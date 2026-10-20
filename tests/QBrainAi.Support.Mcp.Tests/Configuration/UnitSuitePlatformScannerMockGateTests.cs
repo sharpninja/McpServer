@@ -1,11 +1,16 @@
+using System.Globalization;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+
 namespace QBrainAi.Support.Mcp.Tests.Configuration;
 
 /// <summary>
 /// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008), BDPv4 mock gate for
 /// <see cref="UnitSuitePlatformScanner"/>: scripted C# sources with findings derived from the rule (an OS
-/// check, OS-platform attribute, xUnit skip, or real process-host binding in a test class without
-/// <c>[Trait("Category", "Integration")]</c> is a finding; strings, comments and non-test helpers are not),
-/// plus negative controls proving the finding assertion rejects a missing, extra, or misattributed finding.
+/// check, OS-platform attribute, xUnit skip, or real process-host binding in a test that is not tagged
+/// <c>[Trait("Category", "Integration")]</c> on its method or class is a finding; strings, comments,
+/// <c>nameof</c> and non-test helpers are not; every conditional-compilation branch is read), plus negative
+/// controls proving the finding assertion rejects a missing, extra, or misattributed finding.
 /// </summary>
 public sealed class UnitSuitePlatformScannerMockGateTests
 {
@@ -214,6 +219,113 @@ public sealed class UnitSuitePlatformScannerMockGateTests
                 }
             }
             """", ["7 os-check FooTests", "9 os-check FooTests", "10 os-check FooTests"]),
+        ["split-and-qualified-os-calls"] = ("""
+            namespace N;
+            public sealed class FooTests
+            {
+                [Fact]
+                public void A()
+                {
+                    _ = OperatingSystem
+                        .IsWindows();
+                    _ = OperatingSystem.
+                        IsLinux();
+                    _ = global::System.OperatingSystem.IsMacOS();
+                    var s = $@"{OperatingSystem.
+                        IsFreeBSD()}";
+                    _ = System.Runtime.InteropServices.RuntimeInformation
+                        .IsOSPlatform(OSPlatform.Linux);
+                }
+            }
+            """, ["7 os-check FooTests", "9 os-check FooTests", "11 os-check FooTests", "12 os-check FooTests", "14 os-check FooTests"]),
+        ["qualified-and-listed-os-attributes"] = ("""
+            namespace N;
+            public sealed class FooTests
+            {
+                [global::System.Runtime.Versioning.SupportedOSPlatform("windows")]
+                [Fact]
+                public void A() { }
+                [Fact, System.Runtime.Versioning.SupportedOSPlatform("windows")]
+                public void B() { }
+                [Fact]
+                [UnsupportedOSPlatformAttribute("linux")]
+                public void C() { }
+                [Fact(DisplayName = "SupportedOSPlatform(\"windows\")")]
+                public void D() { }
+            }
+            """, ["4 os-attribute FooTests", "7 os-attribute FooTests", "10 os-attribute FooTests"]),
+        ["aliases-static-imports-and-method-groups"] = ("""
+            using OS = System.OperatingSystem;
+            using static System.Runtime.InteropServices.RuntimeInformation;
+            using static Xunit.Assert;
+            namespace N;
+            public sealed class FooTests
+            {
+                [Fact]
+                public void A()
+                {
+                    _ = OS.IsWindows();
+                    _ = IsOSPlatform(OSPlatform.Linux);
+                    Func<bool> check = OperatingSystem.IsLinux;
+                    Skip("s");
+                    _ = nameof(OperatingSystem.IsMacOS);
+                    True(true);
+                }
+            }
+            """, ["10 os-check FooTests", "11 os-check FooTests", "12 os-check FooTests", "13 skip FooTests"]),
+        ["assembly-attribute"] = ("""
+            [assembly: System.Runtime.Versioning.SupportedOSPlatform("windows")]
+            namespace N;
+            public sealed class FooTests
+            {
+                [Fact]
+                public void A() { }
+            }
+            """, ["1 os-attribute <assembly>"]),
+        ["method-level-integration"] = ("""
+            namespace N;
+            public sealed class FooTests
+            {
+                [Fact]
+                [Trait("Category", "Integration")]
+                [SupportedOSPlatform("windows")]
+                public void A() { _ = OperatingSystem.IsWindows(); }
+                [Fact]
+                public void B() { _ = OperatingSystem.IsWindows(); }
+            }
+            """, ["9 os-check FooTests"]),
+        ["skip-variants"] = ("""
+            namespace N;
+            public sealed class FooTests
+            {
+                [Theory]
+                [InlineData(1, Skip = "row")]
+                [InlineData(2)]
+                public void A(int x) { }
+                [SkippableFactAttribute]
+                public void B() { Skip.If(true); Skip.IfNot(false); }
+                [Fact(SkipExceptions = new[] { typeof(InvalidOperationException) })]
+                public void C() => throw new Xunit.Sdk.SkipException("x");
+            }
+            """, ["5 skip FooTests", "8 skip FooTests", "9 skip FooTests", "10 skip FooTests", "11 skip FooTests"]),
+        ["conditional-compilation-branches"] = ("""
+            namespace N;
+            public sealed class FooTests
+            {
+                [Fact]
+                public void A()
+                {
+            #if PROCESS_MOCK
+                    _ = OperatingSystem.IsWindows();
+            #else
+                    _ = OperatingSystem.IsLinux();
+            #endif
+            #if WINDOWS && !LINUX
+                    Assert.Skip("w");
+            #endif
+                }
+            }
+            """, ["8 os-check FooTests", "10 os-check FooTests", "13 skip FooTests"]),
     };
 
     /// <summary>Every scripted source yields exactly the findings the rule requires.</summary>
@@ -236,6 +348,13 @@ public sealed class UnitSuitePlatformScannerMockGateTests
     [InlineData("multiline-skip-attribute")]
     [InlineData("qualified-skip-attribute")]
     [InlineData("interpolation-holes")]
+    [InlineData("split-and-qualified-os-calls")]
+    [InlineData("qualified-and-listed-os-attributes")]
+    [InlineData("aliases-static-imports-and-method-groups")]
+    [InlineData("assembly-attribute")]
+    [InlineData("method-level-integration")]
+    [InlineData("skip-variants")]
+    [InlineData("conditional-compilation-branches")]
     public void ScriptedSource_YieldsRuleFindings(string name)
     {
         var (source, expected) = Cases[name];
@@ -244,7 +363,92 @@ public sealed class UnitSuitePlatformScannerMockGateTests
 
     /// <summary>The theory above covers every scripted case.</summary>
     [Fact]
-    public void ScriptedTheory_CoversEveryCase() => Assert.Equal(17, Cases.Count);
+    public void ScriptedTheory_CoversEveryCase() => Assert.Equal(24, Cases.Count);
+
+    /// <summary>
+    /// Negative controls for the forms the syntax-tree scanner reads (structural fix after hostile validation
+    /// round 2): each new case's findings are not empty; counting a name inside <c>nameof</c> is rejected;
+    /// honoring the Integration trait only on classes (which also counts the method-level Integration test) is
+    /// rejected; and the output of one parse with no conditional symbols defined (which sees only the
+    /// <c>#else</c> branch) is rejected. A plain parse with no symbols has no <c>IsWindows</c> access at all,
+    /// which is why every branch combination is parsed.
+    /// </summary>
+    [Fact]
+    public void RoundThreeFormNegativeControls_AreRejectedInsidePassingHarness()
+    {
+        foreach (var name in new[] { "aliases-static-imports-and-method-groups", "assembly-attribute", "method-level-integration", "skip-variants", "conditional-compilation-branches" })
+        {
+            var expected = Cases[name].Expected;
+            Assert.NotNull(Record.Exception(() => AssertFindings(expected, [])));
+        }
+
+        var aliases = Cases["aliases-static-imports-and-method-groups"];
+        var aliasFindings = UnitSuitePlatformScanner.Scan("aliases.cs", aliases.Source);
+        Assert.NotNull(Record.Exception(() => AssertFindings([.. aliases.Expected, "14 os-check FooTests"], aliasFindings)));
+        Assert.Null(Record.Exception(() => AssertFindings(aliases.Expected, aliasFindings)));
+
+        var methodLevel = Cases["method-level-integration"];
+        var methodFindings = UnitSuitePlatformScanner.Scan("method-level.cs", methodLevel.Source);
+        Assert.NotNull(Record.Exception(() => AssertFindings(
+            ["6 os-attribute FooTests", "7 os-check FooTests", "9 os-check FooTests"], methodFindings)));
+        Assert.Null(Record.Exception(() => AssertFindings(methodLevel.Expected, methodFindings)));
+
+        var branches = Cases["conditional-compilation-branches"];
+        var branchFindings = UnitSuitePlatformScanner.Scan("branches.cs", branches.Source);
+        Assert.NotNull(Record.Exception(() => AssertFindings(["10 os-check FooTests"], branchFindings)));
+        Assert.Null(Record.Exception(() => AssertFindings(branches.Expected, branchFindings)));
+        var plainParse = CSharpSyntaxTree.ParseText(branches.Source, cancellationToken: TestContext.Current.CancellationToken)
+            .GetRoot(TestContext.Current.CancellationToken);
+        Assert.DoesNotContain(
+            plainParse.DescendantNodes().OfType<MemberAccessExpressionSyntax>(),
+            access => access.Name.Identifier.ValueText == "IsWindows");
+    }
+
+    /// <summary>
+    /// A file that names more conditional-compilation symbols than the scanner parses combinations for fails the
+    /// scan and the skip definition instead of leaving a branch unread; a file at the limit is read.
+    /// </summary>
+    [Fact]
+    public void ConditionalSymbolsBeyondTheLimit_FailClosed()
+    {
+        static string SourceWith(int symbolCount) =>
+            "#if " + string.Join(" || ", Enumerable.Range(1, symbolCount).Select(index => "S" + index.ToString(CultureInfo.InvariantCulture)))
+            + "\npublic sealed class FooTests\n{\n    [Fact]\n    public void A() => Assert.Skip(\"s\");\n}\n#endif\n";
+
+        var over = SourceWith(UnitSuitePlatformScanner.MaxConditionalSymbols + 1);
+        Assert.Throws<InvalidOperationException>(() => UnitSuitePlatformScanner.Scan("over.cs", over));
+        Assert.Throws<InvalidOperationException>(() => UnitSuitePlatformScanner.FindSkipLines(over));
+
+        var atLimit = SourceWith(UnitSuitePlatformScanner.MaxConditionalSymbols);
+        AssertFindings(["5 skip FooTests"], UnitSuitePlatformScanner.Scan("limit.cs", atLimit));
+        Assert.Equal(new[] { 5 }, UnitSuitePlatformScanner.FindSkipLines(atLimit));
+    }
+
+    /// <summary>
+    /// Negative controls for the cases added after hostile validation round 2 (finding R2-F2): the outputs
+    /// the line-based scanner gave for a member call split after the dot and for a qualified or listed OS
+    /// attribute (no findings), an output that drops the global-qualified call, and an output that also
+    /// counts an OS attribute name inside a string argument are each rejected by the finding assertion.
+    /// </summary>
+    [Fact]
+    public void RoundTwoCounterexampleNegativeControls_AreRejectedInsidePassingHarness()
+    {
+        foreach (var name in new[] { "split-and-qualified-os-calls", "qualified-and-listed-os-attributes" })
+        {
+            var expected = Cases[name].Expected;
+            Assert.NotNull(Record.Exception(() => AssertFindings(expected, [])));
+        }
+
+        var calls = UnitSuitePlatformScanner.Scan("split-and-qualified-os-calls.cs", Cases["split-and-qualified-os-calls"].Source);
+        Assert.NotNull(Record.Exception(() => AssertFindings(
+            ["7 os-check FooTests", "9 os-check FooTests", "12 os-check FooTests", "14 os-check FooTests"], calls)));
+        Assert.Null(Record.Exception(() => AssertFindings(Cases["split-and-qualified-os-calls"].Expected, calls)));
+
+        var attributes = UnitSuitePlatformScanner.Scan("qualified-and-listed-os-attributes.cs", Cases["qualified-and-listed-os-attributes"].Source);
+        Assert.NotNull(Record.Exception(() => AssertFindings(
+            ["4 os-attribute FooTests", "7 os-attribute FooTests", "10 os-attribute FooTests", "12 os-attribute FooTests"], attributes)));
+        Assert.Null(Record.Exception(() => AssertFindings(Cases["qualified-and-listed-os-attributes"].Expected, attributes)));
+    }
 
     /// <summary>
     /// Negative controls for the cases added after hostile validation round 1 (finding F3): the outputs a
@@ -290,39 +494,35 @@ public sealed class UnitSuitePlatformScannerMockGateTests
         Assert.Null(Record.Exception(() => AssertFindings(["4 skip FooTests", "9 skip FooTests", "10 skip FooTests", "11 skip FooTests"], actual)));
     }
 
-    /// <summary>Stripping keeps every line and removes the text inside strings, comments and characters.</summary>
-    [Fact]
-    public void StripCommentsAndStrings_KeepsLinesAndBlanksLiterals()
-    {
-        var (source, _) = Cases["verbatim-raw-and-char"];
-        var stripped = UnitSuitePlatformScanner.StripCommentsAndStrings(source);
-
-        Assert.Equal(source.Count(ch => ch == '\n'), stripped.Count(ch => ch == '\n'));
-        Assert.DoesNotContain("still inside", stripped, StringComparison.Ordinal);
-        Assert.DoesNotContain("IsMacOS", stripped, StringComparison.Ordinal);
-        Assert.Contains("_ = OperatingSystem.IsLinux();", stripped, StringComparison.Ordinal);
-    }
-
     /// <summary>
-    /// Stripping keeps interpolation holes as code and blanks the literal text around them, escaped braces,
-    /// strings nested in a hole, and a hole's format clause.
+    /// Literals and comments never yield a finding or a skip line: every rule's text placed only inside
+    /// regular, verbatim, raw and interpolated string text, character literals, line comments, block comments
+    /// and XML documentation is ignored, while the same text as code in the last line is found.
     /// </summary>
     [Fact]
-    public void StripCommentsAndStrings_KeepsInterpolationHolesAsCode()
+    public void LiteralsAndComments_NeverYieldFindings()
     {
-        var (source, _) = Cases["interpolation-holes"];
-        var stripped = UnitSuitePlatformScanner.StripCommentsAndStrings(source);
-
-        Assert.Equal(source.Count(ch => ch == '\n'), stripped.Count(ch => ch == '\n'));
-        Assert.Contains("{OperatingSystem.IsWindows()}", stripped, StringComparison.Ordinal);
-        Assert.Contains("RuntimeInformation.IsOSPlatform(OSPlatform.Linux)", stripped, StringComparison.Ordinal);
-        Assert.Contains("{{OperatingSystem.IsFreeBSD()}}", stripped, StringComparison.Ordinal);
-        Assert.DoesNotContain("host", stripped, StringComparison.Ordinal);
-        Assert.DoesNotContain("IsLinux()", stripped, StringComparison.Ordinal);
-        Assert.DoesNotContain("IsMacOS", stripped, StringComparison.Ordinal);
-        Assert.DoesNotContain("IsAndroid", stripped, StringComparison.Ordinal);
-        Assert.DoesNotContain("IsIOS", stripped, StringComparison.Ordinal);
-        Assert.DoesNotContain("\"l\"", stripped, StringComparison.Ordinal);
+        const string source = """"
+            namespace N;
+            public sealed class FooTests
+            {
+                /// <summary>OperatingSystem.IsWindows() [SupportedOSPlatform("x")] Assert.Skip("y")</summary>
+                [Fact]
+                public void A()
+                {
+                    var a = "OperatingSystem.IsWindows() RuntimeInformation.IsOSPlatform(p)";
+                    var b = @"[Fact(Skip = ""x"")] SkipException SystemWorkspaceHostEnvironment.Instance";
+                    var c = """[SupportedOSPlatform("linux")] WorkspacePathNormalizer.Process""";
+                    var d = $"text OperatingSystem.IsLinux() {{Assert.SkipWhen(true, w)}}";
+                    var e = '[';
+                    // OperatingSystem.IsMacOS(); Assert.SkipUnless(false, "u");
+                    /* [SkippableFact] [UnsupportedOSPlatform("ios")] */
+                    _ = OperatingSystem.IsLinux();
+                }
+            }
+            """";
+        AssertFindings(["15 os-check FooTests"], UnitSuitePlatformScanner.Scan("literals.cs", source));
+        Assert.Empty(UnitSuitePlatformScanner.FindSkipLines(source));
     }
 
     /// <summary>Assertion shared by the scripted cases and the negative controls.</summary>

@@ -4,9 +4,13 @@ namespace QBrainAi.Support.Mcp.Tests.Configuration;
 /// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008): binds <see cref="UnitSuitePlatformScanner"/>,
 /// unchanged from its mock gate, to the C# sources of every project the Nuke <c>Test</c> target runs
 /// (<c>build/Build.Test.cs</c>: test projects except integration, plugin-integration, review and Build.Tests
-/// projects). A test that depends on the platform is an integration test, so the unit test classes hold
-/// no operating-system check, OS-platform attribute, xUnit skip, or real process-host binding.
+/// projects). A test that depends on the platform is an integration test, so the unit tests hold no
+/// operating-system check, OS-platform attribute, xUnit skip, or real process-host binding. These tests
+/// read the repository checkout, so they are integration tests on both hosts and run in each host's
+/// MigrationIntegrationTests (hostile validation round 2, finding R2-F1); the scripted cases in
+/// <see cref="UnitSuitePlatformScannerMockGateTests"/> stay unit tests.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class UnitSuitePlatformScannerTests
 {
     private static readonly string[] ExpectedUnitProjects =
@@ -37,7 +41,7 @@ public sealed class UnitSuitePlatformScannerTests
 
         Assert.True(
             findings.Length == 0,
-            "A test that depends on the platform is an integration test: tag its class [Trait(\"Category\", \"Integration\")] "
+            "A test that depends on the platform is an integration test: tag the test method or its class [Trait(\"Category\", \"Integration\")] "
             + "(with [Trait(\"Platform\", ...)] when it applies to one host) or remove the dependence. Findings:"
             + Environment.NewLine + string.Join(Environment.NewLine, findings));
     }

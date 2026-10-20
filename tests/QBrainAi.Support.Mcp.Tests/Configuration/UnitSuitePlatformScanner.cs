@@ -1,427 +1,281 @@
-using System.Text;
-using System.Text.RegularExpressions;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace QBrainAi.Support.Mcp.Tests.Configuration;
 
 /// <summary>
-/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008): finds platform dependence in unit test classes.
-/// A test that depends on the platform is an integration test (operator 2026-10-19: "If it depends on the
-/// environment, it's an integration test."), so an operating-system check, an OS-platform attribute, an
-/// xUnit skip, or a binding to the real process host is a finding unless its test class (or an enclosing
-/// class) carries <c>[Trait("Category", "Integration")]</c>. Strings and comments are ignored, but the code
-/// inside an interpolation hole is not. Test classes are types whose name ends in <c>Tests</c> or that
-/// declare <c>[Fact]</c> or <c>[Theory]</c> methods; other helper types (for example the host-neutral
-/// <c>UnitTestPaths</c> fixture) are not test classes. The scan reads source text only: dependence reached
-/// through a helper type, or through operating-system behavior of a base-library call such as
-/// <c>Path.GetFullPath</c>, is outside it.
+/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008): finds platform dependence in unit tests by reading
+/// the C# syntax tree. A test that depends on the platform is an integration test (operator 2026-10-19: "If it
+/// depends on the environment, it's an integration test."), so an operating-system check, an OS-platform
+/// attribute, an xUnit skip, or a binding to the real process host is a finding unless the test method, its
+/// test class, or an enclosing class carries <c>[Trait("Category", "Integration")]</c>. The compiler's parser
+/// separates code from strings, comments and documentation and keeps the code inside interpolation holes, so a
+/// member access split across lines, a qualified, global-qualified or aliased name, a <c>using static</c>
+/// import, a method group, and an attribute anywhere in an attribute list are read like a plain call or
+/// attribute; a name inside <c>nameof</c> is not a use. Every conditional-compilation branch is read: the file
+/// is parsed once for each combination of the symbols its <c>#if</c> and <c>#elif</c> directives name, and a
+/// file that names more than <see cref="MaxConditionalSymbols"/> symbols fails the scan instead of leaving a
+/// branch unread. Test classes are types whose name ends in <c>Tests</c> or that declare a method with an
+/// attribute whose name ends in <c>Fact</c> or <c>Theory</c>; other helper types (for example the host-neutral
+/// <c>UnitTestPaths</c> fixture) are not test classes. An OS-platform attribute on the assembly or module is a
+/// finding for the whole project. Limits: the scan reads one file's syntax, so dependence reached through a
+/// helper type defined in another file, a global using or alias declared in another file, reflection, or
+/// operating-system behavior of a base-library call such as <c>Path.GetFullPath</c> is outside it.
 /// </summary>
 internal static class UnitSuitePlatformScanner
 {
-    /// <summary>Skip calls and skippable attributes, which never span lines (declared before <see cref="Rules"/>, which uses it).</summary>
-    private static readonly Regex SkipCall = new(
-        @"\bAssert\s*\.\s*Skip(?:When|Unless)?\b|\bSkipException\b|\bSkippable(?:Fact|Theory)\b",
-        RegexOptions.CultureInvariant);
+    /// <summary>Most distinct conditional-compilation symbols one file may name; every combination is parsed.</summary>
+    internal const int MaxConditionalSymbols = 8;
 
-    private static readonly (string Kind, Regex Pattern)[] Rules =
+    private const string AssemblyOwner = "<assembly>";
+
+    private const string AttributeSuffix = "Attribute";
+
+    private static readonly CSharpParseOptions ParseOptions = new(LanguageVersion.Preview, DocumentationMode.None);
+
+    private static readonly string[] KindOrder = ["os-check", "os-attribute", "skip", "process-host"];
+
+    /// <summary>Calls, property reads and method groups on a type, matched by the type's rightmost name.</summary>
+    private static readonly MemberRule[] MemberRules =
     [
-        ("os-check", new Regex(@"\bOperatingSystem\s*\.\s*Is[A-Z]\w*\s*\(", RegexOptions.CultureInvariant)),
-        ("os-check", new Regex(@"\bRuntimeInformation\s*\.\s*IsOSPlatform\s*\(", RegexOptions.CultureInvariant)),
-        ("os-attribute", new Regex(@"\[\s*(?:[\w.]+\.)?(?:Supported|Unsupported)OSPlatform(?:Attribute)?\s*\(", RegexOptions.CultureInvariant)),
-        ("skip", SkipCall),
-        ("process-host", new Regex(@"\bSystemWorkspaceHostEnvironment\s*\.\s*Instance\b|\bWorkspacePathNormalizer\s*\.\s*Process\b", RegexOptions.CultureInvariant)),
+        new("os-check", "OperatingSystem", static name => name.Length > 2 && name.StartsWith("Is", StringComparison.Ordinal) && name[2] is >= 'A' and <= 'Z'),
+        new("os-check", "RuntimeInformation", static name => name == "IsOSPlatform"),
+        new("skip", "Assert", static name => name is "Skip" or "SkipWhen" or "SkipUnless"),
+        new("skip", "Skip", static name => name is "If" or "IfNot"),
+        new("process-host", "SystemWorkspaceHostEnvironment", static name => name == "Instance"),
+        new("process-host", "WorkspacePathNormalizer", static name => name == "Process"),
     ];
 
-    private static readonly Regex TypeDeclaration = new(
-        @"\b(?:class|record|struct|interface)\s+([A-Za-z_]\w*)",
-        RegexOptions.CultureInvariant);
-
-    private static readonly Regex IntegrationTrait = new(
-        @"\[\s*(?:Xunit\.)?Trait(?:Attribute)?\s*\(\s*""Category""\s*,\s*""Integration""\s*\)",
-        RegexOptions.CultureInvariant);
-
-    private static readonly Regex TestAttribute = new(
-        @"(?<=[\[,]\s*)(?:global\s*::\s*)?(?:[A-Za-z_]\w*\s*\.\s*)*(?:Fact|Theory)(?:Attribute)?\b",
-        RegexOptions.CultureInvariant);
-
-    /// <summary>A <c>[Fact(</c> or <c>[Theory(</c> argument list, plain, qualified, or later in an attribute list.</summary>
-    private static readonly Regex TestAttributeCall = new(
-        @"(?<=[\[,]\s*)(?:global\s*::\s*)?(?:[A-Za-z_]\w*\s*\.\s*)*(?:Fact|Theory)(?:Attribute)?\s*\(",
-        RegexOptions.CultureInvariant);
-
-    /// <summary>The xUnit skip properties: <c>Skip</c>, <c>SkipUnless</c>, <c>SkipWhen</c>, <c>SkipType</c>.</summary>
-    private static readonly Regex SkipArgument = new(@"\bSkip\w*\s*=(?!=)", RegexOptions.CultureInvariant);
-
     /// <summary>
-    /// TR-MCP-USECASE-018 (AC-006): the one definition of an xUnit skip shared by this scanner and the skip
-    /// guard. Returns the 1-based lines of code (already stripped of strings and comments) that hold a skip
-    /// call, <c>SkipException</c>, a skippable attribute, or a test attribute whose argument list (which may
-    /// span lines) sets a skip property; an attribute is reported on the line of its name.
+    /// TR-MCP-USECASE-018 (AC-006): the one definition of an xUnit skip shared by this scanner and the skip guard.
+    /// Returns the 1-based lines, in any conditional-compilation branch and in any type or none, that hold a skip
+    /// call (<c>Assert.Skip</c>, <c>Assert.SkipWhen</c>, <c>Assert.SkipUnless</c>, <c>Skip.If</c>,
+    /// <c>Skip.IfNot</c>), a use of <c>SkipException</c>, a <c>SkippableFact</c> or <c>SkippableTheory</c>
+    /// attribute, or an attribute argument that sets a property whose name starts with <c>Skip</c> (for example
+    /// <c>Skip</c>, <c>SkipUnless</c>, <c>SkipWhen</c> or <c>SkipExceptions</c> on a test or data attribute); an
+    /// attribute is reported on the line of its name.
     /// </summary>
-    /// <param name="strippedCode">Output of <see cref="StripCommentsAndStrings"/>.</param>
-    internal static IReadOnlyList<int> FindSkipLines(string strippedCode)
+    /// <param name="source">C# source text.</param>
+    internal static IReadOnlyList<int> FindSkipLines(string source)
     {
-        ArgumentNullException.ThrowIfNull(strippedCode);
-        var code = strippedCode.Replace("\r\n", "\n", StringComparison.Ordinal);
-        var lines = new SortedSet<int>();
-        foreach (Match call in SkipCall.Matches(code))
-            lines.Add(LineOf(code, call.Index));
-        foreach (Match attribute in TestAttributeCall.Matches(code))
-        {
-            var open = attribute.Index + attribute.Length - 1;
-            var close = MatchingParenthesis(code, open);
-            var arguments = code.Substring(open + 1, (close < 0 ? code.Length : close) - open - 1);
-            if (SkipArgument.IsMatch(arguments))
-                lines.Add(LineOf(code, attribute.Index));
-        }
-
-        return lines.ToArray();
+        ArgumentNullException.ThrowIfNull(source);
+        return ParseBranches(source)
+            .SelectMany(FindHits)
+            .Where(hit => hit.Kind == "skip")
+            .Select(hit => LineOf(hit.Node))
+            .Distinct()
+            .Order()
+            .ToArray();
     }
 
-    /// <summary>Scans one C# source file and returns its findings in line order.</summary>
+    /// <summary>Scans one C# source file and returns its findings in line order, then rule order.</summary>
     /// <param name="relativePath">Path reported with each finding.</param>
     /// <param name="source">File text.</param>
     internal static IReadOnlyList<UnitSuitePlatformFinding> Scan(string relativePath, string source)
     {
         ArgumentNullException.ThrowIfNull(relativePath);
         ArgumentNullException.ThrowIfNull(source);
-        var original = source.Replace("\r\n", "\n", StringComparison.Ordinal).Split('\n');
-        var stripped = StripCommentsAndStrings(source).Replace("\r\n", "\n", StringComparison.Ordinal);
-        var code = stripped.Split('\n');
-        var skipLines = new HashSet<int>(FindSkipLines(stripped));
-
-        var open = new Stack<TypeScope>();
-        var hits = new List<(int Line, string Kind, TypeScope? Owner)>();
-        var attributeHits = new List<(int Line, string Kind)>();
-        TypeScope? pending = null;
-        var depth = 0;
-
-        for (var i = 0; i < code.Length; i++)
+        var findings = new HashSet<(int Line, string Kind, string TestClass)>();
+        foreach (var root in ParseBranches(source))
         {
-            var line = code[i];
-            var trimmed = line.Trim();
-            var declaration = TypeDeclaration.Match(line);
-            if (declaration.Success)
+            foreach (var (node, kind) in FindHits(root))
             {
-                pending = new TypeScope(
-                    declaration.Groups[1].Value,
-                    HasIntegrationTrait(original, code, i),
-                    open.Count > 0 ? open.Peek() : null,
-                    depth);
-            }
-
-            if (open.Count > 0 && TestAttribute.IsMatch(line))
-                open.Peek().HasTests = true;
-
-            var lineNumber = i + 1;
-            var lineHits = Rules
-                .Where(rule => rule.Kind == "skip" ? skipLines.Contains(lineNumber) : rule.Pattern.IsMatch(line))
-                .Select(rule => rule.Kind)
-                .ToList();
-            if (!declaration.Success && trimmed.StartsWith('['))
-            {
-                // Attribute lines belong to the type or member declared after them.
-                attributeHits.AddRange(lineHits.Select(kind => (i + 1, kind)));
-            }
-            else
-            {
-                if (trimmed.Length > 0)
-                {
-                    var target = declaration.Success ? pending : (open.Count > 0 ? open.Peek() : null);
-                    hits.AddRange(attributeHits.Select(hit => (hit.Line, hit.Kind, target)));
-                    attributeHits.Clear();
-                }
-
-                hits.AddRange(lineHits.Select(kind => (i + 1, kind, pending ?? (open.Count > 0 ? open.Peek() : null))));
-            }
-
-            foreach (var ch in line)
-            {
-                if (ch == '{')
-                {
-                    depth++;
-                    if (pending is not null)
-                    {
-                        pending.Depth = depth;
-                        open.Push(pending);
-                        pending = null;
-                    }
-                }
-                else if (ch == '}')
-                {
-                    while (open.Count > 0 && open.Peek().Depth >= depth)
-                        open.Pop();
-                    depth--;
-                }
-                else if (ch == ';' && pending is not null && depth == pending.DeclaredDepth)
-                {
-                    // A positional record or a declaration without a body ends here.
-                    pending = null;
-                }
+                var testClass = FindingOwner(node);
+                if (testClass is not null)
+                    findings.Add((LineOf(node), kind, testClass));
             }
         }
 
-        var findings = new List<UnitSuitePlatformFinding>();
-        foreach (var (line, kind, owner) in hits)
-        {
-            var testClass = owner;
-            while (testClass is not null && !testClass.IsTestClass)
-                testClass = testClass.Parent;
-            if (testClass is null || testClass.IsIntegration)
-                continue;
-            findings.Add(new UnitSuitePlatformFinding(relativePath, line, kind, testClass.Name));
-        }
-
-        return findings;
+        return findings
+            .OrderBy(finding => finding.Line)
+            .ThenBy(finding => Array.IndexOf(KindOrder, finding.Kind))
+            .ThenBy(finding => finding.TestClass, StringComparer.Ordinal)
+            .Select(finding => new UnitSuitePlatformFinding(relativePath, finding.Line, finding.Kind, finding.TestClass))
+            .ToArray();
     }
 
     /// <summary>
-    /// Replaces the contents of comments, string literals (regular, verbatim, interpolated, raw) and character
-    /// literals with spaces, keeping every newline so line numbers stay the same. The code inside an
-    /// interpolation hole is kept (strings nested in it are blanked in turn); escaped braces and a hole's
-    /// format clause are literal text and are blanked.
+    /// Parses the source once for every combination of the conditional-compilation symbols it names, so code in
+    /// every <c>#if</c>, <c>#elif</c> and <c>#else</c> branch reachable by some combination is in a tree.
     /// </summary>
-    /// <param name="source">C# source text.</param>
-    internal static string StripCommentsAndStrings(string source)
+    private static IReadOnlyList<CompilationUnitSyntax> ParseBranches(string source)
     {
-        ArgumentNullException.ThrowIfNull(source);
-        var result = new StringBuilder(source.Length);
-        var i = 0;
-        CopyCode(source, ref i, result, inHole: false);
-        return result.ToString();
-    }
-
-    /// <summary>
-    /// Copies code, blanking comments and literals. In an interpolation hole, copying stops (without consuming
-    /// the character) at a <c>}</c> or a format-clause <c>:</c> that is not nested in brackets.
-    /// </summary>
-    private static void CopyCode(string source, ref int i, StringBuilder result, bool inHole)
-    {
-        var depth = 0;
-        while (i < source.Length)
+        var none = Parse(source, []);
+        var symbols = new SortedSet<string>(SymbolsOf(none), StringComparer.Ordinal);
+        var known = 0;
+        while (symbols.Count != known && symbols.Count <= MaxConditionalSymbols)
         {
-            var c = source[i];
-            var next = Peek(source, i + 1);
-            if (inHole && depth == 0 && (c == '}' || (c == ':' && next != ':' && Peek(source, i - 1) != ':')))
-                return;
-            if (c == '/' && next == '/')
-            {
-                while (i < source.Length && source[i] != '\n')
-                    Blank(result, source[i++]);
-            }
-            else if (c == '/' && next == '*')
-            {
-                Blank(result, source[i++]);
-                Blank(result, source[i++]);
-                while (i < source.Length && !(source[i] == '*' && Peek(source, i + 1) == '/'))
-                    Blank(result, source[i++]);
-                if (i < source.Length)
-                {
-                    Blank(result, source[i++]);
-                    Blank(result, source[i++]);
-                }
-            }
-            else if (c == '"' || ((c == '@' || c == '$') && (next == '"' || next == '@' || next == '$')))
-            {
-                CopyString(source, ref i, result);
-            }
-            else if (c == '\'')
-            {
-                result.Append(source[i++]);
-                while (i < source.Length && source[i] != '\'' && source[i] != '\n')
-                {
-                    if (source[i] == '\\' && i + 1 < source.Length)
-                        Blank(result, source[i++]);
-                    Blank(result, source[i++]);
-                }
-
-                if (i < source.Length && source[i] == '\'')
-                    result.Append(source[i++]);
-            }
-            else
-            {
-                if (inHole && c is '(' or '[' or '{')
-                    depth++;
-                else if (inHole && c is ')' or ']' or '}')
-                    depth--;
-                result.Append(source[i++]);
-            }
-        }
-    }
-
-    /// <summary>Copies one string literal starting at its prefix, blanking its text and keeping its holes.</summary>
-    private static void CopyString(string source, ref int i, StringBuilder result)
-    {
-        var dollars = 0;
-        var verbatim = false;
-        while (i < source.Length && source[i] != '"')
-        {
-            dollars += source[i] == '$' ? 1 : 0;
-            verbatim |= source[i] == '@';
-            result.Append(source[i++]);
+            // A directive nested in a branch that is inactive with no symbols defined names its symbols here.
+            known = symbols.Count;
+            symbols.UnionWith(SymbolsOf(Parse(source, symbols)).ToArray());
         }
 
-        var quotes = 0;
-        while (i + quotes < source.Length && source[i + quotes] == '"')
-            quotes++;
-        if (!verbatim && quotes >= 3)
+        if (symbols.Count > MaxConditionalSymbols)
         {
-            // Raw string: n dollars mean a run of n braces opens a hole; shorter runs are text.
-            for (var q = 0; q < quotes; q++)
-                result.Append(source[i++]);
-            while (i < source.Length && !IsRun(source, i, '"', quotes))
-            {
-                var braces = dollars > 0 ? CountRun(source, i, '{') : 0;
-                if (braces >= dollars && braces > 0)
-                {
-                    for (var b = 0; b < braces - dollars; b++)
-                        Blank(result, source[i++]);
-                    for (var b = 0; b < dollars; b++)
-                        result.Append(source[i++]);
-                    CopyHole(source, ref i, result, dollars);
-                }
-                else if (braces > 0)
-                {
-                    for (var b = 0; b < braces; b++)
-                        Blank(result, source[i++]);
-                }
-                else
-                {
-                    Blank(result, source[i++]);
-                }
-            }
-
-            for (var q = 0; q < quotes && i < source.Length; q++)
-                result.Append(source[i++]);
-            return;
+            throw new InvalidOperationException(
+                $"The source names {symbols.Count} conditional-compilation symbols; the platform scan reads every branch and supports at most {MaxConditionalSymbols}.");
         }
 
-        result.Append(source[i++]);
-        while (i < source.Length)
-        {
-            var ch = source[i];
-            var after = Peek(source, i + 1);
-            if ((verbatim && ch == '"' && after == '"')
-                || (!verbatim && ch == '\\' && i + 1 < source.Length)
-                || (dollars > 0 && ch == '{' && after == '{')
-                || (dollars > 0 && ch == '}' && after == '}'))
-            {
-                Blank(result, source[i++]);
-                Blank(result, source[i++]);
-            }
-            else if (ch == '"' || (!verbatim && ch == '\n'))
-            {
-                break;
-            }
-            else if (dollars > 0 && ch == '{')
-            {
-                result.Append(source[i++]);
-                CopyHole(source, ref i, result, 1);
-            }
-            else
-            {
-                Blank(result, source[i++]);
-            }
-        }
+        var names = symbols.ToArray();
+        var roots = new List<CompilationUnitSyntax> { none };
+        for (var mask = 1; mask < 1 << names.Length; mask++)
+            roots.Add(Parse(source, names.Where((_, index) => (mask & (1 << index)) != 0)));
 
-        if (i < source.Length && source[i] == '"')
-            result.Append(source[i++]);
+        return roots;
     }
 
-    /// <summary>Copies one interpolation hole after its opening braces: code, then a blanked format clause, then the closing braces.</summary>
-    private static void CopyHole(string source, ref int i, StringBuilder result, int braces)
+    private static CompilationUnitSyntax Parse(string source, IEnumerable<string> symbols) =>
+        CSharpSyntaxTree.ParseText(source, ParseOptions.WithPreprocessorSymbols(symbols)).GetCompilationUnitRoot();
+
+    private static IEnumerable<string> SymbolsOf(CompilationUnitSyntax root) =>
+        root.DescendantNodes(descendIntoTrivia: true)
+            .OfType<ConditionalDirectiveTriviaSyntax>()
+            .SelectMany(directive => directive.Condition.DescendantNodesAndSelf().OfType<IdentifierNameSyntax>())
+            .Select(identifier => identifier.Identifier.ValueText);
+
+    /// <summary>Every rule hit in one tree, with the node it is reported on.</summary>
+    private static IEnumerable<(SyntaxNode Node, string Kind)> FindHits(CompilationUnitSyntax root)
     {
-        CopyCode(source, ref i, result, inHole: true);
-        if (i < source.Length && source[i] == ':')
+        var aliases = new Dictionary<string, string>(StringComparer.Ordinal);
+        var staticTypes = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var directive in root.DescendantNodes().OfType<UsingDirectiveSyntax>())
         {
-            while (i < source.Length && source[i] != '}')
-                Blank(result, source[i++]);
-        }
-
-        for (var b = 0; b < braces && i < source.Length && source[i] == '}'; b++)
-            result.Append(source[i++]);
-    }
-
-    private static char Peek(string source, int index) => index >= 0 && index < source.Length ? source[index] : '\0';
-
-    private static void Blank(StringBuilder result, char c) => result.Append(c == '\n' ? '\n' : ' ');
-
-    private static int CountRun(string source, int index, char c)
-    {
-        var count = 0;
-        while (index + count < source.Length && source[index + count] == c)
-            count++;
-        return count;
-    }
-
-    private static bool IsRun(string source, int index, char c, int count) => CountRun(source, index, c) >= count;
-
-    private static int LineOf(string code, int index)
-    {
-        var line = 1;
-        for (var k = 0; k < index; k++)
-        {
-            if (code[k] == '\n')
-                line++;
-        }
-
-        return line;
-    }
-
-    private static int MatchingParenthesis(string code, int open)
-    {
-        var depth = 0;
-        for (var k = open; k < code.Length; k++)
-        {
-            if (code[k] == '(')
-                depth++;
-            else if (code[k] == ')' && --depth == 0)
-                return k;
-        }
-
-        return -1;
-    }
-
-    private static bool HasIntegrationTrait(string[] original, string[] code, int declarationLine)
-    {
-        if (IntegrationTrait.IsMatch(original[declarationLine]))
-            return true;
-        for (var i = declarationLine - 1; i >= 0; i--)
-        {
-            var stripped = code[i].Trim();
-            if (stripped.Length == 0)
+            var target = RightmostName(directive.NamespaceOrType);
+            if (target is null)
                 continue;
-            if (!stripped.StartsWith('[') && !stripped.EndsWith(']') && !stripped.EndsWith(','))
-                break;
-            if (IntegrationTrait.IsMatch(original[i]))
-                return true;
+            if (directive.Alias is not null)
+                aliases[directive.Alias.Name.Identifier.ValueText] = target;
+            else if (directive.StaticKeyword.IsKind(SyntaxKind.StaticKeyword))
+                staticTypes.Add(target);
         }
 
-        return false;
+        foreach (var node in root.DescendantNodes(child => child is not UsingDirectiveSyntax))
+        {
+            IReadOnlyList<string> kinds = node switch
+            {
+                AttributeSyntax attribute => AttributeKinds(attribute, aliases),
+                MemberAccessExpressionSyntax access => MemberKinds(TypeName(access.Expression, aliases), access.Name.Identifier.ValueText),
+                IdentifierNameSyntax { Identifier.ValueText: "SkipException" } => ["skip"],
+                IdentifierNameSyntax identifier when IsUnqualified(identifier) => StaticImportKinds(identifier.Identifier.ValueText, staticTypes),
+                _ => [],
+            };
+            if (kinds.Count > 0 && (node is AttributeSyntax || !InNameOf(node)))
+            {
+                foreach (var kind in kinds)
+                    yield return (node, kind);
+            }
+        }
     }
 
-    private sealed class TypeScope(string name, bool hasIntegrationTrait, TypeScope? parent, int declaredDepth)
+    private static IReadOnlyList<string> AttributeKinds(AttributeSyntax attribute, IReadOnlyDictionary<string, string> aliases)
     {
-        internal string Name { get; } = name;
-
-        internal TypeScope? Parent { get; } = parent;
-
-        internal int DeclaredDepth { get; } = declaredDepth;
-
-        internal int Depth { get; set; } = -1;
-
-        internal bool HasTests { get; set; }
-
-        internal bool IsTestClass => HasTests || Name.EndsWith("Tests", StringComparison.Ordinal);
-
-        internal bool IsIntegration => hasIntegrationTrait || (Parent?.IsIntegration ?? false);
+        var name = WithoutAttributeSuffix(TypeName(attribute.Name, aliases));
+        var kinds = new List<string>();
+        if (name is "SupportedOSPlatform" or "UnsupportedOSPlatform")
+            kinds.Add("os-attribute");
+        if (name is "SkippableFact" or "SkippableTheory" || SetsSkipProperty(attribute))
+            kinds.Add("skip");
+        return kinds;
     }
+
+    private static IReadOnlyList<string> MemberKinds(string? typeName, string member) =>
+        MemberRules.Where(rule => rule.Type == typeName && rule.Matches(member)).Select(rule => rule.Kind).ToArray();
+
+    private static IReadOnlyList<string> StaticImportKinds(string member, IReadOnlySet<string> staticTypes) =>
+        MemberRules.Where(rule => staticTypes.Contains(rule.Type) && rule.Matches(member)).Select(rule => rule.Kind).ToArray();
+
+    private static bool SetsSkipProperty(AttributeSyntax attribute) =>
+        attribute.ArgumentList is { } arguments
+        && arguments.Arguments.Any(argument =>
+            argument.NameEquals is { } nameEquals && nameEquals.Name.Identifier.ValueText.StartsWith("Skip", StringComparison.Ordinal));
+
+    /// <summary>The unit test class a hit counts against, or null when it is in no test class or in an integration test.</summary>
+    private static string? FindingOwner(SyntaxNode node)
+    {
+        if (node is AttributeSyntax { Parent: AttributeListSyntax { Target.Identifier.ValueText: "assembly" or "module" } })
+            return AssemblyOwner;
+
+        var testClass = node.Ancestors().OfType<TypeDeclarationSyntax>().FirstOrDefault(IsTestClass);
+        if (testClass is null
+            || testClass.AncestorsAndSelf().OfType<TypeDeclarationSyntax>().Any(type => HasIntegrationTrait(type.AttributeLists)))
+        {
+            return null;
+        }
+
+        var method = node.Ancestors().OfType<MethodDeclarationSyntax>().FirstOrDefault();
+        if (method is not null && IsTestMethod(method) && HasIntegrationTrait(method.AttributeLists))
+            return null;
+
+        return testClass.Identifier.ValueText;
+    }
+
+    private static bool IsTestClass(TypeDeclarationSyntax type) =>
+        type.Identifier.ValueText.EndsWith("Tests", StringComparison.Ordinal)
+        || type.Members.OfType<MethodDeclarationSyntax>().Any(IsTestMethod);
+
+    private static bool IsTestMethod(MethodDeclarationSyntax method) =>
+        method.AttributeLists.SelectMany(list => list.Attributes).Any(attribute =>
+            WithoutAttributeSuffix(RightmostName(attribute.Name)) is { } name
+            && (name.EndsWith("Fact", StringComparison.Ordinal) || name.EndsWith("Theory", StringComparison.Ordinal)));
+
+    private static bool HasIntegrationTrait(SyntaxList<AttributeListSyntax> lists) =>
+        lists.SelectMany(list => list.Attributes).Any(attribute =>
+            WithoutAttributeSuffix(RightmostName(attribute.Name)) == "Trait"
+            && attribute.ArgumentList is { Arguments.Count: >= 2 } arguments
+            && IsStringLiteral(arguments.Arguments[0].Expression, "Category")
+            && IsStringLiteral(arguments.Arguments[1].Expression, "Integration"));
+
+    private static bool IsStringLiteral(ExpressionSyntax expression, string value) =>
+        expression is LiteralExpressionSyntax literal
+        && literal.IsKind(SyntaxKind.StringLiteralExpression)
+        && literal.Token.ValueText == value;
+
+    /// <summary>True for a name that is not the member or right-hand part of a qualified name or access.</summary>
+    private static bool IsUnqualified(IdentifierNameSyntax identifier) => identifier.Parent switch
+    {
+        MemberAccessExpressionSyntax access => access.Name != identifier,
+        QualifiedNameSyntax qualified => qualified.Right != identifier,
+        AliasQualifiedNameSyntax => false,
+        MemberBindingExpressionSyntax => false,
+        NameEqualsSyntax or NameColonSyntax => false,
+        _ => true,
+    };
+
+    private static bool InNameOf(SyntaxNode node) =>
+        node.Ancestors().Any(ancestor =>
+            ancestor is InvocationExpressionSyntax { Expression: IdentifierNameSyntax { Identifier.ValueText: "nameof" } });
+
+    /// <summary>The rightmost name of a type or receiver expression, resolving a file-level using alias.</summary>
+    private static string? TypeName(SyntaxNode node, IReadOnlyDictionary<string, string> aliases) =>
+        node is IdentifierNameSyntax identifier && aliases.TryGetValue(identifier.Identifier.ValueText, out var target)
+            ? target
+            : RightmostName(node);
+
+    private static string? RightmostName(SyntaxNode? node) => node switch
+    {
+        SimpleNameSyntax simple => simple.Identifier.ValueText,
+        QualifiedNameSyntax qualified => qualified.Right.Identifier.ValueText,
+        AliasQualifiedNameSyntax aliasQualified => aliasQualified.Name.Identifier.ValueText,
+        MemberAccessExpressionSyntax access => access.Name.Identifier.ValueText,
+        _ => null,
+    };
+
+    private static string? WithoutAttributeSuffix(string? name) =>
+        name is not null && name.Length > AttributeSuffix.Length && name.EndsWith(AttributeSuffix, StringComparison.Ordinal)
+            ? name[..^AttributeSuffix.Length]
+            : name;
+
+    private static int LineOf(SyntaxNode node) => node.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
+
+    private sealed record MemberRule(string Kind, string Type, Func<string, bool> Matches);
 }
 
 /// <summary>TR-MCP-USECASE-018 (AC-006): one platform-dependent line in a unit test class.</summary>
 /// <param name="Path">Repository-relative source path.</param>
 /// <param name="Line">1-based line number.</param>
 /// <param name="Kind">os-check, os-attribute, skip, or process-host.</param>
-/// <param name="TestClass">Unit test class that holds the line.</param>
+/// <param name="TestClass">Unit test class that holds the line, or <c>&lt;assembly&gt;</c> for an assembly- or module-level attribute.</param>
 internal sealed record UnitSuitePlatformFinding(string Path, int Line, string Kind, string TestClass)
 {
     /// <inheritdoc />
