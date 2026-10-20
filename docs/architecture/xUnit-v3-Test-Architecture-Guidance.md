@@ -552,7 +552,7 @@ Assert.Equal(1, vsync.FrameCount);
 - Rationale: The default is the machine's culture, so number and date formatting differ between developer machines and CI.
 - Source: https://xunit.net/docs/config-xunit-runner-json ; https://xunit.net/docs/getting-started/v3/whats-new
 
-**XU-095 (MUST)** Unit tests MUST mock or fake external I/O (network, databases, real devices, files outside a temp folder unique to the test). Integration tests that really need such a dependency MUST be marked `Explicit` or otherwise kept out of the required validation scope (XU-121), and SHOULD use fixtures to manage the resource.
+**XU-095 (MUST)** Unit tests MUST mock or fake external I/O (network, databases, real devices, files outside a temp folder unique to the test). Integration tests that really need such a dependency MUST be kept out of the required validation scope with a gate-excluded trait or a separate project (XU-121), and SHOULD use fixtures to manage the resource.
 
 - Rationale: This is how XU-001 works in practice. Mocked data proves a test is green before the production code is written, and keeps it green whatever the environment.
 - Source: Team policy; https://xunit.net/docs/shared-context
@@ -691,12 +691,12 @@ Team baseline `xunit.runner.json`:
 
 ## 12. Skip and explicit tests
 
-**XU-120 (MUST NOT)** Do not commit a test with a static `Skip = "..."` unless it links to a work item and a human approved it in the PR. xUnit1004 is raised to error (section 13), so the skip also needs a reviewed suppression.
+**XU-120 (MUST NOT)** Do not commit a test with a static `Skip = "..."` unless it links to a work item, a human approved it in the PR, and the test is outside the required validation scope (excluded from the gate as XU-121 describes). xUnit1004 is raised to error (section 13), so the skip also needs a reviewed suppression.
 
-- Rationale: xUnit.net says skipping should be a temporary mechanism. Under XU-001, a skip that hides a failure is a red test.
+- Rationale: xUnit.net says skipping should be a temporary mechanism. Under XU-001, a skip that hides a failure is a red test. Approval does not change the result: a static skip is still reported as skipped, and the gate requires zero skips (XU-140).
 - Source: https://xunit.net/xunit.analyzers/rules/xUnit1004
 
-**XU-121 (MUST)** A test that depends on the environment (operating system, missing hardware, licensed ROM images that CI does not have) MUST NOT be in the required validation scope unless that scope provides the dependency. The validation gate requires zero failures and zero skips in the executed scope (XU-140), so a skip inside that scope fails the gate. Either provide the dependency on the gate's agents, or keep the test out of the gate: mark it `Explicit = true` (XU-123), or tag it with a trait and exclude that trait from the gate run (`--filter-not-trait "name=value"` in MTP, `-trait- "name=value"` in the native UX).
+**XU-121 (MUST)** A test that depends on the environment (operating system, missing hardware, licensed ROM images that CI does not have) MUST NOT be in the required validation scope unless that scope provides the dependency. The validation gate requires zero failures and zero skips in the executed scope (XU-140), so a skip inside that scope fails the gate. Either provide the dependency on the gate's agents, or keep the test out of the gate: tag it with a trait and exclude that trait from the gate run (`--filter-not-trait "name=value"` in MTP, `-trait- "name=value"` in the native UX), or put it in a separate test project that is not in the gate's project list. `Explicit = true` alone is not enough where the gate counts tests that were not run: xUnit.net reports unrequested explicit tests as "not run", and McpServer's `build/SessionLifeUnitGateValidator.cs` rejects a TRX whose `notExecuted` counter is above 0. `Explicit` MAY be combined with the trait exclusion.
 
 Outside the required validation scope (for example a scheduled hardware job or a local run), such a test SHOULD use `SkipUnless` or `SkipWhen` together with `Skip` (the reason), and `SkipType` if the property lives on another class.
 
@@ -711,7 +711,9 @@ public static class TestEnvironment
     public static bool IsWindows => OperatingSystem.IsWindows();
 }
 
-[Fact(Skip = "Requires Windows", SkipUnless = nameof(TestEnvironment.IsWindows), SkipType = typeof(TestEnvironment), Explicit = true)]
+// The gate run passes --filter-not-trait "Requires=Hardware" (MTP).
+[Trait("Requires", "Hardware")]
+[Fact(Skip = "Requires Windows", SkipUnless = nameof(TestEnvironment.IsWindows), SkipType = typeof(TestEnvironment))]
 public void NativeAudioBackend_Initializes() { /* ... */ }
 ```
 
@@ -721,7 +723,8 @@ public void NativeAudioBackend_Initializes() { /* ... */ }
 - Source: https://xunit.net/docs/getting-started/v3/whats-new
 
 ```csharp
-[Fact(Explicit = true)]
+[Trait("Requires", "Hardware")]
+[Fact]
 public void FullRomSuite_Passes()
 {
     var path = Environment.GetEnvironmentVariable("EMU_TEST_ROMS");
@@ -732,6 +735,7 @@ public void FullRomSuite_Passes()
 
 **XU-123 (SHOULD)** Mark expensive, manual, or long-running tests `Explicit = true` instead of skipping them. Run them with `-explicit only` (native UX), `--explicit only` (MTP), or `"explicit": "only"` in `testconfig.json`. The values are `on`, `off`, and `only`, and the default is `off`.
 
+- In a gated project, an explicit test MUST also be excluded from the gate run by trait or by project (XU-121), because a gate that rejects not-run tests (as McpServer's does) would otherwise fail.
 - Rationale: Explicit tests show as "not run" unless someone asks for them, which states the intent more accurately than a skip.
 - Source: https://xunit.net/docs/getting-started/v3/whats-new ; https://xunit.net/docs/config-testconfig-json ; https://xunit.net/docs/getting-started/v3/microsoft-testing-platform
 
@@ -864,6 +868,11 @@ Sources: https://xunit.net/xunit.analyzers/rules/ ; https://github.com/xunit/xun
 - Rationale: It turns off all compiler warnings in generated code. xUnit.net advises using it only when the generated code conflicts with an analyzer.
 - Source: https://xunit.net/releases/v3/4.0.1
 
+**XU-134 (MUST)** Team test projects are written in C#. A test project in another language (F# or Visual Basic) needs explicit human approval in the PR, and its review MUST check the section 13 rules by hand.
+
+- Rationale: xUnit.net v3 supports F# and Visual Basic, but `xunit.analyzers` only analyzes C#. In other languages, `TreatWarningsAsErrors` and the `.editorconfig` cannot raise diagnostics that are never produced.
+- Source: Team policy; https://github.com/xunit/xunit.analyzers/blob/main/README.md
+
 ### 13.3 Sample `.editorconfig` for test folders
 
 Put this file in the root of the tests folder, so it applies only to test code:
@@ -940,7 +949,7 @@ Sources: https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/con
 - Rationale: Result publishers and gates read structured reports. The 4.0.1 release notes describe the Markdown report as a simplified report. The 4.0 release renamed both sets of switches. The 4.0.0 release notes list the MTP renames, and the 4.0.2 source builds every report option as `report-xunit-<format>`.
 - Source: https://xunit.net/releases/v3/4.0.0 ; https://xunit.net/releases/v3/4.0.1 ; https://github.com/xunit/xunit/blob/v3-4.0.2/src/common/MicrosoftTestingPlatform/CommandLineOptionsProvider.cs ; https://github.com/xunit/xunit/blob/v3-3.2.2/src/common/MicrosoftTestingPlatform/CommandLineOptionsProvider.cs
 
-**XU-142 (MUST NOT)** The default PR pipeline does not run explicit tests. A separate scheduled or manual job MAY run them with `--explicit only` (MTP) or `-explicit only` (native).
+**XU-142 (MUST NOT)** The default PR pipeline does not run explicit tests. Where the gate rejects tests that were not run (McpServer does), explicit tests are also excluded from the gate run by trait or project (XU-121), so they are not reported at all. A separate scheduled or manual job MAY run them with `--explicit only` (MTP) or `-explicit only` (native).
 
 - Rationale: The PR pipeline stays fast and deterministic. The default value of `explicit` is `off`.
 - Source: https://xunit.net/docs/config-testconfig-json
@@ -1065,6 +1074,7 @@ Source: https://xunit.net/docs/getting-started/v3/migration
 - **`dotnet test` default runner.** The MTP page (May 27, 2026) says `dotnet test` uses VSTest by default. The getting started page (May 2, 2026, template 4.0.0-pre.108) says the template defaults to MTP and writes `global.json`. In practice, a project's runner depends on its template version and settings. XU-020 sets the team default explicitly, so this does not matter for our projects.
 - **Avalonia and xUnit 4.0.** The status of AvaloniaUI/Avalonia#22072 is as of Oct 20, 2026. Check it again before lifting XU-161. Whether Avalonia needs the 3.2.x MTP v2 package or the default 3.2.x package was not tested. `xunit.v3.mtp-v2` 3.2.2 exists on NuGet, but I did not build it against Avalonia.
 - **Native AOT theory discovery.** The Native AOT page lists serialization as not available in AOT mode, so XU-047 is limited to reflection mode. How AOT mode discovers and lists individual theory rows without serialization was not verified, so this guide gives no AOT-specific rule for it.
+- **Explicit tests in TRX, and filtered-out tests.** xUnit.net documents that unrequested explicit tests are reported as "not run". That they land in the TRX `notExecuted` counter, and that tests removed by `--filter-not-trait` do not appear in the TRX at all, was not verified by running a build. XU-121 is written so the gate does not depend on either detail.
 - **MTP report switch names.** The MTP page (May 27, 2026) still maps `-xml`, `-jUnit`, `-ctrf`, and `-nUnit` to `--report-xunit`, `--report-junit`, `--report-ctrf`, and `--report-nunit`. Those are the 3.2.x names. The 4.0.0 release notes and the 4.0.2 source use `--report-xunit-xml`, `--report-xunit-junit`, `--report-xunit-ctrf`, and `--report-xunit-nunit`. XU-141 lists both by version.
 - **Console runner assembly parallelism switch.** The 4.0.0 release notes' deprecation table names the replacement switch `-parallelizeAssemblies`. The "Running Tests in Parallel" page and the 4.0.2 source (`xunit.v3.runner.console/CommandLine.cs`) use `-parallelAssemblies`. XU-024 uses `-parallelAssemblies`, which matches the source.
 - **The v3 command line options page** (https://xunit.net/docs/getting-started/v3/cmdline) returned HTTP 500 during research. Command line switches here were taken from the MTP page and the release notes instead.
@@ -1125,6 +1135,7 @@ GitHub repositories:
 
 - https://github.com/xunit/xunit (accessed Oct 20, 2026)
 - https://github.com/xunit/xunit.analyzers (accessed Oct 20, 2026)
+- https://github.com/xunit/xunit.analyzers/blob/main/README.md (accessed Oct 20, 2026)
 - https://github.com/xunit/xunit.net (accessed Oct 20, 2026)
 - https://github.com/xunit/xunit.analyzers/blob/main/src/xunit.analyzers/Utility/Descriptors.xUnit1xxx.cs (accessed Oct 20, 2026)
 - https://github.com/xunit/xunit.analyzers/blob/main/src/xunit.analyzers/Utility/Descriptors.xUnit2xxx.cs (accessed Oct 20, 2026)
