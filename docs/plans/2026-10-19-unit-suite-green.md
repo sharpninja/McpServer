@@ -137,7 +137,7 @@ Inventory (read-only, `runs/platform-test-inventory-20261019T1612.txt`, the 7 pr
 
 ## 10. Execution record (2026-10-19)
 
-- `cbc74e82` A; `28bf0b22` B1, B2, B3 tests; `de581353` D overload; `a4c358ef` narrowing (superseded); `b2319488` F; `11681680` takeover of PLAN-C4MODEL-001 unit-suite code (blob-identical to `c2125c42`); `8c2b83ab` G (TR-MCP-NUKE-019); `8a617334` merge of develop with PR 86 (BoundedProcess fix split out of PR 84 by operator decision 17:05); `b2bd50b3` section 9 (guard, skip-guard strengthening, reclassification).
+- `cbc74e82` A; `28bf0b22` B1, B2, B3 tests; `de581353` D overload; `a4c358ef` narrowing (superseded); `b2319488` F; `11681680` takeover of PLAN-C4MODEL-001 unit-suite code (blob-identical to `c2125c42`); `8c2b83ab` G (TR-MCP-NUKE-019); `8a617334` merge of develop with PR 86 (BoundedProcess fix split out of PR 84 by operator decision 17:05); `b2bd50b3` section 9 (guard, skip-guard strengthening, reclassification); `4f668b76` this plan and the PR 82 handoff correction (step 7).
 - Mock gates: G `unit-green-g-mockgate-20261019T1633` 21/21; guard `unit-green-guard-mock-20261019T1720` 17/17.
 - Linux: Test `unit-green-reclass-20261019T1745` 4611 total, 0 failed, 0 not executed; MigrationIntegrationTests `unit-green-reclass-int-20261019T1751` 154 passed, 0 failed, 0 skipped (filter `Category=Integration&Platform!=Windows`).
 - Windows (PAYTON-LEGION2, HEAD `b2bd50b3` verified): Test `unit-green-win-reclass-20261019T1751` 4611 total, 0 failed, 0 not executed; MigrationIntegrationTests in the same run 128 passed, 0 failed, 0 not executed (filter `Category=Integration&Platform!=Linux`).
@@ -171,3 +171,12 @@ Inventory (read-only, `runs/platform-test-inventory-20261019T1612.txt`, the 7 pr
 - Final-head gates: every gate reruns at the head that carries this plan and these receipts. Their run ids and counts are recorded in the PR body and the hostile-validation brief rather than here, so recording them does not move the head again.
 - Wiki export retried 19:19:13: the same failure (`triage-report-a6927fca10364155ab9992506e1abc9c`); declared, not committed.
 - Open: the Windows lane from an interactive desktop session (operator "skip" 19:03), so TR-MCP-NUKE-019 AC-2 and AC-5 are unproven for Windows; hostile validation has not run.
+
+## 13. Decisions within the guidelines (2026-10-19 19:41)
+
+Operator, 19:41, answering four pre-HV questions: "OK, this is ridiculous.  I should not have to sit here and answer every decision.  You have guidelines to make decisions within." Decisions taken within the profile, the goal and this plan:
+
+- D-A, final head: the gates count at the last head with a code, test or build change, and every later commit must be docs-only, proven by `git diff --name-only` from the gated head listing only `docs/` paths. Why: the HV receipts are committed after the gates, so the literal final head always comes after them. The final-head gates ran at `83417029`, which already carries the plan of section 12 and its receipts.
+- D-B, criteria scope after hostile AGREE: set satisfied TR-MCP-NUKE-019 AC-1, AC-3 and AC-4, plus AC-2 and AC-5 only with a passing Windows interactive run; TR-MCP-USECASE-018 AC-006; TR-MCP-USECASE-019 AC-008; TR-MCP-QUALITY-001 ac-21; TEST-MCP-PATHNORM-001 `unitgreen-native-host`. The other 17 criteria of TR-MCP-USECASE-018 and -019 stay unsatisfied. Why: no criterion is set satisfied without evidence in this PR (profile 4.5).
+- D-C, residual risks 8 and 9 of the pre-HV problems list (unit tests that write or read repository files; a dual or unknown Platform tag) stay declared. Why: fixing either changes a requirement or this plan, which the goal reserves for the operator.
+- D-D, the Windows interactive lane: amendment H1 allows the run "by you or an agent working there". At 19:42 the Claude session LEG-VICE# (Remote Control) was asked to run it in a fresh worktree `F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019` with run id `unit-green-win-interactive-20261019`. Probes over WSMan at 19:46, 19:48 and 19:49 found no worktree and no TestResults. Until a passing run exists, AC-2 and AC-5 stay unsatisfied for Windows and TODO task 11 stays unchecked; the operator's 19:03 "skip" stands.
