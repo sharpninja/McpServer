@@ -321,11 +321,11 @@ OVERALL DECK STYLE RULES:
 
 - Paste the full prompt into **Canva AI → Magic Design → Presentation**
 - If Canva limits prompt length, paste one `SLIDE N` block at a time and add slides sequentially
-- After generation, upload the PNGs from `docs/Marketing/diagrams/` as custom images:
-  - `architecture.png` → Slide 4
-  - `features.png` → Slide 3 (feature map)
-  - `ui-tooling.png` → Slide 9
-  - `agent-workflow.png` → Slide 11
+- After generation, upload the SVG renders from `docs/architecture/c4/rendered/` (listed in `docs/Marketing/diagrams/README.md`) as custom images:
+  - `MKT-ARCHITECTURE-01.svg` and `MKT-ARCHITECTURE-01-part2.svg` to `-part7.svg` → Slide 4
+  - `MKT-FEATURES-01.svg` and `MKT-FEATURES-01-part2.svg` to `-part6.svg` → Slide 3 (feature map)
+  - `MKT-UITOOLING-01.svg` and `MKT-UITOOLING-01-part2.svg` → Slide 9
+  - `MKT-AGENTWORKFLOW-01.svg` and `MKT-AGENTWORKFLOW-01-part2.svg` to `-part8.svg` → Slide 11
 - All links in this prompt are real and ready to use as hyperlinks in Canva's link tool
 
 ## Known Links Reference

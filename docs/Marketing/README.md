@@ -12,7 +12,7 @@ Content for the QBrainAi Canva website and presentation.
 - [presentation-outline.md](presentation-outline.md) — 12-slide outline with speaker notes
 - [canva-website-prompt.md](canva-website-prompt.md) — Ready-to-paste Canva AI prompt for the website
 - [canva-presentation-prompt.md](canva-presentation-prompt.md) — Ready-to-paste Canva AI prompt for the presentation
-- [diagrams/README.md](diagrams/README.md) — Mermaid source + rendered PNG diagrams
+- [diagrams/README.md](diagrams/README.md): the Marketing diagrams as views of the C4 workspace, with links to their rendered SVG files
 
 ## Known Links
 

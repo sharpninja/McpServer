@@ -209,6 +209,6 @@ Professional, technical, and confident. This is developer infrastructure — not
 
 - Paste the full prompt into **Canva AI → Magic Design → Website**
 - If Canva breaks it up by section, paste one section at a time
-- Upload the PNGs from `docs/Marketing/diagrams/` as image assets to use in the Architecture and Hero sections
+- Upload the SVG renders from `docs/architecture/c4/rendered/` (listed in `docs/Marketing/diagrams/README.md`) as image assets to use in the Architecture and Hero sections
 - The code blocks in Quick Start work best as dark-background text boxes with a monospace font (Canva's "Code" text style if available, or a dark rectangle with white Courier/Source Code Pro text)
 - For feature icons, use Canva's built-in icon library searching the terms in parentheses next to each icon description
