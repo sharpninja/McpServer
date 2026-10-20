@@ -637,11 +637,32 @@ public static class MarkerFileService
         string pluginName,
         string environmentVariableName,
         string? userProfile,
-        DirectoryTreeWalker walker)
+        DirectoryTreeWalker walker) =>
+        ResolveAgentPluginVersion(workspacePath, pluginName, environmentVariableName, userProfile, walker, ReadExistingFileText);
+
+    /// <summary>
+    /// AC-TR-MCP-WS-005-001: resolves an agent plugin version as the overload above does, reading each candidate's
+    /// version files through <paramref name="readText"/>, so a version file that exists but cannot be read yields no
+    /// version and resolution goes on to the next file and candidate.
+    /// </summary>
+    /// <param name="workspacePath">Workspace whose sibling folder may hold the plugin.</param>
+    /// <param name="pluginName">Plugin folder name.</param>
+    /// <param name="environmentVariableName">Variable that may name the plugin root.</param>
+    /// <param name="userProfile">Profile whose plugin caches are scanned; none when empty.</param>
+    /// <param name="walker">Directory walk used for the cache scan.</param>
+    /// <param name="readText">Reads a file's text; null when the file does not exist; throws when it cannot be read.</param>
+    /// <returns>The resolved version.</returns>
+    internal static string ResolveAgentPluginVersion(
+        string workspacePath,
+        string pluginName,
+        string environmentVariableName,
+        string? userProfile,
+        DirectoryTreeWalker walker,
+        Func<string, string?> readText)
     {
-        foreach (var root in EnumerateAgentPluginVersionRoots(workspacePath, pluginName, environmentVariableName, userProfile, walker))
+        foreach (var root in EnumerateAgentPluginVersionRoots(workspacePath, pluginName, environmentVariableName, userProfile, walker, readText))
         {
-            var version = TryReadAgentPluginVersion(root);
+            var version = TryReadAgentPluginVersion(root, readText);
             if (!string.IsNullOrWhiteSpace(version))
                 return version;
         }
@@ -649,12 +670,22 @@ public static class MarkerFileService
         return SyncedAgentPluginVersion;
     }
 
+    /// <summary>
+    /// AC-TR-MCP-WS-005-001: the file read used for version files: a file's text, or null when it does not exist.
+    /// A file that exists but cannot be read throws, and the version read treats that as a file without a version.
+    /// </summary>
+    /// <param name="path">File path.</param>
+    /// <returns>The file text, or null when the file does not exist.</returns>
+    internal static string? ReadExistingFileText(string path) =>
+        File.Exists(path) ? File.ReadAllText(path) : null;
+
     private static IEnumerable<string> EnumerateAgentPluginVersionRoots(
         string workspacePath,
         string pluginName,
         string environmentVariableName,
         string? userProfile,
-        DirectoryTreeWalker walker)
+        DirectoryTreeWalker walker,
+        Func<string, string?> readText)
     {
         var environmentRoot = Environment.GetEnvironmentVariable(environmentVariableName);
         if (!string.IsNullOrWhiteSpace(environmentRoot))
@@ -669,17 +700,21 @@ public static class MarkerFileService
 
         if (!string.IsNullOrWhiteSpace(userProfile))
         {
-            foreach (var candidate in EnumerateUserPluginCacheRoots(userProfile, pluginName, walker))
+            foreach (var candidate in EnumerateUserPluginCacheRoots(userProfile, pluginName, walker, readText))
                 yield return candidate;
         }
     }
 
-    private static IEnumerable<string> EnumerateUserPluginCacheRoots(string userProfile, string pluginName, DirectoryTreeWalker walker)
+    private static IEnumerable<string> EnumerateUserPluginCacheRoots(
+        string userProfile,
+        string pluginName,
+        DirectoryTreeWalker walker,
+        Func<string, string?> readText)
     {
         var codexCache = Path.Combine(userProfile, ".codex", "plugins", "cache", pluginName);
         if (Directory.Exists(codexCache))
         {
-            foreach (var candidate in OrderPluginVersionRoots(walker.EnumerateDirectories(codexCache)))
+            foreach (var candidate in OrderPluginVersionRoots(walker.EnumerateDirectories(codexCache), readText))
                 yield return candidate;
         }
 
@@ -689,7 +724,7 @@ public static class MarkerFileService
             var candidates = walker.EnumerateDirectories(claudeCache)
                 .Where(path => path.Contains(pluginName, StringComparison.OrdinalIgnoreCase)
                     || Path.GetFileName(path).Contains("mcpserver", StringComparison.OrdinalIgnoreCase));
-            foreach (var candidate in OrderPluginVersionRoots(candidates))
+            foreach (var candidate in OrderPluginVersionRoots(candidates, readText))
                 yield return candidate;
         }
 
@@ -699,23 +734,23 @@ public static class MarkerFileService
             var candidates = walker.EnumerateDirectories(grokCache)
                 .Where(path => path.Contains(pluginName, StringComparison.OrdinalIgnoreCase)
                     || Path.GetFileName(path).Contains("mcpserver", StringComparison.OrdinalIgnoreCase));
-            foreach (var candidate in OrderPluginVersionRoots(candidates))
+            foreach (var candidate in OrderPluginVersionRoots(candidates, readText))
                 yield return candidate;
         }
     }
 
-    private static IEnumerable<string> OrderPluginVersionRoots(IEnumerable<string> candidates)
+    private static IEnumerable<string> OrderPluginVersionRoots(IEnumerable<string> candidates, Func<string, string?> readText)
     {
         return candidates
-            .Select(path => new { Path = path, Version = GetPluginVersionSortKey(path) })
+            .Select(path => new { Path = path, Version = GetPluginVersionSortKey(path, readText) })
             .OrderByDescending(candidate => candidate.Version)
             .ThenByDescending(candidate => candidate.Path, StringComparer.OrdinalIgnoreCase)
             .Select(candidate => candidate.Path);
     }
 
-    private static System.Version GetPluginVersionSortKey(string root)
+    private static System.Version GetPluginVersionSortKey(string root, Func<string, string?> readText)
     {
-        var versionText = TryReadAgentPluginVersion(root);
+        var versionText = TryReadAgentPluginVersion(root, readText);
         if (string.IsNullOrWhiteSpace(versionText))
             return new System.Version(0, 0);
 
@@ -725,18 +760,23 @@ public static class MarkerFileService
             : new System.Version(0, 0);
     }
 
-    private static string? TryReadAgentPluginVersion(string root)
+    /// <summary>
+    /// AC-TR-MCP-WS-005-001: reads the version of one candidate root from <c>.version</c>, then the plugin manifests
+    /// and <c>package.json</c>, in that order, through <paramref name="readText"/>; the first non-empty version wins.
+    /// A file that exists but cannot be read (an IO or access error) yields no version and the read goes on to the
+    /// next file; malformed JSON yields no version; any other error propagates.
+    /// </summary>
+    /// <param name="root">Candidate plugin root.</param>
+    /// <param name="readText">Reads a file's text; null when the file does not exist; throws when it cannot be read.</param>
+    /// <returns>The version, or null when no file yields one.</returns>
+    internal static string? TryReadAgentPluginVersion(string root, Func<string, string?> readText)
     {
-        if (string.IsNullOrWhiteSpace(root) || !Directory.Exists(root))
+        if (string.IsNullOrWhiteSpace(root))
             return null;
 
-        var versionFile = Path.Combine(root, ".version");
-        if (File.Exists(versionFile))
-        {
-            var version = File.ReadAllText(versionFile).Trim();
-            if (!string.IsNullOrWhiteSpace(version))
-                return version;
-        }
+        var version = TryReadFileText(Path.Combine(root, ".version"), readText)?.Trim();
+        if (!string.IsNullOrWhiteSpace(version))
+            return version;
 
         foreach (var manifest in new[]
                  {
@@ -747,11 +787,11 @@ public static class MarkerFileService
                      "package.json",
                  })
         {
-            var path = Path.Combine(root, manifest);
-            if (!File.Exists(path))
+            var text = TryReadFileText(Path.Combine(root, manifest), readText);
+            if (text is null)
                 continue;
 
-            var version = TryReadVersionFromJson(path);
+            version = TryReadVersionFromJson(text);
             if (!string.IsNullOrWhiteSpace(version))
                 return version;
         }
@@ -759,11 +799,23 @@ public static class MarkerFileService
         return null;
     }
 
-    private static string? TryReadVersionFromJson(string path)
+    private static string? TryReadFileText(string path, Func<string, string?> readText)
     {
         try
         {
-            using var document = JsonDocument.Parse(File.ReadAllText(path));
+            return readText(path);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            return null;
+        }
+    }
+
+    private static string? TryReadVersionFromJson(string text)
+    {
+        try
+        {
+            using var document = JsonDocument.Parse(text);
             if (document.RootElement.TryGetProperty("version", out var version)
                 && version.ValueKind == JsonValueKind.String)
             {

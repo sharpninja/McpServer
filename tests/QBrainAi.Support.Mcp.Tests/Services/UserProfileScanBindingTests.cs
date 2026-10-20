@@ -16,7 +16,10 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// <see cref="DirectoryTreeWalker.ListFileSystem"/>, with the failure conditions scripted on top: one directory's
 /// listing throws the untrusted-mount-point <see cref="IOException"/> seen on PAYTON-LEGION2 as kingd, and one
 /// directory is reported as a link. Seam controls run the same profile with the link flag removed and prove the
-/// result changes, so the expected values come from the link and error handling rather than from the layout.
+/// result changes, so the expected values come from the link and error handling rather than from the layout. The
+/// version-file cases (operator 2026-10-20: "Fold R3-P3 in first") read the same profile through
+/// <see cref="MarkerFileService.ReadExistingFileText"/> with named <c>.version</c> files scripted to throw the
+/// sharing-violation <see cref="IOException"/> of a locked file; their seam control reads every file normally.
 /// </remarks>
 public sealed class UserProfileScanBindingTests : IDisposable
 {
@@ -106,6 +109,53 @@ public sealed class UserProfileScanBindingTests : IDisposable
         var cacheRoot = Path.Combine(Profile, ".claude", "plugins", "cache");
 
         Assert.Equal(MarkerFileService.SyncedAgentPluginVersion, Resolve(ScriptedWalker(cacheRoot, link: null)));
+    }
+
+    /// <summary>
+    /// The file system read, except that every path in <paramref name="unreadable"/> throws the sharing-violation
+    /// <see cref="IOException"/> a locked file raises.
+    /// </summary>
+    private static Func<string, string?> ScriptedReader(params string[] unreadable) =>
+        path => unreadable.Any(locked => SamePath(path, locked))
+            ? throw new IOException("The process cannot access the file because it is being used by another process.")
+            : MarkerFileService.ReadExistingFileText(path);
+
+    private string ResolveWithReader(Func<string, string?> readText) =>
+        MarkerFileService.ResolveAgentPluginVersion(
+            Workspace,
+            PluginName,
+            $"MCP_SCAN_BINDING_UNSET_{Guid.NewGuid():N}",
+            Profile,
+            DirectoryTreeWalker.FileSystem,
+            readText);
+
+    /// <summary>
+    /// AC-TR-MCP-WS-005-001: when the higher cached version's <c>.version</c> cannot be read, resolution does not
+    /// throw and returns the next readable version; with the plain file read (seam control) the higher version wins,
+    /// so the unreadable file is what was passed over.
+    /// </summary>
+    [Fact]
+    public void ResolveAgentPluginVersion_UnreadableVersionFile_ResolvesTheNextReadableVersion()
+    {
+        var (_, higher) = CreatePluginCacheProfile();
+
+        Assert.Equal("7.7.7", ResolveWithReader(ScriptedReader(Path.Combine(higher, ".version"))));
+        Assert.Equal("9.9.9", ResolveWithReader(MarkerFileService.ReadExistingFileText));
+    }
+
+    /// <summary>
+    /// AC-TR-MCP-WS-005-001: when every cached version file cannot be read, resolution does not throw and falls back
+    /// to the synced plugin version.
+    /// </summary>
+    [Fact]
+    public void ResolveAgentPluginVersion_EveryVersionFileUnreadable_FallsBackToTheSyncedVersion()
+    {
+        var (_, higher) = CreatePluginCacheProfile();
+        var lower = Path.Combine(Path.GetDirectoryName(higher)!, "7.7.7");
+
+        Assert.Equal(
+            MarkerFileService.SyncedAgentPluginVersion,
+            ResolveWithReader(ScriptedReader(Path.Combine(higher, ".version"), Path.Combine(lower, ".version"))));
     }
 
     private (string Unlistable, string Linked) CreateHistoryProfile()
