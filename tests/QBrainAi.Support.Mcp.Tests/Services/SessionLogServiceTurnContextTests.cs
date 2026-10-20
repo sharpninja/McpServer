@@ -344,6 +344,7 @@ public sealed class SessionLogServiceTurnContextTests : IDisposable
     }
 
     /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-005: ~/ query expands then exact-matches.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task QueryAsync_HomeRelativeFilter_ExpandsThenExactMatches()
     {

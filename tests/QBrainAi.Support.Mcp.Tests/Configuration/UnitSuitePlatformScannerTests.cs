@@ -1,3 +1,5 @@
+using QBrainAi.Tests.Shared;
+
 namespace QBrainAi.Support.Mcp.Tests.Configuration;
 
 /// <summary>
@@ -59,6 +61,31 @@ public sealed class UnitSuitePlatformScannerTests
         Assert.Equal(ExpectedUnitProjects, names);
     }
 
+    /// <summary>
+    /// DRY: no source in the unit-suite projects holds a repository-root locator beside the shared
+    /// <c>tests/Shared/TestRepositoryRoot.cs</c>, and the guard does find the shared locator (positive control on the
+    /// real file).
+    /// </summary>
+    [Fact]
+    public void UnitProjects_HoldNoRepositoryLocatorBesideTheSharedOne()
+    {
+        var testsRoot = FindTestsRoot();
+        var findings = UnitProjects(testsRoot)
+            .SelectMany(project => Directory.EnumerateFiles(project, "*.cs", SearchOption.AllDirectories))
+            .Where(path => !IsBuildOutput(path))
+            .OrderBy(path => path, StringComparer.Ordinal)
+            .SelectMany(path => UnitSuitePlatformScanner.FindRepositoryLocators(File.ReadAllText(path))
+                .Select(line => $"{Path.GetRelativePath(testsRoot, path).Replace('\\', '/')}:{line}"))
+            .ToArray();
+
+        Assert.True(
+            findings.Length == 0,
+            "Locate the repository with the shared TestRepositoryRoot (tests/Shared/TestRepositoryRoot.cs) instead of a "
+            + "local walk up. Findings:" + Environment.NewLine + string.Join(Environment.NewLine, findings));
+        Assert.NotEmpty(UnitSuitePlatformScanner.FindRepositoryLocators(
+            File.ReadAllText(Path.Combine(testsRoot, "Shared", "TestRepositoryRoot.cs"))));
+    }
+
     private static IEnumerable<string> UnitProjects(string testsRoot) =>
         Directory.EnumerateDirectories(testsRoot)
             .Where(directory =>
@@ -79,14 +106,5 @@ public sealed class UnitSuitePlatformScannerTests
             || path.Contains($"{separator}obj{separator}", StringComparison.OrdinalIgnoreCase);
     }
 
-    private static string FindTestsRoot()
-    {
-        for (var directory = new DirectoryInfo(AppContext.BaseDirectory); directory is not null; directory = directory.Parent)
-        {
-            if (File.Exists(Path.Combine(directory.FullName, "QBrainAi.sln")))
-                return Path.Combine(directory.FullName, "tests");
-        }
-
-        throw new DirectoryNotFoundException($"Could not locate the repository root from '{AppContext.BaseDirectory}'.");
-    }
+    private static string FindTestsRoot() => TestRepositoryRoot.Combine("tests");
 }

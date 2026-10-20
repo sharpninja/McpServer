@@ -8,6 +8,7 @@ namespace QBrainAi.Support.Mcp.Tests.Memory;
 public sealed class MemoryBenchMultiTurnPackTests
 {
     /// <summary>AC-FR-MCP-MEMORY-019-01: v2 pack lives at the canonical path and is versioned.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void PackFile_ExistsAndVersioned()
     {
@@ -23,6 +24,7 @@ public sealed class MemoryBenchMultiTurnPackTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019-02: Pack covers preference, decision, fact, multi-fact, and negative/refuse.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void CoversRequiredJobClasses()
     {
@@ -33,6 +35,7 @@ public sealed class MemoryBenchMultiTurnPackTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019-03: Each job has establish then required query turns.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void JobsHaveEstablishThenRequiredQuery()
     {
@@ -46,6 +49,7 @@ public sealed class MemoryBenchMultiTurnPackTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019-04: Query turns do not restate gold facts in the user message.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void QueryTurns_DoNotRestateFacts()
     {
@@ -60,6 +64,7 @@ public sealed class MemoryBenchMultiTurnPackTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019-05: Pack declares paired conditions and token fields.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void PairedConditionsAndTokenFields()
     {

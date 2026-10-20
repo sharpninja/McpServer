@@ -75,6 +75,7 @@ public sealed class SessionLogSubmitBudgetTests
     }
 
     /// <summary>The shipped appsettings knob and host registration use the 30 second Submit budget.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void ShippedAppSettings_AndHosts_RegisterThirtySecondSubmitBudget()
     {

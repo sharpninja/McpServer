@@ -31,6 +31,9 @@
     <ProjectReference Include="..\QBrainAi.ProcessTree.TestHelper\QBrainAi.ProcessTree.TestHelper.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Shared\TestRepositoryRoot.cs" Link="Shared\TestRepositoryRoot.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <Using Include="Xunit" />
     <AssemblyMetadata Include="McpRepositoryRoot" Value="$(McpRepositoryRoot)" />
     <None Update="Fixtures\AgentHelp\**\*"

@@ -258,6 +258,7 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
     }
 
     /// <summary>TEST-MCP-DOCFXWIKI-001: DocFX workflow paths cannot escape the workspace through reparse points.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Load_DocFxWorkflowThroughReparsePoint_ThrowsActionableValidation()
     {

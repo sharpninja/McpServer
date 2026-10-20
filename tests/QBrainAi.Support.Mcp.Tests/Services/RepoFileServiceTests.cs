@@ -465,6 +465,7 @@ public sealed class RepoFileServiceTests : IDisposable
         Assert.DoesNotContain(src.Entries, entry => entry.Name == "notes.txt");
     }
 
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task ReadAsync_PathThroughSymlinkOutsideRepo_ReturnsNull()
     {

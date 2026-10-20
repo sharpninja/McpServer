@@ -289,6 +289,7 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
     }
 
     /// <summary>TEST-MCP-HOSTILEREVIEW-006: REST, REPL, Director, and plugin expose submit/status/get/query only.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task HostileReview_SurfaceParity_RestReplDirectorPlugin()
     {
@@ -541,22 +542,7 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
             },
         };
 
-    private static string FindRepoRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            if (File.Exists(Path.Combine(directory.FullName, "AGENTS.md"))
-                && Directory.Exists(Path.Combine(directory.FullName, "docs", "Project")))
-            {
-                return directory.FullName;
-            }
-
-            directory = directory.Parent;
-        }
-
-        throw new InvalidOperationException("Repository root could not be located.");
-    }
+    private static string FindRepoRoot() => QBrainAi.Tests.Shared.TestRepositoryRoot.Resolve();
 
     /// <summary>Records hostile-review HTTP paths for shipped workflow proof.</summary>
     private sealed class RecordingHostileReviewHandler : HttpMessageHandler

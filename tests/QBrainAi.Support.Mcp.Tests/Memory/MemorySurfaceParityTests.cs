@@ -1,5 +1,6 @@
 using System.Text.Json;
 using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Tests.Shared;
 
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
@@ -14,6 +15,7 @@ public sealed class MemorySurfaceParityTests : IDisposable
     public void Dispose() => _harness.Dispose();
 
     /// <summary>AC-FR-MCP-MEMORY-010-48: Remember via MCP tool and REST produce equivalent stored fields.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task McpAndRest_EquivalentStore()
     {
@@ -42,16 +44,5 @@ public sealed class MemorySurfaceParityTests : IDisposable
         Assert.Equal(payload.Type, mcpStored?.Type, ignoreCase: true);
     }
 
-    private static string FindRepoRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            if (File.Exists(Path.Combine(directory.FullName, "docs", "stdio-tool-contract.json")))
-                return directory.FullName;
-            directory = directory.Parent;
-        }
-
-        throw new InvalidOperationException("Repository root could not be located.");
-    }
+    private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
 }

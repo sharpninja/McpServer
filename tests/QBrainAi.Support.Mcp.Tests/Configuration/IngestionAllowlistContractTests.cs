@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using QBrainAi.Tests.Shared;
 using Xunit;
 
 namespace QBrainAi.Support.Mcp.Tests.Configuration;
@@ -20,6 +21,7 @@ public sealed class IngestionAllowlistContractTests
     /// Test data: <c>src\QBrainAi.Support.Mcp\appsettings.yaml</c> content with expected glob values.
     /// This data is used to ensure configuration defaults preserve indexing coverage for CQRS source trees.
     /// </remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void AppSettingsYaml_ContainsRequiredRepoAllowlistPatterns()
     {
@@ -38,6 +40,7 @@ public sealed class IngestionAllowlistContractTests
     /// Test data: <c>templates\prompt-templates.yaml</c> and known capability bullet strings for indexed repo-local projects.
     /// This data is used to confirm marker prompt output advertises indexed libraries that still live in this repository.
     /// </remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void MarkerPromptTemplate_ContainsAvailableCapabilitiesSection()
     {
@@ -61,6 +64,7 @@ public sealed class IngestionAllowlistContractTests
     /// iteration cannot advance unless the executed test gate has no failures
     /// and no skips.
     /// </remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void MarkerPromptTemplate_ContainsByrdV4HundredPercentTestGate()
     {
@@ -83,6 +87,7 @@ public sealed class IngestionAllowlistContractTests
     /// agents to produce requirements-backed, TDD-first plans that lower-cost
     /// implementation agents can execute without resolving unstated decisions.
     /// </remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void MarkerPromptTemplate_ContainsDecisionCompletePlanHandoffGuidance()
     {
@@ -105,6 +110,7 @@ public sealed class IngestionAllowlistContractTests
     /// <remarks>
     /// Requirement coverage: FR-MCP-HELP-008, TEST-MCP-HELP-SEC-007.
     /// </remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void MarkerPromptTemplate_ContainsAgentHelpSection()
     {
@@ -123,6 +129,7 @@ public sealed class IngestionAllowlistContractTests
     /// <remarks>
     /// Requirement coverage: FR-MCP-103, PLAN-FEDERATION-001 agent/operator surface.
     /// </remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void MarkerPromptTemplate_ContainsFederationTopologyDiagnostics()
     {
@@ -155,6 +162,7 @@ public sealed class IngestionAllowlistContractTests
     /// expose the role, hub, proxy, queue, sync, signing, and local-execution keys
     /// needed to configure Hub and LocalProxy machines without hand-inventing YAML.
     /// </remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void AppSettingsTemplate_ContainsHubSpokeFederationShape()
     {
@@ -301,42 +309,13 @@ public sealed class IngestionAllowlistContractTests
     }
 
     /// <summary>
-    /// Locates a repository file by walking upward from the test execution directory.
+    /// Locates a repository file under the checkout root through the shared <see cref="TestRepositoryRoot"/>, which
+    /// resolves only for an integration test (TR-MCP-USECASE-018 AC-006).
     /// </summary>
     /// <param name="segments">Path segments from repository root to the target file.</param>
     /// <returns>Absolute path to the requested file.</returns>
-    /// <remarks>
-    /// Test data: relative path segments for files under test.
-    /// This helper is used so tests can resolve files reliably across local and CI run directories.
-    /// </remarks>
-    private static string FindFileFromRepoRoot(params string[] segments)
-    {
-        var dir = new DirectoryInfo(AppContext.BaseDirectory);
-        while (dir is not null)
-        {
-            var candidate = Path.Combine(dir.FullName, Path.Combine(segments));
-            if (File.Exists(candidate))
-                return candidate;
+    private static string FindFileFromRepoRoot(params string[] segments) => TestRepositoryRoot.Combine(segments);
 
-            dir = dir.Parent;
-        }
-
-        throw new FileNotFoundException($"Could not locate file '{Path.Combine(segments)}' from '{AppContext.BaseDirectory}'.");
-    }
-
-    private static string FindDirectoryFromRepoRoot(params string[] segments)
-    {
-        var dir = new DirectoryInfo(AppContext.BaseDirectory);
-        while (dir is not null)
-        {
-            var candidate = Path.Combine(dir.FullName, Path.Combine(segments));
-            if (Directory.Exists(candidate))
-                return candidate;
-
-            dir = dir.Parent;
-        }
-
-        throw new DirectoryNotFoundException($"Could not locate directory '{Path.Combine(segments)}' from '{AppContext.BaseDirectory}'.");
-    }
+    private static string FindDirectoryFromRepoRoot(params string[] segments) => TestRepositoryRoot.Combine(segments);
 
 }

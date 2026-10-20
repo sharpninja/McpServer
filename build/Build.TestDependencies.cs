@@ -111,11 +111,14 @@ partial class Build
             // Only projects that contain Category=Integration tests: an empty filter match
             // makes the test runner fail the target.
             // TR-MCP-NUKE-019 AC-2: every project that holds Category=Integration cases, so the two hosts
-            // together run every integration case.
+            // together run every integration case. Repl.Core.Tests and QBAgent.Tests hold the tests that read the
+            // repository checkout through the shared TestRepositoryRoot (TR-MCP-USECASE-018 AC-006).
             var projectsWithIntegrationTests = new[]
             {
                 TestsDirectory / "QBrainAi.Support.Mcp.Tests" / "QBrainAi.Support.Mcp.Tests.csproj",
                 TestsDirectory / "QBrainAi.McpAgent.Tests" / "QBrainAi.McpAgent.Tests.csproj",
+                TestsDirectory / "QBrainAi.Repl.Core.Tests" / "QBrainAi.Repl.Core.Tests.csproj",
+                TestsDirectory / "QBrainAi.QBAgent.Tests" / "QBrainAi.QBAgent.Tests.csproj",
                 TestsDirectory / "Build.Tests" / "Build.Tests.csproj",
             };
 

@@ -21,7 +21,10 @@ namespace QBrainAi.Support.Mcp.Tests.Configuration;
 /// <c>UnitTestPaths</c> fixture) are not test classes. An OS-platform attribute on the assembly or module is a
 /// finding for the whole project. Limits: the scan reads one file's syntax, so dependence reached through a
 /// helper type defined in another file, a global using or alias declared in another file, reflection, or
-/// operating-system behavior of a base-library call such as <c>Path.GetFullPath</c> is outside it.
+/// operating-system behavior of a base-library call such as <c>Path.GetFullPath</c> is outside it. Repository
+/// reads are covered by construction instead: <see cref="FindRepositoryLocators"/> keeps the shared
+/// <c>TestRepositoryRoot</c> the only repository-root locator (DRY), and that locator refuses to resolve outside
+/// an integration test, so a unit test that reads the checkout through any helper fails the unit run.
 /// </summary>
 internal static class UnitSuitePlatformScanner
 {
@@ -64,6 +67,27 @@ internal static class UnitSuitePlatformScanner
             .SelectMany(FindHits)
             .Where(hit => hit.Kind == "skip")
             .Select(hit => LineOf(hit.Node))
+            .Distinct()
+            .Order()
+            .ToArray();
+    }
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008), DRY guard for repository reads: returns the 1-based
+    /// lines, in any type and any conditional-compilation branch, of a repository-root locator other than the shared
+    /// <c>TestRepositoryRoot</c>: a walk up (<c>.Parent</c>, <c>?.Parent</c>, <c>Directory.GetParent</c>) in a member
+    /// that starts from <c>AppContext.BaseDirectory</c> or a <c>[CallerFilePath]</c> parameter (reported at the first
+    /// step), a <c>Path.Combine</c> or <c>Path.Join</c> of <c>AppContext.BaseDirectory</c> with a <c>..</c> segment,
+    /// or a read of the <c>McpRepositoryRoot</c> build metadata (the key and <c>AssemblyMetadataAttribute</c> in one
+    /// member; the key alone, as in a comparison, is not a read).
+    /// </summary>
+    /// <param name="source">C# source text.</param>
+    internal static IReadOnlyList<int> FindRepositoryLocators(string source)
+    {
+        ArgumentNullException.ThrowIfNull(source);
+        return ParseBranches(source)
+            .SelectMany(RepositoryLocatorNodes)
+            .Select(LineOf)
             .Distinct()
             .Order()
             .ToArray();
@@ -167,6 +191,55 @@ internal static class UnitSuitePlatformScanner
             }
         }
     }
+
+    private static IEnumerable<SyntaxNode> RepositoryLocatorNodes(CompilationUnitSyntax root)
+    {
+        foreach (var member in root.DescendantNodes().OfType<MemberDeclarationSyntax>()
+                     .Where(member => member is not BaseTypeDeclarationSyntax and not BaseNamespaceDeclarationSyntax and not DelegateDeclarationSyntax))
+        {
+            var nodes = member.DescendantNodes().ToArray();
+            if (nodes.Any(IsBaseDirectory) || nodes.OfType<ParameterSyntax>().Any(HasCallerFilePath))
+            {
+                var step = nodes.FirstOrDefault(IsParentStep);
+                if (step is not null)
+                    yield return step;
+            }
+
+            foreach (var walk in nodes.OfType<InvocationExpressionSyntax>().Where(IsRelativeWalkUp))
+                yield return walk;
+
+            // A read of the build metadata names the attribute type and the key in the same member.
+            if (nodes.OfType<SimpleNameSyntax>().Any(name => WithoutAttributeSuffix(name.Identifier.ValueText) == "AssemblyMetadata"))
+            {
+                foreach (var literal in nodes.OfType<LiteralExpressionSyntax>().Where(literal => IsStringLiteral(literal, "McpRepositoryRoot")))
+                    yield return literal;
+            }
+        }
+    }
+
+    private static bool IsBaseDirectory(SyntaxNode node) =>
+        node is MemberAccessExpressionSyntax { Name.Identifier.ValueText: "BaseDirectory" } access
+        && RightmostName(access.Expression) == "AppContext";
+
+    private static bool HasCallerFilePath(ParameterSyntax parameter) =>
+        parameter.AttributeLists.SelectMany(list => list.Attributes)
+            .Any(attribute => WithoutAttributeSuffix(RightmostName(attribute.Name)) == "CallerFilePath");
+
+    private static bool IsParentStep(SyntaxNode node) => node switch
+    {
+        MemberAccessExpressionSyntax { Name.Identifier.ValueText: "Parent" } => true,
+        MemberBindingExpressionSyntax { Name.Identifier.ValueText: "Parent" } => true,
+        InvocationExpressionSyntax { Expression: MemberAccessExpressionSyntax { Name.Identifier.ValueText: "GetParent" } } => true,
+        _ => false,
+    };
+
+    private static bool IsRelativeWalkUp(InvocationExpressionSyntax invocation) =>
+        RightmostName(invocation.Expression) is "Combine" or "Join"
+        && invocation.ArgumentList.Arguments.Any(argument => IsBaseDirectory(argument.Expression))
+        && invocation.ArgumentList.Arguments.Any(argument =>
+            argument.Expression is LiteralExpressionSyntax literal
+            && literal.IsKind(SyntaxKind.StringLiteralExpression)
+            && literal.Token.ValueText.StartsWith("..", StringComparison.Ordinal));
 
     private static IReadOnlyList<string> AttributeKinds(AttributeSyntax attribute, IReadOnlyDictionary<string, string> aliases)
     {

@@ -18,18 +18,12 @@ public sealed class BugTriage139FifteenthHarnessTests
     [Fact]
     public void DeterministicBuild_EmbedsRepositoryRootAndCopiesAgentHelpFixtures()
     {
-        var metadata = typeof(BugTriage139FifteenthHarnessTests).Assembly
-            .GetCustomAttributes<AssemblyMetadataAttribute>()
-            .SingleOrDefault(attribute =>
-                string.Equals(
-                    attribute.Key,
-                    "McpRepositoryRoot",
-                    StringComparison.Ordinal));
-        Assert.NotNull(metadata);
-        Assert.False(string.IsNullOrWhiteSpace(metadata!.Value));
+        // The build metadata is read once, in the shared locator (DRY).
+        var metadataRoot = QBrainAi.Tests.Shared.TestRepositoryRoot.BuildMetadataRoot;
+        Assert.False(string.IsNullOrWhiteSpace(metadataRoot));
         Assert.True(
-            File.Exists(Path.Combine(metadata.Value!, "QBrainAi.sln")),
-            metadata.Value);
+            File.Exists(Path.Combine(metadataRoot!, "QBrainAi.sln")),
+            metadataRoot);
 
         var fixture = Path.Combine(
             AppContext.BaseDirectory,

@@ -163,6 +163,7 @@ public abstract class WorkspacePathConsumersContractTests
     /// FR-MCP-FED-PATH-001-AC4: repo writes for a foreign-platform workspace fail and create
     /// nothing at a host re-rooting of the path.
     /// </summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task RepoFiles_ForeignWorkspace_WriteFailsAndCreatesNothing()
     {

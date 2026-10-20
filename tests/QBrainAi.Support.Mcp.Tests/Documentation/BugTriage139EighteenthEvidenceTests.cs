@@ -15,6 +15,7 @@ namespace QBrainAi.Support.Mcp.Tests.Documentation;
 public sealed class BugTriage139EighteenthEvidenceTests
 {
     /// <summary>Verifies every published historical receipt against its immutable Git-era hash.</summary>
+    [Trait("Category", "Integration")]
     [Theory]
     [InlineData(
         "BUG-TRIAGE-139-ninth-remediation.md",
@@ -55,6 +56,7 @@ public sealed class BugTriage139EighteenthEvidenceTests
     /// Verifies corrections, canonical TODO/triage ownership, and the fixed exact-ledger path are
     /// declared only by the current append-only index.
     /// </summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void CurrentEvidenceIndex_RecordsSupersessionOwnershipAndExactLedgerPath()
     {

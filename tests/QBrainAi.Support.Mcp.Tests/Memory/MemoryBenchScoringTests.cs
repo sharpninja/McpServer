@@ -8,6 +8,7 @@ namespace QBrainAi.Support.Mcp.Tests.Memory;
 public sealed class MemoryBenchScoringTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-10: exact/contains are deterministic; rubric uses a locked checklist.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void DeterministicOrDocumentedRubric()
     {

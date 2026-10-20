@@ -1,4 +1,5 @@
 using QBrainAi.SessionLog.Transcripts;
+using QBrainAi.Tests.Shared;
 
 namespace QBrainAi.Support.Mcp.Tests.Ingestion;
 
@@ -12,6 +13,7 @@ public sealed class ImportRecoveryEnvelopeTests
     /// A pending envelope is replayed from its source file. The canonical artifact and source file stay.
     /// The persister receives the normalized session, not the envelope document.
     /// </summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task IngestPath_ReplaysPendingEnvelopeThroughPersister_DeletesOnlyEnvelope()
     {
@@ -73,18 +75,7 @@ public sealed class ImportRecoveryEnvelopeTests
         }
     }
 
-    private static string FindRepositoryRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            if (File.Exists(Path.Combine(directory.FullName, "QBrainAi.sln")))
-                return directory.FullName;
-            directory = directory.Parent;
-        }
-
-        throw new InvalidOperationException("QBrainAi.sln not found.");
-    }
+    private static string FindRepositoryRoot() => TestRepositoryRoot.Resolve();
 
     private sealed class EmptyDetector : ITranscriptBundleDetector
     {

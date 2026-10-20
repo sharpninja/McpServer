@@ -25,6 +25,9 @@
     <ProjectReference Include="..\..\tests\QBrainAi.Todo.Validation\QBrainAi.Todo.Validation.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Shared\TestRepositoryRoot.cs" Link="Shared\TestRepositoryRoot.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
 </Project>

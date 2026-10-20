@@ -6,6 +6,7 @@ namespace QBrainAi.Support.Mcp.Tests.Memory;
 public sealed class MemoryBenchSafetyTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-12: NEG-001 forbids invented favorites in both conditions.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void NegativePrompts_NoHallucinatedMemory()
     {

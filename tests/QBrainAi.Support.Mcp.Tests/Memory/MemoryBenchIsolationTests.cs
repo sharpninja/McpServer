@@ -8,6 +8,7 @@ namespace QBrainAi.Support.Mcp.Tests.Memory;
 public sealed class MemoryBenchIsolationTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-28: Pack run cannot read or mutate the primary workspace.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void NoPrimaryWorkspaceBleed()
     {

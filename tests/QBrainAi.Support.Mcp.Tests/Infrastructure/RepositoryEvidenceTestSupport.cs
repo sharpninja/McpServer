@@ -14,94 +14,13 @@ internal static partial class RepositoryEvidenceTestSupport
 {
     private static readonly TimeSpan s_defaultProcessTimeout = TimeSpan.FromSeconds(30);
 
-    private static readonly string? s_buildRepositoryRoot =
-        typeof(RepositoryEvidenceTestSupport).Assembly
-            .GetCustomAttributes<AssemblyMetadataAttribute>()
-            .FirstOrDefault(
-                attribute => string.Equals(
-                    attribute.Key,
-                    "McpRepositoryRoot",
-                    StringComparison.Ordinal))
-            ?.Value;
-
     /// <summary>
-    /// Resolves and validates an explicit repository root, or discovers the checkout from immutable
-    /// build-time source provenance before considering process-relative locations.
+    /// The repository root through the shared <see cref="QBrainAi.Tests.Shared.TestRepositoryRoot"/> (the one locator:
+    /// <c>MCP_REPOSITORY_ROOT</c>, then the build metadata, then the marker walk-up), which resolves only for an
+    /// integration test.
     /// </summary>
     /// <returns>The validated absolute repository root.</returns>
-    /// <exception cref="InvalidOperationException">
-    /// Thrown when an explicit candidate is invalid or no checkout can be discovered.
-    /// </exception>
-    internal static string ResolveRepositoryRoot()
-    {
-        var configured = Environment.GetEnvironmentVariable("MCP_REPOSITORY_ROOT");
-        if (!string.IsNullOrWhiteSpace(configured))
-            return ValidateRepositoryRoot(configured, "Configured");
-
-        if (!string.IsNullOrWhiteSpace(s_buildRepositoryRoot))
-            return ValidateRepositoryRoot(s_buildRepositoryRoot, "Build-metadata");
-
-        var startingPoints = new[]
-        {
-            Path.GetDirectoryName(typeof(RepositoryEvidenceTestSupport).Assembly.Location),
-            AppContext.BaseDirectory,
-            Directory.GetCurrentDirectory(),
-        };
-        foreach (var startingPoint in startingPoints.Where(
-                     candidate => !string.IsNullOrWhiteSpace(candidate)))
-        {
-            DirectoryInfo? current;
-            try
-            {
-                current = new DirectoryInfo(Path.GetFullPath(startingPoint!));
-            }
-            catch (Exception exception) when (
-                exception is ArgumentException or NotSupportedException or PathTooLongException)
-            {
-                continue;
-            }
-
-            while (current is not null)
-            {
-                if (IsRepositoryRoot(current.FullName))
-                    return current.FullName;
-
-                current = current.Parent;
-            }
-        }
-
-        throw new InvalidOperationException(
-            "Repository root was not found from build metadata, assembly location, " +
-            "application base directory, or current directory.");
-    }
-
-    /// <summary>Validates an explicit root without silently falling back to another checkout.</summary>
-    private static string ValidateRepositoryRoot(string candidate, string source)
-    {
-        var root = Path.GetFullPath(candidate);
-        if (!IsRepositoryRoot(root))
-        {
-            throw new InvalidOperationException(
-                $"{source} repository root is invalid: {root}");
-        }
-
-        return root;
-    }
-
-    /// <summary>Checks the complete set of markers that identify this repository.</summary>
-    private static bool IsRepositoryRoot(string root)
-    {
-        var gitMarker = Path.Combine(root, ".git");
-        return (File.Exists(gitMarker) || Directory.Exists(gitMarker)) &&
-               File.Exists(Path.Combine(root, "QBrainAi.sln")) &&
-               File.Exists(Path.Combine(root, "Directory.Build.props")) &&
-               File.Exists(
-                   Path.Combine(
-                       root,
-                       "tests",
-                       "QBrainAi.Support.Mcp.Tests",
-                       "QBrainAi.Support.Mcp.Tests.csproj"));
-    }
+    internal static string ResolveRepositoryRoot() => QBrainAi.Tests.Shared.TestRepositoryRoot.Resolve();
 
     /// <summary>
     /// Runs Git with binary-safe standard output and a bounded timeout.

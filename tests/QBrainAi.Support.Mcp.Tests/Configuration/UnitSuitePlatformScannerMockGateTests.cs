@@ -525,6 +525,125 @@ public sealed class UnitSuitePlatformScannerMockGateTests
         Assert.Empty(UnitSuitePlatformScanner.FindSkipLines(source));
     }
 
+    /// <summary>
+    /// Scripted sources for the DRY guard <see cref="UnitSuitePlatformScanner.FindRepositoryLocators"/>: a locator is a
+    /// walk up (<c>.Parent</c>, <c>?.Parent</c>, <c>Directory.GetParent</c>) in a member that starts from the test output
+    /// or the caller's source path, a relative walk up from the test output, or a read of the <c>McpRepositoryRoot</c>
+    /// build metadata, in any type. A fixture read from the test output, a walk up from another directory, a call to
+    /// the shared locator, and the same text in comments or strings are not locators.
+    /// </summary>
+    private static readonly Dictionary<string, (string Source, int[] Expected)> LocatorCases = new(StringComparer.Ordinal)
+    {
+        ["walk-up-from-output"] = ("""
+            namespace N;
+            internal static class Paths
+            {
+                internal static string Root()
+                {
+                    var directory = new DirectoryInfo(AppContext.BaseDirectory);
+                    while (directory is not null && !File.Exists(Path.Combine(directory.FullName, "X.sln")))
+                        directory = directory.Parent;
+                    return directory!.FullName;
+                }
+            }
+            """, [8]),
+        ["conditional-walk-up-in-test-class"] = ("""
+            namespace N;
+            public sealed class FooTests
+            {
+                private static string Root()
+                {
+                    for (var d = new DirectoryInfo(AppContext.BaseDirectory); d is not null; d = d?.Parent)
+                    {
+                        if (File.Exists(Path.Combine(d.FullName, "X.sln"))) return d.FullName;
+                    }
+                    throw new InvalidOperationException();
+                }
+            }
+            """, [6]),
+        ["relative-walk-up"] = ("""
+            namespace N;
+            public sealed class FooTests
+            {
+                [Fact]
+                public void A()
+                {
+                    var src = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "src"));
+                    var up = Path.Combine(AppContext.BaseDirectory, "../../docs");
+                }
+            }
+            """, [7, 8]),
+        ["caller-file-path"] = ("""
+            using System.Runtime.CompilerServices;
+            namespace N;
+            internal static class Paths
+            {
+                internal static string Root([CallerFilePath] string path = "") =>
+                    new FileInfo(path).Directory!.Parent!.FullName;
+            }
+            """, [6]),
+        ["build-metadata"] = ("""
+            namespace N;
+            internal static class Paths
+            {
+                internal static string? Root() => typeof(Paths).Assembly
+                    .GetCustomAttributes<System.Reflection.AssemblyMetadataAttribute>()
+                    .FirstOrDefault(a => a.Key == "McpRepositoryRoot")?.Value;
+            }
+            """, [6]),
+        ["not-locators"] = ("""
+            namespace N;
+            public sealed class FooTests
+            {
+                private static string Fixture(string name) => Path.Combine(AppContext.BaseDirectory, "Fixtures", name);
+                private static string Up(string temp) => new DirectoryInfo(temp).Parent!.FullName;
+                private static string Shared() => TestRepositoryRoot.Resolve();
+                // var d = new DirectoryInfo(AppContext.BaseDirectory); d = d.Parent;
+                private const string Text = "McpRepositoryRoot AppContext.BaseDirectory .Parent";
+                private static bool IsAnchorKey(string key) => key == "McpRepositoryRoot";
+            }
+            """, []),
+    };
+
+    /// <summary>Every scripted source yields exactly the locator lines the DRY rule requires.</summary>
+    /// <param name="name">Case name.</param>
+    [Theory]
+    [InlineData("walk-up-from-output")]
+    [InlineData("conditional-walk-up-in-test-class")]
+    [InlineData("relative-walk-up")]
+    [InlineData("caller-file-path")]
+    [InlineData("build-metadata")]
+    [InlineData("not-locators")]
+    public void ScriptedSource_YieldsRepositoryLocatorLines(string name)
+    {
+        var (source, expected) = LocatorCases[name];
+        Assert.Equal(expected, UnitSuitePlatformScanner.FindRepositoryLocators(source));
+    }
+
+    /// <summary>The locator theory above covers every scripted case.</summary>
+    [Fact]
+    public void LocatorTheory_CoversEveryCase() => Assert.Equal(6, LocatorCases.Count);
+
+    /// <summary>
+    /// Negative controls for the DRY guard: an output with no locator lines, one that drops the conditional
+    /// <c>?.Parent</c> step, and one that also counts the fixture read from the test output are each rejected.
+    /// </summary>
+    [Fact]
+    public void LocatorNegativeControls_AreRejectedInsidePassingHarness()
+    {
+        var relative = UnitSuitePlatformScanner.FindRepositoryLocators(LocatorCases["relative-walk-up"].Source);
+        Assert.NotNull(Record.Exception(() => Assert.Equal(new[] { 7, 8 }, Array.Empty<int>())));
+        Assert.NotNull(Record.Exception(() => Assert.Equal(new[] { 7 }, relative)));
+        Assert.Null(Record.Exception(() => Assert.Equal(new[] { 7, 8 }, relative)));
+
+        var conditional = UnitSuitePlatformScanner.FindRepositoryLocators(LocatorCases["conditional-walk-up-in-test-class"].Source);
+        Assert.NotNull(Record.Exception(() => Assert.Equal(Array.Empty<int>(), conditional)));
+
+        var notLocators = UnitSuitePlatformScanner.FindRepositoryLocators(LocatorCases["not-locators"].Source);
+        Assert.NotNull(Record.Exception(() => Assert.Equal(new[] { 4 }, notLocators)));
+        Assert.Null(Record.Exception(() => Assert.Equal(Array.Empty<int>(), notLocators)));
+    }
+
     /// <summary>Assertion shared by the scripted cases and the negative controls.</summary>
     /// <param name="expected">Findings as "line kind class".</param>
     /// <param name="actual">Scanner output.</param>

@@ -1,3 +1,5 @@
+using QBrainAi.Tests.Shared;
+
 namespace QBrainAi.Support.Mcp.Tests.Configuration;
 
 /// <summary>
@@ -5,6 +7,7 @@ namespace QBrainAi.Support.Mcp.Tests.Configuration;
 /// </summary>
 public sealed class TriageConfigurationContractTests
 {
+    [Trait("Category", "Integration")]
     [Theory]
     [InlineData("appsettings.yaml")]
     [InlineData("appsettings.Staging.yaml")]
@@ -39,18 +42,5 @@ public sealed class TriageConfigurationContractTests
         return section;
     }
 
-    private static string FindFileFromRepoRoot(params string[] segments)
-    {
-        var dir = new DirectoryInfo(AppContext.BaseDirectory);
-        while (dir is not null)
-        {
-            var candidate = Path.Combine(dir.FullName, Path.Combine(segments));
-            if (File.Exists(candidate))
-                return candidate;
-
-            dir = dir.Parent;
-        }
-
-        throw new FileNotFoundException($"Could not locate file '{Path.Combine(segments)}' from '{AppContext.BaseDirectory}'.");
-    }
+    private static string FindFileFromRepoRoot(params string[] segments) => TestRepositoryRoot.Combine(segments);
 }

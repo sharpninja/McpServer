@@ -8,6 +8,7 @@ namespace QBrainAi.Support.Mcp.Tests.Memory;
 public sealed class MemoryBenchValueGateTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-47: Other plugins stay blocked until H7a AGREE.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void GrokH7a_RequiresAgreeBeforeOtherPlugins()
     {
@@ -25,6 +26,7 @@ public sealed class MemoryBenchValueGateTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-50: H-done defaults to H7a; H7b is follow-on.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void HDone_DefaultRequiresH7a_H7bFollowOn()
     {

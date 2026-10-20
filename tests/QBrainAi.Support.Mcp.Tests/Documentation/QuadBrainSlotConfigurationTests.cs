@@ -1,3 +1,4 @@
+using QBrainAi.Tests.Shared;
 using YamlDotNet.Serialization;
 
 namespace QBrainAi.Support.Mcp.Tests.Documentation;
@@ -6,6 +7,7 @@ namespace QBrainAi.Support.Mcp.Tests.Documentation;
 public sealed class QuadBrainSlotConfigurationTests
 {
     /// <summary>The prepared assignment file contains all four requested brain-slot mappings.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void QuadBrainSlotAssignments_ContainRequestedRuntimeAndModelMappings()
     {
@@ -56,6 +58,7 @@ public sealed class QuadBrainSlotConfigurationTests
     }
 
     /// <summary>The generator script builds the YAML artifact through PowerShell object serialization.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void QuadBrainSlotGenerator_UsesConvertToYaml()
     {
@@ -171,19 +174,5 @@ public sealed class QuadBrainSlotConfigurationTests
     private static string ToInvariantString(object item)
         => Convert.ToString(item, System.Globalization.CultureInfo.InvariantCulture) ?? string.Empty;
 
-    private static string FindRepoRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            if (File.Exists(Path.Combine(directory.FullName, "QBrainAi.sln")))
-            {
-                return directory.FullName;
-            }
-
-            directory = directory.Parent;
-        }
-
-        throw new InvalidOperationException("Repository root could not be located.");
-    }
+    private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
 }

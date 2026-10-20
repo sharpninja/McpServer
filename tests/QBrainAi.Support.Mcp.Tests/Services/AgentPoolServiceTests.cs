@@ -432,13 +432,13 @@ public sealed class AgentPoolServiceTests
         todoFactory.CreateForWorkspace(Arg.Any<string>(), Arg.Any<WorkspaceContext>()).Returns(todoService);
         var resolver = new TodoServiceResolver(
             todoService,
-            Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = Environment.CurrentDirectory }),
+            Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = AppContext.BaseDirectory }),
             todoFactory);
 
         return new WorkspaceServiceAccessor(
             resolver,
             new HttpContextAccessor(),
-            Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = Environment.CurrentDirectory }));
+            Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = AppContext.BaseDirectory }));
     }
 
     private static IOptionsMonitor<T> CreateOptionsMonitor<T>(T value) where T : class

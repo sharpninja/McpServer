@@ -7,6 +7,7 @@ namespace QBrainAi.Support.Mcp.Tests.Memory;
 public sealed class MemoryUiDeployDocsTests
 {
     /// <summary>AC-TR-MCP-MEMORY-UI-002-02: Deploy docs name Nuke UpdateService as the ship path.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void NamesUpdateService()
     {

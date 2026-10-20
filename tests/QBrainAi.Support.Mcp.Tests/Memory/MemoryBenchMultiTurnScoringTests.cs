@@ -8,6 +8,7 @@ namespace QBrainAi.Support.Mcp.Tests.Memory;
 public sealed class MemoryBenchMultiTurnScoringTests
 {
     /// <summary>AC-FR-MCP-MEMORY-019: without_memory query turns can pass from conversation history.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void QueryScoring_SameGoldForBothConditions()
     {
@@ -23,6 +24,7 @@ public sealed class MemoryBenchMultiTurnScoringTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019: Negative/refuse turns fail if the model invents.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void NegativeRefuse_FailsOnInvention()
     {

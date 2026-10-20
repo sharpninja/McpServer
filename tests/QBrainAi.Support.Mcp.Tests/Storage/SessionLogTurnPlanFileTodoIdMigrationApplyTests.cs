@@ -64,10 +64,11 @@ public sealed class SessionLogTurnPlanFileTodoIdMigrationApplyTests : IDisposabl
     }
 
     /// <summary>All three provider migration sources add both columns with default None.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void ProviderMigrations_AddBothColumnsWithNoneDefault()
     {
-        var repoSrc = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "src"));
+        var repoSrc = QBrainAi.Tests.Shared.TestRepositoryRoot.Combine("src");
         var roots = new[]
         {
             Path.Combine(repoSrc, "QBrainAi.Storage.SqliteMigrations", "Migrations"),

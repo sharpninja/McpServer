@@ -1058,24 +1058,12 @@ public sealed class MarkerFileServiceTests
     }
 
     /// <summary>
-    /// Locates a repository file by walking up from the test output directory.
+    /// Locates a repository file through the shared <see cref="QBrainAi.Tests.Shared.TestRepositoryRoot"/> (integration
+    /// tests only).
     /// </summary>
     /// <param name="segments">Repo-relative path segments of the file to locate.</param>
     /// <returns>The absolute path of the located file.</returns>
-    private static string FindFileFromRepoRoot(params string[] segments)
-    {
-        var dir = new DirectoryInfo(AppContext.BaseDirectory);
-        while (dir is not null)
-        {
-            var candidate = Path.Combine(dir.FullName, Path.Combine(segments));
-            if (File.Exists(candidate))
-                return candidate;
-
-            dir = dir.Parent;
-        }
-
-        throw new FileNotFoundException($"Could not locate file '{Path.Combine(segments)}' from '{AppContext.BaseDirectory}'.");
-    }
+    private static string FindFileFromRepoRoot(params string[] segments) => QBrainAi.Tests.Shared.TestRepositoryRoot.Combine(segments);
 
     /// <summary>
     /// Verifies the marker-v1 payload builder emits exactly the fields named by
@@ -1170,6 +1158,7 @@ public sealed class MarkerFileServiceTests
     /// Test data: the canonical key order code fence in <c>docs/REPL-AGENT-GUIDE.md</c>.
     /// This data is used to bind the published verifier contract to the authoritative field array.
     /// </remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void SignaturePayloadFields_MatchesDocumentedCanonicalKeyOrder()
     {

@@ -9,6 +9,7 @@ namespace QBrainAi.Support.Mcp.Tests.Memory;
 public sealed class MemoryMcpSchemaTests
 {
     /// <summary>AC-TR-MCP-MEMORY-API-002-06: Unknown required-breaking fields follow the documented additionalProperties policy.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void UnknownFields_Policy()
     {

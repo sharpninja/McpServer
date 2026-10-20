@@ -182,17 +182,8 @@ public sealed class BugTriage139FourteenthHarnessTests
         }
     }
 
-    private static string SourceRepositoryRoot()
-    {
-        var metadata = typeof(BugTriage139FourteenthHarnessTests).Assembly
-            .GetCustomAttributes<AssemblyMetadataAttribute>()
-            .Single(
-                attribute => string.Equals(
-                    attribute.Key,
-                    "McpRepositoryRoot",
-                    StringComparison.Ordinal));
-        return Path.GetFullPath(
-            metadata.Value ??
+    private static string SourceRepositoryRoot() =>
+        Path.GetFullPath(
+            QBrainAi.Tests.Shared.TestRepositoryRoot.BuildMetadataRoot ??
             throw new InvalidOperationException("Build repository-root metadata is empty."));
-    }
 }

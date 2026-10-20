@@ -162,6 +162,7 @@ public sealed class BugTriage139SixteenthIdentityConsumerTests
     /// Verifies a real local symbolic-link alias remains lexical on the synchronous surface instead
     /// of triggering uncancellable physical traversal.
     /// </summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void SynchronousIdentitySurface_LocalSymbolicLink_RemainsLexical()
     {

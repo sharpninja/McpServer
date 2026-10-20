@@ -511,7 +511,7 @@ public sealed class GitHubCliServiceTests
         Assert.False(UsesHostWorkspace(new ProcessRunRequest("gh", "issue list"), host));
         Assert.False(UsesHostWorkspace(new ProcessRunRequest("git", "status", WorkingDirectory: Path.GetFullPath(host)), host));
 
-        var reRooted = Path.Combine(Directory.GetCurrentDirectory(), "C:/foreign/workspace");
+        var reRooted = Path.Combine(AppContext.BaseDirectory, "C:/foreign/workspace");
         Assert.True(OpensWorkspaceOnHost(new ProcessRunRequest("gh", "issue list", WorkingDirectory: reRooted)));
         Assert.True(OpensWorkspaceOnHost(new ProcessRunRequest(
             "gh",

@@ -87,6 +87,7 @@ public abstract class WorkspaceServiceCrossPlatformContractTests
     /// FR-MCP-FED-PATH-001-AC4: initializing a foreign-platform workspace fails without creating
     /// any directory on the host.
     /// </summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task Init_ForeignPlatformWorkspace_CreatesNothingOnHost()
     {

@@ -6,6 +6,7 @@ namespace QBrainAi.Support.Mcp.Tests.Memory;
 public sealed class MemoryBenchInjectionTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-14: Injection header is present only when memory is on.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void InjectionPresentOnlyWithMemory()
     {

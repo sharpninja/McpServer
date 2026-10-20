@@ -8,6 +8,7 @@ namespace QBrainAi.Support.Mcp.Tests.Memory;
 public sealed class MemoryBenchPackTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-01: Pack file lives at the canonical path and is versioned.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void PackFile_ExistsAndVersioned()
     {
@@ -20,6 +21,7 @@ public sealed class MemoryBenchPackTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-02: Pack covers the eight required prompt classes.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void CoversEightPromptClasses()
     {
@@ -30,6 +32,7 @@ public sealed class MemoryBenchPackTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-03: Each prompt has the required entry fields.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void EntrySchema_Complete()
     {
@@ -46,6 +49,7 @@ public sealed class MemoryBenchPackTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-04: Pack declares paired without_memory / with_memory conditions.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void PairedConditions()
     {
@@ -56,6 +60,7 @@ public sealed class MemoryBenchPackTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-30: Fixtures use synthetic BENCH-* tokens, not real secrets.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void NoRealSecretsInFixtures()
     {
