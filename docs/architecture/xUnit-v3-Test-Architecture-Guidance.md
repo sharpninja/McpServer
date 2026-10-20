@@ -13,7 +13,7 @@ Binding team guidance for writing and structuring .NET tests with xUnit.net v3. 
 - **MUST** / **MUST NOT**: mandatory. A violation blocks merge.
 - **SHOULD** / **SHOULD NOT**: the default. Any deviation needs a written reason in the PR description.
 - **MAY**: optional. Use your judgment.
-- Adoption: rules that require per-project files or configuration (XU-110, XU-131) bind new test projects immediately and existing ones from the first PR that brings them under this guide. Each of those rules says so.
+- Adoption: rules that require per-project or repository configuration (XU-020, XU-094, XU-110, XU-131) bind new test projects immediately and existing ones from the first PR that brings them under this guide. Until then an existing project is not in violation and needs no per-PR deviation reason. Each of those rules says so.
 - Every rule has an ID (XU-NNN), a short rationale, and a source. If a rule's source says "Team policy", the rule is our own convention and not an xUnit.net requirement. Those rules still link the xUnit.net documentation that motivates them.
 - These rules use the API names from xUnit.net v3 4.0.x. Some names changed in 4.0, mostly around parallelization. Where that matters, the rule says which version it applies to.
 
@@ -136,6 +136,8 @@ Minimal project file (MTP v2, .NET 10 SDK, with `global.json` as shown in XU-020
 
 - With .NET SDK 10 or later, put `{"test": {"runner": "Microsoft.Testing.Platform"}}` in the solution's `global.json`.
 - With .NET SDK 8 or 9, set `<TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>` in the project.
+- `<UseMicrosoftTestingPlatformRunner>` only selects the command line UX of the test executable (XU-022). It does not switch the `dotnet test` backend.
+- Adoption: existing projects that still run `dotnet test` through VSTest keep doing so, with the VSTest packages from XU-021, until the PR that migrates them. In McpServer on Oct 20, 2026, `global.json` (SDK 10.0.201) had no `test.runner` setting, so `dotnet test` still used VSTest there.
 - Rationale: xUnit.net v3 supports MTP natively, and the current template defaults to it.
 - Source: https://xunit.net/docs/getting-started/v3/microsoft-testing-platform ; https://xunit.net/docs/getting-started/v3/getting-started
 
@@ -544,7 +546,7 @@ Assert.Equal(1, vsync.FrameCount);
 - Rationale: A failing case can then be replayed exactly. xUnit.net itself moved to stable, repeatable test ordering for the same reason.
 - Source: Team policy; https://xunit.net/docs/getting-started/v3/whats-new
 
-**XU-094 (MUST)** Set the culture explicitly in `xunit.runner.json` (`"culture": "invariant"`, or a named culture). Tests that check behavior in specific cultures cover each culture explicitly. See the "Cultured tests" item in section 17 for why this guide does not prescribe `CulturedFact` or `CulturedTheory`.
+**XU-094 (MUST)** Set the culture explicitly in `xunit.runner.json` (`"culture": "invariant"`, or a named culture). Existing projects adopt this together with their `xunit.runner.json` (XU-110). Tests that check behavior in specific cultures cover each culture explicitly. See the "Cultured tests" item in section 17 for why this guide does not prescribe `CulturedFact` or `CulturedTheory`.
 
 - Rationale: The default is the machine's culture, so number and date formatting differ between developer machines and CI.
 - Source: https://xunit.net/docs/config-xunit-runner-json ; https://xunit.net/docs/getting-started/v3/whats-new
@@ -930,10 +932,12 @@ Sources: https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/con
 
 **XU-141 (MUST)** CI MUST publish results in a machine-readable format.
 
-- MTP: `--report-xunit-trx` (others are `--report-xunit` for xUnit.net XML, `--report-junit`, `--report-ctrf`, `--report-nunit`, `--report-xunit-html`, and `--report-xunit-markdown` in 4.0.1 or later). Reports go to the results directory, which you can change with `--results-directory`.
+- MTP in 4.0 or later: `--report-xunit-trx` (others are `--report-xunit-xml`, `--report-xunit-junit`, `--report-xunit-ctrf`, `--report-xunit-nunit`, `--report-xunit-html`, and `--report-xunit-markdown` in 4.0.1 or later).
+- MTP in 3.2.x (for example McpServer's current pin): `--report-xunit-trx` and `--report-xunit-html` are the same, but XML, JUnit, CTRF, and NUnit use the old names `--report-xunit`, `--report-junit`, `--report-ctrf`, and `--report-nunit`. Each `-filename` switch follows the same rename.
+- Reports go to the results directory, which you can change with `--results-directory`.
 - Native UX in 4.0 or later: `-result-trx <file>` (others are `-result-xml`, `-result-junit`, `-result-ctrf`, `-result-markdown`). The old `-trx` and `-xml` style switches are deprecated.
-- Rationale: The 4.0 release renamed both sets of switches.
-- Source: https://xunit.net/releases/v3/4.0.0 ; https://xunit.net/releases/v3/4.0.1 ; https://xunit.net/docs/getting-started/v3/microsoft-testing-platform
+- Rationale: The 4.0 release renamed both sets of switches. The 4.0.0 release notes list the MTP renames, and the 4.0.2 source builds every report option as `report-xunit-<format>`.
+- Source: https://xunit.net/releases/v3/4.0.0 ; https://xunit.net/releases/v3/4.0.1 ; https://github.com/xunit/xunit/blob/v3-4.0.2/src/common/MicrosoftTestingPlatform/CommandLineOptionsProvider.cs ; https://github.com/xunit/xunit/blob/v3-3.2.2/src/common/MicrosoftTestingPlatform/CommandLineOptionsProvider.cs
 
 **XU-142 (MUST NOT)** The default PR pipeline does not run explicit tests. A separate scheduled or manual job MAY run them with `--explicit only` (MTP) or `-explicit only` (native).
 
@@ -1060,6 +1064,7 @@ Source: https://xunit.net/docs/getting-started/v3/migration
 - **`dotnet test` default runner.** The MTP page (May 27, 2026) says `dotnet test` uses VSTest by default. The getting started page (May 2, 2026, template 4.0.0-pre.108) says the template defaults to MTP and writes `global.json`. In practice, a project's runner depends on its template version and settings. XU-020 sets the team default explicitly, so this does not matter for our projects.
 - **Avalonia and xUnit 4.0.** The status of AvaloniaUI/Avalonia#22072 is as of Oct 20, 2026. Check it again before lifting XU-161. Whether Avalonia needs the 3.2.x MTP v2 package or the default 3.2.x package was not tested. `xunit.v3.mtp-v2` 3.2.2 exists on NuGet, but I did not build it against Avalonia.
 - **Native AOT theory discovery.** The Native AOT page lists serialization as not available in AOT mode, so XU-047 is limited to reflection mode. How AOT mode discovers and lists individual theory rows without serialization was not verified, so this guide gives no AOT-specific rule for it.
+- **MTP report switch names.** The MTP page (May 27, 2026) still maps `-xml`, `-jUnit`, `-ctrf`, and `-nUnit` to `--report-xunit`, `--report-junit`, `--report-ctrf`, and `--report-nunit`. Those are the 3.2.x names. The 4.0.0 release notes and the 4.0.2 source use `--report-xunit-xml`, `--report-xunit-junit`, `--report-xunit-ctrf`, and `--report-xunit-nunit`. XU-141 lists both by version.
 - **The v3 command line options page** (https://xunit.net/docs/getting-started/v3/cmdline) returned HTTP 500 during research. Command line switches here were taken from the MTP page and the release notes instead.
 - **Team conventions.** The naming scheme (XU-033), seeded randomness (XU-093), temp folders (XU-096), and the agent rules (XU-003) are team policy, not xUnit.net requirements, and are labeled that way.
 - **Version-specific CI runner commands** (for example GitHub Actions task syntax) are deliberately left out, because I did not verify them against a primary source.
@@ -1129,6 +1134,8 @@ GitHub repositories:
 - https://github.com/xunit/xunit/blob/v3-4.0.2/src/xunit.v3.core/FactAttribute_reflection.cs (accessed Oct 20, 2026)
 - https://github.com/xunit/xunit/blob/v3-4.0.2/src/xunit.v3.core/TestClassAttribute_reflection.cs (accessed Oct 20, 2026)
 - https://github.com/xunit/xunit/blob/v3-4.0.2/src/xunit.v3.core/CulturedFactAttribute_reflection.cs (accessed Oct 20, 2026)
+- https://github.com/xunit/xunit/blob/v3-4.0.2/src/common/MicrosoftTestingPlatform/CommandLineOptionsProvider.cs (accessed Oct 20, 2026)
+- https://github.com/xunit/xunit/blob/v3-3.2.2/src/common/MicrosoftTestingPlatform/CommandLineOptionsProvider.cs (accessed Oct 20, 2026)
 
 NuGet (version verification):
 
