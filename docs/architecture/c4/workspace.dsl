@@ -485,6 +485,7 @@ workspace "QBrain.AI (McpServer)" "The one C4 definition of the whole QBrain.AI 
 
         # EF Core entity model (D5): Entity elements and foreign keys
         !include model/entities.dsl
+        !include model/str.dsl
 
         # Deployment environments (evidence: see evidence.md, section Deployment)
         dockerEnv = deploymentEnvironment "DockerCompose" {
@@ -567,6 +568,7 @@ workspace "QBrain.AI (McpServer)" "The one C4 definition of the whole QBrain.AI 
 
         # Static C4 views (levels 1 to 3): neighbourhood views sized to the AC-5 letter page.
         !include views/c4.dsl
+        !include views/str.dsl
 
         deployment qbrain "DockerCompose" "DeploymentDocker" "Deployment: Docker Compose container and its data volume (docker-compose.mcp.yml and Dockerfile)." {
             include dockerEnv.dockerHost.dockerContainerNode dockerEnv.dockerHost.dockerVolumeNode
@@ -654,7 +656,7 @@ workspace "QBrain.AI (McpServer)" "The one C4 definition of the whole QBrain.AI 
                 color #000000
             }
             element "Start" {
-                shape circle
+                shape ellipse
                 background #c8e6c9
             }
             element "Action" {
@@ -669,7 +671,7 @@ workspace "QBrain.AI (McpServer)" "The one C4 definition of the whole QBrain.AI 
                 stroke #a94442
             }
             element "End" {
-                shape circle
+                shape ellipse
                 background #d6d8db
             }
             element "State" {
