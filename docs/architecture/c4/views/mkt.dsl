@@ -1,6 +1,9 @@
 # Views of the four Marketing diagrams (PLAN-C4MODEL-001 P4, DocCode MKT). Keys are MKT-<diagram>-01; a diagram that
 # does not fit one letter page (TR-MCP-NUKE-017 AC-5) continues in parts keyed MKT-<diagram>-01-partN, in order.
 # Sources: docs/Marketing/diagrams/*.mmd at 92e2c6c4; review record docs/receipts/c4model/p4-mkt-review.md.
+# D3: the static views show as-built relationships, so they exclude relationships tagged Planned, which other documents
+# add between shared elements (for example the SessionTurn self-steps). MKT-UITOOLING-01 shows the planned Web UI and
+# its Planned edge on purpose, so it excludes only the server self-step.
 
 # agent-workflow.mmd (sequence, 17 messages): dynamic views in source order, one or two per phase note, at most three
 # participants each so the steps stay readable. A message sent to two stores at once (the FTS5 and HNSW halves of the
@@ -63,36 +66,43 @@ dynamic qbrain "MKT-AGENTWORKFLOW-01-part8" "Agent workflow part 8 of 8, GitHub 
 component qbrain.server "MKT-ARCHITECTURE-01" "Architecture part 1 of 7: AI agents and the transport layer (architecture.mmd lines 15 to 25, 44)." {
     title "Architecture (1 of 7): AI agents and the transport layer"
     include agent qbrain.server.stdioHost qbrain.server.mcpHttp qbrain.server.middleware
+    exclude "relationship.tag==Planned"
     autolayout tb 150 50
 }
 component qbrain.server "MKT-ARCHITECTURE-01-part2" "Architecture part 2 of 7: the transports hand requests to the tool surface and the controllers (architecture.mmd lines 22 to 24, 45)." {
     title "Architecture (2 of 7): transports to tools and controllers"
     include qbrain.server.stdioHost qbrain.server.mcpHttp qbrain.server.middleware qbrain.server.mcpTools qbrain.server.api
+    exclude "relationship.tag==Planned"
     autolayout tb 150 50
 }
 component qbrain.server "MKT-ARCHITECTURE-01-part3" "Architecture part 3 of 7: every transport reaches multi-workspace routing (architecture.mmd lines 35, 45)." {
     title "Architecture (3 of 7): multi-workspace routing"
     include qbrain.server.middleware qbrain.server.mcpTools qbrain.server.api qbrain.server.workspace
+    exclude "relationship.tag==Planned"
     autolayout tb 150 50
 }
 component qbrain.server "MKT-ARCHITECTURE-01-part4" "Architecture part 4 of 7: hybrid context search and TODO management (architecture.mmd lines 28, 29, 46, 47)." {
     title "Architecture (4 of 7): context search and TODO management"
     include qbrain.server.api qbrain.server.mcpTools qbrain.server.search qbrain.server.todo qbrain.repoFs
+    exclude "relationship.tag==Planned"
     autolayout tb 150 50
 }
 component qbrain.server "MKT-ARCHITECTURE-01-part5" "Architecture part 5 of 7: session logging and requirements tracking (architecture.mmd lines 30, 33, 46, 47, 49)." {
     title "Architecture (5 of 7): session logging and requirements tracking"
     include qbrain.server.api qbrain.server.mcpTools qbrain.server.sessionLog qbrain.server.requirements qbrain.repoFs
+    exclude "relationship.tag==Planned"
     autolayout tb 150 50
 }
 component qbrain.server "MKT-ARCHITECTURE-01-part6" "Architecture part 6 of 7: GitHub issue sync (architecture.mmd lines 31, 41, 46, 48)." {
     title "Architecture (6 of 7): GitHub issue sync"
     include qbrain.server.api qbrain.server.mcpTools qbrain.server.github github
+    exclude "relationship.tag==Planned"
     autolayout tb 150 50
 }
 component qbrain.server "MKT-ARCHITECTURE-01-part7" "Architecture part 7 of 7: GraphRAG and prompt templates (architecture.mmd lines 32, 34, 46, 49, 50)." {
     title "Architecture (7 of 7): GraphRAG and prompt templates"
     include qbrain.server.api qbrain.server.mcpTools qbrain.server.graphrag qbrain.server.tools qbrain.repoFs
+    exclude "relationship.tag==Planned"
     autolayout tb 150 50
 }
 
@@ -100,12 +110,14 @@ component qbrain.server "MKT-ARCHITECTURE-01-part7" "Architecture part 7 of 7: G
 container qbrain "MKT-UITOOLING-01" "UI tooling part 1 of 2: GUI and CLI clients (ui-tooling.mmd lines 15 to 22, 30 to 32)." {
     title "UI Tooling (1 of 2): web, terminal and command-line clients"
     include qbrain.server mktWebUi mktDirector
+    exclude "qbrain.server->qbrain.server"
     autolayout tb 150 50
 }
 component qbrain.libs "MKT-UITOOLING-01-part2" "UI tooling part 2 of 2: client library and agents (ui-tooling.mmd lines 15, 26 to 29, 34, 35)." {
     title "UI Tooling (2 of 2): client library and MCP agents"
     include qbrain.server qbrain.libs.client agent
     exclude "qbrain.server->qbrain.libs.client"
+    exclude "relationship.tag==Planned"
     autolayout lr 200 100
 }
 
