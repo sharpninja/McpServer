@@ -73,12 +73,12 @@ Do not reference v2 packages (`xunit`, `xunit.abstractions`, `xunit.core`, `xuni
 - Rationale: `xunit.v3` brings in `xunit.v3.core`, `xunit.v3.assert`, and `xunit.analyzers`. Support for MTP v1 (`xunit.v3.mtp-v1`) was removed in 4.0.0. Native AOT projects use the `.aot` package variants, which xUnit.net lists side by side with the reflection packages.
 - Source: https://xunit.net/docs/nuget-packages-v3 ; https://xunit.net/docs/getting-started/v3/microsoft-testing-platform ; https://xunit.net/releases/v3/4.0.0 ; https://xunit.net/docs/getting-started/v3/native-aot
 
-**XU-013 (MUST NOT)** Do not reference `xunit.v3` or `xunit.v3.core` from a project that is not a test project. That includes shared test harness libraries. Shared libraries reference `xunit.v3.extensibility.core` (for framework types) and/or `xunit.v3.assert` or `xunit.v3.assert.source` (for assertions).
+**XU-013 (MUST NOT)** Do not reference `xunit.v3` or `xunit.v3.core` from a project that is not a test project. That includes shared test harness libraries. Shared libraries reference `xunit.v3.extensibility.core` (for framework types) and/or `xunit.v3.assert` or `xunit.v3.assert.source` (for assertions). A shared library consumed by a Native AOT test project uses the AOT mapping in XU-018 instead (`xunit.v3.extensibility.core.aot`, `xunit.v3.assert.aot`, or `xunit.v3.assert.source` 4.0 or later with `XUNIT_AOT` defined).
 
 - Rationale: `xunit.v3.core` injects an entry point that turns the project into an executable.
-- Source: https://xunit.net/docs/nuget-packages-v3
+- Source: https://xunit.net/docs/nuget-packages-v3 ; https://xunit.net/docs/getting-started/v3/native-aot
 
-**XU-014 (SHOULD)** Put custom assertions in a shared "test utility" library that references `xunit.v3.assert.source`. Extend the partial `Assert` class there. Test projects that reference that library MUST NOT also receive `xunit.v3.assert`, so they use the core-only package from XU-012 instead of `xunit.v3`.
+**XU-014 (SHOULD)** Put custom assertions in a shared "test utility" library that references `xunit.v3.assert.source`. Extend the partial `Assert` class there. If the utility serves Native AOT test projects, it MUST use version 4.0 or later of the source package and define the `XUNIT_AOT` constant (XU-018); otherwise it compiles the reflection-mode assertion implementations. Test projects that reference that library MUST NOT also receive `xunit.v3.assert`, so they use the core-only package from XU-012 instead of `xunit.v3`.
 
 - Rationale: The source package exposes `Assert` as a partial class so you can add methods to it. This is the documented pattern for multi-project test suites. The source `Assert` class is `public` by default, and `xunit.v3` (through `xunit.v3.mtp-v2` in 4.x) depends on `xunit.v3.assert`, so a test project with both sees two public `Xunit.Assert` types and fails with CS0433. The core-only packages do not depend on `xunit.v3.assert` or `xunit.analyzers`, which is why the analyzers must be added explicitly. Verified on Oct 20, 2026 by building a 3.2.2 test project against such a utility library: with `xunit.v3` it failed with CS0433, and with `xunit.v3.core` it built.
 - Source: https://xunit.net/docs/nuget-packages-v3 ; https://github.com/xunit/assert.xunit/blob/main/README.md ; https://api.nuget.org/v3-flatcontainer/xunit.v3.mtp-v2/4.0.2/xunit.v3.mtp-v2.nuspec ; https://api.nuget.org/v3-flatcontainer/xunit.v3.core.mtp-v2/4.0.2/xunit.v3.core.mtp-v2.nuspec
@@ -120,6 +120,13 @@ Minimal project file (MTP v2, .NET 10 SDK, with `global.json` as shown in XU-020
   </ItemGroup>
 </Project>
 ```
+
+**XU-018 (MUST)** A test project that opts into Native AOT (v3 4.0 or later, C# only, .NET 9 or later) MUST use only the Native AOT package variants from xUnit.net's package table, in the test project and in every shared harness it consumes. Rules in this guide that depend on a feature xUnit.net lists as not available in AOT mode do not apply to AOT projects. Each such rule says so.
+
+- Package mapping for shared harnesses: `xunit.v3.extensibility.core.aot` instead of `xunit.v3.extensibility.core`, `xunit.v3.assert.aot` instead of `xunit.v3.assert`, and `xunit.v3.assert.source` only at 4.0 or later with the `XUNIT_AOT` constant defined in the project that compiles that source.
+- Features not available in AOT mode: EventSource reporting, default interface methods inherited by test classes, generic test methods, interface-based attributes, serialization, `.uniqueid` override files, and implicit or explicit conversion operators for theory data.
+- Rationale: The AOT variants replace runtime reflection with source generation. A reflection package in an AOT dependency graph compiles against the wrong implementation.
+- Source: https://xunit.net/docs/getting-started/v3/native-aot
 
 ---
 
@@ -166,10 +173,10 @@ Minimal project file (MTP v2, .NET 10 SDK, with `global.json` as shown in XU-020
 - Rationale: These are framework errors. Overloads are reported at run time in reflection mode, and are not run at all in Native AOT mode.
 - Source: https://xunit.net/xunit.analyzers/rules/ ; https://xunit.net/releases/v3/4.0.2
 
-**XU-032 (MUST)** Helper methods in a test class must be `private` or `internal` (xUnit1013 flags public methods that are not tests).
+**XU-032 (MUST)** Helper methods in a test class must not be `public` unless they are tests. Use `private`, `internal`, or `protected` (for helpers that a base test class shares with derived test classes). xUnit1013 flags public methods that are not tests.
 
-- Rationale: A public helper looks like a test that someone forgot to mark.
-- Source: https://xunit.net/xunit.analyzers/rules/
+- Rationale: A public helper looks like a test that someone forgot to mark. The xUnit1013 page says any visibility other than public fixes the diagnostic.
+- Source: https://xunit.net/xunit.analyzers/rules/ ; https://xunit.net/xunit.analyzers/rules/xUnit1013
 
 **XU-033 (SHOULD)** Name things as follows:
 
@@ -225,9 +232,9 @@ public class AluTests
 
 - Facts take no parameters (xUnit1001) and carry no data (xUnit1005).
 - Theories must have data (xUnit1003), must have parameters (xUnit1006), and should use every parameter (xUnit1026).
-- Theories MAY use `params` arrays and default parameter values. xUnit1022 and xUnit1023 only flag those on xUnit.net versions before 2.2.0, so they do not restrict v3 projects.
+- Theories MAY use default parameter values. In reflection mode they MAY also use `params` arrays. xUnit1022 and xUnit1023 only flag those on xUnit.net versions before 2.2.0, so they do not restrict v3 projects. In Native AOT mode a theory parameter MUST NOT use `params` (xUnit1064); build the array in the theory data instead.
 - Rationale: The analyzers enforce these rules. Most of them are errors by default.
-- Source: https://xunit.net/xunit.analyzers/rules/ ; https://xunit.net/xunit.analyzers/rules/xUnit1022 ; https://xunit.net/xunit.analyzers/rules/xUnit1023
+- Source: https://xunit.net/xunit.analyzers/rules/ ; https://xunit.net/xunit.analyzers/rules/xUnit1022 ; https://xunit.net/xunit.analyzers/rules/xUnit1023 ; https://xunit.net/xunit.analyzers/rules/xUnit1064
 
 **XU-042 (SHOULD)** New data sources should be a public static member that returns `IEnumerable<TheoryDataRow<...>>`, referenced with `[MemberData(nameof(...))]`.
 
@@ -938,10 +945,10 @@ Sources: https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/con
 - Rationale: Long-running warnings are diagnostic messages, so they only appear when diagnostics are enabled.
 - Source: https://xunit.net/docs/config-xunit-runner-json ; https://xunit.net/docs/getting-started/v3/microsoft-testing-platform
 
-**XU-144 (SHOULD)** CI should keep the assembly unique ID that appears in the run output, so a failure that depends on order can be reproduced locally (XU-087).
+**XU-144 (SHOULD)** For reflection-mode test projects, CI should keep the assembly unique ID that appears in the run output, so a failure that depends on order can be reproduced locally (XU-087). This does not apply to Native AOT projects (XU-018), because the `.uniqueid` override is not available in AOT mode.
 
 - Rationale: CI and local runs use different orders because the ID is derived from the file path.
-- Source: https://xunit.net/docs/getting-started/v3/whats-new
+- Source: https://xunit.net/docs/getting-started/v3/whats-new ; https://xunit.net/docs/getting-started/v3/native-aot
 
 **XU-145 (SHOULD)** Collect code coverage under MTP with the `Microsoft.Testing.Extensions.CodeCoverage` package (`dotnet test --coverage --coverage-output-format cobertura` with the .NET 10 SDK or later in MTP mode; with the .NET 8 or 9 SDK, where MTP runs on top of the VSTest-based `dotnet test`, add the separator: `dotnet test -- --coverage --coverage-output-format cobertura`). When `dotnet test` runs several projects, do not pass `--coverage-output`.
 
@@ -994,7 +1001,7 @@ Each item below is forbidden unless a rule above explicitly allows it.
 - `MemberData("Name")` string literals instead of `nameof` (XU-044).
 - New data sources returning `IEnumerable<object[]>` (XU-042).
 - Theory data that cannot be serialized, without a reason (XU-047).
-- Public helper methods in test classes (XU-032).
+- Public helper methods in test classes that are not tests (XU-032).
 - Storing `TestContext.Current` in a field (XU-076).
 - Referencing `xunit.v3` from a non-test library (XU-013).
 - Using the obsolete `CollectionBehavior` parallelism properties on 4.0 (XU-083).
@@ -1095,6 +1102,7 @@ xUnit.net analyzer rules:
 - https://xunit.net/xunit.analyzers/rules/xUnit1004 (accessed Oct 20, 2026)
 - https://xunit.net/xunit.analyzers/rules/xUnit1030 (accessed Oct 20, 2026)
 - https://xunit.net/xunit.analyzers/rules/xUnit1031 (accessed Oct 20, 2026)
+- https://xunit.net/xunit.analyzers/rules/xUnit1013 (accessed Oct 20, 2026)
 - https://xunit.net/xunit.analyzers/rules/xUnit1022 (accessed Oct 20, 2026)
 - https://xunit.net/xunit.analyzers/rules/xUnit1023 (accessed Oct 20, 2026)
 - https://xunit.net/xunit.analyzers/rules/xUnit1044 (accessed Oct 20, 2026)
@@ -1102,6 +1110,7 @@ xUnit.net analyzer rules:
 - https://xunit.net/xunit.analyzers/rules/xUnit1054 (accessed Oct 20, 2026)
 - https://xunit.net/xunit.analyzers/rules/xUnit1056 (accessed Oct 20, 2026)
 - https://xunit.net/xunit.analyzers/rules/xUnit1057 (accessed Oct 20, 2026)
+- https://xunit.net/xunit.analyzers/rules/xUnit1064 (accessed Oct 20, 2026)
 - https://xunit.net/xunit.analyzers/rules/xUnit1051 (accessed Oct 20, 2026)
 - https://xunit.net/xunit.analyzers/rules/xUnit1069 (accessed Oct 20, 2026)
 
