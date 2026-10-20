@@ -615,3 +615,92 @@ PLAN-C4MODEL-001 phase P4, document code AM1. Source fences are those of docs/ar
 * Run 2: 20261019T212739-p4-am1-g4-r2.log (21:27:39 to 21:31:39 local): the same counts, MermaidFence 109 again only in the Stateless document. hash-dir.ps1 -Compare (21:31:53 local): Identical 2384 of 2384, no file added, changed or removed. Gate G4 holds for this document.
 * Tracked renders against the base commit (normalize-compare.ps1, 21:32:01 local, JointJS ids renumbered per file): of the 259 renders b457ac22 tracks, 250 differ only in renumbered ids and 9 in content, all marketing views (MKT-ARCHITECTURE-01 and its parts 2 to 7, MKT-UITOOLING-01 and its part 2). svg-text-diff.ps1 shows the one added text in each: the label "Runs its own steps (sequence self-messages and notes)" [Internal step], a planned self relationship of agent, qbrain.server.api or qbrain.server that the SessionTurn fragment defines (str.dsl lines 3227, 3252 and 3256); the AM1 fragment defines no self relationship on those elements, and the later commit 463ffbe4 makes the marketing views exclude Planned edges. The as-built views exclude Planned elements and relationships (c4.dsl), so the AM1 planned self steps on qbrain.db, triage and the host adapters do not reach them.
 * Measured beyond the gate on the same renders: svg-label-overlap.ps1 0 covering labels of 3036; svg-text-fit.ps1 73 instances over their shape, as listed under Render inspection.
+
+## View fidelity sweep
+
+Added 2026-10-20 (local) in worktree p4-amfix-20261019 (branch p4/amfix-20261019) at commit 49dff2ea84cedf04b7852d353c91167b7277a885, the effort branch merge of this conversion (2f1c096d) and the Stateless conversion. Task from the coordinator: every non-dynamic AM1 view draws only the edges of its source fence, because custom, container and component views draw every model relationship between the elements they include.
+
+* Starting point: head-check.ps1 (07:41:26 local) found HEAD 49dff2ea on p4/amfix-20261019 with a clean status. The merged model/am1.dsl (SHA-256 CF1B57DB...) and views/am1.dsl (831D5472...) equal this conversion's output byte for byte (hash-dir.ps1).
+* Fence edges: convert-am1.ps1 now records every edge of every fence as the element pair it becomes (activity, state, entity, structure, use-case and delivery-order edges) and writes them, with each non-dynamic view's includes and excludes, to SCRATCH/p4-am1/convert-out-amfix/view-edges.json. Run against the merged worktree into a separate scratch stage (07:45:39 local), it regenerated model/am1.dsl and views/am1.dsl byte-identical to the merged fragments, so the report describes exactly the merged views.
+* Drawn edges: export-json.ps1 exported a scratch copy of the merged workspace with the pinned CLI (structurizr/cli 2025.11.09 at its pinned digest, export -format json, exit 0). view-fidelity.ps1 reads the relationships each view lists in that JSON and classes each one: a fence edge in the fence's direction, a fence edge drawn the other way, or an extra the fence does not draw. It also lists fence edges whose two ends a view includes but that the view does not draw.
+* Self test: with the edges of F99 (B.1) forgotten (view-fidelity.ps1 -DropFence 99), the check reported 8 extras in the 5 AM1-B-01 views, the 8 relationships of B.1. The check finds extra edges when they exist.
+* Result, before any change (07:48:35 local) and again after the gate (08:06:14 local, on a fresh export at 08:06:04): 402 non-dynamic views draw 1006 relationships. All 1006 are fence edges in the fence's direction: 0 are reversed, 0 are extras, and 0 fence edges are missing. The one fence edge a view includes without drawing is the self transition of Running in 7.2. It is excluded on purpose from AM1-07-02 and its parts 2, 4 and 5 and drawn in its own part.
+* Per kind:
+  * Activity: 62 fences, 285 views, 780 drawn relationships.
+  * State: 4 fences, 19 views, 46.
+  * Entity: 9 fences, 15 views, 26.
+  * Structure (section 4): 1 fence, 13 views, 20.
+  * Use case: 13 fences, 66 views, 123.
+  * Delivery order (section 20.1): 1 fence, 4 views, 11.
+  * Fence edge counts are the same before and after the sweep, because nothing changed.
+* Views changed: none. Excludes added: 0. views/am1.dsl and model/am1.dsl stay as merged. The views were already exact for three reasons:
+  * The entity views carry excludes computed at conversion over every model pair of every fragment.
+  * The section 4 structure views and the use-case views filter on this document's own relationship tags (exclude "relationship.tag!=Am1Context" and exclude "relationship.tag!=Am1UseCase"), and only the fence's edges carry those tags.
+  * Activity, state and delivery-order elements each belong to one fence.
+
+  The merge added no model relationship between elements these views include.
+* Merged labels (D4 consequence): no relationship an AM1 view draws joins the labels of two diagrams; no drawn description holds " / ". Two drawn fence edges carry another diagram's label instead of the fence's, because B.9 reuses the as-built HostileReview foreign keys (D4):
+  * entHostileReviewRequest -> entHostileReviewExecution reads "1 to 0..n via RequestId" (the as-built entity model) where the fence labels it "model executions" (view AM1-B-09).
+  * entHostileReviewRequest -> entHostileReviewDiagnostic reads the same, where the fence says "sanitized diagnostics" (view AM1-B-09-part2).
+
+  Both are left as they are.
+* Gate receipts, in p4-amfix-20261019:
+  * inspect-workspace.ps1 at error and warning severity (07:49:22 and 07:49:33 local): exit 0, 0 lines.
+  * Run 1, 20261020T074946-p4-amfix-g4-r1.log (07:49:46 to 07:55:42 local): ExitCode 0, ArchitectureDiagrams Succeeded. diagram-findings.ps1 counted 0 each of ValidationFailed, InspectionErrors, RenderFailed, MermaidFence, MermaidFile, DanglingViewLink, MissingRender, OrphanRender, TextSizeSpread, PageOverflow and InvalidSvg, with 2384 render lines and 2384 SVG files.
+  * hash-dir.ps1 manifest after run 1 (07:55:52 local): 2384 files.
+  * Run 2, 20261020T075558-p4-amfix-g4-r2.log (07:55:58 to 08:02:27 local): ExitCode 0, ArchitectureDiagrams Succeeded, the same 0 counts. hash-dir.ps1 -Compare (08:03:38 local): Identical 2384 of 2384.
+  * normalize-compare.ps1 against 49dff2ea (08:03:56 local): of 1677 tracked renders, 183 byte-identical and 1494 differing only in renumbered JointJS ids. 0 content changes. 707 renders (the AM1 views) are not tracked at that commit.
+* Receipts: the two gate logs and their pid files above (docs/receipts/c4model, p4-amfix names). In SCRATCH/p4-am1: convert-out-amfix/view-edges.json, fidelity-detail.txt, fidelity-excludes.json (empty: no exclude proposed), selftest-excludes.json, selftest-detail.txt, amfix-g4-r1-manifest.txt. Scripts: convert-am1.ps1 (edge report), view-fidelity.ps1, head-check.ps1, append-section.ps1.
+
+## Mermaid prose
+
+Added 2026-10-20 (local) in worktree p4-amfix-20261019 at 49dff2ea, on the operator's answer of 2026-10-20 relayed by the coordinator (verbatim: "Update it to the C4 views (Recommended)"; the option: rewrite only the sentences that describe Mermaid so they describe the C4 views and their keys, and list each change in the receipts). Only the clauses that describe Mermaid notation or rendering changed; every requirement, rule, code, test name and operator quote in those lines stays as it was. Each changed passage is one line of the converted document, so its line number is the same before and after the change; the line at b457ac22 (before the conversion) is given too.
+
+* Search: find-in-file.ps1 over the converted document (image and "View:" lines left out) for Mermaid, `[[`, stadium, oval, dotted, solid line, double-bordered, alt, participant, note over, ref, cylinder, flowchart, top to bottom, diamond, arrow, notation, legend, drawn, node, box, edge, block, branch, label and shape. Five lines describe Mermaid notation or rendering: 10, 2014, 3272, 3916 and 4004. The other hits use those words in their own sense (for example "drawn once below" for a nested activity view placed below, "Mapping edges" of section 19.3, "Not drawn" column lists) and stay unchanged.
+* Line 10 (line 10 at b457ac22), how to read the diagrams.
+  * Old: Its diagrams use the foundation's notation (foundation, "How to read the diagrams"): activity diagrams are Mermaid flowcharts read top to bottom, a double-bordered node (`[["..."]]`) is a call to a shared component, policy, or process drawn once where it is defined, every error exit ends in a terminal that names its code, and sequence diagrams list every response a caller can receive in `alt` blocks.
+  * New: Its diagrams use the foundation's notation (foundation, "How to read the diagrams"), drawn as views of the C4 workspace (section 23): activity diagrams are custom views whose elements name their kind in the metadata line ("Activity: start" and "Activity: end" on ellipses, "Activity: decision" on a diamond, "Activity: action" and "Activity: call" on rounded boxes, "Activity: error" on a box with a red border), an element whose metadata line reads "Activity: call" is a call to a shared component, policy, or process drawn once where it is defined, every error exit ends in a terminal that names its code, and sequence diagrams are dynamic views that list every response a caller can receive in `alt` blocks, each branch a view of its own (section 23).
+  * Backing:
+    * Element styles in workspace.dsl: Start is an ellipse (#c8e6c9) and End an ellipse (#d6d8db); Decision is a diamond; Action is a roundedbox; Error has background #f8d7da and stroke #a94442 with no shape of its own, so a box. Planned adds a dashed border.
+    * model/am1.dsl gives every activity element one of exactly six metadata lines (Activity: start, action, call, decision, error, end; 0 elements with "Activity: store" or "Activity: terminal step").
+    * A call element is tagged Activity,Action and carries "Activity: call", for example am1RunReviewerProcess_ReviewerAdapterBuildLaunch.
+    * Activity views are custom views and sequences are dynamic views (views/am1.dsl).
+    * Each alt branch is the view `<key>-alt<k>-<i>` (section 23; 250 such keys).
+    * The views use top to bottom or left to right layouts, so the reading direction is no longer stated.
+* Line 2014 (line 1837 at b457ac22), the participant legend of section 17.
+  * Old: Participants: `Caller` is any surface's caller (a plugin through the REPL, the REPL, Director, an MCP client, or a REST client); `API` is the controller or MCP tool, which dispatches through `IDispatcher`; `Pipe` is WorkspaceResolutionBehavior; `H` is the unit's handler; `DB` is the relational store; `W` is process HvWorkerHost with RunReviewerProcess; `AD` is the reviewer adapter and its process; `TG` is `ITriageService`.
+  * New: Participants are model elements, and the views show each under its element name: `Caller` is any surface's caller (a plugin through the REPL, the REPL, Director, an MCP client, or a REST client), shown as QBrainAi.Client; `API` is the controller or MCP tool, which dispatches through `IDispatcher`, shown as REST Controllers; `Pipe` is WorkspaceResolutionBehavior; `H` is the unit's handler, shown as Hostile Validation Handlers (HV Finalization Handler in FinalizeOneRequest, Session-Log and Review Handlers in 17.15); `DB` is the relational store, shown as MCP Database; `W` is process HvWorkerHost with RunReviewerProcess, shown as HV Worker Host; `AD` is the reviewer adapter and its process, shown as HV Reviewer Adapters; `TG` is `ITriageService`, shown as "Triage, Handoff and Hostile Review". `Model` is shown as Agent Host Model, `Plugin` and `Plugin watcher` as lib-ps, `Prompt hook` as Host adapters, and Worker A and Worker B of 17.9 as HV Worker Host, each step naming its worker.
+  * Backing:
+    * The converter's participant map (SCRATCH/p4-am1/am1-config.psd1, Participants and ParticipantsByFence: F76 H is the finalization handler, F84 H is the foundation's session-log handlers).
+    * element-names.ps1 over the JSON export (08:14:24 local) gave the element names and kinds. qbrain.libs.client is QBrainAi.Client. qbrain.server.api is REST Controllers. qbrain.server.strWorkspaceResolutionBehavior is WorkspaceResolutionBehavior. qbrain.server.am1HvHandlers is Hostile Validation Handlers. qbrain.server.am1HvFinalizer is HV Finalization Handler. qbrain.server.strSessionLogHandlers is Session-Log and Review Handlers. qbrain.db is MCP Database. qbrain.server.am1HvWorkerHost is HV Worker Host. qbrain.server.am1ReviewerAdapters is HV Reviewer Adapters. qbrain.server.triage is "Triage, Handoff and Hostile Review". strHostModel is Agent Host Model. qbrain.plugins.pluginPs is lib-ps. qbrain.plugins.pluginHosts is Host adapters.
+    * The source declared `participant Watcher as Plugin watcher`, `participant Hook as Prompt hook`, `participant W1 as Worker A, crashed` and `participant W2 as Worker B` (b457ac22 lines 2431, 2435, 2299, 2300).
+    * The 17.9 steps carry the prefix "Worker A, crashed:" or "Worker B:" (StepPrefix; render AM1-17-09-part3, "Worker B: ExpireHvRunLeasesCommand at its sweep").
+    * The two sentences after the legend (the workspace refusal; shared components as one message) still hold for the views and stay unchanged.
+* Line 3272 (line 2498 at b457ac22), the use-case notation of section 18.
+  * Old: The foundation's notation (foundation section 7): actors are stadium shapes on the left, the use case is the central oval, included and extending behaviors are ovals linked `include` or `extend`.
+  * New: The foundation's notation (foundation section 7), drawn as container and component views: actors are their model elements (the operator and the agent as person shapes, a system or component as its own box), the use case is an element whose metadata line reads "Use case", included and extending behaviors are elements whose metadata line reads "Use case: included" or "Use case: extension", linked `include` from the use case or `extend` to it, and each actor's line to the use case reads "participates in".
+  * Backing:
+    * views/am1.dsl: the 66 views of AM1-18-01 and UC-HV-01 to UC-HV-12 are container views (qbrain) and component views (qbrain.server, qbrain.libs, qbrain.plugins).
+    * element-names.ps1: developer (Developer / Operator) and agent (AI Coding Agent) are Person elements, drawn with the person shape (style "Person"). strHostModel, llm and mktDirector are software systems. am1HvWorkerHost, qbrain.libs.client, qbrain.plugins.pluginPs and qbrain.server.triage are components.
+    * model/am1.dsl line 1933: am1UcManageTheReviewerPool with metadata "Use case". Line 1945: am1UcListAndReadReviewers with "Use case: included". Line 1948: am1UcStaleStateVersion409Conflict with "Use case: extension".
+    * Line 2051: developer -> am1UcManageTheReviewerPool "participates in". Line 2069: am1UcManageTheReviewerPool -> am1UcListAndReadReviewers "include". Line 2072: am1UcStaleStateVersion409Conflict -> am1UcManageTheReviewerPool "extend".
+    * The rest of the paragraph (labels, the store's keys, actor names, the shared alternate, flow names) is unchanged.
+* Line 3916 (line 3065 at b457ac22), the line kinds and columns of Addendum B.
+  * Old: Solid lines are database foreign keys (each the composite (`WorkspaceId`, parent key)); dotted lines are logical references by root ids, enforced by the units. Diagrams draw key columns and the columns this amendment adds;
+  * New: A relationship whose technology reads "EF Core foreign key" is a database foreign key (each the composite (`WorkspaceId`, parent key)); one whose technology reads "Logical reference" is a logical reference by root ids, enforced by the units; the views draw both as the same dashed line, labelled with its cardinality and name. Diagrams keep key columns and the columns this amendment adds as properties of the entity element (of the view, for an existing entity), and each entity box shows its keys;
+  * Backing:
+    * The converter writes a solid source line (`--`) as technology "EF Core foreign key" and a dotted one (`..`) as "Logical reference". The description is "<cardinality>: <label>", for example "1 to 0..n: members".
+    * svg-dash-probe.ps1 (08:16:35 local) over the 15 AM1-B renders: 26 relationship paths, all with stroke-dasharray "8 8", and 0 with an empty dasharray. That is all 26 relationships the entity views draw (view-fidelity.ps1). workspace.dsl sets no relationship style beyond font size, so the line style is the renderer's default. The coordinator's brief expected solid lines; the renders show dashed lines, so the text says dashed.
+    * Planned entities hold their columns as element properties "column.<name>" next to "table", for example am1EntHvEvidence in model/am1.dsl line 1867. Existing entities hold the drawn columns as view properties "column.<Entity>.<name>", for example AM1-B-01 and AM1-B-09 in views/am1.dsl.
+    * Every entity description starts with its keys (PK, FK, UK).
+    * The grouping rule in the same line and the section references after it are unchanged.
+* Line 4004 (line 3301 at b457ac22), B.9.
+  * Old: so its solid lines are foreign keys on `RequestId` alone,
+  * New: so its relationships whose technology reads "EF Core foreign key" are foreign keys on `RequestId` alone,
+  * Backing: the AM1-B-09 and AM1-B-09-part2 renders label the request to attempt, request to execution and request to diagnostic relationships "[EF Core foreign key]" and the execution to attempt relationship "[Logical reference]". The citations of the line are unchanged.
+* Verification:
+  * verify-prose.ps1 (08:18:12 local) compared the worktree document with `git show 49dff2ea:docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md`: 4012 lines before and after, differing lines 10, 2014, 3272, 3916 and 4004, 0 unexpected, exit 0.
+  * The document's SHA-256 went from 90FD862E... to 88735148... (copy-into-worktree.ps1, hash-verified).
+  * style-check.ps1 is clean on the document and on this record.
+  * inspect-workspace.ps1 (08:19:11 and 08:19:20 local): exit 0, 0 lines at error and warning severity.
+  * No DSL file changed: hash-dir.ps1 found the views (6 of 6) and the model fragments (5 of 5) identical to their state at 49dff2ea (08:19:29 local). No render was needed.
