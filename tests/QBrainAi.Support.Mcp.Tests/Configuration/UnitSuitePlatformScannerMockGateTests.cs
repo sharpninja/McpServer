@@ -170,6 +170,50 @@ public sealed class UnitSuitePlatformScannerMockGateTests
                 public void A() => Assert.True(OperatingSystem.IsLinux());
             }
             """, []),
+        ["multiline-skip-attribute"] = ("""
+            namespace N;
+            public sealed class FooTests
+            {
+                [Fact(
+                    Skip = "later")]
+                public void A() { }
+                [Theory(DisplayName = nameof(B),
+                    SkipUnless = nameof(Ready),
+                    Skip = "not ready")]
+                public void B(int x) { }
+            }
+            """, ["4 skip FooTests", "7 skip FooTests"]),
+        ["qualified-skip-attribute"] = ("""
+            namespace N;
+            public sealed class FooTests
+            {
+                [Xunit.Fact(Skip = "later")]
+                public void A() { }
+                [global::Xunit.TheoryAttribute(Skip = "x")]
+                public void B(int x) { }
+                [Trait("k", "v"), Fact(Skip = "y")]
+                public void C() { }
+                [Fact(Timeout = 10)]
+                public void D() { }
+                [Fact(DisplayName = "Skip = later")]
+                public void E() { }
+            }
+            """, ["4 skip FooTests", "6 skip FooTests", "8 skip FooTests"]),
+        ["interpolation-holes"] = (""""
+            namespace N;
+            public sealed class FooTests
+            {
+                [Fact]
+                public void A()
+                {
+                    var a = $"host {OperatingSystem.IsWindows()} end";
+                    var b = $"text OperatingSystem.IsLinux() {{OperatingSystem.IsMacOS()}}";
+                    var c = $@"{(RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? "l" : "w")}";
+                    var d = $$"""{{OperatingSystem.IsFreeBSD()}} {OperatingSystem.IsAndroid()}""";
+                    var e = $"{value:OperatingSystem.IsIOS()}";
+                }
+            }
+            """", ["7 os-check FooTests", "9 os-check FooTests", "10 os-check FooTests"]),
     };
 
     /// <summary>Every scripted source yields exactly the findings the rule requires.</summary>
@@ -189,6 +233,9 @@ public sealed class UnitSuitePlatformScannerMockGateTests
     [InlineData("verbatim-raw-and-char")]
     [InlineData("abstract-contract-with-skip")]
     [InlineData("integration-with-other-attributes")]
+    [InlineData("multiline-skip-attribute")]
+    [InlineData("qualified-skip-attribute")]
+    [InlineData("interpolation-holes")]
     public void ScriptedSource_YieldsRuleFindings(string name)
     {
         var (source, expected) = Cases[name];
@@ -197,7 +244,36 @@ public sealed class UnitSuitePlatformScannerMockGateTests
 
     /// <summary>The theory above covers every scripted case.</summary>
     [Fact]
-    public void ScriptedTheory_CoversEveryCase() => Assert.Equal(14, Cases.Count);
+    public void ScriptedTheory_CoversEveryCase() => Assert.Equal(17, Cases.Count);
+
+    /// <summary>
+    /// Negative controls for the cases added after hostile validation round 1 (finding F3): the outputs a
+    /// line-based skip match, an unqualified attribute match, and a literal-blanking interpolation strip gave
+    /// (no findings), and an output that also counts the literal text outside a hole or an escaped-brace
+    /// block, are each rejected by the finding assertion.
+    /// </summary>
+    [Fact]
+    public void RoundOneCounterexampleNegativeControls_AreRejectedInsidePassingHarness()
+    {
+        foreach (var name in new[] { "multiline-skip-attribute", "qualified-skip-attribute", "interpolation-holes" })
+        {
+            var expected = Cases[name].Expected;
+            Assert.NotNull(Record.Exception(() => AssertFindings(expected, [])));
+        }
+
+        var interpolation = UnitSuitePlatformScanner.Scan("interpolation-holes.cs", Cases["interpolation-holes"].Source);
+        Assert.NotNull(Record.Exception(() => AssertFindings(
+            ["7 os-check FooTests", "8 os-check FooTests", "9 os-check FooTests", "10 os-check FooTests"], interpolation)));
+        Assert.NotNull(Record.Exception(() => AssertFindings(
+            ["7 os-check FooTests", "9 os-check FooTests", "10 os-check FooTests", "11 os-check FooTests"], interpolation)));
+        Assert.Null(Record.Exception(() => AssertFindings(Cases["interpolation-holes"].Expected, interpolation)));
+
+        var qualified = UnitSuitePlatformScanner.Scan("qualified-skip-attribute.cs", Cases["qualified-skip-attribute"].Source);
+        Assert.NotNull(Record.Exception(() => AssertFindings(
+            ["4 skip FooTests", "6 skip FooTests", "8 skip FooTests", "10 skip FooTests"], qualified)));
+        Assert.NotNull(Record.Exception(() => AssertFindings(
+            ["4 skip FooTests", "6 skip FooTests", "8 skip FooTests", "12 skip FooTests"], qualified)));
+    }
 
     /// <summary>
     /// Negative controls: the finding assertion rejects a missing finding, an extra finding, a finding on
@@ -225,6 +301,28 @@ public sealed class UnitSuitePlatformScannerMockGateTests
         Assert.DoesNotContain("still inside", stripped, StringComparison.Ordinal);
         Assert.DoesNotContain("IsMacOS", stripped, StringComparison.Ordinal);
         Assert.Contains("_ = OperatingSystem.IsLinux();", stripped, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// Stripping keeps interpolation holes as code and blanks the literal text around them, escaped braces,
+    /// strings nested in a hole, and a hole's format clause.
+    /// </summary>
+    [Fact]
+    public void StripCommentsAndStrings_KeepsInterpolationHolesAsCode()
+    {
+        var (source, _) = Cases["interpolation-holes"];
+        var stripped = UnitSuitePlatformScanner.StripCommentsAndStrings(source);
+
+        Assert.Equal(source.Count(ch => ch == '\n'), stripped.Count(ch => ch == '\n'));
+        Assert.Contains("{OperatingSystem.IsWindows()}", stripped, StringComparison.Ordinal);
+        Assert.Contains("RuntimeInformation.IsOSPlatform(OSPlatform.Linux)", stripped, StringComparison.Ordinal);
+        Assert.Contains("{{OperatingSystem.IsFreeBSD()}}", stripped, StringComparison.Ordinal);
+        Assert.DoesNotContain("host", stripped, StringComparison.Ordinal);
+        Assert.DoesNotContain("IsLinux()", stripped, StringComparison.Ordinal);
+        Assert.DoesNotContain("IsMacOS", stripped, StringComparison.Ordinal);
+        Assert.DoesNotContain("IsAndroid", stripped, StringComparison.Ordinal);
+        Assert.DoesNotContain("IsIOS", stripped, StringComparison.Ordinal);
+        Assert.DoesNotContain("\"l\"", stripped, StringComparison.Ordinal);
     }
 
     /// <summary>Assertion shared by the scripted cases and the negative controls.</summary>

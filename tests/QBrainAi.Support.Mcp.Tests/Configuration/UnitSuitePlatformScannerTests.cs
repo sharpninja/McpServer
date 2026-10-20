@@ -43,8 +43,10 @@ public sealed class UnitSuitePlatformScannerTests
     }
 
     /// <summary>
-    /// The guard scans exactly the projects the Nuke <c>Test</c> target runs; a new or removed unit project
-    /// changes this list and must be reviewed here.
+    /// Pins the projects the guard scans to the seven the Nuke <c>Test</c> target ran when this was written
+    /// (<c>build/Build.Test.cs:16-24</c>): a test project added to or removed from <c>tests/</c> changes the
+    /// guard's selection and fails here. Limit: this test does not read <c>build/Build.Test.cs</c>, so a
+    /// change confined to that target's selection leaves it green and must be mirrored here by hand.
     /// </summary>
     [Fact]
     public void GuardProjectSelection_MatchesTheUnitTestTarget()

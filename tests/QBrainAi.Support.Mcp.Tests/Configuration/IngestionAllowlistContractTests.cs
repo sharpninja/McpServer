@@ -184,23 +184,14 @@ public sealed class IngestionAllowlistContractTests
     }
 
     /// <summary>
-    /// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008): every xUnit skip form (a <c>Skip =</c>
-    /// attribute argument, <c>SkipException</c>, <c>Assert.Skip</c>, <c>Assert.SkipWhen</c>,
-    /// <c>Assert.SkipUnless</c>, skippable facts or theories), matched against code whose strings and
-    /// comments were removed by <see cref="UnitSuitePlatformScanner.StripCommentsAndStrings"/>.
-    /// </summary>
-    internal static readonly Regex SkipPattern = new(
-        @"\[(?:Fact|Theory)\s*\([^\]]*\bSkip\s*=|\bSkipException\b|\bAssert\s*\.\s*Skip(?:When|Unless)?\b|\bSkippable(?:Fact|Theory)\b",
-        RegexOptions.CultureInvariant);
-
-    /// <summary>
     /// Verifies active test source files do not hide incomplete work with xUnit skip mechanics.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: Byrd Development Process V4 validation discipline; TR-MCP-USECASE-018 (AC-006),
     /// TR-MCP-USECASE-019 (AC-008): platform-specific tests neither skip nor silently return.
     /// Test data: all C# source files under the repository <c>tests</c> folder, with strings and comments
-    /// removed so scripted sources that mention a skip are not counted.
+    /// removed so scripted sources that mention a skip are not counted. Skip forms are found by
+    /// <see cref="UnitSuitePlatformScanner.FindSkipLines"/>, the one definition both guards share.
     /// This data is used to make progress visible: active validation suites must
     /// pass or fail directly instead of silently skipping unfinished behavior.
     /// </remarks>
@@ -218,15 +209,10 @@ public sealed class IngestionAllowlistContractTests
                 continue;
             }
 
-            var code = UnitSuitePlatformScanner.StripCommentsAndStrings(File.ReadAllText(path))
-                .Replace("\r\n", "\n", StringComparison.Ordinal)
-                .Split('\n');
-            for (var index = 0; index < code.Length; index++)
+            var code = UnitSuitePlatformScanner.StripCommentsAndStrings(File.ReadAllText(path));
+            foreach (var line in UnitSuitePlatformScanner.FindSkipLines(code))
             {
-                if (SkipPattern.IsMatch(code[index]))
-                {
-                    offenders.Add($"{Path.GetRelativePath(testsRoot, path)}:{index + 1}");
-                }
+                offenders.Add($"{Path.GetRelativePath(testsRoot, path)}:{line}");
             }
         }
 
@@ -238,43 +224,68 @@ public sealed class IngestionAllowlistContractTests
     }
 
     /// <summary>
-    /// TR-MCP-USECASE-018 (AC-006), BDPv4 mock gate for <see cref="SkipPattern"/>: scripted lines, stripped of
-    /// strings and comments as the guard does, match exactly when they hold a skip form.
+    /// TR-MCP-USECASE-018 (AC-006), BDPv4 mock gate for <see cref="UnitSuitePlatformScanner.FindSkipLines"/>:
+    /// scripted sources, stripped of strings and comments as the guard does, yield exactly the lines that
+    /// hold a skip form, including an attribute whose arguments span lines, a qualified or listed attribute,
+    /// and the xUnit v3 conditional skip properties.
     /// </summary>
-    /// <param name="line">Scripted source line.</param>
-    /// <param name="expected">Whether the guard must count it.</param>
+    /// <param name="source">Scripted source; lines are separated by "\n".</param>
+    /// <param name="expectedLines">Comma-separated 1-based lines the guard must count; empty for none.</param>
     [Theory]
-    [InlineData("Assert.SkipUnless(OperatingSystem.IsWindows(), \"w\");", true)]
-    [InlineData("Assert.SkipWhen(true, \"w\");", true)]
-    [InlineData("Assert.Skip(\"s\");", true)]
-    [InlineData("[Fact(Skip = \"later\")]", true)]
-    [InlineData("[Theory(DisplayName = \"x\", Skip = \"later\")]", true)]
-    [InlineData("throw new SkipException(\"x\");", true)]
-    [InlineData("[SkippableFact]", true)]
-    [InlineData("Assert.Contains(\"skip=3\", query);", false)]
-    [InlineData("var text = \"Assert.SkipUnless(true)\";", false)]
-    [InlineData("// Assert.Skip(\"x\");", false)]
-    [InlineData("Assert.Skipped(result);", false)]
-    public void SkipPattern_MatchesEverySkipFormOutsideLiterals(string line, bool expected)
+    [InlineData("Assert.SkipUnless(OperatingSystem.IsWindows(), \"w\");", "1")]
+    [InlineData("Assert.SkipWhen(true, \"w\");", "1")]
+    [InlineData("Assert.Skip(\"s\");", "1")]
+    [InlineData("[Fact(Skip = \"later\")]", "1")]
+    [InlineData("[Theory(DisplayName = \"x\", Skip = \"later\")]", "1")]
+    [InlineData("throw new SkipException(\"x\");", "1")]
+    [InlineData("[SkippableFact]", "1")]
+    [InlineData("[Fact(\n    Skip = \"later\")]\npublic void A() { }", "1")]
+    [InlineData("[Fact]\npublic void A() { }\n[Theory(DisplayName = nameof(B),\n    SkipUnless = nameof(Ready),\n    Skip = \"x\")]", "3")]
+    [InlineData("[Xunit.Fact(Skip = \"later\")]", "1")]
+    [InlineData("[global::Xunit.FactAttribute(Skip = \"x\")]", "1")]
+    [InlineData("[Trait(\"a\", \"b\"), Theory(Skip = \"x\")]", "1")]
+    [InlineData("Assert.Contains(\"skip=3\", query);", "")]
+    [InlineData("var text = \"Assert.SkipUnless(true)\";", "")]
+    [InlineData("// Assert.Skip(\"x\");", "")]
+    [InlineData("Assert.Skipped(result);", "")]
+    [InlineData("[Fact(Timeout = 10)]", "")]
+    [InlineData("[Fact(DisplayName = \"Skip = later\")]", "")]
+    [InlineData("[Fact]\npublic void Skip() { var Skip = 1; }", "")]
+    public void FindSkipLines_FindsEverySkipFormOutsideLiterals(string source, string expectedLines)
     {
-        Assert.Equal(expected, SkipPattern.IsMatch(UnitSuitePlatformScanner.StripCommentsAndStrings(line)));
+        var expected = expectedLines.Length == 0
+            ? Array.Empty<int>()
+            : expectedLines.Split(',').Select(value => int.Parse(value, System.Globalization.CultureInfo.InvariantCulture)).ToArray();
+        Assert.Equal(expected, UnitSuitePlatformScanner.FindSkipLines(UnitSuitePlatformScanner.StripCommentsAndStrings(source)));
     }
 
     /// <summary>
-    /// TR-MCP-USECASE-018 (AC-006) negative controls: the pattern this guard used before 2026-10-19 missed
-    /// <c>Assert.SkipUnless</c> and <c>Assert.SkipWhen</c>, and matching without stripping literals counts a
-    /// skip that only appears inside a string.
+    /// TR-MCP-USECASE-018 (AC-006) negative controls: the single-line patterns this guard used before
+    /// hostile validation round 1 (finding F3) missed a skip attribute split across lines and a qualified
+    /// skip attribute, and the pattern used before 2026-10-19 also missed <c>Assert.SkipUnless</c> and
+    /// <c>Assert.SkipWhen</c>; matching without stripping literals counts a skip that only appears inside a
+    /// string.
     /// </summary>
     [Fact]
     public void SkipGuardNegativeControls_AreRejectedInsidePassingHarness()
     {
-        var previous = new Regex(
+        var original = new Regex(
             @"\[(?:Fact|Theory)\s*\([^\]]*\bSkip\s*=|\bSkipException\b|\bAssert\.Skip\b|\bSkippable(?:Fact|Theory)\b",
             RegexOptions.CultureInvariant);
-        Assert.DoesNotMatch(previous, "Assert.SkipUnless(OperatingSystem.IsWindows(), \"w\");");
-        Assert.DoesNotMatch(previous, "Assert.SkipWhen(true, \"w\");");
-        Assert.Matches(SkipPattern, "var text = \"Assert.SkipUnless(true)\";");
-        Assert.DoesNotMatch(SkipPattern, UnitSuitePlatformScanner.StripCommentsAndStrings("var text = \"Assert.SkipUnless(true)\";"));
+        var roundOne = new Regex(
+            @"\[(?:Fact|Theory)\s*\([^\]]*\bSkip\s*=|\bSkipException\b|\bAssert\s*\.\s*Skip(?:When|Unless)?\b|\bSkippable(?:Fact|Theory)\b",
+            RegexOptions.CultureInvariant);
+        Assert.DoesNotMatch(original, "Assert.SkipUnless(OperatingSystem.IsWindows(), \"w\");");
+        Assert.DoesNotMatch(original, "Assert.SkipWhen(true, \"w\");");
+        foreach (var line in "[Fact(\n    Skip = \"later\")]".Split('\n'))
+        {
+            Assert.DoesNotMatch(roundOne, line);
+        }
+
+        Assert.DoesNotMatch(roundOne, "[Xunit.Fact(Skip = \"later\")]");
+        Assert.Equal(new[] { 1 }, UnitSuitePlatformScanner.FindSkipLines("[Xunit.Fact(Skip = \"later\")]"));
+        Assert.NotEmpty(UnitSuitePlatformScanner.FindSkipLines("var text = \"Assert.SkipUnless(true)\";"));
+        Assert.Empty(UnitSuitePlatformScanner.FindSkipLines(UnitSuitePlatformScanner.StripCommentsAndStrings("var text = \"Assert.SkipUnless(true)\";")));
     }
 
     /// <summary>
