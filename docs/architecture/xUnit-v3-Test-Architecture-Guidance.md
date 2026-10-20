@@ -40,6 +40,11 @@ Binding team guidance for writing and structuring .NET tests with xUnit.net v3. 
 - Rationale: v3 test projects are executables, so `dotnet test` or `dotnet run` gives a fast local signal.
 - Source: https://xunit.net/docs/getting-started/v3/getting-started
 
+**XU-005 (MUST)** Test code follows the repository's documentation policy. In McpServer, all code must have XML documentation comments and all public APIs must be documented, and that includes test classes, test methods, fixtures, and helpers. Code samples in this document omit those comments for brevity, except the sample under XU-035, which shows the expected shape. Do not copy a sample without adding them.
+
+- Rationale: Samples are trimmed to show the xUnit.net point being made. Without XML documentation, projects that generate a documentation file report CS1591 for public members.
+- Source: Team policy (AGENTS.md, "Correctness"); https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/
+
 ---
 
 ## 2. Project structure and packages
@@ -185,8 +190,14 @@ Minimal project file (MTP v2, .NET 10 SDK, with `global.json` as shown in XU-020
 ```csharp
 namespace Emulator.Cpu.Tests;
 
+/// <summary>
+/// Unit tests for <see cref="Alu"/> arithmetic.
+/// </summary>
 public class AluTests
 {
+    /// <summary>
+    /// Verifies that ADC adds one extra when the carry flag is set.
+    /// </summary>
     [Fact]
     public void Adc_WithCarrySet_AddsOneExtra()
     {
@@ -300,10 +311,10 @@ public static TheoryData<byte, bool> OpcodeByCarry =
     new MatrixTheoryData<byte, bool>([0x69, 0xE9], [true, false]);
 ```
 
-**XU-050 (SHOULD)** Put per-row metadata (`Skip`, `Explicit`, `Label`, `Timeout`, `Traits`, `TestDisplayName`, `DisableParallelization`) on the `TheoryDataRow` or the `InlineData` row, not on the whole theory.
+**XU-050 (SHOULD)** Put per-row metadata (`Skip`, `Explicit`, `Label`, `Timeout`, `Traits`, `TestDisplayName`, and, in v3 4.0 or later only, `DisableParallelization`) on the `TheoryDataRow` or the `InlineData` row, not on the whole theory.
 
-- Rationale: The setting then affects only the row that needs it.
-- Source: https://xunit.net/docs/getting-started/v3/theory-data-attributes
+- Rationale: The setting then affects only the row that needs it. `DisableParallelization` does not exist on data rows or data attributes in 3.2.x; it arrived with the 4.0 parallelization changes (XU-084).
+- Source: https://xunit.net/docs/getting-started/v3/theory-data-attributes ; https://xunit.net/releases/v3/4.0.0 ; https://github.com/xunit/xunit/blob/v3-4.0.2/src/xunit.v3.core/ITheoryDataRow.cs
 
 **XU-051 (MAY)** `MemberData` methods MAY be async and return `Task<>` or `ValueTask<>`. They MUST NOT fetch data from the network or other external systems (see XU-095).
 
@@ -373,10 +384,13 @@ public sealed class BootTests(RomImageFixture rom)
 - Rationale: An assembly fixture does not change parallelization, so several tests can use it at the same moment.
 - Source: https://xunit.net/docs/shared-context ; https://xunit.net/releases/v3/4.0.0
 
-**XU-065 (MUST)** A shared fixture (class, collection, or assembly) MUST NOT hold mutable state that tests change, unless the fixture resets that state before each test. In v3 4.0 or later, the fixture SHOULD do the reset by implementing `INotifyTestLifecycle` or `INotifyTestLifecycleAsync`.
+**XU-065 (MUST)** A shared fixture (class, collection, or assembly) MUST NOT hold mutable state that tests change, with two exceptions:
 
-- Rationale: Leftover state makes tests depend on run order. The 4.0 lifecycle notification interfaces exist for exactly this case, for example resetting data before each test.
-- Source: https://xunit.net/releases/v3/4.0.0
+- The fixture gives each test its own isolated state (for example, a new instance or scope per test).
+- The fixture resets that state before each test, and every consumer of the fixture runs serially. That holds for class and collection fixtures under the default `parallelMode` `collections`. It does not hold for assembly fixtures (XU-064), or for any fixture under `parallelMode` `all` (XU-084), because those can be used by several tests at the same moment. In v3 4.0 or later, the fixture SHOULD do the reset by implementing `INotifyTestLifecycle` or `INotifyTestLifecycleAsync`.
+
+- Rationale: Leftover state makes tests depend on run order. The 4.0 lifecycle notification interfaces exist for resetting data before each test, but a reset while another test is still using the fixture would corrupt that test, so resetting is only safe when consumers are serialized.
+- Source: https://xunit.net/releases/v3/4.0.0 ; https://xunit.net/docs/shared-context ; https://xunit.net/docs/running-tests-in-parallel
 
 **XU-066 (MUST)** Every fixture constructor argument must come from a declared fixture (xUnit1041). A fixture MAY take a fixture with a longer lifetime as a constructor argument: a class fixture MAY receive assembly and/or collection fixtures, and a collection fixture MAY receive assembly fixtures. A fixture MUST NOT take a fixture of the same or a shorter lifetime (for example, one class fixture taking another class fixture). If you need that, write one fixture that builds and owns the others.
 
@@ -709,9 +723,9 @@ public void FullRomSuite_Passes()
 - Rationale: Explicit tests show as "not run" unless someone asks for them, which states the intent more accurately than a skip.
 - Source: https://xunit.net/docs/getting-started/v3/whats-new ; https://xunit.net/docs/config-testconfig-json ; https://xunit.net/docs/getting-started/v3/microsoft-testing-platform
 
-**XU-124 (MAY)** Theories whose data can legitimately be empty in some environments MAY set `SkipTestWithoutData = true` on `[Theory]`.
+**XU-124 (MAY)** Outside the required validation scope (XU-121), theories whose data can legitimately be empty in some environments MAY set `SkipTestWithoutData = true` on `[Theory]`. Theories in the gate run MUST provide stable, non-empty data instead.
 
-- Rationale: An empty theory is then skipped instead of failing.
+- Rationale: An empty theory is then skipped instead of failing, and a skip inside the gate fails validation (XU-140, XU-147).
 - Source: https://xunit.net/docs/getting-started/v3/whats-new
 
 ---
@@ -1118,13 +1132,15 @@ Microsoft Learn:
 
 - https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/errors-warnings (accessed Oct 20, 2026)
 - https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/configuration-options (accessed Oct 20, 2026)
+- https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/ (accessed Oct 20, 2026)
 - https://learn.microsoft.com/en-us/dotnet/standard/datetime/timeprovider-overview (accessed Oct 20, 2026)
 - https://learn.microsoft.com/dotnet/core/testing/migrating-vstest-microsoft-testing-platform (accessed Oct 20, 2026)
 - https://aka.ms/testingplatform/exitcodes (linked from the MTP output on the xunit.net getting started page, referenced in XU-140, accessed Oct 20, 2026)
 
 Repository policy:
 
-- `AGENTS.md`, section "Byrd Test Gate", in this repository (read Oct 20, 2026)
+- `AGENTS.md`, sections "Byrd Test Gate" and "Correctness", in this repository (read Oct 20, 2026)
+- https://github.com/xunit/xunit/blob/v3-4.0.2/src/xunit.v3.core/ITheoryDataRow.cs (accessed Oct 20, 2026)
 
 Avalonia:
 
