@@ -488,6 +488,7 @@ workspace "QBrain.AI (McpServer)" "The one C4 definition of the whole QBrain.AI 
         !include model/mkt.dsl
         !include model/qmd.dsl
         !include model/str.dsl
+        !include model/am1.dsl
 
         # Deployment environments (evidence: see evidence.md, section Deployment)
         dockerEnv = deploymentEnvironment "DockerCompose" {
@@ -573,6 +574,7 @@ workspace "QBrain.AI (McpServer)" "The one C4 definition of the whole QBrain.AI 
         !include views/mkt.dsl
         !include views/qmd.dsl
         !include views/str.dsl
+        !include views/am1.dsl
 
         deployment qbrain "DockerCompose" "DeploymentDocker" "Deployment: Docker Compose container and its data volume (docker-compose.mcp.yml and Dockerfile)." {
             include dockerEnv.dockerHost.dockerContainerNode dockerEnv.dockerHost.dockerVolumeNode
