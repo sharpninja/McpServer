@@ -196,6 +196,7 @@ public sealed class FederatedSessionLogServiceTests
     /// AC-FR-MCP-SESSIONLOGCTX-001-007: federation apply/submit with omitted fields
     /// persists a validated pair (None if extraction finds nothing).
     /// </summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task Apply_OmittedFields_PersistsProperValue()
     {

@@ -613,9 +613,33 @@ public static class MarkerFileService
     internal static string ResolveAgentPluginVersion(
         string workspacePath,
         string pluginName,
-        string environmentVariableName)
+        string environmentVariableName) =>
+        ResolveAgentPluginVersion(
+            workspacePath,
+            pluginName,
+            environmentVariableName,
+            AgentPluginUserProfileOverride ?? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+            DirectoryTreeWalker.FileSystem);
+
+    /// <summary>
+    /// AC-TR-MCP-WS-005-001: resolves an agent plugin version, scanning the plugin caches under
+    /// <paramref name="userProfile"/> through <paramref name="walker"/>, which skips directory links and any
+    /// directory it cannot list; falls back to <see cref="SyncedAgentPluginVersion"/>.
+    /// </summary>
+    /// <param name="workspacePath">Workspace whose sibling folder may hold the plugin.</param>
+    /// <param name="pluginName">Plugin folder name.</param>
+    /// <param name="environmentVariableName">Variable that may name the plugin root.</param>
+    /// <param name="userProfile">Profile whose plugin caches are scanned; none when empty.</param>
+    /// <param name="walker">Directory walk used for the cache scan.</param>
+    /// <returns>The resolved version.</returns>
+    internal static string ResolveAgentPluginVersion(
+        string workspacePath,
+        string pluginName,
+        string environmentVariableName,
+        string? userProfile,
+        DirectoryTreeWalker walker)
     {
-        foreach (var root in EnumerateAgentPluginVersionRoots(workspacePath, pluginName, environmentVariableName))
+        foreach (var root in EnumerateAgentPluginVersionRoots(workspacePath, pluginName, environmentVariableName, userProfile, walker))
         {
             var version = TryReadAgentPluginVersion(root);
             if (!string.IsNullOrWhiteSpace(version))
@@ -628,7 +652,9 @@ public static class MarkerFileService
     private static IEnumerable<string> EnumerateAgentPluginVersionRoots(
         string workspacePath,
         string pluginName,
-        string environmentVariableName)
+        string environmentVariableName,
+        string? userProfile,
+        DirectoryTreeWalker walker)
     {
         var environmentRoot = Environment.GetEnvironmentVariable(environmentVariableName);
         if (!string.IsNullOrWhiteSpace(environmentRoot))
@@ -641,28 +667,26 @@ public static class MarkerFileService
                 yield return Path.Combine(siblingRoot, pluginName);
         }
 
-        var userProfile = AgentPluginUserProfileOverride
-            ?? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
         if (!string.IsNullOrWhiteSpace(userProfile))
         {
-            foreach (var candidate in EnumerateUserPluginCacheRoots(userProfile, pluginName))
+            foreach (var candidate in EnumerateUserPluginCacheRoots(userProfile, pluginName, walker))
                 yield return candidate;
         }
     }
 
-    private static IEnumerable<string> EnumerateUserPluginCacheRoots(string userProfile, string pluginName)
+    private static IEnumerable<string> EnumerateUserPluginCacheRoots(string userProfile, string pluginName, DirectoryTreeWalker walker)
     {
         var codexCache = Path.Combine(userProfile, ".codex", "plugins", "cache", pluginName);
         if (Directory.Exists(codexCache))
         {
-            foreach (var candidate in OrderPluginVersionRoots(Directory.EnumerateDirectories(codexCache, "*", SearchOption.AllDirectories)))
+            foreach (var candidate in OrderPluginVersionRoots(walker.EnumerateDirectories(codexCache)))
                 yield return candidate;
         }
 
         var claudeCache = Path.Combine(userProfile, ".claude", "plugins", "cache");
         if (Directory.Exists(claudeCache))
         {
-            var candidates = Directory.EnumerateDirectories(claudeCache, "*", SearchOption.AllDirectories)
+            var candidates = walker.EnumerateDirectories(claudeCache)
                 .Where(path => path.Contains(pluginName, StringComparison.OrdinalIgnoreCase)
                     || Path.GetFileName(path).Contains("mcpserver", StringComparison.OrdinalIgnoreCase));
             foreach (var candidate in OrderPluginVersionRoots(candidates))
@@ -672,7 +696,7 @@ public static class MarkerFileService
         var grokCache = Path.Combine(userProfile, ".grok", "installed-plugins");
         if (Directory.Exists(grokCache))
         {
-            var candidates = Directory.EnumerateDirectories(grokCache, "*", SearchOption.AllDirectories)
+            var candidates = walker.EnumerateDirectories(grokCache)
                 .Where(path => path.Contains(pluginName, StringComparison.OrdinalIgnoreCase)
                     || Path.GetFileName(path).Contains("mcpserver", StringComparison.OrdinalIgnoreCase));
             foreach (var candidate in OrderPluginVersionRoots(candidates))

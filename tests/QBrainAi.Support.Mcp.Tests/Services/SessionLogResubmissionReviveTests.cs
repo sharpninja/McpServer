@@ -52,6 +52,7 @@ public sealed class SessionLogResubmissionReviveTests
     }
 
     /// <summary>Resubmitting an imported session after its rows were tombstoned revives it through the import path.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task SubmitAsync_ImportResubmitAfterTombstone_RevivesSession()
     {

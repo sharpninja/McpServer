@@ -58,13 +58,16 @@ public sealed class MarkerFileServiceTests
     /// <summary>
     /// Runs <paramref name="action"/> with plugin-version env vars cleared and the user-profile
     /// cache scan redirected to an empty temp directory, so resolution sees only the inputs the
-    /// test controls regardless of plugins installed on the machine.
+    /// test controls regardless of plugins installed on the machine. The previous override (the
+    /// assembly's <see cref="HermeticUserProfileFixture"/> profile) is restored afterwards, never
+    /// cleared, so resolution never falls back to the real user profile (AC-TR-MCP-WS-005-001).
     /// </summary>
     /// <param name="action">The assertion body to run hermetically.</param>
     private static void WithHermeticPluginVersionResolution(Action action)
     {
         var emptyProfile = Path.Combine(Path.GetTempPath(), $"mcp-marker-profile-{Guid.NewGuid():N}");
         Directory.CreateDirectory(emptyProfile);
+        var previous = MarkerFileService.AgentPluginUserProfileOverride;
         try
         {
             MarkerFileService.AgentPluginUserProfileOverride = emptyProfile;
@@ -72,7 +75,7 @@ public sealed class MarkerFileServiceTests
         }
         finally
         {
-            MarkerFileService.AgentPluginUserProfileOverride = null;
+            MarkerFileService.AgentPluginUserProfileOverride = previous;
             Directory.Delete(emptyProfile, recursive: true);
         }
     }

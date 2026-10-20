@@ -59,6 +59,7 @@ public sealed class SessionLogServiceTurnContextTests : IDisposable
     }
 
     /// <summary>AC-TR-MCP-SESSIONLOG-006-003: import with omitted fields extracts then persists.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task SubmitAsync_ImportMissingFields_ExtractsFromTurnText()
     {

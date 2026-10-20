@@ -20,6 +20,27 @@ public sealed class SessionLogTurnContextExtractor
     private const int MaxHistoryFiles = 20;
     private const int MaxHistoryBytes = 1_048_576;
 
+    private readonly DirectoryTreeWalker _walker;
+
+    /// <summary>
+    /// Creates an extractor whose agent-history scan walks the real file system (AC-TR-MCP-SESSIONLOG-006-009).
+    /// </summary>
+    public SessionLogTurnContextExtractor()
+        : this(DirectoryTreeWalker.FileSystem)
+    {
+    }
+
+    /// <summary>
+    /// AC-TR-MCP-SESSIONLOG-006-009: creates an extractor whose agent-history scan walks through
+    /// <paramref name="walker"/>, which skips directory links and any directory it cannot list.
+    /// </summary>
+    /// <param name="walker">Directory walk used for the history scan.</param>
+    internal SessionLogTurnContextExtractor(DirectoryTreeWalker walker)
+    {
+        ArgumentNullException.ThrowIfNull(walker);
+        _walker = walker;
+    }
+
     /// <summary>
     /// Extracts a validated pair. Always returns <see cref="SessionLogTurnContextValidator.NoneSentinel"/>
     /// or a valid value. Never invents ids or paths.
@@ -39,7 +60,7 @@ public sealed class SessionLogTurnContextExtractor
     {
         ArgumentNullException.ThrowIfNull(turn);
 
-        var sources = CollectSources(turn, workspacePath, userProfilePath, agentSessionId, agentSessionTranscriptFile);
+        var sources = CollectSources(turn, workspacePath, userProfilePath, agentSessionId, agentSessionTranscriptFile, _walker);
         var todoId = ExtractTodoId(turn, sources);
         var planFile = ExtractPlanFile(turn, sources, workspacePath, userProfilePath);
         return (planFile, todoId);
@@ -50,7 +71,8 @@ public sealed class SessionLogTurnContextExtractor
         string? workspacePath,
         string? userProfilePath,
         string? agentSessionId,
-        string? agentSessionTranscriptFile)
+        string? agentSessionTranscriptFile,
+        DirectoryTreeWalker walker)
     {
         var parts = new List<string>();
         AddIfAny(parts, turn.QueryTitle);
@@ -72,7 +94,7 @@ public sealed class SessionLogTurnContextExtractor
         foreach (var dialog in turn.ProcessingDialog)
             AddIfAny(parts, dialog.Content);
 
-        AppendHistory(parts, workspacePath, userProfilePath, agentSessionId, agentSessionTranscriptFile);
+        AppendHistory(parts, workspacePath, userProfilePath, agentSessionId, agentSessionTranscriptFile, walker);
         return parts;
     }
 
@@ -81,7 +103,8 @@ public sealed class SessionLogTurnContextExtractor
         string? workspacePath,
         string? userProfilePath,
         string? agentSessionId,
-        string? agentSessionTranscriptFile)
+        string? agentSessionTranscriptFile,
+        DirectoryTreeWalker walker)
     {
         var files = new List<string>();
         if (!string.IsNullOrWhiteSpace(agentSessionTranscriptFile) && File.Exists(agentSessionTranscriptFile))
@@ -102,21 +125,8 @@ public sealed class SessionLogTurnContextExtractor
             if (!Directory.Exists(root))
                 continue;
 
-            IEnumerable<string> candidates;
-            try
-            {
-                candidates = Directory.EnumerateFiles(root, "*", SearchOption.AllDirectories);
-            }
-            catch (IOException)
-            {
-                continue;
-            }
-            catch (UnauthorizedAccessException)
-            {
-                continue;
-            }
-
-            foreach (var file in candidates)
+            // AC-TR-MCP-SESSIONLOG-006-009: the walk skips directory links and any directory it cannot list.
+            foreach (var file in walker.EnumerateFiles(root))
             {
                 if (files.Count >= MaxHistoryFiles)
                     break;
