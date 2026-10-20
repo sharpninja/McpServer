@@ -145,6 +145,23 @@ interface ISvgContentFitter
 }
 
 /// <summary>
+/// TR-MCP-NUKE-017 AC-2: makes the bytes of a render depend only on its own view. The diagram library numbers the
+/// element ids it generates from one counter for the whole page, and that counter is consumed at a timing-dependent
+/// point, so without this step two runs on one workspace can differ and any workspace change shifts the ids of every
+/// later render.
+/// </summary>
+interface ISvgIdRenumberer
+{
+    /// <summary>
+    /// Returns the SVG with every generated id defined by an <c>id</c> attribute (JointJS <c>j_N</c>, <c>v-N</c> and
+    /// <c>v_N</c>) numbered from 1 per prefix in the order the definitions appear, every <c>url(#id)</c> and
+    /// <c>href="#id"</c> reference to such an id rewritten with it, and every other byte unchanged. Throws
+    /// <see cref="ArgumentException"/> when the document is not an SVG.
+    /// </summary>
+    string Renumber(string svg);
+}
+
+/// <summary>
 /// TR-MCP-NUKE-017: Input of one ArchitectureDiagrams run.
 /// </summary>
 /// <param name="RepositoryRoot">Absolute repository root.</param>
