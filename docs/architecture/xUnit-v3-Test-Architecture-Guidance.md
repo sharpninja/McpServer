@@ -65,6 +65,7 @@ Binding team guidance for writing and structuring .NET tests with xUnit.net v3. 
 - `xunit.v3.mtp-v2` (MTP v2, chosen explicitly)
 - `xunit.v3.mtp-off` (MTP support disabled)
 - For a project that opts into Native AOT (4.0 or later, C# only, .NET 9 or later): the AOT variant of the same choice, `xunit.v3.aot`, `xunit.v3.aot.mtp-v2`, or `xunit.v3.aot.mtp-off`
+- For a test project that references a shared test utility library built with `xunit.v3.assert.source` (XU-014): the matching core-only package (`xunit.v3.core`, `xunit.v3.core.mtp-v2`, or `xunit.v3.core.mtp-off`) plus an explicit `xunit.analyzers` reference, instead of `xunit.v3`
 
 Do not reference v2 packages (`xunit`, `xunit.abstractions`, `xunit.core`, `xunit.assert`, `xunit.console`).
 
@@ -76,10 +77,10 @@ Do not reference v2 packages (`xunit`, `xunit.abstractions`, `xunit.core`, `xuni
 - Rationale: `xunit.v3.core` injects an entry point that turns the project into an executable.
 - Source: https://xunit.net/docs/nuget-packages-v3
 
-**XU-014 (SHOULD)** Put custom assertions in a shared "test utility" library that references `xunit.v3.assert.source`. Extend the partial `Assert` class there.
+**XU-014 (SHOULD)** Put custom assertions in a shared "test utility" library that references `xunit.v3.assert.source`. Extend the partial `Assert` class there. Test projects that reference that library MUST NOT also receive `xunit.v3.assert`, so they use the core-only package from XU-012 instead of `xunit.v3`.
 
-- Rationale: The source package exposes `Assert` as a partial class so you can add methods to it. This is the documented pattern for multi-project test suites.
-- Source: https://xunit.net/docs/nuget-packages-v3
+- Rationale: The source package exposes `Assert` as a partial class so you can add methods to it. This is the documented pattern for multi-project test suites. The source `Assert` class is `public` by default, and `xunit.v3` (through `xunit.v3.mtp-v2` in 4.x) depends on `xunit.v3.assert`, so a test project with both sees two public `Xunit.Assert` types and fails with CS0433. The core-only packages do not depend on `xunit.v3.assert` or `xunit.analyzers`, which is why the analyzers must be added explicitly. Verified on Oct 20, 2026 by building a 3.2.2 test project against such a utility library: with `xunit.v3` it failed with CS0433, and with `xunit.v3.core` it built.
+- Source: https://xunit.net/docs/nuget-packages-v3 ; https://github.com/xunit/assert.xunit/blob/main/README.md ; https://api.nuget.org/v3-flatcontainer/xunit.v3.mtp-v2/4.0.2/xunit.v3.mtp-v2.nuspec ; https://api.nuget.org/v3-flatcontainer/xunit.v3.core.mtp-v2/4.0.2/xunit.v3.core.mtp-v2.nuspec
 
 **XU-015 (MUST NOT)** Do not remove or disable `xunit.analyzers`.
 
@@ -535,7 +536,7 @@ Assert.Equal(1, vsync.FrameCount);
 - Rationale: A failing case can then be replayed exactly. xUnit.net itself moved to stable, repeatable test ordering for the same reason.
 - Source: Team policy; https://xunit.net/docs/getting-started/v3/whats-new
 
-**XU-094 (MUST)** Set the culture explicitly in `xunit.runner.json` (`"culture": "invariant"`, or a named culture). Tests that check behavior in specific cultures cover each culture explicitly (see XU-095).
+**XU-094 (MUST)** Set the culture explicitly in `xunit.runner.json` (`"culture": "invariant"`, or a named culture). Tests that check behavior in specific cultures cover each culture explicitly. See the "Cultured tests" item in section 17 for why this guide does not prescribe `CulturedFact` or `CulturedTheory`.
 
 - Rationale: The default is the machine's culture, so number and date formatting differ between developer machines and CI.
 - Source: https://xunit.net/docs/config-xunit-runner-json ; https://xunit.net/docs/getting-started/v3/whats-new
@@ -611,7 +612,7 @@ public sealed class DisassemblerTests(ITestOutputHelper output)
 
 ## 11. Configuration
 
-**XU-110 (MUST)** Each test project MUST have an `xunit.runner.json` at its root. The file includes `"$schema": "https://xunit.net/schema/current/xunit.runner.schema.json"` and is included as `Content` with `CopyToOutputDirectory="PreserveNewest"`.
+**XU-110 (MUST)** Each test project MUST have an `xunit.runner.json` at its root. New test projects comply from the start. An existing project adopts the file, with the team baseline below, in the first PR that brings it under this guide; until then it is not in violation. In McpServer, none of the test projects that reference `xunit.v3` had an `xunit.runner.json` on Oct 20, 2026, so this rollout is still to do. The file includes `"$schema": "https://xunit.net/schema/current/xunit.runner.schema.json"` and is included as `Content` with `CopyToOutputDirectory="PreserveNewest"`.
 
 - Rationale: Settings stay in source control, and editors get autocomplete from the schema.
 - Source: https://xunit.net/docs/config-xunit-runner-json
@@ -1141,6 +1142,9 @@ Repository policy:
 
 - `AGENTS.md`, sections "Byrd Test Gate" and "Correctness", in this repository (read Oct 20, 2026)
 - https://github.com/xunit/xunit/blob/v3-4.0.2/src/xunit.v3.core/ITheoryDataRow.cs (accessed Oct 20, 2026)
+- https://github.com/xunit/assert.xunit/blob/main/README.md (accessed Oct 20, 2026)
+- https://api.nuget.org/v3-flatcontainer/xunit.v3.mtp-v2/4.0.2/xunit.v3.mtp-v2.nuspec (accessed Oct 20, 2026)
+- https://api.nuget.org/v3-flatcontainer/xunit.v3.core.mtp-v2/4.0.2/xunit.v3.core.mtp-v2.nuspec (accessed Oct 20, 2026)
 
 Avalonia:
 
