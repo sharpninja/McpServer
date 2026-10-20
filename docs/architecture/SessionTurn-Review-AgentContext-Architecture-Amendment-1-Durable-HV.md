@@ -87,46 +87,57 @@ Statements read and not carried as requirements: S-08 (superseded by S-28, the l
 
 ## 4. System context and component ownership
 
-```mermaid
-flowchart LR
-    subgraph Callers["Callers"]
-        PL["Plugins: PowerShell core verbs and the notification watcher"]
-        RP["qbrain-ai-repl: workflow.hv verbs"]
-        DR["Director: HV commands"]
-        MC["MCP clients: hv tools"]
-    end
-    subgraph Server["QBrainAi.Support.Mcp"]
-        API["HostileValidationController and hv MCP tools"]
-        PIPE["IDispatcher pipeline: WorkspaceResolutionBehavior"]
-        HV["HostileValidation handlers: reviewers, admission, queries, cancel, evidence"]
-        WK["HvWorkerHost: claim, start, run, heartbeat, output, close, fail, finalize, sweep"]
-        AD["Reviewer adapters: Cline, Copilot, Claude, Codex, Grok"]
-        FIN["FinalizeHvRequestCommand"]
-        TR["Foundation units reused: TurnWritePipeline, HvVerdictMapping, RecordModelGradeCommand, DecideAgentResponseTrustCommand"]
-        TRG["ITriageService: POST triage reports"]
-        BUS["IChangeEventBus: wake-ups only"]
-    end
-    REV["Reviewer CLI process, with its own plugin and session-log turn"]
-    DB[("Relational store: HV tables, GZIP evidence, notification outbox, DataAuditLogs")]
-    PL --> RP
-    RP --> API
-    DR --> API
-    MC --> API
-    API --> PIPE
-    PIPE --> HV
-    PIPE --> FIN
-    HV --> DB
-    WK --> PIPE
-    WK --> AD
-    AD --> REV
-    REV -. "live output lines" .-> AD
-    FIN --> TR
-    TR --> DB
-    FIN --> DB
-    WK --> TRG
-    HV -. "wake" .-> BUS
-    BUS -. "wake" .-> WK
-```
+![System context and component ownership, part 1 of 13](c4/rendered/AM1-04-01.svg)
+
+View: AM1-04-01
+
+![System context and component ownership, part 2 of 13](c4/rendered/AM1-04-01-part2.svg)
+
+View: AM1-04-01-part2
+
+![System context and component ownership, part 3 of 13](c4/rendered/AM1-04-01-part3.svg)
+
+View: AM1-04-01-part3
+
+![System context and component ownership, part 4 of 13](c4/rendered/AM1-04-01-part4.svg)
+
+View: AM1-04-01-part4
+
+![System context and component ownership, part 5 of 13](c4/rendered/AM1-04-01-part5.svg)
+
+View: AM1-04-01-part5
+
+![System context and component ownership, part 6 of 13](c4/rendered/AM1-04-01-part6.svg)
+
+View: AM1-04-01-part6
+
+![System context and component ownership, part 7 of 13](c4/rendered/AM1-04-01-part7.svg)
+
+View: AM1-04-01-part7
+
+![System context and component ownership, part 8 of 13](c4/rendered/AM1-04-01-part8.svg)
+
+View: AM1-04-01-part8
+
+![System context and component ownership, part 9 of 13](c4/rendered/AM1-04-01-part9.svg)
+
+View: AM1-04-01-part9
+
+![System context and component ownership, part 10 of 13](c4/rendered/AM1-04-01-part10.svg)
+
+View: AM1-04-01-part10
+
+![System context and component ownership, part 11 of 13](c4/rendered/AM1-04-01-part11.svg)
+
+View: AM1-04-01-part11
+
+![System context and component ownership, part 12 of 13](c4/rendered/AM1-04-01-part12.svg)
+
+View: AM1-04-01-part12
+
+![System context and component ownership, part 13 of 13](c4/rendered/AM1-04-01-part13.svg)
+
+View: AM1-04-01-part13
 
 Ownership: the HostileValidation bounded context owns every unit, policy, entity, and process of this amendment. It calls the foundation's SessionTurnLogging (TurnLocator, TurnWritePipeline), TurnReviews (ScoreLexeme, ScoreVerdict, policy HvVerdictMapping), ResponsesAndTrust (RecordModelGradeCommand, DecideAgentResponseTrustCommand), and SharedComponents (SerializableWrite, IdempotentCreate, ReadableKeyAllocator, PagedQuery, ClassifiedErrorException, ContentHasher, SecretRedactor) through their Phase 2 seams, and the existing `ITriageService` (POST `/qbrainai/triage/reports`, `src/QBrainAi.Support.Mcp/Controllers/TriageController.cs:13-14,33`). Namespaces follow the foundation rule (foundation section 3.5): commands in `src/QBrainAi.Services/HostileValidation/Commands/` (namespace `QBrainAi.Support.Mcp.HostileValidation.Commands`), queries in `.../Queries/`, policies in `.../Policies/`, the worker in `.../Execution/`, adapters in `.../Reviewers/`, entities in `src/QBrainAi.Storage/Entities/HostileValidation/` (namespace `QBrainAi.Support.Mcp.Storage.Entities.HostileValidation`), DTOs in `src/QBrainAi.Client/Models/HostileValidation/` (namespace `QBrainAi.Client.Models.HostileValidation`), one type per file.
 
@@ -193,76 +204,94 @@ Each amendment names the foundation clause it replaces and states the replacemen
 
 ### 7.1 HV request
 
-```mermaid
-stateDiagram-v2
-    [*] --> Queued: SubmitHvRequestCommand, turns frozen Pending
-    Queued --> Running: ClaimHvRunCommand, run attempt claimed
-    Queued --> Canceled: CancelHvRequestCommand
-    Running --> Queued: attempt Failed or Abandoned, attempts left
-    Running --> CancelRequested: CancelHvRequestCommand
-    CancelRequested --> Canceled: worker stops the process, the run closes or fails, or the lease expires
-    Running --> Finalizing: CloseHvRunOutputCommand, output closed
-    Finalizing --> Completed: FinalizeHvRequestCommand commits, turns Final
-    Finalizing --> Queued: verification failed, attempts left
-    Running --> Failed: attempts spent
-    Finalizing --> Failed: verification failed, attempts spent
-    Canceled --> [*]: turns released to None
-    Failed --> [*]: turns released to None
-    Completed --> [*]
-```
+![HV request lifecycle (state diagram), part 1 of 7](c4/rendered/AM1-07-01.svg)
+
+View: AM1-07-01
+
+![HV request lifecycle (state diagram), part 2 of 7](c4/rendered/AM1-07-01-part2.svg)
+
+View: AM1-07-01-part2
+
+![HV request lifecycle (state diagram), part 3 of 7](c4/rendered/AM1-07-01-part3.svg)
+
+View: AM1-07-01-part3
+
+![HV request lifecycle (state diagram), part 4 of 7](c4/rendered/AM1-07-01-part4.svg)
+
+View: AM1-07-01-part4
+
+![HV request lifecycle (state diagram), part 5 of 7](c4/rendered/AM1-07-01-part5.svg)
+
+View: AM1-07-01-part5
+
+![HV request lifecycle (state diagram), part 6 of 7](c4/rendered/AM1-07-01-part6.svg)
+
+View: AM1-07-01-part6
+
+![HV request lifecycle (state diagram), part 7 of 7](c4/rendered/AM1-07-01-part7.svg)
+
+View: AM1-07-01-part7
 
 - `Queued` and `Running` hold the turns `Pending`. `Completed`, `Failed`, and `Canceled` are terminal and never change again (S-06, S-20). A request whose attempt fails returns to `Queued` with its assignment re-evaluated (R-07); with no eligible reviewer it stays `Queued`, its ETA `Unknown`, until a reviewer passes a NONCE or the request is canceled, so no work is lost to an outage.
 - `CancelRequested` is not terminal: the request is canceled when the worker has stopped the process, when its run closes or fails first (CloseHvRunOutputCommand and FailHvRunCommand through policy HvRetryDecision, R-28), or when the lease of a dead worker expires.
 
 ### 7.2 Run attempt
 
-```mermaid
-stateDiagram-v2
-    [*] --> Claimed: ClaimHvRunCommand, lease and fence
-    Claimed --> Running: RecordHvRunStartCommand, process started
-    Running --> Running: heartbeat renews the lease, output appended
-    Running --> OutputClosed: CloseHvRunOutputCommand
-    Claimed --> Failed: FailHvRunCommand, process never started, or worker_shutdown
-    Running --> Failed: FailHvRunCommand, execution failure
-    Running --> Canceled: cancel observed at a heartbeat
-    OutputClosed --> Canceled: cancel found at close
-    Claimed --> Abandoned: lease expired, ExpireHvRunLeasesCommand
-    Running --> Abandoned: lease expired, ExpireHvRunLeasesCommand
-    OutputClosed --> Succeeded: FinalizeHvRequestCommand committed, or probe passed
-    OutputClosed --> Failed: verification failed, or probe failed
-    Succeeded --> [*]
-    Failed --> [*]
-    Abandoned --> [*]
-    Canceled --> [*]
-```
+![Run attempt lifecycle (state diagram), part 1 of 8](c4/rendered/AM1-07-02.svg)
+
+View: AM1-07-02
+
+![Run attempt lifecycle (state diagram), part 2 of 8](c4/rendered/AM1-07-02-part2.svg)
+
+View: AM1-07-02-part2
+
+![Run attempt lifecycle (state diagram), part 3 of 8](c4/rendered/AM1-07-02-part3.svg)
+
+View: AM1-07-02-part3
+
+![Run attempt lifecycle (state diagram), part 4 of 8](c4/rendered/AM1-07-02-part4.svg)
+
+View: AM1-07-02-part4
+
+![Run attempt lifecycle (state diagram), part 5 of 8](c4/rendered/AM1-07-02-part5.svg)
+
+View: AM1-07-02-part5
+
+![Run attempt lifecycle (state diagram), part 6 of 8](c4/rendered/AM1-07-02-part6.svg)
+
+View: AM1-07-02-part6
+
+![Run attempt lifecycle (state diagram), part 7 of 8](c4/rendered/AM1-07-02-part7.svg)
+
+View: AM1-07-02-part7
+
+![Run attempt lifecycle (state diagram), part 8 of 8](c4/rendered/AM1-07-02-part8.svg)
+
+View: AM1-07-02-part8
 
 A run is either a `Review` run of an HV request or a `Probe` run of a reviewer's NONCE (R-10); both use the same lease, fence, output, and close units, so the probe needs no second execution path.
 
 ### 7.3 Reviewer readiness
 
-```mermaid
-stateDiagram-v2
-    [*] --> Unverified: seeded from configuration
-    Unverified --> Online: NONCE probe passed
-    Unverified --> Offline: NONCE probe failed
-    Online --> Offline: execution failure, incident filed
-    Offline --> Online: NONCE probe passed
-    Online --> Unverified: strategy, agent path, model, or effort changed
-    Offline --> Unverified: strategy, agent path, model, or effort changed
-```
+![Reviewer readiness (state diagram), part 1 of 2](c4/rendered/AM1-07-03.svg)
+
+View: AM1-07-03
+
+![Reviewer readiness (state diagram), part 2 of 2](c4/rendered/AM1-07-03-part2.svg)
+
+View: AM1-07-03-part2
 
 `Enabled` is a separate flag set by UpdateHvReviewerCommand: a disabled reviewer is never eligible and is never NONCEd automatically, whatever its readiness. Eligibility (policy HvReviewerEligibility) is enabled, `Online`, and neither the submitter nor the author of the reviewed turns (R-08).
 
 ### 7.4 HV state of a turn
 
-```mermaid
-stateDiagram-v2
-    [*] --> None
-    None --> Pending: admitted by SubmitHvRequestCommand
-    Pending --> None: request Canceled or Failed
-    Pending --> Final: FinalizeHvRequestCommand
-    Final --> [*]
-```
+![HV state of a turn (state diagram), part 1 of 2](c4/rendered/AM1-07-04.svg)
+
+View: AM1-07-04
+
+![HV state of a turn (state diagram), part 2 of 2](c4/rendered/AM1-07-04-part2.svg)
+
+View: AM1-07-04-part2
 
 While `Pending` or `Final`, policy HvTurnFreeze refuses every write to the turn and its children except finalization's own (A-07, A-08). A turn that already holds a `Pass` or `Fail` hostile review when the column is added starts `Final`, with no request id (A-11).
 
@@ -330,129 +359,125 @@ The foundation's shared components (foundation section 3.5) are reused unchanged
 
 Claims, renews, and takes over the lease of one row, and guards every fenced write, following develop's handoff-ingestion pattern (`HandoffIngestionService.cs:724-735,782-807`). Operations: `Claim(row, owner, duration)` (only when the row has no lease or an expired one; the fence token increments), `Renew(row, owner, fence, duration)`, `Guard(row, owner, fence)` (the precondition of every fenced write), `Release(row, owner, fence)`, and `Expire(row, fence, liveStatuses)` (a sweep's takeover of a dead worker's row: in the caller's transaction the row must still be in one of the live statuses, with the fence the sweep read and an expired lease; otherwise the result is `skipped` and nothing changes, because the row was renewed, settled, or already taken over; when it holds, the fence token increments and owner and expiry are cleared, so the dead worker's next write is `stale_fence` and no second sweep can take the same row over again). Each runs inside the caller's SerializableWrite. Used by ClaimHvRunCommand, RecordHvRunStartCommand, RecordHvRunHeartbeatCommand, AppendHvRunOutputCommand, CloseHvRunOutputCommand, FailHvRunCommand, and ExpireHvRunLeasesCommand, and by the HostileReview worker's ClaimHostileReviewAttemptCommand, RenewHostileReviewAttemptCommand, CompleteHostileReviewAttemptCommand, and ExpireHostileReviewLeasesCommand (section 16.7).
 
-```mermaid
-flowchart TD
-    S(["FencedLease: operation, row, owner, fence"]) --> OP{"Operation?"}
-    OP -->|Claim| CL{"Lease absent or expired?"}
-    CL -->|no| E1(["held: another owner holds a live lease"])
-    CL -->|yes| CT["Set owner and expiry, increment the fence token"]
-    CT --> OK1(["claimed: the new fence token"])
-    OP -->|"Renew, Guard, or Release"| G{"Owner and fence equal the stored ones?"}
-    G -->|no| E2(["stale_fence: nothing changed"])
-    G -->|yes| W{"Operation?"}
-    W -->|Renew| RN["Extend the expiry"]
-    RN --> OK2(["renewed"])
-    W -->|Guard| OK3(["guarded: the caller's write proceeds"])
-    W -->|Release| RL["Clear owner and expiry"]
-    RL --> OK4(["released"])
-    OP -->|Expire| EX{"Row still in a live status, fence as read, lease expired?"}
-    EX -->|no| SK(["skipped: renewed, settled, or taken over; nothing changed"])
-    EX -->|yes| ET["Increment the fence token; clear owner and expiry"]
-    ET --> OK5(["expired: the caller ends the row and decides its parent"])
-```
+![FencedLease (activity), part 1 of 6](c4/rendered/FencedLease.svg)
+
+View: FencedLease
+
+![FencedLease (activity), part 2 of 6](c4/rendered/FencedLease-part2.svg)
+
+View: FencedLease-part2
+
+![FencedLease (activity), part 3 of 6](c4/rendered/FencedLease-part3.svg)
+
+View: FencedLease-part3
+
+![FencedLease (activity), part 4 of 6](c4/rendered/FencedLease-part4.svg)
+
+View: FencedLease-part4
+
+![FencedLease (activity), part 5 of 6](c4/rendered/FencedLease-part5.svg)
+
+View: FencedLease-part5
+
+![FencedLease (activity), part 6 of 6](c4/rendered/FencedLease-part6.svg)
+
+View: FencedLease-part6
 
 ### 11.2 GzipCodec (namespace `QBrainAi.Support.Mcp.Storage.Compression`)
 
 `Compress(bytes)` returns one GZIP member; `Decompress(bytes)` returns the original bytes; `RoundTrip(original, compressed)` decompresses and compares length and SHA-256 (through ContentHasher's hex form over raw bytes) and fails with `evidence_corrupt` on any difference, so no compressed blob is stored unverified. It follows `DataAuditLogEntity`'s encode and decode (`DataAuditLogEntity.cs:119-147`); that entity's private copy is context, not work. Used by SubmitHvRequestCommand (request evidence), AppendHvRunOutputCommand (chunks), FinalizeHvRequestCommand (result document, chunk verification), RunReviewerProcess (the accepted request of the brief), CloseHvRunOutputCommand (a probe's chunks), and GetHvRequestQuery, GetHvResultQuery, GetHvEvidenceQuery, and OrderedEventReplay (public reads).
 
-```mermaid
-flowchart TD
-    S(["GzipCodec: operation, bytes"]) --> OP{"Operation?"}
-    OP -->|Compress| C["Write one GZIP member at the configured level"]
-    C --> RT[["GzipCodec RoundTrip on the result"]]
-    RT -->|equal| OK1(["compressed bytes"])
-    RT -->|different| E1(["evidence_corrupt"])
-    OP -->|Decompress| D{"Valid GZIP member?"}
-    D -->|no| E2(["evidence_corrupt"])
-    D -->|yes| OK2(["original bytes"])
-    OP -->|RoundTrip| R["Decompress, compare length and SHA-256 with the original"]
-    R -->|equal| OK3(["equal"])
-    R -->|different| E3(["evidence_corrupt"])
-```
+![GzipCodec (activity), part 1 of 4](c4/rendered/GzipCodec.svg)
+
+View: GzipCodec
+
+![GzipCodec (activity), part 2 of 4](c4/rendered/GzipCodec-part2.svg)
+
+View: GzipCodec-part2
+
+![GzipCodec (activity), part 3 of 4](c4/rendered/GzipCodec-part3.svg)
+
+View: GzipCodec-part3
+
+![GzipCodec (activity), part 4 of 4](c4/rendered/GzipCodec-part4.svg)
+
+View: GzipCodec-part4
 
 ### 11.3 AuditLedgerGuard (namespace `QBrainAi.Support.Mcp.Storage.Auditing`)
 
 `EnsureAvailable()` checks, inside the caller's transaction, that the `DataAuditLogs` table is writable and refuses with 503 `audit_unavailable` (`retryable: true`) when it is not, closing for HV the skip of `McpDbContext.AppendAuditRows` (`McpDbContext.cs:1507-1538`); `RecordRead(entityKind, entityKey, actor)` adds one ledger row with action `read` for an evidence access (R-19), always in a transaction of its own that commits before the caller consumes any byte, and never inside a caller's transaction: a caller that writes after a read calls it before it opens its own transaction, so the read row survives any rollback or failed commit of the caller. Every HV unit calls `EnsureAvailable()` before any other step that writes. `RecordRead` is the one boundary of every evidence read (R-19), called before any byte is returned or consumed: by GetHvEvidenceQuery, GetHvResultQuery, the output stream, and GetHvRequestQuery when it returns output lines (directly, or for a same-key replay of SubmitHvRequestCommand), and by RunReviewerProcess (the accepted request of the brief), FinalizeHvRequestCommand (the run's chunks), and CloseHvRunOutputCommand (a probe's chunks); each caller states what it does when the read is refused.
 
-```mermaid
-flowchart TD
-    S(["AuditLedgerGuard: operation"]) --> A{"DataAuditLogs writable?"}
-    A -->|no| E(["503 audit_unavailable, retryable: nothing written, no byte read"])
-    A -->|yes| OP{"Operation?"}
-    OP -->|EnsureAvailable| OK1(["available"])
-    OP -->|RecordRead| R2["Add one ledger row, action read, entity kind and key, actor, request id, in a transaction of its own, and commit it"]
-    R2 --> OK3(["read recorded and committed before the caller reads, whatever the caller later commits or rolls back"])
-```
+![AuditLedgerGuard (activity), part 1 of 2](c4/rendered/AuditLedgerGuard.svg)
+
+View: AuditLedgerGuard
+
+![AuditLedgerGuard (activity), part 2 of 2](c4/rendered/AuditLedgerGuard-part2.svg)
+
+View: AuditLedgerGuard-part2
 
 ### 11.4 AgentIdentity (namespace `QBrainAi.Client.Agents`)
 
 `Normalize(name)` returns the reviewer id (`Cline`, `Copilot`, `Claude`, `Codex`, `Grok`) of a known alias, case-insensitively and with separators removed, or `Unknown` with the input's PascalCase form; `IsSameReviewer(a, b)` compares normalized ids. The alias table is R-08's; the PowerShell core's copy is kept equal by the golden contract `docs/context/agent-identity-contract.json` (`AgentIdentityGoldenContractTests` in C# and Pester), the foundation's language-boundary rule (foundation section 3.5.4).
 
-```mermaid
-flowchart TD
-    S(["AgentIdentity.Normalize: name"]) --> B{"Blank?"}
-    B -->|yes| U(["Unknown"])
-    B -->|no| N["Lower-case, remove separators"]
-    N --> K{"In the alias table?"}
-    K -->|yes| R(["Reviewer id: Cline, Copilot, Claude, Codex, or Grok"])
-    K -->|no| U2(["Unknown, with the PascalCase form"])
-```
+![AgentIdentity.Normalize (activity), part 1 of 2](c4/rendered/AgentIdentity.svg)
+
+View: AgentIdentity
+
+![AgentIdentity.Normalize (activity), part 2 of 2](c4/rendered/AgentIdentity-part2.svg)
+
+View: AgentIdentity-part2
 
 ### 11.5 TurnSnapshotBuilder (namespace `QBrainAi.Support.Mcp.HostileValidation`)
 
 Builds the canonical review snapshot of one turn: its turn key, status, `requestClass`, query title and text, interpretation, response, actions, design decisions, files modified, requirements discovered, blockers, tags, context list, and processing dialog, in stored order, with `agentReview` and `hostileReview` left out (R-21), every text through SecretRedactor, serialized as canonical JSON, and hashed through ContentHasher. Used by SubmitHvRequestCommand (the snapshot and its hash on each `HvRequestTurn`) and FinalizeHvRequestCommand (V-2 re-hash).
 
-```mermaid
-flowchart TD
-    S(["TurnSnapshotBuilder: turn"]) --> P["Project the listed fields in stored order; omit agentReview and hostileReview"]
-    P --> R[["SecretRedactor on every text field"]]
-    R --> J["Serialize as canonical JSON"]
-    J --> H[["ContentHasher: SHA-256 of the stored normal form"]]
-    H --> OK(["snapshot JSON and snapshotSha256"])
-```
+![TurnSnapshotBuilder (activity), part 1 of 2](c4/rendered/TurnSnapshotBuilder.svg)
+
+View: TurnSnapshotBuilder
+
+![TurnSnapshotBuilder (activity), part 2 of 2](c4/rendered/TurnSnapshotBuilder-part2.svg)
+
+View: TurnSnapshotBuilder-part2
 
 ### 11.6 RequirementReferenceExtractor (namespace `QBrainAi.Support.Mcp.Requirements`)
 
 Extracts the requirement and use-case references of R-23 from the submitted context, in order of first appearance and without duplicates, and resolves each against the workspace's effective requirements (`client.Requirements.GetEffectiveRequirementsAsync`, the marker's requirements visibility rule) and use cases (by store id or exact title). Returns each reference with `kind`, `id`, `resolved`, and, when resolved, its title and the SHA-256 of its effective record. Used by SubmitHvRequestCommand.
 
-```mermaid
-flowchart TD
-    S(["RequirementReferenceExtractor: context text"]) --> X["Scan for FR, TR, TEST ids, acceptance-criterion forms, and use-case references; keep first appearances"]
-    X --> L{"Any reference found?"}
-    L -->|no| E(["empty list"])
-    L -->|yes| R["Resolve each against the effective requirements and the use cases"]
-    R --> OK(["ordered list: kind, id, resolved, title, sha256"])
-```
+![RequirementReferenceExtractor (activity), part 1 of 2](c4/rendered/RequirementReferenceExtractor.svg)
+
+View: RequirementReferenceExtractor
+
+![RequirementReferenceExtractor (activity), part 2 of 2](c4/rendered/RequirementReferenceExtractor-part2.svg)
+
+View: RequirementReferenceExtractor-part2
 
 ### 11.7 NotificationOutbox (namespace `QBrainAi.Support.Mcp.HostileValidation`)
 
 `Append(kind, hvRequestId, reviewerId, runId, submitter, payload)` (`submitter` the request's submitting turn key, null where section 12 says so) runs inside the caller's SerializableWrite: it increments the workspace's `HvWorkspaceState.NextNotificationSequence`, inserts the `HvNotification` row with that sequence, and registers a post-commit wake-up on `IChangeEventBus` (R-16). Used by every unit whose change a caller observes.
 
-```mermaid
-flowchart TD
-    S(["NotificationOutbox.Append in the caller's transaction"]) --> Q["Read and increment HvWorkspaceState.NextNotificationSequence"]
-    Q --> I["Insert HvNotification with the sequence, kind, ids, and payload"]
-    I --> W["Register the post-commit wake-up on IChangeEventBus"]
-    W --> OK(["appended: sequence; visible only when the caller commits"])
-```
+![NotificationOutbox.Append (activity)](c4/rendered/NotificationOutbox.svg)
+
+View: NotificationOutbox
 
 ### 11.8 OrderedEventReplay (namespace `QBrainAi.Support.Mcp.Streaming`)
 
 Serves a Server-Sent Events stream from durable ordered rows: parses `Last-Event-ID` (absent means from the beginning of the requested stream, a malformed value is 400 `validation_error` with `details.field` `Last-Event-ID`), sends every stored event after it in order with its `id:`, then waits on the `IChangeEventBus` wake-up (or a poll interval) and sends new rows; it sends a comment line every 15 seconds while idle so proxies keep the connection, and ends when the caller disconnects or the stream's source reaches a terminal event. Develop's event stream has no replay and no event ids (`src/QBrainAi.Support.Mcp/Controllers/EventStreamController.cs:27-92`); this component adds both without changing that controller. Used by StreamHvRunOutputQuery and StreamHvNotificationsQuery.
 
-```mermaid
-flowchart TD
-    S(["OrderedEventReplay: source, Last-Event-ID"]) --> P{"Last-Event-ID valid or absent?"}
-    P -->|malformed| E(["400 validation_error, details.field Last-Event-ID"])
-    P -->|yes| RD["Read stored events after the position, in order"]
-    RD --> SND["Send each event with its id"]
-    SND --> T{"Source terminal and all events sent?"}
-    T -->|yes| END(["stream ended with the terminal event"])
-    T -->|no| WT["Wait for a wake-up or the poll interval; send a comment every 15 seconds while idle"]
-    WT --> DC{"Caller disconnected?"}
-    DC -->|yes| END2(["stream closed"])
-    DC -->|no| RD
-```
+![OrderedEventReplay (activity), part 1 of 4](c4/rendered/OrderedEventReplay.svg)
+
+View: OrderedEventReplay
+
+![OrderedEventReplay (activity), part 2 of 4](c4/rendered/OrderedEventReplay-part2.svg)
+
+View: OrderedEventReplay-part2
+
+![OrderedEventReplay (activity), part 3 of 4](c4/rendered/OrderedEventReplay-part3.svg)
+
+View: OrderedEventReplay-part3
+
+![OrderedEventReplay (activity), part 4 of 4](c4/rendered/OrderedEventReplay-part4.svg)
+
+View: OrderedEventReplay-part4
 
 ## 12. Data model (namespace `QBrainAi.Support.Mcp.Storage.Entities.HostileValidation`)
 
@@ -612,25 +637,22 @@ Each unit is one command or query record and its handler, two files in the folde
 - Surfaces: section 13.1. Response 200: the five reviewers in pool order (Cline, Copilot, Claude, Codex, Grok), each with `activeRuns` (its runs in `Claimed` or `Running`).
 - Errors: 400 `validation_error` (`workspacePath`).
 
-```mermaid
-flowchart TD
-    S(["Handler runs: GET reviewers"]) --> L["Load the workspace's HvReviewer rows in pool order"]
-    L --> C["Count each reviewer's runs in Claimed or Running"]
-    C --> R(["200 the five HvReviewerDto"])
-```
+![ListHvReviewersQuery: list the reviewer pool (activity)](c4/rendered/ListHvReviewersQuery.svg)
+
+View: ListHvReviewersQuery
 
 #### GetHvReviewerQuery: get one reviewer [FR-MCP-HVPIPE-001, -003]
 
 - Handler: `GetHvReviewerQuery(string WorkspacePath, string ReviewerId) : IQuery<HvReviewerDto>`.
 - Response 200 `HvReviewerDto`. Errors: 400 `validation_error` (`workspacePath`); 404 `not_found` (`details.resource` `reviewer`) for an id AgentIdentity does not map to a reviewer.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: GET reviewers/{reviewerId}"]) --> N[["AgentIdentity.Normalize"]]
-    N -->|Unknown| E(["404 not_found, details.resource reviewer"])
-    N -->|reviewer id| L["Load the row and count its active runs"]
-    L --> R(["200 HvReviewerDto"])
-```
+![GetHvReviewerQuery: get one reviewer (activity), part 1 of 2](c4/rendered/GetHvReviewerQuery.svg)
+
+View: GetHvReviewerQuery
+
+![GetHvReviewerQuery: get one reviewer (activity), part 2 of 2](c4/rendered/GetHvReviewerQuery-part2.svg)
+
+View: GetHvReviewerQuery-part2
 
 #### UpdateHvReviewerCommand: manage a reviewer in real time [FR-MCP-HVPIPE-001]
 
@@ -640,28 +662,29 @@ flowchart TD
 - A disabled reviewer stays assigned to the requests it holds until their next claim, which reassigns them (R-07); a run already running continues.
 - Response 200 `HvReviewerDto`. Errors: 400 `validation_error`; 404 `not_found` (`reviewer`); 409 `conflict` (`retryable: false` stale version, `retryable: true` exhausted); 503 `audit_unavailable`.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: PATCH reviewers/{reviewerId}"]) --> V{"Fields valid and expectedStateVersion present?"}
-    V -->|no| E1(["400 validation_error, naming the field"])
-    V -->|yes| N[["AgentIdentity.Normalize"]]
-    N -->|Unknown| E2(["404 not_found, details.resource reviewer"])
-    N -->|reviewer id| SW[["SerializableWrite with AuditLedgerGuard"]]
-    SW -->|"audit unavailable"| E3(["503 audit_unavailable"])
-    SW -->|"attempts exhausted"| E4(["409 conflict, retryable true"])
-    SW -->|attempt| VER{"StateVersion equals expectedStateVersion?"}
-    VER -->|no| E5(["409 conflict, retryable false, details.field expectedStateVersion"])
-    VER -->|yes| AP["Apply the fields"]
-    AP --> CH{"Strategy, agent path, model, or effort changed?"}
-    CH -->|yes| UV["ConfigurationVersion plus 1; Readiness Unverified, reason configuration_changed, open incident id cleared"]
-    UV --> NO[["NotificationOutbox: reviewer_unverified"]]
-    NO --> PRQ{"Enabled and Unverified now?"}
-    CH -->|no| PRQ
-    PRQ -->|yes| SETP["Set ProbeRequestedUtc: a durable probe request"]
-    SETP --> INC["Increment StateVersion"]
-    PRQ -->|no| INC
-    INC --> R(["200 HvReviewerDto; the worker is woken after the commit"])
-```
+![UpdateHvReviewerCommand: manage a reviewer in real time (activity), part 1 of 6](c4/rendered/UpdateHvReviewerCommand.svg)
+
+View: UpdateHvReviewerCommand
+
+![UpdateHvReviewerCommand: manage a reviewer in real time (activity), part 2 of 6](c4/rendered/UpdateHvReviewerCommand-part2.svg)
+
+View: UpdateHvReviewerCommand-part2
+
+![UpdateHvReviewerCommand: manage a reviewer in real time (activity), part 3 of 6](c4/rendered/UpdateHvReviewerCommand-part3.svg)
+
+View: UpdateHvReviewerCommand-part3
+
+![UpdateHvReviewerCommand: manage a reviewer in real time (activity), part 4 of 6](c4/rendered/UpdateHvReviewerCommand-part4.svg)
+
+View: UpdateHvReviewerCommand-part4
+
+![UpdateHvReviewerCommand: manage a reviewer in real time (activity), part 5 of 6](c4/rendered/UpdateHvReviewerCommand-part5.svg)
+
+View: UpdateHvReviewerCommand-part5
+
+![UpdateHvReviewerCommand: manage a reviewer in real time (activity), part 6 of 6](c4/rendered/UpdateHvReviewerCommand-part6.svg)
+
+View: UpdateHvReviewerCommand-part6
 
 #### StartHvReviewerNonceCommand: request a NONCE probe [FR-MCP-HVPIPE-003]
 
@@ -669,22 +692,21 @@ flowchart TD
 - Delegate: AuditLedgerGuard; the reviewer row (404); a disabled reviewer is 409 `hv_reviewer_disabled`; a probe run of this reviewer in `Claimed` or `Running` returns 202 `Running` with its run id and writes nothing; a `ProbeRequestedUtc` already set returns 202 `AlreadyRequested` and writes nothing; otherwise `ProbeRequestedUtc` is set and the result is 202 `Requested`. After the commit the worker is woken; ClaimHvRunCommand creates the probe run.
 - Errors: 400 `validation_error` (`workspacePath`); 404 `not_found` (`reviewer`); 409 `hv_reviewer_disabled`, `conflict` (`retryable: true`); 503 `audit_unavailable`.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: POST reviewers/{reviewerId}/nonce"]) --> N[["AgentIdentity.Normalize"]]
-    N -->|Unknown| E1(["404 not_found, details.resource reviewer"])
-    N -->|reviewer id| SW[["SerializableWrite with AuditLedgerGuard"]]
-    SW -->|"audit unavailable"| E2(["503 audit_unavailable"])
-    SW -->|"attempts exhausted"| E3(["409 conflict, retryable true"])
-    SW -->|attempt| EN{"Reviewer enabled?"}
-    EN -->|no| E4(["409 hv_reviewer_disabled"])
-    EN -->|yes| RUN{"A probe run Claimed or Running?"}
-    RUN -->|yes| R1(["202 Running, with its run id; nothing written"])
-    RUN -->|no| REQ{"ProbeRequestedUtc already set?"}
-    REQ -->|yes| R2(["202 AlreadyRequested; nothing written"])
-    REQ -->|no| SET["Set ProbeRequestedUtc"]
-    SET --> R3(["202 Requested; the worker is woken after the commit"])
-```
+![StartHvReviewerNonceCommand: request a NONCE probe (activity), part 1 of 4](c4/rendered/StartHvReviewerNonceCommand.svg)
+
+View: StartHvReviewerNonceCommand
+
+![StartHvReviewerNonceCommand: request a NONCE probe (activity), part 2 of 4](c4/rendered/StartHvReviewerNonceCommand-part2.svg)
+
+View: StartHvReviewerNonceCommand-part2
+
+![StartHvReviewerNonceCommand: request a NONCE probe (activity), part 3 of 4](c4/rendered/StartHvReviewerNonceCommand-part3.svg)
+
+View: StartHvReviewerNonceCommand-part3
+
+![StartHvReviewerNonceCommand: request a NONCE probe (activity), part 4 of 4](c4/rendered/StartHvReviewerNonceCommand-part4.svg)
+
+View: StartHvReviewerNonceCommand-part4
 
 ### 14.2 Admission, queries, and cancellation
 
@@ -702,62 +724,65 @@ flowchart TD
 - Concurrency: two submissions over overlapping turns are serialized by SerializableWrite; the second sees the first's `Pending` items and is refused with `hv_turns_pending` (I-01; the unique filtered index ends a racing insert, and the retried attempt finds the winner). Two submissions over disjoint turns take consecutive cursor values, so round-robin order holds under concurrency.
 - Errors, in order: 400 `hv_scope_invalid`, `validation_error` (submitter, key, context, `workspacePath`), `hv_scope_too_large`, `hv_scope_includes_submitting_turn`, `hv_scope_empty`; 409 `conflict` (`retryable: false` key reused, `retryable: true` exhausted), `hv_turns_not_terminal`, `hv_turns_pending`, `hv_turns_already_reviewed`, `hv_no_reviewer_available` (with `details.reviewers`); 500 `evidence_corrupt` (the accepted request failed its GZIP round trip, nothing saved; or, on a replay, a stored output chunk failed to decompress, as GetHvRequestQuery answers); 503 `audit_unavailable` (also a replay whose output read cannot be recorded).
 
-```mermaid
-flowchart TD
-    S(["Handler runs: POST requests"]) --> SH{"Scope, submitter, key, and context well formed?"}
-    SH -->|"scope"| E1(["400 hv_scope_invalid, details.field"])
-    SH -->|"submitter, key, or context"| E2(["400 validation_error, details.field"])
-    SH -->|yes| RX[["RequirementReferenceExtractor on the context"]]
-    RX --> SW[["SerializableWrite with AuditLedgerGuard"]]
-    SW -->|"audit unavailable"| E3(["503 audit_unavailable"])
-    SW -->|"attempts exhausted"| E4(["409 conflict, retryable true"])
-    SW -->|attempt| IC[["IdempotentCreate lookup, policy Conflict"]]
-    IC -->|"stored, same inputs: nothing written"| GQ[["GetHvRequestQuery for the stored request, after the delegate"]]
-    GQ -->|"200 HvRequestResult"| R2(["200 the stored request, its output read recorded first"])
-    GQ -->|"500 evidence_corrupt or 503 audit_unavailable"| E7(["that answer of GetHvRequestQuery"])
-    IC -->|"key reused, other inputs"| E5(["409 conflict, retryable false"])
-    IC -->|absent| AC[["AdmitRequestChecks"]]
-    AC -->|refused| E6(["Refusal of AdmitRequestChecks, drawn there"])
-    AC -->|"members and reviewer"| INS[["InsertAdmittedRequest"]]
-    INS -->|"key collision: attempt ends"| SW
-    INS -->|committed| R(["201 HvRequestResult; the worker is woken after the commit"])
-```
+![SubmitHvRequestCommand: admit an HV request (activity), part 1 of 7](c4/rendered/SubmitHvRequestCommand.svg)
+
+View: SubmitHvRequestCommand
+
+![SubmitHvRequestCommand: admit an HV request (activity), part 2 of 7](c4/rendered/SubmitHvRequestCommand-part2.svg)
+
+View: SubmitHvRequestCommand-part2
+
+![SubmitHvRequestCommand: admit an HV request (activity), part 3 of 7](c4/rendered/SubmitHvRequestCommand-part3.svg)
+
+View: SubmitHvRequestCommand-part3
+
+![SubmitHvRequestCommand: admit an HV request (activity), part 4 of 7](c4/rendered/SubmitHvRequestCommand-part4.svg)
+
+View: SubmitHvRequestCommand-part4
+
+![SubmitHvRequestCommand: admit an HV request (activity), part 5 of 7](c4/rendered/SubmitHvRequestCommand-part5.svg)
+
+View: SubmitHvRequestCommand-part5
+
+![SubmitHvRequestCommand: admit an HV request (activity), part 6 of 7](c4/rendered/SubmitHvRequestCommand-part6.svg)
+
+View: SubmitHvRequestCommand-part6
+
+![SubmitHvRequestCommand: admit an HV request (activity), part 7 of 7](c4/rendered/SubmitHvRequestCommand-part7.svg)
+
+View: SubmitHvRequestCommand-part7
 
 ##### Nested activity: AdmitRequestChecks (the checks of SubmitHvRequestCommand, inside its delegate)
 
-```mermaid
-flowchart TD
-    S(["AdmitRequestChecks"]) --> SK{"Submitter kind Agent?"}
-    SK -->|yes| TL[["TurnLocator: the submitting turn"]]
-    TL -->|"InvalidIdentifier, SessionNotFound, or TurnNotFound"| E1(["400 validation_error, details.field submitter"])
-    TL -->|found| SC
-    SK -->|"no: Operator"| SC[["Policy HvScopeResolution"]]
-    SC -->|refused| E2(["400 hv_scope_invalid, hv_scope_too_large, hv_scope_includes_submitting_turn, or hv_scope_empty"])
-    SC -->|members| EL[["Policy HvAdmissionEligibility"]]
-    EL -->|refused| E3(["409 hv_turns_not_terminal, hv_turns_pending, or hv_turns_already_reviewed, listing every turn"])
-    EL -->|eligible| RR[["Policy RoundRobinAssignment"]]
-    RR -->|"no eligible reviewer"| E4(["409 hv_no_reviewer_available, details.reviewers"])
-    RR -->|"reviewer, cursor advanced"| OK(["members and reviewer"])
-```
+![Nested activity: AdmitRequestChecks (the checks of SubmitHvRequestCommand, inside its delegate) (activity), part 1 of 3](c4/rendered/AdmitRequestChecks.svg)
+
+View: AdmitRequestChecks
+
+![Nested activity: AdmitRequestChecks (the checks of SubmitHvRequestCommand, inside its delegate) (activity), part 2 of 3](c4/rendered/AdmitRequestChecks-part2.svg)
+
+View: AdmitRequestChecks-part2
+
+![Nested activity: AdmitRequestChecks (the checks of SubmitHvRequestCommand, inside its delegate) (activity), part 3 of 3](c4/rendered/AdmitRequestChecks-part3.svg)
+
+View: AdmitRequestChecks-part3
 
 ##### Nested activity: InsertAdmittedRequest (the inserts of SubmitHvRequestCommand, inside its delegate)
 
-```mermaid
-flowchart TD
-    S(["InsertAdmittedRequest: members, reviewer, references"]) --> K[["ReadableKeyAllocator: hvr- key"]]
-    K -->|collision| C(["attempt ends: SerializableWrite runs the delegate again"])
-    K -->|key| RQ["Insert HvRequest Queued with the assigned reviewer, the submitter, and the author id"]
-    RQ --> TS[["TurnSnapshotBuilder for each member turn"]]
-    TS --> IT["Insert one HvRequestTurn per member: ordinal, turn key, snapshot hash, class and hostile status at admission, Pending"]
-    IT --> RF["Insert the requirement references"]
-    RF --> RS["Insert HvRequestResponse Pending for each gradable response of a member turn"]
-    RS --> EV[["GzipCodec Compress: the accepted request"]]
-    EV -->|evidence_corrupt| E1(["attempt fails: 500 evidence_corrupt, nothing saved"])
-    EV -->|compressed| IE["Insert HvEvidence Request with its SHA-256 and sizes"]
-    IE --> FZ[["Policy HvTurnFreeze Freeze: each member turn Pending with this request"]]
-    FZ --> NO[["NotificationOutbox: hv_queued"]]
-    NO --> OK(["inserted"])
-```
+![Nested activity: InsertAdmittedRequest (the inserts of SubmitHvRequestCommand, inside its delegate) (activity), part 1 of 4](c4/rendered/InsertAdmittedRequest.svg)
+
+View: InsertAdmittedRequest
+
+![Nested activity: InsertAdmittedRequest (the inserts of SubmitHvRequestCommand, inside its delegate) (activity), part 2 of 4](c4/rendered/InsertAdmittedRequest-part2.svg)
+
+View: InsertAdmittedRequest-part2
+
+![Nested activity: InsertAdmittedRequest (the inserts of SubmitHvRequestCommand, inside its delegate) (activity), part 3 of 4](c4/rendered/InsertAdmittedRequest-part3.svg)
+
+View: InsertAdmittedRequest-part3
+
+![Nested activity: InsertAdmittedRequest (the inserts of SubmitHvRequestCommand, inside its delegate) (activity), part 4 of 4](c4/rendered/InsertAdmittedRequest-part4.svg)
+
+View: InsertAdmittedRequest-part4
 
 #### GetHvRequestQuery: get an HV request with its progress [FR-MCP-HVPIPE-015, -016]
 
@@ -765,20 +790,21 @@ flowchart TD
 - Loads the request, its turns, references, responses, and current run with its progress (R-18) and its last 20 output lines (decompressed from the last chunks through GzipCodec). Because the last output is evidence, the unit records the access through AuditLedgerGuard `RecordRead` before it decompresses any chunk, whenever it returns output lines (R-19). After evidence removal it returns no output line, `outputRemoved` true, and records no read (R-20). A chunk that fails to decompress is 500 `evidence_corrupt`, after the read was recorded.
 - Response 200 `HvRequestResult`. Errors: 400 `validation_error` (`workspacePath`); 404 `not_found` (`hv_request`); 500 `evidence_corrupt`; 503 `audit_unavailable` (output lines present and the ledger unwritable).
 
-```mermaid
-flowchart TD
-    S(["Handler runs: GET requests/{hvRequestId}"]) --> F{"Request in the workspace?"}
-    F -->|no| E1(["404 not_found, details.resource hv_request"])
-    F -->|yes| L["Load turns, references, responses, and the current run with its progress"]
-    L --> O{"Current run has output?"}
-    O -->|no| R1(["200 HvRequestResult, lastOutput empty, etaStatus as recorded"])
-    O -->|"removed"| R3(["200 HvRequestResult, lastOutput empty, outputRemoved true"])
-    O -->|yes| A[["AuditLedgerGuard RecordRead"]]
-    A -->|"audit unavailable"| E2(["503 audit_unavailable"])
-    A -->|recorded| G[["GzipCodec Decompress the last chunks to 20 lines"]]
-    G -->|evidence_corrupt| E3(["500 evidence_corrupt"])
-    G -->|lines| R2(["200 HvRequestResult with lastOutput"])
-```
+![GetHvRequestQuery: get an HV request with its progress (activity), part 1 of 4](c4/rendered/GetHvRequestQuery.svg)
+
+View: GetHvRequestQuery
+
+![GetHvRequestQuery: get an HV request with its progress (activity), part 2 of 4](c4/rendered/GetHvRequestQuery-part2.svg)
+
+View: GetHvRequestQuery-part2
+
+![GetHvRequestQuery: get an HV request with its progress (activity), part 3 of 4](c4/rendered/GetHvRequestQuery-part3.svg)
+
+View: GetHvRequestQuery-part3
+
+![GetHvRequestQuery: get an HV request with its progress (activity), part 4 of 4](c4/rendered/GetHvRequestQuery-part4.svg)
+
+View: GetHvRequestQuery-part4
 
 #### QueryHvRequestsQuery: list HV requests, running ones included [FR-MCP-HVPIPE-015]
 
@@ -786,14 +812,13 @@ flowchart TD
 - PagedQuery with `PageBounds` `Refuse` (limit 1..1000, default 50); filters combine with AND; order `CreatedUtc` descending, then `HvRequestId`. Summaries carry no output lines, so no read is recorded.
 - Errors: 400 `validation_error` (`workspacePath`, `limit`, `offset`, an unknown `status`, an unknown `reviewerId`).
 
-```mermaid
-flowchart TD
-    S(["Handler runs: GET requests"]) --> V{"Status and reviewer filters known?"}
-    V -->|no| E1(["400 validation_error, details.field status or reviewerId"])
-    V -->|yes| PQ[["PagedQuery, PageBounds Refuse: AND filters, CreatedUtc descending then HvRequestId"]]
-    PQ -->|"limit or offset out of bounds"| E2(["400 validation_error, details.field limit or offset"])
-    PQ -->|page| R(["200 PageResult of HV request summaries"])
-```
+![QueryHvRequestsQuery: list HV requests, running ones included (activity), part 1 of 2](c4/rendered/QueryHvRequestsQuery.svg)
+
+View: QueryHvRequestsQuery
+
+![QueryHvRequestsQuery: list HV requests, running ones included (activity), part 2 of 2](c4/rendered/QueryHvRequestsQuery-part2.svg)
+
+View: QueryHvRequestsQuery-part2
 
 #### CancelHvRequestCommand: cancel any HV [FR-MCP-HVPIPE-008]
 
@@ -801,24 +826,29 @@ flowchart TD
 - Delegate: AuditLedgerGuard; the request (404); by status: `Queued` becomes `Canceled` with `CompletedUtc`, policy HvTurnFreeze `Release` returns its turns to `None`, its `Pending` responses become `Closed` (`request_ended`), and `hv_canceled` is appended; `Running` becomes `CancelRequested` with `CancelRequestedUtc` and `hv_cancel_requested` is appended (the worker stops the process at its next heartbeat, section 16.2); `CancelRequested` and `Canceled` return 200 unchanged; `Finalizing`, `Completed`, and `Failed` are 409 `hv_request_not_cancelable`.
 - Response 200 `CancelHvRequestResult`. Errors: 400 `validation_error` (`workspacePath`); 404 `not_found` (`hv_request`); 409 `hv_request_not_cancelable`, `conflict` (`retryable: true`); 503 `audit_unavailable`.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: POST requests/{hvRequestId}/cancel"]) --> SW[["SerializableWrite with AuditLedgerGuard"]]
-    SW -->|"audit unavailable"| E1(["503 audit_unavailable"])
-    SW -->|"attempts exhausted"| E2(["409 conflict, retryable true"])
-    SW -->|attempt| F{"Request in the workspace?"}
-    F -->|no| E3(["404 not_found, details.resource hv_request"])
-    F -->|yes| ST{"Status?"}
-    ST -->|Queued| CQ["Canceled with CompletedUtc; Pending responses Closed request_ended"]
-    CQ --> RL[["Policy HvTurnFreeze Release"]]
-    RL --> N1[["NotificationOutbox: hv_canceled"]]
-    N1 --> R1(["200 Canceled"])
-    ST -->|Running| CR["CancelRequested with CancelRequestedUtc"]
-    CR --> N2[["NotificationOutbox: hv_cancel_requested"]]
-    N2 --> R2(["200 CancelRequested"])
-    ST -->|"CancelRequested or Canceled"| R3(["200 unchanged"])
-    ST -->|"Finalizing, Completed, or Failed"| E4(["409 hv_request_not_cancelable, details.status"])
-```
+![CancelHvRequestCommand: cancel any HV (activity), part 1 of 6](c4/rendered/CancelHvRequestCommand.svg)
+
+View: CancelHvRequestCommand
+
+![CancelHvRequestCommand: cancel any HV (activity), part 2 of 6](c4/rendered/CancelHvRequestCommand-part2.svg)
+
+View: CancelHvRequestCommand-part2
+
+![CancelHvRequestCommand: cancel any HV (activity), part 3 of 6](c4/rendered/CancelHvRequestCommand-part3.svg)
+
+View: CancelHvRequestCommand-part3
+
+![CancelHvRequestCommand: cancel any HV (activity), part 4 of 6](c4/rendered/CancelHvRequestCommand-part4.svg)
+
+View: CancelHvRequestCommand-part4
+
+![CancelHvRequestCommand: cancel any HV (activity), part 5 of 6](c4/rendered/CancelHvRequestCommand-part5.svg)
+
+View: CancelHvRequestCommand-part5
+
+![CancelHvRequestCommand: cancel any HV (activity), part 6 of 6](c4/rendered/CancelHvRequestCommand-part6.svg)
+
+View: CancelHvRequestCommand-part6
 
 ### 14.3 Results, evidence, streams, and incidents
 
@@ -828,22 +858,21 @@ flowchart TD
 - Order: the request (404); `Completed` required, otherwise 409 `hv_result_not_ready` with the status; evidence removed is 410 `hv_evidence_removed` with the hashes and sizes it keeps; AuditLedgerGuard `RecordRead`; then the document is assembled from the `Result` evidence and the `Request` evidence (GzipCodec) and the finalized run's chunks, streamed in order. A payload that fails to decompress before the first byte is sent is 500 `evidence_corrupt`; a chunk that fails after the document has started ends the response with an incomplete body, which the caller detects against `evidence.responseLog.chainSha256`.
 - Errors: 400 `validation_error` (`workspacePath`); 404 `not_found` (`hv_request`); 409 `hv_result_not_ready`; 410 `hv_evidence_removed`; 500 `evidence_corrupt`; 503 `audit_unavailable`.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: GET requests/{hvRequestId}/result"]) --> F{"Request in the workspace?"}
-    F -->|no| E1(["404 not_found, details.resource hv_request"])
-    F -->|yes| C{"Status Completed?"}
-    C -->|no| E2(["409 hv_result_not_ready, details.status"])
-    C -->|yes| RM{"Evidence removed?"}
-    RM -->|yes| E3(["410 hv_evidence_removed, hashes and sizes kept"])
-    RM -->|no| A[["AuditLedgerGuard RecordRead"]]
-    A -->|"audit unavailable"| E4(["503 audit_unavailable"])
-    A -->|recorded| D[["GzipCodec Decompress: Result and Request evidence"]]
-    D -->|evidence_corrupt| E5(["500 evidence_corrupt"])
-    D -->|decompressed| LG["Stream the finalized run's chunks in order as responseLog"]
-    LG --> R(["200 HvResultDocument, gzip when the caller accepts it"])
-    LG -->|"a chunk fails after the body started"| R2(["response ends incomplete; the chain hash shows it"])
-```
+![GetHvResultQuery: the standard result document (activity), part 1 of 4](c4/rendered/GetHvResultQuery.svg)
+
+View: GetHvResultQuery
+
+![GetHvResultQuery: the standard result document (activity), part 2 of 4](c4/rendered/GetHvResultQuery-part2.svg)
+
+View: GetHvResultQuery-part2
+
+![GetHvResultQuery: the standard result document (activity), part 3 of 4](c4/rendered/GetHvResultQuery-part3.svg)
+
+View: GetHvResultQuery-part3
+
+![GetHvResultQuery: the standard result document (activity), part 4 of 4](c4/rendered/GetHvResultQuery-part4.svg)
+
+View: GetHvResultQuery-part4
 
 #### GetHvEvidenceQuery: download evidence [FR-MCP-HVPIPE-011, -015]
 
@@ -851,25 +880,25 @@ flowchart TD
 - `Kind` `request` (from admission), `response-log` (the finalized run, or `runId` for any run of the request, including a running one, so a caller can fetch output before finalization), or `result` (only when `Completed`). The default answer is `application/gzip`: the stored GZIP member for `request` and `result`, and for `response-log` the run's chunks served as consecutive GZIP members, which is a valid GZIP stream (RFC 1952, section 2.2); with `Decompressed` the bytes are decompressed on the way (`application/x-ndjson` or `application/json`). Nothing uncompressed is stored (R-14). AuditLedgerGuard `RecordRead` runs before the first byte. With `Decompressed`, a payload that fails to decompress before the first byte is sent is 500 `evidence_corrupt`, and one that fails later ends the body incomplete (its stored SHA-256 shows it); the compressed answer serves the stored bytes as they are, with their stored SHA-256 and sizes.
 - Errors: 400 `validation_error` (`workspacePath`, an unknown `kind`); 404 `not_found` (`hv_request`; `run` for a `runId` that does not exist or belongs to another request), `hv_evidence_not_available` (a kind not produced yet); 410 `hv_evidence_removed`; 500 `evidence_corrupt` (`Decompressed` only); 503 `audit_unavailable`.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: GET requests/{hvRequestId}/evidence/{kind}"]) --> K{"Kind request, response-log, or result?"}
-    K -->|no| E1(["400 validation_error, details.field kind"])
-    K -->|yes| F{"Request in the workspace, and runId of this request when given?"}
-    F -->|"request missing"| E2(["404 not_found, details.resource hv_request"])
-    F -->|"runId missing or of another request"| E3(["404 not_found, details.resource run"])
-    F -->|yes| P{"Evidence produced?"}
-    P -->|no| E4(["404 hv_evidence_not_available"])
-    P -->|"removed"| E5(["410 hv_evidence_removed"])
-    P -->|yes| A[["AuditLedgerGuard RecordRead"]]
-    A -->|"audit unavailable"| E6(["503 audit_unavailable"])
-    A -->|recorded| M{"Decompressed requested?"}
-    M -->|no| G(["200 application/gzip: the stored member, or the run's chunks as consecutive members"])
-    M -->|yes| D[["GzipCodec Decompress, streamed"]]
-    D -->|"evidence_corrupt before the first byte"| E7(["500 evidence_corrupt"])
-    D -->|decompressed| R(["200 the original bytes"])
-    D -->|"evidence_corrupt after the body started"| R2(["body ends incomplete; the stored SHA-256 shows it"])
-```
+![GetHvEvidenceQuery: download evidence (activity), part 1 of 5](c4/rendered/GetHvEvidenceQuery.svg)
+
+View: GetHvEvidenceQuery
+
+![GetHvEvidenceQuery: download evidence (activity), part 2 of 5](c4/rendered/GetHvEvidenceQuery-part2.svg)
+
+View: GetHvEvidenceQuery-part2
+
+![GetHvEvidenceQuery: download evidence (activity), part 3 of 5](c4/rendered/GetHvEvidenceQuery-part3.svg)
+
+View: GetHvEvidenceQuery-part3
+
+![GetHvEvidenceQuery: download evidence (activity), part 4 of 5](c4/rendered/GetHvEvidenceQuery-part4.svg)
+
+View: GetHvEvidenceQuery-part4
+
+![GetHvEvidenceQuery: download evidence (activity), part 5 of 5](c4/rendered/GetHvEvidenceQuery-part5.svg)
+
+View: GetHvEvidenceQuery-part5
 
 #### RemoveHvEvidenceCommand: remove evidence on instruction [FR-MCP-HVPIPE-019]
 
@@ -877,20 +906,21 @@ flowchart TD
 - Delegate: AuditLedgerGuard; the request (404); a request not `Completed`, `Failed`, or `Canceled` is 409 `hv_request_active`; every `HvEvidence` payload is set to null with `RemovedUtc`, `RemovedBy`, and `RemovalReason`, and every `HvRunOutputChunk` payload of the request's runs is set to null with `RemovedUtc` (the who and why stay on the evidence rows, section 12); hashes, sizes, counts, result rows, findings, and turn reviews stay; each change writes its own ledger rows, and no earlier ledger row is changed or deleted (I-13). A repeat finds nothing left and returns 200 with empty `removedKinds`.
 - Errors: 400 `validation_error` (`workspacePath`, `reason`, `removedBy`); 404 `not_found` (`hv_request`); 409 `hv_request_active`, `conflict` (`retryable: true`); 503 `audit_unavailable`.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: POST requests/{hvRequestId}/evidence/remove"]) --> V{"reason and removedBy present and within length?"}
-    V -->|no| E1(["400 validation_error, details.field"])
-    V -->|yes| SW[["SerializableWrite with AuditLedgerGuard"]]
-    SW -->|"audit unavailable"| E2(["503 audit_unavailable"])
-    SW -->|"attempts exhausted"| E3(["409 conflict, retryable true"])
-    SW -->|attempt| F{"Request in the workspace?"}
-    F -->|no| E4(["404 not_found, details.resource hv_request"])
-    F -->|yes| T{"Completed, Failed, or Canceled?"}
-    T -->|no| E5(["409 hv_request_active, details.status"])
-    T -->|yes| RM["Null every evidence and chunk payload still present; stamp RemovedUtc, and RemovedBy and RemovalReason on the evidence rows"]
-    RM --> R(["200 RemoveHvEvidenceResult: removed kinds and chunk count, empty on a repeat"])
-```
+![RemoveHvEvidenceCommand: remove evidence on instruction (activity), part 1 of 4](c4/rendered/RemoveHvEvidenceCommand.svg)
+
+View: RemoveHvEvidenceCommand
+
+![RemoveHvEvidenceCommand: remove evidence on instruction (activity), part 2 of 4](c4/rendered/RemoveHvEvidenceCommand-part2.svg)
+
+View: RemoveHvEvidenceCommand-part2
+
+![RemoveHvEvidenceCommand: remove evidence on instruction (activity), part 3 of 4](c4/rendered/RemoveHvEvidenceCommand-part3.svg)
+
+View: RemoveHvEvidenceCommand-part3
+
+![RemoveHvEvidenceCommand: remove evidence on instruction (activity), part 4 of 4](c4/rendered/RemoveHvEvidenceCommand-part4.svg)
+
+View: RemoveHvEvidenceCommand-part4
 
 #### StreamHvRunOutputQuery: attach to the live output of any HV [FR-MCP-HVPIPE-016]
 
@@ -898,59 +928,52 @@ flowchart TD
 - Order: the request (404); evidence removed is 410 `hv_evidence_removed` (R-20); AuditLedgerGuard `RecordRead` once per connection; then OrderedEventReplay over the request's runs in attempt order and each run's chunks in sequence order (section 13.5), ending when the request is terminal and every chunk has been sent; a chunk that fails to decompress is sent as `hv_stream_error` with `evidence_corrupt`, and the stream ends.
 - Errors (before the stream starts): 400 `validation_error` (`workspacePath`, `Last-Event-ID`); 404 `not_found` (`hv_request`); 410 `hv_evidence_removed`; 503 `audit_unavailable`.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: GET requests/{hvRequestId}/output/stream"]) --> F{"Request in the workspace?"}
-    F -->|no| E1(["404 not_found, details.resource hv_request"])
-    F -->|yes| RMV{"Evidence removed?"}
-    RMV -->|yes| E4(["410 hv_evidence_removed"])
-    RMV -->|no| A[["AuditLedgerGuard RecordRead"]]
-    A -->|"audit unavailable"| E2(["503 audit_unavailable"])
-    A -->|recorded| OR[["OrderedEventReplay: runs in attempt order, chunks in sequence"]]
-    OR -->|"malformed Last-Event-ID"| E3(["400 validation_error, details.field Last-Event-ID"])
-    OR -->|"request terminal, all sent"| END(["stream ended after hv_run_closed"])
-    OR -->|"caller disconnected"| END2(["stream closed"])
-    OR -->|"chunk fails to decompress"| END3(["hv_stream_error evidence_corrupt, stream ended"])
-```
+![StreamHvRunOutputQuery: attach to the live output of any HV (activity), part 1 of 3](c4/rendered/StreamHvRunOutputQuery.svg)
+
+View: StreamHvRunOutputQuery
+
+![StreamHvRunOutputQuery: attach to the live output of any HV (activity), part 2 of 3](c4/rendered/StreamHvRunOutputQuery-part2.svg)
+
+View: StreamHvRunOutputQuery-part2
+
+![StreamHvRunOutputQuery: attach to the live output of any HV (activity), part 3 of 3](c4/rendered/StreamHvRunOutputQuery-part3.svg)
+
+View: StreamHvRunOutputQuery-part3
 
 #### StreamHvNotificationsQuery: the HV notification stream [FR-MCP-HVPIPE-017]
 
 - Handler: `StreamHvNotificationsQuery(string WorkspacePath, string? LastEventId) : IQuery<IAsyncEnumerable<HvNotificationDto>>`, served as `text/event-stream` (S-19, R-16). Notifications carry ids and verdicts, not evidence, so no read row is recorded.
 - Errors (before the stream starts): 400 `validation_error` (`workspacePath`, `Last-Event-ID`).
 
-```mermaid
-flowchart TD
-    S(["Handler runs: GET notifications/stream"]) --> OR[["OrderedEventReplay: HvNotification rows by sequence"]]
-    OR -->|"malformed Last-Event-ID"| E(["400 validation_error, details.field Last-Event-ID"])
-    OR -->|"caller disconnected"| END(["stream closed"])
-```
+![StreamHvNotificationsQuery: the HV notification stream (activity)](c4/rendered/StreamHvNotificationsQuery.svg)
+
+View: StreamHvNotificationsQuery
 
 #### QueryHvNotificationsQuery: poll notifications [FR-MCP-HVPIPE-017]
 
 - Handler: `QueryHvNotificationsQuery(string WorkspacePath, HvNotificationQuery Query) : IQuery<HvNotificationPage>`: rows with `Sequence` greater than `afterSequence` (at least 0), at most `limit` (1..1000, default 100), in sequence order, with the workspace's `lastSequence`.
 - Errors: 400 `validation_error` (`workspacePath`, `afterSequence`, `limit`).
 
-```mermaid
-flowchart TD
-    S(["Handler runs: GET notifications"]) --> V{"afterSequence at least 0, limit 1 to 1000?"}
-    V -->|no| E(["400 validation_error, details.field"])
-    V -->|yes| Q["Read rows after afterSequence in sequence order, up to limit; read lastSequence"]
-    Q --> R(["200 items and lastSequence"])
-```
+![QueryHvNotificationsQuery: poll notifications (activity), part 1 of 2](c4/rendered/QueryHvNotificationsQuery.svg)
+
+View: QueryHvNotificationsQuery
+
+![QueryHvNotificationsQuery: poll notifications (activity), part 2 of 2](c4/rendered/QueryHvNotificationsQuery-part2.svg)
+
+View: QueryHvNotificationsQuery-part2
 
 #### QueryHvIncidentsQuery: list incidents [FR-MCP-HVPIPE-009]
 
 - Handler: `QueryHvIncidentsQuery(string WorkspacePath, HvIncidentQuery Query) : IQuery<PageResult<HvIncidentDto>>`: PagedQuery with `PageBounds` `Refuse`, filters `reviewerId` and `filingStatus` combined with AND, order `CreatedUtc` descending then `IncidentId`.
 - Errors: 400 `validation_error` (`workspacePath`, `limit`, `offset`, an unknown `reviewerId` or `filingStatus`).
 
-```mermaid
-flowchart TD
-    S(["Handler runs: GET incidents"]) --> V{"Filters known?"}
-    V -->|no| E1(["400 validation_error, details.field"])
-    V -->|yes| PQ[["PagedQuery, PageBounds Refuse: AND filters, CreatedUtc descending then IncidentId"]]
-    PQ -->|"limit or offset out of bounds"| E2(["400 validation_error, details.field limit or offset"])
-    PQ -->|page| R(["200 PageResult of HvIncidentDto"])
-```
+![QueryHvIncidentsQuery: list incidents (activity), part 1 of 2](c4/rendered/QueryHvIncidentsQuery.svg)
+
+View: QueryHvIncidentsQuery
+
+![QueryHvIncidentsQuery: list incidents (activity), part 2 of 2](c4/rendered/QueryHvIncidentsQuery-part2.svg)
+
+View: QueryHvIncidentsQuery-part2
 
 ### 14.4 Execution (internal units, dispatched only by the worker host)
 
@@ -963,29 +986,49 @@ Every unit here is internal (R-29): its caller is process HvWorkerHost (section 
 - Concurrency: the request's state, version, and the one-live-run index are checked and written in the delegate, so two workers never claim one request (W-11).
 - Results: a claim; null; 409 `conflict` (`retryable: true`, the worker tries again at its next poll); 503 `audit_unavailable`.
 
-```mermaid
-flowchart TD
-    S(["ClaimHvRunCommand: workerId"]) --> SW[["SerializableWrite with AuditLedgerGuard"]]
-    SW -->|"audit unavailable"| E1(["503 audit_unavailable"])
-    SW -->|"attempts exhausted"| E2(["409 conflict, retryable true"])
-    SW -->|attempt| P{"An enabled reviewer with a requested probe and free capacity?"}
-    P -->|yes| PR["Insert the Probe run with a fresh nonce; clear ProbeRequestedUtc; LastProbeRunId the new run"]
-    PR --> L1[["FencedLease Claim"]]
-    L1 --> R1(["probe claim"])
-    P -->|no| Q{"Oldest Queued request whose assignee is eligible with capacity?"}
-    Q -->|yes| RV
-    Q -->|"no, assignee no longer eligible"| RR[["Policy RoundRobinAssignment with the capacity filter"]]
-    Q -->|"no, assignee eligible but at MaxConcurrentRuns: the request waits for it"| NX
-    RR -->|"no eligible reviewer with capacity"| NX{"Another Queued request?"}
-    NX -->|yes| Q
-    NX -->|no| R0(["null: nothing claimable"])
-    RR -->|"reviewer, reassignment recorded"| RV["Insert the Review run, attempt AttemptCount plus 1"]
-    Q -->|"no Queued request"| R0
-    RV --> L2[["FencedLease Claim"]]
-    L2 --> RS["Request Running, AttemptCount plus 1, StartedUtc on the first attempt"]
-    RS --> N[["NotificationOutbox: hv_started"]]
-    N --> R2(["review claim"])
-```
+![ClaimHvRunCommand: claim the next probe or review (activity), part 1 of 11](c4/rendered/ClaimHvRunCommand.svg)
+
+View: ClaimHvRunCommand
+
+![ClaimHvRunCommand: claim the next probe or review (activity), part 2 of 11](c4/rendered/ClaimHvRunCommand-part2.svg)
+
+View: ClaimHvRunCommand-part2
+
+![ClaimHvRunCommand: claim the next probe or review (activity), part 3 of 11](c4/rendered/ClaimHvRunCommand-part3.svg)
+
+View: ClaimHvRunCommand-part3
+
+![ClaimHvRunCommand: claim the next probe or review (activity), part 4 of 11](c4/rendered/ClaimHvRunCommand-part4.svg)
+
+View: ClaimHvRunCommand-part4
+
+![ClaimHvRunCommand: claim the next probe or review (activity), part 5 of 11](c4/rendered/ClaimHvRunCommand-part5.svg)
+
+View: ClaimHvRunCommand-part5
+
+![ClaimHvRunCommand: claim the next probe or review (activity), part 6 of 11](c4/rendered/ClaimHvRunCommand-part6.svg)
+
+View: ClaimHvRunCommand-part6
+
+![ClaimHvRunCommand: claim the next probe or review (activity), part 7 of 11](c4/rendered/ClaimHvRunCommand-part7.svg)
+
+View: ClaimHvRunCommand-part7
+
+![ClaimHvRunCommand: claim the next probe or review (activity), part 8 of 11](c4/rendered/ClaimHvRunCommand-part8.svg)
+
+View: ClaimHvRunCommand-part8
+
+![ClaimHvRunCommand: claim the next probe or review (activity), part 9 of 11](c4/rendered/ClaimHvRunCommand-part9.svg)
+
+View: ClaimHvRunCommand-part9
+
+![ClaimHvRunCommand: claim the next probe or review (activity), part 10 of 11](c4/rendered/ClaimHvRunCommand-part10.svg)
+
+View: ClaimHvRunCommand-part10
+
+![ClaimHvRunCommand: claim the next probe or review (activity), part 11 of 11](c4/rendered/ClaimHvRunCommand-part11.svg)
+
+View: ClaimHvRunCommand-part11
 
 #### RecordHvRunStartCommand: record that the reviewer process started [FR-MCP-HVPIPE-007, -008]
 
@@ -995,18 +1038,21 @@ flowchart TD
 - Crash outcomes: a crash after the process started and before this commit leaves the run `Claimed`; the reviewer ends with its worker (W-03), the lease expires, and the sweep queues a new attempt (W-02).
 - Results: started; `stale_fence` (the worker stops its process); 409 `conflict` (`retryable: true`); 503 `audit_unavailable`.
 
-```mermaid
-flowchart TD
-    S(["RecordHvRunStartCommand: run, worker, fence, process id"]) --> SW[["SerializableWrite with AuditLedgerGuard"]]
-    SW -->|"audit unavailable"| E1(["503 audit_unavailable"])
-    SW -->|"attempts exhausted"| E2(["409 conflict, retryable true"])
-    SW -->|attempt| G[["FencedLease Guard"]]
-    G -->|stale_fence| E3(["stale_fence: nothing changed"])
-    G -->|guarded| RN{"Run Running with this process id?"}
-    RN -->|yes| R0(["started: the stored start, nothing written"])
-    RN -->|no| CL["Run Claimed becomes Running: StartedUtc, ProcessId"]
-    CL --> R(["started: startedUtc"])
-```
+![RecordHvRunStartCommand: record that the reviewer process started (activity), part 1 of 4](c4/rendered/RecordHvRunStartCommand.svg)
+
+View: RecordHvRunStartCommand
+
+![RecordHvRunStartCommand: record that the reviewer process started (activity), part 2 of 4](c4/rendered/RecordHvRunStartCommand-part2.svg)
+
+View: RecordHvRunStartCommand-part2
+
+![RecordHvRunStartCommand: record that the reviewer process started (activity), part 3 of 4](c4/rendered/RecordHvRunStartCommand-part3.svg)
+
+View: RecordHvRunStartCommand-part3
+
+![RecordHvRunStartCommand: record that the reviewer process started (activity), part 4 of 4](c4/rendered/RecordHvRunStartCommand-part4.svg)
+
+View: RecordHvRunStartCommand-part4
 
 #### RecordHvRunHeartbeatCommand: renew the lease and read cancellation [FR-MCP-HVPIPE-007, -008]
 
@@ -1014,16 +1060,17 @@ flowchart TD
 - Delegate: AuditLedgerGuard; FencedLease `Renew`; `LastHeartbeatUtc`; `cancelRequested` is true when the request is `CancelRequested` (a probe run is never canceled this way).
 - Results: renewed; `stale_fence` (the worker stops its process, section 16.2); 409 `conflict` (`retryable: true`); 503 `audit_unavailable`.
 
-```mermaid
-flowchart TD
-    S(["RecordHvRunHeartbeatCommand: run, worker, fence"]) --> SW[["SerializableWrite with AuditLedgerGuard"]]
-    SW -->|"audit unavailable"| E1(["503 audit_unavailable"])
-    SW -->|"attempts exhausted"| E2(["409 conflict, retryable true"])
-    SW -->|attempt| L[["FencedLease Renew"]]
-    L -->|stale_fence| E3(["stale_fence: nothing changed"])
-    L -->|renewed| H["Set LastHeartbeatUtc; read whether the request is CancelRequested"]
-    H --> R(["renewed: leaseExpiresUtc, cancelRequested"])
-```
+![RecordHvRunHeartbeatCommand: renew the lease and read cancellation (activity), part 1 of 3](c4/rendered/RecordHvRunHeartbeatCommand.svg)
+
+View: RecordHvRunHeartbeatCommand
+
+![RecordHvRunHeartbeatCommand: renew the lease and read cancellation (activity), part 2 of 3](c4/rendered/RecordHvRunHeartbeatCommand-part2.svg)
+
+View: RecordHvRunHeartbeatCommand-part2
+
+![RecordHvRunHeartbeatCommand: renew the lease and read cancellation (activity), part 3 of 3](c4/rendered/RecordHvRunHeartbeatCommand-part3.svg)
+
+View: RecordHvRunHeartbeatCommand-part3
 
 #### AppendHvRunOutputCommand: persist live output [FR-MCP-HVPIPE-008, -011, -016]
 
@@ -1032,26 +1079,29 @@ flowchart TD
 - Delegate: AuditLedgerGuard; FencedLease `Guard`; a chunk with this `Sequence` already stored whose SHA-256 equals the batch's returns it unchanged (a retried append), and one with another SHA-256 is 409 `conflict` with `retryable: false`; a `Sequence` other than `OutputChunkCount` + 1 is 409 `conflict` with `details.field` `sequence`; GzipCodec `Compress`; insert the chunk with its SHA-256 and chain hash; update the run's manifest (`OutputChunkCount`, `OutputLineCount`, `OutputBytes`, `OutputChainSha256`) and `LastOutputUtc`; the last `hv_progress` among the batch's completed records sets the run's progress (R-18) and an `hv_reviewer_turn` among them its reviewer turn ids. After the commit the output streams are woken.
 - Results: appended (`sequence`, `chainSha256`); unchanged; `stale_fence`; 409 `conflict`; 500 `evidence_corrupt` (the round trip failed; nothing saved); 503 `audit_unavailable`.
 
-```mermaid
-flowchart TD
-    S(["AppendHvRunOutputCommand: run, fence, sequence, lines"]) --> V{"Sequence at least 1 and every line one JSON object?"}
-    V -->|no| E1(["400 validation_error"])
-    V -->|yes| SW[["SerializableWrite with AuditLedgerGuard"]]
-    SW -->|"audit unavailable"| E2(["503 audit_unavailable"])
-    SW -->|"attempts exhausted"| E3(["409 conflict, retryable true"])
-    SW -->|attempt| G[["FencedLease Guard"]]
-    G -->|stale_fence| E4(["stale_fence: nothing changed"])
-    G -->|guarded| D{"A chunk with this sequence stored?"}
-    D -->|"yes, same SHA-256"| R1(["unchanged: the stored chunk"])
-    D -->|"yes, other SHA-256"| E5(["409 conflict, retryable false"])
-    D -->|no| Q{"Sequence is OutputChunkCount plus 1?"}
-    Q -->|no| E6(["409 conflict, details.field sequence"])
-    Q -->|yes| C[["GzipCodec Compress"]]
-    C -->|evidence_corrupt| E7(["500 evidence_corrupt: nothing saved"])
-    C -->|compressed| I["Insert the chunk: SHA-256, chain hash, fence; update the run manifest and LastOutputUtc"]
-    I --> PG["Set progress from the last completed hv_progress record and reviewer turn ids from hv_reviewer_turn"]
-    PG --> R2(["appended: sequence, chainSha256; streams woken after the commit"])
-```
+![AppendHvRunOutputCommand: persist live output (activity), part 1 of 6](c4/rendered/AppendHvRunOutputCommand.svg)
+
+View: AppendHvRunOutputCommand
+
+![AppendHvRunOutputCommand: persist live output (activity), part 2 of 6](c4/rendered/AppendHvRunOutputCommand-part2.svg)
+
+View: AppendHvRunOutputCommand-part2
+
+![AppendHvRunOutputCommand: persist live output (activity), part 3 of 6](c4/rendered/AppendHvRunOutputCommand-part3.svg)
+
+View: AppendHvRunOutputCommand-part3
+
+![AppendHvRunOutputCommand: persist live output (activity), part 4 of 6](c4/rendered/AppendHvRunOutputCommand-part4.svg)
+
+View: AppendHvRunOutputCommand-part4
+
+![AppendHvRunOutputCommand: persist live output (activity), part 5 of 6](c4/rendered/AppendHvRunOutputCommand-part5.svg)
+
+View: AppendHvRunOutputCommand-part5
+
+![AppendHvRunOutputCommand: persist live output (activity), part 6 of 6](c4/rendered/AppendHvRunOutputCommand-part6.svg)
+
+View: AppendHvRunOutputCommand-part6
 
 #### CloseHvRunOutputCommand: close a run's output [FR-MCP-HVPIPE-003, -008, -011]
 
@@ -1060,37 +1110,45 @@ flowchart TD
 - Delegate: AuditLedgerGuard; FencedLease `Guard`; `ChunkCount` equal to `OutputChunkCount`, otherwise 409 `conflict` with `details.field` `chunkCount` (the worker appends what is missing and closes again); for a `Probe` run, the stored `OutputChunkCount` and `OutputChainSha256` equal to those the reads saw, otherwise the attempt ends and the unit starts again from its reads; the run becomes `OutputClosed` with `EndedUtc`, `ExitCode` 0, `RuntimeModel`, and `RuntimeEffort`; FencedLease `Release`. A `Review` run whose request is `CancelRequested` (a cancel that committed after the last heartbeat): the run becomes `Canceled` with code `canceled` instead, and policy HvRetryDecision makes the request `Canceled`, so an accepted cancellation is never lost (R-28). Any other `Review` run: the request becomes `Finalizing` and `hv_finalizing` is appended; after the commit the worker dispatches FinalizeHvRequestCommand. A `Probe` run: policy HvProbeOutcome settles it in this transaction with the verdict the reads produced (section 15): a probe of an older configuration (the reviewer was reconfigured while it ran) fails with `probe_stale_configuration` and changes nothing of the reviewer; a probe of the current configuration is decided by policy ReadinessProbeVerdict, a pass making the run `Succeeded` and the reviewer `Online` with `ResolvedModel` and `ResolvedEffort`, and a failure making the run `Failed` with the policy's code, attributed by FailHvRunCommand's one list (a reviewer code makes the reviewer `Offline` with its incident; `evidence_corrupt` is a server fault with a server incident and the readiness unchanged).
 - Results: closed (`Finalizing`, request canceled, probe passed, probe failed, or stale probe); `stale_fence`; 409 `conflict`; 503 `audit_unavailable`.
 
-```mermaid
-flowchart TD
-    S(["CloseHvRunOutputCommand: run, fence, chunk count, provenance"]) --> PK{"Probe run?"}
-    PK -->|yes| RR[["AuditLedgerGuard RecordRead: the probe's chunks, committed on its own"]]
-    RR -->|"audit unavailable"| E0(["503 audit_unavailable: nothing written"])
-    RR -->|recorded| PV[["Read the chunks; V-1 and policy ReadinessProbeVerdict: the probe's verdict, no transaction open"]]
-    PV --> SW[["SerializableWrite with AuditLedgerGuard"]]
-    PK -->|"no: Review"| SW
-    SW -->|"audit unavailable"| E1(["503 audit_unavailable"])
-    SW -->|"attempts exhausted"| E2(["409 conflict, retryable true"])
-    SW -->|attempt| G[["FencedLease Guard"]]
-    G -->|stale_fence| E3(["stale_fence: nothing changed"])
-    G -->|guarded| C{"ChunkCount equals OutputChunkCount, and for a probe the manifest as read?"}
-    C -->|"no: count differs"| E4(["409 conflict, details.field chunkCount"])
-    C -->|"no: the probe's manifest changed since the reads"| S
-    C -->|yes| OC["Run OutputClosed: EndedUtc, exit 0, runtime model and effort"]
-    OC --> RL[["FencedLease Release"]]
-    RL --> K{"Run kind?"}
-    K -->|Review| CRQ{"Request CancelRequested?"}
-    CRQ -->|yes| CNL["Run Canceled with code canceled"]
-    CNL --> RD[["Policy HvRetryDecision: request Canceled, turns released, hv_canceled"]]
-    RD --> R4(["closed: request Canceled"])
-    CRQ -->|no| FZ["Request Finalizing"]
-    FZ --> N1[["NotificationOutbox: hv_finalizing"]]
-    N1 --> R1(["closed: Finalizing; the worker dispatches FinalizeHvRequestCommand"])
-    K -->|Probe| PO[["Policy HvProbeOutcome, with the verdict the reads produced for a probe of the current configuration"]]
-    PO -->|stale| R5(["closed: stale probe, reviewer unchanged"])
-    PO -->|passed| R2(["closed: probe passed, reviewer Online"])
-    PO -->|"failed: reviewer code"| R3(["closed: probe failed, reviewer Offline, incident Pending"])
-    PO -->|"failed: evidence_corrupt"| R6(["closed: probe failed, server fault, readiness unchanged"])
-```
+![CloseHvRunOutputCommand: close a run's output (activity), part 1 of 10](c4/rendered/CloseHvRunOutputCommand.svg)
+
+View: CloseHvRunOutputCommand
+
+![CloseHvRunOutputCommand: close a run's output (activity), part 2 of 10](c4/rendered/CloseHvRunOutputCommand-part2.svg)
+
+View: CloseHvRunOutputCommand-part2
+
+![CloseHvRunOutputCommand: close a run's output (activity), part 3 of 10](c4/rendered/CloseHvRunOutputCommand-part3.svg)
+
+View: CloseHvRunOutputCommand-part3
+
+![CloseHvRunOutputCommand: close a run's output (activity), part 4 of 10](c4/rendered/CloseHvRunOutputCommand-part4.svg)
+
+View: CloseHvRunOutputCommand-part4
+
+![CloseHvRunOutputCommand: close a run's output (activity), part 5 of 10](c4/rendered/CloseHvRunOutputCommand-part5.svg)
+
+View: CloseHvRunOutputCommand-part5
+
+![CloseHvRunOutputCommand: close a run's output (activity), part 6 of 10](c4/rendered/CloseHvRunOutputCommand-part6.svg)
+
+View: CloseHvRunOutputCommand-part6
+
+![CloseHvRunOutputCommand: close a run's output (activity), part 7 of 10](c4/rendered/CloseHvRunOutputCommand-part7.svg)
+
+View: CloseHvRunOutputCommand-part7
+
+![CloseHvRunOutputCommand: close a run's output (activity), part 8 of 10](c4/rendered/CloseHvRunOutputCommand-part8.svg)
+
+View: CloseHvRunOutputCommand-part8
+
+![CloseHvRunOutputCommand: close a run's output (activity), part 9 of 10](c4/rendered/CloseHvRunOutputCommand-part9.svg)
+
+View: CloseHvRunOutputCommand-part9
+
+![CloseHvRunOutputCommand: close a run's output (activity), part 10 of 10](c4/rendered/CloseHvRunOutputCommand-part10.svg)
+
+View: CloseHvRunOutputCommand-part10
 
 #### FailHvRunCommand: record an execution failure [FR-MCP-HVPIPE-009]
 
@@ -1098,35 +1156,45 @@ flowchart TD
 - Delegate: AuditLedgerGuard; FencedLease `Guard`; for the finalizer's call, the run must still be `OutputClosed` and its request still `Finalizing` at `ExpectedRequestStateVersion`, otherwise nothing changes and the result is the stored outcome (`already_completed` when another finalization committed, `not_finalizable` otherwise), so a late verification failure never undoes a committed finalization (I-03); the run becomes `Failed` (or `Canceled` for the code `canceled`) with the code and the detail (through SecretRedactor) and `EndedUtc`, and its lease is released. Then, by run kind. A `Review` run: `canceled` and `worker_shutdown` insert no incident and change no reviewer; every other failure inserts an `HvIncident` (`Pending`) with `DedupeKey` `hv-reviewer-<reviewerId>-<failureCode>` when the failure is attributable to the reviewer (`reviewer_launch_failed`, `reviewer_exited_nonzero`, `reviewer_output_invalid`, `reviewer_turn_unverified`, `runtime_identity_mismatch`, `verdict_binding_failed`, and the probe codes `probe_nonce_mismatch` and `reviewer_turn_logging_unsupported`, which CloseHvRunOutputCommand records), and `hv-server-<failureCode>` otherwise (`evidence_corrupt`, `snapshot_changed`, `model_grade_conflict`, `reviewer_not_independent`); this one attribution list holds for every incident of a run, review or probe; a reviewer-attributable failure also makes the reviewer `Offline` with `ReadinessReason` the code and `OpenIncidentId`, and appends `reviewer_offline` (S-15); then the request goes through policy HvRetryDecision, which decides and writes its next state: `Queued` again (its assignee re-evaluated at the next claim), `Failed` with `attempts_exhausted`, or, for a `CancelRequested` request, `Canceled`, each ended request with its turns released, its `Pending` responses closed, and its notification (section 15). A `Probe` run has no request, so HvRetryDecision does not apply: policy HvProbeOutcome settles it with the same attribution list, after its configuration check, so a failing probe of an older configuration changes nothing of the reviewer; for the current configuration, `worker_shutdown` requests the probe again, and every other failure leaves the reviewer as the attribution sets it (`Offline` with its incident for a reviewer code, readiness unchanged with a server incident otherwise), with no new probe until a caller requests one (S-15). After the commit the worker is woken to file the incident (FileHvIncidentCommand) and claim again.
 - Results: failed with the request's next state, or the probe outcome; `already_completed` or `not_finalizable` (finalizer's call, nothing changed); `stale_fence`; 409 `conflict`; 503 `audit_unavailable`.
 
-```mermaid
-flowchart TD
-    S(["FailHvRunCommand: run, fence, failure code, detail"]) --> SW[["SerializableWrite with AuditLedgerGuard"]]
-    SW -->|"audit unavailable"| E1(["503 audit_unavailable"])
-    SW -->|"attempts exhausted"| E2(["409 conflict, retryable true"])
-    SW -->|attempt| G[["FencedLease Guard"]]
-    G -->|stale_fence| E3(["stale_fence: nothing changed"])
-    G -->|guarded| FC{"Finalizer's call?"}
-    FC -->|yes| ST{"Run OutputClosed and request Finalizing at the version read?"}
-    ST -->|no| R0(["already_completed or not_finalizable: nothing changed"])
-    ST -->|yes| F
-    FC -->|"no: the worker"| F["Run Failed, or Canceled for canceled: code, redacted detail, EndedUtc; lease released"]
-    F --> KD{"Run kind?"}
-    KD -->|Probe| PO[["Policy HvProbeOutcome: configuration check, then the attribution or the shutdown re-request"]]
-    PO -->|stale| R4(["failed: stale probe, reviewer unchanged"])
-    PO -->|settled| R5(["failed: probe settled, reviewer as attributed"])
-    PO -->|"worker_shutdown"| R6(["failed: probe of the current configuration requested again"])
-    KD -->|Review| NI{"Code canceled or worker_shutdown?"}
-    NI -->|yes| RD
-    NI -->|no| AT{"Failure attributable to the reviewer?"}
-    AT -->|yes| OFF["Insert HvIncident Pending, key hv-reviewer-id-code; reviewer Offline with the code and incident"]
-    OFF --> N1[["NotificationOutbox: reviewer_offline"]]
-    N1 --> RD
-    AT -->|no| SI["Insert HvIncident Pending, key hv-server-code"]
-    SI --> RD[["Policy HvRetryDecision: decides and writes the request's next state"]]
-    RD -->|"requeue"| R1(["failed: request Queued"])
-    RD -->|"attempts exhausted"| R2(["failed: request Failed, turns released, hv_failed"])
-    RD -->|"cancel requested"| R3(["failed: request Canceled, turns released, hv_canceled"])
-```
+![FailHvRunCommand: record an execution failure (activity), part 1 of 10](c4/rendered/FailHvRunCommand.svg)
+
+View: FailHvRunCommand
+
+![FailHvRunCommand: record an execution failure (activity), part 2 of 10](c4/rendered/FailHvRunCommand-part2.svg)
+
+View: FailHvRunCommand-part2
+
+![FailHvRunCommand: record an execution failure (activity), part 3 of 10](c4/rendered/FailHvRunCommand-part3.svg)
+
+View: FailHvRunCommand-part3
+
+![FailHvRunCommand: record an execution failure (activity), part 4 of 10](c4/rendered/FailHvRunCommand-part4.svg)
+
+View: FailHvRunCommand-part4
+
+![FailHvRunCommand: record an execution failure (activity), part 5 of 10](c4/rendered/FailHvRunCommand-part5.svg)
+
+View: FailHvRunCommand-part5
+
+![FailHvRunCommand: record an execution failure (activity), part 6 of 10](c4/rendered/FailHvRunCommand-part6.svg)
+
+View: FailHvRunCommand-part6
+
+![FailHvRunCommand: record an execution failure (activity), part 7 of 10](c4/rendered/FailHvRunCommand-part7.svg)
+
+View: FailHvRunCommand-part7
+
+![FailHvRunCommand: record an execution failure (activity), part 8 of 10](c4/rendered/FailHvRunCommand-part8.svg)
+
+View: FailHvRunCommand-part8
+
+![FailHvRunCommand: record an execution failure (activity), part 9 of 10](c4/rendered/FailHvRunCommand-part9.svg)
+
+View: FailHvRunCommand-part9
+
+![FailHvRunCommand: record an execution failure (activity), part 10 of 10](c4/rendered/FailHvRunCommand-part10.svg)
+
+View: FailHvRunCommand-part10
 
 #### ExpireHvRunLeasesCommand: recover from dead workers [FR-MCP-HVPIPE-007]
 
@@ -1134,24 +1202,33 @@ flowchart TD
 - For each run read in `Claimed` or `Running` whose `LeaseExpiresUtc` has passed, one SerializableWrite (so one stuck run never blocks the others): AuditLedgerGuard; FencedLease `Expire` with the fence the sweep read and the live statuses `Claimed` and `Running` (skipped when its worker renewed it, the run was settled, or another sweep already took it over, so a run is abandoned at most once and a second sweep never acts on its request); the run becomes `Abandoned` with `lease_expired`, and its incremented fence makes the old worker's next write `stale_fence` (W-03); a server incident (`hv-server-lease_expired`) is inserted; for a `Review` run, policy HvRetryDecision decides and writes its request's next state (`Queued`; `Failed` on its last counted attempt; `Canceled` when a cancel was requested, which completes the cancel of a dead worker's run, R-28), the ended request with its turns released, its `Pending` responses closed, and `hv_failed` or `hv_canceled`, as after FailHvRunCommand; a `Probe` run is settled by policy HvProbeOutcome as `lease_expired`, which requests its probe again only while it is of the reviewer's current configuration and leaves the reviewer as it was. Then it lists the `Finalizing` requests (W-05) for the worker to finalize.
 - Results: the sweep result; 503 `audit_unavailable` ends the sweep (W-12).
 
-```mermaid
-flowchart TD
-    S(["ExpireHvRunLeasesCommand"]) --> L["List runs Claimed or Running with an expired lease"]
-    L --> MORE{"Next expired run?"}
-    MORE -->|no| FP["List Finalizing requests"]
-    FP --> R(["sweep result: abandoned runs, finalization pending"])
-    MORE -->|yes| SW[["SerializableWrite with AuditLedgerGuard, one per run"]]
-    SW -->|"audit unavailable"| E(["503 audit_unavailable: sweep ends"])
-    SW -->|"attempts exhausted"| MORE
-    SW -->|attempt| X[["FencedLease Expire: still Claimed or Running, fence as read, lease expired"]]
-    X -->|"skipped: renewed, settled, or taken over"| MORE
-    X -->|expired| AB["Run Abandoned lease_expired; insert server incident"]
-    AB --> K{"Run kind?"}
-    K -->|Review| RD[["Policy HvRetryDecision: requeue, fail, or cancel the request, with release and notification"]]
-    RD --> MORE
-    K -->|Probe| PQ[["Policy HvProbeOutcome lease_expired: probe requested again only for the current configuration"]]
-    PQ --> MORE
-```
+![ExpireHvRunLeasesCommand: recover from dead workers (activity), part 1 of 7](c4/rendered/ExpireHvRunLeasesCommand.svg)
+
+View: ExpireHvRunLeasesCommand
+
+![ExpireHvRunLeasesCommand: recover from dead workers (activity), part 2 of 7](c4/rendered/ExpireHvRunLeasesCommand-part2.svg)
+
+View: ExpireHvRunLeasesCommand-part2
+
+![ExpireHvRunLeasesCommand: recover from dead workers (activity), part 3 of 7](c4/rendered/ExpireHvRunLeasesCommand-part3.svg)
+
+View: ExpireHvRunLeasesCommand-part3
+
+![ExpireHvRunLeasesCommand: recover from dead workers (activity), part 4 of 7](c4/rendered/ExpireHvRunLeasesCommand-part4.svg)
+
+View: ExpireHvRunLeasesCommand-part4
+
+![ExpireHvRunLeasesCommand: recover from dead workers (activity), part 5 of 7](c4/rendered/ExpireHvRunLeasesCommand-part5.svg)
+
+View: ExpireHvRunLeasesCommand-part5
+
+![ExpireHvRunLeasesCommand: recover from dead workers (activity), part 6 of 7](c4/rendered/ExpireHvRunLeasesCommand-part6.svg)
+
+View: ExpireHvRunLeasesCommand-part6
+
+![ExpireHvRunLeasesCommand: recover from dead workers (activity), part 7 of 7](c4/rendered/ExpireHvRunLeasesCommand-part7.svg)
+
+View: ExpireHvRunLeasesCommand-part7
 
 #### FinalizeHvRequestCommand: verify and commit the result atomically [FR-MCP-HVPIPE-010, -011, -012, -013, -014, -021]
 
@@ -1161,66 +1238,73 @@ flowchart TD
 - Delegate (SerializableWrite, S-23): AuditLedgerGuard; re-check that the request is `Finalizing` at the version read, the run is `OutputClosed` with the fence and chunk manifest read, every member turn is `Pending` for this request, and each linked response's status is the one the reads saw (a difference ends the attempt, and the unit starts again from its request status check); then, all in this transaction: the `HvTurnAssessment` and `HvFinding` rows; the holistic scores and verdict and the overall verdict on the request (the one predicate of R-31); for each member turn RecordSessionTurnReviewCommand (kind hostile, origin `HvFinalization`, dispatched in the delegate so it joins the transaction) with `hvVerdict` the turn's verdict, its scores, `reasons` its FAIL and UNKNOWN findings prefixed `FAIL:` or `UNKNOWN:`, `reviewer` `<reviewerId>/<runtimeModel>/<runtimeEffort>`, `reviewedAt` the run's `EndedUtc`, and `requestJsonlPath` and `responseJsonlPath` the evidence references `hv-evidence:<hvRequestId>/request` and `hv-evidence:<hvRequestId>/response-log/<runId>` (policy HvVerdictMapping stores the status, A-06); policy HvTurnFreeze `Finalize` (`HvState` `Final`); each `HvRequestTurn` `Reviewed`; for each admitted response still `Pending` at commit, when Mode is not `Off`, RecordModelGradeCommand (the internal unit of section 14.5: origin `HvFinalization`, the run's reviewer as grader, the response's `hv_response_grade` record) with its trust decision, which marks the response item `Graded`, and when Mode is `Off`, the item `NotGraded` (`agent_context_disabled`); an admitted response that left the review since admission (its item `Closed`, ResponseStatusTransition) gets no grade, and its grade record is kept in the result document (`responseGrades`, disposition `Closed`); the FAIL and UNKNOWN findings of every response grade, whatever the item's disposition, are among the `HvFinding` rows of scope `Response` above; the `Result` evidence (GzipCodec) and `ResultSha256`; the request `Completed` with `CompletedUtc` and `FinalizedRunId`; the run `Succeeded` with `VerdictRecordSha256`, the SHA-256 of the verified `hv_verdict` record in its stored normal form (the form V-6 compares); NotificationOutbox `hv_completed` with the overall verdict. After the commit, the post-commit dispatches the foundation's grade units make (EvaluateStalenessCommand for dependents, the projection pass) run as they do for a grade (foundation section 3.1, "Projection pass").
 - Results: `completed` (with the overall verdict); `already_completed`; `not_finalizable`; `verification_failed` (code, `evidence_corrupt` included for a failed result compression and `model_grade_conflict` for a stored grade with other input); 409 `conflict` (`retryable: true`, the sweep finalizes again); 503 `audit_unavailable` (the request stays `Finalizing`, W-06).
 
-```mermaid
-flowchart TD
-    S(["FinalizeHvRequestCommand: hvRequestId"]) --> ST{"Request status?"}
-    ST -->|Completed| R0(["already_completed: the stored outcome"])
-    ST -->|"other than Finalizing"| R1(["not_finalizable: nothing written"])
-    ST -->|Finalizing| RD[["ReadFinalizationInputs"]]
-    RD -->|"read refused"| E0(["503 audit_unavailable: request stays Finalizing"])
-    RD -->|"check failed: code"| FR[["FailHvRunCommand with the stored fence and the code"]]
-    FR -->|failed| R2(["verification_failed: request Queued or Failed"])
-    FR -->|"already_completed or not_finalizable"| R4(["that outcome: nothing changed"])
-    FR -->|stale_fence| R5(["not_finalizable: nothing changed"])
-    FR -->|"409 conflict or 503 audit_unavailable"| R6(["that refusal: request stays Finalizing for the sweep"])
-    RD -->|"verified records"| SW[["SerializableWrite with AuditLedgerGuard"]]
-    SW -->|"audit unavailable"| E1(["503 audit_unavailable: request stays Finalizing"])
-    SW -->|"attempts exhausted"| E2(["409 conflict, retryable true: the sweep finalizes again"])
-    SW -->|attempt| RC{"Request, run, chunk manifest, turn states, and response states as read?"}
-    RC -->|"no: attempt ends, start again"| ST
-    RC -->|yes| CM[["CommitFinalResult"]]
-    CM -->|"result round trip failed or a model grade conflict: rolled back"| FR
-    CM -->|"a grade guard failed, retryable: attempt ends, start again"| ST
-    CM -->|committed| R3(["completed: overall verdict; post-commit grade dispatches run"])
-```
+![FinalizeHvRequestCommand: verify and commit the result atomically (activity), part 1 of 7](c4/rendered/FinalizeHvRequestCommand.svg)
+
+View: FinalizeHvRequestCommand
+
+![FinalizeHvRequestCommand: verify and commit the result atomically (activity), part 2 of 7](c4/rendered/FinalizeHvRequestCommand-part2.svg)
+
+View: FinalizeHvRequestCommand-part2
+
+![FinalizeHvRequestCommand: verify and commit the result atomically (activity), part 3 of 7](c4/rendered/FinalizeHvRequestCommand-part3.svg)
+
+View: FinalizeHvRequestCommand-part3
+
+![FinalizeHvRequestCommand: verify and commit the result atomically (activity), part 4 of 7](c4/rendered/FinalizeHvRequestCommand-part4.svg)
+
+View: FinalizeHvRequestCommand-part4
+
+![FinalizeHvRequestCommand: verify and commit the result atomically (activity), part 5 of 7](c4/rendered/FinalizeHvRequestCommand-part5.svg)
+
+View: FinalizeHvRequestCommand-part5
+
+![FinalizeHvRequestCommand: verify and commit the result atomically (activity), part 6 of 7](c4/rendered/FinalizeHvRequestCommand-part6.svg)
+
+View: FinalizeHvRequestCommand-part6
+
+![FinalizeHvRequestCommand: verify and commit the result atomically (activity), part 7 of 7](c4/rendered/FinalizeHvRequestCommand-part7.svg)
+
+View: FinalizeHvRequestCommand-part7
 
 ##### Nested activity: ReadFinalizationInputs (reads of FinalizeHvRequestCommand, no transaction open)
 
-```mermaid
-flowchart TD
-    S(["ReadFinalizationInputs"]) --> RR[["AuditLedgerGuard RecordRead: the run's chunks"]]
-    RR -->|"audit unavailable"| E(["read refused: 503 audit_unavailable"])
-    RR -->|recorded| RN["Load the OutputClosed run and its chunks in sequence"]
-    RN --> V[["Policy HvFinalVerification V-1 to V-8"]]
-    V -->|"failed: code"| F(["check failed: code"])
-    V -->|passed| M{"Linked responses and Mode not Off?"}
-    M -->|yes| ES[["EvaluateStalenessCommand for the linked responses"]]
-    ES --> OK(["verified records, response states read"])
-    M -->|no| OK
-```
+![Nested activity: ReadFinalizationInputs (reads of FinalizeHvRequestCommand, no transaction open) (activity), part 1 of 3](c4/rendered/ReadFinalizationInputs.svg)
+
+View: ReadFinalizationInputs
+
+![Nested activity: ReadFinalizationInputs (reads of FinalizeHvRequestCommand, no transaction open) (activity), part 2 of 3](c4/rendered/ReadFinalizationInputs-part2.svg)
+
+View: ReadFinalizationInputs-part2
+
+![Nested activity: ReadFinalizationInputs (reads of FinalizeHvRequestCommand, no transaction open) (activity), part 3 of 3](c4/rendered/ReadFinalizationInputs-part3.svg)
+
+View: ReadFinalizationInputs-part3
 
 ##### Nested activity: CommitFinalResult (the writes of FinalizeHvRequestCommand, inside its delegate)
 
-```mermaid
-flowchart TD
-    S(["CommitFinalResult"]) --> A["Insert HvTurnAssessment rows and the HvFinding rows of every scope, every response's findings included"]
-    A --> H[["ScoreVerdict at max threshold and 0.98: holistic and overall verdicts on the request"]]
-    H --> TR[["RecordSessionTurnReviewCommand per member turn, origin HvFinalization: policy HvVerdictMapping stores hostileReview"]]
-    TR --> FN[["Policy HvTurnFreeze Finalize: each member turn Final"]]
-    FN --> RV["Each HvRequestTurn Reviewed"]
-    RV --> MD{"Pending linked responses?"}
-    MD -->|"yes, Mode not Off"| MG[["RecordModelGradeCommand per response, origin HvFinalization, with its trust decision"]]
-    MG -->|"409 conflict, retryable false"| RG(["a stored grade with other input: the transaction rolls back, model_grade_conflict to the caller"])
-    MG -->|"409 conflict, retryable true"| RT(["a guard failed: the attempt ends and the unit reads again"])
-    MD -->|"yes, Mode Off"| NG["Items NotGraded agent_context_disabled"]
-    MD -->|no| EV
-    MG --> EV[["GzipCodec Compress: the Result evidence"]]
-    NG --> EV
-    EV -->|evidence_corrupt| RB(["round trip failed: the transaction rolls back, evidence_corrupt to the caller"])
-    EV -->|compressed| CP["Request Completed with CompletedUtc and FinalizedRunId; run Succeeded with VerdictRecordSha256"]
-    CP --> N[["NotificationOutbox: hv_completed"]]
-    N --> OK(["committed"])
-```
+![Nested activity: CommitFinalResult (the writes of FinalizeHvRequestCommand, inside its delegate) (activity), part 1 of 6](c4/rendered/CommitFinalResult.svg)
+
+View: CommitFinalResult
+
+![Nested activity: CommitFinalResult (the writes of FinalizeHvRequestCommand, inside its delegate) (activity), part 2 of 6](c4/rendered/CommitFinalResult-part2.svg)
+
+View: CommitFinalResult-part2
+
+![Nested activity: CommitFinalResult (the writes of FinalizeHvRequestCommand, inside its delegate) (activity), part 3 of 6](c4/rendered/CommitFinalResult-part3.svg)
+
+View: CommitFinalResult-part3
+
+![Nested activity: CommitFinalResult (the writes of FinalizeHvRequestCommand, inside its delegate) (activity), part 4 of 6](c4/rendered/CommitFinalResult-part4.svg)
+
+View: CommitFinalResult-part4
+
+![Nested activity: CommitFinalResult (the writes of FinalizeHvRequestCommand, inside its delegate) (activity), part 5 of 6](c4/rendered/CommitFinalResult-part5.svg)
+
+View: CommitFinalResult-part5
+
+![Nested activity: CommitFinalResult (the writes of FinalizeHvRequestCommand, inside its delegate) (activity), part 6 of 6](c4/rendered/CommitFinalResult-part6.svg)
+
+View: CommitFinalResult-part6
 
 #### FileHvIncidentCommand: file an incident through the triage endpoint [FR-MCP-HVPIPE-009]
 
@@ -1228,24 +1312,25 @@ flowchart TD
 - Order, so that no write reaches triage while the ledger is down (R-19): the incident (`Filed` returns it unchanged); first one SerializableWrite with AuditLedgerGuard records the attempt (`FilingAttempts` plus 1, `LastFilingAttemptUtc`), the write-ahead record of the filing, and a 503 `audit_unavailable` here ends the unit before triage is called; then, outside any transaction, `ITriageService` submits the report (title `Hostile validation <failureCode> on <reviewerId>`, summary, component `hostile-validation`, `dedupeKey`, `errorSignature` the failure code, the sanitized evidence, the run and request ids, reporter `QBrainAi`), the service behind `POST /qbrainai/triage/reports`; then a second SerializableWrite with AuditLedgerGuard records the outcome inside its transaction: accepted sets `TriageReportId`, `TriageGroupId`, `FilingStatus` `Filed`, `FiledUtc`, and appends `incident_filed`; refused or unreachable sets `LastFilingError`, and the sweep tries again (W-08, W-09). A ledger failure after triage accepted leaves the incident `Pending`, and the retry files under the same `dedupeKey`, which joins the same triage group (L-03).
 - Results: filed; filing pending with the error; 409 `conflict` (`retryable: true`); 503 `audit_unavailable` (before triage is called, or after it with the incident still `Pending`).
 
-```mermaid
-flowchart TD
-    S(["FileHvIncidentCommand: incidentId"]) --> F{"Incident Filed already?"}
-    F -->|yes| R0(["unchanged"])
-    F -->|no| SWA[["SerializableWrite with AuditLedgerGuard: the attempt"]]
-    SWA -->|"audit unavailable"| E1(["503 audit_unavailable: triage is not called"])
-    SWA -->|attempt| A["FilingAttempts plus 1, LastFilingAttemptUtc"]
-    A -->|committed| T["ITriageService submit: dedupeKey, errorSignature, sanitized evidence, run and request ids"]
-    T -->|accepted| SW1[["SerializableWrite with AuditLedgerGuard: the outcome"]]
-    SW1 -->|attempt| FI["Filed: report and group ids, FiledUtc"]
-    FI --> N[["NotificationOutbox: incident_filed"]]
-    N --> R1(["filed: committed with its notification"])
-    T -->|"refused or unreachable"| SW2[["SerializableWrite with AuditLedgerGuard: the outcome"]]
-    SW2 -->|attempt| P["LastFilingError set"]
-    P --> R2(["filing pending: the sweep tries again"])
-    SW1 -->|"audit unavailable"| E2(["503 audit_unavailable: the incident stays Pending"])
-    SW2 -->|"audit unavailable"| E2
-```
+![FileHvIncidentCommand: file an incident through the triage endpoint (activity), part 1 of 5](c4/rendered/FileHvIncidentCommand.svg)
+
+View: FileHvIncidentCommand
+
+![FileHvIncidentCommand: file an incident through the triage endpoint (activity), part 2 of 5](c4/rendered/FileHvIncidentCommand-part2.svg)
+
+View: FileHvIncidentCommand-part2
+
+![FileHvIncidentCommand: file an incident through the triage endpoint (activity), part 3 of 5](c4/rendered/FileHvIncidentCommand-part3.svg)
+
+View: FileHvIncidentCommand-part3
+
+![FileHvIncidentCommand: file an incident through the triage endpoint (activity), part 4 of 5](c4/rendered/FileHvIncidentCommand-part4.svg)
+
+View: FileHvIncidentCommand-part4
+
+![FileHvIncidentCommand: file an incident through the triage endpoint (activity), part 5 of 5](c4/rendered/FileHvIncidentCommand-part5.svg)
+
+View: FileHvIncidentCommand-part5
 
 ### 14.5 Amended foundation units
 
@@ -1262,19 +1347,21 @@ flowchart TD
 - Writes: the grade (`grd-` key through ReadableKeyAllocator and IdempotentCreate) with `HvRequestId`, `RunId`, `RequestEvidenceSha256`, `ResponseLogChainSha256`, the findings, the thresholds in force, and `RecordedUtc`; the item `Graded` with its `GradeId`; DecideAgentResponseTrustCommand dispatched in the same transaction. It never changes the HV request's state: FinalizeHvRequestCommand completes the request.
 - Results: the grade; 409 `conflict` (`retryable: false` or `true` as above).
 
-```mermaid
-flowchart TD
-    S(["RecordModelGradeCommand: inside FinalizeHvRequestCommand's transaction"]) --> ID[["IdempotentCreate lookup: response, HV request, kind Model"]]
-    ID -->|"stored, equal input"| R0(["the stored grade, nothing written"])
-    ID -->|"stored, other input"| E1(["409 conflict, retryable false: the caller rolls back and fails the run with model_grade_conflict"])
-    ID -->|absent| G{"Response gradable, its item Pending, request Finalizing, grader the run's reviewer?"}
-    G -->|no| E2(["409 conflict, retryable true: the caller reads again"])
-    G -->|yes| K[["ReadableKeyAllocator: grd- key"]]
-    K --> I["Insert the grade: run reference, evidence hashes, scores, findings, thresholds"]
-    I --> M["Item Graded with the grade id"]
-    M --> T[["DecideAgentResponseTrustCommand in the same transaction"]]
-    T --> R(["grade recorded; the HV request is not changed"])
-```
+![RecordModelGradeCommand: record a model grade inside finalization (amended, internal) (activity), part 1 of 4](c4/rendered/AM1-RecordModelGradeCommand.svg)
+
+View: AM1-RecordModelGradeCommand
+
+![RecordModelGradeCommand: record a model grade inside finalization (amended, internal) (activity), part 2 of 4](c4/rendered/AM1-RecordModelGradeCommand-part2.svg)
+
+View: AM1-RecordModelGradeCommand-part2
+
+![RecordModelGradeCommand: record a model grade inside finalization (amended, internal) (activity), part 3 of 4](c4/rendered/AM1-RecordModelGradeCommand-part3.svg)
+
+View: AM1-RecordModelGradeCommand-part3
+
+![RecordModelGradeCommand: record a model grade inside finalization (amended, internal) (activity), part 4 of 4](c4/rendered/AM1-RecordModelGradeCommand-part4.svg)
+
+View: AM1-RecordModelGradeCommand-part4
 
 ## 15. Policies
 
@@ -1282,95 +1369,98 @@ flowchart TD
 
 Applied by SubmitHvRequestCommand inside its delegate, reading only the database. TurnLocator finds the reviewed session by `agent` and `sessionId` (`SessionNotFound` is `hv_scope_invalid`); `Turn`: the one turn by `requestId`; `Range`: both endpoint turns, then every turn between them inclusive in the session's turn order (the order develop reads a session's turns in: ascending turn row `Id`, VI-06), refused when an endpoint is missing or the start is after the end; `Session`: every turn of the session at this moment (S-11). The submitting turn is removed from a `Session` scope (`ExcludedSubmittingTurn` true) and refuses a `Turn` or `Range` scope that contains it. More than `MaxTurnsPerRequest` members is `hv_scope_too_large` with the count; no member left is `hv_scope_empty`.
 
-```mermaid
-flowchart TD
-    S(["HvScopeResolution: scope, submitting turn"]) --> TL[["TurnLocator: the reviewed session"]]
-    TL -->|"InvalidIdentifier or SessionNotFound"| E1(["400 hv_scope_invalid"])
-    TL -->|session| K{"Scope kind?"}
-    K -->|Turn| T1[["TurnLocator: the turn"]]
-    T1 -->|TurnNotFound| E1
-    T1 -->|found| M1["Members: that turn"]
-    K -->|Range| T2[["TurnLocator: both endpoint turns"]]
-    T2 -->|TurnNotFound| E1
-    T2 -->|found| O{"Start not after end?"}
-    O -->|no| E1
-    O -->|yes| M2["Members: every turn from start to end, inclusive, in session order"]
-    K -->|Session| M3["Members: every turn of the session now"]
-    M1 --> SB{"Submitting turn among the members?"}
-    M2 --> SB
-    SB -->|yes| E2(["400 hv_scope_includes_submitting_turn"])
-    SB -->|no| MX
-    M3 --> X["Remove the submitting turn when present; set ExcludedSubmittingTurn"]
-    X --> EM{"Members left?"}
-    EM -->|no| E3(["400 hv_scope_empty"])
-    EM -->|yes| MX{"At most MaxTurnsPerRequest?"}
-    MX -->|no| E4(["400 hv_scope_too_large, details.count and details.max"])
-    MX -->|yes| R(["members in session order"])
-```
+![Policy HvScopeResolution: resolve the member turns (activity), part 1 of 7](c4/rendered/HvScopeResolution.svg)
+
+View: HvScopeResolution
+
+![Policy HvScopeResolution: resolve the member turns (activity), part 2 of 7](c4/rendered/HvScopeResolution-part2.svg)
+
+View: HvScopeResolution-part2
+
+![Policy HvScopeResolution: resolve the member turns (activity), part 3 of 7](c4/rendered/HvScopeResolution-part3.svg)
+
+View: HvScopeResolution-part3
+
+![Policy HvScopeResolution: resolve the member turns (activity), part 4 of 7](c4/rendered/HvScopeResolution-part4.svg)
+
+View: HvScopeResolution-part4
+
+![Policy HvScopeResolution: resolve the member turns (activity), part 5 of 7](c4/rendered/HvScopeResolution-part5.svg)
+
+View: HvScopeResolution-part5
+
+![Policy HvScopeResolution: resolve the member turns (activity), part 6 of 7](c4/rendered/HvScopeResolution-part6.svg)
+
+View: HvScopeResolution-part6
+
+![Policy HvScopeResolution: resolve the member turns (activity), part 7 of 7](c4/rendered/HvScopeResolution-part7.svg)
+
+View: HvScopeResolution-part7
 
 ### Policy HvAdmissionEligibility: admit only reviewable turns [FR-MCP-HVPIPE-005, -013]
 
 Applied by SubmitHvRequestCommand after HvScopeResolution. It reads each member's status and HV state and never its `agentReview` (R-21). It collects every violation before it refuses, so the refusal names all affected turns: a non-terminal turn (`TurnStatus.IsTerminal` false) is `hv_turns_not_terminal`; a `Pending` turn is `hv_turns_pending` with its open request; a `Final` turn is `hv_turns_already_reviewed` with its request (null for a turn the A-11 migration made `Final`). When more than one kind applies, the first in that order is the code and `details` lists every kind (R-05, R-27).
 
-```mermaid
-flowchart TD
-    S(["HvAdmissionEligibility: members"]) --> C["For each member read status and HV state, never agentReview"]
-    C --> NT{"Any member not terminal?"}
-    NT -->|yes| E1(["409 hv_turns_not_terminal, details lists every turn of every kind"])
-    NT -->|no| PD{"Any member Pending?"}
-    PD -->|yes| E2(["409 hv_turns_pending, with their open requests"])
-    PD -->|no| FN{"Any member Final?"}
-    FN -->|yes| E3(["409 hv_turns_already_reviewed, with their requests"])
-    FN -->|no| R(["eligible"])
-```
+![Policy HvAdmissionEligibility: admit only reviewable turns (activity), part 1 of 3](c4/rendered/HvAdmissionEligibility.svg)
+
+View: HvAdmissionEligibility
+
+![Policy HvAdmissionEligibility: admit only reviewable turns (activity), part 2 of 3](c4/rendered/HvAdmissionEligibility-part2.svg)
+
+View: HvAdmissionEligibility-part2
+
+![Policy HvAdmissionEligibility: admit only reviewable turns (activity), part 3 of 3](c4/rendered/HvAdmissionEligibility-part3.svg)
+
+View: HvAdmissionEligibility-part3
 
 ### Policy HvReviewerEligibility: who may review [FR-MCP-HVPIPE-002, -003]
 
 A reviewer is eligible for a request when it is enabled, `Online`, and its id differs from both the request's `SubmitterReviewerId` and its `AuthorReviewerId` (AgentIdentity, R-08). Capacity (`MaxConcurrentRuns`) is a claim-time condition (ClaimHvRunCommand), not eligibility, so admission never refuses a request only because reviewers are busy.
 
-```mermaid
-flowchart TD
-    S(["HvReviewerEligibility: reviewer, submitter id, author id"]) --> E{"Enabled?"}
-    E -->|no| N(["not eligible: disabled"])
-    E -->|yes| O{"Online?"}
-    O -->|no| N2(["not eligible: readiness and reason"])
-    O -->|yes| X[["AgentIdentity.IsSameReviewer with the submitter id and with the author id"]]
-    X -->|"same as either"| N3(["not eligible: submitter or author"])
-    X -->|"different from both"| Y(["eligible"])
-```
+![Policy HvReviewerEligibility: who may review (activity), part 1 of 2](c4/rendered/HvReviewerEligibility.svg)
+
+View: HvReviewerEligibility
+
+![Policy HvReviewerEligibility: who may review (activity), part 2 of 2](c4/rendered/HvReviewerEligibility-part2.svg)
+
+View: HvReviewerEligibility-part2
 
 ### Policy RoundRobinAssignment: pick the next reviewer [FR-MCP-HVPIPE-002, -007]
 
 Applied inside a SerializableWrite (admission, and reassignment at claim). The pool order is Cline, Copilot, Claude, Codex, Grok. Starting after `HvWorkspaceState.LastAssignedReviewerId` (or at the start when null), it takes the first reviewer in cyclic order that HvReviewerEligibility accepts and, when the caller passes the capacity filter, that also has fewer runs in `Claimed` or `Running` than its `MaxConcurrentRuns`, and sets the cursor to it in the same transaction (S-17, R-07). Admission passes no filter, so a request is admitted while every reviewer is busy (capacity is a claim condition, HvReviewerEligibility); reassignment at claim passes it, so a full reviewer is skipped for a later free one. With none at admission it refuses with `hv_no_reviewer_available` and `details.reviewers`, each reviewer's enabled flag, readiness, reason, and open incident, the context S-16 asks the plugin to show; with none at claim it returns none and writes nothing, so the cursor and the request stay as they were and the request waits `Queued`.
 
-```mermaid
-flowchart TD
-    S(["RoundRobinAssignment: submitter id, author id, capacity filter at claim"]) --> C["Start after the cursor in pool order"]
-    C --> N{"Next reviewer in cyclic order, five at most?"}
-    N -->|"none left, admission"| E(["409 hv_no_reviewer_available, details.reviewers"])
-    N -->|"none left, claim"| E2(["none: nothing written, cursor and request unchanged"])
-    N -->|reviewer| EL[["Policy HvReviewerEligibility"]]
-    EL -->|"not eligible"| N
-    EL -->|eligible| CP{"Capacity filter passed, or none asked?"}
-    CP -->|"no: at MaxConcurrentRuns"| N
-    CP -->|yes| U["Set LastAssignedReviewerId to the reviewer"]
-    U --> R(["assigned reviewer"])
-```
+![Policy RoundRobinAssignment: pick the next reviewer (activity), part 1 of 5](c4/rendered/RoundRobinAssignment.svg)
+
+View: RoundRobinAssignment
+
+![Policy RoundRobinAssignment: pick the next reviewer (activity), part 2 of 5](c4/rendered/RoundRobinAssignment-part2.svg)
+
+View: RoundRobinAssignment-part2
+
+![Policy RoundRobinAssignment: pick the next reviewer (activity), part 3 of 5](c4/rendered/RoundRobinAssignment-part3.svg)
+
+View: RoundRobinAssignment-part3
+
+![Policy RoundRobinAssignment: pick the next reviewer (activity), part 4 of 5](c4/rendered/RoundRobinAssignment-part4.svg)
+
+View: RoundRobinAssignment-part4
+
+![Policy RoundRobinAssignment: pick the next reviewer (activity), part 5 of 5](c4/rendered/RoundRobinAssignment-part5.svg)
+
+View: RoundRobinAssignment-part5
 
 ### Policy HvTurnFreeze: freeze, release, finalize, and guard [FR-MCP-HVPIPE-012]
 
 - `Freeze(turns, hvRequestId)`: `HvState` `Pending` and `HvRequestId` on each member turn (SubmitHvRequestCommand). `Release(hvRequestId)`: back to `None` for the turns of a request that ended `Canceled` or `Failed`. `Finalize(hvRequestId)`: `Final` (FinalizeHvRequestCommand). Each writes the turn's HV columns only, never its content, inside the caller's transaction.
 - `Guard(turn, origin)`: applied by TurnWritePipeline after TurnLocator and before every other policy, and by every unit of A-07: a turn whose `HvState` is `Pending` or `Final` refuses every write and delete of the turn or its children, from every origin except `HvFinalization` writing a `Pending` turn of its own request, with 409 `turn_immutable`, `details.reason` `hv_pending` or `hv_final`, and `details.hvRequestId` (S-06, S-07, R-04). A session-level replace or delete that would change such a turn is refused the same way.
 
-```mermaid
-flowchart TD
-    S(["HvTurnFreeze Guard: turn, write origin, request"]) --> ST{"Turn HvState?"}
-    ST -->|None| OK(["allowed"])
-    ST -->|Final| E1(["409 turn_immutable, reason hv_final"])
-    ST -->|Pending| O{"Origin HvFinalization for this turn's request?"}
-    O -->|yes| OK
-    O -->|no| E2(["409 turn_immutable, reason hv_pending"])
-```
+![Policy HvTurnFreeze: freeze, release, finalize, and guard (activity), part 1 of 2](c4/rendered/HvTurnFreeze.svg)
+
+View: HvTurnFreeze
+
+![Policy HvTurnFreeze: freeze, release, finalize, and guard (activity), part 2 of 2](c4/rendered/HvTurnFreeze-part2.svg)
+
+View: HvTurnFreeze-part2
 
 ### Policy HvFinalVerification: the eight verification steps [FR-MCP-HVPIPE-010, -011, -021]
 
@@ -1385,106 +1475,109 @@ Applied by FinalizeHvRequestCommand to the run's stored chunks before any transa
 - V-7 Runtime identity (`runtime_identity_mismatch`): the log holds at least one top-level `hv_provenance` line written by the worker from the CLI's runtime receipt of this run, and every one names the run's expected model (or, when the reviewer has no configured model, the model the last NONCE resolved) and expected effort (P-04).
 - V-8 Completeness (`reviewer_output_invalid`): exactly one `hv_verdict`, the last reviewer record; exactly one `hv_holistic`; exactly one `hv_turn_assessment` per member and one `hv_response_grade` per response of the accepted request; every FAIL and UNKNOWN finding of every scope (turn, holistic, and response) has a category, a location, evidence, and a remediation (S-13); the failures list equals every FAIL and UNKNOWN finding of every scope.
 
-```mermaid
-flowchart TD
-    S(["HvFinalVerification: run chunks, request, members, responses"]) --> L[["VerifyLogAndBinding: V-1, V-8, V-2, V-3"]]
-    L -->|"failed: code"| E1(["the step's code, drawn there"])
-    L -->|"bound records"| R[["VerifyVerdictAndReviewer: V-4, V-5, V-6, V-7"]]
-    R -->|"failed: code"| E2(["the step's code, drawn there"])
-    R -->|passed| OK(["verified records"])
-```
+![Policy HvFinalVerification: the eight verification steps (activity), part 1 of 2](c4/rendered/HvFinalVerification.svg)
+
+View: HvFinalVerification
+
+![Policy HvFinalVerification: the eight verification steps (activity), part 2 of 2](c4/rendered/HvFinalVerification-part2.svg)
+
+View: HvFinalVerification-part2
 
 ##### Nested activity: VerifyLogAndBinding (V-1, V-8, V-2, V-3 of HvFinalVerification)
 
-```mermaid
-flowchart TD
-    S(["VerifyLogAndBinding"]) --> V1{"V-1 chunks contiguous, hashes and chain equal, lines JSON?"}
-    V1 -->|no| E1(["evidence_corrupt"])
-    V1 -->|yes| V8{"V-8 one verdict last, one holistic, one assessment per member, one grade per accepted response, complete findings?"}
-    V8 -->|no| E8(["reviewer_output_invalid"])
-    V8 -->|yes| V2{"V-2 assessments bound to members and admission hashes?"}
-    V2 -->|"assessment names another hash"| E2a(["verdict_binding_failed"])
-    V2 -->|"turn re-hash differs"| E2b(["snapshot_changed"])
-    V2 -->|yes| V3{"V-3 verdict names this request, run, counts, reviewer, response hashes?"}
-    V3 -->|no| E3(["verdict_binding_failed"])
-    V3 -->|yes| OK(["bound records"])
-```
+![Nested activity: VerifyLogAndBinding (V-1, V-8, V-2, V-3 of HvFinalVerification) (activity), part 1 of 4](c4/rendered/VerifyLogAndBinding.svg)
+
+View: VerifyLogAndBinding
+
+![Nested activity: VerifyLogAndBinding (V-1, V-8, V-2, V-3 of HvFinalVerification) (activity), part 2 of 4](c4/rendered/VerifyLogAndBinding-part2.svg)
+
+View: VerifyLogAndBinding-part2
+
+![Nested activity: VerifyLogAndBinding (V-1, V-8, V-2, V-3 of HvFinalVerification) (activity), part 3 of 4](c4/rendered/VerifyLogAndBinding-part3.svg)
+
+View: VerifyLogAndBinding-part3
+
+![Nested activity: VerifyLogAndBinding (V-1, V-8, V-2, V-3 of HvFinalVerification) (activity), part 4 of 4](c4/rendered/VerifyLogAndBinding-part4.svg)
+
+View: VerifyLogAndBinding-part4
 
 ##### Nested activity: VerifyVerdictAndReviewer (V-4 to V-7 of HvFinalVerification)
 
-```mermaid
-flowchart TD
-    S(["VerifyVerdictAndReviewer: bound records"]) --> V4{"V-4 verdicts consistent with scores and findings?"}
-    V4 -->|no| E4(["reviewer_output_invalid"])
-    V4 -->|yes| V5{"V-5 reviewer id differs from the submitter and author ids?"}
-    V5 -->|no| E5(["reviewer_not_independent"])
-    V5 -->|yes| V6{"V-6 reviewer turn a completed Chore, independent, after the claim, holding every reviewer record?"}
-    V6 -->|no| E6(["reviewer_turn_unverified"])
-    V6 -->|yes| V7{"V-7 worker provenance present, every line the expected model and effort?"}
-    V7 -->|no| E7(["runtime_identity_mismatch"])
-    V7 -->|yes| OK(["passed"])
-```
+![Nested activity: VerifyVerdictAndReviewer (V-4 to V-7 of HvFinalVerification) (activity), part 1 of 3](c4/rendered/VerifyVerdictAndReviewer.svg)
+
+View: VerifyVerdictAndReviewer
+
+![Nested activity: VerifyVerdictAndReviewer (V-4 to V-7 of HvFinalVerification) (activity), part 2 of 3](c4/rendered/VerifyVerdictAndReviewer-part2.svg)
+
+View: VerifyVerdictAndReviewer-part2
+
+![Nested activity: VerifyVerdictAndReviewer (V-4 to V-7 of HvFinalVerification) (activity), part 3 of 3](c4/rendered/VerifyVerdictAndReviewer-part3.svg)
+
+View: VerifyVerdictAndReviewer-part3
 
 ### Policy ReadinessProbeVerdict: the NONCE decision [FR-MCP-HVPIPE-003]
 
 Applied by CloseHvRunOutputCommand to a `Probe` run's chunks, which it reads after their `RecordRead` commits and before its transaction opens (R-19); its verdict is handed to policy HvProbeOutcome in that transaction. The probe passes when V-1 holds for its chunks, its log holds exactly one `hv_probe` record whose `nonce` equals the run's `ProbeNonce` (`probe_nonce_mismatch` otherwise), an `hv_provenance` line names the expected model and effort (`runtime_identity_mismatch` otherwise; with no configured model the runtime model is accepted and becomes `ResolvedModel`), and its `hv_reviewer_turn` names a persisted turn TurnLocator finds for that reviewer created at or after the run's `ClaimedUtc` (`reviewer_turn_logging_unsupported` otherwise, R-24) (S-27: "the agent is available and can execute an HV"). HvProbeOutcome uses this verdict only for a probe of the reviewer's current `ConfigurationVersion`.
 
-```mermaid
-flowchart TD
-    S(["ReadinessProbeVerdict: probe run"]) --> I{"Chunks pass V-1?"}
-    I -->|no| E1(["failed: evidence_corrupt"])
-    I -->|yes| N{"Exactly one hv_probe with the run's nonce?"}
-    N -->|no| E2(["failed: probe_nonce_mismatch"])
-    N -->|yes| P{"Provenance names the expected model and effort?"}
-    P -->|no| E3(["failed: runtime_identity_mismatch"])
-    P -->|yes| T{"Persisted reviewer turn for this reviewer, created at or after the claim?"}
-    T -->|no| E4(["failed: reviewer_turn_logging_unsupported"])
-    T -->|yes| OK(["passed: resolved model and effort"])
-```
+![Policy ReadinessProbeVerdict: the NONCE decision (activity), part 1 of 3](c4/rendered/ReadinessProbeVerdict.svg)
+
+View: ReadinessProbeVerdict
+
+![Policy ReadinessProbeVerdict: the NONCE decision (activity), part 2 of 3](c4/rendered/ReadinessProbeVerdict-part2.svg)
+
+View: ReadinessProbeVerdict-part2
+
+![Policy ReadinessProbeVerdict: the NONCE decision (activity), part 3 of 3](c4/rendered/ReadinessProbeVerdict-part3.svg)
+
+View: ReadinessProbeVerdict-part3
 
 ### Policy HvProbeOutcome: settle a probe run and its reviewer [FR-MCP-HVPIPE-003, -009]
 
 Applied inside the caller's transaction for a `Probe` run by CloseHvRunOutputCommand, FailHvRunCommand, and ExpireHvRunLeasesCommand, so a probe ends the same way whichever unit ends it, as HvRetryDecision does for a review (R-10). It is the only writer of a reviewer's readiness and probe request on behalf of a probe run. First the configuration check: a run whose `ReviewerConfigurationVersion` is not the reviewer's `ConfigurationVersion` changes nothing of the reviewer (readiness, reason, resolved model and effort, probe request, open incident), inserts no reviewer incident, and requests no probe; a stale close ends its run `Failed` with `probe_stale_configuration`, and a stale failure or expiry keeps the run outcome its caller recorded. Otherwise, by the outcome its caller hands it: a pass (from ReadinessProbeVerdict) makes the run `Succeeded` and the reviewer `Online` with `ResolvedModel` and `ResolvedEffort`, its `ReadinessReason` and `OpenIncidentId` cleared (the incident row stays), and appends `reviewer_online`; a reviewer-attributable code (FailHvRunCommand's one attribution list) makes the reviewer `Offline` with `ReadinessReason` the code and an `HvIncident` `hv-reviewer-<reviewerId>-<code>` as `OpenIncidentId`, and appends `reviewer_offline`; `evidence_corrupt` is a server fault: an `HvIncident` `hv-server-evidence_corrupt`, and the readiness unchanged; `worker_shutdown` and `lease_expired` are no outcome (the worker stopped or died), so `ProbeRequestedUtc` is set again and the same configuration is probed again, with no incident for `worker_shutdown` and the sweep's server incident for `lease_expired`. A probe that ended with a pass, a reviewer code, or `evidence_corrupt` is the settled probe of its configuration: process HvWorkerHost requests a startup NONCE only for an enabled `Unverified` reviewer whose current configuration has no settled probe (the run rows' `Kind`, `ReviewerConfigurationVersion`, `Status`, and `FailureCode` show it), so a restart never retries a settled probe, and a caller asks for a new one (S-15).
 
-```mermaid
-flowchart TD
-    S(["HvProbeOutcome: probe run, outcome, in the caller's transaction"]) --> CV{"Run of the reviewer's current ConfigurationVersion?"}
-    CV -->|no| ST["Reviewer unchanged, no reviewer incident, no probe request; a stale close ends the run probe_stale_configuration"]
-    ST --> R0(["stale: the newer configuration and its pending probe untouched"])
-    CV -->|yes| O{"Outcome?"}
-    O -->|passed| ON["Run Succeeded; reviewer Online with resolved model and effort, reason and open incident id cleared"]
-    ON --> N1[["NotificationOutbox: reviewer_online"]]
-    N1 --> R1(["settled: Online"])
-    O -->|"reviewer-attributable code"| OFF["Reviewer Offline with the code; insert HvIncident Pending, key hv-reviewer-id-code"]
-    OFF --> N2[["NotificationOutbox: reviewer_offline"]]
-    N2 --> R2(["settled: Offline"])
-    O -->|evidence_corrupt| SV["Insert HvIncident Pending, key hv-server-evidence_corrupt; readiness unchanged"]
-    SV --> R3(["settled: server fault, no new probe until a caller asks"])
-    O -->|"worker_shutdown or lease_expired"| RQ["Set ProbeRequestedUtc: the same configuration is probed again"]
-    RQ --> R4(["not settled: probe requested again"])
-```
+![Policy HvProbeOutcome: settle a probe run and its reviewer (activity), part 1 of 5](c4/rendered/HvProbeOutcome.svg)
+
+View: HvProbeOutcome
+
+![Policy HvProbeOutcome: settle a probe run and its reviewer (activity), part 2 of 5](c4/rendered/HvProbeOutcome-part2.svg)
+
+View: HvProbeOutcome-part2
+
+![Policy HvProbeOutcome: settle a probe run and its reviewer (activity), part 3 of 5](c4/rendered/HvProbeOutcome-part3.svg)
+
+View: HvProbeOutcome-part3
+
+![Policy HvProbeOutcome: settle a probe run and its reviewer (activity), part 4 of 5](c4/rendered/HvProbeOutcome-part4.svg)
+
+View: HvProbeOutcome-part4
+
+![Policy HvProbeOutcome: settle a probe run and its reviewer (activity), part 5 of 5](c4/rendered/HvProbeOutcome-part5.svg)
+
+View: HvProbeOutcome-part5
 
 ### Policy HvRetryDecision: requeue, fail, or cancel [FR-MCP-HVPIPE-007, -009]
 
 Applied inside the caller's transaction by FailHvRunCommand and ExpireHvRunLeasesCommand for a review run's request, and by CloseHvRunOutputCommand for a review run whose request is `CancelRequested` at close; it decides the request's next state and writes it, so a request ends the same way whether its attempt failed, its worker died, or its cancel was found at close. It acts only on a request whose current attempt is the caller's run (the run's `Attempt` equals the request's `AttemptCount`, and the request is `Running` or `CancelRequested`, or `Finalizing` for the finalizer's FailHvRunCommand); any other request is left unchanged and the caller's own run outcome stands, so no late or repeated caller requeues a newer attempt or revives a terminal request. A `CancelRequested` request becomes `Canceled`; otherwise, with the counted attempts (the request's runs except those that ended `worker_shutdown`, which a graceful restart causes and no reviewer does) below `MaxAttemptsPerRequest` the request returns to `Queued` (its assignee re-evaluated at the next claim, R-07); otherwise it becomes `Failed` with `attempts_exhausted`. A canceled or failed request gets `CompletedUtc`, releases its turns (HvTurnFreeze `Release`), closes its `Pending` responses with `request_ended`, and appends `hv_canceled` or `hv_failed` (NotificationOutbox).
 
-```mermaid
-flowchart TD
-    S(["HvRetryDecision: request, in the caller's transaction"]) --> CUR{"Caller's run the request's current attempt, request Running, CancelRequested, or Finalizing for the finalizer?"}
-    CUR -->|no| R0(["unchanged: a newer attempt or a terminal request is never touched"])
-    CUR -->|yes| C{"CancelRequested?"}
-    C -->|yes| CN["Request Canceled with CompletedUtc; Pending responses Closed request_ended"]
-    CN --> RL1[["Policy HvTurnFreeze Release"]]
-    RL1 --> N1[["NotificationOutbox: hv_canceled"]]
-    N1 --> R1(["cancel: request Canceled"])
-    C -->|no| A{"Counted attempts, worker_shutdown excluded, below MaxAttemptsPerRequest?"}
-    A -->|yes| QD["Request Queued; assignee re-evaluated at the next claim"]
-    QD --> R2(["requeue: request Queued"])
-    A -->|no| FL["Request Failed attempts_exhausted with CompletedUtc; Pending responses Closed request_ended"]
-    FL --> RL2[["Policy HvTurnFreeze Release"]]
-    RL2 --> N2[["NotificationOutbox: hv_failed"]]
-    N2 --> R3(["fail: request Failed"])
-```
+![Policy HvRetryDecision: requeue, fail, or cancel (activity), part 1 of 5](c4/rendered/HvRetryDecision.svg)
+
+View: HvRetryDecision
+
+![Policy HvRetryDecision: requeue, fail, or cancel (activity), part 2 of 5](c4/rendered/HvRetryDecision-part2.svg)
+
+View: HvRetryDecision-part2
+
+![Policy HvRetryDecision: requeue, fail, or cancel (activity), part 3 of 5](c4/rendered/HvRetryDecision-part3.svg)
+
+View: HvRetryDecision-part3
+
+![Policy HvRetryDecision: requeue, fail, or cancel (activity), part 4 of 5](c4/rendered/HvRetryDecision-part4.svg)
+
+View: HvRetryDecision-part4
+
+![Policy HvRetryDecision: requeue, fail, or cancel (activity), part 5 of 5](c4/rendered/HvRetryDecision-part5.svg)
+
+View: HvRetryDecision-part5
 
 ### Reused policy HvVerdictMapping
 
@@ -1496,120 +1589,167 @@ Foundation section 5.3, unchanged in its rule; its only caller is now RecordSess
 
 A hosted `BackgroundService` per workspace application (`src/QBrainAi.Services/HostileValidation/Execution/HvWorkerHost.cs`), with a worker id of the host name, process id, and a random suffix. It is the only dispatcher of the internal units (R-29). At start, while `WorkerEnabled`, it requests a NONCE for every enabled `Unverified` reviewer whose current configuration has no settled probe (StartHvReviewerNonceCommand, R-10, policy HvProbeOutcome), so a probe that already settled, for example on a server fault, is not retried by a restart; a request refused with 503 `audit_unavailable` or a retryable `conflict` is made again at the next iteration, after the sweep, and a repeat that finds the probe requested or running changes nothing (202 `AlreadyRequested` or `Running`); a repeat answered 409 `hv_reviewer_disabled` (the reviewer was disabled meanwhile) is not made again. Then it loops, woken by an `IChangeEventBus` wake-up or at `PollInterval`: a sweep (ExpireHvRunLeasesCommand, FinalizeHvRequestCommand for every `Finalizing` request it lists, FileHvIncidentCommand for every `Pending` incident), then claims until ClaimHvRunCommand returns null, starting one process RunReviewerProcess per claim. On a graceful shutdown it stops claiming and ends each of its running runs with FailHvRunCommand code `worker_shutdown`, which files no incident, marks no reviewer offline, and does not count as an attempt (policy HvRetryDecision); after a crash the leases expire instead (W-03). A 503 `audit_unavailable` from any unit stops the loop iteration and the next iteration starts from the sweep (W-12).
 
-```mermaid
-flowchart TD
-    S(["HvWorkerHost starts"]) --> EN{"WorkerEnabled?"}
-    EN -->|no| IDLE(["idle: no claims"])
-    EN -->|yes| NV[["StartHvReviewerNonceCommand for each enabled Unverified reviewer with no settled probe of its current configuration"]]
-    NV -->|"each requested, or refused and made again after the next sweep"| W["Wait for a wake-up or PollInterval"]
-    W --> SD{"Shutting down?"}
-    SD -->|yes| FS[["FailAttempt worker_shutdown for each own running run, a refusal left to the lease expiry"]]
-    FS --> END(["stopped"])
-    SD -->|no| SW[["ExpireHvRunLeasesCommand"]]
-    SW -->|audit_unavailable| W
-    SW -->|"sweep result"| FZ[["FinalizeHvRequestCommand for each Finalizing request"]]
-    FZ -->|audit_unavailable| W
-    FZ -->|"each answered: completed, already_completed, not_finalizable, verification_failed, or conflict left for the next sweep"| FI[["FileHvIncidentCommand for each Pending incident"]]
-    FI -->|audit_unavailable| W
-    FI -->|"each filed, left Pending with its error, or a conflict left for the next sweep"| RN2[["StartHvReviewerNonceCommand again for each startup request that was refused"]]
-    RN2 -->|"audit_unavailable"| W
-    RN2 -->|"each requested, already requested, or running, a conflict kept for the next iteration, a disabled reviewer dropped"| CL[["ClaimHvRunCommand"]]
-    CL -->|"null, audit_unavailable, or conflict"| W
-    CL -->|claim| RP[["Process RunReviewerProcess, started for this claim"]]
-    RP --> CL
-```
+![Process HvWorkerHost: the durable worker (activity), part 1 of 8](c4/rendered/HvWorkerHost.svg)
+
+View: HvWorkerHost
+
+![Process HvWorkerHost: the durable worker (activity), part 2 of 8](c4/rendered/HvWorkerHost-part2.svg)
+
+View: HvWorkerHost-part2
+
+![Process HvWorkerHost: the durable worker (activity), part 3 of 8](c4/rendered/HvWorkerHost-part3.svg)
+
+View: HvWorkerHost-part3
+
+![Process HvWorkerHost: the durable worker (activity), part 4 of 8](c4/rendered/HvWorkerHost-part4.svg)
+
+View: HvWorkerHost-part4
+
+![Process HvWorkerHost: the durable worker (activity), part 5 of 8](c4/rendered/HvWorkerHost-part5.svg)
+
+View: HvWorkerHost-part5
+
+![Process HvWorkerHost: the durable worker (activity), part 6 of 8](c4/rendered/HvWorkerHost-part6.svg)
+
+View: HvWorkerHost-part6
+
+![Process HvWorkerHost: the durable worker (activity), part 7 of 8](c4/rendered/HvWorkerHost-part7.svg)
+
+View: HvWorkerHost-part7
+
+![Process HvWorkerHost: the durable worker (activity), part 8 of 8](c4/rendered/HvWorkerHost-part8.svg)
+
+View: HvWorkerHost-part8
 
 ### 16.2 Process RunReviewerProcess: one attempt, live [FR-MCP-HVPIPE-008, -016]
 
 Runs one claimed run. It builds the brief (section 13.3: the accepted request read from the `Request` evidence inside the run envelope, after AuditLedgerGuard `RecordRead` records that read, or the probe brief with its nonce, which reads no evidence); a refused read starts no process and ends the attempt without another write, so the lease expiry recovers it (W-02, W-12); a `Request` evidence that fails to decompress starts no process and fails the run with `evidence_corrupt` (FailHvRunCommand: a server fault, so a server incident and the reviewer unchanged, and the request through policy HvRetryDecision, whose attempts bound the retries, FR-MCP-HVPIPE-011-AC009). It asks the reviewer's adapter for the launch (section 16.3), starts the process with the workspace as its working directory and its plugin as a host session of its own (R-24), inside a containment bound to the worker process, so the reviewer and every descendant end when the worker dies, however abruptly (W-03; the containment, for example a process group or job object, is the adapter's, section 16.3), records the start (RecordHvRunStartCommand), and appends the `hv_brief` record as sequence 1. While the process runs it has four concurrent duties and no time limit (R-11, P-02): every line the adapter delivers goes into a buffer that is appended (AppendHvRunOutputCommand) when `OutputFlushBytes` accumulate; a flush timer appends a buffer that is not empty once `OutputFlushInterval` has passed since its first line, whether or not another line arrives, so a single line followed by silence is still appended within the interval (R-12); a heartbeat every `HeartbeatInterval` (RecordHvRunHeartbeatCommand) renews the lease and reads cancellation; and the process exit is awaited. `stale_fence` from any unit kills the process and ends the attempt without another write (W-03); `audit_unavailable` kills the process and ends the attempt (W-12); `evidence_corrupt` from an append (its round trip failed and nothing was saved) kills the process and fails the run with `evidence_corrupt` (FailHvRunCommand: a server fault, so a server incident and the reviewer unchanged, and the request through policy HvRetryDecision), and so does a non-retryable `conflict` from an append (a different batch under a stored sequence, or a sequence out of order), because the log's integrity can no longer be shown, and so does a 400 `validation_error` from an append, which only a worker defect can cause because the adapter wraps every line as one JSON object (section 16.3); a retryable `conflict` repeats the same unit call with the same sequence. Every FailHvRunCommand call of this process, and the worker host's shutdown call, goes through the nested activity FailAttempt, drawn once below: `failed` ends the attempt with the request's next state (or the probe's outcome) as that unit wrote it; a retryable `conflict` repeats the same call; `stale_fence` and 503 `audit_unavailable` end the attempt with no further write and the request as it was, which the lease expiry recovers (W-03, W-12); so no exit of this process names a request state that a refused write did not produce. Every AppendHvRunOutputCommand call of this process (sequence 1 with the `hv_brief` record, each flush, and the final flush of the remaining lines and the provenance) goes through the nested activity AppendBatch, drawn once below: `appended` (or `unchanged`, a retried batch) lets the caller go on; a retryable `conflict` repeats the same call with the same sequence; `stale_fence` or 503 `audit_unavailable` stops the attempt with no further write; 500 `evidence_corrupt`, a non-retryable `conflict`, or a 400 `validation_error` stops it for integrity, and the caller ends the process and fails the run with `evidence_corrupt` through FailAttempt, so no later sequence is appended after a refused one. RecordHvRunStartCommand and RecordHvRunHeartbeatCommand repeat on a retryable `conflict`. A close answered 409 `conflict` with `details.field` `chunkCount` appends what is missing and closes again, and a retryable `conflict` repeats the close. Every append carries the records the adapter's extraction completed with that batch. On exit the remaining buffer is appended, the adapter's provenance lines are appended (section 16.3), and the run is closed (exit code 0, CloseHvRunOutputCommand, then FinalizeHvRequestCommand for a review whose request is `Finalizing`; a close that finds the request `CancelRequested` ends it `Canceled` instead, R-28; exit code 0 is not evidence of a review, R-11) or failed (FailHvRunCommand with `reviewer_exited_nonzero` and the exit code in its detail, or `reviewer_launch_failed` when the process never started). A cancellation read at a heartbeat kills the process and fails the run with `canceled`, which policy HvRetryDecision turns into the request's `Canceled` (R-28). Killing the process, here and in the diagrams, ends the reviewer's whole process tree, descendants included, also when the root process has already exited; and when the root exits while a descendant still holds its output pipes, the worker ends that descendant before it reads the output to its end. Without that, a descendant that outlives the reviewer would hold the run open forever, because no time limit ends a run (P-02); P14 is the same defect class in the plugin core (FR-MCP-HVPIPE-008-AC011).
 
-```mermaid
-flowchart TD
-    S(["RunReviewerProcess: claim"]) --> KD{"Run kind?"}
-    KD -->|Review| RR[["AuditLedgerGuard RecordRead: the Request evidence"]]
-    RR -->|"audit unavailable"| END10(["attempt ended before launch, no further write; the lease expires"])
-    RR -->|recorded| B["Build the brief: accepted request in the run envelope"]
-    KD -->|Probe| BP["Build the probe brief with its nonce"]
-    B -->|"Request evidence fails to decompress"| FB[["FailAttempt evidence_corrupt: a server fault"]]
-    FB --> END11(["attempt ended before launch, as FailAttempt answers"])
-    B -->|"brief built"| L[["Reviewer adapter BuildLaunch"]]
-    BP --> L
-    L --> ST{"Process started?"}
-    ST -->|no| FL[["FailAttempt reviewer_launch_failed"]]
-    FL --> END1(["attempt ended, as FailAttempt answers"])
-    ST -->|"yes, contained with the worker"| SR[["RecordHvRunStartCommand: Running, StartedUtc, ProcessId"]]
-    SR -->|"stale_fence or audit_unavailable"| K0["Kill the process"]
-    K0 --> END0(["attempt ended, no further write"])
-    SR -->|"retryable conflict"| SR
-    SR -->|started| A1[["AppendBatch: sequence 1, the hv_brief record"]]
-    A1 -->|"stop: stale_fence or audit_unavailable"| K1
-    A1 -->|"stop: integrity"| K3
-    A1 -->|appended| RUN[["StreamReviewerOutput: lines, flushes, heartbeats, until exit, stale fence, audit failure, evidence_corrupt, or cancel"]]
-    RUN -->|"stale_fence or audit_unavailable"| K1["Kill the process"]
-    K1 --> END2(["attempt ended, no further write"])
-    RUN -->|"cancel requested"| K2["Kill the process"]
-    K2 --> FC[["FailAttempt canceled"]]
-    FC --> END3(["attempt ended, as FailAttempt answers: request Canceled when it was written"])
-    RUN -->|"stop for integrity from an append"| K3["Kill the process"]
-    K3 --> FE[["FailAttempt evidence_corrupt: a server fault"]]
-    FE --> END7(["attempt ended, as FailAttempt answers"])
-    RUN -->|"exited"| FLS[["AppendBatch: remaining lines, then the adapter's hv_provenance lines"]]
-    FLS -->|"stop: stale_fence or audit_unavailable"| END12(["attempt ended, no further write"])
-    FLS -->|"stop: integrity"| FE
-    FLS -->|appended| EX{"Exit code 0?"}
-    EX -->|no| FN[["FailAttempt reviewer_exited_nonzero, the exit code in the detail"]]
-    FN --> END4(["attempt ended, as FailAttempt answers"])
-    EX -->|yes| CO[["CloseHvRunOutputCommand"]]
-    CO -->|"409 conflict chunkCount"| FLS
-    CO -->|"retryable conflict"| CO
-    CO -->|"Review: Finalizing"| FZ[["FinalizeHvRequestCommand"]]
-    FZ --> END5(["attempt ended: request Completed, Queued, or Failed, or still Finalizing for the sweep"])
-    CO -->|"Review: cancel found at close"| END8(["attempt ended: request Canceled"])
-    CO -->|"Probe: passed, failed, or stale"| END6(["attempt ended: reviewer Online, Offline, or unchanged"])
-    CO -->|"stale_fence or audit_unavailable"| END9(["attempt ended, no further write"])
-```
+![Process RunReviewerProcess: one attempt, live (activity), part 1 of 17](c4/rendered/RunReviewerProcess.svg)
+
+View: RunReviewerProcess
+
+![Process RunReviewerProcess: one attempt, live (activity), part 2 of 17](c4/rendered/RunReviewerProcess-part2.svg)
+
+View: RunReviewerProcess-part2
+
+![Process RunReviewerProcess: one attempt, live (activity), part 3 of 17](c4/rendered/RunReviewerProcess-part3.svg)
+
+View: RunReviewerProcess-part3
+
+![Process RunReviewerProcess: one attempt, live (activity), part 4 of 17](c4/rendered/RunReviewerProcess-part4.svg)
+
+View: RunReviewerProcess-part4
+
+![Process RunReviewerProcess: one attempt, live (activity), part 5 of 17](c4/rendered/RunReviewerProcess-part5.svg)
+
+View: RunReviewerProcess-part5
+
+![Process RunReviewerProcess: one attempt, live (activity), part 6 of 17](c4/rendered/RunReviewerProcess-part6.svg)
+
+View: RunReviewerProcess-part6
+
+![Process RunReviewerProcess: one attempt, live (activity), part 7 of 17](c4/rendered/RunReviewerProcess-part7.svg)
+
+View: RunReviewerProcess-part7
+
+![Process RunReviewerProcess: one attempt, live (activity), part 8 of 17](c4/rendered/RunReviewerProcess-part8.svg)
+
+View: RunReviewerProcess-part8
+
+![Process RunReviewerProcess: one attempt, live (activity), part 9 of 17](c4/rendered/RunReviewerProcess-part9.svg)
+
+View: RunReviewerProcess-part9
+
+![Process RunReviewerProcess: one attempt, live (activity), part 10 of 17](c4/rendered/RunReviewerProcess-part10.svg)
+
+View: RunReviewerProcess-part10
+
+![Process RunReviewerProcess: one attempt, live (activity), part 11 of 17](c4/rendered/RunReviewerProcess-part11.svg)
+
+View: RunReviewerProcess-part11
+
+![Process RunReviewerProcess: one attempt, live (activity), part 12 of 17](c4/rendered/RunReviewerProcess-part12.svg)
+
+View: RunReviewerProcess-part12
+
+![Process RunReviewerProcess: one attempt, live (activity), part 13 of 17](c4/rendered/RunReviewerProcess-part13.svg)
+
+View: RunReviewerProcess-part13
+
+![Process RunReviewerProcess: one attempt, live (activity), part 14 of 17](c4/rendered/RunReviewerProcess-part14.svg)
+
+View: RunReviewerProcess-part14
+
+![Process RunReviewerProcess: one attempt, live (activity), part 15 of 17](c4/rendered/RunReviewerProcess-part15.svg)
+
+View: RunReviewerProcess-part15
+
+![Process RunReviewerProcess: one attempt, live (activity), part 16 of 17](c4/rendered/RunReviewerProcess-part16.svg)
+
+View: RunReviewerProcess-part16
+
+![Process RunReviewerProcess: one attempt, live (activity), part 17 of 17](c4/rendered/RunReviewerProcess-part17.svg)
+
+View: RunReviewerProcess-part17
 
 ##### Nested activity: FailAttempt (every FailHvRunCommand call of the worker, drawn once)
 
-```mermaid
-flowchart TD
-    S(["FailAttempt: run, fence, failure code, detail"]) --> F[["FailHvRunCommand"]]
-    F -->|"failed: the request's next state or the probe outcome"| OK(["attempt ended: the state FailHvRunCommand wrote"])
-    F -->|"retryable conflict"| F
-    F -->|"stale_fence or audit_unavailable"| NW(["attempt ended, no further write: the request as it was, recovered by the lease expiry"])
-```
+![Nested activity: FailAttempt (every FailHvRunCommand call of the worker, drawn once) (activity)](c4/rendered/FailAttempt.svg)
+
+View: FailAttempt
 
 ##### Nested activity: AppendBatch (every AppendHvRunOutputCommand call of the worker, drawn once)
 
-```mermaid
-flowchart TD
-    S(["AppendBatch: run, fence, sequence, lines, completed records"]) --> A[["AppendHvRunOutputCommand"]]
-    A -->|"appended, or unchanged for a retried batch"| OK(["appended: the caller goes on with the next sequence"])
-    A -->|"retryable conflict"| A
-    A -->|"stale_fence or 503 audit_unavailable"| ST(["stop: no further write"])
-    A -->|"500 evidence_corrupt, 409 conflict retryable false, or 400 validation_error"| IN(["stop for integrity: the caller ends the process and fails the run evidence_corrupt through FailAttempt"])
-```
+![Nested activity: AppendBatch (every AppendHvRunOutputCommand call of the worker, drawn once) (activity), part 1 of 2](c4/rendered/AppendBatch.svg)
+
+View: AppendBatch
+
+![Nested activity: AppendBatch (every AppendHvRunOutputCommand call of the worker, drawn once) (activity), part 2 of 2](c4/rendered/AppendBatch-part2.svg)
+
+View: AppendBatch-part2
 
 ##### Nested activity: StreamReviewerOutput (the loop of RunReviewerProcess, collapsed above)
 
-```mermaid
-flowchart TD
-    S(["StreamReviewerOutput"]) --> E{"Next event?"}
-    E -->|"line from the adapter"| BUF["Add the JSONL line to the buffer; start the flush timer if the buffer was empty"]
-    BUF --> FT{"Flush bytes reached?"}
-    FT -->|no| E
-    FT -->|yes| AP[["AppendBatch: the buffer as the next sequence"]]
-    E -->|"flush timer fired, buffer not empty"| AP
-    AP -->|appended| E
-    AP -->|"stop: stale_fence or audit_unavailable"| X1(["stop: stale fence or audit failure"])
-    AP -->|"stop: integrity"| X4(["stop: the log's integrity fails, evidence_corrupt"])
-    E -->|"heartbeat timer"| HB[["RecordHvRunHeartbeatCommand"]]
-    HB -->|"retryable conflict"| HB
-    HB -->|"renewed, no cancel"| E
-    HB -->|"cancelRequested"| X2(["stop: cancel requested"])
-    HB -->|"stale_fence or audit_unavailable"| X1
-    E -->|"process exited"| X3(["stop: exited, with the exit code"])
-```
+![Nested activity: StreamReviewerOutput (the loop of RunReviewerProcess, collapsed above) (activity), part 1 of 10](c4/rendered/StreamReviewerOutput.svg)
+
+View: StreamReviewerOutput
+
+![Nested activity: StreamReviewerOutput (the loop of RunReviewerProcess, collapsed above) (activity), part 2 of 10](c4/rendered/StreamReviewerOutput-part2.svg)
+
+View: StreamReviewerOutput-part2
+
+![Nested activity: StreamReviewerOutput (the loop of RunReviewerProcess, collapsed above) (activity), part 3 of 10](c4/rendered/StreamReviewerOutput-part3.svg)
+
+View: StreamReviewerOutput-part3
+
+![Nested activity: StreamReviewerOutput (the loop of RunReviewerProcess, collapsed above) (activity), part 4 of 10](c4/rendered/StreamReviewerOutput-part4.svg)
+
+View: StreamReviewerOutput-part4
+
+![Nested activity: StreamReviewerOutput (the loop of RunReviewerProcess, collapsed above) (activity), part 5 of 10](c4/rendered/StreamReviewerOutput-part5.svg)
+
+View: StreamReviewerOutput-part5
+
+![Nested activity: StreamReviewerOutput (the loop of RunReviewerProcess, collapsed above) (activity), part 6 of 10](c4/rendered/StreamReviewerOutput-part6.svg)
+
+View: StreamReviewerOutput-part6
+
+![Nested activity: StreamReviewerOutput (the loop of RunReviewerProcess, collapsed above) (activity), part 7 of 10](c4/rendered/StreamReviewerOutput-part7.svg)
+
+View: StreamReviewerOutput-part7
+
+![Nested activity: StreamReviewerOutput (the loop of RunReviewerProcess, collapsed above) (activity), part 8 of 10](c4/rendered/StreamReviewerOutput-part8.svg)
+
+View: StreamReviewerOutput-part8
+
+![Nested activity: StreamReviewerOutput (the loop of RunReviewerProcess, collapsed above) (activity), part 9 of 10](c4/rendered/StreamReviewerOutput-part9.svg)
+
+View: StreamReviewerOutput-part9
+
+![Nested activity: StreamReviewerOutput (the loop of RunReviewerProcess, collapsed above) (activity), part 10 of 10](c4/rendered/StreamReviewerOutput-part10.svg)
+
+View: StreamReviewerOutput-part10
 
 ### 16.3 Reviewer adapter contract [FR-MCP-HVPIPE-001, -003, -008]
 
@@ -1626,38 +1766,45 @@ flowchart TD
 
 `workflow.hv.submit` in the PowerShell core (`plugins/core/lib-ps/repl-invoke.ps1`): process BindVerbToTurn (foundation section 4.4) binds the invocation to its turn; the verb sends SubmitHvRequestCommand through the REPL with `submitter` that turn's key and `idempotencyKey` `hv-` followed by the first 32 lower-case hex characters of the SHA-256 of the canonical JSON of the whole invocation identity `{ submitter: { agent, sessionId, requestId }, scope, context, contextFormat }`, so the key has 35 characters whatever the length of the ids (within the 128 of section 12), two sessions with equal request ids get different keys, and a repeat of the same call is the same request. A created or stored request is reported with its id, status, and reviewer; the watcher needs no record of it, because a terminal notification carries the submitter's turn key (R-30, section 16.5). `hv_no_reviewer_available` is reported with the context S-16 asks for: each reviewer's enabled flag, readiness, and reason from `details.reviewers`, the open incident of each `Offline` reviewer (through `workflow.hv.incidents`), and the remedy text "after the cause is fixed, NONCE the reviewer: workflow.hv.nonce <reviewerId>". Every other refusal is reported with its code, final. A retryable answer (transport outage, 503, 409 with `retryable: true`) is reported with `retryable: true` and exit 1 and is not queued in the failsafe, because the same call with the same key can simply be repeated (the reviews' no-failsafe rule, foundation section 5.2).
 
-```mermaid
-flowchart TD
-    S(["workflow.hv.submit: scope, context"]) --> B[["Process BindVerbToTurn"]]
-    B -->|refused| E1(["refusal of BindVerbToTurn, drawn there"])
-    B -->|bound turn| K["Submitter the bound turn key; idempotencyKey: hv- and 32 hex of the invocation identity"]
-    K --> SUB["REPL: SubmitHvRequestCommand"]
-    SUB -->|"201 or 200"| R1(["reported: id, status, reviewer"])
-    SUB -->|"409 hv_no_reviewer_available"| CTX["Add reviewer statuses, open incidents, and the NONCE remedy"]
-    CTX --> R2(["reported: refusal with context, exit 1"])
-    SUB -->|"retryable answer"| R3(["reported: code, retryable true, exit 1, not queued"])
-    SUB -->|"other refusal"| R4(["reported: code, final, exit 1"])
-```
+![Process SubmitHvFromPlugin: the plugin verb (activity), part 1 of 4](c4/rendered/SubmitHvFromPlugin.svg)
+
+View: SubmitHvFromPlugin
+
+![Process SubmitHvFromPlugin: the plugin verb (activity), part 2 of 4](c4/rendered/SubmitHvFromPlugin-part2.svg)
+
+View: SubmitHvFromPlugin-part2
+
+![Process SubmitHvFromPlugin: the plugin verb (activity), part 3 of 4](c4/rendered/SubmitHvFromPlugin-part3.svg)
+
+View: SubmitHvFromPlugin-part3
+
+![Process SubmitHvFromPlugin: the plugin verb (activity), part 4 of 4](c4/rendered/SubmitHvFromPlugin-part4.svg)
+
+View: SubmitHvFromPlugin-part4
 
 ### 16.5 Process WatchHvNotifications: completions into the plugin [FR-MCP-HVPIPE-017, -020]
 
 Started by process StartHostSession (foundation section 4.4) for each host session and stopped by EndHostSession; one instance per host session (`sessions/<hostSessionKey>/hv-watcher.pid`, the arrival bridge's pattern). It runs the REPL streaming verb `workflow.hv.watchNotifications` with `Last-Event-ID` the `lastSequence` of `sessions/<hostSessionKey>/hv-notifications.yaml`. That one state file holds both `lastSequence` and the `inbox`, and every change to it is one atomic replace (temp file, flush, rename) under `hv-notifications.lock`. For each event the watcher writes, in that one replace, the new `lastSequence` and, when the event is `hv_completed`, `hv_failed`, or `hv_canceled` and its submitter session is this host session's MCP session (the submitter turn key the notification carries, section 12), an inbox entry keyed by the event's sequence; so a crash leaves either both or neither, and an event replayed after a crash is not added twice. Matching by the carried key needs no record of the submission, so a completion that arrives before the submit verb has returned is still inboxed. A disconnect reconnects with backoff from the recorded sequence, so nothing is missed (R-16). The prompt hook adds each undelivered inbox entry to the next prompt's context ("HV <hvRequestId> <status>, overall verdict <verdict>, sequence <n>; result: workflow.hv.result <hvRequestId>") and then marks it delivered in the same state file; a crash between the two repeats the entry at a later prompt, so delivery to the model is at least once, and the sequence makes a repeat recognizable (R-30). Plugins never call REST; the REPL holds the stream (R-30).
 
-```mermaid
-flowchart TD
-    S(["WatchHvNotifications: host session"]) --> P{"Watcher already running for this host session?"}
-    P -->|yes| X(["exit: one instance"])
-    P -->|no| C["REPL workflow.hv.watchNotifications from lastSequence"]
-    C --> E{"Next event?"}
-    E -->|"notification"| M{"Terminal kind, submitter session this host session's?"}
-    M -->|yes| IN["Inbox entry by sequence and lastSequence, one atomic replace of the state file"]
-    M -->|no| LS["Record lastSequence, one atomic replace of the state file"]
-    IN --> E
-    LS --> E
-    E -->|disconnected| BK["Wait with backoff"]
-    BK --> C
-    E -->|"host session ended"| END(["stopped"])
-```
+![Process WatchHvNotifications: completions into the plugin (activity), part 1 of 5](c4/rendered/WatchHvNotifications.svg)
+
+View: WatchHvNotifications
+
+![Process WatchHvNotifications: completions into the plugin (activity), part 2 of 5](c4/rendered/WatchHvNotifications-part2.svg)
+
+View: WatchHvNotifications-part2
+
+![Process WatchHvNotifications: completions into the plugin (activity), part 3 of 5](c4/rendered/WatchHvNotifications-part3.svg)
+
+View: WatchHvNotifications-part3
+
+![Process WatchHvNotifications: completions into the plugin (activity), part 4 of 5](c4/rendered/WatchHvNotifications-part4.svg)
+
+View: WatchHvNotifications-part4
+
+![Process WatchHvNotifications: completions into the plugin (activity), part 5 of 5](c4/rendered/WatchHvNotifications-part5.svg)
+
+View: WatchHvNotifications-part5
 
 ### 16.6 Director HV commands [FR-MCP-HVPIPE-020]
 
@@ -1682,63 +1829,77 @@ The HostileReview subsystem keeps its own bounded context, queue, entities, and 
 - One accepted terminal result (P2): only CompleteHostileReviewAttemptCommand writes a result, and only while the request has none; a duplicate or late completion returns the accepted result and changes nothing, even when its fence is stale, and the sweep never changes a request that has an accepted result, replacing `AcceptReviewerOutputAsync`'s unfenced overwrite.
 - Named tests (H0 against mocks, H3 production, recorded on TEST-MCP-HOSTILEREVIEW-002 and -003 in H0 after approval, D-09): `HostileReviewWorkerUsesConfiguredOrPooledDefaultAgent`, `HostileReviewIdentitiesDistinctRequestAttemptPoolJobExecutionResult`, `HostileReviewAttemptRerunsAfterProcessLossBounded`, `HostileReviewDuplicateOrLateCompletionOneAcceptedResult`, `HostileReviewCancellationInternalOnly`, `HostileReviewLongRunRenewsLeaseNoTimeLimit`, `HostileReviewCompletionVersusSweepOneOutcome`, `HostileReviewSweepNeverChangesAcceptedRequest`, `HostileReviewShutdownRequeuesUncounted` (FR-MCP-HOSTILEREVIEW-003 criterion 4); `HostileReviewFastExitRecordsExecutionAndTerminalFields`, `HostileReviewExecutionMetadataFromProvenanceMissingTokensDiagnosed`, `HostileReviewAgentWithoutProvenanceFailsBeforeLaunch`, `HostileReviewLaunchWithoutProvenanceLeavesNoExecutionRow`, `HostileReviewEveryOutcomeStoresItsDiagnostics` (FR-MCP-HOSTILEREVIEW-003 criteria 1 to 3); `HostileReviewStoresNoRawArtifactPromptOrOutput`, `HostileReviewLinkLimitsRefused`, `HostileReviewEveryListedArtifactTypeResolvesWithContentHash`, `HostileReviewDispatchRefusedLinkFailsWithDiagnosticNeverOmitted` (FR-MCP-HOSTILEREVIEW-002 criteria 2 and 4 and P3).
 
-```mermaid
-flowchart TD
-    S(["HostileReviewWorkerHost starts"]) --> W["Wait for a wake-up or PollInterval"]
-    W --> SD{"Shutting down?"}
-    SD -->|yes| SC[["For each own running attempt: stop its process tree, then CompleteAttempt Canceled worker_shutdown, uncounted"]]
-    SC --> END(["stopped"])
-    SD -->|no| EX[["ExpireHostileReviewLeasesCommand"]]
-    EX -->|audit_unavailable| W
-    EX -->|"sweep result"| CAP{"Fewer than MaximumConcurrentReviews own attempts running?"}
-    CAP -->|no| W
-    CAP -->|yes| CL[["ClaimHostileReviewAttemptCommand"]]
-    CL -->|"null or audit_unavailable"| W
-    CL -->|"retryable conflict"| CL
-    CL -->|attempt| RA[["RunHostileReviewAttempt, started for this attempt"]]
-    RA --> CAP
-```
+![Process HostileReviewWorkerHost: the artifact worker of FR-MCP-HOSTILEREVIEW-003 (P1 to P3, D-02) (activity), part 1 of 4](c4/rendered/HostileReviewWorkerHost.svg)
+
+View: HostileReviewWorkerHost
+
+![Process HostileReviewWorkerHost: the artifact worker of FR-MCP-HOSTILEREVIEW-003 (P1 to P3, D-02) (activity), part 2 of 4](c4/rendered/HostileReviewWorkerHost-part2.svg)
+
+View: HostileReviewWorkerHost-part2
+
+![Process HostileReviewWorkerHost: the artifact worker of FR-MCP-HOSTILEREVIEW-003 (P1 to P3, D-02) (activity), part 3 of 4](c4/rendered/HostileReviewWorkerHost-part3.svg)
+
+View: HostileReviewWorkerHost-part3
+
+![Process HostileReviewWorkerHost: the artifact worker of FR-MCP-HOSTILEREVIEW-003 (P1 to P3, D-02) (activity), part 4 of 4](c4/rendered/HostileReviewWorkerHost-part4.svg)
+
+View: HostileReviewWorkerHost-part4
 
 ##### Nested activity: RunHostileReviewAttempt (one claimed attempt of HostileReviewWorkerHost)
 
-```mermaid
-flowchart TD
-    S(["RunHostileReviewAttempt: claim"]) --> LK{"Every link reauthorized and within the limits?"}
-    LK -->|no| CF[["CompleteAttempt: failure with the link's sanitized diagnostic"]]
-    CF --> END1(["attempt ended, no process launched, as CompleteAttempt answers"])
-    LK -->|yes| PV{"Selected agent has a reviewer adapter with a provenance source for model and effort?"}
-    PV -->|no| CI[["CompleteAttempt: failure runtime_identity_unavailable, with its diagnostic"]]
-    CI --> END7(["attempt ended, no process launched, as CompleteAttempt answers"])
-    PV -->|yes| RUN["Assemble the prompt in memory; create the execution id; launch the selected agent contained with the worker"]
-    RUN --> ST{"Process started?"}
-    ST -->|no| CN[["CompleteAttempt: failure, launch failed"]]
-    CN --> END2(["attempt ended, as CompleteAttempt answers"])
-    ST -->|yes| LOOP{"Next event?"}
-    LOOP -->|"renewal timer"| RN[["RenewHostileReviewAttemptCommand, ProcessStarted"]]
-    RN -->|renewed| LOOP
-    RN -->|"retryable conflict"| RN
-    RN -->|"stale_fence or audit_unavailable"| KL["Stop the reviewer's process tree; no further write"]
-    KL --> END3(["attempt ended: the sweep or the lease expiry decides it"])
-    LOOP -->|"pool job canceled"| KC["Stop the reviewer's process tree"]
-    KC --> CC[["CompleteAttempt: Canceled, counted"]]
-    CC --> END4(["attempt ended, as CompleteAttempt answers"])
-    LOOP -->|"reviewer exited"| PR["Read the output lines only to parse the result, store none of them; read the adapter's provenance and build the execution metadata"]
-    PR --> PM{"Provenance shows the model and effort?"}
-    PM -->|yes| CO[["CompleteAttempt: the parsed result, or the failure, with the execution metadata and its diagnostics"]]
-    PM -->|no| CU[["CompleteAttempt: failure runtime_identity_unavailable, no execution metadata, the execution id and times in its diagnostic"]]
-    CO --> END5(["attempt ended, as CompleteAttempt answers"])
-    CU --> END6(["attempt ended, as CompleteAttempt answers"])
-```
+![Nested activity: RunHostileReviewAttempt (one claimed attempt of HostileReviewWorkerHost) (activity), part 1 of 12](c4/rendered/RunHostileReviewAttempt.svg)
+
+View: RunHostileReviewAttempt
+
+![Nested activity: RunHostileReviewAttempt (one claimed attempt of HostileReviewWorkerHost) (activity), part 2 of 12](c4/rendered/RunHostileReviewAttempt-part2.svg)
+
+View: RunHostileReviewAttempt-part2
+
+![Nested activity: RunHostileReviewAttempt (one claimed attempt of HostileReviewWorkerHost) (activity), part 3 of 12](c4/rendered/RunHostileReviewAttempt-part3.svg)
+
+View: RunHostileReviewAttempt-part3
+
+![Nested activity: RunHostileReviewAttempt (one claimed attempt of HostileReviewWorkerHost) (activity), part 4 of 12](c4/rendered/RunHostileReviewAttempt-part4.svg)
+
+View: RunHostileReviewAttempt-part4
+
+![Nested activity: RunHostileReviewAttempt (one claimed attempt of HostileReviewWorkerHost) (activity), part 5 of 12](c4/rendered/RunHostileReviewAttempt-part5.svg)
+
+View: RunHostileReviewAttempt-part5
+
+![Nested activity: RunHostileReviewAttempt (one claimed attempt of HostileReviewWorkerHost) (activity), part 6 of 12](c4/rendered/RunHostileReviewAttempt-part6.svg)
+
+View: RunHostileReviewAttempt-part6
+
+![Nested activity: RunHostileReviewAttempt (one claimed attempt of HostileReviewWorkerHost) (activity), part 7 of 12](c4/rendered/RunHostileReviewAttempt-part7.svg)
+
+View: RunHostileReviewAttempt-part7
+
+![Nested activity: RunHostileReviewAttempt (one claimed attempt of HostileReviewWorkerHost) (activity), part 8 of 12](c4/rendered/RunHostileReviewAttempt-part8.svg)
+
+View: RunHostileReviewAttempt-part8
+
+![Nested activity: RunHostileReviewAttempt (one claimed attempt of HostileReviewWorkerHost) (activity), part 9 of 12](c4/rendered/RunHostileReviewAttempt-part9.svg)
+
+View: RunHostileReviewAttempt-part9
+
+![Nested activity: RunHostileReviewAttempt (one claimed attempt of HostileReviewWorkerHost) (activity), part 10 of 12](c4/rendered/RunHostileReviewAttempt-part10.svg)
+
+View: RunHostileReviewAttempt-part10
+
+![Nested activity: RunHostileReviewAttempt (one claimed attempt of HostileReviewWorkerHost) (activity), part 11 of 12](c4/rendered/RunHostileReviewAttempt-part11.svg)
+
+View: RunHostileReviewAttempt-part11
+
+![Nested activity: RunHostileReviewAttempt (one claimed attempt of HostileReviewWorkerHost) (activity), part 12 of 12](c4/rendered/RunHostileReviewAttempt-part12.svg)
+
+View: RunHostileReviewAttempt-part12
 
 ##### Nested activity: CompleteAttempt (every CompleteHostileReviewAttemptCommand call of the worker, drawn once)
 
-```mermaid
-flowchart TD
-    S(["CompleteAttempt: attempt, fence, outcome"]) --> C[["CompleteHostileReviewAttemptCommand"]]
-    C -->|"accepted, alreadyAccepted, requeued, failed, or stale_fence"| OK(["attempt ended with the state that unit wrote or found"])
-    C -->|"retryable conflict"| C
-    C -->|"503 audit_unavailable"| LX(["attempt ended, no further write: left to the lease expiry"])
-```
+![Nested activity: CompleteAttempt (every CompleteHostileReviewAttemptCommand call of the worker, drawn once) (activity)](c4/rendered/CompleteAttempt.svg)
+
+View: CompleteAttempt
 
 #### ClaimHostileReviewAttemptCommand: claim the next queued artifact review [FR-MCP-HOSTILEREVIEW-003]
 
@@ -1746,18 +1907,21 @@ flowchart TD
 - Delegate (SerializableWrite with AuditLedgerGuard): the oldest `Queued` request with no accepted result, no live attempt, and fewer counted attempts than `MaximumAttempts`; a new attempt `Claimed` with `AttemptId`, the next attempt number, the AgentPool job (`PoolJobId`), and `ClaimedUtc`, FencedLease `Claim`; the request `Running` with `AttemptCount` plus 1. Nothing claimable returns null and writes nothing. Two workers never claim one request: the request's state and the one-live-attempt index are checked and written in the delegate.
 - Results: a claim; null; 409 `conflict` (`retryable: true`); 503 `audit_unavailable`.
 
-```mermaid
-flowchart TD
-    S(["ClaimHostileReviewAttemptCommand: workerId"]) --> SW[["SerializableWrite with AuditLedgerGuard"]]
-    SW -->|"audit unavailable"| E1(["503 audit_unavailable"])
-    SW -->|"attempts exhausted"| E2(["409 conflict, retryable true"])
-    SW -->|attempt| Q{"Oldest Queued request without an accepted result or a live attempt, attempts left?"}
-    Q -->|no| R0(["null: nothing claimable"])
-    Q -->|yes| A["Insert the attempt Claimed: AttemptId, attempt number, PoolJobId, ClaimedUtc"]
-    A --> L[["FencedLease Claim"]]
-    L --> RQ["Request Running, AttemptCount plus 1"]
-    RQ --> R(["claim: request, attempt, fence, lease expiry"])
-```
+![ClaimHostileReviewAttemptCommand: claim the next queued artifact review (activity), part 1 of 4](c4/rendered/ClaimHostileReviewAttemptCommand.svg)
+
+View: ClaimHostileReviewAttemptCommand
+
+![ClaimHostileReviewAttemptCommand: claim the next queued artifact review (activity), part 2 of 4](c4/rendered/ClaimHostileReviewAttemptCommand-part2.svg)
+
+View: ClaimHostileReviewAttemptCommand-part2
+
+![ClaimHostileReviewAttemptCommand: claim the next queued artifact review (activity), part 3 of 4](c4/rendered/ClaimHostileReviewAttemptCommand-part3.svg)
+
+View: ClaimHostileReviewAttemptCommand-part3
+
+![ClaimHostileReviewAttemptCommand: claim the next queued artifact review (activity), part 4 of 4](c4/rendered/ClaimHostileReviewAttemptCommand-part4.svg)
+
+View: ClaimHostileReviewAttemptCommand-part4
 
 #### RenewHostileReviewAttemptCommand: keep a running artifact review's lease [FR-MCP-HOSTILEREVIEW-003]
 
@@ -1765,18 +1929,21 @@ flowchart TD
 - Delegate (SerializableWrite with AuditLedgerGuard): FencedLease `Renew`; the attempt must be `Claimed` or `Running`; with `ProcessStarted`, a `Claimed` attempt becomes `Running`. It never writes `ExecutionId`, which only the completion writes with its execution row.
 - Results: renewed (`leaseExpiresUtc`); `stale_fence` (nothing changed; the host stops the reviewer); 409 `conflict` (`retryable: true`); 503 `audit_unavailable`.
 
-```mermaid
-flowchart TD
-    S(["RenewHostileReviewAttemptCommand: attempt, worker, fence, processStarted"]) --> SW[["SerializableWrite with AuditLedgerGuard"]]
-    SW -->|"audit unavailable"| E1(["503 audit_unavailable"])
-    SW -->|"attempts exhausted"| E2(["409 conflict, retryable true"])
-    SW -->|attempt| L[["FencedLease Renew"]]
-    L -->|stale_fence| E3(["stale_fence: nothing changed"])
-    L -->|renewed| X{"ProcessStarted and attempt Claimed?"}
-    X -->|yes| RN["Attempt Running"]
-    RN --> R(["renewed: leaseExpiresUtc"])
-    X -->|no| R
-```
+![RenewHostileReviewAttemptCommand: keep a running artifact review's lease (activity), part 1 of 4](c4/rendered/RenewHostileReviewAttemptCommand.svg)
+
+View: RenewHostileReviewAttemptCommand
+
+![RenewHostileReviewAttemptCommand: keep a running artifact review's lease (activity), part 2 of 4](c4/rendered/RenewHostileReviewAttemptCommand-part2.svg)
+
+View: RenewHostileReviewAttemptCommand-part2
+
+![RenewHostileReviewAttemptCommand: keep a running artifact review's lease (activity), part 3 of 4](c4/rendered/RenewHostileReviewAttemptCommand-part3.svg)
+
+View: RenewHostileReviewAttemptCommand-part3
+
+![RenewHostileReviewAttemptCommand: keep a running artifact review's lease (activity), part 4 of 4](c4/rendered/RenewHostileReviewAttemptCommand-part4.svg)
+
+View: RenewHostileReviewAttemptCommand-part4
 
 #### CompleteHostileReviewAttemptCommand: accept one terminal result [FR-MCP-HOSTILEREVIEW-003]
 
@@ -1784,28 +1951,29 @@ flowchart TD
 - Delegate (SerializableWrite with AuditLedgerGuard), in this order: a request that already has an accepted result returns `alreadyAccepted` with it and writes nothing, whatever the caller's fence; then FencedLease `Guard` (`stale_fence`: nothing changed); the attempt must be `Claimed` or `Running`; the outcome's sanitized diagnostics as the request's existing diagnostic rows (`HostileReviewDiagnosticEntity`, code and message, `src/QBrainAi.Storage/Entities/HostileReviewDiagnosticEntity.cs:23-31`), whatever the outcome; when `Outcome.execution` is set, the execution row from it and the attempt's `ExecutionId`, written together (this unit is the only writer of both); then by outcome, each setting the attempt's `EndedUtc`: a success writes the result once (`AcceptedResultId`, `Verdict`, findings), makes the attempt `Succeeded` and the request `Completed`, and releases the lease (`accepted`); a failure, including one where no process started or the provenance showed no model or effort, makes the attempt `Failed` with its sanitized code and releases the lease, and the request returns to `Queued` while counted attempts remain (`requeued`) and otherwise becomes `Failed` (`failed`); a cancellation makes the attempt `Canceled` with `worker_shutdown` (not counted) or `canceled` (counted) as the outcome says, and the request is decided as for a failure.
 - Results: `accepted`; `alreadyAccepted`; `requeued`; `failed`; `stale_fence`; 409 `conflict` (`retryable: true`); 503 `audit_unavailable`.
 
-```mermaid
-flowchart TD
-    S(["CompleteHostileReviewAttemptCommand: attempt, fence, outcome"]) --> SW[["SerializableWrite with AuditLedgerGuard"]]
-    SW -->|"audit unavailable"| E1(["503 audit_unavailable"])
-    SW -->|"attempts exhausted"| E2(["409 conflict, retryable true"])
-    SW -->|attempt| AC{"Request already has an accepted result?"}
-    AC -->|yes| R0(["alreadyAccepted: the accepted result, nothing written"])
-    AC -->|no| G[["FencedLease Guard"]]
-    G -->|stale_fence| E3(["stale_fence: nothing changed"])
-    G -->|guarded| DG["Store the outcome's sanitized diagnostics, whatever the outcome; with execution metadata, the execution row and the attempt's ExecutionId together"]
-    DG --> O{"Outcome?"}
-    O -->|success| OK["Write the result once and set AcceptedResultId; attempt Succeeded with EndedUtc; request Completed"]
-    OK --> RL1[["FencedLease Release"]]
-    RL1 --> R1(["accepted"])
-    O -->|"failure or cancellation"| FA["Attempt Failed with its code, or Canceled counted or not, with EndedUtc"]
-    FA --> RL2[["FencedLease Release"]]
-    RL2 --> F{"Counted attempts below MaximumAttempts?"}
-    F -->|yes| RQ["Request Queued again"]
-    RQ --> R2(["requeued"])
-    F -->|no| FL["Request Failed"]
-    FL --> R3(["failed"])
-```
+![CompleteHostileReviewAttemptCommand: accept one terminal result (activity), part 1 of 6](c4/rendered/CompleteHostileReviewAttemptCommand.svg)
+
+View: CompleteHostileReviewAttemptCommand
+
+![CompleteHostileReviewAttemptCommand: accept one terminal result (activity), part 2 of 6](c4/rendered/CompleteHostileReviewAttemptCommand-part2.svg)
+
+View: CompleteHostileReviewAttemptCommand-part2
+
+![CompleteHostileReviewAttemptCommand: accept one terminal result (activity), part 3 of 6](c4/rendered/CompleteHostileReviewAttemptCommand-part3.svg)
+
+View: CompleteHostileReviewAttemptCommand-part3
+
+![CompleteHostileReviewAttemptCommand: accept one terminal result (activity), part 4 of 6](c4/rendered/CompleteHostileReviewAttemptCommand-part4.svg)
+
+View: CompleteHostileReviewAttemptCommand-part4
+
+![CompleteHostileReviewAttemptCommand: accept one terminal result (activity), part 5 of 6](c4/rendered/CompleteHostileReviewAttemptCommand-part5.svg)
+
+View: CompleteHostileReviewAttemptCommand-part5
+
+![CompleteHostileReviewAttemptCommand: accept one terminal result (activity), part 6 of 6](c4/rendered/CompleteHostileReviewAttemptCommand-part6.svg)
+
+View: CompleteHostileReviewAttemptCommand-part6
 
 #### ExpireHostileReviewLeasesCommand: recover artifact reviews from dead workers [FR-MCP-HOSTILEREVIEW-003]
 
@@ -1813,24 +1981,33 @@ flowchart TD
 - For each attempt read as `Claimed` or `Running` with an expired lease, one SerializableWrite with AuditLedgerGuard and FencedLease `Expire` with the fence the sweep read and the live statuses `Claimed` and `Running` (skipped when it renewed, completed, or was already taken over by another sweep), the same operation the HV sweep uses (section 11.1); the attempt becomes `Abandoned` with `EndedUtc` and `FailureCode` `lease_expired`, and its incremented fence makes the old worker's renewal or completion `stale_fence`; the request is then left unchanged when it has an accepted result, and otherwise returns to `Queued` while counted attempts remain and becomes `Failed` when they are spent.
 - Results: the sweep result; 503 `audit_unavailable` ends the sweep.
 
-```mermaid
-flowchart TD
-    S(["ExpireHostileReviewLeasesCommand"]) --> N{"Next attempt read Claimed or Running with an expired lease?"}
-    N -->|no| R(["sweep result"])
-    N -->|yes| SW[["SerializableWrite with AuditLedgerGuard, one per attempt"]]
-    SW -->|"audit unavailable"| E(["503 audit_unavailable: sweep ends"])
-    SW -->|"attempts exhausted"| N
-    SW -->|attempt| X[["FencedLease Expire: still Claimed or Running, fence as read, lease expired"]]
-    X -->|"skipped: renewed, completed, or taken over"| N
-    X -->|expired| AB["Attempt Abandoned with EndedUtc and lease_expired"]
-    AB --> AR{"Request has an accepted result?"}
-    AR -->|yes| N
-    AR -->|no| F{"Counted attempts below MaximumAttempts?"}
-    F -->|yes| RQ["Request Queued again"]
-    F -->|no| FL["Request Failed"]
-    RQ --> N
-    FL --> N
-```
+![ExpireHostileReviewLeasesCommand: recover artifact reviews from dead workers (activity), part 1 of 7](c4/rendered/ExpireHostileReviewLeasesCommand.svg)
+
+View: ExpireHostileReviewLeasesCommand
+
+![ExpireHostileReviewLeasesCommand: recover artifact reviews from dead workers (activity), part 2 of 7](c4/rendered/ExpireHostileReviewLeasesCommand-part2.svg)
+
+View: ExpireHostileReviewLeasesCommand-part2
+
+![ExpireHostileReviewLeasesCommand: recover artifact reviews from dead workers (activity), part 3 of 7](c4/rendered/ExpireHostileReviewLeasesCommand-part3.svg)
+
+View: ExpireHostileReviewLeasesCommand-part3
+
+![ExpireHostileReviewLeasesCommand: recover artifact reviews from dead workers (activity), part 4 of 7](c4/rendered/ExpireHostileReviewLeasesCommand-part4.svg)
+
+View: ExpireHostileReviewLeasesCommand-part4
+
+![ExpireHostileReviewLeasesCommand: recover artifact reviews from dead workers (activity), part 5 of 7](c4/rendered/ExpireHostileReviewLeasesCommand-part5.svg)
+
+View: ExpireHostileReviewLeasesCommand-part5
+
+![ExpireHostileReviewLeasesCommand: recover artifact reviews from dead workers (activity), part 6 of 7](c4/rendered/ExpireHostileReviewLeasesCommand-part6.svg)
+
+View: ExpireHostileReviewLeasesCommand-part6
+
+![ExpireHostileReviewLeasesCommand: recover artifact reviews from dead workers (activity), part 7 of 7](c4/rendered/ExpireHostileReviewLeasesCommand-part7.svg)
+
+View: ExpireHostileReviewLeasesCommand-part7
 
 ## 17. Sequence diagrams
 
@@ -1838,660 +2015,1257 @@ Participants: `Caller` is any surface's caller (a plugin through the REPL, the R
 
 ### 17.1 ListHvReviewersQuery and GetHvReviewerQuery
 
-```mermaid
-sequenceDiagram
-    participant Caller
-    participant API
-    participant Pipe
-    participant H
-    participant DB
-    Caller->>API: GET reviewers, or GET reviewers/{reviewerId}
-    API->>Pipe: QueryAsync
-    alt workspace unresolved
-        Pipe-->>Caller: 400 validation_error, details.field workspacePath
-    else resolved
-        Pipe->>H: handler runs
-        H->>H: AgentIdentity.Normalize, for one reviewer
-        alt unknown reviewer id
-            H-->>Caller: 404 not_found, reviewer
-        else known
-            H->>DB: load reviewers and count active runs
-            DB-->>H: rows
-            H-->>Caller: 200 HvReviewerDto list, or one HvReviewerDto
-        end
-    end
-```
+![ListHvReviewersQuery and GetHvReviewerQuery, part 1 of 2](c4/rendered/AM1-17-01.svg)
+
+View: AM1-17-01
+
+![ListHvReviewersQuery and GetHvReviewerQuery, part 2 of 2](c4/rendered/AM1-17-01-part2.svg)
+
+View: AM1-17-01-part2
+
+![ListHvReviewersQuery and GetHvReviewerQuery, alt 1 branch 1 of 2: workspace unresolved](c4/rendered/AM1-17-01-alt1-1.svg)
+
+View: AM1-17-01-alt1-1
+
+![ListHvReviewersQuery and GetHvReviewerQuery, alt 1 branch 2 of 2: resolved, part 1 of 2](c4/rendered/AM1-17-01-alt1-2.svg)
+
+View: AM1-17-01-alt1-2
+
+![ListHvReviewersQuery and GetHvReviewerQuery, alt 1 branch 2 of 2: resolved, part 2 of 2](c4/rendered/AM1-17-01-alt1-2-part2.svg)
+
+View: AM1-17-01-alt1-2-part2
+
+![ListHvReviewersQuery and GetHvReviewerQuery, alt 2 branch 1 of 2: unknown reviewer id](c4/rendered/AM1-17-01-alt2-1.svg)
+
+View: AM1-17-01-alt2-1
+
+![ListHvReviewersQuery and GetHvReviewerQuery, alt 2 branch 2 of 2: known, part 1 of 2](c4/rendered/AM1-17-01-alt2-2.svg)
+
+View: AM1-17-01-alt2-2
+
+![ListHvReviewersQuery and GetHvReviewerQuery, alt 2 branch 2 of 2: known, part 2 of 2](c4/rendered/AM1-17-01-alt2-2-part2.svg)
+
+View: AM1-17-01-alt2-2-part2
 
 ### 17.2 UpdateHvReviewerCommand
 
-```mermaid
-sequenceDiagram
-    participant Caller
-    participant API
-    participant Pipe
-    participant H
-    participant DB
-    participant W
-    Caller->>API: PATCH reviewers/{reviewerId} with expectedStateVersion
-    API->>Pipe: SendAsync
-    alt workspace unresolved
-        Pipe-->>Caller: 400 validation_error, workspacePath
-    else resolved
-        Pipe->>H: handler runs
-        alt invalid field or no expectedStateVersion
-            H-->>Caller: 400 validation_error, details.field
-        else unknown reviewer id
-            H-->>Caller: 404 not_found, reviewer
-        else valid
-            H->>DB: SerializableWrite with AuditLedgerGuard
-            alt audit ledger unavailable
-                DB-->>H: refused
-                H-->>Caller: 503 audit_unavailable
-            else stale expectedStateVersion
-                H-->>Caller: 409 conflict, retryable false, details.field expectedStateVersion
-            else attempts exhausted
-                H-->>Caller: 409 conflict, retryable true
-            else committed
-                DB-->>H: updated row, readiness Unverified when the launch changed
-                H-->>Caller: 200 HvReviewerDto
-                H-)W: wake, NONCE the Unverified reviewer
-            end
-        end
-    end
-```
+![UpdateHvReviewerCommand, part 1 of 2](c4/rendered/AM1-17-02.svg)
+
+View: AM1-17-02
+
+![UpdateHvReviewerCommand, part 2 of 2](c4/rendered/AM1-17-02-part2.svg)
+
+View: AM1-17-02-part2
+
+![UpdateHvReviewerCommand, alt 1 branch 1 of 2: workspace unresolved](c4/rendered/AM1-17-02-alt1-1.svg)
+
+View: AM1-17-02-alt1-1
+
+![UpdateHvReviewerCommand, alt 1 branch 2 of 2: resolved](c4/rendered/AM1-17-02-alt1-2.svg)
+
+View: AM1-17-02-alt1-2
+
+![UpdateHvReviewerCommand, alt 2 branch 1 of 3: invalid field or no expectedStateVersion](c4/rendered/AM1-17-02-alt2-1.svg)
+
+View: AM1-17-02-alt2-1
+
+![UpdateHvReviewerCommand, alt 2 branch 2 of 3: unknown reviewer id](c4/rendered/AM1-17-02-alt2-2.svg)
+
+View: AM1-17-02-alt2-2
+
+![UpdateHvReviewerCommand, alt 2 branch 3 of 3: valid](c4/rendered/AM1-17-02-alt2-3.svg)
+
+View: AM1-17-02-alt2-3
+
+![UpdateHvReviewerCommand, alt 3 branch 1 of 4: audit ledger unavailable, part 1 of 2](c4/rendered/AM1-17-02-alt3-1.svg)
+
+View: AM1-17-02-alt3-1
+
+![UpdateHvReviewerCommand, alt 3 branch 1 of 4: audit ledger unavailable, part 2 of 2](c4/rendered/AM1-17-02-alt3-1-part2.svg)
+
+View: AM1-17-02-alt3-1-part2
+
+![UpdateHvReviewerCommand, alt 3 branch 2 of 4: stale expectedStateVersion](c4/rendered/AM1-17-02-alt3-2.svg)
+
+View: AM1-17-02-alt3-2
+
+![UpdateHvReviewerCommand, alt 3 branch 3 of 4: attempts exhausted](c4/rendered/AM1-17-02-alt3-3.svg)
+
+View: AM1-17-02-alt3-3
+
+![UpdateHvReviewerCommand, alt 3 branch 4 of 4: committed, part 1 of 3](c4/rendered/AM1-17-02-alt3-4.svg)
+
+View: AM1-17-02-alt3-4
+
+![UpdateHvReviewerCommand, alt 3 branch 4 of 4: committed, part 2 of 3](c4/rendered/AM1-17-02-alt3-4-part2.svg)
+
+View: AM1-17-02-alt3-4-part2
+
+![UpdateHvReviewerCommand, alt 3 branch 4 of 4: committed, part 3 of 3](c4/rendered/AM1-17-02-alt3-4-part3.svg)
+
+View: AM1-17-02-alt3-4-part3
 
 ### 17.3 StartHvReviewerNonceCommand and the probe it starts
 
-```mermaid
-sequenceDiagram
-    participant Caller
-    participant API
-    participant H
-    participant DB
-    participant W
-    participant AD
-    participant TG
-    Caller->>API: POST reviewers/{reviewerId}/nonce
-    API->>H: SendAsync, after the workspace behavior
-    alt unknown reviewer
-        H-->>Caller: 404 not_found, reviewer
-    else disabled
-        H-->>Caller: 409 hv_reviewer_disabled
-    else probe already running
-        H-->>Caller: 202 Running with its runId
-    else probe already requested
-        H-->>Caller: 202 AlreadyRequested
-    else audit ledger unavailable
-        H-->>Caller: 503 audit_unavailable
-    else requested
-        H->>DB: set ProbeRequestedUtc
-        H-->>Caller: 202 Requested
-        H-)W: wake
-        W->>DB: ClaimHvRunCommand creates the Probe run with a fresh nonce
-        W->>AD: launch with the probe brief
-        AD-->>W: live lines, the hv_probe record, then exit
-        W->>DB: AppendHvRunOutputCommand for each batch, then the hv_provenance lines
-        Note over W,DB: the probe runs through RunReviewerProcess, 16.2, so its start, heartbeats, and appends, each append through AppendBatch, have the outcomes drawn in 17.7, a stale fence or audit refusal ends the attempt for the lease expiry, and an integrity refusal fails the probe evidence_corrupt as in the V-1 branch below
-        W->>DB: on exit 0 CloseHvRunOutputCommand, with RecordRead of the chunks committed, the chunks read and ReadinessProbeVerdict decided before its transaction, then policy HvProbeOutcome in it, otherwise FailHvRunCommand with policy HvProbeOutcome
-        alt reviewer reconfigured while the probe ran
-            DB-->>W: run Failed probe_stale_configuration, readiness and the newer probe request unchanged
-        else probe passed
-            DB-->>W: reviewer Online, notification reviewer_online
-        else nonce, provenance, or reviewer turn failed, or the launch failed or the process exited nonzero
-            DB-->>W: reviewer Offline, incident Pending, notification reviewer_offline
-            W->>TG: FileHvIncidentCommand at the next sweep
-        else stored chunks fail V-1
-            DB-->>W: run Failed evidence_corrupt, server incident Pending, readiness unchanged
-            W->>TG: FileHvIncidentCommand at the next sweep
-        else the read of the chunks cannot be recorded
-            DB-->>W: 503 audit_unavailable, nothing written
-            Note over W,DB: the attempt ends, and the lease expiry later requests the probe again, HvProbeOutcome lease_expired
-        end
-    end
-```
+![StartHvReviewerNonceCommand and the probe it starts, part 1 of 2](c4/rendered/AM1-17-03.svg)
+
+View: AM1-17-03
+
+![StartHvReviewerNonceCommand and the probe it starts, part 2 of 2](c4/rendered/AM1-17-03-part2.svg)
+
+View: AM1-17-03-part2
+
+![StartHvReviewerNonceCommand and the probe it starts, alt 1 branch 1 of 6: unknown reviewer](c4/rendered/AM1-17-03-alt1-1.svg)
+
+View: AM1-17-03-alt1-1
+
+![StartHvReviewerNonceCommand and the probe it starts, alt 1 branch 2 of 6: disabled](c4/rendered/AM1-17-03-alt1-2.svg)
+
+View: AM1-17-03-alt1-2
+
+![StartHvReviewerNonceCommand and the probe it starts, alt 1 branch 3 of 6: probe already running](c4/rendered/AM1-17-03-alt1-3.svg)
+
+View: AM1-17-03-alt1-3
+
+![StartHvReviewerNonceCommand and the probe it starts, alt 1 branch 4 of 6: probe already requested](c4/rendered/AM1-17-03-alt1-4.svg)
+
+View: AM1-17-03-alt1-4
+
+![StartHvReviewerNonceCommand and the probe it starts, alt 1 branch 5 of 6: audit ledger unavailable](c4/rendered/AM1-17-03-alt1-5.svg)
+
+View: AM1-17-03-alt1-5
+
+![StartHvReviewerNonceCommand and the probe it starts, alt 1 branch 6 of 6: requested, part 1 of 11](c4/rendered/AM1-17-03-alt1-6.svg)
+
+View: AM1-17-03-alt1-6
+
+![StartHvReviewerNonceCommand and the probe it starts, alt 1 branch 6 of 6: requested, part 2 of 11](c4/rendered/AM1-17-03-alt1-6-part2.svg)
+
+View: AM1-17-03-alt1-6-part2
+
+![StartHvReviewerNonceCommand and the probe it starts, alt 1 branch 6 of 6: requested, part 3 of 11](c4/rendered/AM1-17-03-alt1-6-part3.svg)
+
+View: AM1-17-03-alt1-6-part3
+
+![StartHvReviewerNonceCommand and the probe it starts, alt 1 branch 6 of 6: requested, part 4 of 11](c4/rendered/AM1-17-03-alt1-6-part4.svg)
+
+View: AM1-17-03-alt1-6-part4
+
+![StartHvReviewerNonceCommand and the probe it starts, alt 1 branch 6 of 6: requested, part 5 of 11](c4/rendered/AM1-17-03-alt1-6-part5.svg)
+
+View: AM1-17-03-alt1-6-part5
+
+![StartHvReviewerNonceCommand and the probe it starts, alt 1 branch 6 of 6: requested, part 6 of 11](c4/rendered/AM1-17-03-alt1-6-part6.svg)
+
+View: AM1-17-03-alt1-6-part6
+
+![StartHvReviewerNonceCommand and the probe it starts, alt 1 branch 6 of 6: requested, part 7 of 11](c4/rendered/AM1-17-03-alt1-6-part7.svg)
+
+View: AM1-17-03-alt1-6-part7
+
+![StartHvReviewerNonceCommand and the probe it starts, alt 1 branch 6 of 6: requested, part 8 of 11](c4/rendered/AM1-17-03-alt1-6-part8.svg)
+
+View: AM1-17-03-alt1-6-part8
+
+![StartHvReviewerNonceCommand and the probe it starts, alt 1 branch 6 of 6: requested, part 9 of 11](c4/rendered/AM1-17-03-alt1-6-part9.svg)
+
+View: AM1-17-03-alt1-6-part9
+
+![StartHvReviewerNonceCommand and the probe it starts, alt 1 branch 6 of 6: requested, part 10 of 11](c4/rendered/AM1-17-03-alt1-6-part10.svg)
+
+View: AM1-17-03-alt1-6-part10
+
+![StartHvReviewerNonceCommand and the probe it starts, alt 1 branch 6 of 6: requested, part 11 of 11](c4/rendered/AM1-17-03-alt1-6-part11.svg)
+
+View: AM1-17-03-alt1-6-part11
+
+![StartHvReviewerNonceCommand and the probe it starts, alt 2 branch 1 of 5: reviewer reconfigured while the probe ran](c4/rendered/AM1-17-03-alt2-1.svg)
+
+View: AM1-17-03-alt2-1
+
+![StartHvReviewerNonceCommand and the probe it starts, alt 2 branch 2 of 5: probe passed](c4/rendered/AM1-17-03-alt2-2.svg)
+
+View: AM1-17-03-alt2-2
+
+![StartHvReviewerNonceCommand and the probe it starts, alt 2 branch 3 of 5: nonce, provenance, or reviewer turn failed, or the launch failed or the process exited nonzero, part 1 of 3](c4/rendered/AM1-17-03-alt2-3.svg)
+
+View: AM1-17-03-alt2-3
+
+![StartHvReviewerNonceCommand and the probe it starts, alt 2 branch 3 of 5: nonce, provenance, or reviewer turn failed, or the launch failed or the process exited nonzero, part 2 of 3](c4/rendered/AM1-17-03-alt2-3-part2.svg)
+
+View: AM1-17-03-alt2-3-part2
+
+![StartHvReviewerNonceCommand and the probe it starts, alt 2 branch 3 of 5: nonce, provenance, or reviewer turn failed, or the launch failed or the process exited nonzero, part 3 of 3](c4/rendered/AM1-17-03-alt2-3-part3.svg)
+
+View: AM1-17-03-alt2-3-part3
+
+![StartHvReviewerNonceCommand and the probe it starts, alt 2 branch 4 of 5: stored chunks fail V-1, part 1 of 2](c4/rendered/AM1-17-03-alt2-4.svg)
+
+View: AM1-17-03-alt2-4
+
+![StartHvReviewerNonceCommand and the probe it starts, alt 2 branch 4 of 5: stored chunks fail V-1, part 2 of 2](c4/rendered/AM1-17-03-alt2-4-part2.svg)
+
+View: AM1-17-03-alt2-4-part2
+
+![StartHvReviewerNonceCommand and the probe it starts, alt 2 branch 5 of 5: the read of the chunks cannot be recorded, part 1 of 2](c4/rendered/AM1-17-03-alt2-5.svg)
+
+View: AM1-17-03-alt2-5
+
+![StartHvReviewerNonceCommand and the probe it starts, alt 2 branch 5 of 5: the read of the chunks cannot be recorded, part 2 of 2](c4/rendered/AM1-17-03-alt2-5-part2.svg)
+
+View: AM1-17-03-alt2-5-part2
 
 ### 17.4 SubmitHvRequestCommand from the plugin verb
 
-```mermaid
-sequenceDiagram
-    participant Model
-    participant Plugin
-    participant API
-    participant Pipe
-    participant H
-    participant DB
-    participant W
-    Model->>Plugin: workflow.hv.submit with a scope and context
-    Plugin->>Plugin: process BindVerbToTurn, then the idempotency key
-    alt binding refused
-        Plugin-->>Model: the refusal of BindVerbToTurn
-    else bound
-        Plugin->>API: REPL SubmitHvRequestCommand with the submitter turn key
-        API->>Pipe: SendAsync
-        alt workspace unresolved
-            Pipe-->>Plugin: 400 validation_error, workspacePath
-        else resolved
-            Pipe->>H: handler runs
-            H->>H: shape checks, RequirementReferenceExtractor
-            H->>DB: SerializableWrite with AuditLedgerGuard
-            Note over H,DB: ref AdmitRequestChecks and InsertAdmittedRequest, section 14.2
-            alt malformed scope or submitter
-                H-->>Plugin: 400 hv_scope_invalid or validation_error
-            else scope too large, includes the submitting turn, or empty
-                H-->>Plugin: 400 hv_scope_too_large, hv_scope_includes_submitting_turn, or hv_scope_empty
-            else turns not terminal, pending, or already reviewed
-                H-->>Plugin: 409 with every affected turn listed
-            else no eligible reviewer
-                H-->>Plugin: 409 hv_no_reviewer_available with details.reviewers
-                Plugin-->>Model: refusal with reviewer statuses, open incidents, and the NONCE remedy
-            else same key and same inputs
-                H->>H: nothing written, then GetHvRequestQuery for the stored request, its output read recorded first
-                H-->>Plugin: 200 the stored request, or that query's 500 evidence_corrupt or 503 audit_unavailable
-            else the accepted request fails its GZIP round trip
-                H-->>Plugin: 500 evidence_corrupt, nothing saved
-            else key reused with other inputs
-                H-->>Plugin: 409 conflict, retryable false
-            else audit unavailable or attempts exhausted
-                H-->>Plugin: 503 audit_unavailable or 409 conflict, retryable true
-                Plugin-->>Model: retryable true, exit 1, not queued
-            else admitted
-                DB-->>H: request Queued, turns Pending, notification hv_queued
-                H-->>Plugin: 201 HvRequestResult
-                H-)W: wake, auto-start
-                Plugin-->>Model: id, status, assigned reviewer
-            end
-        end
-    end
-```
+![SubmitHvRequestCommand from the plugin verb, part 1 of 2](c4/rendered/AM1-17-04.svg)
+
+View: AM1-17-04
+
+![SubmitHvRequestCommand from the plugin verb, part 2 of 2](c4/rendered/AM1-17-04-part2.svg)
+
+View: AM1-17-04-part2
+
+![SubmitHvRequestCommand from the plugin verb, alt 1 branch 1 of 2: binding refused](c4/rendered/AM1-17-04-alt1-1.svg)
+
+View: AM1-17-04-alt1-1
+
+![SubmitHvRequestCommand from the plugin verb, alt 1 branch 2 of 2: bound, part 1 of 2](c4/rendered/AM1-17-04-alt1-2.svg)
+
+View: AM1-17-04-alt1-2
+
+![SubmitHvRequestCommand from the plugin verb, alt 1 branch 2 of 2: bound, part 2 of 2](c4/rendered/AM1-17-04-alt1-2-part2.svg)
+
+View: AM1-17-04-alt1-2-part2
+
+![SubmitHvRequestCommand from the plugin verb, alt 2 branch 1 of 2: workspace unresolved](c4/rendered/AM1-17-04-alt2-1.svg)
+
+View: AM1-17-04-alt2-1
+
+![SubmitHvRequestCommand from the plugin verb, alt 2 branch 2 of 2: resolved, part 1 of 4](c4/rendered/AM1-17-04-alt2-2.svg)
+
+View: AM1-17-04-alt2-2
+
+![SubmitHvRequestCommand from the plugin verb, alt 2 branch 2 of 2: resolved, part 2 of 4](c4/rendered/AM1-17-04-alt2-2-part2.svg)
+
+View: AM1-17-04-alt2-2-part2
+
+![SubmitHvRequestCommand from the plugin verb, alt 2 branch 2 of 2: resolved, part 3 of 4](c4/rendered/AM1-17-04-alt2-2-part3.svg)
+
+View: AM1-17-04-alt2-2-part3
+
+![SubmitHvRequestCommand from the plugin verb, alt 2 branch 2 of 2: resolved, part 4 of 4](c4/rendered/AM1-17-04-alt2-2-part4.svg)
+
+View: AM1-17-04-alt2-2-part4
+
+![SubmitHvRequestCommand from the plugin verb, alt 3 branch 1 of 9: malformed scope or submitter](c4/rendered/AM1-17-04-alt3-1.svg)
+
+View: AM1-17-04-alt3-1
+
+![SubmitHvRequestCommand from the plugin verb, alt 3 branch 2 of 9: scope too large, includes the submitting turn, or empty](c4/rendered/AM1-17-04-alt3-2.svg)
+
+View: AM1-17-04-alt3-2
+
+![SubmitHvRequestCommand from the plugin verb, alt 3 branch 3 of 9: turns not terminal, pending, or already reviewed, part 1 of 2](c4/rendered/AM1-17-04-alt3-3.svg)
+
+View: AM1-17-04-alt3-3
+
+![SubmitHvRequestCommand from the plugin verb, alt 3 branch 3 of 9: turns not terminal, pending, or already reviewed, part 2 of 2](c4/rendered/AM1-17-04-alt3-3-part2.svg)
+
+View: AM1-17-04-alt3-3-part2
+
+![SubmitHvRequestCommand from the plugin verb, alt 3 branch 4 of 9: no eligible reviewer, part 1 of 2](c4/rendered/AM1-17-04-alt3-4.svg)
+
+View: AM1-17-04-alt3-4
+
+![SubmitHvRequestCommand from the plugin verb, alt 3 branch 4 of 9: no eligible reviewer, part 2 of 2](c4/rendered/AM1-17-04-alt3-4-part2.svg)
+
+View: AM1-17-04-alt3-4-part2
+
+![SubmitHvRequestCommand from the plugin verb, alt 3 branch 5 of 9: same key and same inputs, part 1 of 3](c4/rendered/AM1-17-04-alt3-5.svg)
+
+View: AM1-17-04-alt3-5
+
+![SubmitHvRequestCommand from the plugin verb, alt 3 branch 5 of 9: same key and same inputs, part 2 of 3](c4/rendered/AM1-17-04-alt3-5-part2.svg)
+
+View: AM1-17-04-alt3-5-part2
+
+![SubmitHvRequestCommand from the plugin verb, alt 3 branch 5 of 9: same key and same inputs, part 3 of 3](c4/rendered/AM1-17-04-alt3-5-part3.svg)
+
+View: AM1-17-04-alt3-5-part3
+
+![SubmitHvRequestCommand from the plugin verb, alt 3 branch 6 of 9: the accepted request fails its GZIP round trip](c4/rendered/AM1-17-04-alt3-6.svg)
+
+View: AM1-17-04-alt3-6
+
+![SubmitHvRequestCommand from the plugin verb, alt 3 branch 7 of 9: key reused with other inputs](c4/rendered/AM1-17-04-alt3-7.svg)
+
+View: AM1-17-04-alt3-7
+
+![SubmitHvRequestCommand from the plugin verb, alt 3 branch 8 of 9: audit unavailable or attempts exhausted, part 1 of 2](c4/rendered/AM1-17-04-alt3-8.svg)
+
+View: AM1-17-04-alt3-8
+
+![SubmitHvRequestCommand from the plugin verb, alt 3 branch 8 of 9: audit unavailable or attempts exhausted, part 2 of 2](c4/rendered/AM1-17-04-alt3-8-part2.svg)
+
+View: AM1-17-04-alt3-8-part2
+
+![SubmitHvRequestCommand from the plugin verb, alt 3 branch 9 of 9: admitted, part 1 of 4](c4/rendered/AM1-17-04-alt3-9.svg)
+
+View: AM1-17-04-alt3-9
+
+![SubmitHvRequestCommand from the plugin verb, alt 3 branch 9 of 9: admitted, part 2 of 4](c4/rendered/AM1-17-04-alt3-9-part2.svg)
+
+View: AM1-17-04-alt3-9-part2
+
+![SubmitHvRequestCommand from the plugin verb, alt 3 branch 9 of 9: admitted, part 3 of 4](c4/rendered/AM1-17-04-alt3-9-part3.svg)
+
+View: AM1-17-04-alt3-9-part3
+
+![SubmitHvRequestCommand from the plugin verb, alt 3 branch 9 of 9: admitted, part 4 of 4](c4/rendered/AM1-17-04-alt3-9-part4.svg)
+
+View: AM1-17-04-alt3-9-part4
 
 ### 17.5 GetHvRequestQuery and QueryHvRequestsQuery
 
-```mermaid
-sequenceDiagram
-    participant Caller
-    participant API
-    participant H
-    participant DB
-    Caller->>API: GET requests/{hvRequestId}, or GET requests with filters
-    API->>H: QueryAsync, after the workspace behavior
-    alt one request, not found
-        H-->>Caller: 404 not_found, hv_request
-    else one request, found
-        H->>DB: load turns, references, responses, current run, last chunks
-        alt output present and audit ledger unavailable
-            H-->>Caller: 503 audit_unavailable
-        else evidence removed
-            H-->>Caller: 200 HvRequestResult, lastOutput empty, outputRemoved true, no read recorded
-        else read recorded, and a last chunk fails to decompress
-            H-->>Caller: 500 evidence_corrupt
-        else read recorded or no output
-            H-->>Caller: 200 HvRequestResult with progress, etaStatus, and the last 20 lines
-        end
-    else query with an unknown filter or out-of-bounds page
-        H-->>Caller: 400 validation_error, details.field
-    else query
-        H->>DB: PagedQuery, CreatedUtc descending
-        H-->>Caller: 200 PageResult of summaries
-    end
-```
+![GetHvRequestQuery and QueryHvRequestsQuery, part 1 of 2](c4/rendered/AM1-17-05.svg)
+
+View: AM1-17-05
+
+![GetHvRequestQuery and QueryHvRequestsQuery, part 2 of 2](c4/rendered/AM1-17-05-part2.svg)
+
+View: AM1-17-05-part2
+
+![GetHvRequestQuery and QueryHvRequestsQuery, alt 1 branch 1 of 4: one request, not found](c4/rendered/AM1-17-05-alt1-1.svg)
+
+View: AM1-17-05-alt1-1
+
+![GetHvRequestQuery and QueryHvRequestsQuery, alt 1 branch 2 of 4: one request, found, part 1 of 2](c4/rendered/AM1-17-05-alt1-2.svg)
+
+View: AM1-17-05-alt1-2
+
+![GetHvRequestQuery and QueryHvRequestsQuery, alt 1 branch 2 of 4: one request, found, part 2 of 2](c4/rendered/AM1-17-05-alt1-2-part2.svg)
+
+View: AM1-17-05-alt1-2-part2
+
+![GetHvRequestQuery and QueryHvRequestsQuery, alt 2 branch 1 of 4: output present and audit ledger unavailable](c4/rendered/AM1-17-05-alt2-1.svg)
+
+View: AM1-17-05-alt2-1
+
+![GetHvRequestQuery and QueryHvRequestsQuery, alt 2 branch 2 of 4: evidence removed](c4/rendered/AM1-17-05-alt2-2.svg)
+
+View: AM1-17-05-alt2-2
+
+![GetHvRequestQuery and QueryHvRequestsQuery, alt 2 branch 3 of 4: read recorded, and a last chunk fails to decompress](c4/rendered/AM1-17-05-alt2-3.svg)
+
+View: AM1-17-05-alt2-3
+
+![GetHvRequestQuery and QueryHvRequestsQuery, alt 2 branch 4 of 4: read recorded or no output](c4/rendered/AM1-17-05-alt2-4.svg)
+
+View: AM1-17-05-alt2-4
+
+![GetHvRequestQuery and QueryHvRequestsQuery, alt 1 branch 3 of 4: query with an unknown filter or out-of-bounds page, part 1 of 2](c4/rendered/AM1-17-05-alt1-3.svg)
+
+View: AM1-17-05-alt1-3
+
+![GetHvRequestQuery and QueryHvRequestsQuery, alt 1 branch 3 of 4: query with an unknown filter or out-of-bounds page, part 2 of 2](c4/rendered/AM1-17-05-alt1-3-part2.svg)
+
+View: AM1-17-05-alt1-3-part2
+
+![GetHvRequestQuery and QueryHvRequestsQuery, alt 1 branch 4 of 4: query, part 1 of 2](c4/rendered/AM1-17-05-alt1-4.svg)
+
+View: AM1-17-05-alt1-4
+
+![GetHvRequestQuery and QueryHvRequestsQuery, alt 1 branch 4 of 4: query, part 2 of 2](c4/rendered/AM1-17-05-alt1-4-part2.svg)
+
+View: AM1-17-05-alt1-4-part2
 
 ### 17.6 CancelHvRequestCommand
 
-```mermaid
-sequenceDiagram
-    participant Caller
-    participant API
-    participant H
-    participant DB
-    participant W
-    participant AD
-    Caller->>API: POST requests/{hvRequestId}/cancel
-    API->>H: SendAsync, after the workspace behavior
-    H->>DB: SerializableWrite with AuditLedgerGuard
-    alt not found
-        H-->>Caller: 404 not_found, hv_request
-    else Finalizing, Completed, or Failed
-        H-->>Caller: 409 hv_request_not_cancelable
-    else already CancelRequested or Canceled
-        H-->>Caller: 200 unchanged
-    else audit unavailable or attempts exhausted
-        H-->>Caller: 503 audit_unavailable or 409 conflict, retryable true
-    else Queued
-        DB-->>H: Canceled, turns released, hv_canceled
-        H-->>Caller: 200 Canceled
-    else Running
-        DB-->>H: CancelRequested, hv_cancel_requested
-        H-->>Caller: 200 CancelRequested
-        W->>DB: RecordHvRunHeartbeatCommand
-        DB-->>W: cancelRequested true
-        W->>AD: kill the process
-        W->>DB: FailHvRunCommand canceled, through FailAttempt
-        alt failed
-            DB-->>W: run Canceled, request Canceled, turns released, hv_canceled
-        else stale_fence or audit_unavailable
-            DB-->>W: nothing written, the request stays CancelRequested
-            Note over W,DB: the lease expiry completes the cancel, ExpireHvRunLeasesCommand with HvRetryDecision
-        end
-    end
-```
+![CancelHvRequestCommand, part 1 of 3](c4/rendered/AM1-17-06.svg)
+
+View: AM1-17-06
+
+![CancelHvRequestCommand, part 2 of 3](c4/rendered/AM1-17-06-part2.svg)
+
+View: AM1-17-06-part2
+
+![CancelHvRequestCommand, part 3 of 3](c4/rendered/AM1-17-06-part3.svg)
+
+View: AM1-17-06-part3
+
+![CancelHvRequestCommand, alt 1 branch 1 of 6: not found](c4/rendered/AM1-17-06-alt1-1.svg)
+
+View: AM1-17-06-alt1-1
+
+![CancelHvRequestCommand, alt 1 branch 2 of 6: Finalizing, Completed, or Failed](c4/rendered/AM1-17-06-alt1-2.svg)
+
+View: AM1-17-06-alt1-2
+
+![CancelHvRequestCommand, alt 1 branch 3 of 6: already CancelRequested or Canceled](c4/rendered/AM1-17-06-alt1-3.svg)
+
+View: AM1-17-06-alt1-3
+
+![CancelHvRequestCommand, alt 1 branch 4 of 6: audit unavailable or attempts exhausted](c4/rendered/AM1-17-06-alt1-4.svg)
+
+View: AM1-17-06-alt1-4
+
+![CancelHvRequestCommand, alt 1 branch 5 of 6: Queued, part 1 of 2](c4/rendered/AM1-17-06-alt1-5.svg)
+
+View: AM1-17-06-alt1-5
+
+![CancelHvRequestCommand, alt 1 branch 5 of 6: Queued, part 2 of 2](c4/rendered/AM1-17-06-alt1-5-part2.svg)
+
+View: AM1-17-06-alt1-5-part2
+
+![CancelHvRequestCommand, alt 1 branch 6 of 6: Running, part 1 of 5](c4/rendered/AM1-17-06-alt1-6.svg)
+
+View: AM1-17-06-alt1-6
+
+![CancelHvRequestCommand, alt 1 branch 6 of 6: Running, part 2 of 5](c4/rendered/AM1-17-06-alt1-6-part2.svg)
+
+View: AM1-17-06-alt1-6-part2
+
+![CancelHvRequestCommand, alt 1 branch 6 of 6: Running, part 3 of 5](c4/rendered/AM1-17-06-alt1-6-part3.svg)
+
+View: AM1-17-06-alt1-6-part3
+
+![CancelHvRequestCommand, alt 1 branch 6 of 6: Running, part 4 of 5](c4/rendered/AM1-17-06-alt1-6-part4.svg)
+
+View: AM1-17-06-alt1-6-part4
+
+![CancelHvRequestCommand, alt 1 branch 6 of 6: Running, part 5 of 5](c4/rendered/AM1-17-06-alt1-6-part5.svg)
+
+View: AM1-17-06-alt1-6-part5
+
+![CancelHvRequestCommand, alt 2 branch 1 of 2: failed](c4/rendered/AM1-17-06-alt2-1.svg)
+
+View: AM1-17-06-alt2-1
+
+![CancelHvRequestCommand, alt 2 branch 2 of 2: stale_fence or audit_unavailable, part 1 of 2](c4/rendered/AM1-17-06-alt2-2.svg)
+
+View: AM1-17-06-alt2-2
+
+![CancelHvRequestCommand, alt 2 branch 2 of 2: stale_fence or audit_unavailable, part 2 of 2](c4/rendered/AM1-17-06-alt2-2-part2.svg)
+
+View: AM1-17-06-alt2-2-part2
 
 ### 17.7 A review attempt, from claim to finalization
 
-```mermaid
-sequenceDiagram
-    participant W
-    participant H
-    participant DB
-    participant AD
-    W->>H: ClaimHvRunCommand
-    H->>DB: SerializableWrite: the oldest claimable Queued request in the order of 14.4, a reviewer with capacity, FencedLease Claim
-    alt nothing claimable
-        H-->>W: null
-    else claimed
-        DB-->>H: run Claimed, request Running, hv_started
-        H-->>W: claim with fence token
-        W->>DB: AuditLedgerGuard RecordRead, then the Request evidence for the brief
-        alt read refused
-            Note over W: attempt ends before launch without another write, the lease expires later, 17.9
-        else Request evidence fails to decompress
-            W->>H: FailHvRunCommand evidence_corrupt, a server incident, the reviewer unchanged
-        else brief built
-            W->>AD: BuildLaunch and start the process inside a containment bound to the worker
-            alt launch failed
-                W->>H: FailHvRunCommand reviewer_launch_failed
-                Note over W,H: ref the execution failure sequence, 17.8, and every FailHvRunCommand of this sequence is handled by FailAttempt, 16.2
-                Note over W,H: failed ends the attempt with the state written, stale_fence or audit_unavailable ends it with no further write
-            else started
-                W->>H: RecordHvRunStartCommand with the process id
-                alt stale fence or audit unavailable at the start
-                    H-->>W: stale_fence or 503 audit_unavailable
-                    W->>AD: kill the process
-                    Note over W: attempt ends without another write, the lease expires later, 17.9
-                else retryable conflict at the start
-                    H-->>W: 409 conflict, retryable true
-                    Note over W,H: the worker repeats the same call with the same process id
-                else start recorded
-                    H->>DB: run Running, StartedUtc, ProcessId
-                    W->>H: AppendHvRunOutputCommand sequence 1, the hv_brief record
-                    Note over W,H: every append, sequence 1 and the final flush included, goes through AppendBatch, 16.2, whose refusals are the branches below
-                    Note over W,AD: ref StreamOneAttempt (below)
-                    alt stale fence or audit unavailable during the run
-                        W->>AD: kill the process
-                        Note over W: attempt ends without another write, the lease expires later, 17.9
-                    else cancel requested
-                        W->>AD: kill the process
-                        W->>H: FailHvRunCommand canceled
-                    else evidence_corrupt, a non-retryable conflict, or a 400 validation_error from an append
-                        W->>AD: kill the process
-                        W->>H: FailHvRunCommand evidence_corrupt, a server incident, the reviewer unchanged
-                    else exited with a nonzero code
-                        W->>H: FailHvRunCommand reviewer_exited_nonzero
-                    else exited with code 0
-                        W->>H: AppendHvRunOutputCommand, the remaining lines and the hv_provenance lines
-                        W->>H: CloseHvRunOutputCommand with the chunk count
-                        alt request CancelRequested at close
-                            H-->>W: run Canceled, request Canceled, turns released
-                        else 409 conflict with details.field chunkCount
-                            H-->>W: conflict, chunkCount
-                            Note over W,H: the worker appends what is missing and closes again
-                        else retryable conflict at the close
-                            H-->>W: 409 conflict, retryable true
-                            Note over W,H: the worker repeats the same close
-                        else stale fence or audit unavailable
-                            H-->>W: stale_fence or 503 audit_unavailable
-                            Note over W: attempt ends without another write, the lease expires later, 17.9
-                        else
-                            H-->>W: request Finalizing
-                            Note over W,H: ref FinalizeOneRequest (below)
-                        end
-                    end
-                end
-            end
-        end
-    end
-```
+![A review attempt, from claim to finalization, part 1 of 2](c4/rendered/AM1-17-07.svg)
+
+View: AM1-17-07
+
+![A review attempt, from claim to finalization, part 2 of 2](c4/rendered/AM1-17-07-part2.svg)
+
+View: AM1-17-07-part2
+
+![A review attempt, from claim to finalization, alt 1 branch 1 of 2: nothing claimable](c4/rendered/AM1-17-07-alt1-1.svg)
+
+View: AM1-17-07-alt1-1
+
+![A review attempt, from claim to finalization, alt 1 branch 2 of 2: claimed, part 1 of 3](c4/rendered/AM1-17-07-alt1-2.svg)
+
+View: AM1-17-07-alt1-2
+
+![A review attempt, from claim to finalization, alt 1 branch 2 of 2: claimed, part 2 of 3](c4/rendered/AM1-17-07-alt1-2-part2.svg)
+
+View: AM1-17-07-alt1-2-part2
+
+![A review attempt, from claim to finalization, alt 1 branch 2 of 2: claimed, part 3 of 3](c4/rendered/AM1-17-07-alt1-2-part3.svg)
+
+View: AM1-17-07-alt1-2-part3
+
+![A review attempt, from claim to finalization, alt 2 branch 1 of 3: read refused, part 1 of 3](c4/rendered/AM1-17-07-alt2-1.svg)
+
+View: AM1-17-07-alt2-1
+
+![A review attempt, from claim to finalization, alt 2 branch 1 of 3: read refused, part 2 of 3](c4/rendered/AM1-17-07-alt2-1-part2.svg)
+
+View: AM1-17-07-alt2-1-part2
+
+![A review attempt, from claim to finalization, alt 2 branch 1 of 3: read refused, part 3 of 3](c4/rendered/AM1-17-07-alt2-1-part3.svg)
+
+View: AM1-17-07-alt2-1-part3
+
+![A review attempt, from claim to finalization, alt 2 branch 2 of 3: Request evidence fails to decompress](c4/rendered/AM1-17-07-alt2-2.svg)
+
+View: AM1-17-07-alt2-2
+
+![A review attempt, from claim to finalization, alt 2 branch 3 of 3: brief built, part 1 of 2](c4/rendered/AM1-17-07-alt2-3.svg)
+
+View: AM1-17-07-alt2-3
+
+![A review attempt, from claim to finalization, alt 2 branch 3 of 3: brief built, part 2 of 2](c4/rendered/AM1-17-07-alt2-3-part2.svg)
+
+View: AM1-17-07-alt2-3-part2
+
+![A review attempt, from claim to finalization, alt 3 branch 1 of 2: launch failed, part 1 of 7](c4/rendered/AM1-17-07-alt3-1.svg)
+
+View: AM1-17-07-alt3-1
+
+![A review attempt, from claim to finalization, alt 3 branch 1 of 2: launch failed, part 2 of 7](c4/rendered/AM1-17-07-alt3-1-part2.svg)
+
+View: AM1-17-07-alt3-1-part2
+
+![A review attempt, from claim to finalization, alt 3 branch 1 of 2: launch failed, part 3 of 7](c4/rendered/AM1-17-07-alt3-1-part3.svg)
+
+View: AM1-17-07-alt3-1-part3
+
+![A review attempt, from claim to finalization, alt 3 branch 1 of 2: launch failed, part 4 of 7](c4/rendered/AM1-17-07-alt3-1-part4.svg)
+
+View: AM1-17-07-alt3-1-part4
+
+![A review attempt, from claim to finalization, alt 3 branch 1 of 2: launch failed, part 5 of 7](c4/rendered/AM1-17-07-alt3-1-part5.svg)
+
+View: AM1-17-07-alt3-1-part5
+
+![A review attempt, from claim to finalization, alt 3 branch 1 of 2: launch failed, part 6 of 7](c4/rendered/AM1-17-07-alt3-1-part6.svg)
+
+View: AM1-17-07-alt3-1-part6
+
+![A review attempt, from claim to finalization, alt 3 branch 1 of 2: launch failed, part 7 of 7](c4/rendered/AM1-17-07-alt3-1-part7.svg)
+
+View: AM1-17-07-alt3-1-part7
+
+![A review attempt, from claim to finalization, alt 3 branch 2 of 2: started](c4/rendered/AM1-17-07-alt3-2.svg)
+
+View: AM1-17-07-alt3-2
+
+![A review attempt, from claim to finalization, alt 4 branch 1 of 3: stale fence or audit unavailable at the start, part 1 of 2](c4/rendered/AM1-17-07-alt4-1.svg)
+
+View: AM1-17-07-alt4-1
+
+![A review attempt, from claim to finalization, alt 4 branch 1 of 3: stale fence or audit unavailable at the start, part 2 of 2](c4/rendered/AM1-17-07-alt4-1-part2.svg)
+
+View: AM1-17-07-alt4-1-part2
+
+![A review attempt, from claim to finalization, alt 4 branch 2 of 3: retryable conflict at the start, part 1 of 2](c4/rendered/AM1-17-07-alt4-2.svg)
+
+View: AM1-17-07-alt4-2
+
+![A review attempt, from claim to finalization, alt 4 branch 2 of 3: retryable conflict at the start, part 2 of 2](c4/rendered/AM1-17-07-alt4-2-part2.svg)
+
+View: AM1-17-07-alt4-2-part2
+
+![A review attempt, from claim to finalization, alt 4 branch 3 of 3: start recorded, part 1 of 7](c4/rendered/AM1-17-07-alt4-3.svg)
+
+View: AM1-17-07-alt4-3
+
+![A review attempt, from claim to finalization, alt 4 branch 3 of 3: start recorded, part 2 of 7](c4/rendered/AM1-17-07-alt4-3-part2.svg)
+
+View: AM1-17-07-alt4-3-part2
+
+![A review attempt, from claim to finalization, alt 4 branch 3 of 3: start recorded, part 3 of 7](c4/rendered/AM1-17-07-alt4-3-part3.svg)
+
+View: AM1-17-07-alt4-3-part3
+
+![A review attempt, from claim to finalization, alt 4 branch 3 of 3: start recorded, part 4 of 7](c4/rendered/AM1-17-07-alt4-3-part4.svg)
+
+View: AM1-17-07-alt4-3-part4
+
+![A review attempt, from claim to finalization, alt 4 branch 3 of 3: start recorded, part 5 of 7](c4/rendered/AM1-17-07-alt4-3-part5.svg)
+
+View: AM1-17-07-alt4-3-part5
+
+![A review attempt, from claim to finalization, alt 4 branch 3 of 3: start recorded, part 6 of 7](c4/rendered/AM1-17-07-alt4-3-part6.svg)
+
+View: AM1-17-07-alt4-3-part6
+
+![A review attempt, from claim to finalization, alt 4 branch 3 of 3: start recorded, part 7 of 7](c4/rendered/AM1-17-07-alt4-3-part7.svg)
+
+View: AM1-17-07-alt4-3-part7
+
+![A review attempt, from claim to finalization, alt 5 branch 1 of 5: stale fence or audit unavailable during the run, part 1 of 2](c4/rendered/AM1-17-07-alt5-1.svg)
+
+View: AM1-17-07-alt5-1
+
+![A review attempt, from claim to finalization, alt 5 branch 1 of 5: stale fence or audit unavailable during the run, part 2 of 2](c4/rendered/AM1-17-07-alt5-1-part2.svg)
+
+View: AM1-17-07-alt5-1-part2
+
+![A review attempt, from claim to finalization, alt 5 branch 2 of 5: cancel requested, part 1 of 2](c4/rendered/AM1-17-07-alt5-2.svg)
+
+View: AM1-17-07-alt5-2
+
+![A review attempt, from claim to finalization, alt 5 branch 2 of 5: cancel requested, part 2 of 2](c4/rendered/AM1-17-07-alt5-2-part2.svg)
+
+View: AM1-17-07-alt5-2-part2
+
+![A review attempt, from claim to finalization, alt 5 branch 3 of 5: evidence_corrupt, a non-retryable conflict, or a 400 validation_error from an append, part 1 of 3](c4/rendered/AM1-17-07-alt5-3.svg)
+
+View: AM1-17-07-alt5-3
+
+![A review attempt, from claim to finalization, alt 5 branch 3 of 5: evidence_corrupt, a non-retryable conflict, or a 400 validation_error from an append, part 2 of 3](c4/rendered/AM1-17-07-alt5-3-part2.svg)
+
+View: AM1-17-07-alt5-3-part2
+
+![A review attempt, from claim to finalization, alt 5 branch 3 of 5: evidence_corrupt, a non-retryable conflict, or a 400 validation_error from an append, part 3 of 3](c4/rendered/AM1-17-07-alt5-3-part3.svg)
+
+View: AM1-17-07-alt5-3-part3
+
+![A review attempt, from claim to finalization, alt 5 branch 4 of 5: exited with a nonzero code](c4/rendered/AM1-17-07-alt5-4.svg)
+
+View: AM1-17-07-alt5-4
+
+![A review attempt, from claim to finalization, alt 5 branch 5 of 5: exited with code 0](c4/rendered/AM1-17-07-alt5-5.svg)
+
+View: AM1-17-07-alt5-5
+
+![A review attempt, from claim to finalization, alt 6 branch 1 of 5: request CancelRequested at close](c4/rendered/AM1-17-07-alt6-1.svg)
+
+View: AM1-17-07-alt6-1
+
+![A review attempt, from claim to finalization, alt 6 branch 2 of 5: 409 conflict with details.field chunkCount, part 1 of 2](c4/rendered/AM1-17-07-alt6-2.svg)
+
+View: AM1-17-07-alt6-2
+
+![A review attempt, from claim to finalization, alt 6 branch 2 of 5: 409 conflict with details.field chunkCount, part 2 of 2](c4/rendered/AM1-17-07-alt6-2-part2.svg)
+
+View: AM1-17-07-alt6-2-part2
+
+![A review attempt, from claim to finalization, alt 6 branch 3 of 5: retryable conflict at the close](c4/rendered/AM1-17-07-alt6-3.svg)
+
+View: AM1-17-07-alt6-3
+
+![A review attempt, from claim to finalization, alt 6 branch 4 of 5: stale fence or audit unavailable](c4/rendered/AM1-17-07-alt6-4.svg)
+
+View: AM1-17-07-alt6-4
+
+![A review attempt, from claim to finalization, alt 6 branch 5 of 5: otherwise](c4/rendered/AM1-17-07-alt6-5.svg)
+
+View: AM1-17-07-alt6-5
 
 #### Nested sequence: StreamOneAttempt (the live part of the review attempt)
 
-```mermaid
-sequenceDiagram
-    participant W
-    participant H
-    participant DB
-    participant AD
-    loop until the process exits, a stale fence, an audit failure, evidence_corrupt, or a cancel
-        alt a line arrives
-            AD-->>W: output line, at once
-            W->>W: add to the buffer, start the flush timer if the buffer was empty
-            opt flush bytes reached
-                W->>H: AppendHvRunOutputCommand with the next sequence
-                Note over W,H: the same append outcomes as a timer flush, below
-            end
-        else the flush timer fires with lines buffered, whether or not another line came
-            W->>H: AppendHvRunOutputCommand with the next sequence
-            alt appended
-                H->>DB: chunk stored, manifest and progress updated
-                H-->>W: appended, streams woken
-            else retryable conflict
-                H-->>W: 409 conflict, retryable true
-                W->>H: the same append again
-            else stale fence or audit unavailable
-                H-->>W: stale_fence or 503 audit_unavailable
-            else round trip failed, a non-retryable conflict, or a malformed batch
-                H-->>W: 500 evidence_corrupt, 409 conflict retryable false, or 400 validation_error, nothing saved
-            end
-        else the heartbeat timer fires
-            W->>H: RecordHvRunHeartbeatCommand
-            alt renewed
-                H-->>W: lease extended, cancelRequested false
-            else cancel requested
-                H-->>W: cancelRequested true
-            else retryable conflict
-                H-->>W: 409 conflict, retryable true
-                W->>H: the same heartbeat again
-            else stale fence or audit unavailable
-                H-->>W: stale_fence or 503 audit_unavailable
-            end
-        end
-    end
-```
+![Nested sequence: StreamOneAttempt (the live part of the review attempt), part 1 of 2](c4/rendered/StreamOneAttempt.svg)
+
+View: StreamOneAttempt
+
+![Nested sequence: StreamOneAttempt (the live part of the review attempt), part 2 of 2](c4/rendered/StreamOneAttempt-part2.svg)
+
+View: StreamOneAttempt-part2
+
+![Nested sequence: StreamOneAttempt (the live part of the review attempt), loop 1: until the process exits, a stale fence, an audit failure, evidence_corrupt, or a cancel, part 1 of 3](c4/rendered/StreamOneAttempt-loop1.svg)
+
+View: StreamOneAttempt-loop1
+
+![Nested sequence: StreamOneAttempt (the live part of the review attempt), loop 1: until the process exits, a stale fence, an audit failure, evidence_corrupt, or a cancel, part 2 of 3](c4/rendered/StreamOneAttempt-loop1-part2.svg)
+
+View: StreamOneAttempt-loop1-part2
+
+![Nested sequence: StreamOneAttempt (the live part of the review attempt), loop 1: until the process exits, a stale fence, an audit failure, evidence_corrupt, or a cancel, part 3 of 3](c4/rendered/StreamOneAttempt-loop1-part3.svg)
+
+View: StreamOneAttempt-loop1-part3
+
+![Nested sequence: StreamOneAttempt (the live part of the review attempt), alt 1 branch 1 of 3: a line arrives, part 1 of 2](c4/rendered/StreamOneAttempt-alt1-1.svg)
+
+View: StreamOneAttempt-alt1-1
+
+![Nested sequence: StreamOneAttempt (the live part of the review attempt), alt 1 branch 1 of 3: a line arrives, part 2 of 2](c4/rendered/StreamOneAttempt-alt1-1-part2.svg)
+
+View: StreamOneAttempt-alt1-1-part2
+
+![Nested sequence: StreamOneAttempt (the live part of the review attempt), opt 1: flush bytes reached, part 1 of 3](c4/rendered/StreamOneAttempt-opt1.svg)
+
+View: StreamOneAttempt-opt1
+
+![Nested sequence: StreamOneAttempt (the live part of the review attempt), opt 1: flush bytes reached, part 2 of 3](c4/rendered/StreamOneAttempt-opt1-part2.svg)
+
+View: StreamOneAttempt-opt1-part2
+
+![Nested sequence: StreamOneAttempt (the live part of the review attempt), opt 1: flush bytes reached, part 3 of 3](c4/rendered/StreamOneAttempt-opt1-part3.svg)
+
+View: StreamOneAttempt-opt1-part3
+
+![Nested sequence: StreamOneAttempt (the live part of the review attempt), alt 1 branch 2 of 3: the flush timer fires with lines buffered, whether or not another line came, part 1 of 2](c4/rendered/StreamOneAttempt-alt1-2.svg)
+
+View: StreamOneAttempt-alt1-2
+
+![Nested sequence: StreamOneAttempt (the live part of the review attempt), alt 1 branch 2 of 3: the flush timer fires with lines buffered, whether or not another line came, part 2 of 2](c4/rendered/StreamOneAttempt-alt1-2-part2.svg)
+
+View: StreamOneAttempt-alt1-2-part2
+
+![Nested sequence: StreamOneAttempt (the live part of the review attempt), alt 2 branch 1 of 4: appended, part 1 of 2](c4/rendered/StreamOneAttempt-alt2-1.svg)
+
+View: StreamOneAttempt-alt2-1
+
+![Nested sequence: StreamOneAttempt (the live part of the review attempt), alt 2 branch 1 of 4: appended, part 2 of 2](c4/rendered/StreamOneAttempt-alt2-1-part2.svg)
+
+View: StreamOneAttempt-alt2-1-part2
+
+![Nested sequence: StreamOneAttempt (the live part of the review attempt), alt 2 branch 2 of 4: retryable conflict](c4/rendered/StreamOneAttempt-alt2-2.svg)
+
+View: StreamOneAttempt-alt2-2
+
+![Nested sequence: StreamOneAttempt (the live part of the review attempt), alt 2 branch 3 of 4: stale fence or audit unavailable](c4/rendered/StreamOneAttempt-alt2-3.svg)
+
+View: StreamOneAttempt-alt2-3
+
+![Nested sequence: StreamOneAttempt (the live part of the review attempt), alt 2 branch 4 of 4: round trip failed, a non-retryable conflict, or a malformed batch, part 1 of 2](c4/rendered/StreamOneAttempt-alt2-4.svg)
+
+View: StreamOneAttempt-alt2-4
+
+![Nested sequence: StreamOneAttempt (the live part of the review attempt), alt 2 branch 4 of 4: round trip failed, a non-retryable conflict, or a malformed batch, part 2 of 2](c4/rendered/StreamOneAttempt-alt2-4-part2.svg)
+
+View: StreamOneAttempt-alt2-4-part2
+
+![Nested sequence: StreamOneAttempt (the live part of the review attempt), alt 1 branch 3 of 3: the heartbeat timer fires](c4/rendered/StreamOneAttempt-alt1-3.svg)
+
+View: StreamOneAttempt-alt1-3
+
+![Nested sequence: StreamOneAttempt (the live part of the review attempt), alt 3 branch 1 of 4: renewed](c4/rendered/StreamOneAttempt-alt3-1.svg)
+
+View: StreamOneAttempt-alt3-1
+
+![Nested sequence: StreamOneAttempt (the live part of the review attempt), alt 3 branch 2 of 4: cancel requested](c4/rendered/StreamOneAttempt-alt3-2.svg)
+
+View: StreamOneAttempt-alt3-2
+
+![Nested sequence: StreamOneAttempt (the live part of the review attempt), alt 3 branch 3 of 4: retryable conflict](c4/rendered/StreamOneAttempt-alt3-3.svg)
+
+View: StreamOneAttempt-alt3-3
+
+![Nested sequence: StreamOneAttempt (the live part of the review attempt), alt 3 branch 4 of 4: stale fence or audit unavailable](c4/rendered/StreamOneAttempt-alt3-4.svg)
+
+View: StreamOneAttempt-alt3-4
 
 #### Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt)
 
-```mermaid
-sequenceDiagram
-    participant W
-    participant H
-    participant DB
-    W->>H: FinalizeHvRequestCommand
-    alt already Completed
-        H-->>W: already_completed, nothing written
-    else not Finalizing
-        H-->>W: not_finalizable, nothing written
-    else Finalizing
-        H->>DB: AuditLedgerGuard RecordRead of the run's chunks
-        alt read refused
-            H-->>W: 503 audit_unavailable, the request stays Finalizing
-        else read recorded
-            H->>DB: read the run and its chunks, no transaction
-            H->>H: policy HvFinalVerification V-1 to V-8
-            alt a step failed
-                H->>H: FailHvRunCommand with the stored fence and the code
-                alt failed
-                    H-->>W: verification_failed, request Queued or Failed
-                else already_completed, not_finalizable, or stale_fence
-                    H-->>W: already_completed or not_finalizable, nothing changed
-                else 503 audit_unavailable or 409 conflict
-                    H-->>W: that refusal, the request stays Finalizing for the sweep
-                end
-            else verified
-                opt linked responses and Mode not Off
-                    H->>H: EvaluateStalenessCommand for the linked responses
-                end
-                H->>DB: SerializableWrite with AuditLedgerGuard: re-check, then CommitFinalResult
-                alt state differs from the reads
-                    DB-->>H: attempt ends, the unit starts again from its status check
-                else audit unavailable or attempts exhausted
-                    H-->>W: 503 audit_unavailable or 409 conflict, the request stays Finalizing
-                else result compression failed its round trip, or a stored model grade with other input
-                    DB-->>H: rolled back, nothing visible
-                    H->>H: FailHvRunCommand evidence_corrupt or model_grade_conflict, a server fault, outcomes as above
-                else a model grade guard failed, retryable
-                    DB-->>H: attempt ends, the unit starts again from its status check
-                else committed
-                    DB-->>H: assessments, findings of every scope, hostile reviews, turns Final, grades, Completed, hv_completed
-                    H-->>W: completed with the overall verdict
-                end
-            end
-        end
-    end
-```
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt)](c4/rendered/FinalizeOneRequest.svg)
+
+View: FinalizeOneRequest
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), alt 1 branch 1 of 3: already Completed](c4/rendered/FinalizeOneRequest-alt1-1.svg)
+
+View: FinalizeOneRequest-alt1-1
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), alt 1 branch 2 of 3: not Finalizing](c4/rendered/FinalizeOneRequest-alt1-2.svg)
+
+View: FinalizeOneRequest-alt1-2
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), alt 1 branch 3 of 3: Finalizing, part 1 of 2](c4/rendered/FinalizeOneRequest-alt1-3.svg)
+
+View: FinalizeOneRequest-alt1-3
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), alt 1 branch 3 of 3: Finalizing, part 2 of 2](c4/rendered/FinalizeOneRequest-alt1-3-part2.svg)
+
+View: FinalizeOneRequest-alt1-3-part2
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), alt 2 branch 1 of 2: read refused](c4/rendered/FinalizeOneRequest-alt2-1.svg)
+
+View: FinalizeOneRequest-alt2-1
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), alt 2 branch 2 of 2: read recorded, part 1 of 3](c4/rendered/FinalizeOneRequest-alt2-2.svg)
+
+View: FinalizeOneRequest-alt2-2
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), alt 2 branch 2 of 2: read recorded, part 2 of 3](c4/rendered/FinalizeOneRequest-alt2-2-part2.svg)
+
+View: FinalizeOneRequest-alt2-2-part2
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), alt 2 branch 2 of 2: read recorded, part 3 of 3](c4/rendered/FinalizeOneRequest-alt2-2-part3.svg)
+
+View: FinalizeOneRequest-alt2-2-part3
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), alt 3 branch 1 of 2: a step failed, part 1 of 3](c4/rendered/FinalizeOneRequest-alt3-1.svg)
+
+View: FinalizeOneRequest-alt3-1
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), alt 3 branch 1 of 2: a step failed, part 2 of 3](c4/rendered/FinalizeOneRequest-alt3-1-part2.svg)
+
+View: FinalizeOneRequest-alt3-1-part2
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), alt 3 branch 1 of 2: a step failed, part 3 of 3](c4/rendered/FinalizeOneRequest-alt3-1-part3.svg)
+
+View: FinalizeOneRequest-alt3-1-part3
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), alt 4 branch 1 of 3: failed](c4/rendered/FinalizeOneRequest-alt4-1.svg)
+
+View: FinalizeOneRequest-alt4-1
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), alt 4 branch 2 of 3: already_completed, not_finalizable, or stale_fence, part 1 of 2](c4/rendered/FinalizeOneRequest-alt4-2.svg)
+
+View: FinalizeOneRequest-alt4-2
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), alt 4 branch 2 of 3: already_completed, not_finalizable, or stale_fence, part 2 of 2](c4/rendered/FinalizeOneRequest-alt4-2-part2.svg)
+
+View: FinalizeOneRequest-alt4-2-part2
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), alt 4 branch 3 of 3: 503 audit_unavailable or 409 conflict](c4/rendered/FinalizeOneRequest-alt4-3.svg)
+
+View: FinalizeOneRequest-alt4-3
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), alt 3 branch 2 of 2: verified, part 1 of 2](c4/rendered/FinalizeOneRequest-alt3-2.svg)
+
+View: FinalizeOneRequest-alt3-2
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), alt 3 branch 2 of 2: verified, part 2 of 2](c4/rendered/FinalizeOneRequest-alt3-2-part2.svg)
+
+View: FinalizeOneRequest-alt3-2-part2
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), opt 1: linked responses and Mode not Off, part 1 of 2](c4/rendered/FinalizeOneRequest-opt1.svg)
+
+View: FinalizeOneRequest-opt1
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), opt 1: linked responses and Mode not Off, part 2 of 2](c4/rendered/FinalizeOneRequest-opt1-part2.svg)
+
+View: FinalizeOneRequest-opt1-part2
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), alt 5 branch 1 of 5: state differs from the reads](c4/rendered/FinalizeOneRequest-alt5-1.svg)
+
+View: FinalizeOneRequest-alt5-1
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), alt 5 branch 2 of 5: audit unavailable or attempts exhausted](c4/rendered/FinalizeOneRequest-alt5-2.svg)
+
+View: FinalizeOneRequest-alt5-2
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), alt 5 branch 3 of 5: result compression failed its round trip, or a stored model grade with other input, part 1 of 3](c4/rendered/FinalizeOneRequest-alt5-3.svg)
+
+View: FinalizeOneRequest-alt5-3
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), alt 5 branch 3 of 5: result compression failed its round trip, or a stored model grade with other input, part 2 of 3](c4/rendered/FinalizeOneRequest-alt5-3-part2.svg)
+
+View: FinalizeOneRequest-alt5-3-part2
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), alt 5 branch 3 of 5: result compression failed its round trip, or a stored model grade with other input, part 3 of 3](c4/rendered/FinalizeOneRequest-alt5-3-part3.svg)
+
+View: FinalizeOneRequest-alt5-3-part3
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), alt 5 branch 4 of 5: a model grade guard failed, retryable](c4/rendered/FinalizeOneRequest-alt5-4.svg)
+
+View: FinalizeOneRequest-alt5-4
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), alt 5 branch 5 of 5: committed, part 1 of 2](c4/rendered/FinalizeOneRequest-alt5-5.svg)
+
+View: FinalizeOneRequest-alt5-5
+
+![Nested sequence: FinalizeOneRequest (FinalizeHvRequestCommand after a closed attempt), alt 5 branch 5 of 5: committed, part 2 of 2](c4/rendered/FinalizeOneRequest-alt5-5-part2.svg)
+
+View: FinalizeOneRequest-alt5-5-part2
 
 ### 17.8 An execution failure, its incident, and the reviewer going offline
 
-```mermaid
-sequenceDiagram
-    participant W
-    participant H
-    participant DB
-    participant TG
-    participant Caller
-    W->>H: FailHvRunCommand with a reviewer-attributable code
-    H->>DB: SerializableWrite with AuditLedgerGuard and FencedLease Guard
-    alt stale fence
-        H-->>W: stale_fence, nothing changed
-    else audit unavailable or attempts exhausted
-        H-->>W: 503 audit_unavailable or 409 conflict, retryable true, nothing changed
-        Note over W,H: FailAttempt ends the attempt with no further write, or repeats the call on the retryable conflict
-    else guarded
-        DB-->>H: run Failed, incident Pending, reviewer Offline, reviewer_offline
-        alt request CancelRequested
-            DB-->>H: request Canceled, turns released, responses closed, hv_canceled
-        else attempts left
-            DB-->>H: request Queued, through policy HvRetryDecision
-        else attempts exhausted
-            DB-->>H: request Failed, turns released, responses closed, hv_failed
-        end
-        H-->>W: failed with the request's next state
-        W->>H: FileHvIncidentCommand at the sweep
-        H->>DB: SerializableWrite with AuditLedgerGuard: FilingAttempts plus 1, LastFilingAttemptUtc
-        alt audit ledger unavailable
-            H-->>W: 503 audit_unavailable, triage not called, incident Pending
-        else attempt recorded
-            H->>TG: submit the report with dedupeKey hv-reviewer-id-code
-            alt triage accepted
-                TG-->>H: report id and group id
-                H->>DB: incident Filed, incident_filed
-            else triage refused or unreachable
-                TG-->>H: error
-                H->>DB: LastFilingError, retried at the next sweep
-            end
-        end
-        W->>H: ClaimHvRunCommand reassigns the Queued request to the next eligible reviewer with capacity, or writes nothing and leaves it waiting when none has capacity
-        Note over Caller,H: later, after the cause is fixed: StartHvReviewerNonceCommand, 17.3
-    end
-```
+![An execution failure, its incident, and the reviewer going offline, part 1 of 2](c4/rendered/AM1-17-08.svg)
+
+View: AM1-17-08
+
+![An execution failure, its incident, and the reviewer going offline, part 2 of 2](c4/rendered/AM1-17-08-part2.svg)
+
+View: AM1-17-08-part2
+
+![An execution failure, its incident, and the reviewer going offline, alt 1 branch 1 of 3: stale fence](c4/rendered/AM1-17-08-alt1-1.svg)
+
+View: AM1-17-08-alt1-1
+
+![An execution failure, its incident, and the reviewer going offline, alt 1 branch 2 of 3: audit unavailable or attempts exhausted, part 1 of 3](c4/rendered/AM1-17-08-alt1-2.svg)
+
+View: AM1-17-08-alt1-2
+
+![An execution failure, its incident, and the reviewer going offline, alt 1 branch 2 of 3: audit unavailable or attempts exhausted, part 2 of 3](c4/rendered/AM1-17-08-alt1-2-part2.svg)
+
+View: AM1-17-08-alt1-2-part2
+
+![An execution failure, its incident, and the reviewer going offline, alt 1 branch 2 of 3: audit unavailable or attempts exhausted, part 3 of 3](c4/rendered/AM1-17-08-alt1-2-part3.svg)
+
+View: AM1-17-08-alt1-2-part3
+
+![An execution failure, its incident, and the reviewer going offline, alt 1 branch 3 of 3: guarded, part 1 of 7](c4/rendered/AM1-17-08-alt1-3.svg)
+
+View: AM1-17-08-alt1-3
+
+![An execution failure, its incident, and the reviewer going offline, alt 1 branch 3 of 3: guarded, part 2 of 7](c4/rendered/AM1-17-08-alt1-3-part2.svg)
+
+View: AM1-17-08-alt1-3-part2
+
+![An execution failure, its incident, and the reviewer going offline, alt 1 branch 3 of 3: guarded, part 3 of 7](c4/rendered/AM1-17-08-alt1-3-part3.svg)
+
+View: AM1-17-08-alt1-3-part3
+
+![An execution failure, its incident, and the reviewer going offline, alt 1 branch 3 of 3: guarded, part 4 of 7](c4/rendered/AM1-17-08-alt1-3-part4.svg)
+
+View: AM1-17-08-alt1-3-part4
+
+![An execution failure, its incident, and the reviewer going offline, alt 1 branch 3 of 3: guarded, part 5 of 7](c4/rendered/AM1-17-08-alt1-3-part5.svg)
+
+View: AM1-17-08-alt1-3-part5
+
+![An execution failure, its incident, and the reviewer going offline, alt 1 branch 3 of 3: guarded, part 6 of 7](c4/rendered/AM1-17-08-alt1-3-part6.svg)
+
+View: AM1-17-08-alt1-3-part6
+
+![An execution failure, its incident, and the reviewer going offline, alt 1 branch 3 of 3: guarded, part 7 of 7](c4/rendered/AM1-17-08-alt1-3-part7.svg)
+
+View: AM1-17-08-alt1-3-part7
+
+![An execution failure, its incident, and the reviewer going offline, alt 2 branch 1 of 3: request CancelRequested](c4/rendered/AM1-17-08-alt2-1.svg)
+
+View: AM1-17-08-alt2-1
+
+![An execution failure, its incident, and the reviewer going offline, alt 2 branch 2 of 3: attempts left](c4/rendered/AM1-17-08-alt2-2.svg)
+
+View: AM1-17-08-alt2-2
+
+![An execution failure, its incident, and the reviewer going offline, alt 2 branch 3 of 3: attempts exhausted](c4/rendered/AM1-17-08-alt2-3.svg)
+
+View: AM1-17-08-alt2-3
+
+![An execution failure, its incident, and the reviewer going offline, alt 3 branch 1 of 2: audit ledger unavailable](c4/rendered/AM1-17-08-alt3-1.svg)
+
+View: AM1-17-08-alt3-1
+
+![An execution failure, its incident, and the reviewer going offline, alt 3 branch 2 of 2: attempt recorded](c4/rendered/AM1-17-08-alt3-2.svg)
+
+View: AM1-17-08-alt3-2
+
+![An execution failure, its incident, and the reviewer going offline, alt 4 branch 1 of 2: triage accepted, part 1 of 2](c4/rendered/AM1-17-08-alt4-1.svg)
+
+View: AM1-17-08-alt4-1
+
+![An execution failure, its incident, and the reviewer going offline, alt 4 branch 1 of 2: triage accepted, part 2 of 2](c4/rendered/AM1-17-08-alt4-1-part2.svg)
+
+View: AM1-17-08-alt4-1-part2
+
+![An execution failure, its incident, and the reviewer going offline, alt 4 branch 2 of 2: triage refused or unreachable, part 1 of 2](c4/rendered/AM1-17-08-alt4-2.svg)
+
+View: AM1-17-08-alt4-2
+
+![An execution failure, its incident, and the reviewer going offline, alt 4 branch 2 of 2: triage refused or unreachable, part 2 of 2](c4/rendered/AM1-17-08-alt4-2-part2.svg)
+
+View: AM1-17-08-alt4-2-part2
 
 ### 17.9 Recovery after a worker crash
 
-```mermaid
-sequenceDiagram
-    participant W1 as Worker A, crashed
-    participant W2 as Worker B
-    participant H
-    participant DB
-    Note over W1: crashed while its run was Running, its process gone with it
-    W2->>H: ExpireHvRunLeasesCommand at its sweep
-    H->>DB: runs Claimed or Running with an expired lease
-    alt renewed, settled, or taken over by another sweep in the meantime
-        DB-->>H: skipped by FencedLease Expire, the request untouched
-    else still Claimed or Running with the fence as read and its lease expired
-        H->>DB: run Abandoned lease_expired, fence incremented, server incident, policy HvRetryDecision
-        alt the request has a newer attempt or is terminal
-            DB-->>H: request untouched
-        else request CancelRequested
-            DB-->>H: request Canceled, turns released, responses closed, hv_canceled
-        else attempts left
-            DB-->>H: request Queued
-        else attempts exhausted
-            DB-->>H: request Failed, turns released, responses closed, hv_failed
-        end
-    end
-    H-->>W2: abandoned runs and Finalizing requests
-    W2->>H: FinalizeHvRequestCommand for each Finalizing request
-    W2->>H: ClaimHvRunCommand
-    opt worker A was alive but paused past its lease
-        W1->>H: any fenced write with the old fence
-        H-->>W1: stale_fence
-        W1->>W1: kill its process, end the attempt
-    end
-```
+![Recovery after a worker crash, part 1 of 6](c4/rendered/AM1-17-09.svg)
+
+View: AM1-17-09
+
+![Recovery after a worker crash, part 2 of 6](c4/rendered/AM1-17-09-part2.svg)
+
+View: AM1-17-09-part2
+
+![Recovery after a worker crash, part 3 of 6](c4/rendered/AM1-17-09-part3.svg)
+
+View: AM1-17-09-part3
+
+![Recovery after a worker crash, part 4 of 6](c4/rendered/AM1-17-09-part4.svg)
+
+View: AM1-17-09-part4
+
+![Recovery after a worker crash, part 5 of 6](c4/rendered/AM1-17-09-part5.svg)
+
+View: AM1-17-09-part5
+
+![Recovery after a worker crash, part 6 of 6](c4/rendered/AM1-17-09-part6.svg)
+
+View: AM1-17-09-part6
+
+![Recovery after a worker crash, alt 1 branch 1 of 2: renewed, settled, or taken over by another sweep in the meantime, part 1 of 2](c4/rendered/AM1-17-09-alt1-1.svg)
+
+View: AM1-17-09-alt1-1
+
+![Recovery after a worker crash, alt 1 branch 1 of 2: renewed, settled, or taken over by another sweep in the meantime, part 2 of 2](c4/rendered/AM1-17-09-alt1-1-part2.svg)
+
+View: AM1-17-09-alt1-1-part2
+
+![Recovery after a worker crash, alt 1 branch 2 of 2: still Claimed or Running with the fence as read and its lease expired, part 1 of 2](c4/rendered/AM1-17-09-alt1-2.svg)
+
+View: AM1-17-09-alt1-2
+
+![Recovery after a worker crash, alt 1 branch 2 of 2: still Claimed or Running with the fence as read and its lease expired, part 2 of 2](c4/rendered/AM1-17-09-alt1-2-part2.svg)
+
+View: AM1-17-09-alt1-2-part2
+
+![Recovery after a worker crash, alt 2 branch 1 of 4: the request has a newer attempt or is terminal](c4/rendered/AM1-17-09-alt2-1.svg)
+
+View: AM1-17-09-alt2-1
+
+![Recovery after a worker crash, alt 2 branch 2 of 4: request CancelRequested](c4/rendered/AM1-17-09-alt2-2.svg)
+
+View: AM1-17-09-alt2-2
+
+![Recovery after a worker crash, alt 2 branch 3 of 4: attempts left](c4/rendered/AM1-17-09-alt2-3.svg)
+
+View: AM1-17-09-alt2-3
+
+![Recovery after a worker crash, alt 2 branch 4 of 4: attempts exhausted](c4/rendered/AM1-17-09-alt2-4.svg)
+
+View: AM1-17-09-alt2-4
+
+![Recovery after a worker crash, opt 1: worker A was alive but paused past its lease, part 1 of 2](c4/rendered/AM1-17-09-opt1.svg)
+
+View: AM1-17-09-opt1
+
+![Recovery after a worker crash, opt 1: worker A was alive but paused past its lease, part 2 of 2](c4/rendered/AM1-17-09-opt1-part2.svg)
+
+View: AM1-17-09-opt1-part2
 
 ### 17.10 GetHvResultQuery and GetHvEvidenceQuery
 
-```mermaid
-sequenceDiagram
-    participant Caller
-    participant API
-    participant H
-    participant DB
-    Caller->>API: GET requests/{hvRequestId}/result, or GET requests/{hvRequestId}/evidence/{kind}
-    API->>H: QueryAsync, after the workspace behavior
-    alt unknown kind
-        H-->>Caller: 400 validation_error, details.field kind
-    else request or run not found
-        H-->>Caller: 404 not_found, hv_request or run
-    else result before Completed
-        H-->>Caller: 409 hv_result_not_ready
-    else evidence not produced yet
-        H-->>Caller: 404 hv_evidence_not_available
-    else evidence removed
-        H-->>Caller: 410 hv_evidence_removed with hashes and sizes
-    else audit ledger unavailable
-        H-->>Caller: 503 audit_unavailable
-    else available
-        H->>DB: AuditLedgerGuard RecordRead, then read the evidence
-        DB-->>H: GZIP members and chunks
-        alt a payload it decompresses fails before the first byte
-            H-->>Caller: 500 evidence_corrupt
-        else it fails after the body started
-            H-->>Caller: the body ends incomplete, which its stored hash shows
-        else decompressed or served compressed
-            H-->>Caller: 200 gzip, or decompressed when asked, streamed
-        end
-    end
-```
+![GetHvResultQuery and GetHvEvidenceQuery, part 1 of 2](c4/rendered/AM1-17-10.svg)
+
+View: AM1-17-10
+
+![GetHvResultQuery and GetHvEvidenceQuery, part 2 of 2](c4/rendered/AM1-17-10-part2.svg)
+
+View: AM1-17-10-part2
+
+![GetHvResultQuery and GetHvEvidenceQuery, alt 1 branch 1 of 7: unknown kind](c4/rendered/AM1-17-10-alt1-1.svg)
+
+View: AM1-17-10-alt1-1
+
+![GetHvResultQuery and GetHvEvidenceQuery, alt 1 branch 2 of 7: request or run not found](c4/rendered/AM1-17-10-alt1-2.svg)
+
+View: AM1-17-10-alt1-2
+
+![GetHvResultQuery and GetHvEvidenceQuery, alt 1 branch 3 of 7: result before Completed](c4/rendered/AM1-17-10-alt1-3.svg)
+
+View: AM1-17-10-alt1-3
+
+![GetHvResultQuery and GetHvEvidenceQuery, alt 1 branch 4 of 7: evidence not produced yet](c4/rendered/AM1-17-10-alt1-4.svg)
+
+View: AM1-17-10-alt1-4
+
+![GetHvResultQuery and GetHvEvidenceQuery, alt 1 branch 5 of 7: evidence removed](c4/rendered/AM1-17-10-alt1-5.svg)
+
+View: AM1-17-10-alt1-5
+
+![GetHvResultQuery and GetHvEvidenceQuery, alt 1 branch 6 of 7: audit ledger unavailable](c4/rendered/AM1-17-10-alt1-6.svg)
+
+View: AM1-17-10-alt1-6
+
+![GetHvResultQuery and GetHvEvidenceQuery, alt 1 branch 7 of 7: available, part 1 of 2](c4/rendered/AM1-17-10-alt1-7.svg)
+
+View: AM1-17-10-alt1-7
+
+![GetHvResultQuery and GetHvEvidenceQuery, alt 1 branch 7 of 7: available, part 2 of 2](c4/rendered/AM1-17-10-alt1-7-part2.svg)
+
+View: AM1-17-10-alt1-7-part2
+
+![GetHvResultQuery and GetHvEvidenceQuery, alt 2 branch 1 of 3: a payload it decompresses fails before the first byte](c4/rendered/AM1-17-10-alt2-1.svg)
+
+View: AM1-17-10-alt2-1
+
+![GetHvResultQuery and GetHvEvidenceQuery, alt 2 branch 2 of 3: it fails after the body started](c4/rendered/AM1-17-10-alt2-2.svg)
+
+View: AM1-17-10-alt2-2
+
+![GetHvResultQuery and GetHvEvidenceQuery, alt 2 branch 3 of 3: decompressed or served compressed](c4/rendered/AM1-17-10-alt2-3.svg)
+
+View: AM1-17-10-alt2-3
 
 ### 17.11 RemoveHvEvidenceCommand
 
-```mermaid
-sequenceDiagram
-    participant Caller
-    participant API
-    participant H
-    participant DB
-    Caller->>API: POST requests/{hvRequestId}/evidence/remove with reason and removedBy
-    API->>H: SendAsync, after the workspace behavior
-    alt reason or removedBy missing or too long
-        H-->>Caller: 400 validation_error, details.field
-    else not found
-        H-->>Caller: 404 not_found, hv_request
-    else request not terminal
-        H-->>Caller: 409 hv_request_active
-    else audit unavailable or attempts exhausted
-        H-->>Caller: 503 audit_unavailable or 409 conflict, retryable true
-    else removed or nothing left
-        H->>DB: null the payloads, stamp the removal, ledger rows
-        H-->>Caller: 200 removed kinds and chunk count, empty on a repeat
-    end
-```
+![RemoveHvEvidenceCommand, part 1 of 2](c4/rendered/AM1-17-11.svg)
+
+View: AM1-17-11
+
+![RemoveHvEvidenceCommand, part 2 of 2](c4/rendered/AM1-17-11-part2.svg)
+
+View: AM1-17-11-part2
+
+![RemoveHvEvidenceCommand, alt 1 branch 1 of 5: reason or removedBy missing or too long](c4/rendered/AM1-17-11-alt1-1.svg)
+
+View: AM1-17-11-alt1-1
+
+![RemoveHvEvidenceCommand, alt 1 branch 2 of 5: not found](c4/rendered/AM1-17-11-alt1-2.svg)
+
+View: AM1-17-11-alt1-2
+
+![RemoveHvEvidenceCommand, alt 1 branch 3 of 5: request not terminal](c4/rendered/AM1-17-11-alt1-3.svg)
+
+View: AM1-17-11-alt1-3
+
+![RemoveHvEvidenceCommand, alt 1 branch 4 of 5: audit unavailable or attempts exhausted](c4/rendered/AM1-17-11-alt1-4.svg)
+
+View: AM1-17-11-alt1-4
+
+![RemoveHvEvidenceCommand, alt 1 branch 5 of 5: removed or nothing left, part 1 of 2](c4/rendered/AM1-17-11-alt1-5.svg)
+
+View: AM1-17-11-alt1-5
+
+![RemoveHvEvidenceCommand, alt 1 branch 5 of 5: removed or nothing left, part 2 of 2](c4/rendered/AM1-17-11-alt1-5-part2.svg)
+
+View: AM1-17-11-alt1-5-part2
 
 ### 17.12 StreamHvRunOutputQuery with a reconnect
 
-```mermaid
-sequenceDiagram
-    participant Caller
-    participant API
-    participant H
-    participant DB
-    participant W
-    Caller->>API: GET requests/{hvRequestId}/output/stream
-    API->>H: QueryAsync, after the workspace behavior
-    alt not found
-        H-->>Caller: 404 not_found, hv_request
-    else evidence removed
-        H-->>Caller: 410 hv_evidence_removed
-    else malformed Last-Event-ID
-        H-->>Caller: 400 validation_error, Last-Event-ID
-    else audit ledger unavailable
-        H-->>Caller: 503 audit_unavailable
-    else attached
-        H->>DB: RecordRead, then stored chunks after the position
-        H-->>Caller: hv_output events with id runId and sequence
-        W-)H: wake after each append
-        H->>DB: new chunks
-        H-->>Caller: hv_output events, live while the reviewer runs
-        Note over Caller,API: the connection drops
-        Caller->>API: GET the same stream with Last-Event-ID runId and sequence
-        API->>H: QueryAsync
-        H->>DB: chunks after that sequence, then later runs
-        H-->>Caller: the missed events, then live events
-        alt a stored chunk fails to decompress
-            H-->>Caller: hv_stream_error with code evidence_corrupt, then the stream ends
-        else every chunk sent
-            H-->>Caller: hv_run_closed, then the stream ends when the request is terminal
-        end
-    end
-```
+![StreamHvRunOutputQuery with a reconnect, part 1 of 2](c4/rendered/AM1-17-12.svg)
+
+View: AM1-17-12
+
+![StreamHvRunOutputQuery with a reconnect, part 2 of 2](c4/rendered/AM1-17-12-part2.svg)
+
+View: AM1-17-12-part2
+
+![StreamHvRunOutputQuery with a reconnect, alt 1 branch 1 of 5: not found](c4/rendered/AM1-17-12-alt1-1.svg)
+
+View: AM1-17-12-alt1-1
+
+![StreamHvRunOutputQuery with a reconnect, alt 1 branch 2 of 5: evidence removed](c4/rendered/AM1-17-12-alt1-2.svg)
+
+View: AM1-17-12-alt1-2
+
+![StreamHvRunOutputQuery with a reconnect, alt 1 branch 3 of 5: malformed Last-Event-ID](c4/rendered/AM1-17-12-alt1-3.svg)
+
+View: AM1-17-12-alt1-3
+
+![StreamHvRunOutputQuery with a reconnect, alt 1 branch 4 of 5: audit ledger unavailable](c4/rendered/AM1-17-12-alt1-4.svg)
+
+View: AM1-17-12-alt1-4
+
+![StreamHvRunOutputQuery with a reconnect, alt 1 branch 5 of 5: attached, part 1 of 9](c4/rendered/AM1-17-12-alt1-5.svg)
+
+View: AM1-17-12-alt1-5
+
+![StreamHvRunOutputQuery with a reconnect, alt 1 branch 5 of 5: attached, part 2 of 9](c4/rendered/AM1-17-12-alt1-5-part2.svg)
+
+View: AM1-17-12-alt1-5-part2
+
+![StreamHvRunOutputQuery with a reconnect, alt 1 branch 5 of 5: attached, part 3 of 9](c4/rendered/AM1-17-12-alt1-5-part3.svg)
+
+View: AM1-17-12-alt1-5-part3
+
+![StreamHvRunOutputQuery with a reconnect, alt 1 branch 5 of 5: attached, part 4 of 9](c4/rendered/AM1-17-12-alt1-5-part4.svg)
+
+View: AM1-17-12-alt1-5-part4
+
+![StreamHvRunOutputQuery with a reconnect, alt 1 branch 5 of 5: attached, part 5 of 9](c4/rendered/AM1-17-12-alt1-5-part5.svg)
+
+View: AM1-17-12-alt1-5-part5
+
+![StreamHvRunOutputQuery with a reconnect, alt 1 branch 5 of 5: attached, part 6 of 9](c4/rendered/AM1-17-12-alt1-5-part6.svg)
+
+View: AM1-17-12-alt1-5-part6
+
+![StreamHvRunOutputQuery with a reconnect, alt 1 branch 5 of 5: attached, part 7 of 9](c4/rendered/AM1-17-12-alt1-5-part7.svg)
+
+View: AM1-17-12-alt1-5-part7
+
+![StreamHvRunOutputQuery with a reconnect, alt 1 branch 5 of 5: attached, part 8 of 9](c4/rendered/AM1-17-12-alt1-5-part8.svg)
+
+View: AM1-17-12-alt1-5-part8
+
+![StreamHvRunOutputQuery with a reconnect, alt 1 branch 5 of 5: attached, part 9 of 9](c4/rendered/AM1-17-12-alt1-5-part9.svg)
+
+View: AM1-17-12-alt1-5-part9
+
+![StreamHvRunOutputQuery with a reconnect, alt 2 branch 1 of 2: a stored chunk fails to decompress](c4/rendered/AM1-17-12-alt2-1.svg)
+
+View: AM1-17-12-alt2-1
+
+![StreamHvRunOutputQuery with a reconnect, alt 2 branch 2 of 2: every chunk sent](c4/rendered/AM1-17-12-alt2-2.svg)
+
+View: AM1-17-12-alt2-2
 
 ### 17.13 StreamHvNotificationsQuery through the plugin watcher
 
-```mermaid
-sequenceDiagram
-    participant Watcher as Plugin watcher
-    participant API
-    participant H
-    participant DB
-    participant Hook as Prompt hook
-    Watcher->>API: REPL workflow.hv.watchNotifications from lastSequence
-    API->>H: QueryAsync, after the workspace behavior
-    alt malformed Last-Event-ID
-        H-->>Watcher: 400 validation_error, Last-Event-ID
-    else attached
-        H->>DB: notifications after lastSequence
-        H-->>Watcher: events in sequence order
-        Watcher->>Watcher: record lastSequence and inbox the completions its session submitted, one atomic replace
-        Note over Watcher,API: the connection drops
-        Watcher->>API: reconnect with Last-Event-ID lastSequence, with backoff
-        H-->>Watcher: the missed events, then live events
-        Hook->>Watcher: read the inbox at the next prompt
-        Hook->>Hook: add each undelivered completion to the prompt context, then mark it delivered (at least once)
-    end
-```
+![StreamHvNotificationsQuery through the plugin watcher, part 1 of 2](c4/rendered/AM1-17-13.svg)
+
+View: AM1-17-13
+
+![StreamHvNotificationsQuery through the plugin watcher, part 2 of 2](c4/rendered/AM1-17-13-part2.svg)
+
+View: AM1-17-13-part2
+
+![StreamHvNotificationsQuery through the plugin watcher, alt 1 branch 1 of 2: malformed Last-Event-ID](c4/rendered/AM1-17-13-alt1-1.svg)
+
+View: AM1-17-13-alt1-1
+
+![StreamHvNotificationsQuery through the plugin watcher, alt 1 branch 2 of 2: attached, part 1 of 7](c4/rendered/AM1-17-13-alt1-2.svg)
+
+View: AM1-17-13-alt1-2
+
+![StreamHvNotificationsQuery through the plugin watcher, alt 1 branch 2 of 2: attached, part 2 of 7](c4/rendered/AM1-17-13-alt1-2-part2.svg)
+
+View: AM1-17-13-alt1-2-part2
+
+![StreamHvNotificationsQuery through the plugin watcher, alt 1 branch 2 of 2: attached, part 3 of 7](c4/rendered/AM1-17-13-alt1-2-part3.svg)
+
+View: AM1-17-13-alt1-2-part3
+
+![StreamHvNotificationsQuery through the plugin watcher, alt 1 branch 2 of 2: attached, part 4 of 7](c4/rendered/AM1-17-13-alt1-2-part4.svg)
+
+View: AM1-17-13-alt1-2-part4
+
+![StreamHvNotificationsQuery through the plugin watcher, alt 1 branch 2 of 2: attached, part 5 of 7](c4/rendered/AM1-17-13-alt1-2-part5.svg)
+
+View: AM1-17-13-alt1-2-part5
+
+![StreamHvNotificationsQuery through the plugin watcher, alt 1 branch 2 of 2: attached, part 6 of 7](c4/rendered/AM1-17-13-alt1-2-part6.svg)
+
+View: AM1-17-13-alt1-2-part6
+
+![StreamHvNotificationsQuery through the plugin watcher, alt 1 branch 2 of 2: attached, part 7 of 7](c4/rendered/AM1-17-13-alt1-2-part7.svg)
+
+View: AM1-17-13-alt1-2-part7
 
 ### 17.14 QueryHvNotificationsQuery and QueryHvIncidentsQuery
 
-```mermaid
-sequenceDiagram
-    participant Caller
-    participant API
-    participant H
-    participant DB
-    Caller->>API: GET notifications with afterSequence and limit, or GET incidents with filters
-    API->>H: QueryAsync, after the workspace behavior
-    alt a parameter out of range or an unknown filter
-        H-->>Caller: 400 validation_error, details.field
-    else valid
-        H->>DB: rows after the sequence, or PagedQuery of incidents
-        H-->>Caller: 200 items and lastSequence, or a PageResult of incidents
-    end
-```
+![QueryHvNotificationsQuery and QueryHvIncidentsQuery, part 1 of 2](c4/rendered/AM1-17-14.svg)
+
+View: AM1-17-14
+
+![QueryHvNotificationsQuery and QueryHvIncidentsQuery, part 2 of 2](c4/rendered/AM1-17-14-part2.svg)
+
+View: AM1-17-14-part2
+
+![QueryHvNotificationsQuery and QueryHvIncidentsQuery, alt 1 branch 1 of 2: a parameter out of range or an unknown filter](c4/rendered/AM1-17-14-alt1-1.svg)
+
+View: AM1-17-14-alt1-1
+
+![QueryHvNotificationsQuery and QueryHvIncidentsQuery, alt 1 branch 2 of 2: valid, part 1 of 2](c4/rendered/AM1-17-14-alt1-2.svg)
+
+View: AM1-17-14-alt1-2
+
+![QueryHvNotificationsQuery and QueryHvIncidentsQuery, alt 1 branch 2 of 2: valid, part 2 of 2](c4/rendered/AM1-17-14-alt1-2-part2.svg)
+
+View: AM1-17-14-alt1-2-part2
 
 ### 17.15 A write to a frozen turn, and a hostile review from an agent surface
 
-```mermaid
-sequenceDiagram
-    participant Model
-    participant Plugin
-    participant API
-    participant H
-    participant DB
-    Model->>Plugin: any session-log verb for a turn under HV
-    Plugin->>API: the verb's route, through the REPL
-    API->>H: the foundation unit, through TurnWritePipeline
-    H->>DB: TurnLocator, then policy HvTurnFreeze Guard
-    alt turn Pending
-        H-->>Plugin: 409 turn_immutable, reason hv_pending, hvRequestId
-    else turn Final
-        H-->>Plugin: 409 turn_immutable, reason hv_final, hvRequestId
-    end
-    Plugin-->>Model: final refusal: record later changes in a later turn
-    Model->>Plugin: recordReview hostile with status Pass, Fail, Running, or an hvVerdict
-    Plugin->>API: RecordSessionTurnReviewCommand
-    API->>H: handler runs
-    H-->>Plugin: 403 review_hostile_pipeline_only
-    Plugin-->>Model: final refusal: request an HV instead
-```
+![A write to a frozen turn, and a hostile review from an agent surface, part 1 of 9](c4/rendered/AM1-17-15.svg)
+
+View: AM1-17-15
+
+![A write to a frozen turn, and a hostile review from an agent surface, part 2 of 9](c4/rendered/AM1-17-15-part2.svg)
+
+View: AM1-17-15-part2
+
+![A write to a frozen turn, and a hostile review from an agent surface, part 3 of 9](c4/rendered/AM1-17-15-part3.svg)
+
+View: AM1-17-15-part3
+
+![A write to a frozen turn, and a hostile review from an agent surface, part 4 of 9](c4/rendered/AM1-17-15-part4.svg)
+
+View: AM1-17-15-part4
+
+![A write to a frozen turn, and a hostile review from an agent surface, part 5 of 9](c4/rendered/AM1-17-15-part5.svg)
+
+View: AM1-17-15-part5
+
+![A write to a frozen turn, and a hostile review from an agent surface, part 6 of 9](c4/rendered/AM1-17-15-part6.svg)
+
+View: AM1-17-15-part6
+
+![A write to a frozen turn, and a hostile review from an agent surface, part 7 of 9](c4/rendered/AM1-17-15-part7.svg)
+
+View: AM1-17-15-part7
+
+![A write to a frozen turn, and a hostile review from an agent surface, part 8 of 9](c4/rendered/AM1-17-15-part8.svg)
+
+View: AM1-17-15-part8
+
+![A write to a frozen turn, and a hostile review from an agent surface, part 9 of 9](c4/rendered/AM1-17-15-part9.svg)
+
+View: AM1-17-15-part9
+
+![A write to a frozen turn, and a hostile review from an agent surface, alt 1 branch 1 of 2: turn Pending](c4/rendered/AM1-17-15-alt1-1.svg)
+
+View: AM1-17-15-alt1-1
+
+![A write to a frozen turn, and a hostile review from an agent surface, alt 1 branch 2 of 2: turn Final](c4/rendered/AM1-17-15-alt1-2.svg)
+
+View: AM1-17-15-alt1-2
 
 ## 18. Use cases
 
@@ -2499,243 +3273,317 @@ The foundation's notation (foundation section 7): actors are stadium shapes on t
 
 ### 18.1 Overview
 
-```mermaid
-flowchart LR
-    OP(["Operator"])
-    MD(["Model, through its plugin"])
-    WK(["HV worker"])
-    RV(["Reviewer agent"])
-    CL(["Any client: REPL, Director, MCP, REST"])
-    TG(["Triage"])
-    U1(("UC-HV-01 Manage the reviewer pool"))
-    U2(("UC-HV-02 NONCE a reviewer"))
-    U3(("UC-HV-03 Submit an HV request"))
-    U4(("UC-HV-04 Run a review live"))
-    U5(("UC-HV-05 Finalize the HV result"))
-    U6(("UC-HV-06 Watch an HV live"))
-    U7(("UC-HV-07 Receive completion notifications"))
-    U8(("UC-HV-08 Cancel an HV"))
-    U9(("UC-HV-09 Recover from failures"))
-    U10(("UC-HV-10 Retrieve the result and evidence"))
-    U11(("UC-HV-11 Remove evidence on instruction"))
-    U12(("UC-HV-12 Remediate after a reviewed turn"))
-    OP --- U1
-    OP --- U2
-    OP --- U8
-    OP --- U11
-    MD --- U3
-    MD --- U7
-    MD --- U12
-    CL --- U3
-    CL --- U6
-    CL --- U8
-    CL --- U10
-    WK --- U2
-    WK --- U4
-    WK --- U5
-    WK --- U9
-    RV --- U2
-    RV --- U4
-    TG --- U9
-```
+![Use cases: overview (use cases), part 1 of 10](c4/rendered/AM1-18-01.svg)
+
+View: AM1-18-01
+
+![Use cases: overview (use cases), part 2 of 10](c4/rendered/AM1-18-01-part2.svg)
+
+View: AM1-18-01-part2
+
+![Use cases: overview (use cases), part 3 of 10](c4/rendered/AM1-18-01-part3.svg)
+
+View: AM1-18-01-part3
+
+![Use cases: overview (use cases), part 4 of 10](c4/rendered/AM1-18-01-part4.svg)
+
+View: AM1-18-01-part4
+
+![Use cases: overview (use cases), part 5 of 10](c4/rendered/AM1-18-01-part5.svg)
+
+View: AM1-18-01-part5
+
+![Use cases: overview (use cases), part 6 of 10](c4/rendered/AM1-18-01-part6.svg)
+
+View: AM1-18-01-part6
+
+![Use cases: overview (use cases), part 7 of 10](c4/rendered/AM1-18-01-part7.svg)
+
+View: AM1-18-01-part7
+
+![Use cases: overview (use cases), part 8 of 10](c4/rendered/AM1-18-01-part8.svg)
+
+View: AM1-18-01-part8
+
+![Use cases: overview (use cases), part 9 of 10](c4/rendered/AM1-18-01-part9.svg)
+
+View: AM1-18-01-part9
+
+![Use cases: overview (use cases), part 10 of 10](c4/rendered/AM1-18-01-part10.svg)
+
+View: AM1-18-01-part10
 
 ### 18.2 UC-HV-01 Manage the reviewer pool [FR-MCP-HVPIPE-001]
 
 Actors: Operator (through Director or the REPL), server. Trigger: the operator lists, inspects, enables, disables, or retunes a reviewer. Preconditions: the server started with the five reviewers configured and seeded (section 10). Main flow: the operator lists the pool (ListHvReviewersQuery), reads one reviewer (GetHvReviewerQuery), and changes its enabled flag, strategy, agent path, model, effort, or concurrency with the state version it read (UpdateHvReviewerCommand); a change to the strategy, agent path, model, or effort makes the reviewer `Unverified`, and the worker NONCEs it (UC-HV-02). Alternates: a stale state version is refused with 409 `conflict` and the operator reads again; an unknown reviewer is 404; an invalid field is 400; the audit ledger is unavailable and nothing changes (503). Postconditions: the change is stored, audited, and announced (`reviewer_unverified` when the launch changed); a disabled reviewer gets no new assignment, and the requests it held are reassigned at their next claim. Invariants: I-10; no change applies without its ledger rows.
 
-```mermaid
-flowchart LR
-    OP(["Operator"]) --- U(("Manage the reviewer pool"))
-    U -. include .-> I1(("List and read reviewers"))
-    U -. include .-> I2(("Update with the state version (UpdateHvReviewerCommand)"))
-    E1(("Launch changed: Unverified, then NONCE")) -. extend .-> U
-    E2(("Stale state version: 409 conflict")) -. extend .-> U
-    E3(("Audit ledger unavailable: 503")) -. extend .-> U
-```
+![UC-HV-01 Manage the reviewer pool (use cases), part 1 of 3](c4/rendered/UC-HV-01.svg)
+
+View: UC-HV-01
+
+![UC-HV-01 Manage the reviewer pool (use cases), part 2 of 3](c4/rendered/UC-HV-01-part2.svg)
+
+View: UC-HV-01-part2
+
+![UC-HV-01 Manage the reviewer pool (use cases), part 3 of 3](c4/rendered/UC-HV-01-part3.svg)
+
+View: UC-HV-01-part3
 
 ### 18.3 UC-HV-02 NONCE a reviewer [FR-MCP-HVPIPE-003]
 
 Actors: operator or any agent, HV worker, reviewer agent. Trigger: a reviewer is `Unverified` (startup or a launch change, requested by the worker) or `Offline` after its cause was fixed (requested by a caller, S-15). Preconditions: the reviewer is enabled. Main flow: the caller requests a NONCE (StartHvReviewerNonceCommand); the worker claims the probe (ClaimHvRunCommand), launches the reviewer with a probe brief carrying a fresh nonce (RunReviewerProcess), streams its output (AppendHvRunOutputCommand), appends the adapter's provenance, and closes the run (CloseHvRunOutputCommand); policy ReadinessProbeVerdict passes: the nonce is echoed, the provenance shows the expected model and effort, and the reviewer logged its own turn; the reviewer becomes `Online` with its resolved model and effort. Alternates: a probe already requested or running is reported without a second probe; a disabled reviewer is refused with 409 `hv_reviewer_disabled`; the probe fails (wrong nonce, wrong or missing provenance, no reviewer turn, launch failure, nonzero exit) and the reviewer stays or becomes `Offline` with an incident filed through triage (UC-HV-09); the probe's stored log fails its integrity check, a server fault, and a server incident is filed while the reviewer's readiness is unchanged; the reviewer is reconfigured while the probe runs, and the old probe, whether it closes, fails, ends with a shutdown, or loses its lease, changes nothing of the reviewer while the newer probe request waits (HvProbeOutcome); the worker dies during a probe of the current configuration and the sweep requests it again; the worker restarts after a probe settled on a server fault and requests no new probe until a caller asks; a startup NONCE request refused while the audit ledger is down is made again at the worker's next iteration, unless the reviewer was disabled meanwhile. Postconditions: the reviewer's readiness reflects a probe of this moment (S-27); `reviewer_online` or `reviewer_offline` is announced. Invariants: only a passing NONCE moves a reviewer to `Online` (R-10).
 
-```mermaid
-flowchart LR
-    OP(["Operator or agent"]) --- U(("NONCE a reviewer"))
-    WK(["HV worker"]) --- U
-    RV(["Reviewer agent"]) --- U
-    U -. include .-> I1(("Probe run with a fresh nonce (RunReviewerProcess)"))
-    U -. include .-> I2(("Decide (ReadinessProbeVerdict)"))
-    E1(("Already requested or running: no second probe")) -. extend .-> U
-    E2(("Disabled reviewer: 409")) -. extend .-> U
-    E3(("Probe failed: Offline, incident filed")) -. extend .-> U
-    E4(("Worker died: probe requested again")) -. extend .-> U
-    E5(("Stored log corrupt: server incident, readiness unchanged")) -. extend .-> U
-    E6(("Reconfigured while probing: stale probe, readiness unchanged")) -. extend .-> U
-    E7(("Restart after a settled probe: no automatic retry")) -. extend .-> U
-```
+![UC-HV-02 NONCE a reviewer (use cases), part 1 of 7](c4/rendered/UC-HV-02.svg)
+
+View: UC-HV-02
+
+![UC-HV-02 NONCE a reviewer (use cases), part 2 of 7](c4/rendered/UC-HV-02-part2.svg)
+
+View: UC-HV-02-part2
+
+![UC-HV-02 NONCE a reviewer (use cases), part 3 of 7](c4/rendered/UC-HV-02-part3.svg)
+
+View: UC-HV-02-part3
+
+![UC-HV-02 NONCE a reviewer (use cases), part 4 of 7](c4/rendered/UC-HV-02-part4.svg)
+
+View: UC-HV-02-part4
+
+![UC-HV-02 NONCE a reviewer (use cases), part 5 of 7](c4/rendered/UC-HV-02-part5.svg)
+
+View: UC-HV-02-part5
+
+![UC-HV-02 NONCE a reviewer (use cases), part 6 of 7](c4/rendered/UC-HV-02-part6.svg)
+
+View: UC-HV-02-part6
+
+![UC-HV-02 NONCE a reviewer (use cases), part 7 of 7](c4/rendered/UC-HV-02-part7.svg)
+
+View: UC-HV-02-part7
 
 ### 18.4 UC-HV-03 Submit an HV request [FR-MCP-HVPIPE-002, -004, -005, -006, -013, -018]
 
 Actors: model (through its plugin) or operator (through Director), any client, server. Trigger: a caller wants a turn, an inclusive range of turns, or a whole session reviewed (S-03, S-11). Preconditions: the turns to review are terminal; for an agent caller, its own turn is bound by the plugin (BindVerbToTurn). Main flow: the caller submits the scope, optional context in Markdown or YAML, and an idempotency key (SubmitHvRequestCommand); the server resolves the requirement references of the context (RequirementReferenceExtractor), resolves the members (HvScopeResolution: the session's turns at admission time for a session scope, without the submitting turn), checks that every member is terminal, not under review, and never reviewed (HvAdmissionEligibility), picks the next eligible reviewer round-robin, never the submitter, the author of the reviewed session, or an alias of either (RoundRobinAssignment, HvReviewerEligibility), snapshots every member without its review records (TurnSnapshotBuilder), stores the complete accepted request compressed (GzipCodec), freezes the members (HvTurnFreeze), announces `hv_queued`, and wakes the worker (auto-start, S-24). Alternates: the same key and inputs return the stored request as GetHvRequestQuery returns it, its last output read audited; the key with other inputs is a conflict; a malformed scope, a scope over the limit, a scope naming the submitting turn, or an empty session scope is refused (400); turns that are not terminal, under review, or already reviewed are refused with every affected turn listed (409); no reviewer is eligible and the request is refused with every reviewer's status, and the plugin adds the reviewers' open incidents and the NONCE remedy (409, S-16); a turn whose class is `Chore` and whose hostile review is `Unnecessary` is admitted and graded like any other (S-09); a turn has no self-review, or any self-review grade or status, and admission is the same (S-28); the audit ledger is unavailable and nothing is written (503, S-29). Postconditions: one `Queued` request with its members frozen `Pending`, its accepted request stored, and its reviewer assigned. Invariants: I-01, I-07, I-08, I-10.
 
-```mermaid
-flowchart LR
-    MD(["Model, through its plugin"]) --- U(("Submit an HV request"))
-    OP(["Operator, through Director"]) --- U
-    U -. include .-> I1(("Resolve members (HvScopeResolution)"))
-    U -. include .-> I2(("Check eligibility (HvAdmissionEligibility)"))
-    U -. include .-> I3(("Assign round-robin, submitter and author excluded (RoundRobinAssignment)"))
-    U -. include .-> I4(("Store the accepted request and freeze the turns"))
-    E1(("Same key and inputs: stored request")) -. extend .-> U
-    E2(("Bad, oversized, self-including, or empty scope: 400")) -. extend .-> U
-    E3(("Not terminal, pending, or reviewed: 409 listing every turn")) -. extend .-> U
-    E4(("No eligible reviewer: 409 with reviewer context")) -. extend .-> U
-    E5(("Unnecessary turn: included and graded")) -. extend .-> U
-    E6(("Self-review absent or any grade: same admission")) -. extend .-> U
-    E7(("Audit ledger unavailable: 503, nothing written")) -. extend .-> U
-```
+![UC-HV-03 Submit an HV request (use cases), part 1 of 7](c4/rendered/UC-HV-03.svg)
+
+View: UC-HV-03
+
+![UC-HV-03 Submit an HV request (use cases), part 2 of 7](c4/rendered/UC-HV-03-part2.svg)
+
+View: UC-HV-03-part2
+
+![UC-HV-03 Submit an HV request (use cases), part 3 of 7](c4/rendered/UC-HV-03-part3.svg)
+
+View: UC-HV-03-part3
+
+![UC-HV-03 Submit an HV request (use cases), part 4 of 7](c4/rendered/UC-HV-03-part4.svg)
+
+View: UC-HV-03-part4
+
+![UC-HV-03 Submit an HV request (use cases), part 5 of 7](c4/rendered/UC-HV-03-part5.svg)
+
+View: UC-HV-03-part5
+
+![UC-HV-03 Submit an HV request (use cases), part 6 of 7](c4/rendered/UC-HV-03-part6.svg)
+
+View: UC-HV-03-part6
+
+![UC-HV-03 Submit an HV request (use cases), part 7 of 7](c4/rendered/UC-HV-03-part7.svg)
+
+View: UC-HV-03-part7
 
 ### 18.5 UC-HV-04 Run a review live [FR-MCP-HVPIPE-007, -008]
 
 Actors: HV worker, reviewer agent, server. Trigger: a `Queued` request whose reviewer is eligible and has capacity. Preconditions: UC-HV-03 completed. Main flow: the worker claims the request with a lease and a fence (ClaimHvRunCommand); it launches the reviewer with the brief (RunReviewerProcess) and records the brief as the log's first record; every line the reviewer writes is appended within the flush interval (AppendHvRunOutputCommand) and is visible on the output stream while the reviewer runs (S-22); progress records set the request's progress and ETA (R-18); heartbeats renew the lease (RecordHvRunHeartbeatCommand); the reviewer reviews each turn and the whole set, logs its own `Chore` turn holding its result, and emits its verdict record last; on exit with code 0 the worker appends the provenance and closes the output (CloseHvRunOutputCommand), and the request becomes `Finalizing`. Alternates: the assignee is no longer eligible and the claim reassigns round-robin to an eligible reviewer with capacity, skipping one at its `MaxConcurrentRuns`, or writes nothing and the request waits when none has capacity; the assignee is still eligible but at its `MaxConcurrentRuns`, and the request keeps it and waits while later requests are claimed; a cancel arrives and the worker stops the reviewer (UC-HV-08); the reviewer fails to start or exits nonzero (UC-HV-09); the stored accepted request fails to decompress when the brief is built, so no reviewer starts and the attempt fails with `evidence_corrupt` as a server fault (UC-HV-09); the worker loses its lease and its writes are refused as stale, so it stops (UC-HV-09); no reviewer is eligible and the request waits `Queued` with an unknown ETA; the reviewer runs for any length of time without a timeout (P-02). Postconditions: the attempt's complete log is stored, compressed, contiguous, and hashed. Invariants: I-05, I-06.
 
-```mermaid
-flowchart LR
-    WK(["HV worker"]) --- U(("Run a review live"))
-    RV(["Reviewer agent"]) --- U
-    U -. include .-> I1(("Claim with lease and fence (ClaimHvRunCommand)"))
-    U -. include .-> I2(("Stream every line as it is written (AppendHvRunOutputCommand)"))
-    U -. include .-> I3(("Heartbeat (RecordHvRunHeartbeatCommand)"))
-    U -. include .-> I4(("Close the output (CloseHvRunOutputCommand)"))
-    E1(("Assignee ineligible: reassigned at claim")) -. extend .-> U
-    E2(("Cancel: reviewer stopped")) -. extend .-> U
-    E3(("Launch failure or nonzero exit: UC-HV-09")) -. extend .-> U
-    E4(("Lease lost: stale fence, worker stops")) -. extend .-> U
-    E5(("No eligible reviewer: waits Queued, ETA unknown")) -. extend .-> U
-    E6(("Accepted request corrupt at the brief: no launch, server fault, UC-HV-09")) -. extend .-> U
-```
+![UC-HV-04 Run a review live (use cases), part 1 of 6](c4/rendered/UC-HV-04.svg)
+
+View: UC-HV-04
+
+![UC-HV-04 Run a review live (use cases), part 2 of 6](c4/rendered/UC-HV-04-part2.svg)
+
+View: UC-HV-04-part2
+
+![UC-HV-04 Run a review live (use cases), part 3 of 6](c4/rendered/UC-HV-04-part3.svg)
+
+View: UC-HV-04-part3
+
+![UC-HV-04 Run a review live (use cases), part 4 of 6](c4/rendered/UC-HV-04-part4.svg)
+
+View: UC-HV-04-part4
+
+![UC-HV-04 Run a review live (use cases), part 5 of 6](c4/rendered/UC-HV-04-part5.svg)
+
+View: UC-HV-04-part5
+
+![UC-HV-04 Run a review live (use cases), part 6 of 6](c4/rendered/UC-HV-04-part6.svg)
+
+View: UC-HV-04-part6
 
 ### 18.6 UC-HV-05 Finalize the HV result [FR-MCP-HVPIPE-010, -011, -012, -014, -021]
 
 Actors: HV worker, server. Trigger: a request is `Finalizing` (after UC-HV-04, or found by the sweep after a crash). Main flow: the server records its read of the attempt's log (AuditLedgerGuard), reads it, and verifies it (HvFinalVerification: integrity, completeness, binding to the request and to each turn's admission snapshot, verdict consistency at 98/98, reviewer independence, the reviewer's own turn, and runtime identity); then, in one transaction (S-23), it stores the per-turn assessments, the holistic evaluation, and the delineated failures with their remediation, writes each turn's hostile review through HvVerdictMapping, makes every member turn final, grades the linked agent responses and decides their trust when agent context is on, stores the result document compressed, completes the request, and announces `hv_completed`. Alternates: a verification step fails, the attempt fails with that code (UC-HV-09), and the request is queued again or fails when its attempts are spent; recording that failure is itself refused or conflicts, and the request stays `Finalizing` for the sweep; the result document fails its compression round trip, the transaction rolls back, and the attempt fails with `evidence_corrupt` as a server fault; a stored model grade with other input is found, the transaction rolls back, and the attempt fails with `model_grade_conflict` as a server fault; the store changed since the reads and the unit starts again from its status check; the audit ledger is unavailable or the transaction keeps conflicting and the request stays `Finalizing` for the sweep; the request was already finalized and the stored outcome returns; agent context is `Off` and the linked responses are recorded `NotGraded`. Postconditions: either every part of the result is committed or none is (I-04); the TODOs the turns name are unchanged (S-25); the self-review records were never read (S-28). Invariants: I-02, I-03, I-04, I-09.
 
-```mermaid
-flowchart LR
-    WK(["HV worker"]) --- U(("Finalize the HV result"))
-    U -. include .-> I1(("Verify V-1 to V-8 (HvFinalVerification)"))
-    U -. include .-> I2(("Commit everything at once (CommitFinalResult)"))
-    U -. include .-> I3(("Hostile review per turn (HvVerdictMapping)"))
-    E1(("Verification failed: attempt fails, request requeued or failed")) -. extend .-> U
-    E2(("State changed: transaction runs again")) -. extend .-> U
-    E3(("Audit unavailable: stays Finalizing for the sweep")) -. extend .-> U
-    E4(("Already finalized: stored outcome")) -. extend .-> U
-    E5(("Agent context Off: responses NotGraded")) -. extend .-> U
-    E6(("Result compression failed: rolled back, attempt fails evidence_corrupt")) -. extend .-> U
-```
+![UC-HV-05 Finalize the HV result (use cases), part 1 of 5](c4/rendered/UC-HV-05.svg)
+
+View: UC-HV-05
+
+![UC-HV-05 Finalize the HV result (use cases), part 2 of 5](c4/rendered/UC-HV-05-part2.svg)
+
+View: UC-HV-05-part2
+
+![UC-HV-05 Finalize the HV result (use cases), part 3 of 5](c4/rendered/UC-HV-05-part3.svg)
+
+View: UC-HV-05-part3
+
+![UC-HV-05 Finalize the HV result (use cases), part 4 of 5](c4/rendered/UC-HV-05-part4.svg)
+
+View: UC-HV-05-part4
+
+![UC-HV-05 Finalize the HV result (use cases), part 5 of 5](c4/rendered/UC-HV-05-part5.svg)
+
+View: UC-HV-05-part5
 
 ### 18.7 UC-HV-06 Watch an HV live [FR-MCP-HVPIPE-015, -016]
 
 Actors: any client (Director `hv-output`, the REPL, a REST client). Trigger: a caller wants to see a running HV (S-18). Main flow: the caller lists running HVs (QueryHvRequestsQuery with `status` `Running`), reads one with its progress, ETA, and last 20 lines (GetHvRequestQuery), and attaches to its output stream (StreamHvRunOutputQuery), which replays the stored chunks and then sends each new chunk as it is appended; the stream ends after the request reaches a terminal state. Alternates: the connection drops and the caller reconnects with its last event id, receiving exactly the events it missed (OrderedEventReplay); the reviewer reports no progress and the ETA is `Unknown` (R-18); a new attempt starts and the stream continues with the new run's events; the audit ledger is unavailable and the attach is refused (503, evidence access is audited). Postconditions: the caller saw every output line in order. Invariants: I-06.
 
-```mermaid
-flowchart LR
-    CL(["Any client"]) --- U(("Watch an HV live"))
-    U -. include .-> I1(("List running HVs (QueryHvRequestsQuery)"))
-    U -. include .-> I2(("Progress, ETA, last output (GetHvRequestQuery)"))
-    U -. include .-> I3(("Attach to the output stream (StreamHvRunOutputQuery)"))
-    E1(("Dropped: reconnect with Last-Event-ID")) -. extend .-> U
-    E2(("No progress reported: ETA Unknown")) -. extend .-> U
-    E3(("New attempt: stream continues")) -. extend .-> U
-```
+![UC-HV-06 Watch an HV live (use cases), part 1 of 4](c4/rendered/UC-HV-06.svg)
+
+View: UC-HV-06
+
+![UC-HV-06 Watch an HV live (use cases), part 2 of 4](c4/rendered/UC-HV-06-part2.svg)
+
+View: UC-HV-06-part2
+
+![UC-HV-06 Watch an HV live (use cases), part 3 of 4](c4/rendered/UC-HV-06-part3.svg)
+
+View: UC-HV-06-part3
+
+![UC-HV-06 Watch an HV live (use cases), part 4 of 4](c4/rendered/UC-HV-06-part4.svg)
+
+View: UC-HV-06-part4
 
 ### 18.8 UC-HV-07 Receive completion notifications [FR-MCP-HVPIPE-017, -020]
 
 Actors: the plugin's watcher and the model, Director, any client. Trigger: an HV completes, fails, or is canceled (S-19). Main flow: the plugin's watcher follows the notification stream from its last sequence (WatchHvNotifications, StreamHvNotificationsQuery); a terminal notification whose submitter turn key names the host session's MCP session goes to the host session's inbox; at the next prompt the plugin adds it to the model's context with its sequence, the overall verdict, and how to read the result, and marks it delivered. Alternates: the stream drops and the watcher reconnects from its recorded sequence, missing nothing; the server restarts and the outbox rows are still there; a client without streams polls (QueryHvNotificationsQuery); a notification arrives twice (at least once) and its sequence keeps it out of the inbox the second time; a completion arrives before the submit verb has returned and is still inboxed; the plugin crashes between adding an entry to a prompt and marking it delivered, and the entry is added once more. Postconditions: every terminal outcome of a request the host session's MCP session submitted reaches that session's model at least once, each time with its sequence. Invariants: I-12.
 
-```mermaid
-flowchart LR
-    PL(["Plugin watcher and model"]) --- U(("Receive completion notifications"))
-    CL(["Director or any client"]) --- U
-    U -. include .-> I1(("Follow the stream from the last sequence (StreamHvNotificationsQuery)"))
-    U -. include .-> I2(("Inbox and deliver at the next prompt (WatchHvNotifications)"))
-    E1(("Dropped: reconnect from the recorded sequence")) -. extend .-> U
-    E2(("No streams: poll (QueryHvNotificationsQuery)")) -. extend .-> U
-    E3(("Delivered twice: deduplicated by sequence")) -. extend .-> U
-```
+![UC-HV-07 Receive completion notifications (use cases), part 1 of 5](c4/rendered/UC-HV-07.svg)
+
+View: UC-HV-07
+
+![UC-HV-07 Receive completion notifications (use cases), part 2 of 5](c4/rendered/UC-HV-07-part2.svg)
+
+View: UC-HV-07-part2
+
+![UC-HV-07 Receive completion notifications (use cases), part 3 of 5](c4/rendered/UC-HV-07-part3.svg)
+
+View: UC-HV-07-part3
+
+![UC-HV-07 Receive completion notifications (use cases), part 4 of 5](c4/rendered/UC-HV-07-part4.svg)
+
+View: UC-HV-07-part4
+
+![UC-HV-07 Receive completion notifications (use cases), part 5 of 5](c4/rendered/UC-HV-07-part5.svg)
+
+View: UC-HV-07-part5
 
 ### 18.9 UC-HV-08 Cancel an HV [FR-MCP-HVPIPE-008]
 
 Actors: any caller (S-18, no roles). Main flow: the caller cancels (CancelHvRequestCommand); a `Queued` request is canceled at once and its turns released; a `Running` request becomes `CancelRequested`, the worker reads it at its next heartbeat, stops the reviewer, and the request becomes `Canceled` with its turns released. Alternates: the request is already `CancelRequested` or `Canceled` and nothing changes; it is `Finalizing`, `Completed`, or `Failed` and the cancel is refused (409); the reviewer exits with code 0 before the next heartbeat, and the close finds the cancel and ends the request `Canceled` instead of finalizing it (CloseHvRunOutputCommand, R-28); the run fails before the next heartbeat, and the failure ends the request `Canceled` (FailHvRunCommand, HvRetryDecision); the worker died and the lease expiry completes the cancel (ExpireHvRunLeasesCommand). Postconditions: a canceled request's turns are writable again; nothing of an unfinished review is recorded on them. Invariants: I-04.
 
-```mermaid
-flowchart LR
-    CL(["Any caller"]) --- U(("Cancel an HV"))
-    U -. include .-> I1(("Cancel (CancelHvRequestCommand)"))
-    E1(("Running: worker stops the reviewer at its heartbeat")) -. extend .-> U
-    E2(("Already canceled: unchanged")) -. extend .-> U
-    E3(("Finalizing or terminal: 409")) -. extend .-> U
-    E4(("Worker dead: lease expiry completes the cancel")) -. extend .-> U
-    E5(("Exited before the heartbeat: the close completes the cancel")) -. extend .-> U
-```
+![UC-HV-08 Cancel an HV (use cases), part 1 of 4](c4/rendered/UC-HV-08.svg)
+
+View: UC-HV-08
+
+![UC-HV-08 Cancel an HV (use cases), part 2 of 4](c4/rendered/UC-HV-08-part2.svg)
+
+View: UC-HV-08-part2
+
+![UC-HV-08 Cancel an HV (use cases), part 3 of 4](c4/rendered/UC-HV-08-part3.svg)
+
+View: UC-HV-08-part3
+
+![UC-HV-08 Cancel an HV (use cases), part 4 of 4](c4/rendered/UC-HV-08-part4.svg)
+
+View: UC-HV-08-part4
 
 ### 18.10 UC-HV-09 Recover from failures [FR-MCP-HVPIPE-007, -009]
 
 Actors: HV worker, triage, server. Trigger: an execution failure (launch failure, nonzero exit, invalid output, failed verification, missing reviewer turn, runtime identity mismatch, corrupt stored evidence) or a dead worker. Main flow: the failure is recorded on the attempt (FailHvRunCommand); a failure attributable to the reviewer marks it `Offline` until a NONCE passes (S-15); an incident is recorded and filed through the triage endpoint with a deduplication key (FileHvIncidentCommand, S-26); the request returns to `Queued` and the next claim assigns the next eligible reviewer. Alternates: attempts are spent and the request fails, releasing its turns; triage is unreachable and the filing is retried at each sweep; a worker died and its expired leases are swept (ExpireHvRunLeasesCommand), its runs abandoned and fenced out; two sweeps read the same expired run, and the second skips it (FencedLease `Expire`), so the run is abandoned once and a newer attempt or a terminal request is never touched (HvRetryDecision); a graceful shutdown ends runs with `worker_shutdown`, which is not counted as an attempt; the audit ledger is unavailable and the failed run cannot be recorded until it returns, after which the lease expiry recovers it. Postconditions: no failure is silent, no incident group is duplicated, and no reviewer is used again before it proves itself. Invariants: I-05.
 
-```mermaid
-flowchart LR
-    WK(["HV worker"]) --- U(("Recover from failures"))
-    TG(["Triage"]) --- U
-    U -. include .-> I1(("Record the failure (FailHvRunCommand)"))
-    U -. include .-> I2(("File the incident (FileHvIncidentCommand)"))
-    U -. include .-> I3(("Requeue and reassign (HvRetryDecision, RoundRobinAssignment)"))
-    E1(("Attempts spent: request Failed, turns released")) -. extend .-> U
-    E2(("Triage unreachable: filing retried")) -. extend .-> U
-    E3(("Dead worker: leases swept, runs fenced out")) -. extend .-> U
-    E4(("Graceful shutdown: not counted")) -. extend .-> U
-    E5(("Two sweeps on one expired run: the second skips it")) -. extend .-> U
-```
+![UC-HV-09 Recover from failures (use cases), part 1 of 5](c4/rendered/UC-HV-09.svg)
+
+View: UC-HV-09
+
+![UC-HV-09 Recover from failures (use cases), part 2 of 5](c4/rendered/UC-HV-09-part2.svg)
+
+View: UC-HV-09-part2
+
+![UC-HV-09 Recover from failures (use cases), part 3 of 5](c4/rendered/UC-HV-09-part3.svg)
+
+View: UC-HV-09-part3
+
+![UC-HV-09 Recover from failures (use cases), part 4 of 5](c4/rendered/UC-HV-09-part4.svg)
+
+View: UC-HV-09-part4
+
+![UC-HV-09 Recover from failures (use cases), part 5 of 5](c4/rendered/UC-HV-09-part5.svg)
+
+View: UC-HV-09-part5
 
 ### 18.11 UC-HV-10 Retrieve the result and evidence [FR-MCP-HVPIPE-011, -015]
 
 Actors: any client. Main flow: the caller reads the standard result document (GetHvResultQuery: the complete accepted request, the complete response log, every turn with its score, the holistic evaluation, the delineated failures with remediation, the overall verdict, and the evidence hashes, S-13, S-21) or downloads one evidence item compressed or decompressed (GetHvEvidenceQuery); every read is audited. Alternates: the result is not ready (409); the evidence was removed (410, with the hashes and sizes kept); the audit ledger is unavailable (503); a stored payload fails to decompress (500 `evidence_corrupt` before the first byte, or a body that ends incomplete after it, which its stored hash shows). Postconditions: the bytes returned decompress to exactly the bytes stored at admission and during the run. Invariants: I-06, I-11.
 
-```mermaid
-flowchart LR
-    CL(["Any client"]) --- U(("Retrieve the result and evidence"))
-    U -. include .-> I1(("Result document (GetHvResultQuery)"))
-    U -. include .-> I2(("Evidence download (GetHvEvidenceQuery)"))
-    U -. include .-> I3(("Audit every read (AuditLedgerGuard)"))
-    E1(("Not ready: 409")) -. extend .-> U
-    E2(("Removed: 410 with hashes")) -. extend .-> U
-    E3(("Audit unavailable: 503")) -. extend .-> U
-```
+![UC-HV-10 Retrieve the result and evidence (use cases), part 1 of 4](c4/rendered/UC-HV-10.svg)
+
+View: UC-HV-10
+
+![UC-HV-10 Retrieve the result and evidence (use cases), part 2 of 4](c4/rendered/UC-HV-10-part2.svg)
+
+View: UC-HV-10-part2
+
+![UC-HV-10 Retrieve the result and evidence (use cases), part 3 of 4](c4/rendered/UC-HV-10-part3.svg)
+
+View: UC-HV-10-part3
+
+![UC-HV-10 Retrieve the result and evidence (use cases), part 4 of 4](c4/rendered/UC-HV-10-part4.svg)
+
+View: UC-HV-10-part4
 
 ### 18.12 UC-HV-11 Remove evidence on instruction [FR-MCP-HVPIPE-019]
 
 Actors: operator (S-29: "Retain until told to remove."). Main flow: the operator removes a terminal request's evidence with a reason and a name (RemoveHvEvidenceCommand); the evidence and chunk bytes are removed, while the result rows, findings, turn reviews, hashes, and sizes stay; the removal is audited. Alternates: the request is still active (409); the evidence was already removed and nothing changes. Postconditions: nothing else ever removes evidence (I-11). Invariants: I-10, I-11.
 
-```mermaid
-flowchart LR
-    OP(["Operator"]) --- U(("Remove evidence on instruction"))
-    U -. include .-> I1(("Remove with reason and name (RemoveHvEvidenceCommand)"))
-    E1(("Request active: 409")) -. extend .-> U
-    E2(("Already removed: unchanged")) -. extend .-> U
-```
+![UC-HV-11 Remove evidence on instruction (use cases), part 1 of 2](c4/rendered/UC-HV-11.svg)
+
+View: UC-HV-11
+
+![UC-HV-11 Remove evidence on instruction (use cases), part 2 of 2](c4/rendered/UC-HV-11-part2.svg)
+
+View: UC-HV-11-part2
 
 ### 18.13 UC-HV-12 Remediate after a reviewed turn [FR-MCP-HVPIPE-012, -014]
 
 Actors: model. Trigger: an HV found failures in reviewed turns. Main flow: the model reads the result's failures and their remediation (UC-HV-10), does the corrective work in a later turn, and requests a new HV for the new turns (UC-HV-03) (S-06). Alternates: the model tries to change a reviewed turn and every write is refused with 409 `turn_immutable` (HvTurnFreeze); it tries to write a hostile review itself and is refused with 403 `review_hostile_pipeline_only`; it tries to submit the reviewed turns again and is refused with 409 `hv_turns_already_reviewed` (S-20); an AGREE verdict never moves a TODO, so the coordinator decides completion (S-25). Postconditions: the reviewed history is unchanged; the remediation is new work with its own HV. Invariants: I-01, I-09.
 
-```mermaid
-flowchart LR
-    MD(["Model"]) --- U(("Remediate after a reviewed turn"))
-    U -. include .-> I1(("Read the failures and remediation"))
-    U -. include .-> I2(("New turns, new HV request"))
-    E1(("Write to a reviewed turn: 409 turn_immutable")) -. extend .-> U
-    E2(("Own hostile review: 403")) -. extend .-> U
-    E3(("Same turns again: 409 already reviewed")) -. extend .-> U
-    E4(("AGREE: TODO unchanged, coordinator decides")) -. extend .-> U
-```
+![UC-HV-12 Remediate after a reviewed turn (use cases), part 1 of 4](c4/rendered/UC-HV-12.svg)
+
+View: UC-HV-12
+
+![UC-HV-12 Remediate after a reviewed turn (use cases), part 2 of 4](c4/rendered/UC-HV-12-part2.svg)
+
+View: UC-HV-12-part2
+
+![UC-HV-12 Remediate after a reviewed turn (use cases), part 3 of 4](c4/rendered/UC-HV-12-part3.svg)
+
+View: UC-HV-12-part3
+
+![UC-HV-12 Remediate after a reviewed turn (use cases), part 4 of 4](c4/rendered/UC-HV-12-part4.svg)
+
+View: UC-HV-12-part4
 
 ## 19. Requirements, acceptance criteria, and traceability (proposed)
 
@@ -2954,20 +3802,21 @@ The plan `PLAN-HVPIPELINE-001` derives from this section and cites it; the archi
 
 ### 20.1 Phases
 
-```mermaid
-flowchart TD
-    DEP["PLAN-SESSIONTURNREVIEW-001 delivers the foundation components the HV contexts call, or their Phase 2 seams"] --> H0["H0 Phases 1 to 3 for the HV catalog: requirements, interfaces and stubs, TDD with mocks"]
-    H0 --> SS["HvStorageSchema: first, alone"]
-    SS --> SC["HvSharedComponents: second, alone"]
-    SC --> H1["H1 HvReviewerPool"]
-    H1 --> H2["H2 HvAdmission"]
-    H2 --> H3["H3 HvExecution"]
-    H3 --> H7["H7 HvFinalization"]
-    H7 --> H4["H4 HvRestSurfaces"]
-    H4 --> H6["H6 HvStreamsAndOperations"]
-    H6 --> H5["H5 HvClientParity"]
-    H5 --> VAL["Integration, live checks, independent validation, operator approval"]
-```
+![Delivery order of the HV phases, part 1 of 4](c4/rendered/AM1-20-01.svg)
+
+View: AM1-20-01
+
+![Delivery order of the HV phases, part 2 of 4](c4/rendered/AM1-20-01-part2.svg)
+
+View: AM1-20-01-part2
+
+![Delivery order of the HV phases, part 3 of 4](c4/rendered/AM1-20-01-part3.svg)
+
+View: AM1-20-01-part3
+
+![Delivery order of the HV phases, part 4 of 4](c4/rendered/AM1-20-01-part4.svg)
+
+View: AM1-20-01-part4
 
 - H0 (Phases 1 to 3 for the whole HV catalog): the requirement records and mappings of section 19 (created 2026-10-16 as `pending`) updated to the text the hostile validation and the operator's approval settle, and the use cases of section 18 created (store ids recorded beside the labels), all through the plugin's workflows; the import of FR, TR, and TEST-MCP-PATHNORM-001 into this workspace's store and the strengthened acceptance criteria, each with a named test, of the existing requirements through which P10 to P15 are fixed (section 20.4), and the named tests of the HostileReview worker on TEST-MCP-HOSTILEREVIEW-002 and -003 (sections 16.7 and 19.3); the verification items of section 20.5; every interface, DTO, entity class, option, and stub of sections 10 to 16 compiling and unregistered, as the foundation's Phase 2 does (foundation section 8.2); every test of section 19 written from its acceptance criteria and proven against mocks with negative controls before any production code (the profile's BDPv4 procedure: tests and their mocks first, a green mock gate with every planned negative control rejected, then production code); the decision on the foundation amendments A-01 to A-12, which is a change to the approved PLAN-SESSIONTURNREVIEW-001 and needs its new hostile validation (section 1). The implementation worktree is cut from `develop` when Phase 2 starts (S-31), never from the foundation's worktree.
 - HvStorageSchema: the entities of section 12, their configurations, migrations for SQLite, PostgreSQL, and SQL Server (Up, Down, Up with schema and data equal, as the foundation's StorageSchema), the two turn columns of A-11 with their database default and their migration rule for turns already reviewed (FR-MCP-HVPIPE-012-AC007), the `AgentResponseGrade` change of A-05, the dump policies, and the federation domain; after the foundation's StorageSchema. Before it creates any HV entity, it fixes the workspace-key problems P10, P12, and P13 (D-07, section 20.4), because every HV entity is keyed by `WorkspaceId` first (section 12).
@@ -3049,16 +3898,18 @@ On 2026-10-16 the operator asked the drafting agent to settle every decision it 
 
 ## 23. Diagram index
 
-- Section 4: the system context.
-- Section 7: the state diagrams of the HV request (7.1), the run attempt (7.2), reviewer readiness (7.3), and a turn's HV state (7.4).
+Views (PLAN-C4MODEL-001; operator, 2026-10-19: "Every diagram in every doc should come from the same C4 definition."): every diagram is a view of `docs/architecture/c4/workspace.dsl` (this amendment's elements in `model/am1.dsl`, its views in `views/am1.dsl`, reusing the foundation's elements of `model/str.dsl`), shown as the image `c4/rendered/<view key>.svg` followed by the line `View: <view key>`, and rendered by `./build.ps1 ArchitectureDiagrams` on one US letter page at 8 to 16 point text (TR-MCP-NUKE-017 AC-5). A diagram named by its heading (a unit of work, policy, process, shared component, nested activity, or nested sequence) has its name as view key, except the amended RecordModelGradeCommand of section 14.5, whose key is `AM1-RecordModelGradeCommand` because the foundation's diagram keeps `RecordModelGradeCommand`; a use case keeps its label (`UC-HV-01` to `UC-HV-12`); every other diagram has the key `AM1-<section>-<NN>` named below. A diagram larger than one page continues in the views `<key>-part2`, `<key>-part3`, and so on; each branch of an `alt` block of a sequence is its own view `<key>-alt<k>-<i>`, an `opt` block is the view `<key>-opt<k>`, and a loop body is the view `<key>-loop<k>`, each placed after the view that holds the block.
+
+- Section 4: the system context (view AM1-04-01).
+- Section 7: the state diagrams of the HV request (7.1, view AM1-07-01), the run attempt (7.2, view AM1-07-02), reviewer readiness (7.3, view AM1-07-03), and a turn's HV state (7.4, view AM1-07-04).
 - Section 11, the shared components, each drawn once: FencedLease, GzipCodec, AuditLedgerGuard, AgentIdentity, TurnSnapshotBuilder, RequirementReferenceExtractor, NotificationOutbox, OrderedEventReplay.
-- Section 14, units of work: ListHvReviewersQuery, GetHvReviewerQuery, UpdateHvReviewerCommand, StartHvReviewerNonceCommand; SubmitHvRequestCommand (nested activities AdmitRequestChecks and InsertAdmittedRequest), GetHvRequestQuery, QueryHvRequestsQuery, CancelHvRequestCommand; GetHvResultQuery, GetHvEvidenceQuery, RemoveHvEvidenceCommand, StreamHvRunOutputQuery, StreamHvNotificationsQuery, QueryHvNotificationsQuery, QueryHvIncidentsQuery; ClaimHvRunCommand, RecordHvRunStartCommand, RecordHvRunHeartbeatCommand, AppendHvRunOutputCommand, CloseHvRunOutputCommand, FailHvRunCommand, ExpireHvRunLeasesCommand, FinalizeHvRequestCommand (nested activities ReadFinalizationInputs and CommitFinalResult), FileHvIncidentCommand; section 14.5, the amended internal RecordModelGradeCommand.
+- Section 14, units of work: ListHvReviewersQuery, GetHvReviewerQuery, UpdateHvReviewerCommand, StartHvReviewerNonceCommand; SubmitHvRequestCommand (nested activities AdmitRequestChecks and InsertAdmittedRequest), GetHvRequestQuery, QueryHvRequestsQuery, CancelHvRequestCommand; GetHvResultQuery, GetHvEvidenceQuery, RemoveHvEvidenceCommand, StreamHvRunOutputQuery, StreamHvNotificationsQuery, QueryHvNotificationsQuery, QueryHvIncidentsQuery; ClaimHvRunCommand, RecordHvRunStartCommand, RecordHvRunHeartbeatCommand, AppendHvRunOutputCommand, CloseHvRunOutputCommand, FailHvRunCommand, ExpireHvRunLeasesCommand, FinalizeHvRequestCommand (nested activities ReadFinalizationInputs and CommitFinalResult), FileHvIncidentCommand; section 14.5, the amended internal RecordModelGradeCommand (view AM1-RecordModelGradeCommand).
 - Section 15, policies: HvScopeResolution, HvAdmissionEligibility, HvReviewerEligibility, RoundRobinAssignment, HvTurnFreeze, HvFinalVerification (nested activities VerifyLogAndBinding and VerifyVerdictAndReviewer), ReadinessProbeVerdict, HvProbeOutcome, HvRetryDecision.
 - Section 16, processes: HvWorkerHost, RunReviewerProcess (nested activities FailAttempt, AppendBatch, and StreamReviewerOutput), SubmitHvFromPlugin, WatchHvNotifications, and HostileReviewWorkerHost (nested activities RunHostileReviewAttempt and CompleteAttempt) with its internal units ClaimHostileReviewAttemptCommand, RenewHostileReviewAttemptCommand, CompleteHostileReviewAttemptCommand, and ExpireHostileReviewLeasesCommand (section 16.7).
-- Section 17, sequences: 17.1 to 17.15, with the nested sequences StreamOneAttempt and FinalizeOneRequest after 17.7.
-- Section 18, use cases: the overview and UC-HV-01 to UC-HV-12.
-- Section 20: the delivery order.
-- Addendum B, entity diagrams by functionality: B.1 references between the groups, B.2 reviewer pool, B.3 requests and membership, B.4 runs and output, B.5 results and findings, B.6 evidence, B.7 notifications and incidents, B.8 changed foundation entities, B.9 HostileReview worker storage.
+- Section 17, sequences: 17.1 to 17.15 (views AM1-17-01 to AM1-17-15), with the nested sequences StreamOneAttempt and FinalizeOneRequest after 17.7.
+- Section 18, use cases: the overview (view AM1-18-01) and UC-HV-01 to UC-HV-12 (views UC-HV-01 to UC-HV-12).
+- Section 20: the delivery order (view AM1-20-01).
+- Addendum B, entity diagrams by functionality: B.1 references between the groups (view AM1-B-01), B.2 reviewer pool (AM1-B-02), B.3 requests and membership (AM1-B-03), B.4 runs and output (AM1-B-04), B.5 results and findings (AM1-B-05), B.6 evidence (AM1-B-06), B.7 notifications and incidents (AM1-B-07), B.8 changed foundation entities (AM1-B-08), B.9 HostileReview worker storage (AM1-B-09).
 
 ## Addendum B. Entity diagrams with relationships
 
@@ -3068,269 +3919,94 @@ Grouped by functionality, the foundation's rule (Addendum A, "Grouping"): each e
 
 - An HV request names its reviewed session by `Agent` and `SessionId`, its submitting turn by the submitter turn key, and each member turn by its turn key; a run names the reviewer's own turn by `ReviewerAgent`, `ReviewerSessionId`, and `ReviewerRequestId`; a requirement reference names a requirement or use case by `RefId`; an incident names its triage report by `TriageReportId`.
 
-```mermaid
-erDiagram
-    SessionLog ||..o{ HvRequest : "reviewed session, by Agent and SessionId"
-    SessionLogTurn ||..o{ HvRequest : "submitting turn key"
-    SessionLogTurn ||..o{ HvRequestTurn : "member turn key"
-    SessionLogTurn ||..o{ HvRun : "reviewer turn key"
-    Requirement ||..o{ HvRequestRequirementRef : "RefId"
-    TriageReport ||..o{ HvIncident : "TriageReportId"
-    HvReviewer ||..o{ HvRequest : "AssignedReviewerId"
-    HvReviewer ||..o{ HvRun : "ReviewerId"
-```
+![References between the groups (entities), part 1 of 5](c4/rendered/AM1-B-01.svg)
+
+View: AM1-B-01
+
+![References between the groups (entities), part 2 of 5](c4/rendered/AM1-B-01-part2.svg)
+
+View: AM1-B-01-part2
+
+![References between the groups (entities), part 3 of 5](c4/rendered/AM1-B-01-part3.svg)
+
+View: AM1-B-01-part3
+
+![References between the groups (entities), part 4 of 5](c4/rendered/AM1-B-01-part4.svg)
+
+View: AM1-B-01-part4
+
+![References between the groups (entities), part 5 of 5](c4/rendered/AM1-B-01-part5.svg)
+
+View: AM1-B-01-part5
 
 ### B.2 Reviewer pool
 
 Not drawn: `HvReviewer` `ConfigurationVersion`, `ExecutionStrategy`, `AgentPath`, `ConfiguredModel`, `ConfiguredEffort`, `ResolvedModel`, `ResolvedEffort`, `ReadinessReason`, `ReadinessChangedUtc`, `LastProbeRunId`, `OpenIncidentId`, `ProbeRequestedUtc`, `MaxConcurrentRuns`, `CreatedUtc`, `UpdatedUtc`.
 
-```mermaid
-erDiagram
-    HvWorkspaceState {
-        string WorkspaceId PK
-        string LastAssignedReviewerId
-        long NextNotificationSequence
-        int StateVersion
-    }
-    HvReviewer {
-        string WorkspaceId PK
-        string ReviewerId PK
-        bool Enabled
-        string Readiness
-        int StateVersion
-    }
-    HvWorkspaceState ||..o{ HvReviewer : "same workspace, cursor names a reviewer"
-```
+![Reviewer pool (entities)](c4/rendered/AM1-B-02.svg)
+
+View: AM1-B-02
 
 ### B.3 Requests and membership
 
 Not drawn: `HvRequest` scope, submitter, context, state, and result columns of section 12; unique (`WorkspaceId`, `IdempotencyKey`); indexes (`WorkspaceId`, `Status`, `CreatedUtc`) and (`WorkspaceId`, `Agent`, `SessionId`). `HvRequestTurn`: unique (`WorkspaceId`, `HvRequestId`, `Ordinal`) and the unique filtered turn-key index where `Disposition` is `Pending`. `HvRequestResponse`: unique (`WorkspaceId`, `HvRequestId`, `ResponseId`) and unique filtered (`WorkspaceId`, `ResponseId`) where `Disposition` is `Pending`.
 
-```mermaid
-erDiagram
-    HvRequest {
-        string WorkspaceId PK
-        string HvRequestId PK
-        string ScopeKind
-        string Agent
-        string SessionId
-        string IdempotencyKey UK
-        string Status
-        string AssignedReviewerId
-        int AttemptCount
-        string OverallVerdict
-    }
-    HvRequestTurn {
-        long Id PK
-        string HvRequestId FK, UK
-        int Ordinal UK
-        string Agent UK
-        string SessionId UK
-        string RequestId UK
-        string SnapshotSha256
-        string Disposition
-    }
-    HvRequestRequirementRef {
-        long Id PK
-        string HvRequestId FK, UK
-        int Ordinal UK
-        string Kind
-        string RefId
-        bool Resolved
-    }
-    HvRequestResponse {
-        long Id PK
-        string HvRequestId FK, UK
-        string ResponseId FK, UK
-        string Disposition
-        string GradeId
-    }
-    AgentResponse {
-        string ResponseId PK
-    }
-    HvRequest ||--o{ HvRequestTurn : "members"
-    HvRequest ||--o{ HvRequestRequirementRef : "references"
-    HvRequest ||--o{ HvRequestResponse : "linked responses"
-    AgentResponse ||--o{ HvRequestResponse : "graded in"
-```
+![Requests and membership (entities), part 1 of 2](c4/rendered/AM1-B-03.svg)
+
+View: AM1-B-03
+
+![Requests and membership (entities), part 2 of 2](c4/rendered/AM1-B-03-part2.svg)
+
+View: AM1-B-03-part2
 
 ### B.4 Runs and output
 
 Not drawn: `HvRun` timestamps, `ReviewerConfigurationVersion`, `ProcessId`, `ExitCode`, `FailureDetail`, `ExpectedModel`, `ExpectedEffort`, `ProbeNonce`, the output manifest, progress, and provenance columns of section 12; the unique filtered (`WorkspaceId`, `HvRequestId`) where `Status` is live. `HvRunOutputChunk`: unique (`WorkspaceId`, `RunId`, `Sequence`); `LineCount`, `ByteCount`, `FenceToken`, `CreatedUtc`, `RemovedUtc`.
 
-```mermaid
-erDiagram
-    HvRun {
-        string WorkspaceId PK
-        string RunId PK
-        string Kind
-        string HvRequestId FK, UK
-        string ReviewerId
-        int Attempt
-        string LeaseOwner
-        long FenceToken
-        string Status
-        string ReviewerSessionId
-        string ReviewerRequestId
-    }
-    HvRunOutputChunk {
-        long Id PK
-        string RunId FK, UK
-        int Sequence UK
-        bytes Payload
-        string Sha256
-        string ChainSha256
-    }
-    HvRequest {
-        string HvRequestId PK
-    }
-    HvRequest |o--o{ HvRun : "attempts, null for a probe"
-    HvRun ||--o{ HvRunOutputChunk : "ordered output"
-```
+![Runs and output (entities)](c4/rendered/AM1-B-04.svg)
+
+View: AM1-B-04
 
 ### B.5 Results and findings
 
 Not drawn: `HvTurnAssessment` `Summary`, `RunId`; `HvFinding` `ResponseId`, `Check`, `Location`, `RequirementRef`, `ClaimId`, `Evidence`, `Remediation`, `RunId`; each unique with (`WorkspaceId`, `HvRequestId`, `Ordinal`).
 
-```mermaid
-erDiagram
-    HvTurnAssessment {
-        long Id PK
-        string HvRequestId FK, UK
-        int Ordinal UK
-        string RequestId
-        decimal Correctness
-        decimal Completeness
-        string Verdict
-        string MappedReviewStatus
-    }
-    HvFinding {
-        long Id PK
-        string HvRequestId FK, UK
-        int Ordinal UK
-        string Scope
-        int TurnOrdinal
-        string Outcome
-        string Category
-    }
-    HvRequest {
-        string HvRequestId PK
-    }
-    HvRequest ||--o{ HvTurnAssessment : "per-turn assessments"
-    HvRequest ||--o{ HvFinding : "failures"
-```
+![Results and findings (entities)](c4/rendered/AM1-B-05.svg)
+
+View: AM1-B-05
 
 ### B.6 Evidence
 
 Not drawn: `ByteCount`, `CompressedBytes`, `ContentType`, `CreatedUtc`, `RemovedBy`, `RemovalReason`; unique (`WorkspaceId`, `HvRequestId`, `Kind`).
 
-```mermaid
-erDiagram
-    HvEvidence {
-        long Id PK
-        string HvRequestId FK, UK
-        string Kind UK
-        bytes Payload
-        string Sha256
-        datetime RemovedUtc
-    }
-    HvRequest {
-        string HvRequestId PK
-    }
-    HvRequest ||--o{ HvEvidence : "Request and Result evidence"
-```
+![Evidence (entities)](c4/rendered/AM1-B-06.svg)
+
+View: AM1-B-06
 
 ### B.7 Notifications and incidents
 
 Not drawn: `HvNotification` `SubmitterAgent`, `SubmitterSessionId`, `SubmitterRequestId`, `PayloadJson`, `CreatedUtc`; `HvIncident` `Summary`, `Evidence`, `FilingAttempts`, `LastFilingAttemptUtc`, `LastFilingError`, `TriageGroupId`, `CreatedUtc`, `FiledUtc`.
 
-```mermaid
-erDiagram
-    HvNotification {
-        string WorkspaceId PK
-        long Sequence PK
-        string Kind
-        string HvRequestId
-        string ReviewerId
-        string RunId
-    }
-    HvIncident {
-        string WorkspaceId PK
-        string IncidentId PK
-        string ReviewerId
-        string RunId
-        string FailureCode
-        string DedupeKey
-        string FilingStatus
-        string TriageReportId
-    }
-    HvRun {
-        string RunId PK
-    }
-    HvRun ||..o{ HvIncident : "RunId"
-    HvRun ||..o{ HvNotification : "RunId"
-```
+![Notifications and incidents (entities)](c4/rendered/AM1-B-07.svg)
+
+View: AM1-B-07
 
 ### B.8 Changed foundation entities
 
 `SessionLogTurn` gains `HvState` and `HvRequestId` (A-11); `AgentResponseGrade` gains `RunId` and its `HvRequestId` becomes a foreign key to `HvRequest` (A-05); its removed receipt-path columns are listed in section 12.
 
-```mermaid
-erDiagram
-    SessionLogTurn {
-        long Id PK
-        string RequestId UK
-        string HvState "default None"
-        string HvRequestId
-    }
-    AgentResponseGrade {
-        string GradeId PK
-        string ResponseId FK
-        string HvRequestId FK
-        string RunId
-    }
-    HvRequest {
-        string HvRequestId PK
-    }
-    HvRequest ||..o{ SessionLogTurn : "HvRequestId while Pending or Final"
-    HvRequest |o--o{ AgentResponseGrade : "model grades"
-```
+![Changed foundation entities (entities)](c4/rendered/AM1-B-08.svg)
+
+View: AM1-B-08
 
 ### B.9 HostileReview worker storage (section 16.7)
 
 The HostileReview subsystem keeps its single-column keys (R-25), so its solid lines are foreign keys on `RequestId` alone, as its existing execution and diagnostic rows have (`src/QBrainAi.Storage/Entities/HostileReviewExecutionEntity.cs:63-65`, `HostileReviewDiagnosticEntity.cs:33-35`). Not drawn: `HostileReviewAttempt` `LeaseOwner`, `LeaseExpiresUtc`, `ClaimedUtc`, `EndedUtc`, `FailureCode`, `IsDeleted`, and its unique filtered (`WorkspaceId`, `RequestId`) where `Status` is `Claimed` or `Running`; the other columns of the request, execution, and diagnostic rows, which exist today (`src/QBrainAi.Storage/Entities/HostileReviewRequestEntity.cs:8-85`).
 
-```mermaid
-erDiagram
-    HostileReviewRequest {
-        string RequestId PK
-        string WorkspaceId
-        string Status
-        string AcceptedResultId
-        int AttemptCount
-        bool IsDeleted
-    }
-    HostileReviewAttempt {
-        string AttemptId PK
-        string RequestId FK
-        string WorkspaceId
-        int AttemptNumber
-        string PoolJobId
-        string ExecutionId
-        string Status
-        long FenceToken
-    }
-    HostileReviewExecution {
-        string ExecutionId PK
-        string RequestId FK
-    }
-    HostileReviewDiagnostic {
-        long DiagnosticId PK
-        string RequestId FK
-        string Code
-    }
-    HostileReviewRequest ||--o{ HostileReviewAttempt : "attempts"
-    HostileReviewRequest ||--o{ HostileReviewExecution : "model executions"
-    HostileReviewRequest ||--o{ HostileReviewDiagnostic : "sanitized diagnostics"
-    HostileReviewExecution |o..o| HostileReviewAttempt : "ExecutionId, written with the execution row at completion"
-```
+![HostileReview worker storage (section 16.7) (entities), part 1 of 2](c4/rendered/AM1-B-09.svg)
+
+View: AM1-B-09
+
+![HostileReview worker storage (section 16.7) (entities), part 2 of 2](c4/rendered/AM1-B-09-part2.svg)
+
+View: AM1-B-09-part2
