@@ -163,6 +163,7 @@ sealed class StructurizrChromiumTooling(string chromiumPath) : IArchitectureDiag
 
         var svgs = new Dictionary<string, string>(StringComparer.Ordinal);
         var fitter = new SvgContentFitter();
+        var renumberer = new SvgIdRenumberer();
         foreach (var key in viewKeys.Distinct(StringComparer.Ordinal))
         {
             // AC-2 "the content fitted": the export's viewBox is the whole paper, so the drawn content is measured in
@@ -230,7 +231,9 @@ sealed class StructurizrChromiumTooling(string chromiumPath) : IArchitectureDiag
                     .ToArray();
                 try
                 {
-                    svgs[key] = fitter.Fit(svg, new SvgContentBox(edges[0], edges[1], edges[2], edges[3]));
+                    // AC-2: the ids come from one page-wide counter consumed at a timing-dependent point, so each
+                    // render is renumbered on its own.
+                    svgs[key] = renumberer.Renumber(fitter.Fit(svg, new SvgContentBox(edges[0], edges[1], edges[2], edges[3])));
                 }
                 catch (ArgumentException)
                 {

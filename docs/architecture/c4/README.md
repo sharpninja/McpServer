@@ -19,7 +19,7 @@ Run from the repository root:
 
     ./build.ps1 ArchitectureDiagrams
 
-The target (TR-MCP-NUKE-017) validates the workspace with structurizr/cli 2025.11.09 pinned by digest, fails on any Structurizr inspection error, renders every view through the Structurizr static export in headless Chromium (light theme, cropped to the drawn content plus 50 units), writes only changed files, removes renders of deleted views, and fails on Mermaid fences or .mmd files outside docs/receipts, on image links to unknown views, on views without renders, and on renders outside the letter-page standard. Add --what-if to report without writing.
+The target (TR-MCP-NUKE-017) validates the workspace with structurizr/cli 2025.11.09 pinned by digest, fails on any Structurizr inspection error, renders every view through the Structurizr static export in headless Chromium (light theme, cropped to the drawn content plus 50 units, generated element ids renumbered per render so a render's bytes depend only on its own view), writes only changed files, removes renders of deleted views, and fails on Mermaid fences or .mmd files outside docs/receipts, on image links to unknown views, on views without renders, and on renders outside the letter-page standard. Add --what-if to report without writing.
 
 ## Editing
 - Add an element once and reuse it in every view that shows it (ADR 0001, D4).
