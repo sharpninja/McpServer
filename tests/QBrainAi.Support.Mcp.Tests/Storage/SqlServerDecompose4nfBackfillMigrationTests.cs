@@ -17,6 +17,7 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// <c>InstallTestDependencies</c> Nuke target, and an unreachable server fails the gate directly.
 /// </summary>
 [Trait("Category", "Integration")]
+[Collection(SqlServerLocalDbCollection.Name)]
 public sealed class SqlServerDecompose4nfBackfillMigrationTests : IDisposable
 {
     private const string PreSliceMigration = "20260628194732_RepairTriageCreatedTodoWorkspace";

@@ -18,6 +18,7 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// server fails the gate directly rather than skipping. Validates FR-MCP-129 and FR-MCP-134.
 /// </summary>
 [Trait("Category", "Integration")]
+[Collection(SqlServerLocalDbCollection.Name)]
 public sealed class SqlServerRenameQuadBrainRolesMigrationTests : IDisposable
 {
     private const string PrecedingMigration = "20260702193940_Decompose4nfAgentModelLists";

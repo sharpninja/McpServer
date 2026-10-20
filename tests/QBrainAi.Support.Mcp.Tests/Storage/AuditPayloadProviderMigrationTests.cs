@@ -8,6 +8,7 @@ using Xunit;
 namespace QBrainAi.Support.Mcp.Tests.Storage;
 
 [Trait("Category", "Integration")]
+[Collection(SqlServerLocalDbCollection.Name)]
 public sealed class SqlServerAuditPayloadMigrationTests : IDisposable
 {
     private readonly string _serverConnectionString = SqlServerTestConnection.Server;

@@ -28,7 +28,9 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// SqlServer and Postgres compiled <c>Up()</c> must emit guarded SQL (no unguarded
 /// <see cref="CreateTableOperation"/>). SqlServer captured SQL is executed on disposable LocalDB.
 /// Postgres captured SQL is executed on an ephemeral local cluster (no Skip).
+/// Its SQL Server case opens LocalDB, so the class runs in <see cref="SqlServerLocalDbCollection"/> (TR-MCP-NUKE-019 AC-2).
 /// </summary>
+[Collection(SqlServerLocalDbCollection.Name)]
 public sealed class SessionLogAgentSessionHeaderMigrationTests : IDisposable
 {
     /// <summary>Sqlite migration immediately before the header-column apply vehicle.</summary>
