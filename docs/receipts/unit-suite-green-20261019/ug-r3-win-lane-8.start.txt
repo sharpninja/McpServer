@@ -1,0 +1,15 @@
+RECEIPT 2026-10-20T16:51:31 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Start-WinInteractiveLane.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+START 2026-10-20T16:51:23 host=PAYTON-LEGION2 user=kingd
+RUNNER C:\Users\kingd\AppData\Local\Temp\Invoke-WinLaneRunner.ps1 sha256=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE expected=D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE match=True
+  checkout: Previous HEAD position was 68fa7b39 test(storage): the SQL Server LocalDB collection runs with parallelization disabled, as the chosen option states (IMPL-UNITGREEN-001)
+  checkout: HEAD is now at e0b078c8 fix(marker): a plugin version file that cannot be read never fails the marker (IMPL-UNITGREEN-001)
+HEAD e0b078c802d6456d106e6ec681d1aa93d6c4d055 expected=e0b078c802d6456d106e6ec681d1aa93d6c4d055 match=True
+PWSH C:\Program Files\PowerShell\7-LabWsman\pwsh.exe
+ACTION -NoProfile -ExecutionPolicy Bypass -File "C:\Users\kingd\AppData\Local\Temp\Invoke-WinLaneRunner.ps1" -Worktree "F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019" -RunId "ug-r3-win-lane-8" -LogPath "C:\Users\kingd\AppData\Local\Temp\unit-green-interactive\MigrationIntegrationTests-ug-r3-win-lane-8.log" -ProofPath "C:\Users\kingd\AppData\Local\Temp\unit-green-interactive\proof-ug-r3-win-lane-8.txt" -ExitPath "C:\Users\kingd\AppData\Local\Temp\unit-green-interactive\exit-ug-r3-win-lane-8.txt"
+ACCOUNT PAYTON-LEGION2\kingd
+TASK McpUnitGreenLane-ug-r3-win-lane-8 state=Running lastRun=10/20/2026 16:51:25 result=267009
+PROOF so far: START 2026-10-20T16:51:26 user=kingd session=1 interactive=True head=e0b078c802d6456d106e6ec681d1aa93d6c4d055
+END 2026-10-20T16:51:31
