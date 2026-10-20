@@ -1,4 +1,4 @@
-# Plan: the unit suite green on both lab hosts (proposed)
+# Plan: the unit suite green on both lab hosts
 
 Proposed 2026-10-19T14:47 local by ClaudeCode (claude-opus-5-5, effort xhigh). Status: approved 14:50 ("Yes, I approve the change") with the amendments in sections 7 to 9; executed as recorded in section 10; no done state before hostile validation. Committed as `docs/plans/2026-10-19-unit-suite-green.md` on the effort branch.
 
@@ -6,7 +6,7 @@ Proposed 2026-10-19T14:47 local by ClaudeCode (claude-opus-5-5, effort xhigh). S
 
 - "BDPv4 requires all unit tests be green."
 - "Gotta use the recommended packages."
-- Decisions: "Plan first, approve later"; "Full suite on Windows too" (Windows shows 0 failed and 0 skipped; Linux keeps reporting its 16 Windows-only cases as skipped); "Tag them Integration (Recommended)" (verify the three provider tests are integration tests, tag them, and make them pass in `MigrationIntegrationTests` on PAYTON-LEGION2); "Leave merged, fix forward (Recommended)" (PR 82 stays merged as `ace70daa`).
+- Decisions: "Plan first, approve later"; "Full suite on Windows too" (Windows shows 0 failed and 0 skipped; Linux keeps reporting its 16 Windows-only cases as skipped; superseded by the day-one rule in section 9: 0 skipped on both hosts); "Tag them Integration (Recommended)" (verify the three provider tests are integration tests, tag them, and make them pass in `MigrationIntegrationTests` on PAYTON-LEGION2); "Leave merged, fix forward (Recommended)" (PR 82 stays merged as `ace70daa`).
 
 ## 2. Measured state (receipts)
 
@@ -44,7 +44,7 @@ Production already implements FR-MCP-PATHNORM-001; these tests still assert the 
 
 - `WorkspaceNativePathMockDataTests.NonWindowsHost_IsUnchanged` and `WorkspaceNativePathRealTests.NonWindowsHost_IsUnchanged` skip on Windows (`Assert.SkipWhen(OperatingSystem.IsWindows(), ...)`, `WorkspaceNativePathContractTests.cs:42`) because `WorkspaceIdentityPath.ToNativePath` reads `OperatingSystem.IsWindows()` directly (`src/QBrainAi.Client/WorkspaceIdentityPath.cs:1043-1049`).
 - Fix: add `ToNativePath(string path, WorkspacePathPlatform platform, IWorkspaceHostEnvironment host)` (decides on `host.Platform`); the existing two-argument method delegates with `SystemWorkspaceHostEnvironment.Instance`, so its behavior is unchanged. Move the non-Windows-host case into a new contract `WorkspaceNativePathHostContractTests` run against a simulated non-Windows host (`SimulatedWorkspaceHosts`) on every runner, with MockData and Real subclasses, so it executes on Windows too. Public API addition in the published `QBrainAI.Client` package: additive, not breaking.
-- The 16 Linux skips (the Windows-only cases in `WorkspaceNativePathContractTests` and `WorkspaceRemotePathContractTests`) stay as they are, per the operator.
+- The 16 Linux skips (the Windows-only cases in `WorkspaceNativePathContractTests` and `WorkspaceRemotePathContractTests`) stay as they are, per the operator. Superseded by section 9: the native-path Windows-host cases run on every host against the simulated host, and the remote-path Real binding is a Windows integration test without a skip.
 
 ### E. Windows evidence route environment (not code)
 
@@ -59,14 +59,14 @@ Production already implements FR-MCP-PATHNORM-001; these tests still assert the 
 ### G. `MigrationIntegrationTests` target-level failures on Windows (operator decision, asked separately)
 
 - Decompose4nf: fixed by B2.
-- Build.Tests, 8 Linux-only cases of `ServiceUpdateTests` (`LinuxPreflight_RejectsSpecialApphostAndTextInputs` x4, `LinuxPreflight_RejectsSpecialStageFiles`, `LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: False)`, `LinuxArchive_UsesPrivateMetadataPreservingCommands`, `LinuxReplacement_DoesNotFollowSymlinks`): `mkfifo` missing, "Unix file modes are not supported on this platform", access denied on the stale-file replacement. They cannot pass on Windows, and the target cannot run on Linux because `InstallTestDependencies` installs the Windows LocalDB MSI (`build/Build.TestDependencies.cs:236-272`). So these 8 pass on no host today.
+- Build.Tests, 8 Linux-only cases of `ServiceUpdateTests` (`LinuxPreflight_RejectsSpecialApphostAndTextInputs` x4, `LinuxPreflight_RejectsSpecialStageFiles`, `LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: False)`, `LinuxArchive_UsesPrivateMetadataPreservingCommands`, `LinuxReplacement_DoesNotFollowSymlinks`): `mkfifo` missing, "Unix file modes are not supported on this platform", access denied on the stale-file replacement. They cannot pass on Windows, and the target cannot run on Linux because `InstallTestDependencies` installs the Windows LocalDB MSI (`build/Build.TestDependencies.cs:236-272`). So these 8 pass on no host today. Superseded: TR-MCP-NUKE-018 (taken over in `11681680`) runs the target on Linux, and amendment G runs these cases only there.
 - Build.Tests, 3 PATH cases: fixed by E.
 
 ## 4. Requirements first (BDPv4 step 1), through the plugin's requirements workflow
 
 - TR-MCP-QUALITY-001: reopen the AC "NU1901 and NU1903 are not approved..." (develop violates it since the 2026-10-13 advisories) and strengthen it to "NU1901, NU1902, NU1903, and NU1904 are not approved. Vulnerable package advisories must be resolved by updating to the advisory's patched versions and a clean vulnerability audit on every lab host"; satisfied again only with the A evidence.
 - TEST-MCP-PATHNORM-001: add the AC "The native-boundary behavior for a non-Windows host is proven on every test host without a host-conditional skip" (D).
-- No new FR or TR, and no mapping change. TODO `IMPL-UNITGREEN-001` created through the plugin, linked to this plan and to TR-MCP-QUALITY-001 and TEST-MCP-PATHNORM-001.
+- No new FR or TR, and no mapping change. TODO `IMPL-UNITGREEN-001` created through the plugin, linked to this plan and to TR-MCP-QUALITY-001 and TEST-MCP-PATHNORM-001. Superseded by the amendments: TR-MCP-NUKE-019 created under FR-MCP-BUILD-001 (AC-1 to AC-4, then AC-5); FR-MCP-USECASE-016 and -017 converted into TR-MCP-USECASE-018 and -019 under FR-MCP-USECASE-001 and deleted, with their four mappings replaced; TEST-MCP-USECASE-019 and -020 restated for BDPv4.
 
 ## 5. Order, gates and receipts (Nuke targets only; no override; receipts under `TestResults/<run id>` and copied to `docs/receipts/unit-suite-green-20261019/`)
 
@@ -74,12 +74,13 @@ Production already implements FR-MCP-PATHNORM-001; these tests still assert the 
 - Step 0: fresh Linux baseline `./build.ps1 Test --test-run-id unit-green-linux-base-<stamp>` at `ace70daa` (expected: the 14 failures listed in B and C, plus the 16 skips).
 - Step 1 (A): package pins. Gate: `Restore` and `Compile` clean on both hosts, zero NU190x.
 - Step 2 (tests and scripted data first): B1 to B6, C, D's new contract and MockData class, F's assertion message, each B change with its negative control.
-- Step 3, mock gate (Linux): `./build.ps1 Test --test-run-id unit-green-mock-<stamp>`. Pass condition: 0 failed; every new and changed test and every negative control passes; not executed exactly the 16 named Windows-only cases. B and C bind to production that already implements FR-MCP-PATHNORM-001; D's Real binding is not written until step 4, so no test is red at any point.
+- Step 3, mock gate (Linux): `./build.ps1 Test --test-run-id unit-green-mock-<stamp>`. Pass condition: 0 failed; every new and changed test and every negative control passes; not executed exactly the 16 named Windows-only cases (superseded by section 9: 0 not executed). B and C bind to production that already implements FR-MCP-PATHNORM-001; D's Real binding is not written until step 4, so no test is red at any point.
 - Step 4 (production): D's host-aware `ToNativePath` overload and the `WorkspaceNativePathHostRealTests` binding.
 - Step 5, exit gates, all required:
-  - Linux fresh worktree: `./build.ps1 Test`: 0 failed; not executed exactly the 16 named Windows-only cases.
+  - Linux fresh worktree: `./build.ps1 Test`: 0 failed; not executed exactly the 16 named Windows-only cases (superseded by section 9: 0 failed, 0 not executed).
   - Windows fresh worktree: `Test`: 0 failed, 0 not executed.
-  - Windows: `MigrationIntegrationTests`: 0 failed, 0 not executed, including the three provider tests (scope of G per your answer).
+  - Windows: `MigrationIntegrationTests`: 0 failed, 0 not executed, including the three provider tests (scope of G per your answer); since amendment H, run from an interactive desktop session.
+  - Linux: `MigrationIntegrationTests`: 0 failed, 0 not executed (added by amendment G).
   - `ValidateTraceability` on Linux; Build.Tests run as the infrastructure check because A changes the Nuke build project's package graph.
 - Step 6: hostile validation by a reviewer outside the Claude family (agent and model asked below), unbounded review time, request and response jsonl under `docs/receipts/hv/`, the entire verdict in the reviewer's session-log turn, 98/98 bar. No done state before AGREE.
 - Step 7: one PR into `develop`, signed comments. On the branch also correct `docs/handoffs/pr82-review-handoff-20261019T104723.md`, which records the baseline-equal gate as accepted.
@@ -89,14 +90,15 @@ Production already implements FR-MCP-PATHNORM-001; these tests still assert the 
 - Test files: `UseCaseGetWorkspaceResolutionContractTests.cs`, `RemoveTodoRecordsMigrationTests.cs`, `Decompose4nfBackfillMigrationTests.cs`, `WorkspacePathNormalizerRealTests.cs`, `WorkspaceServiceAccessorTests.cs`, `GitHubCliServiceTests.cs`, `WorkspaceResolutionMiddlewareTests.cs`, `SessionLogAgentSessionHeaderMigrationTests.cs`, `EphemeralPostgresFixtureTests.cs`, `WorkspaceNativePathContractTests.cs` (plus the new host contract), `HostileReviewG4OverlayTests.cs`.
 - Production: `Directory.Packages.props` (every project moves Pkcs and Xml from 10.0.10 to 10.0.13; for net8 and net9 consumers Pkcs 10.0.13 brings `Microsoft.Bcl.Cryptography` and `System.Formats.Asn1` 10.0.13, neither centrally pinned); `src/QBrainAi.Client/WorkspaceIdentityPath.cs` (additive overload).
 - No migration, schema, configuration, wire contract or stored-data change. Breaking change: none.
+- Added by the amendments: `build/` (`Build.TestDependencies.cs`, `LinuxProviderTestProvisioner.cs`, `ProviderTestProvisioningContracts.cs`, `IntegrationLaneFilter.cs`, `IntegrationLaneFilterContracts.cs`, `InteractiveSessionPrecondition.cs`, `IntegrationLanePreconditionContracts.cs`) and `.nuke/build.schema.json` (TestDbEnvFile); `src/QBrainAi.Services/Services/GitHubCliService.cs` (takeover); Build.Tests contracts, mock gates and bindings for TR-MCP-NUKE-018 and -019; and about 40 test files in `QBrainAi.Support.Mcp.Tests` and `QBrainAi.McpAgent.Tests` (traits, per-platform splits, the two guards). Still no breaking change; the Windows integration lane now needs an interactive desktop session (amendment H).
 
 ## 7. Amendments and decisions after approval (2026-10-19)
 
 - Approved 14:50 ("Yes, I approve the change"); G: "Host-scoped lane (Recommended)" as a plan amendment for approval; HV reviewer: Codex gpt-6-astra max.
 - Step 1: FR, TR and TEST-MCP-PATHNORM-001 were absent from this store and TR-MCP-QUALITY-001 had no criteria here. Operator: "Copy from PAYTON-LEGION2". Copied verbatim through the PAYTON-LEGION2 plugin wrapper (receipt `runs/legion2-requirements-20261019T1459.txt`), then ac-21 reopened and strengthened and TEST-MCP-PATHNORM-001 `unitgreen-native-host` added. Store drift filed as `triage-report-89af8a4491394d1f87b6cc27d535e85f`.
-- Overlap: PLAN-C4MODEL-001 (branch `docs/c4-structurizr-model-20261017`) had already fixed 10 of the 14 Linux failures (`ff55292e`), Decompose4nf (`d248230e`) and the Linux provider lane (TR-MCP-NUKE-018). Operator: "Narrow mine (Recommended)". This effort keeps A, B1, B2 (RemoveTodoRecords), B3, D, E, F and the Windows side of G; B4, B5, B6, C and the Decompose4nf change were restored to develop in `a4c358ef`. Exit gates run after PLAN-C4MODEL-001 is on develop and develop is merged here.
+- Overlap: PLAN-C4MODEL-001 (branch `docs/c4-structurizr-model-20261017`) had already fixed 10 of the 14 Linux failures (`ff55292e`), Decompose4nf (`d248230e`) and the Linux provider lane (TR-MCP-NUKE-018). Operator: "Narrow mine (Recommended)". This effort keeps A, B1, B2 (RemoveTodoRecords), B3, D, E, F and the Windows side of G; B4, B5, B6, C and the Decompose4nf change were restored to develop in `a4c358ef`. Exit gates run after PLAN-C4MODEL-001 is on develop and develop is merged here. Superseded 16:02 to 16:38 by the ownership decision in section 9 (this effort took that code over in `11681680`), and 17:05 by PR 86, which carried the one BoundedProcess file this branch needed.
 
-## 8. Proposed amendment G: host-scoped integration lane, Windows side (for approval)
+## 8. Amendment G: host-scoped integration lane (approved 16:22)
 
 - Requirement (step 1): new TR-MCP-NUKE-019 under FR-MCP-BUILD-001 (Nuke behavior is accountable through TR only; no TEST record): "MigrationIntegrationTests selects host-specific integration cases by the Platform trait".
   - AC-1: On a Windows host the target runs `Category=Integration` cases except those tagged `Platform=Linux`; on a Linux host it runs them except those tagged `Platform=Windows`; untagged cases run on both.
@@ -126,6 +128,12 @@ Inventory (read-only, `runs/platform-test-inventory-20261019T1612.txt`, the 7 pr
 - Fixture root: UnitTestPaths.Root chooses a host-shaped fake root (`UnitTestPaths.cs:13`); operator decision 16:19, "Host-neutral fixture (Recommended)": kept; the guard does not scan helper types, so the fixture is outside it.
 - Requirements: FR-MCP-USECASE-016 and -017 (the only FRs that state the platform-test rule) are converted to TRs per the operator ("If it is in a FR, then that FR needs to be converted to a TR"; 17:03 answers "Merge into its TR (Recommended)", "FR-001, delete FRs (Recommended)", "Only 016 and 017 (Recommended)"): TR-MCP-USECASE-018 holds FR-016's 7 criteria (AC-006 restated for the integration lane) and TR-MCP-USECASE-019 FR-017's 8 (AC-008 restated), both under FR-MCP-USECASE-001 with TEST-MCP-USECASE-019/020; FR-016 and FR-017 deleted after read-back. FR-MCP-USECASE-015 stays an FR.
 - Additional finding: McpAgentOptionsSectionTests' legacy-section binding goes through a validator that requires a path fully qualified on the running host, so it moved to an integration class and `QBrainAi.McpAgent.Tests` joined MigrationIntegrationTests (TR-MCP-NUKE-019 AC-2).
+- As built (`b2bd50b3`, `59249260`, and the handoff-reader fix), where it differs from the inventory above:
+  - Linux natives: the tagged classes are BugTriage139FifteenthLinuxNativeTests, BugTriage139SixteenthLinuxTests, BugTriage139EighteenthLinuxTests and RequirementsFourteenthLinuxNativeTests; `BugTriage139FifteenthNativeTests.cs` holds a helper type (BugTriage139FifteenthNativeScenarios), and BugTriage139FifteenthSharedTests is Integration on both hosts (by judgment; no scanner hit). Windows natives also include BugTriage139FifteenthWindowsNativeTests.
+  - The Codex npm-shim case is Platform=Windows, beside the Windows launch case, not untagged.
+  - WorkspaceTokenServiceTests compares with the `ExpectedWorkspaceKey` oracle instead of a simulated-host normalizer; McpAgentOptionsSectionTests' legacy case is an integration test (the finding above), not fixed data.
+  - Silent returns removed in tagged classes: ProcessEnvironmentServiceTests (4); DesktopProcessSpawner's interactive case and HandoffContainedFileReader's invalid-handle case moved to Windows integration classes.
+  - The platform guard also flags xUnit skips and bindings to the real process host (`SystemWorkspaceHostEnvironment.Instance`, `WorkspacePathNormalizer.Process`); it reads source only, so dependence reached through a helper is outside it.
 
 ## 10. Execution record (2026-10-19)
 
@@ -134,4 +142,32 @@ Inventory (read-only, `runs/platform-test-inventory-20261019T1612.txt`, the 7 pr
 - Linux: Test `unit-green-reclass-20261019T1745` 4611 total, 0 failed, 0 not executed; MigrationIntegrationTests `unit-green-reclass-int-20261019T1751` 154 passed, 0 failed, 0 skipped (filter `Category=Integration&Platform!=Windows`).
 - Windows (PAYTON-LEGION2, HEAD `b2bd50b3` verified): Test `unit-green-win-reclass-20261019T1751` 4611 total, 0 failed, 0 not executed; MigrationIntegrationTests in the same run 128 passed, 0 failed, 0 not executed (filter `Category=Integration&Platform!=Linux`).
 - Infrastructure: full Build.Tests (raw `dotnet test`) `unit-green-buildtests-20261019T1753` 422 passed, 0 failed, 0 not executed; ValidateTraceability `unit-green-traceability-20261019T1758` passed.
+- `59249260` (operator 18:01, "Platform=Windows, fail loudly (Recommended)"): the interactive desktop-spawner case moved to `DesktopProcessSpawnerWindowsInteractiveTests` (Integration, Platform=Windows) and asserts `Environment.UserInteractive`. Linux Test `unit-green-desktop-20261019T1824` green; Linux lane `unit-green-desktop-int-20261019T1830` 153 passed, 0 failed; Windows Test 4611/0/0 and Windows lane 126 passed, 1 failed in `unit-green-win-desktop-20261019T1830`, and 127 passed, 1 failed in the lane-only rerun `unit-green-win-desktop-int-20261019T1837`; the failure both times is that case, because the WSMan route is non-interactive. The 18:30 Windows lane also lost the TranscriptMcpStdioHost result without any outcome (present again at 18:37), filed as `triage-report-9be3ac08e4c84330b00a8ad647552012`.
+- Operator 18:01: the five TODO tasks checked before hostile review were unchecked ("Uncheck them now (Recommended)"); TEST-MCP-USECASE-019 and -020 restated for BDPv4 ("Restate for BDPv4 (Recommended)").
 - Not done: the requirements wiki export (`workflow.requirements.generateDocument`, wiki, all) fails on Linux with the known defect `triage-report-a6927fca10364155ab9992506e1abc9c` (status grouped), so the generated `docs/Project` exports still list FR-MCP-USECASE-016 and -017, which the store no longer holds. Hostile validation has not run.
+
+## 11. Amendment H: the Windows integration lane runs interactively (H1 approved 18:47)
+
+- Operator, 18:45: "Lane runs interactively by design". Requirement first: TR-MCP-NUKE-019 AC-5, recorded 18:46 and unsatisfied: "On a Windows host, MigrationIntegrationTests runs its test processes in an interactive desktop session of the logged-on user, so a Windows case that needs an interactive session (Environment.UserInteractive is true) executes and passes; a run that cannot reach an interactive session fails before any test runs and names the missing session, and never reports such a case as passed, skipped, or not executed."
+- Why: `DesktopProcessSpawnerWindowsInteractiveTests` asserts an interactive session; the WSMan evidence route runs as lab-wsman in a non-interactive session, so the Windows lane stays at 1 failed.
+- Approach, your decision (each meets AC-5):
+  - H1 (recommended): interactive precondition. On Windows the target checks its own process before any test runs and fails, naming the missing session, when it is not interactive. The Windows lane is then run from a console in kingd's desktop session (a PowerShell.Mcp console or a terminal), by you or an agent working there; I read its TRX back over WSMan as the receipt. Blast radius: one pure decision function and its binding in `build/Build.TestDependencies.cs`; no change to the machine. Consequence: every Windows lane run needs a session on the desktop; the WSMan route still runs the Windows `Test` target and proves the precondition fails as specified.
+  - H2: relaunch into the desktop session. Invoked without an interactive session, the target registers a one-shot scheduled task that runs the same `dotnet test` commands in the logged-on user's interactive session, waits for it, collects the TRX files, and removes the task. Blast radius: task registration code in `build/`, rights for lab-wsman to register a task that runs as kingd, kingd logged on during every run, and a transient scheduled task on each run. Consequence: WSMan stays the whole evidence route. Unknown until tried: whether lab-wsman can register an interactive task for kingd without kingd's password.
+- Tests first (Build.Tests, raw `dotnet test`): the decision as a pure function (host platform and interactive flag in; run, or fail with the named message, out); contract scenarios for Linux (unchanged), Windows interactive (run) and Windows non-interactive (fail before tests); scripted implementation with negative controls (runs when non-interactive, skips instead of failing, message omits the session, fails on Linux); mock gate; then production and the binding. Under H2, the task command line is composed by a pure function with the same pattern, and the registration itself is exercised only by the lane run.
+- Gates: Linux lane unchanged at 0 failed; Windows lane 0 failed and 0 not executed from an interactive session; a non-interactive Windows invocation fails before any test with the named message (receipt from the WSMan route); full Build.Tests 0 failed.
+- Approved 18:47 ("Approve H1 (Recommended)") and built as `69d8f3f5`: mock gate `unit-green-h-mockgate-20261019T1849` 9/9; production and binding `unit-green-h-real-20261019T1856` 14/14; Linux lane `unit-green-h-int-20261019T1856` 153 passed, 0 failed, 0 skipped; Windows over WSMan `unit-green-win-h-wsman-20261019T1856` refused before any test with the named message and wrote no TRX.
+- Not executed, by operator decision 19:03 ("skip"): the Windows lane run from an interactive desktop session. AC-5's "executes and passes" half therefore has no evidence and AC-5 stays unsatisfied.
+
+## 12. Final gates (2026-10-19)
+
+- `12746834`: HandoffContainedFileReader's Windows-only invalid-handle case moved to `HandoffContainedFileReaderWindowsTests` (Integration, Platform=Windows) without its silent return; found by the pre-HV review (`Find-SilentPlatformReturns.ps1`).
+- Runs at the code head `12746834`:
+  - Linux Test `unit-green-handoff-20261019T1909`: 4611 total, 0 failed, 0 not executed. It ran at `69d8f3f5` with the `12746834` change uncommitted in the worktree (its meta file lists the dirty path), so it is not a clean code-head run.
+  - Linux MigrationIntegrationTests `unit-green-final-int-20261019T1915`: 152 passed (Support.Mcp 135, McpAgent 1, Build 16), 0 failed, 0 skipped; one fewer than `unit-green-h-int-20261019T1856` because the invalid-handle case now runs only on Windows.
+  - Windows Test `unit-green-win-final-20261019T1915` (HEAD `12746834` verified): 4611 total, 0 failed, 0 not executed; the Windows lane over WSMan in the same run refused before any test with the AC-5 message.
+  - ValidateTraceability `unit-green-final-traceability-20261019T1918`: passed.
+  - Full Build.Tests `unit-green-final-buildtests-20261019T1918` (raw `dotnet test`): 436 total, 436 passed, 0 failed, 0 not executed.
+- Receipts of these runs: `docs/receipts/unit-suite-green-20261019/` (TRX summaries, meta and exit files, the Windows receipts and the traceability log; SHA-256 verified copies, originals kept).
+- Final-head gates: every gate reruns at the head that carries this plan and these receipts. Their run ids and counts are recorded in the PR body and the hostile-validation brief rather than here, so recording them does not move the head again.
+- Wiki export retried 19:19:13: the same failure (`triage-report-a6927fca10364155ab9992506e1abc9c`); declared, not committed.
+- Open: the Windows lane from an interactive desktop session (operator "skip" 19:03), so TR-MCP-NUKE-019 AC-2 and AC-5 are unproven for Windows; hostile validation has not run.
