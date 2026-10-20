@@ -84,10 +84,10 @@ Do not reference v2 packages (`xunit`, `xunit.abstractions`, `xunit.core`, `xuni
 - Rationale: The source package exposes `Assert` as a partial class so you can add methods to it. This is the documented pattern for multi-project test suites. The source `Assert` class is `public` by default, and `xunit.v3` (through `xunit.v3.mtp-v2` in 4.x) depends on `xunit.v3.assert`, so a test project with both sees two public `Xunit.Assert` types and fails with CS0433. The core-only packages do not depend on `xunit.v3.assert` or `xunit.analyzers`, which is why the analyzers must be added explicitly. Verified on Oct 20, 2026 by building a 3.2.2 test project against such a utility library: with `xunit.v3` it failed with CS0433, and with `xunit.v3.core` it built.
 - Source: https://xunit.net/docs/nuget-packages-v3 ; https://github.com/xunit/assert.xunit/blob/main/README.md ; https://api.nuget.org/v3-flatcontainer/xunit.v3.mtp-v2/4.0.2/xunit.v3.mtp-v2.nuspec ; https://api.nuget.org/v3-flatcontainer/xunit.v3.core.mtp-v2/4.0.2/xunit.v3.core.mtp-v2.nuspec
 
-**XU-015 (MUST NOT)** Do not remove or disable `xunit.analyzers`.
+**XU-015 (MUST NOT)** Do not remove or disable `xunit.analyzers`. Projects on the 3.2.x line MUST reference `xunit.analyzers` 2.2.0 explicitly (centrally pinned), because the transitive version is too old for section 13.
 
-- Rationale: The analyzers enforce most of this document at compile time (see section 13).
-- Source: https://xunit.net/docs/nuget-packages-v3
+- Rationale: The analyzers enforce most of this document at compile time (see section 13). Section 13 is written against analyzers 2.2.0. `xunit.v3.mtp-v1` 3.2.2 (which `xunit.v3` 3.2.2 depends on) only requires `xunit.analyzers` 1.27.0, so without an explicit reference NuGet resolves 1.27.0. That version lacks rules section 13 relies on; for example, xUnit1069 (XU-075) first appears in analyzers 2.0.0.
+- Source: https://xunit.net/docs/nuget-packages-v3 ; https://api.nuget.org/v3-flatcontainer/xunit.v3.mtp-v1/3.2.2/xunit.v3.mtp-v1.nuspec ; https://github.com/xunit/xunit.analyzers/blob/2.0.0/src/xunit.analyzers/Utility/Descriptors.xUnit1xxx.cs
 
 **XU-016 (SHOULD)** Pin package versions centrally, for example with Central Package Management, and upgrade every test project together. The exception is XU-161.
 
@@ -313,10 +313,10 @@ public sealed class OpcodeCases : IEnumerable<TheoryDataRow<byte, string>>
 - Rationale: It stops the data from being enumerated during discovery.
 - Source: https://xunit.net/docs/getting-started/v3/theory-data-attributes
 
-**XU-049 (MAY)** Use `MatrixTheoryData` to combine 2 to 5 data sets into every combination.
+**XU-049 (MAY)** Use `MatrixTheoryData` to combine 2 to 15 data sets into every combination (the 3.2.2 API lists `MatrixTheoryData<T1, T2>` through `MatrixTheoryData<T1, ..., T15>`).
 
 - Rationale: It builds combinatorial cases (for example opcode by flag state) without writing every row by hand.
-- Source: https://xunit.net/docs/getting-started/v3/whats-new
+- Source: https://xunit.net/docs/getting-started/v3/whats-new ; https://api.xunit.net/v3/3.2.2/Xunit.html
 
 ```csharp
 public static TheoryData<byte, bool> OpcodeByCarry =
@@ -328,10 +328,10 @@ public static TheoryData<byte, bool> OpcodeByCarry =
 - Rationale: The setting then affects only the row that needs it. `DisableParallelization` does not exist on data rows or data attributes in 3.2.x; it arrived with the 4.0 parallelization changes (XU-084).
 - Source: https://xunit.net/docs/getting-started/v3/theory-data-attributes ; https://xunit.net/releases/v3/4.0.0 ; https://github.com/xunit/xunit/blob/v3-4.0.2/src/xunit.v3.core/ITheoryDataRow.cs
 
-**XU-051 (MAY)** `MemberData` methods MAY be async and return `Task<>` or `ValueTask<>`. They MUST NOT fetch data from the network or other external systems (see XU-095).
+**XU-051 (MAY)** `MemberData` sources MAY be async: they MAY return `IAsyncEnumerable<TheoryDataRow<...>>` (for example, an async iterator), and either `IEnumerable<>` or `IAsyncEnumerable<>` MAY be wrapped in `Task<>` or `ValueTask<>`. They MUST NOT fetch data from the network or other external systems (see XU-095).
 
 - Rationale: v3 supports async data, but data from outside the test makes tests non-deterministic.
-- Source: https://xunit.net/docs/getting-started/v3/whats-new
+- Source: https://xunit.net/docs/getting-started/v3/whats-new ; https://api.xunit.net/v3/3.0.0/Xunit.MemberDataAttribute.html
 
 ---
 
@@ -959,10 +959,10 @@ Sources: https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/con
 - Rationale: Long-running warnings are diagnostic messages, so they only appear when diagnostics are enabled. The threshold switch and the diagnostics switch are independent options, so the command line form needs both.
 - Source: https://xunit.net/docs/config-xunit-runner-json ; https://xunit.net/docs/getting-started/v3/microsoft-testing-platform
 
-**XU-144 (SHOULD)** For reflection-mode test projects, CI should keep the assembly unique ID that appears in the run output, so a failure that depends on order can be reproduced locally (XU-087). This does not apply to Native AOT projects (XU-018), because the `.uniqueid` override is not available in AOT mode.
+**XU-144 (SHOULD)** For reflection-mode test projects, CI should keep the assembly unique ID that appears in the run output (the native execution summary ends with `ID: '<value>'`). In the MTP command line UX, pass `--xunit-info` so that the native xUnit.net output, including that summary, is shown alongside the MTP output. CI should keep that ID so a failure that depends on order can be reproduced locally (XU-087). This does not apply to Native AOT projects (XU-018), because the `.uniqueid` override is not available in AOT mode.
 
 - Rationale: CI and local runs use different orders because the ID is derived from the file path.
-- Source: https://xunit.net/docs/getting-started/v3/whats-new ; https://xunit.net/docs/getting-started/v3/native-aot
+- Source: https://xunit.net/docs/getting-started/v3/whats-new ; https://xunit.net/docs/getting-started/v3/native-aot ; https://xunit.net/docs/getting-started/v3/microsoft-testing-platform
 
 **XU-145 (SHOULD)** Collect code coverage under MTP with the `Microsoft.Testing.Extensions.CodeCoverage` package (`dotnet test --coverage --coverage-output-format cobertura` with the .NET 10 SDK or later in MTP mode; with the .NET 8 or 9 SDK, where MTP runs on top of the VSTest-based `dotnet test`, add the separator: `dotnet test -- --coverage --coverage-output-format cobertura`). When `dotnet test` runs several projects, do not pass `--coverage-output`.
 
@@ -1100,6 +1100,8 @@ xUnit.net documentation:
 - https://api.xunit.net/v3/4.0.0/Xunit.IClassFixture-1.html (accessed Oct 20, 2026)
 - https://api.xunit.net/v3/4.0.0/Xunit.ICollectionFixture-1.html (accessed Oct 20, 2026)
 - https://api.xunit.net/v3/3.2.2/Xunit.TheoryData-1.html (accessed Oct 20, 2026)
+- https://api.xunit.net/v3/3.2.2/Xunit.html (accessed Oct 20, 2026)
+- https://api.xunit.net/v3/3.0.0/Xunit.MemberDataAttribute.html (accessed Oct 20, 2026)
 - https://xunit.net/docs/getting-started/v3/cmdline (accessed Oct 20, 2026; returned HTTP 500, not used for facts)
 - https://github.com/xunit/xunit.net/blob/main/site/docs/getting-started/v3/custom-serialization.md (accessed Oct 20, 2026)
 - https://xunit.net/docs/shared-context (accessed Oct 20, 2026)
@@ -1136,6 +1138,8 @@ GitHub repositories:
 - https://github.com/xunit/xunit (accessed Oct 20, 2026)
 - https://github.com/xunit/xunit.analyzers (accessed Oct 20, 2026)
 - https://github.com/xunit/xunit.analyzers/blob/main/README.md (accessed Oct 20, 2026)
+- https://github.com/xunit/xunit.analyzers/blob/2.0.0/src/xunit.analyzers/Utility/Descriptors.xUnit1xxx.cs (accessed Oct 20, 2026)
+- https://api.nuget.org/v3-flatcontainer/xunit.v3.mtp-v1/3.2.2/xunit.v3.mtp-v1.nuspec (accessed Oct 20, 2026)
 - https://github.com/xunit/xunit.net (accessed Oct 20, 2026)
 - https://github.com/xunit/xunit.analyzers/blob/main/src/xunit.analyzers/Utility/Descriptors.xUnit1xxx.cs (accessed Oct 20, 2026)
 - https://github.com/xunit/xunit.analyzers/blob/main/src/xunit.analyzers/Utility/Descriptors.xUnit2xxx.cs (accessed Oct 20, 2026)
