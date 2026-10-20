@@ -1,0 +1,14 @@
+{
+  "TimestampUtc": "2026-10-20T01:13:16.5559006Z",
+  "TimestampLocal": "2026-10-19T20:13:16",
+  "Mode": "Search",
+  "Arguments": [
+    "-n",
+    "class UnitSuitePlatformScanner|namespace",
+    "tests/QBrainAi.Support.Mcp.Tests/UnitSuitePlatformScanner.cs"
+  ],
+  "Offset": 0,
+  "Count": 20,
+  "ExitCode": 2,
+  "Output": "rg: tests/QBrainAi.Support.Mcp.Tests/UnitSuitePlatformScanner.cs: IO error for operation on tests/QBrainAi.Support.Mcp.Tests/UnitSuitePlatformScanner.cs: No such file or directory (os error 2)"
+}

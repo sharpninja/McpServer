@@ -1,0 +1,15 @@
+{
+  "TimestampUtc": "2026-10-20T00:55:45.2879429Z",
+  "TimestampLocal": "2026-10-19T19:55:45",
+  "Mode": "Search",
+  "Arguments": [
+    "-n",
+    "MCP_.*MODEL|CODEX_MODEL|AGENT_MODEL|Model =|model =",
+    "/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1",
+    "/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/McpPluginShim.psm1"
+  ],
+  "Offset": 0,
+  "Count": 250,
+  "ExitCode": 0,
+  "Output": "/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/McpPluginShim.psm1:444:        model = $Model\n/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1:1337:    $model = Get-ReplSessionStateValue -Key 'model'\n/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1:1339:        $model = if ($env:MCP_SESSION_MODEL) { $env:MCP_SESSION_MODEL }\n/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-invoke.ps1:1744:        model = [string]$turnObj.turn.model"
+}

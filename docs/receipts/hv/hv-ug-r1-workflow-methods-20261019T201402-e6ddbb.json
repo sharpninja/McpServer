@@ -1,0 +1,14 @@
+{
+  "TimestampUtc": "2026-10-20T01:14:02.8887777Z",
+  "TimestampLocal": "2026-10-19T20:14:02",
+  "Mode": "Search",
+  "Arguments": [
+    "-n",
+    "workflow.usecase|workflow.sessionlog.queryHistory|UseCases.ListAsync|UseCases.GetCoverageAsync",
+    "src"
+  ],
+  "Offset": 0,
+  "Count": 100,
+  "ExitCode": 0,
+  "Output": "src/QBrainAi.Repl.Core/SessionLogCommandShapes.cs:31:/// <item><c>workflow.sessionlog.queryHistory</c> — Query session log history</item>\nsrc/QBrainAi.Repl.Core/SessionLogCommandShapes.cs:123:    /// Method: <c>workflow.sessionlog.queryHistory</c>\nsrc/QBrainAi.Repl.Core/SessionLogCommandShapes.cs:125:    public const string QueryHistoryMethod = \"workflow.sessionlog.queryHistory\";\nsrc/QBrainAi.Repl.Core/SessionLogCommandShapes.cs:826:/// Represents the parameters for the <c>workflow.sessionlog.queryHistory</c> command.\nsrc/QBrainAi.Repl.Core/SessionLogCommandShapes.cs:834:///   method: workflow.sessionlog.queryHistory\nsrc/QBrainAi.Repl.Core/SessionLogCommandShapes.cs:863:/// Represents the result for the <c>workflow.sessionlog.queryHistory</c> command.\nsrc/QBrainAi.Support.Mcp/graphrag-global/input/canonical/templates/prompt-templates.yaml:505:      5. Recover the open turn instead of starting over: query session history through the plugin (workflow.sessionlog.queryHistory), find the in-progress turn, then keep updating and complete it via the plugin. Do not open a duplicate session for the same work.\nsrc/QBrainAi.Support.Mcp/graphrag-global/input/canonical/templates/prompt-templates.yaml:506:      5a. Treat `deprecated: true` on successful `workflow.*` results as metadata, not wrapper failure. Treat an empty `workflow.sessionlog.queryHistory` result as a valid no-match result. Re-check the workspace current directory, explicit `agent` or `sourceType`, and plugin cache/session state through the wrapper; do not use raw REST merely because history is empty or marked deprecated."
+}

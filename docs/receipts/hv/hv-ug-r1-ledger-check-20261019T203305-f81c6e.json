@@ -1,0 +1,12 @@
+{
+  "TimestampUtc": "2026-10-20T01:33:05.4913148Z",
+  "TimestampLocal": "2026-10-19T20:33:05",
+  "Mode": "Read",
+  "Arguments": [
+    "docs/receipts/hv/hv-ug-r1-final-Ledger.json"
+  ],
+  "Offset": 0,
+  "Count": 20,
+  "ExitCode": 0,
+  "Output": "FILE: docs/receipts/hv/hv-ug-r1-final-Ledger.json; LINES: 1829\n1: [\n2:   {\n3:     \"TimestampUtc\": \"2026-10-20T00:51:41.33Z\",\n4:     \"Tool\": \"exec\",\n5:     \"Commands\": [\n6:       \"Get-Content -Raw /home/sharpninja/.claude/skills/add-profile/SKILL.md; Get-ChildItem -LiteralPath /home/sharpninja/.claude/profile -File -Filter *.md | Where-Object { $_.Name -ne 'SKILL.md' } | Sort-Object Name | ForEach-Object { Write-Output ('PROFILE_FILE: ' + $_.FullName); Get-Content -Raw -LiteralPath $_.FullName }; Write-Output ('PROFILE_FILE_COUNT: ' + @(Get-ChildItem -LiteralPath /home/sharpninja/.claude/profile -File -Filter *.md | Where-Object { $_.Name -ne 'SKILL.md' }).Count)\"\n7:     ],\n8:     \"ExitCodes\": [\n9:       0\n10:     ],\n11:     \"Running\": false,\n12:     \"ResultLength\": 40927,\n13:     \"Invocation\": null,\n14:     \"Error\": null\n15:   },\n16:   {\n17:     \"TimestampUtc\": \"2026-10-20T00:51:57.241Z\",\n18:     \"Tool\": \"exec\",\n19:     \"Commands\": [\n20:       \"$profileLines = Get-Content -LiteralPath /home/sharpninja/.claude/profile/PROFILE-MERGED.md; Write-Output ('PROFILE_LINES: ' + $profileLines.Count); $profileLines | Select-Object -Skip 110 -First 155; Get-Content -Raw /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/enforcement/SKILL.md; Get-Content -Raw /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/skills/session/SKILL.md; Get-Date -Format s\""
+}

@@ -1,0 +1,12 @@
+{
+  "TimestampUtc": "2026-10-20T01:22:56.0838326Z",
+  "TimestampLocal": "2026-10-19T20:22:56",
+  "Mode": "Read",
+  "Arguments": [
+    "docs/receipts/hv/hv-ug-r1-test-20261019T201636.meta.json"
+  ],
+  "Offset": 160,
+  "Count": 35,
+  "ExitCode": 0,
+  "Output": "FILE: docs/receipts/hv/hv-ug-r1-test-20261019T201636.meta.json; LINES: 150"
+}
