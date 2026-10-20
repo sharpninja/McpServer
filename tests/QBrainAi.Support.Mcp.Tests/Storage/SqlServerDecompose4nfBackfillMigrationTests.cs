@@ -29,8 +29,7 @@ public sealed class SqlServerDecompose4nfBackfillMigrationTests : IDisposable
     /// <summary>Resolves the server connection (LocalDB by default).</summary>
     public SqlServerDecompose4nfBackfillMigrationTests()
     {
-        _serverConnectionString = Environment.GetEnvironmentVariable("MCP_TEST_SQLSERVER_CONNECTION")
-            ?? "Server=(localdb)\\MSSQLLocalDB;Integrated Security=True;TrustServerCertificate=True";
+        _serverConnectionString = SqlServerTestConnection.Server;
     }
 
     /// <summary>
