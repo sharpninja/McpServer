@@ -1,6 +1,6 @@
 # PLAN-C4MODEL-001: Every documentation diagram comes from one Structurizr C4 definition
 
-Status: awaiting operator approval (written 2026-10-19 on branch docs/c4-structurizr-model-20261017, PR 84).
+Status: approved 2026-10-19T09:59:12 local (operator answer "Yes, I approve the plan" on commit 044b5ac6); in progress at P4 (written 2026-10-19 on branch docs/c4-structurizr-model-20261017, PR 84).
 Process: Byrd Development Process v4. The plan decides its phases, gates and hostile validation points.
 
 ## 1. Operator rulings (verbatim, 2026-10-19)
@@ -101,8 +101,8 @@ P6 Hostile validation of this plan's result by the reviewer the operator names (
 
 P7 Delivery. Signed commits on docs/c4-structurizr-model-20261017, fast-forward pushes, PR 84 description updated, signed reply on comment 6269382182.
 
-## 6. Open items for approval
+## 6. Approval record (operator answers, 2026-10-19T09:59:12 local)
 
-- Approve the plan and the requirement reconciliation in section 3.
-- Code freeze: P1 rewrites tests/QBrainAi.Support.Mcp.Tests/Documentation/TurnTransactionPlanArtifactTests.cs, product test code outside the Nuke-target exemption.
-- Name the HV reviewer (agent and model) for P6.
+- The plan and the requirement reconciliation in section 3 (commit 044b5ac6): "Yes, I approve the plan".
+- Code freeze for P1, which rewrites tests/QBrainAi.Support.Mcp.Tests/Documentation/TurnTransactionPlanArtifactTests.cs (product test code outside the Nuke-target exemption): "fix the test".
+- HV reviewer for P6: "Codex gpt-6-astra max".
