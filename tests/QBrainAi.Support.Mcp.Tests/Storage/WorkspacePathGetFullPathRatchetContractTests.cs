@@ -101,6 +101,9 @@ public abstract class WorkspacePathGetFullPathRatchetContractTests
         ["src/QBrainAi.Support.Mcp/Controllers/SessionLogTranscriptIngestionController.cs"] = 2,
         ["src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs"] = 1,
         ["src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs"] = 3,
+        // P1.5: physical backup/copy/report/token filenames; persisted workspace keys use the lexical policy.
+        ["src/QBrainAi.Support.Mcp/DatabaseMaintenance/WorkspacePathRekey.cs"] = 2,
+        ["src/QBrainAi.Support.Mcp/DatabaseMaintenance/WorkspacePathRekeyCommand.cs"] = 4,
         ["src/QBrainAi.Support.Mcp/McpStdio/McpStdioHost.cs"] = 1,
         ["src/QBrainAi.Support.Mcp/Program.cs"] = 9,
         ["src/QBrainAi.Support.Mcp/Services/AppSettingsFileService.cs"] = 2,
