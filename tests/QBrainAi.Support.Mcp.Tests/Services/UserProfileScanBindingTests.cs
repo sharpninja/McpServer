@@ -76,12 +76,18 @@ public sealed class UserProfileScanBindingTests : IDisposable
         return (unlistable, linked);
     }
 
+    /// <summary>
+    /// Test-owned resolution sources: no plugin-root variable, the production sibling rule applied to the temporary
+    /// workspace (a folder that is never created), and the temporary profile.
+    /// </summary>
+    private AgentPluginVersionSources Sources => new(_ => null, AgentPluginVersionSources.SiblingOf, Profile);
+
     private string Resolve(DirectoryTreeWalker walker) =>
         MarkerFileService.ResolveAgentPluginVersion(
             Workspace,
             PluginName,
-            $"MCP_SCAN_BINDING_UNSET_{Guid.NewGuid():N}",
-            Profile,
+            "CLAUDE_PLUGIN_ROOT",
+            Sources,
             walker);
 
     /// <summary>
@@ -124,8 +130,8 @@ public sealed class UserProfileScanBindingTests : IDisposable
         MarkerFileService.ResolveAgentPluginVersion(
             Workspace,
             PluginName,
-            $"MCP_SCAN_BINDING_UNSET_{Guid.NewGuid():N}",
-            Profile,
+            "CLAUDE_PLUGIN_ROOT",
+            Sources,
             DirectoryTreeWalker.FileSystem,
             readText);
 

@@ -90,10 +90,12 @@ public static class MarkerFileService
         SignaturePayloadFields[..^ConditionalAgentPluginFieldCount];
 
     /// <summary>
-    /// Test seam: when set, plugin-version resolution scans this directory for user plugin caches
-    /// instead of the real user profile, so tests are hermetic against locally installed plugins.
+    /// AC-TR-MCP-WS-005-001 test seam: when set, marker plugin-version resolution reads every input (the plugin-root
+    /// environment variables, the workspace sibling plugin folder and the user profile caches) from these sources
+    /// instead of <see cref="AgentPluginVersionSources.Process"/>, so unit tests never read the process environment,
+    /// the machine or the real profile. Set only by the unit-test assembly fixture.
     /// </summary>
-    internal static string? AgentPluginUserProfileOverride { get; set; }
+    internal static AgentPluginVersionSources? AgentPluginVersionSourcesOverride { get; set; }
 
     private static readonly ISerializer s_yamlSerializer = new SerializerBuilder()
         .WithNamingConvention(CamelCaseNamingConvention.Instance)
@@ -529,12 +531,22 @@ public static class MarkerFileService
             $"Marker signature payload field '{field}' has no value binding. Update ResolveSignaturePayloadValue when adding a field to SignaturePayloadFields."),
     };
 
-    internal static MarkerAgentPlugins BuildDefaultAgentPlugins(string workspacePath)
+    internal static MarkerAgentPlugins BuildDefaultAgentPlugins(string workspacePath) =>
+        BuildDefaultAgentPlugins(workspacePath, AgentPluginVersionSourcesOverride ?? AgentPluginVersionSources.Process);
+
+    /// <summary>
+    /// AC-TR-MCP-WS-005-001: builds the default agent-plugin contract, resolving each plugin version from
+    /// <paramref name="sources"/> only.
+    /// </summary>
+    /// <param name="workspacePath">Workspace the marker describes.</param>
+    /// <param name="sources">Every input plugin-version resolution reads.</param>
+    /// <returns>The agent-plugin contract.</returns>
+    internal static MarkerAgentPlugins BuildDefaultAgentPlugins(string workspacePath, AgentPluginVersionSources sources)
     {
         var siblingRoot = Path.GetDirectoryName(Path.GetFullPath(workspacePath)) ?? string.Empty;
         string Sibling(string name) => string.IsNullOrWhiteSpace(siblingRoot) ? name : Path.Combine(siblingRoot, name);
         string Version(string pluginName, string environmentVariableName) =>
-            ResolveAgentPluginVersion(workspacePath, pluginName, environmentVariableName);
+            ResolveAgentPluginVersion(workspacePath, pluginName, environmentVariableName, sources, DirectoryTreeWalker.FileSystem);
 
         return new MarkerAgentPlugins
         {
@@ -610,35 +622,25 @@ public static class MarkerFileService
         };
     }
 
-    internal static string ResolveAgentPluginVersion(
-        string workspacePath,
-        string pluginName,
-        string environmentVariableName) =>
-        ResolveAgentPluginVersion(
-            workspacePath,
-            pluginName,
-            environmentVariableName,
-            AgentPluginUserProfileOverride ?? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-            DirectoryTreeWalker.FileSystem);
-
     /// <summary>
-    /// AC-TR-MCP-WS-005-001: resolves an agent plugin version, scanning the plugin caches under
-    /// <paramref name="userProfile"/> through <paramref name="walker"/>, which skips directory links and any
-    /// directory it cannot list; falls back to <see cref="SyncedAgentPluginVersion"/>.
+    /// AC-TR-MCP-WS-005-001: resolves an agent plugin version from <paramref name="sources"/> only: the plugin root
+    /// its environment variable names, then the plugin folder beside the workspace, then the plugin caches under its
+    /// user profile, scanned through <paramref name="walker"/>, which skips directory links and any directory it
+    /// cannot list; falls back to <see cref="SyncedAgentPluginVersion"/>.
     /// </summary>
     /// <param name="workspacePath">Workspace whose sibling folder may hold the plugin.</param>
     /// <param name="pluginName">Plugin folder name.</param>
     /// <param name="environmentVariableName">Variable that may name the plugin root.</param>
-    /// <param name="userProfile">Profile whose plugin caches are scanned; none when empty.</param>
+    /// <param name="sources">Every input resolution reads.</param>
     /// <param name="walker">Directory walk used for the cache scan.</param>
     /// <returns>The resolved version.</returns>
     internal static string ResolveAgentPluginVersion(
         string workspacePath,
         string pluginName,
         string environmentVariableName,
-        string? userProfile,
+        AgentPluginVersionSources sources,
         DirectoryTreeWalker walker) =>
-        ResolveAgentPluginVersion(workspacePath, pluginName, environmentVariableName, userProfile, walker, ReadExistingFileText);
+        ResolveAgentPluginVersion(workspacePath, pluginName, environmentVariableName, sources, walker, ReadExistingFileText);
 
     /// <summary>
     /// AC-TR-MCP-WS-005-001: resolves an agent plugin version as the overload above does, reading each candidate's
@@ -648,7 +650,7 @@ public static class MarkerFileService
     /// <param name="workspacePath">Workspace whose sibling folder may hold the plugin.</param>
     /// <param name="pluginName">Plugin folder name.</param>
     /// <param name="environmentVariableName">Variable that may name the plugin root.</param>
-    /// <param name="userProfile">Profile whose plugin caches are scanned; none when empty.</param>
+    /// <param name="sources">Every input resolution reads.</param>
     /// <param name="walker">Directory walk used for the cache scan.</param>
     /// <param name="readText">Reads a file's text; null when the file does not exist; throws when it cannot be read.</param>
     /// <returns>The resolved version.</returns>
@@ -656,11 +658,11 @@ public static class MarkerFileService
         string workspacePath,
         string pluginName,
         string environmentVariableName,
-        string? userProfile,
+        AgentPluginVersionSources sources,
         DirectoryTreeWalker walker,
         Func<string, string?> readText)
     {
-        foreach (var root in EnumerateAgentPluginVersionRoots(workspacePath, pluginName, environmentVariableName, userProfile, walker, readText))
+        foreach (var root in EnumerateAgentPluginVersionRoots(workspacePath, pluginName, environmentVariableName, sources, walker, readText))
         {
             var version = TryReadAgentPluginVersion(root, readText);
             if (!string.IsNullOrWhiteSpace(version))
@@ -683,21 +685,19 @@ public static class MarkerFileService
         string workspacePath,
         string pluginName,
         string environmentVariableName,
-        string? userProfile,
+        AgentPluginVersionSources sources,
         DirectoryTreeWalker walker,
         Func<string, string?> readText)
     {
-        var environmentRoot = Environment.GetEnvironmentVariable(environmentVariableName);
+        var environmentRoot = sources.EnvironmentVariable(environmentVariableName);
         if (!string.IsNullOrWhiteSpace(environmentRoot))
             yield return environmentRoot;
 
-        if (!string.IsNullOrWhiteSpace(workspacePath))
-        {
-            var siblingRoot = Path.GetDirectoryName(Path.GetFullPath(workspacePath));
-            if (!string.IsNullOrWhiteSpace(siblingRoot))
-                yield return Path.Combine(siblingRoot, pluginName);
-        }
+        var siblingRoot = sources.SiblingRoot(workspacePath, pluginName);
+        if (!string.IsNullOrWhiteSpace(siblingRoot))
+            yield return siblingRoot;
 
+        var userProfile = sources.UserProfile;
         if (!string.IsNullOrWhiteSpace(userProfile))
         {
             foreach (var candidate in EnumerateUserPluginCacheRoots(userProfile, pluginName, walker, readText))

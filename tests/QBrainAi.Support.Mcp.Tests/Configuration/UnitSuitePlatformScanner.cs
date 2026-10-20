@@ -13,7 +13,9 @@ namespace QBrainAi.Support.Mcp.Tests.Configuration;
 /// separates code from strings, comments and documentation and keeps the code inside interpolation holes, so a
 /// member access split across lines, a qualified, global-qualified or aliased name, a <c>using static</c>
 /// import, a method group, and an attribute anywhere in an attribute list are read like a plain call or
-/// attribute; a name inside <c>nameof</c> is not a use. Every conditional-compilation branch is read: the file
+/// attribute; a name inside <c>nameof</c> is not a use. Aliases and static imports resolve in the lexical scope
+/// of the code that uses them, as the compiler resolves them: the file's directives, then each enclosing
+/// namespace's, an inner alias hiding an outer one, so a directive in one namespace does not reach another. Every conditional-compilation branch is read: the file
 /// is parsed once for each combination of the symbols its <c>#if</c> and <c>#elif</c> directives name, and a
 /// file that names more than <see cref="MaxConditionalSymbols"/> symbols fails the scan instead of leaving a
 /// branch unread. Test classes are types whose name ends in <c>Tests</c> or that declare a method with an
@@ -161,9 +163,45 @@ internal static class UnitSuitePlatformScanner
     /// <summary>Every rule hit in one tree, with the node it is reported on.</summary>
     private static IEnumerable<(SyntaxNode Node, string Kind)> FindHits(CompilationUnitSyntax root)
     {
-        var aliases = new Dictionary<string, string>(StringComparer.Ordinal);
-        var staticTypes = new HashSet<string>(StringComparer.Ordinal);
-        foreach (var directive in root.DescendantNodes().OfType<UsingDirectiveSyntax>())
+        var scopes = new Dictionary<SyntaxNode, ImportScope>();
+        foreach (var node in root.DescendantNodes(child => child is not UsingDirectiveSyntax))
+        {
+            IReadOnlyList<string> kinds = node switch
+            {
+                AttributeSyntax attribute => AttributeKinds(attribute, ScopeOf(attribute, scopes).Aliases),
+                MemberAccessExpressionSyntax access => MemberKinds(TypeName(access.Expression, ScopeOf(access, scopes).Aliases), access.Name.Identifier.ValueText),
+                IdentifierNameSyntax { Identifier.ValueText: "SkipException" } => ["skip"],
+                IdentifierNameSyntax identifier when IsUnqualified(identifier) => StaticImportKinds(identifier.Identifier.ValueText, ScopeOf(identifier, scopes).StaticTypes),
+                _ => [],
+            };
+            if (kinds.Count > 0 && (node is AttributeSyntax || !InNameOf(node)))
+            {
+                foreach (var kind in kinds)
+                    yield return (node, kind);
+            }
+        }
+    }
+
+    /// <summary>The using aliases and static imports in effect at <paramref name="node"/>.</summary>
+    private static ImportScope ScopeOf(SyntaxNode node, Dictionary<SyntaxNode, ImportScope> scopes) =>
+        ScopeFor(node.Ancestors().First(IsImportContainer), scopes);
+
+    /// <summary>
+    /// The using aliases and static imports in effect inside <paramref name="container"/> (the file or a namespace),
+    /// resolved the way the compiler resolves them: the file's directives, then each enclosing namespace's from the
+    /// outermost in, an inner alias hiding an outer alias of the same name. Cached per container.
+    /// </summary>
+    private static ImportScope ScopeFor(SyntaxNode container, Dictionary<SyntaxNode, ImportScope> scopes)
+    {
+        if (scopes.TryGetValue(container, out var known))
+            return known;
+
+        var outer = container.Ancestors().FirstOrDefault(IsImportContainer);
+        var enclosing = outer is null ? ImportScope.Empty : ScopeFor(outer, scopes);
+        var aliases = new Dictionary<string, string>(enclosing.Aliases, StringComparer.Ordinal);
+        var staticTypes = new HashSet<string>(enclosing.StaticTypes, StringComparer.Ordinal);
+        var usings = container is BaseNamespaceDeclarationSyntax space ? space.Usings : ((CompilationUnitSyntax)container).Usings;
+        foreach (var directive in usings)
         {
             var target = RightmostName(directive.NamespaceOrType);
             if (target is null)
@@ -174,23 +212,12 @@ internal static class UnitSuitePlatformScanner
                 staticTypes.Add(target);
         }
 
-        foreach (var node in root.DescendantNodes(child => child is not UsingDirectiveSyntax))
-        {
-            IReadOnlyList<string> kinds = node switch
-            {
-                AttributeSyntax attribute => AttributeKinds(attribute, aliases),
-                MemberAccessExpressionSyntax access => MemberKinds(TypeName(access.Expression, aliases), access.Name.Identifier.ValueText),
-                IdentifierNameSyntax { Identifier.ValueText: "SkipException" } => ["skip"],
-                IdentifierNameSyntax identifier when IsUnqualified(identifier) => StaticImportKinds(identifier.Identifier.ValueText, staticTypes),
-                _ => [],
-            };
-            if (kinds.Count > 0 && (node is AttributeSyntax || !InNameOf(node)))
-            {
-                foreach (var kind in kinds)
-                    yield return (node, kind);
-            }
-        }
+        var scope = new ImportScope(aliases, staticTypes);
+        scopes[container] = scope;
+        return scope;
     }
+
+    private static bool IsImportContainer(SyntaxNode node) => node is CompilationUnitSyntax or BaseNamespaceDeclarationSyntax;
 
     private static IEnumerable<SyntaxNode> RepositoryLocatorNodes(CompilationUnitSyntax root)
     {
@@ -319,7 +346,7 @@ internal static class UnitSuitePlatformScanner
         node.Ancestors().Any(ancestor =>
             ancestor is InvocationExpressionSyntax { Expression: IdentifierNameSyntax { Identifier.ValueText: "nameof" } });
 
-    /// <summary>The rightmost name of a type or receiver expression, resolving a file-level using alias.</summary>
+    /// <summary>The rightmost name of a type or receiver expression, resolving a using alias in scope.</summary>
     private static string? TypeName(SyntaxNode node, IReadOnlyDictionary<string, string> aliases) =>
         node is IdentifierNameSyntax identifier && aliases.TryGetValue(identifier.Identifier.ValueText, out var target)
             ? target
@@ -342,6 +369,13 @@ internal static class UnitSuitePlatformScanner
     private static int LineOf(SyntaxNode node) => node.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
 
     private sealed record MemberRule(string Kind, string Type, Func<string, bool> Matches);
+
+    /// <summary>Using aliases (alias to the target's rightmost name) and static-import types in effect in one scope.</summary>
+    private sealed record ImportScope(IReadOnlyDictionary<string, string> Aliases, IReadOnlySet<string> StaticTypes)
+    {
+        internal static readonly ImportScope Empty =
+            new(new Dictionary<string, string>(StringComparer.Ordinal), new HashSet<string>(StringComparer.Ordinal));
+    }
 }
 
 /// <summary>TR-MCP-USECASE-018 (AC-006): one platform-dependent line in a unit test class.</summary>

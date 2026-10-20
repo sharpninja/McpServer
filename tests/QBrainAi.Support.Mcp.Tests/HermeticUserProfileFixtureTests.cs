@@ -5,15 +5,16 @@ namespace QBrainAi.Support.Mcp.Tests;
 
 /// <summary>
 /// Tests that <see cref="HermeticUserProfileFixture"/> is in effect for this assembly: marker agent-plugin version
-/// resolution points at an existing, empty directory under the system temp folder, never an unset value that
-/// would fall back to the real user profile.
+/// resolution reads the fixture's sources, which resolve no plugin-root variable, offer no folder beside the workspace,
+/// and point at an existing, empty directory under the system temp folder, never the real user profile.
 /// </summary>
 /// <remarks>
 /// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 (operator 2026-10-20: "Fix scans in PR 87
-/// (Recommended)"). Test data: the assembly fixture's profile, injected; negative controls feed the hermeticity
-/// assertion an unset override, a directory outside the temp folder, and a temp directory that holds a plugin cache,
-/// and prove the assertion rejects each. The live override is only checked to be set and under the temp folder:
-/// a test class running in parallel may hold its own temporary profile there and delete it when it finishes.
+/// (Recommended)" and "Structural fix, round 4 (Recommended)"). Test data: the assembly fixture's profile and sources,
+/// injected; negative controls feed the profile assertion an unset override, a directory outside the temp folder, and
+/// a temp directory that holds a plugin cache, and prove the assertion rejects each (the source-level controls are in
+/// <c>AgentPluginVersionSourcesTests</c>). No test changes the live override at run time, so it is checked to be the
+/// fixture's own sources.
 /// </remarks>
 public sealed class HermeticUserProfileFixtureTests
 {
@@ -36,18 +37,19 @@ public sealed class HermeticUserProfileFixtureTests
     }
 
     /// <summary>
-    /// The fixture's profile is an existing, empty directory under the temp folder, and the live override is set
-    /// and lies under the temp folder, so plugin-version resolution never falls back to the real user profile.
+    /// The fixture's profile is an existing, empty directory under the temp folder, and the live override is the
+    /// fixture's sources, which pass the source hermeticity assertion, so plugin-version resolution never reads the
+    /// environment, the machine or the real user profile.
     /// </summary>
     [Fact]
-    public void AgentPluginUserProfileOverride_IsAnEmptyTemporaryProfile()
+    public void AgentPluginVersionSourcesOverride_IsTheHermeticAssemblySources()
     {
         AssertHermetic(_fixture.Profile, Path.GetTempPath());
 
-        // Read once: another test class may be inside its own hermetic scope, whose folder it deletes afterwards.
-        var live = MarkerFileService.AgentPluginUserProfileOverride;
-        Assert.False(string.IsNullOrWhiteSpace(live));
-        Assert.StartsWith(Path.GetFullPath(Path.GetTempPath()), Path.GetFullPath(live), StringComparison.Ordinal);
+        var live = MarkerFileService.AgentPluginVersionSourcesOverride;
+        Assert.Same(_fixture.Sources, live);
+        QBrainAi.Support.Mcp.Tests.Services.AgentPluginVersionSourcesTests.AssertHermetic(live!);
+        Assert.Equal(_fixture.Profile, live!.UserProfile);
     }
 
     /// <summary>
