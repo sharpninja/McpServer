@@ -142,10 +142,10 @@ Minimal project file (MTP v2, .NET 10 SDK, with `global.json` as shown in XU-020
 - Rationale: xUnit.net v3 supports MTP natively, and the current template defaults to it.
 - Source: https://xunit.net/docs/getting-started/v3/microsoft-testing-platform ; https://xunit.net/docs/getting-started/v3/getting-started
 
-**XU-021 (MUST)** If any consumer still runs tests through VSTest (an older Visual Studio, or a CI task that only speaks VSTest), keep the `xunit.runner.visualstudio` (3.0.0 or later) and `Microsoft.NET.Test.Sdk` package references. If every consumer uses MTP, you MAY remove them. On xUnit.net 4.x with the .NET 10 SDK or later, a project that must still run under VSTest MUST also use the MTP-off core package (`xunit.v3.mtp-off`, or `xunit.v3.aot.mtp-off` for Native AOT) instead of the default `xunit.v3`, or move that consumer to MTP.
+**XU-021 (MUST)** If any consumer still runs tests through VSTest (an older Visual Studio, or a CI task that only speaks VSTest), keep the `xunit.runner.visualstudio` and `Microsoft.NET.Test.Sdk` package references. The adapter must be 3.0.0 or later for reflection-mode projects, and 4.0 or later for Native AOT projects (XU-018). If every consumer uses MTP, you MAY remove them. On xUnit.net 4.x with the .NET 10 SDK or later, a project that must still run under VSTest MUST also use the MTP-off core package (`xunit.v3.mtp-off`, or `xunit.v3.aot.mtp-off` for Native AOT) instead of the default `xunit.v3`, or move that consumer to MTP.
 
-- Rationale: VSTest mode needs both packages. xUnit.net recommends keeping them until every environment uses MTP. In 4.0 the default package enables MTP v2, and xUnit.net offers the MTP-off packages for those who want to use VSTest on the .NET 10 SDK or later. Without them, a run can fail with "Testing with VSTest target is no longer supported by Microsoft.Testing.Platform on .NET 10 SDK and later".
-- Source: https://xunit.net/docs/getting-started/v3/microsoft-testing-platform ; https://xunit.net/docs/getting-started/v3/migration ; https://xunit.net/releases/v3/4.0.0
+- Rationale: VSTest mode needs both packages. xUnit.net recommends keeping them until every environment uses MTP. In 4.0 the default package enables MTP v2, and xUnit.net offers the MTP-off packages for those who want to use VSTest on the .NET 10 SDK or later. Without them, a run can fail with "Testing with VSTest target is no longer supported by Microsoft.Testing.Platform on .NET 10 SDK and later". The Native AOT package table lists `xunit.runner.visualstudio` as "Use version 4.0+". McpServer centrally pins the adapter to 3.1.5 on Oct 20, 2026, so an AOT project there would need that pin raised.
+- Source: https://xunit.net/docs/getting-started/v3/microsoft-testing-platform ; https://xunit.net/docs/getting-started/v3/migration ; https://xunit.net/releases/v3/4.0.0 ; https://xunit.net/docs/getting-started/v3/native-aot
 
 **XU-022 (MUST)** Every test project's README or build script MUST say which command line UX it uses: native xUnit.net (the default) or MTP (`<UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>`). Scripts MUST use the switches for that UX.
 
@@ -931,13 +931,13 @@ Sources: https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/con
 - Rationale: This enforces XU-001, section 13, and the repository's validation gate, which does not count skipped tests as passing. MTP reports failures through its exit codes (see https://aka.ms/testingplatform/exitcodes, which the MTP output links to).
 - Source: Team policy (AGENTS.md, "Byrd Test Gate"); https://xunit.net/docs/getting-started/v3/getting-started ; https://xunit.net/docs/getting-started/v3/microsoft-testing-platform
 
-**XU-141 (MUST)** CI MUST publish results in a machine-readable format.
+**XU-141 (MUST)** CI MUST publish results in a structured, machine-readable format: TRX, xUnit.net XML, JUnit, CTRF, or NUnit. The HTML and Markdown reports are for people to read and MAY be added, but they do not satisfy this rule on their own. In McpServer, the unit test gate requires a TRX per project (`build/SessionLifeUnitGateReports.cs` records `<lane>/<project>/<project>.trx`, and `build/SessionLifeUnitGateValidator.cs` rejects a run whose TRX is missing or defective), so McpServer CI MUST produce TRX.
 
 - MTP in 4.0 or later: `--report-xunit-trx` (others are `--report-xunit-xml`, `--report-xunit-junit`, `--report-xunit-ctrf`, `--report-xunit-nunit`, `--report-xunit-html`, and `--report-xunit-markdown` in 4.0.1 or later).
 - MTP in 3.2.x (for example McpServer's current pin): `--report-xunit-trx` and `--report-xunit-html` are the same, but XML, JUnit, CTRF, and NUnit use the old names `--report-xunit`, `--report-junit`, `--report-ctrf`, and `--report-nunit`. Each `-filename` switch follows the same rename.
 - Reports go to the results directory, which you can change with `--results-directory`.
 - Native UX in 4.0 or later: `-result-trx <file>` (others are `-result-xml`, `-result-junit`, `-result-ctrf`, and `-result-markdown` in 4.0.1 or later). The old `-trx` and `-xml` style switches are deprecated.
-- Rationale: The 4.0 release renamed both sets of switches. The 4.0.0 release notes list the MTP renames, and the 4.0.2 source builds every report option as `report-xunit-<format>`.
+- Rationale: Result publishers and gates read structured reports. The 4.0.1 release notes describe the Markdown report as a simplified report. The 4.0 release renamed both sets of switches. The 4.0.0 release notes list the MTP renames, and the 4.0.2 source builds every report option as `report-xunit-<format>`.
 - Source: https://xunit.net/releases/v3/4.0.0 ; https://xunit.net/releases/v3/4.0.1 ; https://github.com/xunit/xunit/blob/v3-4.0.2/src/common/MicrosoftTestingPlatform/CommandLineOptionsProvider.cs ; https://github.com/xunit/xunit/blob/v3-3.2.2/src/common/MicrosoftTestingPlatform/CommandLineOptionsProvider.cs
 
 **XU-142 (MUST NOT)** The default PR pipeline does not run explicit tests. A separate scheduled or manual job MAY run them with `--explicit only` (MTP) or `-explicit only` (native).
@@ -945,9 +945,9 @@ Sources: https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/con
 - Rationale: The PR pipeline stays fast and deterministic. The default value of `explicit` is `off`.
 - Source: https://xunit.net/docs/config-testconfig-json
 
-**XU-143 (SHOULD)** CI should detect hung tests by setting `longRunningTestSeconds` above 0 together with `diagnosticMessages: true`, or with the `--long-running` / `-longRunning` switch.
+**XU-143 (SHOULD)** CI should detect hung tests by setting `longRunningTestSeconds` above 0 together with `diagnosticMessages: true`, or with the `--long-running <seconds>` / `-longRunning <seconds>` switch together with `--xunit-diagnostics on` (MTP) or `-diagnostics` (native UX).
 
-- Rationale: Long-running warnings are diagnostic messages, so they only appear when diagnostics are enabled.
+- Rationale: Long-running warnings are diagnostic messages, so they only appear when diagnostics are enabled. The threshold switch and the diagnostics switch are independent options, so the command line form needs both.
 - Source: https://xunit.net/docs/config-xunit-runner-json ; https://xunit.net/docs/getting-started/v3/microsoft-testing-platform
 
 **XU-144 (SHOULD)** For reflection-mode test projects, CI should keep the assembly unique ID that appears in the run output, so a failure that depends on order can be reproduced locally (XU-087). This does not apply to Native AOT projects (XU-018), because the `.uniqueid` override is not available in AOT mode.
