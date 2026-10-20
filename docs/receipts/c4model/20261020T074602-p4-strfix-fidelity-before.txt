@@ -1,0 +1,43 @@
+LocalNow: 2026-10-20T07:46:02 | views 575 | views with extra 18 | extra 24 | missing 0 | ambiguous 0 | no expected list 0 | fence edges with merged labels 26 | implied relationships drawn 0
+STR-06-01 (F99, custom): fence 2, drawn 3, extra 1, missing 0
+    extra: strEntAgentContextPackageItem -> entSessionLogTurn | 0..n to 1: SourceRef, kind SessionLogTurn [Relationship,Planned]
+STR-06-01-part3 (F99, custom): fence 2, drawn 4, extra 2, missing 0
+    extra: strEntAgentContextPackageInputLink -> strEntAgentContextRelationship | 0..n to 1: RelationshipId, read at build [Relationship,Planned]
+    extra: strEntAgentContextRelationship -> strEntAgentContextPackage | 0..n to 0..n: From or To kind Package [Relationship,Planned]
+STR-06-02-part2 (F100, custom): fence 1, drawn 2, extra 1, missing 0
+    extra: strEntAgentContextFinding -> strEntAgentContextRelationship | 0..n to 1: RelationshipId [Relationship,Planned]
+STR-06-03 (F101, custom): fence 2, drawn 4, extra 2, missing 0
+    extra: entSessionLogTurn -> strEntAgentContextPackage | 1 to 0..n: built for, by turn key [Relationship,Planned]
+    extra: strEntAgentResponse -> strEntAgentResponse | 0..1 to 0..1: SupersededByResponseId [Relationship,Planned]
+STR-06-03-part2 (F101, custom): fence 2, drawn 3, extra 1, missing 0
+    extra: strEntAgentResponse -> strEntAgentResponse | 0..1 to 0..1: SupersededByResponseId [Relationship,Planned]
+STR-06-04 (F102, custom): fence 2, drawn 3, extra 1, missing 0
+    extra: strEntAgentResponse -> strEntAgentResponse | 0..1 to 0..1: SupersededByResponseId [Relationship,Planned]
+STR-06-05-part2 (F103, custom): fence 1, drawn 2, extra 1, missing 0
+    extra: strEntAgentResponse -> strEntAgentResponse | 0..1 to 0..1: SupersededByResponseId [Relationship,Planned]
+STR-06-06 (F104, custom): fence 2, drawn 4, extra 2, missing 0
+    extra: strEntAgentContextPackage -> strEntAgentResponse | 1 to 0..n: answered by [Relationship,Planned]
+    extra: strEntAgentResponse -> strEntAgentResponse | 0..1 to 0..1: SupersededByResponseId [Relationship,Planned]
+STR-06-06-part2 (F104, custom): fence 1, drawn 2, extra 1, missing 0
+    extra: strEntAgentResponse -> strEntAgentResponse | 0..1 to 0..1: SupersededByResponseId [Relationship,Planned]
+STR-A-01-part2 (F204, custom): fence 2, drawn 4, extra 2, missing 0
+    extra: strEntAgentContextPackage -> strEntAgentResponse | 1 to 0..n: answered by [Relationship,Planned]
+    extra: strEntAgentResponse -> strEntAgentResponse | 0..1 to 0..1: SupersededByResponseId [Relationship,Planned]
+STR-A-01-part5 (F204, custom): fence 2, drawn 3, extra 1, missing 0
+    extra: strEntAgentResponse -> strEntAgentResponse | 0..1 to 0..1: SupersededByResponseId [Relationship,Planned]
+STR-A-01-part6 (F204, custom): fence 2, drawn 4, extra 2, missing 0
+    extra: strEntAgentContextRelationship -> strEntAgentContextFinding | 1 to 0..n: by RelationshipId [Relationship,Planned]
+    extra: strEntAgentContextRelationship -> strEntAgentContextPackageInputLink | 1 to 0..n: read at build, by RelationshipId [Relationship,Planned]
+STR-A-01-part7 (F204, custom): fence 2, drawn 4, extra 2, missing 0
+    extra: strEntAgentContextPackage -> strEntAgentResponse | 1 to 0..n: answered by [Relationship,Planned]
+    extra: strEntAgentResponse -> strEntAgentResponse | 0..1 to 0..1: SupersededByResponseId [Relationship,Planned]
+STR-A-08 (F211, custom): fence 2, drawn 3, extra 1, missing 0
+    extra: strEntAgentResponse -> strEntAgentResponse | 0..1 to 0..1: SupersededByResponseId [Relationship,Planned]
+STR-A-09 (F212, custom): fence 2, drawn 3, extra 1, missing 0
+    extra: strEntAgentResponse -> strEntAgentResponse | 0..1 to 0..1: SupersededByResponseId [Relationship,Planned]
+STR-A-10 (F213, custom): fence 2, drawn 3, extra 1, missing 0
+    extra: strEntAgentResponse -> strEntAgentResponse | 0..1 to 0..1: SupersededByResponseId [Relationship,Planned]
+STR-07-01-part3 (F179, component): fence 3, drawn 4, extra 1, missing 0
+    extra: strHostModel -> strUcLogEachUserRequestAsExactly | participates in [Relationship,Planned,UseCase]
+STR-07-01-part7 (F179, container): fence 3, drawn 4, extra 1, missing 0
+    extra: qbrain.server -> strUcRecordAnAgentSelfReview | participates in [Relationship,Planned,UseCase]

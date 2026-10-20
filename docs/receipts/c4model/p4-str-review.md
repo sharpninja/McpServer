@@ -778,3 +778,95 @@ PLAN-C4MODEL-001 phase P4, document code STR. Source fences are those of docs/ar
 * Final run 2: docs/receipts/c4model/20261019T193503-p4-str-g4b-r2.log (19:35:03 to 19:38:44 local): the same counts. hash-dir.ps1 manifest of run 1 (SCRATCH/p4-str/manifest-g4b-r1.txt, 19:35:01 local) compared after run 2 (19:38:56 local): Identical 1631 of 1631.
 * An earlier gate pair on the sources before the last two layout changes also held: 20261019T191341-p4-str-g4-r1.log and 20261019T191728-p4-str-g4-r2.log, the same zero counts, 1621 renders, Identical 1621 of 1621 (19:21:29 local).
 * The .log receipts are ignored by .gitignore line 108 (*.log; check-ignore.ps1, 19:39:45 local) while 37 earlier .log receipts in the folder are tracked, so committing these needs git add -f.
+
+## View fidelity sweep
+
+Added 2026-10-20 in worktree p4-strfix-20261019 (branch p4/strfix-20261019, base 49dff2ea84cedf04b7852d353c91167b7277a885, which holds this conversion as cc3163ee merged in b457ac22 and the Amendment 1 and Stateless conversions). Custom, container and component views draw every model relationship between the elements they include (within their tag excludes), and the shared elements of this document (entities, use cases, bounded contexts, components, people) carry relationships of several diagrams. The sweep compares, for every non-dynamic STR view, the relationships the view draws in the merged workspace with the relationships its source fence draws, and hides the others with an exclude.
+
+Method: the converter (SCRATCH/p4-str/convert-str.ps1, run against this base into a separate scratch folder) wrote, per view, the model relationships its fence draws (source identifier, destination identifier, description) to view-expected.json; its regenerated model/str.dsl and views/str.dsl were byte-identical to the merged fragments (SHA-256 99E1B50C and D64DF622), so the mapping is the one the merged views were built from. The pinned CLI (structurizr/cli:2025.11.09) exported the workspace to JSON on a scratch copy; fidelity-check.ps1 read each view's relationship list from the export and compared it with the fence relationships by source, destination and description.
+
+### Summary
+
+* Non-dynamic STR views checked: 575 (custom, container and component views; the 843 dynamic views draw only their own steps).
+* Before: 18 views drew 24 relationships their fences do not draw; 0 fence relationships were missing from any view; 0 extra relationships shared a source and destination with a fence relationship, so every exclude is an exact source->destination expression.
+* Excludes added: 24 in 18 views of docs/architecture/c4/views/str.dsl, each block with one comment line. The model is unchanged; no element or relationship was added or removed.
+* After: 0 extra and 0 missing relationships in 575 views.
+
+### Views changed
+
+* STR-06-01 (F99, custom view): the fence draws 2 relationships; the view drew 3 before and 2 after (0 extra, 0 missing).
+  * exclude "strEntAgentContextPackageItem -> entSessionLogTurn": hides "0..n to 1: SourceRef, kind SessionLogTurn" (Relationship,Planned)
+* STR-06-01-part3 (F99, custom view): the fence draws 2 relationships; the view drew 4 before and 2 after (0 extra, 0 missing).
+  * exclude "strEntAgentContextPackageInputLink -> strEntAgentContextRelationship": hides "0..n to 1: RelationshipId, read at build" (Relationship,Planned)
+  * exclude "strEntAgentContextRelationship -> strEntAgentContextPackage": hides "0..n to 0..n: From or To kind Package" (Relationship,Planned)
+* STR-06-02-part2 (F100, custom view): the fence draws 1 relationship; the view drew 2 before and 1 after (0 extra, 0 missing).
+  * exclude "strEntAgentContextFinding -> strEntAgentContextRelationship": hides "0..n to 1: RelationshipId" (Relationship,Planned)
+* STR-06-03 (F101, custom view): the fence draws 2 relationships; the view drew 4 before and 2 after (0 extra, 0 missing).
+  * exclude "entSessionLogTurn -> strEntAgentContextPackage": hides "1 to 0..n: built for, by turn key" (Relationship,Planned)
+  * exclude "strEntAgentResponse -> strEntAgentResponse": hides "0..1 to 0..1: SupersededByResponseId" (Relationship,Planned)
+* STR-06-03-part2 (F101, custom view): the fence draws 2 relationships; the view drew 3 before and 2 after (0 extra, 0 missing).
+  * exclude "strEntAgentResponse -> strEntAgentResponse": hides "0..1 to 0..1: SupersededByResponseId" (Relationship,Planned)
+* STR-06-04 (F102, custom view): the fence draws 2 relationships; the view drew 3 before and 2 after (0 extra, 0 missing).
+  * exclude "strEntAgentResponse -> strEntAgentResponse": hides "0..1 to 0..1: SupersededByResponseId" (Relationship,Planned)
+* STR-06-05-part2 (F103, custom view): the fence draws 1 relationship; the view drew 2 before and 1 after (0 extra, 0 missing).
+  * exclude "strEntAgentResponse -> strEntAgentResponse": hides "0..1 to 0..1: SupersededByResponseId" (Relationship,Planned)
+* STR-06-06 (F104, custom view): the fence draws 2 relationships; the view drew 4 before and 2 after (0 extra, 0 missing).
+  * exclude "strEntAgentContextPackage -> strEntAgentResponse": hides "1 to 0..n: answered by" (Relationship,Planned)
+  * exclude "strEntAgentResponse -> strEntAgentResponse": hides "0..1 to 0..1: SupersededByResponseId" (Relationship,Planned)
+* STR-06-06-part2 (F104, custom view): the fence draws 1 relationship; the view drew 2 before and 1 after (0 extra, 0 missing).
+  * exclude "strEntAgentResponse -> strEntAgentResponse": hides "0..1 to 0..1: SupersededByResponseId" (Relationship,Planned)
+* STR-A-01-part2 (F204, custom view): the fence draws 2 relationships; the view drew 4 before and 2 after (0 extra, 0 missing).
+  * exclude "strEntAgentContextPackage -> strEntAgentResponse": hides "1 to 0..n: answered by" (Relationship,Planned)
+  * exclude "strEntAgentResponse -> strEntAgentResponse": hides "0..1 to 0..1: SupersededByResponseId" (Relationship,Planned)
+* STR-A-01-part5 (F204, custom view): the fence draws 2 relationships; the view drew 3 before and 2 after (0 extra, 0 missing).
+  * exclude "strEntAgentResponse -> strEntAgentResponse": hides "0..1 to 0..1: SupersededByResponseId" (Relationship,Planned)
+* STR-A-01-part6 (F204, custom view): the fence draws 2 relationships; the view drew 4 before and 2 after (0 extra, 0 missing).
+  * exclude "strEntAgentContextRelationship -> strEntAgentContextFinding": hides "1 to 0..n: by RelationshipId" (Relationship,Planned)
+  * exclude "strEntAgentContextRelationship -> strEntAgentContextPackageInputLink": hides "1 to 0..n: read at build, by RelationshipId" (Relationship,Planned)
+* STR-A-01-part7 (F204, custom view): the fence draws 2 relationships; the view drew 4 before and 2 after (0 extra, 0 missing).
+  * exclude "strEntAgentContextPackage -> strEntAgentResponse": hides "1 to 0..n: answered by" (Relationship,Planned)
+  * exclude "strEntAgentResponse -> strEntAgentResponse": hides "0..1 to 0..1: SupersededByResponseId" (Relationship,Planned)
+* STR-A-08 (F211, custom view): the fence draws 2 relationships; the view drew 3 before and 2 after (0 extra, 0 missing).
+  * exclude "strEntAgentResponse -> strEntAgentResponse": hides "0..1 to 0..1: SupersededByResponseId" (Relationship,Planned)
+* STR-A-09 (F212, custom view): the fence draws 2 relationships; the view drew 3 before and 2 after (0 extra, 0 missing).
+  * exclude "strEntAgentResponse -> strEntAgentResponse": hides "0..1 to 0..1: SupersededByResponseId" (Relationship,Planned)
+* STR-A-10 (F213, custom view): the fence draws 2 relationships; the view drew 3 before and 2 after (0 extra, 0 missing).
+  * exclude "strEntAgentResponse -> strEntAgentResponse": hides "0..1 to 0..1: SupersededByResponseId" (Relationship,Planned)
+* STR-07-01-part3 (F179, component view): the fence draws 3 relationships; the view drew 4 before and 3 after (0 extra, 0 missing).
+  * exclude "strHostModel -> strUcLogEachUserRequestAsExactly": hides "participates in" (Relationship,Planned,UseCase)
+* STR-07-01-part7 (F179, container view): the fence draws 3 relationships; the view drew 4 before and 3 after (0 extra, 0 missing).
+  * exclude "qbrain.server -> strUcRecordAnAgentSelfReview": hides "participates in" (Relationship,Planned,UseCase)
+
+### Merged labels (D4: one relationship per real thing)
+
+These relationships are drawn by two fences each and carry both labels joined by " / " (the section 6.3 table diagram and the Addendum A entity diagram name the same foreign key). They stay as they are: one relationship per real thing, and each of the views listed draws it because its fence draws it.
+
+* strEntAgentContextPackage -> strEntAgentContextPackageItem: "1 to 0..n: contains / items", drawn by F99 and F208 (views STR-06-01, STR-A-05)
+* strEntAgentContextPackage -> strEntAgentContextPackageFocusRef: "1 to 0..n: focuses / focus refs", drawn by F99 and F208 (views STR-06-01-part2, STR-A-05)
+* strEntAgentContextPackage -> strEntAgentContextPackageInput: "1 to 0..n: snapshots / inputs", drawn by F99 and F208 (views STR-06-01-part2, STR-A-05-part2)
+* strEntAgentContextPackage -> strEntAgentContextPackageInputLink: "1 to 0..n: snapshots links / input links", drawn by F99 and F208 (views STR-06-01-part3, STR-A-05-part2)
+* strEntAgentContextPackage -> strEntAgentContextOmission: "1 to 0..n: records / omissions", drawn by F100 and F209 (views STR-06-02, STR-A-06)
+* strEntAgentContextPackage -> strEntAgentContextFinding: "1 to 0..n: records / findings", drawn by F100 and F209 (views STR-06-02, STR-A-06)
+* strEntAgentResponse -> strEntAgentResponseClaim: "1 to 0..n: asserts / claims", drawn by F101 and F210 (views STR-06-03-part2, STR-A-07)
+* strEntAgentResponse -> strEntAgentResponseEvidence: "1 to 0..n: cites / evidence", drawn by F101 and F210 (views STR-06-03-part2, STR-A-07-part2)
+* strEntAgentResponse -> strEntAgentResponseGrade: "1 to 0..n: graded by / grades", drawn by F102 and F211 (views STR-06-04, STR-A-08)
+* entSessionLogTurn -> strEntAgentResponseGrade: "1 to 0..n: reviewer turn / reviewer turn key", drawn by F102 and F204 (views STR-06-04-part2, STR-A-01-part3)
+* strEntAgentResponseGrade -> strEntAgentResponseGradeFinding: "1 to 0..n: lists / findings", drawn by F102 and F211 (views STR-06-04-part2, STR-A-08-part2)
+* strEntAgentContextHvRequest -> strEntAgentContextHvRequestItem: "1 to 0..n: lists / items", drawn by F103 and F212 (views STR-06-05, STR-A-09)
+* strEntAgentResponse -> strEntAgentContextProjection: "1 to 0..1: projected as / projection", drawn by F104 and F213 (views STR-06-06-part2, STR-A-10)
+
+* Planned relationships of the use-case and system-context diagrams that a second diagram reuses with another label or direction: 0 (pair-reuse report of the converter).
+* Reused as-built entity relationships (16, model/entities.dsl) keep their as-built description in the views of this document, for example "1 to 0..n via SessionLogId"; the fence label of the same foreign key is recorded in the fence list above.
+
+### Receipts
+
+* Expected fence relationships: docs/receipts/c4model/20261020T074842-p4-strfix-view-expected.json (converter run 07:48:42 local; model and views byte-identical to the merged fragments, sync-stage.ps1 dry run 07:48:57).
+* Before: docs/receipts/c4model/20261020T074602-p4-strfix-fidelity-before.txt and .json (JSON export of the merged workspace at 49dff2ea, 07:40:59 local): 575 views, 18 with extra relationships, 24 extra, 0 missing, 0 ambiguous, 0 implied relationships drawn.
+* Staged check: the excludes overlaid on a scratch copy and exported again (07:47:08 local): 575 views, 0 extra, 0 missing (SCRATCH/p4-str/fix-out/after-fidelity.txt).
+* Change: docs/architecture/c4/views/str.dsl, 42 added lines (18 comment lines and 24 exclude lines), nothing removed (git diff at 07:49:12 local); SHA-256 D64DF622 before, 597A9BB9 after (copy-into-worktree.ps1, 07:49:10 local).
+* Inspection: inspect-workspace.ps1 on the worktree, exit 0 with 0 findings (07:49:20 local).
+* Gate run 1: docs/receipts/c4model/20261020T074935-p4-strfix-g4-r1.log (07:49:36 to 07:55:27 local, build succeeded, exit 0): 0 ValidationFailed, 0 InspectionErrors, 0 RenderFailed, 0 MermaidFence, 0 MermaidFile, 0 DanglingViewLink, 0 MissingRender, 0 OrphanRender, 0 TextSizeSpread, 0 PageOverflow, 0 InvalidSvg; 2384 renders.
+* Gate run 2: docs/receipts/c4model/20261020T075559-p4-strfix-g4-r2.log (07:55:59 to 08:02:25 local, build succeeded, exit 0): the same 0 counts for every finding type; 2384 renders. hash-dir.ps1 manifest of run 1 (SCRATCH/p4-str/manifest-strfix-r1.txt, 07:55:57 local) compared after run 2 (08:03:33 local): Identical 2384 of 2384.
+* Images: the 18 changed views were read as images on the gate render (SCRATCH/p4-str/sheets/strfix-a.png and strfix-b.png); each draws only its fence relationships, with the layout of the gate render and no page overflow.
+* Render comparison: docs/receipts/c4model/20261020T081327-p4-strfix-render-compare.txt (normalize-compare.ps1 on the worktree against HEAD 49dff2ea, generated ids renumbered per file, 08:13:27 local): of 2384 renders, the content changed in exactly the 18 renders of the views with excludes and in no other; 1490 differ only in generated ids; 169 are byte-identical; 707 are new because they were not committed at 49dff2ea, and none of them is an STR view.
+* Final: docs/receipts/c4model/20261020T075628-p4-strfix-fidelity-final.txt and .json (JSON export of the worktree itself, 07:56:06 local): 575 views, 0 extra, 0 missing, 0 ambiguous; every STR non-dynamic view draws only relationships its fence draws.

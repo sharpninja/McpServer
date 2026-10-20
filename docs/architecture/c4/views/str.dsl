@@ -6457,6 +6457,8 @@ custom "ImplementationPass-part4" "Nested activity: ImplementationPass (loop bod
 custom "STR-06-01" "Packages and their build inputs (section 6.3) (entities), part 1 of 3" "Entity diagram converted from fence F99 (line 2860)." {
     include entSessionLogTurn strEntAgentContextPackage strEntAgentContextPackageItem
     exclude "relationship.tag!=Planned"
+    # View fidelity sweep 2026-10-20: hide relationships between these elements that this fence does not draw
+    exclude "strEntAgentContextPackageItem -> entSessionLogTurn"
     autolayout tb 200 300
 }
 custom "STR-06-01-part2" "Packages and their build inputs (section 6.3) (entities), part 2 of 3" "Entity diagram converted from fence F99 (line 2860)." {
@@ -6467,6 +6469,9 @@ custom "STR-06-01-part2" "Packages and their build inputs (section 6.3) (entitie
 custom "STR-06-01-part3" "Packages and their build inputs (section 6.3) (entities), part 3 of 3" "Entity diagram converted from fence F99 (line 2860)." {
     include strEntAgentContextPackage strEntAgentContextPackageInputLink strEntAgentContextRelationship
     exclude "relationship.tag!=Planned"
+    # View fidelity sweep 2026-10-20: hide relationships between these elements that this fence does not draw
+    exclude "strEntAgentContextPackageInputLink -> strEntAgentContextRelationship"
+    exclude "strEntAgentContextRelationship -> strEntAgentContextPackage"
     autolayout tb 200 300
 }
 custom "STR-06-02" "Package omissions and findings (section 6.3) (entities), part 1 of 2" "Entity diagram converted from fence F100 (line 2872)." {
@@ -6477,21 +6482,30 @@ custom "STR-06-02" "Package omissions and findings (section 6.3) (entities), par
 custom "STR-06-02-part2" "Package omissions and findings (section 6.3) (entities), part 2 of 2" "Entity diagram converted from fence F100 (line 2872)." {
     include strEntAgentContextRelationship strEntAgentContextFinding
     exclude "relationship.tag!=Planned"
+    # View fidelity sweep 2026-10-20: hide relationships between these elements that this fence does not draw
+    exclude "strEntAgentContextFinding -> strEntAgentContextRelationship"
     autolayout lr 300 200
 }
 custom "STR-06-03" "Responses and evidence (section 6.3) (entities), part 1 of 2" "Entity diagram converted from fence F101 (line 2881)." {
     include entSessionLogTurn strEntAgentResponse strEntAgentContextPackage
     exclude "relationship.tag!=Planned"
+    # View fidelity sweep 2026-10-20: hide relationships between these elements that this fence does not draw
+    exclude "entSessionLogTurn -> strEntAgentContextPackage"
+    exclude "strEntAgentResponse -> strEntAgentResponse"
     autolayout tb 200 300
 }
 custom "STR-06-03-part2" "Responses and evidence (section 6.3) (entities), part 2 of 2" "Entity diagram converted from fence F101 (line 2881)." {
     include strEntAgentResponse strEntAgentResponseClaim strEntAgentResponseEvidence
     exclude "relationship.tag!=Planned"
+    # View fidelity sweep 2026-10-20: hide relationships between these elements that this fence does not draw
+    exclude "strEntAgentResponse -> strEntAgentResponse"
     autolayout lr 300 200
 }
 custom "STR-06-04" "Grades (section 6.3) (entities), part 1 of 2" "Entity diagram converted from fence F102 (line 2891)." {
     include strEntAgentResponse strEntAgentResponseGrade strEntAgentContextHvRequest
     exclude "relationship.tag!=Planned"
+    # View fidelity sweep 2026-10-20: hide relationships between these elements that this fence does not draw
+    exclude "strEntAgentResponse -> strEntAgentResponse"
     autolayout lr 300 200
 }
 custom "STR-06-04-part2" "Grades (section 6.3) (entities), part 2 of 2" "Entity diagram converted from fence F102 (line 2891)." {
@@ -6507,16 +6521,23 @@ custom "STR-06-05" "HV requests (section 6.3) (entities), part 1 of 2" "Entity d
 custom "STR-06-05-part2" "HV requests (section 6.3) (entities), part 2 of 2" "Entity diagram converted from fence F103 (line 2901)." {
     include strEntAgentResponse strEntAgentContextHvRequestItem
     exclude "relationship.tag!=Planned"
+    # View fidelity sweep 2026-10-20: hide relationships between these elements that this fence does not draw
+    exclude "strEntAgentResponse -> strEntAgentResponse"
     autolayout lr 300 200
 }
 custom "STR-06-06" "Relationships and the GraphRAG projection (section 6.3) (entities), part 1 of 2" "Entity diagram converted from fence F104 (line 2910)." {
     include strEntAgentContextRelationship strEntAgentContextPackage strEntAgentResponse
     exclude "relationship.tag!=Planned"
+    # View fidelity sweep 2026-10-20: hide relationships between these elements that this fence does not draw
+    exclude "strEntAgentContextPackage -> strEntAgentResponse"
+    exclude "strEntAgentResponse -> strEntAgentResponse"
     autolayout tb 200 300
 }
 custom "STR-06-06-part2" "Relationships and the GraphRAG projection (section 6.3) (entities), part 2 of 2" "Entity diagram converted from fence F104 (line 2910)." {
     include strEntAgentResponse strEntAgentContextProjection
     exclude "relationship.tag!=Planned"
+    # View fidelity sweep 2026-10-20: hide relationships between these elements that this fence does not draw
+    exclude "strEntAgentResponse -> strEntAgentResponse"
     autolayout lr 300 200
 }
 custom "STR-A-01" "A.1 References between the groups (entities), part 1 of 9" "Entity diagram converted from fence F204 (line 5645)." {
@@ -6527,6 +6548,9 @@ custom "STR-A-01" "A.1 References between the groups (entities), part 1 of 9" "E
 custom "STR-A-01-part2" "A.1 References between the groups (entities), part 2 of 9" "Entity diagram converted from fence F204 (line 5645)." {
     include entSessionLogTurn strEntAgentContextPackage strEntAgentResponse
     exclude "relationship.tag!=Planned"
+    # View fidelity sweep 2026-10-20: hide relationships between these elements that this fence does not draw
+    exclude "strEntAgentContextPackage -> strEntAgentResponse"
+    exclude "strEntAgentResponse -> strEntAgentResponse"
     autolayout tb 200 300
 }
 custom "STR-A-01-part3" "A.1 References between the groups (entities), part 3 of 9" "Entity diagram converted from fence F204 (line 5645)." {
@@ -6542,16 +6566,24 @@ custom "STR-A-01-part4" "A.1 References between the groups (entities), part 4 of
 custom "STR-A-01-part5" "A.1 References between the groups (entities), part 5 of 9" "Entity diagram converted from fence F204 (line 5645)." {
     include strEntAgentContextPackageItem entTodoItem strEntAgentResponse
     exclude "relationship.tag!=Planned"
+    # View fidelity sweep 2026-10-20: hide relationships between these elements that this fence does not draw
+    exclude "strEntAgentResponse -> strEntAgentResponse"
     autolayout lr 300 200
 }
 custom "STR-A-01-part6" "A.1 References between the groups (entities), part 6 of 9" "Entity diagram converted from fence F204 (line 5645)." {
     include strEntAgentContextFinding strEntAgentContextRelationship strEntAgentContextPackageInputLink
     exclude "relationship.tag!=Planned"
+    # View fidelity sweep 2026-10-20: hide relationships between these elements that this fence does not draw
+    exclude "strEntAgentContextRelationship -> strEntAgentContextFinding"
+    exclude "strEntAgentContextRelationship -> strEntAgentContextPackageInputLink"
     autolayout tb 200 300
 }
 custom "STR-A-01-part7" "A.1 References between the groups (entities), part 7 of 9" "Entity diagram converted from fence F204 (line 5645)." {
     include strEntAgentContextRelationship strEntAgentContextPackage strEntAgentResponse
     exclude "relationship.tag!=Planned"
+    # View fidelity sweep 2026-10-20: hide relationships between these elements that this fence does not draw
+    exclude "strEntAgentContextPackage -> strEntAgentResponse"
+    exclude "strEntAgentResponse -> strEntAgentResponse"
     autolayout tb 200 300
 }
 custom "STR-A-01-part8" "A.1 References between the groups (entities), part 8 of 9" "Entity diagram converted from fence F204 (line 5645)." {
@@ -6688,6 +6720,8 @@ custom "STR-A-07-part2" "A.7 Responses and evidence (Phase C) (entities), part 2
 custom "STR-A-08" "A.8 Grades (Phase C) (entities), part 1 of 2" "Entity diagram converted from fence F211 (line 5926)." {
     include strEntAgentResponse strEntAgentResponseGrade strEntAgentContextHvRequest
     exclude "relationship.tag!=Planned"
+    # View fidelity sweep 2026-10-20: hide relationships between these elements that this fence does not draw
+    exclude "strEntAgentResponse -> strEntAgentResponse"
     autolayout lr 300 200
 }
 custom "STR-A-08-part2" "A.8 Grades (Phase C) (entities), part 2 of 2" "Entity diagram converted from fence F211 (line 5926)." {
@@ -6698,11 +6732,15 @@ custom "STR-A-08-part2" "A.8 Grades (Phase C) (entities), part 2 of 2" "Entity d
 custom "STR-A-09" "A.9 HV requests (Phase C) (entities)" "Entity diagram converted from fence F212 (line 5956)." {
     include strEntAgentContextHvRequest strEntAgentContextHvRequestItem strEntAgentResponse
     exclude "relationship.tag!=Planned"
+    # View fidelity sweep 2026-10-20: hide relationships between these elements that this fence does not draw
+    exclude "strEntAgentResponse -> strEntAgentResponse"
     autolayout lr 300 200
 }
 custom "STR-A-10" "A.10 Relationships, the GraphRAG projection, and retrieval stores (Phase C) (entities), part 1 of 3" "Entity diagram converted from fence F213 (line 5985)." {
     include strEntAgentResponse strEntAgentContextProjection entContextDocument
     exclude "relationship.tag!=Planned"
+    # View fidelity sweep 2026-10-20: hide relationships between these elements that this fence does not draw
+    exclude "strEntAgentResponse -> strEntAgentResponse"
     autolayout tb 200 300
     properties {
         "column.ContextDocument.Id" "string PK"
@@ -6809,6 +6847,8 @@ component qbrain.plugins "STR-07-01-part3" "Use-case diagram converted from fenc
     title "Use cases: overview (use cases), part 3 of 12"
     include qbrain.plugins.pluginPs strUcLogEachUserRequestAsExactly strUcCloseEveryRequestTurnBeforeStopping strHostModel
     exclude "relationship.tag!=UseCase"
+    # View fidelity sweep 2026-10-20: hide relationships between these elements that this fence does not draw
+    exclude "strHostModel -> strUcLogEachUserRequestAsExactly"
     autolayout tb 400 250
 }
 component qbrain.plugins "STR-07-01-part4" "Use-case diagram converted from fence F179 (line 5073)." {
@@ -6833,6 +6873,8 @@ container qbrain "STR-07-01-part7" "Use-case diagram converted from fence F179 (
     title "Use cases: overview (use cases), part 7 of 12"
     include strHostModel strUcCompleteOrFailATurnUnder strUcRecordAnAgentSelfReview qbrain.server
     exclude "relationship.tag!=UseCase"
+    # View fidelity sweep 2026-10-20: hide relationships between these elements that this fence does not draw
+    exclude "qbrain.server -> strUcRecordAnAgentSelfReview"
     autolayout tb 400 250
 }
 container qbrain "STR-07-01-part8" "Use-case diagram converted from fence F179 (line 5073)." {
