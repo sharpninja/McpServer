@@ -1,0 +1,108 @@
+# PLAN-C4MODEL-001: Every documentation diagram comes from one Structurizr C4 definition
+
+Status: approved 2026-10-19T09:59:12 local (operator answer "Yes, I approve the plan" on commit 044b5ac6); in progress at P4 (written 2026-10-19 on branch docs/c4-structurizr-model-20261017, PR 84).
+Process: Byrd Development Process v4. The plan decides its phases, gates and hostile validation points.
+
+## 1. Operator rulings (verbatim, 2026-10-19)
+
+1. PR 84 comment 6269382182: "Mermaid was supposed to be replaced by a single Structurizr C4 model encompassing the whole codebase."
+2. Chat: "Every diagram in every doc should come from the same C4 definition."
+3. Answers to the batched decision (all four chosen as recommended):
+   - Non-C4 diagram kinds: "Custom views". Activity, entity, state and mindmap diagrams are tagged custom elements plus custom views in the same workspace.
+   - Code freeze: "Exempt the Nuke target". One Nuke target renders, validates and enforces the rule, with its own TR-MCP-NUKE TR under FR-MCP-BUILD-001.
+   - Renderer: "Structurizr static + Chromium". structurizr/cli export -format static, then headless Chromium.
+   - Sequencing: "Everything now, re-HV after". Every doc converts in PR 84; the SessionTurn architecture and its plan get a new HV round afterwards.
+
+These rulings supersede the Mermaid-specific parts of the 2026-10-11 deliverables ruling ("a single, complete activity diagram (mermaid) for every unit of work"): every unit of work still gets one complete activity diagram, as a custom view.
+
+## 2. Scope (receipts: git ls-files inventory, 2026-10-19T09:37:54 local)
+
+In scope, 460 diagrams:
+- docs/architecture/SessionTurn-Review-AgentContext-Architecture.md: 213 fences (flowchart 135, sequence 58, entity 16, state 4).
+- docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md: 107 fences (flowchart 77, sequence 17, entity 9, state 4).
+- docs/Stateless-Agent-Context-Management.md: 109 fences (flowchart 68, sequence 33, entity 6, state 2).
+- docs/Project/Quad-Model-Transactional-Diffgram-Plan.md: 6 fences (flowchart 5, sequence 1), the six imported diagrams of FR-MCP-124.
+- docs/Marketing/diagrams: 4 .mmd files (sequence 1, graph 2, mindmap 1), plus their committed renders (4 svg/png).
+- docs/architecture/c4 in PR 84: 12 Mermaid view exports (mermaid/) and 9 Mermaid entity diagrams (data/).
+
+Out of scope, with reasons:
+- docs/receipts (8 fences, 3 .mmd, rendered svg trees): historical evidence of past HV rounds; receipts keep their recorded content.
+- Product features that emit Mermaid or PlantUML for users (FR-MCP-USECASE-005, -013, -014; MermaidUseCaseDiagramService, UseCaseUmlSerializationService, the use-case web UI): product output formats, not documentation diagrams.
+- tools/powershell/McpContext.USER.html: a VS Code export of McpContext.USER.md that inlines the Mermaid library; the markdown source has no diagram.
+
+## 3. Requirements
+
+New (captured before implementation, through workflow.requirements):
+- TR-MCP-NUKE-017 "ArchitectureDiagrams: one C4 definition for every documentation diagram", mapped to FR-MCP-BUILD-001, acceptance criteria:
+  - AC-1: validates docs/architecture/c4/workspace.dsl with structurizr/cli:2025.11.09 (pinned digest recorded in the target; never :latest) and fails on a non-zero exit or any inspection error.
+  - AC-2: renders every view of the workspace to docs/architecture/c4/rendered/<viewKey>.svg through the Structurizr static export and headless Chromium, in the light theme, with the help dialog dismissed, the content fitted, and no render-time stamp, so two runs on the same workspace produce byte-identical files. Amended 2026-10-20 (operator answer "Renumber ids per render (Recommended)"): in each rendered SVG the generated element ids (JointJS j_N, v-N and v_N) are renumbered from 1 per prefix in document order, every reference to a renumbered id follows it, and no other byte changes, so the bytes of a render depend only on its own view. Runs on one workspace had been only intermittently byte-identical, because the page-wide id counter is consumed at a timing-dependent point before the first view renders (docs/receipts/c4model/README.md, "P4 SessionTurn architecture merged").
+  - AC-3: fails when a tracked file outside docs/receipts contains a Mermaid fence or has the .mmd extension.
+  - AC-4: fails when a markdown image under docs points into docs/architecture/c4/rendered with a view key the workspace does not define, and when a rendered file has no view (orphan).
+  - AC-5 (band amended 2026-10-19, see the AC-5 measurement note below): fails when a workspace font size falls outside 11 to 16 px (8 to 12 pt at 96 dpi) or a render exceeds one letter page (1056 x 816 landscape or 816 x 1056 portrait) without being split into views per functional group.
+  - AC-6 (amended 2026-10-19, operator answer "Target-level --what-if"): honors the Nuke parameter WhatIf (--what-if, the name PLAN-BUILDWHATIF-001 gives it): reports what it would validate, render and check, runs the read-only checks, and writes nothing; the build.ps1 -WhatIf pass-through stays with TR-MCP-NUKE-005, which is not implemented on this branch.
+  - AC-7 withdrawn 2026-10-19 (operator: "Your task is only to update documentation; you are not writing code." and answer "Withdraw AC-7 (Recommended)"). It was added the same day (answer "Approve renumbering (Recommended)") to renumber the JointJS ids per render; it is removed from the requirement store with its text kept in the notes, and its uncommitted code was removed from the worktree. On 2026-10-20 the renumbering returned as part of AC-2 (above), restored from the preserved copy with its mock gate rerun first.
+  - AC-5 is measured on each rendered SVG: the check passes when one scale exists at which every visible text size lies within the band and the scaled viewBox fits 1056 x 816 or 816 x 1056. Amended 2026-10-19 (operator answer "Show it; widen AC-5 to 2:1"): the band is 10.67 to 21.33 px (8 to 16 pt), because hiding the element metadata line is a Structurizr inspection error and with it visible the spread is a fixed 2:1.
+  - Structurizr inspection errors are fixed with real content, never suppressed (operator answer "Real docs and ADRs"): the software system carries !docs (architecture overview) and !adrs (one ADR per ruling of this plan).
+  - The pre-existing Build.Tests failure (BoundedProcessTests on OfficialPluginCoreSyncTestSupport.cs, triage-report-1b7f4954cf214dea9fbadebe1ecc65da) is fixed in this plan (operator answer "Fix it in this plan"), so the infrastructure gate is 409/409.
+- Unit-suite failures on Linux (operator answers 2026-10-19: "Irrelevant" to confirming they pre-exist, "Fix all 14 in this plan", "Fix 10 here; 4 via PR 82/83", "Trait + Linux provisioning"): of the 14 QBrainAi.Support.Mcp.Tests failures, the 4 tests that PR 82 and PR 83 change arrive by merging develop after both land; the other 10 are fixed here. Test fixtures use the TR-MCP-FED-PATH-001 oracle ExpectedWorkspaceKey.Of; GitHubCliService never opens a foreign-platform workspace on the host (TR-MCP-FED-PATH-001); the three tests that need a database server carry Category=Integration and run through MigrationIntegrationTests. Amended 2026-10-19: the 4 remaining failures are not all changed by PR 82 and PR 83 (WorkspacePathNormalizerRealTests is changed by neither; it still failed after PR 82 was merged, run c4model-20261019T1543-g1e); they belong to IMPL-UNITGREEN-001 (branch fix/unit-suite-green-20261019, operator decision "Narrow mine (Recommended)" recorded in its commit a4c358ef). Operator rule 2026-10-19: "There should be ZERO platform specific UNIT tests.  If it depends on the environment, it's an integration test." Bringing the unit suite in line with it (the 16 Windows-only skipped cases, OS-branching expectations, [SupportedOSPlatform] unit files, and the skip guard that misses Assert.SkipUnless and Assert.SkipWhen) belongs to IMPL-UNITGREEN-001 (operator answer "IMPL-UNITGREEN-001 (Recommended)"); this plan does not edit those test files. Amended 2026-10-19 (operator: this effort changes documentation only; answers "Revert the 16 files here" and "resume"): every unit-suite change this plan made (the 10 test fixes and the GitHubCliService fix of ff55292e, the Decompose4nf test fix with MigrationKeyAssertions of d248230e, and the TR-MCP-NUKE-018 provisioning below) moved to IMPL-UNITGREEN-001, whose takeover commit 11681680 holds the 15 files byte for byte, and was restored to develop on this branch. tests/Build.Tests/OfficialPluginCoreSyncTestSupport.cs (the BoundedProcess guard fix of 252b4946) stays here.
+- TR-MCP-NUKE-018 "InstallTestDependencies provisions provider test servers on Linux", mapped to FR-MCP-BUILD-001 (operator answer "Yes, I approve the change"); its AC-1 to AC-6 are stated once, in the requirement store. Since 2026-10-19 it is implemented by IMPL-UNITGREEN-001 (takeover 11681680), not on this branch.
+
+Reconciled (applied only after approval; text below is the proposed replacement):
+- TR-MCP-TXNDIAGRAMS-001: "Imported diagrams SHALL be preserved as views of docs/architecture/c4/workspace.dsl whose keys are the imported diagram IDs, with source-section references, branch IDs (element and relationship properties), scope annotations, and test mappings. In-scope branches SHALL have tests; future quad-model, Curiosity, AoT, and weight-update branches SHALL remain explicitly deferred." The record's "Covered by" line is kept and gains docs/architecture/c4/workspace.dsl. (Correction made while applying the approved text: the first proposal omitted the existing deferral clause; the clause is kept, nothing else changed.)
+- TEST-MCP-165: "Imported diagram preservation tests SHALL validate all six imported diagram views by key in the workspace, one rendered image link per diagram section of the Quad-Model plan, imported source references, and repo annotations."
+- FR-MCP-124 keeps its text (it requires preservation of the diagrams, not a format).
+
+## 4. Locked design decisions
+
+D1 One definition. docs/architecture/c4/workspace.dsl is the only diagram source. It may !include fragments under docs/architecture/c4/model/ and docs/architecture/c4/views/; nothing else in the repository defines a diagram.
+
+D2 Whole codebase. Every project under src/ is an element: deployable units are containers; libraries are components of the container that loads them, tagged Library; the SharpNinja.McpServer.* compatibility shims are components tagged Compatibility; build/ (Nuke), tests/ (one element per test project, relationship "tests" to its target), plugins/core, tools/powershell and infra/frp are modeled. Plugin repositories outside this repository are external software systems. Amended 2026-10-19 (operator answers "Shared Libraries container (Recommended)" and "Components of Test Suites (Recommended)"): a library that two or more deployable units load is a component of one "Shared Libraries" container tagged Library, and each loading container has a "loads" relationship to it; a library with one loader stays a component of that container. Each test project is a component of one "Test Suites" container tagged Test, which the runtime container views exclude.
+
+D3 Planned design. Elements and relationships that exist only in the architecture docs are tagged Planned. As-built views exclude the tag; architecture views include it.
+
+D4 Identity. One element per real thing across all diagrams. A participant or node that names an existing element reuses it; new things get one element. Mermaid node ids never become model identifiers.
+
+D5 Mapping by Mermaid kind.
+- Structure flowcharts and graphs: C4 static views (context, container, component) or custom views when the nodes are not C4 elements.
+- Activity flowcharts (unit-of-work diagrams): custom view of elements tagged Activity plus one of Start, Action, Decision (Diamond shape), Error, End; edges are relationships whose description is the branch condition. Every branch and error path of the source survives.
+- Sequence diagrams: dynamic views. Each alt, opt or par branch becomes its own dynamic view keyed <diagramKey>-<branch>; each loop body becomes a nested dynamic view keyed <diagramKey>-loop<N> placed directly after its parent in the doc (the 2026-10-12 loop rule). Amended 2026-10-19 (operator answer "Hyphen (Recommended)"): Structurizr rejects dots in view keys ("View keys can only contain the following characters: a-zA-Z0-9_-", probe receipt in docs/receipts/c4model/README.md), so the separator is a hyphen.
+- Entity diagrams: custom view of elements tagged Entity, one element per entity, attributes and keys in element properties, cardinality in the relationship description; an entity drawn in two diagrams is one element.
+- State diagrams: custom view of elements tagged State; transitions are relationships named by their trigger.
+- Mindmap: custom view of elements tagged Topic.
+- The EF Core entity model (data/ef-entity-model.md and the 9 Mermaid ER files) becomes Entity elements per DbContext area; its evidence paths move into evidence.md and the Mermaid files are deleted.
+
+D6 View keys. Imported and named diagrams keep their IDs as keys (AD-TXN-001, SD-DIFFGRAM-001, and so on). Other views use <DocCode>-<Section>-<NN> (for example STR-07-03), stable across edits.
+
+D7 Docs. Each Mermaid fence is replaced in place by an image link to docs/architecture/c4/rendered/<viewKey>.svg with the view title as alt text, followed by the line "View: <viewKey>". Prose around diagrams is unchanged.
+
+D8 Rendering. The Nuke target copies the workspace sources to a temporary directory (nothing is written under docs during export), exports the static site there, starts Chromium headless with a DevTools port, emulates prefers-color-scheme light, and per view calls structurizr.diagram.setDarkMode(false), structurizr.diagram.changeView(key, callback) and structurizr.diagram.exportCurrentDiagramToSVG(false), saving the returned SVG. The workspace sets the view-set property "structurizr.metadata" "false". Spike receipts (2026-10-19, scratch probe workspace): screenshots of the viewer selected the right view but showed the help dialog, the dark theme and a render-time stamp (09:53:17); the SVG export has a white canvas, a viewBox cropped to the content and no dialog (10:05:34); with metadata on, the export still carried a hidden date line and two runs differed (10:06:55); with "structurizr.metadata" "false", two runs in separate Chromium processes were byte-identical for all four probe views (10:07:50). Default element text sizes are 16.8, 24, 33.6 and 36 px, a spread above the 1.5 ratio AC-5 allows, so the workspace styles set font sizes explicitly.
+
+D11 AC-3 scope. A Mermaid fence is a markdown construct: the fence scan reads tracked .md and .markdown files; the .mmd check covers every tracked file; both skip docs/receipts. Source files that carry fence text inside string literals (for example Build.Tests fixtures) are not documents and are not fence-scanned.
+
+D10 Risk recorded: the exported index.html loads themes from https://static.structurizr.com/themes/ before it renders; the target must render without network themes (no theme references in the workspace) and fail with a clear message if the viewer never becomes ready.
+
+D9 Migration tooling (a converter from Mermaid to DSL drafts, alias maps) lives outside the repository under ~/.cache/c4-migration and is never a second definition. Every converted view is checked by a person-equivalent review against its source fence before the fence is removed.
+
+## 5. Phases and gates
+
+P0 Records. Create TR-MCP-NUKE-017 and its mapping; after approval, update TR-MCP-TXNDIAGRAMS-001 and TEST-MCP-165; MCP TODO PLAN-C4MODEL-001 points at this plan.
+
+P1 Tests first (BDPv4 5.1). Build.Tests cases for the target's pure parts (Mermaid scanner, view-link and orphan checker, font and page-size checker, render-plan builder, -WhatIf plan) against fixture trees under tests/Build.Tests/Fixtures/c4, with negative controls (a fixture with a stray fence, an .mmd file, a dangling view key, an orphan render, an oversized font) captured inside passing tests. TurnTransactionPlanArtifactTests rewritten to assert the six view keys and links (TEST-MCP-165), proven first against a fixture copy of the converted plan section. Gate G1: green mock gate, every negative control rejected, 0 failed, 0 skipped.
+
+P2 Implementation. build/Build.ArchitectureDiagrams.cs plus helpers; bind the same tests to the real helpers. Gate G2: Build.Tests green; ./build.ps1 Compile green.
+
+P3 Model. Extend workspace.dsl per D2 to D5 for the as-built codebase and the EF entity model; delete mermaid/ and data/*.mmd. Gate G3: ./build.ps1 ArchitectureDiagrams validates and renders; AC-3 still red only for the docs not yet converted (recorded, not hidden).
+
+P4 Conversion, one doc per agent in parallel (Quad-Model plan, Marketing, Stateless, SessionTurn architecture, Amendment 1), each agent following the standing rules and logging its own session-log turns. Gate G4 per doc: no fence left, every view rendered, review record per view. Amended 2026-10-19 (operator answer "Staged parallel (Recommended)"): each agent works in its own git worktree and owns model/<doc>.dsl, views/<doc>.dsl and its document; the SessionTurn architecture, Quad-Model and Marketing agents start first, and the Amendment 1 and Stateless agents start after the SessionTurn elements are merged and reuse them (D4); the implementer merges each branch and runs the gates. Amended 2026-10-19 (operator answers "All work must be based on develop" and "Authorize pwsh writes"): every P4 worktree starts from an effort-branch commit that contains origin/develop; the harness blocks the Write and Edit tools on other worktrees, so agents edit staged copies under the session scratchpad and copy them into their own p4 worktree with a checked pwsh script that refuses every other worktree, any path outside it or under .git, and any source outside the scratchpad, and verifies each copy by SHA-256. Agent renders are gate evidence only: the implementer merges sources, documents and receipts and renders once on the effort branch.
+
+P5 Gates. ./build.ps1 ArchitectureDiagrams green (AC-1 to AC-6); Build.Tests green; ./build.ps1 Test green (0 failed, 0 skipped, no platform-specific unit test) including TurnTransactionPlanArtifactTests, after develop carrying PR 83 and IMPL-UNITGREEN-001 is merged; ./build.ps1 MigrationIntegrationTests green on LAB-OMARCHY (TR-MCP-NUKE-018 AC-6) after that same merge, since the Linux provisioning now arrives with IMPL-UNITGREEN-001; one PAYTON-LEGION2 run over WSMan of ./build.ps1 Test (0 failed, 0 skipped) and MigrationIntegrationTests (TR-MCP-NUKE-018 AC-5) after that merge (operator answer "At P5 (Recommended)"); ./build.ps1 ValidateTraceability green; every render inspected as an image against the page standard.
+
+P6 Hostile validation of this plan's result by the reviewer the operator names (not a Claude-family agent), 98/98, request and response jsonl under docs/receipts/hv, full verdict in the session log. Then the new HV round of the SessionTurn architecture and plan (operator ruling), with the converted diagrams.
+
+P7 Delivery. Signed commits on docs/c4-structurizr-model-20261017, fast-forward pushes, PR 84 description updated, signed reply on comment 6269382182.
+
+## 6. Approval record (operator answers, 2026-10-19T09:59:12 local)
+
+- The plan and the requirement reconciliation in section 3 (commit 044b5ac6): "Yes, I approve the plan".
+- Code freeze for P1, which rewrites tests/QBrainAi.Support.Mcp.Tests/Documentation/TurnTransactionPlanArtifactTests.cs (product test code outside the Nuke-target exemption): "fix the test".
+- HV reviewer for P6: "Codex gpt-6-astra max".

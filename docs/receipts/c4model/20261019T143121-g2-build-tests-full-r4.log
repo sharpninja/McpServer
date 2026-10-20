@@ -1,0 +1,10 @@
+LocalStart: 20261019T143121 Command: dotnet test /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/Build.Tests.csproj -c Debug --logger trx;LogFileName=20261019T143121-g2-build-tests-full-r4.trx --results-directory /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/docs/receipts/c4model ExitCode: 0 
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  _build -> /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/build/bin/Debug/_build.dll
+  Build.Tests -> /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll
+Test run for /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/docs/receipts/c4model/20261019T143121-g2-build-tests-full-r4.trx
+
+Passed!  - Failed:     0, Passed:   460, Skipped:     0, Total:   460, Duration: 4 m 41 s - Build.Tests.dll (net10.0)

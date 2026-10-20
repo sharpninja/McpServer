@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="62446949-bf2d-4513-b43b-112683b3f0d1" name="@LAB-OMARCHY 2026-10-19 14:28:55" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-19T14:28:55.1565408-05:00" queuing="2026-10-19T14:28:55.1565410-05:00" start="2026-10-19T14:28:53.4350048-05:00" finish="2026-10-19T14:28:55.1949413-05:00" />
+  <TestSettings name="default" id="e5ae6676-2052-4e30-846a-1bee3fcebdf3">
+    <Deployment runDeploymentRoot="_LAB-OMARCHY_2026-10-19_14_28_55" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="be60a6a3-aca9-4752-8387-cc3cad7a10b8" testId="830ed847-09ce-eecf-6831-c6e471dbd576" testName="NukeBuild.Tests.SvgContentFitMockGateTests.ScriptedFitter_PassesScenario(scenario: &quot;clamp-to-paper&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0000286" startTime="2026-10-19T14:28:55.0465032-05:00" endTime="2026-10-19T14:28:55.0465521-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="be60a6a3-aca9-4752-8387-cc3cad7a10b8" />
+    <UnitTestResult executionId="33b5e396-d451-4f7b-b594-481bc7c76e3d" testId="8a889b7a-3373-d9bc-3f73-e87755758319" testName="NukeBuild.Tests.SvgContentFitMockGateTests.ScriptedFitter_PassesScenario(scenario: &quot;not-svg&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0001756" startTime="2026-10-19T14:28:55.0425727-05:00" endTime="2026-10-19T14:28:55.0427713-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="33b5e396-d451-4f7b-b594-481bc7c76e3d" />
+    <UnitTestResult executionId="841e6871-80c9-4255-9136-e6e5cdcfc232" testId="9bbd2604-9362-c11c-621f-3d75e76c193f" testName="NukeBuild.Tests.SvgContentFitMockGateTests.ScriptedFitter_PassesScenario(scenario: &quot;inner&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0000306" startTime="2026-10-19T14:28:55.0422768-05:00" endTime="2026-10-19T14:28:55.0423289-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="841e6871-80c9-4255-9136-e6e5cdcfc232" />
+    <UnitTestResult executionId="1029dd0b-693e-490c-8f28-e22147fc2d57" testId="db8454f4-62f9-536d-2379-c4ef7f8b313b" testName="NukeBuild.Tests.SvgContentFitMockGateTests.WrongFitter_IsRejected(scenario: &quot;culture&quot;, fault: CultureFormatting)" computerName="LAB-OMARCHY" duration="00:00:00.0076878" startTime="2026-10-19T14:28:55.0521182-05:00" endTime="2026-10-19T14:28:55.0598470-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1029dd0b-693e-490c-8f28-e22147fc2d57" />
+    <UnitTestResult executionId="628e278e-a24b-4c9e-b554-61a221a85ad9" testId="659bd83b-86d2-e103-9d1b-d5733c77f07b" testName="NukeBuild.Tests.SvgContentFitMockGateTests.WrongFitter_IsRejected(scenario: &quot;inner&quot;, fault: NoMargin)" computerName="LAB-OMARCHY" duration="00:00:00.0000441" startTime="2026-10-19T14:28:55.0649313-05:00" endTime="2026-10-19T14:28:55.0649936-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="628e278e-a24b-4c9e-b554-61a221a85ad9" />
+    <UnitTestResult executionId="a9a72653-2316-48c1-b4a8-4d6b446a8666" testId="6113997c-4257-b194-dbd2-43fa4347b7cf" testName="NukeBuild.Tests.SvgContentFitMockGateTests.WrongFitter_IsRejected(scenario: &quot;empty-content&quot;, fault: AcceptsEmptyBox)" computerName="LAB-OMARCHY" duration="00:00:00.0009852" startTime="2026-10-19T14:28:55.0607403-05:00" endTime="2026-10-19T14:28:55.0617487-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a9a72653-2316-48c1-b4a8-4d6b446a8666" />
+    <UnitTestResult executionId="fc514256-7bd4-41d6-ae80-5c9cfa83cce2" testId="d85e1b5d-c6a0-bee3-074c-5f2eeff054bb" testName="NukeBuild.Tests.SvgContentFitMockGateTests.WrongFitter_IsRejected(scenario: &quot;fractional&quot;, fault: RoundsInward)" computerName="LAB-OMARCHY" duration="00:00:00.0003056" startTime="2026-10-19T14:28:55.0602134-05:00" endTime="2026-10-19T14:28:55.0605486-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fc514256-7bd4-41d6-ae80-5c9cfa83cce2" />
+    <UnitTestResult executionId="ff07456b-b429-4346-a579-f19fc2ea611c" testId="1eeca2d0-8ce9-dce3-e0c5-b2393b4196ec" testName="NukeBuild.Tests.SvgContentFitMockGateTests.WrongFitter_IsRejected(scenario: &quot;clamp-to-paper&quot;, fault: NoClamp)" computerName="LAB-OMARCHY" duration="00:00:00.0000494" startTime="2026-10-19T14:28:55.0646767-05:00" endTime="2026-10-19T14:28:55.0647487-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ff07456b-b429-4346-a579-f19fc2ea611c" />
+    <UnitTestResult executionId="d48d0f66-d545-43cd-9570-8706d56933ab" testId="7ca2cd98-6405-1d1a-4264-f283f8f9afc5" testName="NukeBuild.Tests.SvgContentFitMockGateTests.ScriptedFitterTheory_CoversEveryScenario" computerName="LAB-OMARCHY" duration="00:00:00.0034095" startTime="2026-10-19T14:28:55.0483306-05:00" endTime="2026-10-19T14:28:55.0517675-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d48d0f66-d545-43cd-9570-8706d56933ab" />
+    <UnitTestResult executionId="8f054883-63d1-474b-bc0b-58e7d02a06a6" testId="fabaff3a-dc36-69d6-aa41-38b6ef8200c7" testName="NukeBuild.Tests.SvgContentFitMockGateTests.ScriptedFitter_PassesScenario(scenario: &quot;offset-paper&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0175503" startTime="2026-10-19T14:28:55.0079394-05:00" endTime="2026-10-19T14:28:55.0341926-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8f054883-63d1-474b-bc0b-58e7d02a06a6" />
+    <UnitTestResult executionId="638d2631-6186-480e-90a5-4e94d26504a6" testId="2a0ef677-df12-751d-30db-b169eaa80066" testName="NukeBuild.Tests.SvgContentFitMockGateTests.ScriptedFitter_PassesScenario(scenario: &quot;infinite-content&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0001685" startTime="2026-10-19T14:28:55.0413999-05:00" endTime="2026-10-19T14:28:55.0415929-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="638d2631-6186-480e-90a5-4e94d26504a6" />
+    <UnitTestResult executionId="b9866fc2-47ef-435c-9e92-2294b8c9446e" testId="ff4d17da-eb08-c137-2249-4a5fe3ae4374" testName="NukeBuild.Tests.SvgContentFitMockGateTests.ScriptedFitter_PassesScenario(scenario: &quot;fractional&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0003569" startTime="2026-10-19T14:28:55.0384383-05:00" endTime="2026-10-19T14:28:55.0388487-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b9866fc2-47ef-435c-9e92-2294b8c9446e" />
+    <UnitTestResult executionId="15e96136-f101-4e69-a04a-4c80c89ec6ae" testId="f5b311dc-1e68-17ff-6bc4-094b26ebacdf" testName="NukeBuild.Tests.SvgContentFitMockGateTests.ScriptedFitter_PassesScenario(scenario: &quot;no-viewbox&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0002898" startTime="2026-10-19T14:28:55.0457598-05:00" endTime="2026-10-19T14:28:55.0460879-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="15e96136-f101-4e69-a04a-4c80c89ec6ae" />
+    <UnitTestResult executionId="6b7b6a78-d2d2-401b-ab4c-9707baa029b1" testId="769b8c49-984e-1b92-0203-79838f244f95" testName="NukeBuild.Tests.SvgContentFitMockGateTests.ScriptedFitter_PassesScenario(scenario: &quot;preserves-bytes&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0000318" startTime="2026-10-19T14:28:55.0430076-05:00" endTime="2026-10-19T14:28:55.0430612-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6b7b6a78-d2d2-401b-ab4c-9707baa029b1" />
+    <UnitTestResult executionId="7df0244b-2a1d-49a2-a896-ab587ed9dc1c" testId="e33a2372-1d15-d0c4-1836-0bd96803e7c9" testName="NukeBuild.Tests.SvgContentFitMockGateTests.ScriptedFitter_PassesScenario(scenario: &quot;empty-content&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0020161" startTime="2026-10-19T14:28:55.0390779-05:00" endTime="2026-10-19T14:28:55.0411230-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7df0244b-2a1d-49a2-a896-ab587ed9dc1c" />
+    <UnitTestResult executionId="77ae8d05-1b2f-4ca4-8fa7-e08f7cb710ae" testId="ec4323fd-09d9-87ad-9871-e80e8ea48d8b" testName="NukeBuild.Tests.SvgContentFitMockGateTests.WrongFitter_IsRejected(scenario: &quot;preserves-bytes&quot;, fault: ReplacesEveryViewBox)" computerName="LAB-OMARCHY" duration="00:00:00.0024250" startTime="2026-10-19T14:28:55.0619957-05:00" endTime="2026-10-19T14:28:55.0644501-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="77ae8d05-1b2f-4ca4-8fa7-e08f7cb710ae" />
+    <UnitTestResult executionId="62ab5f22-8cbb-416b-b8f9-ca04d288a4e6" testId="539c21b3-c01b-8d29-28e7-ccc426799c16" testName="NukeBuild.Tests.SvgContentFitMockGateTests.ScriptedFitter_PassesScenario(scenario: &quot;culture&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0001756" startTime="2026-10-19T14:28:55.0418016-05:00" endTime="2026-10-19T14:28:55.0420080-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="62ab5f22-8cbb-416b-b8f9-ca04d288a4e6" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="NukeBuild.Tests.SvgContentFitMockGateTests.WrongFitter_IsRejected(scenario: &quot;empty-content&quot;, fault: AcceptsEmptyBox)" storage="/home/sharpninja/github/mcpserver/.claude/worktrees/github-pr-comment-84-944644/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="6113997c-4257-b194-dbd2-43fa4347b7cf">
+      <Execution id="a9a72653-2316-48c1-b4a8-4d6b446a8666" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.SvgContentFitMockGateTests" name="WrongFitter_IsRejected" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.SvgContentFitMockGateTests.WrongFitter_IsRejected(scenario: &quot;clamp-to-paper&quot;, fault: NoClamp)" storage="/home/sharpninja/github/mcpserver/.claude/worktrees/github-pr-comment-84-944644/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="1eeca2d0-8ce9-dce3-e0c5-b2393b4196ec">
+      <Execution id="ff07456b-b429-4346-a579-f19fc2ea611c" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.SvgContentFitMockGateTests" name="WrongFitter_IsRejected" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.SvgContentFitMockGateTests.ScriptedFitter_PassesScenario(scenario: &quot;culture&quot;)" storage="/home/sharpninja/github/mcpserver/.claude/worktrees/github-pr-comment-84-944644/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="539c21b3-c01b-8d29-28e7-ccc426799c16">
+      <Execution id="62ab5f22-8cbb-416b-b8f9-ca04d288a4e6" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.SvgContentFitMockGateTests" name="ScriptedFitter_PassesScenario" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.SvgContentFitMockGateTests.ScriptedFitterTheory_CoversEveryScenario" storage="/home/sharpninja/github/mcpserver/.claude/worktrees/github-pr-comment-84-944644/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="7ca2cd98-6405-1d1a-4264-f283f8f9afc5">
+      <Execution id="d48d0f66-d545-43cd-9570-8706d56933ab" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.SvgContentFitMockGateTests" name="ScriptedFitterTheory_CoversEveryScenario" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.SvgContentFitMockGateTests.ScriptedFitter_PassesScenario(scenario: &quot;fractional&quot;)" storage="/home/sharpninja/github/mcpserver/.claude/worktrees/github-pr-comment-84-944644/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="ff4d17da-eb08-c137-2249-4a5fe3ae4374">
+      <Execution id="b9866fc2-47ef-435c-9e92-2294b8c9446e" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.SvgContentFitMockGateTests" name="ScriptedFitter_PassesScenario" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.SvgContentFitMockGateTests.ScriptedFitter_PassesScenario(scenario: &quot;clamp-to-paper&quot;)" storage="/home/sharpninja/github/mcpserver/.claude/worktrees/github-pr-comment-84-944644/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="830ed847-09ce-eecf-6831-c6e471dbd576">
+      <Execution id="be60a6a3-aca9-4752-8387-cc3cad7a10b8" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.SvgContentFitMockGateTests" name="ScriptedFitter_PassesScenario" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.SvgContentFitMockGateTests.ScriptedFitter_PassesScenario(scenario: &quot;preserves-bytes&quot;)" storage="/home/sharpninja/github/mcpserver/.claude/worktrees/github-pr-comment-84-944644/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="769b8c49-984e-1b92-0203-79838f244f95">
+      <Execution id="6b7b6a78-d2d2-401b-ab4c-9707baa029b1" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.SvgContentFitMockGateTests" name="ScriptedFitter_PassesScenario" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.SvgContentFitMockGateTests.ScriptedFitter_PassesScenario(scenario: &quot;offset-paper&quot;)" storage="/home/sharpninja/github/mcpserver/.claude/worktrees/github-pr-comment-84-944644/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="fabaff3a-dc36-69d6-aa41-38b6ef8200c7">
+      <Execution id="8f054883-63d1-474b-bc0b-58e7d02a06a6" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.SvgContentFitMockGateTests" name="ScriptedFitter_PassesScenario" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.SvgContentFitMockGateTests.ScriptedFitter_PassesScenario(scenario: &quot;not-svg&quot;)" storage="/home/sharpninja/github/mcpserver/.claude/worktrees/github-pr-comment-84-944644/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="8a889b7a-3373-d9bc-3f73-e87755758319">
+      <Execution id="33b5e396-d451-4f7b-b594-481bc7c76e3d" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.SvgContentFitMockGateTests" name="ScriptedFitter_PassesScenario" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.SvgContentFitMockGateTests.WrongFitter_IsRejected(scenario: &quot;fractional&quot;, fault: RoundsInward)" storage="/home/sharpninja/github/mcpserver/.claude/worktrees/github-pr-comment-84-944644/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="d85e1b5d-c6a0-bee3-074c-5f2eeff054bb">
+      <Execution id="fc514256-7bd4-41d6-ae80-5c9cfa83cce2" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.SvgContentFitMockGateTests" name="WrongFitter_IsRejected" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.SvgContentFitMockGateTests.ScriptedFitter_PassesScenario(scenario: &quot;inner&quot;)" storage="/home/sharpninja/github/mcpserver/.claude/worktrees/github-pr-comment-84-944644/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="9bbd2604-9362-c11c-621f-3d75e76c193f">
+      <Execution id="841e6871-80c9-4255-9136-e6e5cdcfc232" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.SvgContentFitMockGateTests" name="ScriptedFitter_PassesScenario" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.SvgContentFitMockGateTests.WrongFitter_IsRejected(scenario: &quot;preserves-bytes&quot;, fault: ReplacesEveryViewBox)" storage="/home/sharpninja/github/mcpserver/.claude/worktrees/github-pr-comment-84-944644/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="ec4323fd-09d9-87ad-9871-e80e8ea48d8b">
+      <Execution id="77ae8d05-1b2f-4ca4-8fa7-e08f7cb710ae" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.SvgContentFitMockGateTests" name="WrongFitter_IsRejected" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.SvgContentFitMockGateTests.ScriptedFitter_PassesScenario(scenario: &quot;infinite-content&quot;)" storage="/home/sharpninja/github/mcpserver/.claude/worktrees/github-pr-comment-84-944644/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="2a0ef677-df12-751d-30db-b169eaa80066">
+      <Execution id="638d2631-6186-480e-90a5-4e94d26504a6" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.SvgContentFitMockGateTests" name="ScriptedFitter_PassesScenario" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.SvgContentFitMockGateTests.WrongFitter_IsRejected(scenario: &quot;inner&quot;, fault: NoMargin)" storage="/home/sharpninja/github/mcpserver/.claude/worktrees/github-pr-comment-84-944644/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="659bd83b-86d2-e103-9d1b-d5733c77f07b">
+      <Execution id="628e278e-a24b-4c9e-b554-61a221a85ad9" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.SvgContentFitMockGateTests" name="WrongFitter_IsRejected" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.SvgContentFitMockGateTests.WrongFitter_IsRejected(scenario: &quot;culture&quot;, fault: CultureFormatting)" storage="/home/sharpninja/github/mcpserver/.claude/worktrees/github-pr-comment-84-944644/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="db8454f4-62f9-536d-2379-c4ef7f8b313b">
+      <Execution id="1029dd0b-693e-490c-8f28-e22147fc2d57" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.SvgContentFitMockGateTests" name="WrongFitter_IsRejected" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.SvgContentFitMockGateTests.ScriptedFitter_PassesScenario(scenario: &quot;no-viewbox&quot;)" storage="/home/sharpninja/github/mcpserver/.claude/worktrees/github-pr-comment-84-944644/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="f5b311dc-1e68-17ff-6bc4-094b26ebacdf">
+      <Execution id="15e96136-f101-4e69-a04a-4c80c89ec6ae" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.SvgContentFitMockGateTests" name="ScriptedFitter_PassesScenario" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.SvgContentFitMockGateTests.ScriptedFitter_PassesScenario(scenario: &quot;empty-content&quot;)" storage="/home/sharpninja/github/mcpserver/.claude/worktrees/github-pr-comment-84-944644/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="e33a2372-1d15-d0c4-1836-0bd96803e7c9">
+      <Execution id="7df0244b-2a1d-49a2-a896-ab587ed9dc1c" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.SvgContentFitMockGateTests" name="ScriptedFitter_PassesScenario" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="830ed847-09ce-eecf-6831-c6e471dbd576" executionId="be60a6a3-aca9-4752-8387-cc3cad7a10b8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8a889b7a-3373-d9bc-3f73-e87755758319" executionId="33b5e396-d451-4f7b-b594-481bc7c76e3d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9bbd2604-9362-c11c-621f-3d75e76c193f" executionId="841e6871-80c9-4255-9136-e6e5cdcfc232" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="db8454f4-62f9-536d-2379-c4ef7f8b313b" executionId="1029dd0b-693e-490c-8f28-e22147fc2d57" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="659bd83b-86d2-e103-9d1b-d5733c77f07b" executionId="628e278e-a24b-4c9e-b554-61a221a85ad9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6113997c-4257-b194-dbd2-43fa4347b7cf" executionId="a9a72653-2316-48c1-b4a8-4d6b446a8666" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d85e1b5d-c6a0-bee3-074c-5f2eeff054bb" executionId="fc514256-7bd4-41d6-ae80-5c9cfa83cce2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1eeca2d0-8ce9-dce3-e0c5-b2393b4196ec" executionId="ff07456b-b429-4346-a579-f19fc2ea611c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7ca2cd98-6405-1d1a-4264-f283f8f9afc5" executionId="d48d0f66-d545-43cd-9570-8706d56933ab" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fabaff3a-dc36-69d6-aa41-38b6ef8200c7" executionId="8f054883-63d1-474b-bc0b-58e7d02a06a6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2a0ef677-df12-751d-30db-b169eaa80066" executionId="638d2631-6186-480e-90a5-4e94d26504a6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ff4d17da-eb08-c137-2249-4a5fe3ae4374" executionId="b9866fc2-47ef-435c-9e92-2294b8c9446e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f5b311dc-1e68-17ff-6bc4-094b26ebacdf" executionId="15e96136-f101-4e69-a04a-4c80c89ec6ae" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="769b8c49-984e-1b92-0203-79838f244f95" executionId="6b7b6a78-d2d2-401b-ab4c-9707baa029b1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e33a2372-1d15-d0c4-1836-0bd96803e7c9" executionId="7df0244b-2a1d-49a2-a896-ab587ed9dc1c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ec4323fd-09d9-87ad-9871-e80e8ea48d8b" executionId="77ae8d05-1b2f-4ca4-8fa7-e08f7cb710ae" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="539c21b3-c01b-8d29-28e7-ccc426799c16" executionId="62ab5f22-8cbb-416b-b8f9-ca04d288a4e6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="17" executed="17" passed="17" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.13)
+[xUnit.net 00:00:00.25]   Discovering: Build.Tests
+[xUnit.net 00:00:00.74]   Discovered:  Build.Tests
+[xUnit.net 00:00:00.98]   Starting:    Build.Tests
+[xUnit.net 00:00:01.15]   Finished:    Build.Tests (ID = '2d31d9847ff390eb1ab3716cd7a21103155b07824a6c2050ebcad5d455c854e6')
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>
