@@ -44,67 +44,63 @@ Owners (section 8.3): SharedComponents owns 3.5.1 and 3.5.2; SessionTurnLogging 
 - `ModeGateBehavior` (namespace `QBrainAi.Support.Mcp.AgentContext`): applies only to records that implement the marker interface `IModeGatedRequest` (same namespace); while `Mcp:AgentContext:Mode` is `Off` it refuses them with 409 `agent_context_disabled`. It reads `Mode` through `IOptionsMonitor<AgentContextOptions>` at each dispatch (the pattern of `src/QBrainAi.Services/Services/AgentPoolService.cs:36`), so a reloaded configuration takes effect without a restart (`ModeGateReloadedConfigurationOffRefusesWithoutRestart`; section 3.1, Mode at runtime). `ModeGateEveryAgentContextCommandExceptTrustDecisionImplementsMarker` reflects over the agent-context command records and fails when one other than DecideAgentResponseTrustCommand lacks the marker (section 3.1, Mode gate completeness). Gated: every agent-context command except DecideAgentResponseTrustCommand (dispatched only by the grade units). Not gated: GetAgentContextStatusQuery and every read-only agent-context query, so the stored records stay readable for audit in `Off` (the attached plan: "Preserve rejected and stale responses for audit"). A requirement update or delete dispatches EvaluateStalenessCommand only while Mode is not `Off`; after a return from `Off`, reads evaluate freshness themselves (section 6.5).
 - Order: both behaviors run inside the dispatcher, after the controller or tool calls `SendAsync` or `QueryAsync` and before the handler; request validation runs in the handler. Every sequence diagram draws these refusals after the dispatch.
 
-```mermaid
-flowchart TD
-    S(["Command or query dispatched through IDispatcher"]) --> W[["WorkspaceResolutionBehavior"]]
-    W -->|path unregistered, or no workspace and not allowed| E0(["400 validation_error, details.field workspacePath"])
-    W -->|resolved from the record or the transport, or global allowed| G{"Record implements IModeGatedRequest?"}
-    G -->|no| H(["Handler runs"])
-    G -->|yes| M{"Mcp:AgentContext:Mode is Off?"}
-    M -->|yes| E1(["409 agent_context_disabled"])
-    M -->|no| H
-```
+![RequestPipeline: WorkspaceResolutionBehavior and ModeGateBehavior (activity), part 1 of 2](architecture/c4/rendered/RequestPipeline.svg)
+
+View: RequestPipeline
+
+![RequestPipeline: WorkspaceResolutionBehavior and ModeGateBehavior (activity), part 2 of 2](architecture/c4/rendered/RequestPipeline-part2.svg)
+
+View: RequestPipeline-part2
 
 #### 3.5.2 Storage and errors
 
 - `DbErrorClassifier` (namespace `QBrainAi.Support.Mcp.Storage.Errors`): `IsUniqueViolation(exception, out indexName)` by provider code (SQL Server 2601 and 2627, PostgreSQL 23505, SQLite 2067 and 1555) and `IsTransientConflict(exception)` (SQL Server 1205, PostgreSQL 40001 and 40P01, SQLite 5 busy and 6 locked). A timeout or transport failure is never a transient conflict (it may have committed; `HandoffDbExceptions.IsCommitAmbiguous`, `src/QBrainAi.Services/Services/HandoffDbExceptions.cs:49`, keeps that meaning). Develop's message-text predicates (`SessionLogService.cs:234`, `:357`, `:812-817`) are context; new code calls only this classifier.
 - `SerializableWrite` (namespace `QBrainAi.Support.Mcp.Storage.Transactions`): runs a unit's checks and its save as one delegate in one Serializable transaction on SQLite, PostgreSQL, and SQL Server (the pattern of `SessionLogService.SubmitAsync`, `SessionLogService.cs:153-157`, and `RequirementsRecoveryService.cs:80-126`). Every unit that evaluates the completion gate, the terminal-state guard, a review rule, a response status, or an idempotency key and then saves runs through it, so a concurrent write to the same turn or response commits wholly before or after it. Per-response writes name their responses: the first statements increment each response's `StatusVersion` in ascending `ResponseId` order. Isolation scope (section 3.1, "Turn-level isolation"): a single-turn write reads its session row only to locate and validate the parent and writes only the one turn with its children; the session row's summary fields change only in the separate short write after the turn commits, whose failure never fails the turn write (`TurnWriteSummaryRefreshFailureNeverFailsTurnWrite`; develop refreshes them inside the turn's save, `SessionLogService.cs:762,794,879` at `a8d3934b`), so no two single-turn transactions write the same row, and writes to different turns of one session never answer a conflict (`TurnWriteConcurrentDifferentTurnsSameSessionBothCommitNoConflictAnswer`, dense-session fixture, three providers). Per provider: on SQL Server and PostgreSQL both transactions read the session row without updating it, so neither blocks the other on it, and a key-range or serialization conflict between two inserts near the same index position ends the loser's attempt, which SerializableWrite reruns within its bound; on SQLite the database write lock serializes the two writes, which wait within the busy timeout. A multi-turn submission keeps its session-level scope and refreshes the summary inside its own transaction. On the EF in-memory provider, which has no transactions, SerializableWrite runs the delegate once, as develop does (`SessionLogService.cs:155`). A caller-owned transaction is refused as develop refuses it today (`SessionLogService.cs:119-128`). A delegate reads and writes only the database: a unit reads the git commits, files, sources, and GraphRAG results it needs before SerializableWrite, and the delegate re-checks the database state those reads relied on (each locked response's `StatusVersion`, the turn's status); a changed state ends the attempt and the unit runs again from its reads, within the same bound. On SQLite a Serializable transaction holds the database write lock from its start, so no hook write waits on a retrieval or a git read (`BuildOnSqliteHookWriteDuringRetrievalNotBlocked`). A transient conflict, or a unique violation on a key the delegate declares (an idempotency key, a readable key), rolls the transaction back and runs the whole delegate again, at most three times (four attempts) unless the caller states another bound and exhaustion outcome (only the Phase A minter does, ReadableKeyAllocator below); then the unit returns 409 `conflict` with `retryable: true` and saves nothing. The attempts run within the unit's existing storage budget (FR-MCP-SESSIONLIFE-003). A refusal the delegate returns rolls back and is returned unchanged. A command dispatched from inside a delegate (for example DecideAgentResponseTrustCommand from a grade unit) joins the caller's transaction and retry; it never opens a second one. SharedComponents proves the component on a test entity it owns (`SerializableWriteForcedInterleavingTestEntityCommitsWhollyBeforeOrAfter`, `SerializableWriteRetriesExhausted409ConflictRetryableNothingSaved`); the turn cases belong to the gates of the contexts that own those units: `TurnWriteForcedInterleavingReviewResetVsCompleteNeverClosedWithoutReview`, `TurnWriteForcedInterleavingClassChangeVsCompleteGateSeesCommittedClass`, and `TurnWriteForcedInterleavingChoreFlipVsRunningWriteRunningKept`. Every case runs on SQLite, PostgreSQL, and SQL Server.
 
-```mermaid
-flowchart TD
-    S(["SerializableWrite: delegate, ids to lock"]) --> B["Begin Serializable transaction; bump StatusVersion of each id to lock, ascending"]
-    B --> RUN["Run checks and save"]
-    RUN -->|refusal| RF(["Rolled back, refusal returned"])
-    RUN -->|done| CM{"Commit"}
-    CM -->|committed| OK(["Result returned"])
-    RUN -->|transient conflict or declared key collision| RB2["Roll back"]
-    CM -->|transient conflict| RB2
-    RB2 --> N{"Under the retry bound, three unless the caller states one?"}
-    N -->|yes| B
-    N -->|no| EC(["409 conflict, retryable, or the caller's stated exhaustion outcome"])
-```
+![SerializableWrite (activity), part 1 of 3](architecture/c4/rendered/SerializableWrite.svg)
+
+View: SerializableWrite
+
+![SerializableWrite (activity), part 2 of 3](architecture/c4/rendered/SerializableWrite-part2.svg)
+
+View: SerializableWrite-part2
+
+![SerializableWrite (activity), part 3 of 3](architecture/c4/rendered/SerializableWrite-part3.svg)
+
+View: SerializableWrite-part3
 
 - `IdempotentCreate` with `PayloadFingerprint` (namespace `QBrainAi.Support.Mcp.Storage.Idempotency`; precedent `TodoPayloadFingerprint`, `src/QBrainAi.Services/Services/TodoPayloadFingerprint.cs:10`): runs inside SerializableWrite. It looks the key up first, before any precondition that can change between attempts (a source, a status, a commit), so a retry of a lost response returns the stored record; a unit that reads outside the database before its SerializableWrite (Build, Submit, the grades) runs the same lookup read-only before those reads, so such a retry returns the stored record without reading any source. The fingerprint is SHA-256 over the canonical JSON of the client-supplied inputs only, never over server-observed sources. The caller states its mismatch policy: `Conflict` (every agent-context create: 409 `conflict` with `retryable: false`), `ReturnStored` (MintSessionTurnCommand: one host event, so a repeated nonce returns the stored turn whatever the payload; RelationshipWriter: identical links), or `MergeInto` (the insert-when-absent turn writes: the write is merged into the stored turn). A unique violation on the key index ends the attempt; SerializableWrite runs the unit again and the next lookup finds the winner, so one rule covers a retry and a concurrent duplicate. Soft delete (TR-MCP-DB-003): `McpDbContext` turns every delete into a soft delete and hides deleted rows through its query filter, while the unique indexes cover deleted rows too (`McpDbContext.cs:391,404,1302-1336`). The lookup therefore reads past the filter: a soft-deleted record with the key is revived (its deletion columns cleared) and then written as a new record with the new inputs and fingerprint (`created: true`), the pattern develop uses for a tombstoned session (`SessionLogService.cs:161-169`, `SessionLogResubmissionReviveTests`), so a deleted link or record can be created again (`IdempotentCreateSoftDeletedKeyRevivedCreatedTrue`).
 
-```mermaid
-flowchart TD
-    S(["IdempotentCreate: key, PayloadFingerprint of the client inputs, mismatch policy"]) --> F{"Record with this key exists?"}
-    F -->|yes| SAME{"Stored fingerprint equals the new one?"}
-    SAME -->|yes| ST(["Stored record returned, created false"])
-    SAME -->|no| POL{"Mismatch policy?"}
-    POL -->|Conflict| E409(["409 conflict, retryable false: key reused with other inputs"])
-    POL -->|ReturnStored| ST
-    POL -->|MergeInto| MG(["Stored record returned for the caller to merge the write into"])
-    F -->|soft-deleted| RV["Revive: clear the deletion columns"]
-    RV --> INS
-    F -->|no| INS["Caller's remaining checks, then insert or overwrite the revived row"]
-    INS -->|inserted| NEW(["New record, created true"])
-    INS -->|unique violation on the key index| RT(["Attempt ends: SerializableWrite retries and the next lookup finds the winner"])
-```
+![IdempotentCreate (activity), part 1 of 5](architecture/c4/rendered/IdempotentCreate.svg)
+
+View: IdempotentCreate
+
+![IdempotentCreate (activity), part 2 of 5](architecture/c4/rendered/IdempotentCreate-part2.svg)
+
+View: IdempotentCreate-part2
+
+![IdempotentCreate (activity), part 3 of 5](architecture/c4/rendered/IdempotentCreate-part3.svg)
+
+View: IdempotentCreate-part3
+
+![IdempotentCreate (activity), part 4 of 5](architecture/c4/rendered/IdempotentCreate-part4.svg)
+
+View: IdempotentCreate-part4
+
+![IdempotentCreate (activity), part 5 of 5](architecture/c4/rendered/IdempotentCreate-part5.svg)
+
+View: IdempotentCreate-part5
 
 - `ReadableKeyAllocator` (namespace `QBrainAi.Support.Mcp.Storage.Keys`): allocates the human-readable keys of section 3 (Identifiers). Strategy `NextOrdinal` (`<prefix><parent>-<nn>`, highest stored suffix within the key's unique index scope plus one; the agent-context keys `pkg-`, `rsp-`, and `grd-` under their record parent, `rel-` under its type and timestamp, and `hvr-` under its session and timestamp with `-<nn>` appended only from the second key of the same second, each with the shortened parent id rule and the formats of section 6.3) or `RandomHex` (`req-<yyyyMMddTHHmmssZ>-<8 hex>`, the Phase A minter). `NextOrdinal` reads past the soft-delete filter, so a deleted record's suffix is never allocated again (`ReadableKeyAllocatorSoftDeletedSuffixNeverReused`). A collision on the key's unique index declares a retry to SerializableWrite with the next candidate. The Phase A minter states its own bound and exhaustion outcome to SerializableWrite for request-id collisions only: today's six attempts and 500 `mint_collision_exhausted` (InsertMintedTurnWithRetry, section 4.2); its transient conflicts keep the default bound and exit; agent-context keys use SerializableWrite's default bound (four attempts), then 409 `conflict` with `retryable: true`.
 - `PagedQuery` and `PageBounds` (namespace `QBrainAi.Support.Mcp.Storage.Paging`) with the wire type `PageResult<TItem>` (namespace `QBrainAi.Client.Paging`, fields `totalCount`, `limit`, `offset`, `items`): counts the matches and reads one page in the caller's stable order. `PageBounds` carries the policy: `Clamp` (QuerySessionLogsQuery, today's behavior: limit default 100, clamped to 1..1000, a negative offset read as 0, `SessionLogService.cs:476-477`) or `Refuse` (every agent-context query and RetrieveAgentContextCandidatesQuery's `limit`: limit 1..1000, default 50, offset at least 0, otherwise 400 `validation_error` with `details.field` `limit` or `offset`). The four agent-context page types of section 6.4 are `PageResult<TItem>`.
 
-```mermaid
-flowchart TD
-    S(["PagedQuery: limit, offset, PageBounds, stable order"]) --> P{"PageBounds policy?"}
-    P -->|Clamp| C["Default the limit when absent, clamp it to the bounds, read a negative offset as 0"]
-    P -->|Refuse| V{"Limit and offset within the bounds?"}
-    V -->|no| E(["400 validation_error, details.field limit or offset"])
-    V -->|yes| Q["Count the matches, read one page in the stable order"]
-    C --> Q
-    Q --> R(["PageResult: totalCount, limit, offset, items"])
-```
+![PagedQuery (activity), part 1 of 2](architecture/c4/rendered/PagedQuery.svg)
+
+View: PagedQuery
+
+![PagedQuery (activity), part 2 of 2](architecture/c4/rendered/PagedQuery-part2.svg)
+
+View: PagedQuery-part2
 
 - `ClassifiedErrorException` and `ErrorCodes` (namespace `QBrainAi.Client.Errors`): every new handler fails with `Result<T>.Failure(new ClassifiedErrorException(code, status, message, details, retryable))` (`src/QBrainAi.Cqrs/Result.cs:50`); `ErrorCodes` is the one table of codes with their HTTP status and retryable flag, read by the server, the REPL envelope, and the plugin's receipt mapping (C9). `McpErrorClassifier` (`src/QBrainAi.Support.Mcp/Services/McpErrorClassifier.cs:14`) maps `ClassifiedErrorException` to the `ClassifiedError` problem+json body and the MCP tool error in one branch; it gains no per-feature branch. Retryable codes: transport outage and degraded persistence (503 `backend_unavailable`), a busy store (503 `persistence_error` with `retryable: true`, today's answer, `McpErrorClassifier.cs:129-139`), and 409 `conflict` when `retryable` is true (SerializableWrite exhausted, key allocation exhausted); every other code is final, including the REPL client-policy codes `transaction_degraded` and `mutation_not_transactional` (`ClientMutationPolicy.cs:203-218`), which `ErrorCodes` lists. The REPL classifier carries a server `ClassifiedError` answer through at every status: its `code`, `message`, `retryable`, and `details` reach the REPL envelope unchanged, where today only a 503 passes the server's code through and `conflict` is forced to `retryable: false` (`src/QBrainAi.Repl.Core/ReplMcpErrorClassifier.cs:60-95`), and any other answer becomes a classifier code or `method_invocation_error` (`src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs:3346-3370`); so the plugin sees the completion-gate token, the review and agent-context codes, and the server's retryable flag (`ReplClassifierConflictRetryableTrueKept`, `ReplClassifierServerClassifiedErrorKeepsCodeRetryableDetailsEveryStatus`). Exceptions without a server body keep today's classification.
 - `SecretRedactor` (namespace `QBrainAi.Support.Mcp.Redaction`): `Redact(text)` and `ContainsSecret(text)` over the rules of `SessionLogSanitizer` and `ApiKeyRedaction` (`src/QBrainAi.Services/Services/SessionLogSanitizer.cs:15`, `src/QBrainAi.Common.AgentCli/ApiKeyRedaction.cs:9`). It is the one redactor behind the session-log sanitizer's review paths and the agent-context secret filter and secret scan (section 3, Secrets).
@@ -115,45 +111,43 @@ flowchart TD
 - `TurnStatus`: `IsTerminal(status)` is true for `completed`, `failed`, `closed`, `canceled`, and `cancelled` (develop's set, `SessionLogService.cs:1355-1361`); every "terminal" and "nonterminal" in this document means this predicate. Agent surfaces (REST, MCP, client, REPL, plugin) accept the statuses `in_progress`, `completed`, `failed`, and `canceled` on writes (the legacy spelling `cancelled` stays accepted, as FR-MCP-SESSIONLIFE-002 relies on); a write naming `closed` is refused with 400 `validation_error` (operator, 2026-10-12, answer "Refuse from agent surfaces (Recommended)"); server-internal writers and existing rows keep `closed`.
 - `TurnLocator`: validates the session id and, when the unit addresses a turn, the request id (`SessionLogIdentifierValidator`, `src/QBrainAi.Services/Services/SessionLogIdentifierValidator.cs:8`), finds the session by (workspace, agent, sessionId) and the turn by (session, requestId). It returns typed results; each surface maps them to its existing body, listed in the unit's error list. Every unit that addresses a session or a turn, including the review units and the agent-context units that name a turn, calls it with the same key; an agent-context request that names a turn carries `agent`, `sessionId`, and `requestId`.
 
-```mermaid
-flowchart TD
-    S(["TurnLocator: agent, sessionId, requestId"]) --> V{"Ids valid?"}
-    V -->|no| E1(["InvalidIdentifier"])
-    V -->|yes| SE{"Session found?"}
-    SE -->|no| E2(["SessionNotFound"])
-    SE -->|yes| RQ{"Turn addressed?"}
-    RQ -->|no| OKS(["Session"])
-    RQ -->|yes| T{"Turn found?"}
-    T -->|no| E3(["TurnNotFound"])
-    T -->|yes| OKT(["Session and turn"])
-```
+![TurnLocator (activity), part 1 of 3](architecture/c4/rendered/TurnLocator.svg)
+
+View: TurnLocator
+
+![TurnLocator (activity), part 2 of 3](architecture/c4/rendered/TurnLocator-part2.svg)
+
+View: TurnLocator-part2
+
+![TurnLocator (activity), part 3 of 3](architecture/c4/rendered/TurnLocator-part3.svg)
+
+View: TurnLocator-part3
 
 - `TurnWritePipeline`: the one write path of every turn-writing unit (SubmitSessionLogCommand per turn, UpsertSessionTurnCommand, PatchSessionTurnCommand, ReplaceSessionTurnCommand, CompleteSessionTurnCommand, FailSessionTurnCommand), run inside SerializableWrite. Modes: `Submit` (policy TerminalTurnOutcomeGuard first; the completion gate's missing items are collected and the submission is rejected once after every turn is evaluated), `Merge` (additive; insert when absent; Upsert, Patch), `Replace` (whole replacement; the turn must exist), and the status overrides `Complete` and `Fail` (Merge with the status set). The single-turn modes reject at the first refusal. The insert-when-absent race is IdempotentCreate with policy `MergeInto` (one retry mechanism, no separate race step). Review records carried in the turn body pass policy ReviewValidation (section 5.3) before RequestClassification. The completion gate runs when the write moves the turn into `completed` or `failed`, or when a Replace carries `completed` or `failed` (FR-MCP-SESSIONCLASS-002-AC004), never on any other write that only enriches an already terminal turn. The QBAgent terminal compliance check (`ValidateTerminalTurnCompliance`, `SessionLogService.cs:1329`) runs in the single-turn modes only, as today. Single-turn modes read only their session row and their turn (turn-level isolation); the session summary refresh runs after the turn commits, as its own short write whose failure never fails the turn write. Outputs: the turn id (single-turn modes) or the per-turn outcome (`Submit`). Typed failures, mapped by each surface to the bodies its unit lists: `InvalidIdentifier`, `SessionNotFound` (never in `Submit` mode, which opens or upserts its session first), `TurnNotFound`, `InvalidPayload`, `ReviewInvalid` (with the policy ReviewValidation code), `RequestClassInvalid`, `CompletionGateMissing` (with the missing items), and the SerializableWrite conflict.
 
-```mermaid
-flowchart TD
-    S(["TurnWritePipeline: mode, entry, origin"]) --> LOC[["TurnLocator"]]
-    LOC -->|invalid id or no session| F1(["Typed failure"])
-    LOC -->|session found| GD[["Policy TerminalTurnOutcomeGuard, Submit mode only"]]
-    GD -->|skipped_terminal or no_change| OUT(["Outcome only, no write"])
-    GD -->|other modes, created, or merged| CTX{"Context valid and attributed?"}
-    CTX -->|no| F2(["InvalidPayload"])
-    CTX -->|yes| EXT{"Turn exists?"}
-    EXT -->|no, Replace| F3(["TurnNotFound"])
-    EXT -->|no, other modes| INS[["IdempotentCreate MergeInto: insert with ReviewDefaults"]]
-    EXT -->|yes| APP["Merge, or replace; Complete and Fail set status"]
-    INS -->|stored turn| APP
-    INS -->|inserted| RV[["Policy ReviewValidation, when the body carries reviews"]]
-    APP --> RV
-    RV -->|invalid| F7(["ReviewInvalid"])
-    RV -->|valid or none| PC[["Policy RequestClassification, when requestClass is supplied"]]
-    PC -->|invalid| F4(["RequestClassInvalid"])
-    PC -->|valid or not supplied| GT[["Policy CompletionGate, when the write moves into completed or failed, or a Replace carries one"]]
-    GT -->|missing items| F5(["CompletionGateMissing"])
-    GT -->|met or not applicable| QB{"Single-turn QBAgent close without evidence?"}
-    QB -->|yes| F6(["InvalidPayload"])
-    QB -->|no| OK(["Children stamped, summary refreshed: turn id or per-turn outcome"])
-```
+![TurnWritePipeline (activity), part 1 of 6](architecture/c4/rendered/TurnWritePipeline.svg)
+
+View: TurnWritePipeline
+
+![TurnWritePipeline (activity), part 2 of 6](architecture/c4/rendered/TurnWritePipeline-part2.svg)
+
+View: TurnWritePipeline-part2
+
+![TurnWritePipeline (activity), part 3 of 6](architecture/c4/rendered/TurnWritePipeline-part3.svg)
+
+View: TurnWritePipeline-part3
+
+![TurnWritePipeline (activity), part 4 of 6](architecture/c4/rendered/TurnWritePipeline-part4.svg)
+
+View: TurnWritePipeline-part4
+
+![TurnWritePipeline (activity), part 5 of 6](architecture/c4/rendered/TurnWritePipeline-part5.svg)
+
+View: TurnWritePipeline-part5
+
+![TurnWritePipeline (activity), part 6 of 6](architecture/c4/rendered/TurnWritePipeline-part6.svg)
+
+View: TurnWritePipeline-part6
 
 - `TurnReadProjection`: the read shape of a turn on every read surface: review text through `SecretRedactor`, scores as their exact decimal lexemes (`ScoreLexeme`), unset review fields `null` (C11). Turn text is stored as written and redacted on every read surface (FR-MCP-SESSIONLOGSAN-001); its review-text redaction and the TR-MCP-SESSIONLOGSAN-001 decorator's review paths are the same `SecretRedactor` call, and search runs on the stored text (FR-MCP-SESSIONLOGSAN-001 ac4). Used by GetSessionLogQuery, QuerySessionLogsQuery, and the record RecordSessionTurnReviewCommand and ResetSessionTurnReviewCommand return.
 
@@ -169,47 +163,42 @@ flowchart TD
 - `PackageAssembler`, `CandidateRanker`, and `BuiltPackageLookup` (namespace `QBrainAi.Support.Mcp.AgentContext.Packages`, owner ContextPackages): `CandidateRanker` scores candidates by the rule of section 6.3, rounds half-even to six places, and orders by score descending then `sourceRef`; RetrieveAgentContextCandidatesQuery's relational path uses it. `PackageAssembler` turns a candidate snapshot into a package: secret filter (`SecretRedactor`), omission filter, findings, the mandatory-context check, the budget fill (FillBudgetWithCandidates), and rendering; BuildAgentContextPackageCommand runs it on live candidates and ReplayAgentContextPackageQuery on the stored input snapshot, which therefore records every input the assembler reads (section 6.3). `BuiltPackageLookup` finds a package in the workspace that is not `Overflow`: 404 `not_found` (`details.resource` `package`) or 409 `agent_context_package_overflow`.
 - `ResponseStatusTransition` (namespace `QBrainAi.Support.Mcp.AgentContext.Responses`, owner ResponsesAndTrust): changes one response's status inside SerializableWrite with the response, and for a supersede the replacement too, locked in ascending `ResponseId` order. It checks the lifecycle of section 6.3 (a transition already applied with the same target and replacement returns unchanged; a transition the lifecycle does not allow is 409 `agent_context_transition_invalid`), sets `Status`, `StatusChangedUtc`, and `TrustedUtc` for `Trusted`, and applies every side effect in the same transaction: the projection row (entering `Trusted`: `Pending` for ingest; leaving `Trusted`: `Pending` for removal when the row holds a `GraphRagDocumentId`, otherwise `Removed`), and for `Rejected` or `Superseded` the response's `Pending` items in `Open` HV requests become `Closed` with that reason, and each request left with no `Pending` item becomes `Completed` with `CompletedUtc`.
 
-```mermaid
-flowchart TD
-    S(["ResponseStatusTransition: target, reason, replacement"]) --> SAME{"Already applied?"}
-    SAME -->|yes| UN(["Unchanged, 200"])
-    SAME -->|no| C{"Lifecycle allows it?"}
-    C -->|no| E(["409 agent_context_transition_invalid"])
-    C -->|yes| ST["Set status and timestamps"]
-    ST --> PJ["Mark the projection row"]
-    PJ --> HV{"Rejected or Superseded?"}
-    HV -->|yes| CL["Close Pending HV items, complete emptied requests"]
-    HV -->|no| OK(["Saved with the caller"])
-    CL --> OK
-```
+![ResponseStatusTransition (activity), part 1 of 3](architecture/c4/rendered/ResponseStatusTransition.svg)
+
+View: ResponseStatusTransition
+
+![ResponseStatusTransition (activity), part 2 of 3](architecture/c4/rendered/ResponseStatusTransition-part2.svg)
+
+View: ResponseStatusTransition-part2
+
+![ResponseStatusTransition (activity), part 3 of 3](architecture/c4/rendered/ResponseStatusTransition-part3.svg)
+
+View: ResponseStatusTransition-part3
 
 - `IResponseStalenessRule` (namespace `QBrainAi.Support.Mcp.AgentContext.Responses`, owner ResponsesAndTrust, called read-only by ContextPackages and ContextGraph): evaluates one `Submitted`, `Grading`, or `Trusted` response and returns fresh, or stale with the first changed reference and its relationship. Dependencies are the `depends_on`, `derived_from`, and `supports` targets of the response and of its package, the response's `File`, `Requirement`, `Receipt`, and `SessionLogTurn` evidence (including evidence outside its package), and every cited requirement (stale when deleted or superseded), except the request's own turn (never a dependency or evidence, section 6.3) and Rule files outside version control (provenance only, never a dependency, section 6.3). A file dependency is hashed at the workspace's current HEAD commit. A dependency that names a response (kind `PriorResponse`: a package item, or a `depends_on`, `derived_from`, or `supports` target of the response or of its package) must also be effectively `Trusted` and fresh, because its `ContentSha256` never changes when it is rejected, superseded, made stale, or demoted: the rule reads that response's stored status and evaluates it in turn, so a prior response that is `Rejected`, `Superseded`, `Stale`, `Submitted`, or `Grading` makes the dependent response stale with that reference, at any depth of the chain. One evaluation memoizes each response it has evaluated, and a reference back to a response already on the evaluation path adds no staleness of its own, so a cycle of client-made links terminates (`StalenessPriorResponseDependencyRejectedSupersededStaleOrDemotedDependentStale`, `StalenessPriorResponseThroughPackageItemDependentStale`, `StalenessDependencyCycleTerminatesEachResponseEvaluatedOnce`). Queries and Build report the effective status and write nothing; only EvaluateStalenessCommand persists `Stale`, through ResponseStatusTransition, after it evaluates outside its SerializableWrite. A unit that needs the persisted status (the grade units, and a unit of another context) dispatches EvaluateStalenessCommand through `IDispatcher` before its own SerializableWrite.
 
-```mermaid
-flowchart TD
-    S(["IResponseStalenessRule.Evaluate: one response"]) --> ST{"Status Submitted, Grading, or Trusted?"}
-    ST -->|no| N(["Not evaluated"])
-    ST -->|yes| D["Collect depends_on, derived_from, and supports targets, evidence, and cited requirements, except the own turn and untracked Rule files"]
-    D --> H{"Every dependency hashes as recorded, files read at the workspace HEAD commit?"}
-    H -->|yes| PR{"Every response dependency effectively Trusted and fresh: evaluated in turn, memoized, a cycle edge adding nothing?"}
-    PR -->|yes| F(["Fresh"])
-    PR -->|no| C
-    H -->|no, or a cited requirement deleted or superseded| C(["Stale: the first changed reference and its relationship"])
-```
+![IResponseStalenessRule.Evaluate (activity), part 1 of 3](architecture/c4/rendered/IResponseStalenessRule.svg)
+
+View: IResponseStalenessRule
+
+![IResponseStalenessRule.Evaluate (activity), part 2 of 3](architecture/c4/rendered/IResponseStalenessRule-part2.svg)
+
+View: IResponseStalenessRule-part2
+
+![IResponseStalenessRule.Evaluate (activity), part 3 of 3](architecture/c4/rendered/IResponseStalenessRule-part3.svg)
+
+View: IResponseStalenessRule-part3
 
 - `ResponseIdList` (namespace `QBrainAi.Support.Mcp.AgentContext.Responses`): validates a list of response ids (at most 1000, each with the `rsp-` prefix; otherwise 400 `validation_error`) and selects them; ids that name no response in the workspace are returned in the result's `notFound` list (EvaluateStalenessCommand, ProjectAgentResponsesCommand).
 - `RelationshipWriter` (namespace `QBrainAi.Support.Mcp.AgentContext.Graph`, owner ContextGraph, called by ContextPackages and ResponsesAndTrust inside their own transactions): writes a typed link with its target's hash (`ToSha256`, which the caller read through SourceResolver before its SerializableWrite, so the delegate stays database-only) and `CreatedBy`. A `supersedes` link is written only by SupersedeAgentResponseCommand; a client request for that type is 400 `validation_error` with `details.field` `type`, so one data source holds the supersede chain. Identical links return the stored link (`created: false`, IdempotentCreate with policy `ReturnStored`). Every link created by a command (`CreatedBy` names the command, for example Build's `derived_from` and `relevant_to`, Submit's `derived_from` and `supports`, Supersede's `supersedes`) is protected: their deletion is 409 `agent_context_relationship_protected`.
 
-```mermaid
-flowchart TD
-    S(["RelationshipWriter in the caller's transaction: link, createdBy"]) --> T{"Type supersedes and the caller is not SupersedeAgentResponseCommand?"}
-    T -->|yes| E1(["400 validation_error, details.field type"])
-    T -->|no| CY{"A supersedes link that would close a cycle?"}
-    CY -->|yes| E2(["409 agent_context_supersede_invalid"])
-    CY -->|no| IC[["IdempotentCreate keyed by the link's six fields, policy ReturnStored: insert with the caller's ToSha256 and CreatedBy"]]
-    IC -->|stored link| SAME(["created false"])
-    IC -->|new link| OK(["created true"])
-```
+![RelationshipWriter (activity), part 1 of 2](architecture/c4/rendered/RelationshipWriter.svg)
+
+View: RelationshipWriter
+
+![RelationshipWriter (activity), part 2 of 2](architecture/c4/rendered/RelationshipWriter-part2.svg)
+
+View: RelationshipWriter-part2
 
 #### 3.5.6 Plugin core functions (PowerShell, `plugins/core/lib-ps`, owner PluginCorePowerShell)
 
@@ -217,54 +206,55 @@ The processes BindVerbToTurn and PersistTurnWriteWithReceipt (section 4.4) are t
 
 - `Resolve-MintOutcome`: classifies one mint result for the prompt hook, the arrival bridge, and the failsafe drain alike.
 
-```mermaid
-flowchart TD
-    S(["Resolve-MintOutcome: mint result, new invocation or stored retry"]) --> R{"Result?"}
-    R -->|201 created| C(["created"])
-    R -->|200 merged, stored status in_progress| M{"New invocation on copilot or classic cline?"}
-    M -->|yes| U(["unsupported: indistinguishable_arrival, by Set-SessionUnsupported"])
-    M -->|no| MI(["merged in progress: same requestId, turn-already-open"])
-    R -->|200 merged, stored status terminal| T(["merged terminal: report storedStatus; never the write target, the open list, or the ledger"])
-    R -->|transport outage, a retryable 503 or 409, or the scoped mint 404 or unknown_method of C9| O(["outage: pending id pending-nonce, failsafe mint record kept for the drain"])
-    R -->|ingress_nonce_invalid, validation_error, or mint_collision_exhausted| F(["final: turn-open-failed with the code; a drained record counts an attempt"])
-    R -->|session_not_open| SO{"Session open confirmed for this envelope?"}
-    SO -->|yes| F
-    SO -->|no| O
-```
+![Resolve-MintOutcome (activity), part 1 of 4](architecture/c4/rendered/Resolve-MintOutcome.svg)
+
+View: Resolve-MintOutcome
+
+![Resolve-MintOutcome (activity), part 2 of 4](architecture/c4/rendered/Resolve-MintOutcome-part2.svg)
+
+View: Resolve-MintOutcome-part2
+
+![Resolve-MintOutcome (activity), part 3 of 4](architecture/c4/rendered/Resolve-MintOutcome-part3.svg)
+
+View: Resolve-MintOutcome-part3
+
+![Resolve-MintOutcome (activity), part 4 of 4](architecture/c4/rendered/Resolve-MintOutcome-part4.svg)
+
+View: Resolve-MintOutcome-part4
 
 - `Invoke-SessionOpen`: the idempotent session open for an envelope's `mcpSessionId`, used by StartHostSession, the first-ingress writer, and the failsafe drain. It opens the id its caller recorded and records nothing itself: StartHostSession and the first-ingress writer record a new `mcpSessionId` in their own `Update-TurnState` replace before the first open, and only when none is recorded for the host session key, so an outage before the open is confirmed never changes the identity, and every retry and drain opens the same id (`SessionStartOpenOutageRecordedSessionIdReusedByNextStartAndDrain`, `TsHostFirstIngressOpenOutageRecordedSessionIdReusedByDrainNoSecondId`). A recorded `mcpSessionId` for a host session key is never replaced: a later SessionStart, a post-compact start, or a resumed session key keeps it (FR-MCP-SESSIONLIFE-002).
 
-```mermaid
-flowchart TD
-    S(["Invoke-SessionOpen: envelope mcpSessionId"]) --> R{"Open result?"}
-    R -->|200 created true or false| OK(["confirmed: the id its caller recorded before the open"])
-    R -->|transport outage| O(["outage: records kept for the next drain"])
-    R -->|400 invalid session identifier| F(["final: invalid session identifier"])
-```
+![Invoke-SessionOpen (activity), part 1 of 2](architecture/c4/rendered/Invoke-SessionOpen.svg)
+
+View: Invoke-SessionOpen
+
+![Invoke-SessionOpen (activity), part 2 of 2](architecture/c4/rendered/Invoke-SessionOpen-part2.svg)
+
+View: Invoke-SessionOpen-part2
 
 - `Set-SessionUnsupported`: the D6 fail-closed rule for every check that can fail a host session (the bridge's format and removal checks, the prompt hook's unsupported branch, the copilot and classic-cline single-registration and equal-field checks).
 
-```mermaid
-flowchart TD
-    S(["Set-SessionUnsupported: reason, causeOffset or causeNonce"]) --> D{"A request already delivered in this host session?"}
-    D -->|no| N(["turn_logging_unsupported reported; nothing recorded"])
-    D -->|yes| R[["Update-TurnState: record unsupportedSince with the reason and causeOffset, causeNonce, or detectedAtUtc"]]
-    R --> U(["Host session failed closed: open turns follow the unsupported-session failsafe decision"])
-```
+![Set-SessionUnsupported (activity), part 1 of 2](architecture/c4/rendered/Set-SessionUnsupported.svg)
+
+View: Set-SessionUnsupported
+
+![Set-SessionUnsupported (activity), part 2 of 2](architecture/c4/rendered/Set-SessionUnsupported-part2.svg)
+
+View: Set-SessionUnsupported-part2
 
 - `Update-TurnState`: the one writer of `sessions/<hostSessionKey>/turn-state.yaml` for every writer section 3.4 lists: one atomic replace under `turn-open.lock`, released on every path. A function that runs inside a change already holding the lock (for example `Set-SessionUnsupported` or `Invoke-SessionOpen` called by a writer that holds it) records into that same replace and takes no second lock.
 
-```mermaid
-flowchart TD
-    S(["Update-TurnState: change to apply"]) --> L{"turn-open.lock acquired?"}
-    L -->|no| C(["contended: returned to the caller; the prompt hook reports turn-open-contended and writes its failsafe diagnostic"])
-    L -->|yes| RD["Read turn-state.yaml and apply the change"]
-    RD --> W{"Temp file written, flushed, and renamed over turn-state.yaml?"}
-    W -->|yes| REL["Release turn-open.lock"]
-    REL --> OK(["State replaced"])
-    W -->|no| REL2["Release turn-open.lock"]
-    REL2 --> E(["Error returned, file unchanged"])
-```
+![Update-TurnState (activity), part 1 of 3](architecture/c4/rendered/Update-TurnState.svg)
+
+View: Update-TurnState
+
+![Update-TurnState (activity), part 2 of 3](architecture/c4/rendered/Update-TurnState-part2.svg)
+
+View: Update-TurnState-part2
+
+![Update-TurnState (activity), part 3 of 3](architecture/c4/rendered/Update-TurnState-part3.svg)
+
+View: Update-TurnState-part3
 
 - `Test-ModelEvidence` and `Get-CloseRemedy`: model evidence is at least one model-authored action, designDecision, or commit; it is required before a `completed` or `failed` close and never for a `canceled` close; records captured in the failsafe for the turn count. `Get-CloseRemedy` takes the turn and the chosen close (`completed`, `failed`, or `canceled`) and returns the remedy of section 3.4 (Stop gate) for that turn in its fixed order; the Stop gate, clear-session, and the advisory completion precheck call it.
 
@@ -276,16 +266,17 @@ flowchart TD
   - `Confirm-McpAliasAcknowledged -ConsumerId -PendingId`: idempotent; records the ack on both entries and prunes the `delivery` entry once every required consumer has acknowledged; an unknown `pendingId` is refused with `request_unknown`.
   The cases of this component run in one Pester file, `plugins/core/test-fixtures/pester/AliasJournal.Tests.ps1` (`AliasJournalResolveEitherIdSameTurn`, `AliasJournalReplayNoReMint`, `AliasJournalSamePendingIdOtherRequestIdRefusedRequestAmbiguousNothingWritten`, `AliasLateRegistrationNotRequiredForOlderAliases`, `AliasRequiredSetPersistedRestartKeepsPruningEligibility`, `AliasPartialAckNotPruned`, `AliasTwoHostSessionsIsolated`, `AliasLookupAfterAllAcksPruneAndRestartBothIdsResolveExactAcksRepeatAckNoop`); the processes that call it keep their own cases (`AliasJournalCrashBoundariesOneMintNoLostWrite`, `AliasRebindQueuedWritesOriginalOrderThroughPersistPath`).
 
-```mermaid
-flowchart TD
-    S(["Add-McpAlias: pendingId and requestId from the prompt hook, the bridge, or the drain"]) --> L{"turn-open.lock held or acquired?"}
-    L -->|no| C(["contended: returned to the caller, which keeps its records and retries"])
-    L -->|yes| E{"lookup entry for pendingId?"}
-    E -->|same requestId| SAME(["stored entry returned; nothing written"])
-    E -->|another requestId| AMB(["request_ambiguous: final; nothing written"])
-    E -->|none| W["Write the lookup entry and the delivery entry with the registered consumers in one atomic replace of aliases.yaml"]
-    W --> OK(["alias committed; the caller rewrites its bound records under the minted requestId"])
-```
+![Add-McpAlias (activity), part 1 of 3](architecture/c4/rendered/Add-McpAlias.svg)
+
+View: Add-McpAlias
+
+![Add-McpAlias (activity), part 2 of 3](architecture/c4/rendered/Add-McpAlias-part2.svg)
+
+View: Add-McpAlias-part2
+
+![Add-McpAlias (activity), part 3 of 3](architecture/c4/rendered/Add-McpAlias-part3.svg)
+
+View: Add-McpAlias-part3
 
 ## 6. Phase C: stateless agent context
 
@@ -488,111 +479,133 @@ Entity relationships, one diagram per functional group, in the groups of Addendu
 
 Packages and their build inputs:
 
-```mermaid
-erDiagram
-    SessionLogTurns ||..o{ AgentContextPackages : "built for, by turn key"
-    AgentContextPackages ||--o{ AgentContextPackageItems : contains
-    AgentContextPackages ||--o{ AgentContextPackageFocusRefs : focuses
-    AgentContextPackages ||--o{ AgentContextPackageInputs : snapshots
-    AgentContextPackages ||--o{ AgentContextPackageInputLinks : "snapshots links"
-    AgentContextRelationships ||..o{ AgentContextPackageInputLinks : "read at build, by RelationshipId"
-```
+![Packages and their build inputs (section 6.3) (entities), part 1 of 3](architecture/c4/rendered/STR-06-01.svg)
+
+View: STR-06-01
+
+![Packages and their build inputs (section 6.3) (entities), part 2 of 3](architecture/c4/rendered/STR-06-01-part2.svg)
+
+View: STR-06-01-part2
+
+![Packages and their build inputs (section 6.3) (entities), part 3 of 3](architecture/c4/rendered/STR-06-01-part3.svg)
+
+View: STR-06-01-part3
 
 Package omissions and findings:
 
-```mermaid
-erDiagram
-    AgentContextPackages ||--o{ AgentContextOmissions : records
-    AgentContextPackages ||--o{ AgentContextFindings : records
-    AgentContextRelationships ||..o{ AgentContextFindings : "by RelationshipId"
-```
+![Package omissions and findings (section 6.3) (entities), part 1 of 2](architecture/c4/rendered/STR-06-02.svg)
+
+View: STR-06-02
+
+![Package omissions and findings (section 6.3) (entities), part 2 of 2](architecture/c4/rendered/STR-06-02-part2.svg)
+
+View: STR-06-02-part2
 
 Responses and evidence:
 
-```mermaid
-erDiagram
-    SessionLogTurns ||..o{ AgentResponses : "answers, by turn key"
-    AgentContextPackages ||--o{ AgentResponses : "answered by"
-    AgentResponses ||--o{ AgentResponseClaims : asserts
-    AgentResponses ||--o{ AgentResponseEvidence : cites
-```
+![Responses and evidence (section 6.3) (entities), part 1 of 2](architecture/c4/rendered/STR-06-03.svg)
+
+View: STR-06-03
+
+![Responses and evidence (section 6.3) (entities), part 2 of 2](architecture/c4/rendered/STR-06-03-part2.svg)
+
+View: STR-06-03-part2
 
 Grades:
 
-```mermaid
-erDiagram
-    AgentResponses ||--o{ AgentResponseGrades : "graded by"
-    AgentContextHvRequests |o--o{ AgentResponseGrades : "model grades"
-    SessionLogTurns ||..o{ AgentResponseGrades : "reviewer turn"
-    AgentResponseGrades ||--o{ AgentResponseGradeFindings : lists
-```
+![Grades (section 6.3) (entities), part 1 of 2](architecture/c4/rendered/STR-06-04.svg)
+
+View: STR-06-04
+
+![Grades (section 6.3) (entities), part 2 of 2](architecture/c4/rendered/STR-06-04-part2.svg)
+
+View: STR-06-04-part2
 
 HV requests:
 
-```mermaid
-erDiagram
-    SessionLogs ||..o{ AgentContextHvRequests : "turn range, by Agent and SessionId"
-    AgentContextHvRequests ||--o{ AgentContextHvRequestItems : lists
-    AgentResponses ||--o{ AgentContextHvRequestItems : "reviewed in"
-```
+![HV requests (section 6.3) (entities), part 1 of 2](architecture/c4/rendered/STR-06-05.svg)
+
+View: STR-06-05
+
+![HV requests (section 6.3) (entities), part 2 of 2](architecture/c4/rendered/STR-06-05-part2.svg)
+
+View: STR-06-05-part2
 
 Relationships and the GraphRAG projection:
 
-```mermaid
-erDiagram
-    AgentContextRelationships }o..o{ AgentContextPackages : "From or To kind Package"
-    AgentContextRelationships }o..o{ AgentResponses : "From or To kind Response"
-    AgentResponses ||--o| AgentContextProjections : "projected as"
-```
+![Relationships and the GraphRAG projection (section 6.3) (entities), part 1 of 2](architecture/c4/rendered/STR-06-06.svg)
+
+View: STR-06-06
+
+![Relationships and the GraphRAG projection (section 6.3) (entities), part 2 of 2](architecture/c4/rendered/STR-06-06-part2.svg)
+
+View: STR-06-06-part2
 
 Response lifecycle (the transitions ResponseStatusTransition allows, section 3.5.5):
 
-```mermaid
-stateDiagram-v2
-    [*] --> Submitted: SubmitAgentResponseCommand
-    Submitted --> Grading: first grade recorded, trust decision
-    Grading --> Grading: grade recorded, latest pair not both Pass
-    Grading --> Trusted: latest deterministic and latest model grade both Pass at the floor
-    Trusted --> Grading: newer grade or re-derived verdict Fails
-    Submitted --> Stale: EvaluateStalenessCommand, a dependency changed
-    Grading --> Stale: EvaluateStalenessCommand, a dependency changed
-    Trusted --> Stale: EvaluateStalenessCommand, a dependency changed
-    Stale --> Stale: grade recorded, status kept
-    Submitted --> Rejected: RejectAgentResponseCommand
-    Grading --> Rejected: RejectAgentResponseCommand
-    Trusted --> Rejected: RejectAgentResponseCommand
-    Stale --> Rejected: RejectAgentResponseCommand
-    Submitted --> Superseded: SupersedeAgentResponseCommand
-    Grading --> Superseded: SupersedeAgentResponseCommand
-    Trusted --> Superseded: SupersedeAgentResponseCommand
-    Stale --> Superseded: SupersedeAgentResponseCommand
-    Rejected --> [*]
-    Superseded --> [*]
-```
+![Response lifecycle (state diagram), part 1 of 9](architecture/c4/rendered/STR-06-07.svg)
+
+View: STR-06-07
+
+![Response lifecycle (state diagram), part 2 of 9](architecture/c4/rendered/STR-06-07-part2.svg)
+
+View: STR-06-07-part2
+
+![Response lifecycle (state diagram), part 3 of 9](architecture/c4/rendered/STR-06-07-part3.svg)
+
+View: STR-06-07-part3
+
+![Response lifecycle (state diagram), part 4 of 9](architecture/c4/rendered/STR-06-07-part4.svg)
+
+View: STR-06-07-part4
+
+![Response lifecycle (state diagram), part 5 of 9](architecture/c4/rendered/STR-06-07-part5.svg)
+
+View: STR-06-07-part5
+
+![Response lifecycle (state diagram), part 6 of 9](architecture/c4/rendered/STR-06-07-part6.svg)
+
+View: STR-06-07-part6
+
+![Response lifecycle (state diagram), part 7 of 9](architecture/c4/rendered/STR-06-07-part7.svg)
+
+View: STR-06-07-part7
+
+![Response lifecycle (state diagram), part 8 of 9](architecture/c4/rendered/STR-06-07-part8.svg)
+
+View: STR-06-07-part8
+
+![Response lifecycle (state diagram), part 9 of 9](architecture/c4/rendered/STR-06-07-part9.svg)
+
+View: STR-06-07-part9
 
 ResponseStatusTransition applies only the transitions drawn, inside SerializableWrite with the response (and for a supersede the replacement) locked in ascending `ResponseId` order; the trust decision moves a response between `Submitted`, `Grading`, and `Trusted` and keeps a `Stale` response `Stale`. A repeat of a transition already applied (a Reject of a `Rejected` response, a Supersede naming the same replacement) returns the response unchanged with 200. Every other requested transition is 409 `agent_context_transition_invalid`: a Reject of a `Superseded` response, a Supersede of a `Rejected` original or of an original superseded by another response, and any transition out of `Rejected` or `Superseded`. Supersede validation that is not a lifecycle question (a replacement for another request, a replacement that is `Rejected` or `Superseded`, a cycle) is 409 `agent_context_supersede_invalid`, and a grade for a `Rejected` or `Superseded` response is 409 `agent_context_response_not_gradable` (grade units only). Each transition sets `Status` and `StatusChangedUtc` (and `TrustedUtc` on entering `Trusted`) and applies its projection row and HV item effects in the same transaction.
 
 Projection row states (`AgentContextProjectionEntity.State`; the choice node `ProjectOneResponseSave` is one ProjectOneResponse save):
 
-```mermaid
-stateDiagram-v2
-    state ProjectOneResponseSave <<choice>>
-    [*] --> Pending: response first enters Trusted
-    Pending --> ProjectOneResponseSave: projection pass selects the row
-    Failed --> ProjectOneResponseSave: projection pass selects the row
-    Skipped --> ProjectOneResponseSave: selected while ingest is enabled, or named in responseIds
-    ProjectOneResponseSave --> Projected: response Trusted, ingest enabled, document ingested, status still Trusted on re-read
-    ProjectOneResponseSave --> Skipped: response Trusted, ProjectionEnabled false or GraphRAG disabled
-    ProjectOneResponseSave --> Removed: response not Trusted, GraphRAG enabled, held document deleted or none held
-    ProjectOneResponseSave --> Pending: response not Trusted while GraphRAG disabled, or left Trusted during the ingest with the new document id kept
-    ProjectOneResponseSave --> Failed: GraphRAG ingest or delete error, LastError set
-    Projected --> Pending: response leaves Trusted, document awaiting removal, or reconciliation finds its document gone
-    Pending --> Removed: response leaves Trusted, no document held
-    Skipped --> Removed: response leaves Trusted, no document held
-    Failed --> Removed: response leaves Trusted, no document held
-    Failed --> Pending: response enters Trusted, or leaves it while a document is held
-    Removed --> Pending: response enters Trusted again
-```
+![Projection row states (state diagram), part 1 of 6](architecture/c4/rendered/STR-06-08.svg)
+
+View: STR-06-08
+
+![Projection row states (state diagram), part 2 of 6](architecture/c4/rendered/STR-06-08-part2.svg)
+
+View: STR-06-08-part2
+
+![Projection row states (state diagram), part 3 of 6](architecture/c4/rendered/STR-06-08-part3.svg)
+
+View: STR-06-08-part3
+
+![Projection row states (state diagram), part 4 of 6](architecture/c4/rendered/STR-06-08-part4.svg)
+
+View: STR-06-08-part4
+
+![Projection row states (state diagram), part 5 of 6](architecture/c4/rendered/STR-06-08-part5.svg)
+
+View: STR-06-08-part5
+
+![Projection row states (state diagram), part 6 of 6](architecture/c4/rendered/STR-06-08-part6.svg)
+
+View: STR-06-08-part6
 
 The transitions out of `Pending`, `Projected`, `Skipped`, `Failed`, and `Removed` that name the response entering or leaving `Trusted` are ResponseStatusTransition's projection effect (section 3.5.5): entering `Trusted` marks the row `Pending` for ingest; leaving `Trusted` marks it `Pending` for removal when it holds a `GraphRagDocumentId`, otherwise `Removed`. Every transition out of `ProjectOneResponseSave` is that save, through SerializableWrite with the response locked; `Projected` to `Pending` for a document gone is ReconcileProjectedDocuments' save, also with the response locked (section 6.5).
 
@@ -688,14 +701,13 @@ Shared components (section 3.5) are drawn as call nodes `[["Component: purpose"]
 - Cost at host session start (risk R-R4; no parameter or query is added): plugins make this read once per host session start for `mode` (section 6.6), so the counts must not grow with responses times dependencies. The handler evaluates the `Submitted`, `Grading`, and `Trusted` responses with one SourceResolver read per distinct dependency and commit, the read each evaluation makes anyway, shared by every response that cites that dependency (inference: the work is bounded by the distinct files, requirements, receipts, and turns cited, not by the response count), and answers within the SessionStart hook bound with 1000 `Trusted` responses (`StatusThousandTrustedResponsesAnswersWithinSessionStartHookBound`). A plugin whose read misses the hook bound has an unreadable Mode and runs the host session as `Off` (section 3.1, Mode changes).
 - Request: none. Response 200 `AgentContextStatusResult`. Errors: 400 `validation_error` (`details.field` `workspacePath`, WorkspaceResolutionBehavior). REPL: a listed read, never refused by ClientMutationPolicy.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: GET status"]) --> O["Read AgentContextOptions in force"]
-    O --> G["IGraphRagService.GetStatusAsync: enabled and state"]
-    G --> ST[["IResponseStalenessRule, read-only: Submitted, Grading, Trusted"]]
-    ST --> C["Count packages, and responses by effective status"]
-    C --> R(["200 AgentContextStatusResult"])
-```
+![GetAgentContextStatusQuery: get status (activity), part 1 of 2](architecture/c4/rendered/GetAgentContextStatusQuery.svg)
+
+View: GetAgentContextStatusQuery
+
+![GetAgentContextStatusQuery: get status (activity), part 2 of 2](architecture/c4/rendered/GetAgentContextStatusQuery-part2.svg)
+
+View: GetAgentContextStatusQuery-part2
 
 #### BuildAgentContextPackageCommand: build a context package [FR-MCP-AGENTCONTEXT-001, -002]
 
@@ -711,92 +723,89 @@ flowchart TD
 
 The diagram draws the reads as one call of the nested activity ReadBuildInputs below; the overflow and the built package are inserted with a `pkg-` key from ReadableKeyAllocator through IdempotentCreate (the `Overflow` package with its mandatory items, token counts, and input snapshot and no content; the `Built` package with its items, omissions, findings, focus refs, and input snapshot). The 422 carries the token counts and mandatory items, the stored ones on a repeat. The SerializableWrite and its delegate are drawn as one call of the nested activity SavePackage below, whose edges are its returns. One 409 `conflict` terminal stands for both conflict answers: `retryable: false` for the key reused with other client inputs, and `retryable: true` when SerializableWrite or ReadableKeyAllocator is exhausted after four attempts.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: POST packages"]) --> V{"Fields present, tokenBudget in range?"}
-    V -->|no| E1(["400 validation_error"])
-    V -->|yes| ICR[["IdempotentCreate lookup, read-only"]]
-    ICR -->|"stored, same client inputs"| PST{"Stored package status?"}
-    ICR -->|"key reused, other inputs"| E5(["409 conflict, retryable only when exhausted"])
-    ICR -->|absent| RB[["ReadBuildInputs, no transaction open"]]
-    PST -->|Built| EX(["200 the stored package"])
-    PST -->|Overflow| E6(["422 agent_context_budget_exceeded"])
-    RB -->|refused| ER(["Refusal of ReadBuildInputs, drawn there"])
-    RB -->|input snapshot| PA[["PackageAssembler in memory"]]
-    PA --> SP[["SavePackage"]]
-    SP -->|"stored Built"| EX
-    SP -->|"stored Overflow, or Overflow committed"| E6
-    SP -->|"key reused, or retries exhausted"| E5
-    SP -->|"turn status changed: read again"| ICR
-    SP -->|"Built package committed"| OK(["201 package, status Built"])
-```
+![BuildAgentContextPackageCommand: build a context package (activity), part 1 of 6](architecture/c4/rendered/BuildAgentContextPackageCommand.svg)
+
+View: BuildAgentContextPackageCommand
+
+![BuildAgentContextPackageCommand: build a context package (activity), part 2 of 6](architecture/c4/rendered/BuildAgentContextPackageCommand-part2.svg)
+
+View: BuildAgentContextPackageCommand-part2
+
+![BuildAgentContextPackageCommand: build a context package (activity), part 3 of 6](architecture/c4/rendered/BuildAgentContextPackageCommand-part3.svg)
+
+View: BuildAgentContextPackageCommand-part3
+
+![BuildAgentContextPackageCommand: build a context package (activity), part 4 of 6](architecture/c4/rendered/BuildAgentContextPackageCommand-part4.svg)
+
+View: BuildAgentContextPackageCommand-part4
+
+![BuildAgentContextPackageCommand: build a context package (activity), part 5 of 6](architecture/c4/rendered/BuildAgentContextPackageCommand-part5.svg)
+
+View: BuildAgentContextPackageCommand-part5
+
+![BuildAgentContextPackageCommand: build a context package (activity), part 6 of 6](architecture/c4/rendered/BuildAgentContextPackageCommand-part6.svg)
+
+View: BuildAgentContextPackageCommand-part6
 
 ##### Nested activity: ReadBuildInputs (reads of BuildAgentContextPackageCommand, before its SerializableWrite)
 
 No transaction is open. RetrieveAgentContextCandidatesQuery is dispatched with the package's `agent`, `sessionId`, `requestId`, and `focusRefs`, and `preferGraphRag` equal to `GraphRag:UseForRetrieval`; the mandatory items (request, profile, rules, applicable requirements) and every focus ref join its results, and the request's own turn is never a candidate. IResponseStalenessRule evaluates each prior-response candidate read-only and its effective status becomes the input's `ResponseStatus`. SourceResolver reads and hashes every candidate (through ContentHasher), and the snapshot's `InputsSha256` is computed over them. The turn status noted here is the state the delegate re-checks.
 
-```mermaid
-flowchart TD
-    S(["ReadBuildInputs: no transaction open"]) --> TL[["TurnLocator: agent, sessionId, requestId"]]
-    TL -->|InvalidIdentifier| E1(["400 validation_error, sessionId or requestId"])
-    TL -->|"SessionNotFound or TurnNotFound"| E3(["404 not_found session_turn"])
-    TL -->|"turn found, status noted"| GIT[["SourceResolver.ReadCommit: HEAD commit"]]
-    GIT -->|unavailable| E4(["409 agent_context_commit_unavailable"])
-    GIT -->|HEAD commit| PRF{"A profile file and a rule file resolve?"}
-    PRF -->|no| E7(["409 agent_context_profile_unavailable"])
-    PRF -->|yes| GA["Candidates: mandatory items, focus refs, Retrieve results"]
-    GA --> ST[["IResponseStalenessRule, read-only: prior responses"]]
-    ST --> IH[["SourceResolver: content and hash of each candidate"]]
-    IH --> R(["Input snapshot with InputsSha256"])
-```
+![Nested activity: ReadBuildInputs (reads of BuildAgentContextPackageCommand, before its SerializableWrite) (activity), part 1 of 4](architecture/c4/rendered/ReadBuildInputs.svg)
+
+View: ReadBuildInputs
+
+![Nested activity: ReadBuildInputs (reads of BuildAgentContextPackageCommand, before its SerializableWrite) (activity), part 2 of 4](architecture/c4/rendered/ReadBuildInputs-part2.svg)
+
+View: ReadBuildInputs-part2
+
+![Nested activity: ReadBuildInputs (reads of BuildAgentContextPackageCommand, before its SerializableWrite) (activity), part 3 of 4](architecture/c4/rendered/ReadBuildInputs-part3.svg)
+
+View: ReadBuildInputs-part3
+
+![Nested activity: ReadBuildInputs (reads of BuildAgentContextPackageCommand, before its SerializableWrite) (activity), part 4 of 4](architecture/c4/rendered/ReadBuildInputs-part4.svg)
+
+View: ReadBuildInputs-part4
 
 ##### Nested activity: SavePackage (SerializableWrite of BuildAgentContextPackageCommand, after ReadBuildInputs and PackageAssembler)
 
 The delegate reads and writes only the database: it runs the key lookup again, re-checks that the turn still has the status ReadBuildInputs noted (a change ends the attempt and the unit reads again, within SerializableWrite's bound of four attempts), and inserts, with a `pkg-` key from ReadableKeyAllocator, either the `Overflow` package or the `Built` package with its RelationshipWriter links. A key collision ends the attempt and SerializableWrite runs the delegate again; a refusal rolls back and is returned unchanged.
 
-```mermaid
-flowchart TD
-    S(["SavePackage: snapshot and assembled package"]) --> SW[["SerializableWrite, database only"]]
-    SW -->|retries exhausted| EC(["409 conflict, retryable true"])
-    subgraph TX [Delegate of SerializableWrite]
-        IC[["IdempotentCreate lookup"]]
-        TS{"Turn status as the reads saw it?"}
-        SO[["Insert the Overflow package"]]
-        SV[["Insert the Built package"]]
-        LK[["RelationshipWriter: derived_from, relevant_to"]]
-    end
-    SW -->|attempt| IC
-    IC -->|"stored, same client inputs"| ST(["Returned: the stored package"])
-    IC -->|"key reused, other inputs"| E5(["409 conflict, retryable false"])
-    IC -->|absent| TS
-    TS -->|"changed: attempt ends"| RA(["Returned: read again"])
-    TS -->|"same, mandatory over the budget"| SO
-    TS -->|"same, assembled"| SV
-    SO -->|committed| E6(["422 agent_context_budget_exceeded"])
-    SV --> LK
-    LK -->|committed| OK(["201 package, status Built"])
-    SO -->|"key collision: attempt ends"| SW
-    SV -->|"key collision: attempt ends"| SW
-```
+![Nested activity: SavePackage (SerializableWrite of BuildAgentContextPackageCommand, after ReadBuildInputs and PackageAssembler) (activity), part 1 of 5](architecture/c4/rendered/SavePackage.svg)
+
+View: SavePackage
+
+![Nested activity: SavePackage (SerializableWrite of BuildAgentContextPackageCommand, after ReadBuildInputs and PackageAssembler) (activity), part 2 of 5](architecture/c4/rendered/SavePackage-part2.svg)
+
+View: SavePackage-part2
+
+![Nested activity: SavePackage (SerializableWrite of BuildAgentContextPackageCommand, after ReadBuildInputs and PackageAssembler) (activity), part 3 of 5](architecture/c4/rendered/SavePackage-part3.svg)
+
+View: SavePackage-part3
+
+![Nested activity: SavePackage (SerializableWrite of BuildAgentContextPackageCommand, after ReadBuildInputs and PackageAssembler) (activity), part 4 of 5](architecture/c4/rendered/SavePackage-part4.svg)
+
+View: SavePackage-part4
+
+![Nested activity: SavePackage (SerializableWrite of BuildAgentContextPackageCommand, after ReadBuildInputs and PackageAssembler) (activity), part 5 of 5](architecture/c4/rendered/SavePackage-part5.svg)
+
+View: SavePackage-part5
 
 ##### Nested activity: FillBudgetWithCandidates (loop of PackageAssembler, for BuildAgentContextPackageCommand and ReplayAgentContextPackageQuery)
 
 Each optional kind keeps at most `MaxCandidatesPerKind` candidates in rank order (`PriorResponse` at most `MaxPriorResponses`); mandatory items are never cut. A candidate whose tokens equal the remaining budget is included (`FillBudgetCandidateEqualsRemainingIncluded`, `BuildCandidatesBeyondPerKindLimitOmittedBelowCandidateLimit`, `BuildMaxPriorResponsesZeroNoPriorResponseItem`).
 
-```mermaid
-flowchart TD
-    S(["Optional candidates after the secret and omission filters"]) --> RK[["CandidateRanker: score rounded half-even to 6 places, descending, then sourceRef by ordinal comparison"]]
-    RK --> MORE{"Next candidate in rank order?"}
-    MORE -->|none left| DONE(["Return every candidate placed"])
-    MORE -->|candidate| LIM{"Beyond the first MaxCandidatesPerKind of its kind in rank order, or MaxPriorResponses for PriorResponse?"}
-    LIM -->|yes| OML["Omit with reason below_candidate_limit"]
-    LIM -->|no| FIT{"Its tokens at most the remaining budget?"}
-    FIT -->|yes| ADD["Include with score, rationale, and retrieval path, then subtract its tokens"]
-    FIT -->|no| OMB["Omit with reason budget"]
-    ADD --> MORE
-    OMB --> MORE
-    OML --> MORE
-```
+![Nested activity: FillBudgetWithCandidates (loop of PackageAssembler, for BuildAgentContextPackageCommand and ReplayAgentContextPackageQuery) (activity), part 1 of 3](architecture/c4/rendered/FillBudgetWithCandidates.svg)
+
+View: FillBudgetWithCandidates
+
+![Nested activity: FillBudgetWithCandidates (loop of PackageAssembler, for BuildAgentContextPackageCommand and ReplayAgentContextPackageQuery) (activity), part 2 of 3](architecture/c4/rendered/FillBudgetWithCandidates-part2.svg)
+
+View: FillBudgetWithCandidates-part2
+
+![Nested activity: FillBudgetWithCandidates (loop of PackageAssembler, for BuildAgentContextPackageCommand and ReplayAgentContextPackageQuery) (activity), part 3 of 3](architecture/c4/rendered/FillBudgetWithCandidates-part3.svg)
+
+View: FillBudgetWithCandidates-part3
 
 #### GetAgentContextPackageQuery: get a package [FR-MCP-AGENTCONTEXT-001]
 
@@ -804,16 +813,13 @@ flowchart TD
 - REST `GET /qbrainai/agent-context/packages/{packageId}?includeContent=true`; MCP `agent_context_get_package(workspacePath, packageId, includeContent)`; client `GetPackageAsync(packageId, includeContent)`; REPL `client.AgentContext.GetPackageAsync`; PowerShell `New-McpAgentContextGetPackageParams`; tool descriptor `agent_context_get_package`.
 - Not gated. Response 200 `AgentContextPackageResult` (a `Built` or `Overflow` package). Errors: 400 `validation_error` (`details.field` `workspacePath`, WorkspaceResolutionBehavior); 404 `not_found` (`package`). REPL: a listed read, never refused by ClientMutationPolicy.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: GET package"]) --> F{"Package found in the workspace?"}
-    F -->|no| E2(["404 not_found package"])
-    F -->|yes| IC{"includeContent?"}
-    IC -->|yes| FULL["Load items with content, omissions, findings, rendered content"]
-    IC -->|no| SUM["Load items without content, omissions, findings"]
-    FULL --> R(["200 AgentContextPackageResult"])
-    SUM --> R
-```
+![GetAgentContextPackageQuery: get a package (activity), part 1 of 2](architecture/c4/rendered/GetAgentContextPackageQuery.svg)
+
+View: GetAgentContextPackageQuery
+
+![GetAgentContextPackageQuery: get a package (activity), part 2 of 2](architecture/c4/rendered/GetAgentContextPackageQuery-part2.svg)
+
+View: GetAgentContextPackageQuery-part2
 
 #### QueryAgentContextPackagesQuery: query packages [FR-MCP-AGENTCONTEXT-001]
 
@@ -822,14 +828,13 @@ flowchart TD
 - Paging: PagedQuery with `PageBounds` `Refuse` (limit 1..1000, default 50, offset at least 0), stable order `CreatedUtc` descending, then `PackageId`. RunStatelessInvocation finds a request's package again with `{ agent, sessionId, requestId, status: Built }`, all three turn-key fields required for that recovery, because a legacy request id is unique only within its session (section 6.6; `StatelessInvocationPackageRecoveryFiltersWholeTurnKeyTwoLegacySessionsSameRequestId`); a filter by `agent` alone or with the other fields is accepted for any other caller (`QueryPackagesFiltersAgentSessionIdAndRequestId`).
 - Not gated. Response 200 `PageResult<AgentContextPackageResult>` whose items are package summaries (`items`, `omissions`, `findings`, and `renderedContent` null, section 6.4). Errors: 400 `validation_error` (`details.field` `workspacePath`, WorkspaceResolutionBehavior; an unknown status; `limit` or `offset` outside the bounds, `details.field` naming it). REPL: a listed read, never refused by ClientMutationPolicy.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: GET packages"]) --> V{"Status filter absent or known?"}
-    V -->|no| E2(["400 validation_error"])
-    V -->|yes| PQ[["PagedQuery, PageBounds Refuse: filter, order CreatedUtc descending, then PackageId"]]
-    PQ -->|"limit or offset outside the bounds"| E2
-    PQ -->|page| R(["200 PageResult of package summaries"])
-```
+![QueryAgentContextPackagesQuery: query packages (activity), part 1 of 2](architecture/c4/rendered/QueryAgentContextPackagesQuery.svg)
+
+View: QueryAgentContextPackagesQuery
+
+![QueryAgentContextPackagesQuery: query packages (activity), part 2 of 2](architecture/c4/rendered/QueryAgentContextPackagesQuery-part2.svg)
+
+View: QueryAgentContextPackagesQuery-part2
 
 #### ReplayAgentContextPackageQuery: replay a package [FR-MCP-AGENTCONTEXT-001]
 
@@ -838,21 +843,25 @@ flowchart TD
 - Replay runs PackageAssembler, the same component the build ran, in memory on the package's immutable input snapshot only (the input rows with each prior-response candidate's `ResponseStatus` and each candidate's `ContainsSecret`, the input links that the findings read, `OptionsSnapshotJson`, and the focus refs, section 6.3), so every assembler step (secret filter, omission filter, findings, the mandatory-context check, FillBudgetWithCandidates, rendering) is reproduced; it reads no live source, configuration, relationship, or response status, stores nothing, and compares the result over the stored normal forms (ContentHasher, section 3.5.2), so replay stays identical after configuration, omitted-source, status, and non-Git source changes (`ReplayAfterConfigChangeIdentical`, `ReplayAfterOmittedSourceChangeIdentical`, `ReplayAfterRequirementTodoTurnProfileChangeIdentical`, `ReplaySourceWithEmAndEnDashesIdenticalTrue`).
 - Not gated. Response 200 `AgentContextReplayResult`. Errors: 400 `validation_error` (`details.field` `workspacePath`, WorkspaceResolutionBehavior); 404 `not_found` (`package`); 409 `agent_context_package_overflow` (BuiltPackageLookup, `SubmitOrReplayOverflowPackage409PackageOverflow`), `agent_context_replay_snapshot_unavailable` (no stored snapshot, `ReplayNoInputSnapshot409ReplaySnapshotUnavailable`), `agent_context_replay_builder_changed` (built by another builder version; `details { recorded, current }`, `ReplayOtherBuilderVersion409ReplayBuilderChangedRecordedAndCurrent`). REPL: a listed read, never refused by ClientMutationPolicy.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: POST replay"]) --> BL[["BuiltPackageLookup: packageId"]]
-    BL -->|not found| E2(["404 not_found package"])
-    BL -->|Overflow| E3(["409 agent_context_package_overflow"])
-    BL -->|Built package| SN{"Input snapshot stored?"}
-    SN -->|no| E4(["409 agent_context_replay_snapshot_unavailable"])
-    SN -->|yes| BV{"BuilderVersion equals the running builder's version?"}
-    BV -->|no| E5(["409 agent_context_replay_builder_changed with recorded and current"])
-    BV -->|yes| RB[["PackageAssembler on the stored input snapshot: no live source read, nothing stored"]]
-    RB --> CMP["Compare InputsSha256, ContentSha256, and items by ordinal"]
-    CMP --> SAME{"Identical?"}
-    SAME -->|yes| R1(["200 identical true"])
-    SAME -->|no| R2(["200 identical false with differences: added, removed, hashChanged, reordered"])
-```
+![ReplayAgentContextPackageQuery: replay a package (activity), part 1 of 5](architecture/c4/rendered/ReplayAgentContextPackageQuery.svg)
+
+View: ReplayAgentContextPackageQuery
+
+![ReplayAgentContextPackageQuery: replay a package (activity), part 2 of 5](architecture/c4/rendered/ReplayAgentContextPackageQuery-part2.svg)
+
+View: ReplayAgentContextPackageQuery-part2
+
+![ReplayAgentContextPackageQuery: replay a package (activity), part 3 of 5](architecture/c4/rendered/ReplayAgentContextPackageQuery-part3.svg)
+
+View: ReplayAgentContextPackageQuery-part3
+
+![ReplayAgentContextPackageQuery: replay a package (activity), part 4 of 5](architecture/c4/rendered/ReplayAgentContextPackageQuery-part4.svg)
+
+View: ReplayAgentContextPackageQuery-part4
+
+![ReplayAgentContextPackageQuery: replay a package (activity), part 5 of 5](architecture/c4/rendered/ReplayAgentContextPackageQuery-part5.svg)
+
+View: ReplayAgentContextPackageQuery-part5
 
 #### SubmitAgentResponseCommand: submit a response [FR-MCP-AGENTCONTEXT-003]
 
@@ -866,48 +875,49 @@ flowchart TD
 
 The well-formedness check covers: content nonempty, at least one claim, every claim with evidence, claimIds unique, evidence kinds, refs, and hashes well formed, format and mode known. The insert takes a `rsp-` key from ReadableKeyAllocator through IdempotentCreate and stores the response `Submitted`, its claims, and its evidence with both hashes, with the root ids copied from the package.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: POST responses"]) --> V{"Submission well formed?"}
-    V -->|no| E2(["400 validation_error, details.field"])
-    V -->|yes| ICR[["IdempotentCreate lookup, read-only"]]
-    ICR -->|"stored, same submission"| EX(["200 the stored response"])
-    ICR -->|"key reused, other submission"| E5(["409 conflict, retryable false"])
-    ICR -->|absent| RS[["ReadSubmissionInputs, no transaction open"]]
-    RS -->|refused| ER(["Refusal of ReadSubmissionInputs, drawn there"])
-    RS -->|"package and evidence hashes"| FP[["SecretRedactor, then ContentSha256"]]
-    FP --> SW[["SerializableWrite, database only"]]
-    SW -->|retries exhausted| EC(["409 conflict, retryable true"])
-    subgraph TX [Delegate of SerializableWrite]
-        IC[["IdempotentCreate lookup"]]
-        INS[["Insert the response, claims, evidence"]]
-        LK[["RelationshipWriter: derived_from, supports"]]
-    end
-    SW -->|attempt| IC
-    IC -->|"stored, same submission"| EX
-    IC -->|"key reused, other submission"| E5
-    IC -->|absent| INS
-    INS -->|"key collision: attempt ends"| SW
-    INS --> LK
-    LK -->|committed| OK(["201 response, status Submitted"])
-```
+![SubmitAgentResponseCommand: submit a response (activity), part 1 of 6](architecture/c4/rendered/SubmitAgentResponseCommand.svg)
+
+View: SubmitAgentResponseCommand
+
+![SubmitAgentResponseCommand: submit a response (activity), part 2 of 6](architecture/c4/rendered/SubmitAgentResponseCommand-part2.svg)
+
+View: SubmitAgentResponseCommand-part2
+
+![SubmitAgentResponseCommand: submit a response (activity), part 3 of 6](architecture/c4/rendered/SubmitAgentResponseCommand-part3.svg)
+
+View: SubmitAgentResponseCommand-part3
+
+![SubmitAgentResponseCommand: submit a response (activity), part 4 of 6](architecture/c4/rendered/SubmitAgentResponseCommand-part4.svg)
+
+View: SubmitAgentResponseCommand-part4
+
+![SubmitAgentResponseCommand: submit a response (activity), part 5 of 6](architecture/c4/rendered/SubmitAgentResponseCommand-part5.svg)
+
+View: SubmitAgentResponseCommand-part5
+
+![SubmitAgentResponseCommand: submit a response (activity), part 6 of 6](architecture/c4/rendered/SubmitAgentResponseCommand-part6.svg)
+
+View: SubmitAgentResponseCommand-part6
 
 ##### Nested activity: ReadSubmissionInputs (reads of SubmitAgentResponseCommand, before its SerializableWrite)
 
 No transaction is open. The consistency check refuses a submission whose `agent` differs from the package's, an `invocationMode` `Stateless` on a package not built in `Stateless`, and `SessionLogTurn` evidence naming the package's own turn, each with `details.field` naming the field or evidence ref. SourceResolver reads the HEAD commit, hashes each `File` at its `commitSha` (by default that commit) and each `Requirement`, `Receipt`, and `SessionLogTurn` ref from its source.
 
-```mermaid
-flowchart TD
-    S(["ReadSubmissionInputs: no transaction open"]) --> BL[["BuiltPackageLookup: packageId"]]
-    BL -->|not found| E3(["404 not_found package"])
-    BL -->|Overflow| E4(["409 agent_context_package_overflow"])
-    BL -->|Built package| CS{"Agent, mode, and evidence fit the package?"}
-    CS -->|no| E2(["400 validation_error, details.field"])
-    CS -->|yes| SR[["SourceResolver: ReadCommit, then each evidence hash"]]
-    SR -->|"commit unavailable"| E6(["409 agent_context_commit_unavailable"])
-    SR -->|"a ref names no existing source"| E2
-    SR -->|"hashes, null where unreadable"| R(["Package and evidence hashes"])
-```
+![Nested activity: ReadSubmissionInputs (reads of SubmitAgentResponseCommand, before its SerializableWrite) (activity), part 1 of 4](architecture/c4/rendered/ReadSubmissionInputs.svg)
+
+View: ReadSubmissionInputs
+
+![Nested activity: ReadSubmissionInputs (reads of SubmitAgentResponseCommand, before its SerializableWrite) (activity), part 2 of 4](architecture/c4/rendered/ReadSubmissionInputs-part2.svg)
+
+View: ReadSubmissionInputs-part2
+
+![Nested activity: ReadSubmissionInputs (reads of SubmitAgentResponseCommand, before its SerializableWrite) (activity), part 3 of 4](architecture/c4/rendered/ReadSubmissionInputs-part3.svg)
+
+View: ReadSubmissionInputs-part3
+
+![Nested activity: ReadSubmissionInputs (reads of SubmitAgentResponseCommand, before its SerializableWrite) (activity), part 4 of 4](architecture/c4/rendered/ReadSubmissionInputs-part4.svg)
+
+View: ReadSubmissionInputs-part4
 
 #### GetAgentResponseQuery: get a response [FR-MCP-AGENTCONTEXT-003]
 
@@ -916,14 +926,13 @@ flowchart TD
 - Freshness: a read never reports `Trusted` for a response whose dependency changed. The handler evaluates the response with IResponseStalenessRule read-only (a `Rejected`, `Superseded`, or already `Stale` response is not evaluated) and returns the effective status (`Stale`, with `statusReason` naming the changed reference) without writing: a query never writes (`src/QBrainAi.Cqrs/IQuery.cs:5`, "Queries represent intent to read state without side effects"), and the stored status changes only through the commands that persist staleness (`GetResponseAfterFileChangeReportsStale`, `GetResponseAfterFileChangeWritesNothing`).
 - Not gated. Response 200 `AgentResponseResult` (with every grade). Errors: 400 `validation_error` (`details.field` `workspacePath`, WorkspaceResolutionBehavior); 404 `not_found` (`response`). REPL: a listed read, never refused by ClientMutationPolicy.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: GET response"]) --> F{"Response found in the workspace?"}
-    F -->|no| E2(["404 not_found response"])
-    F -->|yes| ST[["IResponseStalenessRule, read-only: effective status, nothing written"]]
-    ST -->|"fresh, stale with the changed reference, or not evaluated"| L["Load claims, evidence, grades with findings, and content when requested, and report the effective status"]
-    L --> R(["200 AgentResponseResult"])
-```
+![GetAgentResponseQuery: get a response (activity), part 1 of 2](architecture/c4/rendered/GetAgentResponseQuery.svg)
+
+View: GetAgentResponseQuery
+
+![GetAgentResponseQuery: get a response (activity), part 2 of 2](architecture/c4/rendered/GetAgentResponseQuery-part2.svg)
+
+View: GetAgentResponseQuery-part2
 
 #### QueryAgentResponsesQuery: query responses [FR-MCP-AGENTCONTEXT-003, -004]
 
@@ -933,19 +942,17 @@ flowchart TD
 - Paging: PagedQuery with `PageBounds` `Refuse` (limit 1..1000, default 50, offset at least 0), stable order `SubmittedUtc` descending, then `ResponseId`.
 - Not gated. Response 200 `PageResult<AgentResponseResult>` whose items are response summaries (`claims`, `evidence`, `grades`, and `content` null, section 6.4). Errors: 400 `validation_error` (`details.field` `workspacePath`, WorkspaceResolutionBehavior; an unknown status; `limit` or `offset` outside the bounds, `details.field` naming it). REPL: a listed read, never refused by ClientMutationPolicy.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: GET responses"]) --> V{"Status filter absent or known?"}
-    V -->|no| E2(["400 validation_error"])
-    V -->|yes| ST[["IResponseStalenessRule, read-only: effective status of every matching Submitted, Grading, or Trusted response, nothing written"]]
-    ST --> TO{"trustedOnly?"}
-    TO -->|yes| T["Restrict to effective status Trusted"]
-    TO -->|no| A["Every effective status, or the requested one"]
-    T --> PQ[["PagedQuery, PageBounds Refuse: order SubmittedUtc descending, then ResponseId"]]
-    A --> PQ
-    PQ -->|"limit or offset outside the bounds"| E2
-    PQ -->|page| R(["200 PageResult of response summaries"])
-```
+![QueryAgentResponsesQuery: query responses (activity), part 1 of 3](architecture/c4/rendered/QueryAgentResponsesQuery.svg)
+
+View: QueryAgentResponsesQuery
+
+![QueryAgentResponsesQuery: query responses (activity), part 2 of 3](architecture/c4/rendered/QueryAgentResponsesQuery-part2.svg)
+
+View: QueryAgentResponsesQuery-part2
+
+![QueryAgentResponsesQuery: query responses (activity), part 3 of 3](architecture/c4/rendered/QueryAgentResponsesQuery-part3.svg)
+
+View: QueryAgentResponsesQuery-part3
 
 #### RunDeterministicGradeCommand: run the deterministic grade [FR-MCP-AGENTCONTEXT-004]
 
@@ -959,50 +966,43 @@ flowchart TD
 
 The save takes a `grd-` key from ReadableKeyAllocator and stores the grade with its findings and the thresholds in force, with `RecordedUtc` set by the server; ScoreVerdict applies `max(configured, 0.98)` and zero FAIL and UNKNOWN findings.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: POST grades/deterministic"]) --> F{"Response found and gradable?"}
-    F -->|"not found"| E2(["404 not_found response"])
-    F -->|"Rejected or Superseded"| E3(["409 agent_context_response_not_gradable"])
-    F -->|yes| CL[["Each evidence item (nested: CheckOneEvidenceItem)"]]
-    CL --> SEC[["SecretRedactor.ContainsSecret: content, claims, refs"]]
-    SEC --> EV["Dispatch EvaluateStalenessCommand for it"]
-    EV -->|"409 conflict, retryable true"| EC(["409 conflict, retryable true"])
-    EV -->|evaluated| SC["Staleness finding, exact scores"]
-    SC --> VD[["ScoreVerdict: max of configured and 0.98"]]
-    VD --> SW[["SerializableWrite, locking the response"]]
-    SW -->|retries exhausted| EC
-    subgraph TX [Delegate of SerializableWrite]
-        RC{"Response as the reads saw it?"}
-        SV[["Save the grade and its findings"]]
-        TR["Dispatch DecideAgentResponseTrustCommand"]
-    end
-    SW -->|attempt| RC
-    RC -->|"changed: attempt ends, read again"| F
-    RC -->|same| SV
-    SV -->|"key collision: attempt ends"| SW
-    SV --> TR
-    TR -->|committed| R(["201 grade with the response status"])
-```
+![RunDeterministicGradeCommand: run the deterministic grade (activity), part 1 of 6](architecture/c4/rendered/RunDeterministicGradeCommand.svg)
+
+View: RunDeterministicGradeCommand
+
+![RunDeterministicGradeCommand: run the deterministic grade (activity), part 2 of 6](architecture/c4/rendered/RunDeterministicGradeCommand-part2.svg)
+
+View: RunDeterministicGradeCommand-part2
+
+![RunDeterministicGradeCommand: run the deterministic grade (activity), part 3 of 6](architecture/c4/rendered/RunDeterministicGradeCommand-part3.svg)
+
+View: RunDeterministicGradeCommand-part3
+
+![RunDeterministicGradeCommand: run the deterministic grade (activity), part 4 of 6](architecture/c4/rendered/RunDeterministicGradeCommand-part4.svg)
+
+View: RunDeterministicGradeCommand-part4
+
+![RunDeterministicGradeCommand: run the deterministic grade (activity), part 5 of 6](architecture/c4/rendered/RunDeterministicGradeCommand-part5.svg)
+
+View: RunDeterministicGradeCommand-part5
+
+![RunDeterministicGradeCommand: run the deterministic grade (activity), part 6 of 6](architecture/c4/rendered/RunDeterministicGradeCommand-part6.svg)
+
+View: RunDeterministicGradeCommand-part6
 
 ##### Nested activity: CheckOneEvidenceItem (loop body of RunDeterministicGradeCommand)
 
-```mermaid
-flowchart TD
-    S(["Next evidence item of the claim"]) --> K{"Evidence kind"}
-    K -->|"File, Requirement, Receipt, or SessionLogTurn"| H{"Server-computed Sha256 present?"}
-    H -->|"no: the existing source could not be read at submission"| UF["Finding UNKNOWN"]
-    H -->|yes| C{"CitedSha256 absent or equal to Sha256?"}
-    C -->|yes| PF["Finding PASS"]
-    C -->|no| FF["Finding FAIL"]
-    K -->|Commit| AN[["SourceResolver, kind Commit: Ref against the response's CommitSha"]]
-    AN -->|"workspace not a git checkout"| UF
-    AN -->|"equal to it or one of its ancestors"| PF
-    AN -->|"missing or unrelated commit"| FF
-    PF --> NX(["Finding recorded: continue with the next item"])
-    FF --> NX
-    UF --> NX
-```
+![Nested activity: CheckOneEvidenceItem (loop body of RunDeterministicGradeCommand) (activity), part 1 of 3](architecture/c4/rendered/CheckOneEvidenceItem.svg)
+
+View: CheckOneEvidenceItem
+
+![Nested activity: CheckOneEvidenceItem (loop body of RunDeterministicGradeCommand) (activity), part 2 of 3](architecture/c4/rendered/CheckOneEvidenceItem-part2.svg)
+
+View: CheckOneEvidenceItem-part2
+
+![Nested activity: CheckOneEvidenceItem (loop body of RunDeterministicGradeCommand) (activity), part 3 of 3](architecture/c4/rendered/CheckOneEvidenceItem-part3.svg)
+
+View: CheckOneEvidenceItem-part3
 
 #### RecordModelGradeCommand: record a model grade from an HV review [FR-MCP-AGENTCONTEXT-004]
 
@@ -1016,85 +1016,77 @@ flowchart TD
 
 The handler's validation checks that `hvRequestId`, the request, response, and rollout jsonl paths, `reviewerSessionId`, `reviewerRequestId`, and `reviewerThreadId` are present (otherwise `agent_context_receipt_paths_required`), that every finding has a claimId and a check with outcome PASS, FAIL, or UNKNOWN (otherwise `validation_error`), and that the grader agent, model, and effort equal the configured grader. The insert takes a `grd-` key from ReadableKeyAllocator through IdempotentCreate and stores the grade with `hvRequestId`, its findings, the receipt paths and hashes, the thresholds in force, and `RecordedUtc`. The 200 is a retry of the continuation; the 422 names the failed check. One decision holds the three request checks (receipt fields, findings, and the configured grader agent, model, and effort), each refusal on its own edge. The reads are drawn as one call of the nested activity ReadModelGradeInputs and the SerializableWrite with its delegate as one call of the nested activity SaveModelGrade, both below, whose edges are their returns. One 409 `conflict` terminal stands for both conflict answers: `retryable: false` for a different grade already stored for this response and HV request, and `retryable: true` when SerializableWrite or ReadableKeyAllocator is exhausted after four attempts.
 
-```mermaid
-flowchart TD
-    S(["Body deserialized: POST grades/model"]) --> LX[["ScoreLexemeJsonConverter: both scores"]]
-    LX -->|invalid lexeme| E2(["400 review_score_format, precision, or out_of_range"])
-    LX -->|"valid: pipeline, then the handler"| V{"Receipt fields, findings, and grader valid?"}
-    V -->|"a receipt field missing"| E5(["400 agent_context_receipt_paths_required"])
-    V -->|"a finding malformed"| E6(["400 validation_error"])
-    V -->|"not the configured grader"| E7(["403 agent_context_grader_not_allowed"])
-    V -->|yes| ICR[["IdempotentCreate lookup, read-only"]]
-    ICR -->|"stored, equal submission"| EXR(["200 the stored grade"])
-    ICR -->|"another grade stored"| E14(["409 conflict, retryable only when exhausted"])
-    ICR -->|absent| RM[["ReadModelGradeInputs, no transaction open"]]
-    RM -->|refused| ER(["Refusal of ReadModelGradeInputs, drawn there"])
-    RM -->|"checks passed, verdict derived"| SM[["SaveModelGrade"]]
-    SM -->|"stored, equal submission"| EXR
-    SM -->|"another grade stored, or retries exhausted"| E14
-    SM -->|"changed: read again"| ICR
-    SM -->|committed| R(["201 grade, response status, hvRequestStatus"])
-```
+![RecordModelGradeCommand: record a model grade from an HV review (activity), part 1 of 5](architecture/c4/rendered/RecordModelGradeCommand.svg)
+
+View: RecordModelGradeCommand
+
+![RecordModelGradeCommand: record a model grade from an HV review (activity), part 2 of 5](architecture/c4/rendered/RecordModelGradeCommand-part2.svg)
+
+View: RecordModelGradeCommand-part2
+
+![RecordModelGradeCommand: record a model grade from an HV review (activity), part 3 of 5](architecture/c4/rendered/RecordModelGradeCommand-part3.svg)
+
+View: RecordModelGradeCommand-part3
+
+![RecordModelGradeCommand: record a model grade from an HV review (activity), part 4 of 5](architecture/c4/rendered/RecordModelGradeCommand-part4.svg)
+
+View: RecordModelGradeCommand-part4
+
+![RecordModelGradeCommand: record a model grade from an HV review (activity), part 5 of 5](architecture/c4/rendered/RecordModelGradeCommand-part5.svg)
+
+View: RecordModelGradeCommand-part5
 
 ##### Nested activity: ReadModelGradeInputs (reads of RecordModelGradeCommand, before its SerializableWrite)
 
 No transaction is open. The gradable check runs in this order: the response is neither `Rejected` nor `Superseded`, the HV request is `Open`, and the response is an item of it. The eight checks are `receipt_path`, `request_meta`, `verdict_block`, `verdict_binding`, `verdict_match`, `reviewer_turn`, `reviewer_independent`, and `runtime_identity` (section 6.3); they read the frozen receipt files and the reviewer's own session-log turn and compare normal forms (ContentHasher, `ModelGradeVerdictWithEmDashReviewerTurnMatchesInNormalForm`). After every read-only check, the receipt, reviewer, and runtime-identity checks included (section 3.1, Database-only delegates), the dispatched EvaluateStalenessCommand persists `Stale` when a dependency changed; a `Stale` response stays gradable and DecideAgentResponseTrustCommand leaves it `Stale`. ScoreVerdict counts the PASS, FAIL, and UNKNOWN findings at `max(configured, 0.98)`. The diagram draws the response, claim, HV request, and item checks as one call of the nested activity CheckGradeTarget below.
 
-```mermaid
-flowchart TD
-    S(["ReadModelGradeInputs: no transaction open"]) --> CT[["CheckGradeTarget"]]
-    CT -->|refused| ERT(["Refusal of CheckGradeTarget, drawn there"])
-    CT -->|"an item of an Open HV request"| RV{"The eight receipt checks pass?"}
-    RV -->|"a check fails"| E13(["422 agent_context_receipt_unverified"])
-    RV -->|"all eight pass"| EV["Dispatch EvaluateStalenessCommand for it"]
-    EV -->|"409 conflict, retryable true"| EC(["409 conflict, retryable true"])
-    EV -->|evaluated| VD[["ScoreVerdict over the findings"]]
-    VD --> R(["Checks passed, verdict derived"])
-```
+![Nested activity: ReadModelGradeInputs (reads of RecordModelGradeCommand, before its SerializableWrite) (activity), part 1 of 3](architecture/c4/rendered/ReadModelGradeInputs.svg)
+
+View: ReadModelGradeInputs
+
+![Nested activity: ReadModelGradeInputs (reads of RecordModelGradeCommand, before its SerializableWrite) (activity), part 2 of 3](architecture/c4/rendered/ReadModelGradeInputs-part2.svg)
+
+View: ReadModelGradeInputs-part2
+
+![Nested activity: ReadModelGradeInputs (reads of RecordModelGradeCommand, before its SerializableWrite) (activity), part 3 of 3](architecture/c4/rendered/ReadModelGradeInputs-part3.svg)
+
+View: ReadModelGradeInputs-part3
 
 ##### Nested activity: CheckGradeTarget (response, claim, HV request, and item checks of ReadModelGradeInputs)
 
 No transaction is open. The checks run in this order: the response exists in the workspace, every finding's claimId names a claim of the response, the HV request exists in the workspace, and the response is gradable in it (neither `Rejected` nor `Superseded`, the HV request `Open`, and the response an item of it).
 
-```mermaid
-flowchart TD
-    S(["CheckGradeTarget: no transaction open"]) --> F{"Response in the workspace?"}
-    F -->|no| E8(["404 not_found response"])
-    F -->|yes| CK{"Each claimId a claim of it?"}
-    CK -->|no| E6(["400 validation_error"])
-    CK -->|yes| HR{"HV request in the workspace?"}
-    HR -->|no| E10(["404 not_found hv_request"])
-    HR -->|yes| GQ{"Gradable in that HV request?"}
-    GQ -->|"Rejected or Superseded"| E9(["409 agent_context_response_not_gradable"])
-    GQ -->|"HV request Completed"| E11(["409 agent_context_hv_request_closed"])
-    GQ -->|"not an item"| E12(["409 agent_context_grade_not_in_hv_request"])
-    GQ -->|yes| R(["Gradable: an item of an Open HV request"])
-```
+![Nested activity: CheckGradeTarget (response, claim, HV request, and item checks of ReadModelGradeInputs) (activity), part 1 of 3](architecture/c4/rendered/CheckGradeTarget.svg)
+
+View: CheckGradeTarget
+
+![Nested activity: CheckGradeTarget (response, claim, HV request, and item checks of ReadModelGradeInputs) (activity), part 2 of 3](architecture/c4/rendered/CheckGradeTarget-part2.svg)
+
+View: CheckGradeTarget-part2
+
+![Nested activity: CheckGradeTarget (response, claim, HV request, and item checks of ReadModelGradeInputs) (activity), part 3 of 3](architecture/c4/rendered/CheckGradeTarget-part3.svg)
+
+View: CheckGradeTarget-part3
 
 ##### Nested activity: SaveModelGrade (SerializableWrite of RecordModelGradeCommand, after ReadModelGradeInputs)
 
 The SerializableWrite locks the response. Its delegate reads and writes only the database: it runs the key lookup again, re-checks that the response's status and `StatusVersion` (read after the staleness dispatch), the HV request's status, and the item's disposition are those the reads saw (a change ends the attempt and the unit reads again, within the bound of four attempts), inserts the grade with a `grd-` key from ReadableKeyAllocator, marks the item `Graded` and the HV request `Completed` with `CompletedUtc` when no item stays `Pending`, and dispatches DecideAgentResponseTrustCommand in the same transaction.
 
-```mermaid
-flowchart TD
-    S(["SaveModelGrade: checks passed, verdict derived"]) --> SW[["SerializableWrite, locking the response"]]
-    SW -->|retries exhausted| EC(["409 conflict, retryable true"])
-    subgraph TX [Delegate of SerializableWrite]
-        IC[["IdempotentCreate lookup"]]
-        RC{"Response, HV request, item as read?"}
-        INS[["Insert the grade, item Graded"]]
-        TR["Dispatch DecideAgentResponseTrustCommand"]
-    end
-    SW -->|attempt| IC
-    IC -->|"stored, equal submission"| EXR(["200 the stored grade"])
-    IC -->|"another grade stored"| E14(["409 conflict, retryable false"])
-    IC -->|absent| RC
-    RC -->|"changed: attempt ends"| RA(["Returned: read again"])
-    RC -->|same| INS
-    INS -->|"key collision: attempt ends"| SW
-    INS --> TR
-    TR -->|committed| R(["201 grade, response status, hvRequestStatus"])
-```
+![Nested activity: SaveModelGrade (SerializableWrite of RecordModelGradeCommand, after ReadModelGradeInputs) (activity), part 1 of 4](architecture/c4/rendered/SaveModelGrade.svg)
+
+View: SaveModelGrade
+
+![Nested activity: SaveModelGrade (SerializableWrite of RecordModelGradeCommand, after ReadModelGradeInputs) (activity), part 2 of 4](architecture/c4/rendered/SaveModelGrade-part2.svg)
+
+View: SaveModelGrade-part2
+
+![Nested activity: SaveModelGrade (SerializableWrite of RecordModelGradeCommand, after ReadModelGradeInputs) (activity), part 3 of 4](architecture/c4/rendered/SaveModelGrade-part3.svg)
+
+View: SaveModelGrade-part3
+
+![Nested activity: SaveModelGrade (SerializableWrite of RecordModelGradeCommand, after ReadModelGradeInputs) (activity), part 4 of 4](architecture/c4/rendered/SaveModelGrade-part4.svg)
+
+View: SaveModelGrade-part4
 
 #### DecideAgentResponseTrustCommand: decide trust (internal, after every grade) [FR-MCP-AGENTCONTEXT-004]
 
@@ -1102,17 +1094,13 @@ flowchart TD
 - Trigger: the two grade handlers dispatch it after their grade is saved, in the same transaction. No endpoint.
 - Rule: a response is `Trusted` only when it is fresh and neither `Rejected`, `Stale`, nor `Superseded`, and the verdicts of both its latest deterministic grade and its latest model grade ("latest" by the server-stamped `RecordedUtc`, then `GradeId`, section 6.3) are `Pass`; otherwise it is `Grading`. It never reads a stored verdict: ScoreVerdict re-derives each latest grade's verdict from that grade's stored scores and finding counts against `max(configured now, 0.98)`, so no stored verdict or earlier threshold below the floor can trust a response, and a raised threshold demotes a `Trusted` response at its next decision (`TrustStoredThresholdBelowFloorFloorApplied`, `TrustThresholdRaisedAfterGradeAppliedAtNextDecision`). It reads no source and persists no `Stale` (section 3.1: a SerializableWrite delegate does no git, file, or source read, and only EvaluateStalenessCommand persists `Stale`): the dispatching grade unit ran EvaluateStalenessCommand for the response before its SerializableWrite, and a response that is then `Stale`, `Rejected`, or `Superseded` is not decided and keeps its status, so a dependency that changed after the deterministic grade and before the model grade makes the response `Stale`, never `Trusted` (`TrustDependencyChangedBeforeModelGradeStaleNotTrusted`). The status change and its projection-row side effect go through ResponseStatusTransition in the grade's transaction, so the stored status always reflects the latest committed grade pair, and a concurrent reject, supersede, or staleness change on the same response is ordered before or after it, never interleaved.
 
-```mermaid
-flowchart TD
-    S(["Dispatched in a grade unit's delegate, response locked"]) --> ST{"Stored status Stale, Rejected, or Superseded?"}
-    ST -->|"yes: not decided"| DONE(["AgentResponseTrustDecision returned, status unchanged"])
-    ST -->|no| LG["Read the latest deterministic and model grades"]
-    LG --> SV[["ScoreVerdict: re-derive at max of configured now and 0.98"]]
-    SV --> D{"Both grades exist, both verdicts Pass?"}
-    D -->|"yes: target Trusted"| TR[["ResponseStatusTransition to the target"]]
-    D -->|"no: target Grading"| TR
-    TR --> DONE2(["AgentResponseTrustDecision returned"])
-```
+![DecideAgentResponseTrustCommand: decide trust (internal, after every grade) (activity), part 1 of 2](architecture/c4/rendered/DecideAgentResponseTrustCommand.svg)
+
+View: DecideAgentResponseTrustCommand
+
+![DecideAgentResponseTrustCommand: decide trust (internal, after every grade) (activity), part 2 of 2](architecture/c4/rendered/DecideAgentResponseTrustCommand-part2.svg)
+
+View: DecideAgentResponseTrustCommand-part2
 
 #### RejectAgentResponseCommand: reject a response [FR-MCP-AGENTCONTEXT-005]
 
@@ -1121,23 +1109,17 @@ flowchart TD
 - Transition: ResponseStatusTransition to `Rejected` with the reason, inside a SerializableWrite that locks the response, with every side effect in the same transaction (the response's `Pending` items in `Open` HV requests become `Closed` with reason `rejected`, each request left with no `Pending` item becomes `Completed` with `CompletedUtc`, and the projection row is marked). A repeat on a `Rejected` response is the same transition and returns 200 unchanged. A reject and a supersede of the same response commit one after the other: the second is refused with 409 `agent_context_transition_invalid` and the stored status is the first one's (`LifecycleForcedInterleavingSupersedeVsRejectSameOriginalOneWinsOtherRefused`, on the three providers).
 - Response 200 `AgentResponseResult` with status `Rejected`. Errors: 400 `validation_error` (`details.field` `workspacePath`, WorkspaceResolutionBehavior; blank reason); 404 `not_found` (`response`); 409 `agent_context_disabled`, `agent_context_transition_invalid` (the response is `Superseded`), `conflict` with `retryable: true` (SerializableWrite exhausted after four attempts); REPL only (ClientMutationPolicy, before any server call): `transaction_degraded`, `mutation_not_transactional`. The unit reads only the database, so its whole check runs in the delegate.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: POST reject"]) --> V{"Reason nonblank?"}
-    V -->|no| E2(["400 validation_error"])
-    V -->|yes| SW[["SerializableWrite, locking the response"]]
-    SW -->|retries exhausted| EC(["409 conflict, retryable true"])
-    subgraph TX [Delegate of SerializableWrite]
-        F{"Response found in the workspace?"}
-        RT[["ResponseStatusTransition to Rejected, with the reason"]]
-    end
-    SW -->|attempt| F
-    F -->|no| E3(["404 not_found response"])
-    F -->|yes| RT
-    RT -->|"already Rejected: unchanged"| SAME(["200 AgentResponseResult, unchanged"])
-    RT -->|"Superseded: lifecycle refuses"| E4(["409 agent_context_transition_invalid"])
-    RT -->|"transition saved, committed"| OK(["200 AgentResponseResult status Rejected"])
-```
+![RejectAgentResponseCommand: reject a response (activity), part 1 of 3](architecture/c4/rendered/RejectAgentResponseCommand.svg)
+
+View: RejectAgentResponseCommand
+
+![RejectAgentResponseCommand: reject a response (activity), part 2 of 3](architecture/c4/rendered/RejectAgentResponseCommand-part2.svg)
+
+View: RejectAgentResponseCommand-part2
+
+![RejectAgentResponseCommand: reject a response (activity), part 3 of 3](architecture/c4/rendered/RejectAgentResponseCommand-part3.svg)
+
+View: RejectAgentResponseCommand-part3
 
 #### SupersedeAgentResponseCommand: supersede a response [FR-MCP-AGENTCONTEXT-005]
 
@@ -1148,27 +1130,25 @@ flowchart TD
 
 In the diagram a valid replacement answers the same turn as the original (the same `agent`, `sessionId`, and `requestId`, the whole turn key of section 3) and is neither `Rejected` nor `Superseded`, and the transition node applies the side effects of the Transition bullet. One decision checks, in this order, that both responses exist in the workspace and that the replacement is valid for the original, each refusal on its own edge.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: POST supersede"]) --> V{"Replacement differs, reason nonblank?"}
-    V -->|no| E2(["400 validation_error"])
-    V -->|yes| SW[["SerializableWrite, locking both by ResponseId"]]
-    SW -->|retries exhausted| EC(["409 conflict, retryable true"])
-    subgraph TX [Delegate of SerializableWrite]
-        F{"Both found, replacement valid?"}
-        RT[["ResponseStatusTransition: original to Superseded"]]
-        RW[["RelationshipWriter: supersedes, cycle rule"]]
-    end
-    SW -->|attempt| F
-    F -->|"a response not found"| E3(["404 not_found response"])
-    F -->|"replacement not valid"| E4(["409 agent_context_supersede_invalid"])
-    F -->|yes| RT
-    RT -->|"already by this replacement"| SAME(["200 response, unchanged"])
-    RT -->|"Rejected, or by another response"| E5(["409 agent_context_transition_invalid"])
-    RT -->|saved| RW
-    RW -->|"would close a cycle"| E4
-    RW -->|committed| OK(["200 response, status Superseded"])
-```
+![SupersedeAgentResponseCommand: supersede a response (activity), part 1 of 5](architecture/c4/rendered/SupersedeAgentResponseCommand.svg)
+
+View: SupersedeAgentResponseCommand
+
+![SupersedeAgentResponseCommand: supersede a response (activity), part 2 of 5](architecture/c4/rendered/SupersedeAgentResponseCommand-part2.svg)
+
+View: SupersedeAgentResponseCommand-part2
+
+![SupersedeAgentResponseCommand: supersede a response (activity), part 3 of 5](architecture/c4/rendered/SupersedeAgentResponseCommand-part3.svg)
+
+View: SupersedeAgentResponseCommand-part3
+
+![SupersedeAgentResponseCommand: supersede a response (activity), part 4 of 5](architecture/c4/rendered/SupersedeAgentResponseCommand-part4.svg)
+
+View: SupersedeAgentResponseCommand-part4
+
+![SupersedeAgentResponseCommand: supersede a response (activity), part 5 of 5](architecture/c4/rendered/SupersedeAgentResponseCommand-part5.svg)
+
+View: SupersedeAgentResponseCommand-part5
 
 #### EvaluateStalenessCommand: evaluate staleness [FR-MCP-AGENTCONTEXT-005]
 
@@ -1179,34 +1159,29 @@ flowchart TD
 - Selection (ResponseIdList): the listed ids, or every `Submitted`, `Grading`, and `Trusted` response when none is listed; an id that names no response in the workspace is returned in `notFound`, is not counted in `evaluatedCount`, and raises no error (`EvaluateStalenessUnknownIdsNotCountedNoError`).
 - Response 200 `EvaluateStalenessResult { evaluatedCount, newlyStale, notFound }`. When one response's write exhausts its retries the unit stops and returns 409 `conflict` with `retryable: true`; responses already marked stay marked, and a retry evaluates again. Errors: 400 `validation_error` (`details.field` `workspacePath`, WorkspaceResolutionBehavior; malformed list, more than 1000 ids, an id without the `rsp-` prefix); 409 `agent_context_disabled`, `conflict` with `retryable: true` (SerializableWrite exhausted after four attempts); REPL only (ClientMutationPolicy, before any server call): `transaction_degraded`, `mutation_not_transactional`.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: POST staleness/evaluate"]) --> RL[["ResponseIdList: validate and select, none listed selecting every Submitted, Grading, and Trusted response"]]
-    RL -->|"malformed, more than 1000, or an id without rsp-"| E2(["400 validation_error"])
-    RL -->|"selected, unknown ids in notFound"| L[["For each selected response (nested: EvaluateOneResponseStaleness)"]]
-    L -->|every response evaluated| R(["200 EvaluateStalenessResult: evaluatedCount, newlyStale, notFound"])
-    L -->|"a write exhausted its retries"| EC(["409 conflict, retryable true"])
-```
+![EvaluateStalenessCommand: evaluate staleness (activity), part 1 of 2](architecture/c4/rendered/EvaluateStalenessCommand.svg)
+
+View: EvaluateStalenessCommand
+
+![EvaluateStalenessCommand: evaluate staleness (activity), part 2 of 2](architecture/c4/rendered/EvaluateStalenessCommand-part2.svg)
+
+View: EvaluateStalenessCommand-part2
 
 ##### Nested activity: EvaluateOneResponseStaleness (loop body of EvaluateStalenessCommand)
 
 The rule reads files at the workspace HEAD commit with no transaction open; the transition records the changed reference and its relationship and marks the projection row (ResponseStatusTransition, section 3.5.5).
 
-```mermaid
-flowchart TD
-    S(["Next selected response"]) --> RU[["IResponseStalenessRule, read-only, no transaction"]]
-    RU -->|"fresh, or not evaluated"| NX(["Continue with the next response"])
-    RU -->|stale| SW[["SerializableWrite, locking the response"]]
-    SW -->|retries exhausted| EX(["Stop the loop: the unit returns 409 conflict, retryable true"])
-    subgraph TX [Delegate of SerializableWrite]
-        RC{"Response as the evaluation saw it?"}
-        MK[["ResponseStatusTransition to Stale"]]
-    end
-    SW -->|attempt| RC
-    RC -->|"changed: attempt ends, evaluate again"| RU
-    RC -->|same| MK
-    MK -->|"committed, added to newlyStale"| NX
-```
+![Nested activity: EvaluateOneResponseStaleness (loop body of EvaluateStalenessCommand) (activity), part 1 of 3](architecture/c4/rendered/EvaluateOneResponseStaleness.svg)
+
+View: EvaluateOneResponseStaleness
+
+![Nested activity: EvaluateOneResponseStaleness (loop body of EvaluateStalenessCommand) (activity), part 2 of 3](architecture/c4/rendered/EvaluateOneResponseStaleness-part2.svg)
+
+View: EvaluateOneResponseStaleness-part2
+
+![Nested activity: EvaluateOneResponseStaleness (loop body of EvaluateStalenessCommand) (activity), part 3 of 3](architecture/c4/rendered/EvaluateOneResponseStaleness-part3.svg)
+
+View: EvaluateOneResponseStaleness-part3
 
 #### CreateAgentContextRelationshipCommand: create a relationship [FR-MCP-AGENTCONTEXT-006]
 
@@ -1215,22 +1190,17 @@ flowchart TD
 - The node kinds are `SourceKind` wire values, mapped by SourceResolver (`Response` is `PriorResponse`, `CodeFile` is the kind of `Code` items and `File` evidence), and both refs are resolved through it, with the target's `ToSha256`, before SerializableWrite (section 3.1, Database-only delegates), and RelationshipWriter receives that hash (section 3.1: it takes the target hash its caller read before the write), so the delegate holds only RelationshipWriter's database work; a ref that names no existing source is 400 `validation_error` with `details.field` `fromRef` or `toRef`, as in every unit. RelationshipWriter writes the link with `CreatedBy` the calling agent, so a client-made link stays deletable; a client cannot create type `supersedes` (400 `validation_error`, `details.field` `type`), because only SupersedeAgentResponseCommand writes the supersede chain. Two concurrent identical creates: the loser's insert hits the link's unique index, SerializableWrite runs the delegate again, and RelationshipWriter returns the winner's link with `created: false` (`CreateRelationshipConcurrentIdenticalOne201OneCreatedFalse`).
 - Response 201 with `created: true`, or 200 with `created: false` for an identical stored link (a soft-deleted identical link is revived, keeps its `RelationshipId`, and is written anew with `created: true`, IdempotentCreate, section 3.5.2 and section 6.3, `CreateRelationshipAfterDeleteRevivedSameRelationshipIdCreatedTrue`). Errors: 400 `agent_context_relationship_invalid` (an unknown kind or type, or a self-link, `CreateRelationshipUnknownKindTypeOrSelfLink400RelationshipInvalid`), `validation_error` (`details.field` `workspacePath`, WorkspaceResolutionBehavior; type `supersedes`; a ref that names no existing source); 409 `agent_context_disabled`, `conflict` with `retryable: true` (SerializableWrite or ReadableKeyAllocator `rel-` exhausted after four attempts); REPL only (ClientMutationPolicy, before any server call): `transaction_degraded`, `mutation_not_transactional`.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: POST relationships"]) --> V{"Known kinds and type, and not a self-link?"}
-    V -->|no| E2(["400 agent_context_relationship_invalid"])
-    V -->|yes| RS[["SourceResolver: fromRef, toRef, ToSha256 of the target"]]
-    RS -->|"a ref names no existing source"| E3(["400 validation_error, details.field fromRef or toRef"])
-    RS -->|both resolve| SW[["SerializableWrite, database only"]]
-    SW -->|retries exhausted| EC(["409 conflict, retryable true"])
-    subgraph TX [Delegate of SerializableWrite]
-        RW[["RelationshipWriter, createdBy the caller, key rel-"]]
-    end
-    SW -->|attempt| RW
-    RW -->|"type supersedes"| E4(["400 validation_error, details.field type"])
-    RW -->|"stored identical link"| SAME(["200 the stored link, created false"])
-    RW -->|"new link, committed"| OK(["201 link, created true"])
-```
+![CreateAgentContextRelationshipCommand: create a relationship (activity), part 1 of 3](architecture/c4/rendered/CreateAgentContextRelationshipCommand.svg)
+
+View: CreateAgentContextRelationshipCommand
+
+![CreateAgentContextRelationshipCommand: create a relationship (activity), part 2 of 3](architecture/c4/rendered/CreateAgentContextRelationshipCommand-part2.svg)
+
+View: CreateAgentContextRelationshipCommand-part2
+
+![CreateAgentContextRelationshipCommand: create a relationship (activity), part 3 of 3](architecture/c4/rendered/CreateAgentContextRelationshipCommand-part3.svg)
+
+View: CreateAgentContextRelationshipCommand-part3
 
 #### DeleteAgentContextRelationshipCommand: delete a relationship [FR-MCP-AGENTCONTEXT-006]
 
@@ -1239,15 +1209,13 @@ flowchart TD
 - Protection (RelationshipWriter): every link a command created is protected, because IResponseStalenessRule reads it, it holds the supersede chain, or it records the package's turn: Build's `derived_from` and `relevant_to` (`CreatedBy` `BuildAgentContextPackageCommand`, `DeleteRelationshipBuildMadeDerivedFrom409Protected`), Submit's `derived_from` and `supports` (`DeleteRelationshipServerMadeDerivedFrom409Protected`, `DeleteRelationshipServerMadeSupports409Protected`), and Supersede's `supersedes` (`DeleteRelationshipSupersedeMadeSupersedes409Protected`); a client-made link of any type can be deleted. The protection reads only the immutable `CreatedBy`, so the unit needs no SerializableWrite. The delete is a soft delete (`McpDbContext`, TR-MCP-DB-003), and a later identical create revives the link (section 3.5.2).
 - Response 204. Errors: 400 `validation_error` (`details.field` `workspacePath`, WorkspaceResolutionBehavior); 404 `not_found` (`relationship`); 409 `agent_context_disabled`, `agent_context_relationship_protected`; REPL only (ClientMutationPolicy, before any server call): `transaction_degraded`, `mutation_not_transactional`.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: DELETE relationship"]) --> F{"Link found in the workspace?"}
-    F -->|no| E2(["404 not_found relationship"])
-    F -->|yes| PRT[["RelationshipWriter protection: CreatedBy names a command?"]]
-    PRT -->|protected| E4(["409 agent_context_relationship_protected"])
-    PRT -->|client-made| D["Soft-delete the link"]
-    D --> OK(["204"])
-```
+![DeleteAgentContextRelationshipCommand: delete a relationship (activity), part 1 of 2](architecture/c4/rendered/DeleteAgentContextRelationshipCommand.svg)
+
+View: DeleteAgentContextRelationshipCommand
+
+![DeleteAgentContextRelationshipCommand: delete a relationship (activity), part 2 of 2](architecture/c4/rendered/DeleteAgentContextRelationshipCommand-part2.svg)
+
+View: DeleteAgentContextRelationshipCommand-part2
 
 #### QueryAgentContextRelationshipsQuery: query relationships [FR-MCP-AGENTCONTEXT-006]
 
@@ -1256,20 +1224,21 @@ flowchart TD
 - Paging: PagedQuery with `PageBounds` `Refuse` (limit 1..1000, default 50, offset at least 0), stable order `CreatedUtc`, then `RelationshipId`.
 - Not gated. Response 200 `PageResult<AgentContextRelationshipDto>`. Errors: 400 `validation_error` (`details.field` `workspacePath`, WorkspaceResolutionBehavior; a node kind without a ref, an unknown kind, type, or direction; `limit` or `offset` outside the bounds, `details.field` naming it). REPL: a listed read, never refused by ClientMutationPolicy.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: GET relationships"]) --> V{"Filters valid: nodeKind with nodeRef, known kind, type, and direction?"}
-    V -->|no| E2(["400 validation_error"])
-    V -->|yes| DIR{"Direction"}
-    DIR -->|out| Q1["Links where the node is From"]
-    DIR -->|in| Q2["Links where the node is To"]
-    DIR -->|both| Q3["Union of both"]
-    Q1 --> PQ[["PagedQuery, PageBounds Refuse: filter by type, order CreatedUtc, then RelationshipId"]]
-    Q2 --> PQ
-    Q3 --> PQ
-    PQ -->|"limit or offset outside the bounds"| E2
-    PQ -->|page| R(["200 PageResult of AgentContextRelationshipDto"])
-```
+![QueryAgentContextRelationshipsQuery: query relationships (activity), part 1 of 4](architecture/c4/rendered/QueryAgentContextRelationshipsQuery.svg)
+
+View: QueryAgentContextRelationshipsQuery
+
+![QueryAgentContextRelationshipsQuery: query relationships (activity), part 2 of 4](architecture/c4/rendered/QueryAgentContextRelationshipsQuery-part2.svg)
+
+View: QueryAgentContextRelationshipsQuery-part2
+
+![QueryAgentContextRelationshipsQuery: query relationships (activity), part 3 of 4](architecture/c4/rendered/QueryAgentContextRelationshipsQuery-part3.svg)
+
+View: QueryAgentContextRelationshipsQuery-part3
+
+![QueryAgentContextRelationshipsQuery: query relationships (activity), part 4 of 4](architecture/c4/rendered/QueryAgentContextRelationshipsQuery-part4.svg)
+
+View: QueryAgentContextRelationshipsQuery-part4
 
 #### RetrieveAgentContextCandidatesQuery: retrieve candidate context [FR-MCP-AGENTCONTEXT-007]
 
@@ -1279,38 +1248,45 @@ flowchart TD
 - Path choice: `preferGraphRag` false takes the relational path with no `fallbackReason`; `preferGraphRag` true with `GraphRag:UseForRetrieval` false takes it with `fallbackReason` `retrieval_disabled` (`RetrievePreferGraphRagUseForRetrievalFalseRelationalWithRetrievalDisabled`). The GraphRAG path answers only the `PriorResponse` kind, because GraphRAG holds only projected responses: a request whose `kinds` is absent or names any other kind takes the relational path with `fallbackReason` `graphrag_kinds_unsupported`; otherwise it queries the projected responses in `GraphRagStorageScope.Workspace` only, drops a hit that names no response of this workspace, keeps one hit per response, and keeps the hits that are `Trusted` and fresh, scored by the GraphRAG score (`RetrieveGraphRagOtherKindsRequestedRelationalWithReason`, `RetrieveGraphRagOrderedByScoreThenSourceRefCutToLimit`, `ProjectionAndGraphRagRetrievalWorkspaceScopedNoCrossWorkspaceHit`, `RetrieveGraphRagDuplicateHitsForOneResponseReturnedOnce`). Any fallback uses the relational path and reports `fallbackReason` (`graphrag_disabled`, `graphrag_not_initialized`, `graphrag_not_indexed`, `index_in_progress`, `retrieval_disabled`, `graphrag_error`, or `graphrag_kinds_unsupported`).
 - Not gated. Response 200 `AgentContextRetrieveResult`. Errors: 400 `validation_error` (`details.field` `workspacePath`, WorkspaceResolutionBehavior; `trustedOnly: false` with kind `PriorResponse`; `limit` outside `PageBounds` `Refuse`, 1..1000, default 50, `details.field` `limit`; only some of `agent`, `sessionId`, and `requestId`; TurnLocator `InvalidIdentifier`); 404 `not_found` (`session_turn` for TurnLocator `SessionNotFound` or `TurnNotFound`, `RetrieveUnknownTurn404SessionTurn`). REPL: a listed read, never refused by ClientMutationPolicy. A query opens no transaction, so when Build dispatches it, its GraphRAG and source reads run before Build's SerializableWrite.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: POST retrieve"]) --> V{"Request valid: agent, sessionId, and requestId all or none, trustedOnly true for PriorResponse, limit 1..1000?"}
-    V -->|no| E2(["400 validation_error"])
-    V -->|yes| NT{"Turn named?"}
-    NT -->|yes| TL[["TurnLocator: agent, sessionId, requestId"]]
-    TL -->|InvalidIdentifier| E2
-    TL -->|"SessionNotFound or TurnNotFound"| E3(["404 not_found session_turn"])
-    TL -->|turn found| PG
-    NT -->|no| PG{"preferGraphRag?"}
-    PG -->|no| REL["Relational path: candidates other than the named turn"]
-    PG -->|yes| UR{"GraphRag:UseForRetrieval?"}
-    UR -->|no| FB0["fallbackReason retrieval_disabled"]
-    FB0 --> REL
-    UR -->|yes| KD{"kinds names only PriorResponse?"}
-    KD -->|no| FB1["fallbackReason graphrag_kinds_unsupported"]
-    FB1 --> REL
-    KD -->|yes| GS["IGraphRagService.GetStatusAsync"]
-    GS --> EN{"Enabled and indexed?"}
-    EN -->|no| FB2["fallbackReason from the status"]
-    FB2 --> REL
-    EN -->|yes| GQ["IGraphRagService.QueryAsync over the projected responses in GraphRagStorageScope.Workspace"]
-    GQ --> GQR{"Query result"}
-    GQR -->|"FallbackUsed or exception"| FB3["fallbackReason from the result, or graphrag_error"]
-    FB3 --> REL
-    GQR -->|ok| MAPG["Keep hits naming a response of this workspace, one hit per response, scored by the GraphRAG score"]
-    REL --> R1["Score: linked by relationships to the named turn and focus refs first, then the hybrid search score"]
-    MAPG --> TF[["IResponseStalenessRule, read-only: keep PriorResponse candidates that are Trusted and fresh, nothing written"]]
-    R1 --> TF
-    TF --> RK[["CandidateRanker, then cut to limit"]]
-    RK --> RES(["200 AgentContextRetrieveResult: retrievalPath, fallbackReason when a fallback happened, candidates"])
-```
+![RetrieveAgentContextCandidatesQuery: retrieve candidate context (activity), part 1 of 10](architecture/c4/rendered/RetrieveAgentContextCandidatesQuery.svg)
+
+View: RetrieveAgentContextCandidatesQuery
+
+![RetrieveAgentContextCandidatesQuery: retrieve candidate context (activity), part 2 of 10](architecture/c4/rendered/RetrieveAgentContextCandidatesQuery-part2.svg)
+
+View: RetrieveAgentContextCandidatesQuery-part2
+
+![RetrieveAgentContextCandidatesQuery: retrieve candidate context (activity), part 3 of 10](architecture/c4/rendered/RetrieveAgentContextCandidatesQuery-part3.svg)
+
+View: RetrieveAgentContextCandidatesQuery-part3
+
+![RetrieveAgentContextCandidatesQuery: retrieve candidate context (activity), part 4 of 10](architecture/c4/rendered/RetrieveAgentContextCandidatesQuery-part4.svg)
+
+View: RetrieveAgentContextCandidatesQuery-part4
+
+![RetrieveAgentContextCandidatesQuery: retrieve candidate context (activity), part 5 of 10](architecture/c4/rendered/RetrieveAgentContextCandidatesQuery-part5.svg)
+
+View: RetrieveAgentContextCandidatesQuery-part5
+
+![RetrieveAgentContextCandidatesQuery: retrieve candidate context (activity), part 6 of 10](architecture/c4/rendered/RetrieveAgentContextCandidatesQuery-part6.svg)
+
+View: RetrieveAgentContextCandidatesQuery-part6
+
+![RetrieveAgentContextCandidatesQuery: retrieve candidate context (activity), part 7 of 10](architecture/c4/rendered/RetrieveAgentContextCandidatesQuery-part7.svg)
+
+View: RetrieveAgentContextCandidatesQuery-part7
+
+![RetrieveAgentContextCandidatesQuery: retrieve candidate context (activity), part 8 of 10](architecture/c4/rendered/RetrieveAgentContextCandidatesQuery-part8.svg)
+
+View: RetrieveAgentContextCandidatesQuery-part8
+
+![RetrieveAgentContextCandidatesQuery: retrieve candidate context (activity), part 9 of 10](architecture/c4/rendered/RetrieveAgentContextCandidatesQuery-part9.svg)
+
+View: RetrieveAgentContextCandidatesQuery-part9
+
+![RetrieveAgentContextCandidatesQuery: retrieve candidate context (activity), part 10 of 10](architecture/c4/rendered/RetrieveAgentContextCandidatesQuery-part10.svg)
+
+View: RetrieveAgentContextCandidatesQuery-part10
 
 #### ProjectAgentResponsesCommand: project responses into GraphRAG [FR-MCP-AGENTCONTEXT-007]
 
@@ -1321,57 +1297,49 @@ flowchart TD
 - Reconciliation (nested activity ReconcileProjectedDocuments, after the loop, on every pass while GraphRAG is enabled): the GraphRAG store itself holds every cleanup obligation, because each projected document carries `sourceType` `agent-response` and `sourceKey` `agent-context/<responseId>`. A document of that source type in the workspace scope is current only while the response its source key names has a `Projected` row naming that document id; the pass lists the documents of that source type (`IGraphRagService.ListDocumentsAsync` with `sourceType`, page by page, `src/QBrainAi.GraphRag/Services/IGraphRagService.cs:40` at `a8d3934b`) and deletes every other one ingested before the pass started (`DeleteDocumentAsync`, which answers `Success: false` for a document already gone, `GraphRagService.cs:488-492`), so a document that two racing passes ingested, a document whose save exhausted its retries after the ingest, and a document whose delete failed are removed by the next complete pass (`ProjectionReconcileTwoIngestsWithRejectEveryDocumentRemoved`, `ProjectionReconcileSaveExhaustedAfterIngestOrphanRemovedNextPass`, `ProjectionReconcileDuplicateDeleteFailedRetriedNextPass`). A document ingested after the pass started is left to the pass that ingested it or a later one. A `Projected` row whose document the listing lacks and whose `UpdatedUtc` is before the pass started returns to `Pending` through SerializableWrite with the response locked, so the next pass ingests it again (`ProjectionReconcileProjectedRowDocumentMissingBackToPending`). A delete error is logged and the document is met again on the next pass; a save that exhausts its retries ends the unit with 409 `conflict` with `retryable: true`.
 - Response 200 `ProjectAgentResponsesResult { projected, removed, skipped, failed, skippedReason, notFound }`; GraphRAG being disabled is not an error. When a save exhausts its retries the unit stops and returns 409 `conflict` with `retryable: true`; rows already saved stay saved. Errors: 400 `validation_error` (`details.field` `workspacePath`, WorkspaceResolutionBehavior; malformed list, more than 1000 ids, an id without the `rsp-` prefix); 409 `agent_context_disabled`, `conflict` with `retryable: true` (SerializableWrite exhausted after four attempts, in a save or in the dispatched EvaluateStalenessCommand); REPL only (ClientMutationPolicy, before any server call): `transaction_degraded`, `mutation_not_transactional`.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: POST projection/graphrag"]) --> RL[["ResponseIdList: validate and select, none listed selecting the Pending and Failed rows, and the Skipped rows once ingest is enabled"]]
-    RL -->|"malformed, more than 1000, or an id without rsp-"| E2(["400 validation_error"])
-    RL -->|"selected, unknown ids in notFound"| L[["For each selected response (nested: ProjectOneResponse)"]]
-    L -->|every response handled| RC[["ReconcileProjectedDocuments (nested, below)"]]
-    RC -->|reconciled| R(["200 ProjectAgentResponsesResult: projected, removed, skipped, skippedReason, failed, notFound"])
-    L -->|"a write exhausted its retries"| EC(["409 conflict, retryable true"])
-    RC -->|"a write exhausted its retries"| EC
-```
+![ProjectAgentResponsesCommand: project responses into GraphRAG (activity), part 1 of 2](architecture/c4/rendered/ProjectAgentResponsesCommand.svg)
+
+View: ProjectAgentResponsesCommand
+
+![ProjectAgentResponsesCommand: project responses into GraphRAG (activity), part 2 of 2](architecture/c4/rendered/ProjectAgentResponsesCommand-part2.svg)
+
+View: ProjectAgentResponsesCommand-part2
 
 ##### Nested activity: ProjectOneResponse (loop body of ProjectAgentResponsesCommand)
 
-```mermaid
-flowchart TD
-    S(["Next selected response"]) --> EV["Dispatch EvaluateStalenessCommand for this response through IDispatcher"]
-    EV -->|"409 conflict, retryable true"| X(["Stop the loop: the unit returns 409 conflict, retryable true"])
-    EV -->|"evaluated, status persisted"| TR{"Response Trusted?"}
-    TR -->|yes| PE{"GraphRAG enabled and ProjectionEnabled?"}
-    PE -->|"no: Skipped, projection_disabled or graphrag_disabled"| SV[["SerializableWrite, locking the response: re-read its status and row after any GraphRAG call, then save the row state, keeping an overlapping pass's document and deleting its own"]]
-    PE -->|yes| UP{"Projected content hash equals ContentSha256?"}
-    UP -->|yes| NX(["Continue with the next response"])
-    UP -->|no| ING["IGraphRagService.IngestTextAsync in GraphRagStorageScope.Workspace with the content and its root ids"]
-    TR -->|no| DOC{"Row holds a GraphRagDocumentId?"}
-    DOC -->|"no: Removed"| SV
-    DOC -->|yes| GE{"GraphRAG enabled?"}
-    GE -->|"no: the row stays Pending"| NX
-    GE -->|yes| DEL["IGraphRagService.DeleteDocumentAsync"]
-    ING -->|"ok: Projected, or Pending for removal with the new document id when the response left Trusted meanwhile. Error: Failed"| SV
-    DEL -->|"ok or already gone: Removed. Exception: Failed, keeping the document id"| SV
-    SV -->|committed| NX
-    SV -->|retries exhausted| X
-```
+![Nested activity: ProjectOneResponse (loop body of ProjectAgentResponsesCommand) (activity), part 1 of 5](architecture/c4/rendered/ProjectOneResponse.svg)
+
+View: ProjectOneResponse
+
+![Nested activity: ProjectOneResponse (loop body of ProjectAgentResponsesCommand) (activity), part 2 of 5](architecture/c4/rendered/ProjectOneResponse-part2.svg)
+
+View: ProjectOneResponse-part2
+
+![Nested activity: ProjectOneResponse (loop body of ProjectAgentResponsesCommand) (activity), part 3 of 5](architecture/c4/rendered/ProjectOneResponse-part3.svg)
+
+View: ProjectOneResponse-part3
+
+![Nested activity: ProjectOneResponse (loop body of ProjectAgentResponsesCommand) (activity), part 4 of 5](architecture/c4/rendered/ProjectOneResponse-part4.svg)
+
+View: ProjectOneResponse-part4
+
+![Nested activity: ProjectOneResponse (loop body of ProjectAgentResponsesCommand) (activity), part 5 of 5](architecture/c4/rendered/ProjectOneResponse-part5.svg)
+
+View: ProjectOneResponse-part5
 
 ##### Nested activity: ReconcileProjectedDocuments (after the loop of ProjectAgentResponsesCommand)
 
-```mermaid
-flowchart TD
-    S(["Loop done; t0 is the pass start"]) --> GE{"GraphRAG enabled?"}
-    GE -->|no| NO(["Nothing reconciled: removals wait until GraphRAG is enabled"])
-    GE -->|yes| LS["ListDocumentsAsync with sourceType agent-response, page by page, workspace scope"]
-    LS --> RD["Read the Projected rows: response id and GraphRagDocumentId"]
-    RD --> OR{"Documents that no Projected row names, ingested before t0?"}
-    OR -->|yes| DEL["DeleteDocumentAsync each; an error is logged and met again on the next pass"]
-    OR -->|no| MS
-    DEL --> MS{"Projected rows whose document the listing lacks, updated before t0?"}
-    MS -->|no| OK(["Reconciled"])
-    MS -->|yes| SW[["SerializableWrite per row, locking its response: re-read the row, back to Pending"]]
-    SW -->|committed| OK
-    SW -->|retries exhausted| X(["The unit returns 409 conflict, retryable true"])
-```
+![Nested activity: ReconcileProjectedDocuments (after the loop of ProjectAgentResponsesCommand) (activity), part 1 of 3](architecture/c4/rendered/ReconcileProjectedDocuments.svg)
+
+View: ReconcileProjectedDocuments
+
+![Nested activity: ReconcileProjectedDocuments (after the loop of ProjectAgentResponsesCommand) (activity), part 2 of 3](architecture/c4/rendered/ReconcileProjectedDocuments-part2.svg)
+
+View: ReconcileProjectedDocuments-part2
+
+![Nested activity: ReconcileProjectedDocuments (after the loop of ProjectAgentResponsesCommand) (activity), part 3 of 3](architecture/c4/rendered/ReconcileProjectedDocuments-part3.svg)
+
+View: ReconcileProjectedDocuments-part3
 
 #### GetAgentContextPilotReportQuery: pilot report [FR-MCP-AGENTCONTEXT-009]
 
@@ -1380,16 +1348,13 @@ flowchart TD
 - Comparison (section 3.1, the pilot comparison): responses submitted in the window are grouped by `invocationMode` (`Pilot` yields `Stateful` responses, a period in `Stateless` on hosts with history exclusion yields `Stateless` ones). Per mode: counts by effective status, through IResponseStalenessRule read-only, so a stored `Trusted` response whose dependency changed counts as `Stale` and nothing is written (`PilotReportAfterDependencyChangeCountsStaleNotTrustedWritesNothing`); mean latest model correctness and completeness over the responses that have a model grade ("latest" by `RecordedUtc`, then `GradeId`); and `trustRate`, the `Trusted` responses over all responses of the mode (`PilotReportResponsesWithoutModelGradeExcludedFromMeansInTrustRateDenominator`). For the window it also counts the packages that failed (`overflowPackages`, the `Overflow` packages), the requests with a package and no response (`packagesWithoutResponse`, the `Built` packages no response answers), and the refused prompts (`refusedPrompts`, the turns closed `canceled`, or with the legacy spelling `cancelled`, whose `failureNote` starts with the token `agent_context_invocation_failed` that RunStatelessInvocation writes, section 6.6, so a refusal for an outage or a commit, profile, or budget failure is counted alike) (`PilotReportCountsOverflowRefusedAndPackageWithoutResponse`).
 - Not gated, so the report stays readable after a rollback to `Off`. Response 200 `AgentContextPilotReport`. Errors: 400 `validation_error` (`details.field` `workspacePath`, WorkspaceResolutionBehavior; a missing or invalid `fromUtc` or `toUtc`, or `fromUtc` not before `toUtc`). REPL: a listed read, never refused by ClientMutationPolicy.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: GET pilot report"]) --> V{"fromUtc and toUtc valid UTC and from before to?"}
-    V -->|no| E2(["400 validation_error"])
-    V -->|yes| ST[["IResponseStalenessRule, read-only: effective status of every response submitted in the window, nothing written"]]
-    ST --> Q["Group the responses by invocationMode"]
-    Q --> AGG["Per mode: counts by effective status, mean latest model correctness and completeness over the responses with a model grade, trustRate over all responses of the mode"]
-    AGG --> FC["Count overflowPackages, packagesWithoutResponse, refusedPrompts"]
-    FC --> R(["200 AgentContextPilotReport"])
-```
+![GetAgentContextPilotReportQuery: pilot report (activity), part 1 of 2](architecture/c4/rendered/GetAgentContextPilotReportQuery.svg)
+
+View: GetAgentContextPilotReportQuery
+
+![GetAgentContextPilotReportQuery: pilot report (activity), part 2 of 2](architecture/c4/rendered/GetAgentContextPilotReportQuery-part2.svg)
+
+View: GetAgentContextPilotReportQuery-part2
 
 #### CreateAgentContextHvRequestCommand: create an HV request for a range of turns [FR-MCP-AGENTCONTEXT-004]
 
@@ -1404,44 +1369,37 @@ flowchart TD
 
 The selection re-reads the locked responses and keeps, in turn order and each `Pending`, those neither `Rejected` nor `Superseded` and not `Pending` in another `Open` HV request. The insert takes a `hvr-` key from ReadableKeyAllocator through IdempotentCreate and stores the HV request `Open` with its items. The diagram draws the turn, range, and selection checks as one call of the nested activity SelectHvRequestItems below, inside the delegate.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: POST hv-requests"]) --> V{"Every request field nonblank?"}
-    V -->|no| E2(["400 validation_error"])
-    V -->|yes| SW[["SerializableWrite, locking the range's responses"]]
-    SW -->|retries exhausted| EC(["409 conflict, retryable true"])
-    subgraph TX [Delegate of SerializableWrite]
-        IC[["IdempotentCreate lookup"]]
-        SI[["SelectHvRequestItems"]]
-        INS[["Insert the HV request Open and its items"]]
-    end
-    SW -->|attempt| IC
-    IC -->|"stored, same inputs"| R2(["200 the stored request, current items"])
-    IC -->|"key reused, other inputs"| E8(["409 conflict, retryable false"])
-    IC -->|absent| SI
-    SI -->|refused| ERS(["Refusal of SelectHvRequestItems, drawn there"])
-    SI -->|"items selected"| INS
-    INS -->|"key collision: attempt ends"| SW
-    INS -->|committed| R(["201 AgentContextHvRequestResult"])
-```
+![CreateAgentContextHvRequestCommand: create an HV request for a range of turns (activity), part 1 of 4](architecture/c4/rendered/CreateAgentContextHvRequestCommand.svg)
+
+View: CreateAgentContextHvRequestCommand
+
+![CreateAgentContextHvRequestCommand: create an HV request for a range of turns (activity), part 2 of 4](architecture/c4/rendered/CreateAgentContextHvRequestCommand-part2.svg)
+
+View: CreateAgentContextHvRequestCommand-part2
+
+![CreateAgentContextHvRequestCommand: create an HV request for a range of turns (activity), part 3 of 4](architecture/c4/rendered/CreateAgentContextHvRequestCommand-part3.svg)
+
+View: CreateAgentContextHvRequestCommand-part3
+
+![CreateAgentContextHvRequestCommand: create an HV request for a range of turns (activity), part 4 of 4](architecture/c4/rendered/CreateAgentContextHvRequestCommand-part4.svg)
+
+View: CreateAgentContextHvRequestCommand-part4
 
 ##### Nested activity: SelectHvRequestItems (turn, range, and item selection inside the SerializableWrite delegate of CreateAgentContextHvRequestCommand)
 
 It runs inside the delegate, after the key lookup, and reads only the database; a refusal rolls the transaction back and is returned unchanged. TurnLocator finds the session by `agent` and `sessionId`, then each endpoint turn by its `requestId`. One `agent_context_hv_request_invalid` terminal stands for the unknown session (`SessionNotFound`), the range refusals (an endpoint turn not in the session, from after to, or a range longer than `HvRequest:MaxTurns`), and a range with no gradable agent response; each edge names its case.
 
-```mermaid
-flowchart TD
-    S(["SelectHvRequestItems: in the delegate"]) --> TL[["TurnLocator: session, then both endpoint turns"]]
-    TL -->|InvalidIdentifier| E2(["400 validation_error"])
-    TL -->|"SessionNotFound: session"| E4(["400 agent_context_hv_request_invalid"])
-    TL -->|"TurnNotFound: range"| E4
-    TL -->|"both turns found"| RG{"From not after to, within MaxTurns?"}
-    RG -->|"no: range"| E4
-    RG -->|yes| SEL["Keep the gradable responses, each Pending"]
-    SEL --> ANY{"At least one response kept?"}
-    ANY -->|"no: none gradable"| E4
-    ANY -->|yes| R(["Items selected, each Pending"])
-```
+![Nested activity: SelectHvRequestItems (turn, range, and item selection inside the SerializableWrite delegate of CreateAgentContextHvRequestCommand) (activity), part 1 of 3](architecture/c4/rendered/SelectHvRequestItems.svg)
+
+View: SelectHvRequestItems
+
+![Nested activity: SelectHvRequestItems (turn, range, and item selection inside the SerializableWrite delegate of CreateAgentContextHvRequestCommand) (activity), part 2 of 3](architecture/c4/rendered/SelectHvRequestItems-part2.svg)
+
+View: SelectHvRequestItems-part2
+
+![Nested activity: SelectHvRequestItems (turn, range, and item selection inside the SerializableWrite delegate of CreateAgentContextHvRequestCommand) (activity), part 3 of 3](architecture/c4/rendered/SelectHvRequestItems-part3.svg)
+
+View: SelectHvRequestItems-part3
 
 #### GetAgentContextHvRequestQuery: get an HV request [FR-MCP-AGENTCONTEXT-004]
 
@@ -1449,13 +1407,13 @@ flowchart TD
 - REST `GET /qbrainai/agent-context/hv-requests/{hvRequestId}`; MCP `agent_context_get_hv_request(string workspacePath, string hvRequestId)`; client `GetHvRequestAsync(hvRequestId)`; REPL `client.AgentContext.GetHvRequestAsync`; PowerShell `New-McpAgentContextGetHvRequestParams`; tool descriptor `agent_context_get_hv_request`.
 - Not gated. Response 200 `AgentContextHvRequestResult` with its items. Errors: 400 `validation_error` (`details.field` `workspacePath`, WorkspaceResolutionBehavior); 404 `not_found` (`hv_request`). REPL: a listed read, never refused by ClientMutationPolicy.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: GET hv-requests/{hvRequestId}"]) --> F{"HV request found in the workspace?"}
-    F -->|no| E2(["404 not_found hv_request"])
-    F -->|yes| L["Load items with their dispositions"]
-    L --> R(["200 AgentContextHvRequestResult"])
-```
+![GetAgentContextHvRequestQuery: get an HV request (activity), part 1 of 2](architecture/c4/rendered/GetAgentContextHvRequestQuery.svg)
+
+View: GetAgentContextHvRequestQuery
+
+![GetAgentContextHvRequestQuery: get an HV request (activity), part 2 of 2](architecture/c4/rendered/GetAgentContextHvRequestQuery-part2.svg)
+
+View: GetAgentContextHvRequestQuery-part2
 
 #### QueryAgentContextHvRequestsQuery: query HV requests [FR-MCP-AGENTCONTEXT-004]
 
@@ -1464,14 +1422,13 @@ flowchart TD
 - Paging: PagedQuery with `PageBounds` `Refuse` (limit 1..1000, default 50, offset at least 0), stable order `CreatedUtc` descending, then `HvRequestId`.
 - Not gated. Response 200 `PageResult<AgentContextHvRequestResult>` whose items are HV request summaries (`items` null, section 6.4). Errors: 400 `validation_error` (`details.field` `workspacePath`, WorkspaceResolutionBehavior; an unknown status; `limit` or `offset` outside the bounds, `details.field` naming it). REPL: a listed read, never refused by ClientMutationPolicy.
 
-```mermaid
-flowchart TD
-    S(["Handler runs: GET hv-requests"]) --> V{"Status filter absent or known?"}
-    V -->|no| E2(["400 validation_error"])
-    V -->|yes| PQ[["PagedQuery, PageBounds Refuse: filter by sessionId and status, order CreatedUtc descending, then HvRequestId"]]
-    PQ -->|"limit or offset outside the bounds"| E2
-    PQ -->|page| R(["200 PageResult of HV requests without items"])
-```
+![QueryAgentContextHvRequestsQuery: query HV requests (activity), part 1 of 2](architecture/c4/rendered/QueryAgentContextHvRequestsQuery.svg)
+
+View: QueryAgentContextHvRequestsQuery
+
+![QueryAgentContextHvRequestsQuery: query HV requests (activity), part 2 of 2](architecture/c4/rendered/QueryAgentContextHvRequestsQuery-part2.svg)
+
+View: QueryAgentContextHvRequestsQuery-part2
 
 ### 6.6 Processes (plugin)
 
@@ -1491,79 +1448,89 @@ flowchart TD
 
 The diagram draws the refusal and its `canceled` close as one call of the nested activity FailInvocation, and the injection, the model's submission, and the grade request as one call of the nested activity AnswerAndSubmit. An unreadable Mode and a cached 409 `agent_context_disabled` both mean `Off`. When no turn exists to close (a bridge-host request whose `enqueue` record is not yet in the transcript, a final mint refusal, `nonce_source_missing`, or `turn-open-contended`), the prompt is refused with its code; for a final mint refusal the Stop gate also warns, naming the prompt. An absorbed request whose build fails records the failure in its per-turn file and is neither refused nor closed, and the model answers statefully. The build carries `agent`, `sessionId`, `requestId`, the prompt text, and the idempotency key `inv-` plus the SHA-256 of its whole turn key (Build bullet above). The Mode, host, trigger, and turn checks before the build are drawn as one call of the nested activity ResolveInvocationTurn below, whose edges are its returns.
 
-```mermaid
-flowchart TD
-    S(["Prompt hook, or a delivery absorbed_mid_turn"]) --> RI[["ResolveInvocationTurn"]]
-    RI -->|"stateful: Off, or no build"| STF(["Stateful turn as today"])
-    RI -->|"prompt refused, no turn"| RFN(["Prompt refused, no turn to close"])
-    RI -->|"outage: a pending-nonce turn"| FI[["FailInvocation"]]
-    RI -->|"turn bound, or absorbed as Pilot"| BP[["BuildAgentContextPackageCommand"]]
-    BP -->|"409 agent_context_disabled"| OFF["Cache Mode Off through Update-TurnState"]
-    OFF --> STF
-    BP -->|"other error, outage, or not Built"| ABF{"Absorbed request?"}
-    ABF -->|no| FI
-    ABF -->|yes| ABW(["Failure in the per-turn file only"])
-    BP -->|"201, or 200 Built"| AS[["AnswerAndSubmit"]]
-    AS -->|"submit 409 agent_context_disabled"| OFF
-    AS -->|"submitted, or an error reported"| DN(["Outcome of AnswerAndSubmit, drawn there"])
-    FI --> FO(["Invocation failed, no answer: drawn there"])
-```
+![Process RunStatelessInvocation: run a stateless invocation (plugin process) (activity), part 1 of 6](architecture/c4/rendered/RunStatelessInvocation.svg)
+
+View: RunStatelessInvocation
+
+![Process RunStatelessInvocation: run a stateless invocation (plugin process) (activity), part 2 of 6](architecture/c4/rendered/RunStatelessInvocation-part2.svg)
+
+View: RunStatelessInvocation-part2
+
+![Process RunStatelessInvocation: run a stateless invocation (plugin process) (activity), part 3 of 6](architecture/c4/rendered/RunStatelessInvocation-part3.svg)
+
+View: RunStatelessInvocation-part3
+
+![Process RunStatelessInvocation: run a stateless invocation (plugin process) (activity), part 4 of 6](architecture/c4/rendered/RunStatelessInvocation-part4.svg)
+
+View: RunStatelessInvocation-part4
+
+![Process RunStatelessInvocation: run a stateless invocation (plugin process) (activity), part 5 of 6](architecture/c4/rendered/RunStatelessInvocation-part5.svg)
+
+View: RunStatelessInvocation-part5
+
+![Process RunStatelessInvocation: run a stateless invocation (plugin process) (activity), part 6 of 6](architecture/c4/rendered/RunStatelessInvocation-part6.svg)
+
+View: RunStatelessInvocation-part6
 
 ##### Nested activity: ResolveInvocationTurn (Mode, host, trigger, and turn checks of RunStatelessInvocation, before the build)
 
 A host session reported `turn_logging_unsupported`, a cached Mode `Off` (an unreadable Mode included), and a host whose prompt hook cannot refuse (P0.2 probe (j)) leave the turn stateful. A delivery absorbed into a running turn runs as `Pilot`. On a bridge host the hook applies pending transcript records through `Sync-PluginArrivalLog` up to its start and takes the bridge-minted `requestId`; on another host `Resolve-MintOutcome` classifies the hook's own mint. A request with no turn to close is refused with its code (a final mint refusal, `nonce_source_missing`, or a contended `turn-open.lock`; for a final mint refusal the Stop gate also warns, naming the prompt); a mint outage (a `pending-` nonce turn) fails the invocation through FailInvocation; an `unsupported` or merged terminal mint leaves the turn stateful. Each branch ends in its own terminal so the diagram stays one page.
 
-```mermaid
-flowchart TD
-    S(["ResolveInvocationTurn"]) --> MD{"Logging supported, Mode not Off?"}
-    MD -->|no| ST1(["Stateful turn as today"])
-    MD -->|yes| CAN{"Hook can refuse (probe j)?"}
-    CAN -->|"no: run as Off"| ST2(["Stateful turn as today"])
-    CAN -->|yes| TRG{"Trigger?"}
-    TRG -->|absorbed_mid_turn| ABS(["Turn bound: build as Pilot"])
-    TRG -->|bridge host| SY[["Sync-PluginArrivalLog"]]
-    TRG -->|other host| MR[["Resolve-MintOutcome"]]
-    SY -->|enqueue not written| RF1(["Prompt refused, no turn"])
-    SY -->|bridge requestId| B1(["Turn bound: build"])
-    MR -->|final or contended| RF2(["Prompt refused, no turn"])
-    MR -->|unsupported or terminal| ST3(["Stateful turn"])
-    MR -->|outage| OUT(["Fail the invocation"])
-    MR -->|created or open| B2(["Turn bound: build"])
-```
+![Nested activity: ResolveInvocationTurn (Mode, host, trigger, and turn checks of RunStatelessInvocation, before the build) (activity), part 1 of 5](architecture/c4/rendered/ResolveInvocationTurn.svg)
+
+View: ResolveInvocationTurn
+
+![Nested activity: ResolveInvocationTurn (Mode, host, trigger, and turn checks of RunStatelessInvocation, before the build) (activity), part 2 of 5](architecture/c4/rendered/ResolveInvocationTurn-part2.svg)
+
+View: ResolveInvocationTurn-part2
+
+![Nested activity: ResolveInvocationTurn (Mode, host, trigger, and turn checks of RunStatelessInvocation, before the build) (activity), part 3 of 5](architecture/c4/rendered/ResolveInvocationTurn-part3.svg)
+
+View: ResolveInvocationTurn-part3
+
+![Nested activity: ResolveInvocationTurn (Mode, host, trigger, and turn checks of RunStatelessInvocation, before the build) (activity), part 4 of 5](architecture/c4/rendered/ResolveInvocationTurn-part4.svg)
+
+View: ResolveInvocationTurn-part4
+
+![Nested activity: ResolveInvocationTurn (Mode, host, trigger, and turn checks of RunStatelessInvocation, before the build) (activity), part 5 of 5](architecture/c4/rendered/ResolveInvocationTurn-part5.svg)
+
+View: ResolveInvocationTurn-part5
 
 ##### Nested activity: FailInvocation (refusal and canceled close of RunStatelessInvocation)
 
 The plugin refuses the prompt with the error code and message shown to the operator (for `agent_context_budget_exceeded` also `tokenBudget`, `mandatoryTokenCount`, `overflowTokenCount`, and the mandatory items) and produces no answer. It then closes the request's own turn `canceled` with `failureNote` `agent_context_invocation_failed <code>: <message>` through process PersistTurnWriteWithReceipt, with no model-evidence check. On `persisted` the request leaves `openDelivered` and the Stop ledger after the confirmed close; on `queued` (an outage, including a busy store and 409 `conflict` with `retryable: true`, which keep the failsafe record, section 3.1, Retryable answers; or a pending mint whose close waits behind its mint record) the close is held in the failsafe and the Stop gate warns degraded persistence naming the package failure, never blocks, and keeps the ledger entry until the drain confirms; any other receipt is shown with its code and the turn stays open for the Stop gate.
 
-```mermaid
-flowchart TD
-    S(["FailInvocation: the failure's code and message"]) --> REF["Refuse the prompt: code, message, counts"]
-    REF --> CN[["Process PersistTurnWriteWithReceipt: close canceled"]]
-    CN -->|persisted| CL(["Failed: cleared from openDelivered and the ledger"])
-    CN -->|"queued: outage"| CQ(["Failed: close in the failsafe, Stop gate warns"])
-    CN -->|"other receipt code"| CO(["Failed: receipt shown, turn stays open"])
-```
+![Nested activity: FailInvocation (refusal and canceled close of RunStatelessInvocation) (activity), part 1 of 2](architecture/c4/rendered/FailInvocation.svg)
+
+View: FailInvocation
+
+![Nested activity: FailInvocation (refusal and canceled close of RunStatelessInvocation) (activity), part 2 of 2](architecture/c4/rendered/FailInvocation-part2.svg)
+
+View: FailInvocation-part2
 
 ##### Nested activity: AnswerAndSubmit (model answer, submission, and grade request of RunStatelessInvocation)
 
 The plugin keeps the returned `packageId` in `turns/<requestId>.yaml`. It injects only for `Stateless` on a host with an authoritative history-exclusion operation (P0.2 row): the model input becomes the rendered package, the request, and the `REQUIRED MEMORIES` block, and `invocationMode` is `Stateless`; `Pilot`, an absorbed request, and `Stateless` on a host without that operation answer statefully with `invocationMode` `Stateful`. Before it closes the turn the model calls `agent_context_submit_response`, and the plugin supplies the `packageId` from the per-turn file, or from QueryAgentContextPackagesQuery `{ agent, sessionId, requestId, status: Built }`. A failed submission is reported in the tool result and the model resubmits; the pilot report counts a package without a response. A failed grade request is reported the same way and the grade is re-run on request. After a 201 grade the response stays `Grading` (or `Stale`, when the grade's staleness dispatch found a changed dependency) until an HV request covering the turn records its model grade (CreateAgentContextHvRequestCommand, RecordModelGradeCommand).
 
-```mermaid
-flowchart TD
-    S(["AnswerAndSubmit: the Built package"]) --> REC["Keep packageId in turns/requestId.yaml"]
-    REC --> MM{"Inject the package for this request?"}
-    MM -->|"Pilot, absorbed, or no history exclusion"| RUN1["No injection: invocationMode Stateful"]
-    MM -->|"Stateless, history exclusion"| INJ["Model input: package, request, memories"]
-    RUN1 --> SUB["Model calls agent_context_submit_response"]
-    INJ --> SUB
-    SUB --> SR{"Submit result"}
-    SR -->|"409 agent_context_disabled"| OFF(["Returned: Mode Off to cache"])
-    SR -->|"other error or outage"| SE(["In the tool result, turn untouched"])
-    SR -->|"201 or 200"| GRD["Request RunDeterministicGradeCommand"]
-    GRD --> GDR{"Grade result"}
-    GDR -->|201| WAIT(["Grading until an HV model grade"])
-    GDR -->|"error or outage"| GE(["In the tool result, turn untouched"])
-```
+![Nested activity: AnswerAndSubmit (model answer, submission, and grade request of RunStatelessInvocation) (activity), part 1 of 5](architecture/c4/rendered/AnswerAndSubmit.svg)
+
+View: AnswerAndSubmit
+
+![Nested activity: AnswerAndSubmit (model answer, submission, and grade request of RunStatelessInvocation) (activity), part 2 of 5](architecture/c4/rendered/AnswerAndSubmit-part2.svg)
+
+View: AnswerAndSubmit-part2
+
+![Nested activity: AnswerAndSubmit (model answer, submission, and grade request of RunStatelessInvocation) (activity), part 3 of 5](architecture/c4/rendered/AnswerAndSubmit-part3.svg)
+
+View: AnswerAndSubmit-part3
+
+![Nested activity: AnswerAndSubmit (model answer, submission, and grade request of RunStatelessInvocation) (activity), part 4 of 5](architecture/c4/rendered/AnswerAndSubmit-part4.svg)
+
+View: AnswerAndSubmit-part4
+
+![Nested activity: AnswerAndSubmit (model answer, submission, and grade request of RunStatelessInvocation) (activity), part 5 of 5](architecture/c4/rendered/AnswerAndSubmit-part5.svg)
+
+View: AnswerAndSubmit-part5
 
 ### 6.7 Phase C sequence diagrams
 
@@ -1585,890 +1552,1639 @@ Shared components (section 3.5) appear as one message, one participant, or one `
 
 The CQRS behaviors of section 3.5.1 run inside the scoped `IDispatcher`, after the controller or tool calls `SendAsync` or `QueryAsync` and before the handler, for every command and query. WorkspaceResolutionBehavior resolves a record's non-empty `WorkspacePath` into the dispatch scope's `WorkspaceContext` and otherwise keeps the workspace the transport resolved; it refuses a path that names no registered workspace, or a record with no workspace that does not implement `IAllowsGlobalWorkspace`, with 400 `validation_error` and `details.field` `workspacePath` on every surface, the status TR-MCP-MT-002 gives an unregistered workspace. On REST, `WorkspaceResolutionMiddleware` still answers a missing or unknown `X-Workspace-Path` before any controller with today's body (TR-MCP-MT-002), so the behavior's refusal reaches REST only through a record path that names an unregistered workspace. A plugin that receives 409 `agent_context_disabled` from a build or a submission caches `Off` for its host session and continues statefully (section 3.1, Mode changes).
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Caller
-    participant Controller
-    participant Workspace as WorkspaceResolutionBehavior
-    participant ModeGate as ModeGateBehavior
-    participant Handler
-    Caller->>Controller: request with X-Workspace-Path or workspacePath
-    Controller->>Workspace: SendAsync(command) or QueryAsync(query)
-    Note over Workspace,ModeGate: inside IDispatcher, before the handler
-    alt path unregistered, or no workspace and not allowed
-        Workspace-->>Controller: Failure, ClassifiedError 400
-        Controller-->>Caller: 400 validation_error, details.field workspacePath
-        Note over Caller: fix X-Workspace-Path or workspacePath
-    else resolved into the scope's WorkspaceContext
-        Workspace->>ModeGate: next
-        alt record implements IModeGatedRequest and Mode is Off
-            ModeGate-->>Controller: Failure, ClassifiedError 409
-            Controller-->>Caller: 409 agent_context_disabled
-            Note over Caller: a plugin caches Off for the host session and continues statefully
-        else not gated, or Mode is Pilot or Stateless
-            ModeGate->>Handler: Handle(record)
-            Note over Handler: request validation, then the unit's steps
-            Handler-->>Controller: Result, success or ClassifiedErrorException
-            Controller-->>Caller: status and body
-        end
-    end
-```
+![Sequence: RequestPipeline (every Phase C dispatch), part 1 of 4](architecture/c4/rendered/RequestPipeline-Sequence.svg)
+
+View: RequestPipeline-Sequence
+
+![Sequence: RequestPipeline (every Phase C dispatch), part 2 of 4](architecture/c4/rendered/RequestPipeline-Sequence-part2.svg)
+
+View: RequestPipeline-Sequence-part2
+
+![Sequence: RequestPipeline (every Phase C dispatch), part 3 of 4](architecture/c4/rendered/RequestPipeline-Sequence-part3.svg)
+
+View: RequestPipeline-Sequence-part3
+
+![Sequence: RequestPipeline (every Phase C dispatch), part 4 of 4](architecture/c4/rendered/RequestPipeline-Sequence-part4.svg)
+
+View: RequestPipeline-Sequence-part4
+
+![Sequence: RequestPipeline (every Phase C dispatch), alt 1 branch 1 of 2: path unregistered, or no workspace and not allowed, part 1 of 2](architecture/c4/rendered/RequestPipeline-Sequence-alt1-1.svg)
+
+View: RequestPipeline-Sequence-alt1-1
+
+![Sequence: RequestPipeline (every Phase C dispatch), alt 1 branch 1 of 2: path unregistered, or no workspace and not allowed, part 2 of 2](architecture/c4/rendered/RequestPipeline-Sequence-alt1-1-part2.svg)
+
+View: RequestPipeline-Sequence-alt1-1-part2
+
+![Sequence: RequestPipeline (every Phase C dispatch), alt 1 branch 2 of 2: resolved into the scope's WorkspaceContext](architecture/c4/rendered/RequestPipeline-Sequence-alt1-2.svg)
+
+View: RequestPipeline-Sequence-alt1-2
+
+![Sequence: RequestPipeline (every Phase C dispatch), alt 2 branch 1 of 2: record implements IModeGatedRequest and Mode is Off, part 1 of 3](architecture/c4/rendered/RequestPipeline-Sequence-alt2-1.svg)
+
+View: RequestPipeline-Sequence-alt2-1
+
+![Sequence: RequestPipeline (every Phase C dispatch), alt 2 branch 1 of 2: record implements IModeGatedRequest and Mode is Off, part 2 of 3](architecture/c4/rendered/RequestPipeline-Sequence-alt2-1-part2.svg)
+
+View: RequestPipeline-Sequence-alt2-1-part2
+
+![Sequence: RequestPipeline (every Phase C dispatch), alt 2 branch 1 of 2: record implements IModeGatedRequest and Mode is Off, part 3 of 3](architecture/c4/rendered/RequestPipeline-Sequence-alt2-1-part3.svg)
+
+View: RequestPipeline-Sequence-alt2-1-part3
+
+![Sequence: RequestPipeline (every Phase C dispatch), alt 2 branch 2 of 2: not gated, or Mode is Pilot or Stateless, part 1 of 3](architecture/c4/rendered/RequestPipeline-Sequence-alt2-2.svg)
+
+View: RequestPipeline-Sequence-alt2-2
+
+![Sequence: RequestPipeline (every Phase C dispatch), alt 2 branch 2 of 2: not gated, or Mode is Pilot or Stateless, part 2 of 3](architecture/c4/rendered/RequestPipeline-Sequence-alt2-2-part2.svg)
+
+View: RequestPipeline-Sequence-alt2-2-part2
+
+![Sequence: RequestPipeline (every Phase C dispatch), alt 2 branch 2 of 2: not gated, or Mode is Pilot or Stateless, part 3 of 3](architecture/c4/rendered/RequestPipeline-Sequence-alt2-2-part3.svg)
+
+View: RequestPipeline-Sequence-alt2-2-part3
 
 #### Sequence: submit GetAgentContextStatusQuery
 
 The plugin reads the Mode once at host session start (SessionStart, or the first prompt on a host without a SessionStart event: cline, cline-v2, and opencode) and caches it as `agentContextMode` in the host session's `turn-state.yaml` through `Update-TurnState`; a Mode it cannot read, including a read that misses the SessionStart hook bound, or a value it does not know, is `Off`, and a change away from `Off` takes effect at the next host session start (section 3.1, Mode changes). Responses are counted by effective status, through `IResponseStalenessRule` read-only, and the query writes nothing. Because every host session start makes this read (risk R-R4), the handler reads each distinct dependency and commit once through `SourceResolver`, shared by every `Submitted`, `Grading`, or `Trusted` response that cites it (inference: the work is bounded by the distinct dependencies cited, not by the response count), and answers within the SessionStart hook bound with 1000 `Trusted` responses (`StatusThousandTrustedResponsesAnswersWithinSessionStartHookBound`).
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Caller
-    participant Controller
-    participant Handler
-    participant GraphRAG
-    participant Store
-    Caller->>Controller: GET /status
-    alt server answers
-        Controller->>Handler: QueryAsync(GetAgentContextStatusQuery)
-        Note over Controller,Handler: ref RequestPipeline, not gated: readable in Mode Off
-        Handler->>GraphRAG: GetStatusAsync
-        GraphRAG-->>Handler: enabled, state
-        Handler->>Store: count packages, and responses by stored status
-        Store-->>Handler: counts, the Submitted, Grading, Trusted responses
-        Handler->>Handler: IResponseStalenessRule, read-only, each dependency read once
-        Note over Handler: counts by effective status, nothing written
-        Controller-->>Caller: 200 AgentContextStatusResult
-        Note over Caller: a plugin caches the Mode for the host session, Off means stateful
-    else outage, any error, or no answer within the hook bound
-        Note over Caller: a plugin caches Off for the host session
-    end
-```
+![Sequence: submit GetAgentContextStatusQuery](architecture/c4/rendered/STR-06-09.svg)
+
+View: STR-06-09
+
+![Sequence: submit GetAgentContextStatusQuery, alt 1 branch 1 of 2: server answers, part 1 of 7](architecture/c4/rendered/STR-06-09-alt1-1.svg)
+
+View: STR-06-09-alt1-1
+
+![Sequence: submit GetAgentContextStatusQuery, alt 1 branch 1 of 2: server answers, part 2 of 7](architecture/c4/rendered/STR-06-09-alt1-1-part2.svg)
+
+View: STR-06-09-alt1-1-part2
+
+![Sequence: submit GetAgentContextStatusQuery, alt 1 branch 1 of 2: server answers, part 3 of 7](architecture/c4/rendered/STR-06-09-alt1-1-part3.svg)
+
+View: STR-06-09-alt1-1-part3
+
+![Sequence: submit GetAgentContextStatusQuery, alt 1 branch 1 of 2: server answers, part 4 of 7](architecture/c4/rendered/STR-06-09-alt1-1-part4.svg)
+
+View: STR-06-09-alt1-1-part4
+
+![Sequence: submit GetAgentContextStatusQuery, alt 1 branch 1 of 2: server answers, part 5 of 7](architecture/c4/rendered/STR-06-09-alt1-1-part5.svg)
+
+View: STR-06-09-alt1-1-part5
+
+![Sequence: submit GetAgentContextStatusQuery, alt 1 branch 1 of 2: server answers, part 6 of 7](architecture/c4/rendered/STR-06-09-alt1-1-part6.svg)
+
+View: STR-06-09-alt1-1-part6
+
+![Sequence: submit GetAgentContextStatusQuery, alt 1 branch 1 of 2: server answers, part 7 of 7](architecture/c4/rendered/STR-06-09-alt1-1-part7.svg)
+
+View: STR-06-09-alt1-1-part7
+
+![Sequence: submit GetAgentContextStatusQuery, alt 1 branch 2 of 2: outage, any error, or no answer within the hook bound, part 1 of 2](architecture/c4/rendered/STR-06-09-alt1-2.svg)
+
+View: STR-06-09-alt1-2
+
+![Sequence: submit GetAgentContextStatusQuery, alt 1 branch 2 of 2: outage, any error, or no answer within the hook bound, part 2 of 2](architecture/c4/rendered/STR-06-09-alt1-2-part2.svg)
+
+View: STR-06-09-alt1-2-part2
 
 #### Sequence: submit BuildAgentContextPackageCommand
 
 `Caller` is usually the plugin running process RunStatelessInvocation (below). Build reads before it writes (section 3.1, "Database-only delegates"): the read-only key lookup, then nested sequence ReadBuildInputs, then `PackageAssembler` in memory, and only then nested sequence SaveBuiltPackage, whose SerializableWrite delegate reads and writes only the database. No transaction is open during a retrieval, a GraphRAG call, or a git read, so on SQLite no hook write waits on them (`BuildOnSqliteHookWriteDuringRetrievalNotBlocked`). The idempotency fingerprint is over the request's client inputs, and the read-only lookup runs before every read that can change, so a retry of a lost answer returns the stored package even after a source or the HEAD commit changed; a retry of an overflow finds the stored `Overflow` package and returns the same 422, never an answer. `InputsSha256` stays the provenance and replay check. `PackageAssembler` runs the secret filter (`SecretRedactor`), the omission filter, the findings, the mandatory-context check, the budget fill, and the rendering (section 3.5.5), and never truncates mandatory context. The input snapshot records every input the assembler reads, including each prior-response candidate's trust and staleness state at build time and the `contradicts` and `blocks` links the findings read. Build persists nothing but its package, its children, its snapshot, and its links: it reads staleness and never persists it (only EvaluateStalenessCommand persists `Stale`).
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Caller
-    participant Controller
-    participant Handler
-    participant Store
-    Caller->>Controller: POST /packages (BuildAgentContextPackageRequest)
-    Controller->>Handler: SendAsync(BuildAgentContextPackageCommand)
-    Note over Controller,Handler: ref RequestPipeline, gated
-    alt request invalid (ids, tokenBudget)
-        Controller-->>Caller: 400 validation_error, details.field
-        Note over Caller: fix the field, never resend unchanged
-    else request valid
-        Handler->>Store: IdempotentCreate.Find, read-only, before any source read
-        alt stored package Built (a retry or a duplicate delivery)
-            Controller-->>Caller: 200 AgentContextPackageResult, status Built
-            Note over Caller: use the returned package
-        else stored package Overflow (a retry)
-            Controller-->>Caller: 422 agent_context_budget_exceeded, stored diagnostics
-            Note over Caller: refuse the prompt, close the turn canceled
-        else key reused with other inputs
-            Controller-->>Caller: 409 conflict, retryable false
-            Note over Caller: new key, or the same inputs
-        else absent
-            Note over Caller,Store: ref ReadBuildInputs (below), each refusal there answers the caller
-            Handler->>Handler: PackageAssembler: assemble the candidate snapshot
-            Note over Caller,Store: ref SaveBuiltPackage (below), SerializableWrite, database only
-        end
-    end
-```
+![Sequence: submit BuildAgentContextPackageCommand, part 1 of 3](architecture/c4/rendered/STR-06-10.svg)
+
+View: STR-06-10
+
+![Sequence: submit BuildAgentContextPackageCommand, part 2 of 3](architecture/c4/rendered/STR-06-10-part2.svg)
+
+View: STR-06-10-part2
+
+![Sequence: submit BuildAgentContextPackageCommand, part 3 of 3](architecture/c4/rendered/STR-06-10-part3.svg)
+
+View: STR-06-10-part3
+
+![Sequence: submit BuildAgentContextPackageCommand, alt 1 branch 1 of 2: request invalid (ids, tokenBudget)](architecture/c4/rendered/STR-06-10-alt1-1.svg)
+
+View: STR-06-10-alt1-1
+
+![Sequence: submit BuildAgentContextPackageCommand, alt 1 branch 2 of 2: request valid, part 1 of 2](architecture/c4/rendered/STR-06-10-alt1-2.svg)
+
+View: STR-06-10-alt1-2
+
+![Sequence: submit BuildAgentContextPackageCommand, alt 1 branch 2 of 2: request valid, part 2 of 2](architecture/c4/rendered/STR-06-10-alt1-2-part2.svg)
+
+View: STR-06-10-alt1-2-part2
+
+![Sequence: submit BuildAgentContextPackageCommand, alt 2 branch 1 of 4: stored package Built (a retry or a duplicate delivery)](architecture/c4/rendered/STR-06-10-alt2-1.svg)
+
+View: STR-06-10-alt2-1
+
+![Sequence: submit BuildAgentContextPackageCommand, alt 2 branch 2 of 4: stored package Overflow (a retry)](architecture/c4/rendered/STR-06-10-alt2-2.svg)
+
+View: STR-06-10-alt2-2
+
+![Sequence: submit BuildAgentContextPackageCommand, alt 2 branch 3 of 4: key reused with other inputs](architecture/c4/rendered/STR-06-10-alt2-3.svg)
+
+View: STR-06-10-alt2-3
+
+![Sequence: submit BuildAgentContextPackageCommand, alt 2 branch 4 of 4: absent, part 1 of 5](architecture/c4/rendered/STR-06-10-alt2-4.svg)
+
+View: STR-06-10-alt2-4
+
+![Sequence: submit BuildAgentContextPackageCommand, alt 2 branch 4 of 4: absent, part 2 of 5](architecture/c4/rendered/STR-06-10-alt2-4-part2.svg)
+
+View: STR-06-10-alt2-4-part2
+
+![Sequence: submit BuildAgentContextPackageCommand, alt 2 branch 4 of 4: absent, part 3 of 5](architecture/c4/rendered/STR-06-10-alt2-4-part3.svg)
+
+View: STR-06-10-alt2-4-part3
+
+![Sequence: submit BuildAgentContextPackageCommand, alt 2 branch 4 of 4: absent, part 4 of 5](architecture/c4/rendered/STR-06-10-alt2-4-part4.svg)
+
+View: STR-06-10-alt2-4-part4
+
+![Sequence: submit BuildAgentContextPackageCommand, alt 2 branch 4 of 4: absent, part 5 of 5](architecture/c4/rendered/STR-06-10-alt2-4-part5.svg)
+
+View: STR-06-10-alt2-4-part5
 
 ##### Nested sequence: ReadBuildInputs (reads of the BuildAgentContextPackageCommand sequence, before any transaction)
 
 Every read here runs outside a transaction. `SourceResolver` reads the workspace HEAD commit and the profile and rule sources, and resolves and hashes every candidate through `ContentHasher`. RetrieveAgentContextCandidatesQuery is dispatched with the package's `agent`, `sessionId`, `requestId`, and `focusRefs`, and `preferGraphRag` equal to `GraphRag:UseForRetrieval`; it calls GraphRAG when preferred and reads each prior-response candidate's status through `IResponseStalenessRule` read-only, writing nothing. Every focus ref is also a candidate, and the request's own turn is never one. A missing profile or rule file is fixed by the operator in `ProfileSources` or `RuleSources`. The turn's status read here is the state SaveBuiltPackage re-checks.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Caller
-    participant Controller
-    participant Handler
-    participant Store
-    Handler->>Store: TurnLocator(agent, sessionId, requestId)
-    alt InvalidIdentifier
-        Controller-->>Caller: 400 validation_error, details.field
-    else SessionNotFound or TurnNotFound
-        Controller-->>Caller: 404 not_found, details.resource session_turn
-        Note over Caller: open or mint the turn first
-    else turn found, with its status
-        Handler->>Handler: SourceResolver: ReadCommit, profile and rule sources
-        alt commit unreadable
-            Controller-->>Caller: 409 agent_context_commit_unavailable
-            Note over Caller: refuse the prompt with the code, close the turn canceled
-        else no profile file or no rule file resolves
-            Controller-->>Caller: 409 agent_context_profile_unavailable
-            Note over Caller: refuse the prompt with the code, close the turn canceled
-        else commit, profile, and rules read
-            Handler->>Handler: QueryAsync(RetrieveAgentContextCandidatesQuery)
-            Note over Handler: staleness read-only, nothing written
-            Handler->>Handler: SourceResolver: resolve and hash every candidate
-        end
-    end
-```
+![Nested sequence: ReadBuildInputs (reads of the BuildAgentContextPackageCommand sequence, before any transaction), part 1 of 2](architecture/c4/rendered/ReadBuildInputs-Sequence.svg)
+
+View: ReadBuildInputs-Sequence
+
+![Nested sequence: ReadBuildInputs (reads of the BuildAgentContextPackageCommand sequence, before any transaction), part 2 of 2](architecture/c4/rendered/ReadBuildInputs-Sequence-part2.svg)
+
+View: ReadBuildInputs-Sequence-part2
+
+![Nested sequence: ReadBuildInputs (reads of the BuildAgentContextPackageCommand sequence, before any transaction), alt 1 branch 1 of 3: InvalidIdentifier](architecture/c4/rendered/ReadBuildInputs-Sequence-alt1-1.svg)
+
+View: ReadBuildInputs-Sequence-alt1-1
+
+![Nested sequence: ReadBuildInputs (reads of the BuildAgentContextPackageCommand sequence, before any transaction), alt 1 branch 2 of 3: SessionNotFound or TurnNotFound](architecture/c4/rendered/ReadBuildInputs-Sequence-alt1-2.svg)
+
+View: ReadBuildInputs-Sequence-alt1-2
+
+![Nested sequence: ReadBuildInputs (reads of the BuildAgentContextPackageCommand sequence, before any transaction), alt 1 branch 3 of 3: turn found, with its status, part 1 of 2](architecture/c4/rendered/ReadBuildInputs-Sequence-alt1-3.svg)
+
+View: ReadBuildInputs-Sequence-alt1-3
+
+![Nested sequence: ReadBuildInputs (reads of the BuildAgentContextPackageCommand sequence, before any transaction), alt 1 branch 3 of 3: turn found, with its status, part 2 of 2](architecture/c4/rendered/ReadBuildInputs-Sequence-alt1-3-part2.svg)
+
+View: ReadBuildInputs-Sequence-alt1-3-part2
+
+![Nested sequence: ReadBuildInputs (reads of the BuildAgentContextPackageCommand sequence, before any transaction), alt 2 branch 1 of 3: commit unreadable](architecture/c4/rendered/ReadBuildInputs-Sequence-alt2-1.svg)
+
+View: ReadBuildInputs-Sequence-alt2-1
+
+![Nested sequence: ReadBuildInputs (reads of the BuildAgentContextPackageCommand sequence, before any transaction), alt 2 branch 2 of 3: no profile file or no rule file resolves](architecture/c4/rendered/ReadBuildInputs-Sequence-alt2-2.svg)
+
+View: ReadBuildInputs-Sequence-alt2-2
+
+![Nested sequence: ReadBuildInputs (reads of the BuildAgentContextPackageCommand sequence, before any transaction), alt 2 branch 3 of 3: commit, profile, and rules read, part 1 of 4](architecture/c4/rendered/ReadBuildInputs-Sequence-alt2-3.svg)
+
+View: ReadBuildInputs-Sequence-alt2-3
+
+![Nested sequence: ReadBuildInputs (reads of the BuildAgentContextPackageCommand sequence, before any transaction), alt 2 branch 3 of 3: commit, profile, and rules read, part 2 of 4](architecture/c4/rendered/ReadBuildInputs-Sequence-alt2-3-part2.svg)
+
+View: ReadBuildInputs-Sequence-alt2-3-part2
+
+![Nested sequence: ReadBuildInputs (reads of the BuildAgentContextPackageCommand sequence, before any transaction), alt 2 branch 3 of 3: commit, profile, and rules read, part 3 of 4](architecture/c4/rendered/ReadBuildInputs-Sequence-alt2-3-part3.svg)
+
+View: ReadBuildInputs-Sequence-alt2-3-part3
+
+![Nested sequence: ReadBuildInputs (reads of the BuildAgentContextPackageCommand sequence, before any transaction), alt 2 branch 3 of 3: commit, profile, and rules read, part 4 of 4](architecture/c4/rendered/ReadBuildInputs-Sequence-alt2-3-part4.svg)
+
+View: ReadBuildInputs-Sequence-alt2-3-part4
 
 ##### Nested sequence: SaveBuiltPackage (the SerializableWrite of the BuildAgentContextPackageCommand sequence)
 
 The delegate reads and writes only the database, within at most four attempts (section 3.5.2). It looks the key up again, which finds a concurrent build that won the key, re-checks the turn status ReadBuildInputs read (a change ends the attempt, and Build runs again from its reads), and inserts the package, its children, its input snapshot, and its links: `RelationshipWriter` with `CreatedBy` `BuildAgentContextPackageCommand`, `derived_from` each included source except a `Rule` read outside version control, and `relevant_to` the turn, with the hashes ReadBuildInputs read. An `Overflow` package is stored for audit with its mandatory items and token counts and no content. The package, its children, and its links commit together. The plugin keeps the `packageId` in its per-turn file and, in `Stateless`, injects `renderedContent`.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Caller
-    participant Controller
-    participant Handler
-    participant Store
-    Handler->>Store: IdempotentCreate.Find, a concurrent winner
-    alt stored package Built
-        Controller-->>Caller: 200 AgentContextPackageResult, status Built
-    else stored package Overflow
-        Controller-->>Caller: 422 agent_context_budget_exceeded, stored diagnostics
-    else key reused with other inputs
-        Controller-->>Caller: 409 conflict, retryable false
-    else absent, and the turn status changed since ReadBuildInputs
-        Note over Handler,Store: the attempt ends, Build runs again from its reads
-    else absent, and the turn status unchanged
-        alt PackageAssembler returned Overflow
-            Handler->>Store: insert the Overflow package, mandatory items, snapshot
-            Controller-->>Caller: 422 agent_context_budget_exceeded, token counts
-            Note over Caller: refuse the prompt with the token counts, close the turn canceled
-        else assembled
-            Handler->>Store: insert the package, its children, its snapshot
-            Handler->>Store: RelationshipWriter: derived_from and relevant_to links
-            Controller-->>Caller: 201 AgentContextPackageResult, Location
-            Note over Caller: keep the packageId, inject in Stateless
-        end
-    else retries exhausted (SerializableWrite or key allocation)
-        Controller-->>Caller: 409 conflict, retryable true, nothing saved
-        Note over Caller: retry the same request within the bounded retries of C9
-    end
-```
+![Nested sequence: SaveBuiltPackage (the SerializableWrite of the BuildAgentContextPackageCommand sequence), part 1 of 2](architecture/c4/rendered/SaveBuiltPackage.svg)
+
+View: SaveBuiltPackage
+
+![Nested sequence: SaveBuiltPackage (the SerializableWrite of the BuildAgentContextPackageCommand sequence), part 2 of 2](architecture/c4/rendered/SaveBuiltPackage-part2.svg)
+
+View: SaveBuiltPackage-part2
+
+![Nested sequence: SaveBuiltPackage (the SerializableWrite of the BuildAgentContextPackageCommand sequence), alt 1 branch 1 of 6: stored package Built](architecture/c4/rendered/SaveBuiltPackage-alt1-1.svg)
+
+View: SaveBuiltPackage-alt1-1
+
+![Nested sequence: SaveBuiltPackage (the SerializableWrite of the BuildAgentContextPackageCommand sequence), alt 1 branch 2 of 6: stored package Overflow](architecture/c4/rendered/SaveBuiltPackage-alt1-2.svg)
+
+View: SaveBuiltPackage-alt1-2
+
+![Nested sequence: SaveBuiltPackage (the SerializableWrite of the BuildAgentContextPackageCommand sequence), alt 1 branch 3 of 6: key reused with other inputs](architecture/c4/rendered/SaveBuiltPackage-alt1-3.svg)
+
+View: SaveBuiltPackage-alt1-3
+
+![Nested sequence: SaveBuiltPackage (the SerializableWrite of the BuildAgentContextPackageCommand sequence), alt 1 branch 4 of 6: absent, and the turn status changed since ReadBuildInputs, part 1 of 3](architecture/c4/rendered/SaveBuiltPackage-alt1-4.svg)
+
+View: SaveBuiltPackage-alt1-4
+
+![Nested sequence: SaveBuiltPackage (the SerializableWrite of the BuildAgentContextPackageCommand sequence), alt 1 branch 4 of 6: absent, and the turn status changed since ReadBuildInputs, part 2 of 3](architecture/c4/rendered/SaveBuiltPackage-alt1-4-part2.svg)
+
+View: SaveBuiltPackage-alt1-4-part2
+
+![Nested sequence: SaveBuiltPackage (the SerializableWrite of the BuildAgentContextPackageCommand sequence), alt 1 branch 4 of 6: absent, and the turn status changed since ReadBuildInputs, part 3 of 3](architecture/c4/rendered/SaveBuiltPackage-alt1-4-part3.svg)
+
+View: SaveBuiltPackage-alt1-4-part3
+
+![Nested sequence: SaveBuiltPackage (the SerializableWrite of the BuildAgentContextPackageCommand sequence), alt 1 branch 5 of 6: absent, and the turn status unchanged](architecture/c4/rendered/SaveBuiltPackage-alt1-5.svg)
+
+View: SaveBuiltPackage-alt1-5
+
+![Nested sequence: SaveBuiltPackage (the SerializableWrite of the BuildAgentContextPackageCommand sequence), alt 2 branch 1 of 2: PackageAssembler returned Overflow, part 1 of 2](architecture/c4/rendered/SaveBuiltPackage-alt2-1.svg)
+
+View: SaveBuiltPackage-alt2-1
+
+![Nested sequence: SaveBuiltPackage (the SerializableWrite of the BuildAgentContextPackageCommand sequence), alt 2 branch 1 of 2: PackageAssembler returned Overflow, part 2 of 2](architecture/c4/rendered/SaveBuiltPackage-alt2-1-part2.svg)
+
+View: SaveBuiltPackage-alt2-1-part2
+
+![Nested sequence: SaveBuiltPackage (the SerializableWrite of the BuildAgentContextPackageCommand sequence), alt 2 branch 2 of 2: assembled, part 1 of 2](architecture/c4/rendered/SaveBuiltPackage-alt2-2.svg)
+
+View: SaveBuiltPackage-alt2-2
+
+![Nested sequence: SaveBuiltPackage (the SerializableWrite of the BuildAgentContextPackageCommand sequence), alt 2 branch 2 of 2: assembled, part 2 of 2](architecture/c4/rendered/SaveBuiltPackage-alt2-2-part2.svg)
+
+View: SaveBuiltPackage-alt2-2-part2
+
+![Nested sequence: SaveBuiltPackage (the SerializableWrite of the BuildAgentContextPackageCommand sequence), alt 1 branch 6 of 6: retries exhausted (SerializableWrite or key allocation), part 1 of 2](architecture/c4/rendered/SaveBuiltPackage-alt1-6.svg)
+
+View: SaveBuiltPackage-alt1-6
+
+![Nested sequence: SaveBuiltPackage (the SerializableWrite of the BuildAgentContextPackageCommand sequence), alt 1 branch 6 of 6: retries exhausted (SerializableWrite or key allocation), part 2 of 2](architecture/c4/rendered/SaveBuiltPackage-alt1-6-part2.svg)
+
+View: SaveBuiltPackage-alt1-6-part2
 
 #### Sequence: submit GetAgentContextPackageQuery
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Caller
-    participant Controller
-    participant Handler
-    participant Store
-    Caller->>Controller: GET /packages/{packageId}?includeContent
-    Controller->>Handler: QueryAsync(GetAgentContextPackageQuery)
-    Note over Controller,Handler: ref RequestPipeline, not gated: readable in Mode Off
-    Handler->>Store: load the package in the workspace
-    alt not found
-        Controller-->>Caller: 404 not_found, details.resource package
-        Note over Caller: report the id
-    else found, Built or Overflow
-        Store-->>Handler: package, items, omissions, findings, content
-        Controller-->>Caller: 200 AgentContextPackageResult
-        Note over Caller: verify contentSha256 of renderedContent before use
-    end
-```
+![Sequence: submit GetAgentContextPackageQuery, part 1 of 5](architecture/c4/rendered/STR-06-11.svg)
+
+View: STR-06-11
+
+![Sequence: submit GetAgentContextPackageQuery, part 2 of 5](architecture/c4/rendered/STR-06-11-part2.svg)
+
+View: STR-06-11-part2
+
+![Sequence: submit GetAgentContextPackageQuery, part 3 of 5](architecture/c4/rendered/STR-06-11-part3.svg)
+
+View: STR-06-11-part3
+
+![Sequence: submit GetAgentContextPackageQuery, part 4 of 5](architecture/c4/rendered/STR-06-11-part4.svg)
+
+View: STR-06-11-part4
+
+![Sequence: submit GetAgentContextPackageQuery, part 5 of 5](architecture/c4/rendered/STR-06-11-part5.svg)
+
+View: STR-06-11-part5
+
+![Sequence: submit GetAgentContextPackageQuery, alt 1 branch 1 of 2: not found](architecture/c4/rendered/STR-06-11-alt1-1.svg)
+
+View: STR-06-11-alt1-1
+
+![Sequence: submit GetAgentContextPackageQuery, alt 1 branch 2 of 2: found, Built or Overflow, part 1 of 3](architecture/c4/rendered/STR-06-11-alt1-2.svg)
+
+View: STR-06-11-alt1-2
+
+![Sequence: submit GetAgentContextPackageQuery, alt 1 branch 2 of 2: found, Built or Overflow, part 2 of 3](architecture/c4/rendered/STR-06-11-alt1-2-part2.svg)
+
+View: STR-06-11-alt1-2-part2
+
+![Sequence: submit GetAgentContextPackageQuery, alt 1 branch 2 of 2: found, Built or Overflow, part 3 of 3](architecture/c4/rendered/STR-06-11-alt1-2-part3.svg)
+
+View: STR-06-11-alt1-2-part3
 
 #### Sequence: submit QueryAgentContextPackagesQuery
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Caller
-    participant Controller
-    participant Handler
-    participant Store
-    Caller->>Controller: GET /packages?agent&sessionId&requestId&status&limit&offset
-    Controller->>Handler: QueryAsync(QueryAgentContextPackagesQuery)
-    Note over Controller,Handler: ref RequestPipeline, not gated: readable in Mode Off
-    alt unknown status, or limit or offset outside PageBounds
-        Controller-->>Caller: 400 validation_error, details.field
-    else filters valid
-        Handler->>Store: PagedQuery, CreatedUtc descending then PackageId
-        Store-->>Handler: PageResult
-        Controller-->>Caller: 200 PageResult of package summaries
-        Note over Caller: PagedQuery paging
-    end
-```
+![Sequence: submit QueryAgentContextPackagesQuery, part 1 of 4](architecture/c4/rendered/STR-06-12.svg)
+
+View: STR-06-12
+
+![Sequence: submit QueryAgentContextPackagesQuery, part 2 of 4](architecture/c4/rendered/STR-06-12-part2.svg)
+
+View: STR-06-12-part2
+
+![Sequence: submit QueryAgentContextPackagesQuery, part 3 of 4](architecture/c4/rendered/STR-06-12-part3.svg)
+
+View: STR-06-12-part3
+
+![Sequence: submit QueryAgentContextPackagesQuery, part 4 of 4](architecture/c4/rendered/STR-06-12-part4.svg)
+
+View: STR-06-12-part4
+
+![Sequence: submit QueryAgentContextPackagesQuery, alt 1 branch 1 of 2: unknown status, or limit or offset outside PageBounds](architecture/c4/rendered/STR-06-12-alt1-1.svg)
+
+View: STR-06-12-alt1-1
+
+![Sequence: submit QueryAgentContextPackagesQuery, alt 1 branch 2 of 2: filters valid, part 1 of 2](architecture/c4/rendered/STR-06-12-alt1-2.svg)
+
+View: STR-06-12-alt1-2
+
+![Sequence: submit QueryAgentContextPackagesQuery, alt 1 branch 2 of 2: filters valid, part 2 of 2](architecture/c4/rendered/STR-06-12-alt1-2-part2.svg)
+
+View: STR-06-12-alt1-2-part2
 
 #### Sequence: submit ReplayAgentContextPackageQuery
 
 `PackageAssembler` rebuilds in memory from the stored input snapshot, `OptionsSnapshotJson`, and the focus refs only; because the snapshot records every input the assembler reads (section 3.5.5), Replay reproduces every assembler step without reading a live source or configuration, and stores nothing.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Caller
-    participant Controller
-    participant Handler
-    participant Store
-    participant Assembler as PackageAssembler
-    Caller->>Controller: POST /packages/{packageId}/replay
-    Controller->>Handler: QueryAsync(ReplayAgentContextPackageQuery)
-    Note over Controller,Handler: ref RequestPipeline, not gated: readable in Mode Off
-    Handler->>Store: BuiltPackageLookup(packageId)
-    alt not found
-        Controller-->>Caller: 404 not_found, details.resource package
-    else Overflow
-        Controller-->>Caller: 409 agent_context_package_overflow
-    else no input snapshot stored
-        Controller-->>Caller: 409 agent_context_replay_snapshot_unavailable
-    else built by another builder version
-        Controller-->>Caller: 409 agent_context_replay_builder_changed
-        Note over Caller: report recorded and current, replay needs the same builder
-    else replayable
-        Handler->>Assembler: assemble(stored snapshot, OptionsSnapshotJson)
-        Assembler-->>Handler: items, InputsSha256, ContentSha256
-        Note over Handler: compare by ordinal, nothing stored
-        Controller-->>Caller: 200 AgentContextReplayResult
-        alt identical
-            Note over Caller: deterministic replay proven
-        else differences
-            Note over Caller: report each added, removed, hashChanged, reordered item
-        end
-    end
-```
+![Sequence: submit ReplayAgentContextPackageQuery, part 1 of 5](architecture/c4/rendered/STR-06-13.svg)
+
+View: STR-06-13
+
+![Sequence: submit ReplayAgentContextPackageQuery, part 2 of 5](architecture/c4/rendered/STR-06-13-part2.svg)
+
+View: STR-06-13-part2
+
+![Sequence: submit ReplayAgentContextPackageQuery, part 3 of 5](architecture/c4/rendered/STR-06-13-part3.svg)
+
+View: STR-06-13-part3
+
+![Sequence: submit ReplayAgentContextPackageQuery, part 4 of 5](architecture/c4/rendered/STR-06-13-part4.svg)
+
+View: STR-06-13-part4
+
+![Sequence: submit ReplayAgentContextPackageQuery, part 5 of 5](architecture/c4/rendered/STR-06-13-part5.svg)
+
+View: STR-06-13-part5
+
+![Sequence: submit ReplayAgentContextPackageQuery, alt 1 branch 1 of 5: not found](architecture/c4/rendered/STR-06-13-alt1-1.svg)
+
+View: STR-06-13-alt1-1
+
+![Sequence: submit ReplayAgentContextPackageQuery, alt 1 branch 2 of 5: Overflow](architecture/c4/rendered/STR-06-13-alt1-2.svg)
+
+View: STR-06-13-alt1-2
+
+![Sequence: submit ReplayAgentContextPackageQuery, alt 1 branch 3 of 5: no input snapshot stored](architecture/c4/rendered/STR-06-13-alt1-3.svg)
+
+View: STR-06-13-alt1-3
+
+![Sequence: submit ReplayAgentContextPackageQuery, alt 1 branch 4 of 5: built by another builder version](architecture/c4/rendered/STR-06-13-alt1-4.svg)
+
+View: STR-06-13-alt1-4
+
+![Sequence: submit ReplayAgentContextPackageQuery, alt 1 branch 5 of 5: replayable, part 1 of 3](architecture/c4/rendered/STR-06-13-alt1-5.svg)
+
+View: STR-06-13-alt1-5
+
+![Sequence: submit ReplayAgentContextPackageQuery, alt 1 branch 5 of 5: replayable, part 2 of 3](architecture/c4/rendered/STR-06-13-alt1-5-part2.svg)
+
+View: STR-06-13-alt1-5-part2
+
+![Sequence: submit ReplayAgentContextPackageQuery, alt 1 branch 5 of 5: replayable, part 3 of 3](architecture/c4/rendered/STR-06-13-alt1-5-part3.svg)
+
+View: STR-06-13-alt1-5-part3
+
+![Sequence: submit ReplayAgentContextPackageQuery, alt 2 branch 1 of 2: identical, part 1 of 2](architecture/c4/rendered/STR-06-13-alt2-1.svg)
+
+View: STR-06-13-alt2-1
+
+![Sequence: submit ReplayAgentContextPackageQuery, alt 2 branch 1 of 2: identical, part 2 of 2](architecture/c4/rendered/STR-06-13-alt2-1-part2.svg)
+
+View: STR-06-13-alt2-1-part2
+
+![Sequence: submit ReplayAgentContextPackageQuery, alt 2 branch 2 of 2: differences, part 1 of 2](architecture/c4/rendered/STR-06-13-alt2-2.svg)
+
+View: STR-06-13-alt2-2
+
+![Sequence: submit ReplayAgentContextPackageQuery, alt 2 branch 2 of 2: differences, part 2 of 2](architecture/c4/rendered/STR-06-13-alt2-2-part2.svg)
+
+View: STR-06-13-alt2-2-part2
 
 #### Sequence: submit SubmitAgentResponseCommand
 
 `Caller` is the plugin carrying the model's `agent_context_submit_response` tool call, which the model makes before it closes the turn; the plugin supplies the `packageId` it kept for the request (section 3.1, Response submission). `SubmissionSha256` (through `ContentHasher`, over the whole submission) is the idempotency fingerprint. Submit reads before it writes (section 3.1, "Database-only delegates"): the read-only key lookup, then nested sequence ReadSubmissionInputs, then `SecretRedactor` redacts the content in memory, and only then the SerializableWrite. Its delegate reads and writes only the database: it looks the key up again, which finds a concurrent submission that won the key, and inserts the response, its claims and evidence with both hashes, and its links (`RelationshipWriter`, `CreatedBy` `SubmitAgentResponseCommand`: `derived_from` the package, `supports` each `Requirement` or `File` evidence item, with the hashes ReadSubmissionInputs read). A stored package never changes, so the key is the only state the delegate re-checks. The response, its children, and its links commit together.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Caller
-    participant Controller
-    participant Handler
-    participant Store
-    Caller->>Controller: POST /responses (SubmitAgentResponseRequest)
-    Controller->>Handler: SendAsync(SubmitAgentResponseCommand)
-    Note over Controller,Handler: ref RequestPipeline, gated
-    alt content, claims, evidence, format, or mode invalid
-        Controller-->>Caller: 400 validation_error, details.field
-        Note over Caller: fix and resend
-    else request valid
-        Handler->>Store: IdempotentCreate.Find, read-only, before any source read
-        alt stored, same submission
-            Controller-->>Caller: 200 AgentResponseResult, the stored response
-            Note over Caller: treat as submitted
-        else key reused with another submission (any field)
-            Controller-->>Caller: 409 conflict, retryable false
-        else absent
-            Note over Caller,Store: ref ReadSubmissionInputs (below), each refusal there answers the caller
-            Handler->>Handler: SecretRedactor: redact the content, then ContentSha256
-            Note over Handler,Store: SerializableWrite, database only
-            Handler->>Store: IdempotentCreate.Find, a concurrent winner
-            alt winner with the same submission
-                Controller-->>Caller: 200 AgentResponseResult, the stored response
-            else winner with another submission
-                Controller-->>Caller: 409 conflict, retryable false
-            else absent
-                Handler->>Store: insert the response, claims, evidence, and links
-                Controller-->>Caller: 201 AgentResponseResult, status Submitted
-                Note over Caller: the plugin requests the deterministic grade
-            else retries exhausted (SerializableWrite or key allocation)
-                Controller-->>Caller: 409 conflict, retryable true, nothing saved
-                Note over Caller: retry the same request within the bounded retries of C9
-            end
-        end
-    end
-```
+![Sequence: submit SubmitAgentResponseCommand, part 1 of 3](architecture/c4/rendered/STR-06-14.svg)
+
+View: STR-06-14
+
+![Sequence: submit SubmitAgentResponseCommand, part 2 of 3](architecture/c4/rendered/STR-06-14-part2.svg)
+
+View: STR-06-14-part2
+
+![Sequence: submit SubmitAgentResponseCommand, part 3 of 3](architecture/c4/rendered/STR-06-14-part3.svg)
+
+View: STR-06-14-part3
+
+![Sequence: submit SubmitAgentResponseCommand, alt 1 branch 1 of 2: content, claims, evidence, format, or mode invalid, part 1 of 2](architecture/c4/rendered/STR-06-14-alt1-1.svg)
+
+View: STR-06-14-alt1-1
+
+![Sequence: submit SubmitAgentResponseCommand, alt 1 branch 1 of 2: content, claims, evidence, format, or mode invalid, part 2 of 2](architecture/c4/rendered/STR-06-14-alt1-1-part2.svg)
+
+View: STR-06-14-alt1-1-part2
+
+![Sequence: submit SubmitAgentResponseCommand, alt 1 branch 2 of 2: request valid, part 1 of 2](architecture/c4/rendered/STR-06-14-alt1-2.svg)
+
+View: STR-06-14-alt1-2
+
+![Sequence: submit SubmitAgentResponseCommand, alt 1 branch 2 of 2: request valid, part 2 of 2](architecture/c4/rendered/STR-06-14-alt1-2-part2.svg)
+
+View: STR-06-14-alt1-2-part2
+
+![Sequence: submit SubmitAgentResponseCommand, alt 2 branch 1 of 3: stored, same submission](architecture/c4/rendered/STR-06-14-alt2-1.svg)
+
+View: STR-06-14-alt2-1
+
+![Sequence: submit SubmitAgentResponseCommand, alt 2 branch 2 of 3: key reused with another submission (any field)](architecture/c4/rendered/STR-06-14-alt2-2.svg)
+
+View: STR-06-14-alt2-2
+
+![Sequence: submit SubmitAgentResponseCommand, alt 2 branch 3 of 3: absent, part 1 of 5](architecture/c4/rendered/STR-06-14-alt2-3.svg)
+
+View: STR-06-14-alt2-3
+
+![Sequence: submit SubmitAgentResponseCommand, alt 2 branch 3 of 3: absent, part 2 of 5](architecture/c4/rendered/STR-06-14-alt2-3-part2.svg)
+
+View: STR-06-14-alt2-3-part2
+
+![Sequence: submit SubmitAgentResponseCommand, alt 2 branch 3 of 3: absent, part 3 of 5](architecture/c4/rendered/STR-06-14-alt2-3-part3.svg)
+
+View: STR-06-14-alt2-3-part3
+
+![Sequence: submit SubmitAgentResponseCommand, alt 2 branch 3 of 3: absent, part 4 of 5](architecture/c4/rendered/STR-06-14-alt2-3-part4.svg)
+
+View: STR-06-14-alt2-3-part4
+
+![Sequence: submit SubmitAgentResponseCommand, alt 2 branch 3 of 3: absent, part 5 of 5](architecture/c4/rendered/STR-06-14-alt2-3-part5.svg)
+
+View: STR-06-14-alt2-3-part5
+
+![Sequence: submit SubmitAgentResponseCommand, alt 3 branch 1 of 4: winner with the same submission](architecture/c4/rendered/STR-06-14-alt3-1.svg)
+
+View: STR-06-14-alt3-1
+
+![Sequence: submit SubmitAgentResponseCommand, alt 3 branch 2 of 4: winner with another submission](architecture/c4/rendered/STR-06-14-alt3-2.svg)
+
+View: STR-06-14-alt3-2
+
+![Sequence: submit SubmitAgentResponseCommand, alt 3 branch 3 of 4: absent, part 1 of 2](architecture/c4/rendered/STR-06-14-alt3-3.svg)
+
+View: STR-06-14-alt3-3
+
+![Sequence: submit SubmitAgentResponseCommand, alt 3 branch 3 of 4: absent, part 2 of 2](architecture/c4/rendered/STR-06-14-alt3-3-part2.svg)
+
+View: STR-06-14-alt3-3-part2
+
+![Sequence: submit SubmitAgentResponseCommand, alt 3 branch 4 of 4: retries exhausted (SerializableWrite or key allocation), part 1 of 2](architecture/c4/rendered/STR-06-14-alt3-4.svg)
+
+View: STR-06-14-alt3-4
+
+![Sequence: submit SubmitAgentResponseCommand, alt 3 branch 4 of 4: retries exhausted (SerializableWrite or key allocation), part 2 of 2](architecture/c4/rendered/STR-06-14-alt3-4-part2.svg)
+
+View: STR-06-14-alt3-4-part2
 
 ##### Nested sequence: ReadSubmissionInputs (reads of the SubmitAgentResponseCommand sequence, before any transaction)
 
 Every read here runs outside a transaction. `BuiltPackageLookup` finds the package; the submission must match it (`agent` equal to the package's agent, `invocationMode` `Stateless` only on a `Stateless` package, and no `SessionLogTurn` evidence naming the package's own turn, section 3.1). `SourceResolver` reads the workspace HEAD commit and hashes each `File` evidence ref at its `commitSha` and each `Requirement`, `Receipt`, and `SessionLogTurn` ref from its source; each cited hash is kept as `CitedSha256`, and the server's hash is `Sha256`, null when an existing source cannot be read.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Caller
-    participant Controller
-    participant Handler
-    participant Store
-    Handler->>Store: BuiltPackageLookup(packageId)
-    alt package not found
-        Controller-->>Caller: 404 not_found, details.resource package
-    else package Overflow
-        Controller-->>Caller: 409 agent_context_package_overflow
-    else agent, mode, or own-turn evidence inconsistent with the package
-        Controller-->>Caller: 400 validation_error, details.field
-    else package Built, submission consistent
-        Handler->>Handler: SourceResolver: ReadCommit, hash each evidence ref
-        alt commit unreadable
-            Controller-->>Caller: 409 agent_context_commit_unavailable
-        else a ref names no existing source
-            Controller-->>Caller: 400 validation_error, details.field the ref
-            Note over Caller: cite an existing source and resend
-        else every ref resolved
-            Note over Handler: Sha256 and CitedSha256 kept per evidence item
-        end
-    end
-```
+![Nested sequence: ReadSubmissionInputs (reads of the SubmitAgentResponseCommand sequence, before any transaction), part 1 of 2](architecture/c4/rendered/ReadSubmissionInputs-Sequence.svg)
+
+View: ReadSubmissionInputs-Sequence
+
+![Nested sequence: ReadSubmissionInputs (reads of the SubmitAgentResponseCommand sequence, before any transaction), part 2 of 2](architecture/c4/rendered/ReadSubmissionInputs-Sequence-part2.svg)
+
+View: ReadSubmissionInputs-Sequence-part2
+
+![Nested sequence: ReadSubmissionInputs (reads of the SubmitAgentResponseCommand sequence, before any transaction), alt 1 branch 1 of 4: package not found](architecture/c4/rendered/ReadSubmissionInputs-Sequence-alt1-1.svg)
+
+View: ReadSubmissionInputs-Sequence-alt1-1
+
+![Nested sequence: ReadSubmissionInputs (reads of the SubmitAgentResponseCommand sequence, before any transaction), alt 1 branch 2 of 4: package Overflow](architecture/c4/rendered/ReadSubmissionInputs-Sequence-alt1-2.svg)
+
+View: ReadSubmissionInputs-Sequence-alt1-2
+
+![Nested sequence: ReadSubmissionInputs (reads of the SubmitAgentResponseCommand sequence, before any transaction), alt 1 branch 3 of 4: agent, mode, or own-turn evidence inconsistent with the package, part 1 of 2](architecture/c4/rendered/ReadSubmissionInputs-Sequence-alt1-3.svg)
+
+View: ReadSubmissionInputs-Sequence-alt1-3
+
+![Nested sequence: ReadSubmissionInputs (reads of the SubmitAgentResponseCommand sequence, before any transaction), alt 1 branch 3 of 4: agent, mode, or own-turn evidence inconsistent with the package, part 2 of 2](architecture/c4/rendered/ReadSubmissionInputs-Sequence-alt1-3-part2.svg)
+
+View: ReadSubmissionInputs-Sequence-alt1-3-part2
+
+![Nested sequence: ReadSubmissionInputs (reads of the SubmitAgentResponseCommand sequence, before any transaction), alt 1 branch 4 of 4: package Built, submission consistent, part 1 of 2](architecture/c4/rendered/ReadSubmissionInputs-Sequence-alt1-4.svg)
+
+View: ReadSubmissionInputs-Sequence-alt1-4
+
+![Nested sequence: ReadSubmissionInputs (reads of the SubmitAgentResponseCommand sequence, before any transaction), alt 1 branch 4 of 4: package Built, submission consistent, part 2 of 2](architecture/c4/rendered/ReadSubmissionInputs-Sequence-alt1-4-part2.svg)
+
+View: ReadSubmissionInputs-Sequence-alt1-4-part2
+
+![Nested sequence: ReadSubmissionInputs (reads of the SubmitAgentResponseCommand sequence, before any transaction), alt 2 branch 1 of 3: commit unreadable](architecture/c4/rendered/ReadSubmissionInputs-Sequence-alt2-1.svg)
+
+View: ReadSubmissionInputs-Sequence-alt2-1
+
+![Nested sequence: ReadSubmissionInputs (reads of the SubmitAgentResponseCommand sequence, before any transaction), alt 2 branch 2 of 3: a ref names no existing source](architecture/c4/rendered/ReadSubmissionInputs-Sequence-alt2-2.svg)
+
+View: ReadSubmissionInputs-Sequence-alt2-2
+
+![Nested sequence: ReadSubmissionInputs (reads of the SubmitAgentResponseCommand sequence, before any transaction), alt 2 branch 3 of 3: every ref resolved, part 1 of 2](architecture/c4/rendered/ReadSubmissionInputs-Sequence-alt2-3.svg)
+
+View: ReadSubmissionInputs-Sequence-alt2-3
+
+![Nested sequence: ReadSubmissionInputs (reads of the SubmitAgentResponseCommand sequence, before any transaction), alt 2 branch 3 of 3: every ref resolved, part 2 of 2](architecture/c4/rendered/ReadSubmissionInputs-Sequence-alt2-3-part2.svg)
+
+View: ReadSubmissionInputs-Sequence-alt2-3-part2
 
 #### Sequence: submit GetAgentResponseQuery
 
 `IResponseStalenessRule` evaluates a `Submitted`, `Grading`, or `Trusted` response read-only and the query returns its effective status, writing nothing, so a `Trusted` answer has just been checked.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Caller
-    participant Controller
-    participant Handler
-    participant Store
-    Caller->>Controller: GET /responses/{responseId}?includeContent
-    Controller->>Handler: QueryAsync(GetAgentResponseQuery)
-    Note over Controller,Handler: ref RequestPipeline, not gated: readable in Mode Off
-    Handler->>Store: load the response, claims, evidence, grades
-    alt not found
-        Controller-->>Caller: 404 not_found, details.resource response
-    else found
-        Handler->>Handler: IResponseStalenessRule, read-only
-        Note over Handler: effective status, nothing written
-        Controller-->>Caller: 200 AgentResponseResult, effective status
-        Note over Caller: use as context only when Trusted
-    end
-```
+![Sequence: submit GetAgentResponseQuery, part 1 of 5](architecture/c4/rendered/STR-06-15.svg)
+
+View: STR-06-15
+
+![Sequence: submit GetAgentResponseQuery, part 2 of 5](architecture/c4/rendered/STR-06-15-part2.svg)
+
+View: STR-06-15-part2
+
+![Sequence: submit GetAgentResponseQuery, part 3 of 5](architecture/c4/rendered/STR-06-15-part3.svg)
+
+View: STR-06-15-part3
+
+![Sequence: submit GetAgentResponseQuery, part 4 of 5](architecture/c4/rendered/STR-06-15-part4.svg)
+
+View: STR-06-15-part4
+
+![Sequence: submit GetAgentResponseQuery, part 5 of 5](architecture/c4/rendered/STR-06-15-part5.svg)
+
+View: STR-06-15-part5
+
+![Sequence: submit GetAgentResponseQuery, alt 1 branch 1 of 2: not found](architecture/c4/rendered/STR-06-15-alt1-1.svg)
+
+View: STR-06-15-alt1-1
+
+![Sequence: submit GetAgentResponseQuery, alt 1 branch 2 of 2: found, part 1 of 4](architecture/c4/rendered/STR-06-15-alt1-2.svg)
+
+View: STR-06-15-alt1-2
+
+![Sequence: submit GetAgentResponseQuery, alt 1 branch 2 of 2: found, part 2 of 4](architecture/c4/rendered/STR-06-15-alt1-2-part2.svg)
+
+View: STR-06-15-alt1-2-part2
+
+![Sequence: submit GetAgentResponseQuery, alt 1 branch 2 of 2: found, part 3 of 4](architecture/c4/rendered/STR-06-15-alt1-2-part3.svg)
+
+View: STR-06-15-alt1-2-part3
+
+![Sequence: submit GetAgentResponseQuery, alt 1 branch 2 of 2: found, part 4 of 4](architecture/c4/rendered/STR-06-15-alt1-2-part4.svg)
+
+View: STR-06-15-alt1-2-part4
 
 #### Sequence: submit QueryAgentResponsesQuery
 
 `IResponseStalenessRule` evaluates every matching `Submitted`, `Grading`, or `Trusted` response read-only before the query filters, counts, and pages by effective status; it writes nothing.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Caller
-    participant Controller
-    participant Handler
-    participant Store
-    Caller->>Controller: GET /responses?requestId&packageId&status&trustedOnly&limit&offset
-    Controller->>Handler: QueryAsync(QueryAgentResponsesQuery)
-    Note over Controller,Handler: ref RequestPipeline, not gated: readable in Mode Off
-    alt unknown status, or limit or offset outside PageBounds
-        Controller-->>Caller: 400 validation_error, details.field
-    else filters valid
-        Handler->>Handler: IResponseStalenessRule, read-only
-        Note over Handler: effective status of every match, nothing written
-        Handler->>Store: PagedQuery by effective status
-        Store-->>Handler: PageResult, SubmittedUtc descending then ResponseId
-        Controller-->>Caller: 200 PageResult of response summaries
-        Note over Caller: PagedQuery paging
-    end
-```
+![Sequence: submit QueryAgentResponsesQuery, part 1 of 4](architecture/c4/rendered/STR-06-16.svg)
+
+View: STR-06-16
+
+![Sequence: submit QueryAgentResponsesQuery, part 2 of 4](architecture/c4/rendered/STR-06-16-part2.svg)
+
+View: STR-06-16-part2
+
+![Sequence: submit QueryAgentResponsesQuery, part 3 of 4](architecture/c4/rendered/STR-06-16-part3.svg)
+
+View: STR-06-16-part3
+
+![Sequence: submit QueryAgentResponsesQuery, part 4 of 4](architecture/c4/rendered/STR-06-16-part4.svg)
+
+View: STR-06-16-part4
+
+![Sequence: submit QueryAgentResponsesQuery, alt 1 branch 1 of 2: unknown status, or limit or offset outside PageBounds](architecture/c4/rendered/STR-06-16-alt1-1.svg)
+
+View: STR-06-16-alt1-1
+
+![Sequence: submit QueryAgentResponsesQuery, alt 1 branch 2 of 2: filters valid, part 1 of 4](architecture/c4/rendered/STR-06-16-alt1-2.svg)
+
+View: STR-06-16-alt1-2
+
+![Sequence: submit QueryAgentResponsesQuery, alt 1 branch 2 of 2: filters valid, part 2 of 4](architecture/c4/rendered/STR-06-16-alt1-2-part2.svg)
+
+View: STR-06-16-alt1-2-part2
+
+![Sequence: submit QueryAgentResponsesQuery, alt 1 branch 2 of 2: filters valid, part 3 of 4](architecture/c4/rendered/STR-06-16-alt1-2-part3.svg)
+
+View: STR-06-16-alt1-2-part3
+
+![Sequence: submit QueryAgentResponsesQuery, alt 1 branch 2 of 2: filters valid, part 4 of 4](architecture/c4/rendered/STR-06-16-alt1-2-part4.svg)
+
+View: STR-06-16-alt1-2-part4
 
 #### Sequence: submit RunDeterministicGradeCommand
 
 The grade reads before it writes, in the order of section 3.1 ("Database-only delegates"): every read-only check, then the EvaluateStalenessCommand dispatch, then the SerializableWrite. Before the SerializableWrite the handler loads the response and checks that it is gradable (found, neither `Rejected` nor `Superseded`), has `SourceResolver` check each evidence item (nested activity CheckOneEvidenceItem) and the commit ancestry, so no git read runs inside a transaction, and runs `SecretRedactor.ContainsSecret` over the content, claims, and evidence refs; it then dispatches EvaluateStalenessCommand for the response (the only writer of `Stale`, which evaluates outside any transaction and persists `Stale` in its own SerializableWrite when a dependency of the response or its package changed) and reads the response's status and `StatusVersion` that the dispatch left. It then runs the global checks (every claim has evidence, and the freshness of the response and its package, from that status), computes the exact scores, and derives the verdict with `ScoreVerdict` at `max(configured, 0.98)`. The SerializableWrite locks the response and re-checks its `StatusVersion` against the one the reads saw (a concurrent reject, supersede, or staleness change ends the attempt, and the unit runs again from its reads, so a response rejected meanwhile is then refused 409 `agent_context_response_not_gradable`, `GradeResponseRejectedDuringReadsReadsAgain409NotGradable`), saves the grade, its findings, and the thresholds in force, and stamps `RecordedUtc`, which orders "latest". The trust decision is the same dispatch, drawn the same way, as in SubmitOneModelGrade: DecideAgentResponseTrustCommand, not gated, in the same transaction, reading only the database (the stored status and the latest grades). The caller processes the answer by `responseStatus`: `Stale` is excluded from trusted retrieval and needs a new response; `Grading` after a `Pass` waits for the model grade of an HV request covering the turn (CreateAgentContextHvRequestCommand); a `Fail` shows every FAIL and UNKNOWN finding, to fix and submit a new response.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Caller
-    participant Controller
-    participant Handler
-    participant Store
-    Caller->>Controller: POST /responses/{responseId}/grades/deterministic
-    Controller->>Handler: SendAsync(RunDeterministicGradeCommand)
-    Note over Controller,Handler: ref RequestPipeline, gated
-    Handler->>Store: load the response
-    alt not found
-        Controller-->>Caller: 404 not_found, details.resource response
-    else Rejected or Superseded
-        Controller-->>Caller: 409 agent_context_response_not_gradable
-    else gradable
-        Handler->>Handler: SourceResolver: each evidence item, the commit ancestry
-        Note over Handler: secret scan of content, claims, and evidence refs
-        Handler->>Handler: SendAsync(EvaluateStalenessCommand), this response
-        Note over Handler: global checks, exact scores, ScoreVerdict
-        Note over Handler,Store: SerializableWrite, response locked, database only
-        Handler->>Store: re-check StatusVersion, save the grade and findings
-        Handler->>Handler: SendAsync(DecideAgentResponseTrustCommand)
-        Controller-->>Caller: 201 AgentResponseGradeResult, responseStatus
-        alt responseStatus Stale
-            Note over Caller: never trusted, submit a new response
-        else verdict Pass, responseStatus Grading
-            Note over Caller: await the model grade of an HV request
-        else verdict Fail
-            Note over Caller: fix each FAIL and UNKNOWN, submit anew
-        end
-    else retries exhausted (here or in EvaluateStalenessCommand)
-        Controller-->>Caller: 409 conflict, retryable true, nothing saved
-        Note over Caller: retry the same request within the bounded retries of C9
-    end
-```
+![Sequence: submit RunDeterministicGradeCommand, part 1 of 4](architecture/c4/rendered/STR-06-17.svg)
+
+View: STR-06-17
+
+![Sequence: submit RunDeterministicGradeCommand, part 2 of 4](architecture/c4/rendered/STR-06-17-part2.svg)
+
+View: STR-06-17-part2
+
+![Sequence: submit RunDeterministicGradeCommand, part 3 of 4](architecture/c4/rendered/STR-06-17-part3.svg)
+
+View: STR-06-17-part3
+
+![Sequence: submit RunDeterministicGradeCommand, part 4 of 4](architecture/c4/rendered/STR-06-17-part4.svg)
+
+View: STR-06-17-part4
+
+![Sequence: submit RunDeterministicGradeCommand, alt 1 branch 1 of 4: not found](architecture/c4/rendered/STR-06-17-alt1-1.svg)
+
+View: STR-06-17-alt1-1
+
+![Sequence: submit RunDeterministicGradeCommand, alt 1 branch 2 of 4: Rejected or Superseded](architecture/c4/rendered/STR-06-17-alt1-2.svg)
+
+View: STR-06-17-alt1-2
+
+![Sequence: submit RunDeterministicGradeCommand, alt 1 branch 3 of 4: gradable, part 1 of 9](architecture/c4/rendered/STR-06-17-alt1-3.svg)
+
+View: STR-06-17-alt1-3
+
+![Sequence: submit RunDeterministicGradeCommand, alt 1 branch 3 of 4: gradable, part 2 of 9](architecture/c4/rendered/STR-06-17-alt1-3-part2.svg)
+
+View: STR-06-17-alt1-3-part2
+
+![Sequence: submit RunDeterministicGradeCommand, alt 1 branch 3 of 4: gradable, part 3 of 9](architecture/c4/rendered/STR-06-17-alt1-3-part3.svg)
+
+View: STR-06-17-alt1-3-part3
+
+![Sequence: submit RunDeterministicGradeCommand, alt 1 branch 3 of 4: gradable, part 4 of 9](architecture/c4/rendered/STR-06-17-alt1-3-part4.svg)
+
+View: STR-06-17-alt1-3-part4
+
+![Sequence: submit RunDeterministicGradeCommand, alt 1 branch 3 of 4: gradable, part 5 of 9](architecture/c4/rendered/STR-06-17-alt1-3-part5.svg)
+
+View: STR-06-17-alt1-3-part5
+
+![Sequence: submit RunDeterministicGradeCommand, alt 1 branch 3 of 4: gradable, part 6 of 9](architecture/c4/rendered/STR-06-17-alt1-3-part6.svg)
+
+View: STR-06-17-alt1-3-part6
+
+![Sequence: submit RunDeterministicGradeCommand, alt 1 branch 3 of 4: gradable, part 7 of 9](architecture/c4/rendered/STR-06-17-alt1-3-part7.svg)
+
+View: STR-06-17-alt1-3-part7
+
+![Sequence: submit RunDeterministicGradeCommand, alt 1 branch 3 of 4: gradable, part 8 of 9](architecture/c4/rendered/STR-06-17-alt1-3-part8.svg)
+
+View: STR-06-17-alt1-3-part8
+
+![Sequence: submit RunDeterministicGradeCommand, alt 1 branch 3 of 4: gradable, part 9 of 9](architecture/c4/rendered/STR-06-17-alt1-3-part9.svg)
+
+View: STR-06-17-alt1-3-part9
+
+![Sequence: submit RunDeterministicGradeCommand, alt 2 branch 1 of 3: responseStatus Stale, part 1 of 2](architecture/c4/rendered/STR-06-17-alt2-1.svg)
+
+View: STR-06-17-alt2-1
+
+![Sequence: submit RunDeterministicGradeCommand, alt 2 branch 1 of 3: responseStatus Stale, part 2 of 2](architecture/c4/rendered/STR-06-17-alt2-1-part2.svg)
+
+View: STR-06-17-alt2-1-part2
+
+![Sequence: submit RunDeterministicGradeCommand, alt 2 branch 2 of 3: verdict Pass, responseStatus Grading, part 1 of 2](architecture/c4/rendered/STR-06-17-alt2-2.svg)
+
+View: STR-06-17-alt2-2
+
+![Sequence: submit RunDeterministicGradeCommand, alt 2 branch 2 of 3: verdict Pass, responseStatus Grading, part 2 of 2](architecture/c4/rendered/STR-06-17-alt2-2-part2.svg)
+
+View: STR-06-17-alt2-2-part2
+
+![Sequence: submit RunDeterministicGradeCommand, alt 2 branch 3 of 3: verdict Fail, part 1 of 2](architecture/c4/rendered/STR-06-17-alt2-3.svg)
+
+View: STR-06-17-alt2-3
+
+![Sequence: submit RunDeterministicGradeCommand, alt 2 branch 3 of 3: verdict Fail, part 2 of 2](architecture/c4/rendered/STR-06-17-alt2-3-part2.svg)
+
+View: STR-06-17-alt2-3-part2
+
+![Sequence: submit RunDeterministicGradeCommand, alt 1 branch 4 of 4: retries exhausted (here or in EvaluateStalenessCommand), part 1 of 2](architecture/c4/rendered/STR-06-17-alt1-4.svg)
+
+View: STR-06-17-alt1-4
+
+![Sequence: submit RunDeterministicGradeCommand, alt 1 branch 4 of 4: retries exhausted (here or in EvaluateStalenessCommand), part 2 of 2](architecture/c4/rendered/STR-06-17-alt1-4-part2.svg)
+
+View: STR-06-17-alt1-4-part2
 
 #### Sequence: submit RecordModelGradeCommand from an HV review
 
 `Agent` is the agent that asks for the review; `Runner` is the existing HV runner; `Reviewer` is the HV agent (the configured grader, Codex `gpt-6-astra` `max`, one reviewer thread, in two steps). In step 1 the reviewer reviews the turns and responses, emits the VERDICT JSON with its `overallVerdict`, a `grades` entry per response carrying that response's `verdict`, and its own thread id, and stores its entire result on its own session-log turn; when that run completes, the runner freezes the request, response, and rollout jsonl receipts under the receipt root.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Agent
-    participant Runner
-    participant Reviewer
-    participant Controller
-    Agent->>Controller: POST /hv-requests (CreateAgentContextHvRequestCommand)
-    Controller-->>Agent: 201 hvRequestId with its response items
-    Agent->>Runner: HV brief naming hvRequestId
-    Runner->>Reviewer: step 1: codex exec (review)
-    Note over Reviewer,Controller: reviews, emits the VERDICT JSON, stores its result on its own turn
-    Reviewer-->>Runner: run completes (turn.completed)
-    Note over Runner,Reviewer: freezes the request, response, and rollout jsonl receipts
-    Runner->>Reviewer: step 2: codex exec resume reviewerThreadId
-    Note over Runner,Reviewer: grade-only continuation naming the frozen receipt paths
-    loop each response item of the HV request
-        Note over Reviewer,Controller: ref SubmitOneModelGrade (below)
-    end
-    Reviewer-->>Runner: continuation completes
-    Note over Runner: an interrupted continuation is resumed again with the same prompt
-```
+![Sequence: submit RecordModelGradeCommand from an HV review, part 1 of 8](architecture/c4/rendered/STR-06-18.svg)
+
+View: STR-06-18
+
+![Sequence: submit RecordModelGradeCommand from an HV review, part 2 of 8](architecture/c4/rendered/STR-06-18-part2.svg)
+
+View: STR-06-18-part2
+
+![Sequence: submit RecordModelGradeCommand from an HV review, part 3 of 8](architecture/c4/rendered/STR-06-18-part3.svg)
+
+View: STR-06-18-part3
+
+![Sequence: submit RecordModelGradeCommand from an HV review, part 4 of 8](architecture/c4/rendered/STR-06-18-part4.svg)
+
+View: STR-06-18-part4
+
+![Sequence: submit RecordModelGradeCommand from an HV review, part 5 of 8](architecture/c4/rendered/STR-06-18-part5.svg)
+
+View: STR-06-18-part5
+
+![Sequence: submit RecordModelGradeCommand from an HV review, part 6 of 8](architecture/c4/rendered/STR-06-18-part6.svg)
+
+View: STR-06-18-part6
+
+![Sequence: submit RecordModelGradeCommand from an HV review, part 7 of 8](architecture/c4/rendered/STR-06-18-part7.svg)
+
+View: STR-06-18-part7
+
+![Sequence: submit RecordModelGradeCommand from an HV review, part 8 of 8](architecture/c4/rendered/STR-06-18-part8.svg)
+
+View: STR-06-18-part8
+
+![Sequence: submit RecordModelGradeCommand from an HV review, loop 1: each response item of the HV request, part 1 of 2](architecture/c4/rendered/STR-06-18-loop1.svg)
+
+View: STR-06-18-loop1
+
+![Sequence: submit RecordModelGradeCommand from an HV review, loop 1: each response item of the HV request, part 2 of 2](architecture/c4/rendered/STR-06-18-loop1-part2.svg)
+
+View: STR-06-18-loop1-part2
 
 ##### Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence)
 
 The reviewer sends `client.AgentContext.RecordModelGradeAsync` through the REPL, whose lossless normalizer keeps `correctness` and `completeness` as their exact lexemes (`ScoreLexeme`, section 3.5.4), so `verdict_match` compares the verdict entry's own lexemes. `ScoreLexemeJsonConverter` refuses an invalid lexeme at deserialization, before the dispatch and before any lookup, with 400 `review_score_format`, `review_score_precision`, or `review_score_out_of_range`. The request carries `hvRequestId`, the scores and findings copied from the reviewer's `grades` entry, the receipt paths, the reviewer's turn ids, and `reviewerThreadId`. The model grade reads before it writes, in the order of section 3.1 ("Database-only delegates"): every read-only check (the response, the HV request and its item, and the eight receipt, reviewer, and runtime-identity checks), then the EvaluateStalenessCommand dispatch, then the SerializableWrite. Nested sequence ReadModelGradeInputs looks the stored grade up read-only, checks the response, the HV request, and its item, reads the receipt files and the reviewer's own turn for the eight checks of section 6.3, and only then dispatches EvaluateStalenessCommand for the response (the only writer of `Stale`, which evaluates outside any transaction); the handler then derives the verdict with `ScoreVerdict` at the 0.98 floor, in memory. The SerializableWrite then locks the response and reads and writes only the database: it looks the grade up again, which finds a concurrent continuation that stored it first; re-checks the response's `StatusVersion` and the HV request's status and item that the reads saw (a change ends the attempt, and the unit runs again from its reads); inserts the grade with its findings, receipt hashes, and the thresholds in force, stamps `RecordedUtc`, marks the item `Graded`, completes the HV request with `CompletedUtc` when no item is `Pending`, and dispatches DecideAgentResponseTrustCommand (not gated), whose decision reads the stored status and the latest grades; all of it commits together. The reviewer reports a `Grading` result's FAIL and UNKNOWN findings, or a `Stale` result's changed dependency, to the agent that requested the HV.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Reviewer
-    participant Controller
-    participant Handler
-    participant Store
-    Reviewer->>Controller: POST /responses/{responseId}/grades/model
-    alt score lexeme invalid (ScoreLexemeJsonConverter)
-        Controller-->>Reviewer: 400 review_score_format, _precision, or _out_of_range
-    else lexemes valid
-        Controller->>Handler: SendAsync(RecordModelGradeCommand)
-        Note over Controller,Handler: ref RequestPipeline, gated
-        alt hvRequestId, a jsonl path, a reviewer turn id, or reviewerThreadId missing
-            Controller-->>Reviewer: 400 agent_context_receipt_paths_required
-        else findings invalid
-            Controller-->>Reviewer: 400 validation_error, details.field
-        else grader not the configured one
-            Controller-->>Reviewer: 403 agent_context_grader_not_allowed
-        else request valid
-            Note over Reviewer,Store: ref ReadModelGradeInputs (below), each refusal there answers the reviewer
-            Note over Handler,Store: SerializableWrite, response locked, database only
-            Handler->>Store: IdempotentCreate.Find, a concurrent continuation
-            alt equal grade stored meanwhile
-                Controller-->>Reviewer: 200 the stored AgentResponseGradeResult
-            else a different grade stored meanwhile
-                Controller-->>Reviewer: 409 conflict, retryable false
-            else absent
-                Handler->>Store: re-check, insert the grade, item Graded
-                Handler->>Handler: SendAsync(DecideAgentResponseTrustCommand)
-                Controller-->>Reviewer: 201 AgentResponseGradeResult, responseStatus, hvRequestStatus
-                alt responseStatus Trusted
-                    Note over Reviewer,Controller: the response becomes retrievable context
-                else responseStatus Grading
-                    Note over Reviewer,Controller: report each FAIL and UNKNOWN finding
-                else responseStatus Stale
-                    Note over Reviewer,Controller: report the changed dependency
-                end
-            else retries exhausted
-                Controller-->>Reviewer: 409 conflict, retryable true, nothing saved
-                Note over Reviewer: resubmit the same grade
-            end
-        end
-    end
-```
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence)](architecture/c4/rendered/SubmitOneModelGrade.svg)
+
+View: SubmitOneModelGrade
+
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence), alt 1 branch 1 of 2: score lexeme invalid (ScoreLexemeJsonConverter)](architecture/c4/rendered/SubmitOneModelGrade-alt1-1.svg)
+
+View: SubmitOneModelGrade-alt1-1
+
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence), alt 1 branch 2 of 2: lexemes valid, part 1 of 3](architecture/c4/rendered/SubmitOneModelGrade-alt1-2.svg)
+
+View: SubmitOneModelGrade-alt1-2
+
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence), alt 1 branch 2 of 2: lexemes valid, part 2 of 3](architecture/c4/rendered/SubmitOneModelGrade-alt1-2-part2.svg)
+
+View: SubmitOneModelGrade-alt1-2-part2
+
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence), alt 1 branch 2 of 2: lexemes valid, part 3 of 3](architecture/c4/rendered/SubmitOneModelGrade-alt1-2-part3.svg)
+
+View: SubmitOneModelGrade-alt1-2-part3
+
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence), alt 2 branch 1 of 4: hvRequestId, a jsonl path, a reviewer turn id, or reviewerThreadId missing, part 1 of 2](architecture/c4/rendered/SubmitOneModelGrade-alt2-1.svg)
+
+View: SubmitOneModelGrade-alt2-1
+
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence), alt 2 branch 1 of 4: hvRequestId, a jsonl path, a reviewer turn id, or reviewerThreadId missing, part 2 of 2](architecture/c4/rendered/SubmitOneModelGrade-alt2-1-part2.svg)
+
+View: SubmitOneModelGrade-alt2-1-part2
+
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence), alt 2 branch 2 of 4: findings invalid](architecture/c4/rendered/SubmitOneModelGrade-alt2-2.svg)
+
+View: SubmitOneModelGrade-alt2-2
+
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence), alt 2 branch 3 of 4: grader not the configured one](architecture/c4/rendered/SubmitOneModelGrade-alt2-3.svg)
+
+View: SubmitOneModelGrade-alt2-3
+
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence), alt 2 branch 4 of 4: request valid, part 1 of 5](architecture/c4/rendered/SubmitOneModelGrade-alt2-4.svg)
+
+View: SubmitOneModelGrade-alt2-4
+
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence), alt 2 branch 4 of 4: request valid, part 2 of 5](architecture/c4/rendered/SubmitOneModelGrade-alt2-4-part2.svg)
+
+View: SubmitOneModelGrade-alt2-4-part2
+
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence), alt 2 branch 4 of 4: request valid, part 3 of 5](architecture/c4/rendered/SubmitOneModelGrade-alt2-4-part3.svg)
+
+View: SubmitOneModelGrade-alt2-4-part3
+
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence), alt 2 branch 4 of 4: request valid, part 4 of 5](architecture/c4/rendered/SubmitOneModelGrade-alt2-4-part4.svg)
+
+View: SubmitOneModelGrade-alt2-4-part4
+
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence), alt 2 branch 4 of 4: request valid, part 5 of 5](architecture/c4/rendered/SubmitOneModelGrade-alt2-4-part5.svg)
+
+View: SubmitOneModelGrade-alt2-4-part5
+
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence), alt 3 branch 1 of 4: equal grade stored meanwhile](architecture/c4/rendered/SubmitOneModelGrade-alt3-1.svg)
+
+View: SubmitOneModelGrade-alt3-1
+
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence), alt 3 branch 2 of 4: a different grade stored meanwhile](architecture/c4/rendered/SubmitOneModelGrade-alt3-2.svg)
+
+View: SubmitOneModelGrade-alt3-2
+
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence), alt 3 branch 3 of 4: absent, part 1 of 3](architecture/c4/rendered/SubmitOneModelGrade-alt3-3.svg)
+
+View: SubmitOneModelGrade-alt3-3
+
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence), alt 3 branch 3 of 4: absent, part 2 of 3](architecture/c4/rendered/SubmitOneModelGrade-alt3-3-part2.svg)
+
+View: SubmitOneModelGrade-alt3-3-part2
+
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence), alt 3 branch 3 of 4: absent, part 3 of 3](architecture/c4/rendered/SubmitOneModelGrade-alt3-3-part3.svg)
+
+View: SubmitOneModelGrade-alt3-3-part3
+
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence), alt 4 branch 1 of 3: responseStatus Trusted, part 1 of 3](architecture/c4/rendered/SubmitOneModelGrade-alt4-1.svg)
+
+View: SubmitOneModelGrade-alt4-1
+
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence), alt 4 branch 1 of 3: responseStatus Trusted, part 2 of 3](architecture/c4/rendered/SubmitOneModelGrade-alt4-1-part2.svg)
+
+View: SubmitOneModelGrade-alt4-1-part2
+
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence), alt 4 branch 1 of 3: responseStatus Trusted, part 3 of 3](architecture/c4/rendered/SubmitOneModelGrade-alt4-1-part3.svg)
+
+View: SubmitOneModelGrade-alt4-1-part3
+
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence), alt 4 branch 2 of 3: responseStatus Grading, part 1 of 2](architecture/c4/rendered/SubmitOneModelGrade-alt4-2.svg)
+
+View: SubmitOneModelGrade-alt4-2
+
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence), alt 4 branch 2 of 3: responseStatus Grading, part 2 of 2](architecture/c4/rendered/SubmitOneModelGrade-alt4-2-part2.svg)
+
+View: SubmitOneModelGrade-alt4-2-part2
+
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence), alt 4 branch 3 of 3: responseStatus Stale, part 1 of 2](architecture/c4/rendered/SubmitOneModelGrade-alt4-3.svg)
+
+View: SubmitOneModelGrade-alt4-3
+
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence), alt 4 branch 3 of 3: responseStatus Stale, part 2 of 2](architecture/c4/rendered/SubmitOneModelGrade-alt4-3-part2.svg)
+
+View: SubmitOneModelGrade-alt4-3-part2
+
+![Nested sequence: SubmitOneModelGrade (loop body of the RecordModelGradeCommand sequence), alt 3 branch 4 of 4: retries exhausted](architecture/c4/rendered/SubmitOneModelGrade-alt3-4.svg)
+
+View: SubmitOneModelGrade-alt3-4
 
 ##### Nested sequence: ReadModelGradeInputs (reads of the SubmitOneModelGrade sequence, before any transaction)
 
 Every read here runs outside a transaction, in the order of the unit's checks (section 6.5): the stored grade (IdempotentCreate on the natural key `ResponseId`, `HvRequestId`, kind `Model`, policy `Conflict`, read-only, so a retry after the request completed or the response was rejected still returns the stored grade), the response, each finding's `claimId`, the HV request, the response's status, the HV request's status, the item, and the eight receipt, reviewer, and runtime-identity checks of section 6.3 over the receipt files and the reviewer's own session-log turn. A failed check is answered with `details.check`; the reviewer makes its submission equal its verdict entry and its turn, or reruns the HV on the configured grader. EvaluateStalenessCommand then persists `Stale` when a dependency of the response or its package changed, so the trust decision in the SerializableWrite never trusts it (a `Stale` response stays gradable, and the decision leaves it `Stale`); when that dispatch's own write exhausts its four attempts, the grade answers 409 `conflict` with `retryable: true` and saves nothing. The response's `StatusVersion` and the HV request's state that the SerializableWrite re-checks are the ones read after that dispatch.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Reviewer
-    participant Controller
-    participant Handler
-    participant Store
-    Handler->>Store: IdempotentCreate.Find, read-only
-    alt equal grade stored (a retried continuation)
-        Controller-->>Reviewer: 200 the stored AgentResponseGradeResult
-        Note over Reviewer: continue with the next item
-    else a different grade stored
-        Controller-->>Reviewer: 409 conflict, retryable false
-        Note over Reviewer: report it, never overwrite a stored grade
-    else absent
-        Handler->>Store: load the response, the HV request, and its item
-        alt response not found
-            Controller-->>Reviewer: 404 not_found, details.resource response
-        else a finding names a claim the response does not have
-            Controller-->>Reviewer: 400 validation_error, details.field
-        else HV request not found
-            Controller-->>Reviewer: 404 not_found, details.resource hv_request
-        else response Rejected or Superseded
-            Controller-->>Reviewer: 409 agent_context_response_not_gradable
-        else HV request Completed
-            Controller-->>Reviewer: 409 agent_context_hv_request_closed
-        else response not an item of the HV request
-            Controller-->>Reviewer: 409 agent_context_grade_not_in_hv_request
-        else gradable item of an Open HV request
-            Handler->>Handler: read the receipts, run the eight checks of section 6.3
-            alt a check fails
-                Controller-->>Reviewer: 422 agent_context_receipt_unverified, details.check
-                Note over Reviewer: match the verdict entry and turn, or rerun the HV
-            else all eight pass
-                Handler->>Handler: SendAsync(EvaluateStalenessCommand), this response
-                alt its write exhausted the retries
-                    Controller-->>Reviewer: 409 conflict, retryable true, nothing saved
-                    Note over Reviewer: resubmit the same grade
-                else evaluated: fresh, or Stale persisted
-                    Note over Handler: the status and StatusVersion the write re-checks
-                end
-            end
-        end
-    end
-```
+![Nested sequence: ReadModelGradeInputs (reads of the SubmitOneModelGrade sequence, before any transaction), part 1 of 2](architecture/c4/rendered/ReadModelGradeInputs-Sequence.svg)
+
+View: ReadModelGradeInputs-Sequence
+
+![Nested sequence: ReadModelGradeInputs (reads of the SubmitOneModelGrade sequence, before any transaction), part 2 of 2](architecture/c4/rendered/ReadModelGradeInputs-Sequence-part2.svg)
+
+View: ReadModelGradeInputs-Sequence-part2
+
+![Nested sequence: ReadModelGradeInputs (reads of the SubmitOneModelGrade sequence, before any transaction), alt 1 branch 1 of 3: equal grade stored (a retried continuation)](architecture/c4/rendered/ReadModelGradeInputs-Sequence-alt1-1.svg)
+
+View: ReadModelGradeInputs-Sequence-alt1-1
+
+![Nested sequence: ReadModelGradeInputs (reads of the SubmitOneModelGrade sequence, before any transaction), alt 1 branch 2 of 3: a different grade stored](architecture/c4/rendered/ReadModelGradeInputs-Sequence-alt1-2.svg)
+
+View: ReadModelGradeInputs-Sequence-alt1-2
+
+![Nested sequence: ReadModelGradeInputs (reads of the SubmitOneModelGrade sequence, before any transaction), alt 1 branch 3 of 3: absent, part 1 of 2](architecture/c4/rendered/ReadModelGradeInputs-Sequence-alt1-3.svg)
+
+View: ReadModelGradeInputs-Sequence-alt1-3
+
+![Nested sequence: ReadModelGradeInputs (reads of the SubmitOneModelGrade sequence, before any transaction), alt 1 branch 3 of 3: absent, part 2 of 2](architecture/c4/rendered/ReadModelGradeInputs-Sequence-alt1-3-part2.svg)
+
+View: ReadModelGradeInputs-Sequence-alt1-3-part2
+
+![Nested sequence: ReadModelGradeInputs (reads of the SubmitOneModelGrade sequence, before any transaction), alt 2 branch 1 of 7: response not found](architecture/c4/rendered/ReadModelGradeInputs-Sequence-alt2-1.svg)
+
+View: ReadModelGradeInputs-Sequence-alt2-1
+
+![Nested sequence: ReadModelGradeInputs (reads of the SubmitOneModelGrade sequence, before any transaction), alt 2 branch 2 of 7: a finding names a claim the response does not have](architecture/c4/rendered/ReadModelGradeInputs-Sequence-alt2-2.svg)
+
+View: ReadModelGradeInputs-Sequence-alt2-2
+
+![Nested sequence: ReadModelGradeInputs (reads of the SubmitOneModelGrade sequence, before any transaction), alt 2 branch 3 of 7: HV request not found](architecture/c4/rendered/ReadModelGradeInputs-Sequence-alt2-3.svg)
+
+View: ReadModelGradeInputs-Sequence-alt2-3
+
+![Nested sequence: ReadModelGradeInputs (reads of the SubmitOneModelGrade sequence, before any transaction), alt 2 branch 4 of 7: response Rejected or Superseded](architecture/c4/rendered/ReadModelGradeInputs-Sequence-alt2-4.svg)
+
+View: ReadModelGradeInputs-Sequence-alt2-4
+
+![Nested sequence: ReadModelGradeInputs (reads of the SubmitOneModelGrade sequence, before any transaction), alt 2 branch 5 of 7: HV request Completed](architecture/c4/rendered/ReadModelGradeInputs-Sequence-alt2-5.svg)
+
+View: ReadModelGradeInputs-Sequence-alt2-5
+
+![Nested sequence: ReadModelGradeInputs (reads of the SubmitOneModelGrade sequence, before any transaction), alt 2 branch 6 of 7: response not an item of the HV request](architecture/c4/rendered/ReadModelGradeInputs-Sequence-alt2-6.svg)
+
+View: ReadModelGradeInputs-Sequence-alt2-6
+
+![Nested sequence: ReadModelGradeInputs (reads of the SubmitOneModelGrade sequence, before any transaction), alt 2 branch 7 of 7: gradable item of an Open HV request, part 1 of 2](architecture/c4/rendered/ReadModelGradeInputs-Sequence-alt2-7.svg)
+
+View: ReadModelGradeInputs-Sequence-alt2-7
+
+![Nested sequence: ReadModelGradeInputs (reads of the SubmitOneModelGrade sequence, before any transaction), alt 2 branch 7 of 7: gradable item of an Open HV request, part 2 of 2](architecture/c4/rendered/ReadModelGradeInputs-Sequence-alt2-7-part2.svg)
+
+View: ReadModelGradeInputs-Sequence-alt2-7-part2
+
+![Nested sequence: ReadModelGradeInputs (reads of the SubmitOneModelGrade sequence, before any transaction), alt 3 branch 1 of 2: a check fails](architecture/c4/rendered/ReadModelGradeInputs-Sequence-alt3-1.svg)
+
+View: ReadModelGradeInputs-Sequence-alt3-1
+
+![Nested sequence: ReadModelGradeInputs (reads of the SubmitOneModelGrade sequence, before any transaction), alt 3 branch 2 of 2: all eight pass, part 1 of 2](architecture/c4/rendered/ReadModelGradeInputs-Sequence-alt3-2.svg)
+
+View: ReadModelGradeInputs-Sequence-alt3-2
+
+![Nested sequence: ReadModelGradeInputs (reads of the SubmitOneModelGrade sequence, before any transaction), alt 3 branch 2 of 2: all eight pass, part 2 of 2](architecture/c4/rendered/ReadModelGradeInputs-Sequence-alt3-2-part2.svg)
+
+View: ReadModelGradeInputs-Sequence-alt3-2-part2
+
+![Nested sequence: ReadModelGradeInputs (reads of the SubmitOneModelGrade sequence, before any transaction), alt 4 branch 1 of 2: its write exhausted the retries](architecture/c4/rendered/ReadModelGradeInputs-Sequence-alt4-1.svg)
+
+View: ReadModelGradeInputs-Sequence-alt4-1
+
+![Nested sequence: ReadModelGradeInputs (reads of the SubmitOneModelGrade sequence, before any transaction), alt 4 branch 2 of 2: evaluated: fresh, or Stale persisted, part 1 of 2](architecture/c4/rendered/ReadModelGradeInputs-Sequence-alt4-2.svg)
+
+View: ReadModelGradeInputs-Sequence-alt4-2
+
+![Nested sequence: ReadModelGradeInputs (reads of the SubmitOneModelGrade sequence, before any transaction), alt 4 branch 2 of 2: evaluated: fresh, or Stale persisted, part 2 of 2](architecture/c4/rendered/ReadModelGradeInputs-Sequence-alt4-2-part2.svg)
+
+View: ReadModelGradeInputs-Sequence-alt4-2-part2
 
 #### Sequence: submit RejectAgentResponseCommand
 
 `ResponseStatusTransition` (section 3.5.5) applies the side effects in the same transaction: the projection row becomes `Pending` for removal when it holds a `GraphRagDocumentId` (otherwise `Removed`), the response's `Pending` items in `Open` HV requests become `Closed` (`rejected`), and each request left with no `Pending` item becomes `Completed` with `CompletedUtc`.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Caller
-    participant Controller
-    participant Handler
-    participant Store
-    Caller->>Controller: POST /responses/{responseId}/reject (reason)
-    Controller->>Handler: SendAsync(RejectAgentResponseCommand)
-    Note over Controller,Handler: ref RequestPipeline, gated
-    alt blank reason
-        Controller-->>Caller: 400 validation_error, details.field reason
-    else reason given
-        Note over Handler,Store: SerializableWrite, responseId locked
-        Handler->>Store: ResponseStatusTransition(responseId, Rejected, reason)
-        alt response not found
-            Controller-->>Caller: 404 not_found, details.resource response
-        else already Rejected (same transition)
-            Controller-->>Caller: 200 AgentResponseResult, unchanged
-        else Superseded (the lifecycle does not allow it)
-            Controller-->>Caller: 409 agent_context_transition_invalid
-        else transitioned
-            Controller-->>Caller: 200 AgentResponseResult, status Rejected
-            Note over Caller: excluded from trusted retrieval
-        else retries exhausted
-            Controller-->>Caller: 409 conflict, retryable true, nothing saved
-            Note over Caller: retry the same request within the bounded retries of C9
-        end
-    end
-```
+![Sequence: submit RejectAgentResponseCommand, part 1 of 3](architecture/c4/rendered/STR-06-19.svg)
+
+View: STR-06-19
+
+![Sequence: submit RejectAgentResponseCommand, part 2 of 3](architecture/c4/rendered/STR-06-19-part2.svg)
+
+View: STR-06-19-part2
+
+![Sequence: submit RejectAgentResponseCommand, part 3 of 3](architecture/c4/rendered/STR-06-19-part3.svg)
+
+View: STR-06-19-part3
+
+![Sequence: submit RejectAgentResponseCommand, alt 1 branch 1 of 2: blank reason](architecture/c4/rendered/STR-06-19-alt1-1.svg)
+
+View: STR-06-19-alt1-1
+
+![Sequence: submit RejectAgentResponseCommand, alt 1 branch 2 of 2: reason given, part 1 of 3](architecture/c4/rendered/STR-06-19-alt1-2.svg)
+
+View: STR-06-19-alt1-2
+
+![Sequence: submit RejectAgentResponseCommand, alt 1 branch 2 of 2: reason given, part 2 of 3](architecture/c4/rendered/STR-06-19-alt1-2-part2.svg)
+
+View: STR-06-19-alt1-2-part2
+
+![Sequence: submit RejectAgentResponseCommand, alt 1 branch 2 of 2: reason given, part 3 of 3](architecture/c4/rendered/STR-06-19-alt1-2-part3.svg)
+
+View: STR-06-19-alt1-2-part3
+
+![Sequence: submit RejectAgentResponseCommand, alt 2 branch 1 of 5: response not found](architecture/c4/rendered/STR-06-19-alt2-1.svg)
+
+View: STR-06-19-alt2-1
+
+![Sequence: submit RejectAgentResponseCommand, alt 2 branch 2 of 5: already Rejected (same transition)](architecture/c4/rendered/STR-06-19-alt2-2.svg)
+
+View: STR-06-19-alt2-2
+
+![Sequence: submit RejectAgentResponseCommand, alt 2 branch 3 of 5: Superseded (the lifecycle does not allow it)](architecture/c4/rendered/STR-06-19-alt2-3.svg)
+
+View: STR-06-19-alt2-3
+
+![Sequence: submit RejectAgentResponseCommand, alt 2 branch 4 of 5: transitioned](architecture/c4/rendered/STR-06-19-alt2-4.svg)
+
+View: STR-06-19-alt2-4
+
+![Sequence: submit RejectAgentResponseCommand, alt 2 branch 5 of 5: retries exhausted](architecture/c4/rendered/STR-06-19-alt2-5.svg)
+
+View: STR-06-19-alt2-5
 
 #### Sequence: submit SupersedeAgentResponseCommand
 
 Both responses are locked in ascending `ResponseId` order. `ResponseStatusTransition` sets the original `Superseded` with its side effects (projection row, HV items `Closed` with `superseded`), and `RelationshipWriter` writes the `supersedes` link and checks the cycle in the same transaction, so the supersede chain has one data source (section 3.5.5).
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Caller
-    participant Controller
-    participant Handler
-    participant Store
-    Caller->>Controller: POST /responses/{responseId}/supersede
-    Note over Caller,Controller: supersededByResponseId, reason
-    Controller->>Handler: SendAsync(SupersedeAgentResponseCommand)
-    Note over Controller,Handler: ref RequestPipeline, gated
-    alt self-reference or blank reason
-        Controller-->>Caller: 400 validation_error, details.field
-    else request valid
-        Note over Handler,Store: SerializableWrite, both responses locked
-        Handler->>Store: load the original and the replacement
-        alt either not found
-            Controller-->>Caller: 404 not_found, details.resource response
-        else other request, or replacement Rejected or Superseded
-            Controller-->>Caller: 409 agent_context_supersede_invalid
-        else both valid
-            Handler->>Store: ResponseStatusTransition(original, Superseded, replacement)
-            alt already superseded by this replacement
-                Controller-->>Caller: 200 AgentResponseResult, unchanged
-            else original Rejected, or superseded by another response
-                Controller-->>Caller: 409 agent_context_transition_invalid
-            else transitioned
-                Handler->>Store: RelationshipWriter: replacement supersedes original
-                alt the link would close a cycle
-                    Controller-->>Caller: 409 agent_context_supersede_invalid
-                    Note over Caller: rolled back, nothing saved
-                else link written
-                    Controller-->>Caller: 200 AgentResponseResult, status Superseded
-                    Note over Caller: retrieval now returns the replacement only
-                end
-            end
-        else retries exhausted
-            Controller-->>Caller: 409 conflict, retryable true, nothing saved
-            Note over Caller: retry the same request within the bounded retries of C9
-        end
-    end
-```
+![Sequence: submit SupersedeAgentResponseCommand, part 1 of 3](architecture/c4/rendered/STR-06-20.svg)
+
+View: STR-06-20
+
+![Sequence: submit SupersedeAgentResponseCommand, part 2 of 3](architecture/c4/rendered/STR-06-20-part2.svg)
+
+View: STR-06-20-part2
+
+![Sequence: submit SupersedeAgentResponseCommand, part 3 of 3](architecture/c4/rendered/STR-06-20-part3.svg)
+
+View: STR-06-20-part3
+
+![Sequence: submit SupersedeAgentResponseCommand, alt 1 branch 1 of 2: self-reference or blank reason](architecture/c4/rendered/STR-06-20-alt1-1.svg)
+
+View: STR-06-20-alt1-1
+
+![Sequence: submit SupersedeAgentResponseCommand, alt 1 branch 2 of 2: request valid, part 1 of 4](architecture/c4/rendered/STR-06-20-alt1-2.svg)
+
+View: STR-06-20-alt1-2
+
+![Sequence: submit SupersedeAgentResponseCommand, alt 1 branch 2 of 2: request valid, part 2 of 4](architecture/c4/rendered/STR-06-20-alt1-2-part2.svg)
+
+View: STR-06-20-alt1-2-part2
+
+![Sequence: submit SupersedeAgentResponseCommand, alt 1 branch 2 of 2: request valid, part 3 of 4](architecture/c4/rendered/STR-06-20-alt1-2-part3.svg)
+
+View: STR-06-20-alt1-2-part3
+
+![Sequence: submit SupersedeAgentResponseCommand, alt 1 branch 2 of 2: request valid, part 4 of 4](architecture/c4/rendered/STR-06-20-alt1-2-part4.svg)
+
+View: STR-06-20-alt1-2-part4
+
+![Sequence: submit SupersedeAgentResponseCommand, alt 2 branch 1 of 4: either not found](architecture/c4/rendered/STR-06-20-alt2-1.svg)
+
+View: STR-06-20-alt2-1
+
+![Sequence: submit SupersedeAgentResponseCommand, alt 2 branch 2 of 4: other request, or replacement Rejected or Superseded](architecture/c4/rendered/STR-06-20-alt2-2.svg)
+
+View: STR-06-20-alt2-2
+
+![Sequence: submit SupersedeAgentResponseCommand, alt 2 branch 3 of 4: both valid, part 1 of 2](architecture/c4/rendered/STR-06-20-alt2-3.svg)
+
+View: STR-06-20-alt2-3
+
+![Sequence: submit SupersedeAgentResponseCommand, alt 2 branch 3 of 4: both valid, part 2 of 2](architecture/c4/rendered/STR-06-20-alt2-3-part2.svg)
+
+View: STR-06-20-alt2-3-part2
+
+![Sequence: submit SupersedeAgentResponseCommand, alt 3 branch 1 of 3: already superseded by this replacement](architecture/c4/rendered/STR-06-20-alt3-1.svg)
+
+View: STR-06-20-alt3-1
+
+![Sequence: submit SupersedeAgentResponseCommand, alt 3 branch 2 of 3: original Rejected, or superseded by another response, part 1 of 2](architecture/c4/rendered/STR-06-20-alt3-2.svg)
+
+View: STR-06-20-alt3-2
+
+![Sequence: submit SupersedeAgentResponseCommand, alt 3 branch 2 of 3: original Rejected, or superseded by another response, part 2 of 2](architecture/c4/rendered/STR-06-20-alt3-2-part2.svg)
+
+View: STR-06-20-alt3-2-part2
+
+![Sequence: submit SupersedeAgentResponseCommand, alt 3 branch 3 of 3: transitioned, part 1 of 2](architecture/c4/rendered/STR-06-20-alt3-3.svg)
+
+View: STR-06-20-alt3-3
+
+![Sequence: submit SupersedeAgentResponseCommand, alt 3 branch 3 of 3: transitioned, part 2 of 2](architecture/c4/rendered/STR-06-20-alt3-3-part2.svg)
+
+View: STR-06-20-alt3-3-part2
+
+![Sequence: submit SupersedeAgentResponseCommand, alt 4 branch 1 of 2: the link would close a cycle](architecture/c4/rendered/STR-06-20-alt4-1.svg)
+
+View: STR-06-20-alt4-1
+
+![Sequence: submit SupersedeAgentResponseCommand, alt 4 branch 2 of 2: link written](architecture/c4/rendered/STR-06-20-alt4-2.svg)
+
+View: STR-06-20-alt4-2
+
+![Sequence: submit SupersedeAgentResponseCommand, alt 2 branch 4 of 4: retries exhausted](architecture/c4/rendered/STR-06-20-alt2-4.svg)
+
+View: STR-06-20-alt2-4
 
 #### Sequence: submit EvaluateStalenessCommand
 
 This unit is the only writer of `Stale` (section 3.1, "Database-only delegates"). The two grade units dispatch it for their response after their read-only checks and before their own SerializableWrite, and ProjectOneResponse before its row saves (section 3.5.5, `IResponseStalenessRule`), so each reads the status it leaves; and the units whose commit moved a response out of `Trusted` or into `Rejected`, `Superseded`, or `Stale` (the grade units through the trust decision, RejectAgentResponseCommand, SupersedeAgentResponseCommand, and this unit) dispatch it after that commit with the `responseIds` of the responses that depend on that response, only while Mode is not `Off`, logging a failed dispatch without changing their own answer (section 3.1, Dependent responses). Each selected response is read first and written second (nested activity EvaluateOneResponseStaleness): `IResponseStalenessRule` reads its dependencies outside any transaction (files at the workspace HEAD commit; never the request's own turn or a Rule file outside version control), and a changed dependency persists `Stale` through `ResponseStatusTransition` in the response's own SerializableWrite, which locks it and re-checks the `StatusVersion` the read saw (a change ends the attempt, and that response is read again).
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Caller
-    participant Controller
-    participant Handler
-    participant Store
-    Caller->>Controller: POST /staleness/evaluate (responseIds)
-    Controller->>Handler: SendAsync(EvaluateStalenessCommand)
-    Note over Controller,Handler: ref RequestPipeline, gated
-    Handler->>Store: ResponseIdList(responseIds)
-    alt malformed, over 1000 ids, or an id without rsp-
-        Controller-->>Caller: 400 validation_error, details.field responseIds
-    else selected (an empty list selects every Submitted, Grading, Trusted)
-        loop each selected response
-            Note over Handler,Store: ref EvaluateOneResponseStaleness: read, then SerializableWrite
-        end
-        alt every response evaluated
-            Note over Handler: each newly Stale response: EvaluateStalenessCommand dispatched for its dependents after commit
-            Controller-->>Caller: 200 evaluatedCount, newlyStale, notFound
-            Note over Caller: list each stale response with its changed ref
-        else a response's write exhausted its retries
-            Controller-->>Caller: 409 conflict, retryable true
-            Note over Caller: retry the same request within the bounded retries of C9
-        end
-    end
-```
+![Sequence: submit EvaluateStalenessCommand, part 1 of 4](architecture/c4/rendered/STR-06-21.svg)
+
+View: STR-06-21
+
+![Sequence: submit EvaluateStalenessCommand, part 2 of 4](architecture/c4/rendered/STR-06-21-part2.svg)
+
+View: STR-06-21-part2
+
+![Sequence: submit EvaluateStalenessCommand, part 3 of 4](architecture/c4/rendered/STR-06-21-part3.svg)
+
+View: STR-06-21-part3
+
+![Sequence: submit EvaluateStalenessCommand, part 4 of 4](architecture/c4/rendered/STR-06-21-part4.svg)
+
+View: STR-06-21-part4
+
+![Sequence: submit EvaluateStalenessCommand, alt 1 branch 1 of 2: malformed, over 1000 ids, or an id without rsp-](architecture/c4/rendered/STR-06-21-alt1-1.svg)
+
+View: STR-06-21-alt1-1
+
+![Sequence: submit EvaluateStalenessCommand, alt 1 branch 2 of 2: selected (an empty list selects every Submitted, Grading, Trusted), part 1 of 3](architecture/c4/rendered/STR-06-21-alt1-2.svg)
+
+View: STR-06-21-alt1-2
+
+![Sequence: submit EvaluateStalenessCommand, alt 1 branch 2 of 2: selected (an empty list selects every Submitted, Grading, Trusted), part 2 of 3](architecture/c4/rendered/STR-06-21-alt1-2-part2.svg)
+
+View: STR-06-21-alt1-2-part2
+
+![Sequence: submit EvaluateStalenessCommand, alt 1 branch 2 of 2: selected (an empty list selects every Submitted, Grading, Trusted), part 3 of 3](architecture/c4/rendered/STR-06-21-alt1-2-part3.svg)
+
+View: STR-06-21-alt1-2-part3
+
+![Sequence: submit EvaluateStalenessCommand, loop 1: each selected response, part 1 of 3](architecture/c4/rendered/STR-06-21-loop1.svg)
+
+View: STR-06-21-loop1
+
+![Sequence: submit EvaluateStalenessCommand, loop 1: each selected response, part 2 of 3](architecture/c4/rendered/STR-06-21-loop1-part2.svg)
+
+View: STR-06-21-loop1-part2
+
+![Sequence: submit EvaluateStalenessCommand, loop 1: each selected response, part 3 of 3](architecture/c4/rendered/STR-06-21-loop1-part3.svg)
+
+View: STR-06-21-loop1-part3
+
+![Sequence: submit EvaluateStalenessCommand, alt 2 branch 1 of 2: every response evaluated, part 1 of 4](architecture/c4/rendered/STR-06-21-alt2-1.svg)
+
+View: STR-06-21-alt2-1
+
+![Sequence: submit EvaluateStalenessCommand, alt 2 branch 1 of 2: every response evaluated, part 2 of 4](architecture/c4/rendered/STR-06-21-alt2-1-part2.svg)
+
+View: STR-06-21-alt2-1-part2
+
+![Sequence: submit EvaluateStalenessCommand, alt 2 branch 1 of 2: every response evaluated, part 3 of 4](architecture/c4/rendered/STR-06-21-alt2-1-part3.svg)
+
+View: STR-06-21-alt2-1-part3
+
+![Sequence: submit EvaluateStalenessCommand, alt 2 branch 1 of 2: every response evaluated, part 4 of 4](architecture/c4/rendered/STR-06-21-alt2-1-part4.svg)
+
+View: STR-06-21-alt2-1-part4
+
+![Sequence: submit EvaluateStalenessCommand, alt 2 branch 2 of 2: a response's write exhausted its retries](architecture/c4/rendered/STR-06-21-alt2-2.svg)
+
+View: STR-06-21-alt2-2
 
 #### Sequence: submit CreateAgentContextRelationshipCommand
 
 `SourceResolver` resolves both refs and hashes the target before the SerializableWrite, whose delegate reads and writes only the database (section 3.1, "Database-only delegates"). `RelationshipWriter` (section 3.5.5) records that hash as `ToSha256` and `CreatedBy` (the calling agent), returns an identical link as stored (IdempotentCreate with policy `ReturnStored`), and refuses a client's `supersedes` link; a client therefore never reaches the writer's cycle check, which only SupersedeAgentResponseCommand uses.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Caller
-    participant Controller
-    participant Handler
-    participant Store
-    participant Resolver as SourceResolver
-    Caller->>Controller: POST /relationships (CreateAgentContextRelationshipRequest)
-    Controller->>Handler: SendAsync(CreateAgentContextRelationshipCommand)
-    Note over Controller,Handler: ref RequestPipeline, gated
-    alt unknown kind or type, or a self-link
-        Controller-->>Caller: 400 agent_context_relationship_invalid
-    else link well formed
-        Handler->>Resolver: resolve both refs, hash the target
-        alt a ref names no existing source
-            Controller-->>Caller: 400 validation_error, details.field the ref
-        else both refs resolve
-            Note over Handler,Store: SerializableWrite, database only
-            Handler->>Store: RelationshipWriter(link, createdBy the agent)
-            alt type supersedes
-                Controller-->>Caller: 400 validation_error, details.field type
-            else identical link stored
-                Controller-->>Caller: 200 link, created false
-            else new link
-                Controller-->>Caller: 201 link, created true
-            else retries exhausted
-                Controller-->>Caller: 409 conflict, retryable true, nothing saved
-                Note over Caller: retry the same request within the bounded retries of C9
-            end
-        end
-    end
-```
+![Sequence: submit CreateAgentContextRelationshipCommand, part 1 of 3](architecture/c4/rendered/STR-06-22.svg)
+
+View: STR-06-22
+
+![Sequence: submit CreateAgentContextRelationshipCommand, part 2 of 3](architecture/c4/rendered/STR-06-22-part2.svg)
+
+View: STR-06-22-part2
+
+![Sequence: submit CreateAgentContextRelationshipCommand, part 3 of 3](architecture/c4/rendered/STR-06-22-part3.svg)
+
+View: STR-06-22-part3
+
+![Sequence: submit CreateAgentContextRelationshipCommand, alt 1 branch 1 of 2: unknown kind or type, or a self-link](architecture/c4/rendered/STR-06-22-alt1-1.svg)
+
+View: STR-06-22-alt1-1
+
+![Sequence: submit CreateAgentContextRelationshipCommand, alt 1 branch 2 of 2: link well formed, part 1 of 2](architecture/c4/rendered/STR-06-22-alt1-2.svg)
+
+View: STR-06-22-alt1-2
+
+![Sequence: submit CreateAgentContextRelationshipCommand, alt 1 branch 2 of 2: link well formed, part 2 of 2](architecture/c4/rendered/STR-06-22-alt1-2-part2.svg)
+
+View: STR-06-22-alt1-2-part2
+
+![Sequence: submit CreateAgentContextRelationshipCommand, alt 2 branch 1 of 2: a ref names no existing source](architecture/c4/rendered/STR-06-22-alt2-1.svg)
+
+View: STR-06-22-alt2-1
+
+![Sequence: submit CreateAgentContextRelationshipCommand, alt 2 branch 2 of 2: both refs resolve, part 1 of 3](architecture/c4/rendered/STR-06-22-alt2-2.svg)
+
+View: STR-06-22-alt2-2
+
+![Sequence: submit CreateAgentContextRelationshipCommand, alt 2 branch 2 of 2: both refs resolve, part 2 of 3](architecture/c4/rendered/STR-06-22-alt2-2-part2.svg)
+
+View: STR-06-22-alt2-2-part2
+
+![Sequence: submit CreateAgentContextRelationshipCommand, alt 2 branch 2 of 2: both refs resolve, part 3 of 3](architecture/c4/rendered/STR-06-22-alt2-2-part3.svg)
+
+View: STR-06-22-alt2-2-part3
+
+![Sequence: submit CreateAgentContextRelationshipCommand, alt 3 branch 1 of 4: type supersedes](architecture/c4/rendered/STR-06-22-alt3-1.svg)
+
+View: STR-06-22-alt3-1
+
+![Sequence: submit CreateAgentContextRelationshipCommand, alt 3 branch 2 of 4: identical link stored](architecture/c4/rendered/STR-06-22-alt3-2.svg)
+
+View: STR-06-22-alt3-2
+
+![Sequence: submit CreateAgentContextRelationshipCommand, alt 3 branch 3 of 4: new link](architecture/c4/rendered/STR-06-22-alt3-3.svg)
+
+View: STR-06-22-alt3-3
+
+![Sequence: submit CreateAgentContextRelationshipCommand, alt 3 branch 4 of 4: retries exhausted](architecture/c4/rendered/STR-06-22-alt3-4.svg)
+
+View: STR-06-22-alt3-4
 
 #### Sequence: submit DeleteAgentContextRelationshipCommand
 
 A link a command created is protected because the staleness rule reads it or it holds the supersede chain: Build's `derived_from` and `relevant_to`, Submit's `derived_from` and `supports`, and Supersede's `supersedes`.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Caller
-    participant Controller
-    participant Handler
-    participant Store
-    Caller->>Controller: DELETE /relationships/{relationshipId}
-    Controller->>Handler: SendAsync(DeleteAgentContextRelationshipCommand)
-    Note over Controller,Handler: ref RequestPipeline, gated
-    Handler->>Store: load the link
-    alt not found
-        Controller-->>Caller: 404 not_found, details.resource relationship
-    else made by a command (CreatedBy names it)
-        Controller-->>Caller: 409 agent_context_relationship_protected
-        Note over Caller: report the link as protected
-    else made by a client
-        Handler->>Store: delete the link
-        Controller-->>Caller: 204
-    end
-```
+![Sequence: submit DeleteAgentContextRelationshipCommand, part 1 of 4](architecture/c4/rendered/STR-06-23.svg)
+
+View: STR-06-23
+
+![Sequence: submit DeleteAgentContextRelationshipCommand, part 2 of 4](architecture/c4/rendered/STR-06-23-part2.svg)
+
+View: STR-06-23-part2
+
+![Sequence: submit DeleteAgentContextRelationshipCommand, part 3 of 4](architecture/c4/rendered/STR-06-23-part3.svg)
+
+View: STR-06-23-part3
+
+![Sequence: submit DeleteAgentContextRelationshipCommand, part 4 of 4](architecture/c4/rendered/STR-06-23-part4.svg)
+
+View: STR-06-23-part4
+
+![Sequence: submit DeleteAgentContextRelationshipCommand, alt 1 branch 1 of 3: not found](architecture/c4/rendered/STR-06-23-alt1-1.svg)
+
+View: STR-06-23-alt1-1
+
+![Sequence: submit DeleteAgentContextRelationshipCommand, alt 1 branch 2 of 3: made by a command (CreatedBy names it)](architecture/c4/rendered/STR-06-23-alt1-2.svg)
+
+View: STR-06-23-alt1-2
+
+![Sequence: submit DeleteAgentContextRelationshipCommand, alt 1 branch 3 of 3: made by a client, part 1 of 2](architecture/c4/rendered/STR-06-23-alt1-3.svg)
+
+View: STR-06-23-alt1-3
+
+![Sequence: submit DeleteAgentContextRelationshipCommand, alt 1 branch 3 of 3: made by a client, part 2 of 2](architecture/c4/rendered/STR-06-23-alt1-3-part2.svg)
+
+View: STR-06-23-alt1-3-part2
 
 #### Sequence: submit QueryAgentContextRelationshipsQuery
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Caller
-    participant Controller
-    participant Handler
-    participant Store
-    Caller->>Controller: GET /relationships?nodeKind&nodeRef&type&direction&limit&offset
-    Controller->>Handler: QueryAsync(QueryAgentContextRelationshipsQuery)
-    Note over Controller,Handler: ref RequestPipeline, not gated: readable in Mode Off
-    alt kind without ref, unknown type or direction, or outside PageBounds
-        Controller-->>Caller: 400 validation_error, details.field
-    else filters valid
-        Handler->>Store: PagedQuery: out, in, or both, by type
-        Store-->>Handler: PageResult, CreatedUtc then RelationshipId
-        Controller-->>Caller: 200 PageResult of relationships
-        Note over Caller: PagedQuery paging
-    end
-```
+![Sequence: submit QueryAgentContextRelationshipsQuery, part 1 of 4](architecture/c4/rendered/STR-06-24.svg)
+
+View: STR-06-24
+
+![Sequence: submit QueryAgentContextRelationshipsQuery, part 2 of 4](architecture/c4/rendered/STR-06-24-part2.svg)
+
+View: STR-06-24-part2
+
+![Sequence: submit QueryAgentContextRelationshipsQuery, part 3 of 4](architecture/c4/rendered/STR-06-24-part3.svg)
+
+View: STR-06-24-part3
+
+![Sequence: submit QueryAgentContextRelationshipsQuery, part 4 of 4](architecture/c4/rendered/STR-06-24-part4.svg)
+
+View: STR-06-24-part4
+
+![Sequence: submit QueryAgentContextRelationshipsQuery, alt 1 branch 1 of 2: kind without ref, unknown type or direction, or outside PageBounds, part 1 of 2](architecture/c4/rendered/STR-06-24-alt1-1.svg)
+
+View: STR-06-24-alt1-1
+
+![Sequence: submit QueryAgentContextRelationshipsQuery, alt 1 branch 1 of 2: kind without ref, unknown type or direction, or outside PageBounds, part 2 of 2](architecture/c4/rendered/STR-06-24-alt1-1-part2.svg)
+
+View: STR-06-24-alt1-1-part2
+
+![Sequence: submit QueryAgentContextRelationshipsQuery, alt 1 branch 2 of 2: filters valid, part 1 of 2](architecture/c4/rendered/STR-06-24-alt1-2.svg)
+
+View: STR-06-24-alt1-2
+
+![Sequence: submit QueryAgentContextRelationshipsQuery, alt 1 branch 2 of 2: filters valid, part 2 of 2](architecture/c4/rendered/STR-06-24-alt1-2-part2.svg)
+
+View: STR-06-24-alt1-2-part2
 
 #### Sequence: submit RetrieveAgentContextCandidatesQuery
 
 `Caller` is a surface, or BuildAgentContextPackageCommand's handler through `QueryAsync` in nested sequence ReadBuildInputs, before any transaction. The request carries `queryText`, `agent`, `sessionId`, `requestId`, `focusRefs`, `kinds`, `limit`, `trustedOnly`, and `preferGraphRag`. A named turn is `agent`, `sessionId`, and `requestId`, all three or none, and is never itself a candidate. Nested sequence ChooseRetrievalPath gathers the candidates. Every `PriorResponse` candidate is then evaluated by `IResponseStalenessRule` read-only, so only `Trusted` and fresh responses are kept and nothing is written; `CandidateRanker` (section 3.5.5) orders by score, then `sourceRef`, and the result is cut to `limit`. The same inputs give the same candidates on the relational path.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Caller
-    participant Controller
-    participant Handler
-    participant Store
-    Caller->>Controller: POST /retrieve (RetrieveAgentContextCandidatesRequest)
-    Controller->>Handler: QueryAsync(RetrieveAgentContextCandidatesQuery)
-    Note over Controller,Handler: ref RequestPipeline, not gated: readable in Mode Off
-    alt trustedOnly false for PriorResponse, partial turn key, or limit outside PageBounds
-        Controller-->>Caller: 400 validation_error, details.field
-    else request valid
-        opt turn named
-            Handler->>Store: TurnLocator(agent, sessionId, requestId)
-        end
-        alt InvalidIdentifier
-            Controller-->>Caller: 400 validation_error, details.field
-        else SessionNotFound or TurnNotFound
-            Controller-->>Caller: 404 not_found, details.resource session_turn
-        else no turn named, or the turn found
-            Note over Handler,Store: ref ChooseRetrievalPath (below): candidates, retrievalPath, fallbackReason
-            Handler->>Handler: IResponseStalenessRule, read-only
-            Handler->>Handler: CandidateRanker, then cut to limit
-            Controller-->>Caller: 200 retrievalPath, fallbackReason when one applied
-            Note over Caller: use the candidates in rank order
-        end
-    end
-```
+![Sequence: submit RetrieveAgentContextCandidatesQuery, part 1 of 4](architecture/c4/rendered/STR-06-25.svg)
+
+View: STR-06-25
+
+![Sequence: submit RetrieveAgentContextCandidatesQuery, part 2 of 4](architecture/c4/rendered/STR-06-25-part2.svg)
+
+View: STR-06-25-part2
+
+![Sequence: submit RetrieveAgentContextCandidatesQuery, part 3 of 4](architecture/c4/rendered/STR-06-25-part3.svg)
+
+View: STR-06-25-part3
+
+![Sequence: submit RetrieveAgentContextCandidatesQuery, part 4 of 4](architecture/c4/rendered/STR-06-25-part4.svg)
+
+View: STR-06-25-part4
+
+![Sequence: submit RetrieveAgentContextCandidatesQuery, alt 1 branch 1 of 2: trustedOnly false for PriorResponse, partial turn key, or limit outside PageBounds, part 1 of 2](architecture/c4/rendered/STR-06-25-alt1-1.svg)
+
+View: STR-06-25-alt1-1
+
+![Sequence: submit RetrieveAgentContextCandidatesQuery, alt 1 branch 1 of 2: trustedOnly false for PriorResponse, partial turn key, or limit outside PageBounds, part 2 of 2](architecture/c4/rendered/STR-06-25-alt1-1-part2.svg)
+
+View: STR-06-25-alt1-1-part2
+
+![Sequence: submit RetrieveAgentContextCandidatesQuery, alt 1 branch 2 of 2: request valid, part 1 of 2](architecture/c4/rendered/STR-06-25-alt1-2.svg)
+
+View: STR-06-25-alt1-2
+
+![Sequence: submit RetrieveAgentContextCandidatesQuery, alt 1 branch 2 of 2: request valid, part 2 of 2](architecture/c4/rendered/STR-06-25-alt1-2-part2.svg)
+
+View: STR-06-25-alt1-2-part2
+
+![Sequence: submit RetrieveAgentContextCandidatesQuery, opt 1: turn named](architecture/c4/rendered/STR-06-25-opt1.svg)
+
+View: STR-06-25-opt1
+
+![Sequence: submit RetrieveAgentContextCandidatesQuery, alt 2 branch 1 of 3: InvalidIdentifier](architecture/c4/rendered/STR-06-25-alt2-1.svg)
+
+View: STR-06-25-alt2-1
+
+![Sequence: submit RetrieveAgentContextCandidatesQuery, alt 2 branch 2 of 3: SessionNotFound or TurnNotFound](architecture/c4/rendered/STR-06-25-alt2-2.svg)
+
+View: STR-06-25-alt2-2
+
+![Sequence: submit RetrieveAgentContextCandidatesQuery, alt 2 branch 3 of 3: no turn named, or the turn found, part 1 of 6](architecture/c4/rendered/STR-06-25-alt2-3.svg)
+
+View: STR-06-25-alt2-3
+
+![Sequence: submit RetrieveAgentContextCandidatesQuery, alt 2 branch 3 of 3: no turn named, or the turn found, part 2 of 6](architecture/c4/rendered/STR-06-25-alt2-3-part2.svg)
+
+View: STR-06-25-alt2-3-part2
+
+![Sequence: submit RetrieveAgentContextCandidatesQuery, alt 2 branch 3 of 3: no turn named, or the turn found, part 3 of 6](architecture/c4/rendered/STR-06-25-alt2-3-part3.svg)
+
+View: STR-06-25-alt2-3-part3
+
+![Sequence: submit RetrieveAgentContextCandidatesQuery, alt 2 branch 3 of 3: no turn named, or the turn found, part 4 of 6](architecture/c4/rendered/STR-06-25-alt2-3-part4.svg)
+
+View: STR-06-25-alt2-3-part4
+
+![Sequence: submit RetrieveAgentContextCandidatesQuery, alt 2 branch 3 of 3: no turn named, or the turn found, part 5 of 6](architecture/c4/rendered/STR-06-25-alt2-3-part5.svg)
+
+View: STR-06-25-alt2-3-part5
+
+![Sequence: submit RetrieveAgentContextCandidatesQuery, alt 2 branch 3 of 3: no turn named, or the turn found, part 6 of 6](architecture/c4/rendered/STR-06-25-alt2-3-part6.svg)
+
+View: STR-06-25-alt2-3-part6
 
 ##### Nested sequence: ChooseRetrievalPath (path choice of the RetrieveAgentContextCandidatesQuery sequence)
 
 The GraphRAG path answers only the `PriorResponse` kind, because GraphRAG holds only projected responses, and queries only `GraphRagStorageScope.Workspace`; it keeps hits that name a response of this workspace, one hit per response, scored by the GraphRAG score. `preferGraphRag` false takes the relational path with no `fallbackReason`. Every fallback takes the relational path and reports its `fallbackReason`: `retrieval_disabled` (`GraphRag:UseForRetrieval` false), `graphrag_kinds_unsupported` (`kinds` absent or naming another kind), `graphrag_disabled`, `graphrag_not_initialized`, `graphrag_not_indexed`, or `index_in_progress` (from the status), and the query result's reason, or `graphrag_error` on an exception. The relational path ranks by the links to the named turn, its TODO, its requirements, and the focus refs first, then by the hybrid search.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Handler
-    participant Store
-    participant GraphRAG
-    opt preferGraphRag, GraphRag:UseForRetrieval, and kinds only PriorResponse
-        Handler->>GraphRAG: GetStatusAsync
-        GraphRAG-->>Handler: enabled and indexed, or a fallbackReason
-    end
-    alt GraphRAG enabled and indexed
-        Handler->>GraphRAG: QueryAsync, workspace scope
-        alt result ok
-            GraphRAG-->>Handler: hits
-            Note over Handler: one hit per response of this workspace
-        else FallbackUsed or an exception
-            GraphRAG-->>Handler: fallbackReason, or graphrag_error
-            Handler->>Store: relational path
-            Store-->>Handler: candidates
-        end
-    else not preferred, or a fallbackReason from the request or the status
-        Handler->>Store: relational path: links first, then hybrid search
-        Store-->>Handler: candidates
-    end
-```
+![Nested sequence: ChooseRetrievalPath (path choice of the RetrieveAgentContextCandidatesQuery sequence), part 1 of 3](architecture/c4/rendered/ChooseRetrievalPath.svg)
+
+View: ChooseRetrievalPath
+
+![Nested sequence: ChooseRetrievalPath (path choice of the RetrieveAgentContextCandidatesQuery sequence), part 2 of 3](architecture/c4/rendered/ChooseRetrievalPath-part2.svg)
+
+View: ChooseRetrievalPath-part2
+
+![Nested sequence: ChooseRetrievalPath (path choice of the RetrieveAgentContextCandidatesQuery sequence), part 3 of 3](architecture/c4/rendered/ChooseRetrievalPath-part3.svg)
+
+View: ChooseRetrievalPath-part3
+
+![Nested sequence: ChooseRetrievalPath (path choice of the RetrieveAgentContextCandidatesQuery sequence), opt 1: preferGraphRag, GraphRag:UseForRetrieval, and kinds only PriorResponse](architecture/c4/rendered/ChooseRetrievalPath-opt1.svg)
+
+View: ChooseRetrievalPath-opt1
+
+![Nested sequence: ChooseRetrievalPath (path choice of the RetrieveAgentContextCandidatesQuery sequence), alt 1 branch 1 of 2: GraphRAG enabled and indexed](architecture/c4/rendered/ChooseRetrievalPath-alt1-1.svg)
+
+View: ChooseRetrievalPath-alt1-1
+
+![Nested sequence: ChooseRetrievalPath (path choice of the RetrieveAgentContextCandidatesQuery sequence), alt 2 branch 1 of 2: result ok](architecture/c4/rendered/ChooseRetrievalPath-alt2-1.svg)
+
+View: ChooseRetrievalPath-alt2-1
+
+![Nested sequence: ChooseRetrievalPath (path choice of the RetrieveAgentContextCandidatesQuery sequence), alt 2 branch 2 of 2: FallbackUsed or an exception, part 1 of 2](architecture/c4/rendered/ChooseRetrievalPath-alt2-2.svg)
+
+View: ChooseRetrievalPath-alt2-2
+
+![Nested sequence: ChooseRetrievalPath (path choice of the RetrieveAgentContextCandidatesQuery sequence), alt 2 branch 2 of 2: FallbackUsed or an exception, part 2 of 2](architecture/c4/rendered/ChooseRetrievalPath-alt2-2-part2.svg)
+
+View: ChooseRetrievalPath-alt2-2-part2
+
+![Nested sequence: ChooseRetrievalPath (path choice of the RetrieveAgentContextCandidatesQuery sequence), alt 1 branch 2 of 2: not preferred, or a fallbackReason from the request or the status, part 1 of 2](architecture/c4/rendered/ChooseRetrievalPath-alt1-2.svg)
+
+View: ChooseRetrievalPath-alt1-2
+
+![Nested sequence: ChooseRetrievalPath (path choice of the RetrieveAgentContextCandidatesQuery sequence), alt 1 branch 2 of 2: not preferred, or a fallbackReason from the request or the status, part 2 of 2](architecture/c4/rendered/ChooseRetrievalPath-alt1-2-part2.svg)
+
+View: ChooseRetrievalPath-alt1-2-part2
 
 #### Sequence: submit ProjectAgentResponsesCommand
 
 `Caller` is a surface, or the background pass that runs after a projection row is marked `Pending`: the unit whose transaction marked the row dispatches the same command with no `responseIds` through `IDispatcher`, without the controller, after its SerializableWrite commits, and logs a failed dispatch without failing (section 3.1, Projection pass). The selection includes `Failed` rows, so a failed ingest or a failed delete is retried on the next pass; the projection row states are the state diagram of section 6.3.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Caller
-    participant Controller
-    participant Handler
-    participant Store
-    Caller->>Controller: POST /projection/graphrag (responseIds)
-    Controller->>Handler: SendAsync(ProjectAgentResponsesCommand)
-    Note over Controller,Handler: ref RequestPipeline, gated
-    Handler->>Store: ResponseIdList(responseIds)
-    alt malformed, over 1000 ids, or an id without rsp-
-        Controller-->>Caller: 400 validation_error, details.field responseIds
-    else selected (an empty list selects every Pending and Failed row, and Skipped rows once ingest is enabled)
-        loop each selected response
-            Note over Handler,Store: ref ProjectOneResponse (below)
-        end
-        Note over Handler,Store: ref ReconcileProjectedDocuments (nested activity, section 6.5): delete agent-response documents no Projected row names that were ingested before the pass started, and return Projected rows whose document is gone to Pending
-        alt every response handled
-            Controller-->>Caller: 200 projected, removed, skipped, failed, notFound
-            Note over Caller: Failed rows are selected again on the next pass
-        else a row write exhausted its retries
-            Controller-->>Caller: 409 conflict, retryable true
-            Note over Caller: retry the same request within the bounded retries of C9
-        end
-    end
-```
+![Sequence: submit ProjectAgentResponsesCommand, part 1 of 4](architecture/c4/rendered/STR-06-26.svg)
+
+View: STR-06-26
+
+![Sequence: submit ProjectAgentResponsesCommand, part 2 of 4](architecture/c4/rendered/STR-06-26-part2.svg)
+
+View: STR-06-26-part2
+
+![Sequence: submit ProjectAgentResponsesCommand, part 3 of 4](architecture/c4/rendered/STR-06-26-part3.svg)
+
+View: STR-06-26-part3
+
+![Sequence: submit ProjectAgentResponsesCommand, part 4 of 4](architecture/c4/rendered/STR-06-26-part4.svg)
+
+View: STR-06-26-part4
+
+![Sequence: submit ProjectAgentResponsesCommand, alt 1 branch 1 of 2: malformed, over 1000 ids, or an id without rsp-](architecture/c4/rendered/STR-06-26-alt1-1.svg)
+
+View: STR-06-26-alt1-1
+
+![Sequence: submit ProjectAgentResponsesCommand, alt 1 branch 2 of 2: selected (an empty list selects every Pending and Failed row, and Skipped rows once ingest is enabled), part 1 of 8](architecture/c4/rendered/STR-06-26-alt1-2.svg)
+
+View: STR-06-26-alt1-2
+
+![Sequence: submit ProjectAgentResponsesCommand, alt 1 branch 2 of 2: selected (an empty list selects every Pending and Failed row, and Skipped rows once ingest is enabled), part 2 of 8](architecture/c4/rendered/STR-06-26-alt1-2-part2.svg)
+
+View: STR-06-26-alt1-2-part2
+
+![Sequence: submit ProjectAgentResponsesCommand, alt 1 branch 2 of 2: selected (an empty list selects every Pending and Failed row, and Skipped rows once ingest is enabled), part 3 of 8](architecture/c4/rendered/STR-06-26-alt1-2-part3.svg)
+
+View: STR-06-26-alt1-2-part3
+
+![Sequence: submit ProjectAgentResponsesCommand, alt 1 branch 2 of 2: selected (an empty list selects every Pending and Failed row, and Skipped rows once ingest is enabled), part 4 of 8](architecture/c4/rendered/STR-06-26-alt1-2-part4.svg)
+
+View: STR-06-26-alt1-2-part4
+
+![Sequence: submit ProjectAgentResponsesCommand, alt 1 branch 2 of 2: selected (an empty list selects every Pending and Failed row, and Skipped rows once ingest is enabled), part 5 of 8](architecture/c4/rendered/STR-06-26-alt1-2-part5.svg)
+
+View: STR-06-26-alt1-2-part5
+
+![Sequence: submit ProjectAgentResponsesCommand, alt 1 branch 2 of 2: selected (an empty list selects every Pending and Failed row, and Skipped rows once ingest is enabled), part 6 of 8](architecture/c4/rendered/STR-06-26-alt1-2-part6.svg)
+
+View: STR-06-26-alt1-2-part6
+
+![Sequence: submit ProjectAgentResponsesCommand, alt 1 branch 2 of 2: selected (an empty list selects every Pending and Failed row, and Skipped rows once ingest is enabled), part 7 of 8](architecture/c4/rendered/STR-06-26-alt1-2-part7.svg)
+
+View: STR-06-26-alt1-2-part7
+
+![Sequence: submit ProjectAgentResponsesCommand, alt 1 branch 2 of 2: selected (an empty list selects every Pending and Failed row, and Skipped rows once ingest is enabled), part 8 of 8](architecture/c4/rendered/STR-06-26-alt1-2-part8.svg)
+
+View: STR-06-26-alt1-2-part8
+
+![Sequence: submit ProjectAgentResponsesCommand, loop 1: each selected response, part 1 of 2](architecture/c4/rendered/STR-06-26-loop1.svg)
+
+View: STR-06-26-loop1
+
+![Sequence: submit ProjectAgentResponsesCommand, loop 1: each selected response, part 2 of 2](architecture/c4/rendered/STR-06-26-loop1-part2.svg)
+
+View: STR-06-26-loop1-part2
+
+![Sequence: submit ProjectAgentResponsesCommand, alt 2 branch 1 of 2: every response handled](architecture/c4/rendered/STR-06-26-alt2-1.svg)
+
+View: STR-06-26-alt2-1
+
+![Sequence: submit ProjectAgentResponsesCommand, alt 2 branch 2 of 2: a row write exhausted its retries](architecture/c4/rendered/STR-06-26-alt2-2.svg)
+
+View: STR-06-26-alt2-2
 
 ##### Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence)
 
 Staleness belongs to ResponsesAndTrust, so the projection (ContextGraph) dispatches EvaluateStalenessCommand for the response first. The GraphRAG calls run outside any transaction; every row save runs afterwards in SerializableWrite with the response locked, reads and writes only the database, and re-reads the response status there (section 3.1, "Database-only delegates"). `ProjectionEnabled` false skips ingest only; a removal still runs while GraphRAG is enabled, and while GraphRAG is disabled a row awaiting removal stays `Pending`.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Handler
-    participant Store
-    participant GraphRAG
-    Handler->>Handler: SendAsync(EvaluateStalenessCommand), this response
-    Note over Handler: fresh, or Stale persisted
-    Handler->>Store: read the response status and its projection row
-    alt Trusted, not projected at its ContentSha256
-        alt ProjectionEnabled and GraphRAG enabled
-            Handler->>GraphRAG: IngestTextAsync, workspace scope, root ids
-            GraphRAG-->>Handler: document id, or an error
-            Handler->>Store: SerializableWrite: re-read the status and the row, save the row
-            alt still Trusted, ingest ok
-                Note over Store: Projected, document id and hash stored
-            else row already Projected by an overlapping pass, same content
-                Note over Store: the stored document kept
-                Handler->>GraphRAG: DeleteDocumentAsync, the document this pass ingested
-            else no longer Trusted, ingest ok
-                Note over Store: keeps the document id, Pending for removal
-            else ingest error
-                Note over Store: Failed with LastError
-            end
-        else ProjectionEnabled false, or GraphRAG disabled
-            Handler->>Store: SerializableWrite: Skipped with skippedReason
-        end
-    else not Trusted, the row holds a GraphRagDocumentId
-        alt GraphRAG enabled
-            Handler->>GraphRAG: DeleteDocumentAsync
-            GraphRAG-->>Handler: ok, already gone (Success false), or an error
-            Handler->>Store: SerializableWrite: Removed when ok or already gone, Failed with LastError on an error
-        else GraphRAG disabled
-            Note over Store: stays Pending until GraphRAG is enabled
-        end
-    else not Trusted, no document
-        Handler->>Store: SerializableWrite: Removed, never selected again
-    else nothing to change
-        Note over Handler: continue with the next response
-    end
-```
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), part 1 of 3](architecture/c4/rendered/ProjectOneResponse-Sequence.svg)
+
+View: ProjectOneResponse-Sequence
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), part 2 of 3](architecture/c4/rendered/ProjectOneResponse-Sequence-part2.svg)
+
+View: ProjectOneResponse-Sequence-part2
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), part 3 of 3](architecture/c4/rendered/ProjectOneResponse-Sequence-part3.svg)
+
+View: ProjectOneResponse-Sequence-part3
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 1 branch 1 of 4: Trusted, not projected at its ContentSha256, part 1 of 2](architecture/c4/rendered/ProjectOneResponse-Sequence-alt1-1.svg)
+
+View: ProjectOneResponse-Sequence-alt1-1
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 1 branch 1 of 4: Trusted, not projected at its ContentSha256, part 2 of 2](architecture/c4/rendered/ProjectOneResponse-Sequence-alt1-1-part2.svg)
+
+View: ProjectOneResponse-Sequence-alt1-1-part2
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 2 branch 1 of 2: ProjectionEnabled and GraphRAG enabled, part 1 of 3](architecture/c4/rendered/ProjectOneResponse-Sequence-alt2-1.svg)
+
+View: ProjectOneResponse-Sequence-alt2-1
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 2 branch 1 of 2: ProjectionEnabled and GraphRAG enabled, part 2 of 3](architecture/c4/rendered/ProjectOneResponse-Sequence-alt2-1-part2.svg)
+
+View: ProjectOneResponse-Sequence-alt2-1-part2
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 2 branch 1 of 2: ProjectionEnabled and GraphRAG enabled, part 3 of 3](architecture/c4/rendered/ProjectOneResponse-Sequence-alt2-1-part3.svg)
+
+View: ProjectOneResponse-Sequence-alt2-1-part3
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 3 branch 1 of 4: still Trusted, ingest ok, part 1 of 4](architecture/c4/rendered/ProjectOneResponse-Sequence-alt3-1.svg)
+
+View: ProjectOneResponse-Sequence-alt3-1
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 3 branch 1 of 4: still Trusted, ingest ok, part 2 of 4](architecture/c4/rendered/ProjectOneResponse-Sequence-alt3-1-part2.svg)
+
+View: ProjectOneResponse-Sequence-alt3-1-part2
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 3 branch 1 of 4: still Trusted, ingest ok, part 3 of 4](architecture/c4/rendered/ProjectOneResponse-Sequence-alt3-1-part3.svg)
+
+View: ProjectOneResponse-Sequence-alt3-1-part3
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 3 branch 1 of 4: still Trusted, ingest ok, part 4 of 4](architecture/c4/rendered/ProjectOneResponse-Sequence-alt3-1-part4.svg)
+
+View: ProjectOneResponse-Sequence-alt3-1-part4
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 3 branch 2 of 4: row already Projected by an overlapping pass, same content, part 1 of 6](architecture/c4/rendered/ProjectOneResponse-Sequence-alt3-2.svg)
+
+View: ProjectOneResponse-Sequence-alt3-2
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 3 branch 2 of 4: row already Projected by an overlapping pass, same content, part 2 of 6](architecture/c4/rendered/ProjectOneResponse-Sequence-alt3-2-part2.svg)
+
+View: ProjectOneResponse-Sequence-alt3-2-part2
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 3 branch 2 of 4: row already Projected by an overlapping pass, same content, part 3 of 6](architecture/c4/rendered/ProjectOneResponse-Sequence-alt3-2-part3.svg)
+
+View: ProjectOneResponse-Sequence-alt3-2-part3
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 3 branch 2 of 4: row already Projected by an overlapping pass, same content, part 4 of 6](architecture/c4/rendered/ProjectOneResponse-Sequence-alt3-2-part4.svg)
+
+View: ProjectOneResponse-Sequence-alt3-2-part4
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 3 branch 2 of 4: row already Projected by an overlapping pass, same content, part 5 of 6](architecture/c4/rendered/ProjectOneResponse-Sequence-alt3-2-part5.svg)
+
+View: ProjectOneResponse-Sequence-alt3-2-part5
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 3 branch 2 of 4: row already Projected by an overlapping pass, same content, part 6 of 6](architecture/c4/rendered/ProjectOneResponse-Sequence-alt3-2-part6.svg)
+
+View: ProjectOneResponse-Sequence-alt3-2-part6
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 3 branch 3 of 4: no longer Trusted, ingest ok, part 1 of 4](architecture/c4/rendered/ProjectOneResponse-Sequence-alt3-3.svg)
+
+View: ProjectOneResponse-Sequence-alt3-3
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 3 branch 3 of 4: no longer Trusted, ingest ok, part 2 of 4](architecture/c4/rendered/ProjectOneResponse-Sequence-alt3-3-part2.svg)
+
+View: ProjectOneResponse-Sequence-alt3-3-part2
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 3 branch 3 of 4: no longer Trusted, ingest ok, part 3 of 4](architecture/c4/rendered/ProjectOneResponse-Sequence-alt3-3-part3.svg)
+
+View: ProjectOneResponse-Sequence-alt3-3-part3
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 3 branch 3 of 4: no longer Trusted, ingest ok, part 4 of 4](architecture/c4/rendered/ProjectOneResponse-Sequence-alt3-3-part4.svg)
+
+View: ProjectOneResponse-Sequence-alt3-3-part4
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 3 branch 4 of 4: ingest error, part 1 of 2](architecture/c4/rendered/ProjectOneResponse-Sequence-alt3-4.svg)
+
+View: ProjectOneResponse-Sequence-alt3-4
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 3 branch 4 of 4: ingest error, part 2 of 2](architecture/c4/rendered/ProjectOneResponse-Sequence-alt3-4-part2.svg)
+
+View: ProjectOneResponse-Sequence-alt3-4-part2
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 2 branch 2 of 2: ProjectionEnabled false, or GraphRAG disabled](architecture/c4/rendered/ProjectOneResponse-Sequence-alt2-2.svg)
+
+View: ProjectOneResponse-Sequence-alt2-2
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 1 branch 2 of 4: not Trusted, the row holds a GraphRagDocumentId, part 1 of 2](architecture/c4/rendered/ProjectOneResponse-Sequence-alt1-2.svg)
+
+View: ProjectOneResponse-Sequence-alt1-2
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 1 branch 2 of 4: not Trusted, the row holds a GraphRagDocumentId, part 2 of 2](architecture/c4/rendered/ProjectOneResponse-Sequence-alt1-2-part2.svg)
+
+View: ProjectOneResponse-Sequence-alt1-2-part2
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 4 branch 1 of 2: GraphRAG enabled, part 1 of 2](architecture/c4/rendered/ProjectOneResponse-Sequence-alt4-1.svg)
+
+View: ProjectOneResponse-Sequence-alt4-1
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 4 branch 1 of 2: GraphRAG enabled, part 2 of 2](architecture/c4/rendered/ProjectOneResponse-Sequence-alt4-1-part2.svg)
+
+View: ProjectOneResponse-Sequence-alt4-1-part2
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 4 branch 2 of 2: GraphRAG disabled, part 1 of 4](architecture/c4/rendered/ProjectOneResponse-Sequence-alt4-2.svg)
+
+View: ProjectOneResponse-Sequence-alt4-2
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 4 branch 2 of 2: GraphRAG disabled, part 2 of 4](architecture/c4/rendered/ProjectOneResponse-Sequence-alt4-2-part2.svg)
+
+View: ProjectOneResponse-Sequence-alt4-2-part2
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 4 branch 2 of 2: GraphRAG disabled, part 3 of 4](architecture/c4/rendered/ProjectOneResponse-Sequence-alt4-2-part3.svg)
+
+View: ProjectOneResponse-Sequence-alt4-2-part3
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 4 branch 2 of 2: GraphRAG disabled, part 4 of 4](architecture/c4/rendered/ProjectOneResponse-Sequence-alt4-2-part4.svg)
+
+View: ProjectOneResponse-Sequence-alt4-2-part4
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 1 branch 3 of 4: not Trusted, no document](architecture/c4/rendered/ProjectOneResponse-Sequence-alt1-3.svg)
+
+View: ProjectOneResponse-Sequence-alt1-3
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 1 branch 4 of 4: nothing to change, part 1 of 2](architecture/c4/rendered/ProjectOneResponse-Sequence-alt1-4.svg)
+
+View: ProjectOneResponse-Sequence-alt1-4
+
+![Nested sequence: ProjectOneResponse (loop body of the ProjectAgentResponsesCommand sequence), alt 1 branch 4 of 4: nothing to change, part 2 of 2](architecture/c4/rendered/ProjectOneResponse-Sequence-alt1-4-part2.svg)
+
+View: ProjectOneResponse-Sequence-alt1-4-part2
 
 #### Sequence: stateless invocation end to end (process RunStatelessInvocation)
 
@@ -2483,217 +3199,429 @@ sequenceDiagram
 - The package-failure `canceled` close is written by the plugin, not the model, on the persist path of process PersistTurnWriteWithReceipt with status `canceled` and the failure reason; `Test-ModelEvidence` never applies to it. An outage or any other retryable answer (409 `conflict` with `retryable: true`, or a busy store's 503 `persistence_error`; section 3.1, "Retryable answers") holds it in the failsafe (receipt `queued`), and the Stop gate warns degraded persistence naming the package failure (never blocks), keeping the ledger entry until the drain confirms the close.
 - History exclusion and memories (FR-MCP-MEMORY-003, -007): in `Stateless` the model's input is the rendered package, the current request, and the deterministic `REQUIRED MEMORIES` block the host already injects; history stays excluded, and within one request's tool loop the request's own prompt, tool calls, and results stay on each later model call (`StatelessToolLoopOwnToolCallsKeptPriorRequestsExcluded`). The message list the host passes to its model call (for opencode, after the adapter applies the core's `output.messages`), captured by the host test harness, is the observation point of `StatelessHostSentinelPriorTurnAbsentFromModelRequest`, which finds the sentinel prior turn absent and the package, the current request, and the `REQUIRED MEMORIES` block present.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Operator
-    participant Host
-    participant Plugin
-    participant Server
-    participant Model
-    Note over Plugin,Server: host session start: GetAgentContextStatusQuery, Mode cached, Off when unreadable
-    Operator->>Host: prompt
-    Host->>Plugin: prompt hook
-    alt bridge host (claude-code, claude-cowork)
-        Note over Plugin,Server: ref ApplyArrivalBridgeRecord through Sync-PluginArrivalLog: bridge-minted requestId
-    else other hosts
-        Note over Plugin,Server: ref OpenTurnFromPromptHook: MintSessionTurnCommand, Resolve-MintOutcome
-    end
-    alt Mode Off, D6 unsupported, unsupported or terminal merge, or the host cannot refuse
-        Host->>Model: prompt with history (stateful, as today)
-    else mint pending (outage)
-        Plugin-->>Host: refuse the prompt with the outage
-        Host-->>Operator: prompt refused, no answer
-        Note over Plugin,Server: ref PersistTurnWriteWithReceipt: canceled close queued behind the mint record
-    else bridge host, enqueue record not yet in the transcript
-        Plugin-->>Host: refuse the prompt, as for a build failure
-        Host-->>Operator: prompt refused, no answer
-    else final mint refusal, or no mint (nonce_source_missing, turn-open-contended)
-        Plugin-->>Host: refuse the prompt, no turn exists
-        Host-->>Operator: prompt refused, no answer
-        Note over Plugin: the Stop gate warns the refusal, naming the prompt
-    else delivered, or a duplicate delivery, in Pilot or Stateless (absorbed_mid_turn runs as Pilot)
-        Note over Operator,Model: ref BuildAndDeliverPackage (below), a failed build ends the invocation there
-        Note over Host,Model: ref SubmitAndGradeResponse (below), after a Built package
-    end
-```
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), part 1 of 4](architecture/c4/rendered/STR-06-27.svg)
+
+View: STR-06-27
+
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), part 2 of 4](architecture/c4/rendered/STR-06-27-part2.svg)
+
+View: STR-06-27-part2
+
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), part 3 of 4](architecture/c4/rendered/STR-06-27-part3.svg)
+
+View: STR-06-27-part3
+
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), part 4 of 4](architecture/c4/rendered/STR-06-27-part4.svg)
+
+View: STR-06-27-part4
+
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), alt 1 branch 1 of 2: bridge host (claude-code, claude-cowork), part 1 of 3](architecture/c4/rendered/STR-06-27-alt1-1.svg)
+
+View: STR-06-27-alt1-1
+
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), alt 1 branch 1 of 2: bridge host (claude-code, claude-cowork), part 2 of 3](architecture/c4/rendered/STR-06-27-alt1-1-part2.svg)
+
+View: STR-06-27-alt1-1-part2
+
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), alt 1 branch 1 of 2: bridge host (claude-code, claude-cowork), part 3 of 3](architecture/c4/rendered/STR-06-27-alt1-1-part3.svg)
+
+View: STR-06-27-alt1-1-part3
+
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), alt 1 branch 2 of 2: other hosts, part 1 of 3](architecture/c4/rendered/STR-06-27-alt1-2.svg)
+
+View: STR-06-27-alt1-2
+
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), alt 1 branch 2 of 2: other hosts, part 2 of 3](architecture/c4/rendered/STR-06-27-alt1-2-part2.svg)
+
+View: STR-06-27-alt1-2-part2
+
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), alt 1 branch 2 of 2: other hosts, part 3 of 3](architecture/c4/rendered/STR-06-27-alt1-2-part3.svg)
+
+View: STR-06-27-alt1-2-part3
+
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), alt 2 branch 1 of 5: Mode Off, D6 unsupported, unsupported or terminal merge, or the host cannot refuse, part 1 of 2](architecture/c4/rendered/STR-06-27-alt2-1.svg)
+
+View: STR-06-27-alt2-1
+
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), alt 2 branch 1 of 5: Mode Off, D6 unsupported, unsupported or terminal merge, or the host cannot refuse, part 2 of 2](architecture/c4/rendered/STR-06-27-alt2-1-part2.svg)
+
+View: STR-06-27-alt2-1-part2
+
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), alt 2 branch 2 of 5: mint pending (outage), part 1 of 4](architecture/c4/rendered/STR-06-27-alt2-2.svg)
+
+View: STR-06-27-alt2-2
+
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), alt 2 branch 2 of 5: mint pending (outage), part 2 of 4](architecture/c4/rendered/STR-06-27-alt2-2-part2.svg)
+
+View: STR-06-27-alt2-2-part2
+
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), alt 2 branch 2 of 5: mint pending (outage), part 3 of 4](architecture/c4/rendered/STR-06-27-alt2-2-part3.svg)
+
+View: STR-06-27-alt2-2-part3
+
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), alt 2 branch 2 of 5: mint pending (outage), part 4 of 4](architecture/c4/rendered/STR-06-27-alt2-2-part4.svg)
+
+View: STR-06-27-alt2-2-part4
+
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), alt 2 branch 3 of 5: bridge host, enqueue record not yet in the transcript, part 1 of 2](architecture/c4/rendered/STR-06-27-alt2-3.svg)
+
+View: STR-06-27-alt2-3
+
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), alt 2 branch 3 of 5: bridge host, enqueue record not yet in the transcript, part 2 of 2](architecture/c4/rendered/STR-06-27-alt2-3-part2.svg)
+
+View: STR-06-27-alt2-3-part2
+
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), alt 2 branch 4 of 5: final mint refusal, or no mint (nonce_source_missing, turn-open-contended), part 1 of 4](architecture/c4/rendered/STR-06-27-alt2-4.svg)
+
+View: STR-06-27-alt2-4
+
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), alt 2 branch 4 of 5: final mint refusal, or no mint (nonce_source_missing, turn-open-contended), part 2 of 4](architecture/c4/rendered/STR-06-27-alt2-4-part2.svg)
+
+View: STR-06-27-alt2-4-part2
+
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), alt 2 branch 4 of 5: final mint refusal, or no mint (nonce_source_missing, turn-open-contended), part 3 of 4](architecture/c4/rendered/STR-06-27-alt2-4-part3.svg)
+
+View: STR-06-27-alt2-4-part3
+
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), alt 2 branch 4 of 5: final mint refusal, or no mint (nonce_source_missing, turn-open-contended), part 4 of 4](architecture/c4/rendered/STR-06-27-alt2-4-part4.svg)
+
+View: STR-06-27-alt2-4-part4
+
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), alt 2 branch 5 of 5: delivered, or a duplicate delivery, in Pilot or Stateless (absorbed_mid_turn runs as Pilot), part 1 of 5](architecture/c4/rendered/STR-06-27-alt2-5.svg)
+
+View: STR-06-27-alt2-5
+
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), alt 2 branch 5 of 5: delivered, or a duplicate delivery, in Pilot or Stateless (absorbed_mid_turn runs as Pilot), part 2 of 5](architecture/c4/rendered/STR-06-27-alt2-5-part2.svg)
+
+View: STR-06-27-alt2-5-part2
+
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), alt 2 branch 5 of 5: delivered, or a duplicate delivery, in Pilot or Stateless (absorbed_mid_turn runs as Pilot), part 3 of 5](architecture/c4/rendered/STR-06-27-alt2-5-part3.svg)
+
+View: STR-06-27-alt2-5-part3
+
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), alt 2 branch 5 of 5: delivered, or a duplicate delivery, in Pilot or Stateless (absorbed_mid_turn runs as Pilot), part 4 of 5](architecture/c4/rendered/STR-06-27-alt2-5-part4.svg)
+
+View: STR-06-27-alt2-5-part4
+
+![Sequence: stateless invocation end to end (process RunStatelessInvocation), alt 2 branch 5 of 5: delivered, or a duplicate delivery, in Pilot or Stateless (absorbed_mid_turn runs as Pilot), part 5 of 5](architecture/c4/rendered/STR-06-27-alt2-5-part5.svg)
+
+View: STR-06-27-alt2-5-part5
 
 ##### Nested sequence: BuildAndDeliverPackage (build and delivery of the stateless invocation sequence)
 
 The plugin builds with the bound `agent`, `sessionId`, and `requestId`, the prompt text, and the idempotency key `inv-` plus the lowercase hex SHA-256 of `<agent>` LF `<sessionId>` LF `<requestId>` (section 6.6), and keeps the returned `packageId` in its per-turn file `turns/<requestId>.yaml`. `Stateless` on a prompt delivery, on a host whose P0.2 row records an authoritative history-exclusion operation, replaces the model's input through that operation (opencode's `output.messages`, or the model request cline-v2's `beforeModel` returns where its P0.2 row records request replacement, section 3.2), or starts a fresh host invocation, with the package, the request, and the `REQUIRED MEMORIES` block; `Pilot`, an absorbed message, and a host without history exclusion (which runs `Stateless` as `Pilot`) answer statefully. A 422 (also a retried overflow), any other error, an outage (a retryable 409 `conflict` or a busy store's 503 included, section 3.1, "Deadlock and busy outcomes"), or a package not `Built` fails the invocation (operator: "Fail the invocation"): the plugin, not the model, closes the request's own turn `canceled` with the `failureNote` `agent_context_invocation_failed` followed by the code and message (section 6.6) on the persist path of process PersistTurnWriteWithReceipt, with no `Test-ModelEvidence`; a confirmed close leaves `openDelivered` and the Stop ledger, and a close held in the failsafe by an outage or a retryable answer (receipt `queued`) makes the Stop gate warn degraded persistence naming the package failure, never block, and keep the ledger entry until the drain confirms the close. An absorbed message has no prompt to refuse: its failure is recorded in the per-turn file and nothing is refused or closed.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Operator
-    participant Host
-    participant Plugin
-    participant Server
-    participant Model
-    Plugin->>Server: BuildAgentContextPackageCommand, idempotencyKey inv- plus the turn key hash
-    alt 201, or 200 with package status Built
-        Plugin->>Plugin: keep packageId in the per-turn file
-        alt Stateless prompt delivery, host with history exclusion
-            Plugin-->>Host: output.messages: package, request, required memories
-            Host->>Model: that message list, no history
-        else Pilot, absorbed_mid_turn, or no history exclusion
-            Host->>Model: prompt with history (stateful)
-        end
-    else 409 agent_context_disabled
-        Note over Plugin: caches Off: no refusal, no canceled close
-        Host->>Model: prompt with history (stateful)
-    else 422, any other error, an outage, or a package not Built
-        alt absorbed_mid_turn
-            Note over Plugin: failure kept in the per-turn file, nothing refused
-        else prompt delivery
-            Plugin-->>Host: refuse the prompt with the code and message
-            Host-->>Operator: prompt refused, no answer
-            Note over Plugin,Server: ref PersistTurnWriteWithReceipt: own turn canceled, no Test-ModelEvidence
-            opt close queued: an outage or a retryable answer
-                Note over Plugin: Stop gate warns degraded persistence, never blocks
-            end
-        end
-    end
-```
+![Nested sequence: BuildAndDeliverPackage (build and delivery of the stateless invocation sequence)](architecture/c4/rendered/BuildAndDeliverPackage.svg)
+
+View: BuildAndDeliverPackage
+
+![Nested sequence: BuildAndDeliverPackage (build and delivery of the stateless invocation sequence), alt 1 branch 1 of 3: 201, or 200 with package status Built, part 1 of 3](architecture/c4/rendered/BuildAndDeliverPackage-alt1-1.svg)
+
+View: BuildAndDeliverPackage-alt1-1
+
+![Nested sequence: BuildAndDeliverPackage (build and delivery of the stateless invocation sequence), alt 1 branch 1 of 3: 201, or 200 with package status Built, part 2 of 3](architecture/c4/rendered/BuildAndDeliverPackage-alt1-1-part2.svg)
+
+View: BuildAndDeliverPackage-alt1-1-part2
+
+![Nested sequence: BuildAndDeliverPackage (build and delivery of the stateless invocation sequence), alt 1 branch 1 of 3: 201, or 200 with package status Built, part 3 of 3](architecture/c4/rendered/BuildAndDeliverPackage-alt1-1-part3.svg)
+
+View: BuildAndDeliverPackage-alt1-1-part3
+
+![Nested sequence: BuildAndDeliverPackage (build and delivery of the stateless invocation sequence), alt 2 branch 1 of 2: Stateless prompt delivery, host with history exclusion, part 1 of 3](architecture/c4/rendered/BuildAndDeliverPackage-alt2-1.svg)
+
+View: BuildAndDeliverPackage-alt2-1
+
+![Nested sequence: BuildAndDeliverPackage (build and delivery of the stateless invocation sequence), alt 2 branch 1 of 2: Stateless prompt delivery, host with history exclusion, part 2 of 3](architecture/c4/rendered/BuildAndDeliverPackage-alt2-1-part2.svg)
+
+View: BuildAndDeliverPackage-alt2-1-part2
+
+![Nested sequence: BuildAndDeliverPackage (build and delivery of the stateless invocation sequence), alt 2 branch 1 of 2: Stateless prompt delivery, host with history exclusion, part 3 of 3](architecture/c4/rendered/BuildAndDeliverPackage-alt2-1-part3.svg)
+
+View: BuildAndDeliverPackage-alt2-1-part3
+
+![Nested sequence: BuildAndDeliverPackage (build and delivery of the stateless invocation sequence), alt 2 branch 2 of 2: Pilot, absorbed_mid_turn, or no history exclusion, part 1 of 2](architecture/c4/rendered/BuildAndDeliverPackage-alt2-2.svg)
+
+View: BuildAndDeliverPackage-alt2-2
+
+![Nested sequence: BuildAndDeliverPackage (build and delivery of the stateless invocation sequence), alt 2 branch 2 of 2: Pilot, absorbed_mid_turn, or no history exclusion, part 2 of 2](architecture/c4/rendered/BuildAndDeliverPackage-alt2-2-part2.svg)
+
+View: BuildAndDeliverPackage-alt2-2-part2
+
+![Nested sequence: BuildAndDeliverPackage (build and delivery of the stateless invocation sequence), alt 1 branch 2 of 3: 409 agent_context_disabled, part 1 of 3](architecture/c4/rendered/BuildAndDeliverPackage-alt1-2.svg)
+
+View: BuildAndDeliverPackage-alt1-2
+
+![Nested sequence: BuildAndDeliverPackage (build and delivery of the stateless invocation sequence), alt 1 branch 2 of 3: 409 agent_context_disabled, part 2 of 3](architecture/c4/rendered/BuildAndDeliverPackage-alt1-2-part2.svg)
+
+View: BuildAndDeliverPackage-alt1-2-part2
+
+![Nested sequence: BuildAndDeliverPackage (build and delivery of the stateless invocation sequence), alt 1 branch 2 of 3: 409 agent_context_disabled, part 3 of 3](architecture/c4/rendered/BuildAndDeliverPackage-alt1-2-part3.svg)
+
+View: BuildAndDeliverPackage-alt1-2-part3
+
+![Nested sequence: BuildAndDeliverPackage (build and delivery of the stateless invocation sequence), alt 1 branch 3 of 3: 422, any other error, an outage, or a package not Built, part 1 of 3](architecture/c4/rendered/BuildAndDeliverPackage-alt1-3.svg)
+
+View: BuildAndDeliverPackage-alt1-3
+
+![Nested sequence: BuildAndDeliverPackage (build and delivery of the stateless invocation sequence), alt 1 branch 3 of 3: 422, any other error, an outage, or a package not Built, part 2 of 3](architecture/c4/rendered/BuildAndDeliverPackage-alt1-3-part2.svg)
+
+View: BuildAndDeliverPackage-alt1-3-part2
+
+![Nested sequence: BuildAndDeliverPackage (build and delivery of the stateless invocation sequence), alt 1 branch 3 of 3: 422, any other error, an outage, or a package not Built, part 3 of 3](architecture/c4/rendered/BuildAndDeliverPackage-alt1-3-part3.svg)
+
+View: BuildAndDeliverPackage-alt1-3-part3
+
+![Nested sequence: BuildAndDeliverPackage (build and delivery of the stateless invocation sequence), alt 3 branch 1 of 2: absorbed_mid_turn, part 1 of 2](architecture/c4/rendered/BuildAndDeliverPackage-alt3-1.svg)
+
+View: BuildAndDeliverPackage-alt3-1
+
+![Nested sequence: BuildAndDeliverPackage (build and delivery of the stateless invocation sequence), alt 3 branch 1 of 2: absorbed_mid_turn, part 2 of 2](architecture/c4/rendered/BuildAndDeliverPackage-alt3-1-part2.svg)
+
+View: BuildAndDeliverPackage-alt3-1-part2
+
+![Nested sequence: BuildAndDeliverPackage (build and delivery of the stateless invocation sequence), alt 3 branch 2 of 2: prompt delivery, part 1 of 5](architecture/c4/rendered/BuildAndDeliverPackage-alt3-2.svg)
+
+View: BuildAndDeliverPackage-alt3-2
+
+![Nested sequence: BuildAndDeliverPackage (build and delivery of the stateless invocation sequence), alt 3 branch 2 of 2: prompt delivery, part 2 of 5](architecture/c4/rendered/BuildAndDeliverPackage-alt3-2-part2.svg)
+
+View: BuildAndDeliverPackage-alt3-2-part2
+
+![Nested sequence: BuildAndDeliverPackage (build and delivery of the stateless invocation sequence), alt 3 branch 2 of 2: prompt delivery, part 3 of 5](architecture/c4/rendered/BuildAndDeliverPackage-alt3-2-part3.svg)
+
+View: BuildAndDeliverPackage-alt3-2-part3
+
+![Nested sequence: BuildAndDeliverPackage (build and delivery of the stateless invocation sequence), alt 3 branch 2 of 2: prompt delivery, part 4 of 5](architecture/c4/rendered/BuildAndDeliverPackage-alt3-2-part4.svg)
+
+View: BuildAndDeliverPackage-alt3-2-part4
+
+![Nested sequence: BuildAndDeliverPackage (build and delivery of the stateless invocation sequence), alt 3 branch 2 of 2: prompt delivery, part 5 of 5](architecture/c4/rendered/BuildAndDeliverPackage-alt3-2-part5.svg)
+
+View: BuildAndDeliverPackage-alt3-2-part5
+
+![Nested sequence: BuildAndDeliverPackage (build and delivery of the stateless invocation sequence), opt 1: close queued: an outage or a retryable answer, part 1 of 2](architecture/c4/rendered/BuildAndDeliverPackage-opt1.svg)
+
+View: BuildAndDeliverPackage-opt1
+
+![Nested sequence: BuildAndDeliverPackage (build and delivery of the stateless invocation sequence), opt 1: close queued: an outage or a retryable answer, part 2 of 2](architecture/c4/rendered/BuildAndDeliverPackage-opt1-part2.svg)
+
+View: BuildAndDeliverPackage-opt1-part2
 
 ##### Nested sequence: SubmitAndGradeResponse (response submission of the stateless invocation sequence)
 
 The model calls the `agent_context_submit_response` tool before it closes its turn; the plugin binds the call to its request as it binds a verb (process BindVerbToTurn) and supplies the kept `packageId`, or finds it again with QueryAgentContextPackagesQuery `{ agent, sessionId, requestId, status: Built }` when a hook process boundary lost it. `invocationMode` is `Stateless` only when history was excluded. A failed submission or grade is reported in the tool result and writes nothing to the turn; a missing submission is not a Stop-gate item, and the pilot report counts requests with a package and no response. The model grade comes later from an HV request covering the turn.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Model
-    participant Plugin
-    participant Server
-    Model->>Plugin: agent_context_submit_response tool call
-    Plugin->>Server: SubmitAgentResponseCommand, kept packageId, invocationMode
-    alt 201 or 200
-        Plugin->>Server: RunDeterministicGradeCommand
-        alt 201
-            Server-->>Plugin: grade, responseStatus Grading or Stale
-            Plugin-->>Model: tool result: the model grade comes from a later HV request
-        else an error or an outage
-            Plugin-->>Model: tool result with the code, the grade is re-run on request
-        end
-    else 409 agent_context_disabled
-        Plugin-->>Model: tool result, agent_context_disabled
-        Note over Plugin: caches Off, the turn closes as any stateful turn
-    else any other error or an outage
-        Plugin-->>Model: tool result with the code and message
-        Note over Model: resubmits or reports it
-    end
-```
+![Nested sequence: SubmitAndGradeResponse (response submission of the stateless invocation sequence), part 1 of 2](architecture/c4/rendered/SubmitAndGradeResponse.svg)
+
+View: SubmitAndGradeResponse
+
+![Nested sequence: SubmitAndGradeResponse (response submission of the stateless invocation sequence), part 2 of 2](architecture/c4/rendered/SubmitAndGradeResponse-part2.svg)
+
+View: SubmitAndGradeResponse-part2
+
+![Nested sequence: SubmitAndGradeResponse (response submission of the stateless invocation sequence), alt 1 branch 1 of 3: 201 or 200](architecture/c4/rendered/SubmitAndGradeResponse-alt1-1.svg)
+
+View: SubmitAndGradeResponse-alt1-1
+
+![Nested sequence: SubmitAndGradeResponse (response submission of the stateless invocation sequence), alt 2 branch 1 of 2: 201, part 1 of 2](architecture/c4/rendered/SubmitAndGradeResponse-alt2-1.svg)
+
+View: SubmitAndGradeResponse-alt2-1
+
+![Nested sequence: SubmitAndGradeResponse (response submission of the stateless invocation sequence), alt 2 branch 1 of 2: 201, part 2 of 2](architecture/c4/rendered/SubmitAndGradeResponse-alt2-1-part2.svg)
+
+View: SubmitAndGradeResponse-alt2-1-part2
+
+![Nested sequence: SubmitAndGradeResponse (response submission of the stateless invocation sequence), alt 2 branch 2 of 2: an error or an outage](architecture/c4/rendered/SubmitAndGradeResponse-alt2-2.svg)
+
+View: SubmitAndGradeResponse-alt2-2
+
+![Nested sequence: SubmitAndGradeResponse (response submission of the stateless invocation sequence), alt 1 branch 2 of 3: 409 agent_context_disabled, part 1 of 2](architecture/c4/rendered/SubmitAndGradeResponse-alt1-2.svg)
+
+View: SubmitAndGradeResponse-alt1-2
+
+![Nested sequence: SubmitAndGradeResponse (response submission of the stateless invocation sequence), alt 1 branch 2 of 3: 409 agent_context_disabled, part 2 of 2](architecture/c4/rendered/SubmitAndGradeResponse-alt1-2-part2.svg)
+
+View: SubmitAndGradeResponse-alt1-2-part2
+
+![Nested sequence: SubmitAndGradeResponse (response submission of the stateless invocation sequence), alt 1 branch 3 of 3: any other error or an outage](architecture/c4/rendered/SubmitAndGradeResponse-alt1-3.svg)
+
+View: SubmitAndGradeResponse-alt1-3
 
 #### Sequence: submit GetAgentContextPilotReportQuery
 
 The report groups the window's responses by `invocationMode`, counts them by effective status through `IResponseStalenessRule` read-only (nothing written), and also counts the `Overflow` packages, the refused prompts, and the requests with a package and no response; the operator compares the modes on it before changing any default (section 3.1, the pilot comparison).
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Caller
-    participant Controller
-    participant Handler
-    participant Store
-    Caller->>Controller: GET /pilot/report?fromUtc&toUtc
-    Controller->>Handler: QueryAsync(GetAgentContextPilotReportQuery)
-    Note over Controller,Handler: ref RequestPipeline, not gated: readable in Mode Off
-    alt fromUtc or toUtc missing or not UTC, or from not before to
-        Controller-->>Caller: 400 validation_error, details.field
-    else window valid
-        Handler->>Store: group the window's responses by invocationMode
-        Store-->>Handler: counts, latest grades by RecordedUtc
-        Controller-->>Caller: 200 AgentContextPilotReport
-        Note over Caller: compare the modes before changing any default
-    end
-```
+![Sequence: submit GetAgentContextPilotReportQuery, part 1 of 4](architecture/c4/rendered/STR-06-28.svg)
+
+View: STR-06-28
+
+![Sequence: submit GetAgentContextPilotReportQuery, part 2 of 4](architecture/c4/rendered/STR-06-28-part2.svg)
+
+View: STR-06-28-part2
+
+![Sequence: submit GetAgentContextPilotReportQuery, part 3 of 4](architecture/c4/rendered/STR-06-28-part3.svg)
+
+View: STR-06-28-part3
+
+![Sequence: submit GetAgentContextPilotReportQuery, part 4 of 4](architecture/c4/rendered/STR-06-28-part4.svg)
+
+View: STR-06-28-part4
+
+![Sequence: submit GetAgentContextPilotReportQuery, alt 1 branch 1 of 2: fromUtc or toUtc missing or not UTC, or from not before to, part 1 of 2](architecture/c4/rendered/STR-06-28-alt1-1.svg)
+
+View: STR-06-28-alt1-1
+
+![Sequence: submit GetAgentContextPilotReportQuery, alt 1 branch 1 of 2: fromUtc or toUtc missing or not UTC, or from not before to, part 2 of 2](architecture/c4/rendered/STR-06-28-alt1-1-part2.svg)
+
+View: STR-06-28-alt1-1-part2
+
+![Sequence: submit GetAgentContextPilotReportQuery, alt 1 branch 2 of 2: window valid, part 1 of 2](architecture/c4/rendered/STR-06-28-alt1-2.svg)
+
+View: STR-06-28-alt1-2
+
+![Sequence: submit GetAgentContextPilotReportQuery, alt 1 branch 2 of 2: window valid, part 2 of 2](architecture/c4/rendered/STR-06-28-alt1-2-part2.svg)
+
+View: STR-06-28-alt1-2-part2
 
 #### Sequence: submit CreateAgentContextHvRequestCommand
 
 `Caller` is any agent; the request carries `sessionId`, `agent`, `fromRequestId`, `toRequestId`, `requestedBy`, `reason`, and `idempotencyKey`. Every step reads only the database, so the lookup, the session and range checks, the candidate locks (every candidate response in ascending `ResponseId` order, then a re-read of its status), and the insert run in one SerializableWrite delegate, and a concurrent create with the same key is found by the rerun's lookup and a concurrent reject or supersede commits wholly before or after.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Caller
-    participant Controller
-    participant Handler
-    participant Store
-    Caller->>Controller: POST /hv-requests (CreateAgentContextHvRequestRequest)
-    Controller->>Handler: SendAsync(CreateAgentContextHvRequestCommand)
-    Note over Controller,Handler: ref RequestPipeline, gated
-    alt blank field
-        Controller-->>Caller: 400 validation_error, details.field
-    else fields given
-        Note over Handler,Store: SerializableWrite: one delegate from the key lookup to the save
-        Handler->>Store: IdempotentCreate.Find(idempotencyKey, request fingerprint)
-        alt same inputs (a retry or a concurrent winner)
-            Controller-->>Caller: 200 the stored AgentContextHvRequestResult
-        else other inputs
-            Controller-->>Caller: 409 conflict, retryable false
-        else absent
-            Handler->>Store: TurnLocator(agent, sessionId), both endpoint turns
-            alt InvalidIdentifier
-                Controller-->>Caller: 400 validation_error, details.field
-            else unknown session, bad range, too long, or no gradable response
-                Controller-->>Caller: 400 agent_context_hv_request_invalid, reason
-                Note over Caller: correct the range
-            else range valid
-                Handler->>Store: lock candidates in ascending ResponseId, re-read status
-                Handler->>Store: IdempotentCreate.Insert request (Open), Pending items
-                Controller-->>Caller: 201 AgentContextHvRequestResult with items
-                Note over Caller: hand hvRequestId to the HV agent in its brief
-            end
-        else retries exhausted (SerializableWrite or key allocation)
-            Controller-->>Caller: 409 conflict, retryable true, nothing saved
-            Note over Caller: retry with the same idempotencyKey within the bounded retries of C9
-        end
-    end
-```
+![Sequence: submit CreateAgentContextHvRequestCommand, part 1 of 3](architecture/c4/rendered/STR-06-29.svg)
+
+View: STR-06-29
+
+![Sequence: submit CreateAgentContextHvRequestCommand, part 2 of 3](architecture/c4/rendered/STR-06-29-part2.svg)
+
+View: STR-06-29-part2
+
+![Sequence: submit CreateAgentContextHvRequestCommand, part 3 of 3](architecture/c4/rendered/STR-06-29-part3.svg)
+
+View: STR-06-29-part3
+
+![Sequence: submit CreateAgentContextHvRequestCommand, alt 1 branch 1 of 2: blank field](architecture/c4/rendered/STR-06-29-alt1-1.svg)
+
+View: STR-06-29-alt1-1
+
+![Sequence: submit CreateAgentContextHvRequestCommand, alt 1 branch 2 of 2: fields given, part 1 of 4](architecture/c4/rendered/STR-06-29-alt1-2.svg)
+
+View: STR-06-29-alt1-2
+
+![Sequence: submit CreateAgentContextHvRequestCommand, alt 1 branch 2 of 2: fields given, part 2 of 4](architecture/c4/rendered/STR-06-29-alt1-2-part2.svg)
+
+View: STR-06-29-alt1-2-part2
+
+![Sequence: submit CreateAgentContextHvRequestCommand, alt 1 branch 2 of 2: fields given, part 3 of 4](architecture/c4/rendered/STR-06-29-alt1-2-part3.svg)
+
+View: STR-06-29-alt1-2-part3
+
+![Sequence: submit CreateAgentContextHvRequestCommand, alt 1 branch 2 of 2: fields given, part 4 of 4](architecture/c4/rendered/STR-06-29-alt1-2-part4.svg)
+
+View: STR-06-29-alt1-2-part4
+
+![Sequence: submit CreateAgentContextHvRequestCommand, alt 2 branch 1 of 4: same inputs (a retry or a concurrent winner)](architecture/c4/rendered/STR-06-29-alt2-1.svg)
+
+View: STR-06-29-alt2-1
+
+![Sequence: submit CreateAgentContextHvRequestCommand, alt 2 branch 2 of 4: other inputs](architecture/c4/rendered/STR-06-29-alt2-2.svg)
+
+View: STR-06-29-alt2-2
+
+![Sequence: submit CreateAgentContextHvRequestCommand, alt 2 branch 3 of 4: absent, part 1 of 2](architecture/c4/rendered/STR-06-29-alt2-3.svg)
+
+View: STR-06-29-alt2-3
+
+![Sequence: submit CreateAgentContextHvRequestCommand, alt 2 branch 3 of 4: absent, part 2 of 2](architecture/c4/rendered/STR-06-29-alt2-3-part2.svg)
+
+View: STR-06-29-alt2-3-part2
+
+![Sequence: submit CreateAgentContextHvRequestCommand, alt 3 branch 1 of 3: InvalidIdentifier](architecture/c4/rendered/STR-06-29-alt3-1.svg)
+
+View: STR-06-29-alt3-1
+
+![Sequence: submit CreateAgentContextHvRequestCommand, alt 3 branch 2 of 3: unknown session, bad range, too long, or no gradable response, part 1 of 2](architecture/c4/rendered/STR-06-29-alt3-2.svg)
+
+View: STR-06-29-alt3-2
+
+![Sequence: submit CreateAgentContextHvRequestCommand, alt 3 branch 2 of 3: unknown session, bad range, too long, or no gradable response, part 2 of 2](architecture/c4/rendered/STR-06-29-alt3-2-part2.svg)
+
+View: STR-06-29-alt3-2-part2
+
+![Sequence: submit CreateAgentContextHvRequestCommand, alt 3 branch 3 of 3: range valid, part 1 of 2](architecture/c4/rendered/STR-06-29-alt3-3.svg)
+
+View: STR-06-29-alt3-3
+
+![Sequence: submit CreateAgentContextHvRequestCommand, alt 3 branch 3 of 3: range valid, part 2 of 2](architecture/c4/rendered/STR-06-29-alt3-3-part2.svg)
+
+View: STR-06-29-alt3-3-part2
+
+![Sequence: submit CreateAgentContextHvRequestCommand, alt 2 branch 4 of 4: retries exhausted (SerializableWrite or key allocation), part 1 of 2](architecture/c4/rendered/STR-06-29-alt2-4.svg)
+
+View: STR-06-29-alt2-4
+
+![Sequence: submit CreateAgentContextHvRequestCommand, alt 2 branch 4 of 4: retries exhausted (SerializableWrite or key allocation), part 2 of 2](architecture/c4/rendered/STR-06-29-alt2-4-part2.svg)
+
+View: STR-06-29-alt2-4-part2
 
 #### Sequence: submit GetAgentContextHvRequestQuery
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Caller
-    participant Controller
-    participant Handler
-    participant Store
-    Caller->>Controller: GET /hv-requests/{hvRequestId}
-    Controller->>Handler: QueryAsync(GetAgentContextHvRequestQuery)
-    Note over Controller,Handler: ref RequestPipeline, not gated: readable in Mode Off
-    Handler->>Store: load the HV request with its items
-    alt not found
-        Controller-->>Caller: 404 not_found, details.resource hv_request
-    else found
-        Controller-->>Caller: 200 AgentContextHvRequestResult
-        Note over Caller: list Pending items still awaiting the HV agent
-    end
-```
+![Sequence: submit GetAgentContextHvRequestQuery, part 1 of 5](architecture/c4/rendered/STR-06-30.svg)
+
+View: STR-06-30
+
+![Sequence: submit GetAgentContextHvRequestQuery, part 2 of 5](architecture/c4/rendered/STR-06-30-part2.svg)
+
+View: STR-06-30-part2
+
+![Sequence: submit GetAgentContextHvRequestQuery, part 3 of 5](architecture/c4/rendered/STR-06-30-part3.svg)
+
+View: STR-06-30-part3
+
+![Sequence: submit GetAgentContextHvRequestQuery, part 4 of 5](architecture/c4/rendered/STR-06-30-part4.svg)
+
+View: STR-06-30-part4
+
+![Sequence: submit GetAgentContextHvRequestQuery, part 5 of 5](architecture/c4/rendered/STR-06-30-part5.svg)
+
+View: STR-06-30-part5
+
+![Sequence: submit GetAgentContextHvRequestQuery, alt 1 branch 1 of 2: not found](architecture/c4/rendered/STR-06-30-alt1-1.svg)
+
+View: STR-06-30-alt1-1
+
+![Sequence: submit GetAgentContextHvRequestQuery, alt 1 branch 2 of 2: found](architecture/c4/rendered/STR-06-30-alt1-2.svg)
+
+View: STR-06-30-alt1-2
 
 #### Sequence: submit QueryAgentContextHvRequestsQuery
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Caller
-    participant Controller
-    participant Handler
-    participant Store
-    Caller->>Controller: GET /hv-requests?sessionId&status&limit&offset
-    Controller->>Handler: QueryAsync(QueryAgentContextHvRequestsQuery)
-    Note over Controller,Handler: ref RequestPipeline, not gated: readable in Mode Off
-    alt unknown status, or limit or offset outside PageBounds
-        Controller-->>Caller: 400 validation_error, details.field
-    else filters valid
-        Handler->>Store: PagedQuery, CreatedUtc descending then HvRequestId
-        Store-->>Handler: PageResult
-        Controller-->>Caller: 200 PageResult of HV requests without items
-        Note over Caller: PagedQuery paging
-    end
-```
+![Sequence: submit QueryAgentContextHvRequestsQuery, part 1 of 4](architecture/c4/rendered/STR-06-31.svg)
+
+View: STR-06-31
+
+![Sequence: submit QueryAgentContextHvRequestsQuery, part 2 of 4](architecture/c4/rendered/STR-06-31-part2.svg)
+
+View: STR-06-31-part2
+
+![Sequence: submit QueryAgentContextHvRequestsQuery, part 3 of 4](architecture/c4/rendered/STR-06-31-part3.svg)
+
+View: STR-06-31-part3
+
+![Sequence: submit QueryAgentContextHvRequestsQuery, part 4 of 4](architecture/c4/rendered/STR-06-31-part4.svg)
+
+View: STR-06-31-part4
+
+![Sequence: submit QueryAgentContextHvRequestsQuery, alt 1 branch 1 of 2: unknown status, or limit or offset outside PageBounds](architecture/c4/rendered/STR-06-31-alt1-1.svg)
+
+View: STR-06-31-alt1-1
+
+![Sequence: submit QueryAgentContextHvRequestsQuery, alt 1 branch 2 of 2: filters valid, part 1 of 2](architecture/c4/rendered/STR-06-31-alt1-2.svg)
+
+View: STR-06-31-alt1-2
+
+![Sequence: submit QueryAgentContextHvRequestsQuery, alt 1 branch 2 of 2: filters valid, part 2 of 2](architecture/c4/rendered/STR-06-31-alt1-2-part2.svg)
+
+View: STR-06-31-alt1-2-part2
 
 ## 7. Agent-context use cases
 
@@ -2701,18 +3629,25 @@ sequenceDiagram
 
 Actors: agent host and plugin, server. Precondition: the request's turn exists (UC-1) and the mode is `Pilot` or `Stateless`. Basic flow: the plugin asks the server to build a package for the request, named by `agent`, `sessionId`, and `requestId` (TurnLocator); the server gathers the request, profile, rules, applicable requirements, related turns (never the request's own turn), TODOs, receipts, trusted prior responses, and code at the current commit (SourceResolver), filters secrets (SecretRedactor) and untrusted items, ranks (CandidateRanker), fills the budget, records provenance and an input snapshot holding every input the assembler reads (PackageAssembler), and returns the rendered package; the plugin keeps the `packageId` in its per-turn file `turns/<requestId>.yaml`. Alternate flows: mandatory context exceeds the budget and the build fails with `agent_context_budget_exceeded`, storing an `Overflow` package, and a retried or concurrent build returns the same 422 with the stored diagnostics; the same idempotency key with the same inputs returns the same package, found before any precondition that can change (IdempotentCreate), and the same key with other inputs is 409 `conflict` with `retryable: false`; the commit is unreadable (409 `agent_context_commit_unavailable`); no profile or rule file resolves (409 `agent_context_profile_unavailable`); the Mode was switched to `Off` after the plugin cached it (409 `agent_context_disabled`, ModeGateBehavior), and the plugin caches `Off` and continues statefully; replay proves the package is reproducible from its input snapshot.
 
-```mermaid
-flowchart LR
-    HO(["Agent host and plugin"]) --- U(("Build a context package (BuildAgentContextPackageCommand)"))
-    SV(["Server"]) --- U
-    U -. include .-> I1(("Retrieve candidates (RetrieveAgentContextCandidatesQuery)"))
-    U -. include .-> I2(("Assemble: secrets, omissions, findings, budget, rendering (PackageAssembler)"))
-    E1(("Mandatory over budget: 422, invocation fails")) -. extend .-> U
-    E2(("Repeated key: same package (IdempotentCreate)")) -. extend .-> U
-    E3(("Replay proves determinism (ReplayAgentContextPackageQuery)")) -. extend .-> U
-    E4(("Commit or profile unavailable: 409")) -. extend .-> U
-    E5(("Mode switched to Off: 409 agent_context_disabled, plugin continues statefully")) -. extend .-> U
-```
+![Use case: Build a context package for a request (use cases), part 1 of 5](architecture/c4/rendered/STR-07-02.svg)
+
+View: STR-07-02
+
+![Use case: Build a context package for a request (use cases), part 2 of 5](architecture/c4/rendered/STR-07-02-part2.svg)
+
+View: STR-07-02-part2
+
+![Use case: Build a context package for a request (use cases), part 3 of 5](architecture/c4/rendered/STR-07-02-part3.svg)
+
+View: STR-07-02-part3
+
+![Use case: Build a context package for a request (use cases), part 4 of 5](architecture/c4/rendered/STR-07-02-part4.svg)
+
+View: STR-07-02-part4
+
+![Use case: Build a context package for a request (use cases), part 5 of 5](architecture/c4/rendered/STR-07-02-part5.svg)
+
+View: STR-07-02-part5
 
 ### 7.12 Use case: Submit and grade an agent response [FR-MCP-AGENTCONTEXT-003, -004]
 
@@ -2720,52 +3655,69 @@ Actors: model, plugin, server, hostile reviewer. Basic flow: in `Pilot` and `Sta
 
 The diagram's short labels map to the flows above: the model submits through the `agent_context_submit_response` tool; the trust decision applies ResponseStatusTransition; an operator reject runs RejectAgentResponseCommand, and a reject of a `Superseded` response is the 409; an HV request retried with its idempotency key returns the stored request; a request with no submission is counted by the pilot report.
 
-```mermaid
-flowchart LR
-    MD(["Model"]) --- U(("Submit and grade a response"))
-    PL(["Plugin"]) --- U
-    HR(["Hostile reviewer"]) --- U
-    SV(["Server"]) --- U
-    U -. include .-> I1(("Submit (SubmitAgentResponseCommand)"))
-    U -. include .-> I2(("Deterministic grade (RunDeterministicGradeCommand)"))
-    U -. include .-> I3(("Model grade (RecordModelGradeCommand)"))
-    U -. include .-> I4(("Trust (DecideAgentResponseTrustCommand)"))
-    E1(("Grade fails: stays Grading")) -. extend .-> U
-    E2(("Unconfigured grader: 403")) -. extend .-> U
-    E3(("Operator reject (of a Superseded one: 409)")) -. extend .-> U
-    E4(("Dependency changed: Stale, not Trusted")) -. extend .-> U
-    E5(("HV request retried: stored request")) -. extend .-> U
-    E6(("No submission: not a Stop-gate item")) -. extend .-> U
-```
+![Use case: Submit and grade an agent response (use cases), part 1 of 7](architecture/c4/rendered/STR-07-03.svg)
+
+View: STR-07-03
+
+![Use case: Submit and grade an agent response (use cases), part 2 of 7](architecture/c4/rendered/STR-07-03-part2.svg)
+
+View: STR-07-03-part2
+
+![Use case: Submit and grade an agent response (use cases), part 3 of 7](architecture/c4/rendered/STR-07-03-part3.svg)
+
+View: STR-07-03-part3
+
+![Use case: Submit and grade an agent response (use cases), part 4 of 7](architecture/c4/rendered/STR-07-03-part4.svg)
+
+View: STR-07-03-part4
+
+![Use case: Submit and grade an agent response (use cases), part 5 of 7](architecture/c4/rendered/STR-07-03-part5.svg)
+
+View: STR-07-03-part5
+
+![Use case: Submit and grade an agent response (use cases), part 6 of 7](architecture/c4/rendered/STR-07-03-part6.svg)
+
+View: STR-07-03-part6
+
+![Use case: Submit and grade an agent response (use cases), part 7 of 7](architecture/c4/rendered/STR-07-03-part7.svg)
+
+View: STR-07-03-part7
 
 ### 7.13 Use case: Retrieve trusted prior context [FR-MCP-AGENTCONTEXT-007]
 
 Actors: server (inside package construction), client apps. Basic flow: retrieval returns ranked candidates (CandidateRanker on the relational path), only trusted responses among prior responses, preferring GraphRAG when the caller asks for it (`preferGraphRag`; a package build asks with the value of `GraphRag:UseForRetrieval` and records it, so its ranking inputs are part of its provenance); a request that names a turn names it by `agent`, `sessionId`, and `requestId` (TurnLocator), and `limit` is bounded (PageBounds `Refuse`). Every read checks staleness read-only and writes nothing (IResponseStalenessRule), and the query answers in every Mode, `Off` included, because ModeGateBehavior gates commands only. Alternate flow: GraphRAG disabled, uninitialized, not indexed, failing, or asked for kinds other than `PriorResponse`, and the deterministic relational path answers with the fallback reason; a `limit` outside 1..1000 is refused with 400 `validation_error`.
 
-```mermaid
-flowchart LR
-    SV(["Server: package builder"]) --- U(("Retrieve trusted prior context (RetrieveAgentContextCandidatesQuery)"))
-    CA(["Client apps"]) --- U
-    U -. include .-> I1(("Read-only staleness check of each prior response (IResponseStalenessRule)"))
-    E1(("GraphRAG unavailable or asked for other kinds: relational fallback with reason")) -. extend .-> U
-    E2(("Mode Off: still answers (read-only query)")) -. extend .-> U
-```
+![Use case: Retrieve trusted prior context (use cases), part 1 of 3](architecture/c4/rendered/STR-07-04.svg)
+
+View: STR-07-04
+
+![Use case: Retrieve trusted prior context (use cases), part 2 of 3](architecture/c4/rendered/STR-07-04-part2.svg)
+
+View: STR-07-04-part2
+
+![Use case: Retrieve trusted prior context (use cases), part 3 of 3](architecture/c4/rendered/STR-07-04-part3.svg)
+
+View: STR-07-04-part3
 
 ### 7.14 Use case: Maintain relationships, staleness, and supersession [FR-MCP-AGENTCONTEXT-005, -006]
 
 Actors: model, operator, server. Basic flow: links are created between packages, responses, requirements, turns, TODOs, code, and receipts (RelationshipWriter, which records each target's current hash as the calling unit read it before its write); when a dependency changes, including a response dependency that leaves `Trusted` or becomes `Rejected`, `Superseded`, or `Stale` (the unit that moved it dispatches EvaluateStalenessCommand for its dependents after its commit, section 3.1, Dependent responses), its dependents become stale (IResponseStalenessRule; only EvaluateStalenessCommand persists `Stale`, through ResponseStatusTransition, and every read reports the effective status and writes nothing): a file dependency is compared at the workspace's HEAD commit, so an uncommitted edit changes nothing and committing it does, while a Rule file outside version control and the request's own turn are never dependencies; a newer response supersedes an older one (SupersedeAgentResponseCommand, the only writer of a `supersedes` link). A requirement update or delete re-evaluates staleness (EvaluateStalenessCommand, dispatched by the requirement service after its commit for the responses that cite the changed requirement; a failed dispatch is logged and never fails the requirement write) only while the Mode is not `Off`; after a return from `Off` every read evaluates freshness itself. Alternate flows: invalid link, cycle, or unresolvable ref refused (an unresolvable ref is 400 `validation_error` naming it); a client request for a `supersedes` link is refused with 400 `validation_error` (`details.field` `type`); an identical link created again returns the stored link with `created: false`; a link a command made (Build's `derived_from`, Submit's `derived_from` and `supports`, Supersede's `supersedes`) cannot be deleted (409 `agent_context_relationship_protected`); a supersede of an original already `Rejected` or superseded by another response is refused with 409 `agent_context_transition_invalid` (ResponseStatusTransition), a supersede whose replacement is invalid or would close a cycle with 409 `agent_context_supersede_invalid`, and a repeat naming the same replacement returns it unchanged.
 
-```mermaid
-flowchart LR
-    MD(["Model"]) --- U(("Maintain relationships and staleness"))
-    OP(["Operator"]) --- U
-    SV(["Server"]) --- U
-    U -. include .-> I1(("Create, delete, query links (CreateAgentContextRelationshipCommand to QueryAgentContextRelationshipsQuery, RelationshipWriter)"))
-    U -. include .-> I2(("Evaluate staleness at the HEAD commit (EvaluateStalenessCommand, IResponseStalenessRule)"))
-    E1(("Supersede a response (SupersedeAgentResponseCommand)")) -. extend .-> U
-    E2(("Invalid link, cycle, client supersedes link, or protected command-made link refused")) -. extend .-> U
-    E3(("Supersede of a Rejected or already superseded response: 409 agent_context_transition_invalid")) -. extend .-> U
-```
+![Use case: Maintain relationships, staleness, and supersession (use cases), part 1 of 4](architecture/c4/rendered/STR-07-05.svg)
+
+View: STR-07-05
+
+![Use case: Maintain relationships, staleness, and supersession (use cases), part 2 of 4](architecture/c4/rendered/STR-07-05-part2.svg)
+
+View: STR-07-05-part2
+
+![Use case: Maintain relationships, staleness, and supersession (use cases), part 3 of 4](architecture/c4/rendered/STR-07-05-part3.svg)
+
+View: STR-07-05-part3
+
+![Use case: Maintain relationships, staleness, and supersession (use cases), part 4 of 4](architecture/c4/rendered/STR-07-05-part4.svg)
+
+View: STR-07-05-part4
 
 ### 7.15 Use case: Run a stateless or pilot invocation [FR-MCP-AGENTCONTEXT-008, -009]
 
@@ -2773,50 +3725,65 @@ Actors: operator, agent host and plugin, model. Precondition: the plugin read th
 
 The diagram's short labels map to the flows above: "409 disabled" is 409 `agent_context_disabled`; the `canceled` close of a refused prompt is written on the persist path of process PersistTurnWriteWithReceipt; the pilot report is GetAgentContextPilotReportQuery; a bridge host's prompt hook syncs the transcript and takes the bridge-minted `requestId`; an absorbed message builds and records its package and never refuses the prompt.
 
-```mermaid
-flowchart LR
-    OP(["Operator"]) --- U(("Run a stateless or pilot invocation (RunStatelessInvocation)"))
-    HO(["Agent host and plugin"]) --- U
-    MD(["Model"]) --- U
-    U -. include .-> I1(("Build a context package for a request"))
-    U -. include .-> I2(("Submit and grade an agent response"))
-    E1(("Mode Off or 409 disabled: stateful")) -. extend .-> U
-    E2(("Build fails or mint pending: refused, canceled")) -. extend .-> U
-    E3(("Pilot report, readable in Off")) -. extend .-> U
-    E4(("Bridge host: hook syncs the transcript")) -. extend .-> U
-    E5(("Absorbed mid-turn: runs as Pilot")) -. extend .-> U
-    E6(("Host cannot refuse a prompt: runs as Off")) -. extend .-> U
-    E7(("Canceled close held by an outage: warn")) -. extend .-> U
-```
+![Use case: Run a stateless or pilot invocation (use cases), part 1 of 7](architecture/c4/rendered/STR-07-06.svg)
+
+View: STR-07-06
+
+![Use case: Run a stateless or pilot invocation (use cases), part 2 of 7](architecture/c4/rendered/STR-07-06-part2.svg)
+
+View: STR-07-06-part2
+
+![Use case: Run a stateless or pilot invocation (use cases), part 3 of 7](architecture/c4/rendered/STR-07-06-part3.svg)
+
+View: STR-07-06-part3
+
+![Use case: Run a stateless or pilot invocation (use cases), part 4 of 7](architecture/c4/rendered/STR-07-06-part4.svg)
+
+View: STR-07-06-part4
+
+![Use case: Run a stateless or pilot invocation (use cases), part 5 of 7](architecture/c4/rendered/STR-07-06-part5.svg)
+
+View: STR-07-06-part5
+
+![Use case: Run a stateless or pilot invocation (use cases), part 6 of 7](architecture/c4/rendered/STR-07-06-part6.svg)
+
+View: STR-07-06-part6
+
+![Use case: Run a stateless or pilot invocation (use cases), part 7 of 7](architecture/c4/rendered/STR-07-06-part7.svg)
+
+View: STR-07-06-part7
 
 ### 7.16 Use case: Project responses into GraphRAG [FR-MCP-AGENTCONTEXT-007]
 
 Actors: server (background pass), operator. Basic flow: after a unit commits a status change that marks a projection row (a grade's trust decision, a reject, a supersede, a staleness evaluation), it dispatches the pass (ProjectAgentResponsesCommand with no `responseIds`); a pass selects the `Pending` and `Failed` projection rows, and `Skipped` rows once ingest is enabled again (or the named `responseIds`, validated by ResponseIdList, with unknown ids returned in `notFound`); each selected response's staleness is evaluated first (EvaluateStalenessCommand, dispatched); trusted responses are ingested into GraphRAG's workspace scope, and for a response that stopped being trusted, including one whose dependency changed, a row that holds a GraphRAG document has it deleted and a row that holds none becomes `Removed`; each row is saved through SerializableWrite with its response locked, re-reading the response status after the GraphRAG call, so a reject that commits during an ingest leaves the new document marked for removal on the next pass (section 6.3, projection row states). Alternate flows: `ProjectionEnabled` false skips ingest only, and removal still runs while GraphRAG is enabled; GraphRAG disabled, so every ingest is skipped and a row awaiting removal stays `Pending` until GraphRAG is enabled; an ingest or delete error is recorded (`Failed`) and retried on the next pass, while a delete of a document already gone counts as removed; two passes that overlap keep one projected document per response, and the later save deletes the document it ingested; every pass ends by reconciling the workspace's `agent-response` documents with the projection rows, so a document left by racing ingests, an exhausted save, or a failed delete is removed by the next complete pass (section 6.5, ReconcileProjectedDocuments).
 
-```mermaid
-flowchart LR
-    SV(["Server background pass"]) --- U(("Project responses into GraphRAG (ProjectAgentResponsesCommand)"))
-    OP(["Operator"]) --- U
-    E1(("GraphRAG disabled: ingest skipped, removal stays Pending")) -. extend .-> U
-    E2(("Ingest or delete error: Failed, retried next pass")) -. extend .-> U
-    E3(("Dependency changed: removed, never projected")) -. extend .-> U
-    E4(("ProjectionEnabled false: ingest skipped, removal still runs")) -. extend .-> U
-    E5(("Reject during an ingest: document removed on the next pass (SerializableWrite)")) -. extend .-> U
-```
+![Use case: Project responses into GraphRAG (use cases), part 1 of 4](architecture/c4/rendered/STR-07-07.svg)
+
+View: STR-07-07
+
+![Use case: Project responses into GraphRAG (use cases), part 2 of 4](architecture/c4/rendered/STR-07-07-part2.svg)
+
+View: STR-07-07-part2
+
+![Use case: Project responses into GraphRAG (use cases), part 3 of 4](architecture/c4/rendered/STR-07-07-part3.svg)
+
+View: STR-07-07-part3
+
+![Use case: Project responses into GraphRAG (use cases), part 4 of 4](architecture/c4/rendered/STR-07-07-part4.svg)
+
+View: STR-07-07-part4
 
 ## 8. Delivery
 
 ### 8.1 Phase order
 
-```mermaid
-flowchart TD
-    ANZ["Analyzer branch chore/netanalyzers-all merged"] --> PRE["Prerequisites (sections 8.2 and 8.4)"]
-    PRE --> REQ["Phase 1 Requirements: the whole catalog"]
-    REQ --> DES["Phase 2 Interfaces and code stubs"]
-    DES --> TST["Phase 3 TDD unit tests with mocks"]
-    TST --> IMP["Phase 4 Implementation: a coding agent per context"]
-    IMP --> VER["Integration, live checks, phase-wide HV, approval"]
-```
+![Phase order (activity), part 1 of 2](architecture/c4/rendered/STR-08-01.svg)
+
+View: STR-08-01
+
+![Phase order (activity), part 2 of 2](architecture/c4/rendered/STR-08-01-part2.svg)
+
+View: STR-08-01-part2
 
 The analyzer branch `chore/netanalyzers-all` merges first, before the prerequisites and Phase 1 (section 3.1, "Analyzer rules"; its work is exempt from the code freeze, section 3.1, "Code freeze exception"), so the P0.1 baseline, every Phase 2 type, and every Phase 3 test name are taken under its rules (IDE0130 namespaces, MA0048 one type per file, CA1707 test names without underscores) and at its paths: its commit `fe5879ba` moved `tests/Build.Tests` to `build/Build.Tests` (replaces the `tests/Build.Tests` path that TR-MCP-NUKE-002 names and that the evidence of TR-MCP-NUKE-002, TR-MCP-NUKE-005 to -010, and FR-MCP-PLUGININT-001 cites). Every later arrow is crossed only after that phase's gates are green with zero failures and zero skips, its hostile validation (Codex gpt-6-astra max) returns AGREE at accuracy and completeness of at least 98 with every claim PASS, and the operator approves. Section 8.2 says what each phase delivers.
 
@@ -2839,37 +3806,25 @@ The first release after Phase 4 publishes both changes. Every `QBrainAI.*` packa
 
 The diagram draws merge order only: a context starts when every context with an arrow into it has merged. StorageSchema (the registered model change, the migrations for three providers, the S3 backfill) runs first and alone; SharedComponents (sections 3.5.1 and 3.5.2, with the `QBrainAi.Cqrs` dispatch scope) runs second and alone; then the six server contexts run in parallel. PluginCorePowerShell and BuildTooling call no C# component, so they run in parallel from the start of Phase 4; HostPluginAdoption follows both, and Documentation runs last. Calls between contexts go through the callee's Phase 2 seam and never wait for the callee to merge, so they draw no arrow; they are listed after the context bullets below.
 
-```mermaid
-flowchart LR
-    SS["StorageSchema: first, alone"] --> SC["SharedComponents: second, alone"]
-    subgraph Server["Server contexts, in parallel"]
-        STL["SessionTurnLogging"]
-        TR["TurnReviews"]
-        CP["ContextPackages"]
-        RT["ResponsesAndTrust"]
-        CG["ContextGraph"]
-        RA["ReplAndAgents"]
-    end
-    subgraph Plugins["Plugins and build, in parallel"]
-        PS["PluginCorePowerShell"]
-        BT["BuildTooling"]
-    end
-    SC --> STL
-    SC --> TR
-    SC --> CP
-    SC --> RT
-    SC --> CG
-    SC --> RA
-    PS --> HPA["HostPluginAdoption: nine plugin repos"]
-    BT --> HPA
-    STL --> DOC["Documentation"]
-    TR --> DOC
-    CP --> DOC
-    RT --> DOC
-    CG --> DOC
-    RA --> DOC
-    HPA --> DOC
-```
+![Bounded contexts in merge order, part 1 of 5](architecture/c4/rendered/STR-08-02.svg)
+
+View: STR-08-02
+
+![Bounded contexts in merge order, part 2 of 5](architecture/c4/rendered/STR-08-02-part2.svg)
+
+View: STR-08-02-part2
+
+![Bounded contexts in merge order, part 3 of 5](architecture/c4/rendered/STR-08-02-part3.svg)
+
+View: STR-08-02-part3
+
+![Bounded contexts in merge order, part 4 of 5](architecture/c4/rendered/STR-08-02-part4.svg)
+
+View: STR-08-02-part4
+
+![Bounded contexts in merge order, part 5 of 5](architecture/c4/rendered/STR-08-02-part5.svg)
+
+View: STR-08-02-part5
 
 Ownership rule: Phase 2 completes every shared file except the registered model change and the migrations (`McpClientJsonContext`, the new DTOs in `src/QBrainAi.Client/Models/SessionLog/` and `src/QBrainAi.Client/Models/AgentContext/` and the Phase B fields on the existing DTOs, REPL allow-lists and validators, `ClientMutationPolicy` (its agent-context entries and the `Evaluate` change they need, which drops the `!ReadMethods.ContainsKey(clientName)` clause at `src/QBrainAi.Repl.Core/ClientMutationPolicy.cs:213` at `a8d3934b`, section 3.1, "Transaction-gated REPL clients", and section 6.5; no namespace is in both lists today, so no existing decision changes and the existing policy tests stay green), DI with the registration of the two CQRS behaviors, configuration and `AgentContextOptions` (`src/QBrainAi.Services/AgentContext/AgentContextOptions.cs`), controllers, MCP tools, client methods, golden contracts, the `agent_context` federation domain registration (section 6.1, FR-MCP-103), the unregistered entity and configuration classes (the agent-context entities in `src/QBrainAi.Storage/Entities/AgentContext/`), and the dispatch of EvaluateStalenessCommand, made only while Mode is not `Off` (section 3.5.1), from the requirement write paths of `RequirementsDatabaseDocumentService` after their commit (`src/QBrainAi.Services/Requirements/`; section 3.1, Requirement writes and staleness)), so each context edits only its own files. The surface error mapping is one of these shared files: Phase 2 writes, completely, how every controller route and MCP tool maps its unit's typed failures to the bodies of the unit's error list (today's body where the unit keeps it, otherwise the `ClassifiedError` body), with one golden case per route in Phase 3 (RED against the stubbed handler, green against a mocked dispatcher). Its owner is therefore the Phase 2 work package (`DESIGN-MERGEDPLAN-001`): no Phase 4 context edits a surface file, and a context whose unit needs another mapping raises a Phase 2 amendment. A new type's namespace is its project's RootNamespace followed by its folder (section 3.5: `src/QBrainAi.Services/<Folder>/` is `QBrainAi.Support.Mcp.<Folder>`, `src/QBrainAi.Storage/<Folder>/` is `QBrainAi.Support.Mcp.Storage.<Folder>`, and `QBrainAi.Client`, `QBrainAi.Cqrs`, and `QBrainAi.Repl.Core` keep their assembly names), and every command or query record and its handler are two files (MA0048), so the folders named below give each context's namespaces; section 3.5 names each component's owner:
 
@@ -2889,98 +3844,85 @@ A context that needs a change outside its files stops and raises a Phase 2 amend
 
 #### Process RunPlanPhases: run the four phases
 
-```mermaid
-flowchart TD
-    S(["Merged plan approved"]) --> AZ["Analyzer branch merged first (section 8.1)"]
-    AZ --> P0["Run the prerequisites, each under its own TODO and HV"]
-    P0 --> PL[["For each of Phases 1, 2, and 3 (nested: RunOnePlanPhase)"]]
-    PL -->|operator withholds approval| WAIT(["Stop: wait for the operator"])
-    PL -->|Phases 1 to 3 approved| P4[["Phase 4 work packages until every context merges in the rollout order (nested: RunPhase4WorkPackages)"]]
-    P4 --> INT["Integration gates, PluginSessionLogIntegration, live checks on Linux and Windows"]
-    INT --> FHV[["Phase-wide HV and operator approval (nested: ValidateAndApprove)"]]
-    FHV -->|approved| E(["Plan complete"])
-    FHV -->|operator withholds approval| WAIT
-```
+![Process RunPlanPhases: run the four phases (activity), part 1 of 3](architecture/c4/rendered/RunPlanPhases.svg)
+
+View: RunPlanPhases
+
+![Process RunPlanPhases: run the four phases (activity), part 2 of 3](architecture/c4/rendered/RunPlanPhases-part2.svg)
+
+View: RunPlanPhases-part2
+
+![Process RunPlanPhases: run the four phases (activity), part 3 of 3](architecture/c4/rendered/RunPlanPhases-part3.svg)
+
+View: RunPlanPhases-part3
 
 ##### Nested activity: RunOnePlanPhase (loop body of RunPlanPhases)
 
-```mermaid
-flowchart TD
-    S(["Next phase: Requirements, Interfaces and stubs, or Unit tests with mocks"]) --> WK["Do the phase's work for the entire plan"]
-    WK --> GT{"Phase gates green with zero failures and zero skips?"}
-    GT -->|no| FX["Fix within the phase"]
-    FX --> GT
-    GT -->|yes| VA[["Phase HV and operator approval (nested: ValidateAndApprove)"]]
-    VA -->|approved| OK(["Return phase approved: continue with the next phase"])
-    VA -->|operator withholds approval| NO(["Return approval withheld"])
-```
+![Nested activity: RunOnePlanPhase (loop body of RunPlanPhases) (activity), part 1 of 2](architecture/c4/rendered/RunOnePlanPhase.svg)
+
+View: RunOnePlanPhase
+
+![Nested activity: RunOnePlanPhase (loop body of RunPlanPhases) (activity), part 2 of 2](architecture/c4/rendered/RunOnePlanPhase-part2.svg)
+
+View: RunOnePlanPhase-part2
 
 ##### Nested activity: ValidateAndApprove (used by RunOnePlanPhase and RunPlanPhases)
 
-```mermaid
-flowchart TD
-    S(["Validation requested"]) --> HV["Launch the HV (Codex gpt-6-astra max) and store the full verdict"]
-    HV --> HR{"AGREE, both scores at least 98, every claim PASS?"}
-    HR -->|no| SH["Show every FAIL and UNKNOWN to the operator, fix"]
-    SH --> HV
-    HR -->|yes| OA{"Operator approves?"}
-    OA -->|yes| AP(["Return approved"])
-    OA -->|no| WH(["Return approval withheld"])
-```
+![Nested activity: ValidateAndApprove (used by RunOnePlanPhase and RunPlanPhases) (activity), part 1 of 3](architecture/c4/rendered/ValidateAndApprove.svg)
+
+View: ValidateAndApprove
+
+![Nested activity: ValidateAndApprove (used by RunOnePlanPhase and RunPlanPhases) (activity), part 2 of 3](architecture/c4/rendered/ValidateAndApprove-part2.svg)
+
+View: ValidateAndApprove-part2
+
+![Nested activity: ValidateAndApprove (used by RunOnePlanPhase and RunPlanPhases) (activity), part 3 of 3](architecture/c4/rendered/ValidateAndApprove-part3.svg)
+
+View: ValidateAndApprove-part3
 
 ##### Nested activity: RunPhase4WorkPackages (loop of RunPlanPhases)
 
 A context is ready when every context with an arrow into it in section 8.3 has merged: StorageSchema first, then SharedComponents, before the server contexts; PluginCorePowerShell and BuildTooling from the start; HostPluginAdoption after both; Documentation last.
 
-```mermaid
-flowchart TD
-    S(["Phase 4 starts"]) --> RDY["Launch a coding agent per ready context (process RunDomainCodingAgent)"]
-    RDY --> MG["Merge each ready context in the rollout order, its gates re-run on the integration head"]
-    MG --> ALL{"Every context merged in the rollout order?"}
-    ALL -->|no| RDY
-    ALL -->|yes| DONE(["Return every context merged"])
-```
+![Nested activity: RunPhase4WorkPackages (loop of RunPlanPhases) (activity)](architecture/c4/rendered/RunPhase4WorkPackages.svg)
+
+View: RunPhase4WorkPackages
 
 #### Process RunDomainCodingAgent: one Phase 4 work package
 
 The coding agent's brief names the context's files, stubs, and tests, the section 3.5 components it calls through their Phase 2 seams (never re-implemented), and the standing rules.
 
-```mermaid
-flowchart TD
-    S(["Context TODO ready: its dependencies merged"]) --> BR["Branch from the integration head: Phase 3 and every merged context"]
-    BR --> AG["Brief the coding agent: files, stubs, tests, seams, standing rules"]
-    AG --> IMPL[["Implement until the context's tests, gates, and HV pass (nested: ImplementBoundedContext)"]]
-    IMPL -->|change needed outside the context's files| AMD(["Stop: raise a Phase 2 amendment for the operator"])
-    IMPL -->|AGREE at 98/98, every claim PASS| MG(["Ready to merge in the rollout order"])
-```
+![Process RunDomainCodingAgent: one Phase 4 work package (activity), part 1 of 2](architecture/c4/rendered/RunDomainCodingAgent.svg)
+
+View: RunDomainCodingAgent
+
+![Process RunDomainCodingAgent: one Phase 4 work package (activity), part 2 of 2](architecture/c4/rendered/RunDomainCodingAgent-part2.svg)
+
+View: RunDomainCodingAgent-part2
 
 ##### Nested activity: ImplementBoundedContext (loop of RunDomainCodingAgent)
 
-```mermaid
-flowchart TD
-    S(["Implementation starts"]) --> P[["One implementation pass (nested: ImplementationPass)"]]
-    P -->|change needed outside the context's files| AMD(["Return change outside the context's files"])
-    P -->|a test, gate, or HV not yet passing| P
-    P -->|AGREE at 98/98, every claim PASS| OK(["Return AGREE"])
-```
+![Nested activity: ImplementBoundedContext (loop of RunDomainCodingAgent) (activity)](architecture/c4/rendered/ImplementBoundedContext.svg)
+
+View: ImplementBoundedContext
 
 ##### Nested activity: ImplementationPass (loop body of ImplementBoundedContext)
 
-```mermaid
-flowchart TD
-    S(["Pass starts"]) --> IM["Replace stubs with the real implementation"]
-    IM --> OUT{"Change needed outside the context's files?"}
-    OUT -->|yes| AMD(["Return change outside the context's files"])
-    OUT -->|no| T3{"Context's Phase 3 tests green, unchanged?"}
-    T3 -->|no| NP(["Return not yet passing"])
-    T3 -->|yes| IT["Add the context's integration tests"]
-    IT --> G{"Context gates green, zero failures and zero skips, Linux and Windows?"}
-    G -->|no| NP
-    G -->|yes| HV["Context HV (Codex gpt-6-astra max)"]
-    HV --> HR{"AGREE at 98/98, every claim PASS?"}
-    HR -->|no| NP
-    HR -->|yes| OK(["Return AGREE"])
-```
+![Nested activity: ImplementationPass (loop body of ImplementBoundedContext) (activity), part 1 of 4](architecture/c4/rendered/ImplementationPass.svg)
+
+View: ImplementationPass
+
+![Nested activity: ImplementationPass (loop body of ImplementBoundedContext) (activity), part 2 of 4](architecture/c4/rendered/ImplementationPass-part2.svg)
+
+View: ImplementationPass-part2
+
+![Nested activity: ImplementationPass (loop body of ImplementBoundedContext) (activity), part 3 of 4](architecture/c4/rendered/ImplementationPass-part3.svg)
+
+View: ImplementationPass-part3
+
+![Nested activity: ImplementationPass (loop body of ImplementBoundedContext) (activity), part 4 of 4](architecture/c4/rendered/ImplementationPass-part4.svg)
+
+View: ImplementationPass-part4
 
 ### 8.4 Gates
 
