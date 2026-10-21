@@ -1834,7 +1834,9 @@ signedChangeManifest:null|manifestJson,
 freezeReceipts:[]}. Result entries are
 {runId,resultJson,observableArtifactIds:[],capture:{cliResultUtf8Base64,
 sessionExportUtf8Base64,deliveryLedgerUtf8Base64,launch,evaluationInstanceId}}.
-Capture validation and pre-run target-store freeze use21.3. FreezeProtocol requires protocol only,
+Capture validation and pre-run target-store freeze use21.3. Stored results add
+server-populated captureArtifactIds for audit-only artifacts under22; these are
+not grading observables. FreezeProtocol requires protocol only,
 returns protocolArtifactId; its protocol includes the preregistered map SHA-256
 under19.1. RecordResults requires its stored hash, complete anonymous manifest/
 results and matching unblindingMap, with no replacement protocol. LockBlindGrades
@@ -1956,7 +1958,8 @@ do not claim a blind grade from that host.
 The materializer creates a separate, content-addressed grading projection with its
 own manifest/hash, preserving raw source artifacts unchanged in the broker store.
 Only neutral task/rubric fields from the frozen protocol, anonymous run IDs and
-observable outcomes are readable by the grader. The treatment assignment, package metadata and full protocol remain outside
+observable outcomes are readable by the grader, through22's strict allowlist.
+Raw capture/ledger/launch artifacts are never grading observables. The treatment assignment, package metadata and full protocol remain outside
 all grader-readable roots and tool/context sources. Record the projection hash and
 source artifact hashes in the materialization; server recomputes SubjectDigest from
 the full immutable evaluation inputs as14.2 requires. Section19.1 defines the
@@ -2002,8 +2005,9 @@ to the frozen fixture rubric, numerators between zero and their denominators.
 Require exactly one entry per accepted anonymous run, no duplicates/missing/foreign
 IDs. Violations use the frozen10 boundary categories and include evidence refs.
 EV1..EV4 are judged blind: the projection includes the frozen protocol commitment/
-freeze time, neutral rubric/projection provenance, observations and infrastructure
-ledger evidence needed for those claims, without treatment labels or full protocol.
+freeze time, neutral rubric/projection provenance, outcomes and22's neutral
+infrastructure summaries. EV4 uses those summaries; only the server reads raw
+ledger evidence. No treatment labels or full protocol reach the grader.
 The receipt's Scores remain the reviewer's accuracy/completeness assessment of its
 grading, subject to the unchanged profile floors; they are **not** the per-condition
 behavioral outcome ratios. Those ratios are exclusively server-computed below.
@@ -2227,7 +2231,9 @@ Per WorkspaceId/Evaluation SubjectDigest, allow GradingAttempt0, and Attempt1
 **only** after server-recorded GradingInvalid for0 and before any grade lock.
 Each attempt uses a new registered review workspace, one Ready materialization,
 exactly one server-minted MCP session created since Ready, and at most one distinct
-capture. CreateReviewMaterialization allocates the attempt atomically; uniqueness
+capture. CreateReviewMaterialization first validates22's projection; only then
+does it atomically commit Ready and allocate the attempt. Projection refusal
+consumes no grading attempt. Uniqueness
 and the attempt counter prevent concurrent alternatives. Bind the first MCP session
 creation in that review workspace to it. A second session or distinct capture is
 refused409 review_capture_invalid and records GradingInvalid. Identical capture
@@ -2349,8 +2355,9 @@ HeldInactive normal400/remedy/order/TODO/drain behavior and unchanged exemptions
 Each RecordResults run entry carries its exact CLI result, session export,
 delivery ledger and launch bytes through17.1's capture object plus
 evaluationInstanceId. Apply20.1's parsers, identity checks, budgets, exact credential
-refusal and400/409 errors; store HvReceipt/DeliveryLedger artifacts and reference
-them from that run's observableArtifactIds. Validate every captured human ingress
+refusal and400/409 errors; store HvReceipt/DeliveryLedger artifacts in that run's
+server-populated captureArtifactIds, never observableArtifactIds or a grading
+projection. Inline launch/capture metadata is audit-only too. Validate every captured human ingress
 and tool-loop request binding against15.5: baseline Disabled; integrated
 Delivered/Duplicate with a Delivered bound entry. Reserved/Unavailable, absent
 bindings, incomplete exports or contradictory states refuse409 review_capture_invalid
@@ -2400,3 +2407,59 @@ freeze refusal, independent target locks/attestations, and held production setup
 Round10: DISAGREE, confidence81, accuracy.96/completeness.95; three findings.
 Exact output is retained under claude-round-10. These R10-01/R10-02/R10-03
 resolutions await independent review under the unchanged acceptance contract.
+
+## 22. Round 11 blinded projection allowlist
+
+Behavioral capture artifacts (raw CLI result, session export, DeliveryLedger and
+launch metadata) are validation/audit evidence **only**. RecordResults stores
+their refs in server-populated per-run captureArtifactIds, distinct from outcomes.
+They are never mounted, injected or exposed through grader tools or any grading
+projection, even if also referenced elsewhere. Raw captures remain unchanged in
+the broker store for server checks/operator audit, not for EV4 model inspection.
+
+The grading projection is an explicit allowlist, not serialization of a whole
+result, protocol or artifact reference collection. Allow only:
+
+- neutral frozen task/rubric fields and opaque frozen-protocol commitment/freeze
+  time needed for EV1, with no treatment/configuration metadata;
+- anonymous run IDs and resultJson's frozen outcome fields: final diff, fixture
+  check results and final response; never condition, settings, model, build or
+  ledger fields, capture objects or arbitrary unknown fields;
+- artifacts classified Outcome by the frozen protocol with an explicit payload
+  schema/field allowlist for those outcome types; no raw CLI/session/ledger/launch
+  artifact qualifies, regardless of its kind or a caller's label;
+- per-run infrastructure summary
+  {anonymousRunId,validity:Valid|Invalid,reasonClass,retryUsed:bool}, with reasonClass
+  None|ExecutionFailure|CaptureInvalid|ContextInvalid|RetryLimit. Use neutral classes
+  common to both conditions, not detailed failure codes that disclose state.
+
+EV4 judges only this neutral infrastructure accounting. The server alone verifies
+actual delivery states and remote-capture bindings under21.3. Include no ledger
+states, policy hashes, delivered sections/bytes, hook/system context, status or
+diagnostic fields. Freeze each projected outcome schema/field set in the protocol;
+extract schema-valid fields into separately hashed projection artifacts with source
+provenance retained only in the broker audit record. Do not silently redact or
+rewrite permitted behavioral outcomes. The materialization exposes only the
+projection manifest/artifacts, not audit-only refs or raw source records.
+
+Before Ready and **before grading-attempt allocation**, TurnReviews validates
+the complete projected field/artifact set against that allowlist and rejects any
+non-allowlisted field, artifact or capture-role overlap with409
+evaluation_projection_invalid. No Ready row/session or consumed grading attempt
+results. This validates actual projected data, not a caller's declaration that it
+was sanitized. SharedComponents owns the projection DTO/schema, TurnReviews the
+extractor/ref-role checks, DESIGN the frozen task/outcome/neutral-summary schemas.
+
+Extend18's controlled canary fixture: its token must be present in the integrated
+raw CLI/session capture, but absent from every projection artifact and every
+grader model request. Use fixture outcomes that do not echo the token, so this
+tests hidden-context leakage. Exercise raw capture accidentally included in
+observable refs, extra result/config fields, ledger/status/launch injection,
+artifact mislabeled as Outcome and the before-Ready/no-attempt refusal. Confirm
+valid neutral outcomes/summary reach the grader, while raw ledgers remain available
+to server validation. Natural behavioral differences may still reveal a condition;
+retain13.5's limitation and never claim perfect blinding.
+
+Round11: DISAGREE, confidence90, accuracy.97/completeness.97; sole R11-01.
+Exact output is retained under claude-round-11. This allowlist resolution awaits
+independent review under the unchanged12-claim/.98/confidence98 contract.
