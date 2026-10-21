@@ -1,0 +1,97 @@
+{
+  "plan": "docs/plans/2026-10-20-plugin-engineering-policy.md",
+  "files": [
+    {
+      "sha256": "A176796D5F4BCE6EAE3EBAE727BB87FB4393161A2A44E026ED2AFA7A2262F075",
+      "path": "docs/plans/2026-10-20-plugin-engineering-policy.md",
+      "bytes": 167443
+    },
+    {
+      "sha256": "E570074FC84A24DA233BF53D030DCEBBFB0113D554CFCA24B73C7109DD672F6A",
+      "path": "docs/Development-Process-draft-v4.md",
+      "bytes": 20141
+    },
+    {
+      "sha256": "6E5D4F418E78CF9A76AB366F64D4F24002C09E3C3F024502ED89D77C6E77295E",
+      "path": "docs/architecture/SessionTurn-Review-AgentContext-Architecture.md",
+      "bytes": 877709
+    },
+    {
+      "sha256": "81E7881B91037CD3C58B84E32B76EC5F5C4671807C2B801BAE1187CB94742063",
+      "path": "docs/plans/PLAN-SESSIONTURN-SESSIONREVIEW-001.md",
+      "bytes": 927837
+    },
+    {
+      "sha256": "67C550CD7BF9BD26C724E420607556A79BFC0310C33430193ED36F32F9CB72CF",
+      "path": "plugins/core/README.md",
+      "bytes": 3594
+    },
+    {
+      "sha256": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B",
+      "path": "plugins/core/lib-ps/plugin-hook.ps1",
+      "bytes": 62903
+    },
+    {
+      "sha256": "A43705C70D4D079EF78A5A19F5E1C192FD47910B781525F0BECCF129DF37AC52",
+      "path": "plugins/core/lib-ps/mcp-status.ps1",
+      "bytes": 3918
+    },
+    {
+      "sha256": "26F879BF38A1BEBF04853312CBAACD650A0D3C7BE226B8B535F0FBDB9EF59C6A",
+      "path": "plugins/core/sync/sync-plugin-core.ps1",
+      "bytes": 5703
+    },
+    {
+      "sha256": "86AC21E3091A5B3F7AA890492F0876C552885FAC28372E41E4C72022F4D5C05E",
+      "path": "plugins/core/hooks-templates/generate-wrappers.ps1",
+      "bytes": 3782
+    },
+    {
+      "sha256": "15D08BF69C0C91EEF29DD9F3F4CCE0AEB4D8BC3655D7C982EC98DBE13707A83A",
+      "path": "plugins/core/test-fixtures/pester/PluginPowerShellOnly.Tests.ps1",
+      "bytes": 2497
+    },
+    {
+      "sha256": "7F1E577B33443A8840D3EF462DB4BF71E2BEB9AE267DC866DF133167B20F792A",
+      "path": "build/Build.SyncAgentPlugins.cs",
+      "bytes": 38826
+    },
+    {
+      "sha256": "B495190F03CFC2BFFB21128F1E1DFB1D7A11A25BD30B81FBEE53DF887C17544F",
+      "path": "build/Build.Test.cs",
+      "bytes": 4006
+    },
+    {
+      "sha256": "B41D11E41AE0144C66338B29CC0DEBD4783CF724E183BBF4873AD155FA1C21E9",
+      "path": "src/QBrainAi.Client/Models/SessionLogModels.cs",
+      "bytes": 18596
+    },
+    {
+      "sha256": "00392D7CD91A4072879F2EB848A3EAF6810962BAB308E55E66EF162C1311E6C7",
+      "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+      "bytes": 102061
+    }
+  ],
+  "workspace": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009",
+  "reviewStage": "PlanReadiness",
+  "requestedEffort": "max",
+  "requestedModel": "claude-opus-5-5",
+  "round": 12,
+  "requestedAgent": "ClaudeCode",
+  "worktreeChanges": [
+    "?? docs/receipts/plugin-engineering-policy-hv-20261020/README.md",
+    "?? docs/receipts/plugin-engineering-policy-hv-20261020/attempt-1-cli-result.json",
+    "?? docs/receipts/plugin-engineering-policy-hv-20261020/attempt-1-cli-stderr.txt",
+    "?? docs/receipts/plugin-engineering-policy-hv-20261020/attempt-1-invocation.json",
+    "?? docs/receipts/plugin-engineering-policy-hv-20261020/attempt-2-cli-result.json",
+    "?? docs/receipts/plugin-engineering-policy-hv-20261020/attempt-2-cli-stderr.txt",
+    "?? docs/receipts/plugin-engineering-policy-hv-20261020/attempt-2-invocation.json",
+    "?? docs/receipts/plugin-engineering-policy-hv-20261020/attempt-3-cli-result.json",
+    "?? docs/receipts/plugin-engineering-policy-hv-20261020/attempt-3-cli-stderr.txt",
+    "?? docs/receipts/plugin-engineering-policy-hv-20261020/attempt-3-invocation.json",
+    "?? docs/receipts/plugin-engineering-policy-hv-20261020/launch-summary.json"
+  ],
+  "commit": "ff3060983ba7e40113f412501a5c033de3ce2cdd",
+  "reviewHistoryMode": "ContinuedIndependentReviewer",
+  "resumedFromSessionId": "3fe98d71-48db-4bee-83c4-0e026088b87f"
+}

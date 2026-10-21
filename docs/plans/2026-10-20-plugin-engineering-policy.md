@@ -2231,7 +2231,9 @@ Per WorkspaceId/Evaluation SubjectDigest, allow GradingAttempt0, and Attempt1
 **only** after server-recorded GradingInvalid for0 and before any grade lock.
 Each attempt uses a new registered review workspace, one Ready materialization,
 exactly one server-minted MCP session created since Ready, and at most one distinct
-capture. CreateReviewMaterialization first validates22's projection; only then
+capture. Section23 also finalizes the protocol's complete results packet on any
+attempt allocation, preventing a fresh subject from resetting these limits.
+CreateReviewMaterialization first validates22's projection; only then
 does it atomically commit Ready and allocate the attempt. Projection refusal
 consumes no grading attempt. Uniqueness
 and the attempt counter prevent concurrent alternatives. Bind the first MCP session
@@ -2277,7 +2279,8 @@ cannot produce a replacement lock. Activation rechecks current attempt accountin
 
 For the same workspace/policySha256/buildArtifactSha256, activation also refuses
 if **any** lock has a failing behavioral threshold verdict, if two grading attempts
-were invalid, or if any frozen protocol has no lock and no explicit abandonment.
+were invalid, if an accepted grading capture has no lock under23, or if any frozen
+protocol has no lock and no explicit abandonment.
 A successful lock under a new protocol cannot hide an earlier failing lock for
 the same policy/build. Repair requires changed policy/build and a new evaluation,
 not selective receipt supersession. Existing same-subject DISAGREE rules still apply.
@@ -2290,7 +2293,8 @@ apply new settings. Sign-EngineeringPolicyChange supports that typed payload.
 It writes PolicyAudit
 Kind EvaluationAbandoned with protocol/workspace/policy/build, operator, UTC and
 reason; show it in status diagnostics and all later aggregate accounting. An
-abandonment is not a lock or passing grade. Refuse abandoning a locked protocol;
+abandonment is not a lock or passing grade. Refuse abandoning a locked protocol
+or one with any accepted grading capture under23;
 it cannot erase a failing lock or two-invalid-grading block. Unfinished protocol
 abandonment permits a new fully disclosed evaluation only under those constraints.
 
@@ -2463,3 +2467,46 @@ retain13.5's limitation and never claim perfect blinding.
 Round11: DISAGREE, confidence90, accuracy.97/completeness.97; sole R11-01.
 Exact output is retained under claude-round-11. This allowlist resolution awaits
 independent review under the unchanged12-claim/.98/confidence98 contract.
+
+## 23. Round 12 protocol result finality
+
+Per WorkspaceId/protocolId, once **any grading attempt is allocated** for a
+results subject, that complete RecordResults packet is final. A different later
+complete packet, including any changed accepted-run EvalResult/resultJson bytes,
+is refused409 evaluation_results_locked; an identical repeat is idempotent.
+Before any attempt exists, a corrected complete packet may supersede its prior
+packet, but retain both immutable manifests/results and their supersession in
+protocol and aggregate accounting. Use the existing RecordResults reason field
+to explain a correction. No packet/accepted-run mutation occurs in place.
+
+Persist the finalized subject digest and results-manifest hash in the existing
+durable workspace/protocol binding. RecordResults correction and grading-attempt
+allocation serialize on that same binding: allocation atomically binds the current
+complete packet; a racing correction either precedes allocation and is disclosed,
+or receives evaluation_results_locked. GradingInvalid does not unfinalize results
+or permit a new subject under the same protocol. A new protocol remains subject
+to21.1's failed-lock, invalid-attempt and unfinished-evaluation checks.
+
+AbandonProtocol is refused409 evaluation_results_locked once **any grading
+attempt for that protocol holds an accepted capture**. That captured grading must
+reach LockBlindGrades or server-recorded GradingInvalid; it cannot disappear through
+abandonment. Retain all captures/states in the accounting, including an invalid
+attempt's earlier accepted intake. An accepted capture whose attempt is still
+pending adjudication cannot be treated as an abandoned or absent grading.
+
+Activation for the same workspace/policy/build additionally refuses with20.2's
+engineering_activation_evaluation_required while any grading attempt holds an
+accepted capture without a lock. Check all protocol subjects, not only the chosen
+AGREE attestation. Existing21.1 failure/invalid and attestation-equality rules remain
+in force; a new result subject cannot hide an accepted unfavorable grading.
+
+TurnReviews owns finalization/capture/activation queries, StorageSchema the
+protocol-binding fields/serialization token, SharedComponents the409 contract.
+Tests: different packet after allocation refused, identical replay idempotent,
+accepted-run bytes immutable, correction before any attempt allowed and disclosed,
+allocation/correction race, abandonment after accepted capture refused, and an
+unlocked accepted capture blocking activation despite another matching AGREE.
+
+Round12: DISAGREE, confidence90, accuracy.97/completeness.97; sole R12-01.
+Exact output is retained under claude-round-12. This finality correction awaits
+independent review under the unchanged acceptance contract.
