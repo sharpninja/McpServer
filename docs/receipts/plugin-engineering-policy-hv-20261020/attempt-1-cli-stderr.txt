@@ -1,0 +1,3 @@
+warning: --disallowed-tools "delete_file", "GetMcpTools" name no tool, so they remove nothing
+warning: grok-4.7-xhigh isn't in the model catalog; ignoring --effort/--reasoning-effort xhigh
+Error: Couldn't set model 'grok-4.7-xhigh': Invalid params: "unknown model id". Run 'grok models' to see available models.

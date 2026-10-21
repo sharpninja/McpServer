@@ -1,0 +1,37 @@
+{
+  "recordAuthor": "Codex",
+  "recordKind": "ReviewerLaunchFailure",
+  "cliModel": "grok-4.7",
+  "reviewStage": "PlanReadiness",
+  "requestedConfiguration": "grok-4.7-xhigh",
+  "reviewerVerdict": null,
+  "nextAction": "Restore Grok Build balance for the authenticated kingd account on Legion2, then resume the authorized review with model grok-4.7 and xhigh effort. No review verdict or approval may be inferred from these launch records.",
+  "reviewedPlan": "docs/plans/2026-10-20-plugin-engineering-policy.md",
+  "launchAttempts": [
+    {
+      "attempt": 1,
+      "sessionId": "ecb63c3b-9b12-4189-988b-716fc6f3cd1d",
+      "outcome": "Flat model identifier rejected before review"
+    },
+    {
+      "attempt": 2,
+      "sessionId": "fc59c437-e626-48e2-b513-f12ed2cfc3bf",
+      "outcome": "Canonical model and effort selected; provider rejected request for exhausted usage balance"
+    },
+    {
+      "attempt": 3,
+      "startedAtUtc": "2026-10-20T14:58:25.1532161Z",
+      "finishedAtUtc": "2026-10-20T14:58:45.7601919Z",
+      "outcome": "User-requested retry with model grok-4.7 and xhigh effort; provider again rejected request with HTTP 402 Grok Build usage balance exhausted",
+      "sessionId": "8343210d-cda5-4638-b54b-71e6c77dfae0"
+    }
+  ],
+  "blocker": "HTTP 402 Payment Required: Grok Build usage balance exhausted",
+  "planCommit": "e7ec28f90cdcd5da355c9e2e4ece2accf3dc73c9",
+  "timestampUtc": "2026-10-20T14:59:47.0744219Z",
+  "planSha256": "54C8F4B71E652A579E7D19472A33F9C3642B1001C5151EB1233A40F175BB24A2",
+  "cliEffort": "xhigh",
+  "reviewExecuted": false,
+  "host": "PAYTON-LEGION2",
+  "requestedAgent": "grok-build"
+}

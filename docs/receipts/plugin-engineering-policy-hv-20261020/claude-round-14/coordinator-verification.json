@@ -1,0 +1,31 @@
+{
+  "markdownReceiptExact": true,
+  "approvedReferences": 13,
+  "recordAuthor": "Codex",
+  "claimsPass": 12,
+  "reviewedCommit": "ef407c794f0ce935b787b7f97a57fc7e234cfb69",
+  "productBuildOrTestsExecuted": false,
+  "completeness": 0.98,
+  "reviewVerdict": "AGREE",
+  "reviewStartedAtUtc": "2026-10-21T22:20:03.2358855Z",
+  "kind": "CoordinatorVerification",
+  "reviewFinishedAtUtc": "2026-10-21T22:23:26.73288Z",
+  "verifiedAtUtc": "2026-10-21T22:23:31.8051732+00:00",
+  "referenceHashesUnchangedSinceFirstApprovedPacket": true,
+  "packetFiles": 17,
+  "confidence": 98,
+  "claimsFail": 0,
+  "actualModelUsageKeys": [
+    "claude-opus-5-5"
+  ],
+  "configuredEffort": "max",
+  "packetAndCurrentSourceHashesMatch": true,
+  "accuracy": 0.98,
+  "claimsUnknown": 0,
+  "planSha256": "34772CF1B5554651118DD3416D7A6658C59D255F5960C8096135A3A225843540",
+  "planMatchesReviewedCommit": true,
+  "reviewerSessionId": "de8f06c4-47bf-4ec4-a3cc-d1156ca0220d",
+  "failListEmpty": true,
+  "round": 14,
+  "reviewReadiness": "READY"
+}
