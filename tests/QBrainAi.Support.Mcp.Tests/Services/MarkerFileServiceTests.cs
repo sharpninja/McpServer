@@ -32,7 +32,7 @@ public sealed class MarkerFileServiceTests
     /// test creates, without reading or changing the process environment.
     /// </summary>
     private static readonly AgentPluginVersionSources s_siblingOnlySources =
-        new(_ => null, AgentPluginVersionSources.SiblingOf, UserProfile: null);
+        new(_ => null, MarkerFileService.SiblingPluginRoot, UserProfile: null);
 
     /// <summary>
     /// Builds a minimal template context for prompt-rendering tests.

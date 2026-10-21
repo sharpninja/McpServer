@@ -19,23 +19,32 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// TEST-HANDOFF-005 / TEST-HANDOFF-007: durable ingest/approval leases, TODO provenance,
 /// SaveChanges compensation, and Success/ErrorCode honesty.
 /// </summary>
+/// <remarks>
+/// Test data: one temporary SQLite database file per test in the test's own temporary workspace, opened without
+/// connection pooling, so every context (each competing service and the test's own polling) has its own connection
+/// to that database, as production does, and SQLite's per-connection rows-affected count belongs to the statement
+/// that produced it (triage-report-9b96ada18d72483dad2a3113e455c01b; operator 2026-10-20: "Fix the race in PR 87
+/// (Recommended)"; the harness assertion and its negative controls are in <see cref="HandoffTestDatabaseTests"/>).
+/// </remarks>
 public sealed class HandoffDurabilityTests : IDisposable
 {
     private readonly string _workspace;
-    private readonly SqliteConnection _connection;
     private readonly DbContextOptions<McpDbContext> _dbOptions;
     private readonly AdjustableTimeProvider _time = new(new DateTimeOffset(2026, 8, 17, 0, 0, 0, TimeSpan.Zero));
     private readonly FailNextSaveInterceptor _failNextSave = new();
 
-    /// <summary>Creates an isolated in-memory SQLite workspace for durability tests.</summary>
+    /// <summary>Creates an isolated SQLite database file in a temporary workspace for durability tests.</summary>
     public HandoffDurabilityTests()
     {
         _workspace = Path.Combine(Path.GetTempPath(), "handoff-durability", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(_workspace);
-        _connection = new SqliteConnection("Data Source=:memory:");
-        _connection.Open();
+        var connectionString = new SqliteConnectionStringBuilder
+        {
+            DataSource = Path.Combine(_workspace, "handoff-durability.db"),
+            Pooling = false,
+        }.ToString();
         _dbOptions = new DbContextOptionsBuilder<McpDbContext>()
-            .UseSqlite(_connection)
+            .UseSqlite(connectionString)
             .AddInterceptors(_failNextSave)
             .Options;
         using var db = CreateDb();
@@ -45,10 +54,17 @@ public sealed class HandoffDurabilityTests : IDisposable
     /// <inheritdoc />
     public void Dispose()
     {
-        _connection.Dispose();
         if (Directory.Exists(_workspace))
             Directory.Delete(_workspace, recursive: true);
     }
+
+    /// <summary>
+    /// Harness binding: every context this class creates has its own connection to the class's one test database
+    /// (the assertion of <see cref="HandoffTestDatabaseTests"/>, bound to <see cref="CreateDb"/>).
+    /// </summary>
+    [Fact]
+    public void TestDatabase_GivesEachContextItsOwnConnectionToOneDatabase() =>
+        HandoffTestDatabaseTests.AssertOwnConnectionsToOneDatabase(CreateDb);
 
     /// <summary>A live in-flight reservation is not mapped as a completed replay.</summary>
     [Fact]

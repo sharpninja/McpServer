@@ -92,10 +92,31 @@ public static class MarkerFileService
     /// <summary>
     /// AC-TR-MCP-WS-005-001 test seam: when set, marker plugin-version resolution reads every input (the plugin-root
     /// environment variables, the workspace sibling plugin folder and the user profile caches) from these sources
-    /// instead of <see cref="AgentPluginVersionSources.Process"/>, so unit tests never read the process environment,
+    /// instead of <see cref="ProcessAgentPluginVersionSources"/>, so unit tests never read the process environment,
     /// the machine or the real profile. Set only by the unit-test assembly fixture.
     /// </summary>
     internal static AgentPluginVersionSources? AgentPluginVersionSourcesOverride { get; set; }
+
+    /// <summary>
+    /// AC-TR-MCP-WS-005-001: the running process's plugin-version sources: its environment variables, the plugin
+    /// folder beside the workspace (<see cref="SiblingPluginRoot"/>), and the current user's profile, read when each
+    /// resolution starts.
+    /// </summary>
+    internal static AgentPluginVersionSources ProcessAgentPluginVersionSources =>
+        new(Environment.GetEnvironmentVariable, SiblingPluginRoot, Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
+
+    /// <summary>AC-TR-MCP-WS-005-001: the plugin folder beside <paramref name="workspacePath"/>; null when the workspace has no parent.</summary>
+    /// <param name="workspacePath">Workspace path; none when empty.</param>
+    /// <param name="pluginName">Plugin folder name.</param>
+    /// <returns>The sibling plugin folder, or null.</returns>
+    internal static string? SiblingPluginRoot(string workspacePath, string pluginName)
+    {
+        if (string.IsNullOrWhiteSpace(workspacePath))
+            return null;
+
+        var parent = Path.GetDirectoryName(Path.GetFullPath(workspacePath));
+        return string.IsNullOrWhiteSpace(parent) ? null : Path.Combine(parent, pluginName);
+    }
 
     private static readonly ISerializer s_yamlSerializer = new SerializerBuilder()
         .WithNamingConvention(CamelCaseNamingConvention.Instance)
@@ -532,7 +553,7 @@ public static class MarkerFileService
     };
 
     internal static MarkerAgentPlugins BuildDefaultAgentPlugins(string workspacePath) =>
-        BuildDefaultAgentPlugins(workspacePath, AgentPluginVersionSourcesOverride ?? AgentPluginVersionSources.Process);
+        BuildDefaultAgentPlugins(workspacePath, AgentPluginVersionSourcesOverride ?? ProcessAgentPluginVersionSources);
 
     /// <summary>
     /// AC-TR-MCP-WS-005-001: builds the default agent-plugin contract, resolving each plugin version from

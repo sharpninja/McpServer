@@ -80,7 +80,7 @@ public sealed class UserProfileScanBindingTests : IDisposable
     /// Test-owned resolution sources: no plugin-root variable, the production sibling rule applied to the temporary
     /// workspace (a folder that is never created), and the temporary profile.
     /// </summary>
-    private AgentPluginVersionSources Sources => new(_ => null, AgentPluginVersionSources.SiblingOf, Profile);
+    private AgentPluginVersionSources Sources => new(_ => null, MarkerFileService.SiblingPluginRoot, Profile);
 
     private string Resolve(DirectoryTreeWalker walker) =>
         MarkerFileService.ResolveAgentPluginVersion(
