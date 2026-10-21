@@ -55,16 +55,25 @@ public sealed class McpDatabaseEncryptionTransitionCommandTests
     /// Verifies that the maintenance command falls back to <c>MCP_INSTANCE</c> when the caller does not pass <c>--instance</c>.
     /// </summary>
     /// <remarks>
-    /// Requirement coverage: FR-MCP-077, TR-MCP-CFG-007.
+    /// Requirement coverage: FR-MCP-077, TR-MCP-CFG-007; classification TR-MCP-USECASE-018 (AC-006),
+    /// TR-MCP-USECASE-019 (AC-008).
     /// Test data: an environment-scoped instance name and a minimal verify command.
     /// This data is used to prove that the documented environment-variable override resolves the same effective instance selector as the explicit CLI option.
+    /// The test reads and writes the process environment, so it is an integration test (operator 2026-10-19: "If it
+    /// depends on the environment, it's an integration test."). The command reads the instance through
+    /// <c>ProductEnvironment.GetLegacy("MCP_INSTANCE")</c>, where <c>QBRAINAI_INSTANCE</c> wins when set, so the test
+    /// clears <c>QBRAINAI_INSTANCE</c> for its duration and restores both variables; found by the widened hostile
+    /// environment gate (IMPL-UNITGREEN-001, runs ug-r5-hostile-wide-1 and -2), where the machine's value won.
     /// </remarks>
     [Fact]
+    [Trait("Category", "Integration")]
     public void TryParse_UsesEnvironmentInstance_WhenCliInstanceIsOmitted()
     {
         var previous = Environment.GetEnvironmentVariable("MCP_INSTANCE");
+        var previousModern = Environment.GetEnvironmentVariable("QBRAINAI_INSTANCE");
         try
         {
+            Environment.SetEnvironmentVariable("QBRAINAI_INSTANCE", null);
             Environment.SetEnvironmentVariable("MCP_INSTANCE", "env-instance");
 
             var parsed = McpDatabaseEncryptionTransitionCommand.TryParse(
@@ -83,6 +92,7 @@ public sealed class McpDatabaseEncryptionTransitionCommandTests
         finally
         {
             Environment.SetEnvironmentVariable("MCP_INSTANCE", previous);
+            Environment.SetEnvironmentVariable("QBRAINAI_INSTANCE", previousModern);
         }
     }
 
