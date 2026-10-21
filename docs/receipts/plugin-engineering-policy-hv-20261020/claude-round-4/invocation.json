@@ -1,0 +1,13 @@
+{
+  "exitCode": 0,
+  "startedAtUtc": "2026-10-21T19:35:53.6774581Z",
+  "requestedAgent": "ClaudeCode",
+  "sessionId": "83e9c7a8-6e1d-4f37-ab54-55ce6013fb4c",
+  "requestedModel": "claude-opus-5-5",
+  "planSha256": "064737AD1AA8A02DF064AE39303A3B588243EE2C97665B2D2FE021469AF89759",
+  "executable": "C:/Users/kingd/.local/bin/claude.exe",
+  "commit": "1e250cd1cd00287e5548fb2a6f06050af025ee63",
+  "requestedEffort": "max",
+  "round": 4,
+  "finishedAtUtc": "2026-10-21T19:59:14.8359300Z"
+}

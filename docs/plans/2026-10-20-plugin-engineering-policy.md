@@ -257,7 +257,7 @@ structured text is visible as invalid raw text with a diagnostic, never Plain.
 Existing clients omitting format still create Plain; modern updates preserve it.
 Before StructuredAcceptanceCriteriaEnabled=true, deploy compatible clients/renderers.
 Legacy full replacement that omits format on an existing structured criterion is
-rejected (`acceptance_criterion_format_required`) rather than resetting it to
+rejected (HTTP400 ClassifiedError `acceptance_criterion_format_required`) rather than resetting it to
 Plain. Explicit conversion requires new format and text, validates both, keeps
 criterion identity and audit history, invalidates prior satisfaction/evidence and
 linked engineering receipts. Format/text/schemaVersion participate in AC revision
@@ -371,8 +371,9 @@ last read; record this limitation instead of claiming a filesystem transaction.
 Only server-owned `EngineeringValidationRunner` creates Verified receipts. Agent
 requests named inventory gate; cannot submit trusted Pass/counts/commands/origins.
 Runner executes approved fixed argument vectors via pwsh.exe in isolated snapshot,
-no shell interpolation/arbitrary arguments. Idempotency key+payload hash; one job
-per snapshot/gate/platform/attempt. Parse original TRX/Pester reports and exit code;
+no shell interpolation/arbitrary arguments. Idempotency key+payload hash; jobs
+allocate per evidence revision/gate/platform/server attempt, with workspace-wide
+failure memory (section15). Parse original TRX/Pester reports and exit code;
 check expected projects/test IDs/counts, failures/skips, scope/time/platform and
 artifact hashes. Missing/contradictory/empty output is Unknown. Raw reports and
 stdout/stderr are content-addressed outside checkout, sanitized on read; uploaded
@@ -883,7 +884,8 @@ Applicability is the following exhaustive ordered decision list (no table):
    the complete applicability cases.
 
 Remedy codes respectively: engineeringPolicy=refresh_policy;
-engineeringEvidence=record_evidence; engineeringSnapshot=refresh_snapshot_or_baseline;
+engineeringEvidence=record_evidence (approve_todo_type if missing/unapproved TodoType);
+engineeringSnapshot=refresh_snapshot_or_baseline;
 engineeringValidation=run_approved_inventory; engineeringCoverage=link_ac_tests;
 engineeringHostileReview=obtain_attested_hv. Keep section 8's token order and
 base missing-item order. Missing baseline itself reports engineeringSnapshot even
@@ -1277,7 +1279,7 @@ transaction. No uncommitted IOptionsMonitor value participates in a gate.
   is enabled. Byte budgets are Int64, counts/timeouts Int32, threshold floors
   decimal, flags bool; enum/string fields retain the stated closed sets/limits.
 - SourceRepositories={}: map WorkspaceId to extra source root arrays, each unique
-  Id and canonical absolute local Git root Path, no overlap/case collision or
+  Id, DirectoryName and canonical absolute local Git root Path, no overlap/case collision or
   network build root. Implicit primary Id `workspace` always resolves to registered
   workspace path; overrides are forbidden. Inventory SourceInputs is a nonempty
   ordered set including `workspace` plus configured extras. Producer pins
@@ -1446,3 +1448,224 @@ it. This is a dependency, not approval inferred from committing this document.
 Round3: DISAGREE, confidence38, accuracy.88/completeness.79, 2PASS/10FAIL;
 14 findings. Exact output is retained under claude-round-3. Sections14.1–14.7 and
 the corrected earlier clauses are the author resolutions awaiting re-review.
+
+## 15. Round 4 contract completion
+
+These nine resolutions complete EP-R4-01 through EP-R4-09. They amend the base
+HV protocol and contracts explicitly; no implementation or phase approval is
+inferred from this document's external readiness review.
+
+### 15.1 Independent review workspace and baseline cadence
+
+For engineering-gated source workspaces, HV/grader sessions run in a **separate
+registered review workspace**, DevelopmentProcess=None, over a read-only
+materialization of the exact source bundle. Its writable workspace envelope holds
+only registration/marker/session metadata; reviewed files are a read-only `source/`
+child. Receipts go only to the broker artifact store outside source. Operator
+registers this workspace/configuration and launches the reviewer there; the review
+brief binds original WorkspaceId, snapshot/subject digests and allowed artifact
+scope. Reviewer records/completes its own Chore turn in that review workspace under
+base rules; it cannot mutate source, create validations or attest its own verdict.
+Global/operator profile and scoped approved review context still apply; no source
+workspace marker/API key is added to the provider packet.
+Review tool allowlist includes own-workspace session-log MCP operations solely
+for its audit lifecycle; read-only restrictions apply to reviewed source. Local
+registration/hooks bootstrap with redacted trust diagnostics, never exposing
+marker keys to the provider. No source-workspace/admin/requirements/TODO mutator
+is available to the reviewer. Explicitly amend the
+base-plan HV protocol's launch directory, docs/receipts/hv location and reviewer
+turn rule for these workspaces. Do not execute the reviewer inside the dirty
+engineering-gated worktree. Ordinary source-agent turns remain gated as before.
+
+After operator approval of a SliceExit, the operator invokes RecordBaseline to
+adopt that slice snapshot before starting the next slice. It may reuse that Slice
+AGREE attestation **only** when oldSnapshotId is the current certified pointer,
+newSnapshotId equals the slice snapshot, and its baselineDeltaDigest equals the
+server's ReviewedDiffSha256. Slice profile includes Scope, Safety and Provenance
+in addition to its existing mandatory claims. CAS/full-delta/history checks still
+run; any extra shared-checkout change or different pointer requires a new Baseline
+HV. Nothing moves the pointer automatically. Same rule applies to approved
+TestDesign exits. Tests: reviewer Chore turn completes without source evidence;
+Docs after adoption stays Docs; unrelated edits cannot piggyback on Slice AGREE;
+attestation/pointer change refuses adoption. Before new gates exist, external
+packet-only plan readiness remains a review record, not a formal phase exit.
+
+### 15.2 Attestation lookup, ownership and failure memory
+
+ReviewRefsJson contains prerequisite attestations only, never the current Slice
+attestation. Evidence can therefore be created before its HV. At completion,
+server recomputes SubjectDigest from the referenced immutable EvidenceId/Revision
+and current profile/dependencies, then looks up attestations by workspace/subject/
+profile. Newest non-superseded attestation must be AGREE and **no** non-superseded
+DISAGREE may exist. Superseding is an operator-only append referencing prior IDs
+for that same subject/profile, with Reason and audit; validate cycles/foreign IDs.
+Newest order is server AttestedUtc then AttestationId, never caller timestamp.
+An old AGREE cannot be selected around a later unresolved DISAGREE.
+
+Turn completion requires evidence whose complete turn FK/root tuple is exactly
+the completing turn. TODO done requires evidence for that TodoId from a completed
+coordinating turn and repeats preflight current-snapshot equality plus DB-only
+policy/generation/profile/requirement/inventory/coverage/attestation checks. It does
+not trust the previous turn's completion stamp alone. Apply the same bounded CAS/
+retry and atomic backend-save rules. Tests cover circular/prerequisite refs,
+multiple/superseded verdicts, foreign-turn evidence and edits between turn close
+and TODO done.
+
+Workspace-wide failure memory is keyed (WorkspaceId, SnapshotId, GateId, Platform,
+InventoryDigest). A Fail in **any** evidence/turn blocks a new Pass for that tuple;
+RunValidation returns409 engineering_validation_failed, completion reports
+engineeringValidation. New turn/revision/Progress versus SliceExit cannot clear
+it. Different source snapshot is necessary after Fail. Receipt gains indexed
+SnapshotId/InventoryDigest, SupersededInfrastructureUnknown bool defaultfalse,
+SupersededByReceiptId nullable UUID/composite workspace FK; section14's one-infra-
+retry exception is unchanged. All turn-child evidence/receipt rows carry the base
+immutable Agent/SessionId/RequestId roots plus parent evidence ID/revision; these
+common root fields are inherited in every wire/job/storage projection, not omitted
+by the shorter field inventories above. Workspace-scoped non-turn attestations
+have nullable turn roots; Slice attestations require them. Test cross-turn failure
+memory and uniqueness under concurrent retries.
+
+### 15.3 Materialization and one normative inventory shape
+
+SourceRepositories.DirectoryName is required, one path component, exact repository
+name. Primary implicit `workspace` has DirectoryName=`McpServer`. Host directories
+are exactly mcpserver-claude-code-plugin, mcpserver-claude-cowork-plugin,
+mcpserver-cline-plugin, mcpserver-cline-v2-plugin, mcpserver-codex-plugin,
+mcpserver-copilot-plugin, mcpserver-grok-plugin, mcpserver-grok-bot-plugin and
+mcpserver-opencode-plugin. Reject duplicate/case-colliding/traversing names.
+
+Job layout: `<WorkRoot>/<jobId>/inputs/<DirectoryName>/` for each source, and
+separate outputs/cache under that job. Inventory WorkingDirectory is relative to
+the primary `inputs/McpServer` repository, canonical default `.`. G6 and
+PowerShellOnly run from that root with literal `--agent-plugin-parent ..`; the
+isolated parent is thus `inputs`, not a substituted arbitrary path. Required
+working outputs are private overlays as already specified. Only the existing
+TestRunId/GateStartedAtUtc placeholders are substituted. Discovery/layout/hash-
+preservation tests run on both OSes, proving all nine repositories are selected.
+
+Normative inventory v1 field placement is below (illustrative values, not active
+test claims). JSON names are lowerCamel; earlier PascalCase denotes DTO members.
+All shown keys required; queryId is null for Process, UseCasesCoverage for
+BrokerQuery. No extra keys. Arrays follow the ordering rules after the example.
+
+```json
+{
+  "schemaVersion": 1,
+  "sourceInputs": ["workspace"],
+  "dependencyCacheSha256": "<64-lowercase-hex>",
+  "catalogIds": ["<frozen-requirement-id>"],
+  "allowedBaselineFindings": [
+    {"code": "<baseline-code>", "requirementId": "<id>", "relatedIds": []}
+  ],
+  "gates": [
+    {
+      "gateId": "G2",
+      "executionKind": "Process",
+      "queryId": null,
+      "argv": ["./build.ps1", "Test", "--test-run-id", "<server-job-id>", "--gate-started-at-utc", "<server-start-utc>"],
+      "workingDirectory": ".",
+      "platforms": ["LinuxX64"],
+      "stages": ["Red", "MocksGreen", "Green"],
+      "expectedProjects": ["<project-path>"],
+      "expectedTests": ["<test-id>"],
+      "expectedCount": 1,
+      "acLinks": [
+        {"requirementKind": "FR", "requirementId": "<id>", "acId": "<ac-id>", "assertionKeys": ["<assertion-key>"]}
+      ],
+      "parserId": "DotnetTrxV1",
+      "timeoutSeconds": 3600,
+      "expectedRedTests": [
+        {"testId": "<test-id>", "exceptionType": "<type>", "assertionMessageSha256": "<64-lowercase-hex>", "stackFramePrefix": "<prefix>"}
+      ]
+    }
+  ],
+  "todoTypes": [
+    {"todoId": "<todo-id>", "kind": "Implementation", "requiredGateIds": ["G2"], "requiredClaims": ["EP1"]}
+  ]
+}
+```
+
+Canonical object keys sort ordinally for hashing. Sort sourceInputs/catalogIds/
+projects/test IDs/claim IDs/assertion keys/relatedIds ordinally; gates by gateId,
+todoTypes by todoId, baseline findings by code/requirementId/relatedIds, AcLinks by
+kind/requirementId/acId, ExpectedRedTests by testId. Platform/Stage enum arrays use
+their declared order. argv preserves execution order. Real inventory substitutes
+verified facts, covers all required cumulative gates/claims and all nine source
+IDs when host gates apply; placeholders/unknown IDs are refused. No approval of
+the example is implied. Reviewed operator approval cannot weaken fixed gate/floor
+requirements. Missing/unapproved TodoType uses engineeringEvidence with remedy
+approve_todo_type; all other missing evidence uses record_evidence.
+
+### 15.4 Replay, signed-manifest channel and status selection
+
+SessionLogMintTurnRequest gains optional `boundAtUtc` UTC timestamp, supplied only
+by the trusted replay path from captured C4 binding. Live mint ignores absent time
+and uses server receive UTC; a live caller sending boundAtUtc is400 validation_error.
+Replay accepts captured values in [session openedUtc, server now+5seconds], bound
+to original nonce/session/request recovery envelope. Outside that window, missing
+or invalid time makes OpeningSnapshotState=Unavailable; do not select a newer
+pointer or fabricate an arrival. Extend arch4.2, mint client/REPL shim and golden
+contract. Tests: live clock, valid delayed replay across pointer advance, rejected
+future/before-session timestamps and no history.
+
+Signed configuration channel: `engineering-policy-change.json` beside the
+instance's canonical protected configuration file, same operator-only directory
+ACL. Signing script writes an atomic temporary file/rename, then operator atomically
+updates canonical configuration and requests reload/restart. Reconciliation reads
+both at startup/reload; mismatch/partial deployment retains previous effective
+settings and reports engineering_config_manifest_mismatch. Missing manifest for
+nondefault change, invalid signature, expired new manifest or stale revision are
+final config rejection codes (engineering_config_manifest_required/invalid/expired/
+conflict). On initial startup with nondefault protected settings, reject feature
+activation until valid; never silently weaken an enabled enforcement request.
+Keep accepted manifest beside configuration and archive its unchanged bytes/hash
+with audit; restart/no-op/idempotent deployment ID reuse uses stored approval,
+not a new signature. New change overwrites channel atomically, preserving audited
+history; cleanup never removes the last accepted manifest. No secret key in file.
+
+Plugin status uses the invoking host's base binding (explicit host session key,
+otherwise sole live session inference). If no invocation can select a single
+host session, return `hostSessions` array keyed/sorted by hostSessionKey with each
+row's host/lastRequestId/delivery fields, and no guessed top-level session fields.
+Server policy descriptor stays workspace-scoped. Test two live sessions and
+ended/resumed sessions; status never changes binding or delivery state.
+
+### 15.5 Evaluation isolation, hash evolution and owners
+
+Run baseline/integrated on two identically provisioned isolated instances and
+source/fixture copies, differing only in their signed GuidanceEnabled values.
+Require fresh host sessions and successful descriptor reads before every run.
+A run is infrastructure-invalid if **any prompt** ledger outcome is not Disabled
+for baseline or Delivered/Duplicate for integrated, including timeout fallback
+that would otherwise inject packaged guidance into baseline. Use the single
+paired rerun; second invalid blocks activation. Keep all contaminated evidence.
+
+Choose the pre-persistence amendment option for Requirement hashes: fold kind/
+criterion IDs/Format into the authoritative base hash contract **before Phase C
+implements any hash writer or persists a hash**. Fold the additive Format column/
+Plain default/backfill and DTO extension into base StorageSchema/SharedComponents
+before those writers compile/deploy. Structured writes remain disabled. Policy
+plugins still ship at1.122.0 after the base rollout; this foundational amendment
+must not wait until that release. No historical Trusted response is silently
+rehash-staled and no per-record hash-version columns are needed in this path.
+Phase1/StorageSchema verifies absence of existing PhaseC package/response/evidence/
+relationship hashes in every target store; migration preflight repeats it. If
+any legacy hash exists, block this rollout without modifying data and require a
+separately reviewed compatibility migration before proceeding; do not assume empty
+from source inspection alone. Tests: seeded legacy state blocks without mutation;
+empty stores write the amended hash; format-only changes stale dependencies;
+satisfaction/evidence metadata does not. This is an explicit base PhaseC ordering
+dependency, not a runtime choice left to implementers.
+
+Ownership additions: TurnReviews owns admin/internal listener behavior, producer
+transport and ConfigurationReconciliationService in its engineering module.
+DESIGN-MERGEDPLAN-001 owns composition-root/listener/reconciliation surface changes
+and coordinates shared files; SharedComponents Phase2 owns public signatures and
+embedded docs/schemas/resources. PluginCorePowerShell owns signing/baseline helper
+scripts under tools/powershell, BuildTooling calls those contracts and owns update/
+census orchestration. RequirementsAndAcceptanceCriteria owns runtime codec/census
+behavior. No context edits another's files without the Phase2 amendment/ACK rule.
+
+Round4: DISAGREE, confidence44, accuracy.91/completeness.82, 3PASS/9FAIL;
+nine findings. Exact output saved under claude-round-4. Current resolutions await
+the next independent review under the unchanged12-claim/.98/confidence98 contract.
