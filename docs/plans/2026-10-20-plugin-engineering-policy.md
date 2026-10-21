@@ -97,6 +97,8 @@ projected onto `Mcp:EngineeringPolicy`:
   this value AND NOT its signed `EngineeringGuidanceSuppressed` setting; section18
   restricts suppression to Evaluation grader review workspaces.
 - `EnforcementEnabled`: instance bool, default false for compatible deployment.
+- `EvaluationGateRequired`: instance bool, default false for local evaluation;
+  operator sets true on staging/production. Section20.2 defines activation checks.
 - `HookReadTimeoutMs`: int, default 100, range 10..250.
 - `MaxInstructionBytes`: int, default 8192, range 1024..8192.
 - `StructuredAcceptanceCriteriaEnabled`: instance bool, default false; operator
@@ -127,7 +129,7 @@ Read `GET /qbrainai/engineering-policy/status` (alias `/mcpserver/...`), client
 `policyGeneration`, `guidanceEnabled`, `enforcementEnabled`, `developmentProcess`,
 `agentContextMode`, `assetAvailable`, `compatible`, `minimumPluginVersion`,
 `diagnostics` (ordered code/message pairs), `hookReadTimeoutMs`,
-`maxInstructionBytes`, `structuredAcceptanceCriteriaEnabled`,
+`maxInstructionBytes`, `structuredAcceptanceCriteriaEnabled`, `evaluationGateRequired`,
 `engineeringGuidanceSuppressed` (workspace bool), `graderContext` (section19.2).
 `guidanceEnabled` is the effective workspace value, not the unadjusted instance setting.
 
@@ -962,7 +964,7 @@ per job; oversize is Unknown/artifact_budget, never partial Pass.
 
 Canonical JSON shapes: CommandJson={executableId,argv:[]};
 ScopeJson={projectPaths:[],testIds:[],filter:string|null};
-ArtifactsJson=[{artifactId:sha256,kind:Trx|Pester|Stdout|Stderr|HvReceipt|EvalProtocol|EvalRunManifest|EvalResult|EvalBlindGrades|EvalUnblindingMap|EvalAggregate,
+ArtifactsJson=[{artifactId:sha256,kind:Trx|Pester|Stdout|Stderr|HvReceipt|DeliveryLedger|EvalProtocol|EvalRunManifest|EvalResult|EvalBlindGrades|EvalUnblindingMap|EvalAggregate,
 sha256,byteLength}]; ReviewRefsJson=[attestationId];
 CoverageJson=[{requirementId,acId,revision,testId,gateId,assertionKey}].
 ManifestJson={headSha,entries:[{path,mode,length,sha256,indexBlob,indexMode,deleted}]};
@@ -1255,7 +1257,8 @@ transaction. No uncommitted IOptionsMonitor value participates in a gate.
 
 - RunnerEnabled bool=false; disabled RunValidation is409 engineering_runner_disabled.
   Enabling enforcement requires RunnerEnabled, approved inventory/baseline and
-  provisioned trusted producers for its required platforms.
+  provisioned trusted producers for its required platforms, plus20.2's current
+  Evaluation attestation when EvaluationGateRequired is true.
 - ArtifactRoot/WorkRoot: absolute paths outside all source roots, respectively
   `/var/lib/qbrainai/engineering/artifacts` and `/var/lib/qbrainai/engineering/work`
   on Linux, `C:/ProgramData/QBrainAi/engineering/artifacts` and
@@ -1721,8 +1724,8 @@ materialization, never silently redacts bytes and retains their old digest.
 No automatic provider upload: operator launches the reviewer with the approved
 materialization/brief. This explicitly replaces the base rule that the implementing
 agent launches the reviewer in its worktree. The reviewer emits its receipt only
-in the captured final response/VERDICT block; broker capture stores it as an
-artifact. The reviewer does not write receipt files in source or artifact storage.
+in the captured final response/VERDICT block; section20.1's explicit capture
+operation stores it as an artifact. The reviewer does not write receipt files in source or artifact storage.
 These launch/emission rules join15.1's base HV protocol amendment.
 
 EngineeringReviewMaterialization: composite WorkspaceId/MaterializationId UUID
@@ -2034,8 +2037,12 @@ TurnReviews owns validation, storage and recomputation; SharedComponents the DTO
 Standard management shape/auth/notfound/store errors apply; inconsistent rubric,
 run set or receipt is400 validation_error, stale bindings409 engineering_review_stale.
 
-For SubjectKind Evaluation, AttestReview additionally requires ArtifactRefs for
-EvalBlindGrades, EvalUnblindingMap and EvalAggregate, resolves the grade lock,
+For SubjectKind Evaluation, AttestReview resolves the grade lock by the raw blind
+receipt's MaterializationId and adds server-derived refs for EvalBlindGrades,
+EvalUnblindingMap and EvalAggregate to the stored attestation's ArtifactRefsJson.
+The raw receipt remains unchanged and carries only its original known inputs;
+neither grader nor caller must predict hashes of later-created artifacts. Server
+resolves those added refs from the immutable lock, never caller substitutions, and
 recomputes the aggregate from immutable grades/map/results, checks exact equality
 with the stored artifact and enforces both the blind receipt/profile floors and
 the behavioral thresholds above. It verifies current evaluation subject inputs,
@@ -2078,3 +2085,117 @@ and unchanged ordinary-workspace context. These are planned implementation tests
 Round8: DISAGREE, confidence84, accuracy.97/completeness.96; two findings.
 Exact output is retained under claude-round-8. R8-01/R8-02 are submitted for the
 next independent review under the unchanged twelve claims and score floors.
+
+## 20. Round 9 capture and activation interfaces
+
+### 20.1 Immutable review capture and ledger verification
+
+Add operator-only POST
+`/admin/engineering-policy/{workspaceId}/review-materializations/{materializationId}/captures`,
+mTLS EngineeringPolicyAdmin; client `RecordReviewCaptureAsync`. WorkspaceId is
+the original subject workspace; the stored materialization selects the separate
+review workspace. Input:
+{cliResultUtf8Base64,sessionExportUtf8Base64,deliveryLedgerUtf8Base64,
+launch:{agent,model,effort,cliVersion,providerSessionId,mcpSessionId,hostSessionKey,
+arguments:[],startedAtUtc,finishedAtUtc}}. Inputs are exact captured bytes, never
+paths/URLs. Session export contains the complete reviewer conversation/event stream
+and ingress/request bindings; ledger bytes are a JSON export of that host session's
+policyDeliveries entries and alias bindings. Respect existing artifact/count/byte
+budgets and exact known-live credential refusal; do not silently redact captures.
+
+TurnReviews parses the raw CLI result/events and session export, extracts the exact
+final response/VERDICT, and verifies agent/model/version/session/launch-time
+consistency with launch metadata, materialization and effective review profile.
+Require successful CLI termination and exactly one final response. CLI arguments
+must specify the required effort. Where a CLI does not independently report actual
+effort, retain requested effort and mark actual effort unexposed/operator-attested;
+do not invent telemetry. Identity/independence remains operator-attested under13.3;
+untrusted agent upload cannot invoke this endpoint or create a trusted capture.
+
+This capture record supplies the previously implicit launch binding: operator
+certifies the declared launch/session metadata with the capture, and the server
+crosschecks its own registered review workspace and minted MCP session/turns.
+Reject a foreign workspace/session, wrong profile/CLI identity, missing final
+response or mismatched request bindings. For an Evaluation capture, enumerate
+**all server-minted grader turns in that mcpSessionId** and require one matching
+Disabled ledger entry for each request, using stored ingress aliases where needed.
+Reject missing, foreign or conflicting entries and Reserved/Delivered/Unavailable;
+verify zero bytes/empty sections and signed neutral-context hash. Session export
+must account for every human ingress and tool-loop dispatch and their bound request;
+unlogged prompt/dispatch or missing complete export invalidates grading. Tool loops
+recheck the same Disabled entry, not a new arrival. Crosschecking is not a claim of
+cryptographic remote-host execution proof; the remaining capture honesty is the
+explicit operator-attested boundary. Tests must not label forged agent data trusted.
+
+Store exact CLI bytes, session export and extracted final response as separate
+HvReceipt artifacts, the exported ledger as DeliveryLedger, all content-addressed.
+Add EngineeringReviewCapture, composite WorkspaceId/CaptureId UUID PK, FK
+WorkspaceId/MaterializationId, with ReviewWorkspaceId, McpSessionId,
+ProviderSessionId, HostSessionKey, LaunchJson, CliArtifactId, SessionExportArtifactId,
+DeliveryLedgerArtifactId, CapturedResponseArtifactId, CaptureDigest, CreatedUtc,
+CreatedByOperatorId. CaptureDigest hashes canonical launch metadata and artifact
+hashes plus materializationId/manifest hash; store append-only with a uniqueness
+index on WorkspaceId/MaterializationId/CaptureDigest. Same bytes/bindings return
+the same record. Different capture targeting a locked materialization refuses409
+evaluation_grades_locked. Return {captureId,capturedResponseArtifactId}; lookup by
+that artifact must identify exactly one matching materialization binding, otherwise
+refuse ambiguity. LockBlindGrades resolves this record and repeats the identity,
+server-turn coverage and Disabled checks; raw receipt upload is not a substitute.
+
+TurnReviews owns behavior/parsers, DESIGN the management surface, SharedComponents
+the DTO/client, StorageSchema the Phase4 capture migration. Standard size limits,
+400 validation_error,403 admin_authorization_required,404 not_found and503 store
+errors apply. Capture identity/ledger/session inconsistencies are409
+review_capture_invalid; unsupported CLI capture format is409
+review_capture_unsupported. No partial trusted capture. Missing/forged/mixed-state
+ledger, unlogged ingress, mismatched identity/materialization, exact extraction,
+idempotence, locked-capture refusal and operator-only authorization are test cases.
+
+### 20.2 Defined staging and production activation gate
+
+EvaluationGateRequired is a protected signed EngineeringPolicyOptions bool under
+14.5/15.4. Defaults false only support local development/evaluation instances;
+staging/production provisioning sets true. Status exposes the effective value.
+On those instances ConfigurationReconciliationService defines **activation** as:
+
+- false-to-true EnforcementEnabled: validate every currently registered BDPv4
+  source workspace; with none, enforcement is dormant and grants no BDP activation;
+- None-to-BDPv4 selection for a source workspace: validate that workspace;
+- policy SHA-256 or deployed build artifact SHA-256 changes while a workspace is
+  BDPv4 and enforcement enabled: validate it before applying the deployment.
+
+For each affected workspace require a current non-superseded Evaluation AGREE
+attestation under the current Evaluation profile, no unresolved DISAGREE, whose
+policySha256/buildArtifactSha256 equal the proposed deployed values. Deployed build
+hash comes from the operator-approved build artifact manifest, never a caller's
+status claim. Re-run19.1's lock/ref/aggregate/threshold checks. Missing, stale,
+mismatched or failing evaluation refuses the configuration/deployment with409
+`engineering_activation_evaluation_required`, audits the reason/attestation ID,
+and retains the previous committed settings. No semantic setting becomes visible
+before this check succeeds. Existing Runner/inventory/baseline preconditions still
+apply. Enabling EvaluationGateRequired on an already active configuration runs
+the same check, preventing an unchecked first signed deployment.
+
+Startup/restart also verifies this invariant before allowing gated BDP work; a
+persisted active selection with a changed build/policy or invalid evaluation is
+held inactive with engineering_activation_evaluation_required, never silently
+grandfathered. Status/administrative recovery remain available; do not claim a
+completed activation. An explicitly signed operator change can disable enforcement
+or select None for recovery under the existing audited procedure. This does not
+allow an agent to lower EvaluationGateRequired or alter the deployment manifest.
+
+Publishing/installing the default-on1.122.0 plugins to staging/production is also
+an operator release-checklist step citing that workspace's matching Evaluation
+attestation ID; the server cannot enforce copying external plugin files. State this
+procedural boundary explicitly. Local isolated evaluation instances keep the gate
+false while producing the evidence, so evaluation bootstrap is not circular.
+ConfigurationReconciliationService owns the invariant, DESIGN the deployment/
+release-checklist integration, TurnReviews the evaluation verification query.
+Test successful activation, missing/stale/failed aggregate refusal with unchanged
+settings, None-to-BDP selection, enforcement enablement, gate enablement on active
+settings, policy/build replacement, restart holding stale activation inactive,
+and the recorded plugin-release attestation reference.
+
+Round9: DISAGREE, confidence86, accuracy.97/completeness.97; R9-01/R9-02.
+Exact output is retained under claude-round-9. These interface corrections await
+independent review; no product implementation or activation is claimed.
