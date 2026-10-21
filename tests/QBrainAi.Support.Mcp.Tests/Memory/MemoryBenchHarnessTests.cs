@@ -1,10 +1,14 @@
 using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Tests.TestSupport;
 
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018: Harness conditions, metrics, isolation, and modes.
+/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018: Harness conditions, metrics, isolation, and modes. The class runs in
+/// <see cref="ProcessEnvironmentCollection"/> because two of its integration tests write the process environment
+/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
 /// </summary>
+[Collection(ProcessEnvironmentCollection.Name)]
 public sealed class MemoryBenchHarnessTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-05: without_memory has no injection and no successful recall tools.</summary>

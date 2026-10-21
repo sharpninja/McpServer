@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using QBrainAi.Common.AgentCli;
 using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Tests.TestSupport;
 using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
 
@@ -10,8 +11,11 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 
 /// <summary>
 /// TEST-MCP-TRIAGE-003: Verifies the Codex CLI execution strategy used by
-/// background triage invokes <c>codex exec</c> non-interactively.
+/// background triage invokes <c>codex exec</c> non-interactively. The class runs in
+/// <see cref="ProcessEnvironmentCollection"/> because one of its tests writes the process environment
+/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
 /// </summary>
+[Collection(ProcessEnvironmentCollection.Name)]
 public sealed class CodexCliAgentExecutionStrategyTests
 {
     /// <summary>
@@ -156,9 +160,12 @@ public sealed class CodexCliAgentExecutionStrategyTests
     /// <summary>
     /// TEST-MCP-TRIAGE-003: The Codex CLI strategy writes one-shot output
     /// files under the configured shared temp root so a service-spawned
-    /// interactive-user codex process can write the final response file.
+    /// interactive-user codex process can write the final response file. The test sets and restores
+    /// <c>MCPSERVER_CODEX_ONESHOT_TEMP</c>, which the strategy reads first, so it writes the process environment and is
+    /// an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
     /// </summary>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task ReadInitialResponseAsync_WithConfiguredSharedTempRoot_UsesSharedOutputPath()
     {
         var tempRoot = Path.Combine(Path.GetTempPath(), $"codex-oneshot-shared-{Guid.NewGuid():N}");

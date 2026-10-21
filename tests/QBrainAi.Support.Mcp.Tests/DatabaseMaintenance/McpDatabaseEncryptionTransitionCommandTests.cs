@@ -1,5 +1,6 @@
 using QBrainAi.Support.Mcp.DatabaseMaintenance;
 using QBrainAi.Support.Mcp.Storage.Database;
+using QBrainAi.Support.Mcp.Tests.TestSupport;
 
 namespace QBrainAi.Support.Mcp.Tests.DatabaseMaintenance;
 
@@ -10,7 +11,10 @@ namespace QBrainAi.Support.Mcp.Tests.DatabaseMaintenance;
 /// Requirement coverage: FR-MCP-077, TR-MCP-SEC-004, TR-MCP-CFG-007.
 /// Test data uses deterministic provider connection strings, placeholder keys, and dry-run command arguments so
 /// the maintenance workflow can be validated without requiring live SEE, pg_tde, or SQL Server TDE infrastructure.
+/// The class runs in <see cref="ProcessEnvironmentCollection"/> because one of its integration tests writes the process
+/// environment (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
 /// </remarks>
+[Collection(ProcessEnvironmentCollection.Name)]
 public sealed class McpDatabaseEncryptionTransitionCommandTests
 {
     /// <summary>

@@ -1,5 +1,6 @@
 using System.Reflection;
 using Xunit;
+using static QBrainAi.Support.Mcp.Tests.TestSupport.CollectionAssertions;
 
 namespace QBrainAi.Support.Mcp.Tests.Storage;
 
@@ -32,38 +33,6 @@ public sealed class SqlServerLocalDbCollectionTests
     private const string ScriptedParallelName = "Scripted parallel collection";
 
     private const string ScriptedExplicitParallelName = "Scripted explicit parallel collection";
-
-    /// <summary>
-    /// Asserts that <paramref name="type"/> carries exactly one xUnit collection attribute and that it names
-    /// <paramref name="collection"/>.
-    /// </summary>
-    private static void AssertInCollection(Type type, string collection)
-    {
-        var names = type.GetCustomAttributesData()
-            .Where(attribute => attribute.AttributeType == typeof(CollectionAttribute))
-            .Select(attribute => attribute.ConstructorArguments.Count == 1 ? attribute.ConstructorArguments[0].Value as string : null)
-            .ToList();
-        var name = Assert.Single(names);
-        Assert.Equal(collection, name);
-    }
-
-    /// <summary>
-    /// Asserts that <paramref name="definition"/> carries exactly one xUnit collection definition, that it names
-    /// <paramref name="collection"/>, and that it sets <c>DisableParallelization</c> to true, so the collection never
-    /// runs beside another collection.
-    /// </summary>
-    private static void AssertSerializedDefinition(Type definition, string collection)
-    {
-        var attribute = Assert.Single(
-            definition.GetCustomAttributesData(),
-            data => data.AttributeType == typeof(CollectionDefinitionAttribute));
-        var name = Assert.Single(attribute.ConstructorArguments);
-        Assert.Equal(collection, name.Value as string);
-        var flag = Assert.Single(
-            attribute.NamedArguments,
-            argument => argument.MemberName == nameof(CollectionDefinitionAttribute.DisableParallelization));
-        Assert.True(flag.TypedValue.Value is true);
-    }
 
     /// <summary>Mock gate positive control: a scripted type in the required collection passes the assertion.</summary>
     [Fact]

@@ -465,7 +465,15 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
     /// and an account without Event Log write access (PAYTON-LEGION2 lab-wsman) failed startup with
     /// "Cannot open log for source '.NET Runtime'" before options validation could report.
     /// </summary>
+    /// <remarks>
+    /// The default host builder imports the whole process environment, so this is an integration test
+    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; the sweep of plan section 19.3). Its assertion depends on
+    /// no environment variable: the in-memory source, added after the environment, sets the five worker keys, and the
+    /// renewal interval equal to the lease duration fails validation whatever else the environment holds. It writes no
+    /// variable, so it stays outside <c>ProcessEnvironmentCollection</c>.
+    /// </remarks>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task HostileReviewWorker_InvalidOptions_FailStartup()
     {
         var builder = Host.CreateApplicationBuilder();

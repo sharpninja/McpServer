@@ -4,13 +4,18 @@ using QBrainAi.Common.AgentCli;
 
 using Microsoft.Extensions.Logging.Abstractions;
 
+using QBrainAi.Support.Mcp.Tests.TestSupport;
+
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
 /// <summary>
 /// Verifies service-launched agent processes inherit user CLI install paths needed by triage agents.
 /// The cases exercise Windows profile and PATH resolution, so they are integration tests that run on
-/// Windows hosts only, without a silent return elsewhere (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019).
+/// Windows hosts only, without a silent return elsewhere (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019). The class runs
+/// in <see cref="ProcessEnvironmentCollection"/> because one of its tests writes the process environment
+/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
 /// </summary>
+[Collection(ProcessEnvironmentCollection.Name)]
 [Trait("Category", "Integration")]
 [Trait("Platform", "Windows")]
 public sealed class ProcessEnvironmentServiceTests
