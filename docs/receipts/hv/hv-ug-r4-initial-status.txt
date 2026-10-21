@@ -1,0 +1,7 @@
+?? docs/receipts/hv/20261020T215217-unitgreen-r4.request.jsonl
+?? docs/receipts/hv/20261020T215217-unitgreen-r4.response.jsonl
+?? docs/receipts/hv/20261020T215217-unitgreen-r4.selfreview.md
+?? docs/receipts/hv/hv-ug-r4-head.txt
+?? docs/receipts/hv/hv-ug-r4-identity.json
+?? docs/receipts/hv/hv-ug-r4-session.json
+

@@ -1,0 +1,634 @@
+{
+  "TimestampLocal": "2026-10-20T23:02:20",
+  "Head": "b0db5b09b5824b2e49b028ac37b3ee8a3b48ec8a",
+  "EffectiveMemory010Matches": 0,
+  "CommitCount": 37,
+  "CommitScan": [
+    {
+      "Commit": "b0db5b09b5824b2e49b028ac37b3ee8a3b48ec8a",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "97b7811491ccb3e338804a01d0bf28e4ecfe273a",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "50b58ce515cba89dab9b479b5e3eceb9fbb7c0a8",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "26fc83486be252e63579cca9d53f3132672555c7",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "c31c2918c15d4085e463e00f6a4977fd67913b76",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "801e6862d49d669808c9315a7ad43d0272b1d1f1",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "0996a1164fa84dd6288403e5161f337581fc21cb",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "64fc4b1400ac5bc7526c472f8efeacb91980f2a6",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "6b89998f4f0257b967bba12e2434135964cf135b",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "e0b078c802d6456d106e6ec681d1aa93d6c4d055",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "395b4cd89726e921af481d4c8c056bf8fa535ae6",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "68fa7b393d007c0d0c466c29ae4da5738bf54af2",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "6ea425ab943ebdd8aad1de1c84896de92d0270d8",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "0210244d27bf2b5e731e4ee40350504934e812a4",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "6042dbb3551c38a740e13de28f44fe9a814e6f0a",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "56d14d7cd7e72975b1cbf0ddcd2cc17c16763249",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "538d0ccf957c041f1e3886864bdf5e4ca693e9ec",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "27c43bccd19a591e4ca30560b52d4c5a9e8b81c9",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "45a3197c9afda2f7c7d87e7d986908f885c20b02",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "a94579db927f25a0cbddd07d639f3054f2ee72e8",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "b4ad42aaa601ed0df7e03b34203dee4f93d316a9",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "49cfec920349f17ace1b287b18d1b0fe2d956b03",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "6b4295b790e0e2cde7113f3be4bb83bc66343016",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "83417029fa3e0ee8ef2ffc6bdfa29a7c1e9fdb38",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "127468345afcc7a24e6a254f712d6b75a54713e8",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "69d8f3f5b19b070f9059a096f344c44bbd359d47",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "5924926051f84720c110ab1421430499fadf918a",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "4f668b76d26b26e7162d8654fb946c484fd42539",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "b2bd50b3711c28bdb256e1f4fa56f3d8114fb6c6",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "8a6173342dcd7683b9d9549005a5af819b8abc90",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "8c2b83ab5a442ce7dbc4a5a78f70dfaafbd034a2",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "11681680d316bee7c8c184e45b699af7c1bd2188",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "b2319488039bbcd1e2014d8f3a1b7a26627b3ba8",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "a4c358efd91131e7fb714370726997b5c2d076cb",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "de5813532adb51b964b222644ae0519bd814f8ef",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "28bf0b222464c5bdbfb8b6ec0a357e15284e486f",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    },
+    {
+      "Commit": "cbc74e823e7af96f8df1a1320498998e5de2b328",
+      "CurrentSecretMatches": 0,
+      "ApiKeyPatternMatches": 0,
+      "Signed": true
+    }
+  ],
+  "Advisories": [
+    {
+      "Id": "GHSA-2fmv-rv2c-59x7",
+      "Url": "https://github.com/advisories/GHSA-2fmv-rv2c-59x7",
+      "Vulnerabilities": [
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Pkcs"
+          },
+          "vulnerable_version_range": ">= 10.0.0, <= 10.0.12",
+          "first_patched_version": "10.0.13",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Pkcs"
+          },
+          "vulnerable_version_range": ">= 11.0.0-preview.1, <= 11.0.0-rc.1",
+          "first_patched_version": "11.0.0-rc.2",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Pkcs"
+          },
+          "vulnerable_version_range": ">= 8.0.0, <= 8.0.1",
+          "first_patched_version": "8.0.2",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Pkcs"
+          },
+          "vulnerable_version_range": ">= 9.0.0, <= 9.0.20",
+          "first_patched_version": "9.0.21",
+          "vulnerable_functions": []
+        }
+      ]
+    },
+    {
+      "Id": "GHSA-7hqp-7c5m-4vq6",
+      "Url": "https://github.com/advisories/GHSA-7hqp-7c5m-4vq6",
+      "Vulnerabilities": [
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Xml"
+          },
+          "vulnerable_version_range": ">= 10.0.0, <= 10.0.12",
+          "first_patched_version": "10.0.13",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Xml"
+          },
+          "vulnerable_version_range": ">= 11.0.0-preview.1, <= 11.0.0-rc.1",
+          "first_patched_version": "11.0.0-rc.2",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Xml"
+          },
+          "vulnerable_version_range": ">= 8.0.0, <= 8.0.4",
+          "first_patched_version": "8.0.5",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Xml"
+          },
+          "vulnerable_version_range": ">= 9.0.0, <= 9.0.20",
+          "first_patched_version": "9.0.21",
+          "vulnerable_functions": []
+        }
+      ]
+    },
+    {
+      "Id": "GHSA-846f-f764-76mx",
+      "Url": "https://github.com/advisories/GHSA-846f-f764-76mx",
+      "Vulnerabilities": [
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Pkcs"
+          },
+          "vulnerable_version_range": ">= 10.0.0, <= 10.0.12",
+          "first_patched_version": "10.0.13",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Pkcs"
+          },
+          "vulnerable_version_range": ">= 11.0.0-preview.1, <= 11.0.0-rc.1",
+          "first_patched_version": "11.0.0-rc.2",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Pkcs"
+          },
+          "vulnerable_version_range": ">= 8.0.0, <= 8.0.1",
+          "first_patched_version": "8.0.2",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Pkcs"
+          },
+          "vulnerable_version_range": ">= 9.0.0, <= 9.0.20",
+          "first_patched_version": "9.0.21",
+          "vulnerable_functions": []
+        }
+      ]
+    },
+    {
+      "Id": "GHSA-c399-9853-6jmj",
+      "Url": "https://github.com/advisories/GHSA-c399-9853-6jmj",
+      "Vulnerabilities": [
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Xml"
+          },
+          "vulnerable_version_range": ">= 10.0.0, <= 10.0.12",
+          "first_patched_version": "10.0.13",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Xml"
+          },
+          "vulnerable_version_range": ">= 11.0.0-preview.1, <= 11.0.0-rc.1",
+          "first_patched_version": "11.0.0-rc.2",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Xml"
+          },
+          "vulnerable_version_range": ">= 8.0.0, <= 8.0.4",
+          "first_patched_version": "8.0.5",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Xml"
+          },
+          "vulnerable_version_range": ">= 9.0.0, <= 9.0.20",
+          "first_patched_version": "9.0.21",
+          "vulnerable_functions": []
+        }
+      ]
+    },
+    {
+      "Id": "GHSA-r955-8q5j-3h83",
+      "Url": "https://github.com/advisories/GHSA-r955-8q5j-3h83",
+      "Vulnerabilities": [
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Xml"
+          },
+          "vulnerable_version_range": ">= 10.0.0, <= 10.0.12",
+          "first_patched_version": "10.0.13",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Xml"
+          },
+          "vulnerable_version_range": ">= 11.0.0-preview.1, <= 11.0.0-rc.1",
+          "first_patched_version": "11.0.0-rc.2",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Xml"
+          },
+          "vulnerable_version_range": ">= 8.0.0, <= 8.0.4",
+          "first_patched_version": "8.0.5",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Xml"
+          },
+          "vulnerable_version_range": ">= 9.0.0, <= 9.0.20",
+          "first_patched_version": "9.0.21",
+          "vulnerable_functions": []
+        }
+      ]
+    }
+  ],
+  "AuditProperties": [
+    "TimestampLocal",
+    "AbsentFr",
+    "EffectiveShape",
+    "TodoProperties",
+    "DocsOnlyAfter97",
+    "CodeAfter26",
+    "CommitSignatures",
+    "Formatting",
+    "HashMismatches",
+    "ChangedCodePaths"
+  ],
+  "WorktreeStatus": [
+    "?? docs/receipts/hv/20261020T215217-unitgreen-r4.request.jsonl",
+    "?? docs/receipts/hv/20261020T215217-unitgreen-r4.response.jsonl",
+    "?? docs/receipts/hv/20261020T215217-unitgreen-r4.selfreview.md",
+    "?? docs/receipts/hv/hostile-validator-unitgreen-r4-20261020T215217.json",
+    "?? docs/receipts/hv/hostile-validator-unitgreen-r4-20261020T215217.md",
+    "?? docs/receipts/hv/hv-ug-r4-advisory-GHSA-2fmv-rv2c-59x7.json",
+    "?? docs/receipts/hv/hv-ug-r4-advisory-GHSA-7hqp-7c5m-4vq6.json",
+    "?? docs/receipts/hv/hv-ug-r4-advisory-GHSA-846f-f764-76mx.json",
+    "?? docs/receipts/hv/hv-ug-r4-advisory-GHSA-c399-9853-6jmj.json",
+    "?? docs/receipts/hv/hv-ug-r4-advisory-GHSA-r955-8q5j-3h83.json",
+    "?? docs/receipts/hv/hv-ug-r4-assertion-changes.json",
+    "?? docs/receipts/hv/hv-ug-r4-audit.json",
+    "?? docs/receipts/hv/hv-ug-r4-changed-files.txt",
+    "?? docs/receipts/hv/hv-ug-r4-chronology-results.txt",
+    "?? docs/receipts/hv/hv-ug-r4-chronology.txt",
+    "?? docs/receipts/hv/hv-ug-r4-code-diff.txt",
+    "?? docs/receipts/hv/hv-ug-r4-command-ledger.json",
+    "?? docs/receipts/hv/hv-ug-r4-commits.txt",
+    "?? docs/receipts/hv/hv-ug-r4-docs-only-26.txt",
+    "?? docs/receipts/hv/hv-ug-r4-docs-only-97.txt",
+    "?? docs/receipts/hv/hv-ug-r4-edit-chronology.json",
+    "?? docs/receipts/hv/hv-ug-r4-effective-again.txt",
+    "?? docs/receipts/hv/hv-ug-r4-final-checks.json",
+    "?? docs/receipts/hv/hv-ug-r4-final-data.json",
+    "?? docs/receipts/hv/hv-ug-r4-gate-comparisons.json",
+    "?? docs/receipts/hv/hv-ug-r4-gates.json",
+    "?? docs/receipts/hv/hv-ug-r4-github-activity.json",
+    "?? docs/receipts/hv/hv-ug-r4-head.txt",
+    "?? docs/receipts/hv/hv-ug-r4-history-final.json",
+    "?? docs/receipts/hv/hv-ug-r4-history-precomplete.json",
+    "?? docs/receipts/hv/hv-ug-r4-hostile-test-1.meta.json",
+    "?? docs/receipts/hv/hv-ug-r4-hostile-test-1.out.txt",
+    "?? docs/receipts/hv/hv-ug-r4-identity.json",
+    "?? docs/receipts/hv/hv-ug-r4-initial-status.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-complete.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-final-actions.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-final-metadata.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-part-001.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-part-002.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-part-003.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-part-004.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-part-005.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-part-006.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-part-007.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-part-008.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-part-009.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-part-010.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-part-011.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-part-012.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-part-013.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-part-014.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-part-015.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-part-016.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-part-017.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-v2-part-001.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-v2-part-002.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-v2-part-003.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-v2-part-004.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-v2-part-005.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-v2-part-006.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-v2-part-007.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-v2-part-008.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-v2-part-009.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-v2-part-010.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-v2-part-011.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-v2-part-012.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-v2-part-013.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-v2-part-014.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-v2-part-015.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-v2-part-016.txt",
+    "?? docs/receipts/hv/hv-ug-r4-log-v2-part-017.txt",
+    "?? docs/receipts/hv/hv-ug-r4-memory-mappings.txt",
+    "?? docs/receipts/hv/hv-ug-r4-memory010-again.txt",
+    "?? docs/receipts/hv/hv-ug-r4-merge-base.txt",
+    "?? docs/receipts/hv/hv-ug-r4-operator-transcript.txt",
+    "?? docs/receipts/hv/hv-ug-r4-own-full.txt",
+    "?? docs/receipts/hv/hv-ug-r4-own-history-interim.txt",
+    "?? docs/receipts/hv/hv-ug-r4-own-history-model.txt",
+    "?? docs/receipts/hv/hv-ug-r4-own-model-metadata.txt",
+    "?? docs/receipts/hv/hv-ug-r4-own-query-2.json",
+    "?? docs/receipts/hv/hv-ug-r4-own-query-2.txt",
+    "?? docs/receipts/hv/hv-ug-r4-own-query.json",
+    "?? docs/receipts/hv/hv-ug-r4-own-query.txt",
+    "?? docs/receipts/hv/hv-ug-r4-persistence-proof.json",
+    "?? docs/receipts/hv/hv-ug-r4-pr-body.txt",
+    "?? docs/receipts/hv/hv-ug-r4-pr-live.json",
+    "?? docs/receipts/hv/hv-ug-r4-pr.txt",
+    "?? docs/receipts/hv/hv-ug-r4-probe-compile.json",
+    "?? docs/receipts/hv/hv-ug-r4-r4-diff.txt",
+    "?? docs/receipts/hv/hv-ug-r4-receipt-files.txt",
+    "?? docs/receipts/hv/hv-ug-r4-receipt-hashes.json",
+    "?? docs/receipts/hv/hv-ug-r4-remaining-records.txt",
+    "?? docs/receipts/hv/hv-ug-r4-sandbox-test-1.meta.json",
+    "?? docs/receipts/hv/hv-ug-r4-sandbox-test-1.out.txt",
+    "?? docs/receipts/hv/hv-ug-r4-sandbox-test-2.meta.json",
+    "?? docs/receipts/hv/hv-ug-r4-sandbox-test-2.out.txt",
+    "?? docs/receipts/hv/hv-ug-r4-scanner-probes-2.json",
+    "?? docs/receipts/hv/hv-ug-r4-scanner-probes.json",
+    "?? docs/receipts/hv/hv-ug-r4-session.json",
+    "?? docs/receipts/hv/hv-ug-r4-shared-connection-sweep.json",
+    "?? docs/receipts/hv/hv-ug-r4-snapshot-commands.json",
+    "?? docs/receipts/hv/hv-ug-r4-store-FR-MCP-018.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-FR-MCP-BUILD-001.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-FR-MCP-PATHNORM-001.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-FR-MCP-SESSIONLOGCTX-001.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-FR-MCP-USECASE-001.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-FR-MCP-USECASE-016.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-FR-MCP-USECASE-017.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-TEST-HANDOFF-004.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-TEST-HANDOFF-005.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-TEST-HANDOFF-006.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-TEST-HANDOFF-007.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-TEST-MCP-MEMORY-010.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-TEST-MCP-PATHNORM-001.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-TEST-MCP-USECASE-019.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-TEST-MCP-USECASE-020.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-TR-MCP-NUKE-018.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-TR-MCP-NUKE-019.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-TR-MCP-PATHNORM-001.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-TR-MCP-QUALITY-001.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-TR-MCP-SESSIONLOG-006.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-TR-MCP-USECASE-018.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-TR-MCP-USECASE-019.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-TR-MCP-WS-005.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-effective.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-history.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-manifest.json",
+    "?? docs/receipts/hv/hv-ug-r4-store-mapping-FR-MCP-018.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-mapping-FR-MCP-BUILD-001.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-mapping-FR-MCP-PATHNORM-001.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-mapping-FR-MCP-SESSIONLOGCTX-001.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-mapping-FR-MCP-USECASE-001.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-mapping-FR-MCP-USECASE-016.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-mapping-FR-MCP-USECASE-017.txt",
+    "?? docs/receipts/hv/hv-ug-r4-store-todo.txt",
+    "?? docs/receipts/hv/hv-ug-r4-takeover.json",
+    "?? docs/receipts/hv/hv-ug-r4-test-results.json",
+    "?? docs/receipts/hv/hv-ug-r4-transcript-events.json",
+    "?? docs/receipts/hv/hv-ug-r4-unit-receipts-secret-scan.txt",
+    "?? docs/receipts/hv/hv-ug-r4-verdict-final.json",
+    "?? docs/receipts/hv/hv-ug-r4-windows-live-2.txt",
+    "?? docs/receipts/hv/hv-ug-r4-windows-live.txt"
+  ],
+  "Diff97": [
+    "docs/plans/2026-10-19-unit-suite-green.md",
+    "docs/receipts/hv/unitgreen-r4-prelaunch.brief.md",
+    "docs/receipts/hv/unitgreen-r4-prelaunch.projected-problems.md",
+    "docs/receipts/hv/unitgreen-r4-prelaunch.selfreview.md",
+    "docs/receipts/unit-suite-green-20261019/ug-r4-build-tests-2.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r4-build-tests-2.trx-summary.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r4-compare-extmock1-extbinding1.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r4-compare-lane2-precommitlane2.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r4-ext-binding-1.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r4-ext-binding-1.trx-summary.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r4-ext-mockgate-1.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r4-ext-mockgate-1.trx-summary.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r4-hostile-gate-3.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r4-hostile-gate-3.trx-summary.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r4-linux-lane-3.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r4-linux-lane-3.trx-summary.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r4-linux-lane-compare-2-3.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r4-linux-test-3.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r4-linux-test-3.trx-summary.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r4-precommit-lane-2.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r4-precommit-lane-2.trx-summary.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r4-traceability-2.exit.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r4-traceability-2.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r4-traceability-2.out.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r4-win-lane-3.start.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r4-win-lane-3.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r4-win-lane-compare-2-3.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r4-win-test-ssh-3.txt"
+  ],
+  "Diff26NonDocs": [
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs"
+  ]
+}

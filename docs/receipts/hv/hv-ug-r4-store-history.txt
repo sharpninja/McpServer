@@ -1,0 +1,293 @@
+type: result
+payload:
+  requestId: req-20261021T025823Z-4ab4
+  result:
+  - agent: Codex
+    sessionId: Codex-20261021T025530Z-plugin-session
+    title: Hostile validation round 4 of IMPL-UNITGREEN-001
+    model: codex
+    started:
+      dateTime: 2026-10-21T02:55:33.0000000
+      utcDateTime: 2026-10-21T02:55:33.0000000Z
+      localDateTime: 2026-10-20T21:55:33.0000000-05:00
+      date: 2026-10-21T00:00:00.0000000
+      day: 21
+      dayOfWeek: Wednesday
+      dayOfYear: 294
+      hour: 2
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 55
+      month: 10
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 33
+      ticks: 639281481330000000
+      utcTicks: 639281481330000000
+      timeOfDay: 02:55:33
+      year: 2026
+    lastUpdated:
+      dateTime: 2026-10-21T02:55:37.0000000
+      utcDateTime: 2026-10-21T02:55:37.0000000Z
+      localDateTime: 2026-10-20T21:55:37.0000000-05:00
+      date: 2026-10-21T00:00:00.0000000
+      day: 21
+      dayOfWeek: Wednesday
+      dayOfYear: 294
+      hour: 2
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 55
+      month: 10
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 37
+      ticks: 639281481370000000
+      utcTicks: 639281481370000000
+      timeOfDay: 02:55:37
+      year: 2026
+    status: in_progress
+    turnCount: 1
+    tags:
+    - unitgreen-r4
+    - IMPL-UNITGREEN-001
+    - hostile-validation
+    filesModifiedCount: 0
+  - agent: Codex
+    sessionId: Codex-20261020T221031Z-plugin-session
+    title: Independently validate IMPL-UNITGREEN-001 round 3
+    model: gpt-6-astra
+    started:
+      dateTime: 2026-10-20T22:10:57.0000000
+      utcDateTime: 2026-10-20T22:10:57.0000000Z
+      localDateTime: 2026-10-20T17:10:57.0000000-05:00
+      date: 2026-10-20T00:00:00.0000000
+      day: 20
+      dayOfWeek: Tuesday
+      dayOfYear: 293
+      hour: 22
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 10
+      month: 10
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 57
+      ticks: 639281310570000000
+      utcTicks: 639281310570000000
+      timeOfDay: 22:10:57
+      year: 2026
+    lastUpdated:
+      dateTime: 2026-10-20T23:04:57.0000000
+      utcDateTime: 2026-10-20T23:04:57.0000000Z
+      localDateTime: 2026-10-20T18:04:57.0000000-05:00
+      date: 2026-10-20T00:00:00.0000000
+      day: 20
+      dayOfWeek: Tuesday
+      dayOfYear: 293
+      hour: 23
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 4
+      month: 10
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 57
+      ticks: 639281342970000000
+      utcTicks: 639281342970000000
+      timeOfDay: 23:04:57
+      year: 2026
+    status: in_progress
+    turnCount: 1
+    tags:
+    - unitgreen-r3
+    - IMPL-UNITGREEN-001
+    - DISAGREE
+    - gpt-6-astra
+    - effort-max
+    - TR-MCP-NUKE-019
+    - TR-MCP-USECASE-018
+    - TR-MCP-USECASE-019
+    - TR-MCP-WS-005
+    - TR-MCP-SESSIONLOG-006
+    filesModifiedCount: 31
+  - agent: Codex
+    sessionId: Codex-20261020T023103Z-unitgreen-r2
+    title: Independent hostile review of IMPL-UNITGREEN-001 round 2 at a94579db
+    model: gpt-6-astra
+    started:
+      dateTime: 2026-10-20T02:31:48.0000000
+      utcDateTime: 2026-10-20T02:31:48.0000000Z
+      localDateTime: 2026-10-19T21:31:48.0000000-05:00
+      date: 2026-10-20T00:00:00.0000000
+      day: 20
+      dayOfWeek: Tuesday
+      dayOfYear: 293
+      hour: 2
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 31
+      month: 10
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 48
+      ticks: 639280603080000000
+      utcTicks: 639280603080000000
+      timeOfDay: 02:31:48
+      year: 2026
+    lastUpdated:
+      dateTime: 2026-10-20T03:24:03.0000000
+      utcDateTime: 2026-10-20T03:24:03.0000000Z
+      localDateTime: 2026-10-19T22:24:03.0000000-05:00
+      date: 2026-10-20T00:00:00.0000000
+      day: 20
+      dayOfWeek: Tuesday
+      dayOfYear: 293
+      hour: 3
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 24
+      month: 10
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 3
+      ticks: 639280634430000000
+      utcTicks: 639280634430000000
+      timeOfDay: 03:24:03
+      year: 2026
+    status: in_progress
+    turnCount: 1
+    tags:
+    - unitgreen-r2
+    - IMPL-UNITGREEN-001
+    - hostile-validation
+    - gpt-6-astra
+    - max
+    - DISAGREE
+    - effort-max
+    - TR-MCP-NUKE-019
+    - TR-MCP-USECASE-018
+    - TR-MCP-USECASE-019
+    filesModifiedCount: 29
+  - agent: Codex
+    sessionId: Codex-20261020T005400Z-unitgreen-r1
+    title: Independent hostile validation round 1 of IMPL-UNITGREEN-001
+    model: gpt-6-astra
+    started:
+      dateTime: 2026-10-20T00:54:03.0000000
+      utcDateTime: 2026-10-20T00:54:03.0000000Z
+      localDateTime: 2026-10-19T19:54:03.0000000-05:00
+      date: 2026-10-20T00:00:00.0000000
+      day: 20
+      dayOfWeek: Tuesday
+      dayOfYear: 293
+      hour: 0
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 54
+      month: 10
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 3
+      ticks: 639280544430000000
+      utcTicks: 639280544430000000
+      timeOfDay: 00:54:03
+      year: 2026
+    lastUpdated:
+      dateTime: 2026-10-20T01:42:26.0000000
+      utcDateTime: 2026-10-20T01:42:26.0000000Z
+      localDateTime: 2026-10-19T20:42:26.0000000-05:00
+      date: 2026-10-20T00:00:00.0000000
+      day: 20
+      dayOfWeek: Tuesday
+      dayOfYear: 293
+      hour: 1
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 42
+      month: 10
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 26
+      ticks: 639280573460000000
+      utcTicks: 639280573460000000
+      timeOfDay: 01:42:26
+      year: 2026
+    status: in_progress
+    turnCount: 1
+    tags:
+    - IMPL-UNITGREEN-001
+    - unitgreen-r1
+    - hostile-validation
+    - DISAGREE
+    - gpt-6-astra
+    - effort-max
+    filesModifiedCount: 2
+  - agent: Codex
+    sessionId: Codex-20261018T075458Z-amendment1-r4
+    title: Hostile validation amendment1-r4 at 437695dc
+    model: gpt-6-astra
+    started:
+      dateTime: 2026-10-18T07:55:10.0000000
+      utcDateTime: 2026-10-18T07:55:10.0000000Z
+      localDateTime: 2026-10-18T02:55:10.0000000-05:00
+      date: 2026-10-18T00:00:00.0000000
+      day: 18
+      dayOfWeek: Sunday
+      dayOfYear: 291
+      hour: 7
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 55
+      month: 10
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 10
+      ticks: 639279069100000000
+      utcTicks: 639279069100000000
+      timeOfDay: 07:55:10
+      year: 2026
+    lastUpdated:
+      dateTime: 2026-10-18T08:39:06.0000000
+      utcDateTime: 2026-10-18T08:39:06.0000000Z
+      localDateTime: 2026-10-18T03:39:06.0000000-05:00
+      date: 2026-10-18T00:00:00.0000000
+      day: 18
+      dayOfWeek: Sunday
+      dayOfYear: 291
+      hour: 8
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 39
+      month: 10
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 6
+      ticks: 639279095460000000
+      utcTicks: 639279095460000000
+      timeOfDay: 08:39:06
+      year: 2026
+    status: in_progress
+    turnCount: 1
+    tags:
+    - hostile-validation
+    - amendment1-r4
+    - gpt-6-astra
+    - max
+    - PLAN-HVPIPELINE-001
+    - REMED-HVPIPELINE-001
+    filesModifiedCount: 6
+  deprecated: true
+
+---
+

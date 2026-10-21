@@ -1,0 +1,90 @@
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+{
+  "Path": "C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-r3-ssh\\Test-ug-r4-win-test-ssh-3.log",
+  "Sha256": "D380C791D71C342AA050B0B22B80748EFB23816090CF7045E406A8AE6754E985",
+  "LineCount": 5292,
+  "AuditWarnings": 0,
+  "Commands": [
+    "21:32:49 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" build F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.Acid.IntegrationTests\\QBrainAi.Acid.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40",
+    "21:32:50 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" build F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.Client.Tests\\QBrainAi.Client.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40",
+    "21:32:52 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" build F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.Context.Validation\\QBrainAi.Context.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40",
+    "21:32:53 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" build F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.Cqrs.Tests\\QBrainAi.Cqrs.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40",
+    "21:32:54 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" build F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.GitHub.Validation\\QBrainAi.GitHub.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40",
+    "21:32:55 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" build F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.Launcher.Tests\\QBrainAi.Launcher.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40",
+    "21:32:57 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" build F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.McpAgent.Tests\\QBrainAi.McpAgent.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40",
+    "21:32:58 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" build F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.PlanReview.Tests\\QBrainAi.PlanReview.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40",
+    "21:32:59 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" build F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.PluginIntegration.Tests\\QBrainAi.PluginIntegration.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40",
+    "21:33:03 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" build F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.ProcessTree.TestHelper\\QBrainAi.ProcessTree.TestHelper.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40",
+    "21:33:04 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" build F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.QBAgent.Tests\\QBrainAi.QBAgent.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40",
+    "21:33:06 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" build F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.Repl.Core.Tests\\QBrainAi.Repl.Core.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40",
+    "21:33:08 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" build F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.Repl.IntegrationTests\\QBrainAi.Repl.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40",
+    "21:33:10 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" build F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.Repo.Validation\\QBrainAi.Repo.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40",
+    "21:33:11 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" build F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.Review.Tests\\QBrainAi.Review.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40",
+    "21:33:12 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" build F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.SessionLog.Validation\\QBrainAi.SessionLog.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40",
+    "21:33:13 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" build F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.Support.Mcp.IntegrationTests\\QBrainAi.Support.Mcp.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40",
+    "21:33:17 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" build F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40",
+    "21:33:24 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" build F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.Todo.Validation\\QBrainAi.Todo.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40",
+    "21:33:25 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" build F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.ToolRegistry.Validation\\QBrainAi.ToolRegistry.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40",
+    "21:33:26 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" build F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.TransactionSecurity.IntegrationTests\\QBrainAi.TransactionSecurity.IntegrationTests.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40",
+    "21:33:28 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" build F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.Workspace.Validation\\QBrainAi.Workspace.Validation.csproj --configuration Debug --no-restore --property:PackageVersion=1.4.40 --property:Version=1.4.40 --property:InformationalVersion=1.4.40",
+    "21:33:29 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\TestResults\\ug-r4-win-test-ssh-3\\unit\\QBrainAi.Support.Mcp.Tests --logger trx;LogFileName=QBrainAi.Support.Mcp.Tests.trx --logger console;verbosity=detailed",
+    "21:33:58 [DBG]   Passed QBrainAi.Support.Mcp.Tests.Services.RequirementScopeLayerServiceTests.RequirementScopeMutation_RejectsMissingLayerAndEndBeforeStart [1 s]",
+    "21:34:11 [DBG]   Passed QBrainAi.Support.Mcp.Tests.Services.UseCaseUmlSerializationTests.ToPlantUml_ContainsStartAndEnd [< 1 ms]",
+    "21:34:39 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.Client.Tests\\QBrainAi.Client.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\TestResults\\ug-r4-win-test-ssh-3\\unit\\QBrainAi.Client.Tests --logger trx;LogFileName=QBrainAi.Client.Tests.trx --logger console;verbosity=detailed",
+    "21:34:43 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.Cqrs.Tests\\QBrainAi.Cqrs.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\TestResults\\ug-r4-win-test-ssh-3\\unit\\QBrainAi.Cqrs.Tests --logger trx;LogFileName=QBrainAi.Cqrs.Tests.trx --logger console;verbosity=detailed",
+    "21:34:45 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.Launcher.Tests\\QBrainAi.Launcher.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\TestResults\\ug-r4-win-test-ssh-3\\unit\\QBrainAi.Launcher.Tests --logger trx;LogFileName=QBrainAi.Launcher.Tests.trx --logger console;verbosity=detailed",
+    "21:34:47 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.McpAgent.Tests\\QBrainAi.McpAgent.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\TestResults\\ug-r4-win-test-ssh-3\\unit\\QBrainAi.McpAgent.Tests --logger trx;LogFileName=QBrainAi.McpAgent.Tests.trx --logger console;verbosity=detailed",
+    "21:34:55 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.Repl.Core.Tests\\QBrainAi.Repl.Core.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\TestResults\\ug-r4-win-test-ssh-3\\unit\\QBrainAi.Repl.Core.Tests --logger trx;LogFileName=QBrainAi.Repl.Core.Tests.trx --logger console;verbosity=detailed",
+    "21:34:58 [DBG]   Passed QBrainAi.Repl.Core.Tests.SessionLogWorkflowTests.ReconnectScenario_CanOpenNewSessionAfterRestart [2 ms]",
+    "21:34:58 [DBG]   Passed QBrainAi.Repl.Core.Tests.SessionLogWorkflowTests.ReconnectScenario_CanQueryHistoryAfterRestart [1 ms]",
+    "21:34:59 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.QBAgent.Tests\\QBrainAi.QBAgent.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\TestResults\\ug-r4-win-test-ssh-3\\unit\\QBrainAi.QBAgent.Tests --logger trx;LogFileName=QBrainAi.QBAgent.Tests.trx --logger console;verbosity=detailed",
+    "Restore            Succeeded       0:11",
+    "Compile            Succeeded       2:00",
+    "Test               Succeeded       1:32"
+  ],
+  "OverrideMatches": []
+}
+{
+  "Path": "C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\MigrationIntegrationTests-ug-r4-win-lane-3.log",
+  "Sha256": "6A005F8A5CBCFB13EA50C38719F381711F471EB7680B9E22DD9AA6DCFA236199",
+  "LineCount": 113,
+  "AuditWarnings": 0,
+  "Commands": [
+    "21:36:19 [INF] Integration lane filter: Category=Integration&Platform!=Linux",
+    "21:36:19 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-green-interactive-20261019\\tests\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.csproj --filter Category=Integration&Platform!=Linux --verbosity minimal --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-green-interactive-20261019\\TestResults\\ug-r4-win-lane-3\\provider\\QBrainAi.Support.Mcp.Tests --logger trx;LogFileName=QBrainAi.Support.Mcp.Tests.trx",
+    "21:40:40 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-green-interactive-20261019\\tests\\QBrainAi.McpAgent.Tests\\QBrainAi.McpAgent.Tests.csproj --filter Category=Integration&Platform!=Linux --verbosity minimal --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-green-interactive-20261019\\TestResults\\ug-r4-win-lane-3\\provider\\QBrainAi.McpAgent.Tests --logger trx;LogFileName=QBrainAi.McpAgent.Tests.trx",
+    "21:40:46 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-green-interactive-20261019\\tests\\QBrainAi.Repl.Core.Tests\\QBrainAi.Repl.Core.Tests.csproj --filter Category=Integration&Platform!=Linux --verbosity minimal --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-green-interactive-20261019\\TestResults\\ug-r4-win-lane-3\\provider\\QBrainAi.Repl.Core.Tests --logger trx;LogFileName=QBrainAi.Repl.Core.Tests.trx",
+    "21:40:51 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-green-interactive-20261019\\tests\\QBrainAi.QBAgent.Tests\\QBrainAi.QBAgent.Tests.csproj --filter Category=Integration&Platform!=Linux --verbosity minimal --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-green-interactive-20261019\\TestResults\\ug-r4-win-lane-3\\provider\\QBrainAi.QBAgent.Tests --logger trx;LogFileName=QBrainAi.QBAgent.Tests.trx",
+    "21:40:57 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-green-interactive-20261019\\tests\\Build.Tests\\Build.Tests.csproj --filter Category=Integration&Platform!=Linux --verbosity minimal --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-green-interactive-20261019\\TestResults\\ug-r4-win-lane-3\\provider\\Build.Tests --logger trx;LogFileName=Build.Tests.trx",
+    "InstallTestDependencies      Succeeded     < 1sec",
+    "MigrationIntegrationTests    Succeeded       4:43"
+  ],
+  "OverrideMatches": []
+}
+{
+  "Path": "C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\proof-ug-r4-win-lane-3.txt",
+  "Sha256": "0A56E850F96693AA77E9457BD79EB17DD71414469C820D2ED3B92A113603608C",
+  "LineCount": 1,
+  "AuditWarnings": 0,
+  "Commands": [
+    "START 2026-10-20T21:36:13 user=kingd session=1 interactive=True head=97b7811491ccb3e338804a01d0bf28e4ecfe273a"
+  ],
+  "OverrideMatches": []
+}
+{
+  "Path": "C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\exit-ug-r4-win-lane-3.txt",
+  "Sha256": "65D730481F905ACDF3DAE1A87A728358C2ECF33A320EF06DF83D4C26061FAB2E",
+  "LineCount": 1,
+  "AuditWarnings": 0,
+  "Commands": [
+    "0 2026-10-20T21:41:03"
+  ],
+  "OverrideMatches": []
+}
+{
+  "Runner": "C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1",
+  "Sha256": "D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE",
+  "User": "kingd"
+}

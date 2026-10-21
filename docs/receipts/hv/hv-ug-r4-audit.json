@@ -1,0 +1,491 @@
+{
+  "TimestampLocal": "2026-10-20T22:17:40",
+  "AbsentFr": [
+    {
+      "Id": "FR-MCP-USECASE-016",
+      "EffectiveMatches": 0,
+      "Getter": "type: error\npayload:\n  requestId: req-20261021T025749Z-9a22\n  code: not_found\n  message: FR 'FR-MCP-USECASE-016' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getFr\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n"
+    },
+    {
+      "Id": "FR-MCP-USECASE-017",
+      "EffectiveMatches": 0,
+      "Getter": "type: error\npayload:\n  requestId: req-20261021T025750Z-627d\n  code: not_found\n  message: FR 'FR-MCP-USECASE-017' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getFr\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n"
+    }
+  ],
+  "EffectiveShape": {
+    "testing": [
+      {
+        "scopeStartLayerKey": "layer-1",
+        "id": "TEST-GRAPHRAG-ADHOC-001",
+        "workspaceId": "/home/sharpninja/github/McpServer",
+        "title": "",
+        "priority": "medium",
+        "condition": "GraphEntityEntity/GraphRelationshipEntity persist with all fields, workspace isolation, cascade delete, FK validation, and RemoveVector correctness.",
+        "acceptanceCriteria": [],
+        "status": "pending"
+      }
+    ],
+    "mappings": [
+      {
+        "workspaceId": "/home/sharpninja/github/McpServer",
+        "frId": "FR-HANDOFF-001",
+        "testIds": [
+          "TEST-HANDOFF-001",
+          "TEST-HANDOFF-002"
+        ],
+        "trIds": [
+          "TR-HANDOFF-CONTRACT-001",
+          "TR-HANDOFF-SECURITY-001"
+        ]
+      }
+    ],
+    "technical": [
+      {
+        "scopeStartLayerKey": "layer-1",
+        "id": "TR-01",
+        "workspaceId": "/home/sharpninja/github/McpServer",
+        "title": "TR-01",
+        "priority": "medium",
+        "acceptanceCriteria": [],
+        "body": "Legacy imported identifier retained for historical traceability. Status: reserved/superseded by MCP-specific technical requirements; no active implementation work is tracked under this stub.",
+        "status": "deferred"
+      }
+    ],
+    "functional": [
+      {
+        "scopeStartLayerKey": "layer-1",
+        "id": "FR-HANDOFF-001",
+        "workspaceId": "/home/sharpninja/github/McpServer",
+        "title": "Ingest workspace-scoped handoff documents",
+        "priority": "medium",
+        "acceptanceCriteria": [
+          {
+            "isSatisfied": true,
+            "id": "",
+            "text": "Supports Markdown, text, JSON, and YAML inputs.",
+            "evidence": "tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6"
+          },
+          {
+            "isSatisfied": true,
+            "id": "",
+            "text": "Rejects missing, unsupported, oversized, traversal, external, and reparse-escaping paths.",
+            "evidence": "tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6"
+          },
+          {
+            "isSatisfied": true,
+            "id": "",
+            "text": "Maximum decoded input is 8 MiB.",
+            "evidence": "tests/QBrainAi.Client.Tests/HandoffClientTests.cs; tests/Build.Tests/HandoffD3D5OverlayTests.cs; overlay G3 D5 AGREE + G8 SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6"
+          }
+        ],
+        "body": "Ingest workspace-scoped handoff documents from a contained file path, caller-supplied content, or MCP artifact reference.",
+        "status": "pending"
+      }
+    ]
+  },
+  "TodoProperties": [
+    "technicalDetails",
+    "done",
+    "id",
+    "description",
+    "dependsOn",
+    "functionalRequirements",
+    "implementationTasks",
+    "title",
+    "priority",
+    "note",
+    "section",
+    "technicalRequirements"
+  ],
+  "DocsOnlyAfter97": [],
+  "CodeAfter26": [
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs"
+  ],
+  "CommitSignatures": [
+    {
+      "Sha": "b0db5b09b5824b2e49b028ac37b3ee8a3b48ec8a",
+      "ValidSignature": true,
+      "Subject": "docs: round 4 plan record, final-head receipts and pre-launch records (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "97b7811491ccb3e338804a01d0bf28e4ecfe273a",
+      "ValidSignature": true,
+      "Subject": "test(handoff,memory): own connection per context in HandoffAuditDefectTests and MemoryS1Harness (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "50b58ce515cba89dab9b479b5e3eceb9fbb7c0a8",
+      "ValidSignature": true,
+      "Subject": "docs: round 4 run receipts through code head 26fc8348 (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "26fc83486be252e63579cca9d53f3132672555c7",
+      "ValidSignature": true,
+      "Subject": "test(handoff),fix(marker): own connection per context in the handoff tests; sibling rule back in MarkerFileService (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "c31c2918c15d4085e463e00f6a4977fd67913b76",
+      "ValidSignature": true,
+      "Subject": "docs: correct the round 3 self-review run sentence (R3-F4, IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "801e6862d49d669808c9315a7ad43d0272b1d1f1",
+      "ValidSignature": true,
+      "Subject": "fix(marker,tests): one source seam for plugin-version inputs; scanner aliases in lexical scope (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "0996a1164fa84dd6288403e5161f337581fc21cb",
+      "ValidSignature": true,
+      "Subject": "docs: hostile validation round 3 receipts as received (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "64fc4b1400ac5bc7526c472f8efeacb91980f2a6",
+      "ValidSignature": true,
+      "Subject": "docs: hostile validation round 3 pre-launch records (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "6b89998f4f0257b967bba12e2434135964cf135b",
+      "ValidSignature": true,
+      "Subject": "docs: the R3-P3 record, its gate receipts and the round 3 traceability receipts (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "e0b078c802d6456d106e6ec681d1aa93d6c4d055",
+      "ValidSignature": true,
+      "Subject": "fix(marker): a plugin version file that cannot be read never fails the marker (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "395b4cd89726e921af481d4c8c056bf8fa535ae6",
+      "ValidSignature": true,
+      "Subject": "docs: hostile validation round 2 receipts, the round 3 record and its gate receipts (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "68fa7b393d007c0d0c466c29ae4da5738bf54af2",
+      "ValidSignature": true,
+      "Subject": "test(storage): the SQL Server LocalDB collection runs with parallelization disabled, as the chosen option states (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "6ea425ab943ebdd8aad1de1c84896de92d0270d8",
+      "ValidSignature": true,
+      "Subject": "test(storage): the ephemeral PostgreSQL fixture runs pg_ctl silent so it cannot garble xUnit messages (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "0210244d27bf2b5e731e4ee40350504934e812a4",
+      "ValidSignature": true,
+      "Subject": "test(storage): the SQL Server test classes on LocalDB run one after another (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "6042dbb3551c38a740e13de28f44fe9a814e6f0a",
+      "ValidSignature": true,
+      "Subject": "test(storage): SQL Server integration tests wait 120 s for LocalDB to accept a connection (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "56d14d7cd7e72975b1cbf0ddcd2cc17c16763249",
+      "ValidSignature": true,
+      "Subject": "test(services): the hermetic-profile check reads the injected fixture, not a parallel test's folder (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "538d0ccf957c041f1e3886864bdf5e4ca693e9ec",
+      "ValidSignature": true,
+      "Subject": "fix(services): user-profile scans skip directory links and unlistable folders (IMPL-UNITGREEN-001, triage b0e41c36)"
+    },
+    {
+      "Sha": "27c43bccd19a591e4ca30560b52d4c5a9e8b81c9",
+      "ValidSignature": true,
+      "Subject": "test(guards): one repository-root locator, refused outside Integration; classify by dependency (IMPL-UNITGREEN-001, R2-F1)"
+    },
+    {
+      "Sha": "45a3197c9afda2f7c7d87e7d986908f885c20b02",
+      "ValidSignature": true,
+      "Subject": "test(guards): Roslyn syntax-tree platform scanner, Roslyn pins to 5.9.0 (IMPL-UNITGREEN-001, R2-F2)"
+    },
+    {
+      "Sha": "a94579db927f25a0cbddd07d639f3054f2ee72e8",
+      "ValidSignature": true,
+      "Subject": "docs: hostile validation round 1 receipts, its remediation record and the round 2 gate receipts (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "b4ad42aaa601ed0df7e03b34203dee4f93d316a9",
+      "ValidSignature": true,
+      "Subject": "test: unit tests that reach native file-system boundaries or write tracked files move to Integration (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "49cfec920349f17ace1b287b18d1b0fe2d956b03",
+      "ValidSignature": true,
+      "Subject": "test: one skip definition for both guards; multiline, qualified and listed skip attributes; interpolation holes kept as code (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "6b4295b790e0e2cde7113f3be4bb83bc66343016",
+      "ValidSignature": true,
+      "Subject": "docs: record the 19:41 decisions and the handoff-correction commit in the unit-suite-green plan (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "83417029fa3e0ee8ef2ffc6bdfa29a7c1e9fdb38",
+      "ValidSignature": true,
+      "Subject": "docs: unit-suite-green plan as built and the code-head gate receipts (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "127468345afcc7a24e6a254f712d6b75a54713e8",
+      "ValidSignature": true,
+      "Subject": "test: the invalid-handle final-path case runs only on Windows, without a silent return (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "69d8f3f5b19b070f9059a096f344c44bbd359d47",
+      "ValidSignature": true,
+      "Subject": "build: the Windows integration lane runs only from an interactive desktop session (TR-MCP-NUKE-019 AC-5, amendment H1)"
+    },
+    {
+      "Sha": "5924926051f84720c110ab1421430499fadf918a",
+      "ValidSignature": true,
+      "Subject": "test: the interactive desktop-spawner case fails loudly instead of returning silently (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "4f668b76d26b26e7162d8654fb946c484fd42539",
+      "ValidSignature": true,
+      "Subject": "docs: unit-suite-green plan and the PR 82 handoff correction (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "b2bd50b3711c28bdb256e1f4fa56f3d8114fb6c6",
+      "ValidSignature": true,
+      "Subject": "test: classify platform-dependent tests as integration tests and guard the unit suite (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "8a6173342dcd7683b9d9549005a5af819b8abc90",
+      "ValidSignature": true,
+      "Subject": "Merge origin/develop (PR 86, 3da2db93) into fix/unit-suite-green-20261019"
+    },
+    {
+      "Sha": "8c2b83ab5a442ce7dbc4a5a78f70dfaafbd034a2",
+      "ValidSignature": true,
+      "Subject": "build: host-scoped integration lane filter for MigrationIntegrationTests (TR-MCP-NUKE-019, IMPL-UNITGREEN-001 G)"
+    },
+    {
+      "Sha": "11681680d316bee7c8c184e45b699af7c1bd2188",
+      "ValidSignature": true,
+      "Subject": "test: take over the unit-suite fixes and Linux provider provisioning from PLAN-C4MODEL-001 (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "b2319488039bbcd1e2014d8f3a1b7a26627b3ba8",
+      "ValidSignature": true,
+      "Subject": "test: HostileReviewWorker startup test no longer depends on Event Log write access (IMPL-UNITGREEN-001 F)"
+    },
+    {
+      "Sha": "a4c358efd91131e7fb714370726997b5c2d076cb",
+      "ValidSignature": true,
+      "Subject": "test: leave the PLAN-C4MODEL-001 unit fixes to that effort (IMPL-UNITGREEN-001 scope)"
+    },
+    {
+      "Sha": "de5813532adb51b964b222644ae0519bd814f8ef",
+      "ValidSignature": true,
+      "Subject": "feat(client): host-aware WorkspaceIdentityPath.ToNativePath overload (IMPL-UNITGREEN-001 step 4)"
+    },
+    {
+      "Sha": "28bf0b222464c5bdbfb8b6ec0a357e15284e486f",
+      "ValidSignature": true,
+      "Subject": "test: canonical workspace keys, provider traits and a host-aware native-path contract (IMPL-UNITGREEN-001 step 2)"
+    },
+    {
+      "Sha": "cbc74e823e7af96f8df1a1320498998e5de2b328",
+      "ValidSignature": true,
+      "Subject": "fix(deps): pin System.Security.Cryptography.Xml and Pkcs to the advisory-patched 10.0.13 (IMPL-UNITGREEN-001 step A)"
+    }
+  ],
+  "Formatting": [
+    {
+      "Path": "docs/plans/2026-10-19-unit-suite-green.md",
+      "EnEmDashes": 0,
+      "TableRows": 0
+    },
+    {
+      "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-pr-body.txt",
+      "EnEmDashes": 0,
+      "TableRows": 0
+    }
+  ],
+  "HashMismatches": [],
+  "ChangedCodePaths": [
+    ".nuke/build.schema.json",
+    "Directory.Packages.props",
+    "build/Build.TestDependencies.cs",
+    "build/IntegrationLaneFilter.cs",
+    "build/IntegrationLaneFilterContracts.cs",
+    "build/IntegrationLanePreconditionContracts.cs",
+    "build/InteractiveSessionPrecondition.cs",
+    "build/LinuxProviderTestProvisioner.cs",
+    "build/ProviderTestProvisioningContracts.cs",
+    "src/QBrainAi.Client/WorkspaceIdentityPath.cs",
+    "src/QBrainAi.Services/Services/AgentPluginVersionSources.cs",
+    "src/QBrainAi.Services/Services/DirectoryListingEntry.cs",
+    "src/QBrainAi.Services/Services/DirectoryTreeWalker.cs",
+    "src/QBrainAi.Services/Services/GitHubCliService.cs",
+    "src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs",
+    "tests/Build.Tests/IntegrationLaneFilterContract.cs",
+    "tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+    "tests/Build.Tests/IntegrationLaneFilterTests.cs",
+    "tests/Build.Tests/IntegrationLanePreconditionContract.cs",
+    "tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs",
+    "tests/Build.Tests/IntegrationLanePreconditionTests.cs",
+    "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs",
+    "tests/Build.Tests/ProviderTestProvisioningTests.cs",
+    "tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs",
+    "tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj",
+    "tests/QBrainAi.QBAgent.Tests/Skills/AuthoredSkillsTests.cs",
+    "tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs",
+    "tests/QBrainAi.Repl.Core.Tests/MemorySchemaContractTests.cs",
+    "tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj",
+    "tests/QBrainAi.Support.Mcp.Tests/Configuration/ConfigurablePathIntegrationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Configuration/TriageConfigurationContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139EighteenthEvidenceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Documentation/QuadBrainSlotConfigurationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Documentation/TurnTransactionPlanArtifactTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorImportTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/McpStdio/BrainSlotToolAbsenceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/McpStdio/MemoryContractArtifactTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryApiIdempotencyTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchCiTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchConflictTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchDocsTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchInjectionTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchIsolationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnDocsTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnHarnessTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnPackTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnScoringTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPackTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchReportTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchSafetyTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchScoringTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTechTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTokenTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchToolUseTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchValueGateTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIntegrationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMcpSchemaTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMigrationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryOnboardingDocsTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryPluginSyncTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS5Catalog.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemorySurfaceParityTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryToolsDiscoveryTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiDeployDocsTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiHostingTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceResolutionMiddlewareTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj",
+    "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementsRecoveryMigrationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/AgentHelp/AgentHelpTestPaths.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPoolServiceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotLlmStrategyTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/DocsSyncG8OverlayTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/FederatedSessionLogServiceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/FileGitHubWorkspaceTokenStoreTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/GrokCliAgentExecutionStrategyTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDeadContractInventoryTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffIngestionServiceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsFourteenthLinuxNativeTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogImportedSessionDeleteTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogResubmissionReviveTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSanitizerRegistrationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTurnContextTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSubmitBudgetTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedSessionLogServiceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/TranscriptSessionLogPersisterTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseComponentUpdateContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseCqrsTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseDiagramGraphCqrsTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseExpandedScopeTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseGetWorkspaceResolutionContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathConsumersContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceCrossPlatformContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceTokenServiceTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/AddSessionLogTurnPlanFileAndTodoIdMigrationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/AuditPayloadProviderMigrationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthLinuxNativeTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthSharedTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthWindowsNativeTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityWindowsTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/Decompose4nfBackfillMigrationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureArgumentsTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertions.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/ProductMigrationApplyTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/RemoveTodoRecordsMigrationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogTurnPlanFileTodoIdMigrationApplyTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerDecompose4nfBackfillMigrationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollection.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerRenameQuadBrainRolesMigrationTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnection.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnectionTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/SqliteBoundedOpenFourteenthTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/UseCaseMigrationApplyTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostRealTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathGetFullPathRatchetContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceRemotePathContractTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Web/UseCaseCanvasUiAssetTests.cs",
+    "tests/QBrainAi.Support.Mcp.Tests/Web/UseCaseUiAssetTests.cs",
+    "tests/Shared/TestRepositoryRoot.cs"
+  ]
+}

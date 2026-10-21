@@ -1,0 +1,53 @@
+[
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffIngestionServiceTests.cs",
+    "SqliteLines": [
+      "25:    private readonly SqliteConnection _connection;",
+      "34:        _connection = new SqliteConnection(\"Data Source=:memory:\");",
+      "37:            .UseSqlite(_connection)"
+    ],
+    "ConcurrencyLines": [
+      "570:        var results = await Task.WhenAll(first, second);"
+    ]
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs",
+    "SqliteLines": [
+      "36:        var connectionString = new SqliteConnectionStringBuilder",
+      "41:        _dbOptions = new DbContextOptionsBuilder<McpDbContext>().UseSqlite(connectionString).Options;"
+    ],
+    "ConcurrencyLines": [
+      "89:        var results = await Task.WhenAll(",
+      "231:        var results = await Task.WhenAll("
+    ]
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs",
+    "SqliteLines": [
+      "41:        var connectionString = new SqliteConnectionStringBuilder",
+      "47:            .UseSqlite(connectionString)"
+    ],
+    "ConcurrencyLines": [
+      "73:        var started = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);",
+      "74:        var release = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);",
+      "182:        var results = await Task.WhenAll(",
+      "342:        var started = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);",
+      "343:        var release = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);",
+      "394:        todo.CreateGate = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);",
+      "432:        todo.CreateGate = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);",
+      "672:        var started = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);",
+      "673:        var release = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);",
+      "945:        public TaskCompletionSource? CreateGate { get; set; }"
+    ]
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Controllers/SessionLogControllerReceiptTests.cs",
+    "SqliteLines": [
+      "108:        await using var connection = new SqliteConnection(\"Data Source=:memory:\");",
+      "111:        await using var db = new McpDbContext(new DbContextOptionsBuilder<McpDbContext>().UseSqlite(connection).Options, workspace);"
+    ],
+    "ConcurrencyLines": [
+      "29:        var persisted = new TaskCompletionSource<long>(TaskCreationOptions.RunContinuationsAsynchronously);"
+    ]
+  }
+]

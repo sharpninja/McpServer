@@ -1,0 +1,13 @@
+type: error
+payload:
+  requestId: req-20261021T033843Z-40af
+  code: not_found
+  message: TEST 'TEST-MCP-MEMORY-010' not found.
+  retryable: false
+  details:
+    methodName: workflow.requirements.getTest
+    exceptionType: McpServer.Client.McpNotFoundException
+    reason: not_found
+
+---
+

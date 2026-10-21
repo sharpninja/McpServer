@@ -1,0 +1,9 @@
+{
+  "RolloutPath": "/home/sharpninja/.codex/sessions/2026/10/20/rollout-2026-10-20T21-52-19-01a15c5f-b6f1-7f50-b4e5-fa36f363f939.jsonl",
+  "Line": 8,
+  "Timestamp": "2026-10-21T02:52:21.302Z",
+  "ThreadId": "01a15c5f-b6f1-7f50-b4e5-fa36f363f939",
+  "Model": "gpt-6-astra",
+  "Effort": "max",
+  "Cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019"
+}

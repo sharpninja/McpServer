@@ -1,0 +1,492 @@
+[
+  {
+    "Copy": "ug-r4-binding-1.meta.json",
+    "Sha256": "9F2A2374BEBF3FF0CD2470D8C391A1FEC1698DC70261762F9FFAE485AE93F288",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-binding-1.meta.json",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-binding-1.trx-summary.txt",
+    "Sha256": "8A6B54DD025B7CCCB16B49F675AD3AF982E57734A100A0AA660D19D358C3DA06",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-binding-1.trx-summary.txt",
+    "OriginalFound": false,
+    "Same": false
+  },
+  {
+    "Copy": "ug-r4-build-tests-1.meta.json",
+    "Sha256": "4F8AB5A788553F0B6341B85EF161DC2B85030CA6AA33E278CA78892B43ADC84A",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-build-tests-1.meta.json",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-build-tests-1.trx-summary.txt",
+    "Sha256": "7498F5055C9D33905D43119F9A70C06317882005FC758ABD4EB00CC74C162C5D",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-build-tests-1.trx-summary.txt",
+    "OriginalFound": false,
+    "Same": false
+  },
+  {
+    "Copy": "ug-r4-build-tests-2.meta.json",
+    "Sha256": "4026101A572DB9DC00234CCE10810108B9A0161847A28580A739DD86E406E882",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-build-tests-2.meta.json",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-build-tests-2.trx-summary.txt",
+    "Sha256": "6E19454EB6247EF96AF4FC2571DA1A038EBC43B1F642049FFF54BE8267F16EFE",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-build-tests-2.trx-summary.txt",
+    "OriginalFound": false,
+    "Same": false
+  },
+  {
+    "Copy": "ug-r4-compare-extmock1-extbinding1.txt",
+    "Sha256": "BA3698D6811371A669D7069A6275830903767119A6EED1E147596E36F8A95AE5",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-compare-extmock1-extbinding1.txt",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-compare-lane1-precommitlane1.txt",
+    "Sha256": "4C476FC5F8DB9AFCEB74B0D795C4425A379059652058A8DA2B01849591EE181B",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-compare-lane1-precommitlane1.txt",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-compare-lane2-precommitlane2.txt",
+    "Sha256": "B5D94D039BAD9AC706C8B570D4B1673B5FC4F0865DF312FEE20BA4EE84656687",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-compare-lane2-precommitlane2.txt",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-compare-mockgate-binding.txt",
+    "Sha256": "E4E87E22C69977E1268BAB661A1191E123BF36966F6F7E6B876030A6DD305A0C",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-compare-mockgate-binding.txt",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-compare-racemock2-racebinding1.txt",
+    "Sha256": "4E151DF9C61B58D9CC6F92CD1C22B95D81ED50C6A0704112E7F521186D48331A",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-compare-racemock2-racebinding1.txt",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-compare-test1-racemock2.txt",
+    "Sha256": "FC9A63CF8DD1483B374F438D6B5335B6EB8ACFF3461726B6ACC3F89C9D7D8B97",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-compare-test1-racemock2.txt",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-ext-binding-1.meta.json",
+    "Sha256": "0F70C244F460E612CB204AB6BBB32E0E68648EB388BFCB6118F2C3F902C08495",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-ext-binding-1.meta.json",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-ext-binding-1.trx-summary.txt",
+    "Sha256": "2998DE76D8DFC1DFC6D6C25EF4201DF4712A387590201B1D1547FDB4E47297F9",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-ext-binding-1.trx-summary.txt",
+    "OriginalFound": false,
+    "Same": false
+  },
+  {
+    "Copy": "ug-r4-ext-mockgate-1.meta.json",
+    "Sha256": "2B719B0AB0F53C936C30708796EE113C6BDE7A0AFF7E82B7FCC35423BF583682",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-ext-mockgate-1.meta.json",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-ext-mockgate-1.trx-summary.txt",
+    "Sha256": "93716BF727593A8AD5CD7DB42C6FAC855CE0BF263792735FF30C4A4C7E238E4C",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-ext-mockgate-1.trx-summary.txt",
+    "OriginalFound": false,
+    "Same": false
+  },
+  {
+    "Copy": "ug-r4-hostile-control-1.meta.json",
+    "Sha256": "6456462B9A0753CB3C663C97898E88533C49289D84B3CDE19BEF11BC7323E872",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-hostile-control-1.meta.json",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-hostile-control-1.trx-summary.txt",
+    "Sha256": "9CD946BC65E6FACFE2398647052282773D23798C15A2EADFE05829CBBA143004",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-hostile-control-1.trx-summary.txt",
+    "OriginalFound": false,
+    "Same": false
+  },
+  {
+    "Copy": "ug-r4-hostile-gate-1.meta.json",
+    "Sha256": "E7693E94236E2F63EB07FE15AD0B18F6183FB2A2926B0E6B38EF294A2DCD6091",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-hostile-gate-1.meta.json",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-hostile-gate-1.trx-summary.txt",
+    "Sha256": "D2968050C75D45590A90C5FD8E7B9EB5C9B719043571395DC9578C47A8A0D348",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-hostile-gate-1.trx-summary.txt",
+    "OriginalFound": false,
+    "Same": false
+  },
+  {
+    "Copy": "ug-r4-hostile-gate-2.meta.json",
+    "Sha256": "9B11843584EF3497D60864AB21077F5023E8CED626C9BC8AC4461B7D3C30DB8D",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-hostile-gate-2.meta.json",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-hostile-gate-2.trx-summary.txt",
+    "Sha256": "129A6923850A75EF7F5A3EFCBDF14EBE201861524A72A3DCA52EAB1E8D40B0DC",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-hostile-gate-2.trx-summary.txt",
+    "OriginalFound": false,
+    "Same": false
+  },
+  {
+    "Copy": "ug-r4-hostile-gate-3.meta.json",
+    "Sha256": "30DD873B441E004AD8AEFAD593443A873E0BCE15A212F077394BAC51656548A9",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-hostile-gate-3.meta.json",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-hostile-gate-3.trx-summary.txt",
+    "Sha256": "AD637F25A2BCD706466A2526298B39F3F9993B3A8BE55F5BEC546A0361757380",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-hostile-gate-3.trx-summary.txt",
+    "OriginalFound": false,
+    "Same": false
+  },
+  {
+    "Copy": "ug-r4-linux-lane-1.meta.json",
+    "Sha256": "A41FAC96E62766E4F250A7F75CE7BCE7F33F3B1926E4470023A29383781F9A86",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-linux-lane-1.meta.json",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-linux-lane-1.trx-summary.txt",
+    "Sha256": "CF1E4BDE2427AB29623EF0B013C2569D889DF6006B66C5FE57534F8C1F9509B5",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-linux-lane-1.trx-summary.txt",
+    "OriginalFound": false,
+    "Same": false
+  },
+  {
+    "Copy": "ug-r4-linux-lane-2.meta.json",
+    "Sha256": "926EB74C78A9F6431E09BB659A3042C6704F4E23CA8CAF686A2F3DBF547DF9E9",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-linux-lane-2.meta.json",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-linux-lane-2.trx-summary.txt",
+    "Sha256": "829F5A169AB50C8B21C09575CC41A410B2564E107BFC2A066B04F500F9CEB2AF",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-linux-lane-2.trx-summary.txt",
+    "OriginalFound": false,
+    "Same": false
+  },
+  {
+    "Copy": "ug-r4-linux-lane-3.meta.json",
+    "Sha256": "89C1F6C308953965C89CB27CBD156B8A7F856B9EE877D5363E111C31D764256B",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-linux-lane-3.meta.json",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-linux-lane-3.trx-summary.txt",
+    "Sha256": "A7BB324B22C06A8D746103474C3B9C17622AEC61587E4EFF12FDE434F31CBBBD",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-linux-lane-3.trx-summary.txt",
+    "OriginalFound": false,
+    "Same": false
+  },
+  {
+    "Copy": "ug-r4-linux-lane-compare-1-2.txt",
+    "Sha256": "9F7EFF0289F9937CE92FA5CFED7B1B12E2AB4897ACC24D241912761A4892FEB0",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-linux-lane-compare-1-2.txt",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-linux-lane-compare-2-3.txt",
+    "Sha256": "249BC73921C9735A24C05BF72DE16AAC56061B395FF2EA93F4B4AC2D3ABB6CC2",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-linux-lane-compare-2-3.txt",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-linux-lane-compare-r3lane8-2.txt",
+    "Sha256": "8B5CBB5DA180705394966EF7C24171376C0234864F7CF5785F26FB62E9A32015",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-linux-lane-compare-r3lane8-2.txt",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-linux-test-1.meta.json",
+    "Sha256": "E84FD74C802F3487AF3BCFDC2739AC03B9E5B902C637F078884A7A56A5F69682",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-linux-test-1.meta.json",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-linux-test-1.trx-summary.txt",
+    "Sha256": "0B3D4F164A9DD08007633A19D24378F1BB1A69DAD5F6267A7E1FA2E6EFE2353C",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-linux-test-1.trx-summary.txt",
+    "OriginalFound": false,
+    "Same": false
+  },
+  {
+    "Copy": "ug-r4-linux-test-2.meta.json",
+    "Sha256": "FA3F7A201E24B3E88ED296BB5AF71F514DBFE0072AAF69559B2537A0D3C9D475",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-linux-test-2.meta.json",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-linux-test-2.trx-summary.txt",
+    "Sha256": "F00100A2870DA248440B0349C2A600C93FAE7847E41C2827BC9A8F2A56017728",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-linux-test-2.trx-summary.txt",
+    "OriginalFound": false,
+    "Same": false
+  },
+  {
+    "Copy": "ug-r4-linux-test-3.meta.json",
+    "Sha256": "A43815B86169C0DCD215A2547FD3F4CC5E8805F418016671623FAA95955FDCD7",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-linux-test-3.meta.json",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-linux-test-3.trx-summary.txt",
+    "Sha256": "8F91C3204A14AA1ED3BC71DD082219ADC074100C7852C852F5AB317A0937EC33",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-linux-test-3.trx-summary.txt",
+    "OriginalFound": false,
+    "Same": false
+  },
+  {
+    "Copy": "ug-r4-mockgate-1.meta.json",
+    "Sha256": "48E084BCDAA25003AD8A7F3D37969065627660A2A3713B135C067DD192B2FAFF",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-mockgate-1.meta.json",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-mockgate-1.trx-summary.txt",
+    "Sha256": "18266945316F0B08E6E409756062A04C0B02304DBB4DA6A4D62292C02F6C8000",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-mockgate-1.trx-summary.txt",
+    "OriginalFound": false,
+    "Same": false
+  },
+  {
+    "Copy": "ug-r4-precommit-lane-1.meta.json",
+    "Sha256": "38A4E61E4B0A473A70FFB1A149D2D329469685CECB1BB42F303ABD51AB825CD1",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-precommit-lane-1.meta.json",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-precommit-lane-1.trx-summary.txt",
+    "Sha256": "ACEEB9D65C28FC934AF10AA592DCBCC8C9AF49F4B1BF4B2B27009A0E5DD00EC1",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-precommit-lane-1.trx-summary.txt",
+    "OriginalFound": false,
+    "Same": false
+  },
+  {
+    "Copy": "ug-r4-precommit-lane-2.meta.json",
+    "Sha256": "D485F176FB8B971F7A816B8DCA1EC39A351A5922CDE54CA4E95034D16719A70D",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-precommit-lane-2.meta.json",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-precommit-lane-2.trx-summary.txt",
+    "Sha256": "51363F2E72A175FA280B476BB01494C558F143A1FBCA6390F505AC9DF895403E",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-precommit-lane-2.trx-summary.txt",
+    "OriginalFound": false,
+    "Same": false
+  },
+  {
+    "Copy": "ug-r4-race-binding-1.meta.json",
+    "Sha256": "6471E6F9B4FFAC2C69F13AFC2117F21C92F78E730C13BB22545B0214E16279EE",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-race-binding-1.meta.json",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-race-binding-1.trx-summary.txt",
+    "Sha256": "6BC0CD0BFAD70D72526D61924E89BC88894C38082C0188D57035CE270591DFC2",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-race-binding-1.trx-summary.txt",
+    "OriginalFound": false,
+    "Same": false
+  },
+  {
+    "Copy": "ug-r4-race-mockgate-1.exit.txt",
+    "Sha256": "1E864AE2065CB292DCA90B66BC220E6AA9FA2AEC4097C25D054F0B1EA9E930A1",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-race-mockgate-1.exit.txt",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-race-mockgate-1.meta.json",
+    "Sha256": "CA3A0F9E21BD8A47C78D53905DB8361907A1B679E1E4151A5BA1215D690258B3",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-race-mockgate-1.meta.json",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-race-mockgate-1.out.txt",
+    "Sha256": "1F9156E928668DEA524FC62CBB08AE5764703D0A36EDFF3CECB379D2DAB8F3D0",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-race-mockgate-1.out.txt",
+    "OriginalFound": false,
+    "Same": false
+  },
+  {
+    "Copy": "ug-r4-race-mockgate-2.meta.json",
+    "Sha256": "9086D5CA9C2085E16D0804FA204EEF1A23AB34BE894A7B212D6AA9E9722EE7BF",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-race-mockgate-2.meta.json",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-race-mockgate-2.trx-summary.txt",
+    "Sha256": "A6F3ED85066A6F34D1FAF6DEB824B8E84DCD60C1F478E6A8E4AB0167EF5C722E",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-race-mockgate-2.trx-summary.txt",
+    "OriginalFound": false,
+    "Same": false
+  },
+  {
+    "Copy": "ug-r4-traceability-1.exit.txt",
+    "Sha256": "0C5BE2099E57A1813B3472EF45E65CB40A3452C4DD9571BA7D7711A3FE3CD5D3",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-traceability-1.exit.txt",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-traceability-1.meta.json",
+    "Sha256": "0588FF2A559B4124627BAD027739D7DE3FFBD9EE2403221C6017543C66FAB67F",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-traceability-1.meta.json",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-traceability-1.out.txt",
+    "Sha256": "B4460247944321130A65C2DFB42D838096F77B546DEED488682421FE21C6BAF5",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-traceability-1.out.txt",
+    "OriginalFound": false,
+    "Same": false
+  },
+  {
+    "Copy": "ug-r4-traceability-2.exit.txt",
+    "Sha256": "1B3C8F9CAB22712957B42EE81A0CB3F96120EBACA73EBD796AF62E68191909D6",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-traceability-2.exit.txt",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-traceability-2.meta.json",
+    "Sha256": "25DFE4B81645B7CA92BFBBA008DFECBAFF4AA91BC3BD3DE150A6C2DC1CBB3512",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-traceability-2.meta.json",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-traceability-2.out.txt",
+    "Sha256": "2C397D2BDBB330E10B75B9DB33BCEE62FA94163C410C52D85F3065926C7DC4A5",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-traceability-2.out.txt",
+    "OriginalFound": false,
+    "Same": false
+  },
+  {
+    "Copy": "ug-r4-win-lane-1.start.txt",
+    "Sha256": "7F32493CC1A17D93059E3208F06B2CB4D804BBBFA937538FED2683913EA5F891",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-win-lane-1.start.txt",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-win-lane-1.txt",
+    "Sha256": "EAFD5DA73FC790A681B24AB612E95B994748854A750E6D8BD25C4EADC9B078DD",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-win-lane-1.txt",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-win-lane-2.start.txt",
+    "Sha256": "976B655A97B0E5996F76C1B4A72D7C2B84B87EB4F045A36FF0D6C94C1B0500D0",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-win-lane-2.start.txt",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-win-lane-2.txt",
+    "Sha256": "77D1C96AE3D7AB5138A0D8127B448879AECE356E0666744C2993AD2322E65497",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-win-lane-2.txt",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-win-lane-3.start.txt",
+    "Sha256": "5EF391D0678DD721C28B7462E800415C10B4AEB9431BCDB27A0B6A4B25B00052",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-win-lane-3.start.txt",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-win-lane-3.txt",
+    "Sha256": "54FA168F80E7A27B8F78714294DD6AC63504988E5A54EC2A40E4B6218AF390A0",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-win-lane-3.txt",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-win-lane-compare-2-3.txt",
+    "Sha256": "CECD25E2E06E88769F16826D914E9BABCCC4C8845A27C8F24FDB672D5FE35592",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-win-lane-compare-2-3.txt",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-win-lane-compare-r3lane8-2.txt",
+    "Sha256": "D1DEC5D7E3A16B7F0AFE93310FE93D6C3282F799727A50C10B64132B6EC34768",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-win-lane-compare-r3lane8-2.txt",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-win-test-ssh-1.stacks.txt",
+    "Sha256": "4FAB7DA408C1972E97561A5F55E097A80AC2FF1F8F6A75169C80878BC4ED5E02",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-win-test-ssh-1.stacks.txt",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-win-test-ssh-1.txt",
+    "Sha256": "EBFBF22B1BE87DF9AFE587403BB0DD6D4D2F1882496FF9CE199703D079A73B07",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-win-test-ssh-1.txt",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-win-test-ssh-2.txt",
+    "Sha256": "81AD75778D472E6FFEAD07EE3151B6031CD90721C5E430EC0379B0B3059C80F9",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-win-test-ssh-2.txt",
+    "OriginalFound": true,
+    "Same": true
+  },
+  {
+    "Copy": "ug-r4-win-test-ssh-3.txt",
+    "Sha256": "CF29C0EF5B4B9C40AF0E57306C5CE2C73D1E7E071D90B50524127FD26E25194A",
+    "OriginalPath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-win-test-ssh-3.txt",
+    "OriginalFound": true,
+    "Same": true
+  }
+]
