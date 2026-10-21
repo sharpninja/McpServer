@@ -122,7 +122,9 @@ public sealed class SessionLogTurnContextExtractor
         foreach (var rootName in new[] { ".grok", ".claude", ".codex", ".cursor" })
         {
             var root = Path.Combine(home, rootName);
-            if (!Directory.Exists(root))
+            // AC-TR-MCP-SESSIONLOG-006-009: a history root that is a link contributes no file, the same as a link
+            // inside it (hostile validation round 5 finding R5-F1); a home that is itself a link is still scanned.
+            if (!Directory.Exists(root) || !walker.IsReachable(home, root))
                 continue;
 
             // AC-TR-MCP-SESSIONLOG-006-009: the walk skips directory links and any directory it cannot list.

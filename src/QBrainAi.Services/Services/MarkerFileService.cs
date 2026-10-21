@@ -732,15 +732,17 @@ public static class MarkerFileService
         DirectoryTreeWalker walker,
         Func<string, string?> readText)
     {
+        // AC-TR-MCP-WS-005-001: a cache root that is a link, or that is reached through a link below the user
+        // profile, contributes no candidate (hostile validation round 5 finding R5-F1).
         var codexCache = Path.Combine(userProfile, ".codex", "plugins", "cache", pluginName);
-        if (Directory.Exists(codexCache))
+        if (Directory.Exists(codexCache) && walker.IsReachable(userProfile, codexCache))
         {
             foreach (var candidate in OrderPluginVersionRoots(walker.EnumerateDirectories(codexCache), readText))
                 yield return candidate;
         }
 
         var claudeCache = Path.Combine(userProfile, ".claude", "plugins", "cache");
-        if (Directory.Exists(claudeCache))
+        if (Directory.Exists(claudeCache) && walker.IsReachable(userProfile, claudeCache))
         {
             var candidates = walker.EnumerateDirectories(claudeCache)
                 .Where(path => path.Contains(pluginName, StringComparison.OrdinalIgnoreCase)
@@ -750,7 +752,7 @@ public static class MarkerFileService
         }
 
         var grokCache = Path.Combine(userProfile, ".grok", "installed-plugins");
-        if (Directory.Exists(grokCache))
+        if (Directory.Exists(grokCache) && walker.IsReachable(userProfile, grokCache))
         {
             var candidates = walker.EnumerateDirectories(grokCache)
                 .Where(path => path.Contains(pluginName, StringComparison.OrdinalIgnoreCase)

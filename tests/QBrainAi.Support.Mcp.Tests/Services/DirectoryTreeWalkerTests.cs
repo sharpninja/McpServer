@@ -18,7 +18,14 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// are walked only when its own listing succeeds, and file links are yielded as files. Negative controls run
 /// deliberately wrong walks (one that follows links, one that propagates listing errors as the legacy recursive
 /// enumeration did, one that stops at the first error, one that drops an unlistable directory) over the same trees
-/// and prove the walk assertion rejects each.
+/// and prove the walk assertion rejects each. The reachability cases (hostile validation round 5 finding R5-F1;
+/// operator 2026-10-21: "Fix both, strengthen ACs" and "Approve, strengthen AC-006/008 (Recommended)") script the
+/// folders between a boundary (the user profile or home) and a scan root: a scan root is walked only when it and
+/// every folder between the boundary and it are listed by their parents as directories that are not links, and the
+/// boundary itself is trusted. Their negative controls run wrong checks (the unchecked root, a check that follows
+/// links, a check of the root alone, a check that also rejects a linked boundary, a prefix match without a
+/// separator, a check that propagates listing errors, a check that also lists the root) and prove the reachability
+/// assertion rejects each.
 /// </remarks>
 public sealed class DirectoryTreeWalkerTests
 {
@@ -247,6 +254,78 @@ public sealed class DirectoryTreeWalkerTests
     }
 
     /// <summary>
+    /// Production binding of the scripted reachability cases: <see cref="DirectoryTreeWalker.IsReachable"/> over
+    /// each scripted tree gives the required answer and never lists a directory link below the boundary.
+    /// </summary>
+    /// <param name="name">Scripted reachability case name.</param>
+    [Theory]
+    [MemberData(nameof(ReachCaseNames))]
+    public void ScriptedReachCase_ProductionCheck_GivesTheRequiredAnswer(string name) =>
+        RunReachAndAssert(name, (list, boundary, root) => new DirectoryTreeWalker(list).IsReachable(boundary, root));
+
+    /// <summary>
+    /// Production binding of the reachability error filter: a listing error that is neither an IO nor an access
+    /// error propagates out of <see cref="DirectoryTreeWalker.IsReachable"/> instead of being taken as unreachable.
+    /// </summary>
+    [Fact]
+    public void ProductionReach_UnexpectedListingError_Propagates()
+    {
+        var tree = new ScriptedDirectoryTree()
+            .Lists("/p", DirEntry("/p/.codex"))
+            .Throws("/p/.codex", () => new InvalidOperationException("not an IO error"));
+
+        Assert.Throws<InvalidOperationException>(() => new DirectoryTreeWalker(tree.List).IsReachable("/p", "/p/.codex/plugins"));
+        Assert.Throws<ArgumentNullException>(() => new DirectoryTreeWalker(tree.List).IsReachable(null!, "/p"));
+        Assert.Throws<ArgumentNullException>(() => new DirectoryTreeWalker(tree.List).IsReachable("/p", null!));
+    }
+
+    /// <summary>
+    /// Integration: on the real file system, <see cref="DirectoryTreeWalker.FileSystem"/> reaches a real folder below
+    /// a boundary, does not reach a scan root that is a directory symbolic link or one reached through a linked
+    /// ancestor (each link's target lies outside the boundary), and still reaches a root below a boundary that is
+    /// itself a directory symbolic link (AC-TR-MCP-WS-005-001, AC-TR-MCP-SESSIONLOG-006-009; hostile validation
+    /// round 5 finding R5-F1). Creating symbolic links depends on the host (on Windows, Developer Mode or the
+    /// create-symbolic-link privilege), so this is an integration test.
+    /// </summary>
+    [Fact]
+    [Trait("Category", "Integration")]
+    public void FileSystemReach_RealRootAndAncestorLinks_AreNotReachable()
+    {
+        var boundary = Path.Combine(Path.GetTempPath(), $"mcp-reach-links-{Guid.NewGuid():N}");
+        var outside = boundary + "-outside";
+        var linkedBoundary = boundary + "-boundary-link";
+        var realRoot = Path.Combine(boundary, "real", "plugins", "cache");
+        var rootLink = Path.Combine(boundary, "real", "plugins", "root-link");
+        var ancestorLink = Path.Combine(boundary, "ancestor-link");
+        Directory.CreateDirectory(realRoot);
+        Directory.CreateDirectory(Path.Combine(outside, "cache"));
+        try
+        {
+            Directory.CreateSymbolicLink(rootLink, Path.Combine(outside, "cache"));
+            Directory.CreateSymbolicLink(ancestorLink, outside);
+            Directory.CreateSymbolicLink(linkedBoundary, boundary);
+            Assert.True(Directory.Exists(rootLink));
+            Assert.True(Directory.Exists(Path.Combine(ancestorLink, "cache")));
+
+            Assert.True(DirectoryTreeWalker.FileSystem.IsReachable(boundary, realRoot));
+            Assert.False(DirectoryTreeWalker.FileSystem.IsReachable(boundary, rootLink));
+            Assert.False(DirectoryTreeWalker.FileSystem.IsReachable(boundary, Path.Combine(ancestorLink, "cache")));
+            Assert.True(DirectoryTreeWalker.FileSystem.IsReachable(linkedBoundary, Path.Combine(linkedBoundary, "real", "plugins", "cache")));
+        }
+        finally
+        {
+            foreach (var link in new[] { linkedBoundary, ancestorLink, rootLink })
+            {
+                if (Directory.Exists(link))
+                    Directory.Delete(link);
+            }
+
+            Directory.Delete(boundary, recursive: true);
+            Directory.Delete(outside, recursive: true);
+        }
+    }
+
+    /// <summary>
     /// Integration: on the real file system, <see cref="DirectoryTreeWalker.ListFileSystem"/> flags a directory
     /// symbolic link and a file symbolic link as links, and <see cref="DirectoryTreeWalker.FileSystem"/> neither
     /// yields nor descends the directory link (whose target lies outside the walked tree) while it yields the file
@@ -383,6 +462,292 @@ public sealed class DirectoryTreeWalkerTests
         return (directories, files);
     }
 
+    // Reachability of a scan root below a boundary (hostile validation round 5 finding R5-F1).
+
+    /// <summary>A reachability check under test: lists through <c>list</c> from <c>boundary</c> down to <c>root</c>.</summary>
+    private delegate bool ReachFunction(
+        Func<string, IReadOnlyList<DirectoryListingEntry>> list,
+        string boundary,
+        string root);
+
+    /// <summary>
+    /// Scripted reachability cases: the tree, the boundary (the user profile or home), the scan root, and whether
+    /// the root may be walked. Expected values come from the strengthened criteria AC-TR-MCP-WS-005-001 and
+    /// AC-TR-MCP-SESSIONLOG-006-009 (operator 2026-10-21: "Fix both, strengthen ACs"): the root and every folder
+    /// between the boundary and it must each be listed by its parent as a directory that is not a link; a folder
+    /// whose listing fails with an IO or access error cannot be traversed; the boundary itself is trusted, so a
+    /// linked profile or home is still scanned; a root that is the boundary is reachable without any listing.
+    /// </summary>
+    private static readonly Dictionary<string, (Func<ScriptedDirectoryTree> Tree, string Boundary, string Root, bool Reachable)> ReachCases =
+        new(StringComparer.Ordinal)
+        {
+            ["reach-normal"] = (() => CodexTree(rootIsLink: false), "/p", "/p/.codex/plugins/cache", true),
+            ["reach-root-link"] = (() => CodexTree(rootIsLink: true), "/p", "/p/.codex/plugins/cache", false),
+            ["reach-top-ancestor-link"] = (
+                () => new ScriptedDirectoryTree()
+                    .Lists("/", DirEntry("/p"))
+                    .Lists("/p", DirLinkEntry("/p/.codex"), FileEntry("/p/.bashrc")),
+                "/p",
+                "/p/.codex/plugins/cache",
+                false),
+            ["reach-middle-ancestor-link"] = (
+                () => new ScriptedDirectoryTree()
+                    .Lists("/", DirEntry("/p"))
+                    .Lists("/p", DirEntry("/p/.codex"))
+                    .Lists("/p/.codex", DirLinkEntry("/p/.codex/plugins")),
+                "/p",
+                "/p/.codex/plugins/cache",
+                false),
+            ["reach-boundary-link"] = (
+                () => CodexTree(rootIsLink: false).Lists("/", DirLinkEntry("/p")),
+                "/p",
+                "/p/.codex/plugins/cache",
+                true),
+            ["reach-parent-unlistable"] = (
+                () => new ScriptedDirectoryTree()
+                    .Lists("/", DirEntry("/p"))
+                    .Lists("/p", DirEntry("/p/.codex"))
+                    .Throws("/p/.codex", () => new IOException(UntrustedMountPointMessage)),
+                "/p",
+                "/p/.codex/plugins/cache",
+                false),
+            ["reach-parent-access-denied"] = (
+                () => new ScriptedDirectoryTree()
+                    .Lists("/", DirEntry("/p"))
+                    .Lists("/p", DirEntry("/p/.codex"))
+                    .Throws("/p/.codex", () => new UnauthorizedAccessException("Access to the path is denied.")),
+                "/p",
+                "/p/.codex/plugins/cache",
+                false),
+            ["reach-root-absent"] = (
+                () => new ScriptedDirectoryTree()
+                    .Lists("/", DirEntry("/p"))
+                    .Lists("/p", DirEntry("/p/.codex"))
+                    .Lists("/p/.codex", DirEntry("/p/.codex/plugins"))
+                    .Lists("/p/.codex/plugins", DirEntry("/p/.codex/plugins/other")),
+                "/p",
+                "/p/.codex/plugins/cache",
+                false),
+            ["reach-root-is-file"] = (
+                () => new ScriptedDirectoryTree()
+                    .Lists("/", DirEntry("/p"))
+                    .Lists("/p", DirEntry("/p/.codex"))
+                    .Lists("/p/.codex", DirEntry("/p/.codex/plugins"))
+                    .Lists("/p/.codex/plugins", FileEntry("/p/.codex/plugins/cache")),
+                "/p",
+                "/p/.codex/plugins/cache",
+                false),
+            ["reach-root-unlistable"] = (
+                () => CodexTree(rootIsLink: false).Throws("/p/.codex/plugins/cache", () => new IOException(UntrustedMountPointMessage)),
+                "/p",
+                "/p/.codex/plugins/cache",
+                true),
+            ["reach-root-is-boundary"] = (() => new ScriptedDirectoryTree().Lists("/", DirEntry("/p")), "/p", "/p", true),
+            ["reach-outside-boundary"] = (
+                () => new ScriptedDirectoryTree()
+                    .Lists("/", DirEntry("/p"), DirEntry("/q"))
+                    .Lists("/p", DirEntry("/p/.codex")),
+                "/p",
+                "/q/.codex",
+                false),
+            ["reach-prefix-sibling-link"] = (
+                () => new ScriptedDirectoryTree()
+                    .Lists("/", DirEntry("/p"))
+                    .Lists("/p", DirLinkEntry("/p/.cod"), DirEntry("/p/.codex"))
+                    .Lists("/p/.codex", DirEntry("/p/.codex/plugins")),
+                "/p",
+                "/p/.codex/plugins",
+                true),
+            ["reach-trailing-separator"] = (() => CodexTree(rootIsLink: false), "/p", "/p/.codex/plugins/cache/", true),
+            ["reach-history-root"] = (
+                () => new ScriptedDirectoryTree()
+                    .Lists("/", DirEntry("/h"))
+                    .Lists("/h", DirEntry("/h/.claude"), DirEntry("/h/.codex")),
+                "/h",
+                "/h/.claude",
+                true),
+            ["reach-history-root-link"] = (
+                () => new ScriptedDirectoryTree()
+                    .Lists("/", DirEntry("/h"))
+                    .Lists("/h", DirLinkEntry("/h/.claude"), DirEntry("/h/.codex")),
+                "/h",
+                "/h/.claude",
+                false),
+        };
+
+    /// <summary>The scripted reachability case names, for the theories.</summary>
+    public static TheoryData<string> ReachCaseNames => new(ReachCases.Keys.Order(StringComparer.Ordinal));
+
+    /// <summary>
+    /// The Codex cache layout <c>/p/.codex/plugins/cache</c> under the boundary <c>/p</c>, with the cache root
+    /// listed as a link when <paramref name="rootIsLink"/>.
+    /// </summary>
+    private static ScriptedDirectoryTree CodexTree(bool rootIsLink) =>
+        new ScriptedDirectoryTree()
+            .Lists("/", DirEntry("/p"))
+            .Lists("/p", DirEntry("/p/.codex"), FileEntry("/p/.bashrc"))
+            .Lists("/p/.codex", DirEntry("/p/.codex/plugins"))
+            .Lists("/p/.codex/plugins", rootIsLink ? DirLinkEntry("/p/.codex/plugins/cache") : DirEntry("/p/.codex/plugins/cache"))
+            .Lists("/p/.codex/plugins/cache", DirEntry("/p/.codex/plugins/cache/mcpserver"));
+
+    /// <summary>
+    /// Asserts one reachability result against a case: the answer equals the required one, and the check never
+    /// listed a directory link below the boundary (it never descends into a link to find the root).
+    /// </summary>
+    private static void AssertReach(string boundary, bool expected, bool actual, ScriptedDirectoryTree tree)
+    {
+        Assert.Equal(expected, actual);
+        Assert.DoesNotContain(tree.Listed, directory => !string.Equals(directory, boundary, StringComparison.Ordinal) && tree.IsLink(directory));
+    }
+
+    /// <summary>Runs one reachability check over a fresh copy of a case's tree and asserts its result.</summary>
+    private static void RunReachAndAssert(string name, ReachFunction reach)
+    {
+        var (treeFactory, boundary, root, reachable) = ReachCases[name];
+        var tree = treeFactory();
+        AssertReach(boundary, reachable, reach(tree.List, boundary, root), tree);
+    }
+
+    /// <summary>
+    /// Mock gate positive control: each reachability case's required answer passes the reachability assertion on a
+    /// tree that has listed nothing.
+    /// </summary>
+    /// <param name="name">Scripted reachability case name.</param>
+    [Theory]
+    [MemberData(nameof(ReachCaseNames))]
+    public void ScriptedReachCase_RequiredAnswer_PassesTheReachAssertion(string name)
+    {
+        var (treeFactory, boundary, _, reachable) = ReachCases[name];
+        AssertReach(boundary, reachable, reachable, treeFactory());
+    }
+
+    /// <summary>The reachability theories cover every scripted case.</summary>
+    [Fact]
+    public void ScriptedReachTheory_CoversEveryCase() => Assert.Equal(16, ReachCases.Count);
+
+    /// <summary>
+    /// Mock gate negative controls: each wrong reachability check is rejected by the reachability assertion on the
+    /// case that exposes it, inside a passing harness. The unchecked root (the behavior before the fix) fails on a
+    /// linked root, a linked ancestor and a linked history root; a check that follows links fails on a linked root
+    /// and a linked ancestor; a check of the root alone fails on a linked ancestor; a check that also rejects a
+    /// linked boundary fails on a linked profile; a prefix match without a separator takes the linked sibling
+    /// <c>.cod</c> for <c>.codex</c>; a check that propagates listing errors fails on an unlistable parent; a check
+    /// that also lists the root fails when only the root cannot be listed.
+    /// </summary>
+    [Fact]
+    public void WrongReachNegativeControls_AreRejectedInsidePassingHarness()
+    {
+        foreach (var name in new[] { "reach-root-link", "reach-top-ancestor-link", "reach-history-root-link" })
+            Assert.NotNull(Record.Exception(() => RunReachAndAssert(name, UncheckedReach)));
+
+        Assert.NotNull(Record.Exception(() => RunReachAndAssert("reach-root-link", FollowsLinksReach)));
+        Assert.NotNull(Record.Exception(() => RunReachAndAssert("reach-middle-ancestor-link", FollowsLinksReach)));
+        Assert.NotNull(Record.Exception(() => RunReachAndAssert("reach-top-ancestor-link", RootOnlyReach)));
+        Assert.NotNull(Record.Exception(() => RunReachAndAssert("reach-middle-ancestor-link", RootOnlyReach)));
+        Assert.NotNull(Record.Exception(() => RunReachAndAssert("reach-boundary-link", ChecksBoundaryReach)));
+        Assert.NotNull(Record.Exception(() => RunReachAndAssert("reach-prefix-sibling-link", PrefixMatchReach)));
+        Assert.NotNull(Record.Exception(() => RunReachAndAssert("reach-parent-unlistable", PropagatesListingErrorsReach)));
+        Assert.NotNull(Record.Exception(() => RunReachAndAssert("reach-root-unlistable", ListsRootReach)));
+
+        // Each wrong check is wrong only where a case exposes it: on the normal layout, which has no link and no
+        // listing error, every one of them gives the required answer, so the rejections above come from the
+        // behavior under test and not from an assertion that rejects everything.
+        foreach (var reach in new ReachFunction[] { UncheckedReach, FollowsLinksReach, RootOnlyReach, ChecksBoundaryReach, PrefixMatchReach, PropagatesListingErrorsReach, ListsRootReach })
+            Assert.Null(Record.Exception(() => RunReachAndAssert("reach-normal", reach)));
+    }
+
+    /// <summary>
+    /// Mock gate negative control for the reachability error filter: a scripted listing error that is neither an IO
+    /// nor an access error escapes the scripted tree, and a check with a catch-all filter hides it; the production
+    /// binding requires the check to let it propagate.
+    /// </summary>
+    [Fact]
+    public void UnexpectedReachListingError_EscapesTheScriptedTree()
+    {
+        var tree = new ScriptedDirectoryTree()
+            .Lists("/p", DirEntry("/p/.codex"))
+            .Throws("/p/.codex", () => new InvalidOperationException("not an IO error"));
+
+        Assert.Throws<InvalidOperationException>(() => PropagatesListingErrorsReach(tree.List, "/p", "/p/.codex/plugins"));
+        Assert.Null(Record.Exception(() => SwallowsEverythingReach(tree.List, "/p", "/p/.codex/plugins")));
+    }
+
+    // Wrong reachability checks used only as negative controls.
+
+    private static readonly ReachFunction UncheckedReach = (_, _, _) => true;
+
+    private static bool FollowsLinksReach(Func<string, IReadOnlyList<DirectoryListingEntry>> list, string boundary, string root) =>
+        ConfigurableReach(list, boundary, root, checkLinks: false, checkAncestors: true, checkBoundary: false, requireSeparator: true, catchListingErrors: true, catchAll: false, listRoot: false);
+
+    private static bool RootOnlyReach(Func<string, IReadOnlyList<DirectoryListingEntry>> list, string boundary, string root) =>
+        ConfigurableReach(list, boundary, root, checkLinks: true, checkAncestors: false, checkBoundary: false, requireSeparator: true, catchListingErrors: true, catchAll: false, listRoot: false);
+
+    private static bool ChecksBoundaryReach(Func<string, IReadOnlyList<DirectoryListingEntry>> list, string boundary, string root) =>
+        ConfigurableReach(list, boundary, root, checkLinks: true, checkAncestors: true, checkBoundary: true, requireSeparator: true, catchListingErrors: true, catchAll: false, listRoot: false);
+
+    private static bool PrefixMatchReach(Func<string, IReadOnlyList<DirectoryListingEntry>> list, string boundary, string root) =>
+        ConfigurableReach(list, boundary, root, checkLinks: true, checkAncestors: true, checkBoundary: false, requireSeparator: false, catchListingErrors: true, catchAll: false, listRoot: false);
+
+    private static bool PropagatesListingErrorsReach(Func<string, IReadOnlyList<DirectoryListingEntry>> list, string boundary, string root) =>
+        ConfigurableReach(list, boundary, root, checkLinks: true, checkAncestors: true, checkBoundary: false, requireSeparator: true, catchListingErrors: false, catchAll: false, listRoot: false);
+
+    private static bool ListsRootReach(Func<string, IReadOnlyList<DirectoryListingEntry>> list, string boundary, string root) =>
+        ConfigurableReach(list, boundary, root, checkLinks: true, checkAncestors: true, checkBoundary: false, requireSeparator: true, catchListingErrors: true, catchAll: false, listRoot: true);
+
+    private static bool SwallowsEverythingReach(Func<string, IReadOnlyList<DirectoryListingEntry>> list, string boundary, string root) =>
+        ConfigurableReach(list, boundary, root, checkLinks: true, checkAncestors: true, checkBoundary: false, requireSeparator: true, catchListingErrors: true, catchAll: true, listRoot: false);
+
+    private static bool ConfigurableReach(
+        Func<string, IReadOnlyList<DirectoryListingEntry>> list,
+        string boundary,
+        string root,
+        bool checkLinks,
+        bool checkAncestors,
+        bool checkBoundary,
+        bool requireSeparator,
+        bool catchListingErrors,
+        bool catchAll,
+        bool listRoot)
+    {
+        var target = root.Length > 1 ? root.TrimEnd('/') : root;
+        try
+        {
+            if (checkBoundary && boundary.Length > 1)
+            {
+                var parent = boundary[..Math.Max(1, boundary.LastIndexOf('/'))];
+                var self = list(parent)
+                    .Where(entry => entry.Path == boundary)
+                    .Select(entry => (DirectoryListingEntry?)entry)
+                    .FirstOrDefault();
+                if (self is null || self.Value.IsLink)
+                    return false;
+            }
+
+            var current = boundary;
+            while (current != target)
+            {
+                var found = list(current)
+                    .Where(entry => target.StartsWith(entry.Path, StringComparison.Ordinal)
+                        && (!requireSeparator || target.Length == entry.Path.Length || target[entry.Path.Length] == '/'))
+                    .Select(entry => (DirectoryListingEntry?)entry)
+                    .FirstOrDefault();
+                if (found is not { } next || !next.IsDirectory || next.Path.Length <= current.Length)
+                    return false;
+                if (next.IsLink && checkLinks && (checkAncestors || next.Path == target))
+                    return false;
+                current = next.Path;
+            }
+
+            if (listRoot)
+                _ = list(target);
+            return true;
+        }
+        catch (Exception ex) when (catchAll || (catchListingErrors && ex is IOException or UnauthorizedAccessException))
+        {
+            return false;
+        }
+    }
+
     /// <summary>
     /// Scripted in-memory directory tree: each directory lists fixed entries or throws a fixed exception, every
     /// listing is recorded in order, and an unscripted directory throws <see cref="InvalidOperationException"/>.
@@ -391,13 +756,20 @@ public sealed class DirectoryTreeWalkerTests
     {
         private readonly Dictionary<string, Func<IReadOnlyList<DirectoryListingEntry>>> _listings = new(StringComparer.Ordinal);
 
+        private readonly HashSet<string> _directoryLinks = new(StringComparer.Ordinal);
+
         /// <summary>Directories listed so far, in order.</summary>
         public List<string> Listed { get; } = [];
+
+        /// <summary>True when some scripted listing reports <paramref name="directory"/> as a directory link.</summary>
+        public bool IsLink(string directory) => _directoryLinks.Contains(directory);
 
         /// <summary>Scripts <paramref name="directory"/> to list <paramref name="entries"/>.</summary>
         public ScriptedDirectoryTree Lists(string directory, params DirectoryListingEntry[] entries)
         {
             _listings[directory] = () => entries;
+            foreach (var entry in entries.Where(entry => entry.IsDirectory && entry.IsLink))
+                _directoryLinks.Add(entry.Path);
             return this;
         }
 

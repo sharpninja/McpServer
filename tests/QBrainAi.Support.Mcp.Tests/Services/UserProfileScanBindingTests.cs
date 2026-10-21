@@ -19,7 +19,10 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// result changes, so the expected values come from the link and error handling rather than from the layout. The
 /// version-file cases (operator 2026-10-20: "Fold R3-P3 in first") read the same profile through
 /// <see cref="MarkerFileService.ReadExistingFileText"/> with named <c>.version</c> files scripted to throw the
-/// sharing-violation <see cref="IOException"/> of a locked file; their seam control reads every file normally.
+/// sharing-violation <see cref="IOException"/> of a locked file; their seam control reads every file normally. The
+/// linked-root cases (hostile validation round 5 finding R5-F1; operator 2026-10-21: "Fix both, strengthen ACs")
+/// report a cache or history root, or a folder between the profile and it, as a link and prove it contributes
+/// nothing, while a profile reported as a link by its own parent is still scanned.
 /// </remarks>
 public sealed class UserProfileScanBindingTests : IDisposable
 {
@@ -195,6 +198,101 @@ public sealed class UserProfileScanBindingTests : IDisposable
 
         Assert.Equal("PLAN-SCANBINDING-001", skipped.TodoId);
         Assert.Equal(SessionLogTurnContextValidator.NoneSentinel, followed.TodoId);
+    }
+
+    /// <summary>
+    /// The cache layouts of AC-TR-MCP-WS-005-001, each with the folder (relative to the profile) a case reports as a
+    /// link: the cache root itself or one of the folders between the profile and it (hostile validation round 5
+    /// finding R5-F1).
+    /// </summary>
+    public static TheoryData<string, string> LinkedCacheComponents => new()
+    {
+        { "codex", ".codex" },
+        { "codex", ".codex/plugins" },
+        { "codex", ".codex/plugins/cache" },
+        { "codex", ".codex/plugins/cache/" + PluginName },
+        { "claude", ".claude" },
+        { "claude", ".claude/plugins" },
+        { "claude", ".claude/plugins/cache" },
+        { "grok", ".grok" },
+        { "grok", ".grok/installed-plugins" },
+    };
+
+    /// <summary>A path the scripted walker treats as unlistable that no case creates.</summary>
+    private string NoUnlistableFolder => Path.Combine(_root, "no-such-folder");
+
+    private void CreateSingleCacheProfile(string kind)
+    {
+        var versionRoot = kind switch
+        {
+            "codex" => Path.Combine(Profile, ".codex", "plugins", "cache", PluginName, "9.9.9"),
+            "claude" => Path.Combine(Profile, ".claude", "plugins", "cache", PluginName, "9.9.9"),
+            "grok" => Path.Combine(Profile, ".grok", "installed-plugins", PluginName, "9.9.9"),
+            _ => throw new ArgumentOutOfRangeException(nameof(kind), kind, "Unknown cache layout."),
+        };
+        Directory.CreateDirectory(versionRoot);
+        Directory.CreateDirectory(Workspace);
+        File.WriteAllText(Path.Combine(versionRoot, ".version"), "9.9.9");
+    }
+
+    /// <summary>
+    /// AC-TR-MCP-WS-005-001: with the only cached version under a cache root that is a link, or under a folder
+    /// between the profile and that root that is a link, resolution does not throw and falls back to the synced
+    /// plugin version; with the link flag removed (seam control) the cached version wins, so the link at or above
+    /// the root is what was skipped.
+    /// </summary>
+    /// <param name="kind">Cache layout: codex, claude or grok.</param>
+    /// <param name="linkedRelative">The folder, relative to the profile, reported as a link.</param>
+    [Theory]
+    [MemberData(nameof(LinkedCacheComponents))]
+    public void ResolveAgentPluginVersion_LinkedCacheRootOrAncestor_FallsBackToTheSyncedVersion(string kind, string linkedRelative)
+    {
+        CreateSingleCacheProfile(kind);
+        var linked = Path.Combine(Profile, linkedRelative.Replace('/', Path.DirectorySeparatorChar));
+
+        Assert.Equal(MarkerFileService.SyncedAgentPluginVersion, Resolve(ScriptedWalker(NoUnlistableFolder, linked)));
+        Assert.Equal("9.9.9", Resolve(ScriptedWalker(NoUnlistableFolder, link: null)));
+    }
+
+    /// <summary>
+    /// AC-TR-MCP-WS-005-001: a user profile that is itself a link is still scanned, so the cached version resolves
+    /// with the profile reported as a link by its parent listing, which the scan never reads.
+    /// </summary>
+    [Fact]
+    public void ResolveAgentPluginVersion_LinkedProfile_IsStillScanned()
+    {
+        CreateSingleCacheProfile("claude");
+
+        Assert.Equal("9.9.9", Resolve(ScriptedWalker(NoUnlistableFolder, Profile)));
+    }
+
+    /// <summary>The four agent-history roots of AC-TR-MCP-SESSIONLOG-006-009.</summary>
+    public static TheoryData<string> HistoryRoots => new() { ".grok", ".claude", ".codex", ".cursor" };
+
+    /// <summary>
+    /// AC-TR-MCP-SESSIONLOG-006-009: when a history root is a link, the extractor does not throw and the turn keeps
+    /// None; with the link flag removed (seam control) the history under it yields the TODO id, and a home that is
+    /// itself a link is still scanned (hostile validation round 5 finding R5-F1).
+    /// </summary>
+    /// <param name="rootName">The history root under the profile.</param>
+    [Theory]
+    [MemberData(nameof(HistoryRoots))]
+    public void Extract_LinkedHistoryRoot_KeepsNone(string rootName)
+    {
+        var history = Path.Combine(Profile, rootName, "projects", "agent-linkedroot");
+        Directory.CreateDirectory(history);
+        File.WriteAllText(Path.Combine(history, "chat.jsonl"), "working PLAN-LINKEDROOT-001");
+
+        var linkedRoot = new SessionLogTurnContextExtractor(ScriptedWalker(NoUnlistableFolder, Path.Combine(Profile, rootName)))
+            .Extract(new SessionLogTurnEntity(), workspacePath: null, userProfilePath: Profile, agentSessionId: "agent-linkedroot");
+        var plain = new SessionLogTurnContextExtractor(ScriptedWalker(NoUnlistableFolder, link: null))
+            .Extract(new SessionLogTurnEntity(), workspacePath: null, userProfilePath: Profile, agentSessionId: "agent-linkedroot");
+        var linkedHome = new SessionLogTurnContextExtractor(ScriptedWalker(NoUnlistableFolder, Profile))
+            .Extract(new SessionLogTurnEntity(), workspacePath: null, userProfilePath: Profile, agentSessionId: "agent-linkedroot");
+
+        Assert.Equal(SessionLogTurnContextValidator.NoneSentinel, linkedRoot.TodoId);
+        Assert.Equal("PLAN-LINKEDROOT-001", plain.TodoId);
+        Assert.Equal("PLAN-LINKEDROOT-001", linkedHome.TodoId);
     }
 
     /// <summary>

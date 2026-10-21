@@ -10,10 +10,15 @@ namespace QBrainAi.Support.Mcp.Services;
 /// <remarks>
 /// A directory is yielded when its parent lists it, unless it is a link; its contents are walked only when its own
 /// listing succeeds. File links are yielded as files. Listing errors other than <see cref="IOException"/> and
-/// <see cref="UnauthorizedAccessException"/> propagate.
+/// <see cref="UnauthorizedAccessException"/> propagate. A scan root below the user profile or home is walked only
+/// when <see cref="IsReachable"/> holds for it (hostile validation round 5 finding R5-F1; operator 2026-10-21:
+/// "Fix both, strengthen ACs").
 /// </remarks>
 internal sealed class DirectoryTreeWalker
 {
+    private static readonly StringComparison s_pathComparison =
+        OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+
     private static readonly EnumerationOptions s_singleLevel = new()
     {
         RecurseSubdirectories = false,
@@ -44,6 +49,62 @@ internal sealed class DirectoryTreeWalker
     /// <param name="root">Directory to walk.</param>
     /// <returns>The reached files, breadth first.</returns>
     internal IEnumerable<string> EnumerateFiles(string root) => Walk(root, yieldDirectories: false);
+
+    /// <summary>
+    /// AC-TR-MCP-WS-005-001, AC-TR-MCP-SESSIONLOG-006-009: whether <paramref name="root"/> may be walked from
+    /// <paramref name="boundary"/>: the root and every folder between the boundary and it must each be listed by
+    /// its parent as a directory that is not a link or other reparse point. The boundary itself is trusted (a user
+    /// profile or home that is itself a link is still scanned) and its parent is never listed; a root that is the
+    /// boundary is reachable without any listing.
+    /// </summary>
+    /// <remarks>
+    /// A folder whose listing fails with an <see cref="IOException"/> or <see cref="UnauthorizedAccessException"/>
+    /// cannot be traversed, so the root is not reachable; any other listing error propagates. A root that is not
+    /// below the boundary, or that a parent does not list as a directory, is not reachable.
+    /// </remarks>
+    /// <param name="boundary">The trusted folder the scan starts from (the user profile or home).</param>
+    /// <param name="root">The scan root below <paramref name="boundary"/>.</param>
+    /// <returns>True when the root may be walked.</returns>
+    internal bool IsReachable(string boundary, string root)
+    {
+        ArgumentNullException.ThrowIfNull(boundary);
+        ArgumentNullException.ThrowIfNull(root);
+        var target = Path.TrimEndingDirectorySeparator(root);
+        var current = Path.TrimEndingDirectorySeparator(boundary);
+        while (!string.Equals(current, target, s_pathComparison))
+        {
+            IReadOnlyList<DirectoryListingEntry> entries;
+            try
+            {
+                entries = _list(current);
+            }
+            catch (IOException)
+            {
+                return false;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return false;
+            }
+
+            var found = entries
+                .Where(entry => LeadsTo(entry.Path, target))
+                .Select(entry => (DirectoryListingEntry?)entry)
+                .FirstOrDefault();
+            if (found is not { } next || !next.IsDirectory || next.IsLink || next.Path.Length <= current.Length)
+                return false;
+            current = next.Path;
+        }
+
+        return true;
+    }
+
+    /// <summary>True when <paramref name="path"/> is <paramref name="target"/> or a folder above it.</summary>
+    private static bool LeadsTo(string path, string target) =>
+        target.StartsWith(path, s_pathComparison)
+        && (target.Length == path.Length
+            || target[path.Length] == Path.DirectorySeparatorChar
+            || target[path.Length] == Path.AltDirectorySeparatorChar);
 
     /// <summary>Lists one real directory with each entry's directory and link flags.</summary>
     /// <param name="directory">Directory to list.</param>
