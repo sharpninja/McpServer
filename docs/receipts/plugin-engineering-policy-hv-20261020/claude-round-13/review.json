@@ -1,0 +1,196 @@
+{
+  "Receipt": {
+    "TimestampUtc": "2026-10-21T00:00:00Z",
+    "ValidatorIdentity": "ClaudeIndependentHostile",
+    "RequestedAgent": "ClaudeCode",
+    "RequestedModel": "claude-opus-5-5",
+    "RequestedEffort": "max",
+    "ReviewStage": "PlanReadiness",
+    "Round": 13,
+    "ReviewedCommit": "df97c824a0f68891969a82284163f394d3c8d03d",
+    "PlanPath": "docs/plans/2026-10-20-plugin-engineering-policy.md",
+    "PlanSha256": "298973F25C180EA3D78DF6DA7592C5FCF4DBE889415A18A1E25258C4C0E3948C",
+    "PlanBytes": 170485,
+    "OverallVerdict": "DISAGREE",
+    "verdict": "NOT-READY",
+    "confidence": 94,
+    "AccuracyScore": 0.98,
+    "CompletenessScore": 0.98,
+    "Counts": {
+      "PASS": 10,
+      "FAIL": 2,
+      "UNKNOWN": 0
+    },
+    "R12ResolutionCheck": {
+      "R12-01": {
+        "Status": "ResolvedAsScoped",
+        "Evidence": [
+          "(a) §23 L2473-2488: once any grading attempt is allocated, the complete packet is final. A different packet or changed accepted-run bytes get 409 evaluation_results_locked; an identical repeat is idempotent. Correction before any attempt is disclosed with its reason. Finality is persisted on a workspace/protocol binding that serializes allocation against correction, and GradingInvalid never unfinalizes. Cross-referenced from §21.1 L2234-2235.",
+          "(b) §23 L2490-2495 and §21.1 L2296-2297: AbandonProtocol is refused once any attempt holds an accepted capture, and the accepted intake stays in accounting.",
+          "(c) §23 L2497-2501 and §21.1 L2280-2283: activation refuses while any accepted capture is unlocked, checked across all protocol subjects.",
+          "Owners are named at L2503-2504 and tests listed at L2505-2508."
+        ],
+        "Residual": "R13-01 (my R12-01 wording allowed an accepted grading to exit via GradingInvalid without limiting what may trigger it)"
+      }
+    },
+    "Claims": [
+      {
+        "Id": "C1",
+        "Summary": "Scope, intent and precedence, plus the nine hosts and their limits.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§1 L8-14 and L39-42; §5 L299-327; §13.4 L930-938. Unchanged."
+        ]
+      },
+      {
+        "Id": "C2",
+        "Summary": "Dependencies are explicit, owned and ordered; planned types are distinguished from implemented ones.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§1 L22-37; §9 L550-566; §14.7 L1464-1476; §15.5 L1677-1701.",
+          "New owners: §21 L2251-2252, L2322-2323, L2351-2352, L2404-2406; §22 L2454-2455; §23 L2503-2504.",
+          "Source hashes are unchanged."
+        ]
+      },
+      {
+        "Id": "C3",
+        "Summary": "Canonical policy, provenance, hashing and distribution integrity.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§2 L46-89; §14.2 L1110-1111; §21.2 L2325-2345; §20.2 L2210-2214."
+        ]
+      },
+      {
+        "Id": "C4",
+        "Summary": "Configuration, selection, reload, defaults and status.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§3 L93-136; §14.5 L1329-1349; §15.4 L1645-1665; §21.2 L2309-2312."
+        ]
+      },
+      {
+        "Id": "C5",
+        "Summary": "Delivery, adapters, dedupe, compaction/stateless handling, deadlines and unavailable behavior.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§5 L287-344; §13.4 L911-928; §14.7 L1450-1462; §19.2 L2098-2102; §21.2 L2319-2320."
+        ]
+      },
+      {
+        "Id": "C6",
+        "Summary": "Evidence models, endpoints, persistence and migration.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§7 L400-458; §13; §16.1 L1740-1749; §17.1 L1826-1856; §19.1 L2050-2059; §20.1 L2152-2175; §21.1 L2244-2257 and L2271; §22 L2417-2422 and L2449-2455; §23 L2482-2488.",
+          "Non-blocking: the protocol-binding and run-attempt entities are described in prose but not named."
+        ]
+      },
+      {
+        "Id": "C7",
+        "Summary": "Server completion gate: writers, states, origins, atomicity and authenticity.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§8 L460-532; §13.3 L871-907; §14.1 L1077-1092; §21.2 L2313-2323."
+        ]
+      },
+      {
+        "Id": "C8",
+        "Summary": "Snapshots, freshness, scope, raw verification and coverage.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§6 L351-398; §13.1 L752-761; §14.2 L1094-1160; §14.4 L1246-1256; §14.7 L1434-1448. Unchanged."
+        ]
+      },
+      {
+        "Id": "C9",
+        "Summary": "Traceability, test-first ordering, zero-fail/zero-skip gates and named validations.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§9 L534-609; §14.6 L1375-1399.",
+          "Planned tests (not executed): §21 L2301-2305, L2353-2355, L2406-2409; §22 L2457-2465; §23 L2505-2508."
+        ]
+      },
+      {
+        "Id": "C10",
+        "Summary": "Recovery, compatibility, rollout, rollback and configuration ownership.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§11 L638-663; §14.6 L1401-1430; §16.2 L1763-1779; §20.2 L2177-2220; §21.2 L2307-2355; §21.3 L2380-2402."
+        ]
+      },
+      {
+        "Id": "C11",
+        "Summary": "Bounded evaluation and independent review with honest evidence.",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "Sound: §10 L611-636; §13.5 L999-1029; §18 L1958-1977; §19.1; §21.1; §21.3; §22 allowlist; §23 finality.",
+          "R13-01: §21.1 L2240-2242 records GradingInvalid for any second session or distinct capture, even after a capture has been accepted. That re-opens Attempt1 (L2230-2231), so a valid low score can be followed by a regrade, contradicting L2242 and §23 L2492-2495."
+        ]
+      },
+      {
+        "Id": "C12",
+        "Summary": "No consequential choice is left to implementers, and implementation stays behind approvals.",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "Approvals are retained: §1 L3-4; §9 L604-609; §14.7 L1474-1476.",
+          "R13-01: the rule 'record GradingInvalid' and the claim 'no regrade after a valid low score' conflict once a capture is accepted, so an implementer would have to pick one."
+        ]
+      }
+    ],
+    "FailList": [
+      {
+        "Id": "R13-01",
+        "Severity": "Low",
+        "Location": "§21.1 L2230-2231, L2239-2242, L2259-2265, L2276-2278; §23 L2490-2495",
+        "Trigger": "A grading capture is accepted, and the operator (who holds the unblinding map) can see an unfavorable result. The operator then submits a distinct re-export, opens a second session in the review workspace, or sends a malformed LockBlindGrades request.",
+        "Problem": "Each of those actions records GradingInvalid. §21.1 makes no exception for an attempt whose capture is already accepted, and any LockBlindGrades 400 counts the same way. Attempt1 is then allowed after GradingInvalid and before any lock. §23 explicitly accepts 'server-recorded GradingInvalid' as an exit for an accepted capture. So a valid, unlocked grading can be turned into an invalid one by a legitimate-looking call, and the same runs regraded. Only the post-lock case (L2276-2278) is protected.",
+        "Consequence": "The operator gets one extra blind-grading draw over the same runs, chosen after the result is known, for the evaluation that gates activation. The accounting discloses it but nothing prevents it. This contradicts 'No regrade follows a valid low score'. My R12-01 wording ('or GradingInvalid') left this path open.",
+        "RequiredResolution": "In §21.1 and §23, apply the existing post-lock rule from the moment a capture is accepted: a later session or distinct capture for that attempt is recorded in accounting, does not convert the attempt to GradingInvalid, grants no Attempt1, and refuses activation for that workspace/policy/build. After acceptance, only LockBlindGrades content validation (inconsistent rubric, run set or receipt) may record GradingInvalid; request-shape, authorization, not-found, stale or store errors never do. State that aborting a grader before it terminates successfully looks the same as a crash and remains an operator-attested residual, disclosed through session and attempt accounting. Reword L2242 to say that no regrade follows an accepted capture except after a LockBlindGrades content failure. Tests: a re-capture, a second session or a malformed request after acceptance grants no Attempt1; a content 400 still permits the single regrade."
+      }
+    ],
+    "blocking_gaps": [
+      "R13-01 (Low): once a capture is accepted, it can still be turned into GradingInvalid by a re-capture, a second session or a malformed request, which permits one regrade after a valid low score."
+    ],
+    "defects": [
+      {
+        "Id": "R13-01",
+        "Severity": "Low",
+        "Claims": [
+          "C11",
+          "C12"
+        ]
+      }
+    ],
+    "path_to_threshold": "Apply R13-01's correction (two or three sentences in §21.1 and §23, plus tests) and re-review. This full read found no other blocking gap; the NonBlockingObservations are optional.",
+    "NonBlockingObservations": [
+      "Name the workspace/protocol binding (§23 L2482-2484, §21.3 L2384-2386) with PK (WorkspaceId, ProtocolId) and its fields, and name the run-attempt state store (§21.3 L2370-2374), in the Phase 1 data diagrams.",
+      "§19.1 L2073-2075 says a behavioral retry uses a new results manifest. Under §23 that is possible only before any attempt is allocated, so clarify the wording.",
+      "§17.1 L1846-1847 still calls observableArtifactIds 'opaque existing', but Outcome artifacts have no ingestion path. State that outcomes travel inline in resultJson.",
+      "The frozen final-diff outcome should exclude host, plugin and MCP state, and the leak test should include ledger-state markers.",
+      "EV1 evidence is thin (commitment and freeze time only). Add a neutral server-verified pre-run-freeze fact, or rely on the rubric.",
+      "Cross-check resultJson.finalResponse against the final response the server extracts from the capture.",
+      "Carry-overs: RecordResults request size and streaming; drain ownership wording; WorkspaceId path collisions (benign)."
+    ],
+    "LatentFindingsAcknowledged": [
+      "R13-01 comes from my own R12-01 RequiredResolution, which accepted 'GradingInvalid' as an exit for an accepted capture without limiting what may trigger it. In round 11 I had also judged this one-regrade path an acceptable disclosed residual; §21.1's explicit claim at L2242 contradicts that judgment."
+    ],
+    "Limitations": [
+      "This was a read-only review of the round-13 packet with the full plan read (L1-2513). No build, test or implementation was executed; tests in the plan are planned only.",
+      "I did not recompute hashes; the commit and plan hash come from the manifest. The 13 non-plan hashes match prior rounds, so I reused my earlier source analysis.",
+      "I did not inspect the worktreeChanges receipts or prior receipts, and did not seek any transcript, credential, live store or execution environment.",
+      "Reviewer identity, capture honesty and remote run binding remain operator-attested, as the plan states.",
+      "TimestampUtc is accurate to the date only."
+    ],
+    "CommandsExecuted": [
+      "Read round-13/packet/review-manifest.json",
+      "Read round-13 plan L1-340",
+      "Read round-13 plan L340-689",
+      "Read round-13 plan L690-1049",
+      "Read round-13 plan L1050-1409",
+      "Read round-13 plan L1410-1779",
+      "Read round-13 plan L1780-2179",
+      "Read round-13 plan L2180-2513"
+    ]
+  },
+  "MarkdownReceipt": "# Round 13 plan-readiness receipt (ClaudeIndependentHostile, claude-opus-5-5/max)\n\n**DISAGREE / NOT-READY**: confidence 94, accuracy 0.98, completeness 0.98; 10 PASS / 2 FAIL / 0 UNKNOWN. Commit `df97c824`, plan SHA-256 `298973F2...948C` (from the manifest, not recomputed); 2513 lines read in full.\n\n## Finding\n- **R13-01 (Low): an accepted grading can still be regraded.** §21.1 records GradingInvalid for any second session or distinct capture, and for any LockBlindGrades 400. That includes attempts whose capture is already accepted, and the operator can see those results before locking. GradingInvalid then permits Attempt1, so a valid low score can be followed by a regrade through a legitimate-looking call (re-capture, second session or malformed request). This contradicts 'No regrade follows a valid low score' (L2242) and §23. Only the post-lock case is protected.\n- **Fix:** apply the post-lock rule from the moment a capture is accepted: record the event, grant no Attempt1, and refuse activation for that workspace/policy/build. After acceptance, only LockBlindGrades content failures may record GradingInvalid. State the abort-before-termination residual as operator-attested, and add tests.\n- My R12-01 wording ('or GradingInvalid') left this open, and in round 11 I had judged the path acceptable.\n\n## R12-01 resolution\nResolved as scoped. §23 makes the results packet final once an attempt exists, with serialized and disclosed corrections. AbandonProtocol is refused after an accepted capture, and activation is blocked while any accepted capture is unlocked, across all subjects.\n\n## Claims\n- PASS: C1 C2 C3 C4 C5 C6 C7 C8 C9 C10\n- FAIL: C11, C12 (both R13-01)\n\n## Non-blocking observations\n- Name the protocol-binding and run-attempt entities.\n- Clarify the §19.1 retry wording in light of §23 finality.\n- Outcome artifacts have no ingestion path ('opaque existing' in §17.1).\n- Exclude host/plugin state from the final diff and add ledger-state markers to the leak test.\n- EV1 evidence is thin.\n- Cross-check finalResponse against the capture.\n- Carry-overs from earlier rounds.\n\n## Path to threshold\nApply R13-01's two-to-three-sentence correction and tests, then re-review. This full read found no other blocking gap.\n\n## Limitations\nRead-only packet review; no execution or hash recomputation; source hashes match prior rounds; operator-attested trust boundaries apply; timestamp is date-only."
+}

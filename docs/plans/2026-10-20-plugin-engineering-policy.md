@@ -2159,7 +2159,8 @@ CreatedByOperatorId. CaptureDigest hashes canonical launch metadata and artifact
 hashes plus materializationId/manifest hash; store append-only with a uniqueness
 index on WorkspaceId/MaterializationId/CaptureDigest. Same bytes/bindings return
 the same record. Section21.1 additionally permits only one distinct capture per
-attempt and records GradingInvalid on refusal; no multiple pre-lock captures.
+attempt. Refusal records GradingInvalid only before acceptance; after acceptance
+section24 applies. No multiple pre-lock captures.
 Return {captureId,capturedResponseArtifactId}; lookup by
 that artifact must identify exactly one matching materialization binding, otherwise
 refuse ambiguity. LockBlindGrades resolves this record and repeats the identity,
@@ -2238,8 +2239,10 @@ does it atomically commit Ready and allocate the attempt. Projection refusal
 consumes no grading attempt. Uniqueness
 and the attempt counter prevent concurrent alternatives. Bind the first MCP session
 creation in that review workspace to it. A second session or distinct capture is
-refused409 review_capture_invalid and records GradingInvalid. Identical capture
-replay is idempotent, not another grading. No regrade follows a valid low score.
+refused409 review_capture_invalid: before acceptance it records GradingInvalid;
+after acceptance it records24's sticky violation without granting a retry.
+Identical capture replay is idempotent, not another grading. No regrade follows
+an accepted capture except a bound-capture content failure under24.
 
 Add EngineeringEvaluationGradingAttempt with composite WorkspaceId/SubjectDigest/
 AttemptNo PK, AttemptNo0|1, unique ReviewWorkspaceId and MaterializationId,
@@ -2252,11 +2255,12 @@ subject transaction. StorageSchema owns its Phase4 migration, TurnReviews the
 state machine, SharedComponents the DTOs; no agent mutation tool exists. The
 session-start guard reserves the candidate MCP ID in the subject store before
 creating the review-store session; repeat of that ID is idempotent, a different
-ID invalidates the attempt. These are not a distributed transaction: failed or
+ID invalidates an attempt only before capture acceptance; after acceptance24's
+post-acceptance violation rule applies. These are not a distributed transaction: failed or
 unknown review-session creation records GradingInvalid, never retries another ID.
 Capture verifies the actual review-store session set against that reservation.
 
-GradingInvalid means CLI failure; not exactly one final response; missing or
+Before capture acceptance, GradingInvalid means CLI failure; not exactly one final response; missing or
 non-Disabled ledger entry; context/projection mismatch; any refused authenticated
 capture for that attempt; or a400 from LockBlindGrades. The handler records the
 invalid state/reason durably before returning its refusal. Operator reports a crash
@@ -2267,6 +2271,7 @@ diagnostics when raw bytes fail credential checks. Grading-only failure retries
 the **same immutable behavioral results**, with a fresh session/workspace, once;
 it does not consume or grant a behavioral paired rerun. Attempt1 invalid blocks
 activation for that workspace/policy/build, including after protocol abandonment.
+After acceptance, only24's bound-capture content failure can grant the one regrade.
 
 Add a unique index EngineeringEvaluationGradeLock(WorkspaceId,SubjectDigest).
 At most one lock exists per subject; it binds that attempt's sole capture.
@@ -2274,12 +2279,14 @@ Evaluation AttestReview must use a raw receipt artifact **equal to the lock's
 CapturedResponseArtifactId**, not another receipt with matching claims. Aggregate
 infrastructure accounting lists every grading attempt, session and capture,
 including invalid attempts and reasons. A later extra session/capture records
-GradingInvalid without editing the immutable lock; it invalidates activation and
+the post-acceptance violation under24 without editing the immutable lock or
+converting an accepted capture to GradingInvalid; it invalidates activation and
 cannot produce a replacement lock. Activation rechecks current attempt accounting.
 
 For the same workspace/policySha256/buildArtifactSha256, activation also refuses
 if **any** lock has a failing behavioral threshold verdict, if two grading attempts
-were invalid, if an accepted grading capture has no lock under23, or if any frozen
+were invalid, if24's post-acceptance violation exists, if an accepted grading
+capture has no lock under23, or if any frozen
 protocol has no lock and no explicit abandonment.
 A successful lock under a new protocol cannot hide an earlier failing lock for
 the same policy/build. Repair requires changed policy/build and a new evaluation,
@@ -2489,7 +2496,7 @@ to21.1's failed-lock, invalid-attempt and unfinished-evaluation checks.
 
 AbandonProtocol is refused409 evaluation_results_locked once **any grading
 attempt for that protocol holds an accepted capture**. That captured grading must
-reach LockBlindGrades or server-recorded GradingInvalid; it cannot disappear through
+reach LockBlindGrades or server-recorded **content** GradingInvalid under24; it cannot disappear through
 abandonment. Retain all captures/states in the accounting, including an invalid
 attempt's earlier accepted intake. An accepted capture whose attempt is still
 pending adjudication cannot be treated as an abandoned or absent grading.
@@ -2510,3 +2517,55 @@ unlocked accepted capture blocking activation despite another matching AGREE.
 Round12: DISAGREE, confidence90, accuracy.97/completeness.97; sole R12-01.
 Exact output is retained under claude-round-12. This finality correction awaits
 independent review under the unchanged acceptance contract.
+
+## 24. Round 13 accepted-capture protection
+
+The post-lock protection applies **from capture acceptance**, superseding broader
+pre-acceptance invalidation wording in20.1/21.1. After a capture is accepted, an
+authenticated second session or distinct re-capture is refused and recorded in
+accounting as PostAcceptanceViolation. It does **not** convert that accepted
+attempt to GradingInvalid, grants no Attempt1 and refuses activation for the same
+workspace/policy/build. Identical idempotent replay remains permitted. Unauthorized
+or foreign-ID traffic cannot create this violation for another attempt.
+
+After acceptance, only LockBlindGrades' server-side **content validation of that
+bound immutable capture** may record GradingInvalid: inconsistent frozen rubric,
+run set or receipt. A request-shape400, authorization error, not-found, stale-binding
+or store error never does. Failed caller parameters cannot manufacture a content
+failure: resolve the exact stored accepted capture/profile/subject before running
+the content validator; it examines those captured bytes, not replacement caller
+grades. Preserve the400 validation_error contract but record a content-invalid
+reason only for that validator's result. No regrade follows an accepted capture
+except this content failure, and never when PostAcceptanceViolation exists.
+
+EngineeringEvaluationGradingAttempt adds
+CaptureValidationState None|Accepted|ContentRejected and
+PostAcceptanceViolation bool=false. CaptureId remains immutable history. Intake
+acceptance sets Accepted. A genuine content failure sets ContentRejected and
+GradingInvalid, retaining the original capture/reason; it may allocate the single
+Attempt1 if all other21.1 conditions pass. For23's pending accepted-capture check,
+Accepted means the active validation state, not a historically accepted capture
+subsequently ContentRejected. Thus an actual malformed grading can be regraded
+once, while a valid low grading or a malformed caller request cannot be discarded.
+Aggregate accounting includes both historical intake and content rejection.
+Activation checks all attempts for sticky PostAcceptanceViolation in addition to
+existing failed-lock/two-invalid/unfinished/pending-capture checks.
+
+Aborting a grader before successful termination can look identical to a crash.
+That remains an explicitly operator-attested residual: record observed termination,
+available session/capture evidence and every attempt; do not claim that the server
+proves the cause or prevents strategic pre-termination aborts. The single retry
+limit and disclosed accounting still apply. This does not relax accepted-capture
+protection or permit an undisclosed new subject/results packet.
+
+TurnReviews owns the validator/state/activation checks, StorageSchema the typed
+attempt fields, SharedComponents the error/state DTOs. Tests: second session and
+distinct capture after acceptance set the sticky violation/no Attempt1; malformed
+request/auth/notfound/stale/store errors never grant a retry; genuine captured
+content400 permits the single regrade and clears only the pending active-acceptance
+check; valid low grades cannot be invalidated by caller input; historical intake/
+rejection and observed pre-termination failure remain disclosed.
+
+Round13: DISAGREE, confidence94, accuracy.98/completeness.98; sole Low R13-01.
+Exact output is retained under claude-round-13. This correction awaits independent
+review under the unchanged all12-PASS/.98/confidence98 acceptance contract.
