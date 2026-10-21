@@ -30,7 +30,8 @@ and [base plan](PLAN-SESSIONTURN-SESSIONREVIEW-001.md) remain authoritative unti
 explicitly amended. The base plan is **NOT APPROVED**. Its approval, analyzer
 merge, P0 prerequisites, turn identity, shared components, CompletionPolicy and
 CompletionGate enforcement change set are dependencies. This plan cannot activate
-that gate independently. Phase 1 amends architecture sections 3.5, 5.3, 6 and 8,
+that gate independently. Phase 1 amends architecture sections 3.1, 3.2, 3.3
+(C8/C9), 3.4, 3.5.2, 4.4, 5.1, 5.3, 5.4, 6, 8 and Addendum A,
 component/interface/data/activity/sequence diagrams, golden contracts and rollout
 together, including the new acceptance-criteria contracts in section 4.
 
@@ -82,7 +83,7 @@ No runtime upstream fetch. Unresolved license text selects original wording,
 never absence of policy. Server build embeds an identical canonical asset and
 descriptor; resolver/status/receipts verify version/hash equality. Low-level
 `sync-plugin-core.ps1` distributes them; extend build discovery/generator/fixtures
-to Grok Bot, currently omitted. Generated copies are checksum-protected and never
+to Grok Bot through base A9 (do not duplicate its work). Copies are checksum-protected and never
 hand-edited. Packaged text must satisfy `PluginPowerShellOnly.Tests.ps1` content
 and path restrictions; design documentation is not copied as runtime instructions.
 
@@ -95,11 +96,19 @@ projected onto `Mcp:EngineeringPolicy`:
 - `EnforcementEnabled`: instance bool, default false for compatible deployment.
 - `HookReadTimeoutMs`: int, default 100, range 10..250.
 - `MaxInstructionBytes`: int, default 8192, range 1024..8192.
+- `StructuredAcceptanceCriteriaEnabled`: instance bool, default false; operator
+  configuration only. Non-Plain create/conversion/edit while false is 409
+  `acceptance_criterion_structured_disabled`; reads and explicit conversion to
+  Plain remain available. An unrelated patch may preserve untouched structured
+  criteria. Enable only after compatible clients/renderers ship.
 
 Use IOptionsMonitor. Invalid startup fails validation; invalid reload retains last
-valid settings and emits a diagnostic. Valid reload increments policy generation;
-enforcement reads current settings each completion, guidance next delivered
-prompt. Disabling guidance does not disable enforcement.
+valid settings and emits a diagnostic. Section 13 defines persisted generation
+and audit. Enforcement reads current settings each completion; hook delivery
+reloads at the next host session, Stateless at the next package build. Guidance
+disable does not disable enforcement. Validate MaxInstructionBytes against the
+largest canonical baseline+activity+BDPv4 rendering; insufficient size rejects
+startup/reload, never truncates. Before first status, plugin limits are 100 ms/8192 bytes.
 
 Workspace `Mcp:Workspaces:<name>:DevelopmentProcess` is `None|BDPv4`, default None.
 Only the operator's canonical configuration/deployment workflow can change it;
@@ -114,7 +123,8 @@ Read `GET /qbrainai/engineering-policy/status` (alias `/mcpserver/...`), client
 `engineering_policy_status`. JSON: `schemaVersion`, `policyVersion`, `policySha256`,
 `policyGeneration`, `guidanceEnabled`, `enforcementEnabled`, `developmentProcess`,
 `agentContextMode`, `assetAvailable`, `compatible`, `minimumPluginVersion`,
-`diagnostics` (ordered code/message pairs).
+`diagnostics` (ordered code/message pairs), `hookReadTimeoutMs`,
+`maxInstructionBytes`, `structuredAcceptanceCriteriaEnabled`.
 
 `mcp-status.ps1.engineeringPolicy` adds `packagedVersion`, `packagedSha256`, `host`,
 `hostSessionKey`, `lastRequestId`, `deliveryOutcome` (Delivered/Duplicate/Disabled/
@@ -243,7 +253,7 @@ retaining the original canonical JSON for round-trip/import; malformed stored
 structured text is visible as invalid raw text with a diagnostic, never Plain.
 
 Existing clients omitting format still create Plain; modern updates preserve it.
-Before structured writes are enabled, deploy all compatible clients/renderers.
+Before StructuredAcceptanceCriteriaEnabled=true, deploy compatible clients/renderers.
 Legacy full replacement that omits format on an existing structured criterion is
 rejected (`acceptance_criterion_format_required`) rather than resetting it to
 Plain. Explicit conversion requires new format and text, validates both, keeps
@@ -315,8 +325,10 @@ overflow is existing 422 Overflow and capable hosts refuse dispatch. A host unab
 to refuse follows base Mode=Off limitation.
 
 Read/hash bound: HookReadTimeoutMs or remaining total hook deadline, whichever is
-shorter. No prompt-hook network fetch; cache selection at bounded SessionStart/
-first-prompt status read. Failure emits short Unavailable diagnostic in the host
+shorter. No ordinary prompt-hook network fetch. SessionStart status read, or the
+single first-ingress read on hosts without SessionStart, has a fixed 250 ms bound
+within the total hook deadline; timeout uses unknown selection/default limits,
+not a second blocking read. Cache for that host session. Failure emits short Unavailable diagnostic in the host
 envelope and failsafe audit, never Delivered; stateful hooks keep existing exit
 behavior. Server completion still requires evidence, independently of injection.
 
@@ -394,8 +406,9 @@ SharedComponents hashing/error contracts. New independent entities:
 Composite FKs Restrict; unique evidence turn+revision and receipt evidence/gate/
 platform/attempt; indexes turn, TodoId, snapshot, job state/time. Coverage entries:
 requirementId/acId/revision/testId/gateId plus structured assertion refs from
-section 4. Review refs name immutable existing reviews with identical dependency
-digests. Validate active-layer refs, no free-text coverage. Historical turns have
+section 4. ReviewRefsJson contains append-only EngineeringReviewAttestation IDs
+(section 13), not mutable latest-wins base reviews. Validate active-layer refs,
+no free-text coverage. Historical turns have
 no new row/backfilled Pass. Turn gains nullable EngineeringCompletionStampJson,
 default null, evidence/revision/snapshot/policy/requirements/inventory/process/
 generation/preflight UTC. AC format migration's Plain backfill is separate from
@@ -435,12 +448,18 @@ producer/artifact outage. Gate rejection uses section 8's canonical contract.
 ## 8. Completion, progress and atomicity
 
 Turn completion may certify Progress; slice/TODO completion is distinct SliceExit.
-Reuse existing TODO transitions. Effective Code is declared Code OR any opening
+Reuse existing TODO transitions. When enforcement is off or process is None,
+effective class equals declared class and opening baselines add no obligations.
+For enforced BDPv4, effective Code is declared Code OR any opening
 to current snapshot change outside docs/**/*.md, docs/**/*.txt, README.md,
-CHANGELOG.md, LICENSE, LICENSE.md; renames check both ends, mode/executable changes
+CHANGELOG.md, LICENSE, LICENSE.md (root-anchored for the four filenames);
+renames check both ends, mode/executable changes
 always Code. Linked Code slices remain Code even without source changes. Missing
-opening capture blocks Code-relevant completion until operator-reviewed baseline
-evidence, not an invented old hash. Docs/Chore cannot downgrade derived Code.
+opening capture conservatively derives Code for every completed target, including
+declared Docs/Chore; section 13's operator baseline command repairs it. Do not
+invent an old hash. Docs/Chore cannot downgrade derived Code. Pass effective class
+to base ReviewValidation/CompletionPolicy too; Unnecessary is invalid for derived
+Code. Keep declared class separately for audit, store EffectiveRequestClass.
 Only enforced BDPv4 effective Code requires these additional stages:
 
 - Red/Progress: active implementation TODO, newly named tests fail for expected
@@ -459,7 +478,8 @@ Only enforced BDPv4 effective Code requires these additional stages:
 Explicit amendment of architecture 5.3: base CompletionPolicy still accepts
 Pass/Fail/Other presence. Additional EngineeringCompletionPolicy imposes above.
 Failed keeps base class-only rule, canceled/cancelled exempt. Pending-HV Other
-names gate; later additive review records actual outcome, preserving history.
+names gate; later review updates the base latest-wins projection and appends a
+separate EngineeringReviewAttestation, preserving engineering history (section 13).
 TODO done/complete requires current SliceExit reference (or approved test-design
 exit); Progress cannot bypass final gate. Server-controlled administrative import/
 correction exemptions audited, never agent-supplied origins.
@@ -469,7 +489,9 @@ does Git/artifact reads and verification outside SerializableWrite and persists
 preflight dependency version. Inside DB-only transaction, EngineeringCompletionPolicy
 runs after CompletionPolicy, checks verified receipt/evidence revisions, snapshot
 equality, current policy/process generation, AC/inventory revisions and review
-refs. CAS mismatch rejects; no filesystem/Git/process/GraphRAG I/O in transaction.
+refs. CAS mismatch aborts the attempt and reruns from preflight reads outside the
+transaction, at most four whole attempts, then 409 conflict/retryable true; no
+filesystem/Git/process/GraphRAG I/O in transaction. Section 13 fixes retry details.
 Prepare all bulk dependencies before the atomic write. Artifact bytes verified
 at preflight, never accepted by trusting agent paths.
 
@@ -491,7 +513,9 @@ PS/client checks are advisory; display server items, never approve locally.
 Failsafe engineering refusal is final for that attempted completion: preserve
 event+refusal receipt, leave original turn in progress, clear attempted replay
 entry, surface missing items for corrected new event; no quarantine/retry loop or
-false persisted completion. Stop warns same items. Clear-session obtains valid
+false persisted completion. Stop blocks a delivered in-progress turn using those
+items, preserving base queued/degraded/unsupported warning exceptions. Engineering
+refusal itself is never reduced to a warning. Clear-session obtains valid
 completion or deliberately fails/cancels under base rules, never invents evidence.
 Outage/queued outcomes retain normal pending entries.
 
@@ -543,7 +567,7 @@ not asserted to exist at baseline:
 
 - Compile: `./build.ps1 Compile`.
 - G1 targeted: `./build.ps1 Test --test-projects <inventory-projects> --test-filter <inventory-filter>`.
-- G2 cumulative current/prior unit suite: `./build.ps1 Test`.
+- G2 cumulative current/prior unit suite: `./build.ps1 Test --test-run-id <job-id> --gate-started-at-utc <utc>`.
 - G3: `./build.ps1 MigrationIntegrationTests --skip InstallTestDependencies`, all
   SQLite/SQL Server/PostgreSQL cases; `./build.ps1 PluginSessionLogIntegration`;
   explicit G1 selection of Support.Mcp.IntegrationTests, SessionLog.Validation,
@@ -614,8 +638,10 @@ Stamp current policy/process generation; do not reclassify historical completion
 
 Rollback operator sets EnforcementEnabled=false, retains records/artifacts/read
 APIs; guidance disable separate. Restore compatible packages together. Prefer
-binary rollback with additive tables retained; old clients cannot safely edit
-structured criteria, so block their writes pending format-aware rollout. Schema
+binary rollback with additive tables retained, but refuse rollback to any binary
+older than format support while any non-Plain criterion exists in rows or TODO
+state. The deployment controller scans both stores with writes quiesced and blocks
+the rollout; enforcement off alone does not make downgrade safe. Schema
 Down requires backup/approval and no non-Plain ACs (section 4). Plain backfill
 does not alter text; no lossy conversion. AgentContext Mode rollback cannot disable
 evidence storage. Reupgrade cannot trust stale/inert/imported receipts.
@@ -636,3 +662,336 @@ schemas inside existing Text, Plain default and explicit migration backfill (4).
 
 Primary-source fallback used because Perplexity was unavailable. No product
 build/test result or implementation approval is claimed by this plan.
+
+## 13. Round 2 contract completion
+
+These details resolve R2-01 through R2-12; they are normative parts of the design,
+not implementation choices to defer. Phase 1 propagates them to the architecture
+sections listed in section 1 and QB-AGENT-001 C8/C9 CONTRACT entries. All new
+entities below follow section 7's workspace-scoped FKs, sanitized inert dump,
+local-only federation and Phase 4 migration rules.
+
+### 13.1 Administrative authority, generations and opening baseline
+
+Use a separate operator management listener bound to loopback, HTTPS with client
+certificate authentication and policy `EngineeringPolicyAdmin`. Its pinned public
+certificate identities are installed by the operator outside the checkout and
+unavailable to workspace agents. Workspace API keys and replicated/imported
+principals never satisfy this policy. These administration routes are **not**
+exposed through MCP, REPL, ordinary typed agent clients or the public workspace
+listener. A compromised operator/server administrator remains outside the threat
+boundary. Management DTOs reject caller-supplied approvedBy/timestamps/generation.
+
+`ConfigurationReconciliationService` is the audit writer for configuration files.
+Operator deployment supplies a signed change manifest (workspace IDs, effective
+settings, operator certificate ID, reason, deployment ID); signature and canonical
+settings hash must match before applying a changed protected setting. No-op reload
+and restart need no new signature or generation. Unattributed changed files are
+rejected, retaining previous settings. In one DB transaction it updates
+`EngineeringWorkspaceState` and appends `EngineeringPolicyAudit`. Fields:
+
+- WorkspaceState PK WorkspaceId; Generation bigint default 1, effective policy
+  hash, EnforcementEnabled, DevelopmentProcess, ActiveInventoryRevision nullable,
+  CertifiedSnapshotId nullable, Revision bigint default 1, LastAppliedDeploymentId.
+- PolicyAudit PK (WorkspaceId, AuditId UUID); Kind, OperatorCertificateId,
+  DeploymentId, Reason, OldValuesJson, NewValuesJson, CreatedUtc, Generation.
+
+Generation is persisted, monotonic and per authoritative workspace. Increment
+only for an effective policy hash, EnforcementEnabled or DevelopmentProcess
+change, not restart/no-op/guidance-limit changes. Inventory/AC changes have their
+own revision/digests. Multiple owner instances serialize the same row; LocalProxy
+reads owner state and never allocates a local generation. Status reports only a
+committed generation. Completion's DB CAS compares this row. Restart compares
+effective fingerprint with persisted values; it cannot reset Generation to 1.
+
+MintSessionTurnCommand (SessionTurnLogging owner) copies CertifiedSnapshotId to
+new turn fields OpeningSnapshotId (nullable FK) and OpeningSnapshotState
+(Captured/Unavailable, default Unavailable), OpeningSnapshotBoundUtc, and
+EffectiveRequestClass (nullable). Do this DB-only within mint/first-persist; no
+snapshot capture or added hook I/O. This is the **prior certified snapshot**, not
+a claim to have captured the filesystem at the prompt's arrival. Green/SliceExit
+may advance the workspace certified pointer atomically after verification.
+Older baselines conservatively include other sessions' edits. Never subtract
+another session's paths by trusting filesModified. Shared-checkout edits can
+therefore force Code/extra evidence on a Docs turn; use isolated worktrees to
+avoid this attribution ambiguity. If no certified baseline exists, all completed
+targets derive Code and require a baseline; failed/canceled remain possible.
+
+Operator-only `POST /admin/engineering-policy/{workspaceId}/baseline`, management
+client `EngineeringPolicyAdmin.RecordBaselineAsync`, script
+`tools/powershell/Set-EngineeringBaseline.ps1`, accepts TurnRefs (explicit agent,
+session, request tuples, empty for future turns only), Reason, ReviewedDiffSha256,
+HvAttestationId and ExpectedWorkspaceRevision. Server captures current snapshot
+outside the DB write; operator's reviewed diff is HEAD-to-snapshot plus any prior
+certified-to-current difference. It verifies the approved review attestation names
+that diff/snapshot and records who accepted the baseline. Transaction updates the
+certified pointer and only listed Unavailable opening references, appending an
+audit; it never rewrites already captured openings or creates passing validations.
+403 admin_authorization_required; 400 validation_error missing reason/review;
+409 engineering_baseline_conflict for CAS/changed diff, snapshot errors as below.
+The operation explicitly authorizes adopting existing changes as a baseline and
+is never callable by an agent holding only the workspace key.
+
+Snapshot capture has a 30-second wall bound, 100,000 entries, 2 GiB total and
+64 MiB/file limits. Budget exhaustion returns final 409
+engineering_snapshot_unavailable with reason capture_budget, no partial snapshot.
+Jobs may request a fresh capture later. No mint waits for it. Double-capture
+disagreement is 409 engineering_snapshot_changed, retryable true. Explicitly
+extend C9/ErrorCodes to this one code; plugin treats it as outage/pending for a
+later drain, never hot-retries. Preflight CAS/DB dependency races use the base
+four-attempt reread rule (whole preflight and transaction, maximum 120 seconds),
+then 409 conflict/retryable true. Each transaction delegate remains DB-only;
+neither retry type creates a successful completion receipt or partial bulk write.
+
+### 13.2 Operator-held validation inventory and runner isolation
+
+`EngineeringValidationInventory`: PK (WorkspaceId, InventoryRevision bigint),
+CanonicalJson, Digest, ApprovedBy, ApprovedUtc, HvAttestationId, CreatedUtc.
+Append-only, active revision on WorkspaceState. Canonical JSON is ordinal-key,
+compact UTF-8 with no BOM; digest is SHA-256 of these exact bytes. Schema:
+schemaVersion=1; gates array sorted GateId, each GateId, Argv string array,
+WorkingDirectory relative path, Platforms array, Stages array, ExpectedProjects
+string array, ExpectedTests string array, ExpectedCount integer, AcLinks array,
+ParserId, TimeoutSeconds (1..3600), ExpectedRedTests array; TodoTypes array of
+{TodoId, Kind:Implementation|TestDesign, RequiredGateIds, RequiredClaims}.
+No duplicate IDs/count mismatch/path escape. ExpectedRedTests entries contain
+TestId, ExceptionType, AssertionMessageSha256 and StackFramePrefix. Positive
+expected RED means every new failing result exactly matches that approved tuple;
+any additional failure, compile exit or infrastructure exception is Fail/Unknown.
+Prior cumulative tests must still pass without failures/skips.
+
+GateId is one of Compile,G1,G2,G3Migration,G3Plugin,G3Support,G3Validation,G3Repl,
+G3Acid,G4,G5Config,G5Traceability,G6,PowerShellOnly,BuildInfrastructure,MockOracles;
+Platform is LinuxX64 or WindowsX64. ParserId is DotnetTrxV1, PesterNUnitV1 or
+ProcessExitV1. Compile/config/traceability use process exit plus named inventory
+checks; a test gate cannot select ProcessExitV1. Pester emits original NUnit XML;
+server parser counts all expected IDs and treats inconclusive/not-run as skipped.
+G1/G2 and migration command vectors include `--test-run-id <server-job-id>` and
+`--gate-started-at-utc <server-start-utc>`; these two typed placeholders are the
+only runner substitutions, and cannot change command/scope. TestRunId is required
+for G2 TRX/inventory generation at the inspected baseline.
+
+Operator-only `POST /admin/engineering-policy/{workspaceId}/inventories` accepts
+ExpectedWorkspaceRevision, canonical inventory payload, Reason, HvAttestationId.
+It validates schema/paths/approved test IDs, hashes it, records authenticated
+operator/time and atomically activates the next revision. Error 400
+engineering_inventory_invalid, 409 engineering_inventory_conflict, 403 as above.
+Typed management `ApproveInventoryAsync`; no agent tool or REPL setter. Runner
+loads only that active DB revision, never an inventory from the editable snapshot.
+New test/command additions require a new approved revision before satisfying an
+exit. Approval review may assess a proposed inventory using a non-gating dry run;
+only operator approval can activate it. Agent Create/Run cannot alter TodoTypes.
+
+Runner broker is the server service account; executable test code runs as separate
+non-admin `qbrain-validation` with no operator/producer credentials, workspace API
+keys, server config/marker, SSH keys, user home mounts, host socket or ambient
+secret environment. Allowlisted environment is PATH and approved nonsecret test
+settings; per-job ephemeral data/cache/output directories, read-only source bundle
+and controlled writable build outputs. Default no network; database suites get
+only their isolated fixture network/ephemeral DB credentials. Host/container
+isolation and secret-denial probes must pass before enabling this runner. Parser
+and DB receipt writes run outside that sandbox; test code cannot mark Verified.
+Each job enforces inventory timeout, then kills its own process tree and records
+Unknown/timeout. Concurrency is one job per workspace to avoid fixture collisions.
+
+Windows native executable is pwsh.exe; Linux native executable is pwsh, reached
+through this workspace's required pwsh.exe compatibility entry. Provision and
+verify that entry's executable target/hash before Linux gates; do not attempt to
+execute a Windows binary there. All operator examples/shell invocations retain
+the workspace's pwsh.exe rule; no alternate scripting shell is introduced.
+
+### 13.3 Append-only review attestation and gate applicability
+
+Base turn reviews are latest-wins projections, not immutable history. Add
+`EngineeringReviewAttestation` PK (WorkspaceId, AttestationId UUID): TurnId
+nullable (inventory/baseline review may be workspace-scoped), SubjectKind
+(Slice/Inventory/Baseline), SubjectDigest, SnapshotId nullable, PolicySha256,
+RequirementsDigest, InventoryDigest, ReviewerIdentity, Model, Effort, ReceiptSha256,
+ArtifactRefsJson, ScoresJson, ClaimsJson, MappedVerdict, TrustLevel=OperatorAttested,
+AttestedBy, AttestedUtc, SupersedesAttestationId nullable, CreatedUtc. Append only;
+no update/delete API. Server captures dependencies rather than accepting hashes
+from the agent; for proposed inventory/baseline subject it computes their digest.
+Uniqueness by (WorkspaceId, ReceiptSha256, SubjectKind, SubjectDigest); indexes
+turn/snapshot/subject. Store score lexemes under base lossless rules.
+
+Operator-only `POST /admin/engineering-policy/{workspaceId}/review-attestations`,
+management `AttestReviewAsync`, accepts SubjectKind, EvidenceId/Revision or proposed
+inventory/baseline subject, raw reviewer receipt artifact, reviewer identity/model/
+effort, Reason, Supersedes ID. Server hashes/parses receipt bytes, checks scores,
+claim list/verdict, configured reviewer profile and subject digest, and stamps
+operator/dependencies. Raw artifacts are outside checkout. 400 review_* for base
+validation, 409 engineering_review_stale, 403 for agent credentials. Read sanitized
+attestation by existing engineering evidence read, no agent creation tool.
+
+Bootstrap is not circular: proposed Inventory/Baseline attestations need no turn
+or active evidence revision. Their subject is the server-computed proposed
+inventory digest or captured snapshot/diff digest; absent nonapplicable dependency
+digests use SHA-256 of canonical empty array, not caller values. Their required
+claims are Scope, Completeness, Safety and Provenance, all PASS at .98 floors.
+Approve inventory first, then attest/adopt a baseline; Slice attestations always
+require active inventory and all real dependency digests. Reviewer profile is
+the approved base Codex gpt-6-astra/max unless an operator-signed scoped override
+exists (this plan-readiness loop's Claude override is not a production default).
+Completion rechecks attestation model/effort/claims against the current profile.
+
+Evidence creation allocates the next turn-local Revision in SerializableWrite;
+each EvidenceId is immutable and belongs to exactly one revision. A changed
+coverage/stage/dependency set creates a new revision/ID; agent APIs cannot update
+or relabel an already verified receipt. Base four-attempt uniqueness retry applies.
+
+Gate checks exact snapshot/AC/policy/inventory digests, receipt hash/existence,
+all required claim IDs once with PASS, no FAIL/UNKNOWN, model/effort profile,
+scores >=.98, authenticated operator attestation and correct subject. Agent-written
+hostileReview Pass alone never satisfies it. Server verifies receipt integrity and
+the operator's authorization; it cannot independently prove the remote model's
+reasoning or independence. **Operator-attested reviewer identity/independence is
+an explicit residual trust assumption**, not labeled cryptographically verified.
+Operator approval at every slice exit already exists in BDPv4. Base review
+projection can still be updated; prior engineering attestations remain unchanged.
+This amends architecture 3.4/5.1/5.4 and gives pending-HV backfill real history.
+
+Applicability is the following exhaustive ordered decision list (no table):
+
+1. Trusted Import/Replication/ServerInternal keep base exemptions and inert data.
+2. Agent target canceled/cancelled: no terminal or engineering gate. Target failed:
+   base requestClass only. Other nonterminal writes: no completion gate.
+3. Agent completed/Replace-completed always uses base CompletionPolicy with
+   server effective class (equal to declared class when off/None). When enforcement is off or process None, add no
+   engineering items, regardless of guidance/asset mismatch. Base review rules
+   still apply. Purpose/stage carry no new obligations in this branch.
+4. Enforcement on + BDPv4 + effective Docs/Chore: base items only. Effective class
+   is server-derived using opening baseline even for declared Docs/Chore; absent
+   baseline conservatively makes it Code. Chore can never exempt derived Code.
+5. Enforcement on + BDPv4 + effective Code completed: engineeringPolicy,
+   engineeringEvidence, engineeringSnapshot, engineeringValidation and
+   engineeringCoverage required for every accepted Progress stage. Red coverage
+   covers all current-increment ACs with named tests/expected outcomes, not a
+   claim they pass; MocksGreen/Green apply section 8. engineeringHostileReview is
+   additionally required for SliceExit and approved TestDesign exit. Purpose
+   SliceExit with Red, or MocksGreen on Implementation, is invalid and reports
+   engineeringValidation. Missing/unapproved TodoType reports engineeringEvidence.
+6. Agent TODO done=true or equivalent terminal-success transition uses the same
+   effective class/process rules and requires the appropriate final evidence,
+   including fresh attestation, not a Progress-only close. See owner below.
+
+Remedy codes respectively: engineeringPolicy=refresh_policy;
+engineeringEvidence=record_evidence; engineeringSnapshot=refresh_snapshot_or_baseline;
+engineeringValidation=run_approved_inventory; engineeringCoverage=link_ac_tests;
+engineeringHostileReview=obtain_attested_hv. Keep section 8's token order and
+base missing-item order. Missing baseline itself reports engineeringSnapshot even
+if other applicable items are also absent. None/off never require descriptor parity.
+
+### 13.4 Delivery ledger, probes, ownership and interface details
+
+Add turn-state policyDeliveries map keyed stable requestId/nonce, with each value
+{requestId, ingressNonce, policyVersion, policySha256, sections[], bytes,
+state:Reserved|Delivered|Unavailable, reservedUtc, deliveredUtc:null|utc,
+diagnosticCode:null|string}. PluginCorePowerShell functions Reserve-PolicyDelivery,
+Commit-PolicyDelivery and Rebind-PolicyDelivery are the only writers under
+turn-open.lock using object-first YAML mutation. Alias rebind changes map key
+atomically; duplicate checks inspect original/aliased key. No policy text stored.
+Retain compact delivered/alias tombstones for the lifetime of the host session's
+durable identity, including ended/resumed sessions; do not time-prune them. Explicit
+administrative session deletion ends that identity; a new identity starts fresh.
+Reserved/unavailable rows remain retryable until successful delivery or terminal
+request. Terminated requests are never reinjected by late replay. Host output
+delivery means successful adapter emission, not proof the model obeyed guidance.
+
+HostPluginAdoption owns new P0.2 consumption probes; PluginCorePowerShell owns
+their shared harness/fixtures. For each of nine rows, a test-only policy descriptor
+contains a random canary visible only through the chosen context channel; deliver
+an otherwise identical prompt asking the host model to return the policy canary,
+capture outgoing context where the host exposes it and the echoed result. No
+canary in user text/environment/tool result. Probe initial/duplicate/restored
+delivery and record actual host API/version/configuration/raw envelope; wrong or
+absent canary fails support. This explicitly adds to base P0.2/Addendum A; no
+claim that Read/Grep fixture tests alone establish native support.
+
+File boundaries: TurnReviews owns new `src/QBrainAi.Services/EngineeringPolicy/`
+(resolver/runner/inventory/attestation/freshness handlers) and matching service
+tests. StorageSchema owns entities/McpDbContext/migrations. SharedComponents owns
+shared DTOs and canonical codec. SessionTurnLogging alone changes existing
+`SessionLogService`, TurnWritePipeline, CompletionGate, mint and turn DTO stamps,
+calling new interfaces. ReplAndAgents owns public controller/MCP/client/REPL glue
+only. Requirements/TODO owner changes RequirementsDatabaseDocumentService,
+TodoExecutionService, EfTodoService and YAML TODO service adapters; coordinator
+serializes these existing-service edits with SessionTurnLogging, not two agents
+editing the same file. BuildTooling owns Nuke targets/infrastructure tests.
+
+`EngineeringTodoExitPolicy` is a **server service guard**, called before every
+done/complete/terminal-success mutation in TODO services, execution planning/status,
+REST/MCP/REPL, YAML/SQLite and batch/import boundaries. Agent origin cannot bypass
+it by changing a status alias or replacing an item; whole batch is refused before
+file/DB save, code 400 validation_error, message token todo_engineering_exit_gate,
+ordered missingItems and affectedTodoIds. Trusted origins are stamped internally
+and audited. ReplAndAgents merely carries this refusal. Add path inventory and
+bypass tests before activation, including YAML rollback and both batch backends.
+
+All new schema strings: WorkspaceId 1024, Agent 128, SessionId/RequestId 256,
+TodoId/GateId/claim IDs 128, UUID IDs 36, SHA-256 digests 64 lowercase hex,
+Git HEAD 40 or 64 lowercase hex, policy version 32, enums 32, reasons/messages
+4096, certificate/producer IDs 128. JSON columns are provider TEXT/nvarchar(max),
+max 8 MiB per manifest, 1 MiB per inventory/evidence/attestation; enforce byte
+limits before DB save. Timestamps UTC datetimeoffset; unmarked fields non-null,
+nullable fields explicitly listed above. Artifact count <=256 and total <=1 GiB
+per job; oversize is Unknown/artifact_budget, never partial Pass.
+
+Canonical JSON shapes: CommandJson={executableId,argv:[]};
+ScopeJson={projectPaths:[],testIds:[],filter:string|null};
+ArtifactsJson=[{artifactId:sha256,kind:Trx|Pester|Stdout|Stderr|HvReceipt,
+sha256,byteLength}]; ReviewRefsJson=[attestationId];
+CoverageJson=[{requirementId,acId,revision,testId,gateId,assertionKey}].
+ManifestJson={headSha,entries:[{path,mode,length,sha256,indexBlob,indexMode,deleted}]};
+deleted entries length/sha256=null, untracked index fields=null. No arbitrary URL
+or filesystem artifact refs. Public completion fields `engineeringEvidenceId`
+and `engineeringEvidenceRevision` (nullable string/int64) propagate unchanged
+through bulk/PATCH/PUT/tool/client/REPL. The same pair is added to every TODO
+terminal-success request and batch item; status aliases go through that DTO/guard.
+An agent omitting the pair receives the guard's missing engineeringEvidence item.
+Response stamp is server-only.
+
+Plain assertionKey is acId; Gerkin is `<acId>#gerkin:<stepId>` for each effective
+Then/Then-And/Then-But assertion; EARS is `<acId>#ears:<property>` for every
+present semantic property (system,response,trigger,state,feature). Schema version/
+pattern/format are digest dependencies, not separate test assertions. Root doc
+names in effective-class exclusions are anchored `/README.md`, `/CHANGELOG.md`,
+`/LICENSE`, `/LICENSE.md`; nested counterparts are Code unless under docs globs.
+
+REPL ClientMutationPolicy: add engineeringEvidence to service-gated namespaces;
+CreateAsync/RunValidationAsync writes are transactional enqueue/store commands,
+never the long-running runner itself. GetAsync and engineeringPolicy.GetStatusAsync
+are read-allowlisted, available while degraded. No admin methods registered.
+Honor transaction_degraded/mutation_not_transactional and base service-gated
+read/write coexistence amendment. Structured AC writes use existing requirements/
+TODO mutator policies; extend golden/tool DTO tests for format, not raw REST bypass.
+
+### 13.5 Evaluation placement and artifact lifecycle
+
+Run all 72 evaluations after Phase 4 integration gates, before staging activation.
+Failure or invalid evaluation blocks staging/production activation; fix under RED/
+green process, bump policy version/hash for any instruction change and rerun all
+72, plus affected deterministic gates. At most one infrastructure rerun per paired
+case (both conditions); a second infra failure is Invalid and blocks activation,
+not silently removed. Full rerun after repair is a new versioned evaluation record.
+
+Grader is separate Claude Code claude-opus-5-5/max session, read-only, fixed CLI
+version, never the behavioral session/coordinator. Evaluation harness strips
+condition labels, randomizes anonymous run IDs with a preregistered recorded seed,
+normalizes artifact metadata that reveals package version, and gives grader task,
+rubric and observable outcomes only. Preserve reversible mapping outside grader
+packet until scores are signed/hashed, then unblind for comparison. Some behavior
+may reveal condition; record that limitation, do not claim perfect blinding.
+Operator attests this evaluator receipt using the same review contract.
+
+All active validation/HV artifacts, including interim receipts, stay in the
+server-owned artifact store **outside the source checkout until completion**.
+Base docs/receipts is a post-completion audit export only for this integration;
+amend engineering review receipt-root handling in architecture 5.1/5.4 accordingly.
+Do not create untracked JSON receipts under docs before a gate: they would change
+the full snapshot and conservatively derive Code. An export is a later documented
+source change needing its own completion, not retroactively part of the validated
+snapshot. No broad exclusion hides source or receipt mutation from the manifest.
+
+Round 2 actual result: DISAGREE, confidence 30, accuracy .86/completeness .72,
+3 PASS/9 FAIL; exact receipt saved under claude-round-2. This section resolves its
+twelve findings for the next independent review; no agreement is assumed.

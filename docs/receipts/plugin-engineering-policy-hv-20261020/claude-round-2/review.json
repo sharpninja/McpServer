@@ -1,0 +1,338 @@
+{
+  "Receipt": {
+    "TimestampUtc": "2026-10-21T00:00:00Z",
+    "ValidatorIdentity": "ClaudeIndependentHostile",
+    "RequestedAgent": "ClaudeCode",
+    "RequestedModel": "claude-opus-5-5",
+    "RequestedEffort": "max",
+    "ReviewStage": "PlanReadiness",
+    "ReviewedCommit": "704880d077c4f38aa3ad627fe17a00d705cc29ce",
+    "PlanSha256": "D521317EA9290E6983FA1292644B0804E714065D2A5B65FA2CBF1577862AD3EB",
+    "OverallVerdict": "DISAGREE",
+    "AccuracyScore": 0.86,
+    "CompletenessScore": 0.72,
+    "Counts": {
+      "PASS": 3,
+      "FAIL": 9,
+      "UNKNOWN": 0
+    },
+    "Claims": [
+      {
+        "Id": "C1",
+        "Summary": "The plan's scope, intent and precedence match full enforcement with default-on guidance. All nine hosts are covered, each with its limits.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "plan §1 L8-14 states the scope: one shared policy, authoritative server completion enforcement, guidance on by default, all nine hosts named, PowerShell shared runtime, and the Gerkin/EARS/Plain formats.",
+          "plan §1 L37-40 sets precedence: operator/user instructions, then workspace rules, then the selected process, then engineering guidance. The model gets no authority to disable an administrative gate.",
+          "plan §3 L94-95 sets GuidanceEnabled to true and EnforcementEnabled to false by default. EnforcementEnabled=false is only the additive-deploy default; §11 L602 and L612 make activation an explicit rollout step.",
+          "plan §5 L281-306 has nine adapter rows, each giving a channel, an identity, and an Unsupported or limitation rule. A failed probe blocks that host, and final acceptance needs all nine rows.",
+          "plan §1 L16-20 records the intent source key and its SHA-256. The transcript itself is not in the packet (see Limitations)."
+        ]
+      },
+      {
+        "Id": "C2",
+        "Summary": "Architecture dependencies are explicit, compatible, owned and ordered, and planned types are kept apart from implemented ones.",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "Satisfied: plan §1 L22-26 says ValidateTerminalTurnCompliance exists and TurnWritePipeline and CompletionGate are planned. The source confirms this: src/QBrainAi.Services/Services/SessionLogService.cs:1329 exists, no TurnWritePipeline or CompletionGate type appears in the packet src, and SessionLogModels.cs:108 has no class or review fields.",
+          "Satisfied: the order in plan §9 L514-528 matches arch §8.3 L5410-5454, and the base dependency and its NOT APPROVED status are explicit (plan §1 L30-33, §11 L603).",
+          "Conflict: plan §1 L33-35 amends only arch 3.5, 5.3, 6 and 8. The plan also changes these base contracts without amending them:\n- arch §3.4 L286 turn-state.yaml schema and writers (plan §5 L272-276);\n- arch §3.4 L305 and §5.1 L2140-2150 latest-wins reviews (plan §7 L397-398, §8 L462);\n- arch §3.3 C9 L270 closed retryable set (plan §7 L431);\n- arch §3.4 L283 Stop blocking (plan §8 L494 says 'warns');\n- arch §3.5.2 L344 rerun-from-reads (plan §8 L472 'CAS mismatch rejects').",
+          "Ownership: the runner, snapshot and gate are split between TurnReviews and SessionTurnLogging with no file assignment (plan §7 L378 vs §9 L522-523). The TODO-exit guard is placed in ReplAndAgents (§9 L525-526), although §8 L463-464 requires server enforcement. Grok Bot discovery (§2 L84-85) duplicates base A9 (base plan L1374)."
+        ]
+      },
+      {
+        "Id": "C3",
+        "Summary": "The canonical policy, its provenance, version and hash, attribution, artifact locations, and distribution/integrity are executable.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "plan §2 L44-54 fixes the canonical asset and descriptor:\n- paths plugins/core/lib-ps/policy/engineering-policy.json and engineering-policy.manifest.json;\n- UTF-8 without BOM, LF line endings, two-space indent, ordinal property order;\n- semver 1.0.0, SHA-256 over the exact asset bytes;\n- asset fields and descriptor source-record fields.",
+          "plan §2 L65-81 pins the upstream commits and blobs. Karpathy's notice is unresolved, so the asset uses original wording and vendors nothing. Ponytail's MIT notice is preserved for adaptations, and there is no runtime fetch.",
+          "plan §2 L81-87: the server embeds an identical asset, and the resolver, status and receipts verify version and hash equality. Generated copies are checksum-protected, and the PowerShellOnly restrictions are honored.",
+          "Verified in source: sync-plugin-core.ps1:115-151 copies lib-ps recursively and writes per-file sha256 into CORE-MANIFEST.yaml; PluginPowerShellOnly.Tests.ps1:30-46 holds the content and path rules.",
+          "Verified: the Grok Bot omission is real (generate-wrappers.ps1:8, Build.SyncAgentPlugins.cs:21-28).",
+          "Minor and non-blocking: the plan does not state the semver increment rule or Ponytail's initial adaptation-decision value (see R2-12)."
+        ]
+      },
+      {
+        "Id": "C4",
+        "Summary": "Configuration, selection, reload, default and disabled behavior, phase selection and the status contract are specified.",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "Satisfied: plan §3 L91-110 defines the typed options, defaults and ranges, IOptionsMonitor, last-valid retention on a bad reload, the operator-only DevelopmentProcess with no agent setter, and that disabling guidance does not disable enforcement.",
+          "R2-06: the plan does not say whether policy and process generation persist across restarts or instances, or whether a no-op reload increments them (L101, §7 L386, §8 L471). It also does not say who records operator identity and reason when the change is a config-file edit (L106-107).",
+          "R2-07, D2 and D7: the status JSON (L114-117) does not carry HookReadTimeoutMs or MaxInstructionBytes, which the hooks enforce (§5 L317). 'Guidance next delivered prompt' (L101-102) contradicts the session-cached selection (L122-123, §5 L318-319).",
+          "R2-05: the plan says 'before structured writes are enabled' (§4 L246, §11 L606-608), but no setting or control exists, and the server deploys first (§11 L602).",
+          "R2-04: there is no applicability table for process None, or for the declared versus effective class (§8 L437-458, L483-488)."
+        ]
+      },
+      {
+        "Id": "C5",
+        "Summary": "PowerShell delivery, host adapters, duplicate prevention, compaction and stateless handling, mandatory context, deadlines and unavailable behavior are specified.",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "Satisfied: plan §5 L267-321 specifies:\n- per-prompt baseline plus three activity sections, with BDPv4 only when selected, and no classifier;\n- the nine rows;\n- silent PostCompact, consistent with base plan L412;\n- the Stateless mandatory item, the 8192-byte limit with ceil(bytes/4) tokens, and the Unavailable rules.",
+          "R2-08: the dedupe reservations live in turn-state.yaml (L272-276), but their field names, states and retention are not given, and the arch §3.4 L286 schema and writer list are not amended.",
+          "R2-07: the hooks cannot learn the server's HookReadTimeoutMs or MaxInstructionBytes.\n- No behavior is defined when the policy is larger than a MaxInstructionBytes as low as 1024 (§3 L97).\n- 'No prompt-hook network fetch' clashes with the first-prompt status read (L318-319).",
+          "D6: 'P0.2 proves actual delivery' (L278) extends base P0.2. The base probes (base plan L212) test model reach only for the classic cline context_modification. No probe method or owner is given for the other rows."
+        ]
+      },
+      {
+        "Id": "C6",
+        "Summary": "Public evidence models, endpoint/tool/client/REPL changes, persistence, and migration/backfill rules are specified.",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "Satisfied: plan §7 L381-410 gives three entities with PKs, Restrict FKs, unique keys, indexes, defaults, dump and federation policy, and Phase 4 registration only.",
+          "Satisfied: plan §7 L412-433 gives the REST, client, REPL and MCP names and error codes.",
+          "Satisfied: plan §4 L140-154 gives the non-null Format column, the explicit Plain backfill, and the TODO JSON state upgrade.",
+          "Missing: an inventory entity (R2-02), the turn-to-opening-snapshot link and the operator baseline operation (R2-01), and the entity that review refs point to (R2-03).",
+          "Missing interface details (R2-12):\n- JSON shapes for CommandJson, ScopeJson, ArtifactsJson and CoverageJson;\n- column lengths and the GateId and Platform value sets;\n- the completion DTO field names (L427);\n- ClientMutationPolicy entries for the new mutating REPL methods (required per arch §8.3 L5444)."
+        ]
+      },
+      {
+        "Id": "C7",
+        "Summary": "The server completion gate covers all writers, terminal states, request classes and origins, with atomic rejection and authentic evidence, and no bypass or self-certification.",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "Satisfied: plan §8 L476-481 covers every Agent completion, every Replace (including already-completed turns), bulk/PATCH/PUT/tools/client/REPL/recovery, QBAgent as Agent, the preserved exemptions, rejection of agent origin fields, and whole-write rollback. This is consistent with arch §5.3 L2345-2351.",
+          "Satisfied: plan §6 L357-365 puts receipt verification in a server-only runner. Agents cannot supply Pass, counts or commands, and the server parses the raw reports.",
+          "R2-03: the SliceExit HV item relies on agent-writable reviews, and arch §5.4 L2369 does no reviewer verification, so the HV item can be self-certified. The residual-risk text (§6 L372-374) does not mention this.",
+          "Open: inventory approval provenance (R2-02), the opening capture (R2-01), applicability (R2-04), and placement of the TODO-exit guard (R2-11).",
+          "D8: the CAS-mismatch outcome and error code are undefined."
+        ]
+      },
+      {
+        "Id": "C8",
+        "Summary": "Validation and review source snapshots, working-copy changes, freshness, scope, raw-result verification and acceptance coverage have concrete, compatible semantics.",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "Satisfied: plan §6 L328-374 is concrete:\n- SourceSnapshot v1 contents, path normalization and unsupported paths;\n- double capture and an immutable materialized bundle hashed before and after each run;\n- an explicit resolver/freshness amendment, LocalProxy and cross-host rules.",
+          "R2-01: there is no opening snapshot. Capture happens only at L328-330, and §7 has no field to store one.",
+          "R2-02 and R2-03: the source and digest of the inventory, and the dependency digest of reviews, are undefined.",
+          "R2-10: receipts under docs/receipts are untracked, non-ignored .json files (§12 L626-627; manifest worktreeChanges). They change the manifest, fall outside the docs exclusion (L438-440), and so stale the evidence the HV reviewed.",
+          "R2-12: three things are unstated: the rule that classifies a RED failure as an expected assertion, the EARS coverage key format, and a time budget for the snapshot. Also, G2 writes TRX only when TestRunId is set (build/Build.Test.cs:27-68)."
+        ]
+      },
+      {
+        "Id": "C9",
+        "Summary": "BDPv4 traceability, test-first ordering (mocks before real code), cumulative zero-fail/zero-skip gates and named validations are executable.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "plan §9 L500-512 sets the phases:\n- Phase 1: records and TODOs;\n- Phase 2: stubs with real contract tests;\n- Phase 3: RED against stubs, then green against approved mocks with mutant oracles;\n- Phase 4: per slice RED, green, refactor, then the cumulative gate.\nThis matches BDPv4 Implementation L76 and Validation L94, and arch §8.2 L5402-5406.",
+          "plan §9 L530-570 freezes the inventory groups. G1-G6 and the Build.Tests exception match arch §8.4 L5557-5573. Gates require zero failures and zero skips on Linux and Windows, and every arrow needs HV plus operator approval. The reviewer substitution is recorded.",
+          "--strict-tr-and-test-coverage exists in base plan L189 and L213.",
+          "Non-blocking: 'pwsh.exe' is named for Linux runs (D5). The runner-side inventory model is tracked under R2-02."
+        ]
+      },
+      {
+        "Id": "C10",
+        "Summary": "Failure recovery, legacy and open-turn compatibility, rollout, rollback and configuration ownership are concrete.",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "Satisfied: plan §8 L491-496 makes a refusal final for that attempt, keeps the turn in progress, and has no quarantine loop. This is consistent with arch §3.3 C8 L269.",
+          "Satisfied: plan §11 L600-621 covers deploy order, the 1.122.0 reservation and collision rule, staged enablement, rollback via EnforcementEnabled=false, and a guarded schema Down.",
+          "R2-01: the 'operator-reviewed baseline' for turns open at activation (L610-611) has no operation, authority or data model.",
+          "R2-05: a binary rollback can drop format from TodoExecutionService JSON or relabel replaced rows as Plain. 'Block their writes' (L617-618) has no mechanism against an old server binary, and structured-write enablement has no control.",
+          "R2-06: ownership of the configuration audit is undefined."
+        ]
+      },
+      {
+        "Id": "C11",
+        "Summary": "The behavioral evaluation and independent review have bounded acceptance criteria, honest evidence and no unmeasured efficiency claims.",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "Satisfied: plan §10 L574-596 sets a frozen 12-task set run as 72 runs, with a fixed model, CLI and budgets, a predetermined order, and no selective retry.\n- Grading is condition-blind against a >=0.98 threshold that must not fall below baseline.\n- Cost and latency are reported descriptively only, with no efficiency claims.\n- EP1-EP6 are added on top of the existing claims.",
+          "R2-09: the evaluation is not placed in the phase or rollout order, and there is no consequence if it fails. The grader identity and blinding procedure are unspecified, and infra reruns have no cap (L581-582).",
+          "R2-10: storing receipts in the tree conflicts with freshness."
+        ]
+      },
+      {
+        "Id": "C12",
+        "Summary": "The plan as a whole leaves no consequential design or validation choice to an implementation agent, and implementation stays behind explicit approvals.",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "Satisfied: approvals are preserved (plan L3-4, §9 L566-570, §12 L637-638).",
+          "Not satisfied: R2-01 through R2-09 leave consequential decisions to implementers: opening capture, the inventory store and its approval, review refs and HV trust, applicability, the structured-write switch and rollback, generation semantics, how hook limits reach the plugin, base amendments and the delivery-state schema, and evaluation gating."
+        ]
+      }
+    ],
+    "FailList": [
+      {
+        "Id": "R2-01",
+        "Severity": "High",
+        "Location": "plan §8 L437-443; §11 L610-611; §6 L328-331; §7 L381-401",
+        "Trigger": "Any completion that needs effective-Code derivation in an enforced BDPv4 workspace, and every turn open at activation",
+        "Problem": "Derived Code and the missing-opening-capture block both depend on an opening SourceSnapshot. The plan does not provide one:\n- capture happens only before validations and at preflight;\n- the turn has no opening-snapshot column or FK;\n- no capture point, owner or deadline is named, and mint runs on the hook path;\n- there is no rule for other sessions' edits in a shared checkout;\n- 'operator-reviewed baseline evidence' has no operation, authority, data or audit.",
+        "Consequence": "Implementers must invent the capture mechanism and an admin API. Otherwise derived Code is unenforceable, or every Code-relevant completion blocks.",
+        "RequiredResolution": "Specify:\n- the capture point and owner (for example, server-side after the MintSessionTurnCommand commit, off the hook path, or the prior certified snapshot);\n- storage (OpeningSnapshotId plus a capture state on the turn);\n- the budget and unavailable behavior;\n- cross-session attribution;\n- what 'Code-relevant' means for Docs/Chore when the opening capture is missing;\n- an operator-only, audited baseline command with surfaces, inputs, authorization and errors."
+      },
+      {
+        "Id": "R2-02",
+        "Severity": "High",
+        "Location": "plan §6 L357-363; §7 L381-392; §8 L452-457; §9 L530-532",
+        "Trigger": "The runner executes 'approved fixed argument vectors', and SliceExit and test-design TODO exits rely on the approved inventory",
+        "Problem": "No inventory store, schema, revision or digest rule, approval record, or write path is defined. Nothing stops the runner from reading an agent-editable inventory out of the snapshot tree.",
+        "Consequence": "Trust in the server-owned runner reduces to a file the agent can edit. InventoryDigest and 'reviewed inventory revision' cannot be implemented without invention.",
+        "RequiredResolution": "Add a server-held, operator-approved inventory record:\n- key WorkspaceId plus InventoryRevision;\n- canonical JSON with GateId, argv, platform, stage, expected projects/test IDs/counts, AC links, parser id, timeout and TODO type markers;\n- approval fields: approvedBy, approvedUtc and an HV receipt reference;\n- digest = SHA-256 of the canonical JSON.\nThe write path must be operator-only, and the runner must load only the active approved revision, never the snapshot tree."
+      },
+      {
+        "Id": "R2-03",
+        "Severity": "High",
+        "Location": "plan §7 L397-398; §8 L448-462; §6 L372-374; arch §3.4 L305, §5.1 L2140-2150, §5.4 L2369",
+        "Trigger": "Green/SliceExit requires a fresh independent HV Pass, with all claims PASS, through review refs",
+        "Problem": "'Immutable existing reviews with identical dependency digests' names no entity. Base reviews are latest-wins, carry no digest and keep no history, so 'later additive review ... preserving history' has no mechanism. The server cannot verify reviewer independence, so an agent-recorded hostileReview Pass self-certifies the HV item. The residual-risk statement omits this.",
+        "Consequence": "Implementers must invent review history and digest storage. The claim of no self-certification is false for the HV item.",
+        "RequiredResolution": "Define an append-only review-reference record with server-captured digests (snapshot, AC revisions, inventory, policy), the reviewer/receipt hash and the mapped verdict. Amend arch 3.4 and 5.1, and define the freshness comparison. Then either make HV evidence server-verifiable, or record it explicitly as attested residual risk and list exactly what the gate checks."
+      },
+      {
+        "Id": "R2-04",
+        "Severity": "Medium",
+        "Location": "plan §8 L437-458, L483-488; §3 L99-110, L125-126",
+        "Trigger": "A completion with EnforcementEnabled and DevelopmentProcess None, or a declared Docs/Chore turn that derives Code",
+        "Problem": "'Only enforced BDPv4 effective Code requires these additional stages' leaves three things undefined: which items apply for None; whether the base CompletionPolicy uses the declared or the effective class (for example, a hostileReview of Unnecessary on derived Code); and which items apply per Purpose, stage and target.",
+        "Consequence": "Implementers choose divergent gate items and remedy codes.",
+        "RequiredResolution": "Add an applicability table: Enforcement x Process x declared/effective class x target x Purpose, mapped to the required items, their order and remedy codes."
+      },
+      {
+        "Id": "R2-05",
+        "Severity": "Medium",
+        "Location": "plan §4 L245-255; §11 L602-608, L615-621; §3 L91-97",
+        "Trigger": "The server deploys before clients, and a later binary rollback",
+        "Problem": "'Before structured writes are enabled' has no setting or control, yet the server deploys first. A binary rollback below the format-aware version can drop format from TodoExecutionService JSON, or relabel replaced relational rows as Plain. 'Block their writes' has no mechanism against an old binary.",
+        "Consequence": "Structured criteria can be written before compatible renderers exist, and a rollback can silently mislabel structured text.",
+        "RequiredResolution": "Add an operator-only typed setting, off by default with an explicit refusal code, that gates Gerkin/EARS writes. Add a rollback rule: refuse binary rollback below the format-aware version while non-Plain criteria exist in rows or TODO state, or perform a verified restore on roll-forward."
+      },
+      {
+        "Id": "R2-06",
+        "Severity": "Medium",
+        "Location": "plan §3 L99-110; §7 L384-387, L399-401; §8 L469-472",
+        "Trigger": "A server restart, multiple instances or LocalProxy, a no-op config reload, or a DevelopmentProcess change",
+        "Problem": "The persistence, scope and increment trigger of policy and process generation are undefined, yet the CAS compares them. The writer of operator identity and reason for config-file changes is also undefined.",
+        "Consequence": "A restart or no-op reload may stale all evidence or produce false equality, and the audit requirement cannot be implemented.",
+        "RequiredResolution": "Define generation as a persisted, monotonic, per-workspace value. Increment it only when the effective policy hash, EnforcementEnabled or DevelopmentProcess changes. Name the audit writer and its fields."
+      },
+      {
+        "Id": "R2-07",
+        "Severity": "Medium",
+        "Location": "plan §3 L94-102, L112-126; §5 L311-321",
+        "Trigger": "Hook delivery, and a server reload",
+        "Problem": "The hooks enforce HookReadTimeoutMs and MaxInstructionBytes, but the status JSON omits both. No behavior is defined when the policy exceeds a MaxInstructionBytes as low as 1024. 'Guidance next delivered prompt' contradicts the session-cached selection and the no-prompt-fetch rule. The first-prompt read on hosts without SessionStart is an unbounded exception.",
+        "Consequence": "The server settings have no effect on hooks, and the reload semantics cannot be tested as written.",
+        "RequiredResolution": "Put both values in the status JSON, with plugin defaults before the first read (or make them plugin constants). Validate MaxInstructionBytes against the canonical section sizes at startup. Restate the reload effect: next host session for hook delivery, next package for Stateless. Bound the first-ingress read."
+      },
+      {
+        "Id": "R2-08",
+        "Severity": "Medium",
+        "Location": "plan §1 L33-35; §5 L272-279; §7 L429-431; §8 L471-472, L494; arch L270, L283, L286, L344; base plan L212",
+        "Trigger": "The Phase 1 architecture amendment",
+        "Problem": "The amendment list omits five base changes:\n- turn-state.yaml delivery records, whose fields, states, retention and writers are unnamed;\n- a new retryable engineering_snapshot_changed code outside base C9's closed set;\n- Stop 'warns' where the base blocks;\n- CAS 'rejects' where the base reruns from its reads;\n- P0.2 model-consumption probes beyond base P0.2, with no method or owner.",
+        "Consequence": "The plan is silently inconsistent with the authoritative architecture, and implementers pick schemas and retry semantics.",
+        "RequiredResolution": "Extend the amendment list to cover 3.1/3.2/3.3/3.4/3.5.2/4.4/5.1/5.4 and Addendum A. Specify:\n- the delivery record schema, retention and writers;\n- the retry classification of the new code;\n- Stop blocking with the engineering items;\n- the CAS outcome code;\n- a per-host P0.2 canary probe and its owner."
+      },
+      {
+        "Id": "R2-09",
+        "Severity": "Medium",
+        "Location": "plan §10 L574-596; §11 L600-613",
+        "Trigger": "Running the evaluation, and an evaluation failure",
+        "Problem": "Four things are missing: where the 72 runs sit in the phase or rollout order, what happens if thresholds fail, the grader's identity, configuration and blinding procedure, and a cap on infra reruns.",
+        "Consequence": "The acceptance criteria bind nothing, and independence and bounds cannot be verified.",
+        "RequiredResolution": "Run the evaluation after Phase 4 integration and before staging activation. A failure blocks activation, and any policy text change bumps the version and reruns all 72 runs. Name the grader and the blinding steps. Cap reruns, and report a second infra failure as invalid."
+      },
+      {
+        "Id": "R2-10",
+        "Severity": "Low",
+        "Location": "plan §6 L333-341; §8 L438-440; §12 L626-627; review-manifest.json worktreeChanges",
+        "Trigger": "Saving HV or validation receipts under docs/receipts in an enforced workspace",
+        "Problem": "Untracked, non-ignored .json receipts enter the manifest and fall outside the docs exclusion. They change the snapshot and derive Code after the HV has reviewed it.",
+        "Consequence": "SliceExit freshness can defeat itself.",
+        "RequiredResolution": "Store receipts outside the source tree, or in ignored paths, until after completion. Alternatively, add an explicit and justified exclusion from the snapshot and from Code derivation."
+      },
+      {
+        "Id": "R2-11",
+        "Severity": "Low",
+        "Location": "plan §7 L378-379; §9 L514-528; §8 L463-465; §2 L84-85; base plan L1374",
+        "Trigger": "Assigning Phase 4 work packages",
+        "Problem": "The runner, snapshot and gate are split between TurnReviews and SessionTurnLogging with no file assignment. The TODO-exit guard is assigned to ReplAndAgents, has no error code, and is not tied to every server TODO write path. Grok Bot discovery duplicates base A9.",
+        "Consequence": "The TODO gate can be bypassed on the client side, or contexts end up editing each other's files.",
+        "RequiredResolution": "Assign files per context. Put the TODO-exit guard in the server TODO services for REST, MCP, REPL, YAML and batch writes, with a named error. Cite base A9 for Grok Bot."
+      },
+      {
+        "Id": "R2-12",
+        "Severity": "Low",
+        "Location": "plan §6 L359; §9 L541; §7 L381-392, L412-433; §4 L252-253; §8 L438-440, L446-447; build/Build.Test.cs:27-68",
+        "Trigger": "Phase 2 contracts",
+        "Problem": "Interface details are unspecified or wrong:\n- pwsh.exe is named for Linux;\n- column lengths, JSON shapes, the GateId and Platform enums, and the completion DTO field names;\n- ClientMutationPolicy entries for the new REPL mutators;\n- the EARS coverage key format and README.md path anchoring;\n- the rule that classifies an expected RED assertion;\n- the runner's OS account and secret isolation, and a snapshot time budget;\n- G2 TRX output requires TestRunId.",
+        "Consequence": "Implementers invent minor interface details.",
+        "RequiredResolution": "Specify each item in the §6, §7 and §9 tables."
+      }
+    ],
+    "Limitations": [
+      "No access to the transcript, GraphRAG or memory, so the intent contract was checked only against the plan text.",
+      "Per instruction, files outside the 14-file packet were not inspected (for example, the requirements and TODO services, the AcceptanceCriterion models and WikiDumpTablePolicyRegistry). Two of the plan's source observations about those files are therefore unverified: the existing Text column length versus the 64 KiB limit, and whether the dump-policy token INERT exists.",
+      "The two large base documents were read only in targeted sections: arch 3.3-3.5, 5.1-5.4 and 8, plus grep hits in the base plan.",
+      "Packet SHA-256 values were not recomputed; the manifest values are taken as given.",
+      "No builds, tests or product behavior were executed or claimed.",
+      "The time of day in TimestampUtc was not measured (no clock tool was used); the date comes from the session context.",
+      "The round-1 receipt is not in the packet, so the prior fixes were verified only against the coordinator's change list and the current plan text."
+    ],
+    "CommandsExecuted": [
+      "Glob **/* at the packet root",
+      "Read review-manifest.json and review-prompt.txt",
+      "Read docs/plans/2026-10-20-plugin-engineering-policy.md (full)",
+      "Read docs/Development-Process-draft-v4.md (full)",
+      "Grep architecture headings ^#{1,4}",
+      "Read the architecture at L259-572, L2120-2465 and L5375-5624",
+      "Read plugins/core/lib-ps/plugin-hook.ps1 L740-949",
+      "Read mcp-status.ps1, sync-plugin-core.ps1, generate-wrappers.ps1, PluginPowerShellOnly.Tests.ps1, plugins/core/README.md and build/Build.Test.cs",
+      "Grep the packet for FR-MCP-115, TR-MCP-PLUGIN-009, TEST-MCP-155 and PostCompact",
+      "Grep plugin-hook.ps1 for additionalContext, contextModification, compact, deadline and hookSpecificOutput",
+      "Grep src for ValidateTerminalTurnCompliance, IsTerminal, SerializableWrite, TurnWritePipeline, CompletionGate and WriteOrigin",
+      "Grep SessionLogModels.cs for the UnifiedRequestEntryDto fields",
+      "Grep Build.SyncAgentPlugins.cs for the plugin repo list",
+      "Grep the base plan for the plugin versions, strict-tr-and-test-coverage, grok-bot, P0.2 probes and additionalContext",
+      "Grep the plan for self, authentic, immutable, history, opening, mint, baseline and inventory",
+      "All of the above were read-only tool calls. No shell commands, builds, tests or hash computations were run."
+    ],
+    "confidence": 30,
+    "verdict": "NOT-READY",
+    "blocking_gaps": [
+      "R2-01 High: the opening snapshot capture and the operator baseline-evidence operation are undefined.",
+      "R2-02 High: the validation inventory has no store, schema, approval provenance or runner-loading rule.",
+      "R2-03 High: review refs and history have no entity or digest and conflict with base latest-wins reviews; HV self-certification is undisclosed.",
+      "R2-04 Medium: there is no gate-item applicability matrix (process None; declared versus effective class).",
+      "R2-05 Medium: there is no structured-AC write switch, and binary rollback can drop format.",
+      "R2-06 Medium: policy/process generation persistence and increment semantics, and the config audit writer, are undefined.",
+      "R2-07 Medium: the hook limits are not carried in the status JSON; the MaxInstructionBytes overflow behavior is undefined; reload semantics contradict session caching.",
+      "R2-08 Medium: base conflicts are unamended (turn-state schema, C9 retryable set, Stop blocking, CAS rerun, P0.2 probes).",
+      "R2-09 Medium: evaluation gate placement, failure consequence, grader and rerun cap are unspecified.",
+      "R2-10 Low: receipts stored in the tree break freshness.",
+      "R2-11 Low: ownership splits, placement of the TODO-exit guard, and duplication of base A9.",
+      "R2-12 Low: interface details (pwsh naming, JSON shapes and lengths, enums, DTO names, ClientMutationPolicy, EARS keys, RED classifier, runner isolation, snapshot budget, TestRunId)."
+    ],
+    "defects": [
+      "D1: plan §8 L494 says 'Stop warns'; base arch §3.4 L283 blocks on session_turn_completion_gate.",
+      "D2: plan §3 L101-102 says 'guidance next delivered prompt'; §3 L122-123 and §5 L318-319 cache the selection per host session with no prompt-hook fetch.",
+      "D3: plan §7 L397-398 and §8 L462 rely on 'immutable existing reviews' and 'preserving history'; base arch §3.4 L305 and §5.1 L2148 are latest-wins.",
+      "D4: plan §7 L431 adds a retryable engineering_snapshot_changed; base arch §3.3 C9 L270 makes every unlisted code final.",
+      "D5: plan §6 L359 and §9 L541 name pwsh.exe for native Linux runs.",
+      "D6: plan §5 L278 says 'P0.2 proves actual delivery'; the base P0.2 probes (base plan L212) cover model reach only for cline context_modification.",
+      "D7: plan §3 L96-97 makes the hook limits server options, but the status JSON (L114-117) does not carry them while the hooks enforce them (§5 L317).",
+      "D8: plan §8 L472 says 'CAS mismatch rejects'; base arch §3.5.2 L344 reruns from its reads. No amendment or error code is given."
+    ],
+    "path_to_threshold": [
+      "1 (R2-01), §6-§8 and §11: define the opening-snapshot capture point, owner, budget, storage (OpeningSnapshotId plus state), cross-session rule and Code-relevant semantics. Add an operator-only, audited RecordBaselineEvidence operation with its errors.",
+      "2 (R2-02), §6, §7 and §9: add a server-held, operator-approved inventory record (schema, revision, digest, approval fields) with an operator-only write path. The runner loads only the active approved revision.",
+      "3 (R2-03), §6-§8 plus arch 3.4/5.1 amendments: add an append-only review-reference record with server-captured digests. Define HV trust (server-verified, or an explicitly attested residual risk) and list the exact gate checks.",
+      "4 (R2-04), §8: add the applicability table (Enforcement x Process x declared/effective class x target x Purpose, mapped to items, order and remedy codes).",
+      "5 (R2-05), §3, §4 and §11: add an operator-only StructuredAcceptanceCriteria setting (default off, refusal code) and a binary-rollback guard covering relational and TODO-state formats.",
+      "6 (R2-06), §3 and §7: make generation a persisted, per-workspace monotonic value that changes only on effective change, and name the DevelopmentProcess audit writer.",
+      "7 (R2-07), §3 and §5: add the hook limits to the status JSON with defaults, validate the size at startup, restate the reload effect, and bound the first-ingress read.",
+      "8 (R2-08), §1, §5, §7 and §8: extend the amendment list; specify the delivery record schema, retention and writers, the new code's retry class, Stop blocking, the CAS code, and the P0.2 canary probe per host and its owner.",
+      "9 (R2-09), §10 and §11: place the evaluation before staging activation. A failure blocks activation, and a policy edit reruns all 72. Name the grader and blinding steps, and cap reruns.",
+      "10 (R2-10), §6 and §12: keep receipts outside the source tree or ignored until completion, or add an explicit exclusion.",
+      "11 (R2-11), §7 and §9: assign files per context, put the server-side TODO-exit guard on all TODO write paths with an error code, and cite base A9.",
+      "12 (R2-12), §6, §7 and §9: specify the interface details listed under R2-12.",
+      "After all twelve edits, re-review C1-C12. A PASS needs every edit to be decision-complete and consistent with the amended architecture."
+    ]
+  },
+  "MarkdownReceipt": "# Hostile plan-readiness receipt (round 2)\n\n**Identity:** ClaudeIndependentHostile, a separately launched Claude reviewer. Requested ClaudeCode / claude-opus-5-5 / max; the coordinator confirms the actual identity from the CLI transport metadata.\n\n**Snapshot:** commit 704880d077c4f38aa3ad627fe17a00d705cc29ce. Plan docs/plans/2026-10-20-plugin-engineering-policy.md, SHA-256 D521317EA9290E6983FA1292644B0804E714065D2A5B65FA2CBF1577862AD3EB (from the manifest, not recomputed).\n\n**Verdict:** DISAGREE / NOT-READY. Accuracy 0.86, completeness 0.72, confidence 30. 3 PASS, 9 FAIL, 0 UNKNOWN.\n\nRound 2 is a large improvement. These parts are now mostly decision-complete:\n- snapshot v1 and the server-owned runner;\n- writer and origin coverage, and the 5.3 amendment;\n- the storage and operations tables;\n- the nine host rows;\n- provenance;\n- the G1-G6 gates;\n- the AC-format contract.\n\nTwelve gaps remain, three of them high.\n\n## Findings (ranked)\n\n1. **R2-01 (High): the opening snapshot and operator baseline are undefined.**\n   - §8 L437-443 and §11 L610-611 derive Code from an opening-to-current diff, and block when the opening capture is missing.\n   - But §6 L328-331 captures snapshots only before validations and at preflight, and §7 has no opening field on the turn.\n   - No operator-baseline operation exists.\n2. **R2-02 (High): the inventory has no store or approval provenance.**\n   - The runner depends on 'approved' argument vectors (§6 L357-363, §9 L530-532), but §7 holds only InventoryDigest.\n   - Nothing prevents the runner from reading an agent-editable file inside the snapshot.\n3. **R2-03 (High): review refs and HV authenticity are undefined.**\n   - §7 L397-398 and §8 L462 require 'immutable existing reviews with identical dependency digests' and history-preserving later reviews.\n   - Base reviews are latest-wins with no digest (arch §3.4 L305, §5.1 L2140-2150), and the reviewer is never verified (arch §5.4 L2369).\n   - So the SliceExit HV item can be self-certified, and the residual-risk text (§6 L372-374) does not say so.\n4. **R2-04 (Medium): no applicability matrix.** Undefined: the items for process None, and whether base policy uses the declared or the effective class.\n5. **R2-05 (Medium): structured-AC enablement and rollback.** Undefined: a switch for 'before structured writes are enabled', and a guard against binary rollback dropping format (§4 L246, §11 L602-618).\n6. **R2-06 (Medium): generation semantics and the config audit writer are undefined** (§3 L99-110, §8 L471).\n7. **R2-07 (Medium): plugin limits and reload.**\n   - The status JSON lacks the hook limits.\n   - Behavior when the policy exceeds MaxInstructionBytes is undefined.\n   - The reload wording contradicts session caching (§3 L101-126, §5 L311-321).\n8. **R2-08 (Medium): base conflicts not amended.** The amendment list (§1 L33-35) omits:\n   - the turn-state.yaml delivery records (arch L286);\n   - the retryable code outside C9 (arch L270);\n   - Stop 'warns' versus blocking (arch L283);\n   - CAS 'rejects' versus rerun-from-reads (arch L344);\n   - P0.2 consumption probes beyond the base probes (base plan L212).\n9. **R2-09 (Medium): evaluation gating.**\n   - The evaluation is not placed in the phase or rollout order.\n   - No failure consequence is defined.\n   - The grader and blinding are unnamed, and infra reruns are uncapped (§10).\n10. **R2-10 (Low): receipts in the tree.** Receipts under docs/receipts are untracked, non-ignored .json files. They change the snapshot and derive Code (§12 L626-627; manifest worktreeChanges).\n11. **R2-11 (Low): ownership.**\n    - Runner, snapshot and gate ownership is split.\n    - The TODO-exit guard sits in ReplAndAgents instead of the server's TODO write paths.\n    - Grok Bot discovery duplicates base A9.\n12. **R2-12 (Low): interface details.** pwsh.exe on Linux, JSON shapes and lengths, enums, DTO names, ClientMutationPolicy entries, EARS keys, the RED classifier, runner isolation, snapshot budget, and TestRunId for TRX (build/Build.Test.cs:27-68).\n\n## Contradictions\n\n- **D1 Stop:** the plan's Stop 'warns'; base Stop blocks.\n- **D2 Reload:** the 'next delivered prompt' reload effect conflicts with session caching.\n- **D3 Reviews:** immutable, history-preserving reviews conflict with base latest-wins.\n- **D4 Retry code:** the new retryable code is outside C9.\n- **D5 pwsh.exe:** pwsh.exe is named for Linux runs.\n- **D6 P0.2:** the plan overstates what base P0.2 proves.\n- **D7 Hook limits:** the server-only hook limits never reach the hooks.\n- **D8 CAS:** 'CAS rejects' versus base rerun-from-reads, with no amendment.\n\n## Claim verdicts\n\n- **C1 PASS:** scope, default-on guidance, explicit enforcement activation, precedence, and nine hosts with limits (§1 L8-40, §3 L94-95, §5 L281-306, §11 L602-612).\n- **C2 FAIL:** planned and implemented types are correctly distinguished (SessionLogService.cs:1329 exists; no TurnWritePipeline or CompletionGate in src). Unamended base conflicts and ownership splits remain.\n- **C3 PASS:** canonical asset, provenance and license fallback, embed, sync and integrity. Verified against sync-plugin-core.ps1:115-151, PluginPowerShellOnly.Tests.ps1:30-46, generate-wrappers.ps1:8 and Build.SyncAgentPlugins.cs:21-28.\n- **C4 FAIL:** R2-04, R2-05, R2-06 and R2-07.\n- **C5 FAIL:** the delivery rules are strong, but the dedupe-state schema, the limits transport and the P0.2 probes are open.\n- **C6 FAIL:** entities, operations and AC migration are present. Missing: the inventory, the opening link, the baseline operation, the review-ref target, and interface details.\n- **C7 FAIL:** writer, origin and atomic coverage is good. Open: HV self-certification, inventory provenance, opening capture, applicability, and TODO-guard placement.\n- **C8 FAIL:** snapshot v1 is concrete. Open: the opening snapshot, inventory and review digests, receipts in the tree, and the RED classifier.\n- **C9 PASS:** phases, test-first ordering, G1-G6 plus Build.Tests, zero failures and skips, Linux+Windows, and HV+approval arrows match BDPv4 L76/L94 and arch 8.1/8.4.\n- **C10 FAIL:** refusal finality and rollout are concrete. Open: the baseline operation, format rollback, and the config audit.\n- **C11 FAIL:** the evaluation is bounded and honest, but has no gate placement, failure path, grader or rerun cap.\n- **C12 FAIL:** approvals are preserved (L3-4, §9 L566-570), but R2-01 to R2-09 remain open.\n\n## Round-1 fixes\n\n- **Resolved:** F2 (except the opening snapshot), F9, F10/F14.\n- **Mostly resolved:** F3 (CAS code open), F4 (review history open), F5 (inventory, baseline and JSON shapes open), F6/F7 (dedupe schema, limits and probes open), F11 (Stop wording, format rollback open).\n- **Partially resolved:**\n  - F1: the runner is resolved; inventory approval and HV trust are open.\n  - F8: settings and status are defined; generation, limits and reload are open.\n  - F12/F13: the evaluation is bounded; gating and grader are open.\n- **AC formats:** thorough. Open: the enablement switch and old-binary rollback.\n\n## Limitations\n\n- No transcript, GraphRAG or memory access.\n- Files outside the 14-file packet were not inspected.\n- The base documents were read in targeted sections.\n- Hashes were not recomputed.\n- No builds or tests were run.\n- The timestamp's time of day was not measured.\n- Only read-only Glob, Read and Grep calls were used."
+}
