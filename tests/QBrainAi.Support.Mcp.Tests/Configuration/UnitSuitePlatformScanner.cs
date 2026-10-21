@@ -11,11 +11,12 @@ namespace QBrainAi.Support.Mcp.Tests.Configuration;
 /// attribute, an xUnit skip, or a binding to the real process host is a finding unless the test method, its
 /// test class, or an enclosing class carries <c>[Trait("Category", "Integration")]</c>. The compiler's parser
 /// separates code from strings, comments and documentation and keeps the code inside interpolation holes, so a
-/// member access split across lines, a qualified, global-qualified or aliased name, a <c>using static</c>
-/// import, a method group, and an attribute anywhere in an attribute list are read like a plain call or
-/// attribute; a name inside <c>nameof</c> is not a use. Aliases and static imports resolve in the lexical scope
-/// of the code that uses them, as the compiler resolves them: the file's directives, then each enclosing
-/// namespace's, an inner alias hiding an outer one, so a directive in one namespace does not reach another. Every conditional-compilation branch is read: the file
+/// member access split across lines, a qualified or global-qualified name, a name used through a using alias
+/// whose target names a type, a <c>using static</c> import that names a type, a method group, and an attribute
+/// anywhere in an attribute list are read like a plain call or attribute; a name inside <c>nameof</c> is not a
+/// use. Aliases and static imports resolve in the lexical scope of the code that uses them, in the compiler's
+/// scope order: the file's directives, then each enclosing namespace's, an inner alias hiding an outer one, so a
+/// directive in one namespace does not reach another. Every conditional-compilation branch is read: the file
 /// is parsed once for each combination of the symbols its <c>#if</c> and <c>#elif</c> directives name, and a
 /// file that names more than <see cref="MaxConditionalSymbols"/> symbols fails the scan instead of leaving a
 /// branch unread. Test classes are types whose name ends in <c>Tests</c> or that declare a method with an
@@ -23,7 +24,11 @@ namespace QBrainAi.Support.Mcp.Tests.Configuration;
 /// <c>UnitTestPaths</c> fixture) are not test classes. An OS-platform attribute on the assembly or module is a
 /// finding for the whole project. Limits: the scan reads one file's syntax, so dependence reached through a
 /// helper type defined in another file, a global using or alias declared in another file, reflection, or
-/// operating-system behavior of a base-library call such as <c>Path.GetFullPath</c> is outside it. Repository
+/// operating-system behavior of a base-library call such as <c>Path.GetFullPath</c> is outside it. An alias
+/// is resolved one step, to the rightmost name of its target, so an alias whose target is another alias (an
+/// alias chain such as <c>using Host = OS;</c>) and a <c>using static</c> that names an alias are not resolved:
+/// a declared limit (hostile validation round 4 finding R4-F1; operator 2026-10-21 "Declare the limit, no fix"),
+/// with the scanner work tracked in TODO IMPL-SCANNERALIAS-001. Repository
 /// reads are covered by construction instead: <see cref="FindRepositoryLocators"/> keeps the shared
 /// <c>TestRepositoryRoot</c> the only repository-root locator (DRY), and that locator refuses to resolve outside
 /// an integration test, so a unit test that reads the checkout through any helper fails the unit run.
@@ -188,8 +193,10 @@ internal static class UnitSuitePlatformScanner
 
     /// <summary>
     /// The using aliases and static imports in effect inside <paramref name="container"/> (the file or a namespace),
-    /// resolved the way the compiler resolves them: the file's directives, then each enclosing namespace's from the
-    /// outermost in, an inner alias hiding an outer alias of the same name. Cached per container.
+    /// in the compiler's scope order: the file's directives, then each enclosing namespace's from the outermost in,
+    /// an inner alias hiding an outer alias of the same name. Each alias and static import keeps the rightmost name
+    /// of its target as written, so an alias chain or a static import that names an alias is not resolved (the
+    /// declared limit in the class summary). Cached per container.
     /// </summary>
     private static ImportScope ScopeFor(SyntaxNode container, Dictionary<SyntaxNode, ImportScope> scopes)
     {

@@ -5,8 +5,10 @@ namespace QBrainAi.Support.Mcp.Tests.Configuration;
 /// <summary>
 /// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008): the unit-suite platform scanner resolves a using alias
 /// or a <c>using static</c> import in the lexical scope of the code that uses it (the enclosing namespace, then the
-/// file), the way the compiler does, so an alias or import declared in one namespace neither hides nor invents a
-/// platform check in another namespace of the same file.
+/// file), in the compiler's scope order, so an alias or import declared in one namespace neither hides nor invents a
+/// platform check in another namespace of the same file. An alias whose target is another alias and a
+/// <c>using static</c> that names an alias are not resolved, a declared limit (hostile validation round 4 finding
+/// R4-F1; operator 2026-10-21 "Declare the limit, no fix"; TODO IMPL-SCANNERALIAS-001), and no case here uses either form.
 /// </summary>
 /// <remarks>
 /// Found by hostile validation round 3 (finding R3-F2: the scanner collected every alias of a file into one dictionary,
