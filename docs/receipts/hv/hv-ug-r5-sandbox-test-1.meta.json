@@ -1,0 +1,27 @@
+{
+  "RunId": "hv-ug-r5-sandbox-test-1",
+  "Target": "Test",
+  "Head": "780b6513b4004da0b17c2359d9cb65f6a69de67e",
+  "DirtyPaths": [
+    "?? docs/receipts/hv/20261021T111806-unitgreen-r5.request.jsonl",
+    "?? docs/receipts/hv/20261021T111806-unitgreen-r5.response.jsonl",
+    "?? docs/receipts/hv/20261021T111806-unitgreen-r5.selfreview.md",
+    "?? docs/receipts/hv/hv-ug-r5-begin-turn.json",
+    "?? docs/receipts/hv/hv-ug-r5-bootstrap-status.json",
+    "?? docs/receipts/hv/hv-ug-r5-bootstrap.json",
+    "?? docs/receipts/hv/hv-ug-r5-git-inventory.json",
+    "?? docs/receipts/hv/hv-ug-r5-initial-history.json",
+    "?? docs/receipts/hv/hv-ug-r5-initial-update.json",
+    "?? docs/receipts/hv/hv-ug-r5-open-session.json"
+  ],
+  "StartLocal": "2026-10-21T11:24:17",
+  "StartUtc": "2026-10-21T16:24:17.5403535Z",
+  "Environment": {
+    "NUGET_HTTP_CACHE_PATH": "/tmp/hv-ug-r5-sandbox-test-1/nuget-http",
+    "MCP_NUKE_POWERSHELL_BOOTSTRAPPED": "1"
+  },
+  "Command": "pwsh.exe -NoProfile -NonInteractive -File ./build.ps1 Test --test-run-id hv-ug-r5-sandbox-test-1",
+  "ExitCode": 0,
+  "EndLocal": "2026-10-21T11:31:51",
+  "OutputPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r5-sandbox-test-1.out.txt"
+}

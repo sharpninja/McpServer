@@ -1,0 +1,738 @@
+{
+  "FilesScanned": 1887,
+  "Names": [
+    "ASPNETCORE_ENVIRONMENT",
+    "AZURE_OPENAI_API_KEY",
+    "CLAUDE_PROJECT_DIR",
+    "DOTNET_ENVIRONMENT",
+    "GH_TOKEN",
+    "HOME",
+    "MCP_AGENT_NAME",
+    "MCP_DATABASE_ENCRYPTION_ENABLED",
+    "MCP_DATABASE_MIGRATIONS_ASSEMBLY",
+    "MCP_DATABASE_PROVIDER",
+    "MCP_EF_CONNECTION_STRING",
+    "MCP_EF_MIGRATIONS_ASSEMBLY",
+    "MCP_EF_PROVIDER",
+    "MCP_INSTANCE",
+    "MCP_PLUGIN_HOST",
+    "MCP_POSTGRES_CONNECTION_STRING",
+    "MCP_POSTGRES_TDE_KEY_PROVIDER",
+    "MCP_POSTGRES_TDE_PRINCIPAL_KEY",
+    "MCP_REPOSITORY_ROOT",
+    "MCP_SERVER_URL",
+    "MCP_SESSION_ID",
+    "MCP_SQLITE_DATA_SOURCE",
+    "MCP_SQLITE_ENCRYPTION_KEY",
+    "MCP_SQLITE_SEE_TOOL_PATH",
+    "MCP_SQLSERVER_CONNECTION_STRING",
+    "MCP_SQLSERVER_TDE_CERTIFICATE",
+    "MCP_SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY",
+    "MCP_TEST_POSTGRES_CONNECTION",
+    "MCP_TEST_SQLSERVER_CONNECTION",
+    "MCP_WORKSPACE",
+    "MCP_WORKSPACE_PATH",
+    "MCP_WORKSPACE_START_DIR",
+    "MCPSERVER_CODEX_ONESHOT_TEMP",
+    "MCPSERVER_CODEX_TRIAGE_TEMP",
+    "MCPSERVER_GROK_ONESHOT_TEMP",
+    "MCPSERVER_ONESHOT_TEMP",
+    "MCPSERVER_QUADBRAIN_CLI_TEMP",
+    "MCPSERVER_WORKSPACE_PATH",
+    "OPENAI_API_KEY",
+    "PATH",
+    "PLUGIN_AGENT_DEFAULT",
+    "PLUGIN_AGENT_NAME",
+    "PORT",
+    "PUBLIC",
+    "QBAGENT_HOME",
+    "QBRAINAI_AGENT_NAME",
+    "QBRAINAI_DATABASE_ENCRYPTION_ENABLED",
+    "QBRAINAI_DATABASE_MIGRATIONS_ASSEMBLY",
+    "QBRAINAI_DATABASE_PROVIDER",
+    "QBRAINAI_EF_CONNECTION_STRING",
+    "QBRAINAI_EF_MIGRATIONS_ASSEMBLY",
+    "QBRAINAI_EF_PROVIDER",
+    "QBRAINAI_INSTANCE",
+    "QBRAINAI_PLUGIN_HOST",
+    "QBRAINAI_POSTGRES_CONNECTION_STRING",
+    "QBRAINAI_POSTGRES_TDE_KEY_PROVIDER",
+    "QBRAINAI_POSTGRES_TDE_PRINCIPAL_KEY",
+    "QBRAINAI_SERVER_URL",
+    "QBRAINAI_SESSION_ID",
+    "QBRAINAI_SQLITE_DATA_SOURCE",
+    "QBRAINAI_SQLITE_ENCRYPTION_KEY",
+    "QBRAINAI_SQLITE_SEE_TOOL_PATH",
+    "QBRAINAI_SQLSERVER_CONNECTION_STRING",
+    "QBRAINAI_SQLSERVER_TDE_CERTIFICATE",
+    "QBRAINAI_SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY",
+    "QBRAINAI_WORKSPACE",
+    "QBRAINAI_WORKSPACE_PATH",
+    "QBRAINAI_WORKSPACE_START_DIR",
+    "SystemDrive",
+    "TEMP",
+    "USERPROFILE",
+    "XAI_API_KEY"
+  ],
+  "LegacyNames": [
+    "MCP_AGENT_NAME",
+    "MCP_DATABASE_ENCRYPTION_ENABLED",
+    "MCP_DATABASE_MIGRATIONS_ASSEMBLY",
+    "MCP_DATABASE_PROVIDER",
+    "MCP_EF_CONNECTION_STRING",
+    "MCP_EF_MIGRATIONS_ASSEMBLY",
+    "MCP_EF_PROVIDER",
+    "MCP_INSTANCE",
+    "MCP_PLUGIN_HOST",
+    "MCP_POSTGRES_CONNECTION_STRING",
+    "MCP_POSTGRES_TDE_KEY_PROVIDER",
+    "MCP_POSTGRES_TDE_PRINCIPAL_KEY",
+    "MCP_SERVER_URL",
+    "MCP_SESSION_ID",
+    "MCP_SQLITE_DATA_SOURCE",
+    "MCP_SQLITE_ENCRYPTION_KEY",
+    "MCP_SQLITE_SEE_TOOL_PATH",
+    "MCP_SQLSERVER_CONNECTION_STRING",
+    "MCP_SQLSERVER_TDE_CERTIFICATE",
+    "MCP_SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY",
+    "MCP_WORKSPACE",
+    "MCP_WORKSPACE_PATH",
+    "MCP_WORKSPACE_START_DIR"
+  ],
+  "ScriptedCount": 81,
+  "Missing": [
+    "PATH"
+  ],
+  "Hits": [
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+      "Line": 72,
+      "Name": "MCP_INSTANCE",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+      "Line": 73,
+      "Name": "QBRAINAI_INSTANCE",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+      "Line": 76,
+      "Name": "QBRAINAI_INSTANCE",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+      "Line": 77,
+      "Name": "MCP_INSTANCE",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+      "Line": 94,
+      "Name": "MCP_INSTANCE",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+      "Line": 95,
+      "Name": "QBRAINAI_INSTANCE",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+      "Line": 64,
+      "Name": "MCP_INSTANCE",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "Line": 195,
+      "Name": "QBRAINAI_INSTANCE",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "Line": 196,
+      "Name": "MCP_INSTANCE",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "Line": 199,
+      "Name": "QBRAINAI_INSTANCE",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "Line": 200,
+      "Name": "MCP_INSTANCE",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "Line": 208,
+      "Name": "QBRAINAI_INSTANCE",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "Line": 209,
+      "Name": "MCP_INSTANCE",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "Line": 220,
+      "Name": "QBRAINAI_INSTANCE",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "Line": 221,
+      "Name": "MCP_INSTANCE",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "Line": 224,
+      "Name": "QBRAINAI_INSTANCE",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "Line": 225,
+      "Name": "MCP_INSTANCE",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "Line": 233,
+      "Name": "QBRAINAI_INSTANCE",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "Line": 234,
+      "Name": "MCP_INSTANCE",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs",
+      "Line": 20,
+      "Name": "MCP_REPOSITORY_ROOT",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs",
+      "Line": 24,
+      "Name": "MCP_REPOSITORY_ROOT",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs",
+      "Line": 34,
+      "Name": "MCP_REPOSITORY_ROOT",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+      "Line": 98,
+      "Name": "XAI_API_KEY",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+      "Line": 99,
+      "Name": "XAI_API_KEY",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+      "Line": 108,
+      "Name": "XAI_API_KEY",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+      "Line": 126,
+      "Name": "XAI_API_KEY",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+      "Line": 127,
+      "Name": "XAI_API_KEY",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+      "Line": 141,
+      "Name": "XAI_API_KEY",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+      "Line": 150,
+      "Name": "OPENAI_API_KEY",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+      "Line": 151,
+      "Name": "AZURE_OPENAI_API_KEY",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs",
+      "Line": 27,
+      "Name": "MCP_TEST_POSTGRES_CONNECTION",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs",
+      "Line": 218,
+      "Name": "MCP_TEST_SQLSERVER_CONNECTION",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs",
+      "Line": 24,
+      "Name": "MCP_TEST_POSTGRES_CONNECTION",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Common.AgentCli/ProcessEnvironmentService.cs",
+      "Line": 23,
+      "Name": "GH_TOKEN",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Common.AgentCli/ProcessEnvironmentService.cs",
+      "Line": 63,
+      "Name": "PATH",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Common.AgentCli/ProcessEnvironmentService.cs",
+      "Line": 262,
+      "Name": "PUBLIC",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+      "Line": 29,
+      "Name": "PATH",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+      "Line": 32,
+      "Name": "TEMP",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+      "Line": 166,
+      "Name": "MCPSERVER_CODEX_ONESHOT_TEMP",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+      "Line": 167,
+      "Name": "MCPSERVER_CODEX_ONESHOT_TEMP",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+      "Line": 188,
+      "Name": "MCPSERVER_CODEX_ONESHOT_TEMP",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 572,
+      "Name": "MCPSERVER_QUADBRAIN_CLI_TEMP",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 573,
+      "Name": "MCPSERVER_ONESHOT_TEMP",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 578,
+      "Name": "MCPSERVER_QUADBRAIN_CLI_TEMP",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 579,
+      "Name": "MCPSERVER_ONESHOT_TEMP",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 584,
+      "Name": "MCPSERVER_QUADBRAIN_CLI_TEMP",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 585,
+      "Name": "MCPSERVER_ONESHOT_TEMP",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+      "Line": 21,
+      "Name": "PUBLIC",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+      "Line": 34,
+      "Name": "PUBLIC",
+      "Kind": "literal"
+    },
+    {
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+      "Line": 49,
+      "Name": "PUBLIC",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      "Line": 56,
+      "Name": "PLUGIN_AGENT_NAME",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      "Line": 57,
+      "Name": "PLUGIN_AGENT_DEFAULT",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      "Line": 55,
+      "Name": "MCP_AGENT_NAME",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      "Line": 58,
+      "Name": "MCP_PLUGIN_HOST",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      "Line": 123,
+      "Name": "MCP_SERVER_URL",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      "Line": 148,
+      "Name": "MCP_WORKSPACE_PATH",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      "Line": 154,
+      "Name": "MCP_WORKSPACE",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      "Line": 289,
+      "Name": "MCP_WORKSPACE_PATH",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      "Line": 290,
+      "Name": "MCP_WORKSPACE",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+      "Line": 140,
+      "Name": "MCPSERVER_WORKSPACE_PATH",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+      "Line": 142,
+      "Name": "CLAUDE_PROJECT_DIR",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+      "Line": 159,
+      "Name": "PLUGIN_AGENT_NAME",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+      "Line": 160,
+      "Name": "PLUGIN_AGENT_DEFAULT",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+      "Line": 139,
+      "Name": "MCP_WORKSPACE_PATH",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+      "Line": 141,
+      "Name": "MCP_WORKSPACE_START_DIR",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+      "Line": 158,
+      "Name": "MCP_AGENT_NAME",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+      "Line": 161,
+      "Name": "MCP_PLUGIN_HOST",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+      "Line": 201,
+      "Name": "MCP_SESSION_ID",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.QBAgent/QBAgentSessionLog.cs",
+      "Line": 49,
+      "Name": "QBAGENT_HOME",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "Line": 75,
+      "Name": "MCP_DATABASE_MIGRATIONS_ASSEMBLY",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "Line": 111,
+      "Name": "MCP_SQLITE_DATA_SOURCE",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "Line": 159,
+      "Name": "MCP_SQLSERVER_CONNECTION_STRING",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "Line": 173,
+      "Name": "MCP_DATABASE_PROVIDER",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "Line": 179,
+      "Name": "MCP_DATABASE_ENCRYPTION_ENABLED",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "Line": 185,
+      "Name": "MCP_SQLITE_ENCRYPTION_KEY",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "Line": 187,
+      "Name": "MCP_SQLITE_SEE_TOOL_PATH",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "Line": 189,
+      "Name": "MCP_POSTGRES_TDE_KEY_PROVIDER",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "Line": 191,
+      "Name": "MCP_POSTGRES_TDE_PRINCIPAL_KEY",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "Line": 193,
+      "Name": "MCP_SQLSERVER_TDE_CERTIFICATE",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "Line": 195,
+      "Name": "MCP_SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Storage/McpDbContextFactory.cs",
+      "Line": 26,
+      "Name": "MCP_EF_PROVIDER",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Storage/McpDbContextFactory.cs",
+      "Line": 30,
+      "Name": "MCP_EF_MIGRATIONS_ASSEMBLY",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Storage/McpDbContextFactory.cs",
+      "Line": 41,
+      "Name": "MCP_EF_CONNECTION_STRING",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Storage/McpDbContextFactory.cs",
+      "Line": 52,
+      "Name": "MCP_SQLITE_DATA_SOURCE",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Storage/McpDbContextFactory.cs",
+      "Line": 54,
+      "Name": "MCP_POSTGRES_CONNECTION_STRING",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Storage/McpDbContextFactory.cs",
+      "Line": 56,
+      "Name": "MCP_SQLSERVER_CONNECTION_STRING",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs",
+      "Line": 292,
+      "Name": "ASPNETCORE_ENVIRONMENT",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs",
+      "Line": 293,
+      "Name": "DOTNET_ENVIRONMENT",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs",
+      "Line": 202,
+      "Name": "MCP_INSTANCE",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Support.Mcp/Program.cs",
+      "Line": 172,
+      "Name": "PORT",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Services/Memory/Bench/MemoryBenchGrokMultiTurnAdapter.cs",
+      "Line": 25,
+      "Name": "XAI_API_KEY",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Services/Memory/Bench/MemoryBenchGrokAdapter.cs",
+      "Line": 26,
+      "Name": "XAI_API_KEY",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Services/Options/McpInstanceResolver.cs",
+      "Line": 20,
+      "Name": "MCP_INSTANCE",
+      "Kind": "GetLegacy"
+    },
+    {
+      "File": "src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs",
+      "Line": 411,
+      "Name": "MCPSERVER_QUADBRAIN_CLI_TEMP",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs",
+      "Line": 412,
+      "Name": "MCPSERVER_ONESHOT_TEMP",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Services/Services/GrokCliAgentExecutionStrategy.cs",
+      "Line": 477,
+      "Name": "MCPSERVER_GROK_ONESHOT_TEMP",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Services/Services/GrokCliAgentExecutionStrategy.cs",
+      "Line": 478,
+      "Name": "MCPSERVER_ONESHOT_TEMP",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs",
+      "Line": 417,
+      "Name": "MCPSERVER_CODEX_ONESHOT_TEMP",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs",
+      "Line": 418,
+      "Name": "MCPSERVER_CODEX_TRIAGE_TEMP",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Services/Services/SessionLogTurnContextValidator.cs",
+      "Line": 144,
+      "Name": "HOME",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Services/Services/SessionLogTurnContextValidator.cs",
+      "Line": 145,
+      "Name": "USERPROFILE",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs",
+      "Line": 494,
+      "Name": "MCPSERVER_ONESHOT_TEMP",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs",
+      "Line": 495,
+      "Name": "MCPSERVER_CODEX_ONESHOT_TEMP",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs",
+      "Line": 496,
+      "Name": "MCPSERVER_CODEX_TRIAGE_TEMP",
+      "Kind": "literal"
+    },
+    {
+      "File": "src/QBrainAi.Services/Services/VoiceConversationService.cs",
+      "Line": 1322,
+      "Name": "SystemDrive",
+      "Kind": "literal"
+    }
+  ]
+}

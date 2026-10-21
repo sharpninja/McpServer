@@ -1,0 +1,562 @@
+81:+            if (!OperatingSystem.IsWindows())
+84:+                return;
+106:+        if (!result.Succeeded)
+151:+            if (!readiness.CanRun)
+325:+            if (!string.IsNullOrWhiteSpace(value))
+331:+                if (fileValues is null && !fileMissing)
+334:+                    if (text is null)
+345:+                if (fileMissing)
+350:+                if (!fileValues!.TryGetValue(variable, out value) || string.IsNullOrWhiteSpace(value))
+362:+            if (loadedFromFile)
+365:+                if (state == ProviderTestContainerState.Missing)
+371:+                if (state == ProviderTestContainerState.Stopped)
+373:+                    if (!host.StartContainer(container))
+384:+            if (!TryReadEndpoint(value, isSqlServer, defaultPort, out var endpointHost, out var port, out var problem))
+396:+                if (!reachable && attempt + 1 < attempts)
+402:+            if (reachable)
+422:+            if (line.Length == 0 || line.StartsWith('#'))
+427:+            if (line.StartsWith("export ", StringComparison.Ordinal))
+433:+            if (equals <= 0)
+440:+            if (value.Length >= 2 && (value[0] == '"' || value[0] == '\'') && value[^1] == value[0])
+467:+        if (isSqlServer)
+470:+            if (server is null)
+476:+            if (server.StartsWith("(localdb)", StringComparison.OrdinalIgnoreCase))
+482:+            if (server.StartsWith("tcp:", StringComparison.OrdinalIgnoreCase))
+488:+            if (comma >= 0)
+490:+                if (!int.TryParse(server[(comma + 1)..].Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out port))
+504:+            if (server is null)
+512:+            if (portText is not null && !int.TryParse(portText, NumberStyles.Integer, CultureInfo.InvariantCulture, out port))
+519:+        if (host.Length == 0 || host == ".")
+531:+            if (builder.TryGetValue(key, out var value) && value is not null && !string.IsNullOrWhiteSpace(value.ToString()))
+559:+        if (exitCode != 0)
+599:+        if (!process.WaitForExit(TimeSpan.FromMinutes(2)))
+838:+                if (entry.IsDirectory)
+840:+                    if (entry.IsLink)
+843:+                    if (yieldDirectories)
+889:+        if (string.IsNullOrWhiteSpace(workingDirectory))
+930:+        if (string.IsNullOrWhiteSpace(workspacePath))
+1044:-        if (!string.IsNullOrWhiteSpace(workspacePath))
+1047:-            if (!string.IsNullOrWhiteSpace(siblingRoot))
+1051:+        if (!string.IsNullOrWhiteSpace(siblingRoot))
+1140:-        if (string.IsNullOrWhiteSpace(root) || !Directory.Exists(root))
+1141:+        if (string.IsNullOrWhiteSpace(root))
+1145:-        if (File.Exists(versionFile))
+1148:-            if (!string.IsNullOrWhiteSpace(version))
+1152:+        if (!string.IsNullOrWhiteSpace(version))
+1162:-            if (!File.Exists(path))
+1164:+            if (text is null)
+1339:+        Assert.Equal(ExpectedFilter(host), actual);
+1355:+        Assert.True(Selects(filter, category: "Integration", platform: null), "An untagged integration case must run on every host.");
+1356:+        Assert.True(Selects(filter, category: "Integration", platform: own), $"A Platform={own} integration case must run on its own host.");
+1357:+        Assert.False(Selects(filter, category: "Integration", platform: other), $"A Platform={other} integration case must not run on a {own} host.");
+1358:+        Assert.False(Selects(filter, category: null, platform: null), "A case without Category=Integration must not run in the integration lane.");
+1376:+            if (parts.Length != 2 || !traits.TryGetValue(parts[0], out var value))
+1382:+            if (negated ? equal : !equal)
+1458:+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => IntegrationLaneFilterContract.AssertSelection(parsed, filter));
+1580:+        Assert.Equal(mayRun, readiness.CanRun);
+1581:+        if (mayRun)
+1583:+            Assert.Null(readiness.FailureMessage);
+1584:+            return;
+1587:+        Assert.False(string.IsNullOrWhiteSpace(readiness.FailureMessage), "A lane that cannot run must say why instead of stopping silently.");
+1588:+        Assert.Contains("interactive desktop session", readiness.FailureMessage, StringComparison.Ordinal);
+1589:+        Assert.Contains("MigrationIntegrationTests", readiness.FailureMessage, StringComparison.Ordinal);
+1664:+            if (fault == Fault.BlocksLinux && !userInteractive)
+1666:+            if (host != IntegrationLaneHost.Windows || userInteractive)
+1766:+                if (scenario == "unreachable")
+1806:+        Assert.DoesNotContain(PostgresSecret, text, StringComparison.Ordinal);
+1807:+        Assert.DoesNotContain(SqlServerSecret, text, StringComparison.Ordinal);
+1808:+        Assert.All(host.ContainerCalls, name => Assert.StartsWith("qbrain-test-", name, StringComparison.Ordinal));
+1813:+                Assert.True(result.Succeeded, string.Join("; ", result.Errors));
+1814:+                Assert.Equal(PostgresValue, host.Variables[ProviderTestNames.PostgresVariable]);
+1815:+                Assert.Equal(SqlServerValue, host.Variables[ProviderTestNames.SqlServerVariable]);
+1816:+                Assert.Empty(host.Started);
+1817:+                Assert.Contains("localhost:55432", host.Probes);
+1818:+                Assert.Contains("localhost:51433", host.Probes);
+1819:+                Assert.Contains("load " + ProviderTestNames.PostgresVariable + " from " + EnvFile, result.Actions);
+1820:+                Assert.Contains("load " + ProviderTestNames.SqlServerVariable + " from " + EnvFile, result.Actions);
+1823:+                Assert.True(result.Succeeded, string.Join("; ", result.Errors));
+1824:+                Assert.Equal(0, host.ReadFileCalls);
+1825:+                Assert.Empty(host.ContainerCalls);
+1826:+                Assert.Empty(host.SetCalls);
+1827:+                Assert.Contains("db.example:6543", host.Probes);
+1828:+                Assert.Contains("sql.example:1444", host.Probes);
+1829:+                Assert.Contains("adopt " + ProviderTestNames.PostgresVariable + " (already set)", result.Actions);
+1832:+                Assert.False(result.Succeeded);
+1833:+                Assert.Contains(result.Errors, error => error.Contains(EnvFile, StringComparison.Ordinal));
+1834:+                Assert.Empty(host.SetCalls);
+1835:+                Assert.Empty(host.Probes);
+1838:+                Assert.False(result.Succeeded);
+1839:+                Assert.Contains(result.Errors, error => error.Contains(ProviderTestNames.SqlServerVariable, StringComparison.Ordinal) && error.Contains(EnvFile, StringComparison.Ordinal));
+1840:+                Assert.Equal(PostgresValue, host.Variables[ProviderTestNames.PostgresVariable]);
+1843:+                Assert.True(result.Succeeded, string.Join("; ", result.Errors));
+1844:+                Assert.Equal(new[] { ProviderTestNames.PostgresContainer }, host.Started);
+1845:+                Assert.Contains("start " + ProviderTestNames.PostgresContainer, result.Actions);
+1848:+                Assert.False(result.Succeeded);
+1849:+                Assert.Contains(result.Errors, error => error.Contains(ProviderTestNames.SqlServerContainer, StringComparison.Ordinal));
+1850:+                Assert.DoesNotContain(ProviderTestNames.SqlServerContainer, host.Started);
+1853:+                Assert.False(result.Succeeded);
+1854:+                Assert.Contains(result.Errors, error => error.Contains("localhost:51433", StringComparison.Ordinal));
+1857:+                Assert.False(result.Succeeded);
+1858:+                Assert.Contains(result.Errors, error => error.Contains(ProviderTestNames.SqlServerVariable, StringComparison.Ordinal) && error.Contains("LocalDB", StringComparison.Ordinal));
+1926:+            if (!Containers.TryGetValue(containerName, out var state) || state == ProviderTestContainerState.Missing)
+1991:+    [InlineData("unreachable", Fault.SkipsProbe)]
+2038:+                    if (fake.Scenario == "stopped-container" && host.GetContainerState(ProviderTestNames.PostgresContainer) == ProviderTestContainerState.Stopped)
+2044:+                    if (fault == Fault.TouchesOtherContainer)
+2049:+                    if (fault == Fault.LeaksValue)
+2054:+                    if (fault != Fault.SkipsProbe)
+2058:+                        if (!pgUp)
+2063:+                        if (!sqlUp)
+2071:+                    if (fault == Fault.ReadsFileWhenSet)
+2083:+                    if (fault != Fault.IgnoresMissingFile)
+2185:-        Assert.Equal("legacy-token", options.ApiKey);
+2186:-        Assert.Equal(workspacePath, options.WorkspacePath);
+2226:+        Assert.Equal("legacy-token", options.ApiKey);
+2227:+        Assert.Equal(workspacePath, options.WorkspacePath);
+2274:-            if (File.Exists(Path.Combine(dir.FullName, "QBrainAi.sln")))
+2318:-            if (File.Exists(Path.Combine(directory.FullName, "QBrainAi.sln")))
+2359:-            if (File.Exists(Path.Combine(directory.FullName, "docs", "context", "repl-yaml-message.schema.json")))
+2508:-                if (skipPattern.IsMatch(line))
+2531:+    [InlineData("Assert.SkipUnless(OperatingSystem.IsWindows(), \"w\");", "1")]
+2532:+    [InlineData("Assert.SkipWhen(true, \"w\");", "1")]
+2533:+    [InlineData("Assert.Skip(\"s\");", "1")]
+2534:+    [InlineData("[Fact(Skip = \"later\")]\npublic void A() { }", "1")]
+2535:+    [InlineData("[Theory(DisplayName = \"x\", Skip = \"later\")]\npublic void A(int x) { }", "1")]
+2536:+    [InlineData("throw new SkipException(\"x\");", "1")]
+2537:+    [InlineData("[SkippableFact]\npublic void A() { }", "1")]
+2538:+    [InlineData("[Fact(\n    Skip = \"later\")]\npublic void A() { }", "1")]
+2539:+    [InlineData("[Fact]\npublic void A() { }\n[Theory(DisplayName = nameof(B),\n    SkipUnless = nameof(Ready),\n    Skip = \"x\")]\npublic void B(int x) { }", "3")]
+2540:+    [InlineData("[Xunit.Fact(Skip = \"later\")]\npublic void A() { }", "1")]
+2541:+    [InlineData("[global::Xunit.FactAttribute(Skip = \"x\")]\npublic void A() { }", "1")]
+2542:+    [InlineData("[Trait(\"a\", \"b\"), Theory(Skip = \"x\")]\npublic void A(int x) { }", "1")]
+2543:+    [InlineData("[Theory]\n[InlineData(1, Skip = \"row\")]\npublic void A(int x) { }", "2")]
+2544:+    [InlineData("[SkippableFactAttribute]\npublic void A() { }", "1")]
+2545:+    [InlineData("[Fact(SkipExceptions = new[] { typeof(InvalidOperationException) })]\npublic void A() { }", "1")]
+2546:+    [InlineData("Skip.If(true);\nSkip.IfNot(false);", "1,2")]
+2547:+    [InlineData("throw new Xunit.Sdk.SkipException(\"x\");", "1")]
+2548:+    [InlineData("using static Xunit.Assert;\nSkip(\"s\");", "2")]
+2549:+    [InlineData("#if WINDOWS\nAssert.Skip(\"w\");\n#endif", "2")]
+2551:+    [InlineData("var text = \"Assert.SkipUnless(true)\";", "")]
+2552:+    [InlineData("// Assert.Skip(\"x\");", "")]
+2553:+    [InlineData("Assert.Skipped(result);", "")]
+2554:+    [InlineData("var name = nameof(SkipException);", "")]
+2556:+    [InlineData("[Fact(DisplayName = \"Skip = later\")]\npublic void A() { }", "")]
+2557:+    [InlineData("[Fact]\npublic void Skip() { var Skip = 1; }", "")]
+2563:+        Assert.Equal(expected, UnitSuitePlatformScanner.FindSkipLines(source));
+2582:+        Assert.DoesNotMatch(original, "Assert.SkipUnless(OperatingSystem.IsWindows(), \"w\");");
+2583:+        Assert.DoesNotMatch(original, "Assert.SkipWhen(true, \"w\");");
+2586:+            Assert.DoesNotMatch(roundOne, line);
+2589:+        Assert.DoesNotMatch(roundOne, "[Xunit.Fact(Skip = \"later\")]");
+2590:+        Assert.Equal(new[] { 1 }, UnitSuitePlatformScanner.FindSkipLines("[Xunit.Fact(Skip = \"later\")]\npublic void A() { }"));
+2591:+        Assert.Matches(roundOne, "var text = \"Assert.SkipUnless(true)\";");
+2592:+        Assert.Empty(UnitSuitePlatformScanner.FindSkipLines("var text = \"Assert.SkipUnless(true)\";"));
+2611:-            if (File.Exists(candidate))
+2627:-            if (Directory.Exists(candidate))
+2703:+        Assert.NotNull(Record.Exception(() => AssertPolicy(_ => { }, unit, allowed: false)));
+2704:+        Assert.NotNull(Record.Exception(() => AssertPolicy(_ => throw new InvalidOperationException("refused"), integration, allowed: true)));
+2705:+        Assert.NotNull(Record.Exception(() => AssertPolicy(_ => throw new InvalidOperationException("another reason"), unit, allowed: false)));
+2706:+        Assert.Null(Record.Exception(() => AssertPolicy(TestRepositoryRoot.EnsureIntegration, unit, allowed: false)));
+2707:+        Assert.Null(Record.Exception(() => AssertPolicy(TestRepositoryRoot.EnsureIntegration, integration, allowed: true)));
+2715:+        Assert.Contains("may not read the repository checkout", resolve.Message, StringComparison.Ordinal);
+2717:+        Assert.Contains("may not read the repository checkout", combine.Message, StringComparison.Ordinal);
+2719:+        Assert.Contains("may not read the repository checkout", metadata.Message, StringComparison.Ordinal);
+2728:+        Assert.True(File.Exists(Path.Combine(root, "QBrainAi.sln")), root);
+2729:+        Assert.Equal(Path.Combine(root, "tests"), TestRepositoryRoot.Combine("tests"));
+2730:+        Assert.True(File.Exists(TestRepositoryRoot.Combine("tests", "Shared", "TestRepositoryRoot.cs")));
+2731:+        Assert.False(string.IsNullOrWhiteSpace(TestRepositoryRoot.BuildMetadataRoot));
+2743:+        if (allowed)
+2745:+            Assert.Null(Record.Exception(() => policy(traits)));
+2746:+            return;
+2750:+        Assert.Contains("may not read the repository checkout", refusal.Message, StringComparison.Ordinal);
+2784:-            if (File.Exists(candidate))
+2915:+                if (testClass is not null)
+2944:+        if (symbols.Count > MaxConditionalSymbols)
+2981:+            if (kinds.Count > 0 && (node is AttributeSyntax || !InNameOf(node)))
+3002:+        if (scopes.TryGetValue(container, out var known))
+3013:+            if (target is null)
+3015:+            if (directive.Alias is not null)
+3034:+            if (nodes.Any(IsBaseDirectory) || nodes.OfType<ParameterSyntax>().Any(HasCallerFilePath))
+3037:+                if (step is not null)
+3045:+            if (nodes.OfType<SimpleNameSyntax>().Any(name => WithoutAttributeSuffix(name.Identifier.ValueText) == "AssemblyMetadata"))
+3081:+        if (name is "SupportedOSPlatform" or "UnsupportedOSPlatform")
+3083:+        if (name is "SkippableFact" or "SkippableTheory" || SetsSkipProperty(attribute))
+3102:+        if (node is AttributeSyntax { Parent: AttributeListSyntax { Target.Identifier.ValueText: "assembly" or "module" } })
+3106:+        if (testClass is null
+3113:+        if (method is not null && IsTestMethod(method) && HasIntegrationTrait(method.AttributeLists))
+3384:+        Assert.NotNull(Record.Exception(() => UnitSuitePlatformScannerMockGateTests.AssertFindings(
+3386:+        Assert.NotNull(Record.Exception(() => UnitSuitePlatformScannerMockGateTests.AssertFindings(
+3388:+        Assert.NotNull(Record.Exception(() => UnitSuitePlatformScannerMockGateTests.AssertFindings(
+3390:+        Assert.NotNull(Record.Exception(() => UnitSuitePlatformScannerMockGateTests.AssertFindings(
+3392:+        Assert.NotNull(Record.Exception(() => UnitSuitePlatformScannerMockGateTests.AssertFindings(
+3427:+                    if (OperatingSystem.IsWindows()) return;
+3439:+                    if (OperatingSystem.IsWindows()) return;
+3452:+                    Assert.Equal("WorkspacePathNormalizer.Process", s);
+3469:+                [Fact(Skip = "later")]
+3474:+                    Assert.SkipWhen(true, "w");
+3475:+                    Assert.SkipUnless(false, "u");
+3476:+                    Assert.Skip("s");
+3564:+                    Assert.SkipUnless(OperatingSystem.IsWindows(), "w");
+3596:+                [Xunit.Fact(Skip = "later")]
+3598:+                [global::Xunit.TheoryAttribute(Skip = "x")]
+3600:+                [Trait("k", "v"), Fact(Skip = "y")]
+3604:+                [Fact(DisplayName = "Skip = later")]
+3703:+                [InlineData(1, Skip = "row")]
+3706:+                [SkippableFactAttribute]
+3708:+                [Fact(SkipExceptions = new[] { typeof(InvalidOperationException) })]
+3725:+                    Assert.Skip("w");
+3783:+            Assert.NotNull(Record.Exception(() => AssertFindings(expected, [])));
+3788:+        Assert.NotNull(Record.Exception(() => AssertFindings([.. aliases.Expected, "14 os-check FooTests"], aliasFindings)));
+3789:+        Assert.Null(Record.Exception(() => AssertFindings(aliases.Expected, aliasFindings)));
+3793:+        Assert.NotNull(Record.Exception(() => AssertFindings(
+3795:+        Assert.Null(Record.Exception(() => AssertFindings(methodLevel.Expected, methodFindings)));
+3799:+        Assert.NotNull(Record.Exception(() => AssertFindings(["10 os-check FooTests"], branchFindings)));
+3800:+        Assert.Null(Record.Exception(() => AssertFindings(branches.Expected, branchFindings)));
+3803:+        Assert.DoesNotContain(
+3820:+        Assert.Throws<InvalidOperationException>(() => UnitSuitePlatformScanner.Scan("over.cs", over));
+3821:+        Assert.Throws<InvalidOperationException>(() => UnitSuitePlatformScanner.FindSkipLines(over));
+3825:+        Assert.Equal(new[] { 5 }, UnitSuitePlatformScanner.FindSkipLines(atLimit));
+3840:+            Assert.NotNull(Record.Exception(() => AssertFindings(expected, [])));
+3844:+        Assert.NotNull(Record.Exception(() => AssertFindings(
+3846:+        Assert.Null(Record.Exception(() => AssertFindings(Cases["split-and-qualified-os-calls"].Expected, calls)));
+3849:+        Assert.NotNull(Record.Exception(() => AssertFindings(
+3851:+        Assert.Null(Record.Exception(() => AssertFindings(Cases["qualified-and-listed-os-attributes"].Expected, attributes)));
+3866:+            Assert.NotNull(Record.Exception(() => AssertFindings(expected, [])));
+3870:+        Assert.NotNull(Record.Exception(() => AssertFindings(
+3872:+        Assert.NotNull(Record.Exception(() => AssertFindings(
+3874:+        Assert.Null(Record.Exception(() => AssertFindings(Cases["interpolation-holes"].Expected, interpolation)));
+3877:+        Assert.NotNull(Record.Exception(() => AssertFindings(
+3879:+        Assert.NotNull(Record.Exception(() => AssertFindings(
+3891:+        Assert.NotNull(Record.Exception(() => AssertFindings(["4 skip FooTests", "9 skip FooTests", "10 skip FooTests"], actual)));
+3892:+        Assert.NotNull(Record.Exception(() => AssertFindings(["4 skip FooTests", "9 skip FooTests", "10 skip FooTests", "11 skip FooTests", "12 skip FooTests"], actual)));
+3893:+        Assert.NotNull(Record.Exception(() => AssertFindings(["4 skip FooTests", "9 skip FooTests", "10 skip FooTests", "12 skip FooTests"], actual)));
+3894:+        Assert.NotNull(Record.Exception(() => AssertFindings(["4 skip FooTests", "9 skip FooTests", "10 skip FooTests", "11 skip BarTests"], actual)));
+3895:+        Assert.Null(Record.Exception(() => AssertFindings(["4 skip FooTests", "9 skip FooTests", "10 skip FooTests", "11 skip FooTests"], actual)));
+3926:+        Assert.Empty(UnitSuitePlatformScanner.FindSkipLines(source));
+3959:+                        if (File.Exists(Path.Combine(d.FullName, "X.sln"))) return d.FullName;
+4021:+        Assert.Equal(expected, UnitSuitePlatformScanner.FindRepositoryLocators(source));
+4036:+        Assert.NotNull(Record.Exception(() => Assert.Equal(new[] { 7, 8 }, Array.Empty<int>())));
+4037:+        Assert.NotNull(Record.Exception(() => Assert.Equal(new[] { 7 }, relative)));
+4038:+        Assert.Null(Record.Exception(() => Assert.Equal(new[] { 7, 8 }, relative)));
+4041:+        Assert.NotNull(Record.Exception(() => Assert.Equal(Array.Empty<int>(), conditional)));
+4044:+        Assert.NotNull(Record.Exception(() => Assert.Equal(new[] { 4 }, notLocators)));
+4045:+        Assert.Null(Record.Exception(() => Assert.Equal(Array.Empty<int>(), notLocators)));
+4052:+        Assert.Equal(expected, actual.Select(finding => $"{finding.Line} {finding.Kind} {finding.TestClass}").ToArray());
+4103:+        Assert.True(
+4120:+        Assert.Equal(ExpectedUnitProjects, names);
+4140:+        Assert.True(
+4144:+        Assert.NotEmpty(UnitSuitePlatformScanner.FindRepositoryLocators(
+4252:-        Assert.NotNull(metadata);
+4253:-        Assert.False(string.IsNullOrWhiteSpace(metadata!.Value));
+4256:+        Assert.False(string.IsNullOrWhiteSpace(metadataRoot));
+4369:-            if (File.Exists(Path.Combine(directory.FullName, "QBrainAi.sln")))
+4432:-            if (File.Exists(Path.Combine(directory.FullName, "AGENTS.md"))
+4491:+        if (ReferenceEquals(MarkerFileService.AgentPluginVersionSourcesOverride, Sources))
+4493:+        if (Directory.Exists(Profile))
+4535:+        Assert.False(string.IsNullOrWhiteSpace(profile));
+4536:+        Assert.StartsWith(Path.GetFullPath(tempRoot), Path.GetFullPath(profile), StringComparison.Ordinal);
+4537:+        Assert.True(Directory.Exists(profile));
+4538:+        Assert.Empty(Directory.EnumerateFileSystemEntries(profile));
+4552:+        Assert.Same(_fixture.Sources, live);
+4554:+        Assert.Equal(_fixture.Profile, live!.UserProfile);
+4574:+            Assert.NotNull(Record.Exception(() => AssertHermetic(null, temp)));
+4575:+            Assert.NotNull(Record.Exception(() => AssertHermetic(outside, temp)));
+4576:+            Assert.NotNull(Record.Exception(() => AssertHermetic(populated, temp)));
+4577:+            Assert.Null(Record.Exception(() => AssertHermetic(empty, temp)));
+4617:-        if (!string.IsNullOrWhiteSpace(configured))
+4620:-        if (!string.IsNullOrWhiteSpace(s_buildRepositoryRoot))
+4645:-                if (IsRepositoryRoot(current.FullName))
+4661:-        if (!IsRepositoryRoot(root))
+4715:-            if (File.Exists(Path.Combine(directory.FullName, "QBrainAi.sln")))
+4799:-            if (File.Exists(Path.Combine(directory.FullName, "docs", "stdio-tool-contract.json")))
+4848:-            if (File.Exists(Path.Combine(directory.FullName, "QBrainAi.sln")))
+4902:-            if (File.Exists(Path.Combine(directory.FullName, "docs", "stdio-tool-contract.json")))
+5691:-            if (Directory.Exists(Path.Combine(directory.FullName, "src", "QBrainAi.Storage.SqliteMigrations")))
+5823:+        if (Directory.Exists(_databaseFolder))
+5887:-            if (File.Exists(Path.Combine(directory.FullName, "docs", "stdio-tool-contract.json")))
+5928:-            if (File.Exists(Path.Combine(directory.FullName, "docs", "stdio-tool-contract.json")))
+6183:-            if (File.Exists(Path.Combine(current.FullName, "QBrainAi.sln")))
+6210:-            if (File.Exists(candidate))
+6290:+        if (Directory.Exists(_root))
+6353:+            if (!string.IsNullOrWhiteSpace(version))
+6361:+            if (sources.EnvironmentVariable(variable) is { Length: > 0 } environmentRoot)
+6363:+            if (sources.SiblingRoot(workspacePath, pluginName) is { Length: > 0 } siblingRoot)
+6365:+            if (!string.IsNullOrWhiteSpace(sources.UserProfile))
+6368:+                if (Directory.Exists(cache))
+6413:+        Assert.Equal(5, plugins.Agents.Count);
+6414:+        Assert.Equal("4.0.0", plugins.Agents["Claude"].PluginVersion);
+6415:+        Assert.All(plugins.Agents.Where(pair => pair.Key != "Claude"), pair => Assert.Equal("3.0.0", pair.Value.PluginVersion));
+6427:+        Assert.NotNull(live);
+6445:+        Assert.NotNull(Record.Exception(() => RunAndAssert("environment-root-first", readsMachineEnvironment)));
+6446:+        Assert.NotNull(Record.Exception(() => RunAndAssert("profile-cache-next", computesSibling)));
+6447:+        Assert.NotNull(Record.Exception(() => RunAndAssert("nothing-falls-back", readsMachineProfile)));
+6448:+        Assert.NotNull(Record.Exception(() => RunAndAssert("no-profile", readsMachineProfile)));
+6450:+            Assert.NotNull(Record.Exception(() => RunAndAssert(name, ignoresSources)));
+6454:+        Assert.Null(Record.Exception(() => RunAndAssert("environment-root-first", computesSibling)));
+6455:+        Assert.Null(Record.Exception(() => RunAndAssert("environment-root-first", readsMachineProfile)));
+6466:+            Assert.Null(sources.EnvironmentVariable(name));
+6467:+        Assert.Null(sources.SiblingRoot(Path.Combine(Path.GetTempPath(), "workspace"), "mcpserver-claude-code-plugin"));
+6468:+        Assert.Null(sources.SiblingRoot(@"C:\test", "mcpserver-codex-plugin"));
+6469:+        Assert.False(string.IsNullOrWhiteSpace(sources.UserProfile));
+6470:+        Assert.True(Directory.Exists(sources.UserProfile));
+6471:+        Assert.Empty(Directory.EnumerateFileSystemEntries(sources.UserProfile!));
+6472:+        Assert.StartsWith(Path.GetFullPath(Path.GetTempPath()), Path.GetFullPath(sources.UserProfile!), StringComparison.Ordinal);
+6488:+        Assert.NotNull(Record.Exception(() => AssertHermetic(new AgentPluginVersionSources(Machine.EnvironmentVariable, (_, _) => null, EmptyProfile))));
+6489:+        Assert.NotNull(Record.Exception(() => AssertHermetic(new AgentPluginVersionSources(_ => null, Machine.SiblingRoot, EmptyProfile))));
+6490:+        Assert.NotNull(Record.Exception(() => AssertHermetic(new AgentPluginVersionSources(_ => null, (_, _) => null, GivenProfile))));
+6491:+        Assert.NotNull(Record.Exception(() => AssertHermetic(new AgentPluginVersionSources(_ => null, (_, _) => null, null))));
+6535:-        Assert.NotNull(dir);
+6565:-        if (!OperatingSystem.IsWindows())
+6566:-            return;
+6570:-        Assert.StartsWith(common, directory, StringComparison.OrdinalIgnoreCase);
+6571:-        Assert.Contains("quadbrain-cli", directory, StringComparison.OrdinalIgnoreCase);
+6597:+        Assert.StartsWith(common, directory, StringComparison.OrdinalIgnoreCase);
+6598:+        Assert.Contains("quadbrain-cli", directory, StringComparison.OrdinalIgnoreCase);
+6626:-        if (OperatingSystem.IsWindows())
+6628:-            Assert.EndsWith("cmd.exe", spawner.StartInfo.FileName, StringComparison.OrdinalIgnoreCase);
+6629:-            Assert.Contains("/c", spawner.StartInfo.ArgumentList);
+6630:-            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains("codex.cmd", StringComparison.OrdinalIgnoreCase));
+6631:-            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains("exec", StringComparison.Ordinal));
+6635:-            Assert.Equal("codex.cmd", spawner.StartInfo.FileName);
+6648:+        Assert.NotNull(spawner.StartInfo);
+6656:-        if (OperatingSystem.IsWindows())
+6659:-            Assert.Contains("model_reasoning_effort=\\\"xhigh\\\"", serializedArguments, StringComparison.Ordinal);
+6664:-            Assert.Contains("model_reasoning_effort=\"xhigh\"", spawner.StartInfo.ArgumentList);
+6680:-        if (!OperatingSystem.IsWindows())
+6681:-            return;
+6703:-            Assert.Equal(AgentCliResultState.Success, result.State);
+6704:-            Assert.Equal("codex stdout", result.Stdout);
+6705:-            Assert.Equal("codex stderr", result.Stderr);
+6706:-            Assert.Equal(0, result.ExitCode);
+6707:-            Assert.NotNull(spawner.StartInfo);
+6708:-            Assert.EndsWith("cmd.exe", spawner.StartInfo.FileName, StringComparison.OrdinalIgnoreCase);
+6709:-            Assert.Contains("/c", spawner.StartInfo.ArgumentList);
+6710:-            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains(cmdPath, StringComparison.OrdinalIgnoreCase));
+6711:-            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains("exec", StringComparison.Ordinal));
+6712:-            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains("-o", StringComparison.Ordinal));
+6713:-            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.EndsWith(" -", StringComparison.Ordinal));
+6714:-            Assert.True(spawner.StartInfo.RedirectStandardInput);
+6715:-            Assert.DoesNotContain(spawner.StartInfo.ArgumentList, argument => argument.Contains("rendered prompt", StringComparison.Ordinal));
+6716:-            Assert.Equal("rendered prompt", spawner.CapturedStandardInput);
+6777:+        Assert.EndsWith("cmd.exe", spawner.StartInfo!.FileName, StringComparison.OrdinalIgnoreCase);
+6778:+        Assert.Contains("/c", spawner.StartInfo.ArgumentList);
+6779:+        Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains("codex.cmd", StringComparison.OrdinalIgnoreCase));
+6780:+        Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains("exec", StringComparison.Ordinal));
+6781:+        Assert.Contains("model_reasoning_effort=\\\"xhigh\\\"", string.Join(" ", spawner.StartInfo.ArgumentList), StringComparison.Ordinal);
+6811:+            Assert.Equal(AgentCliResultState.Success, result.State);
+6812:+            Assert.Equal("codex stdout", result.Stdout);
+6813:+            Assert.Equal("codex stderr", result.Stderr);
+6814:+            Assert.Equal(0, result.ExitCode);
+6815:+            Assert.NotNull(spawner.StartInfo);
+6816:+            Assert.EndsWith("cmd.exe", spawner.StartInfo.FileName, StringComparison.OrdinalIgnoreCase);
+6817:+            Assert.Contains("/c", spawner.StartInfo.ArgumentList);
+6818:+            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains(cmdPath, StringComparison.OrdinalIgnoreCase));
+6819:+            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains("exec", StringComparison.Ordinal));
+6820:+            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains("-o", StringComparison.Ordinal));
+6821:+            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.EndsWith(" -", StringComparison.Ordinal));
+6822:+            Assert.True(spawner.StartInfo.RedirectStandardInput);
+6823:+            Assert.DoesNotContain(spawner.StartInfo.ArgumentList, argument => argument.Contains("rendered prompt", StringComparison.Ordinal));
+6824:+            Assert.Equal("rendered prompt", spawner.CapturedStandardInput);
+6852:+        Assert.Equal("codex.cmd", spawner.StartInfo!.FileName);
+6853:+        Assert.Contains("model_reasoning_effort=\"xhigh\"", spawner.StartInfo.ArgumentList);
+6871:-        if (!OperatingSystem.IsWindows() || !Environment.UserInteractive)
+6872:-            return;
+6895:-        Assert.Equal(0, process.ExitCode);
+6896:-        Assert.Contains("desktop-spawner-default", stdout, StringComparison.Ordinal);
+6897:-        Assert.True(string.IsNullOrWhiteSpace(stderr), stderr);
+6925:+        Assert.True(
+6950:+        Assert.Equal(0, process.ExitCode);
+6951:+        Assert.Contains("desktop-spawner-default", stdout, StringComparison.Ordinal);
+6952:+        Assert.True(string.IsNullOrWhiteSpace(stderr), stderr);
+7083:+        Assert.Equal(expected.Directories.Order(StringComparer.Ordinal), directories.Order(StringComparer.Ordinal));
+7084:+        Assert.Equal(expected.Files.Order(StringComparer.Ordinal), files.Order(StringComparer.Ordinal));
+7085:+        Assert.Equal(
+7127:+        Assert.Equal(new[] { DirEntry("/p/a") }, tree.List("/p"));
+7128:+        Assert.Equal(UntrustedMountPointMessage, Assert.Throws<IOException>(() => tree.List("/p/a")).Message);
+7129:+        Assert.Throws<InvalidOperationException>(() => tree.List("/p/unscripted"));
+7130:+        Assert.Equal(new[] { "/p", "/p/a", "/p/unscripted" }, tree.Listed);
+7144:+            Assert.NotNull(Record.Exception(() => RunAndAssert(name, LegacyRecursiveWalk)));
+7146:+        Assert.NotNull(Record.Exception(() => RunAndAssert("directory-link", FollowsLinksWalk)));
+7147:+        Assert.NotNull(Record.Exception(() => RunAndAssert("untrusted-mount-point", StopsAtFirstErrorWalk)));
+7148:+        Assert.NotNull(Record.Exception(() => RunAndAssert("untrusted-mount-point", DropsUnlistableDirectoryWalk)));
+7154:+            Assert.Null(Record.Exception(() => RunAndAssert("nested-tree", walk)));
+7169:+        Assert.Throws<InvalidOperationException>(() => LegacyRecursiveWalk(tree.List, "/p"));
+7170:+        Assert.Null(Record.Exception(() => SwallowsEverythingWalk(tree.List, "/p")));
+7205:+        Assert.Throws<InvalidOperationException>(() => new DirectoryTreeWalker(tree.List).EnumerateDirectories("/p").ToList());
+7206:+        Assert.Throws<ArgumentNullException>(() => new DirectoryTreeWalker(null!));
+7236:+            Assert.Contains(new DirectoryListingEntry(directoryLink, IsDirectory: true, IsLink: true), entries);
+7237:+            Assert.Contains(new DirectoryListingEntry(fileLink, IsDirectory: false, IsLink: true), entries);
+7238:+            Assert.Contains(new DirectoryListingEntry(real, IsDirectory: true, IsLink: false), entries);
+7240:+            Assert.Equal(new[] { real }, DirectoryTreeWalker.FileSystem.EnumerateDirectories(root));
+7241:+            Assert.Equal(
+7247:+            if (System.IO.File.Exists(fileLink))
+7249:+            if (Directory.Exists(directoryLink))
+7268:+                if (entry.IsDirectory)
+7320:+                if (!yieldUnlistable)
+7322:+                if (stopAtFirstError)
+7329:+                if (entry.IsDirectory && entry.IsLink && skipLinks)
+7331:+                if (entry.IsDirectory)
+7375:+            if (!_listings.TryGetValue(directory, out var listing))
+7454:-        Assert.True(response.Accepted);
+7455:-        Assert.Equal("PAYTON-LEGION2", response.ProxyId);
+7456:-        Assert.Equal(5, response.HeartbeatSeconds);
+7474:-        Assert.Equal("PAYTON-LEGION2", proxy.ProxyId);
+7475:-        Assert.Equal(1, proxy.WorkspaceCount);
+7476:+            Assert.True(response.Accepted);
+7477:+            Assert.Equal("PAYTON-LEGION2", response.ProxyId);
+7478:+            Assert.Equal(5, response.HeartbeatSeconds);
+7482:-        Assert.True(string.Equals(ExpectedWorkspaceKey.Of(_workspacePath), workspace.WorkspacePath,
+7484:-        Assert.NotEmpty(workspace.GlobalWorkspaceId);
+7487:+            Assert.Equal("PAYTON-LEGION2", proxy.ProxyId);
+7488:+            Assert.Equal(1, proxy.WorkspaceCount);
+7492:+            Assert.True(string.Equals(ExpectedWorkspaceKey.Of(workspacePath), workspace.WorkspacePath, workspaceComparison));
+7493:+            Assert.NotEmpty(workspace.GlobalWorkspaceId);
+7497:+            if (Directory.Exists(workspacePath))
+7615:-        Assert.True(result.Success);
+7626:+            Assert.True(result.Success);
+7656:+            Assert.True(result.Success);
+7709:+        Assert.True(UsesHostWorkspace(new ProcessRunRequest("gh", "issue list", WorkingDirectory: Path.GetFullPath(host)), host));
+7710:+        Assert.False(UsesHostWorkspace(new ProcessRunRequest("gh", "issue list"), host));
+7711:+        Assert.False(UsesHostWorkspace(new ProcessRunRequest("git", "status", WorkingDirectory: Path.GetFullPath(host)), host));
+7714:+        Assert.True(OpensWorkspaceOnHost(new ProcessRunRequest("gh", "issue list", WorkingDirectory: reRooted)));
+7715:+        Assert.True(OpensWorkspaceOnHost(new ProcessRunRequest(
+7719:+        Assert.False(OpensWorkspaceOnHost(new ProcessRunRequest("gh", "issue list")));
+7794:-        Assert.Equal(explicitPath, GrokCliAgentExecutionStrategy.ResolveGrokExecutable(explicitPath));
+7795:+        Assert.Equal(withExtension, GrokCliAgentExecutionStrategy.ResolveGrokExecutable(withExtension));
+7796:+        Assert.Equal(withoutExtension, GrokCliAgentExecutionStrategy.ResolveGrokExecutable(withoutExtension));
+7879:-        if (!OperatingSystem.IsWindows())
+7880:-            return;
+7883:-        Assert.False(HandoffContainedFileReader.TryGetFinalPath(handle, out var path));
+7884:-        Assert.True(string.IsNullOrEmpty(path));
+7908:+        Assert.False(HandoffContainedFileReader.TryGetFinalPath(handle, out var path));
+7909:+        Assert.True(string.IsNullOrEmpty(path));
+7941:-            if (File.Exists(Path.Combine(directory.FullName, "AGENTS.md"))
+7984:-            if (File.Exists(Path.Combine(dir.FullName, "AGENTS.md")) && Directory.Exists(Path.Combine(dir.FullName, "src")))
+8113:+        if (Directory.Exists(_root))
+8126:+        Assert.NotSame(first.Database.GetDbConnection(), second.Database.GetDbConnection());
+8129:+        Assert.Equal(1L, Scalar(second.Database.GetDbConnection(), "SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name = 'harness_probe'"));
+8130:+        Assert.True(Scalar(second.Database.GetDbConnection(), "SELECT count(*) FROM harness_probe") >= 1);
+8136:+        if (opened)
+8146:+            if (opened)
+8192:+        Assert.NotNull(Record.Exception(() => AssertOwnConnectionsToOneDatabase(OneSharedInMemoryConnection())));
+8193:+        Assert.NotNull(Record.Exception(() => AssertOwnConnectionsToOneDatabase(PrivateInMemoryDatabases())));
+8240:-        Assert.Contains("HostileReviewWorker", ex.ToString(), StringComparison.Ordinal);
+8242:+        if (!text.Contains("HostileReviewWorker", StringComparison.Ordinal))
+8243:+            Assert.Fail("Startup failed without naming HostileReviewWorker: " + text);
+8256:-            if (File.Exists(Path.Combine(directory.FullName, "AGENTS.md"))
+8353:-            Assert.All(
+8357:+        Assert.All(
+8372:-                Assert.Equal("9.8.7", plugins.Agents["Claude"].PluginVersion);
+8373:-                Assert.Equal(MarkerFileService.SyncedAgentPluginVersion, plugins.Agents["Codex"].PluginVersion);
+8375:+            Assert.Equal("9.8.7", plugins.Agents["Claude"].PluginVersion);
+8376:+            Assert.Equal(MarkerFileService.SyncedAgentPluginVersion, plugins.Agents["Codex"].PluginVersion);
+8398:-                Assert.NotEqual(baselineDigest, updatedDigest);
+8400:+            Assert.NotEqual(baselineDigest, updatedDigest);
+8420:-            if (File.Exists(candidate))
+8575:+        Assert.Equal("1.0.0", files.Read(FileAt(".version")));
+8576:+        Assert.Equal(LockedMessage, Assert.Throws<IOException>(() => files.Read(FileAt("plugin.json"))).Message);
+8577:+        Assert.Null(files.Read(FileAt("package.json")));
+8578:+        Assert.Equal(new[] { FileAt(".version"), FileAt("plugin.json"), FileAt("package.json") }, files.Reads);
+8590:+            Assert.NotNull(Record.Exception(() => RunAndAssert(name, PreviousRead)));
+8593:+            Assert.NotNull(Record.Exception(() => RunAndAssert(name, StopsAtFirstUnreadableRead)));
+8601:+                Assert.Null(Record.Exception(() => RunAndAssert(name, read)));
+8617:+        Assert.Throws<InvalidOperationException>(() => PreviousRead(Root, files.Read));
+8618:+        Assert.Equal("3.6.0", HidesEveryErrorRead(Root, files.Read));
+8642:+        Assert.Throws<InvalidOperationException>(() => MarkerFileService.TryReadAgentPluginVersion(Root, files.Read));
+8672:+                if (stopAtFirstUnreadable)
+8677:+            if (text is null)
+8680:+            if (!string.IsNullOrWhiteSpace(version))
+8754:-        if (!OperatingSystem.IsWindows())
+8755:-            return;
+8764:-        if (!OperatingSystem.IsWindows())
+8765:-            return;
+8774:-        if (!OperatingSystem.IsWindows())
+8775:-            return;
+8784:-        if (!OperatingSystem.IsWindows())
+8785:-            return;
+9324:+        if (Directory.Exists(_root))
+9342:+            if (SamePath(directory, unlistable))
+9388:+        Assert.Equal("7.7.7", Resolve(ScriptedWalker(unlistable, linked)));
+9389:+        Assert.Equal("9.9.9", Resolve(ScriptedWalker(unlistable, link: null)));
+9402:+        Assert.Equal(MarkerFileService.SyncedAgentPluginVersion, Resolve(ScriptedWalker(cacheRoot, link: null)));
+9433:+        Assert.Equal("7.7.7", ResolveWithReader(ScriptedReader(Path.Combine(higher, ".version"))));
+9434:+        Assert.Equal("9.9.9", ResolveWithReader(MarkerFileService.ReadExistingFileText));
+9447:+        Assert.Equal(
+9481:+        Assert.Equal("PLAN-SCANBINDING-001", skipped.TodoId);
+9482:+        Assert.Equal(SessionLogTurnContextValidator.NoneSentinel, followed.TodoId);
+9497:+        Assert.Equal(SessionLogTurnContextValidator.NoneSentinel, result.TodoId);
+9498:+        Assert.Equal(SessionLogTurnContextValidator.NoneSentinel, result.PlanFile);
+9596:-            if (File.Exists(Path.Combine(directory.FullName, "AGENTS.md"))
+9631:-            Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@"F:\first")), accessor.GetWorkspacePath());
+9632:+            Assert.Equal(ExpectedWorkspaceKey.Of(@"F:\first"), accessor.GetWorkspacePath());
+9635:-                Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@"F:\second")), accessor.GetWorkspacePath());
+9636:+                Assert.Equal(ExpectedWorkspaceKey.Of(@"F:\second"), accessor.GetWorkspacePath());
+9639:-            Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@"F:\first")), accessor.GetWorkspacePath());
+9640:+            Assert.Equal(ExpectedWorkspaceKey.Of(@"F:\first"), accessor.GetWorkspacePath());
+9643:-        Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@"F:\outer-default")), accessor.GetWorkspacePath());
+9644:+        Assert.Equal(ExpectedWorkspaceKey.Of(@"F:\outer-default"), accessor.GetWorkspacePath());
+9652:-                    Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@"F:\alpha")), accessor.GetWorkspacePath());
+9653:+                    Assert.Equal(ExpectedWorkspaceKey.Of(@"F:\alpha"), accessor.GetWorkspacePath());
+9661:-                    Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@"F:\beta")), accessor.GetWorkspacePath());
+9662:+                    Assert.Equal(ExpectedWorkspaceKey.Of(@"F:\beta"), accessor.GetWorkspacePath());
+9666:-        Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@"F:\alpha")), observed[0]);
+9667:-        Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@"F:\beta")), observed[1]);
+9668:-        Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@"F:\default-ws")), accessor.GetWorkspacePath());
+9669:+        Assert.Equal(ExpectedWorkspaceKey.Of(@"F:\alpha"), observed[0]);
+9670:+        Assert.Equal(ExpectedWorkspaceKey.Of(@"F:\beta"), observed[1]);
+9671:+        Assert.Equal(ExpectedWorkspaceKey.Of(@"F:\default-ws"), accessor.GetWorkspacePath());
+9697:-        Assert.Equal(QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(@"C:\projects\test"), result, ignoreCase: true);
+9701:+        Assert.Equal(ExpectedWorkspaceKey.Of(@"C:\projects\test"), result, ignoreCase: true);
+10087:+        Assert.StartsWith(action + " ", arguments, StringComparison.Ordinal);
+10088:+        Assert.Matches(Silent, arguments);
+10089:+        Assert.Matches(Wait, arguments);
+10108:+        Assert.NotNull(Record.Exception(() => AssertSilentWaitingCall("start -D \"C:\\data\" -w -o \"-p 5432 -c listen_addresses=localhost\" -l \"C:\\data\\pg.log\"", "start")));
+10109:+        Assert.NotNull(Record.Exception(() => AssertSilentWaitingCall("stop -D \"C:\\data\" -m immediate -w", "stop")));
+10110:+        Assert.NotNull(Record.Exception(() => AssertSilentWaitingCall("stop -D \"C:\\data\" -m immediate -s", "stop")));
+10111:+        Assert.NotNull(Record.Exception(() => AssertSilentWaitingCall("stop -D \"C:\\data\" -m immediate -w -s", "start")));
+10112:+        Assert.NotNull(Record.Exception(() => AssertSilentWaitingCall("start -D \"C:\\data\" -w -o \"-p 5432 -s\" -l \"C:\\data\\pg.log\"", "start")));
+10124:+        Assert.Contains("-o \"-p 5432 -c listen_addresses=localhost\"", start, StringComparison.Ordinal);
+10125:+        Assert.Contains("-l \"C:\\data\\pg.log\"", start, StringComparison.Ordinal);
+10173:+        Assert.Equal([expectedKey], parentKeys);
+10176:+        Assert.Equal([expectedKey], childKeys);
+10276:+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(
+10301:+        if (key is not null)
+10377:+            Assert.Throws<InvalidOperationException>(() => db.TodoItems
+10380:+            Assert.True(db.TodoItems
+10533:+        Assert.Equal(collection, name);
+10547:+        Assert.Equal(collection, name.Value as string);
+10551:+        Assert.True(flag.TypedValue.Value is true);
+10575:+        Assert.NotNull(Record.Exception(() => AssertSerializedDefinition(typeof(ScriptedParallelDefinition), ScriptedParallelName)));
+10576:+        Assert.NotNull(Record.Exception(() => AssertSerializedDefinition(typeof(ScriptedExplicitParallelDefinition), ScriptedExplicitParallelName)));
+10577:+        Assert.NotNull(Record.Exception(() => AssertSerializedDefinition(typeof(ScriptedSerializedDefinition), RequiredCollection)));
+10578:+        Assert.NotNull(Record.Exception(() => AssertSerializedDefinition(typeof(ScriptedOutsider), RequiredCollection)));
+10588:+        Assert.NotNull(Record.Exception(() => AssertInCollection(typeof(ScriptedOutsider), RequiredCollection)));
+10589:+        Assert.NotNull(Record.Exception(() => AssertInCollection(typeof(ScriptedOtherMember), RequiredCollection)));
+10600:+        Assert.Equal(RequiredCollection, SqlServerLocalDbCollection.Name);
+10754:+        Assert.Equal(@"(localdb)\MSSQLLocalDB", builder.DataSource);
+10755:+        Assert.True(builder.IntegratedSecurity);
+10756:+        Assert.True(builder.TrustServerCertificate);
+10757:+        Assert.Equal(string.Empty, builder.InitialCatalog);
+10758:+        Assert.Equal(120, builder.ConnectTimeout);
+10781:+            Assert.NotNull(Record.Exception(() => AssertLocalDbDefault(wrong)));
+10801:+        Assert.Equal(external, SqlServerTestConnection.Resolve(external));
+10902:-        Assert.SkipUnless(OperatingSystem.IsWindows(), "The backslash spelling applies on a Windows host only.");
+10904:-        Assert.Equal(expected, ToNativePath(path, WorkspacePathPlatform.Windows));
+10921:-        Assert.SkipWhen(OperatingSystem.IsWindows(), "Applies to non-Windows hosts only.");
+10923:-        Assert.Equal("C:/Users/kingd/repo", ToNativePath("C:/Users/kingd/repo", WorkspacePathPlatform.Windows));
+10944:-        if (!OperatingSystem.IsWindows())
+11023:+        if (host.Platform != WorkspacePathPlatform.Windows)
+11039:+        Assert.NotNull(Record.Exception(() => AssertUnchanged("C:/Users/kingd/repo", @"C:\Users\kingd\repo")));
+11040:+        Assert.NotNull(Record.Exception(() => AssertUnchanged(
+11043:+        Assert.Null(Record.Exception(() => AssertUnchanged(
+11056:+        Assert.NotNull(Record.Exception(() => AssertNative(@"C:\Users\kingd\repo", "C:/Users/kingd/repo")));
+11057:+        Assert.NotNull(Record.Exception(() => AssertNative(
+11060:+        Assert.Null(Record.Exception(() => AssertNative(
+11138:-        Assert.Equal(foreign, result);
+11139:+        Assert.Equal(ExpectedWorkspaceKey.Of(foreign), result);
+11161:-        Assert.SkipUnless(OperatingSystem.IsWindows(), "Windows physical resolution only runs on a Windows host.");
+11170:-        Assert.SkipUnless(OperatingSystem.IsWindows(), "Windows physical resolution only runs on a Windows host.");
+11378:+        if (traits is not null
+11382:+            return;
+11391:+        if (!string.IsNullOrWhiteSpace(configured))
+11395:+        if (!string.IsNullOrWhiteSpace(buildRoot))
+11408:+                if (IsRepositoryRoot(current.FullName))
+11428:+        if (!IsRepositoryRoot(root))

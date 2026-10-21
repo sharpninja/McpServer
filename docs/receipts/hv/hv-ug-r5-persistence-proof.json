@@ -1,0 +1,30 @@
+{
+  "TimestampUtc": "2026-10-21T17:11:59.1261356Z",
+  "TimestampLocal": "2026-10-21T12:11:59",
+  "SessionId": "Codex-20261021T162057Z-unitgreen-r5",
+  "RequestId": "req-20261021T162141Z-unitgreen-r5",
+  "ThreadId": "01a15f41-79e2-7101-b0a5-70ef6c562049",
+  "Revision": 1,
+  "Model": "gpt-6-astra",
+  "TurnModel": "gpt-6-astra",
+  "TurnStatus": "completed",
+  "PartCount": 20,
+  "ExpectedCharacterCount": 235757,
+  "RestoredCharacterCount": 235757,
+  "ExpectedSha256": "20DB5A064C6443A652C95837ADBF7A508CA04D1D7A0BF1DA421B869503190D24",
+  "RestoredSha256": "20DB5A064C6443A652C95837ADBF7A508CA04D1D7A0BF1DA421B869503190D24",
+  "ExactTextMatch": true,
+  "ResponseExactMatch": true,
+  "MarkdownSha256": "9EA1546CEE5B71CB2A213449A0926B92B19CC02F19450E7CCB5976787508A2DD",
+  "JsonSha256": "DB92A21588C5C11782653EB7ECCFEBFE30EAB789C4D11A6365E50B39C3657FC1",
+  "HistoryMethod": "client.SessionLog.QueryAsync through installed Codex plugin",
+  "HistoryReceipt": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r5-history-final.json",
+  "DesignDecisionCount": 7,
+  "Blockers": [
+    "R5-F1: linked profile roots and ancestors are traversed.",
+    "R5-F2: ambient QBrainAi__ProjectionProbe makes an untagged unit fail."
+  ],
+  "OverallVerdict": "DISAGREE",
+  "RequestJsonl": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261021T111806-unitgreen-r5.request.jsonl",
+  "ResponseJsonl": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261021T111806-unitgreen-r5.response.jsonl"
+}
