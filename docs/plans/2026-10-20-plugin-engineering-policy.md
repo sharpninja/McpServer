@@ -128,8 +128,8 @@ Read `GET /qbrainai/engineering-policy/status` (alias `/mcpserver/...`), client
 `agentContextMode`, `assetAvailable`, `compatible`, `minimumPluginVersion`,
 `diagnostics` (ordered code/message pairs), `hookReadTimeoutMs`,
 `maxInstructionBytes`, `structuredAcceptanceCriteriaEnabled`,
-`engineeringGuidanceSuppressed` (workspace bool). `guidanceEnabled` is the effective
-workspace value, not the unadjusted instance setting.
+`engineeringGuidanceSuppressed` (workspace bool), `graderContext` (section19.2).
+`guidanceEnabled` is the effective workspace value, not the unadjusted instance setting.
 
 `mcp-status.ps1.engineeringPolicy` adds `packagedVersion`, `packagedSha256`, `host`,
 `hostSessionKey`, `lastRequestId`, `deliveryOutcome` (Delivered/Duplicate/Disabled/
@@ -903,11 +903,16 @@ if other applicable items are also absent. None/off never require descriptor par
 
 Add turn-state policyDeliveries map keyed stable requestId/nonce, with each value
 {requestId, ingressNonce, policyVersion, policySha256, sections[], bytes,
-state:Reserved|Delivered|Unavailable, reservedUtc, deliveredUtc:null|utc,
+state:Reserved|Delivered|Disabled|Unavailable, reservedUtc, deliveredUtc:null|utc,
 diagnosticCode:null|string}. PluginCorePowerShell functions Reserve-PolicyDelivery,
 Commit-PolicyDelivery and Rebind-PolicyDelivery are the only writers under
 turn-open.lock using object-first YAML mutation. Alias rebind changes map key
-atomically; duplicate checks inspect original/aliased key. No policy text stored.
+atomically; duplicate checks inspect original/aliased key. Duplicate is an event
+outcome on the existing entry, not a stored state. Commit-PolicyDelivery commits
+a text-free Disabled entry whenever effective guidance is false, including
+baseline-condition runs and suppressed graders; bytes=0, sections=[], deliveredUtc=null.
+Terminal Disabled entries dedupe/rebind like Delivered; tool-loop dispatch rechecks
+the same bound entry. No policy text stored.
 Retain compact delivered/alias tombstones for the lifetime of the host session's
 durable identity, including ended/resumed sessions; do not time-prune them. Explicit
 administrative session deletion ends that identity; a new identity starts fresh.
@@ -957,7 +962,7 @@ per job; oversize is Unknown/artifact_budget, never partial Pass.
 
 Canonical JSON shapes: CommandJson={executableId,argv:[]};
 ScopeJson={projectPaths:[],testIds:[],filter:string|null};
-ArtifactsJson=[{artifactId:sha256,kind:Trx|Pester|Stdout|Stderr|HvReceipt|EvalProtocol|EvalRunManifest|EvalResult,
+ArtifactsJson=[{artifactId:sha256,kind:Trx|Pester|Stdout|Stderr|HvReceipt|EvalProtocol|EvalRunManifest|EvalResult|EvalBlindGrades|EvalUnblindingMap|EvalAggregate,
 sha256,byteLength}]; ReviewRefsJson=[attestationId];
 CoverageJson=[{requirementId,acId,revision,testId,gateId,assertionKey}].
 ManifestJson={headSha,entries:[{path,mode,length,sha256,indexBlob,indexMode,deleted}]};
@@ -999,7 +1004,8 @@ condition labels, randomizes anonymous run IDs with a preregistered recorded see
 normalizes artifact metadata that reveals package version, and gives grader task,
 rubric and observable outcomes plus the neutral operator context defined in18.
 Suppress engineering guidance for every grader prompt. Preserve reversible mapping outside grader
-packet until scores are signed/hashed, then unblind for comparison. Some behavior
+packet permanently; section19.1 locks blind grades and computes comparison on the
+server, with no post-unblinding grader session. Some behavior
 may reveal condition; record that limitation, do not claim perfect blinding.
 Operator attests this evaluator receipt using the same review contract.
 
@@ -1184,7 +1190,8 @@ sum(correct outcomes)/sum(required outcomes), sum(met ACs)/sum(required ACs)
 over those runs; positive denominators predetermined by frozen fixtures. Do not
 average per-task percentages or drop failed runs. Invalid paired reruns follow
 section 13.5; any unresolved Invalid blocks evaluation/activation. Condition-blind
-grader's claims and aggregate scores are attested under Evaluation profile.
+grader's claims/receipt scores and server-computed aggregate results are checked
+under the Evaluation profile with section19.1's distinct meanings and bindings.
 
 ### 14.4 Producers and native validation handshake
 
@@ -1807,12 +1814,16 @@ later checkout. Owners: TurnReviews behavior and DESIGN surface, as16.1.
 Add operator-only POST
 `/admin/engineering-policy/{workspaceId}/evaluation-artifacts`, EngineeringPolicyAdmin
 mTLS, client `StoreEvaluationArtifactsAsync`.
-Request DTO: {operation:FreezeProtocol|RecordResults,protocolId,
+Request DTO: {operation:FreezeProtocol|RecordResults|LockBlindGrades,protocolId,
 protocol:null|protocolJson,protocolSha256:null|hash,
-anonymousRunManifest:null|manifestJson,results:[]}. Result entries are
+anonymousRunManifest:null|manifestJson,results:[],unblindingMap:null|mapJson,
+materializationId:null|uuid,capturedResponseArtifactId:null|sha256}. Result entries are
 {runId,resultJson,observableArtifactIds:[]}. FreezeProtocol requires protocol only,
-returns protocolArtifactId; RecordResults requires its stored hash, complete
-anonymous manifest/results and no replacement protocol. The embedded protocol/run/
+returns protocolArtifactId; its protocol includes the preregistered map SHA-256
+under19.1. RecordResults requires its stored hash, complete anonymous manifest/
+results and matching unblindingMap, with no replacement protocol. LockBlindGrades
+uses the stored captured response and materialization under19.1. Unused mode fields
+must be null/empty. The embedded protocol/run/
 result documents follow the frozen fields/rubric of9/10; opaque existing artifact
 IDs reference raw observations, never caller paths/URLs. It content-addresses the frozen
 protocol, anonymous run manifest and result payloads as EvalProtocol,
@@ -1829,7 +1840,8 @@ Evaluation materialization source/ contains section18's **blinded grading projec
 of that anonymized artifact packet, not an invented repository snapshot. The full
 frozen protocol, anonymous run manifest, results and referenced observables remain
 immutable in the broker store; the full protocol and unblinding map are withheld
-until quality scores are locked as13.5/18 require. All referenced bytes/hashes are checked; SubjectDigest
+from the grader permanently; only the server uses the map after the grade lock
+under19.1. All referenced bytes/hashes are checked; SubjectDigest
 uses14.2's evaluation formula. Evaluation attestation is recorded in the source
 workspace **being activated**, while the grader's Chore turn belongs to its separate
 review workspace. TurnReviews owns storage/handler behavior; DESIGN the management
@@ -1879,8 +1891,11 @@ Add operator-protected workspace keys beside DevelopmentProcess:
   switch. Apply through the signed configuration/reconciliation of14.5/15.4.
 - `EvaluationGraderContext`: nullable object, default null. When suppression is
   true, require {subjectKind:"Evaluation",operatorProfileText,allowedMemoryIds:[],
-  contextSha256}. Profile text is UTF-8, at most8192 bytes. Memory IDs are unique,
-  existing IDs in effective scope; an empty list is valid. contextSha256 hashes
+  contextSha256}. Profile text is UTF-8, at most8192 bytes. Memory IDs are unique;
+  an empty list is valid. Startup/reload validate configuration shape only.
+  Materialization, launch and dispatch validate existence in effective scope and
+  the context hash; a missing/deleted memory yields409 evaluation_grader_context_invalid,
+  never a server startup failure. contextSha256 hashes
   canonical JSON of the other three fields plus the exact selected memory texts
   in Global-ID then Workspace-ID order. Operator signs the full configuration and
   attests that the profile/memories describe neither the evaluated policy nor its
@@ -1892,7 +1907,7 @@ exists. CreateReviewMaterialization for Evaluation requires these settings and
 binds their hash into review-materialization.json as graderContextSha256. Suppressed
 workspaces refuse other subject kinds. Launch requires a Ready Evaluation
 materialization whose context hash still matches; no grader session starts against
-an unmaterialized or mismatched subject. Invalid settings fail startup/reload using
+an unmaterialized or mismatched subject. Invalid configuration shape fails startup/reload using
 section3's last-valid configuration rule; materialization/launch mismatches are409
 evaluation_grader_context_invalid. None plus suppression never disables the
 ordinary session-audit lifecycle or grants source/administrative mutation access.
@@ -1904,7 +1919,7 @@ item. Every grader prompt's delivery ledger records Disabled, including tool-loo
 dispatch, restored/compacted context and any absorbed prompt. Tool-loop dispatch
 rechecks its bound human request's Disabled entry without inventing another
 arrival; an absorbed human prompt has its own entry. Require a successful
-current descriptor read and verify the signed context before launch and dispatch;
+current descriptor read, consume its graderContext under19.2 and verify the signed context before launch and dispatch;
 descriptor unavailable/stale or context verification failure aborts grading before
 model dispatch, never falls back to packaged policy. Ordinary HV workspaces retain
 their existing default-on guidance and profile behavior.
@@ -1924,13 +1939,12 @@ do not claim a blind grade from that host.
 The materializer creates a separate, content-addressed grading projection with its
 own manifest/hash, preserving raw source artifacts unchanged in the broker store.
 Only neutral task/rubric fields from the frozen protocol, anonymous run IDs and
-observable outcomes are readable by the grader before quality scores are signed/
-hashed. The treatment assignment, package metadata and full protocol remain outside
+observable outcomes are readable by the grader. The treatment assignment, package metadata and full protocol remain outside
 all grader-readable roots and tool/context sources. Record the projection hash and
 source artifact hashes in the materialization; server recomputes SubjectDigest from
-the full immutable evaluation inputs as14.2 requires. After quality scores are
-locked, unblind for EV protocol/aggregate audit; locked quality grades cannot be
-revised in response to the mapping. This does not claim behavior itself can never
+the full immutable evaluation inputs as14.2 requires. Section19.1 defines the
+immutable blind-grade lock and deterministic server aggregate audit; the grader
+never receives the mapping or a post-unblinding session. This does not claim behavior itself can never
 reveal a condition; retain13.5's stated limitation.
 
 Grading is infrastructure-invalid unless **every grader prompt ledger outcome is
@@ -1955,3 +1969,112 @@ guidance. These tests are planned gates, not claimed executed checks.
 Round7: DISAGREE, confidence86, accuracy.97/completeness.97; one finding.
 Exact output is retained under claude-round-7. This resolution awaits independent
 confirmation under the unchanged12-claim/.98/confidence98 acceptance contract.
+
+## 19. Round 8 grade locking and delivery contracts
+
+### 19.1 Single blind grader and deterministic aggregation
+
+Choose one blind grading session and **no post-unblinding model audit**. The
+grader's captured final response contains the standard14.3 Evaluation receipt
+and `blindGrades:[{anonymousRunId,correctOutcomes,requiredOutcomes,metAcs,
+requiredAcs,violations:[]}]`. Counts are integers, denominators positive and equal
+to the frozen fixture rubric, numerators between zero and their denominators.
+Require exactly one entry per accepted anonymous run, no duplicates/missing/foreign
+IDs. Violations use the frozen10 boundary categories and include evidence refs.
+EV1..EV4 are judged blind: the projection includes the frozen protocol commitment/
+freeze time, neutral rubric/projection provenance, observations and infrastructure
+ledger evidence needed for those claims, without treatment labels or full protocol.
+The receipt's Scores remain the reviewer's accuracy/completeness assessment of its
+grading, subject to the unchanged profile floors; they are **not** the per-condition
+behavioral outcome ratios. Those ratios are exclusively server-computed below.
+
+FreezeProtocol commits `unblindingMapSha256` before runs. The map is canonical JSON
+{schemaVersion:1,protocolId,assignments:[{anonymousRunId,fixtureId,repeat,condition,
+pairedCaseId,attempt}]}, sorted ordinally by anonymousRunId. Condition is
+Baseline|Integrated, repeat1..3, attempt0|1. Preallocate unique IDs for all primary
+and possible single paired-retry runs using the frozen seed; commit the map hash
+before any observations. No outcomes or later acceptance decisions belong in it.
+RecordResults validates/stores that exact map as EvalUnblindingMap in broker-only
+storage; a hash mismatch refuses409 evaluation_map_mismatch. It is never mounted,
+returned to grader tools or included in grader status/context. The harness manifest
+references its opaque hash. Validate accepted run/attempt selection from the frozen
+paired retry rules and all retained ledger/results; no caller-selected omission.
+There must be36 valid accepted runs per condition and no unresolved Invalid case.
+
+LockBlindGrades on the existing17.1 management endpoint requires protocolId/hash,
+materializationId and the broker-stored capturedResponseArtifactId from16.1.
+Resolve that capture's bound launch/materialization, CLI identity and exact final
+response; never accept replacement caller-authored grade JSON. Verify Ready subject,
+projection/context hashes, complete per-run grade shape/counts and every grader
+prompt Disabled. Validate the standard blind receipt/profile/claims as above.
+Atomically store canonical parsed grades as EvalBlindGrades bound to materializationId,
+projectionSha256, subjectDigest and capturedResponseArtifactId. This immutable
+artifact plus its durable lock binding is the **grade lock**, not an agent claim
+that a score was signed. Same inputs are idempotent; any different capture/grades
+for an already locked materialization refuse409 evaluation_grades_locked.
+
+After that lock, the server alone reads the withheld map, joins accepted run IDs,
+and recomputes the pooled numerator/denominator sums and exact rational ratios
+per condition under14.3. Compare by integer cross-multiplication against98/100
+and baseline; do not round to satisfy a floor. It stores EvalAggregate containing
+protocol/map/grades/projection/result-manifest hashes, per-condition sums/ratios,
+all violations, infrastructure accounting and threshold verdict. Any integrated
+ratio below.98, below baseline, nonzero prohibited violation or unresolved Invalid
+produces a failing aggregate. LockBlindGrades returns blindGradesArtifactId and
+aggregateArtifactId; it does not itself create an AGREE attestation.
+
+Add EngineeringEvaluationGradeLock, composite WorkspaceId/MaterializationId PK
+and FK to EngineeringReviewMaterialization, with ProtocolId, ProtocolSha256,
+SubjectDigest, ProjectionSha256, CapturedResponseArtifactId, BlindGradesArtifactId,
+AggregateArtifactId, LockedUtc, CreatedByOperatorId. UUID/hash lengths, immutable
+append semantics, JSON limits, local-only dump rules and transaction handling
+inherit13/16; no in-place grade/map edit or delete route. The lock/artifacts are
+committed together or not at all. StorageSchema owns its Phase4 migration;
+TurnReviews owns validation, storage and recomputation; SharedComponents the DTOs.
+Standard management shape/auth/notfound/store errors apply; inconsistent rubric,
+run set or receipt is400 validation_error, stale bindings409 engineering_review_stale.
+
+For SubjectKind Evaluation, AttestReview additionally requires ArtifactRefs for
+EvalBlindGrades, EvalUnblindingMap and EvalAggregate, resolves the grade lock,
+recomputes the aggregate from immutable grades/map/results, checks exact equality
+with the stored artifact and enforces both the blind receipt/profile floors and
+the behavioral thresholds above. It verifies current evaluation subject inputs,
+not a caller's aggregate claim. Activation repeats these checks against the
+attested artifact bindings; any mismatch/failing aggregate blocks activation.
+The operator attests the blind review and server result together. No second
+materialization or post-unblinding grader session is needed. Infrastructure retry
+uses a new immutable results manifest/materialization and retains any old lock;
+it never overwrites grades or increases the existing single paired-retry cap.
+
+Tests: map commitment/withholding, exact accepted run set and denominators,
+captured-response binding, atomic lock/idempotence/overwrite refusal, deterministic
+aggregation equality, below-floor/noninferior/violation refusal, altered artifact
+refusal at attestation/activation, and one paired retry retaining prior artifacts.
+
+### 19.2 Explicit context read channel and Disabled evidence
+
+For suppressed workspaces only, the existing authenticated status read adds
+`graderContext:{operatorProfileText,allowedMemoryIds,memoryTexts:[{id,scope,text}],
+contextSha256}`. For all other workspaces graderContext=null. Read only from that
+workspace's committed signed configuration and effective selected raw memories;
+order Global-ID then Workspace-ID. Existing workspace authorization applies;
+no admin credentials, map or full protocol are returned. Materialization/launch/
+dispatch re-resolve selected memories and verify18's hash. Missing memory or
+hash mismatch returns409 evaluation_grader_context_invalid with no context;
+server startup/reload only validates shape, so memory deletion does not prevent
+server startup. Plugin core/adapters consume and hash-check this exact status
+payload before constructing the fresh neutral model context; no inferred profile
+or hidden file channel. Stateless uses the same response and suppression rule.
+
+Section13.4's Disabled state is durable per bound human request. Commit-PolicyDelivery
+writes it under turn-open.lock for any effective-guidance-false workspace; Duplicate
+events and tool dispatch retain/recheck that same Disabled state. Baseline runs
+and graders therefore have actual evidence for every prompt, without claiming
+delivery of text. Reserved/Unavailable is not Disabled and invalidates evaluation.
+Add tests for Disabled creation/dedupe/alias/restore/tool-loop evidence, neutral
+status round-trip/injection, selected memory deletion after startup returning409,
+and unchanged ordinary-workspace context. These are planned implementation tests.
+
+Round8: DISAGREE, confidence84, accuracy.97/completeness.96; two findings.
+Exact output is retained under claude-round-8. R8-01/R8-02 are submitted for the
+next independent review under the unchanged twelve claims and score floors.
