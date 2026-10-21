@@ -1,0 +1,235 @@
+{
+  "Receipt": {
+    "TimestampUtc": "2026-10-21T00:00:00Z",
+    "ValidatorIdentity": "ClaudeIndependentHostile",
+    "RequestedAgent": "ClaudeCode",
+    "RequestedModel": "claude-opus-5-5",
+    "RequestedEffort": "max",
+    "ReviewStage": "PlanReadiness",
+    "ReviewedCommit": "b4f324576d78e384dbc55946f4f13e8e28f8fb35",
+    "PlanSha256": "A30805F7DE2A240D70A248BA814546DE4AA63A6F8F75671435283CC051932117",
+    "OverallVerdict": "DISAGREE",
+    "verdict": "NOT-READY",
+    "confidence": 74,
+    "AccuracyScore": 0.95,
+    "CompletenessScore": 0.93,
+    "Counts": {
+      "PASS": 5,
+      "FAIL": 7,
+      "UNKNOWN": 0
+    },
+    "Claims": [
+      {
+        "Id": "C1",
+        "Summary": "Scope, intent, precedence, full enforcement, default-on guidance, and all nine hosts with their limits",
+        "Verdict": "PASS",
+        "Evidence": [
+          "plan §1 L8-14, L39-42: one shared policy with authoritative server completion enforcement; guidance on by default; all nine hosts named; explicit precedence that gives the model no authority over administrative gates",
+          "plan §1 L16-20 records the transcript source key and hash; the cancelled validation conveys no approval",
+          "plan §3 L96-97, L114-120 and §11 L638-641: GuidanceEnabled defaults to true; EnforcementEnabled=false only as a compatible-deployment default; DevelopmentProcess is operator-only, with this workspace registered as BDPv4; activation is staged",
+          "plan §5 L290-319: nine adapter rows giving channels, identities, restoration and Unsupported limits; nine passing rows are required for final acceptance"
+        ]
+      },
+      {
+        "Id": "C2",
+        "Summary": "Architecture dependencies are explicit, compatible, owned and ordered; planned types are distinguished from implemented ones",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "plan §1 L22-37 separates the existing ValidateTerminalTurnCompliance (SessionLogService.cs:1329, verified in round 4; hash unchanged) from the planned TurnWritePipeline, CompletionGate and AgentContext",
+          "§15.1 L1475-1478 explicitly amends the base HV protocol (launch directory, receipt location, reviewer-turn rule). §15.5 L1660-1667 assigns owners for the listeners, reconciliation, scripts and embedded schemas. §14.7 L1434-1443 places RequirementsAndAcceptanceCriteria in the merge order",
+          "FAIL: §9 L541-542 still has this plan's StorageSchema deliver the AC-format three-provider migrations. §15.5 L1645-1647 instead requires the Format column, Plain backfill and DTO field to be folded into base StorageSchema/SharedComponents before Phase C writers compile (R5-02)",
+          "FAIL: §15.1 L1465 makes the operator the reviewer launcher, but its amendment list (L1475-1477) omits the base rule that the implementing agent launches the run (base plan L196-197) (R5-01)"
+        ]
+      },
+      {
+        "Id": "C3",
+        "Summary": "Canonical policy, provenance, version/hash, attribution, artifact locations, distribution and integrity",
+        "Verdict": "PASS",
+        "Evidence": [
+          "plan §2 L46-89 is unchanged: canonical path, encoding, semver and SHA-256; pinned commits and blobs; Karpathy falls back to original wording; Ponytail MIT notice recorded; no runtime fetch; identical server embed with parity checks",
+          "sync-plugin-core.ps1 L115-151 (hash unchanged) copies lib-ps/policy byte-identically with per-file SHA-256. The PluginPowerShellOnly.Tests.ps1 content rules (L30-46) are acknowledged at plan L88-89. §14.2 L1083-1085 bans en/em dashes in the asset"
+        ]
+      },
+      {
+        "Id": "C4",
+        "Summary": "Configuration, selection, reload/default/disabled behavior, phase selection and public status",
+        "Verdict": "PASS",
+        "Evidence": [
+          "plan §3 L93-138, §13.1 L689-709 and §14.5 L1233-1326: typed keys, defaults, bounds and reload classes; generation persisted with three triggers; signed-manifest format",
+          "§15.4 L1611-1624: the manifest file engineering-policy-change.json sits beside the canonical protected configuration under the operator ACL, written by atomic rename and read at reload/restart. Codes cover mismatch, required, invalid, expired and conflict; initial-startup behavior, archiving and idempotent reuse are defined (resolves EP-R4-06)",
+          "§15.4 L1626-1631: plugin status uses the invoking host's base binding; otherwise it returns a sorted hostSessions array and never guesses a top-level session (resolves EP-R4-06)"
+        ]
+      },
+      {
+        "Id": "C5",
+        "Summary": "Shared PowerShell delivery, host adapters, dedupe, compaction/stateless, mandatory context, deadlines, unavailable behavior",
+        "Verdict": "PASS",
+        "Evidence": [
+          "plan §5 L279-335, §13.4 L896-918 and §14.7 L1420-1432 are unchanged: per-prompt sections, the delivery ledger and its writers, canary probes, Unavailable on a contended lock (consistent with base §3.1 L221), per-request policy for direct adapters, the Stateless mandatory item, and byte/read bounds",
+          "§15.4 L1626-1631 keeps status read-only and per host session"
+        ]
+      },
+      {
+        "Id": "C6",
+        "Summary": "Public evidence models, endpoints/tool/client/REPL, persistence, migration and backfill",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "§4, §7, §13.4, §15.3 L1546-1597 and §4 L260: the AC contract, entities, JSON shapes and limits, surface names, one normative lowerCamel inventory v1 shape, and HTTP400 ClassifiedError for format_required (resolves EP-R4-09)",
+          "§15.4 L1601-1609 adds an optional boundAtUtc to SessionLogMintTurnRequest",
+          "FAIL: §15.4 L1602-1603 returns 400 when a live caller sends boundAtUtc, but no request member distinguishes a live mint from the drain's re-mint of the same nonce (base arch §4.2 L633-637) (R5-03)",
+          "FAIL: the attestation has a single SupersedesAttestationId (§13.3 L817, L826), while §15.2 L1500-1501 requires an append referencing several prior IDs (R5-04). No endpoint exists to materialize review bundles (R5-01)"
+        ]
+      },
+      {
+        "Id": "C7",
+        "Summary": "Completion gate covers writers, terminal states, classes, origins, atomic rejection and authentic evidence",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "§15.2 L1495-1512: attestations are looked up by subject digest; the newest non-superseded must be AGREE with no unresolved DISAGREE; ordering is server-assigned; completion evidence must come from the same turn; TODO done re-runs preflight with full DB checks (resolves EP-R4-02). Workspace-wide failure memory at L1514-1526 (resolves EP-R4-04)",
+          "§15.1 L1460-1478: the reviewer completes its own turn in a review workspace with process None, so the base-mandated reviewer turn no longer deadlocks (resolves EP-R4-01)",
+          "FAIL: failure memory is keyed by InventoryDigest (§15.2 L1514-1515), yet L1518 and §14.1 L1025-1026 require a changed snapshot after any Fail (R5-04)",
+          "FAIL: reusing a Slice AGREE for RecordBaseline (§15.1 L1481-1487) adds Scope/Safety/Provenance but not the Baseline profile's Completeness claim (§13.3 L836, §14.3 L1141-1142), and §14.3's Slice default (L1140-1141) is not updated (R5-04)"
+        ]
+      },
+      {
+        "Id": "C8",
+        "Summary": "Snapshots, working-copy changes, freshness, scope, raw verification and acceptance coverage",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "§6 L374-376 now allocates per evidence revision. §14.4 L1219-1229 and §15.3 L1530-1544 define exact DirectoryName values, inputs/<DirectoryName> layout, WorkingDirectory relative to inputs/McpServer, a literal --agent-plugin-parent .. and only two substitutions. This matches discovery by exact sibling names in Build.SyncAgentPlugins.cs L11-29, L144-203 (resolves EP-R4-03)",
+          "FAIL: §15.1 L1461-1463 requires a read-only materialization of the exact bundle, and §14.2 L1124-1125 adds before/after bundles, but no operation, owner, path or hash check produces them. The only bundle route is scoped to producer jobs (§14.4 L1197-1200) (R5-01)",
+          "FAIL: the failure-memory contradiction (R5-04) leaves the validity scope of receipts unclear"
+        ]
+      },
+      {
+        "Id": "C9",
+        "Summary": "BDPv4 traceability, test-first ordering, cumulative zero-fail/zero-skip gates, executable named validations",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§9 L527-591, §13.2 L768-778 and §14.6 L1345-1369 match the base G5 rule (base plan L189). §15.3 L1537-1597 makes G6 and PowerShellOnly runnable in the isolated runner, with discovery tests on both operating systems",
+          "Build.Test.cs L27-37 confirms TestRunId-driven TRX output. Whether --gate-started-at-utc exists is outside the packet (a limitation, not a plan gap)"
+        ]
+      },
+      {
+        "Id": "C10",
+        "Summary": "Failure recovery, legacy/open-turn compatibility, rollout, rollback, configuration ownership",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "§8 L516-523, §14.1 L1061-1066, §11 L626-651 and §14.6 L1371-1400. §15.1 L1480-1491 defines the post-SliceExit baseline cadence. §15.4 defines the configuration channel. §15.5 L1643-1658 chooses the pre-persistence hash option and blocks rollout when legacy hashes exist (resolves EP-R4-01 cadence and EP-R4-08)",
+          "FAIL: §15.5 puts the Format column and DTO into base binaries, so 'binary older than format support' (§11 L645-647) and 'format-aware' (§14.6 L1373-1387) no longer identify the rollback targets the census guard protects (R5-02)",
+          "FAIL: the late-mint binding lacks a live/replay discriminator (R5-03)"
+        ]
+      },
+      {
+        "Id": "C11",
+        "Summary": "Bounded behavioral evaluation and independent review with honest evidence",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "§15.5 L1635-1641: two isolated instances that differ only in the signed GuidanceEnabled; fresh sessions and successful descriptor reads; any wrong ledger outcome makes the run invalid; a single paired rerun (resolves EP-R4-07). Pooled thresholds are bounded; cost and latency are descriptive only",
+          "§15.1 lets HV and grader sessions complete their own turns",
+          "FAIL: neither the source the independent reviewer reviews (exact bundle materialization) nor the channel for the reviewer's receipt is defined (R5-01)"
+        ]
+      },
+      {
+        "Id": "C12",
+        "Summary": "No consequential choice left to implementers; implementation behind approvals",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "Status L3-4, §14.7 L1444-1446 and §15 L1454-1456 keep implementation behind explicit approvals",
+          "FAIL: R5-01 to R5-04 still leave decisions to implementers"
+        ]
+      }
+    ],
+    "FailList": [
+      {
+        "Id": "R5-01",
+        "Severity": "Medium",
+        "Location": "plan §15.1 L1460-1478; §14.2 L1124-1125; §14.4 L1197-1200; §13.3 L823-830; base plan L196-198",
+        "Trigger": "Any Slice, Inventory, Baseline or Evaluation review for an engineering-gated workspace",
+        "Problem": "Reviewers must work over a read-only materialization of the exact bundle (plus before/after bundles), but no operation, owner, destination or integrity check produces it; the only bundle route is for producer jobs. The operator becomes the launcher and receipt writes are removed, but the plan never says how the reviewer emits its receipt, and the base rule that the implementing agent launches is not amended",
+        "Consequence": "Implementers must invent a security-sensitive export interface, and reviewers cannot prove they reviewed the attested subject",
+        "RequiredResolution": "Add operator-only POST /admin/engineering-policy/{workspaceId}/review-materializations (EngineeringPolicyAdmin mTLS; {subjectKind, subject ref, reviewWorkspaceId}). It reuses the §14.4 materializer to write read-only source/ and before/ plus review-materialization.json {materializationId, subjectDigest, snapshotIds, bundleSha256s, reviewedDiffSha256}, and verifies the hashes. Errors: 400/403/404/409. Owners: TurnReviews (behavior), DESIGN (surface). The brief and attestation ArtifactRefs carry materializationId, and attestation refuses a mismatch. State that the operator launches the reviewer and that the receipt is emitted only in the captured final response/VERDICT block. Add both to the §15.1 amendment list. Tests: byte equality, read-only enforcement, mismatch refusal"
+      },
+      {
+        "Id": "R5-02",
+        "Severity": "Medium",
+        "Location": "plan §9 L541-542; §15.5 L1643-1658; §11 L645-649; §14.6 L1371-1389; §14.5 L1339-1341",
+        "Trigger": "Scheduling the AC Format migration, and any rollback after structured writes are enabled",
+        "Problem": "§15.5 moves the Format column, backfill and DTO field into base StorageSchema/SharedComponents before Phase C, but §9 still assigns the AC-format migrations to this plan's StorageSchema. Base binaries now carry the column without structured handling, so 'format support' and 'format-aware' no longer define which binaries the census guard must refuse",
+        "Consequence": "A duplicate or misplaced migration, or a rollback to a base binary that can mishandle non-Plain criteria",
+        "RequiredResolution": "Edit §9 so this plan's StorageSchema creates only the engineering tables, with the Format column, backfill and DTO from base per §15.5. Define format support in §11 and §14.6 as a server reporting acceptanceCriteriaFormatVersion>=1; base binaries with only the folded column/DTO count as older, and the census guard refuses rollback to them while non-Plain data exists. Add tests"
+      },
+      {
+        "Id": "R5-03",
+        "Severity": "Low",
+        "Location": "plan §15.4 L1601-1609; base arch §4.2 L633-637; §3.1 L220",
+        "Trigger": "A failsafe drain re-mint versus a live mint of the same nonce",
+        "Problem": "The plan rejects a live caller sending boundAtUtc but accepts it on trusted replay. Live and drain mints share the same request shape, and no member identifies a replay",
+        "Consequence": "The 400 rule cannot be implemented as written",
+        "RequiredResolution": "Add an optional ingressReplay object {hostSessionKey, keySource, provisionalRequestId, boundAtUtc}, sent only by the drain from the captured C4 binding. Any boundAtUtc outside that object is 400 validation_error. Update arch §4.2, the REPL shim and the golden contract. Add tests"
+      },
+      {
+        "Id": "R5-04",
+        "Severity": "Low",
+        "Location": "plan §13.3 L817, L826, L836; §14.3 L1140-1142; §15.1 L1481-1487; §15.2 L1499-1502, L1514-1518; §14.1 L1024-1026",
+        "Trigger": "Resolving DISAGREE attestations, reusing a Slice AGREE for a baseline, or remediating a Fail through an approved inventory revision",
+        "Problem": "(a) The attestation has a single SupersedesAttestationId, but supersession must reference several prior IDs. (b) Slice reuse adds Scope/Safety/Provenance but not the Baseline profile's Completeness claim, and the §14.3 Slice default is not updated. (c) Failure memory is keyed by InventoryDigest, yet two sentences require a changed snapshot after any Fail",
+        "Consequence": "Multiple DISAGREEs cannot be resolved, reuse may never validate, and the inventory-correction path is contradictory",
+        "RequiredResolution": "(a) Use a SupersedesAttestationIdsJson array (1..N IDs for the same subject/profile) with cycle and foreign-ID checks. (b) Give the Slice profile all four baseline claims (Scope, Completeness, Safety, Provenance), update the §14.3 default, and validate reuse under the current Slice profile plus the subject-equality conditions. (c) Make the key authoritative: either a changed snapshot or an operator-approved inventory revision with HV is required, and update the §14.1 and §15.2 sentences to match. Add tests"
+      }
+    ],
+    "blocking_gaps": [
+      "1 R5-01 Medium: no defined interface for materializing review bundles, and no defined channel for the reviewer's receipt",
+      "2 R5-02 Medium: §9 migration owner is stale after the §15.5 base fold-in, and the rollback census threshold is ambiguous",
+      "3 R5-03 Low: the mint request has no live/replay discriminator for boundAtUtc",
+      "4 R5-04 Low: supersession cardinality, the claim set for baseline reuse, and failure memory versus inventory revision"
+    ],
+    "defects": [
+      "§9 L541-542 contradicts §15.5 L1645-1647 on who delivers the AC Format migration",
+      "§13.3 L817/L826 (single SupersedesAttestationId) contradicts §15.2 L1500-1501 (several prior IDs)",
+      "§15.2 L1514-1515 keys failure memory by InventoryDigest, but L1518 and §14.1 L1025-1026 require a changed snapshot",
+      "§15.1 L1484-1485 adds Scope/Safety/Provenance to the Slice profile, but §14.3 L1140-1141 does not, and the Baseline profile also requires Completeness (§13.3 L836)",
+      "§15.4 L1602-1603 requires a 400 for a live caller sending boundAtUtc, with no wire member distinguishing live from replay"
+    ],
+    "path_to_threshold": [
+      "1 R5-01: add the review-materializations admin operation (materializer reuse, read-only source/ and before/, manifest, hash verification, errors, owners, materializationId bound into the brief and attestation), state that the operator launches and that the receipt is emitted only in the captured response, and extend the §15.1 amendment list. Add tests",
+      "2 R5-02: correct §9 so this plan's StorageSchema creates only the engineering tables; define format support as acceptanceCriteriaFormatVersion>=1 and count base fold-in binaries as older for the census guard. Add tests",
+      "3 R5-03: add the ingressReplay mint member; reject any boundAtUtc outside it; update arch §4.2, the REPL shim and the golden contract. Add tests",
+      "4 R5-04: use a supersession ID array; give the Slice profile all four baseline claims and update §14.3; make the failure-memory key authoritative and update §14.1 and §15.2. Add tests",
+      "5 These four edits cover every consequential gap found. With them in place and no new contradictions introduced, all 12 claims are projected to PASS on a fresh review"
+    ],
+    "R4ResolutionCheck": {
+      "Resolved": [
+        "EP-R4-03",
+        "EP-R4-06",
+        "EP-R4-07",
+        "EP-R4-09"
+      ],
+      "ResolvedWithResidual": {
+        "EP-R4-01": "R5-01, R5-04(b)",
+        "EP-R4-02": "R5-04(a)",
+        "EP-R4-04": "R5-04(c)",
+        "EP-R4-05": "R5-03",
+        "EP-R4-08": "R5-02"
+      }
+    },
+    "Limitations": [
+      "This was a read-only review of the round-5 packet. No build, test or product code was executed, and no executed check is claimed",
+      "File SHA-256 values were not recomputed; the commit and PlanSha256 come from review-manifest.json",
+      "The base documents and source files were not re-read in this round. Their manifest hashes are identical to round 4, so my round-4 reads were reused and re-checked against the new plan text",
+      "Files outside the packet were not inspected: build.ps1 (the working directory used for the relative --agent-plugin-parent), Build.UpdateService.cs, TodoExecutionService, RequirementAcceptanceCriterionEntity, resolve-cache-dir.ps1 and the marker ignore status, and whether the --gate-started-at-utc parameter exists",
+      "Prior receipt directories are not in the packet; my own round-4 history was treated as untrusted and re-verified",
+      "TimestampUtc carries only the session date (2026-10-21); no clock source was available",
+      "The coordinator must confirm the runtime model and effort from the CLI transport metadata and session export"
+    ],
+    "CommandsExecuted": [
+      "Read round-5 review-manifest.json",
+      "Glob **/* at the round-5 packet root",
+      "Read the round-5 plan L1-1672 (complete)",
+      "Grep the round-5 plan for materializ/export/review workspace/ReviewRoot/bundles",
+      "Grep the round-5 plan for Supersed/boundAtUtc/replay/AC-format/Format column/InventoryDigest/Different source snapshot",
+      "Reused round-4 Read/Grep results for the hash-identical base architecture, base plan, build and plugin sources, and src files"
+    ]
+  },
+  "MarkdownReceipt": "# Claude independent hostile receipt: plan readiness, round 5\n\n**Identity:** ClaudeIndependentHostile, a continued independent Claude reviewer session separate from the Codex author. Requested: ClaudeCode / claude-opus-5-5 / max.\n**Snapshot:** commit b4f324576d78e384dbc55946f4f13e8e28f8fb35; plan SHA-256 A30805F7DE2A240D70A248BA814546DE4AA63A6F8F75671435283CC051932117 (manifest value). I read the plan in full (L1-1672). Source-reference hashes are unchanged from round 4, so my round-4 source analysis was reused.\n**Verdict:** DISAGREE / NOT-READY. Accuracy 0.95, completeness 0.93, confidence 74. Claims: 5 PASS (C1, C3, C4, C5, C9), 7 FAIL, 0 UNKNOWN.\n\nSection 15 resolves the round-4 High finding and most of the Mediums. Four narrow gaps remain, two of them introduced by the new text.\n\n## Findings\n\n**R5-01 Medium: review-source materialization is undefined.** §15.1 L1461-1463 has reviewers work over a read-only materialization of the exact bundle, and §14.2 L1124-1125 adds before/after bundles. No operation, owner, path or hash check produces them; the only bundle route serves producer jobs (§14.4 L1197-1200). The plan also makes the operator the launcher and removes receipt writes without saying how the reviewer emits its receipt. Its amendment list omits the base rule that the implementing agent launches the run (base plan L196-197).\n\n*Fix:* add an operator-only review-materializations admin operation that reuses the §14.4 materializer for read-only source/ and before/ plus a manifest, verifies hashes, and binds a materializationId into the brief and attestation. State that the operator launches the reviewer and that the receipt is emitted only in the captured final response, and add both to the amendment list. Add tests.\n\n**R5-02 Medium: the base fold-in left stale ownership and an ambiguous rollback threshold.** §15.5 L1645-1647 moves the Format column, Plain backfill and DTO field into base, but §9 L541-542 still assigns the AC-format migrations to this plan. Base binaries now carry the column without structured handling, so 'format support' (§11 L645-647) and 'format-aware' (§14.6) no longer identify the rollback targets the census guard must refuse.\n\n*Fix:* correct §9, and define format support as acceptanceCriteriaFormatVersion>=1, with base fold-in binaries counting as older.\n\n**R5-03 Low: the mint request cannot tell live from replay.** §15.4 L1602-1603 rejects a live caller sending boundAtUtc but accepts it on replay. Live and drain mints share one request shape (arch §4.2 L633-637).\n\n*Fix:* add an ingressReplay member carrying boundAtUtc, and reject any boundAtUtc outside it.\n\n**R5-04 Low: residual attestation and failure-memory contradictions.**\n- (a) A single SupersedesAttestationId (§13.3 L817, L826) conflicts with the several prior IDs in §15.2 L1500-1501.\n- (b) Slice reuse for a baseline (§15.1 L1484-1485) adds Scope/Safety/Provenance but not the Baseline profile's Completeness claim (§13.3 L836), and the §14.3 Slice default (L1140-1141) is not updated.\n- (c) Failure memory is keyed by InventoryDigest (§15.2 L1514-1515), yet L1518 and §14.1 L1025-1026 require a changed snapshot.\n\n*Fix:* use a supersession ID array, give the Slice profile all four baseline claims, and make the key authoritative.\n\n## EP-R4 check\n- Resolved: 03, 06, 07, 09.\n- Resolved with a residual: 01 (R5-01, R5-04b), 02 (R5-04a), 04 (R5-04c), 05 (R5-03), 08 (R5-02).\n\n## Claim verdicts\n- **C1 PASS:** §1, §3, §5, §11.\n- **C2 FAIL:** R5-02 and the launcher amendment in R5-01.\n- **C3 PASS:** §2 is unchanged and matches sync-plugin-core.ps1.\n- **C4 PASS:** §15.4 adds the manifest channel and status selection.\n- **C5 PASS:** delivery rules are unchanged; status is read-only per session.\n- **C6 FAIL:** R5-03, R5-04a, and the missing materialization endpoint (R5-01).\n- **C7 FAIL:** §15.1 and §15.2 close the deadlock and the binding. Fails on R5-04b and R5-04c.\n- **C8 FAIL:** the §15.3 layout is executable (consistent with Build.SyncAgentPlugins.cs). Fails on R5-01 and R5-04c.\n- **C9 PASS:** §15.3 makes the G6 and PowerShellOnly gates runnable.\n- **C10 FAIL:** R5-02 (rollback threshold) and R5-03.\n- **C11 FAIL:** the evaluation rules are bounded and explicit, but the source for independent review is undefined (R5-01).\n- **C12 FAIL:** approvals are retained, but R5-01 to R5-04 remain open.\n\n## Path to threshold\nApply the four fixes above, then run a fresh review. No other consequential gap was found. With these fixes and no new contradictions introduced, all 12 claims are projected to PASS.\n\n## Limitations\n- Read-only review; no builds, tests or hash recomputation.\n- Base and source files were not re-read; hash-identical round-4 reads were reused.\n- Files outside the packet were not inspected: build.ps1, Build.UpdateService.cs, TodoExecutionService, the RequirementAcceptanceCriterionEntity, resolve-cache-dir.ps1 and the marker ignore status, and whether the gate-started-at-utc parameter exists.\n- TimestampUtc carries the session date only.\n\n## Commands\nRead, Grep and Glob only. No shell, build or test commands were run."
+}

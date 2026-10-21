@@ -538,8 +538,10 @@ mocks plus negative/mutant oracles; cumulative prior tests green. No real-behavi
 claim. Phase 4 real slices: next behavior RED, implement green, refactor, cumulative
 gate before next slice, with evidence and MCP updates after meaningful changes.
 
-Ownership/order: StorageSchema first (evidence and AC-format three-provider
-migrations), SharedComponents second (hash/codec/schema contracts); then:
+Ownership/order: this plan's StorageSchema first (engineering-table three-provider
+migrations only), SharedComponents second (hash/codec/schema contracts). The
+Format column/Plain backfill/DTO is a base StorageSchema/SharedComponents
+prerequisite per15.5, not a duplicate migration here. Then:
 
 1. PluginCorePowerShell and BuildTooling own assets/resolver/delivery/status and
    generation/integrity respectively; coordinate shared files, independent owners
@@ -814,7 +816,7 @@ nullable (inventory/baseline review may be workspace-scoped), SubjectKind
 (Slice/Inventory/Baseline/Evaluation), SubjectDigest, SnapshotId nullable, PolicySha256,
 RequirementsDigest, InventoryDigest, ReviewerIdentity, Model, Effort, ReceiptSha256,
 ArtifactRefsJson, ScoresJson, ClaimsJson, MappedVerdict, TrustLevel=OperatorAttested,
-AttestedBy, AttestedUtc, SupersedesAttestationId nullable, CreatedUtc. Append only;
+AttestedBy, AttestedUtc, SupersedesAttestationIdsJson nullable, CreatedUtc. Append only;
 no update/delete API. Server captures dependencies rather than accepting hashes
 from the agent; for proposed inventory/baseline subject it computes their digest.
 Uniqueness by (WorkspaceId, ReceiptSha256, SubjectKind, SubjectDigest); indexes
@@ -823,7 +825,7 @@ turn/snapshot/subject. Store score lexemes under base lossless rules.
 Operator-only `POST /admin/engineering-policy/{workspaceId}/review-attestations`,
 management `AttestReviewAsync`, accepts SubjectKind, EvidenceId/Revision or proposed
 inventory/baseline subject, raw reviewer receipt artifact, reviewer identity/model/
-effort, Reason, Supersedes ID. Server hashes/parses receipt bytes, checks scores,
+effort, Reason, SupersedesAttestationIds optional array. Server hashes/parses receipt bytes, checks scores,
 claim list/verdict, configured reviewer profile and subject digest, and stamps
 operator/dependencies. Raw artifacts are outside checkout. 400 review_* for base
 validation, 409 engineering_review_stale, 403 for agent credentials. Read sanitized
@@ -1021,9 +1023,10 @@ replacement for an infrastructure/producer/timeout Unknown. The latter retains
 the first row with SupersededInfrastructureUnknown=true and SupersededByReceiptId;
 it is the only exception to the all-finished-attempts rule. Every other finished
 attempt must be Pass, or ExpectedRed for Red/Progress, and no job may remain
-Queued/Running. Fail is never retried on that evidence/snapshot. A new revision
-after Fail requires a changed source snapshot and documented failure remediation;
-unchanged-snapshot revisions cannot erase a failure. Independent review checks
+Queued/Running. Fail is never retried on the same evidence/failure tuple. A new
+revision after Fail requires either a changed source snapshot or a changed
+operator-approved inventory revision with independent HV and documented remediation;
+unchanged snapshot+inventory revisions cannot erase failure. Independent review checks
 the remediation, not just the fact a hash changed. A second Unknown blocks the
 obligation. Once satisfied, repeated Run returns the existing receipt, not another
 trial. Allocate attempt ordinal and idempotency result atomically; concurrent
@@ -1138,7 +1141,7 @@ layer, coverage, inventory, profile or policy changes do. Test these independent
 Signed configuration contains ReviewerProfiles keyed ProfileId with SubjectKind,
 Agent, Model, Effort, RequiredClaims (unique IDs), AccuracyFloor and CompletenessFloor
 (both .98..1). Defaults: Slice = Codex/gpt-6-astra/max with base mandatory claims
-plus EP1..EP6; Inventory/Baseline = same identity with Scope/Completeness/Safety/
+plus EP1..EP6 and Scope/Completeness/Safety/Provenance; Inventory/Baseline = same identity with Scope/Completeness/Safety/
 Provenance; Evaluation = ClaudeCode/claude-opus-5-5/max with EV1 FrozenProtocol,
 EV2 CorrectnessCompleteness, EV3 Boundaries, EV4 InfrastructureAccounting.
 Profiles are operator-signed, schema-validated, and cannot omit their mandatory
@@ -1481,7 +1484,7 @@ After operator approval of a SliceExit, the operator invokes RecordBaseline to
 adopt that slice snapshot before starting the next slice. It may reuse that Slice
 AGREE attestation **only** when oldSnapshotId is the current certified pointer,
 newSnapshotId equals the slice snapshot, and its baselineDeltaDigest equals the
-server's ReviewedDiffSha256. Slice profile includes Scope, Safety and Provenance
+server's ReviewedDiffSha256. Slice profile includes Scope, Completeness, Safety and Provenance
 in addition to its existing mandatory claims. CAS/full-delta/history checks still
 run; any extra shared-checkout change or different pointer requires a new Baseline
 HV. Nothing moves the pointer automatically. Same rule applies to approved
@@ -1515,7 +1518,8 @@ Workspace-wide failure memory is keyed (WorkspaceId, SnapshotId, GateId, Platfor
 InventoryDigest). A Fail in **any** evidence/turn blocks a new Pass for that tuple;
 RunValidation returns409 engineering_validation_failed, completion reports
 engineeringValidation. New turn/revision/Progress versus SliceExit cannot clear
-it. Different source snapshot is necessary after Fail. Receipt gains indexed
+it. Changed snapshot or independently HV-approved changed inventory is required
+after Fail; the failure-memory tuple is authoritative. Receipt gains indexed
 SnapshotId/InventoryDigest, SupersededInfrastructureUnknown bool defaultfalse,
 SupersededByReceiptId nullable UUID/composite workspace FK; section14's one-infra-
 retry exception is unchanged. All turn-child evidence/receipt rows carry the base
@@ -1598,10 +1602,12 @@ approve_todo_type; all other missing evidence uses record_evidence.
 
 ### 15.4 Replay, signed-manifest channel and status selection
 
-SessionLogMintTurnRequest gains optional `boundAtUtc` UTC timestamp, supplied only
-by the trusted replay path from captured C4 binding. Live mint ignores absent time
-and uses server receive UTC; a live caller sending boundAtUtc is400 validation_error.
-Replay accepts captured values in [session openedUtc, server now+5seconds], bound
+SessionLogMintTurnRequest gains optional `ingressReplay` object
+{hostSessionKey,keySource,provisionalRequestId,boundAtUtc}, supplied only by the
+drain from the captured C4 binding. No object means live mint uses server receive
+UTC. Any top-level boundAtUtc is400 validation_error; the object identifies the
+replay path and must match original nonce/session/provisional binding.
+Replay accepts captured times in [session openedUtc, server now+5seconds], bound
 to original nonce/session/request recovery envelope. Outside that window, missing
 or invalid time makes OpeningSnapshotState=Unavailable; do not select a newer
 pointer or fabricate an arrival. Extend arch4.2, mint client/REPL shim and golden
@@ -1669,3 +1675,102 @@ behavior. No context edits another's files without the Phase2 amendment/ACK rule
 Round4: DISAGREE, confidence44, accuracy.91/completeness.82, 3PASS/9FAIL;
 nine findings. Exact output saved under claude-round-4. Current resolutions await
 the next independent review under the unchanged12-claim/.98/confidence98 contract.
+
+## 16. Round 5 contract completion
+
+### 16.1 Review materialization and receipt emission
+
+Add operator-only POST
+`/admin/engineering-policy/{workspaceId}/review-materializations`, mTLS policy
+EngineeringPolicyAdmin, client `CreateReviewMaterializationAsync`. Input:
+{subjectKind,subjectRef,reviewWorkspaceId}; references are Slice evidenceId/revision,
+Inventory proposed canonical inventory payload, Baseline proposed snapshot/diff
+reference, or Evaluation immutable harness-manifest artifact ID. Resolve the
+subject using14.2's formulas, not a caller's claimed digest. No arbitrary path/URL.
+ReviewWorkspaceId must be registered with process None on this owner, outside
+all source roots, with empty materialization destinations (or identical ready
+materialization for an idempotent repeat). A different existing subject refuses.
+
+TurnReviews behavior reuses14.4's bundle verifier/materializer to write exact
+read-only `source/` and, where a before/after comparison is required, `before/`
+under that review workspace. Preserve15.3's repository directory layout. Recompute
+bundle/manifest/file hashes before Ready, enforce OS read-only access to reviewed
+bytes, and write `review-materialization.json` containing {schemaVersion:1,
+materializationId,subjectKind,subjectDigest,snapshotIds:[],bundleSha256s:[],
+reviewedDiffSha256:null|hash,reviewProfileDigest}. Secret-scan failure refuses
+materialization, never silently redacts bytes and retains their old digest.
+No automatic provider upload: operator launches the reviewer with the approved
+materialization/brief. This explicitly replaces the base rule that the implementing
+agent launches the reviewer in its worktree. The reviewer emits its receipt only
+in the captured final response/VERDICT block; broker capture stores it as an
+artifact. The reviewer does not write receipt files in source or artifact storage.
+These launch/emission rules join15.1's base HV protocol amendment.
+
+EngineeringReviewMaterialization: composite WorkspaceId/MaterializationId UUID
+PK; SubjectKind, SubjectDigest, ReviewWorkspaceId, ManifestSha256, ManifestJson,
+State Ready|Invalid, CreatedUtc, CreatedByOperatorId. Snapshot/bundle refs live in
+the immutable manifest; lengths/JSON limits/dump/local-only rules inherit13.
+TurnReviews owns handler/record behavior; StorageSchema owns entity/migration;
+DESIGN owns management surface with SharedComponents Phase2 DTOs.
+400 validation_error for shape/ref kind;403 admin_authorization_required;
+404 not_found for workspace/subject;409 review_materialization_conflict/stale/
+hash_mismatch/sensitive for conflicting destination, changed subject, failed
+integrity or secret scan. No partial Ready row. Standard503 for unavailable store.
+
+Brief and attested receipt must carry MaterializationId. ArtifactRefsJson shape
+is {materializationId,manifestSha256,artifacts:[standard artifact refs]}; the raw
+receipt's ArtifactRefs uses the same shape. AttestReview resolves the stored
+materialization, verifies Ready/current subject/profile and manifest hash against
+the receipt and dependencies, and refuses mismatch409 engineering_review_stale.
+Current plan-readiness packets before these runtime gates exist are explicitly
+outside this future attestation protocol, not claimed as deployed materializations.
+Tests: byte equality, before/after manifests, read-only enforcement, stale/missing/
+foreign materialization, mismatch refusal, idempotent destination and final-response
+receipt capture. No source-workspace credential is in the materialized packet.
+
+### 16.2 Format-support boundary and migration ownership
+
+This feature's StorageSchema creates engineering tables only. Base StorageSchema/
+SharedComponents owns the single folded Format column/Plain backfill/DTO extension
+before PhaseC hashing (15.5); do not create a second AC migration in this plan.
+Base binaries with only those folded pieces are **not format-aware**: capability
+acceptanceCriteriaFormatVersion is0 or absent and non-Plain API writes are refused
+until the complete codec/validation/rendering implementation is installed.
+Every use of 'format support' or 'format-aware' in11/14.6 means server capability
+acceptanceCriteriaFormatVersion>=1, not presence of a column, enum or DTO.
+Build emits server-capabilities.json from the same compiled capability constant
+the status query reports; UpdateService reads validated target package metadata,
+treating absent/invalid capability as0. Its current-capability>=1 census refuses
+rollback to **any** target below1 while relational or TODO state has non-Plain
+data. Test the base-with-column/DTO-but-capability0 target, a genuinely capable
+target, no duplicate migration, Plain backfill once, and capability/status/package
+parity. Existing census/quiesce/refusal/no-swap rules remain intact.
+
+### 16.3 Replay object and attestation consistency
+
+The optional ingressReplay object (15.4), not an implicit live/drain distinction,
+identifies replay. It carries exactly hostSessionKey,keySource,provisionalRequestId,
+boundAtUtc from C4. Validate all against nonce/session recovery binding; absent
+object is live server time. Top-level boundAtUtc is always400 validation_error,
+including through tools/REPL. Update mint DTO, arch4.2, shim and golden fixtures;
+test live, matching replay, forged/foreign envelope and trust-window failures.
+
+SupersedesAttestationIdsJson is nullable TEXT JSON. Null means no supersession;
+non-null is an array of1..N unique prior UUIDs under the common JSON size bound,
+same workspace/subject/profile, with cycle/foreign-ID checks in the append
+transaction. No singular SupersedesAttestationId exists. Multiple DISAGREEs can
+therefore be resolved by one genuine newer attestation without changing history.
+Baseline reuse validates the Slice AGREE under the **current Slice profile**, whose
+mandatory set includes Scope, Completeness, Safety and Provenance plus base/EP
+claims, then checks15.1's exact old pointer/new snapshot/diff equality. It does not
+pretend a Slice SubjectDigest is the Baseline SubjectDigest. Failure memory's
+tuple is authoritative: changed snapshot **or** independently HV-approved changed
+inventory plus documented remediation permits a new evidence revision; unchanged
+tuple across turns remains blocked. Test multiple supersession, unresolved verdict,
+Slice reuse claim/profile mismatch, approved inventory correction and unapproved
+or semantically unchanged inventory attempts. The one-infrastructure-rerun rule
+does not change.
+
+Round5: DISAGREE, confidence74, accuracy.95/completeness.93; four findings.
+Exact continued-review output is retained under claude-round-5. This revision
+addresses R5-01..04 for the next independent review, without changing thresholds.
