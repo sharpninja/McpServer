@@ -17,9 +17,16 @@ namespace QBrainAi.Support.Mcp.Tests.Memory;
 /// TEST-MCP-MEMORY-010 / TEST-MCP-MEMORY-011 / TEST-MCP-MEMORY-012 / TEST-MCP-MEMORY-014 / TEST-MCP-MEMORY-016:
 /// Shared SQLite fixture and production-surface probes for MCP-MEMORY-002 S1/S2/S3 tests.
 /// </summary>
+/// <remarks>
+/// Test data: one temporary SQLite database file per harness in its own temporary folder, opened without connection
+/// pooling, so every context the harness creates (concurrent operations included) has its own connection to that
+/// database, as production does (the race class of triage-report-9b96ada18d72483dad2a3113e455c01b; operator
+/// 2026-10-20: "Extend fix, then round 4 (Recommended)"; the harness assertion and its negative controls are in
+/// <c>HandoffTestDatabaseTests</c>, bound here by <c>MemoryS1HarnessDatabaseTests</c>).
+/// </remarks>
 public sealed partial class MemoryS1Harness : IDisposable
 {
-    private readonly SqliteConnection _connection;
+    private readonly string _databaseFolder = Path.Combine(Path.GetTempPath(), "mcp-s1-db-" + Guid.NewGuid().ToString("N"));
     private readonly DbContextOptions<McpDbContext> _options;
 
     /// <summary>Workspace A path used as the calling workspace.</summary>
@@ -28,13 +35,17 @@ public sealed partial class MemoryS1Harness : IDisposable
     /// <summary>Workspace B path used as a foreign workspace.</summary>
     public string WorkspaceB { get; } = Path.Combine(Path.GetTempPath(), "mcp-s1-b-" + Guid.NewGuid().ToString("N"));
 
-    /// <summary>Creates an isolated in-memory SQLite schema.</summary>
+    /// <summary>Creates an isolated SQLite schema in a temporary database file.</summary>
     public MemoryS1Harness()
     {
-        _connection = new SqliteConnection("Data Source=:memory:");
-        _connection.Open();
+        Directory.CreateDirectory(_databaseFolder);
+        var connectionString = new SqliteConnectionStringBuilder
+        {
+            DataSource = Path.Combine(_databaseFolder, "memory-s1.db"),
+            Pooling = false,
+        }.ToString();
         _options = new DbContextOptionsBuilder<McpDbContext>()
-            .UseSqlite(_connection)
+            .UseSqlite(connectionString)
             .Options;
 
         using var ctx = CreateContext(WorkspaceA);
@@ -42,7 +53,11 @@ public sealed partial class MemoryS1Harness : IDisposable
     }
 
     /// <inheritdoc />
-    public void Dispose() => _connection.Dispose();
+    public void Dispose()
+    {
+        if (Directory.Exists(_databaseFolder))
+            Directory.Delete(_databaseFolder, recursive: true);
+    }
 
     /// <summary>Creates a context bound to <paramref name="workspacePath"/>.</summary>
     public McpDbContext CreateContext(string? workspacePath)

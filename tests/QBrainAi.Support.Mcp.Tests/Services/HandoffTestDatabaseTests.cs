@@ -19,7 +19,10 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// (Recommended)"). Test data: scripted context factories over a temporary database file the test creates and
 /// deletes. The positive control gives each context its own connection to that file. Negative controls, each rejected
 /// by the harness assertion inside a passing test: the harness's previous shape (one opened in-memory connection
-/// handed to every context) and separate private in-memory databases (own connections, but not one database).
+/// handed to every context) and separate private in-memory databases (own connections, but not one database). The
+/// sibling sweep of the same round found the race class in <c>HandoffAuditDefectTests</c> and <c>MemoryS1Harness</c>
+/// (operator 2026-10-20: "Extend fix, then round 4 (Recommended)"); the one assertion here is bound to all three
+/// harnesses.
 /// </remarks>
 public sealed class HandoffTestDatabaseTests : IDisposable
 {
