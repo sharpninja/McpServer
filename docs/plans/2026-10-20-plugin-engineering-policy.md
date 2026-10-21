@@ -31,7 +31,8 @@ explicitly amended. The base plan is **NOT APPROVED**. Its approval, analyzer
 merge, P0 prerequisites, turn identity, shared components, CompletionPolicy and
 CompletionGate enforcement change set are dependencies. This plan cannot activate
 that gate independently. Phase 1 amends architecture sections 3.1, 3.2, 3.3
-(C8/C9), 3.4, 3.5.2, 4.4, 5.1, 5.3, 5.4, 6, 8 and Addendum A,
+(C8/C9), 3.4, 3.5.2, 3.5.3, 3.5.6, 4.1, 4.2, 4.4, 5.1, 5.3, 5.4,
+6, 7, 8 and Addendum A,
 component/interface/data/activity/sequence diagrams, golden contracts and rollout
 together, including the new acceptance-criteria contracts in section 4.
 
@@ -132,8 +133,9 @@ Unavailable/Unsupported), `deliveredSections`, `deliveredBytes`, `limitations`,
 `lastDeliveredUtc`. Unknown server selection stays unknown, never None. Cache the
 last verified descriptor only within its host session. Without one deliver the
 packaged baseline/activity guidance plus an unavailable-selection diagnostic; do
-not claim BDP section delivery. Version/hash mismatch prevents gated Code
-completion; server policy never derives from a client's status claims.
+not claim BDP section delivery. Client version/hash mismatch is advisory; gated
+completion compares evidence policy hash to current server hash. Server policy
+never derives from client status. Section14.1 defines refusal precedence.
 
 ## 4. Acceptance-criteria formats and JSON-in-text contract
 
@@ -429,7 +431,7 @@ Operations, with /mcpserver aliases and explicit base-bound turn identities:
   server captures dependencies; client EngineeringEvidence.CreateAsync, REPL
   workflow.engineeringEvidence.create, MCP engineering_evidence_create.
 - POST `/qbrainai/engineering-evidence/{evidenceId}/validations`:
-  RunEngineeringValidationCommand; GateId/Platform/Attempt/idempotency key only;
+  RunEngineeringValidationCommand; GateId/Platform/idempotency key only;
   202 ReceiptId/job state; RunValidationAsync, workflow.engineeringEvidence.runValidation,
   engineering_validation_run. Queued is not Pass.
 - GET `/qbrainai/engineering-evidence/{evidenceId}`: GetEngineeringEvidenceQuery,
@@ -462,7 +464,7 @@ to base ReviewValidation/CompletionPolicy too; Unnecessary is invalid for derive
 Code. Keep declared class separately for audit, store EffectiveRequestClass.
 Only enforced BDPv4 effective Code requires these additional stages:
 
-- Red/Progress: active implementation TODO, newly named tests fail for expected
+- Red/Progress: active Implementation or TestDesign TODO, newly named tests fail for expected
   assertion/behavior (not compile/infrastructure error); prior iteration suite
   passes zero failures/skips. ExpectedRed receipt, never Pass. AgentReview may
   be Other explaining RED; hostileReview Other `pending HV <gate>` is permitted.
@@ -541,7 +543,7 @@ migrations), SharedComponents second (hash/codec/schema contracts); then:
 1. PluginCorePowerShell and BuildTooling own assets/resolver/delivery/status and
    generation/integrity respectively; coordinate shared files, independent owners
    may proceed in parallel only where approved by base process.
-2. Requirements/TODO owners implement AC format validation, rendering, adapters,
+2. RequirementsAndAcceptanceCriteria implements AC format validation, rendering, adapters,
    snapshots and all write paths after shared codec/schema; clients/tools follow.
 3. TurnReviews and SessionTurnLogging implement evidence/runner/snapshot/gate after
    base completion/review foundations; no Phase C storage dependency.
@@ -589,8 +591,9 @@ Exit gates require zero failures and zero skips; RED is intermediate evidence.
 
 Every phase/slice arrow also requires independent HV (base named reviewer Codex
 gpt-6-astra max), accuracy/completeness >=0.98, every claim PASS, and operator
-approval. This plan's operator-authorized substitution is Claude Code
-claude-opus-5-5/max, confidence >=98 as well; do not globally change base reviewer.
+approval. Only this document's external plan-readiness loop substitutes Claude
+Code claude-opus-5-5/max (confidence >=98 also); future phase/slice arrows retain
+the base Codex profile unless separately overridden by signed scoped configuration.
 Receipts pin exact source/plan, actual reviewer configuration and limitations.
 
 ## 10. Bounded evaluation
@@ -640,7 +643,7 @@ Rollback operator sets EnforcementEnabled=false, retains records/artifacts/read
 APIs; guidance disable separate. Restore compatible packages together. Prefer
 binary rollback with additive tables retained, but refuse rollback to any binary
 older than format support while any non-Plain criterion exists in rows or TODO
-state. The deployment controller scans both stores with writes quiesced and blocks
+state. BuildTooling's UpdateService guard (section14.6) scans both stores with writes quiesced and blocks
 the rollout; enforcement off alone does not make downgrade safe. Schema
 Down requires backup/approval and no non-Plain ACs (section 4). Plain backfill
 does not alter text; no lossy conversion. AgentContext Mode rollback cannot disable
@@ -692,9 +695,9 @@ rejected, retaining previous settings. In one DB transaction it updates
 
 - WorkspaceState PK WorkspaceId; Generation bigint default 1, effective policy
   hash, EnforcementEnabled, DevelopmentProcess, ActiveInventoryRevision nullable,
-  CertifiedSnapshotId nullable, Revision bigint default 1, LastAppliedDeploymentId.
+  CertifiedSnapshotId nullable, Revision bigint default 1, LastAppliedDeploymentId nullable.
 - PolicyAudit PK (WorkspaceId, AuditId UUID); Kind, OperatorCertificateId,
-  DeploymentId, Reason, OldValuesJson, NewValuesJson, CreatedUtc, Generation.
+  DeploymentId nullable, Reason, OldValuesJson, NewValuesJson, CreatedUtc, Generation.
 
 Generation is persisted, monotonic and per authoritative workspace. Increment
 only for an effective policy hash, EnforcementEnabled or DevelopmentProcess
@@ -706,11 +709,12 @@ effective fingerprint with persisted values; it cannot reset Generation to 1.
 
 MintSessionTurnCommand (SessionTurnLogging owner) copies CertifiedSnapshotId to
 new turn fields OpeningSnapshotId (nullable FK) and OpeningSnapshotState
-(Captured/Unavailable, default Unavailable), OpeningSnapshotBoundUtc, and
+(Captured/Unavailable, default Unavailable), OpeningSnapshotBoundUtc nullable, and
 EffectiveRequestClass (nullable). Do this DB-only within mint/first-persist; no
 snapshot capture or added hook I/O. This is the **prior certified snapshot**, not
-a claim to have captured the filesystem at the prompt's arrival. Green/SliceExit
-may advance the workspace certified pointer atomically after verification.
+a claim to have captured the filesystem at the prompt's arrival. Only the explicit
+baseline operation advances the certified pointer, with full-delta attestation and
+history; Green/SliceExit never advances it implicitly (section 14).
 Older baselines conservatively include other sessions' edits. Never subtract
 another session's paths by trusting filesModified. Shared-checkout edits can
 therefore force Code/extra evidence on a Docs turn; use isolated worktrees to
@@ -761,10 +765,11 @@ any additional failure, compile exit or infrastructure exception is Fail/Unknown
 Prior cumulative tests must still pass without failures/skips.
 
 GateId is one of Compile,G1,G2,G3Migration,G3Plugin,G3Support,G3Validation,G3Repl,
-G3Acid,G4,G5Config,G5Traceability,G6,PowerShellOnly,BuildInfrastructure,MockOracles;
-Platform is LinuxX64 or WindowsX64. ParserId is DotnetTrxV1, PesterNUnitV1 or
-ProcessExitV1. Compile/config/traceability use process exit plus named inventory
-checks; a test gate cannot select ProcessExitV1. Pester emits original NUnit XML;
+G3Acid,G4,G5Config,G5Traceability,G5UseCaseCoverage,G6,PowerShellOnly,BuildInfrastructure,MockOracles;
+Platform is LinuxX64 or WindowsX64. ParserId is DotnetTrxV1, PesterNUnitV1,
+TraceabilityBaselineV1, UseCaseCoverageV1 or ProcessExitV1. Compile/config use ProcessExitV1;
+G5Traceability uses section 14's structured parser, not an exit-code exception.
+A test gate cannot select ProcessExitV1. Pester emits original NUnit XML;
 server parser counts all expected IDs and treats inconclusive/not-run as skipped.
 G1/G2 and migration command vectors include `--test-run-id <server-job-id>` and
 `--gate-started-at-utc <server-start-utc>`; these two typed placeholders are the
@@ -805,7 +810,7 @@ the workspace's pwsh.exe rule; no alternate scripting shell is introduced.
 Base turn reviews are latest-wins projections, not immutable history. Add
 `EngineeringReviewAttestation` PK (WorkspaceId, AttestationId UUID): TurnId
 nullable (inventory/baseline review may be workspace-scoped), SubjectKind
-(Slice/Inventory/Baseline), SubjectDigest, SnapshotId nullable, PolicySha256,
+(Slice/Inventory/Baseline/Evaluation), SubjectDigest, SnapshotId nullable, PolicySha256,
 RequirementsDigest, InventoryDigest, ReviewerIdentity, Model, Effort, ReceiptSha256,
 ArtifactRefsJson, ScoresJson, ClaimsJson, MappedVerdict, TrustLevel=OperatorAttested,
 AttestedBy, AttestedUtc, SupersedesAttestationId nullable, CreatedUtc. Append only;
@@ -870,9 +875,12 @@ Applicability is the following exhaustive ordered decision list (no table):
    additionally required for SliceExit and approved TestDesign exit. Purpose
    SliceExit with Red, or MocksGreen on Implementation, is invalid and reports
    engineeringValidation. Missing/unapproved TodoType reports engineeringEvidence.
-6. Agent TODO done=true or equivalent terminal-success transition uses the same
-   effective class/process rules and requires the appropriate final evidence,
-   including fresh attestation, not a Progress-only close. See owner below.
+6. In enforced BDPv4, Agent TODO done=true or terminal success requires final
+   evidence only if TodoId is in active TodoTypes or was carried by a completed
+   effective-Code turn. The latter without TodoType reports engineeringEvidence.
+   All other TODOs (including ordinary docs/triage tasks) keep existing rules.
+   TODOs have no invented declared class or opening snapshot; section 14 supplies
+   the complete applicability cases.
 
 Remedy codes respectively: engineeringPolicy=refresh_policy;
 engineeringEvidence=record_evidence; engineeringSnapshot=refresh_snapshot_or_baseline;
@@ -911,9 +919,10 @@ File boundaries: TurnReviews owns new `src/QBrainAi.Services/EngineeringPolicy/`
 (resolver/runner/inventory/attestation/freshness handlers) and matching service
 tests. StorageSchema owns entities/McpDbContext/migrations. SharedComponents owns
 shared DTOs and canonical codec. SessionTurnLogging alone changes existing
-`SessionLogService`, TurnWritePipeline, CompletionGate, mint and turn DTO stamps,
-calling new interfaces. ReplAndAgents owns public controller/MCP/client/REPL glue
-only. Requirements/TODO owner changes RequirementsDatabaseDocumentService,
+`SessionLogService`, TurnWritePipeline, mint and turn DTO stamps, calling new
+interfaces. TurnReviews retains CompletionGate ownership. Public contracts and
+controller/MCP/client stubs are SharedComponents Phase 2 shared-file work;
+ReplAndAgents owns Phase 4 adapter behavior only. RequirementsAndAcceptanceCriteria changes RequirementsDatabaseDocumentService,
 TodoExecutionService, EfTodoService and YAML TODO service adapters; coordinator
 serializes these existing-service edits with SessionTurnLogging, not two agents
 editing the same file. BuildTooling owns Nuke targets/infrastructure tests.
@@ -995,3 +1004,445 @@ snapshot. No broad exclusion hides source or receipt mutation from the manifest.
 Round 2 actual result: DISAGREE, confidence 30, accuracy .86/completeness .72,
 3 PASS/9 FAIL; exact receipt saved under claude-round-2. This section resolves its
 twelve findings for the next independent review; no agreement is assumed.
+
+## 14. Round 3 contract completion
+
+The following rules resolve EP-R3-01 through EP-R3-14. They are part of the
+approved-design candidate, to be propagated into the Phase 1 architecture and
+Phase 2 contracts, not postponed product decisions.
+
+### 14.1 Attempts, TODO applicability and refusal precedence
+
+Attempt is server-assigned, never accepted in RunValidation input. For each
+(evidence revision, GateId, Platform), allow one initial attempt and at most one
+replacement for an infrastructure/producer/timeout Unknown. The latter retains
+the first row with SupersededInfrastructureUnknown=true and SupersededByReceiptId;
+it is the only exception to the all-finished-attempts rule. Every other finished
+attempt must be Pass, or ExpectedRed for Red/Progress, and no job may remain
+Queued/Running. Fail is never retried on that evidence/snapshot. A new revision
+after Fail requires a changed source snapshot and documented failure remediation;
+unchanged-snapshot revisions cannot erase a failure. Independent review checks
+the remediation, not just the fact a hash changed. A second Unknown blocks the
+obligation. Once satisfied, repeated Run returns the existing receipt, not another
+trial. Allocate attempt ordinal and idempotency result atomically; concurrent
+requests cannot mint extra trials. Errors 409 engineering_validation_failed or
+engineering_validation_retry_exhausted, final; raw failed attempts remain audit.
+Tests include fail-then-pass refusal, different idempotency keys, concurrent runs,
+one Unknown replacement, second Unknown, unchanged snapshot and RED totals.
+
+TODO applicability is independent of any invented TODO requestClass:
+
+- Off/None or trusted non-Agent origin: existing TODO completion rules only.
+- Enforced BDPv4, TodoId in active TodoTypes: Implementation requires Green/
+  SliceExit; TestDesign requires MocksGreen or Green with phase HV/approval.
+- Enforced BDPv4, TodoId absent there but referenced by any completed turn whose
+  persisted EffectiveRequestClass is Code: block with engineeringEvidence,
+  remedy approve_todo_type; historical turns without that field are not inferred
+  to be Code. A current Code turn cannot finish without the approved type.
+- All other TODOs, including ordinary Docs and triage tasks, retain existing
+  completion rules. Their acceptance criteria still use section 4's format rules.
+
+Matrix tests exercise each branch through every backend, replace/batch/status
+alias and transport, including a previously Code-linked TODO after removal from
+the active inventory. Do not turn closing an incidental triage task into SliceExit.
+
+Completion endpoints report policy/evidence defects only as ordered HTTP400
+session_turn_completion_gate items. Evidence/current **server** policy hash
+mismatch is engineeringPolicy; client package hash/status is advisory. Stale/
+missing source is engineeringSnapshot, validation/coverage/HV as already named.
+No 409 engineering_evidence_stale or engineering_policy_incompatible escapes a
+completion endpoint; those belong to evidence/validation/admin operations.
+Capture races during completion retry preflight, then use base 409 conflict;
+other unavailable capture becomes the missing snapshot gate item. Evidence reads
+return 200 with freshness findings, not a write's refusal. Extend golden fixtures.
+
+Drain checks the complete returned missingItems: any engineering item makes that
+attempt final/cleared with event+refusal audit retained, even if base items are
+also missing. Base-only refusals retain base retry/quarantine rules. This is an
+explicit FR-MCP-REPL-011/FAILSAFE/C8 amendment, not a global quarantine change.
+The separate QB-AGENT-001 retained-mandatory-rejection obligation remains in
+force; clearing a queue entry never clears its governed audit obligation.
+
+### 14.2 Canonical digests and stored normal form
+
+Use exact definitions below, ordinal JSON keys and compact UTF-8, no timestamps
+unless explicitly part of a semantic configuration/profile. Arrays have the
+specified order. All hash-sensitive engineering JSON columns bypass **only**
+LineSanitizer's dash rewrite; they still receive secret-safe outbound projection
+and ordinary access control. Raw source paths/test IDs/manifest bytes must survive
+unchanged. Explicitly amend architecture 3.1/3.5.2's every-string normal-form rule
+for ManifestJson, CanonicalJson, CommandJson, ScopeJson, ArtifactsJson, CoverageJson,
+ReviewRefsJson, ScoresJson, ClaimsJson, completion-stamp JSON and signed payloads.
+Do not globally turn off sanitization or hash sanitized outbound display text.
+
+Structured ACs first decode JSON with duplicate-key rejection, replace U+2013 and
+U+2014 with '-' in every string value, then validate and canonicalize. This covers
+escaped and literal dashes equally. Plain new writes retain existing normalizer;
+the migration itself updates Format only and never rewrites legacy Text. Forbid
+U+2013/U+2014 in canonical policy asset/manifest text at build. Thus Stateless
+policy text and descriptor hashes survive base storage normalization unchanged.
+Tests cover dash-containing AC prose, escaped JSON, paths and test IDs; raw
+artifact hash stability; no path collisions; package equality and Plain migration.
+
+Digest inventory (bullets replace tables under workspace formatting rules):
+
+- Criterion revision: SHA-256 of {id,format,text}; structured text is the canonical
+  JSON **string** stored in Text, Plain text is stored normal form. Exclude
+  isSatisfied, evidence, timestamps and audit notes. CoverageJson.revision is this
+  digest, never a model-supplied ordinal.
+- Effective Requirement hash: {kind,id,title,description,criteria:[{id,format,text}]},
+  criteria in stored ordinal order; exclude status, satisfaction, evidence, notes,
+  timestamps. This explicitly amends the base Requirement hash to include IDs
+  and Format; any structured change or format-only conversion stales dependents.
+  Delete/supersession/effective-layer removal is a separate freshness failure.
+- In-scope ACs: union of AcLinks in the approved TodoType.RequiredGateIds, each
+  AcLink={requirementKind,requirementId,acId,assertionKeys:[]}. Resolve every ID in
+  the current effective layer; any missing/inactive ref blocks, never silently
+  reduces denominator. This defines 'active/current-increment' for all stages.
+- RequirementsDigest: {layerKey,realizesLinksDigest,requirements:[{kind,id,recordDigest,
+  criteria:[{acId,ordinal,revision}]}]}, only those in-scope requirements, sorted
+  ordinal by kind/id; criteria retain stored order. Additional applicable base
+  AgentContext requirements keep its independent retrieval rules.
+  realizesLinksDigest hashes catalog-scope (workspaceId,useCaseId,frId,relation)
+  Realizes link tuples sorted by IDs, excluding timestamps. Mapping changes stale
+  engineering coverage without changing the base Requirement hash's field set.
+- Coverage digest: canonical CoverageJson sorted requirementId/acId/assertionKey/
+  gateId/testId, unique tuples; exclude status/evidence comments. Every in-scope
+  assertion key must map to an expected test of its approved gate.
+- Slice SubjectDigest: {schemaVersion:1,workspaceId,todoId,evidenceId,
+  evidenceRevision,stage,purpose,snapshotId,policySha256,requirementsDigest,
+  inventoryDigest,reviewProfileDigest,coverageDigest,baselineDeltaDigest}.
+  Server computes it; Evidence and Attestation gain ReviewProfileDigest.
+- Diff representation: {oldSnapshotId:null|id,newSnapshotId,oldHeadSha:null|sha,
+  newHeadSha,headToCurrent:[],priorToCurrent:[]}; each list consists of changed
+  {repositoryId,path,before:null|entry,after:null|entry}, sorted repo/path.
+  Entries use the exact manifest fields, with no textual diff formatting or
+  timestamps. first list compares committed HEAD tree to captured bytes; second
+  compares prior certified (or opening for Slice) snapshot to current. Hash of
+  this JSON is ReviewedDiffSha256/baselineDeltaDigest. Raw before/after bundles
+  accompany the review so hashes alone are not presented as reviewable source.
+- Baseline subject: {workspaceId,oldSnapshotId:null|id,newSnapshotId,
+  reviewedDiffSha256}; inventory subject is the proposed CanonicalJson digest.
+- Evaluation subject: {protocolId,protocolDigest,policySha256,buildArtifactSha256,
+  settingsDigest,anonymousRunManifestDigest,resultArtifactsDigest}; all fixed by
+  harness before attestation. Exclude grader/operator timestamps and run labels.
+
+InventoryDigest continues to hash the complete approved canonical inventory.
+isSatisfied/evidence updates never stale a receipt; requirement text, format,
+layer, coverage, inventory, profile or policy changes do. Test these independently.
+
+### 14.3 Profiles, receipts and evaluation
+
+Signed configuration contains ReviewerProfiles keyed ProfileId with SubjectKind,
+Agent, Model, Effort, RequiredClaims (unique IDs), AccuracyFloor and CompletenessFloor
+(both .98..1). Defaults: Slice = Codex/gpt-6-astra/max with base mandatory claims
+plus EP1..EP6; Inventory/Baseline = same identity with Scope/Completeness/Safety/
+Provenance; Evaluation = ClaudeCode/claude-opus-5-5/max with EV1 FrozenProtocol,
+EV2 CorrectnessCompleteness, EV3 Boundaries, EV4 InfrastructureAccounting.
+Profiles are operator-signed, schema-validated, and cannot omit their mandatory
+claims or lower floors. Exact base claim IDs are copied into the Phase 1 approved
+profile artifact, not invented at runtime.
+
+ReviewerOverrides entries: WorkspaceId, SubjectKind, ProfileId, ExpiresUtc,
+Reason, OperatorId, signed DeploymentId; require future expiry and a profile with
+the same mandatory claims/floors. Effective profile is the single unexpired exact
+scope match; overlapping overrides reject reload. Otherwise default. Profile digest
+includes complete effective profile and override scope/expiry. Completion compares
+current digest; expiry requires new HV evidence. The human-authorized Claude
+substitution in this chat concerns **external review of this plan only**, outside
+the future runtime attestation store; no production override is asserted deployed.
+
+Future attested reviewer receipt schemaVersion=1 requires ReviewedSubjectDigest,
+ReviewerIdentity, Agent, Model, Effort, Scores {Accuracy,Completeness} as original
+decimal text in [0,1], Claims [{Id,Verdict:PASS|FAIL|UNKNOWN}], OverallVerdict
+AGREE|DISAGREE and ArtifactRefs. Reject percent-scale 98, duplicate/missing claims,
+wrong subject/model/effort, malformed lexemes or inconsistent verdict. Operator
+certificate identifies the attester, not the reviewer. Server captures subject
+dependencies, parses raw receipt, verifies artifact hashes/CLI metadata where
+supplied and applies effective profile. Remote identity/independence remains
+operator-attested as stated above; an agent-authored Pass cannot create an
+attestation. SubjectKind Evaluation uses its own profile and subject, removing
+the impossible attempt to attest it as a Codex Slice.
+
+Pin evaluation conditions to the **same 1.122.0 build/artifacts**, same server
+settings/inventory/models/permissions: baseline GuidanceEnabled=false, integrated
+GuidanceEnabled=true. This is an ablation of guidance, not comparison to an older
+binary. Report as such. Each condition has 36 valid runs. Pool ratios:
+sum(correct outcomes)/sum(required outcomes), sum(met ACs)/sum(required ACs)
+over those runs; positive denominators predetermined by frozen fixtures. Do not
+average per-task percentages or drop failed runs. Invalid paired reruns follow
+section 13.5; any unresolved Invalid blocks evaluation/activation. Condition-blind
+grader's claims and aggregate scores are attested under Evaluation profile.
+
+### 14.4 Producers and native validation handshake
+
+Operator management POST `/admin/engineering-policy/{workspaceId}/producers`
+upserts by ProducerInstanceId with Platform, BaseUrl (HTTPS, literal IP, no query/
+fragment), ServerCertificateSha256, Enabled, ExpectedRevision and Reason. New
+EngineeringValidationProducer table: composite workspace/producer PK, those
+fields, Revision bigint default1, ApprovedBy/ApprovedUtc; URL max2048, pins64hex,
+other lengths per section13. Unique active producer per platform/workspace.
+Only EngineeringPolicyAdmin accepts it; 403 for workspace key, 400
+engineering_producer_invalid, 409 engineering_producer_conflict. Pins/enablement
+changes append administrative audit; producer registration is never agent-facing.
+
+Authoritative broker dispatches mTLS POST `/internal/engineering-validation/jobs`
+to that registered producer. Body {schemaVersion:1,jobId,ownerInstanceId,workspaceId,
+evidenceId,revision,gateId,attempt,platform,snapshotId,bundleSha256,inventoryDigest,
+inventoryCanonicalJson,deadlineUtc}. Producer authenticates owner client certificate
+against its protected TrustedOwners map, not a caller URL. Idempotent same job/hash
+returns202/200; changed payload with same ID gives409 validation_job_conflict.
+Producer pulls `/internal/engineering-validation/bundles/{bundleSha256}` from the
+preconfigured owner URL using its client certificate; owner authorizes that job/
+workspace/producer and grants only the named immutable bundle. Secure extraction
+rejects traversal/links/duplicate paths/oversize; recompute bundle+manifest hashes.
+Copying from network source mounts is not a native validation fallback.
+
+Producer enforces approved gate/platform/argv, secret-free sandbox and timeout,
+then exposes mTLS GET `/internal/engineering-validation/jobs/{jobId}` and
+`/internal/engineering-validation/jobs/{jobId}/artifacts/{sha256}` to that owner.
+Owner rechecks producer pin, job/snapshot/inventory, raw counts/hashes before
+Verified. Producer-provided Pass alone is insufficient. No arbitrary callback
+URLs, credentials in job bodies, workspace keys or producer self-registration.
+
+Connect5s, dispatch15s, poll5s, artifact-read30s, total job deadline inventory
+TimeoutSeconds+60 (maximum3660). Before durable enqueue, no configured/enabled
+producer returns503 backend_unavailable. After enqueue, dispatch/transport/timeout
+failure becomes Unknown with diagnostic; eligible for the single infra retry.
+Certificate/payload/hash mismatch is Unknown producer_untrusted, not an eligible
+automatic retry; operator remediation required. Never switch producer/platform or
+execute an arbitrary local fallback. Tests cover replay, pins/rotation, forged
+receipt/bundle, byte fidelity across platforms, outage, budget and raw revalidation.
+
+The bundle includes all approved SourceInputs, not just McpServer: inventory
+SourceInputs=[repositoryId] references operator-configured local SourceRepositories
+map (Id, absolute local Path). Host-adapter gates name all nine plugin IDs; missing
+source returns Unknown. SourceSnapshot manifest additionally carries ordered
+inputRepositories [{repositoryId,headSha,entries:[]}], included in SnapshotId and
+effective-Code diff. Capture each by section6's algorithm, with the total existing
+budget. Materialization retains required HEAD/tag/index Git objects in a hashed
+object pack, synthesizes credential-free local Git config and overlays captured
+bytes. Never copy .git credentials/hooks. Generated distribution test trees are
+outputs outside immutable input bundles. Native producers receive identical inputs,
+not whichever revision happens to be in their own source checkout.
+
+### 14.5 Typed configuration, signatures and schema implementation
+
+Extend EngineeringPolicyOptions with the following operator-protected keys.
+Defaults permit guidance and read access, not execution or administration. Unknown
+keys/types reject validation; all security/root/producer changes take effect only
+after restart, semantic policy/process switches through the committed reconciliation
+transaction. No uncommitted IOptionsMonitor value participates in a gate.
+
+- RunnerEnabled bool=false; disabled RunValidation is409 engineering_runner_disabled.
+  Enabling enforcement requires RunnerEnabled, approved inventory/baseline and
+  provisioned trusted producers for its required platforms.
+- ArtifactRoot/WorkRoot: absolute paths outside all source roots, respectively
+  `/var/lib/qbrainai/engineering/artifacts` and `/var/lib/qbrainai/engineering/work`
+  on Linux, `C:/ProgramData/QBrainAi/engineering/artifacts` and
+  `C:/ProgramData/QBrainAi/engineering/work` on
+  Windows. Operator provisions ACLs; sandbox cannot read broker artifacts/config.
+- SandboxAccount string=`qbrain-validation`; PowerShellExecutable defaults
+  `C:/Program Files/PowerShell/7/pwsh.exe` on Windows and `/usr/local/bin/pwsh.exe`
+  on Linux (operator-provisioned entry to native pwsh). Require a canonical absolute
+  executable path, never a shell command string.
+  Runner startup validates account isolation, executable hash and output mounts.
+- DependencyCacheRoot defaults `/var/cache/qbrainai/engineering/dependencies` or
+  `C:/ProgramData/QBrainAi/engineering/dependencies`: operator-provisioned offline
+  SDK/tool/module/package mirror, outside source/user homes, read-only to sandbox.
+  Inventory DependencyCacheSha256 pins its manifest and required package hashes;
+  verify before each job. Use per-job writable overlays and credential-free local
+  feed configuration; no network restore or silent dependency installation. Missing
+  pinned dependencies make the job Unknown/dependency_unavailable. P0 provisions
+  .NET/Git/PowerShell/Pester/build tools needed by the frozen commands.
+- CaptureTimeoutSeconds int=30 (1..30), MaxSnapshotEntries=100000 (1..100000),
+  MaxSourceBytes=2147483648 (1..that value), MaxSourceFileBytes=67108864,
+  MaxArtifactsPerJob=256, MaxArtifactBytesPerJob=1073741824; all positive integers
+  no larger than stated defaults. MaxConcurrentJobsPerWorkspace=1 (only value).
+- ConnectTimeoutSeconds=5, DispatchTimeoutSeconds=15, PollIntervalSeconds=5,
+  ArtifactReadTimeoutSeconds=30, TransferGraceSeconds=60; positive integers with
+  stated values as maxima. Gate TimeoutSeconds remains inventory-owned 1..3600.
+- AdminEnabled=false; AdminListenUrl=`https://127.0.0.1:7448`, loopback HTTPS only.
+  InternalValidationEnabled=false; InternalListenUrl=`https://127.0.0.1:7449`,
+  HTTPS literal IP only, operator explicitly binds a private interface for remote
+  producers. Bind/port conflicts fail feature startup, never fall back to HTTP.
+- CertificateStoreLocation=`CurrentUser`, CertificateStoreName=`My` (OS X509
+  store of broker, not sandbox); AdminServerCertificateId,
+  InternalServerCertificateId, ClientCertificateId nullable SHA-256 cert IDs.
+  OperatorCertificateIds=[] and TrustedOwners=[] by default. Each TrustedOwners
+  item contains InstanceId, BaseUrl, ServerCertificateSha256,
+  ClientCertificateSha256, WorkspaceIds[]. InstanceId is a configured UUID.
+  IDs/pins contain public certificate hashes, never secret key material.
+  InstanceId UUID defaults null and is required when internal validation or runner
+  is enabled. Byte budgets are Int64, counts/timeouts Int32, threshold floors
+  decimal, flags bool; enum/string fields retain the stated closed sets/limits.
+- SourceRepositories={}: map WorkspaceId to extra source root arrays, each unique
+  Id and canonical absolute local Git root Path, no overlap/case collision or
+  network build root. Implicit primary Id `workspace` always resolves to registered
+  workspace path; overrides are forbidden. Inventory SourceInputs is a nonempty
+  ordered set including `workspace` plus configured extras. Producer pins
+  live in the approved DB table; the enabled producer set is read-only to agents.
+- ReviewerProfiles/ReviewerOverrides: typed schemas of14.3; defaults above.
+  Overrides must be signed, scoped, nonoverlapping and expiring. Floors cannot
+  be reduced. StructuredAcceptanceCriteriaEnabled and original four guidance/
+  enforcement/read/byte settings remain exactly as section3 defines.
+
+Absent certificate IDs are valid only for disabled listeners/runner. Enabled TLS
+requires accessible private keys in broker OS store, correct EKU, current validity
+and exact configured SHA-256 public-certificate pin; peer pins are checked both
+ways, not replaced by DNS trust. No key paths/passwords in job bodies or audit.
+Expired/invalid pins block the feature. Agent status exposes capability/diagnostic
+codes, not credentials. Runtime storage/budget/timeout options use the startup
+snapshot; restart applies changes. Delivery flags/limits refresh as section3;
+structured-write enablement takes effect after signed config reconciliation.
+
+Protected-setting set is **all** EngineeringPolicyOptions keys enumerated in
+sections3/14.3/14.5 plus workspace DevelopmentProcess. Producer/inventory/baseline/
+attestation management operations use mTLS and the same operator audit. Signed
+change manifest v1 = {schemaVersion:1,keyId,algorithm:"PS256",payload,signatureBase64}.
+Payload = {deploymentId UUID,issuedUtc,reason,operatorId,workspaceIds:[],
+validUntilUtc,expectedWorkspaceRevisions:{...},
+effectiveSettings:{...complete protected settings...}}. Validity is at most24h;
+reject expired new manifests, future issue time beyond5min or stale expected
+revisions before applying. Canonicalize keys ordinally,
+compact UTF-8, preserve array order, no BOM; sign payload bytes with RSA-PSS/SHA256,
+minimum3072-bit operator key in OS store. Verify signature against pinned operator
+public certificate, current validity, unique deploymentId/payload hash, expected
+workspace set and canonical config equality. Reject altered/reused deploymentId
+with a different hash. Retrying identical manifest is idempotent.
+`tools/powershell/Sign-EngineeringPolicyChange.ps1` uses OS certificate APIs, no
+private material on command line/stdout. Store SignedManifestJson unchanged beside
+PolicyAudit; audit display strings may use base normal form. Initial built-in
+defaults are recorded as SystemBootstrap with null DeploymentId; nondefault
+protected settings require a signed manifest even on first startup.
+
+ConfigurationReconciliationService commits WorkspaceState.EffectiveSettingsJson
+and audit/generation before publishing an effective options snapshot. Gates read
+those committed DB fields; hot reload never observes partially applied settings.
+No-op/restart compares stored semantic values, retaining generation. All canonical
+signed/config/profile JSON fields join the dash-rewrite exemption. Schema tests
+exercise signatures, replay, rotation, expiry, invalid limits and no-op restart.
+
+No JSON Schema package is currently referenced in the inspected projects. Use
+existing System.Text.Json plus `AcceptanceCriterionSchemaValidator`, a local
+validator for the exact subset used by the two embedded schemas: type, required,
+properties, additionalProperties, const, enum, length/item limits, items, pattern,
+allOf, if/then/else and not. Reject unsupported schema keywords at startup rather
+than pretending to support all draft2020-12. $schema/$id are metadata only; no
+remote resolution. Compile the two checked-in schema files as EmbeddedResource;
+build verifies their SHA-256 and service/client schema version1 parity. Validate
+duplicates/depth/bytes/normal form before schema, then Gerkin phase/unique-ID and
+EARS semantic rules. Conformance fixtures cover every used keyword, each EARS
+branch, negative/round-trip cases and schema drift. No new dependency or separate
+AC payload column. Status adds acceptanceCriteriaFormatVersion=1 and schema hashes;
+missing capability on an older server is0, and new clients refuse non-Plain writes
+to it with server_capability_unsupported.
+
+### 14.6 Traceability, rollout census and migration defaults
+
+Add TraceabilityBaselineV1 parser and inventory AllowedBaselineFindings (sorted
+{code,requirementId,relatedIds:[]} tuples frozen from P0). BuildTooling extends
+ValidateTraceability to emit a JSON artifact {schemaVersion:1,complete:true,
+findings:[{code,requirementId,relatedIds:[],message}],catalogIds:[]} before exit.
+Parser verifies report/job hash and complete flag; malformed/missing is Unknown.
+Strict exit0 or exit1 passes only if no finding names a current catalog ID and
+every remaining finding is in the approved P0 baseline. Any other exit is failure.
+Disappearing baseline findings are fine; new findings are not. Ordinary mapping
+validation must exit0. Add GateId G5UseCaseCoverage and ParserId UseCaseCoverageV1:
+the existing store-backed UseCases.GetCoverageAsync report must contain none of
+this plan's catalog FRs in functionalRequirementsWithoutRealizesUseCase. Freeze
+catalog IDs in inventory, not the global SQLite-only strict-use-case switch.
+This implements the base G5 exception without labeling failed tests passing;
+all test gates still require zero failures/skips. Red/Progress explicitly applies
+to approved TestDesign TODOs as well as Implementation TODOs.
+
+Inventory gates gain ExecutionKind=Process|BrokerQuery. Only G5UseCaseCoverage
+uses BrokerQuery, QueryId=UseCasesCoverage and argv=[]; all other gates use Process.
+Broker invokes the existing typed UseCases.GetCoverageAsync outside transactions,
+emits the complete raw JSON report and link digest, and verifies it with
+UseCaseCoverageV1. It uses the base G5 store-query exception, not sandbox credentials
+or an arbitrary query supplied by an agent. This store check is owner-platform
+only; native process gates still run on each required OS. Concurrent link changes
+invalidate RequirementsDigest at preflight. Test missing report, missing Realizes
+link, catalog filtering, stale link digest and unavailable authoritative store.
+
+BuildTooling owns `build/Build.UpdateService.cs` rollback guard. Add --rollback
+bool, used with --skip-build/--skip-version-bump/--publish-source. Before replacing
+format-aware binaries: stop the target service and all registered instances that
+write its stores, verify processes/listeners stopped, and run current format-aware
+binary `--ac-format-census --read-only --report <path>` without starting the host.
+RequirementsAndAcceptanceCriteria owns that offline CLI/codec; it scans every
+configured relational provider and current TODO execution-state/rollback-state
+backend, treating missing legacy Format as Plain. Result schema1: complete,
+scannedStores[], plainCount, nonPlainCount, unknownCount, sourceManifestHashes.
+Never rewrite files/data. Non-Plain count>0 refuses with
+rollback_ac_format_incompatible; malformed/unavailable stores/unknown formats or
+incomplete census refuse rollback_ac_format_census_failed. If any writer cannot
+be quiesced, rollback_quiesce_failed. Shared-store multi-host deployments require
+operator quiescence of every owning instance; no automatic remote source build.
+On refusal no binary swap occurs; restart original format-aware service. Guard
+is in the installed update workflow, not an endpoint the old binary must enforce.
+Only after a complete zero-nonPlain census may old binary be installed. Down
+migration uses the same census/backup rule. Keep backups inert; restoring any
+structured state requires a format-aware binary and the same compatibility check.
+
+Migration defaults: historical OpeningSnapshotId/BoundUtc/EffectiveRequestClass/
+EngineeringCompletionStampJson are null, OpeningSnapshotState=Unavailable.
+New old-binary turn inserts receive those DB defaults. WorkspaceState's
+LastAppliedDeploymentId is nullable default null; PolicyAudit.DeploymentId is
+nullable for non-deployment administration. No timestamp fabricated for history.
+New tables do not require old binaries to insert rows. Test prior-binary inserts
+after Up, old-binary rollback with all Plain, refusal with one structured row or
+TODO state, malformed/unreachable state, census read-only behavior and Up/Down/Up
+on all three providers. Infrastructure orchestration tests remain Build.Tests;
+FR behavior evidence belongs to runtime/migration tests under the base test rule.
+
+### 14.7 Pointer history, delivery and ownership amendments
+
+Add EngineeringBaselineHistory: (WorkspaceId, HistoryId UUID), SnapshotId,
+PreviousSnapshotId nullable, ReviewedDiffSha256, HvAttestationId, ValidFromUtc,
+ValidToUtc nullable, OperatorId, AuditId; append-only interval history (close prior
+interval and insert next in one transaction), with only one open interval.
+Only RecordBaseline operation advances pointer, deterministically after full
+server-computed prior-to-current and HEAD-to-current delta attestation and CAS.
+Green/SliceExit does not adopt unrelated edits or move it. No matching full-delta
+attestation means refusal, never partial adoption. Bind opening reference to the
+history interval in force at immutable ingress binding.boundAtUtc, including
+late failsafe mint, not the pointer current at drain. Missing/untrusted ingress
+time/history yields Unavailable and conservative Code; never guess. Live mint
+uses the base trusted ingress binding, not an agent-selected clock. Preserve
+history/snapshots across restart, end/resume and recovery. Tests include another
+session editing before/after baseline approval, delayed mint across pointer move,
+missing history and false future ingress timestamps.
+
+Contended turn-open.lock does not wait: deliveryOutcome=Unavailable,
+diagnostic policy_delivery_contended, no Delivered tombstone/instruction claim;
+preserve the base turn-open diagnostic and stateful exit behavior. Reserved/
+Unavailable rows retry on next hook invocation for the same delivered request or
+the adapter's next pre-model-dispatch, within existing read/deadline bounds.
+Successful retry commits the one emission. For direct request adapters (Cline v2,
+OpenCode), **every outgoing model request** includes canonical policy unless the
+same hash/sections already occur in that request's actual context; ledger records
+first emission only, never removes later context. Hook hosts rely on their native
+context retention within a prompt and next-prompt restoration; P0.2 records any
+in-loop restoration limitation. Stateless mandatory item stays on all tool-loop
+requests while earlier-request history is excluded. Test contention, retry,
+crash-reserved, duplicate emission, tool-loop requests and restored context.
+
+Explicit architecture8.3 ownership amendment: create
+RequirementsAndAcceptanceCriteria context owning existing requirement/TODO service
+changes, schema/codec integration, census and server TODO guard. Merge it after
+SharedComponents/SessionTurnLogging and before TurnReviews, consuming Phase2 seams;
+feature flags remain off until all implementations land. TurnReviews retains
+CompletionGate and new engineering services. SessionTurnLogging owns pipeline/
+mint/stamps and calls that policy. SharedComponents Phase2 owns public DTO/client/
+controller/MCP stubs/shared signatures; ReplAndAgents Phase4 owns adapter behavior
+only. Cross-owner edits require an approved Phase2 amendment, no parallel edits of
+the same file. Add these ownership rules and new context position to base8.3.
+C8/C9/normal-form/public-contract changes cannot cross into implementation until
+QB-AGENT-001 acknowledges the CONTRACT entry or the operator explicitly resolves
+it. This is a dependency, not approval inferred from committing this document.
+
+Round3: DISAGREE, confidence38, accuracy.88/completeness.79, 2PASS/10FAIL;
+14 findings. Exact output is retained under claude-round-3. Sections14.1–14.7 and
+the corrected earlier clauses are the author resolutions awaiting re-review.
