@@ -40,7 +40,8 @@ export interface ActionItem {
     | 'pr_comment'
     | 'issue_comment'
     | 'web_reference'
-    | 'dependency_add';
+    | 'dependency_add'
+    | 'tool_execution';
   status: 'completed' | 'pending';
   filePath?: string;
 }
@@ -59,6 +60,8 @@ export interface TurnState {
   contextList?: string[];
   actions: ActionItem[];
   dialogItems: DialogItem[];
+  /** TR-QB-AUDIT-001: explicit conclusions, separate from the action trail. */
+  designDecisions?: string[];
   errorMessage?: string;
   errorCode?: string;
 }
@@ -176,6 +179,16 @@ export class SessionShim {
     turn.actions.push(...args.actions);
   }
 
+  /** TR-QB-AUDIT-001: append explicit decisions without inferring them from tool activity. */
+  appendDecisions(args: { decisions: string[] }): void {
+    const turn = this.requireCurrentTurn('append_decisions');
+    if (!Array.isArray(args.decisions) || args.decisions.length === 0 ||
+      args.decisions.some(decision => typeof decision !== 'string' || !decision.trim())) {
+      throw new Error('session_append_decisions requires nonempty decision text');
+    }
+    turn.designDecisions = [...(turn.designDecisions ?? []), ...args.decisions];
+  }
+
   completeTurn(args: { response?: string }): void {
     const turn = this.requireCurrentTurn('complete_turn');
     turn.status = 'completed';
@@ -271,6 +284,7 @@ export class SessionShim {
     if (turn.contextList !== undefined) out.contextList = turn.contextList;
     if (turn.actions.length > 0) out.actions = turn.actions;
     if (turn.dialogItems.length > 0) out.processingDialog = turn.dialogItems;
+    if (turn.designDecisions?.length) out.designDecisions = [...turn.designDecisions];
     if (turn.errorMessage !== undefined) out.errorMessage = turn.errorMessage;
     if (turn.errorCode !== undefined) out.errorCode = turn.errorCode;
     return out;
@@ -459,6 +473,10 @@ export async function dispatchSessionTool(
       shim.appendActions(args as Parameters<SessionShim['appendActions']>[0]);
       return submitTurnWithFailsafe(shim, bridge);
 
+    case 'session_append_decisions':
+      shim.appendDecisions(args as Parameters<SessionShim['appendDecisions']>[0]);
+      return submitTurnWithFailsafe(shim, bridge);
+
     case 'session_complete_turn':
       shim.completeTurn(args as Parameters<SessionShim['completeTurn']>[0]);
       return submitTurnWithFailsafe(shim, bridge);
@@ -468,6 +486,11 @@ export async function dispatchSessionTool(
       return submitTurnWithFailsafe(shim, bridge);
 
     case 'session_query_history':
+      // TR-QB-TRUST-001: a bound host owns routing and authentication. A
+      // governed but unbound bridge must fail closed through its own guard.
+      if (bridge.governed || bridge.hasWorkspaceContext) {
+        return bridge.invoke('client.SessionLog.QueryAsync', args);
+      }
       return (await querySessionHistoryHttpFallback(args)) ?? bridge.invoke('client.SessionLog.QueryAsync', args);
 
     case 'session_close':

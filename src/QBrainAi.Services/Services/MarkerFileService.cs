@@ -536,7 +536,7 @@ public static class MarkerFileService
         string Version(string pluginName, string environmentVariableName) =>
             ResolveAgentPluginVersion(workspacePath, pluginName, environmentVariableName);
 
-        return new MarkerAgentPlugins
+        var plugins = new MarkerAgentPlugins
         {
             Policy = "required",
             Agents = new Dictionary<string, MarkerAgentPluginContract>(StringComparer.Ordinal)
@@ -608,8 +608,55 @@ public static class MarkerFileService
                 },
             },
         };
+        var clineQb = BuildConfiguredClineQbContract();
+        if (clineQb is not null) plugins.Agents["ClineQb"] = clineQb;
+        return plugins;
     }
 
+    /// <summary>TR-QB-TRUST-001: advertise ClineQb only from an explicitly configured, named V2 bundle; unrelated installed agents are never a fallback.</summary>
+    private static MarkerAgentPluginContract? BuildConfiguredClineQbContract()
+    {
+        var root = Environment.GetEnvironmentVariable("CLINE_QB_PLUGIN_ROOT")?.Trim();
+        var artifactSha256 = Environment.GetEnvironmentVariable("CLINE_QB_PLUGIN_ARTIFACT_SHA256")?.Trim();
+        if (artifactSha256 is null || !System.Text.RegularExpressions.Regex.IsMatch(artifactSha256, @"\A[0-9A-Fa-f]{64}\z"))
+            return null;
+        if (string.IsNullOrWhiteSpace(root) || !Path.IsPathFullyQualified(root) || root.Contains('\0'))
+            return null;
+        try
+        {
+            using var manifest = JsonDocument.Parse(File.ReadAllText(Path.Combine(root, "package.json")));
+            if (manifest.RootElement.ValueKind != JsonValueKind.Object
+                || !manifest.RootElement.TryGetProperty("name", out var name)
+                || name.ValueKind != JsonValueKind.String
+                || name.GetString() != "@sharpninja/mcpserver-cline-v2-plugin"
+                || !manifest.RootElement.TryGetProperty("version", out var versionNode)
+                || versionNode.ValueKind != JsonValueKind.String)
+                return null;
+            var version = versionNode.GetString();
+            if (string.IsNullOrWhiteSpace(version) || version.Length > 128
+                || !System.Text.RegularExpressions.Regex.IsMatch(version, @"^[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$"))
+                return null;
+            return new MarkerAgentPluginContract
+            {
+                SourceType = "ClineQb",
+                PluginName = "@sharpninja/mcpserver-cline-v2-plugin",
+                PluginVersion = version,
+                ArtifactSha256 = artifactSha256.ToUpperInvariant(),
+                Activation = "Mandatory bundled Cline V2 plugin constructed in-process by the cline-qb governed host factory.",
+                StartupCommand = "",
+                UnavailableFailure = "MCP_PLUGIN_UNAVAILABLE:ClineQb",
+                RequiredEnvVars = [],
+                HookExpectations = ["host-owned session and turn lifecycle", "final tool authorization", "completion gate"],
+                ToolExpectations = ["session_*", "req_*", "todo_*", "memory_*", "triage_*"],
+                RootHints = [],
+            };
+        }
+        catch (Exception error) when (error is IOException or UnauthorizedAccessException or JsonException or ArgumentException)
+        {
+            // Do not publish an unverified version or prevent other agents from receiving their contracts.
+            return null;
+        }
+    }
     internal static string ResolveAgentPluginVersion(
         string workspacePath,
         string pluginName,
@@ -771,6 +818,9 @@ public static class MarkerFileService
             AppendPayloadLine(builder, $"{agentName}.hookExpectations", string.Join(",", contract.HookExpectations));
             AppendPayloadLine(builder, $"{agentName}.toolExpectations", string.Join(",", contract.ToolExpectations));
             AppendPayloadLine(builder, $"{agentName}.rootHints", string.Join(",", contract.RootHints));
+            // Preserve old profiles byte-for-byte; artifact-aware profiles sign the extra pin.
+            if (contract.ArtifactSha256 is not null)
+                AppendPayloadLine(builder, $"{agentName}.artifactSha256", contract.ArtifactSha256);
         }
 
         return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(builder.ToString())));
@@ -890,6 +940,8 @@ internal sealed class MarkerAgentPluginContract
     public string PluginName { get; set; } = string.Empty;
     [YamlMember(Alias = "plugin_version", ApplyNamingConventions = false)]
     public string PluginVersion { get; set; } = string.Empty;
+    [YamlMember(Alias = "artifact_sha256", ApplyNamingConventions = false)]
+    public string? ArtifactSha256 { get; set; }
     public string Activation { get; set; } = string.Empty;
     [YamlMember(Alias = "startup_command", ApplyNamingConventions = false)]
     public string StartupCommand { get; set; } = string.Empty;

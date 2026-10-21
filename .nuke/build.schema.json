@@ -29,6 +29,7 @@
         "AiWarningSuppressionReview",
         "BenchMemory",
         "BuildAgent",
+        "BuildReplBundles",
         "BuildTrustedThirdParty",
         "BumpVersion",
         "CaptureSessionLifeUnitGate",
@@ -54,6 +55,8 @@
         "StartServer",
         "SyncAgentPlugins",
         "Test",
+        "TestGovernedTurnBinding",
+        "TestGovernedTurnStore",
         "TestGraphRagSmoke",
         "TestMultiInstance",
         "UpdateService",
@@ -135,6 +138,14 @@
   "allOf": [
     {
       "properties": {
+        "A8BindingMode": {
+          "type": "string",
+          "description": "A8 selection contract provider: Mock or Production"
+        },
+        "A8StoreMode": {
+          "type": "string",
+          "description": "A8 store contract provider: Mock or Production"
+        },
         "AgentPluginParent": {
           "type": "string",
           "description": "Directory containing mcpserver-*-plugin repositories; defaults to the repository parent directory"
@@ -223,6 +234,13 @@
         "PublishSource": {
           "type": "string",
           "description": "Path to pre-built publish output (used with --skip-build)"
+        },
+        "ReplRuntimeIdentifiers": {
+          "type": "array",
+          "description": "REPL bundle runtimes (default: linux-x64 linux-arm64 osx-x64 osx-arm64 win-x64 win-arm64)",
+          "items": {
+            "type": "string"
+          }
         },
         "SecondInstance": {
           "type": "string",

@@ -17,3 +17,5 @@ Use these standardized type values when logging actions in session log turns.
 - `entity_violation` — banned organization or individual detected
 - `copilot_invocation` — server-initiated Copilot call
 - `policy_change` — workspace policy configuration change
+
+- `tool_execution` — an actual host tool invocation, distinct from file-operation and design-decision actions. Server validation requires a nonnegative order and nonblank description/status. Status vocabulary remains compatible with host lifecycle values (for example pending, completed and failed); type matching is case-insensitive and stored fields are preserved. Keep the separate `tool_call` and `tool_result` dialog records. An execution action never substitutes for an explicit decision or no-decision attestation. (FR-MCP-AUDITACTION-001 / TR-MCP-AUDITACTION-001)

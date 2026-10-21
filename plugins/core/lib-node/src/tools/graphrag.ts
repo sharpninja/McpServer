@@ -488,19 +488,19 @@ export async function handleGraphragTool(
   const method = toolMethodMap[name];
   if (!method) throw new Error(`Unknown graphrag tool: ${name}`);
 
-  const failsafePath = mutatingGraphragTools.has(name) ? await cacheWrite(method, args) : undefined;
+  const failsafePath = !bridge.governed && mutatingGraphragTools.has(name) ? await cacheWrite(method, args) : undefined;
   let response: ReplResponse;
   try {
-    response = (await graphragHttpFallback(name, args)) ?? (await bridge.invoke(method, args));
+    response = bridge.governed ? await bridge.invoke(method, args) : (await graphragHttpFallback(name, args)) ?? (await bridge.invoke(method, args));
   } catch (error) {
     const suffix = failsafePath ? ` Local failsafe saved: ${failsafePath}` : '';
-    throw new Error(`${error instanceof Error ? error.message : String(error)}${suffix}`);
+    throw new Error(`${error instanceof Error ? error.message : String(error)}${suffix}`, { cause: error });
   }
 
   if (response.type === 'error') {
     const payload = response.payload as { message?: string; code?: string };
     const suffix = failsafePath ? ` Local failsafe saved: ${failsafePath}` : '';
-    throw new Error(`${payload.code ?? 'error'}: ${payload.message ?? 'Unknown error'}${suffix}`);
+    throw new Error(`${payload.code ?? 'error'}: ${payload.message ?? 'Unknown error'}${suffix}`, { cause: payload });
   }
 
   if (failsafePath) await cacheDelete(failsafePath);

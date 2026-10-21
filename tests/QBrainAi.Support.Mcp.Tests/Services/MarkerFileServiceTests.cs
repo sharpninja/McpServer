@@ -32,6 +32,8 @@ public sealed class MarkerFileServiceTests
         "CLAUDE_PLUGIN_ROOT",
         "COPILOT_PLUGIN_ROOT",
         "CLINE_PLUGIN_ROOT",
+        "CLINE_QB_PLUGIN_ROOT",
+        "CLINE_QB_PLUGIN_ARTIFACT_SHA256",
         "GROK_PLUGIN_ROOT",
     ];
 
@@ -774,6 +776,127 @@ public sealed class MarkerFileServiceTests
         public List<MarkerDefaultWikiNavigationItem> Children { get; set; } = [];
     }
 
+    /// <summary>TR-QB-TRUST-001: an explicit V2 package root yields the exact mandatory ClineQb identity, and changes alter its signed digest.</summary>
+    [Fact]
+    public void BuildDefaultAgentPlugins_ConfiguredClineQbRequiresBundledV2Contract()
+    {
+        var root = Path.Combine(Path.GetTempPath(), "qb-marker-contract-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(root);
+        File.WriteAllText(Path.Combine(root, "package.json"), "{\"name\":\"@sharpninja/mcpserver-cline-v2-plugin\",\"version\":\"9.8.7\"}");
+        try
+        {
+            WithHermeticPluginVersionResolution(() =>
+            {
+                Environment.SetEnvironmentVariable("CLINE_QB_PLUGIN_ROOT", root);
+                Environment.SetEnvironmentVariable("CLINE_QB_PLUGIN_ARTIFACT_SHA256", new string('a', 64));
+                var plugins = MarkerFileService.BuildDefaultAgentPlugins(root);
+                var profile = plugins.Agents["ClineQb"];
+                Assert.Equal("required", plugins.Policy);
+                Assert.Equal("ClineQb", profile.SourceType);
+                Assert.Equal("@sharpninja/mcpserver-cline-v2-plugin", profile.PluginName);
+                Assert.Equal("9.8.7", profile.PluginVersion);
+                var yaml = new SerializerBuilder().WithNamingConvention(CamelCaseNamingConvention.Instance).Build().Serialize(profile);
+                Assert.Contains("artifact_sha256: " + new string('A', 64), yaml);
+                var firstDigest = MarkerFileService.ComputeAgentPluginsDigest(plugins);
+                Environment.SetEnvironmentVariable("CLINE_QB_PLUGIN_ARTIFACT_SHA256", new string('B', 64));
+                var changedPin = MarkerFileService.BuildDefaultAgentPlugins(root);
+                Assert.NotEqual(firstDigest, MarkerFileService.ComputeAgentPluginsDigest(changedPin));
+                Assert.Empty(profile.StartupCommand);
+                Assert.Empty(profile.RequiredEnvVars);
+                Assert.Empty(profile.RootHints);
+                Assert.Equal("MCP_PLUGIN_UNAVAILABLE:ClineQb", profile.UnavailableFailure);
+                Assert.Equal("mcpserver-cline-plugin", plugins.Agents["Cline"].PluginName);
+                plugins.ContractDigest = MarkerFileService.ComputeAgentPluginsDigest(plugins);
+                var marker = BuildPinnedSignatureMarker(includeAgentPlugins: true);
+                marker.AgentPlugins = plugins;
+                var signature = MarkerFileService.ComputeMarkerSignature(marker);
+                changedPin.ContractDigest = MarkerFileService.ComputeAgentPluginsDigest(changedPin);
+                marker.AgentPlugins = changedPin;
+                Assert.NotEqual(signature, MarkerFileService.ComputeMarkerSignature(marker));
+                marker.AgentPlugins = plugins;
+                profile.PluginVersion = "9.8.8";
+                plugins.ContractDigest = MarkerFileService.ComputeAgentPluginsDigest(plugins);
+                Assert.NotEqual(signature, MarkerFileService.ComputeMarkerSignature(marker));
+            });
+        }
+        finally { Directory.Delete(root, recursive: true); }
+    }
+
+    /// <summary>TR-QB-TRUST-001: absent, relative, malformed, foreign, and unversioned bundle configuration never falls back to another agent's installation.</summary>
+    [Theory]
+    [InlineData("absent")]
+    [InlineData("relative")]
+    [InlineData("malformed")]
+    [InlineData("array")]
+    [InlineData("invalid-version")]
+    [InlineData("foreign")]
+    [InlineData("unversioned")]
+    public void BuildDefaultAgentPlugins_InvalidClineQbConfigurationDoesNotAdvertiseContract(string kind)
+    {
+        var root = Path.Combine(Path.GetTempPath(), "qb-marker-invalid-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(root);
+        var json = kind switch
+        {
+            "malformed" => "{",
+            "array" => "[]",
+            "invalid-version" => "{\"name\":\"@sharpninja/mcpserver-cline-v2-plugin\",\"version\":\"1..0\"}",
+            "foreign" => "{\"name\":\"mcpserver-cline-plugin\",\"version\":\"9.8.7\"}",
+            _ => "{\"name\":\"@sharpninja/mcpserver-cline-v2-plugin\"}",
+        };
+        File.WriteAllText(Path.Combine(root, "package.json"), json);
+        try
+        {
+            WithHermeticPluginVersionResolution(() =>
+            {
+                Environment.SetEnvironmentVariable("CLINE_QB_PLUGIN_ROOT", kind switch { "absent" => null, "relative" => "relative-bundle", _ => root });
+                Environment.SetEnvironmentVariable("CLINE_QB_PLUGIN_ARTIFACT_SHA256", new string('A', 64));
+                var plugins = MarkerFileService.BuildDefaultAgentPlugins(root);
+                Assert.False(plugins.Agents.ContainsKey("ClineQb"));
+                Assert.True(plugins.Agents.ContainsKey("Cline"));
+            });
+        }
+        finally { Directory.Delete(root, recursive: true); }
+    }
+    /// <summary>TR-QB-TRUST-001: a bundle root alone cannot issue an artifact-bound product contract.</summary>
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("not-a-digest")]
+    [InlineData("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")]
+    [InlineData("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG")]
+    public void BuildDefaultAgentPlugins_RequiresConfiguredArtifactDigest(string? digest)
+    {
+        var root = Path.Combine(Path.GetTempPath(), "qb-artifact-pin-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(root);
+        File.WriteAllText(Path.Combine(root, "package.json"), "{\"name\":\"@sharpninja/mcpserver-cline-v2-plugin\",\"version\":\"9.8.7\"}");
+        try
+        {
+            WithHermeticPluginVersionResolution(() =>
+            {
+                Environment.SetEnvironmentVariable("CLINE_QB_PLUGIN_ROOT", root);
+                Environment.SetEnvironmentVariable("CLINE_QB_PLUGIN_ARTIFACT_SHA256", digest);
+                Assert.False(MarkerFileService.BuildDefaultAgentPlugins(root).Agents.ContainsKey("ClineQb"));
+            });
+        }
+        finally { Directory.Delete(root, recursive: true); }
+    }
+
+    /// <summary>TR-QB-TRUST-001: the same JSON fixture binds .NET issuance and Node verification, including CRLF and Unicode line endings.</summary>
+    [Theory]
+    [InlineData("agent-contract-golden.json")]
+    [InlineData("agent-contract-artifact-golden.json")]
+    public void ComputeAgentPluginsDigest_MatchesNodeGoldenFixture(string fixture)
+    {
+        var root = typeof(MarkerFileServiceTests).Assembly
+            .GetCustomAttributes(typeof(System.Reflection.AssemblyMetadataAttribute), false)
+            .Cast<System.Reflection.AssemblyMetadataAttribute>()
+            .Single(attribute => attribute.Key == "McpRepositoryRoot").Value!;
+        var file = Path.Combine(root, "plugins", "core", "lib-node", "tests", "fixtures", fixture);
+        var plugins = s_yamlDeserializer.Deserialize<MarkerAgentPlugins>(File.ReadAllText(file));
+        Assert.Equal(plugins.ContractDigest, MarkerFileService.ComputeAgentPluginsDigest(plugins));
+        Assert.Equal("ClineQb", plugins.Agents["ClineQb"].SourceType);
+        Assert.Equal("@sharpninja/mcpserver-cline-v2-plugin", plugins.Agents["ClineQb"].PluginName);
+    }
     /// <summary>
     /// TEST-MCP-PLUGIN-PSONLY-001: marker plugin contracts publish the current synced plugin version.
     /// </summary>

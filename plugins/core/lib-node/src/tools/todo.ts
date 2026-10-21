@@ -1,3 +1,4 @@
+import { CoreOperationError } from '../runtime/operation-failure.js';
 import type { ToolDescriptor as Tool } from './tool-descriptor.js';
 import { corePluginId } from '../runtime/core-config.js';
 import type { ReplBridge, ReplResponse } from '../transport/repl-bridge.js';
@@ -529,24 +530,29 @@ export async function handleTodoTool(
   args: Record<string, unknown>,
   bridge: ReplBridge,
 ) {
-  if (internalTodoTools.has(name)) return handleInternalTodoTool(name, args);
+  if (internalTodoTools.has(name)) {
+    // These controls address a process-global legacy preference, not the
+    // mandatory host policy. Never inspect or mutate it from a governed tool.
+    if (bridge.governed) throw new CoreOperationError('governed_control_unsupported', false);
+    return handleInternalTodoTool(name, args);
+  }
 
   const method = toolMethodMap[name];
   if (!method) throw new Error(`Unknown todo tool: ${name}`);
 
-  const failsafePath = mutatingTodoTools.has(name) ? await cacheWrite(method, args) : undefined;
+  const failsafePath = !bridge.governed && mutatingTodoTools.has(name) ? await cacheWrite(method, args) : undefined;
   let response: ReplResponse;
   try {
-    response = (await todoHttpFallback(name, args)) ?? (await bridge.invoke(method, args));
+    response = bridge.governed ? await bridge.invoke(method, args) : (await todoHttpFallback(name, args)) ?? (await bridge.invoke(method, args));
   } catch (error) {
     const suffix = failsafePath ? ` Local failsafe saved: ${failsafePath}` : '';
-    throw new Error(`${error instanceof Error ? error.message : String(error)}${suffix}`);
+    throw new Error(`${error instanceof Error ? error.message : String(error)}${suffix}`, { cause: error });
   }
 
   if (response.type === 'error') {
     const payload = response.payload as { message?: string; code?: string };
     const suffix = failsafePath ? ` Local failsafe saved: ${failsafePath}` : '';
-    throw new Error(`${payload.code ?? 'error'}: ${payload.message ?? 'Unknown error'}${suffix}`);
+    throw new Error(`${payload.code ?? 'error'}: ${payload.message ?? 'Unknown error'}${suffix}`, { cause: payload });
   }
 
   if (failsafePath) await cacheDelete(failsafePath);

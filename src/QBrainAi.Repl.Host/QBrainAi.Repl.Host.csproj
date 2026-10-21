@@ -19,6 +19,13 @@
     <PackageProjectUrl>https://github.com/SharpNinja/McpServer</PackageProjectUrl>
   </PropertyGroup>
 
+  <!-- Bundle naming is scoped to this executable; a global AssemblyName
+       property would also rename referenced projects and collide outputs. -->
+  <PropertyGroup Condition="'$(QBrainReplBundle)' == 'true'">
+    <AssemblyName>qbrain-ai-repl</AssemblyName>
+    <PackAsTool>false</PackAsTool>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="System.CommandLine" />
     <PackageReference Include="Spectre.Console" />

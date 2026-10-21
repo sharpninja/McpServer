@@ -30,13 +30,17 @@ export {
   contextLogger,
   setMarkerEnvironment,
 } from './runtime/host-context.js';
-export { ReplBridge, type ReplResponse } from './transport/repl-bridge.js';
+export { ReplBridge, type ReplResponse, type ReplBridgeOptions } from './transport/repl-bridge.js';
+export { CoreRuntimeError, type CoreRuntimeFailureCode } from './runtime/core-runtime-error.js';
 export {
   fullBootstrap,
   findMarkerFile,
   parseMarkerField,
   type MarkerContext,
+  type BootstrapOptions,
 } from './discovery/marker-resolver.js';
+export type { RequiredAgentPluginBinding, VerifiedAgentPluginContract } from './discovery/agent-plugin-contract.js';
+export { verifyPinnedPluginArtifact, type PinnedPluginArtifactOptions, type VerifiedPluginArtifact } from './discovery/plugin-artifact.js';
 export { cacheWrite, cacheDelete, cacheFlush, cacheStatus } from './cache/cache-manager.js';
 export type { ToolDescriptor, ToolResult } from './tools/tool-descriptor.js';
 export { todoTools, canHandleTodoTool, handleTodoTool } from './tools/todo.js';
@@ -64,6 +68,22 @@ import type { QBrainAiPluginCoreConfig } from './runtime/core-config.js';
 export function createQBrainAiPluginCore(config: QBrainAiPluginCoreConfig = {}): HostContext {
   return new HostContext(config);
 }
+
+export {
+  readWorkspaceVerificationPolicy,
+  type VerificationPolicyBinding,
+  type VerificationPolicyCheck,
+  type WorkspaceVerificationPolicyDocument,
+  type VerifiedWorkspacePolicy,
+} from './runtime/verification-policy.js';
+export { classifyOperationFailure, CoreOperationError, FINAL_OPERATION_CODES, type OperationFailure } from './runtime/operation-failure.js';
+
+export {
+  AuditOutbox, AuditStorageError,
+  type AuditContext, type AuditEvent, type AuditReceipt, type AuditTransport,
+  type AuditEnqueueResult, type AuditFlushResult, type AuditOutboxOptions, type AuditAliasRecord,
+} from './cache/audit-outbox.js';
+export { AuditAliasConsumer, type AuditAliasSource } from './cache/audit-alias-consumer.js';
 
 /**
  * @deprecated 1.x alias of {@link createQBrainAiPluginCore}, kept through 1.x for host plugins

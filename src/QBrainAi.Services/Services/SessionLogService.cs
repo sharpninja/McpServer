@@ -197,6 +197,7 @@ public sealed class SessionLogService : ISessionLogService
             }
         }
 
+        ValidateSubmitActions(existing, dto.Turns);
         var wasCreated = existing is null;
         if (existing != null)
         {
@@ -239,6 +240,7 @@ public sealed class SessionLogService : ISessionLogService
             existing = await FindExistingSessionAsync(dto.SourceType, dto.SessionId, cancellationToken).ConfigureAwait(false)
                 ?? throw new InvalidOperationException($"Session log {dto.SourceType}/{dto.SessionId} disappeared after UNIQUE constraint failure.");
 
+            ValidateSubmitActions(existing, dto.Turns);
             MapDtoToEntity(dto, existing);
             existing.SourceFilePath = sourceFilePath;
             existing.ContentHash = contentHash;
@@ -718,6 +720,7 @@ public sealed class SessionLogService : ISessionLogService
         ArgumentNullException.ThrowIfNull(sourceType);
         ArgumentNullException.ThrowIfNull(sessionId);
         ArgumentNullException.ThrowIfNull(turn);
+        ValidateToolExecutionActions(turn.Actions);
         SyncDbWorkspaceFromContext();
 
         var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(sessionId, sourceType);
@@ -841,6 +844,7 @@ public sealed class SessionLogService : ISessionLogService
         ArgumentNullException.ThrowIfNull(sourceType);
         ArgumentNullException.ThrowIfNull(sessionId);
         ArgumentNullException.ThrowIfNull(turn);
+        ValidateToolExecutionActions(turn.Actions);
         SyncDbWorkspaceFromContext();
 
         var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(sessionId, sourceType);
@@ -966,6 +970,8 @@ public sealed class SessionLogService : ISessionLogService
         SyncDbWorkspaceFromContext();
 
         var parsed = ParseSection(section); // throws ArgumentException on unknown section
+        if (parsed == TurnSection.Actions)
+            ValidateToolExecutionActions(payload.Actions);
         ValidateTurnIdentifiers(sourceType, sessionId, requestId);
 
         var session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false);
@@ -1586,9 +1592,17 @@ public sealed class SessionLogService : ISessionLogService
         }
     }
 
-    private void UpsertTurns(SessionLogEntity session, IEnumerable<UnifiedRequestEntryDto>? dtoTurns)
+    /// <summary>TR-MCP-AUDITACTION-001: validate the effective submit before tracked fields change.</summary>
+    private static void ValidateSubmitActions(SessionLogEntity? session, IEnumerable<UnifiedRequestEntryDto>? turns)
     {
-        var incoming = dtoTurns?.ToArray() ?? [];
+        foreach (var turn in SelectSubmitTurns(session, turns))
+            ValidateToolExecutionActions(turn.Actions);
+    }
+
+    /// <summary>Share last-wins and terminal retention rules between validation and persistence.</summary>
+    private static List<UnifiedRequestEntryDto> SelectSubmitTurns(SessionLogEntity? session, IEnumerable<UnifiedRequestEntryDto>? turns)
+    {
+        var incoming = turns?.ToArray() ?? [];
         var deduped = new List<UnifiedRequestEntryDto>();
         var seenRequestIds = new HashSet<string>(StringComparer.Ordinal);
         for (var i = incoming.Length - 1; i >= 0; i--)
@@ -1598,37 +1612,68 @@ public sealed class SessionLogService : ISessionLogService
                 deduped.Add(dto);
         }
         deduped.Reverse();
+        if (session is null)
+            return deduped;
 
         var existingByRequestId = session.Turns
             .Where(e => e.RequestId != null)
             .ToDictionary(e => e.RequestId!, StringComparer.Ordinal);
+        return deduped.Where(dto =>
+            dto.RequestId is null
+            || !existingByRequestId.TryGetValue(dto.RequestId, out var existingEntry)
+            || !(IsTerminalTurnStatus(existingEntry.Status)
+                && dto.Status is not null
+                && (IsSupersededHookPersist(dto) || !IsTerminalTurnStatus(dto.Status))
+                && !string.Equals(existingEntry.Status, dto.Status, StringComparison.OrdinalIgnoreCase)))
+            .ToList();
+    }
 
-        foreach (var dto in deduped)
+    /// <summary>Merge selected turns without replacing durable terminal history with late hook snapshots.</summary>
+    private void UpsertTurns(SessionLogEntity session, IEnumerable<UnifiedRequestEntryDto>? dtoTurns)
+    {
+        var selected = SelectSubmitTurns(session, dtoTurns);
+        var existingByRequestId = session.Turns
+            .Where(e => e.RequestId != null)
+            .ToDictionary(e => e.RequestId!, StringComparer.Ordinal);
+        foreach (var dto in selected)
         {
             if (dto.RequestId != null && existingByRequestId.TryGetValue(dto.RequestId, out var existingEntry))
             {
-                // A late hook snapshot must not replace durable terminal history.
+                // FR-SUPPORT-015: omitted fields do not clobber persisted values.
                 // Deliberate status corrections use the explicit single-turn API.
-                if (IsTerminalTurnStatus(existingEntry.Status)
-                    && dto.Status is not null
-                    && (IsSupersededHookPersist(dto) || !IsTerminalTurnStatus(dto.Status))
-                    && !string.Equals(existingEntry.Status, dto.Status, StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
-
-                // FR-SUPPORT-015: whole-session submit merges turns additively -
-                // omitted turn fields never clobber previously persisted values.
                 UpdateEntryFromDto(existingEntry, dto, mergeOmittedFields: true);
             }
             else
             {
-                var newEntry = MapSingleEntry(dto);
-                session.Turns.Add(newEntry);
+                session.Turns.Add(MapSingleEntry(dto));
             }
         }
     }
 
+    /// <summary>TR-MCP-AUDITACTION-001: recognize execution metadata without changing legacy action types.</summary>
+    private static bool IsToolExecution(UnifiedActionDto action) =>
+        string.Equals(action.Type, "tool_execution", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>Reject malformed execution actions before any action batch or parent scalar is changed.</summary>
+    private static void ValidateToolExecutionActions(IEnumerable<UnifiedActionDto>? actions)
+    {
+        if (actions is null)
+            return;
+        var index = 0;
+        foreach (var action in actions)
+        {
+            if (IsToolExecution(action))
+            {
+                if (action.Order < 0)
+                    throw new ArgumentException("tool_execution requires nonnegative order.", $"actions[{index}].order");
+                if (string.IsNullOrWhiteSpace(action.Description))
+                    throw new ArgumentException("tool_execution requires nonblank description.", $"actions[{index}].description");
+                if (string.IsNullOrWhiteSpace(action.Status))
+                    throw new ArgumentException("tool_execution requires nonblank status.", $"actions[{index}].status");
+            }
+            index++;
+        }
+    }
     private void UpdateEntryFromDto(
         SessionLogTurnEntity entity,
         UnifiedRequestEntryDto dto,
@@ -1766,7 +1811,7 @@ public sealed class SessionLogService : ISessionLogService
 
     private static List<SessionLogTurnEntity> MapNewTurns(IEnumerable<UnifiedRequestEntryDto>? turns)
     {
-        return turns?.Select(MapSingleEntry).ToList() ?? [];
+        return SelectSubmitTurns(null, turns).Select(MapSingleEntry).ToList();
     }
     private static SessionLogTurnEntity MapSingleEntry(UnifiedRequestEntryDto e)
     {
@@ -1812,7 +1857,7 @@ public sealed class SessionLogService : ISessionLogService
     {
         return actions?.Select((a, i) => new SessionLogActionEntity
         {
-            Order = a.Order > 0 ? a.Order : i,
+            Order = IsToolExecution(a) || a.Order > 0 ? a.Order : i,
             Description = a.Description,
             Type = a.Type,
             Status = a.Status,

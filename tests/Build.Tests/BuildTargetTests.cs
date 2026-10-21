@@ -447,6 +447,11 @@ public sealed class BuildTargetTests
         Assert.Contains("--version {packageVersion}", installReplTarget, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// FR-MCP-BUILD-001: Parses the current REPL package identity from a tool-list
+    /// fixture and rejects absent packages, so repeatable installation does not
+    /// mistake an unrelated global tool for the required package.
+    /// </summary>
     [Fact]
     public void InstallReplTool_ParsesInstalledGlobalToolVersion()
     {

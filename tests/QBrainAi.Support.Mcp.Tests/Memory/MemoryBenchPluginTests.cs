@@ -51,14 +51,20 @@ public sealed class MemoryBenchPluginTests
     [Fact]
     public void AllEight_WritesStubArtifacts()
     {
-        var directory = Path.Combine(MemoryBenchCatalog.FindRepoRoot(), "docs", "benchmarks", "results");
-        Directory.CreateDirectory(directory);
-        var result = MemoryBenchCatalog.RunStub(["all"], directory, utcStamp: "20260919T091800Z");
-        Assert.Equal(MemoryBenchAdapterRegistry.AllPluginIds, result.Plugins);
-        Assert.Equal(128, result.Cells.Count);
-        Assert.Equal(1.0, result.Cells.Average(cell => cell.Pass ? 1 : 0));
-        Assert.True(File.Exists(Path.Combine(directory, "memory-bench-20260919T091800Z.json")));
-        Assert.True(File.Exists(Path.Combine(directory, "memory-bench-20260919T091800Z.md")));
+        var directory = Directory.CreateTempSubdirectory("mcp-bench-all-").FullName;
+        try
+        {
+            var result = MemoryBenchCatalog.RunStub(["all"], directory, utcStamp: "20260919T091800Z");
+            Assert.Equal(MemoryBenchAdapterRegistry.AllPluginIds, result.Plugins);
+            Assert.Equal(128, result.Cells.Count);
+            Assert.Equal(1.0, result.Cells.Average(cell => cell.Pass ? 1 : 0));
+            Assert.True(File.Exists(Path.Combine(directory, "memory-bench-20260919T091800Z.json")));
+            Assert.True(File.Exists(Path.Combine(directory, "memory-bench-20260919T091800Z.md")));
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
     }
 
     private static void AssertPluginCompletesFullPack(string plugin, MemoryBenchRunResult result)

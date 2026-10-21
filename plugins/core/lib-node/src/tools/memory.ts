@@ -233,22 +233,24 @@ export async function handleMemoryTool(
   if (!method) throw new Error(`Unknown memory tool: ${name}`);
   const normalizedArgs = unwrapRequest(args);
 
-  const failsafePath = mutatingMemoryTools.has(name) ? await cacheWrite(method, normalizedArgs) : undefined;
+  const failsafePath = !bridge.governed && mutatingMemoryTools.has(name) ? await cacheWrite(method, normalizedArgs) : undefined;
   let response: ReplResponse;
   try {
     response = await bridge.invoke(method, normalizedArgs);
   } catch (error) {
     const suffix = failsafePath ? ` Local failsafe saved: ${failsafePath}` : '';
-    throw new Error(`${error instanceof Error ? error.message : String(error)}${suffix}`);
+    throw new Error(`${error instanceof Error ? error.message : String(error)}${suffix}`, { cause: error });
   }
 
   if (response.type === 'error') {
     const payload = response.payload as { message?: string; code?: string };
     const suffix = failsafePath ? ` Local failsafe saved: ${failsafePath}` : '';
-    throw new Error(`${payload.code ?? 'error'}: ${payload.message ?? 'Unknown error'}${suffix}`);
+    throw new Error(`${payload.code ?? 'error'}: ${payload.message ?? 'Unknown error'}${suffix}`, { cause: payload });
   }
 
   if (failsafePath) await cacheDelete(failsafePath);
-  await appendMemoryMutationAction(name, normalizedArgs, bridge);
+  // Governed host owns durable, explicitly turn-bound auditing; do not emit
+  // an extra best-effort record against a REPL's implicit current turn.
+  if (!bridge.governed) await appendMemoryMutationAction(name, normalizedArgs, bridge);
   return response.payload;
 }

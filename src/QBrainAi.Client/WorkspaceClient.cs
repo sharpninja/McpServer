@@ -21,6 +21,22 @@ public sealed class WorkspaceClient : McpClientBase
     internal WorkspaceClient(HttpClient http, QBrainAiClientOptions options, WorkspacePathHolder holder)
         : base(http, options, holder) { }
 
+    /// <summary>
+    /// Gets and verifies the current workspace's signed verification policy using a fresh
+    /// challenge. Requires an explicit workspace path and its full marker API key.
+    /// </summary>
+    public async Task<WorkspaceVerificationPolicySnapshot> GetVerificationPolicyAsync(CancellationToken cancellationToken = default)
+    {
+        var workspace = WorkspacePath;
+        var key = ApiKey;
+        if (string.IsNullOrWhiteSpace(workspace) || string.IsNullOrWhiteSpace(key))
+            throw new InvalidOperationException("Verification policy requires an explicit workspace and its marker key.");
+        var challenge = Convert.ToHexString(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32));
+        var envelope = await GetAsync<WorkspaceVerificationPolicyEnvelope>(
+            "qbrainai/workspace/verification-policy?challenge=" + challenge, cancellationToken).ConfigureAwait(false);
+        return WorkspaceVerificationPolicyCodec.Verify(envelope, workspace, challenge, key);
+    }
+
     /// <summary>List all registered workspaces.</summary>
     public async Task<WorkspaceListResult> ListAsync(CancellationToken cancellationToken = default)
     {

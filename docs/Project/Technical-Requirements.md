@@ -4108,3 +4108,11 @@ Scope: layer-1+
 - [ ] The slice shows a red test run before the green run.
 - [ ] Phase 1 is not marked done without the astra-6-xhigh receipt.
 
+
+## TR-MCP-AUDITACTION-001 Validate tool execution actions at session write boundaries
+
+Recognize tool_execution case-insensitively without rewriting caller data. Require nonnegative order, nonblank description and nonblank status for this action type. Preserve status vocabulary for host lifecycle compatibility. Validate actions selected for persistence before whole-session submit, turn upsert, turn replacement or actions-section replacement changes tracked session/turn state. Preserve last-wins duplicate request IDs and retained terminal history: losing duplicate payloads and skipped late snapshots remain ignored. Unrelated section replacements ignore action payloads. Preserve zero as a valid explicit tool_execution order, regardless of collection position. Keep unrelated legacy/custom action validation unchanged. Do not synthesize designDecisions or decision dialog from actions; document the recognized type in docs/context/action-types.md.
+
+**Status:** pending
+Scope: layer-1+
+**Covered by:** FR: FR-MCP-AUDITACTION-001; TEST: TEST-MCP-AUDITACTION-001

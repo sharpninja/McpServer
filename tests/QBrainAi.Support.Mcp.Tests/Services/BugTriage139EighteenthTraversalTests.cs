@@ -88,6 +88,76 @@ public sealed class BugTriage139EighteenthTraversalTests
     }
 
     /// <summary>
+    /// TEST-MCP-USECASE-020-AC001: saturating real bounded traversal workers must reject the next
+    /// caller without retaining its root handle. Uses distinct temporary roots so leaked ownership
+    /// is attributable to the rejected operation, then releases every admitted worker.
+    /// </summary>
+    [Fact(Timeout = 60_000)]
+    public async Task EnumerateFilesBoundedAsync_AdmissionRejected_DoesNotRetainRootHandle()
+    {
+        var method = ResolveBoundedEnumeration();
+        var hook = ResolveHook("s_beforeTraversalDirectoryRead");
+        var activeWorkers = ResolveProperty("ActiveTraversalWorkerCount");
+        var capacityField = typeof(WorkspaceContainedFileSystem).GetField(
+            "MaxTraversalWorkerCount", BindingFlags.NonPublic | BindingFlags.Static);
+        Assert.NotNull(capacityField);
+        var capacity = Assert.IsType<int>(capacityField!.GetRawConstantValue());
+        Assert.Equal(0, ReadCounter(activeWorkers));
+        using var release = new ManualResetEventSlim();
+        using var entered = new CountdownEvent(capacity);
+        var fixtures = new List<TraversalFixture>();
+        var operations = new List<Task>();
+        using var rejected = new TraversalFixture();
+        try
+        {
+            hook.SetValue(null, (Action)(() =>
+            {
+                if (entered.CurrentCount > 0)
+                    entered.Signal();
+                release.Wait(TimeSpan.FromSeconds(15));
+            }));
+            for (var index = 0; index < capacity; index++)
+            {
+                var fixture = new TraversalFixture();
+                fixtures.Add(fixture);
+                operations.Add(InvokeEnumeration(method, fixture.Root, fixture.LiveDirectory,
+                    TimeSpan.FromSeconds(10), TestContext.Current.CancellationToken));
+            }
+            Assert.True(entered.Wait(TimeSpan.FromSeconds(3), TestContext.Current.CancellationToken));
+            Assert.Equal(capacity, ReadCounter(activeWorkers));
+            var exception = await Assert.ThrowsAsync<InvalidOperationException>(() =>
+                InvokeEnumeration(method, rejected.Root, rejected.LiveDirectory,
+                    TimeSpan.FromSeconds(1), TestContext.Current.CancellationToken)).ConfigureAwait(true);
+            Assert.Contains("capacity", exception.Message, StringComparison.OrdinalIgnoreCase);
+            Assert.Equal(capacity, ReadCounter(activeWorkers));
+            if (OperatingSystem.IsWindows())
+            {
+                Directory.Move(rejected.Root, rejected.RenamedRoot);
+            }
+            else
+            {
+                Assert.False(IsDirectoryDescriptorOpen(rejected.Root),
+                    "Rejected admission leaked a reference to the root descriptor.");
+            }
+        }
+        finally
+        {
+            release.Set();
+            hook.SetValue(null, null);
+            try
+            {
+                await Task.WhenAll(operations).WaitAsync(TimeSpan.FromSeconds(5), TestContext.Current.CancellationToken).ConfigureAwait(true);
+            }
+            finally
+            {
+                Assert.True(SpinWait.SpinUntil(() => ReadCounter(activeWorkers) == 0, TimeSpan.FromSeconds(3)));
+                foreach (var fixture in fixtures)
+                    fixture.Dispose();
+            }
+        }
+    }
+
+    /// <summary>
     /// BUG-BASELINE-009: true when this process holds an open descriptor whose /proc/self/fd link names
     /// <paramref name="directory"/> (Linux).
     /// </summary>

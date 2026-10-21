@@ -332,8 +332,8 @@ public sealed class RepoFileService : IRepoFileService, IRepoFileCompensation
 
     private string GetRepoRoot()
     {
-        return Path.GetFullPath(_workspaceContext.WorkspacePath ?? _options.RepoRoot)
-            .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        // Preserve filesystem roots such as / and C:\ while removing a non-root trailing separator.
+        return Path.TrimEndingDirectorySeparator(Path.GetFullPath(_workspaceContext.WorkspacePath ?? _options.RepoRoot));
     }
 
     private bool ContainsEscapingReparsePoint(string repoRoot, string candidatePath, string relativePath)
