@@ -1,0 +1,7 @@
+Now: 2026-10-20T19:48:29 before=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r4-linux-test-1 (4511) after=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r4-race-mockgate-2 (4513)
+onlyBefore=0 onlyAfter=2 common=4511
+onlyAfter QBrainAi.Support.Mcp.Tests=2
+--- only in before ---
+--- only in after ---
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.HandoffTestDatabaseTests.OwnConnectionsToOneFile_PassTheHarnessAssertion
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.HandoffTestDatabaseTests.SharedConnectionAndPrivateDatabases_AreRejectedInsidePassingHarness
