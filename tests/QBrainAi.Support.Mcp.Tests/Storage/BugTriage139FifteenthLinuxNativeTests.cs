@@ -4,6 +4,8 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// TEST-MCP-USECASE-019/020: Linux-only native identity, FUSE, and SQLite boundary evidence.
 /// </summary>
 [Collection(nameof(WorkspaceIdentityNativeProcessStateCollection))]
+[Trait("Category", "Integration")]
+[Trait("Platform", "Linux")]
 public sealed class BugTriage139FifteenthLinuxNativeTests
 {
     /// <summary>

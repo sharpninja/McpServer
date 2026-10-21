@@ -6,6 +6,7 @@ namespace QBrainAi.Support.Mcp.Tests.Memory;
 public sealed class MemoryBenchReportTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-24: Summary compares with_memory vs without_memory pass rates.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void SummaryComparesConditions()
     {
@@ -20,6 +21,7 @@ public sealed class MemoryBenchReportTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-38: Summary table includes the required token columns.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void SummaryTable_TokenColumns()
     {
@@ -35,6 +37,7 @@ public sealed class MemoryBenchReportTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-40: Headline numbers are macro mean tokens_total.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Headline_MacroMeanTokens()
     {

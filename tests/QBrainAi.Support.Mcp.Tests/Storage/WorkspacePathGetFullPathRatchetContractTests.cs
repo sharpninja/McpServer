@@ -114,6 +114,7 @@ public abstract class WorkspacePathGetFullPathRatchetContractTests
     protected abstract IReadOnlyDictionary<string, int> Counts();
 
     /// <summary>TR-MCP-FED-PATH-001: identity files contain no direct host path resolution.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void IdentityFiles_HaveNoDirectGetFullPath()
     {
@@ -126,6 +127,7 @@ public abstract class WorkspacePathGetFullPathRatchetContractTests
     /// TR-MCP-FED-PATH-001: no file exceeds its reviewed host-native count and no new file starts
     /// calling Path.GetFullPath without review.
     /// </summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void AllOtherFiles_StayWithinReviewedAllowlist()
     {

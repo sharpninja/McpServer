@@ -2,19 +2,16 @@ namespace QBrainAi.Support.Mcp.Tests.Services.AgentHelp;
 
 internal static class AgentHelpTestPaths
 {
+    /// <summary>
+    /// Resolves an Agent Help fixture copied to the test output (<c>Fixtures\AgentHelp\**</c>,
+    /// CopyToOutputDirectory), never a file in the repository checkout (TR-MCP-USECASE-018 AC-006).
+    /// </summary>
     public static string ResolveFixturePath(string relativePath)
     {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            var candidate = Path.Combine(directory.FullName, "Fixtures", "AgentHelp", relativePath);
-            if (File.Exists(candidate))
-                return candidate;
-
-            directory = directory.Parent;
-        }
-
-        throw new FileNotFoundException($"Agent Help fixture not found: {relativePath}");
+        var candidate = Path.Combine(AppContext.BaseDirectory, "Fixtures", "AgentHelp", relativePath);
+        return File.Exists(candidate)
+            ? candidate
+            : throw new FileNotFoundException($"Agent Help fixture not found in the test output: {relativePath}", candidate);
     }
 
     public static string CreateTempWorkspaceRoot()

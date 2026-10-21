@@ -6,6 +6,7 @@ using Xunit;
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
 /// <summary>TEST-HANDOFF-002: handle containment, UNC normalization, and bounded reads.</summary>
+[Trait("Category", "Integration")]
 public sealed class HandoffContainedFileReaderTests
 {
     /// <summary>P1-6: \\?\UNC\ is normalized to a UNC path, not a local drive-looking remnant.</summary>
@@ -23,18 +24,6 @@ public sealed class HandoffContainedFileReaderTests
     {
         var normalized = HandoffContainedFileReader.NormalizeFinalPath(@"\\?\C:\workspace\file.md");
         Assert.Equal(@"C:\workspace\file.md", normalized);
-    }
-
-    /// <summary>P1-6: an unresolvable handle fails closed.</summary>
-    [Fact]
-    public void TryGetFinalPath_InvalidHandle_FailsClosedOnWindows()
-    {
-        if (!OperatingSystem.IsWindows())
-            return;
-
-        using var handle = new SafeFileHandle(IntPtr.Zero, ownsHandle: false);
-        Assert.False(HandoffContainedFileReader.TryGetFinalPath(handle, out var path));
-        Assert.True(string.IsNullOrEmpty(path));
     }
 
     /// <summary>P2-1: decoded size exactly at the limit succeeds.</summary>
@@ -153,5 +142,23 @@ public sealed class HandoffContainedFileReaderTests
         public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
         public override void SetLength(long value) => throw new NotSupportedException();
         public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+    }
+}
+
+/// <summary>
+/// TEST-HANDOFF-002: Windows final-path resolution of a handle. Windows-only, so an integration test on Windows
+/// hosts without a silent return elsewhere (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019).
+/// </summary>
+[Trait("Category", "Integration")]
+[Trait("Platform", "Windows")]
+public sealed class HandoffContainedFileReaderWindowsTests
+{
+    /// <summary>P1-6: an unresolvable handle fails closed.</summary>
+    [Fact]
+    public void TryGetFinalPath_InvalidHandle_FailsClosedOnWindows()
+    {
+        using var handle = new SafeFileHandle(IntPtr.Zero, ownsHandle: false);
+        Assert.False(HandoffContainedFileReader.TryGetFinalPath(handle, out var path));
+        Assert.True(string.IsNullOrEmpty(path));
     }
 }

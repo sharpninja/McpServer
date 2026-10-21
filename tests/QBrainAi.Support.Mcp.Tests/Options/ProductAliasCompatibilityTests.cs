@@ -7,12 +7,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using QBrainAi.Support.Mcp.Tests.TestSupport;
 
 namespace QBrainAi.Support.Mcp.Tests.Options;
 
 /// <summary>
-/// TR-MCP-QBRAIN-004 and TR-MCP-QBRAIN-005: product route and configuration aliases.
+/// TR-MCP-QBRAIN-004 and TR-MCP-QBRAIN-005: product route and configuration aliases. The class runs in
+/// <see cref="ProcessEnvironmentCollection"/> because one of its tests writes the process environment
+/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
 /// </summary>
+[Collection(ProcessEnvironmentCollection.Name)]
 public sealed class ProductAliasCompatibilityTests
 {
     /// <summary>
@@ -63,15 +67,26 @@ public sealed class ProductAliasCompatibilityTests
     /// <summary>
     /// TR-MCP-QBRAIN-005: operator Mcp environment and command-line values beat file and image QBrainAi values.
     /// </summary>
+    /// <remarks>
+    /// The test imports the whole process environment (<c>AddEnvironmentVariables</c>), so it is an integration test
+    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation round 5 finding R5-F2, where an ambient
+    /// <c>QBrainAi__ProjectionProbe</c> won over the legacy value and the first assertion failed). It sets the two
+    /// variables its assertions read, clears the canonical and legacy forms of every other variable they depend on
+    /// (both probe names and both port names), and restores all six; the assertions are unchanged.
+    /// </remarks>
     [Fact]
+    [Trait("Category", "Integration")]
     public void ProjectCanonicalSection_EnvironmentAndCommandLineBeatFileQBrainAi()
     {
         var envName = "Mcp__ProjectionProbe";
         var cliName = "QBrainAi__ProjectionCliProbe";
-        var previousEnv = Environment.GetEnvironmentVariable(envName);
-        var previousCli = Environment.GetEnvironmentVariable(cliName);
+        string[] cleared = ["QBrainAi__ProjectionProbe", "Mcp__ProjectionCliProbe", "Mcp__Port", "QBrainAi__Port"];
+        var previous = new[] { envName, cliName }.Concat(cleared)
+            .ToDictionary(name => name, Environment.GetEnvironmentVariable, StringComparer.Ordinal);
         try
         {
+            foreach (var name in cleared)
+                Environment.SetEnvironmentVariable(name, null);
             Environment.SetEnvironmentVariable(envName, "/myrepo");
             Environment.SetEnvironmentVariable(cliName, "/fromenv");
             using var configuration = new ConfigurationManager();
@@ -94,8 +109,8 @@ public sealed class ProductAliasCompatibilityTests
         }
         finally
         {
-            Environment.SetEnvironmentVariable(envName, previousEnv);
-            Environment.SetEnvironmentVariable(cliName, previousCli);
+            foreach (var (name, value) in previous)
+                Environment.SetEnvironmentVariable(name, value);
         }
     }
 

@@ -1,12 +1,15 @@
 using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Tests.TestSupport;
 
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
 /// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011:
 /// S2 Green acceptance for the dedicated memory indexer, ANN/FTS fusion,
-/// and EmbeddingStatus transitions.
+/// and EmbeddingStatus transitions. The class runs in <see cref="ProcessEnvironmentCollection"/> because one of its
+/// tests writes the process environment (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
 /// </summary>
+[Collection(ProcessEnvironmentCollection.Name)]
 public sealed class MemoryIndexerTests : IDisposable
 {
     private readonly MemoryS1Harness _harness = new();
@@ -143,24 +146,39 @@ public sealed class MemoryIndexerTests : IDisposable
         Assert.NotEqual("ready", status);
     }
 
-    /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-09: Local ONNX path works without cloud credentials in the test host.</summary>
+    /// <summary>
+    /// AC-TR-MCP-MEMORY-SEARCH-002-09: Local ONNX path works without cloud credentials in the test host. The test
+    /// clears both cloud keys, so it writes the process environment and is an integration test; it restores both
+    /// keys afterwards, which it did not do before (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+    /// </summary>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task OnnxLocal_NoCloudRequired()
     {
-        Environment.SetEnvironmentVariable("OPENAI_API_KEY", null);
-        Environment.SetEnvironmentVariable("AZURE_OPENAI_API_KEY", null);
-        var memory = await SeedAsync("onnx local embedding body").ConfigureAwait(true);
+        var previousOpenAi = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+        var previousAzure = Environment.GetEnvironmentVariable("AZURE_OPENAI_API_KEY");
+        try
+        {
+            Environment.SetEnvironmentVariable("OPENAI_API_KEY", null);
+            Environment.SetEnvironmentVariable("AZURE_OPENAI_API_KEY", null);
+            var memory = await SeedAsync("onnx local embedding body").ConfigureAwait(true);
 
-        var indexed = await _harness.IndexAsync(
-            memory.Id,
-            provider: "onnx",
-            cloudEnabled: false,
-            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        var status = indexed.EmbeddingStatus
-            ?? await _harness.GetEmbeddingStatusAsync(memory.Id).ConfigureAwait(true);
+            var indexed = await _harness.IndexAsync(
+                memory.Id,
+                provider: "onnx",
+                cloudEnabled: false,
+                cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var status = indexed.EmbeddingStatus
+                ?? await _harness.GetEmbeddingStatusAsync(memory.Id).ConfigureAwait(true);
 
-        Assert.True(indexed.StatusCode is 200 or 201, indexed.Error);
-        Assert.Equal("ready", status);
+            Assert.True(indexed.StatusCode is 200 or 201, indexed.Error);
+            Assert.Equal("ready", status);
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable("OPENAI_API_KEY", previousOpenAi);
+            Environment.SetEnvironmentVariable("AZURE_OPENAI_API_KEY", previousAzure);
+        }
     }
 
     /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-10: Cloud embedding path is opt-in and fails closed when disabled.</summary>

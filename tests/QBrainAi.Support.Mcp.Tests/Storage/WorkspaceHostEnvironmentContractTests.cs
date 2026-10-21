@@ -8,7 +8,10 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// <see cref="IWorkspaceHostEnvironment"/>: it reports the running OS, the process working
 /// directory, and canonical host-native normalization. BDP v4 (plan section 2a):
 /// <see cref="WorkspaceHostEnvironmentMockDataTests"/> then <see cref="WorkspaceHostEnvironmentRealTests"/>.
+/// The contract describes the running host, so it is an integration test on every host
+/// (TR-MCP-USECASE-018 AC-006: no unit test depends on the platform).
 /// </summary>
+[Trait("Category", "Integration")]
 public abstract class WorkspaceHostEnvironmentContractTests
 {
     /// <summary>Platform the running test process is on.</summary>
@@ -47,6 +50,7 @@ public abstract class WorkspaceHostEnvironmentContractTests
 }
 
 /// <summary>BDP v4 step 2: the host contract proven against scripted data.</summary>
+[Trait("Category", "Integration")]
 public sealed class WorkspaceHostEnvironmentMockDataTests : WorkspaceHostEnvironmentContractTests
 {
     /// <inheritdoc />
@@ -61,6 +65,7 @@ public sealed class WorkspaceHostEnvironmentMockDataTests : WorkspaceHostEnviron
 }
 
 /// <summary>BDP v4 step 3: the host contract against <see cref="SystemWorkspaceHostEnvironment"/>.</summary>
+[Trait("Category", "Integration")]
 public sealed class WorkspaceHostEnvironmentRealTests : WorkspaceHostEnvironmentContractTests
 {
     /// <inheritdoc />

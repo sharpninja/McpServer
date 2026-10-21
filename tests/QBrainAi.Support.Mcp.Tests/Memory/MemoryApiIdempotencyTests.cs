@@ -14,6 +14,7 @@ public sealed class MemoryApiIdempotencyTests : IDisposable
     public void Dispose() => _harness.Dispose();
 
     /// <summary>AC-TR-MCP-MEMORY-API-002-10: Idempotency-Key is not supported; duplicates are predictable.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task DocumentedBehavior()
     {

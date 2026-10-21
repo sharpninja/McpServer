@@ -1,0 +1,18 @@
+Exception: /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/Invoke-McpPlugin.ps1:315
+Line |
+ 315 |          throw $msg
+     |          ~~~~~~~~~~
+     | Plugin command failed with exit code 1. type: error payload:  
+     | requestId: req-20261020T031128Z-d489   code: method_invocation_error  
+     | message: 'Unknown method: GetAsync on client: SessionLogClient. Valid
+     | methods: AppendDialogAsync, BeginTurnAsync, ClearTurnSectionAsync,
+     | CompleteTurnAsync, DeleteSessionAsync, DeleteTurnAsync,
+     | DeleteTurnItemAsync, FailTurnAsync, IngestTranscriptPathAsync,
+     | IngestTranscriptUploadAsync, OpenSessionAsync, PatchTurnAsync,
+     | QueryAsync, RepairWorkspaceStampsAsync, ReplaceTurnAsync,
+     | ReplaceTurnSectionAsync, SetSessionTitleAsync, SetTurnTitleAsync,
+     | SubmitAsync, UpsertTurnAsync'   retryable: false   details:    
+     | clientName: SessionLog     methodName: GetAsync     exceptionType:
+     | System.InvalidOperationException  ---
+
+

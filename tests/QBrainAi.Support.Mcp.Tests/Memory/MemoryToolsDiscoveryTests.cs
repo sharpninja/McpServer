@@ -77,6 +77,7 @@ public sealed class MemoryToolsDiscoveryTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-017-09: STDIO and Streamable HTTP advertise the same memory verb set.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void StdioAndHttp_SameVerbSet()
     {

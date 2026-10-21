@@ -1,0 +1,120 @@
+[
+  {
+    "Host": "Windows",
+    "Before": "ug-r3-win-lane-2",
+    "After": "ug-r3-win-lane-8",
+    "BeforeCount": 373,
+    "AfterCount": 373,
+    "Missing": [],
+    "Added": []
+  },
+  {
+    "Host": "Windows",
+    "Before": "ug-r3-win-lane-8",
+    "After": "ug-r4-win-lane-2",
+    "BeforeCount": 373,
+    "AfterCount": 373,
+    "Missing": [],
+    "Added": []
+  },
+  {
+    "Host": "Windows",
+    "Before": "ug-r4-win-lane-2",
+    "After": "ug-r4-win-lane-3",
+    "BeforeCount": 373,
+    "AfterCount": 373,
+    "Missing": [],
+    "Added": []
+  },
+  {
+    "Host": "Windows",
+    "Before": "ug-r4-win-lane-3",
+    "After": "ug-r5-win-lane-1",
+    "BeforeCount": 373,
+    "AfterCount": 373,
+    "Missing": [],
+    "Added": []
+  },
+  {
+    "Host": "Windows",
+    "Before": "ug-r5-win-lane-1",
+    "After": "ug-r5-win-lane-2",
+    "BeforeCount": 373,
+    "AfterCount": 373,
+    "Missing": [],
+    "Added": []
+  },
+  {
+    "Host": "Windows",
+    "Before": "ug-r5-win-lane-2",
+    "After": "ug-r5-win-lane-3",
+    "BeforeCount": 373,
+    "AfterCount": 374,
+    "Missing": [],
+    "Added": [
+      "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.DatabaseMaintenance.McpDatabaseEncryptionTransitionCommandTests.TryParse_UsesEnvironmentInstance_WhenCliInstanceIsOmitted"
+    ]
+  },
+  {
+    "Host": "Windows",
+    "Before": "ug-r5-win-test-ssh-2",
+    "After": "ug-r5-win-test-ssh-3",
+    "BeforeCount": 4518,
+    "AfterCount": 4517,
+    "Missing": [
+      "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.DatabaseMaintenance.McpDatabaseEncryptionTransitionCommandTests.TryParse_UsesEnvironmentInstance_WhenCliInstanceIsOmitted"
+    ],
+    "Added": []
+  },
+  {
+    "Host": "Linux",
+    "Before": "ug-r5-linux-test-2",
+    "After": "ug-r5-linux-test-3",
+    "BeforeCount": 4518,
+    "AfterCount": 4517,
+    "Missing": [
+      "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.DatabaseMaintenance.McpDatabaseEncryptionTransitionCommandTests.TryParse_UsesEnvironmentInstance_WhenCliInstanceIsOmitted"
+    ],
+    "Added": []
+  },
+  {
+    "Host": "Linux",
+    "Before": "ug-r5-linux-lane-2",
+    "After": "ug-r5-precommit-lane-3",
+    "BeforeCount": 397,
+    "AfterCount": 398,
+    "Missing": [],
+    "Added": [
+      "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.DatabaseMaintenance.McpDatabaseEncryptionTransitionCommandTests.TryParse_UsesEnvironmentInstance_WhenCliInstanceIsOmitted"
+    ]
+  },
+  {
+    "Host": "Linux",
+    "Before": "ug-r5-precommit-lane-3",
+    "After": "ug-r5-linux-lane-3",
+    "BeforeCount": 398,
+    "AfterCount": 398,
+    "Missing": [],
+    "Added": []
+  },
+  {
+    "Host": "Linux",
+    "Before": "ug-r5-hostile-wide-2",
+    "After": "ug-r5-hostile-wide-3",
+    "BeforeCount": 4518,
+    "AfterCount": 4517,
+    "Missing": [
+      "QBrainAi.Support.Mcp.Tests|QBrainAi.Support.Mcp.Tests.DatabaseMaintenance.McpDatabaseEncryptionTransitionCommandTests.TryParse_UsesEnvironmentInstance_WhenCliInstanceIsOmitted"
+    ],
+    "Added": []
+  },
+  {
+    "Host": "Linux",
+    "Before": "ug-r5-hostile-wide-3",
+    "After": "ug-r5-hostile-wide-4",
+    "BeforeCount": 4517,
+    "AfterCount": 4517,
+    "Missing": [],
+    "Added": []
+  }
+]

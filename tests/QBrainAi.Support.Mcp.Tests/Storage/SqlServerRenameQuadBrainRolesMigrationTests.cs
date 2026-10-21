@@ -18,6 +18,7 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// server fails the gate directly rather than skipping. Validates FR-MCP-129 and FR-MCP-134.
 /// </summary>
 [Trait("Category", "Integration")]
+[Collection(SqlServerLocalDbCollection.Name)]
 public sealed class SqlServerRenameQuadBrainRolesMigrationTests : IDisposable
 {
     private const string PrecedingMigration = "20260702193940_Decompose4nfAgentModelLists";
@@ -28,8 +29,7 @@ public sealed class SqlServerRenameQuadBrainRolesMigrationTests : IDisposable
     /// <summary>Resolves the server connection (LocalDB by default).</summary>
     public SqlServerRenameQuadBrainRolesMigrationTests()
     {
-        _serverConnectionString = Environment.GetEnvironmentVariable("MCP_TEST_SQLSERVER_CONNECTION")
-            ?? "Server=(localdb)\\MSSQLLocalDB;Integrated Security=True;TrustServerCertificate=True";
+        _serverConnectionString = SqlServerTestConnection.Server;
     }
 
     /// <summary>

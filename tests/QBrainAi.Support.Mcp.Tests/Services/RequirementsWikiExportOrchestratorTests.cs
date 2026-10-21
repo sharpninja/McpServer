@@ -83,6 +83,7 @@ public sealed class RequirementsWikiExportOrchestratorTests
     }
 
     /// <summary>Omitted DocFX configuration does not run the external DocFX workflow runner.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task ExportAsync_WhenDocFxSectionIsOmitted_DoesNotRunDocFxRunner()
     {
@@ -112,6 +113,7 @@ public sealed class RequirementsWikiExportOrchestratorTests
     }
 
     /// <summary>DocFX artifacts are included in the selected platform manifest and omitted from unselected platforms.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task ExportAsync_WithDocFxArtifacts_IncludesArtifactsInSelectedPlatformManifestOnly()
     {
@@ -167,6 +169,7 @@ public sealed class RequirementsWikiExportOrchestratorTests
     }
 
     /// <summary>Stale DocFX artifacts from a previous wiki export are removed by the shared writer.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task ExportAsync_RemovesStaleDocFxArtifactsThroughWriterCleanup()
     {
@@ -215,6 +218,7 @@ public sealed class RequirementsWikiExportOrchestratorTests
     }
 
     /// <summary>Real DocFX 2.78.3 local-tool output is published through both wiki roots and staging is deleted.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task ExportAsync_WithRealDocFxScratchWorkspace_PublishesArtifactsAndDeletesStaging()
     {

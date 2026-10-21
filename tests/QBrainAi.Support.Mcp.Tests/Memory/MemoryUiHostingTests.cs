@@ -7,6 +7,7 @@ namespace QBrainAi.Support.Mcp.Tests.Memory;
 public sealed class MemoryUiHostingTests
 {
     /// <summary>AC-TR-MCP-MEMORY-UI-002-01: UI is served at /memory/ from packaged static assets.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void ServedAtMemoryPath()
     {
@@ -22,6 +23,7 @@ public sealed class MemoryUiHostingTests
     }
 
     /// <summary>AC-TR-MCP-MEMORY-UI-002-04: Static assets are included in publish output / Linux service package.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Assets_InPublishOutput()
     {
@@ -40,6 +42,7 @@ public sealed class MemoryUiHostingTests
     }
 
     /// <summary>AC-TR-MCP-MEMORY-UI-002-05: Deep link /memory/{id} opens detail or fails closed for unknown id.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void DeepLink_DetailOrFailClosed()
     {
@@ -54,6 +57,7 @@ public sealed class MemoryUiHostingTests
     }
 
     /// <summary>AC-TR-MCP-MEMORY-UI-002-06: UI uses the same API-key auth as other /mcpserver pages.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Auth_SameAsMcpserver()
     {
@@ -75,6 +79,7 @@ public sealed class MemoryUiHostingTests
     }
 
     /// <summary>AC-TR-MCP-MEMORY-UI-002-07: CSP / no inline-eval matches sibling static UIs.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Csp_MatchesSiblingUis()
     {
@@ -92,6 +97,7 @@ public sealed class MemoryUiHostingTests
     }
 
     /// <summary>AC-TR-MCP-MEMORY-UI-002-08: Missing hashed bundles are 404, not a false 200 index.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void MissingAsset_NotFalse200()
     {

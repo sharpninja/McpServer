@@ -6,6 +6,7 @@ namespace QBrainAi.Support.Mcp.Tests.Memory;
 public sealed class MemoryBenchToolUseTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-15: with_memory uses memory_recall; without_memory does not.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void RecallUsedWhenNoInjection()
     {

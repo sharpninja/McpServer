@@ -26,56 +26,13 @@ public sealed class MarkerFileServiceTests
         .WithNamingConvention(CamelCaseNamingConvention.Instance)
         .Build();
 
-    private static readonly string[] PluginVersionEnvironmentVariables =
-    [
-        "CODEX_PLUGIN_ROOT",
-        "CLAUDE_PLUGIN_ROOT",
-        "COPILOT_PLUGIN_ROOT",
-        "CLINE_PLUGIN_ROOT",
-        "GROK_PLUGIN_ROOT",
-    ];
-
-    private static void WithClearedPluginVersionEnvironment(Action action)
-    {
-        var saved = PluginVersionEnvironmentVariables.ToDictionary(
-            name => name,
-            name => Environment.GetEnvironmentVariable(name));
-
-        try
-        {
-            foreach (var name in PluginVersionEnvironmentVariables)
-                Environment.SetEnvironmentVariable(name, null);
-
-            action();
-        }
-        finally
-        {
-            foreach (var (name, value) in saved)
-                Environment.SetEnvironmentVariable(name, value);
-        }
-    }
-
     /// <summary>
-    /// Runs <paramref name="action"/> with plugin-version env vars cleared and the user-profile
-    /// cache scan redirected to an empty temp directory, so resolution sees only the inputs the
-    /// test controls regardless of plugins installed on the machine.
+    /// Test-owned plugin-version sources for a temporary workspace (AC-TR-MCP-WS-005-001): no plugin-root variable,
+    /// the production sibling rule applied to that workspace, and no profile, so resolution sees only the folders the
+    /// test creates, without reading or changing the process environment.
     /// </summary>
-    /// <param name="action">The assertion body to run hermetically.</param>
-    private static void WithHermeticPluginVersionResolution(Action action)
-    {
-        var emptyProfile = Path.Combine(Path.GetTempPath(), $"mcp-marker-profile-{Guid.NewGuid():N}");
-        Directory.CreateDirectory(emptyProfile);
-        try
-        {
-            MarkerFileService.AgentPluginUserProfileOverride = emptyProfile;
-            WithClearedPluginVersionEnvironment(action);
-        }
-        finally
-        {
-            MarkerFileService.AgentPluginUserProfileOverride = null;
-            Directory.Delete(emptyProfile, recursive: true);
-        }
-    }
+    private static readonly AgentPluginVersionSources s_siblingOnlySources =
+        new(_ => null, MarkerFileService.SiblingPluginRoot, UserProfile: null);
 
     /// <summary>
     /// Builds a minimal template context for prompt-rendering tests.
@@ -775,19 +732,17 @@ public sealed class MarkerFileServiceTests
     }
 
     /// <summary>
-    /// TEST-MCP-PLUGIN-PSONLY-001: marker plugin contracts publish the current synced plugin version.
+    /// TEST-MCP-PLUGIN-PSONLY-001: marker plugin contracts publish the current synced plugin version. Resolution reads
+    /// the assembly's hermetic sources (<see cref="HermeticUserProfileFixture"/>), so no installed plugin is seen.
     /// </summary>
     [Fact]
     public void BuildDefaultAgentPlugins_UsesCurrentSyncedPluginVersion()
     {
-        WithHermeticPluginVersionResolution(() =>
-        {
-            var plugins = MarkerFileService.BuildDefaultAgentPlugins(@"C:\test");
+        var plugins = MarkerFileService.BuildDefaultAgentPlugins(@"C:\test");
 
-            Assert.All(
-                plugins.Agents,
-                pair => Assert.Equal("1.26.0", pair.Value.PluginVersion));
-        });
+        Assert.All(
+            plugins.Agents,
+            pair => Assert.Equal("1.26.0", pair.Value.PluginVersion));
     }
 
     /// <summary>
@@ -805,13 +760,10 @@ public sealed class MarkerFileServiceTests
 
         try
         {
-            WithHermeticPluginVersionResolution(() =>
-            {
-                var plugins = MarkerFileService.BuildDefaultAgentPlugins(workspace);
+            var plugins = MarkerFileService.BuildDefaultAgentPlugins(workspace, s_siblingOnlySources);
 
-                Assert.Equal("9.8.7", plugins.Agents["Claude"].PluginVersion);
-                Assert.Equal(MarkerFileService.SyncedAgentPluginVersion, plugins.Agents["Codex"].PluginVersion);
-            });
+            Assert.Equal("9.8.7", plugins.Agents["Claude"].PluginVersion);
+            Assert.Equal(MarkerFileService.SyncedAgentPluginVersion, plugins.Agents["Codex"].PluginVersion);
         }
         finally
         {
@@ -833,17 +785,14 @@ public sealed class MarkerFileServiceTests
 
         try
         {
-            WithClearedPluginVersionEnvironment(() =>
-            {
-                var baseline = MarkerFileService.BuildDefaultAgentPlugins(workspace);
-                var baselineDigest = MarkerFileService.ComputeAgentPluginsDigest(baseline);
+            var baseline = MarkerFileService.BuildDefaultAgentPlugins(workspace, s_siblingOnlySources);
+            var baselineDigest = MarkerFileService.ComputeAgentPluginsDigest(baseline);
 
-                File.WriteAllText(Path.Combine(claudePlugin, ".version"), "9.8.7");
-                var updated = MarkerFileService.BuildDefaultAgentPlugins(workspace);
-                var updatedDigest = MarkerFileService.ComputeAgentPluginsDigest(updated);
+            File.WriteAllText(Path.Combine(claudePlugin, ".version"), "9.8.7");
+            var updated = MarkerFileService.BuildDefaultAgentPlugins(workspace, s_siblingOnlySources);
+            var updatedDigest = MarkerFileService.ComputeAgentPluginsDigest(updated);
 
-                Assert.NotEqual(baselineDigest, updatedDigest);
-            });
+            Assert.NotEqual(baselineDigest, updatedDigest);
         }
         finally
         {
@@ -1058,24 +1007,12 @@ public sealed class MarkerFileServiceTests
     }
 
     /// <summary>
-    /// Locates a repository file by walking up from the test output directory.
+    /// Locates a repository file through the shared <see cref="QBrainAi.Tests.Shared.TestRepositoryRoot"/> (integration
+    /// tests only).
     /// </summary>
     /// <param name="segments">Repo-relative path segments of the file to locate.</param>
     /// <returns>The absolute path of the located file.</returns>
-    private static string FindFileFromRepoRoot(params string[] segments)
-    {
-        var dir = new DirectoryInfo(AppContext.BaseDirectory);
-        while (dir is not null)
-        {
-            var candidate = Path.Combine(dir.FullName, Path.Combine(segments));
-            if (File.Exists(candidate))
-                return candidate;
-
-            dir = dir.Parent;
-        }
-
-        throw new FileNotFoundException($"Could not locate file '{Path.Combine(segments)}' from '{AppContext.BaseDirectory}'.");
-    }
+    private static string FindFileFromRepoRoot(params string[] segments) => QBrainAi.Tests.Shared.TestRepositoryRoot.Combine(segments);
 
     /// <summary>
     /// Verifies the marker-v1 payload builder emits exactly the fields named by
@@ -1170,6 +1107,7 @@ public sealed class MarkerFileServiceTests
     /// Test data: the canonical key order code fence in <c>docs/REPL-AGENT-GUIDE.md</c>.
     /// This data is used to bind the published verifier contract to the authoritative field array.
     /// </remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void SignaturePayloadFields_MatchesDocumentedCanonicalKeyOrder()
     {

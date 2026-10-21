@@ -28,7 +28,9 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// SqlServer and Postgres compiled <c>Up()</c> must emit guarded SQL (no unguarded
 /// <see cref="CreateTableOperation"/>). SqlServer captured SQL is executed on disposable LocalDB.
 /// Postgres captured SQL is executed on an ephemeral local cluster (no Skip).
+/// Its SQL Server case opens LocalDB, so the class runs in <see cref="SqlServerLocalDbCollection"/> (TR-MCP-NUKE-019 AC-2).
 /// </summary>
+[Collection(SqlServerLocalDbCollection.Name)]
 public sealed class SessionLogAgentSessionHeaderMigrationTests : IDisposable
 {
     /// <summary>Sqlite migration immediately before the header-column apply vehicle.</summary>
@@ -207,6 +209,7 @@ public sealed class SessionLogAgentSessionHeaderMigrationTests : IDisposable
     /// reapplies without error (idempotent). Does not run the full migration chain.
     /// </summary>
     [Fact]
+    [Trait("Category", "Integration")]
     public void SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently()
     {
         var sql = CaptureUpSql(new SqlServerHeaderMigration(), "Microsoft.EntityFrameworkCore.SqlServer");
@@ -297,6 +300,7 @@ public sealed class SessionLogAgentSessionHeaderMigrationTests : IDisposable
     /// (Program Files PostgreSQL or MCP_TEST_POSTGRES_CONNECTION). Does not Skip.
     /// </summary>
     [Fact]
+    [Trait("Category", "Integration")]
     public void PostgreSqlUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently()
     {
         var sql = CaptureUpSql(new PostgreSqlHeaderMigration(), "Npgsql.EntityFrameworkCore.PostgreSQL");

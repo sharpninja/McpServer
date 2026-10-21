@@ -1,11 +1,15 @@
 using QBrainAi.QBAgent.Skills;
+using QBrainAi.Tests.Shared;
 
 namespace QBrainAi.QBAgent.Tests.Skills;
 
 /// <summary>
 /// TEST-MCP-QBSKILLS-002: Verifies the authored workspace skills under the repo <c>skills/</c> root all parse
-/// with valid frontmatter and are discoverable (FR-MCP-QBSKILLS-003 ac-2).
+/// with valid frontmatter and are discoverable (FR-MCP-QBSKILLS-003 ac-2). The skills are read from the repository
+/// checkout through the shared <see cref="TestRepositoryRoot"/>, so these are integration tests on both hosts
+/// (TR-MCP-USECASE-018 AC-006, hostile validation round 2 finding R2-F1).
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class AuthoredSkillsTests
 {
     private static readonly string[] ExpectedSkills =
@@ -19,18 +23,7 @@ public sealed class AuthoredSkillsTests
         "edit-file-usage",
     ];
 
-    private static string FindSkillsRoot()
-    {
-        var dir = new DirectoryInfo(AppContext.BaseDirectory);
-        while (dir is not null)
-        {
-            if (File.Exists(Path.Combine(dir.FullName, "QBrainAi.sln")))
-                return Path.Combine(dir.FullName, "skills");
-            dir = dir.Parent;
-        }
-
-        throw new DirectoryNotFoundException("Could not locate the repo skills root.");
-    }
+    private static string FindSkillsRoot() => TestRepositoryRoot.Combine("skills");
 
     /// <summary>Every authored workspace skill parses and is discoverable by name.</summary>
     [Fact]

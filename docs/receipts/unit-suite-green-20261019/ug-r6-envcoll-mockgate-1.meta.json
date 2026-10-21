@@ -1,0 +1,20 @@
+{
+  "name": "ug-r6-envcoll-mockgate-1",
+  "target": "Test",
+  "extraArgs": [
+    "--test-run-id",
+    "ug-r6-envcoll-mockgate-1"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "9933796c53433a55d11cf14a96be97438a087b0f",
+  "dirtyPaths": [
+    " M tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/TestSupport/CollectionAssertions.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs"
+  ],
+  "startedLocal": "2026-10-21T13:20:02",
+  "startedUtc": "2026-10-21T18:20:02.6881297Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r6-envcoll-mockgate-1.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r6-envcoll-mockgate-1.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r6-envcoll-mockgate-1.exit.txt"
+}

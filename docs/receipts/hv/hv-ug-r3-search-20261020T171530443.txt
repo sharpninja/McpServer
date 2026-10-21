@@ -1,0 +1,2 @@
+rg: src/QBrainAi.Services,tests/QBrainAi.Support.Mcp.Tests: IO error for operation on src/QBrainAi.Services,tests/QBrainAi.Support.Mcp.Tests: No such file or directory (os error 2)
+

@@ -16,20 +16,29 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// TEST-HANDOFF-004 through TEST-HANDOFF-007: behavior coverage for the audit defects
 /// (replay uniqueness, outcome mapping, invalid drafts, sanitization, cancellation).
 /// </summary>
+/// <remarks>
+/// Test data: one temporary SQLite database file per test in the test's own temporary workspace, opened without
+/// connection pooling, so the concurrently running services each have their own connection to that database, as
+/// production does (the race class of triage-report-9b96ada18d72483dad2a3113e455c01b; operator 2026-10-20: "Extend
+/// fix, then round 4 (Recommended)"; the harness assertion and its negative controls are in
+/// <see cref="HandoffTestDatabaseTests"/>).
+/// </remarks>
 public sealed class HandoffAuditDefectTests : IDisposable
 {
     private readonly string _workspace;
-    private readonly SqliteConnection _connection;
     private readonly DbContextOptions<McpDbContext> _dbOptions;
 
-    /// <summary>Creates an isolated SQLite workspace for audit-defect tests.</summary>
+    /// <summary>Creates an isolated SQLite database file in a temporary workspace for audit-defect tests.</summary>
     public HandoffAuditDefectTests()
     {
         _workspace = Path.Combine(Path.GetTempPath(), "handoff-audit", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(_workspace);
-        _connection = new SqliteConnection("Data Source=:memory:");
-        _connection.Open();
-        _dbOptions = new DbContextOptionsBuilder<McpDbContext>().UseSqlite(_connection).Options;
+        var connectionString = new SqliteConnectionStringBuilder
+        {
+            DataSource = Path.Combine(_workspace, "handoff-audit.db"),
+            Pooling = false,
+        }.ToString();
+        _dbOptions = new DbContextOptionsBuilder<McpDbContext>().UseSqlite(connectionString).Options;
         using var db = CreateDb();
         db.Database.EnsureCreated();
     }
@@ -37,10 +46,17 @@ public sealed class HandoffAuditDefectTests : IDisposable
     /// <inheritdoc />
     public void Dispose()
     {
-        _connection.Dispose();
         if (Directory.Exists(_workspace))
             Directory.Delete(_workspace, recursive: true);
     }
+
+    /// <summary>
+    /// Harness binding: every context this class creates has its own connection to the class's one test database
+    /// (the assertion of <see cref="HandoffTestDatabaseTests"/>, bound to this class's context factory).
+    /// </summary>
+    [Fact]
+    public void TestDatabase_GivesEachContextItsOwnConnectionToOneDatabase() =>
+        HandoffTestDatabaseTests.AssertOwnConnectionsToOneDatabase(CreateDb);
 
     /// <summary>Concurrent same-hash ingest creates one run and extracts once.</summary>
     [Fact]

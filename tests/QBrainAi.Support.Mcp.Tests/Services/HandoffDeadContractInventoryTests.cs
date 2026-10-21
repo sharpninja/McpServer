@@ -1,7 +1,7 @@
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using QBrainAi.Support.Mcp.Services;
 using QBrainAi.Support.Mcp.Storage.Entities;
+using QBrainAi.Tests.Shared;
 using Xunit;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
@@ -35,6 +35,7 @@ public sealed class HandoffDeadContractInventoryTests
     }
 
     /// <summary>P3: source, snapshots, and migrations do not reintroduce the dead contracts.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void SourceAndSchema_DoNotReintroduceReplayOfRunIdOrApproved()
     {
@@ -63,16 +64,5 @@ public sealed class HandoffDeadContractInventoryTests
         Assert.True(hits.Count == 0, string.Join(Environment.NewLine, hits));
     }
 
-    private static string FindRepoRoot([CallerFilePath] string testPath = "")
-    {
-        var dir = new DirectoryInfo(Path.GetDirectoryName(testPath) ?? throw new InvalidOperationException("Test path is missing."));
-        while (dir is not null)
-        {
-            if (File.Exists(Path.Combine(dir.FullName, "AGENTS.md")) && Directory.Exists(Path.Combine(dir.FullName, "src")))
-                return dir.FullName;
-            dir = dir.Parent;
-        }
-
-        throw new InvalidOperationException("Repository root was not found from the test file path.");
-    }
+    private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
 }

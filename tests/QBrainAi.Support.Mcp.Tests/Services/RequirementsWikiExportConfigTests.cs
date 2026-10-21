@@ -79,6 +79,7 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
     }
 
     /// <summary>TEST-MCP-WIKIEXPORT-001-AC2, AC3, AC4, AC5, AC7: valid docs/wiki.yaml drives documents, home, platforms, and navigation.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task GenerateWikiAsync_WithWikiYaml_ExportsConfiguredTreeForGitHubAndAzure()
     {
@@ -131,6 +132,7 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
     }
 
     /// <summary>TEST-MCP-WIKIEXPORT-001-AC5: generated home content falls back to the navigation tree when no home template is configured.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task GenerateWikiAsync_WithWikiYamlWithoutHomeTemplate_UsesDefaultGeneratedHome()
     {
@@ -156,6 +158,7 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
     }
 
     /// <summary>TEST-MCP-WIKIEXPORT-001-AC2: absence of docs/wiki.yaml preserves canonical wiki output.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task GenerateWikiAsync_WithoutWikiYaml_PreservesCanonicalOutput()
     {
@@ -255,6 +258,7 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
     }
 
     /// <summary>TEST-MCP-DOCFXWIKI-001: DocFX workflow paths cannot escape the workspace through reparse points.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Load_DocFxWorkflowThroughReparsePoint_ThrowsActionableValidation()
     {

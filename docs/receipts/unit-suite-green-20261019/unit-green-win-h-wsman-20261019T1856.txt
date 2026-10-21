@@ -1,0 +1,34 @@
+RECEIPT 2026-10-19T18:56:09 host=PAYTON-LEGION2 run=unit-green-win-h-wsman-20261019T1856
+NO-OVERRIDE
+START 2026-10-19T18:56:12 host=PAYTON-LEGION2 user=lab-wsman
+RESTORE generated .nuke/build.schema.json
+PWSH on PATH: True PSHOME=C:\Program Files\PowerShell\7-LabWsman
+HEAD 69d8f3f5b19b070f9059a096f344c44bbd359d47 ref=origin/fix/unit-suite-green-20261019
+TARGET MigrationIntegrationTests begin 2026-10-19T18:56:13
+TARGET MigrationIntegrationTests exit=-1 end 2026-10-19T18:56:19 log=C:\Users\LAB-WS~1\AppData\Local\Temp\unit-suite-green-20261019\MigrationIntegrationTests-unit-green-win-h-wsman-20261019T1856.log
+  LOG 18:56:19 [ERR] Integration lane precondition: MigrationIntegrationTests needs an interactive desktop session on Windows (TR-MCP-NUKE-019 AC-5): this process is not interactive (for example a WSMan, SSH or service session). Run the target from a console in the logged-on user's interactive desktop session.
+  LOG 18:56:19 [ERR] Target MigrationIntegrationTests has thrown an exception
+  LOG System.InvalidOperationException: MigrationIntegrationTests needs an interactive desktop session on Windows (TR-MCP-NUKE-019 AC-5): this process is not interactive (for example a WSMan, SSH or service session). Run the target from a console in the logged-on user's interactive desktop session.
+  LOG    at Build.<get_MigrationIntegrationTests>b__150_1() in F:\GitHub\McpServer\.worktrees\unit-suite-green-20261019\build\Build.TestDependencies.cs:line 128
+  LOG    at Nuke.Common.Execution.BuildExecutor.<>c.<Execute>b__4_2(Action x) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+  LOG    at System.Collections.Generic.List`1.ForEach(Action`1 action)
+  LOG    at Nuke.Common.Execution.BuildExecutor.Execute(NukeBuild build, ExecutableTarget target, IReadOnlyCollection`1 previouslyExecutedTargets, Boolean failureMode) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+  LOG ΓÇï
+  LOG Γò¼ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+  LOG Γòæ Errors & Warnings
+  LOG Γò¼ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+  LOG ΓÇï
+  LOG [ERR] MigrationIntegration: Integration lane precondition: MigrationIntegrationTests needs an interactive desktop session on Windows (TR-MCP-NUKE-019 AC-5): this process is not interactive (for example a WSMan, SSH or service session). Run the target from a console in the logged-on user's interactive desktop session.
+  LOG [ERR] MigrationIntegration: Target MigrationIntegrationTests has thrown an exception
+  LOG ΓÇï
+  LOG ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+  LOG Target┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬áStatus┬á┬á┬á┬á┬á┬áDuration
+  LOG ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+  LOG InstallTestDependencies┬á┬á┬á┬á┬á┬áSucceeded┬á┬á┬á┬á┬á< 1sec
+  LOG MigrationIntegrationTests┬á┬á┬á┬áFailed┬á┬á┬á┬á┬á┬á┬á┬á< 1sec┬á┬á┬á// InvalidOperationException: MigrationIntegrationTests needs an interactive desktop session on Windows (TR-MCP-NUKE-019 AC-5): this process is not interactive (for example a WSMan, SSH or service session). Run the target from a console in the logged-on user's interactive desktop session.
+  LOG ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+  LOG Total┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á┬á< 1sec
+  LOG ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+  LOG ΓÇï
+  LOG Build failed on 10/19/2026 6:56:19 PM. (Γò»┬░Γûí┬░∩╝ëΓò»∩╕╡ Γö╗ΓöüΓö╗
+NO-TRX F:\GitHub\McpServer\.worktrees\unit-suite-green-20261019\TestResults\unit-green-win-h-wsman-20261019T1856

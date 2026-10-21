@@ -1,0 +1,590 @@
+[
+  {
+    "Local": "2026-10-19T17:17:35",
+    "TranscriptLine": 8816,
+    "Tool": "tool-Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "AddedLength": 11331
+  },
+  {
+    "Local": "2026-10-19T17:18:24",
+    "TranscriptLine": 8827,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "AddedLength": 2542
+  },
+  {
+    "Local": "2026-10-19T17:18:26",
+    "TranscriptLine": 8828,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "AddedLength": 328
+  },
+  {
+    "Local": "2026-10-19T17:19:46",
+    "TranscriptLine": 8842,
+    "Tool": "tool-Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "AddedLength": 9669
+  },
+  {
+    "Local": "2026-10-19T17:41:50",
+    "TranscriptLine": 9439,
+    "Tool": "tool-Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs",
+    "AddedLength": 4042
+  },
+  {
+    "Local": "2026-10-19T17:42:08",
+    "TranscriptLine": 9450,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs",
+    "AddedLength": 145
+  },
+  {
+    "Local": "2026-10-19T17:42:10",
+    "TranscriptLine": 9451,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs",
+    "AddedLength": 107
+  },
+  {
+    "Local": "2026-10-19T20:55:01",
+    "TranscriptLine": 12364,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "AddedLength": 2255
+  },
+  {
+    "Local": "2026-10-19T20:55:09",
+    "TranscriptLine": 12365,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "AddedLength": 2436
+  },
+  {
+    "Local": "2026-10-19T20:55:16",
+    "TranscriptLine": 12366,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "AddedLength": 1648
+  },
+  {
+    "Local": "2026-10-19T20:58:20",
+    "TranscriptLine": 12424,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "AddedLength": 4869
+  },
+  {
+    "Local": "2026-10-19T20:58:22",
+    "TranscriptLine": 12425,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "AddedLength": 252
+  },
+  {
+    "Local": "2026-10-19T20:58:51",
+    "TranscriptLine": 12440,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "AddedLength": 445
+  },
+  {
+    "Local": "2026-10-19T20:58:53",
+    "TranscriptLine": 12441,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "AddedLength": 32
+  },
+  {
+    "Local": "2026-10-19T20:59:35",
+    "TranscriptLine": 12451,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "AddedLength": 7511
+  },
+  {
+    "Local": "2026-10-19T21:00:20",
+    "TranscriptLine": 12464,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs",
+    "AddedLength": 463
+  },
+  {
+    "Local": "2026-10-20T07:35:12",
+    "TranscriptLine": 13775,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "AddedLength": 1642
+  },
+  {
+    "Local": "2026-10-20T07:35:18",
+    "TranscriptLine": 13776,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "AddedLength": 2260
+  },
+  {
+    "Local": "2026-10-20T07:35:29",
+    "TranscriptLine": 13777,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "AddedLength": 1583
+  },
+  {
+    "Local": "2026-10-20T07:37:16",
+    "TranscriptLine": 13794,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "AddedLength": 91
+  },
+  {
+    "Local": "2026-10-20T07:38:55",
+    "TranscriptLine": 13840,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs",
+    "AddedLength": 583
+  },
+  {
+    "Local": "2026-10-20T07:50:10",
+    "TranscriptLine": 14014,
+    "Tool": "tool-Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "AddedLength": 15461
+  },
+  {
+    "Local": "2026-10-20T07:50:54",
+    "TranscriptLine": 14032,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "AddedLength": 469
+  },
+  {
+    "Local": "2026-10-20T07:50:55",
+    "TranscriptLine": 14033,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "AddedLength": 67
+  },
+  {
+    "Local": "2026-10-20T07:51:29",
+    "TranscriptLine": 14043,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "AddedLength": 2937
+  },
+  {
+    "Local": "2026-10-20T07:51:42",
+    "TranscriptLine": 14046,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "AddedLength": 4387
+  },
+  {
+    "Local": "2026-10-20T07:51:47",
+    "TranscriptLine": 14047,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "AddedLength": 790
+  },
+  {
+    "Local": "2026-10-20T07:52:59",
+    "TranscriptLine": 14077,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs",
+    "AddedLength": 146
+  },
+  {
+    "Local": "2026-10-20T07:53:01",
+    "TranscriptLine": 14078,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs",
+    "AddedLength": 205
+  },
+  {
+    "Local": "2026-10-20T07:56:34",
+    "TranscriptLine": 14197,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "AddedLength": 109
+  },
+  {
+    "Local": "2026-10-20T07:56:36",
+    "TranscriptLine": 14198,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "AddedLength": 187
+  },
+  {
+    "Local": "2026-10-20T08:52:39",
+    "TranscriptLine": 15135,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "AddedLength": 6167
+  },
+  {
+    "Local": "2026-10-20T08:53:26",
+    "TranscriptLine": 15147,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "AddedLength": 1179
+  },
+  {
+    "Local": "2026-10-20T08:53:34",
+    "TranscriptLine": 15148,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "AddedLength": 2599
+  },
+  {
+    "Local": "2026-10-20T08:53:58",
+    "TranscriptLine": 15157,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "AddedLength": 658
+  },
+  {
+    "Local": "2026-10-20T08:54:47",
+    "TranscriptLine": 15196,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs",
+    "AddedLength": 1432
+  },
+  {
+    "Local": "2026-10-20T08:54:49",
+    "TranscriptLine": 15197,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs",
+    "AddedLength": 81
+  },
+  {
+    "Local": "2026-10-20T08:54:51",
+    "TranscriptLine": 15198,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs",
+    "AddedLength": 81
+  },
+  {
+    "Local": "2026-10-20T09:00:11",
+    "TranscriptLine": 15245,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "AddedLength": 603
+  },
+  {
+    "Local": "2026-10-20T09:00:13",
+    "TranscriptLine": 15246,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "AddedLength": 321
+  },
+  {
+    "Local": "2026-10-20T09:00:16",
+    "TranscriptLine": 15247,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "AddedLength": 310
+  },
+  {
+    "Local": "2026-10-20T10:13:39",
+    "TranscriptLine": 17259,
+    "Tool": "tool-Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs",
+    "AddedLength": 1875
+  },
+  {
+    "Local": "2026-10-20T10:13:45",
+    "TranscriptLine": 17260,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "AddedLength": 1248
+  },
+  {
+    "Local": "2026-10-20T10:14:32",
+    "TranscriptLine": 17283,
+    "Tool": "tool-Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "AddedLength": 3178
+  },
+  {
+    "Local": "2026-10-20T10:20:57",
+    "TranscriptLine": 17416,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "AddedLength": 4260
+  },
+  {
+    "Local": "2026-10-20T10:48:53",
+    "TranscriptLine": 18080,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "AddedLength": 935
+  },
+  {
+    "Local": "2026-10-20T16:39:17",
+    "TranscriptLine": 22036,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "AddedLength": 3969
+  },
+  {
+    "Local": "2026-10-20T16:39:37",
+    "TranscriptLine": 22039,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "AddedLength": 5302
+  },
+  {
+    "Local": "2026-10-20T18:24:04",
+    "TranscriptLine": 23700,
+    "Tool": "tool-Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/AgentPluginVersionSources.cs",
+    "AddedLength": 1013
+  },
+  {
+    "Local": "2026-10-20T18:25:40",
+    "TranscriptLine": 23708,
+    "Tool": "tool-Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "AddedLength": 12600
+  },
+  {
+    "Local": "2026-10-20T18:26:15",
+    "TranscriptLine": 23719,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "AddedLength": 172
+  },
+  {
+    "Local": "2026-10-20T18:27:13",
+    "TranscriptLine": 23738,
+    "Tool": "tool-Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs",
+    "AddedLength": 7836
+  },
+  {
+    "Local": "2026-10-20T18:32:37",
+    "TranscriptLine": 23796,
+    "Tool": "tool-Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/AgentPluginVersionSources.cs",
+    "AddedLength": 2084
+  },
+  {
+    "Local": "2026-10-20T18:36:05",
+    "TranscriptLine": 23899,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "AddedLength": 567
+  },
+  {
+    "Local": "2026-10-20T18:36:10",
+    "TranscriptLine": 23900,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "AddedLength": 1162
+  },
+  {
+    "Local": "2026-10-20T18:36:29",
+    "TranscriptLine": 23909,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "AddedLength": 1264
+  },
+  {
+    "Local": "2026-10-20T18:36:33",
+    "TranscriptLine": 23910,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "AddedLength": 737
+  },
+  {
+    "Local": "2026-10-20T18:36:37",
+    "TranscriptLine": 23913,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "AddedLength": 614
+  },
+  {
+    "Local": "2026-10-20T18:38:01",
+    "TranscriptLine": 23976,
+    "Tool": "tool-Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs",
+    "AddedLength": 2244
+  },
+  {
+    "Local": "2026-10-20T18:38:19",
+    "TranscriptLine": 23982,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "AddedLength": 1007
+  },
+  {
+    "Local": "2026-10-20T18:38:24",
+    "TranscriptLine": 23983,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "AddedLength": 740
+  },
+  {
+    "Local": "2026-10-20T18:38:45",
+    "TranscriptLine": 23997,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "AddedLength": 97
+  },
+  {
+    "Local": "2026-10-20T18:39:12",
+    "TranscriptLine": 24015,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "AddedLength": 505
+  },
+  {
+    "Local": "2026-10-20T18:40:08",
+    "TranscriptLine": 24049,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "AddedLength": 1999
+  },
+  {
+    "Local": "2026-10-20T18:40:26",
+    "TranscriptLine": 24056,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "AddedLength": 147
+  },
+  {
+    "Local": "2026-10-20T18:41:17",
+    "TranscriptLine": 24074,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "AddedLength": 1009
+  },
+  {
+    "Local": "2026-10-20T18:41:24",
+    "TranscriptLine": 24075,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "AddedLength": 2107
+  },
+  {
+    "Local": "2026-10-20T18:41:25",
+    "TranscriptLine": 24076,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "AddedLength": 113
+  },
+  {
+    "Local": "2026-10-20T18:41:28",
+    "TranscriptLine": 24079,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "AddedLength": 522
+  },
+  {
+    "Local": "2026-10-20T18:41:31",
+    "TranscriptLine": 24080,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "AddedLength": 539
+  },
+  {
+    "Local": "2026-10-20T18:42:04",
+    "TranscriptLine": 24099,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs",
+    "AddedLength": 657
+  },
+  {
+    "Local": "2026-10-20T19:39:22",
+    "TranscriptLine": 25245,
+    "Tool": "tool-Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs",
+    "AddedLength": 5919
+  },
+  {
+    "Local": "2026-10-20T19:40:18",
+    "TranscriptLine": 25280,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs",
+    "AddedLength": 109
+  },
+  {
+    "Local": "2026-10-20T19:43:39",
+    "TranscriptLine": 25387,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs",
+    "AddedLength": 695
+  },
+  {
+    "Local": "2026-10-20T19:48:43",
+    "TranscriptLine": 25421,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "AddedLength": 1776
+  },
+  {
+    "Local": "2026-10-20T19:48:44",
+    "TranscriptLine": 25422,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "AddedLength": 119
+  },
+  {
+    "Local": "2026-10-20T19:48:48",
+    "TranscriptLine": 25423,
+    "Tool": "tool-Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/AgentPluginVersionSources.cs",
+    "AddedLength": 1117
+  },
+  {
+    "Local": "2026-10-20T19:49:23",
+    "TranscriptLine": 25442,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "AddedLength": 79
+  },
+  {
+    "Local": "2026-10-20T19:50:20",
+    "TranscriptLine": 25472,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs",
+    "AddedLength": 2475
+  },
+  {
+    "Local": "2026-10-20T21:15:10",
+    "TranscriptLine": 26198,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs",
+    "AddedLength": 2151
+  },
+  {
+    "Local": "2026-10-20T21:16:01",
+    "TranscriptLine": 26222,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs",
+    "AddedLength": 1050
+  },
+  {
+    "Local": "2026-10-20T21:16:05",
+    "TranscriptLine": 26223,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs",
+    "AddedLength": 770
+  },
+  {
+    "Local": "2026-10-20T21:16:37",
+    "TranscriptLine": 26242,
+    "Tool": "tool-Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs",
+    "AddedLength": 1442
+  },
+  {
+    "Local": "2026-10-20T21:16:56",
+    "TranscriptLine": 26255,
+    "Tool": "tool-Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs",
+    "AddedLength": 609
+  }
+]

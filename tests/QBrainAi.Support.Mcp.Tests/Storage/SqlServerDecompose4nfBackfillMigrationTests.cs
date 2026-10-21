@@ -17,6 +17,7 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// <c>InstallTestDependencies</c> Nuke target, and an unreachable server fails the gate directly.
 /// </summary>
 [Trait("Category", "Integration")]
+[Collection(SqlServerLocalDbCollection.Name)]
 public sealed class SqlServerDecompose4nfBackfillMigrationTests : IDisposable
 {
     private const string PreSliceMigration = "20260628194732_RepairTriageCreatedTodoWorkspace";
@@ -29,8 +30,7 @@ public sealed class SqlServerDecompose4nfBackfillMigrationTests : IDisposable
     /// <summary>Resolves the server connection (LocalDB by default).</summary>
     public SqlServerDecompose4nfBackfillMigrationTests()
     {
-        _serverConnectionString = Environment.GetEnvironmentVariable("MCP_TEST_SQLSERVER_CONNECTION")
-            ?? "Server=(localdb)\\MSSQLLocalDB;Integrated Security=True;TrustServerCertificate=True";
+        _serverConnectionString = SqlServerTestConnection.Server;
     }
 
     /// <summary>

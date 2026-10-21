@@ -1,0 +1,20 @@
+{
+  "TimestampUtc": "2026-10-20T01:13:16.5671434Z",
+  "TimestampLocal": "2026-10-19T20:13:16",
+  "Mode": "Files",
+  "Arguments": [
+    "/home/sharpninja/.claude/scratch/pr82-review-20261019",
+    "-g",
+    "*requirement*",
+    "-g",
+    "*fr*",
+    "-g",
+    "*tr-*",
+    "-g",
+    "*convert*"
+  ],
+  "Offset": 0,
+  "Count": 150,
+  "ExitCode": 0,
+  "Output": "/home/sharpninja/.claude/scratch/pr82-review-20261019/reply-thread-requirement.md\n/home/sharpninja/.claude/scratch/pr82-review-20261019/triage-requirements-store-drift.psd1\n/home/sharpninja/.claude/scratch/pr82-review-20261019/reply-thread-requirement.rendered.md\n/home/sharpninja/.claude/scratch/pr82-review-20261019/triage-requirements-createdat.psd1\n/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/legion2-requirements-20261019T1459.txt"
+}

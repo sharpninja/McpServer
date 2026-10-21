@@ -77,10 +77,11 @@ public sealed class UseCaseMigrationApplyTests : IDisposable
     }
 
     /// <summary>AddUseCaseSupport migration sources must not alter SessionLogs.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void AddUseCaseSupportMigration_Source_HasNoSessionLogsTableOps()
     {
-        var repoSrc = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "src"));
+        var repoSrc = QBrainAi.Tests.Shared.TestRepositoryRoot.Combine("src");
         var roots = new[]
         {
             Path.Combine(repoSrc, "QBrainAi.Storage.SqliteMigrations", "Migrations"),

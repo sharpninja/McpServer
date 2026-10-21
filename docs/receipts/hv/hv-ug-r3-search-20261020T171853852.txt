@@ -1,0 +1,11 @@
+1371:        -Model $model `
+2628:        return (Deny-ReplMissingCurrentTurn -Method 'workflow.sessionlog.updateTurn')
+2631:    if (-not (Assert-ReplCallerRequestMatches -Method 'workflow.sessionlog.updateTurn' -ParamsYaml $ParamsYaml)) {
+2634:    if (-not (Assert-ReplCurrentTurnFresh -Method 'workflow.sessionlog.updateTurn')) {
+2684:        $script:ReplPersistVerbMethod = 'workflow.sessionlog.updateTurn'
+2708:        [Console]::Error.WriteLine("workflow.sessionlog.updateTurn failed for '$reqId': $_")
+2717:        [Console]::Error.WriteLine("workflow.sessionlog.updateTurn queued for '$reqId'. Failsafe retained; primary persistence was not claimed.")
+2720:    [Console]::Error.WriteLine("workflow.sessionlog.updateTurn did not persist '$reqId' and no failsafe was retained.")
+3083:        'workflow.sessionlog.updateTurn'      { $script:LastInvokeReplMethodSuccess = [bool](Invoke-WorkflowUpdateTurn -ParamsYaml $ParamsYaml); return }
+3150:        'workflow.sessionlog.updateTurn', 'workflow.sessionlog.appendActions',
+

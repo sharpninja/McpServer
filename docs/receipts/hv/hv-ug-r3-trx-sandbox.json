@@ -1,0 +1,79 @@
+[
+  {
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r3-sandbox-test-20261020T1713/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+    "Sha256": "04B84E23B39ABFA1E630B3997A873DFE73ECFE75346B8669EF2D15022E2A6CF2",
+    "Counters": "<Counters total=\"3097\" executed=\"3097\" passed=\"3097\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />",
+    "Rows": 3097,
+    "Passed": 3097,
+    "Failed": 0,
+    "Other": 0,
+    "Started": "2026-10-20T17:17:59.3797373-05:00",
+    "Ended": "2026-10-20T17:19:43.4163006-05:00"
+  },
+  {
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r3-sandbox-test-20261020T1713/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+    "Sha256": "F24AC7679ED007656C74EB2EB2EBEBE2F7DF710B3465C950DD225F60385ADF25",
+    "Counters": "<Counters total=\"306\" executed=\"306\" passed=\"306\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />",
+    "Rows": 306,
+    "Passed": 306,
+    "Failed": 0,
+    "Other": 0,
+    "Started": "2026-10-20T17:19:45.0347519-05:00",
+    "Ended": "2026-10-20T17:19:47.8427294-05:00"
+  },
+  {
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r3-sandbox-test-20261020T1713/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+    "Sha256": "058BAC03AABDE648ABAE3F368DB67FF1B47749398ED7E6A0E34EDED1254E7C08",
+    "Counters": "<Counters total=\"33\" executed=\"33\" passed=\"33\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />",
+    "Rows": 33,
+    "Passed": 33,
+    "Failed": 0,
+    "Other": 0,
+    "Started": "2026-10-20T17:19:48.8311056-05:00",
+    "Ended": "2026-10-20T17:19:50.5039572-05:00"
+  },
+  {
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r3-sandbox-test-20261020T1713/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+    "Sha256": "6FDD9A73231BCA3FFABF2C00A5E3E4E01A8C5C251A7D41557D3C7B3793191B33",
+    "Counters": "<Counters total=\"20\" executed=\"20\" passed=\"20\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />",
+    "Rows": 20,
+    "Passed": 20,
+    "Failed": 0,
+    "Other": 0,
+    "Started": "2026-10-20T17:19:51.4089490-05:00",
+    "Ended": "2026-10-20T17:19:52.9291096-05:00"
+  },
+  {
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r3-sandbox-test-20261020T1713/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+    "Sha256": "4CACD8278C9C0BFC16C9580BCBAB618054683C10676D073EBD5592DED9C636B2",
+    "Counters": "<Counters total=\"64\" executed=\"64\" passed=\"64\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />",
+    "Rows": 64,
+    "Passed": 64,
+    "Failed": 0,
+    "Other": 0,
+    "Started": "2026-10-20T17:19:53.9621732-05:00",
+    "Ended": "2026-10-20T17:19:57.0904968-05:00"
+  },
+  {
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r3-sandbox-test-20261020T1713/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+    "Sha256": "253C204ABF40EBEDECC991AFCB8D46796E2F15F268A207D67CB2D8F5FE778DC5",
+    "Counters": "<Counters total=\"865\" executed=\"865\" passed=\"865\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />",
+    "Rows": 865,
+    "Passed": 865,
+    "Failed": 0,
+    "Other": 0,
+    "Started": "2026-10-20T17:19:58.0701685-05:00",
+    "Ended": "2026-10-20T17:20:01.4756402-05:00"
+  },
+  {
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r3-sandbox-test-20261020T1713/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+    "Sha256": "FB5D311275E0685D8C6875F623A9C6E02A67805F35A188CE3A8DE247FB9D6FBE",
+    "Counters": "<Counters total=\"94\" executed=\"94\" passed=\"94\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\" />",
+    "Rows": 94,
+    "Passed": 94,
+    "Failed": 0,
+    "Other": 0,
+    "Started": "2026-10-20T17:20:02.7794066-05:00",
+    "Ended": "2026-10-20T17:20:04.6452528-05:00"
+  }
+]

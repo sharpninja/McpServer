@@ -8,6 +8,7 @@ namespace QBrainAi.Support.Mcp.Tests.McpStdio;
 /// <summary>
 /// TEST-MCP-TRANSCRIPT-008: verifies the real stdio host can expose and invoke transcript tools.
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class TranscriptMcpStdioHostTests
 {
     /// <summary>Runs a JSON-RPC stdio session through the built host and normalizes a real Codex fixture.</summary>

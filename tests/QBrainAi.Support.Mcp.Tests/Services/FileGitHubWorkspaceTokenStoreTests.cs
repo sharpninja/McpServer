@@ -12,6 +12,7 @@ using Xunit;
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
 /// <summary>TR-MCP-GH-002: Unit tests for encrypted workspace GitHub token storage.</summary>
+[Trait("Category", "Integration")]
 public sealed class FileGitHubWorkspaceTokenStoreTests : IDisposable
 {
     private readonly string _tempRoot;

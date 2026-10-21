@@ -1,0 +1,2 @@
+RECEIPT unit-green-r2-buildtests-20261019T2120 (TRX summary of /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/unit-green-r2-buildtests-20261019T2120, written 2026-10-19T21:25:41)
+unit-green-r2-buildtests-20261019T2120.trx: total=436 executed=436 passed=436 failed=0 notExecuted=0

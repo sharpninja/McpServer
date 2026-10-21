@@ -1,0 +1,64 @@
+[
+  {
+    "Name": "r3-sibling-counterexample",
+    "Expected": 1,
+    "Actual": 1,
+    "Pass": true,
+    "Findings": [
+      "r3-sibling-counterexample.cs:1 os-check in AliasTests"
+    ],
+    "Source": "namespace A { using OS = System.OperatingSystem; public class AliasTests { [Fact] public void Check() { _ = OS.IsWindows(); } } }\nnamespace B { using OS = System.String; public class Helper { public OS Name {get;set;} } }"
+  },
+  {
+    "Name": "reverse-sibling-control",
+    "Expected": 1,
+    "Actual": 1,
+    "Pass": true,
+    "Findings": [
+      "reverse-sibling-control.cs:2 os-check in AliasTests"
+    ],
+    "Source": "namespace B { using OS = System.String; public class StringTests { [Fact] public void Check() { _ = OS.IsNullOrEmpty(\"x\"); } } }\nnamespace A { using OS = System.OperatingSystem; public class AliasTests { [Fact] public void Check() { _ = OS.IsWindows(); } } }"
+  },
+  {
+    "Name": "nested-aliased-static-os",
+    "Expected": 1,
+    "Actual": 0,
+    "Pass": false,
+    "Findings": [],
+    "Source": "using OS = System.OperatingSystem;\nnamespace N {\n    using static OS;\n    public class StaticAliasTests {\n        [Fact] public void Check() { _ = IsWindows(); }\n    }\n}"
+  },
+  {
+    "Name": "nested-aliased-static-string-control",
+    "Expected": 0,
+    "Actual": 0,
+    "Pass": true,
+    "Findings": [],
+    "Source": "using OS = System.String;\nnamespace N {\n    using static OS;\n    public class StaticAliasTests {\n        [Fact] public void Check() { _ = IsNullOrEmpty(\"x\"); }\n    }\n}"
+  },
+  {
+    "Name": "plain-static-control",
+    "Expected": 1,
+    "Actual": 1,
+    "Pass": true,
+    "Findings": [
+      "plain-static-control.cs:1 os-check in StaticTests"
+    ],
+    "Source": "namespace N { using static System.OperatingSystem; public class StaticTests { [Fact] public void Check() { _ = IsWindows(); } } }"
+  },
+  {
+    "Name": "nested-alias-chain-os",
+    "Expected": 1,
+    "Actual": 0,
+    "Pass": false,
+    "Findings": [],
+    "Source": "using OS = System.OperatingSystem;\nnamespace AliasChain {\n    using Host = OS;\n    public class ChainedAliasTests {\n        [Fact] public void Check() { _ = Host.IsWindows(); }\n    }\n}"
+  },
+  {
+    "Name": "nested-alias-chain-nonplatform",
+    "Expected": 0,
+    "Actual": 0,
+    "Pass": true,
+    "Findings": [],
+    "Source": "using OS = System.String;\nnamespace AliasChain {\n    using Host = OS;\n    public class ChainedAliasTests {\n        [Fact] public void Check() { _ = Host.IsNullOrEmpty(\"x\"); }\n    }\n}"
+  }
+]

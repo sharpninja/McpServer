@@ -6,6 +6,7 @@ namespace QBrainAi.Support.Mcp.Tests.Memory;
 public sealed class MemoryBenchConflictTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-13: with_memory prefers pnpm; without_memory does not assert it.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void PrefersNewerSeeded()
     {

@@ -83,6 +83,7 @@ public sealed class UseCaseExpandedScopeTests : IDisposable
     }
 
     /// <summary>FR-MCP-USECASE-008: Approving increments version number.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task Approval_Approve_IncrementsVersion()
     {

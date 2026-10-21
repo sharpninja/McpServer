@@ -94,6 +94,7 @@ public sealed class RequirementsDocFxWorkflowRunnerTests
     }
 
     /// <summary>Runner rejects reparse points in staged output before they can escape the workspace.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task RunAsync_WhenOutputContainsReparsePointEscape_Throws()
     {

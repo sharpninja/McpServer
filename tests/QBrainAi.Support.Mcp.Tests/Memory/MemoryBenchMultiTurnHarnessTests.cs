@@ -8,6 +8,7 @@ namespace QBrainAi.Support.Mcp.Tests.Memory;
 public sealed class MemoryBenchMultiTurnHarnessTests
 {
     /// <summary>AC-FR-MCP-MEMORY-019: without_memory has no injection/tools and may replay history.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void WithoutMemory_ReplaysHistory_NoInjectionOrTools()
     {
@@ -29,6 +30,7 @@ public sealed class MemoryBenchMultiTurnHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019: with_memory query turns inject memories and do not replay establish text.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void WithMemory_InjectsCompactRecall_DoesNotReplayEstablishTranscript()
     {
@@ -48,6 +50,7 @@ public sealed class MemoryBenchMultiTurnHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019: Each turn and job records token fields and token_source.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void RecordsPerTurnAndPerJobTokens()
     {
@@ -78,6 +81,7 @@ public sealed class MemoryBenchMultiTurnHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019: A job succeeds only when every required query turn passes.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void JobSuccess_RequiresAllRequiredQueryTurns()
     {
@@ -91,6 +95,7 @@ public sealed class MemoryBenchMultiTurnHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019: Default path is Grok first; others stay opt-in until H7a.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void GrokFirst_OthersOptInUntilValueGate()
     {
@@ -106,6 +111,7 @@ public sealed class MemoryBenchMultiTurnHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019 / H7b: Stub -Plugin all writes success-gated multiturn tokens for eight plugins.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void AllEight_WritesMultiTurnStubArtifacts()
     {
@@ -120,6 +126,7 @@ public sealed class MemoryBenchMultiTurnHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019: Writes multiturn artifacts with token tables first.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void WritesMultiturnArtifacts()
     {
@@ -139,6 +146,7 @@ public sealed class MemoryBenchMultiTurnHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019: Stub re-run is deterministic for scores and tokens.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Rerun_DeterministicStub()
     {
@@ -153,6 +161,7 @@ public sealed class MemoryBenchMultiTurnHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019: MULTI without_memory query is more expensive than with_memory query.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void MultiFact_WithoutMemoryQuery_CostsMoreThanWithMemoryQuery()
     {

@@ -1,0 +1,4 @@
+1337:    $model = Get-ReplSessionStateValue -Key 'model'
+1339:        $model = if ($env:MCP_SESSION_MODEL) { $env:MCP_SESSION_MODEL }
+1744:        model = [string]$turnObj.turn.model
+

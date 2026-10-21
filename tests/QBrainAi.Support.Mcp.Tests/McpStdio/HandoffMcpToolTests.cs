@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging.Abstractions;
 using ModelContextProtocol.Server;
 using NSubstitute;
+using QBrainAi.Tests.Shared;
 using Xunit;
 using MsOptions = Microsoft.Extensions.Options;
 
@@ -75,6 +76,7 @@ public sealed class HandoffMcpToolTests : IDisposable
     }
 
     /// <summary>TEST-HANDOFF-006: native tools, Director aliases, and plugin skill exist.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void PublicSurfaces_ExposeIngestGetAndApprove()
     {
@@ -109,6 +111,7 @@ public sealed class HandoffMcpToolTests : IDisposable
     }
 
     /// <summary>P2-6: plugin-sync artifact matches the canonical core handoff skill bytes.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void PluginSync_HandoffSkill_MatchesCoreArtifact()
     {
@@ -206,18 +209,7 @@ public sealed class HandoffMcpToolTests : IDisposable
             handoffIngestionService: handoffService);
     }
 
-    private static string FindRepoRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            if (File.Exists(Path.Combine(directory.FullName, "QBrainAi.sln")))
-                return directory.FullName;
-            directory = directory.Parent;
-        }
-
-        throw new DirectoryNotFoundException("Could not find repository root containing QBrainAi.sln.");
-    }
+    private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
 
     private static string FindPrimaryRepoRoot(string repoRoot)
     {

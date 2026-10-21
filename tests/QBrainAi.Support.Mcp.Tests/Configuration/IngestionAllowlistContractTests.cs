@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using QBrainAi.Tests.Shared;
 using Xunit;
 
 namespace QBrainAi.Support.Mcp.Tests.Configuration;
@@ -20,6 +21,7 @@ public sealed class IngestionAllowlistContractTests
     /// Test data: <c>src\QBrainAi.Support.Mcp\appsettings.yaml</c> content with expected glob values.
     /// This data is used to ensure configuration defaults preserve indexing coverage for CQRS source trees.
     /// </remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void AppSettingsYaml_ContainsRequiredRepoAllowlistPatterns()
     {
@@ -38,6 +40,7 @@ public sealed class IngestionAllowlistContractTests
     /// Test data: <c>templates\prompt-templates.yaml</c> and known capability bullet strings for indexed repo-local projects.
     /// This data is used to confirm marker prompt output advertises indexed libraries that still live in this repository.
     /// </remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void MarkerPromptTemplate_ContainsAvailableCapabilitiesSection()
     {
@@ -61,6 +64,7 @@ public sealed class IngestionAllowlistContractTests
     /// iteration cannot advance unless the executed test gate has no failures
     /// and no skips.
     /// </remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void MarkerPromptTemplate_ContainsByrdV4HundredPercentTestGate()
     {
@@ -83,6 +87,7 @@ public sealed class IngestionAllowlistContractTests
     /// agents to produce requirements-backed, TDD-first plans that lower-cost
     /// implementation agents can execute without resolving unstated decisions.
     /// </remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void MarkerPromptTemplate_ContainsDecisionCompletePlanHandoffGuidance()
     {
@@ -105,6 +110,7 @@ public sealed class IngestionAllowlistContractTests
     /// <remarks>
     /// Requirement coverage: FR-MCP-HELP-008, TEST-MCP-HELP-SEC-007.
     /// </remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void MarkerPromptTemplate_ContainsAgentHelpSection()
     {
@@ -123,6 +129,7 @@ public sealed class IngestionAllowlistContractTests
     /// <remarks>
     /// Requirement coverage: FR-MCP-103, PLAN-FEDERATION-001 agent/operator surface.
     /// </remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void MarkerPromptTemplate_ContainsFederationTopologyDiagnostics()
     {
@@ -155,6 +162,7 @@ public sealed class IngestionAllowlistContractTests
     /// expose the role, hub, proxy, queue, sync, signing, and local-execution keys
     /// needed to configure Hub and LocalProxy machines without hand-inventing YAML.
     /// </remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void AppSettingsTemplate_ContainsHubSpokeFederationShape()
     {
@@ -187,19 +195,21 @@ public sealed class IngestionAllowlistContractTests
     /// Verifies active test source files do not hide incomplete work with xUnit skip mechanics.
     /// </summary>
     /// <remarks>
-    /// Requirement coverage: Byrd Development Process V4 validation discipline.
-    /// Test data: all C# source files under the repository <c>tests</c> folder.
+    /// Requirement coverage: Byrd Development Process V4 validation discipline; TR-MCP-USECASE-018 (AC-006),
+    /// TR-MCP-USECASE-019 (AC-008): platform-specific tests neither skip nor silently return.
+    /// Test data: all C# source files under the repository <c>tests</c> folder, parsed with the C# compiler so
+    /// scripted sources that mention a skip inside a string or comment are not counted. Skip forms are found
+    /// by <see cref="UnitSuitePlatformScanner.FindSkipLines"/>, the one definition both guards share. The test
+    /// reads the repository checkout, so it is an integration test on both hosts (hostile validation round 2,
+    /// finding R2-F1: no unit test reads files outside its test output).
     /// This data is used to make progress visible: active validation suites must
     /// pass or fail directly instead of silently skipping unfinished behavior.
     /// </remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void TestSources_DoNotDeclareSkippedXunitTests()
     {
         var testsRoot = FindDirectoryFromRepoRoot("tests");
-        var skipPattern = new Regex(
-            @"\[(?:Fact|Theory)\s*\([^\]]*\bSkip\s*=|\bSkipException\b|\bAssert\.Skip\b|\bSkippable(?:Fact|Theory)\b",
-            RegexOptions.CultureInvariant);
-
         var offenders = new List<string>();
 
         foreach (var path in Directory.EnumerateFiles(testsRoot, "*.cs", SearchOption.AllDirectories))
@@ -210,14 +220,9 @@ public sealed class IngestionAllowlistContractTests
                 continue;
             }
 
-            int lineNumber = 0;
-            foreach (var line in File.ReadLines(path))
+            foreach (var line in UnitSuitePlatformScanner.FindSkipLines(File.ReadAllText(path)))
             {
-                lineNumber++;
-                if (skipPattern.IsMatch(line))
-                {
-                    offenders.Add($"{Path.GetRelativePath(testsRoot, path)}:{lineNumber}");
-                }
+                offenders.Add($"{Path.GetRelativePath(testsRoot, path)}:{line}");
             }
         }
 
@@ -229,42 +234,88 @@ public sealed class IngestionAllowlistContractTests
     }
 
     /// <summary>
-    /// Locates a repository file by walking upward from the test execution directory.
+    /// TR-MCP-USECASE-018 (AC-006), BDPv4 mock gate for <see cref="UnitSuitePlatformScanner.FindSkipLines"/>:
+    /// scripted sources yield exactly the lines that hold a skip form in code (never inside a string, comment
+    /// or <c>nameof</c>), including an attribute whose arguments span lines, a qualified or listed attribute,
+    /// the xUnit v3 conditional skip properties, a data-row skip, a <c>using static</c> import, and a skip in a
+    /// conditional-compilation branch. Each scripted source is a C# file (statements are top-level statements
+    /// and an attribute is followed by the member it decorates), the shape the guard reads.
+    /// </summary>
+    /// <param name="source">Scripted source; lines are separated by "\n".</param>
+    /// <param name="expectedLines">Comma-separated 1-based lines the guard must count; empty for none.</param>
+    [Theory]
+    [InlineData("Assert.SkipUnless(OperatingSystem.IsWindows(), \"w\");", "1")]
+    [InlineData("Assert.SkipWhen(true, \"w\");", "1")]
+    [InlineData("Assert.Skip(\"s\");", "1")]
+    [InlineData("[Fact(Skip = \"later\")]\npublic void A() { }", "1")]
+    [InlineData("[Theory(DisplayName = \"x\", Skip = \"later\")]\npublic void A(int x) { }", "1")]
+    [InlineData("throw new SkipException(\"x\");", "1")]
+    [InlineData("[SkippableFact]\npublic void A() { }", "1")]
+    [InlineData("[Fact(\n    Skip = \"later\")]\npublic void A() { }", "1")]
+    [InlineData("[Fact]\npublic void A() { }\n[Theory(DisplayName = nameof(B),\n    SkipUnless = nameof(Ready),\n    Skip = \"x\")]\npublic void B(int x) { }", "3")]
+    [InlineData("[Xunit.Fact(Skip = \"later\")]\npublic void A() { }", "1")]
+    [InlineData("[global::Xunit.FactAttribute(Skip = \"x\")]\npublic void A() { }", "1")]
+    [InlineData("[Trait(\"a\", \"b\"), Theory(Skip = \"x\")]\npublic void A(int x) { }", "1")]
+    [InlineData("[Theory]\n[InlineData(1, Skip = \"row\")]\npublic void A(int x) { }", "2")]
+    [InlineData("[SkippableFactAttribute]\npublic void A() { }", "1")]
+    [InlineData("[Fact(SkipExceptions = new[] { typeof(InvalidOperationException) })]\npublic void A() { }", "1")]
+    [InlineData("Skip.If(true);\nSkip.IfNot(false);", "1,2")]
+    [InlineData("throw new Xunit.Sdk.SkipException(\"x\");", "1")]
+    [InlineData("using static Xunit.Assert;\nSkip(\"s\");", "2")]
+    [InlineData("#if WINDOWS\nAssert.Skip(\"w\");\n#endif", "2")]
+    [InlineData("Assert.Contains(\"skip=3\", query);", "")]
+    [InlineData("var text = \"Assert.SkipUnless(true)\";", "")]
+    [InlineData("// Assert.Skip(\"x\");", "")]
+    [InlineData("Assert.Skipped(result);", "")]
+    [InlineData("var name = nameof(SkipException);", "")]
+    [InlineData("[Fact(Timeout = 10)]\npublic void A() { }", "")]
+    [InlineData("[Fact(DisplayName = \"Skip = later\")]\npublic void A() { }", "")]
+    [InlineData("[Fact]\npublic void Skip() { var Skip = 1; }", "")]
+    public void FindSkipLines_FindsEverySkipFormOutsideLiterals(string source, string expectedLines)
+    {
+        var expected = expectedLines.Length == 0
+            ? Array.Empty<int>()
+            : expectedLines.Split(',').Select(value => int.Parse(value, System.Globalization.CultureInfo.InvariantCulture)).ToArray();
+        Assert.Equal(expected, UnitSuitePlatformScanner.FindSkipLines(source));
+    }
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 (AC-006) negative controls: the single-line patterns this guard used before
+    /// hostile validation round 1 (finding F3) missed a skip attribute split across lines and a qualified
+    /// skip attribute, and the pattern used before 2026-10-19 also missed <c>Assert.SkipUnless</c> and
+    /// <c>Assert.SkipWhen</c>; text matching counts a skip that only appears inside a string, which the
+    /// compiler-parsed definition does not.
+    /// </summary>
+    [Fact]
+    public void SkipGuardNegativeControls_AreRejectedInsidePassingHarness()
+    {
+        var original = new Regex(
+            @"\[(?:Fact|Theory)\s*\([^\]]*\bSkip\s*=|\bSkipException\b|\bAssert\.Skip\b|\bSkippable(?:Fact|Theory)\b",
+            RegexOptions.CultureInvariant);
+        var roundOne = new Regex(
+            @"\[(?:Fact|Theory)\s*\([^\]]*\bSkip\s*=|\bSkipException\b|\bAssert\s*\.\s*Skip(?:When|Unless)?\b|\bSkippable(?:Fact|Theory)\b",
+            RegexOptions.CultureInvariant);
+        Assert.DoesNotMatch(original, "Assert.SkipUnless(OperatingSystem.IsWindows(), \"w\");");
+        Assert.DoesNotMatch(original, "Assert.SkipWhen(true, \"w\");");
+        foreach (var line in "[Fact(\n    Skip = \"later\")]".Split('\n'))
+        {
+            Assert.DoesNotMatch(roundOne, line);
+        }
+
+        Assert.DoesNotMatch(roundOne, "[Xunit.Fact(Skip = \"later\")]");
+        Assert.Equal(new[] { 1 }, UnitSuitePlatformScanner.FindSkipLines("[Xunit.Fact(Skip = \"later\")]\npublic void A() { }"));
+        Assert.Matches(roundOne, "var text = \"Assert.SkipUnless(true)\";");
+        Assert.Empty(UnitSuitePlatformScanner.FindSkipLines("var text = \"Assert.SkipUnless(true)\";"));
+    }
+
+    /// <summary>
+    /// Locates a repository file under the checkout root through the shared <see cref="TestRepositoryRoot"/>, which
+    /// resolves only for an integration test (TR-MCP-USECASE-018 AC-006).
     /// </summary>
     /// <param name="segments">Path segments from repository root to the target file.</param>
     /// <returns>Absolute path to the requested file.</returns>
-    /// <remarks>
-    /// Test data: relative path segments for files under test.
-    /// This helper is used so tests can resolve files reliably across local and CI run directories.
-    /// </remarks>
-    private static string FindFileFromRepoRoot(params string[] segments)
-    {
-        var dir = new DirectoryInfo(AppContext.BaseDirectory);
-        while (dir is not null)
-        {
-            var candidate = Path.Combine(dir.FullName, Path.Combine(segments));
-            if (File.Exists(candidate))
-                return candidate;
+    private static string FindFileFromRepoRoot(params string[] segments) => TestRepositoryRoot.Combine(segments);
 
-            dir = dir.Parent;
-        }
-
-        throw new FileNotFoundException($"Could not locate file '{Path.Combine(segments)}' from '{AppContext.BaseDirectory}'.");
-    }
-
-    private static string FindDirectoryFromRepoRoot(params string[] segments)
-    {
-        var dir = new DirectoryInfo(AppContext.BaseDirectory);
-        while (dir is not null)
-        {
-            var candidate = Path.Combine(dir.FullName, Path.Combine(segments));
-            if (Directory.Exists(candidate))
-                return candidate;
-
-            dir = dir.Parent;
-        }
-
-        throw new DirectoryNotFoundException($"Could not locate directory '{Path.Combine(segments)}' from '{AppContext.BaseDirectory}'.");
-    }
+    private static string FindDirectoryFromRepoRoot(params string[] segments) => TestRepositoryRoot.Combine(segments);
 
 }

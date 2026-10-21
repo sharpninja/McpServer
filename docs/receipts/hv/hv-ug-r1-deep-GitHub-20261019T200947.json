@@ -1,0 +1,111 @@
+{
+  "Receipt": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r1-branch-activity-20261019T200151-c84b0d.json",
+  "Count": 15,
+  "Activities": [
+    {
+      "activity_type": "push",
+      "timestamp": "2026-10-20T00:50:08Z",
+      "before": "83417029fa3e0ee8ef2ffc6bdfa29a7c1e9fdb38",
+      "after": "6b4295b790e0e2cde7113f3be4bb83bc66343016",
+      "ref": "refs/heads/fix/unit-suite-green-20261019"
+    },
+    {
+      "activity_type": "push",
+      "timestamp": "2026-10-20T00:26:51Z",
+      "before": "127468345afcc7a24e6a254f712d6b75a54713e8",
+      "after": "83417029fa3e0ee8ef2ffc6bdfa29a7c1e9fdb38",
+      "ref": "refs/heads/fix/unit-suite-green-20261019"
+    },
+    {
+      "activity_type": "push",
+      "timestamp": "2026-10-20T00:15:34Z",
+      "before": "69d8f3f5b19b070f9059a096f344c44bbd359d47",
+      "after": "127468345afcc7a24e6a254f712d6b75a54713e8",
+      "ref": "refs/heads/fix/unit-suite-green-20261019"
+    },
+    {
+      "activity_type": "push",
+      "timestamp": "2026-10-19T23:56:00Z",
+      "before": "5924926051f84720c110ab1421430499fadf918a",
+      "after": "69d8f3f5b19b070f9059a096f344c44bbd359d47",
+      "ref": "refs/heads/fix/unit-suite-green-20261019"
+    },
+    {
+      "activity_type": "push",
+      "timestamp": "2026-10-19T23:29:52Z",
+      "before": "4f668b76d26b26e7162d8654fb946c484fd42539",
+      "after": "5924926051f84720c110ab1421430499fadf918a",
+      "ref": "refs/heads/fix/unit-suite-green-20261019"
+    },
+    {
+      "activity_type": "push",
+      "timestamp": "2026-10-19T22:59:51Z",
+      "before": "b2bd50b3711c28bdb256e1f4fa56f3d8114fb6c6",
+      "after": "4f668b76d26b26e7162d8654fb946c484fd42539",
+      "ref": "refs/heads/fix/unit-suite-green-20261019"
+    },
+    {
+      "activity_type": "push",
+      "timestamp": "2026-10-19T22:50:35Z",
+      "before": "8a6173342dcd7683b9d9549005a5af819b8abc90",
+      "after": "b2bd50b3711c28bdb256e1f4fa56f3d8114fb6c6",
+      "ref": "refs/heads/fix/unit-suite-green-20261019"
+    },
+    {
+      "activity_type": "push",
+      "timestamp": "2026-10-19T22:26:29Z",
+      "before": "8c2b83ab5a442ce7dbc4a5a78f70dfaafbd034a2",
+      "after": "8a6173342dcd7683b9d9549005a5af819b8abc90",
+      "ref": "refs/heads/fix/unit-suite-green-20261019"
+    },
+    {
+      "activity_type": "push",
+      "timestamp": "2026-10-19T21:45:59Z",
+      "before": "11681680d316bee7c8c184e45b699af7c1bd2188",
+      "after": "8c2b83ab5a442ce7dbc4a5a78f70dfaafbd034a2",
+      "ref": "refs/heads/fix/unit-suite-green-20261019"
+    },
+    {
+      "activity_type": "push",
+      "timestamp": "2026-10-19T21:43:27Z",
+      "before": "b2319488039bbcd1e2014d8f3a1b7a26627b3ba8",
+      "after": "11681680d316bee7c8c184e45b699af7c1bd2188",
+      "ref": "refs/heads/fix/unit-suite-green-20261019"
+    },
+    {
+      "activity_type": "push",
+      "timestamp": "2026-10-19T20:52:44Z",
+      "before": "a4c358efd91131e7fb714370726997b5c2d076cb",
+      "after": "b2319488039bbcd1e2014d8f3a1b7a26627b3ba8",
+      "ref": "refs/heads/fix/unit-suite-green-20261019"
+    },
+    {
+      "activity_type": "push",
+      "timestamp": "2026-10-19T20:40:47Z",
+      "before": "de5813532adb51b964b222644ae0519bd814f8ef",
+      "after": "a4c358efd91131e7fb714370726997b5c2d076cb",
+      "ref": "refs/heads/fix/unit-suite-green-20261019"
+    },
+    {
+      "activity_type": "push",
+      "timestamp": "2026-10-19T20:40:03Z",
+      "before": "28bf0b222464c5bdbfb8b6ec0a357e15284e486f",
+      "after": "de5813532adb51b964b222644ae0519bd814f8ef",
+      "ref": "refs/heads/fix/unit-suite-green-20261019"
+    },
+    {
+      "activity_type": "push",
+      "timestamp": "2026-10-19T20:33:40Z",
+      "before": "cbc74e823e7af96f8df1a1320498998e5de2b328",
+      "after": "28bf0b222464c5bdbfb8b6ec0a357e15284e486f",
+      "ref": "refs/heads/fix/unit-suite-green-20261019"
+    },
+    {
+      "activity_type": "branch_creation",
+      "timestamp": "2026-10-19T20:18:10Z",
+      "before": "0000000000000000000000000000000000000000",
+      "after": "cbc74e823e7af96f8df1a1320498998e5de2b328",
+      "ref": "refs/heads/fix/unit-suite-green-20261019"
+    }
+  ]
+}

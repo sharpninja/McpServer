@@ -1,0 +1,47 @@
+{
+  "TimestampLocal": "2026-10-21T11:59:12",
+  "Rollout": "/home/sharpninja/.codex/sessions/2026/10/21/rollout-2026-10-21T11-18-10-01a15f41-79e2-7101-b0a5-70ef6c562049.jsonl",
+  "Session": {
+    "Line": 1,
+    "Timestamp": "2026-10-21T16:18:11.505Z",
+    "Id": "01a15f41-79e2-7101-b0a5-70ef6c562049",
+    "Originator": "codex_exec",
+    "CliVersion": "0.160.1",
+    "Cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+    "Source": "exec"
+  },
+  "TurnContexts": [
+    {
+      "Line": 8,
+      "Timestamp": "2026-10-21T16:18:13.843Z",
+      "TurnId": "01a15f41-830b-7582-a7d3-358d96e844f4",
+      "Model": "gpt-6-astra",
+      "Effort": "max"
+    },
+    {
+      "Line": 280,
+      "Timestamp": "2026-10-21T16:36:17.283Z",
+      "TurnId": "01a15f41-830b-7582-a7d3-358d96e844f4",
+      "Model": "gpt-6-astra",
+      "Effort": "max"
+    },
+    {
+      "Line": 626,
+      "Timestamp": "2026-10-21T16:55:03.456Z",
+      "TurnId": "01a15f41-830b-7582-a7d3-358d96e844f4",
+      "Model": "gpt-6-astra",
+      "Effort": "max"
+    }
+  ],
+  "ProfileFileCount": 1,
+  "ProfileFiles": [
+    {
+      "FullName": "/home/sharpninja/.claude/profile/PROFILE-MERGED.md",
+      "Length": 62592
+    }
+  ],
+  "MarkerReadInFull": true,
+  "MarkerPath": "/home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml",
+  "PluginPath": "/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0",
+  "CachePath": "/tmp/hv-ug-r5-01a15f41-79e2-7101-b0a5-70ef6c562049"
+}

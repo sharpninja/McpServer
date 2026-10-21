@@ -1,0 +1,6 @@
+Now: 2026-10-21T07:53:16 before=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r5-linux-test-2 (4516) after=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r5-linux-test-3 (4515)
+onlyBefore=1 onlyAfter=0 common=4515
+onlyBefore QBrainAi.Support.Mcp.Tests=1
+--- only in before ---
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.DatabaseMaintenance.McpDatabaseEncryptionTransitionCommandTests.TryParse_UsesEnvironmentInstance_WhenCliInstanceIsOmitted
+--- only in after ---

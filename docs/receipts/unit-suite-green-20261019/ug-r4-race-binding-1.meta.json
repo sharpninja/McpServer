@@ -1,0 +1,27 @@
+{
+  "name": "ug-r4-race-binding-1",
+  "target": "Test",
+  "extraArgs": [
+    "--test-run-id",
+    "ug-r4-race-binding-1"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "801e6862d49d669808c9315a7ad43d0272b1d1f1",
+  "dirtyPaths": [
+    " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+    " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json",
+    " M docs/receipts/hv/20261020T170824-unitgreen-r3.selfreview.md",
+    " M docs/receipts/hv/unitgreen-r3-prelaunch.selfreview.md",
+    " M src/QBrainAi.Services/Services/AgentPluginVersionSources.cs",
+    " M src/QBrainAi.Services/Services/MarkerFileService.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs"
+  ],
+  "startedLocal": "2026-10-20T19:50:47",
+  "startedUtc": "2026-10-21T00:50:47.4943837Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-race-binding-1.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-race-binding-1.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r4-race-binding-1.exit.txt"
+}

@@ -8,11 +8,10 @@ using Xunit;
 namespace QBrainAi.Support.Mcp.Tests.Storage;
 
 [Trait("Category", "Integration")]
+[Collection(SqlServerLocalDbCollection.Name)]
 public sealed class SqlServerAuditPayloadMigrationTests : IDisposable
 {
-    private readonly string _serverConnectionString =
-        Environment.GetEnvironmentVariable("MCP_TEST_SQLSERVER_CONNECTION")
-        ?? "Server=(localdb)\\MSSQLLocalDB;Integrated Security=True;TrustServerCertificate=True";
+    private readonly string _serverConnectionString = SqlServerTestConnection.Server;
     private readonly string _databaseName = $"mcp_audit_{Guid.NewGuid():N}";
     private bool _databaseCreated;
 

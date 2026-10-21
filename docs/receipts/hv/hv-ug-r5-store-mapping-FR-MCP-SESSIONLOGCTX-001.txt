@@ -1,0 +1,16 @@
+type: result
+payload:
+  requestId: req-20261021T162513Z-e0ec
+  result:
+    items:
+    - frId: FR-MCP-SESSIONLOGCTX-001
+      trId: TR-MCP-SESSIONLOG-006
+      createdAt: 2026-10-21T16:25:14.9490821+00:00
+    - frId: FR-MCP-SESSIONLOGCTX-001
+      testId: TEST-MCP-SESSIONLOG-006
+      createdAt: 2026-10-21T16:25:14.9497982+00:00
+    totalCount: 2
+  deprecated: true
+
+---
+

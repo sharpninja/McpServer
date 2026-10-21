@@ -13,6 +13,7 @@ public sealed class ConfigurablePathIntegrationTests : IDisposable
 {
     private readonly List<string> _tempDirectories = [];
 
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task RepoIngestor_ResolvesRelativeRepoRoot_AgainstCurrentDirectory()
     {
@@ -28,6 +29,7 @@ public sealed class ConfigurablePathIntegrationTests : IDisposable
         Assert.Contains(results, r => string.Equals(r.Doc.SourceKey, "readme.md", StringComparison.OrdinalIgnoreCase));
     }
 
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task VectorIndexService_SaveAsync_UsesConfiguredRelativeIndexPath()
     {

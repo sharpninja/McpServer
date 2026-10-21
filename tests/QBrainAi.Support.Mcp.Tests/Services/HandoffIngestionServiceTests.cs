@@ -464,6 +464,7 @@ public sealed class HandoffIngestionServiceTests : IDisposable
     }
 
     /// <summary>TEST-HANDOFF-002: reparse-point escapes fail closed.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task IngestAsync_ReparseEscape_IsRejected()
     {

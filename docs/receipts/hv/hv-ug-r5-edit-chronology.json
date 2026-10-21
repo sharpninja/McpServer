@@ -1,0 +1,2990 @@
+[
+  {
+    "Line": 5794,
+    "Local": "2026-10-19T15:19:24",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseGetWorkspaceResolutionContractTests.cs",
+    "OldChars": 137,
+    "NewChars": 427,
+    "WriteChars": 0
+  },
+  {
+    "Line": 5795,
+    "Local": "2026-10-19T15:19:27",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseGetWorkspaceResolutionContractTests.cs",
+    "OldChars": 98,
+    "NewChars": 829,
+    "WriteChars": 0
+  },
+  {
+    "Line": 5796,
+    "Local": "2026-10-19T15:19:32",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseGetWorkspaceResolutionContractTests.cs",
+    "OldChars": 775,
+    "NewChars": 856,
+    "WriteChars": 0
+  },
+  {
+    "Line": 5797,
+    "Local": "2026-10-19T15:19:34",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseGetWorkspaceResolutionContractTests.cs",
+    "OldChars": 89,
+    "NewChars": 85,
+    "WriteChars": 0
+  },
+  {
+    "Line": 5817,
+    "Local": "2026-10-19T15:21:12",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/RemoveTodoRecordsMigrationTests.cs",
+    "OldChars": 244,
+    "NewChars": 600,
+    "WriteChars": 0
+  },
+  {
+    "Line": 5818,
+    "Local": "2026-10-19T15:21:17",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/RemoveTodoRecordsMigrationTests.cs",
+    "OldChars": 96,
+    "NewChars": 1675,
+    "WriteChars": 0
+  },
+  {
+    "Line": 5834,
+    "Local": "2026-10-19T15:21:43",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/Decompose4nfBackfillMigrationTests.cs",
+    "OldChars": 75,
+    "NewChars": 259,
+    "WriteChars": 0
+  },
+  {
+    "Line": 5847,
+    "Local": "2026-10-19T15:22:08",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs",
+    "OldChars": 480,
+    "NewChars": 630,
+    "WriteChars": 0
+  },
+  {
+    "Line": 5861,
+    "Local": "2026-10-19T15:22:34",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "OldChars": 54,
+    "NewChars": 36,
+    "WriteChars": 0
+  },
+  {
+    "Line": 5862,
+    "Local": "2026-10-19T15:22:36",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "OldChars": 55,
+    "NewChars": 37,
+    "WriteChars": 0
+  },
+  {
+    "Line": 5863,
+    "Local": "2026-10-19T15:22:37",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "OldChars": 62,
+    "NewChars": 44,
+    "WriteChars": 0
+  },
+  {
+    "Line": 5864,
+    "Local": "2026-10-19T15:22:39",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "OldChars": 54,
+    "NewChars": 36,
+    "WriteChars": 0
+  },
+  {
+    "Line": 5865,
+    "Local": "2026-10-19T15:22:40",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "OldChars": 53,
+    "NewChars": 35,
+    "WriteChars": 0
+  },
+  {
+    "Line": 5866,
+    "Local": "2026-10-19T15:22:41",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "OldChars": 59,
+    "NewChars": 41,
+    "WriteChars": 0
+  },
+  {
+    "Line": 5892,
+    "Local": "2026-10-19T15:23:49",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "OldChars": 78,
+    "NewChars": 787,
+    "WriteChars": 0
+  },
+  {
+    "Line": 5899,
+    "Local": "2026-10-19T15:24:27",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "OldChars": 3013,
+    "NewChars": 4976,
+    "WriteChars": 0
+  },
+  {
+    "Line": 5930,
+    "Local": "2026-10-19T15:25:10",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceResolutionMiddlewareTests.cs",
+    "OldChars": 780,
+    "NewChars": 1811,
+    "WriteChars": 0
+  },
+  {
+    "Line": 5940,
+    "Local": "2026-10-19T15:25:42",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs",
+    "OldChars": 202,
+    "NewChars": 344,
+    "WriteChars": 0
+  },
+  {
+    "Line": 5941,
+    "Local": "2026-10-19T15:25:45",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs",
+    "OldChars": 201,
+    "NewChars": 341,
+    "WriteChars": 0
+  },
+  {
+    "Line": 5942,
+    "Local": "2026-10-19T15:25:47",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs",
+    "OldChars": 147,
+    "NewChars": 311,
+    "WriteChars": 0
+  },
+  {
+    "Line": 5962,
+    "Local": "2026-10-19T15:26:34",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathContractTests.cs",
+    "OldChars": 219,
+    "NewChars": 298,
+    "WriteChars": 0
+  },
+  {
+    "Line": 5963,
+    "Local": "2026-10-19T15:26:37",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathContractTests.cs",
+    "OldChars": 465,
+    "NewChars": 92,
+    "WriteChars": 0
+  },
+  {
+    "Line": 5966,
+    "Local": "2026-10-19T15:26:47",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 3598
+  },
+  {
+    "Line": 5983,
+    "Local": "2026-10-19T15:27:14",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs",
+    "OldChars": 193,
+    "NewChars": 319,
+    "WriteChars": 0
+  },
+  {
+    "Line": 5984,
+    "Local": "2026-10-19T15:27:15",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs",
+    "OldChars": 207,
+    "NewChars": 243,
+    "WriteChars": 0
+  },
+  {
+    "Line": 5999,
+    "Local": "2026-10-19T15:27:43",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs",
+    "OldChars": 124,
+    "NewChars": 197,
+    "WriteChars": 0
+  },
+  {
+    "Line": 6117,
+    "Local": "2026-10-19T15:34:01",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/WorkspaceIdentityPath.cs",
+    "OldChars": 486,
+    "NewChars": 1368,
+    "WriteChars": 0
+  },
+  {
+    "Line": 6118,
+    "Local": "2026-10-19T15:34:03",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostRealTests.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 596
+  },
+  {
+    "Line": 6521,
+    "Local": "2026-10-19T15:46:34",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs",
+    "OldChars": 356,
+    "NewChars": 744,
+    "WriteChars": 0
+  },
+  {
+    "Line": 6551,
+    "Local": "2026-10-19T15:49:42",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs",
+    "OldChars": 94,
+    "NewChars": 41,
+    "WriteChars": 0
+  },
+  {
+    "Line": 6552,
+    "Local": "2026-10-19T15:49:43",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs",
+    "OldChars": 70,
+    "NewChars": 106,
+    "WriteChars": 0
+  },
+  {
+    "Line": 7359,
+    "Local": "2026-10-19T16:28:07",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/IntegrationLaneFilterContracts.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 853
+  },
+  {
+    "Line": 7362,
+    "Local": "2026-10-19T16:28:18",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/IntegrationLaneFilterContract.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 4238
+  },
+  {
+    "Line": 7365,
+    "Local": "2026-10-19T16:28:28",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 3604
+  },
+  {
+    "Line": 7481,
+    "Local": "2026-10-19T16:31:52",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/IntegrationLaneFilterContract.cs",
+    "OldChars": 959,
+    "NewChars": 1568,
+    "WriteChars": 0
+  },
+  {
+    "Line": 7499,
+    "Local": "2026-10-19T16:32:12",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+    "OldChars": 214,
+    "NewChars": 1900,
+    "WriteChars": 0
+  },
+  {
+    "Line": 7506,
+    "Local": "2026-10-19T16:32:21",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+    "OldChars": 113,
+    "NewChars": 160,
+    "WriteChars": 0
+  },
+  {
+    "Line": 7549,
+    "Local": "2026-10-19T16:33:22",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/IntegrationLaneFilter.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 986
+  },
+  {
+    "Line": 7550,
+    "Local": "2026-10-19T16:33:25",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/IntegrationLaneFilterTests.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 1055
+  },
+  {
+    "Line": 7581,
+    "Local": "2026-10-19T16:33:55",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/Build.TestDependencies.cs",
+    "OldChars": 185,
+    "NewChars": 482,
+    "WriteChars": 0
+  },
+  {
+    "Line": 7582,
+    "Local": "2026-10-19T16:33:57",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/Build.TestDependencies.cs",
+    "OldChars": 226,
+    "NewChars": 214,
+    "WriteChars": 0
+  },
+  {
+    "Line": 7583,
+    "Local": "2026-10-19T16:33:58",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/Build.TestDependencies.cs",
+    "OldChars": 284,
+    "NewChars": 272,
+    "WriteChars": 0
+  },
+  {
+    "Line": 7610,
+    "Local": "2026-10-19T16:34:29",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/IntegrationLaneFilter.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 909
+  },
+  {
+    "Line": 7611,
+    "Local": "2026-10-19T16:34:32",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/Build.TestDependencies.cs",
+    "OldChars": 204,
+    "NewChars": 436,
+    "WriteChars": 0
+  },
+  {
+    "Line": 7940,
+    "Local": "2026-10-19T16:42:15",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/Build.TestDependencies.cs",
+    "OldChars": 374,
+    "NewChars": 77,
+    "WriteChars": 0
+  },
+  {
+    "Line": 7941,
+    "Local": "2026-10-19T16:42:16",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/Build.TestDependencies.cs",
+    "OldChars": 214,
+    "NewChars": 226,
+    "WriteChars": 0
+  },
+  {
+    "Line": 7942,
+    "Local": "2026-10-19T16:42:18",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/Build.TestDependencies.cs",
+    "OldChars": 272,
+    "NewChars": 284,
+    "WriteChars": 0
+  },
+  {
+    "Line": 7945,
+    "Local": "2026-10-19T16:42:20",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/Build.TestDependencies.cs",
+    "OldChars": 347,
+    "NewChars": 115,
+    "WriteChars": 0
+  },
+  {
+    "Line": 7998,
+    "Local": "2026-10-19T16:43:34",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/Build.TestDependencies.cs",
+    "OldChars": 185,
+    "NewChars": 482,
+    "WriteChars": 0
+  },
+  {
+    "Line": 7999,
+    "Local": "2026-10-19T16:43:36",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/Build.TestDependencies.cs",
+    "OldChars": 226,
+    "NewChars": 214,
+    "WriteChars": 0
+  },
+  {
+    "Line": 8000,
+    "Local": "2026-10-19T16:43:37",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/Build.TestDependencies.cs",
+    "OldChars": 284,
+    "NewChars": 272,
+    "WriteChars": 0
+  },
+  {
+    "Line": 8003,
+    "Local": "2026-10-19T16:43:39",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/Build.TestDependencies.cs",
+    "OldChars": 115,
+    "NewChars": 347,
+    "WriteChars": 0
+  },
+  {
+    "Line": 8816,
+    "Local": "2026-10-19T17:17:35",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 11331
+  },
+  {
+    "Line": 8827,
+    "Local": "2026-10-19T17:18:24",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "OldChars": 1871,
+    "NewChars": 2542,
+    "WriteChars": 0
+  },
+  {
+    "Line": 8828,
+    "Local": "2026-10-19T17:18:26",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "OldChars": 247,
+    "NewChars": 328,
+    "WriteChars": 0
+  },
+  {
+    "Line": 8842,
+    "Local": "2026-10-19T17:19:46",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 9669
+  },
+  {
+    "Line": 8963,
+    "Local": "2026-10-19T17:26:59",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "OldChars": 1643,
+    "NewChars": 2475,
+    "WriteChars": 0
+  },
+  {
+    "Line": 8964,
+    "Local": "2026-10-19T17:27:07",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "OldChars": 236,
+    "NewChars": 2462,
+    "WriteChars": 0
+  },
+  {
+    "Line": 8978,
+    "Local": "2026-10-19T17:27:56",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathContractTests.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 1999
+  },
+  {
+    "Line": 8981,
+    "Local": "2026-10-19T17:28:11",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 5565
+  },
+  {
+    "Line": 8993,
+    "Local": "2026-10-19T17:28:38",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceRemotePathContractTests.cs",
+    "OldChars": 1388,
+    "NewChars": 1407,
+    "WriteChars": 0
+  },
+  {
+    "Line": 8994,
+    "Local": "2026-10-19T17:28:40",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceRemotePathContractTests.cs",
+    "OldChars": 191,
+    "NewChars": 384,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9009,
+    "Local": "2026-10-19T17:29:05",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs",
+    "OldChars": 184,
+    "NewChars": 378,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9010,
+    "Local": "2026-10-19T17:29:07",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs",
+    "OldChars": 183,
+    "NewChars": 218,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9011,
+    "Local": "2026-10-19T17:29:09",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs",
+    "OldChars": 203,
+    "NewChars": 238,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9029,
+    "Local": "2026-10-19T17:29:41",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs",
+    "OldChars": 264,
+    "NewChars": 584,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9048,
+    "Local": "2026-10-19T17:30:06",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceTokenServiceTests.cs",
+    "OldChars": 296,
+    "NewChars": 427,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9075,
+    "Local": "2026-10-19T17:30:48",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/GrokCliAgentExecutionStrategyTests.cs",
+    "OldChars": 505,
+    "NewChars": 808,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9076,
+    "Local": "2026-10-19T17:30:51",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs",
+    "OldChars": 371,
+    "NewChars": 471,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9096,
+    "Local": "2026-10-19T17:31:31",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 2840
+  },
+  {
+    "Line": 9107,
+    "Local": "2026-10-19T17:31:47",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/Build.TestDependencies.cs",
+    "OldChars": 253,
+    "NewChars": 507,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9132,
+    "Local": "2026-10-19T17:32:27",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs",
+    "OldChars": 52,
+    "NewChars": 116,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9133,
+    "Local": "2026-10-19T17:32:27",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs",
+    "OldChars": 51,
+    "NewChars": 115,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9134,
+    "Local": "2026-10-19T17:32:29",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsFourteenthLinuxNativeTests.cs",
+    "OldChars": 58,
+    "NewChars": 122,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9135,
+    "Local": "2026-10-19T17:32:30",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthLinuxNativeTests.cs",
+    "OldChars": 57,
+    "NewChars": 121,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9136,
+    "Local": "2026-10-19T17:32:32",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityWindowsTests.cs",
+    "OldChars": 61,
+    "NewChars": 127,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9137,
+    "Local": "2026-10-19T17:32:34",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs",
+    "OldChars": 60,
+    "NewChars": 126,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9140,
+    "Local": "2026-10-19T17:32:35",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthWindowsNativeTests.cs",
+    "OldChars": 59,
+    "NewChars": 125,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9141,
+    "Local": "2026-10-19T17:32:37",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthSharedTests.cs",
+    "OldChars": 52,
+    "NewChars": 87,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9142,
+    "Local": "2026-10-19T17:32:38",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs",
+    "OldChars": 110,
+    "NewChars": 145,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9143,
+    "Local": "2026-10-19T17:32:40",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs",
+    "OldChars": 109,
+    "NewChars": 144,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9144,
+    "Local": "2026-10-19T17:32:41",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs",
+    "OldChars": 56,
+    "NewChars": 91,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9145,
+    "Local": "2026-10-19T17:32:43",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs",
+    "OldChars": 51,
+    "NewChars": 86,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9148,
+    "Local": "2026-10-19T17:32:44",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs",
+    "OldChars": 61,
+    "NewChars": 96,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9149,
+    "Local": "2026-10-19T17:32:46",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/FileGitHubWorkspaceTokenStoreTests.cs",
+    "OldChars": 68,
+    "NewChars": 103,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9150,
+    "Local": "2026-10-19T17:32:47",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs",
+    "OldChars": 58,
+    "NewChars": 93,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9151,
+    "Local": "2026-10-19T17:32:48",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs",
+    "OldChars": 47,
+    "NewChars": 82,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9237,
+    "Local": "2026-10-19T17:35:25",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+    "OldChars": 181,
+    "NewChars": 453,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9255,
+    "Local": "2026-10-19T17:35:45",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "OldChars": 550,
+    "NewChars": 0,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9263,
+    "Local": "2026-10-19T17:36:02",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "OldChars": 201,
+    "NewChars": 1221,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9276,
+    "Local": "2026-10-19T17:36:48",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "OldChars": 4073,
+    "NewChars": 3669,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9279,
+    "Local": "2026-10-19T17:36:55",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "OldChars": 2790,
+    "NewChars": 0,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9291,
+    "Local": "2026-10-19T17:37:08",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "OldChars": 102,
+    "NewChars": 103,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9292,
+    "Local": "2026-10-19T17:37:09",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "OldChars": 88,
+    "NewChars": 89,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9293,
+    "Local": "2026-10-19T17:37:10",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "OldChars": 49,
+    "NewChars": 50,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9306,
+    "Local": "2026-10-19T17:37:49",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "OldChars": 155,
+    "NewChars": 5601,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9334,
+    "Local": "2026-10-19T17:38:38",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "OldChars": 1673,
+    "NewChars": 2499,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9335,
+    "Local": "2026-10-19T17:38:40",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "OldChars": 92,
+    "NewChars": 93,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9351,
+    "Local": "2026-10-19T17:39:05",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "OldChars": 93,
+    "NewChars": 1342,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9379,
+    "Local": "2026-10-19T17:39:47",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+    "OldChars": 342,
+    "NewChars": 646,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9380,
+    "Local": "2026-10-19T17:39:51",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+    "OldChars": 608,
+    "NewChars": 882,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9383,
+    "Local": "2026-10-19T17:40:00",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+    "OldChars": 437,
+    "NewChars": 2314,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9399,
+    "Local": "2026-10-19T17:40:32",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "OldChars": 1348,
+    "NewChars": 1758,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9400,
+    "Local": "2026-10-19T17:40:34",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "OldChars": 112,
+    "NewChars": 93,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9401,
+    "Local": "2026-10-19T17:40:36",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "OldChars": 388,
+    "NewChars": 245,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9431,
+    "Local": "2026-10-19T17:41:23",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "OldChars": 150,
+    "NewChars": 1397,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9439,
+    "Local": "2026-10-19T17:41:50",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 4042
+  },
+  {
+    "Line": 9450,
+    "Local": "2026-10-19T17:42:08",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs",
+    "OldChars": 115,
+    "NewChars": 145,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9451,
+    "Local": "2026-10-19T17:42:10",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs",
+    "OldChars": 101,
+    "NewChars": 107,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9498,
+    "Local": "2026-10-19T17:45:06",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "OldChars": 391,
+    "NewChars": 383,
+    "WriteChars": 0
+  },
+  {
+    "Line": 9977,
+    "Local": "2026-10-19T18:20:39",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 4200
+  },
+  {
+    "Line": 10302,
+    "Local": "2026-10-19T18:54:29",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/IntegrationLanePreconditionContracts.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 1080
+  },
+  {
+    "Line": 10305,
+    "Local": "2026-10-19T18:54:35",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/IntegrationLanePreconditionContract.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 2361
+  },
+  {
+    "Line": 10308,
+    "Local": "2026-10-19T18:54:46",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 4047
+  },
+  {
+    "Line": 10326,
+    "Local": "2026-10-19T18:55:17",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/InteractiveSessionPrecondition.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 1079
+  },
+  {
+    "Line": 10327,
+    "Local": "2026-10-19T18:55:21",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/IntegrationLanePreconditionTests.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 1290
+  },
+  {
+    "Line": 10330,
+    "Local": "2026-10-19T18:55:24",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/Build.TestDependencies.cs",
+    "OldChars": 217,
+    "NewChars": 774,
+    "WriteChars": 0
+  },
+  {
+    "Line": 10499,
+    "Local": "2026-10-19T19:05:43",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs",
+    "OldChars": 442,
+    "NewChars": 0,
+    "WriteChars": 0
+  },
+  {
+    "Line": 10517,
+    "Local": "2026-10-19T19:06:12",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs",
+    "OldChars": 312,
+    "NewChars": 1052,
+    "WriteChars": 0
+  },
+  {
+    "Line": 12364,
+    "Local": "2026-10-19T20:55:01",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "OldChars": 395,
+    "NewChars": 2255,
+    "WriteChars": 0
+  },
+  {
+    "Line": 12365,
+    "Local": "2026-10-19T20:55:09",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "OldChars": 428,
+    "NewChars": 2436,
+    "WriteChars": 0
+  },
+  {
+    "Line": 12366,
+    "Local": "2026-10-19T20:55:16",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "OldChars": 349,
+    "NewChars": 1648,
+    "WriteChars": 0
+  },
+  {
+    "Line": 12389,
+    "Local": "2026-10-19T20:56:46",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "OldChars": 685,
+    "NewChars": 17,
+    "WriteChars": 0
+  },
+  {
+    "Line": 12390,
+    "Local": "2026-10-19T20:56:54",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "OldChars": 1450,
+    "NewChars": 1398,
+    "WriteChars": 0
+  },
+  {
+    "Line": 12395,
+    "Local": "2026-10-19T20:57:12",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "OldChars": 2216,
+    "NewChars": 3930,
+    "WriteChars": 0
+  },
+  {
+    "Line": 12408,
+    "Local": "2026-10-19T20:57:37",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "OldChars": 109,
+    "NewChars": 216,
+    "WriteChars": 0
+  },
+  {
+    "Line": 12409,
+    "Local": "2026-10-19T20:57:39",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "OldChars": 100,
+    "NewChars": 108,
+    "WriteChars": 0
+  },
+  {
+    "Line": 12424,
+    "Local": "2026-10-19T20:58:20",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "OldChars": 2415,
+    "NewChars": 4869,
+    "WriteChars": 0
+  },
+  {
+    "Line": 12425,
+    "Local": "2026-10-19T20:58:22",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "OldChars": 110,
+    "NewChars": 252,
+    "WriteChars": 0
+  },
+  {
+    "Line": 12440,
+    "Local": "2026-10-19T20:58:51",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "OldChars": 115,
+    "NewChars": 445,
+    "WriteChars": 0
+  },
+  {
+    "Line": 12441,
+    "Local": "2026-10-19T20:58:53",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "OldChars": 309,
+    "NewChars": 32,
+    "WriteChars": 0
+  },
+  {
+    "Line": 12451,
+    "Local": "2026-10-19T20:59:35",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "OldChars": 4403,
+    "NewChars": 7511,
+    "WriteChars": 0
+  },
+  {
+    "Line": 12464,
+    "Local": "2026-10-19T21:00:20",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs",
+    "OldChars": 198,
+    "NewChars": 463,
+    "WriteChars": 0
+  },
+  {
+    "Line": 12754,
+    "Local": "2026-10-19T21:07:43",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseDiagramGraphCqrsTests.cs",
+    "OldChars": 185,
+    "NewChars": 397,
+    "WriteChars": 0
+  },
+  {
+    "Line": 12761,
+    "Local": "2026-10-19T21:08:15",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DocsSyncG8OverlayTests.cs",
+    "OldChars": 263,
+    "NewChars": 452,
+    "WriteChars": 0
+  },
+  {
+    "Line": 13775,
+    "Local": "2026-10-20T07:35:12",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "OldChars": 97,
+    "NewChars": 1642,
+    "WriteChars": 0
+  },
+  {
+    "Line": 13776,
+    "Local": "2026-10-20T07:35:18",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "OldChars": 414,
+    "NewChars": 2260,
+    "WriteChars": 0
+  },
+  {
+    "Line": 13777,
+    "Local": "2026-10-20T07:35:29",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "OldChars": 1991,
+    "NewChars": 1583,
+    "WriteChars": 0
+  },
+  {
+    "Line": 13794,
+    "Local": "2026-10-20T07:37:16",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "OldChars": 93,
+    "NewChars": 91,
+    "WriteChars": 0
+  },
+  {
+    "Line": 13812,
+    "Local": "2026-10-20T07:37:44",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "OldChars": 555,
+    "NewChars": 809,
+    "WriteChars": 0
+  },
+  {
+    "Line": 13813,
+    "Local": "2026-10-20T07:37:45",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "OldChars": 175,
+    "NewChars": 96,
+    "WriteChars": 0
+  },
+  {
+    "Line": 13814,
+    "Local": "2026-10-20T07:37:49",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "OldChars": 400,
+    "NewChars": 390,
+    "WriteChars": 0
+  },
+  {
+    "Line": 13815,
+    "Local": "2026-10-20T07:37:50",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "OldChars": 135,
+    "NewChars": 85,
+    "WriteChars": 0
+  },
+  {
+    "Line": 13816,
+    "Local": "2026-10-20T07:37:52",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "OldChars": 143,
+    "NewChars": 168,
+    "WriteChars": 0
+  },
+  {
+    "Line": 13817,
+    "Local": "2026-10-20T07:37:54",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "OldChars": 262,
+    "NewChars": 181,
+    "WriteChars": 0
+  },
+  {
+    "Line": 13840,
+    "Local": "2026-10-20T07:38:55",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs",
+    "OldChars": 265,
+    "NewChars": 583,
+    "WriteChars": 0
+  },
+  {
+    "Line": 14014,
+    "Local": "2026-10-20T07:50:10",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 15461
+  },
+  {
+    "Line": 14032,
+    "Local": "2026-10-20T07:50:54",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "OldChars": 327,
+    "NewChars": 469,
+    "WriteChars": 0
+  },
+  {
+    "Line": 14033,
+    "Local": "2026-10-20T07:50:55",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "OldChars": 49,
+    "NewChars": 67,
+    "WriteChars": 0
+  },
+  {
+    "Line": 14043,
+    "Local": "2026-10-20T07:51:29",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "OldChars": 108,
+    "NewChars": 2937,
+    "WriteChars": 0
+  },
+  {
+    "Line": 14046,
+    "Local": "2026-10-20T07:51:42",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "OldChars": 429,
+    "NewChars": 4387,
+    "WriteChars": 0
+  },
+  {
+    "Line": 14047,
+    "Local": "2026-10-20T07:51:47",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "OldChars": 587,
+    "NewChars": 790,
+    "WriteChars": 0
+  },
+  {
+    "Line": 14062,
+    "Local": "2026-10-20T07:52:29",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "OldChars": 1824,
+    "NewChars": 2904,
+    "WriteChars": 0
+  },
+  {
+    "Line": 14063,
+    "Local": "2026-10-20T07:52:31",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "OldChars": 108,
+    "NewChars": 129,
+    "WriteChars": 0
+  },
+  {
+    "Line": 14077,
+    "Local": "2026-10-20T07:52:59",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs",
+    "OldChars": 127,
+    "NewChars": 146,
+    "WriteChars": 0
+  },
+  {
+    "Line": 14078,
+    "Local": "2026-10-20T07:53:01",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs",
+    "OldChars": 212,
+    "NewChars": 205,
+    "WriteChars": 0
+  },
+  {
+    "Line": 14197,
+    "Local": "2026-10-20T07:56:34",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "OldChars": 84,
+    "NewChars": 109,
+    "WriteChars": 0
+  },
+  {
+    "Line": 14198,
+    "Local": "2026-10-20T07:56:36",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "OldChars": 79,
+    "NewChars": 187,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15110,
+    "Local": "2026-10-20T08:50:05",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Shared/TestRepositoryRoot.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 5081
+  },
+  {
+    "Line": 15123,
+    "Local": "2026-10-20T08:51:11",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 5886
+  },
+  {
+    "Line": 15135,
+    "Local": "2026-10-20T08:52:39",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "OldChars": 460,
+    "NewChars": 6167,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15147,
+    "Local": "2026-10-20T08:53:26",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "OldChars": 108,
+    "NewChars": 1179,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15148,
+    "Local": "2026-10-20T08:53:34",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "OldChars": 127,
+    "NewChars": 2599,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15157,
+    "Local": "2026-10-20T08:53:58",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "OldChars": 329,
+    "NewChars": 658,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15196,
+    "Local": "2026-10-20T08:54:47",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs",
+    "OldChars": 72,
+    "NewChars": 1432,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15197,
+    "Local": "2026-10-20T08:54:49",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs",
+    "OldChars": 468,
+    "NewChars": 81,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15198,
+    "Local": "2026-10-20T08:54:51",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs",
+    "OldChars": 51,
+    "NewChars": 81,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15245,
+    "Local": "2026-10-20T09:00:11",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "OldChars": 382,
+    "NewChars": 603,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15246,
+    "Local": "2026-10-20T09:00:13",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "OldChars": 202,
+    "NewChars": 321,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15247,
+    "Local": "2026-10-20T09:00:16",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "OldChars": 219,
+    "NewChars": 310,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15248,
+    "Local": "2026-10-20T09:00:18",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Shared/TestRepositoryRoot.cs",
+    "OldChars": 120,
+    "NewChars": 692,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15249,
+    "Local": "2026-10-20T09:00:21",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Shared/TestRepositoryRoot.cs",
+    "OldChars": 311,
+    "NewChars": 95,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15250,
+    "Local": "2026-10-20T09:00:22",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Shared/TestRepositoryRoot.cs",
+    "OldChars": 95,
+    "NewChars": 391,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15272,
+    "Local": "2026-10-20T09:01:33",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "OldChars": 220,
+    "NewChars": 438,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15273,
+    "Local": "2026-10-20T09:01:35",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "OldChars": 111,
+    "NewChars": 198,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15337,
+    "Local": "2026-10-20T09:06:22",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.QBAgent.Tests/Skills/AuthoredSkillsTests.cs",
+    "OldChars": 331,
+    "NewChars": 621,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15338,
+    "Local": "2026-10-20T09:06:25",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.QBAgent.Tests/Skills/AuthoredSkillsTests.cs",
+    "OldChars": 422,
+    "NewChars": 83,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15339,
+    "Local": "2026-10-20T09:06:27",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs",
+    "OldChars": 449,
+    "NewChars": 73,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15340,
+    "Local": "2026-10-20T09:06:30",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs",
+    "OldChars": 328,
+    "NewChars": 616,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15341,
+    "Local": "2026-10-20T09:06:33",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/MemorySchemaContractTests.cs",
+    "OldChars": 264,
+    "NewChars": 553,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15342,
+    "Local": "2026-10-20T09:06:35",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/MemorySchemaContractTests.cs",
+    "OldChars": 495,
+    "NewChars": 73,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15400,
+    "Local": "2026-10-20T09:07:37",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "OldChars": 1534,
+    "NewChars": 620,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15401,
+    "Local": "2026-10-20T09:07:39",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "OldChars": 50,
+    "NewChars": 79,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15402,
+    "Local": "2026-10-20T09:07:41",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/TriageConfigurationContractTests.cs",
+    "OldChars": 516,
+    "NewChars": 115,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15403,
+    "Local": "2026-10-20T09:07:43",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/TriageConfigurationContractTests.cs",
+    "OldChars": 51,
+    "NewChars": 81,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15404,
+    "Local": "2026-10-20T09:07:45",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Documentation/QuadBrainSlotConfigurationTests.cs",
+    "OldChars": 461,
+    "NewChars": 75,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15405,
+    "Local": "2026-10-20T09:07:46",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Documentation/QuadBrainSlotConfigurationTests.cs",
+    "OldChars": 31,
+    "NewChars": 60,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15449,
+    "Local": "2026-10-20T09:09:00",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Documentation/TurnTransactionPlanArtifactTests.cs",
+    "OldChars": 547,
+    "NewChars": 75,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15450,
+    "Local": "2026-10-20T09:09:01",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Documentation/TurnTransactionPlanArtifactTests.cs",
+    "OldChars": 105,
+    "NewChars": 135,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15451,
+    "Local": "2026-10-20T09:09:04",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs",
+    "OldChars": 422,
+    "NewChars": 79,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15452,
+    "Local": "2026-10-20T09:09:05",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs",
+    "OldChars": 87,
+    "NewChars": 116,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15475,
+    "Local": "2026-10-20T09:09:43",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/McpStdio/BrainSlotToolAbsenceTests.cs",
+    "OldChars": 481,
+    "NewChars": 75,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15476,
+    "Local": "2026-10-20T09:09:44",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/McpStdio/BrainSlotToolAbsenceTests.cs",
+    "OldChars": 82,
+    "NewChars": 111,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15500,
+    "Local": "2026-10-20T09:10:08",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs",
+    "OldChars": 449,
+    "NewChars": 73,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15501,
+    "Local": "2026-10-20T09:10:09",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs",
+    "OldChars": 79,
+    "NewChars": 108,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15518,
+    "Local": "2026-10-20T09:10:38",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/McpStdio/MemoryContractArtifactTests.cs",
+    "OldChars": 481,
+    "NewChars": 75,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15519,
+    "Local": "2026-10-20T09:10:40",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/McpStdio/MemoryContractArtifactTests.cs",
+    "OldChars": 71,
+    "NewChars": 100,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15520,
+    "Local": "2026-10-20T09:10:42",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMigrationTests.cs",
+    "OldChars": 465,
+    "NewChars": 75,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15521,
+    "Local": "2026-10-20T09:10:43",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMigrationTests.cs",
+    "OldChars": 82,
+    "NewChars": 111,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15550,
+    "Local": "2026-10-20T09:11:21",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS5Catalog.cs",
+    "OldChars": 537,
+    "NewChars": 197,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15551,
+    "Local": "2026-10-20T09:11:23",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS5Catalog.cs",
+    "OldChars": 61,
+    "NewChars": 90,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15552,
+    "Local": "2026-10-20T09:11:25",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Memory/MemorySurfaceParityTests.cs",
+    "OldChars": 452,
+    "NewChars": 75,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15553,
+    "Local": "2026-10-20T09:11:26",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Memory/MemorySurfaceParityTests.cs",
+    "OldChars": 60,
+    "NewChars": 89,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15577,
+    "Local": "2026-10-20T09:12:05",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementsRecoveryMigrationTests.cs",
+    "OldChars": 443,
+    "NewChars": 77,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15578,
+    "Local": "2026-10-20T09:12:06",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementsRecoveryMigrationTests.cs",
+    "OldChars": 60,
+    "NewChars": 89,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15579,
+    "Local": "2026-10-20T09:12:08",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotLlmStrategyTests.cs",
+    "OldChars": 292,
+    "NewChars": 91,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15606,
+    "Local": "2026-10-20T09:12:41",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDeadContractInventoryTests.cs",
+    "OldChars": 573,
+    "NewChars": 75,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15607,
+    "Local": "2026-10-20T09:12:43",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDeadContractInventoryTests.cs",
+    "OldChars": 171,
+    "NewChars": 161,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15608,
+    "Local": "2026-10-20T09:12:45",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs",
+    "OldChars": 547,
+    "NewChars": 97,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15630,
+    "Local": "2026-10-20T09:13:21",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs",
+    "OldChars": 635,
+    "NewChars": 185,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15631,
+    "Local": "2026-10-20T09:13:25",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "OldChars": 787,
+    "NewChars": 470,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15632,
+    "Local": "2026-10-20T09:13:27",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs",
+    "OldChars": 545,
+    "NewChars": 95,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15654,
+    "Local": "2026-10-20T09:14:05",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSanitizerRegistrationTests.cs",
+    "OldChars": 253,
+    "NewChars": 152,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15655,
+    "Local": "2026-10-20T09:14:07",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedSessionLogServiceTests.cs",
+    "OldChars": 145,
+    "NewChars": 101,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15690,
+    "Local": "2026-10-20T09:14:45",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Web/UseCaseUiAssetTests.cs",
+    "OldChars": 621,
+    "NewChars": 186,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15691,
+    "Local": "2026-10-20T09:14:48",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Web/UseCaseCanvasUiAssetTests.cs",
+    "OldChars": 566,
+    "NewChars": 186,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15692,
+    "Local": "2026-10-20T09:14:49",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/AddSessionLogTurnPlanFileAndTodoIdMigrationTests.cs",
+    "OldChars": 116,
+    "NewChars": 78,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15693,
+    "Local": "2026-10-20T09:14:51",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/ProductMigrationApplyTests.cs",
+    "OldChars": 116,
+    "NewChars": 78,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15694,
+    "Local": "2026-10-20T09:14:52",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogTurnPlanFileTodoIdMigrationApplyTests.cs",
+    "OldChars": 116,
+    "NewChars": 78,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15695,
+    "Local": "2026-10-20T09:14:54",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/UseCaseMigrationApplyTests.cs",
+    "OldChars": 116,
+    "NewChars": 78,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15729,
+    "Local": "2026-10-20T09:15:58",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs",
+    "OldChars": 3610,
+    "NewChars": 559,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15747,
+    "Local": "2026-10-20T09:16:18",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs",
+    "OldChars": 554,
+    "NewChars": 340,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15748,
+    "Local": "2026-10-20T09:16:20",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs",
+    "OldChars": 543,
+    "NewChars": 245,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15749,
+    "Local": "2026-10-20T09:16:23",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs",
+    "OldChars": 561,
+    "NewChars": 245,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15750,
+    "Local": "2026-10-20T09:16:26",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/AgentHelp/AgentHelpTestPaths.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 943
+  },
+  {
+    "Line": 15771,
+    "Local": "2026-10-20T09:17:03",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/AgentPoolServiceTests.cs",
+    "OldChars": 39,
+    "NewChars": 35,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15772,
+    "Local": "2026-10-20T09:17:04",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs",
+    "OldChars": 39,
+    "NewChars": 35,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15773,
+    "Local": "2026-10-20T09:17:06",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs",
+    "OldChars": 60,
+    "NewChars": 56,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15774,
+    "Local": "2026-10-20T09:17:07",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs",
+    "OldChars": 70,
+    "NewChars": 66,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15798,
+    "Local": "2026-10-20T09:18:04",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "OldChars": 93,
+    "NewChars": 86,
+    "WriteChars": 0
+  },
+  {
+    "Line": 15848,
+    "Local": "2026-10-20T09:19:29",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/Build.TestDependencies.cs",
+    "OldChars": 507,
+    "NewChars": 862,
+    "WriteChars": 0
+  },
+  {
+    "Line": 17171,
+    "Local": "2026-10-20T10:09:06",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/DirectoryListingEntry.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 633
+  },
+  {
+    "Line": 17180,
+    "Local": "2026-10-20T10:10:36",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 15858
+  },
+  {
+    "Line": 17203,
+    "Local": "2026-10-20T10:12:17",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 16557
+  },
+  {
+    "Line": 17259,
+    "Local": "2026-10-20T10:13:39",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 1875
+  },
+  {
+    "Line": 17260,
+    "Local": "2026-10-20T10:13:45",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "OldChars": 948,
+    "NewChars": 1248,
+    "WriteChars": 0
+  },
+  {
+    "Line": 17283,
+    "Local": "2026-10-20T10:14:32",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 3178
+  },
+  {
+    "Line": 17415,
+    "Local": "2026-10-20T10:20:39",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/DirectoryTreeWalker.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 4018
+  },
+  {
+    "Line": 17416,
+    "Local": "2026-10-20T10:20:57",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "OldChars": 3078,
+    "NewChars": 4260,
+    "WriteChars": 0
+  },
+  {
+    "Line": 17433,
+    "Local": "2026-10-20T10:21:13",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs",
+    "OldChars": 113,
+    "NewChars": 891,
+    "WriteChars": 0
+  },
+  {
+    "Line": 17434,
+    "Local": "2026-10-20T10:21:15",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs",
+    "OldChars": 119,
+    "NewChars": 128,
+    "WriteChars": 0
+  },
+  {
+    "Line": 17435,
+    "Local": "2026-10-20T10:21:16",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs",
+    "OldChars": 121,
+    "NewChars": 157,
+    "WriteChars": 0
+  },
+  {
+    "Line": 17436,
+    "Local": "2026-10-20T10:21:19",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs",
+    "OldChars": 347,
+    "NewChars": 391,
+    "WriteChars": 0
+  },
+  {
+    "Line": 17437,
+    "Local": "2026-10-20T10:21:21",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs",
+    "OldChars": 430,
+    "NewChars": 185,
+    "WriteChars": 0
+  },
+  {
+    "Line": 17459,
+    "Local": "2026-10-20T10:22:49",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "OldChars": 50,
+    "NewChars": 4336,
+    "WriteChars": 0
+  },
+  {
+    "Line": 17462,
+    "Local": "2026-10-20T10:23:10",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 7879
+  },
+  {
+    "Line": 18080,
+    "Local": "2026-10-20T10:48:53",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "OldChars": 450,
+    "NewChars": 935,
+    "WriteChars": 0
+  },
+  {
+    "Line": 18081,
+    "Local": "2026-10-20T10:48:57",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "OldChars": 481,
+    "NewChars": 777,
+    "WriteChars": 0
+  },
+  {
+    "Line": 18612,
+    "Local": "2026-10-20T12:09:03",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnectionTests.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 3477
+  },
+  {
+    "Line": 18651,
+    "Local": "2026-10-20T12:14:17",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnection.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 1996
+  },
+  {
+    "Line": 18652,
+    "Local": "2026-10-20T12:14:21",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnectionTests.cs",
+    "OldChars": 98,
+    "NewChars": 870,
+    "WriteChars": 0
+  },
+  {
+    "Line": 18653,
+    "Local": "2026-10-20T12:14:22",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/AuditPayloadProviderMigrationTests.cs",
+    "OldChars": 227,
+    "NewChars": 85,
+    "WriteChars": 0
+  },
+  {
+    "Line": 18654,
+    "Local": "2026-10-20T12:14:24",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerDecompose4nfBackfillMigrationTests.cs",
+    "OldChars": 203,
+    "NewChars": 65,
+    "WriteChars": 0
+  },
+  {
+    "Line": 18655,
+    "Local": "2026-10-20T12:14:26",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerRenameQuadBrainRolesMigrationTests.cs",
+    "OldChars": 203,
+    "NewChars": 65,
+    "WriteChars": 0
+  },
+  {
+    "Line": 19234,
+    "Local": "2026-10-20T13:36:00",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 3300
+  },
+  {
+    "Line": 19282,
+    "Local": "2026-10-20T13:41:34",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollection.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 613
+  },
+  {
+    "Line": 19283,
+    "Local": "2026-10-20T13:41:36",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/AuditPayloadProviderMigrationTests.cs",
+    "OldChars": 104,
+    "NewChars": 150,
+    "WriteChars": 0
+  },
+  {
+    "Line": 19284,
+    "Local": "2026-10-20T13:41:38",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerDecompose4nfBackfillMigrationTests.cs",
+    "OldChars": 112,
+    "NewChars": 158,
+    "WriteChars": 0
+  },
+  {
+    "Line": 19285,
+    "Local": "2026-10-20T13:41:40",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerRenameQuadBrainRolesMigrationTests.cs",
+    "OldChars": 112,
+    "NewChars": 158,
+    "WriteChars": 0
+  },
+  {
+    "Line": 19286,
+    "Local": "2026-10-20T13:41:42",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs",
+    "OldChars": 170,
+    "NewChars": 341,
+    "WriteChars": 0
+  },
+  {
+    "Line": 19311,
+    "Local": "2026-10-20T13:42:52",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs",
+    "OldChars": 434,
+    "NewChars": 586,
+    "WriteChars": 0
+  },
+  {
+    "Line": 19312,
+    "Local": "2026-10-20T13:42:56",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs",
+    "OldChars": 87,
+    "NewChars": 1242,
+    "WriteChars": 0
+  },
+  {
+    "Line": 19912,
+    "Local": "2026-10-20T14:28:34",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureArgumentsTests.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 3430
+  },
+  {
+    "Line": 19964,
+    "Local": "2026-10-20T14:33:55",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs",
+    "OldChars": 366,
+    "NewChars": 523,
+    "WriteChars": 0
+  },
+  {
+    "Line": 19965,
+    "Local": "2026-10-20T14:33:57",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs",
+    "OldChars": 99,
+    "NewChars": 86,
+    "WriteChars": 0
+  },
+  {
+    "Line": 19966,
+    "Local": "2026-10-20T14:34:01",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs",
+    "OldChars": 49,
+    "NewChars": 1145,
+    "WriteChars": 0
+  },
+  {
+    "Line": 19967,
+    "Local": "2026-10-20T14:34:05",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureArgumentsTests.cs",
+    "OldChars": 159,
+    "NewChars": 897,
+    "WriteChars": 0
+  },
+  {
+    "Line": 20747,
+    "Local": "2026-10-20T15:05:25",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs",
+    "OldChars": 267,
+    "NewChars": 2561,
+    "WriteChars": 0
+  },
+  {
+    "Line": 20748,
+    "Local": "2026-10-20T15:05:29",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs",
+    "OldChars": 180,
+    "NewChars": 1177,
+    "WriteChars": 0
+  },
+  {
+    "Line": 20749,
+    "Local": "2026-10-20T15:05:33",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs",
+    "OldChars": 586,
+    "NewChars": 1067,
+    "WriteChars": 0
+  },
+  {
+    "Line": 20929,
+    "Local": "2026-10-20T15:10:05",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs",
+    "OldChars": 178,
+    "NewChars": 442,
+    "WriteChars": 0
+  },
+  {
+    "Line": 20930,
+    "Local": "2026-10-20T15:10:07",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs",
+    "OldChars": 50,
+    "NewChars": 51,
+    "WriteChars": 0
+  },
+  {
+    "Line": 20931,
+    "Local": "2026-10-20T15:10:11",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs",
+    "OldChars": 997,
+    "NewChars": 842,
+    "WriteChars": 0
+  },
+  {
+    "Line": 21078,
+    "Local": "2026-10-20T15:15:17",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollection.cs",
+    "OldChars": 399,
+    "NewChars": 591,
+    "WriteChars": 0
+  },
+  {
+    "Line": 21079,
+    "Local": "2026-10-20T15:15:21",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs",
+    "OldChars": 708,
+    "NewChars": 573,
+    "WriteChars": 0
+  },
+  {
+    "Line": 21981,
+    "Local": "2026-10-20T16:33:02",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 12933
+  },
+  {
+    "Line": 22036,
+    "Local": "2026-10-20T16:39:17",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "OldChars": 2055,
+    "NewChars": 3969,
+    "WriteChars": 0
+  },
+  {
+    "Line": 22039,
+    "Local": "2026-10-20T16:39:37",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "OldChars": 4181,
+    "NewChars": 5302,
+    "WriteChars": 0
+  },
+  {
+    "Line": 22061,
+    "Local": "2026-10-20T16:40:36",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs",
+    "OldChars": 60,
+    "NewChars": 97,
+    "WriteChars": 0
+  },
+  {
+    "Line": 22062,
+    "Local": "2026-10-20T16:40:40",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs",
+    "OldChars": 164,
+    "NewChars": 1352,
+    "WriteChars": 0
+  },
+  {
+    "Line": 22063,
+    "Local": "2026-10-20T16:40:47",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "OldChars": 69,
+    "NewChars": 2259,
+    "WriteChars": 0
+  },
+  {
+    "Line": 22079,
+    "Local": "2026-10-20T16:41:24",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "OldChars": 237,
+    "NewChars": 563,
+    "WriteChars": 0
+  },
+  {
+    "Line": 23700,
+    "Local": "2026-10-20T18:24:04",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/AgentPluginVersionSources.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 1013
+  },
+  {
+    "Line": 23708,
+    "Local": "2026-10-20T18:25:40",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 12600
+  },
+  {
+    "Line": 23719,
+    "Local": "2026-10-20T18:26:15",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "OldChars": 167,
+    "NewChars": 172,
+    "WriteChars": 0
+  },
+  {
+    "Line": 23738,
+    "Local": "2026-10-20T18:27:13",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 7836
+  },
+  {
+    "Line": 23796,
+    "Local": "2026-10-20T18:32:37",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/AgentPluginVersionSources.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 2084
+  },
+  {
+    "Line": 23899,
+    "Local": "2026-10-20T18:36:05",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "OldChars": 307,
+    "NewChars": 567,
+    "WriteChars": 0
+  },
+  {
+    "Line": 23900,
+    "Local": "2026-10-20T18:36:10",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "OldChars": 477,
+    "NewChars": 1162,
+    "WriteChars": 0
+  },
+  {
+    "Line": 23909,
+    "Local": "2026-10-20T18:36:29",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "OldChars": 1592,
+    "NewChars": 1264,
+    "WriteChars": 0
+  },
+  {
+    "Line": 23910,
+    "Local": "2026-10-20T18:36:33",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "OldChars": 759,
+    "NewChars": 737,
+    "WriteChars": 0
+  },
+  {
+    "Line": 23913,
+    "Local": "2026-10-20T18:36:37",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "OldChars": 681,
+    "NewChars": 614,
+    "WriteChars": 0
+  },
+  {
+    "Line": 23959,
+    "Local": "2026-10-20T18:37:25",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "OldChars": 257,
+    "NewChars": 578,
+    "WriteChars": 0
+  },
+  {
+    "Line": 23960,
+    "Local": "2026-10-20T18:37:27",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "OldChars": 169,
+    "NewChars": 145,
+    "WriteChars": 0
+  },
+  {
+    "Line": 23976,
+    "Local": "2026-10-20T18:38:01",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 2244
+  },
+  {
+    "Line": 23982,
+    "Local": "2026-10-20T18:38:19",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "OldChars": 888,
+    "NewChars": 1007,
+    "WriteChars": 0
+  },
+  {
+    "Line": 23983,
+    "Local": "2026-10-20T18:38:24",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "OldChars": 777,
+    "NewChars": 740,
+    "WriteChars": 0
+  },
+  {
+    "Line": 23997,
+    "Local": "2026-10-20T18:38:45",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "OldChars": 70,
+    "NewChars": 97,
+    "WriteChars": 0
+  },
+  {
+    "Line": 24015,
+    "Local": "2026-10-20T18:39:12",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "OldChars": 2066,
+    "NewChars": 505,
+    "WriteChars": 0
+  },
+  {
+    "Line": 24016,
+    "Local": "2026-10-20T18:39:16",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "OldChars": 522,
+    "NewChars": 567,
+    "WriteChars": 0
+  },
+  {
+    "Line": 24017,
+    "Local": "2026-10-20T18:39:18",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "OldChars": 393,
+    "NewChars": 319,
+    "WriteChars": 0
+  },
+  {
+    "Line": 24020,
+    "Local": "2026-10-20T18:39:22",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "OldChars": 618,
+    "NewChars": 554,
+    "WriteChars": 0
+  },
+  {
+    "Line": 24049,
+    "Local": "2026-10-20T18:40:08",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "OldChars": 136,
+    "NewChars": 1999,
+    "WriteChars": 0
+  },
+  {
+    "Line": 24056,
+    "Local": "2026-10-20T18:40:26",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "OldChars": 200,
+    "NewChars": 147,
+    "WriteChars": 0
+  },
+  {
+    "Line": 24074,
+    "Local": "2026-10-20T18:41:17",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "OldChars": 1492,
+    "NewChars": 1009,
+    "WriteChars": 0
+  },
+  {
+    "Line": 24075,
+    "Local": "2026-10-20T18:41:24",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "OldChars": 99,
+    "NewChars": 2107,
+    "WriteChars": 0
+  },
+  {
+    "Line": 24076,
+    "Local": "2026-10-20T18:41:25",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "OldChars": 115,
+    "NewChars": 113,
+    "WriteChars": 0
+  },
+  {
+    "Line": 24079,
+    "Local": "2026-10-20T18:41:28",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "OldChars": 93,
+    "NewChars": 522,
+    "WriteChars": 0
+  },
+  {
+    "Line": 24080,
+    "Local": "2026-10-20T18:41:31",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "OldChars": 268,
+    "NewChars": 539,
+    "WriteChars": 0
+  },
+  {
+    "Line": 24099,
+    "Local": "2026-10-20T18:42:04",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs",
+    "OldChars": 66,
+    "NewChars": 657,
+    "WriteChars": 0
+  },
+  {
+    "Line": 25245,
+    "Local": "2026-10-20T19:39:22",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 5919
+  },
+  {
+    "Line": 25280,
+    "Local": "2026-10-20T19:40:18",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs",
+    "OldChars": 72,
+    "NewChars": 109,
+    "WriteChars": 0
+  },
+  {
+    "Line": 25387,
+    "Local": "2026-10-20T19:43:39",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs",
+    "OldChars": 717,
+    "NewChars": 695,
+    "WriteChars": 0
+  },
+  {
+    "Line": 25421,
+    "Local": "2026-10-20T19:48:43",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "OldChars": 567,
+    "NewChars": 1776,
+    "WriteChars": 0
+  },
+  {
+    "Line": 25422,
+    "Local": "2026-10-20T19:48:44",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "OldChars": 120,
+    "NewChars": 119,
+    "WriteChars": 0
+  },
+  {
+    "Line": 25423,
+    "Local": "2026-10-20T19:48:48",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/AgentPluginVersionSources.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 1117
+  },
+  {
+    "Line": 25441,
+    "Local": "2026-10-20T19:49:22",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "OldChars": 110,
+    "NewChars": 110,
+    "WriteChars": 0
+  },
+  {
+    "Line": 25442,
+    "Local": "2026-10-20T19:49:23",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "OldChars": 79,
+    "NewChars": 79,
+    "WriteChars": 0
+  },
+  {
+    "Line": 25472,
+    "Local": "2026-10-20T19:50:20",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs",
+    "OldChars": 1403,
+    "NewChars": 2475,
+    "WriteChars": 0
+  },
+  {
+    "Line": 26198,
+    "Local": "2026-10-20T21:15:10",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs",
+    "OldChars": 1162,
+    "NewChars": 2151,
+    "WriteChars": 0
+  },
+  {
+    "Line": 26222,
+    "Local": "2026-10-20T21:16:01",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs",
+    "OldChars": 405,
+    "NewChars": 1050,
+    "WriteChars": 0
+  },
+  {
+    "Line": 26223,
+    "Local": "2026-10-20T21:16:05",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs",
+    "OldChars": 495,
+    "NewChars": 770,
+    "WriteChars": 0
+  },
+  {
+    "Line": 26242,
+    "Local": "2026-10-20T21:16:37",
+    "Tool": "Write",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs",
+    "OldChars": 0,
+    "NewChars": 0,
+    "WriteChars": 1442
+  },
+  {
+    "Line": 26255,
+    "Local": "2026-10-20T21:16:56",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs",
+    "OldChars": 358,
+    "NewChars": 609,
+    "WriteChars": 0
+  },
+  {
+    "Line": 27172,
+    "Local": "2026-10-21T05:14:41",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs",
+    "OldChars": 535,
+    "NewChars": 876,
+    "WriteChars": 0
+  },
+  {
+    "Line": 27905,
+    "Local": "2026-10-21T05:44:57",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "OldChars": 706,
+    "NewChars": 780,
+    "WriteChars": 0
+  },
+  {
+    "Line": 27906,
+    "Local": "2026-10-21T05:45:00",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "OldChars": 216,
+    "NewChars": 626,
+    "WriteChars": 0
+  },
+  {
+    "Line": 27929,
+    "Local": "2026-10-21T05:45:32",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "OldChars": 333,
+    "NewChars": 531,
+    "WriteChars": 0
+  },
+  {
+    "Line": 27930,
+    "Local": "2026-10-21T05:45:36",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs",
+    "OldChars": 420,
+    "NewChars": 700,
+    "WriteChars": 0
+  },
+  {
+    "Line": 27944,
+    "Local": "2026-10-21T05:45:59",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs",
+    "OldChars": 111,
+    "NewChars": 119,
+    "WriteChars": 0
+  },
+  {
+    "Line": 30493,
+    "Local": "2026-10-21T07:38:57",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+    "OldChars": 608,
+    "NewChars": 1456,
+    "WriteChars": 0
+  },
+  {
+    "Line": 30494,
+    "Local": "2026-10-21T07:38:59",
+    "Tool": "Edit",
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+    "OldChars": 115,
+    "NewChars": 200,
+    "WriteChars": 0
+  }
+]

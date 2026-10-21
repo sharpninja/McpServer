@@ -17,6 +17,8 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// </summary>
 [Collection(nameof(WorkspaceIdentityNativeProcessStateCollection))]
 [SupportedOSPlatform("linux")]
+[Trait("Category", "Integration")]
+[Trait("Platform", "Linux")]
 public sealed class BugTriage139EighteenthLinuxTests
 {
     /// <summary>Proves the native Linux gate is executing as a non-root effective user.</summary>

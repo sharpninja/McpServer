@@ -6,6 +6,7 @@ namespace QBrainAi.Support.Mcp.Tests.Memory;
 public sealed class MemoryBenchDocsTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-32: README documents one-plugin and all-eight runs.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Readme_RunInstructions()
     {
@@ -18,6 +19,7 @@ public sealed class MemoryBenchDocsTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-33: USER-GUIDE or MCP-SERVER links the pack.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void UserGuide_LinksPack()
     {
@@ -29,6 +31,7 @@ public sealed class MemoryBenchDocsTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-45: README states tokens are primary; pass/fail is correctness/safety.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Readme_TokensArePrimaryMetric()
     {
@@ -38,6 +41,7 @@ public sealed class MemoryBenchDocsTests
     }
 
     /// <summary>AC-TR-MCP-MEMORY-BENCH-002-14: README documents Grok as the pilot validation path.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Readme_GrokIsPilot()
     {

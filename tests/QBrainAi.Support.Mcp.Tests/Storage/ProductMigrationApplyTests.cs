@@ -71,10 +71,11 @@ public sealed class ProductMigrationApplyTests : IDisposable
     /// TEST-MCP-PRODUCT-005: AddProductsStorage migration sources exist for every provider
     /// and do not alter SessionLogs.
     /// </summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void AddProductsStorageMigration_Source_ExistsForAllProviders_AndHasNoSessionLogsTableOps()
     {
-        var repoSrc = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "src"));
+        var repoSrc = QBrainAi.Tests.Shared.TestRepositoryRoot.Combine("src");
         var roots = new[]
         {
             Path.Combine(repoSrc, "QBrainAi.Storage.SqliteMigrations", "Migrations"),

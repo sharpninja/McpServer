@@ -1,14 +1,25 @@
 using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Tests.TestSupport;
 using Microsoft.Extensions.Configuration;
 using Xunit;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
-/// <summary>Tests for safe brain-slot credential reference resolution. TEST-MCP-177.</summary>
+/// <summary>
+/// Tests for safe brain-slot credential reference resolution. TEST-MCP-177. The class runs in
+/// <see cref="ProcessEnvironmentCollection"/> because one of its tests writes the process environment
+/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+/// </summary>
+[Collection(ProcessEnvironmentCollection.Name)]
 public sealed class BrainSlotCredentialResolverTests
 {
-    /// <summary>Environment references resolve through the named variable and trim whitespace.</summary>
+    /// <summary>
+    /// Environment references resolve through the named variable and trim whitespace. The test sets and clears a
+    /// uniquely named variable, so it writes the process environment and is an integration test
+    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+    /// </summary>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task ResolveAsync_WithEnvironmentReference_ReturnsTrimmedSecret()
     {
         var variableName = "MCP_BRAIN_SLOT_TEST_KEY_" + Guid.NewGuid().ToString("N");

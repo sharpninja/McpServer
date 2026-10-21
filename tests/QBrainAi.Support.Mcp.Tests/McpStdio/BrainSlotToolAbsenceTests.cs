@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Text.Json;
 using ModelContextProtocol.Server;
+using QBrainAi.Tests.Shared;
 
 namespace QBrainAi.Support.Mcp.Tests.McpStdio;
 
@@ -48,6 +49,7 @@ public sealed class BrainSlotToolAbsenceTests
     /// Asserts the durable STDIO tool contract artifact advertises no brain-slot tool,
     /// so agent tooling generated from the manifest cannot discover the surface.
     /// </summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void StdioToolContract_ContainsNoBrainSlotTools()
     {
@@ -87,19 +89,5 @@ public sealed class BrainSlotToolAbsenceTests
             .Where(method => method.GetCustomAttribute<McpServerToolAttribute>() is not null);
     }
 
-    private static string FindRepoRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            if (File.Exists(Path.Combine(directory.FullName, "docs", "stdio-tool-contract.json")))
-            {
-                return directory.FullName;
-            }
-
-            directory = directory.Parent;
-        }
-
-        throw new InvalidOperationException("Repository root could not be located.");
-    }
+    private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
 }

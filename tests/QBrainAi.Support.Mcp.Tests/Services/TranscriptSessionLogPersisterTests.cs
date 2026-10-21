@@ -90,6 +90,7 @@ public sealed class TranscriptSessionLogPersisterTests
     /// AC-FR-MCP-SESSIONLOGCTX-001-007: omitted import fields persist extractor result or None
     /// through the real SessionLogService import path.
     /// </summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task Import_OmittedFields_PersistsExtractorResultOrNone()
     {

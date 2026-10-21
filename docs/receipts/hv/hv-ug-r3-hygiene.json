@@ -1,0 +1,400 @@
+{
+  "TimestampLocal": "2026-10-20T17:38:08",
+  "Commits": [
+    {
+      "Sha": "64fc4b1400ac5bc7526c472f8efeacb91980f2a6",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "6b89998f4f0257b967bba12e2434135964cf135b",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 95%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "e0b078c802d6456d106e6ec681d1aa93d6c4d055",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 95%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "395b4cd89726e921af481d4c8c056bf8fa535ae6",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 94%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "68fa7b393d007c0d0c466c29ae4da5738bf54af2",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 94%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "6ea425ab943ebdd8aad1de1c84896de92d0270d8",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "0210244d27bf2b5e731e4ee40350504934e812a4",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 96%, completeness 92%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "6042dbb3551c38a740e13de28f44fe9a814e6f0a",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 96%, completeness 92%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "56d14d7cd7e72975b1cbf0ddcd2cc17c16763249",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 93%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "538d0ccf957c041f1e3886864bdf5e4ca693e9ec",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 95%, completeness 90%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "27c43bccd19a591e4ca30560b52d4c5a9e8b81c9",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 95%, completeness 90%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "45a3197c9afda2f7c7d87e7d986908f885c20b02",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 90%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "a94579db927f25a0cbddd07d639f3054f2ee72e8",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 94%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "b4ad42aaa601ed0df7e03b34203dee4f93d316a9",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "49cfec920349f17ace1b287b18d1b0fe2d956b03",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 94%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "6b4295b790e0e2cde7113f3be4bb83bc66343016",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 96%, completeness 94%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "83417029fa3e0ee8ef2ffc6bdfa29a7c1e9fdb38",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 96%, completeness 93%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "127468345afcc7a24e6a254f712d6b75a54713e8",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 94%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "69d8f3f5b19b070f9059a096f344c44bbd359d47",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "5924926051f84720c110ab1421430499fadf918a",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "4f668b76d26b26e7162d8654fb946c484fd42539",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 93%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "b2bd50b3711c28bdb256e1f4fa56f3d8114fb6c6",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 95%, completeness 90%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "8a6173342dcd7683b9d9549005a5af819b8abc90",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 95%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "8c2b83ab5a442ce7dbc4a5a78f70dfaafbd034a2",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 90%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "11681680d316bee7c8c184e45b699af7c1bd2188",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 93%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "b2319488039bbcd1e2014d8f3a1b7a26627b3ba8",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 97%, completeness 93%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "a4c358efd91131e7fb714370726997b5c2d076cb",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 92%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "de5813532adb51b964b222644ae0519bd814f8ef",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 93%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "28bf0b222464c5bdbfb8b6ec0a357e15284e486f",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 92%"
+      ],
+      "HasSignature": true
+    },
+    {
+      "Sha": "cbc74e823e7af96f8df1a1320498998e5de2b328",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 90%"
+      ],
+      "HasSignature": true
+    }
+  ],
+  "Formatting": [
+    {
+      "Path": "docs/plans/2026-10-19-unit-suite-green.md",
+      "EnEmDashCount": 0,
+      "TableRows": 0
+    },
+    {
+      "Path": "docs/receipts/hv/hv-ug-r3-pr87-body.txt",
+      "EnEmDashCount": 0,
+      "TableRows": 0
+    }
+  ],
+  "Status": [
+    "?? docs/receipts/hv/20261020T170824-unitgreen-r3.request.jsonl",
+    "?? docs/receipts/hv/20261020T170824-unitgreen-r3.response.jsonl",
+    "?? docs/receipts/hv/20261020T170824-unitgreen-r3.selfreview.md",
+    "?? docs/receipts/hv/hv-ug-r3-boundary-probe-action.txt",
+    "?? docs/receipts/hv/hv-ug-r3-boundary-probe-dialog.txt",
+    "?? docs/receipts/hv/hv-ug-r3-code-change-inventory.json",
+    "?? docs/receipts/hv/hv-ug-r3-code.diff.txt",
+    "?? docs/receipts/hv/hv-ug-r3-commands.jsonl",
+    "?? docs/receipts/hv/hv-ug-r3-commits.txt",
+    "?? docs/receipts/hv/hv-ug-r3-confirmed-environment-action.txt",
+    "?? docs/receipts/hv/hv-ug-r3-confirmed-environment-decision.txt",
+    "?? docs/receipts/hv/hv-ug-r3-confirmed-environment-dialog.txt",
+    "?? docs/receipts/hv/hv-ug-r3-decision-drift-action.txt",
+    "?? docs/receipts/hv/hv-ug-r3-decision-drift-decision.txt",
+    "?? docs/receipts/hv/hv-ug-r3-decision-drift-dialog.txt",
+    "?? docs/receipts/hv/hv-ug-r3-diff-stat.txt",
+    "?? docs/receipts/hv/hv-ug-r3-docs-after-code.txt",
+    "?? docs/receipts/hv/hv-ug-r3-env-plugin-probe/",
+    "?? docs/receipts/hv/hv-ug-r3-env-probe.exit.txt",
+    "?? docs/receipts/hv/hv-ug-r3-env-probe.meta.json",
+    "?? docs/receipts/hv/hv-ug-r3-env-probe.out.txt",
+    "?? docs/receipts/hv/hv-ug-r3-environment-failures.json",
+    "?? docs/receipts/hv/hv-ug-r3-head.txt",
+    "?? docs/receipts/hv/hv-ug-r3-initial-status.txt",
+    "?? docs/receipts/hv/hv-ug-r3-pr87-body.txt",
+    "?? docs/receipts/hv/hv-ug-r3-pr87.txt",
+    "?? docs/receipts/hv/hv-ug-r3-result-names.json",
+    "?? docs/receipts/hv/hv-ug-r3-run-comparisons.json",
+    "?? docs/receipts/hv/hv-ug-r3-runs.json",
+    "?? docs/receipts/hv/hv-ug-r3-sandbox-test.exit.txt",
+    "?? docs/receipts/hv/hv-ug-r3-sandbox-test.meta.json",
+    "?? docs/receipts/hv/hv-ug-r3-sandbox-test.out.txt",
+    "?? docs/receipts/hv/hv-ug-r3-scanner-probe.json",
+    "?? docs/receipts/hv/hv-ug-r3-scriptcheck-20261020T173009.json",
+    "?? docs/receipts/hv/hv-ug-r3-scriptcheck-20261020T173119.json",
+    "?? docs/receipts/hv/hv-ug-r3-scriptcheck-20261020T173136.json",
+    "?? docs/receipts/hv/hv-ug-r3-scriptcheck-20261020T173147.json",
+    "?? docs/receipts/hv/hv-ug-r3-scriptcheck-20261020T173243.json",
+    "?? docs/receipts/hv/hv-ug-r3-scriptcheck-20261020T173259.json",
+    "?? docs/receipts/hv/hv-ug-r3-scriptcheck-20261020T173315.json",
+    "?? docs/receipts/hv/hv-ug-r3-scriptcheck-20261020T173340.json",
+    "?? docs/receipts/hv/hv-ug-r3-scriptcheck-20261020T173756.json",
+    "?? docs/receipts/hv/hv-ug-r3-search-20261020T171530431.txt",
+    "?? docs/receipts/hv/hv-ug-r3-search-20261020T171530443.txt",
+    "?? docs/receipts/hv/hv-ug-r3-search-20261020T171615702.txt",
+    "?? docs/receipts/hv/hv-ug-r3-search-20261020T171831362.txt",
+    "?? docs/receipts/hv/hv-ug-r3-search-20261020T171853852.txt",
+    "?? docs/receipts/hv/hv-ug-r3-search-20261020T172307713.txt",
+    "?? docs/receipts/hv/hv-ug-r3-search-20261020T172333570.txt",
+    "?? docs/receipts/hv/hv-ug-r3-search-20261020T172334192.txt",
+    "?? docs/receipts/hv/hv-ug-r3-search-20261020T172342713.txt",
+    "?? docs/receipts/hv/hv-ug-r3-search-20261020T172349966.txt",
+    "?? docs/receipts/hv/hv-ug-r3-search-20261020T172428472.txt",
+    "?? docs/receipts/hv/hv-ug-r3-search-20261020T172522016.txt",
+    "?? docs/receipts/hv/hv-ug-r3-search-20261020T172544547.txt",
+    "?? docs/receipts/hv/hv-ug-r3-search-20261020T172544572.txt",
+    "?? docs/receipts/hv/hv-ug-r3-search-20261020T172635115.txt",
+    "?? docs/receipts/hv/hv-ug-r3-search-20261020T172635119.txt",
+    "?? docs/receipts/hv/hv-ug-r3-search-20261020T172709060.txt",
+    "?? docs/receipts/hv/hv-ug-r3-search-20261020T172717844.txt",
+    "?? docs/receipts/hv/hv-ug-r3-search-20261020T172722162.txt",
+    "?? docs/receipts/hv/hv-ug-r3-search-20261020T172836387.txt",
+    "?? docs/receipts/hv/hv-ug-r3-search-20261020T173316531.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-FR-MCP-018.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-FR-MCP-018.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-FR-MCP-BUILD-001.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-FR-MCP-BUILD-001.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-FR-MCP-PATHNORM-001.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-FR-MCP-PATHNORM-001.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-FR-MCP-SESSIONLOGCTX-001.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-FR-MCP-SESSIONLOGCTX-001.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-FR-MCP-USECASE-001.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-FR-MCP-USECASE-001.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-FR-MCP-USECASE-016-recheck.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-FR-MCP-USECASE-016-recheck.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-FR-MCP-USECASE-016.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-FR-MCP-USECASE-016.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-FR-MCP-USECASE-017-recheck.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-FR-MCP-USECASE-017-recheck.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-FR-MCP-USECASE-017.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-FR-MCP-USECASE-017.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-TEST-MCP-PATHNORM-001.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-TEST-MCP-PATHNORM-001.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-TEST-MCP-USECASE-019.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-TEST-MCP-USECASE-019.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-TEST-MCP-USECASE-020.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-TEST-MCP-USECASE-020.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-TR-MCP-NUKE-018.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-TR-MCP-NUKE-018.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-TR-MCP-NUKE-019.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-TR-MCP-NUKE-019.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-TR-MCP-PATHNORM-001.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-TR-MCP-PATHNORM-001.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-TR-MCP-QUALITY-001.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-TR-MCP-QUALITY-001.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-TR-MCP-SESSIONLOG-006.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-TR-MCP-SESSIONLOG-006.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-TR-MCP-USECASE-018.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-TR-MCP-USECASE-018.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-TR-MCP-USECASE-019.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-TR-MCP-USECASE-019.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-TR-MCP-WS-005.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-TR-MCP-WS-005.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-effective.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-effective.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-mappings-FR-MCP-018.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-mappings-FR-MCP-018.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-mappings-FR-MCP-BUILD-001.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-mappings-FR-MCP-BUILD-001.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-mappings-FR-MCP-PATHNORM-001.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-mappings-FR-MCP-PATHNORM-001.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-mappings-FR-MCP-SESSIONLOGCTX-001.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-mappings-FR-MCP-SESSIONLOGCTX-001.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-mappings-FR-MCP-USECASE-001.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-mappings-FR-MCP-USECASE-001.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-mappings-FR-MCP-USECASE-016.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-mappings-FR-MCP-USECASE-016.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-mappings-FR-MCP-USECASE-017.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-mappings-FR-MCP-USECASE-017.txt",
+    "?? docs/receipts/hv/hv-ug-r3-store-todo.json",
+    "?? docs/receipts/hv/hv-ug-r3-store-todo.txt",
+    "?? docs/receipts/hv/hv-ug-r3-transcript-answers.json",
+    "?? docs/receipts/hv/hv-ug-r3-transcript-decisions.json",
+    "?? docs/receipts/hv/hv-ug-r3-transcript-operations.json",
+    "?? docs/receipts/hv/hv-ug-r3-trx-build-tests-8.json",
+    "?? docs/receipts/hv/hv-ug-r3-trx-env-probe.json",
+    "?? docs/receipts/hv/hv-ug-r3-trx-sandbox.json",
+    "?? docs/receipts/hv/hv-ug-r3-windows-live.txt"
+  ],
+  "AfterCode": [
+    "docs/plans/2026-10-19-unit-suite-green.md",
+    "docs/receipts/hv/unitgreen-r3-prelaunch.brief.md",
+    "docs/receipts/hv/unitgreen-r3-prelaunch.projected-problems.md",
+    "docs/receipts/hv/unitgreen-r3-prelaunch.selfreview.md",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-build-tests-8.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-build-tests-8.trx-summary.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-linux-lane-8.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-linux-lane-8.trx-summary.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-linux-lane-compare-7-8.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-linux-test-8.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-linux-test-8.trx-summary.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-linux-test-compare-7-8.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-traceability-1.exit.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-traceability-1.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-traceability-1.out.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-traceability-2.exit.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-traceability-2.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-traceability-2.out.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-traceability-3.exit.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-traceability-3.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-traceability-3.out.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-traceability-4.exit.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-traceability-4.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-traceability-4.out.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-traceability-5.exit.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-traceability-5.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-traceability-5.out.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-traceability-6.exit.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-traceability-6.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-traceability-6.out.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-traceability-7.exit.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-traceability-7.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-traceability-7.out.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-versionread-binding-1.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-versionread-binding-1.trx-summary.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-versionread-mockgate-1.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-versionread-mockgate-1.trx-summary.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-win-lane-8.result.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-win-lane-8.start.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-win-lane-compare-7-8.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r3-win-test-ssh-6.result.txt"
+  ]
+}

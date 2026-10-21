@@ -36,29 +36,72 @@ partial class Build
         (AbsolutePath)Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) / "QBrainAi" / "test-tools";
 
     /// <summary>
-    /// Idempotent installer for the provider integration-test dependencies:
-    /// SQL Server LocalDB (elevated MSI install when missing) and PostgreSQL server binaries
-    /// (existing installation preferred; otherwise the portable EDB binaries zip is downloaded
-    /// to a user-scoped tools directory, no elevation required). Re-running when everything is
-    /// already present is a no-op.
+    /// TR-MCP-NUKE-018 AC-1: test-database env file read on non-Windows hosts when a provider connection
+    /// variable is not already set; defaults to ~/.config/qbrain-test/test-db.env.
+    /// </summary>
+    [Parameter("Test-database env file for Linux provider test provisioning (default ~/.config/qbrain-test/test-db.env)")]
+    readonly string TestDbEnvFile = string.Empty;
+
+    /// <summary>
+    /// Idempotent installer for the provider integration-test dependencies. On Windows: SQL Server
+    /// LocalDB (elevated MSI install when missing) and PostgreSQL server binaries (existing
+    /// installation preferred; otherwise the portable EDB binaries zip is downloaded to a
+    /// user-scoped tools directory, no elevation required). On other hosts (TR-MCP-NUKE-018): the
+    /// PostgreSQL and SQL Server endpoints come from the test-database env file and the dedicated
+    /// qbrain-test containers, and must accept connections. Re-running when everything is already
+    /// present is a no-op.
     /// </summary>
     public Target InstallTestDependencies => _ => _
-        .Description("Ensure SQL Server LocalDB and PostgreSQL binaries exist for provider integration tests (idempotent)")
+        .Description("Ensure provider integration-test servers: LocalDB and PostgreSQL binaries on Windows; qbrain-test containers and env file elsewhere (idempotent)")
         .Executes(() =>
         {
+            if (!OperatingSystem.IsWindows())
+            {
+                ProvisionProviderTestServers();
+                return;
+            }
+
             EnsureSqlLocalDb();
             var pgBin = EnsurePostgresBinaries();
             Log.Information("Test dependencies ready. LocalDB: OK; PostgreSQL binaries: {PgBin}", pgBin);
         });
 
     /// <summary>
+    /// TR-MCP-NUKE-018 AC-1 to AC-4: provisions the provider test endpoints through the production
+    /// provisioner and the real host boundary, logs each action (names only, never values), and fails
+    /// the target with every error when any endpoint is unavailable (no skip).
+    /// </summary>
+    void ProvisionProviderTestServers()
+    {
+        var envFile = string.IsNullOrWhiteSpace(TestDbEnvFile)
+            ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ProviderTestNames.DefaultEnvFileRelativeToHome)
+            : Path.GetFullPath(TestDbEnvFile);
+        var result = new LinuxProviderTestProvisioner().Provision(envFile, new SystemProviderTestHost());
+        foreach (var action in result.Actions)
+            Log.Information("Provider test provisioning: {Action}", action);
+
+        if (!result.Succeeded)
+        {
+            foreach (var error in result.Errors)
+                Log.Error("Provider test provisioning: {Error}", error);
+            throw new InvalidOperationException("Provider test provisioning failed: " + string.Join("; ", result.Errors));
+        }
+
+        Log.Information("Test dependencies ready: {Postgres} and {SqlServer} accept connections.", ProviderTestNames.PostgresVariable, ProviderTestNames.SqlServerVariable);
+    }
+
+    /// <summary>
     /// Runs the <c>Category=Integration</c> tests living inside the unit-test projects, including
     /// the provider migration tests (SQLite in-memory, PostgreSQL, SQL Server LocalDB). The
     /// PostgreSQL tests boot their own ephemeral cluster with generated credentials on a free port
     /// via their xUnit class fixture (or honor <c>MCP_TEST_POSTGRES_CONNECTION</c>); SQL Server
-    /// tests use an ad-hoc LocalDB database (auto-started). Integration tests run only through
+    /// tests use an ad-hoc LocalDB database (auto-started) on Windows. On other hosts both
+    /// providers use the endpoints InstallTestDependencies provisions (TR-MCP-NUKE-018 AC-6), and a
+    /// provisioning failure fails this target before any test runs. Integration tests run only through
     /// this target: the default <c>Test</c> target excludes the category. The dedicated
     /// <c>*.IntegrationTests</c> projects remain separate (their classes carry the same trait).
+    /// TR-MCP-NUKE-019: the selection is host-scoped through <see cref="IntegrationLaneFilter"/>; cases tagged
+    /// <c>Platform=Linux</c> run only on Linux hosts, <c>Platform=Windows</c> only on Windows hosts, untagged on both.
     /// </summary>
     public Target MigrationIntegrationTests => _ => _
         .Description("Run Category=Integration tests (provider migrations, process spawns) with provisioned dependencies")
@@ -67,11 +110,30 @@ partial class Build
         {
             // Only projects that contain Category=Integration tests: an empty filter match
             // makes the test runner fail the target.
+            // TR-MCP-NUKE-019 AC-2: every project that holds Category=Integration cases, so the two hosts
+            // together run every integration case. Repl.Core.Tests and QBAgent.Tests hold the tests that read the
+            // repository checkout through the shared TestRepositoryRoot (TR-MCP-USECASE-018 AC-006).
             var projectsWithIntegrationTests = new[]
             {
                 TestsDirectory / "QBrainAi.Support.Mcp.Tests" / "QBrainAi.Support.Mcp.Tests.csproj",
+                TestsDirectory / "QBrainAi.McpAgent.Tests" / "QBrainAi.McpAgent.Tests.csproj",
+                TestsDirectory / "QBrainAi.Repl.Core.Tests" / "QBrainAi.Repl.Core.Tests.csproj",
+                TestsDirectory / "QBrainAi.QBAgent.Tests" / "QBrainAi.QBAgent.Tests.csproj",
                 TestsDirectory / "Build.Tests" / "Build.Tests.csproj",
             };
+
+            // TR-MCP-NUKE-019 AC-5: on Windows the lane runs only from an interactive desktop session; refuse
+            // before any test runs, naming the missing session.
+            var readiness = new InteractiveSessionPrecondition().Evaluate(IntegrationLaneFilter.CurrentHost(), Environment.UserInteractive);
+            if (!readiness.CanRun)
+            {
+                Log.Error("Integration lane precondition: {Message}", readiness.FailureMessage);
+                throw new InvalidOperationException(readiness.FailureMessage);
+            }
+
+            // TR-MCP-NUKE-019 AC-1 and AC-3: select this host's integration cases and name the filter in the log.
+            var laneFilter = new IntegrationLaneFilter().Compose(IntegrationLaneFilter.CurrentHost());
+            Log.Information("Integration lane filter: {Filter}", laneFilter);
 
             var runId = SessionLifeUnitGateReports.NormalizeRunId(TestRunId);
             if (runId is not null)
@@ -95,7 +157,7 @@ partial class Build
                     {
                         DotNetTest(_ => _
                             .SetProjectFile(project)
-                            .SetFilter("Category=Integration")
+                            .SetFilter(laneFilter)
                             .SetVerbosity(DotNetVerbosity.minimal));
                     }
                     else
@@ -104,7 +166,7 @@ partial class Build
                         Directory.CreateDirectory(directory);
                         DotNetTest(_ => _
                             .SetProjectFile(project)
-                            .SetFilter("Category=Integration")
+                            .SetFilter(laneFilter)
                             .SetVerbosity(DotNetVerbosity.minimal)
                             .SetResultsDirectory(directory)
                             .SetLoggers($"trx;LogFileName={projectName}.trx"));

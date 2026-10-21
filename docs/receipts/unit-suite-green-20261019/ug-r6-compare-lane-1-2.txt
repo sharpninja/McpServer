@@ -1,0 +1,18 @@
+Now: 2026-10-21T13:44:48 before=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r6-precommit-lane-1 (399) after=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r6-precommit-lane-2 (412)
+onlyBefore=0 onlyAfter=13 common=399
+onlyAfter QBrainAi.Support.Mcp.Tests=13
+--- only in before ---
+--- only in after ---
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Memory.MemoryIndexerTests.OnnxLocal_NoCloudRequired
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Options.McpInstanceResolverTests.GetRequestedInstanceName_FallsBackToLegacyEnvironmentVariable
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Options.McpInstanceResolverTests.GetRequestedInstanceName_PrefersQBrainAiEnvironmentVariable
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Options.ProductAliasCompatibilityTests.ProjectCanonicalSection_EnvironmentAndCommandLineBeatFileQBrainAi
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.BrainSlotCredentialResolverTests.ResolveAsync_WithEnvironmentReference_ReturnsTrimmedSecret
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Codex_PrefersJsonlAssistantTextOverOutputFileToolCallJson
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Codex_ReturnsAssistantTextFromJsonlNotRawEvents
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Codex_WritesOutputFileUnderConfiguredTemp
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_UsesIsolatedCwdNotConfiguredRepoRoot
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_WritesPromptFileUnderConfiguredTempAndSetsTempEnv
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.ResolveTempDirectory_HonorsConfiguredEnvVar_WithoutWindowsServiceAcl
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithConfiguredSharedTempRoot_UsesSharedOutputPath
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Services.HostileReviewG4OverlayTests.HostileReviewWorker_InvalidOptions_FailStartup

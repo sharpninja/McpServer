@@ -14,6 +14,7 @@ public sealed class MemoryIntegrationTests : IDisposable
     public void Dispose() => _harness.Dispose();
 
     /// <summary>AC-FR-MCP-MEMORY-018-46: Integration tests use the Grok lane as the pilot host.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void UseGrokLane_AsPilot()
     {
@@ -27,6 +28,7 @@ public sealed class MemoryIntegrationTests : IDisposable
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-49: Grok remember→recall/injection path records tokens as primary.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task Grok_RememberRecall_EndToEnd()
     {

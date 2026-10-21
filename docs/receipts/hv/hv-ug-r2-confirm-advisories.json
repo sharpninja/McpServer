@@ -1,0 +1,236 @@
+{
+  "TimestampLocal": "2026-10-19T21:58:25",
+  "Mode": "Advisories",
+  "Records": [
+    {
+      "Id": "GHSA-2fmv-rv2c-59x7",
+      "Url": "https://github.com/advisories/GHSA-2fmv-rv2c-59x7",
+      "Summary": "Microsoft Security Advisory CVE-2026-70162 - .NET Denial of Service Vulnerability",
+      "Published": "2026-10-13T20:07:20Z",
+      "Updated": "2026-10-19T19:17:53Z",
+      "Vulnerabilities": [
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Pkcs"
+          },
+          "vulnerable_version_range": ">= 10.0.0, <= 10.0.12",
+          "first_patched_version": "10.0.13",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Pkcs"
+          },
+          "vulnerable_version_range": ">= 11.0.0-preview.1, <= 11.0.0-rc.1",
+          "first_patched_version": "11.0.0-rc.2",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Pkcs"
+          },
+          "vulnerable_version_range": ">= 8.0.0, <= 8.0.1",
+          "first_patched_version": "8.0.2",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Pkcs"
+          },
+          "vulnerable_version_range": ">= 9.0.0, <= 9.0.20",
+          "first_patched_version": "9.0.21",
+          "vulnerable_functions": []
+        }
+      ],
+      "ExitCode": 0
+    },
+    {
+      "Id": "GHSA-846f-f764-76mx",
+      "Url": "https://github.com/advisories/GHSA-846f-f764-76mx",
+      "Summary": "Microsoft Security Advisory CVE-2026-84008 - .NET Denial of Service Vulnerability",
+      "Published": "2026-10-13T20:03:30Z",
+      "Updated": "2026-10-19T19:17:43Z",
+      "Vulnerabilities": [
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Pkcs"
+          },
+          "vulnerable_version_range": ">= 10.0.0, <= 10.0.12",
+          "first_patched_version": "10.0.13",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Pkcs"
+          },
+          "vulnerable_version_range": ">= 11.0.0-preview.1, <= 11.0.0-rc.1",
+          "first_patched_version": "11.0.0-rc.2",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Pkcs"
+          },
+          "vulnerable_version_range": ">= 8.0.0, <= 8.0.1",
+          "first_patched_version": "8.0.2",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Pkcs"
+          },
+          "vulnerable_version_range": ">= 9.0.0, <= 9.0.20",
+          "first_patched_version": "9.0.21",
+          "vulnerable_functions": []
+        }
+      ],
+      "ExitCode": 0
+    },
+    {
+      "Id": "GHSA-7hqp-7c5m-4vq6",
+      "Url": "https://github.com/advisories/GHSA-7hqp-7c5m-4vq6",
+      "Summary": "Microsoft Security Advisory CVE-2026-96960 - .NET and Visual Studio Denial of Service Vulnerability",
+      "Published": "2026-10-13T20:26:27Z",
+      "Updated": "2026-10-19T16:19:51Z",
+      "Vulnerabilities": [
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Xml"
+          },
+          "vulnerable_version_range": ">= 10.0.0, <= 10.0.12",
+          "first_patched_version": "10.0.13",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Xml"
+          },
+          "vulnerable_version_range": ">= 11.0.0-preview.1, <= 11.0.0-rc.1",
+          "first_patched_version": "11.0.0-rc.2",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Xml"
+          },
+          "vulnerable_version_range": ">= 8.0.0, <= 8.0.4",
+          "first_patched_version": "8.0.5",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Xml"
+          },
+          "vulnerable_version_range": ">= 9.0.0, <= 9.0.20",
+          "first_patched_version": "9.0.21",
+          "vulnerable_functions": []
+        }
+      ],
+      "ExitCode": 0
+    },
+    {
+      "Id": "GHSA-c399-9853-6jmj",
+      "Url": "https://github.com/advisories/GHSA-c399-9853-6jmj",
+      "Summary": "Microsoft Security Advisory CVE-2026-96959 - .NET and Visual Studio Denial of Service Vulnerability",
+      "Published": "2026-10-13T20:49:06Z",
+      "Updated": "2026-10-19T19:18:54Z",
+      "Vulnerabilities": [
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Xml"
+          },
+          "vulnerable_version_range": ">= 10.0.0, <= 10.0.12",
+          "first_patched_version": "10.0.13",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Xml"
+          },
+          "vulnerable_version_range": ">= 11.0.0-preview.1, <= 11.0.0-rc.1",
+          "first_patched_version": "11.0.0-rc.2",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Xml"
+          },
+          "vulnerable_version_range": ">= 8.0.0, <= 8.0.4",
+          "first_patched_version": "8.0.5",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Xml"
+          },
+          "vulnerable_version_range": ">= 9.0.0, <= 9.0.20",
+          "first_patched_version": "9.0.21",
+          "vulnerable_functions": []
+        }
+      ],
+      "ExitCode": 0
+    },
+    {
+      "Id": "GHSA-r955-8q5j-3h83",
+      "Url": "https://github.com/advisories/GHSA-r955-8q5j-3h83",
+      "Summary": "Microsoft Security Advisory CVE-2026-96958 - .NET and Visual Studio Denial of Service Vulnerability",
+      "Published": "2026-10-13T20:05:52Z",
+      "Updated": "2026-10-19T19:17:44Z",
+      "Vulnerabilities": [
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Xml"
+          },
+          "vulnerable_version_range": ">= 10.0.0, <= 10.0.12",
+          "first_patched_version": "10.0.13",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Xml"
+          },
+          "vulnerable_version_range": ">= 11.0.0-preview.1, <= 11.0.0-rc.1",
+          "first_patched_version": "11.0.0-rc.2",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Xml"
+          },
+          "vulnerable_version_range": ">= 8.0.0, <= 8.0.4",
+          "first_patched_version": "8.0.5",
+          "vulnerable_functions": []
+        },
+        {
+          "package": {
+            "ecosystem": "nuget",
+            "name": "System.Security.Cryptography.Xml"
+          },
+          "vulnerable_version_range": ">= 9.0.0, <= 9.0.20",
+          "first_patched_version": "9.0.21",
+          "vulnerable_functions": []
+        }
+      ],
+      "ExitCode": 0
+    }
+  ]
+}

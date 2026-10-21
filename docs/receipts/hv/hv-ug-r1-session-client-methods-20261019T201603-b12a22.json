@@ -1,0 +1,14 @@
+{
+  "TimestampUtc": "2026-10-20T01:16:03.4517669Z",
+  "TimestampLocal": "2026-10-19T20:16:03",
+  "Mode": "Search",
+  "Arguments": [
+    "-n",
+    "GetByIdAsync|QueryAsync|GetSession",
+    "src/QBrainAi.Client/SessionLogClient.cs"
+  ],
+  "Offset": 0,
+  "Count": 80,
+  "ExitCode": 0,
+  "Output": "44:    public async Task<SessionLogQueryResult> QueryAsync(\n49:        return await QueryAsync(\n64:    public async Task<SessionLogQueryResult> QueryAsync("
+}

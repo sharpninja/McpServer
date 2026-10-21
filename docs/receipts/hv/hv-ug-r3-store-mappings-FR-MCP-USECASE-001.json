@@ -1,0 +1,70 @@
+[
+  {
+    "type": "result",
+    "payload": {
+      "result": {
+        "items": [
+          {
+            "trId": "TR-MCP-USECASE-001",
+            "frId": "FR-MCP-USECASE-001",
+            "createdAt": "2026-10-20T22:16:35.1787855+00:00"
+          },
+          {
+            "trId": "TR-MCP-USECASE-002",
+            "frId": "FR-MCP-USECASE-001",
+            "createdAt": "2026-10-20T22:16:35.1794217+00:00"
+          },
+          {
+            "trId": "TR-MCP-USECASE-003",
+            "frId": "FR-MCP-USECASE-001",
+            "createdAt": "2026-10-20T22:16:35.1795644+00:00"
+          },
+          {
+            "trId": "TR-MCP-USECASE-005",
+            "frId": "FR-MCP-USECASE-001",
+            "createdAt": "2026-10-20T22:16:35.1796521+00:00"
+          },
+          {
+            "trId": "TR-MCP-USECASE-018",
+            "frId": "FR-MCP-USECASE-001",
+            "createdAt": "2026-10-20T22:16:35.1797308+00:00"
+          },
+          {
+            "trId": "TR-MCP-USECASE-019",
+            "frId": "FR-MCP-USECASE-001",
+            "createdAt": "2026-10-20T22:16:35.1798190+00:00"
+          },
+          {
+            "testId": "TEST-MCP-USECASE-001",
+            "createdAt": "2026-10-20T22:16:35.1799135+00:00",
+            "frId": "FR-MCP-USECASE-001"
+          },
+          {
+            "testId": "TEST-MCP-USECASE-002",
+            "createdAt": "2026-10-20T22:16:35.1799972+00:00",
+            "frId": "FR-MCP-USECASE-001"
+          },
+          {
+            "testId": "TEST-MCP-USECASE-004",
+            "createdAt": "2026-10-20T22:16:35.1800803+00:00",
+            "frId": "FR-MCP-USECASE-001"
+          },
+          {
+            "testId": "TEST-MCP-USECASE-019",
+            "createdAt": "2026-10-20T22:16:35.1801632+00:00",
+            "frId": "FR-MCP-USECASE-001"
+          },
+          {
+            "testId": "TEST-MCP-USECASE-020",
+            "createdAt": "2026-10-20T22:16:35.1802575+00:00",
+            "frId": "FR-MCP-USECASE-001"
+          }
+        ],
+        "totalCount": 11
+      },
+      "deprecated": true,
+      "requestId": "req-20261020T221633Z-e841"
+    }
+  },
+  null
+]

@@ -1,0 +1,18 @@
+{
+  "TimestampUtc": "2026-10-20T00:55:22.7098512Z",
+  "TimestampLocal": "2026-10-19T19:55:22",
+  "Mode": "Gh",
+  "Arguments": [
+    "pr",
+    "view",
+    "87",
+    "--repo",
+    "sharpninja/McpServer",
+    "--json",
+    "number,title,body,headRefOid,baseRefName,headRefName,isDraft,url,commits,statusCheckRollup"
+  ],
+  "Offset": 0,
+  "Count": 250,
+  "ExitCode": 1,
+  "Output": "mise ERROR Failed to install aqua:cli/cli@latest: Read-only file system (os error 30)\nmise ERROR Version: 2026.10.10 linux-x64 (2026-10-14)\nmise ERROR Run with --verbose or MISE_VERBOSE=1 for more information"
+}

@@ -1,0 +1,12 @@
+{
+  "TimestampUtc": "2026-10-20T01:16:03.4075483Z",
+  "TimestampLocal": "2026-10-19T20:16:03",
+  "Mode": "Read",
+  "Arguments": [
+    "docs/receipts/hv/hv-ug-r1-store-client-UseCases-ListAsync.txt"
+  ],
+  "Offset": 0,
+  "Count": 60,
+  "ExitCode": 0,
+  "Output": "FILE: docs/receipts/hv/hv-ug-r1-store-client-UseCases-ListAsync.txt; LINES: 8\n1: type: result\n2: payload:\n3:   requestId: req-20261020T011536Z-77ee\n4:   result: []\n5: \n6: ---\n7: \n8:"
+}

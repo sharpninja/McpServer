@@ -13,6 +13,8 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// Windows. Uses a temporary root holding a named pipe; no mocks.
 /// </summary>
 [SupportedOSPlatform("linux")]
+[Trait("Category", "Integration")]
+[Trait("Platform", "Linux")]
 public sealed class RequirementsFourteenthLinuxNativeTests
 {
     /// <summary>

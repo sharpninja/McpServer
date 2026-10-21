@@ -1,0 +1,386 @@
+[
+  {
+    "Line": 16779,
+    "Time": "2026-10-20T09:55:27",
+    "Type": "call",
+    "Tool": "Read",
+    "Id": "toolu_011vzZc4qyQDoBh8pY34t3G4",
+    "Value": "/home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1"
+  },
+  {
+    "Line": 16780,
+    "Time": "2026-10-20T09:55:27",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_011vzZc4qyQDoBh8pY34t3G4",
+    "Value": "1\t#Requires -Version 7.0\n2\t<#\n3\t.SYNOPSIS\n4\t    Replaces or adds exactly one acceptance criterion on a TR or TEST record through the plugin\n5\t    (getTr/getTest, then updateTr/updateTest with the full list), then reads the record back and\n6\t    proves that only the named criterion changed. Supports -WhatIf.\n7\t.PARAMETER DataFile\n8\t    PowerShell data file with keys Kind (tr or test), Id, Mode (Replace or Add), and Criterion\n9\t    (id, text, isSatisfied, optional evidence).\n10\t#>\n11\t[CmdletBinding(SupportsShouldProcess)]\n12\tparam(\n13\t    [Parameter(Mandatory)] [string] $DataFile\n14\t)\n15\t\n16\tSet-StrictMode -Version Latest\n17\t$ErrorActionPreference = 'Stop'\n18\t. (Join-Path $PSScriptRoot 'CcPlugin.ps1')\n19\t\n20\tfunction Test-Ok {\n21\t    param([Parameter(Mandatory)] $Result)\n22\t    return ($Result.ExitCode -eq 0 -and $Result.Raw -notmatch '(?im)^\\s*type:\\s*error')\n23\t}\n24\t\n25\tfunction Get-Signature {\n26\t    param($Criterion)\n27\t    return ('{0}|{1}|{2}|{3}' -f (Get-CcValue $Criterion 'id'), (Get-CcValue $Criterion 'text'), [bool](Get-CcValue $Criterion 'isSatisfied'), (Get-CcValue $Criterion 'evidence'))\n28\t}\n29\t\n30\tfunction Read-CriterionList {\n31\t    param([string]$GetMethod, [string]$Id)\n32\t    $g = Invoke-CcPlugin -Method $GetMethod -Params ([ordered]@{ id = $Id })\n33\t    if (-not (Test-Ok $g)) { Write-Output $g.Raw; throw \"Read of $Id failed\" }\n34\t    $result = Get-CcValue (Get-CcValue $g.Parsed 'payload') 'result'\n35\t    return @(Get-CcValue $result 'acceptanceCriteria' | Where-Object { $null -ne $_ })\n36\t}\n37\t\n38\t$data = Import-PowerShellDataFile -LiteralPath $DataFile\n39\t$kind = [string]$data.Kind\n40\t$id = [string]$data.Id\n41\t$mode = [string]$data.Mode\n42\t$new = $data.Criterion\n43\tif ($kind -notin 'tr', 'test') { throw \"Kind must be tr or test, got '$kind'\" }\n44\tif ($mode -notin 'Replace', 'Add') { throw \"Mode must be Replace or Add, got '$mode'\" }\n45\t$getMethod = if ($kind -eq 'tr') { 'workflow.requirements.getTr' } else { 'workflow.requirements.getTest' }\n46\t$updateMethod = if ($kind -eq 'tr') { 'workflow.requirements.updateTr' } else { 'workflow.requirements.updateTest' }\n47\t\n48\tWrite-Output \"Now: $((Get-Date).ToString('s')) $id $mode criterion $($new.id)\"\n49\t$before = @(Read-CriterionList -GetMethod $getMethod -Id $id)\n50\t$ids = @($before | ForEach-Object { [string](Get-CcValue $_ 'id') })\n51\tif ($mode -eq 'Replace' -and $ids -notcontains $new.id) { throw \"Criterion $($new.id) not found on $id\" }\n52\tif ($mode -eq 'Add' -and $ids -contains $new.id) { throw \"Criterion $($new.id) already exists on $id\" }\n53\t\n54\t$newItem = [ordered]@{ id = [string]$new.id; text = [string]$new.text; isSatisfied = [bool]$new.isSatisfied }\n55\tif ($new.ContainsKey('evidence') -and $new.evidence) { $newItem.evidence = [string]$new.evidence }\n56\t$list = @(foreach ($c in $before) {\n57\t    if ($mode -eq 'Replace' -and [string](Get-CcValue $c 'id') -eq $new.id) { $newItem; continue }\n58\t    $item = [ordered]@{ id = [string](Get-CcValue $c 'id'); text = [string](Get-CcValue $c 'text'); isSatisfied = [bool](Get-CcValue $c 'isSatisfied') }\n59\t    $evidence = Get-CcValue $c 'evidence'\n60\t    if ($evidence) { $item.evidence = [string]$evidence }\n61\t    $item\n62\t})\n63\tif ($mode -eq 'Add') { $list += $newItem }\n64\tWrite-Output ('Criteria before={0} after={1}' -f $before.Count, $list.Count)\n65\t\n66\tif (-not $PSCmdlet.ShouldProcess(\"$id criterion $($new.id)\", \"$updateMethod ($mode)\")) { return }\n67\t$u = Invoke-CcPlugin -Method $updateMethod -Params ([ordered]@{ id = $id; acceptanceCriteria = $list })\n68\tWrite-Output \"$updateMethod exit=$($u.ExitCode) ok=$(Test-Ok $u)\"\n69\tif (-not (Test-Ok $u)) { Write-Output $u.Raw; exit 1 }\n70\t\n71\t$after = @(Read-CriterionList -GetMethod $getMethod -Id $id)\n72\t$beforeById = @{}\n73\tforeach ($c in $before) { $beforeById[[string](Get-CcValue $c 'id')] = Get-Signature $c }\n74\t$changed = @()\n75\tforeach ($c in $after) {\n76\t    $cid = [string](Get-CcValue $c 'id')\n77\t    if (-not $beforeById.ContainsKey($cid) -or $beforeById[$cid] -ne (Get-Signature $c)) { $changed += $cid }\n78\t}\n79\t$expectedNew = Get-Signature $newItem\n80\t$target = @($after | Where-Object { [string](Get-CcValue $_ 'id') -eq $new.id })\n81\t$ok = ($changed.Count -eq 1 -and $changed[0] -eq $new.id -and $target.Count -eq 1 -and (Get-Signature $target[0]) -eq $expectedNew -and $after.Count -eq $list.Count)\n82\tWrite-Output ('READBACK {0}: criteria={1} changed=[{2}] targetMatches={3} ok={4}' -f $id, $after.Count, ($changed -join ','), ($target.Count -eq 1 -and (Get-Signature $target[0]) -eq $expectedNew), $ok)\n83\tif (-not $ok) { exit 1 }\n84\t"
+  },
+  {
+    "Line": 16801,
+    "Time": "2026-10-20T09:55:49",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_017MeEdaP22cdU9qaQJNbgpD",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-ws-005-001.psd1 -WhatIf"
+  },
+  {
+    "Line": 16804,
+    "Time": "2026-10-20T09:55:50",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01826RmJxnY7Y1tWFNj4E3Qe",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-sessionlog-006-009.psd1 -WhatIf"
+  },
+  {
+    "Line": 16810,
+    "Time": "2026-10-20T09:55:53",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_017MeEdaP22cdU9qaQJNbgpD",
+    "Value": "What if: Performing the operation \"New Alias\" on target \"Name: cfy Value: ConvertFrom-Yaml\".\nWhat if: Performing the operation \"New Alias\" on target \"Name: cty Value: ConvertTo-Yaml\".\nNow: 2026-10-20T09:55:50 TR-MCP-WS-005 Add criterion AC-TR-MCP-WS-005-001\nCriteria before=0 after=1\nWhat if: Performing the operation \"workflow.requirements.updateTr (Add)\" on target \"TR-MCP-WS-005 criterion AC-TR-MCP-WS-005-001\"."
+  },
+  {
+    "Line": 16811,
+    "Time": "2026-10-20T09:55:58",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01826RmJxnY7Y1tWFNj4E3Qe",
+    "Value": "What if: Performing the operation \"New Alias\" on target \"Name: cfy Value: ConvertFrom-Yaml\".\nWhat if: Performing the operation \"New Alias\" on target \"Name: cty Value: ConvertTo-Yaml\".\nNow: 2026-10-20T09:55:54 TR-MCP-SESSIONLOG-006 Add criterion AC-TR-MCP-SESSIONLOG-006-009\nCriteria before=0 after=1\nWhat if: Performing the operation \"workflow.requirements.updateTr (Add)\" on target \"TR-MCP-SESSIONLOG-006 criterion AC-TR-MCP-SESSIONLOG-006-009\"."
+  },
+  {
+    "Line": 17033,
+    "Time": "2026-10-20T10:03:07",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01SLTNYr2oJtnYHTXsGB4ewe",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-ws-005-001.psd1"
+  },
+  {
+    "Line": 17034,
+    "Time": "2026-10-20T10:03:08",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01RKmibsWETQRXpL45aA23n1",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-sessionlog-006-009.psd1"
+  },
+  {
+    "Line": 17035,
+    "Time": "2026-10-20T10:03:17",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01SLTNYr2oJtnYHTXsGB4ewe",
+    "Value": "Now: 2026-10-20T10:03:07 TR-MCP-WS-005 Add criterion AC-TR-MCP-WS-005-001\nCriteria before=0 after=1\nworkflow.requirements.updateTr exit=0 ok=True\nREADBACK TR-MCP-WS-005: criteria=1 changed=[AC-TR-MCP-WS-005-001] targetMatches=True ok=True"
+  },
+  {
+    "Line": 17036,
+    "Time": "2026-10-20T10:03:28",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01RKmibsWETQRXpL45aA23n1",
+    "Value": "Now: 2026-10-20T10:03:18 TR-MCP-SESSIONLOG-006 Add criterion AC-TR-MCP-SESSIONLOG-006-009\nCriteria before=0 after=1\nworkflow.requirements.updateTr exit=0 ok=True\nREADBACK TR-MCP-SESSIONLOG-006: criteria=1 changed=[AC-TR-MCP-SESSIONLOG-006-009] targetMatches=True ok=True"
+  },
+  {
+    "Line": 21912,
+    "Time": "2026-10-20T16:30:20",
+    "Type": "call",
+    "Tool": "Read",
+    "Id": "toolu_01LykKEdJFBXVNURqBJf3nd2",
+    "Value": "/home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1"
+  },
+  {
+    "Line": 21913,
+    "Time": "2026-10-20T16:30:20",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01LykKEdJFBXVNURqBJf3nd2",
+    "Value": "1\t#Requires -Version 7.0\n2\t<#\n3\t.SYNOPSIS\n4\t    Replaces or adds exactly one acceptance criterion on a TR or TEST record through the plugin\n5\t    (getTr/getTest, then updateTr/updateTest with the full list), then reads the record back and\n6\t    proves that only the named criterion changed. Supports -WhatIf.\n7\t.PARAMETER DataFile\n8\t    PowerShell data file with keys Kind (tr or test), Id, Mode (Replace or Add), and Criterion\n9\t    (id, text, isSatisfied, optional evidence).\n10\t#>\n11\t[CmdletBinding(SupportsShouldProcess)]\n12\tparam(\n13\t    [Parameter(Mandatory)] [string] $DataFile\n14\t)\n15\t\n16\tSet-StrictMode -Version Latest\n17\t$ErrorActionPreference = 'Stop'\n18\t. (Join-Path $PSScriptRoot 'CcPlugin.ps1')\n19\t\n20\tfunction Test-Ok {\n21\t    param([Parameter(Mandatory)] $Result)\n22\t    return ($Result.ExitCode -eq 0 -and $Result.Raw -notmatch '(?im)^\\s*type:\\s*error')\n23\t}\n24\t\n25\tfunction Get-Signature {\n26\t    param($Criterion)\n27\t    return ('{0}|{1}|{2}|{3}' -f (Get-CcValue $Criterion 'id'), (Get-CcValue $Criterion 'text'), [bool](Get-CcValue $Criterion 'isSatisfied'), (Get-CcValue $Criterion 'evidence'))\n28\t}\n29\t\n30\tfunction Read-CriterionList {\n31\t    param([string]$GetMethod, [string]$Id)\n32\t    $g = Invoke-CcPlugin -Method $GetMethod -Params ([ordered]@{ id = $Id })\n33\t    if (-not (Test-Ok $g)) { Write-Output $g.Raw; throw \"Read of $Id failed\" }\n34\t    $result = Get-CcValue (Get-CcValue $g.Parsed 'payload') 'result'\n35\t    return @(Get-CcValue $result 'acceptanceCriteria' | Where-Object { $null -ne $_ })\n36\t}\n37\t\n38\t$data = Import-PowerShellDataFile -LiteralPath $DataFile\n39\t$kind = [string]$data.Kind\n40\t$id = [string]$data.Id\n41\t$mode = [string]$data.Mode\n42\t$new = $data.Criterion\n43\tif ($kind -notin 'tr', 'test') { throw \"Kind must be tr or test, got '$kind'\" }\n44\tif ($mode -notin 'Replace', 'Add') { throw \"Mode must be Replace or Add, got '$mode'\" }\n45\t$getMethod = if ($kind -eq 'tr') { 'workflow.requirements.getTr' } else { 'workflow.requirements.getTest' }\n46\t$updateMethod = if ($kind -eq 'tr') { 'workflow.requirements.updateTr' } else { 'workflow.requirements.updateTest' }\n47\t\n48\tWrite-Output \"Now: $((Get-Date).ToString('s')) $id $mode criterion $($new.id)\"\n49\t$before = @(Read-CriterionList -GetMethod $getMethod -Id $id)\n50\t$ids = @($before | ForEach-Object { [string](Get-CcValue $_ 'id') })\n51\tif ($mode -eq 'Replace' -and $ids -notcontains $new.id) { throw \"Criterion $($new.id) not found on $id\" }\n52\tif ($mode -eq 'Add' -and $ids -contains $new.id) { throw \"Criterion $($new.id) already exists on $id\" }\n53\t\n54\t$newItem = [ordered]@{ id = [string]$new.id; text = [string]$new.text; isSatisfied = [bool]$new.isSatisfied }\n55\tif ($new.ContainsKey('evidence') -and $new.evidence) { $newItem.evidence = [string]$new.evidence }\n56\t$list = @(foreach ($c in $before) {\n57\t    if ($mode -eq 'Replace' -and [string](Get-CcValue $c 'id') -eq $new.id) { $newItem; continue }\n58\t    $item = [ordered]@{ id = [string](Get-CcValue $c 'id'); text = [string](Get-CcValue $c 'text'); isSatisfied = [bool](Get-CcValue $c 'isSatisfied') }\n59\t    $evidence = Get-CcValue $c 'evidence'\n60\t    if ($evidence) { $item.evidence = [string]$evidence }\n61\t    $item\n62\t})\n63\tif ($mode -eq 'Add') { $list += $newItem }\n64\tWrite-Output ('Criteria before={0} after={1}' -f $before.Count, $list.Count)\n65\t\n66\tif (-not $PSCmdlet.ShouldProcess(\"$id criterion $($new.id)\", \"$updateMethod ($mode)\")) { return }\n67\t$u = Invoke-CcPlugin -Method $updateMethod -Params ([ordered]@{ id = $id; acceptanceCriteria = $list })\n68\tWrite-Output \"$updateMethod exit=$($u.ExitCode) ok=$(Test-Ok $u)\"\n69\tif (-not (Test-Ok $u)) { Write-Output $u.Raw; exit 1 }\n70\t\n71\t$after = @(Read-CriterionList -GetMethod $getMethod -Id $id)\n72\t$beforeById = @{}\n73\tforeach ($c in $before) { $beforeById[[string](Get-CcValue $c 'id')] = Get-Signature $c }\n74\t$changed = @()\n75\tforeach ($c in $after) {\n76\t    $cid = [string](Get-CcValue $c 'id')\n77\t    if (-not $beforeById.ContainsKey($cid) -or $beforeById[$cid] -ne (Get-Signature $c)) { $changed += $cid }\n78\t}\n79\t$expectedNew = Get-Signature $newItem\n80\t$target = @($after | Where-Object { [string](Get-CcValue $_ 'id') -eq $new.id })\n81\t$ok = ($changed.Count -eq 1 -and $changed[0] -eq $new.id -and $target.Count -eq 1 -and (Get-Signature $target[0]) -eq $expectedNew -and $after.Count -eq $list.Count)\n82\tWrite-Output ('READBACK {0}: criteria={1} changed=[{2}] targetMatches={3} ok={4}' -f $id, $after.Count, ($changed -join ','), ($target.Count -eq 1 -and (Get-Signature $target[0]) -eq $expectedNew), $ok)\n83\tif (-not $ok) { exit 1 }\n84\t"
+  },
+  {
+    "Line": 21969,
+    "Time": "2026-10-20T16:32:03",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_012vjHUvq7fnPQxsy82cM8vm",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-ws-005-001-r3p3.psd1 -WhatIf"
+  },
+  {
+    "Line": 21972,
+    "Time": "2026-10-20T16:32:08",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_012vjHUvq7fnPQxsy82cM8vm",
+    "Value": "What if: Performing the operation \"New Alias\" on target \"Name: cfy Value: ConvertFrom-Yaml\".\nWhat if: Performing the operation \"New Alias\" on target \"Name: cty Value: ConvertTo-Yaml\".\nNow: 2026-10-20T16:32:04 TR-MCP-WS-005 Replace criterion AC-TR-MCP-WS-005-001\nCriteria before=1 after=1\nWhat if: Performing the operation \"workflow.requirements.updateTr (Replace)\" on target \"TR-MCP-WS-005 criterion AC-TR-MCP-WS-005-001\"."
+  },
+  {
+    "Line": 21975,
+    "Time": "2026-10-20T16:32:18",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_019Wdq3JZvmAJa2B24sLE2qK",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 -DataFile /home/sharpninja/.claude/scratch/pr82-review-20261019/criterion-ws-005-001-r3p3.psd1"
+  },
+  {
+    "Line": 21976,
+    "Time": "2026-10-20T16:32:29",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_019Wdq3JZvmAJa2B24sLE2qK",
+    "Value": "Now: 2026-10-20T16:32:19 TR-MCP-WS-005 Replace criterion AC-TR-MCP-WS-005-001\nCriteria before=1 after=1\nworkflow.requirements.updateTr exit=0 ok=True\nREADBACK TR-MCP-WS-005: criteria=1 changed=[AC-TR-MCP-WS-005-001] targetMatches=True ok=True"
+  },
+  {
+    "Line": 21981,
+    "Time": "2026-10-20T16:33:02",
+    "Type": "call",
+    "Tool": "Write",
+    "Id": "toolu_01SYTgoFdYcNVkf5upppmVEW",
+    "Value": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs"
+  },
+  {
+    "Line": 21988,
+    "Time": "2026-10-20T16:34:03",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01SYTgoFdYcNVkf5upppmVEW",
+    "Value": "File created successfully at: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs (file state is current in your context — no need to Read it back)"
+  },
+  {
+    "Line": 21993,
+    "Time": "2026-10-20T16:34:17",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01XJFEFasUTP5xQJk1sqJJ5V",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-NukeRun.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Target Test -ExtraArgs '--test-run-id;ug-r3-versionread-mockgate-1' -RunDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs -Name ug-r3-versionread-mockgate-1 -WhatIf"
+  },
+  {
+    "Line": 21995,
+    "Time": "2026-10-20T16:34:18",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01XJFEFasUTP5xQJk1sqJJ5V",
+    "Value": "What if: Performing the operation \"Create Directory\" on target \"Destination: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs\".\nWhat if: Performing the operation \"Start detached Nuke run\" on target \"Test in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\".\nMeta: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-mockgate-1.meta.json\nStdout: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-mockgate-1.out.log\nExit file: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-mockgate-1.exit.txt"
+  },
+  {
+    "Line": 22000,
+    "Time": "2026-10-20T16:34:24",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01LR4SVQJL5dMw7V6dWcfPzk",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-NukeRun.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Target Test -ExtraArgs '--test-run-id;ug-r3-versionread-mockgate-1' -RunDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs -Name ug-r3-versionread-mockgate-1"
+  },
+  {
+    "Line": 22006,
+    "Time": "2026-10-20T16:34:24",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01LR4SVQJL5dMw7V6dWcfPzk",
+    "Value": "Started ug-r3-versionread-mockgate-1 pid=417528 at 2026-10-20T16:34:24\nMeta: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-mockgate-1.meta.json\nStdout: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-mockgate-1.out.log\nExit file: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-mockgate-1.exit.txt"
+  },
+  {
+    "Line": 22018,
+    "Time": "2026-10-20T16:35:03",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01CG1X3EbS3yNjnUhM7ARNnM",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Wait-NukeRun.ps1 -RunDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs -Name ug-r3-versionread-mockgate-1 -TrxRoot /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-versionread-mockgate-1"
+  },
+  {
+    "Line": 22019,
+    "Time": "2026-10-20T16:38:49",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01CG1X3EbS3yNjnUhM7ARNnM",
+    "Value": "Watching ug-r3-versionread-mockgate-1 from 2026-10-20T16:35:03\nExit: 0 2026-10-20T16:38:37 seen 2026-10-20T16:38:48\nNow: 2026-10-20T16:38:48 root=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-versionread-mockgate-1\nQBrainAi.Client.Tests: outcome=Completed total=306 executed=306 passed=306 failed=0 notExecuted=0\nQBrainAi.Cqrs.Tests: outcome=Completed total=33 executed=33 passed=33 failed=0 notExecuted=0\nQBrainAi.Launcher.Tests: outcome=Completed total=20 executed=20 passed=20 failed=0 notExecuted=0\nQBrainAi.McpAgent.Tests: outcome=Completed total=64 executed=64 passed=64 failed=0 notExecuted=0\nQBrainAi.QBAgent.Tests: outcome=Completed total=94 executed=94 passed=94 failed=0 notExecuted=0\nQBrainAi.Repl.Core.Tests: outcome=Completed total=865 executed=865 passed=865 failed=0 notExecuted=0\nQBrainAi.Support.Mcp.Tests: outcome=Completed total=3086 executed=3086 passed=3086 failed=0 notExecuted=0\nTOTAL total=4468 executed=4468 passed=4468 failed=0 notExecuted=0"
+  },
+  {
+    "Line": 22024,
+    "Time": "2026-10-20T16:38:54",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01YTwxztLkMLqHvu8qfqyYX7",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-TrxTests.ps1 -Root /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-versionread-mockgate-1 -Pattern 'PluginVersionFileReadTests'"
+  },
+  {
+    "Line": 22031,
+    "Time": "2026-10-20T16:38:55",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01YTwxztLkMLqHvu8qfqyYX7",
+    "Value": "Now: 2026-10-20T16:38:54 root=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-versionread-mockgate-1 pattern=PluginVersionFileReadTests\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: \"no-version-files\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedTheory_CoversEveryCase\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: \"version-file\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.WrongReadNegativeControls_AreRejectedInsidePassingHarness\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: \"manifest-locked-next-manifest\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedFiles_RecordReadsAndReportUnscriptedFilesAbsent\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.UnexpectedReadError_EscapesTheScriptedFiles\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: \"empty-and-malformed-fall-through\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: \"version-file-vanished\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: \"version-file-locked-manifest-next\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: \"every-file-unreadable\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_RequiredVersion_PassesTheVersionAssertion(name: \"version-file-denied-nothing-else\")\nCOUNT Passed=12\nMATCHED 12"
+  },
+  {
+    "Line": 22061,
+    "Time": "2026-10-20T16:40:36",
+    "Type": "call",
+    "Tool": "Edit",
+    "Id": "toolu_01DepunvFcJCDShQ8eHJbBE8",
+    "Value": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs"
+  },
+  {
+    "Line": 22062,
+    "Time": "2026-10-20T16:40:40",
+    "Type": "call",
+    "Tool": "Edit",
+    "Id": "toolu_01FwrLpubV9dKVZPuncC164V",
+    "Value": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs"
+  },
+  {
+    "Line": 22064,
+    "Time": "2026-10-20T16:40:53",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01DepunvFcJCDShQ8eHJbBE8",
+    "Value": "The file /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs has been updated successfully. (file state is current in your context — no need to Read it back)"
+  },
+  {
+    "Line": 22066,
+    "Time": "2026-10-20T16:41:03",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01FwrLpubV9dKVZPuncC164V",
+    "Value": "The file /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs has been updated successfully. (file state is current in your context — no need to Read it back)"
+  },
+  {
+    "Line": 22080,
+    "Time": "2026-10-20T16:41:25",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_017mYPUfihqbWuna42fp64T2",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-NukeRun.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Target Test -ExtraArgs '--test-run-id;ug-r3-versionread-binding-1' -RunDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs -Name ug-r3-versionread-binding-1 -WhatIf"
+  },
+  {
+    "Line": 22083,
+    "Time": "2026-10-20T16:41:34",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_017mYPUfihqbWuna42fp64T2",
+    "Value": "What if: Performing the operation \"Create Directory\" on target \"Destination: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs\".\nWhat if: Performing the operation \"Start detached Nuke run\" on target \"Test in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\".\nMeta: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-binding-1.meta.json\nStdout: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-binding-1.out.log\nExit file: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-binding-1.exit.txt"
+  },
+  {
+    "Line": 22088,
+    "Time": "2026-10-20T16:41:45",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01PMxpRmwZa3o3D9fAC9tzSM",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-NukeRun.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Target Test -ExtraArgs '--test-run-id;ug-r3-versionread-binding-1' -RunDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs -Name ug-r3-versionread-binding-1"
+  },
+  {
+    "Line": 22089,
+    "Time": "2026-10-20T16:41:45",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01PMxpRmwZa3o3D9fAC9tzSM",
+    "Value": "Started ug-r3-versionread-binding-1 pid=439491 at 2026-10-20T16:41:45\nMeta: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-binding-1.meta.json\nStdout: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-binding-1.out.log\nExit file: /home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r3-versionread-binding-1.exit.txt"
+  },
+  {
+    "Line": 22095,
+    "Time": "2026-10-20T16:41:55",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01NfZZhsY7ZmfwDFhFkiXq8J",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Wait-NukeRun.ps1 -RunDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs -Name ug-r3-versionread-binding-1 -TrxRoot /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-versionread-binding-1"
+  },
+  {
+    "Line": 22101,
+    "Time": "2026-10-20T16:45:56",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01NfZZhsY7ZmfwDFhFkiXq8J",
+    "Value": "Watching ug-r3-versionread-binding-1 from 2026-10-20T16:41:56\nExit: 0 2026-10-20T16:45:43 seen 2026-10-20T16:45:56\nNow: 2026-10-20T16:45:56 root=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-versionread-binding-1\nQBrainAi.Client.Tests: outcome=Completed total=306 executed=306 passed=306 failed=0 notExecuted=0\nQBrainAi.Cqrs.Tests: outcome=Completed total=33 executed=33 passed=33 failed=0 notExecuted=0\nQBrainAi.Launcher.Tests: outcome=Completed total=20 executed=20 passed=20 failed=0 notExecuted=0\nQBrainAi.McpAgent.Tests: outcome=Completed total=64 executed=64 passed=64 failed=0 notExecuted=0\nQBrainAi.QBAgent.Tests: outcome=Completed total=94 executed=94 passed=94 failed=0 notExecuted=0\nQBrainAi.Repl.Core.Tests: outcome=Completed total=865 executed=865 passed=865 failed=0 notExecuted=0\nQBrainAi.Support.Mcp.Tests: outcome=Completed total=3097 executed=3097 passed=3097 failed=0 notExecuted=0\nTOTAL total=4479 executed=4479 passed=4479 failed=0 notExecuted=0"
+  },
+  {
+    "Line": 22105,
+    "Time": "2026-10-20T16:46:02",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_012iCvKKn9iBXjCG32WZQro9",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-TrxTests.ps1 -Root /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-versionread-binding-1 -Pattern 'ProductionRead|UnreadableVersionFile|EveryVersionFileUnreadable'"
+  },
+  {
+    "Line": 22106,
+    "Time": "2026-10-20T16:46:03",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_012iCvKKn9iBXjCG32WZQro9",
+    "Value": "Now: 2026-10-20T16:46:03 root=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-versionread-binding-1 pattern=ProductionRead|UnreadableVersionFile|EveryVersionFileUnreadable\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: \"version-file-vanished\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: \"version-file-locked-manifest-next\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: \"empty-and-malformed-fall-through\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.ResolveAgentPluginVersion_EveryVersionFileUnreadable_FallsBackToTheSyncedVersion\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: \"manifest-locked-next-manifest\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: \"version-file-denied-nothing-else\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: \"no-version-files\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: \"version-file\")\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ProductionRead_UnexpectedReadError_Propagates\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.UserProfileScanBindingTests.ResolveAgentPluginVersion_UnreadableVersionFile_ResolvesTheNextReadableVersion\nPassed QBrainAi.Support.Mcp.Tests QBrainAi.Support.Mcp.Tests.Services.PluginVersionFileReadTests.ScriptedCase_ProductionRead_YieldsTheRequiredVersion(name: \"every-file-unreadable\")\nCOUNT Passed=11\nMATCHED 11"
+  },
+  {
+    "Line": 22111,
+    "Time": "2026-10-20T16:46:16",
+    "Type": "call",
+    "Tool": "Write",
+    "Id": "toolu_014QwpMNhTjFDGm4nYtor4uR",
+    "Value": "/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-versionread.txt"
+  },
+  {
+    "Line": 22112,
+    "Time": "2026-10-20T16:46:17",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_014QwpMNhTjFDGm4nYtor4uR",
+    "Value": "File created successfully at: /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-versionread.txt (file state is current in your context — no need to Read it back)"
+  },
+  {
+    "Line": 22114,
+    "Time": "2026-10-20T16:46:18",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_015VHyKR8b9QP8YU9D1DRVwP",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'src/QBrainAi.Services/Services/MarkerFileService.cs;tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-versionread.txt -WhatIf"
+  },
+  {
+    "Line": 22115,
+    "Time": "2026-10-20T16:46:18",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_015VHyKR8b9QP8YU9D1DRVwP",
+    "Value": "Now: 2026-10-20T16:46:18\nBranch: fix/unit-suite-green-20261019\n--- status before ---\n M src/QBrainAi.Services/Services/MarkerFileService.cs\n M tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs\n?? tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs\nWhat if: Performing the operation \"git add and commit\" on target \"src/QBrainAi.Services/Services/MarkerFileService.cs, tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs, tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs\".\n--- status after ---\n## fix/unit-suite-green-20261019...origin/fix/unit-suite-green-20261019\n M src/QBrainAi.Services/Services/MarkerFileService.cs\n M tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs\n?? tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs"
+  },
+  {
+    "Line": 22124,
+    "Time": "2026-10-20T16:46:24",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01MsCZJKFPT1VbprtgCDiv2a",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'src/QBrainAi.Services/Services/MarkerFileService.cs;tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-versionread.txt"
+  },
+  {
+    "Line": 22125,
+    "Time": "2026-10-20T16:46:25",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01MsCZJKFPT1VbprtgCDiv2a",
+    "Value": "Now: 2026-10-20T16:46:24\nBranch: fix/unit-suite-green-20261019\n--- status before ---\n M src/QBrainAi.Services/Services/MarkerFileService.cs\n M tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs\n?? tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs\n--- staged ---\n 3 files changed, 420 insertions(+), 28 deletions(-)\n[fix/unit-suite-green-20261019 e0b078c8] fix(marker): a plugin version file that cannot be read never fails the marker (IMPL-UNITGREEN-001)\n 3 files changed, 420 insertions(+), 28 deletions(-)\n create mode 100644 tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs\nCommit: e0b078c802d6456d106e6ec681d1aa93d6c4d055 fix(marker): a plugin version file that cannot be read never fails the marker (IMPL-UNITGREEN-001)\n--- status after ---\n## fix/unit-suite-green-20261019...origin/fix/unit-suite-green-20261019 [ahead 1]"
+  },
+  {
+    "Line": 22598,
+    "Time": "2026-10-20T17:02:00",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_01CgpvLhCzuoQiqNpyviCd1W",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Save-RunReceipts.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -RunsDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs -LinuxRuns 'ug-r3-versionread-mockgate-1;ug-r3-versionread-binding-1;ug-r3-linux-test-8;ug-r3-linux-lane-8;ug-r3-build-tests-8' -WindowsReceipts 'ug-r3-win-lane-8.start.txt;ug-r3-win-lane-8.result.txt;ug-r3-win-lane-compare-7-8.txt;ug-r3-win-test-ssh-6.result.txt;ug-r3-linux-test-compare-7-8.txt;ug-r3-linux-lane-compare-7-8.txt;ug-r3-traceability-7.out.log' -WhatIf"
+  },
+  {
+    "Line": 22599,
+    "Time": "2026-10-20T17:02:02",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_01CgpvLhCzuoQiqNpyviCd1W",
+    "Value": "Now: 2026-10-20T17:02:01 destination=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019\nWhat if: Performing the operation \"create receipt directory\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019\".\nWhat if: Performing the operation \"write TRX summary of ug-r3-versionread-mockgate-1\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-versionread-mockgate-1.trx-summary.txt\".\nWhat if: Performing the operation \"write TRX summary of ug-r3-versionread-binding-1\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-versionread-binding-1.trx-summary.txt\".\nWhat if: Performing the operation \"write TRX summary of ug-r3-linux-test-8\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-linux-test-8.trx-summary.txt\".\nWhat if: Performing the operation \"write TRX summary of ug-r3-linux-lane-8\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-linux-lane-8.trx-summary.txt\".\nWhat if: Performing the operation \"write TRX summary of ug-r3-build-tests-8\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-build-tests-8.trx-summary.txt\".\nWhat if: Performing the operation \"copy ug-r3-win-lane-8.start.txt\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-win-lane-8.start.txt\".\nWhat if: Performing the operation \"copy ug-r3-win-lane-8.result.txt\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-win-lane-8.result.txt\".\nWhat if: Performing the operation \"copy ug-r3-win-lane-compare-7-8.txt\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-win-lane-compare-7-8.txt\".\nWhat if: Performing the operation \"copy ug-r3-win-test-ssh-6.result.txt\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-win-test-ssh-6.result.txt\".\nWhat if: Performing the operation \"copy ug-r3-linux-test-compare-7-8.txt\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-linux-test-compare-7-8.txt\".\nWhat if: Performing the operation \"copy ug-r3-linux-lane-compare-7-8.txt\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-linux-lane-compare-7-8.txt\".\nWhat if: Performing the operation \"copy ug-r3-traceability-7.out.log\" on target \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-traceability-7.out.log\"."
+  },
+  {
+    "Line": 22602,
+    "Time": "2026-10-20T17:02:07",
+    "Type": "call",
+    "Tool": "Bash",
+    "Id": "toolu_017apzcWPRQTyNVF7PJreetN",
+    "Value": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Save-RunReceipts.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -RunsDir /home/sharpninja/.claude/scratch/pr82-review-20261019/runs -LinuxRuns 'ug-r3-versionread-mockgate-1;ug-r3-versionread-binding-1;ug-r3-linux-test-8;ug-r3-linux-lane-8;ug-r3-build-tests-8' -WindowsReceipts 'ug-r3-win-lane-8.start.txt;ug-r3-win-lane-8.result.txt;ug-r3-win-lane-compare-7-8.txt;ug-r3-win-test-ssh-6.result.txt;ug-r3-linux-test-compare-7-8.txt;ug-r3-linux-lane-compare-7-8.txt;ug-r3-traceability-7.out.log'"
+  },
+  {
+    "Line": 22609,
+    "Time": "2026-10-20T17:02:09",
+    "Type": "result",
+    "Tool": "",
+    "Id": "toolu_017apzcWPRQTyNVF7PJreetN",
+    "Value": "Now: 2026-10-20T17:02:08 destination=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019\nWROTE /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-versionread-mockgate-1.trx-summary.txt lines=8\nCOPIED /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-versionread-mockgate-1.meta.json match=True\nWROTE /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-versionread-binding-1.trx-summary.txt lines=8\nCOPIED /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-versionread-binding-1.meta.json match=True\nWROTE /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-linux-test-8.trx-summary.txt lines=8\nCOPIED /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-linux-test-8.meta.json match=True\nWROTE /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-linux-lane-8.trx-summary.txt lines=6\nCOPIED /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-linux-lane-8.meta.json match=True\nWROTE /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-build-tests-8.trx-summary.txt lines=2\nCOPIED /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-build-tests-8.meta.json match=True\nCOPIED /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-win-lane-8.start.txt match=True original-kept=True\nCOPIED /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-win-lane-8.result.txt match=True original-kept=True\nCOPIED /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-win-lane-compare-7-8.txt match=True original-kept=True\nCOPIED /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-win-test-ssh-6.result.txt match=True original-kept=True\nCOPIED /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-linux-test-compare-7-8.txt match=True original-kept=True\nCOPIED /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-linux-lane-compare-7-8.txt match=True original-kept=True\nCOPIED /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r3-traceability-7.out.log match=True original-kept=True"
+  }
+]

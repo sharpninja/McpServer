@@ -27,6 +27,7 @@ public sealed class SessionLogImportedSessionDeleteTests
     private const string ImportedRequestId = "fc_08eff9c03a00059d016a470a6942688197";
 
     /// <summary>Session delete stays canonical-only: imported UUID session ids are rejected.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task DeleteSessionAsync_ImportedProviderNativeIds_IsRejected()
     {
@@ -43,6 +44,7 @@ public sealed class SessionLogImportedSessionDeleteTests
     }
 
     /// <summary>Imported turns with provider-native request ids must be deletable.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task DeleteTurnAsync_ImportedProviderNativeIds_DeletesTurn()
     {
@@ -66,6 +68,7 @@ public sealed class SessionLogImportedSessionDeleteTests
     }
 
     /// <summary>Imported turns must accept section-level replace operations.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task ReplaceTurnSectionAsync_ImportedProviderNativeIds_ReplacesSection()
     {

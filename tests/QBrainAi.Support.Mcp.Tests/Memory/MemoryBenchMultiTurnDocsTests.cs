@@ -6,6 +6,7 @@ namespace QBrainAi.Support.Mcp.Tests.Memory;
 public sealed class MemoryBenchMultiTurnDocsTests
 {
     /// <summary>AC-FR-MCP-MEMORY-019: README documents the v1/v2 split and success-gated means.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Readme_DocumentsV2AsRealEfficiencyBench()
     {

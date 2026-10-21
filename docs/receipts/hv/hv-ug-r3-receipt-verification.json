@@ -1,0 +1,37 @@
+{
+  "TimestampLocal": "2026-10-20T18:02:57",
+  "Head": "64fc4b1400ac5bc7526c472f8efeacb91980f2a6",
+  "HeadMatches": true,
+  "TrackedStatus": [],
+  "ClaimCount": 17,
+  "Pass": 9,
+  "Fail": 8,
+  "Unknown": 0,
+  "FindingCount": 4,
+  "MissingReferences": [],
+  "ParsedNameRows": 132688,
+  "HistoricalLaneFailures": [
+    {
+      "Run": "ug-r3-win-lane-2",
+      "Host": "Windows",
+      "Project": "QBrainAi.Support.Mcp.Tests",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerAuditPayloadMigrationTests.Migration_PersistsCompressedPayloads_AndDeniesAuditMutation",
+      "Outcome": "Failed",
+      "Start": "2026-10-20T11:03:59.7804283-05:00",
+      "End": "2026-10-20T11:04:14.8654455-05:00",
+      "Duration": "00:00:15.0396738"
+    },
+    {
+      "Run": "ug-r3-win-lane-4",
+      "Host": "Windows",
+      "Project": "QBrainAi.Support.Mcp.Tests",
+      "Name": "QBrainAi.Support.Mcp.Tests.Storage.SqlServerAuditPayloadMigrationTests.Migration_PersistsCompressedPayloads_AndDeniesAuditMutation",
+      "Outcome": "Failed",
+      "Start": "2026-10-20T13:12:32.7941574-05:00",
+      "End": "2026-10-20T13:14:54.76427-05:00",
+      "Duration": "00:02:21.9456417"
+    }
+  ],
+  "MarkdownSha256": "6673C9477F9190C81478620D170AE490801E68C951823B2C340999A9793C90D5",
+  "JsonSha256": "1A4153CC327486CFF81121EC567CBF35F665E0373EA1621DE5A3C78E2D02F99D"
+}

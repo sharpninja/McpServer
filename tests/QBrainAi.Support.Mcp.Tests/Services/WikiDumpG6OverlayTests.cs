@@ -63,6 +63,7 @@ public sealed class WikiDumpG6OverlayTests : IDisposable
     }
 
     /// <summary>TEST-MCP-WIKIEXPORT-003: no dump file without --include-dump on GenerateWikiAsync.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task WikiExport_WithoutDumpFlag_UnchangedBehavior()
     {
@@ -78,6 +79,7 @@ public sealed class WikiDumpG6OverlayTests : IDisposable
     }
 
     /// <summary>TEST-MCP-WIKIEXPORT-003: GenerateWikiAsync includeDump writes versioned JSON keyed by workspace.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace()
     {
@@ -110,6 +112,7 @@ public sealed class WikiDumpG6OverlayTests : IDisposable
     }
 
     /// <summary>TEST-MCP-WIKIEXPORT-003: shipped DI resolves the singleton orchestrator without a captive scoped dump.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task WikiExport_ShippedDi_ResolvesOrchestratorWithoutCaptiveScope()
     {

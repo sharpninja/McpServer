@@ -43,6 +43,7 @@ public sealed class HandoffD3D5OverlayTests : IDisposable
     /// D3: GenerateDocumentAsync renders every live FR-HANDOFF / TR-HANDOFF / TEST-HANDOFF id
     /// that the shipped parser loaded from docs/Project.
     /// </summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task D3_GenerateDocument_ShippedFileBackedService_RendersLiveHandoffFamily()
     {
@@ -95,6 +96,7 @@ public sealed class HandoffD3D5OverlayTests : IDisposable
     /// D3: GenerateAllAsync and GenerateWikiAsync write Handoff family ids into temp markdown/wiki
     /// exports using the shipped export writers. Does not mutate docs/Project.
     /// </summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport()
     {
@@ -159,20 +161,5 @@ public sealed class HandoffD3D5OverlayTests : IDisposable
     private static bool IsHandoffTest(string id) =>
         id.StartsWith("TEST-HANDOFF-", StringComparison.Ordinal);
 
-    private static string FindRepoRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            if (File.Exists(Path.Combine(directory.FullName, "AGENTS.md"))
-                && Directory.Exists(Path.Combine(directory.FullName, "docs", "Project")))
-            {
-                return directory.FullName;
-            }
-
-            directory = directory.Parent;
-        }
-
-        throw new InvalidOperationException("Repository root could not be located.");
-    }
+    private static string FindRepoRoot() => QBrainAi.Tests.Shared.TestRepositoryRoot.Resolve();
 }

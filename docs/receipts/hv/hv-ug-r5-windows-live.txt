@@ -1,0 +1,66 @@
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+{
+  "Path": "C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-r3-ssh\\Test-ug-r5-win-test-ssh-3.log",
+  "Sha256": "E8DCE0BBAD0F52DA77C58C80DB7F0516B4DDE851CF6A1C7D7D2A5497BD7667C5",
+  "LineCount": 5291,
+  "AuditWarnings": 0,
+  "Commands": [
+    "07:56:01 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\TestResults\\ug-r5-win-test-ssh-3\\unit\\QBrainAi.Support.Mcp.Tests --logger trx;LogFileName=QBrainAi.Support.Mcp.Tests.trx --logger console;verbosity=detailed",
+    "07:57:12 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.Client.Tests\\QBrainAi.Client.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\TestResults\\ug-r5-win-test-ssh-3\\unit\\QBrainAi.Client.Tests --logger trx;LogFileName=QBrainAi.Client.Tests.trx --logger console;verbosity=detailed",
+    "07:57:15 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.Cqrs.Tests\\QBrainAi.Cqrs.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\TestResults\\ug-r5-win-test-ssh-3\\unit\\QBrainAi.Cqrs.Tests --logger trx;LogFileName=QBrainAi.Cqrs.Tests.trx --logger console;verbosity=detailed",
+    "07:57:17 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.Launcher.Tests\\QBrainAi.Launcher.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\TestResults\\ug-r5-win-test-ssh-3\\unit\\QBrainAi.Launcher.Tests --logger trx;LogFileName=QBrainAi.Launcher.Tests.trx --logger console;verbosity=detailed",
+    "07:57:19 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.McpAgent.Tests\\QBrainAi.McpAgent.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\TestResults\\ug-r5-win-test-ssh-3\\unit\\QBrainAi.McpAgent.Tests --logger trx;LogFileName=QBrainAi.McpAgent.Tests.trx --logger console;verbosity=detailed",
+    "07:57:24 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.Repl.Core.Tests\\QBrainAi.Repl.Core.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\TestResults\\ug-r5-win-test-ssh-3\\unit\\QBrainAi.Repl.Core.Tests --logger trx;LogFileName=QBrainAi.Repl.Core.Tests.trx --logger console;verbosity=detailed",
+    "07:57:27 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\tests\\QBrainAi.QBAgent.Tests\\QBrainAi.QBAgent.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-green-r3-ssh\\TestResults\\ug-r5-win-test-ssh-3\\unit\\QBrainAi.QBAgent.Tests --logger trx;LogFileName=QBrainAi.QBAgent.Tests.trx --logger console;verbosity=detailed",
+    "Restore            Succeeded       0:11",
+    "Compile            Succeeded       2:03",
+    "Test               Succeeded       1:28"
+  ],
+  "OverrideMatches": []
+}
+{
+  "Path": "C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\MigrationIntegrationTests-ug-r5-win-lane-3.log",
+  "Sha256": "8978B661FE248AA778C1CC07B5E554F99F11F99F8F247708F6BA4F89C535C2DF",
+  "LineCount": 113,
+  "AuditWarnings": 0,
+  "Commands": [
+    "07:58:54 [INF] Integration lane filter: Category=Integration&Platform!=Linux",
+    "07:58:54 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-green-interactive-20261019\\tests\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.csproj --filter Category=Integration&Platform!=Linux --verbosity minimal --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-green-interactive-20261019\\TestResults\\ug-r5-win-lane-3\\provider\\QBrainAi.Support.Mcp.Tests --logger trx;LogFileName=QBrainAi.Support.Mcp.Tests.trx",
+    "08:04:21 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-green-interactive-20261019\\tests\\QBrainAi.McpAgent.Tests\\QBrainAi.McpAgent.Tests.csproj --filter Category=Integration&Platform!=Linux --verbosity minimal --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-green-interactive-20261019\\TestResults\\ug-r5-win-lane-3\\provider\\QBrainAi.McpAgent.Tests --logger trx;LogFileName=QBrainAi.McpAgent.Tests.trx",
+    "08:04:26 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-green-interactive-20261019\\tests\\QBrainAi.Repl.Core.Tests\\QBrainAi.Repl.Core.Tests.csproj --filter Category=Integration&Platform!=Linux --verbosity minimal --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-green-interactive-20261019\\TestResults\\ug-r5-win-lane-3\\provider\\QBrainAi.Repl.Core.Tests --logger trx;LogFileName=QBrainAi.Repl.Core.Tests.trx",
+    "08:04:32 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-green-interactive-20261019\\tests\\QBrainAi.QBAgent.Tests\\QBrainAi.QBAgent.Tests.csproj --filter Category=Integration&Platform!=Linux --verbosity minimal --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-green-interactive-20261019\\TestResults\\ug-r5-win-lane-3\\provider\\QBrainAi.QBAgent.Tests --logger trx;LogFileName=QBrainAi.QBAgent.Tests.trx",
+    "08:04:38 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-green-interactive-20261019\\tests\\Build.Tests\\Build.Tests.csproj --filter Category=Integration&Platform!=Linux --verbosity minimal --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-green-interactive-20261019\\TestResults\\ug-r5-win-lane-3\\provider\\Build.Tests --logger trx;LogFileName=Build.Tests.trx",
+    "InstallTestDependencies      Succeeded     < 1sec",
+    "MigrationIntegrationTests    Succeeded       5:49"
+  ],
+  "OverrideMatches": []
+}
+{
+  "Path": "C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\proof-ug-r5-win-lane-3.txt",
+  "Sha256": "67E453A8CB1795CFA4408A3E2E09D2E354938B9823EA26A2A9AF144DBA1763F9",
+  "LineCount": 1,
+  "AuditWarnings": 0,
+  "Commands": [
+    "START 2026-10-21T07:58:47 user=kingd session=1 interactive=True head=810ee8aa0fbdcc6cf64a3d9575693068d261a97c"
+  ],
+  "OverrideMatches": []
+}
+{
+  "Path": "C:\\Users\\kingd\\AppData\\Local\\Temp\\unit-green-interactive\\exit-ug-r5-win-lane-3.txt",
+  "Sha256": "8FEA33124AB3C653E21EDD2F4FB8CF0F296194372E40B2C1FCBBCA9984A24718",
+  "LineCount": 1,
+  "AuditWarnings": 0,
+  "Commands": [
+    "0 2026-10-21T08:04:44"
+  ],
+  "OverrideMatches": []
+}
+{
+  "Runner": "C:\\Users\\kingd\\AppData\\Local\\Temp\\Invoke-WinLaneRunner.ps1",
+  "Sha256": "D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE",
+  "User": "kingd",
+  "SshWorktreeHead": "810ee8aa0fbdcc6cf64a3d9575693068d261a97c",
+  "InteractiveWorktreeHead": "810ee8aa0fbdcc6cf64a3d9575693068d261a97c"
+}

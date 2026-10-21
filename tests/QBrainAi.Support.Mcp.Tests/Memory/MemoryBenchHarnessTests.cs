@@ -1,13 +1,18 @@
 using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Tests.TestSupport;
 
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018: Harness conditions, metrics, isolation, and modes.
+/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018: Harness conditions, metrics, isolation, and modes. The class runs in
+/// <see cref="ProcessEnvironmentCollection"/> because two of its integration tests write the process environment
+/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
 /// </summary>
+[Collection(ProcessEnvironmentCollection.Name)]
 public sealed class MemoryBenchHarnessTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-05: without_memory has no injection and no successful recall tools.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void WithoutMemory_NoEffectiveInjectionOrTools()
     {
@@ -22,6 +27,7 @@ public sealed class MemoryBenchHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-06: with_memory seeds, injects, and exposes recall tools.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void WithMemory_SeededAndToolsAvailable()
     {
@@ -34,6 +40,7 @@ public sealed class MemoryBenchHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-07: Default path is Grok first; others stay opt-in until H7a.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void GrokFirst_OthersOptInUntilValueGate()
     {
@@ -50,6 +57,7 @@ public sealed class MemoryBenchHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-08: Each cell records transcript, tools, injection, tokens, latency, score, pass.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void RecordsPerCellMetrics_IncludingTokens()
     {
@@ -67,6 +75,7 @@ public sealed class MemoryBenchHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-09: Result artifacts include per-cell tokens and a token summary table.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void WritesResultArtifacts_WithTokenSummary()
     {
@@ -86,6 +95,7 @@ public sealed class MemoryBenchHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-25: Stub/recorded mode does not require cloud credentials.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void StubMode_NoCloudRequired()
     {
@@ -104,6 +114,7 @@ public sealed class MemoryBenchHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-26: Live/stub/recorded modes are tagged on the result.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void LiveMode_Tagged()
     {
@@ -136,6 +147,7 @@ public sealed class MemoryBenchHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-27: Seeds are Workspace-scoped in a disposable bench workspace and cleaned up.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Seeds_WorkspaceScopedCleanup()
     {
@@ -150,6 +162,7 @@ public sealed class MemoryBenchHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-31: Stub re-run on the same pack is byte-stable for scores and tokens.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Rerun_DeterministicStub()
     {

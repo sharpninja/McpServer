@@ -7,6 +7,7 @@ namespace QBrainAi.Support.Mcp.Tests.Documentation;
 /// TEST-MCP-USECASE-018: Fourteenth-review external-artifact repository-root regressions.
 /// </summary>
 [Collection(RepositoryRootProcessStateCollection.Name)]
+[Trait("Category", "Integration")]
 public sealed class BugTriage139FourteenthHarnessTests
 {
     /// <summary>
@@ -181,17 +182,8 @@ public sealed class BugTriage139FourteenthHarnessTests
         }
     }
 
-    private static string SourceRepositoryRoot()
-    {
-        var metadata = typeof(BugTriage139FourteenthHarnessTests).Assembly
-            .GetCustomAttributes<AssemblyMetadataAttribute>()
-            .Single(
-                attribute => string.Equals(
-                    attribute.Key,
-                    "McpRepositoryRoot",
-                    StringComparison.Ordinal));
-        return Path.GetFullPath(
-            metadata.Value ??
+    private static string SourceRepositoryRoot() =>
+        Path.GetFullPath(
+            QBrainAi.Tests.Shared.TestRepositoryRoot.BuildMetadataRoot ??
             throw new InvalidOperationException("Build repository-root metadata is empty."));
-    }
 }

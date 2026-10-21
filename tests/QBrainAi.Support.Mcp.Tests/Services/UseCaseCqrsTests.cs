@@ -199,6 +199,7 @@ public sealed class UseCaseCqrsTests : IDisposable
     }
 
     /// <summary>FR-MCP-USECASE-001: Soft-delete hides use case from get/list queries.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task DeleteUseCase_SoftDeletes_HidesFromGetAndList()
     {
@@ -292,6 +293,7 @@ public sealed class UseCaseCqrsTests : IDisposable
     }
 
     /// <summary>TR-MCP-USECASE-004: Diagram query returns scoped Mermaid UML use-case content.</summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task GetUseCaseDiagram_ReturnsScopedMermaidUml()
     {

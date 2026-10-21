@@ -1,0 +1,135 @@
+​
+███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+██║ ╚████║╚██████╔╝██║  ██╗███████╗
+╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+​
+NUKE Execution Engine version 9.0.4 (Linux,.NETCoreApp,Version=v10.0)
+​
+​
+╬════════════════════════════
+║ InstallTestDependencies
+╬═══════════════════
+​
+05:39:05 [INF] Provider test provisioning: load MCP_TEST_POSTGRES_CONNECTION from /home/sharpninja/.config/qbrain-test/test-db.env
+05:39:05 [INF] Provider test provisioning: endpoint localhost:55432 reachable
+05:39:05 [INF] Provider test provisioning: load MCP_TEST_SQLSERVER_CONNECTION from /home/sharpninja/.config/qbrain-test/test-db.env
+05:39:05 [INF] Provider test provisioning: endpoint localhost:51433 reachable
+05:39:05 [INF] Test dependencies ready: MCP_TEST_POSTGRES_CONNECTION and MCP_TEST_SQLSERVER_CONNECTION accept connections.
+​
+╬══════════════════════════════
+║ MigrationIntegrationTests
+╬═════════════════════
+​
+05:39:05 [INF] Integration lane filter: Category=Integration&Platform!=Windows
+05:39:05 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj --filter Category=Integration&Platform!=Windows --verbosity minimal
+05:39:06 [DBG]   Determining projects to restore...
+05:39:08 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs/QBrainAi.Cqrs.csproj (in 875 ms).
+05:39:08 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs.Mvvm/QBrainAi.Cqrs.Mvvm.csproj (in 875 ms).
+05:39:08 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/QBrainAi.Common.AgentCli.csproj (in 875 ms).
+05:39:08 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.SessionLog.Transcripts/QBrainAi.SessionLog.Transcripts.csproj (in 875 ms).
+05:39:08 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.TransactionSecurity/QBrainAi.TransactionSecurity.csproj (in 875 ms).
+05:39:08 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/QBrainAi.Client.csproj (in 875 ms).
+05:39:08 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/QBrainAi.Repl.Core.csproj (in 875 ms).
+05:39:08 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.ProcessTree.TestHelper/QBrainAi.ProcessTree.TestHelper.csproj (in 5 ms).
+05:39:08 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.ServiceDefaults/QBrainAi.ServiceDefaults.csproj (in 20 ms).
+05:39:08 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.SqlServerMigrations/QBrainAi.Storage.SqlServerMigrations.csproj (in 965 ms).
+05:39:08 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage/QBrainAi.Storage.csproj (in 964 ms).
+05:39:08 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.PostgreSqlMigrations/QBrainAi.Storage.PostgreSqlMigrations.csproj (in 965 ms).
+05:39:08 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.SqliteMigrations/QBrainAi.Storage.SqliteMigrations.csproj (in 965 ms).
+05:39:08 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent/QBrainAi.McpAgent.csproj (in 1.08 sec).
+05:39:08 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/QBrainAi.Services.csproj (in 1.09 sec).
+05:39:08 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.GraphRag/QBrainAi.GraphRag.csproj (in 1.09 sec).
+05:39:08 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/QBrainAi.Support.Mcp.csproj (in 1.09 sec).
+05:39:08 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj (in 1.1 sec).
+05:39:11 [DBG]   QBrainAi.Cqrs -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs/bin/Debug/net10.0/QBrainAi.Cqrs.dll
+05:39:11 [DBG]   QBrainAi.ProcessTree.TestHelper -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.ProcessTree.TestHelper/bin/Debug/net10.0/QBrainAi.ProcessTree.TestHelper.dll
+05:39:12 [DBG]   QBrainAi.SessionLog.Transcripts -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.SessionLog.Transcripts/bin/Debug/net10.0/QBrainAi.SessionLog.Transcripts.dll
+05:39:12 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+05:39:12 [DBG]   QBrainAi.ServiceDefaults -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.ServiceDefaults/bin/Debug/net10.0/QBrainAi.ServiceDefaults.dll
+05:39:12 [DBG]   QBrainAi.Cqrs.Mvvm -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Cqrs.Mvvm/bin/Debug/net10.0/QBrainAi.Cqrs.Mvvm.dll
+05:39:13 [DBG]   QBrainAi.TransactionSecurity -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.TransactionSecurity/bin/Debug/net10.0/QBrainAi.TransactionSecurity.dll
+05:39:22 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+05:39:24 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+05:39:24 [DBG]   QBrainAi.Storage -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage/bin/Debug/net10.0/QBrainAi.Storage.dll
+05:39:25 [DBG]   QBrainAi.McpAgent -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+05:39:31 [DBG]   QBrainAi.Storage.SqlServerMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.SqlServerMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqlServerMigrations.dll
+05:39:32 [DBG]   QBrainAi.Storage.PostgreSqlMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.PostgreSqlMigrations/bin/Debug/net10.0/QBrainAi.Storage.PostgreSqlMigrations.dll
+05:39:32 [DBG]   QBrainAi.Storage.SqliteMigrations -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Storage.SqliteMigrations/bin/Debug/net10.0/QBrainAi.Storage.SqliteMigrations.dll
+05:39:37 [DBG]   QBrainAi.Services -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/bin/Debug/net10.0/QBrainAi.Services.dll
+05:39:38 [DBG]   QBrainAi.GraphRag -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.GraphRag/bin/Debug/net10.0/QBrainAi.GraphRag.dll
+05:39:42 [DBG]   QBrainAi.Support.Mcp -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/bin/Debug/net10.0/QBrainAi.Support.Mcp.dll
+05:39:48 [DBG]   QBrainAi.Support.Mcp.Tests -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/QBrainAi.Support.Mcp.Tests.dll
+05:39:48 [DBG] Test run for /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/QBrainAi.Support.Mcp.Tests.dll (.NETCoreApp,Version=v10.0)
+05:39:49 [DBG] A total of 1 test files matched the specified pattern.
+05:41:28 [DBG] 
+05:41:28 [DBG] Passed!  - Failed:     0, Passed:   375, Skipped:     0, Total:   375, Duration: 1 m 34 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+05:41:28 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj --filter Category=Integration&Platform!=Windows --verbosity minimal
+05:41:30 [DBG]   Determining projects to restore...
+05:41:32 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj (in 920 ms).
+05:41:32 [DBG]   4 of 5 projects are up-to-date for restore.
+05:41:34 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+05:41:34 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+05:41:34 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+05:41:34 [DBG]   QBrainAi.McpAgent -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+05:41:35 [DBG]   QBrainAi.McpAgent.Tests -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.McpAgent.Tests/bin/Debug/net10.0/QBrainAi.McpAgent.Tests.dll
+05:41:35 [DBG] Test run for /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.McpAgent.Tests/bin/Debug/net10.0/QBrainAi.McpAgent.Tests.dll (.NETCoreApp,Version=v10.0)
+05:41:35 [DBG] A total of 1 test files matched the specified pattern.
+05:41:37 [DBG] 
+05:41:37 [DBG] Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 96 ms - QBrainAi.McpAgent.Tests.dll (net10.0)
+05:41:37 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj --filter Category=Integration&Platform!=Windows --verbosity minimal
+05:41:38 [DBG]   Determining projects to restore...
+05:41:40 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Todo.Validation/QBrainAi.Todo.Validation.csproj (in 625 ms).
+05:41:40 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj (in 625 ms).
+05:41:40 [DBG]   3 of 5 projects are up-to-date for restore.
+05:41:41 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+05:41:41 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+05:41:41 [DBG]   QBrainAi.Todo.Validation -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Todo.Validation/bin/Debug/net10.0/QBrainAi.Todo.Validation.dll
+05:41:41 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+05:41:43 [DBG]   QBrainAi.Repl.Core.Tests -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/bin/Debug/net10.0/QBrainAi.Repl.Core.Tests.dll
+05:41:43 [DBG] Test run for /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/bin/Debug/net10.0/QBrainAi.Repl.Core.Tests.dll (.NETCoreApp,Version=v10.0)
+05:41:43 [DBG] A total of 1 test files matched the specified pattern.
+05:41:46 [DBG] 
+05:41:46 [DBG] Passed!  - Failed:     0, Passed:     3, Skipped:     0, Total:     3, Duration: 351 ms - QBrainAi.Repl.Core.Tests.dll (net10.0)
+05:41:46 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj --filter Category=Integration&Platform!=Windows --verbosity minimal
+05:41:47 [DBG]   Determining projects to restore...
+05:41:49 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.QBAgent.Skills/QBrainAi.QBAgent.Skills.csproj (in 578 ms).
+05:41:49 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.QBAgent/QBrainAi.QBAgent.csproj (in 726 ms).
+05:41:49 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.QBAgent.Tools/QBrainAi.QBAgent.Tools.csproj (in 726 ms).
+05:41:49 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj (in 726 ms).
+05:41:49 [DBG]   4 of 8 projects are up-to-date for restore.
+05:41:50 [DBG]   QBrainAi.Client -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+05:41:50 [DBG]   QBrainAi.Common.AgentCli -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+05:41:51 [DBG]   QBrainAi.QBAgent.Skills -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.QBAgent.Skills/bin/Debug/net10.0/QBrainAi.QBAgent.Skills.dll
+05:41:51 [DBG]   QBrainAi.Repl.Core -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+05:41:51 [DBG]   QBrainAi.McpAgent -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+05:41:52 [DBG]   QBrainAi.QBAgent.Tools -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.QBAgent.Tools/bin/Debug/net10.0/QBrainAi.QBAgent.Tools.dll
+05:41:53 [DBG]   QBrainAi.QBAgent -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.QBAgent/bin/Debug/net10.0/QBrainAi.QBAgent.dll
+05:41:53 [DBG]   QBrainAi.QBAgent.Tests -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.QBAgent.Tests/bin/Debug/net10.0/QBrainAi.QBAgent.Tests.dll
+05:41:53 [DBG] Test run for /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.QBAgent.Tests/bin/Debug/net10.0/QBrainAi.QBAgent.Tests.dll (.NETCoreApp,Version=v10.0)
+05:41:53 [DBG] A total of 1 test files matched the specified pattern.
+05:41:55 [DBG] 
+05:41:55 [DBG] Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 44 ms - QBrainAi.QBAgent.Tests.dll (net10.0)
+05:41:55 [INF] > /home/sharpninja/.local/bin/dotnet test /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj --filter Category=Integration&Platform!=Windows --verbosity minimal
+05:41:56 [DBG]   Determining projects to restore...
+05:41:57 [DBG]   Restored /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj (in 724 ms).
+05:41:57 [DBG]   1 of 2 projects are up-to-date for restore.
+05:41:58 [DBG]   _build -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/build/bin/Debug/_build.dll
+05:41:59 [DBG]   Build.Tests -> /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll
+05:41:59 [DBG] Test run for /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll (.NETCoreApp,Version=v10.0)
+05:41:59 [DBG] A total of 1 test files matched the specified pattern.
+05:42:05 [DBG] 
+05:42:05 [DBG] Passed!  - Failed:     0, Passed:    16, Skipped:     0, Total:    16, Duration: 4 s - Build.Tests.dll (net10.0)
+​
+═════════════════════════════════════════════════
+Target                       Status      Duration
+─────────────────────────────────────────────────
+InstallTestDependencies      Succeeded     < 1sec
+MigrationIntegrationTests    Succeeded       3:00
+─────────────────────────────────────────────────
+Total                                        3:00
+═════════════════════════════════════════════════
+​
+Build succeeded on 10/21/2026 5:42:05 AM. ＼（＾ᴗ＾）／

@@ -14,6 +14,7 @@
     <McpRepositoryRoot>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..\..'))</McpRepositoryRoot>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
     <PackageReference Include="Microsoft.Data.Sqlite" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="xunit.v3" />
@@ -28,6 +29,9 @@
     <ProjectReference Include="..\..\src\QBrainAi.Client\QBrainAi.Client.csproj" />
     <ProjectReference Include="..\..\src\QBrainAi.Repl.Core\QBrainAi.Repl.Core.csproj" />
     <ProjectReference Include="..\QBrainAi.ProcessTree.TestHelper\QBrainAi.ProcessTree.TestHelper.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Shared\TestRepositoryRoot.cs" Link="Shared\TestRepositoryRoot.cs" />
   </ItemGroup>
   <ItemGroup>
     <Using Include="Xunit" />

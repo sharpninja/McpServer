@@ -6,13 +6,18 @@ using QBrainAi.Support.Mcp.Storage.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using QBrainAi.Support.Mcp.Tests.TestSupport;
 using Xunit;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
 /// <summary>
-/// TEST-MCP-QBCLI-001: QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session reuse.
+/// TEST-MCP-QBCLI-001: QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session reuse. The
+/// class runs in <see cref="ProcessEnvironmentCollection"/> because its temp-folder tests write the process environment
+/// through <c>WithIsolatedQuadbrainTemp</c>; those tests are integration tests (TR-MCP-USECASE-018 AC-006,
+/// TR-MCP-USECASE-019 AC-008; the sweep of plan section 19.3).
 /// </summary>
+[Collection(ProcessEnvironmentCollection.Name)]
 public sealed class CliBrainSlotStrategyTests
 {
     private static readonly SemaphoreSlim TempEnvLock = new(1, 1);
@@ -115,36 +120,60 @@ public sealed class CliBrainSlotStrategyTests
         Assert.DoesNotContain("--session-id", args);
     }
 
+    /// <summary>
+    /// TEST-MCP-QBCLI-001: Grok runs in an isolated working folder with its dashboard, memory and subagents off and
+    /// without the inherited <c>GROK_PLUGIN_ROOT</c> and <c>GROK_HOME</c>. The test writes the process environment
+    /// (the temp variables, and both Grok variables set to scripted values so their removal is observed), restores it,
+    /// and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+    /// </summary>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task CompleteAsync_Grok_UsesIsolatedCwdNotConfiguredRepoRoot()
     {
-        await WithIsolatedQuadbrainTemp(async _ =>
+        await WithIsolatedQuadbrainTemp(async temp =>
         {
-            var spawner = new RecordingSpawner(stdout: "ok");
-            var client = new CliBrainSlotChatClient(
-                spawner,
-                new NoopProcessEnvironmentService(),
-                new CliBrainSlotSessionStore(),
-                new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions
-                {
-                    CliWorkingDirectory = @"Q:\__mcp_unit_test__\QBrainAi",
-                }),
-                NullLogger.Instance);
-
-            await client.CompleteAsync(GrokSlot(), "ping", temperature: null, TestContext.Current.CancellationToken)
-                .ConfigureAwait(true);
-
-            var cwd = spawner.StartInfos[0].WorkingDirectory;
-            Assert.False(string.IsNullOrWhiteSpace(cwd));
-            Assert.Contains("grok-work", cwd, StringComparison.OrdinalIgnoreCase);
-            Assert.DoesNotContain(@"Q:\__mcp_unit_test__\QBrainAi", cwd, StringComparison.OrdinalIgnoreCase);
-            Assert.Equal(cwd, ArgumentAfter(spawner.StartInfos[0], "--cwd"));
-            Assert.Equal("0", spawner.StartInfos[0].Environment["GROK_AGENT_DASHBOARD"]);
-            Assert.Equal("0", spawner.StartInfos[0].Environment["GROK_MEMORY"]);
-            Assert.Equal("0", spawner.StartInfos[0].Environment["GROK_SUBAGENTS"]);
-            Assert.False(spawner.StartInfos[0].Environment.ContainsKey("GROK_PLUGIN_ROOT"));
-            Assert.False(spawner.StartInfos[0].Environment.ContainsKey("GROK_HOME"));
+            var previousPluginRoot = Environment.GetEnvironmentVariable("GROK_PLUGIN_ROOT");
+            var previousGrokHome = Environment.GetEnvironmentVariable("GROK_HOME");
+            Environment.SetEnvironmentVariable("GROK_PLUGIN_ROOT", Path.Combine(temp, "inherited-grok-plugin-root"));
+            Environment.SetEnvironmentVariable("GROK_HOME", Path.Combine(temp, "inherited-grok-home"));
+            try
+            {
+                await AssertGrokRunsIsolatedAsync().ConfigureAwait(true);
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable("GROK_PLUGIN_ROOT", previousPluginRoot);
+                Environment.SetEnvironmentVariable("GROK_HOME", previousGrokHome);
+            }
         }).ConfigureAwait(true);
+    }
+
+    private static async Task AssertGrokRunsIsolatedAsync()
+    {
+        var spawner = new RecordingSpawner(stdout: "ok");
+        var client = new CliBrainSlotChatClient(
+            spawner,
+            new NoopProcessEnvironmentService(),
+            new CliBrainSlotSessionStore(),
+            new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions
+            {
+                CliWorkingDirectory = @"Q:\__mcp_unit_test__\QBrainAi",
+            }),
+            NullLogger.Instance);
+
+        await client.CompleteAsync(GrokSlot(), "ping", temperature: null, TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+
+        var cwd = spawner.StartInfos[0].WorkingDirectory;
+        Assert.False(string.IsNullOrWhiteSpace(cwd));
+        Assert.Contains("grok-work", cwd, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain(@"Q:\__mcp_unit_test__\QBrainAi", cwd, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal(cwd, ArgumentAfter(spawner.StartInfos[0], "--cwd"));
+        Assert.Equal("0", spawner.StartInfos[0].Environment["GROK_AGENT_DASHBOARD"]);
+        Assert.Equal("0", spawner.StartInfos[0].Environment["GROK_MEMORY"]);
+        Assert.Equal("0", spawner.StartInfos[0].Environment["GROK_SUBAGENTS"]);
+        Assert.False(spawner.StartInfos[0].Environment.ContainsKey("GROK_PLUGIN_ROOT"));
+        Assert.False(spawner.StartInfos[0].Environment.ContainsKey("GROK_HOME"));
     }
 
     [Fact]
@@ -307,7 +336,13 @@ public sealed class CliBrainSlotStrategyTests
         Assert.Equal("working on it", CliBrainSlotChatClient.ExtractCodexAssistantText(jsonl));
     }
 
+    /// <summary>
+    /// TEST-MCP-QBCLI-001: Codex returns the assistant text from the JSONL stream, not the raw events. The test writes
+    /// the process environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test
+    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+    /// </summary>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task CompleteAsync_Codex_ReturnsAssistantTextFromJsonlNotRawEvents()
     {
         await WithIsolatedQuadbrainTemp(async temp =>
@@ -340,7 +375,13 @@ public sealed class CliBrainSlotStrategyTests
         }).ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// TEST-MCP-QBCLI-001: Codex prefers the JSONL assistant text over tool-call JSON in the output file. The test
+    /// writes the process environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test
+    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+    /// </summary>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task CompleteAsync_Codex_PrefersJsonlAssistantTextOverOutputFileToolCallJson()
     {
         await WithIsolatedQuadbrainTemp(async _ =>
@@ -370,19 +411,13 @@ public sealed class CliBrainSlotStrategyTests
         }).ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// TEST-MCP-QBCLI-001: the temp folder comes from the configured variable without the Windows service ACL. The
+    /// test writes the process environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test
+    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+    /// </summary>
     [Fact]
-    public void DefaultSharedTempDirectory_Windows_IsUnderCommonApplicationData()
-    {
-        if (!OperatingSystem.IsWindows())
-            return;
-
-        var directory = Path.GetFullPath(CliBrainSlotChatClient.DefaultSharedTempDirectory());
-        var common = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
-        Assert.StartsWith(common, directory, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("quadbrain-cli", directory, StringComparison.OrdinalIgnoreCase);
-    }
-
-    [Fact]
+    [Trait("Category", "Integration")]
     public async Task ResolveTempDirectory_HonorsConfiguredEnvVar_WithoutWindowsServiceAcl()
     {
         await WithIsolatedQuadbrainTemp(async temp =>
@@ -394,7 +429,13 @@ public sealed class CliBrainSlotStrategyTests
         }).ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// TEST-MCP-QBCLI-001: Grok writes its prompt file under the configured temp folder and points TEMP and TMP at it.
+    /// The test writes the process environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test
+    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+    /// </summary>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task CompleteAsync_Grok_WritesPromptFileUnderConfiguredTempAndSetsTempEnv()
     {
         await WithIsolatedQuadbrainTemp(async temp =>
@@ -427,7 +468,13 @@ public sealed class CliBrainSlotStrategyTests
         }).ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// TEST-MCP-QBCLI-001: Codex writes its output file under the configured temp folder. The test writes the process
+    /// environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test (TR-MCP-USECASE-018 AC-006,
+    /// TR-MCP-USECASE-019 AC-008).
+    /// </summary>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task CompleteAsync_Codex_WritesOutputFileUnderConfiguredTemp()
     {
         await WithIsolatedQuadbrainTemp(async temp =>
@@ -744,5 +791,25 @@ public sealed class CliBrainSlotStrategyTests
             StandardError.Dispose();
             _stdin.Dispose();
         }
+    }
+}
+
+/// <summary>
+/// TEST-MCP-QBCLI-001: the default shared CLI temp directory on a Windows host lives under the machine's
+/// common application data folder. Windows-only behavior, so an integration test on Windows hosts
+/// (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019).
+/// </summary>
+[Trait("Category", "Integration")]
+[Trait("Platform", "Windows")]
+public sealed class CliBrainSlotWindowsTempDirectoryTests
+{
+    /// <summary>The default shared temp directory is under CommonApplicationData and named for quadbrain-cli.</summary>
+    [Fact]
+    public void DefaultSharedTempDirectory_Windows_IsUnderCommonApplicationData()
+    {
+        var directory = Path.GetFullPath(CliBrainSlotChatClient.DefaultSharedTempDirectory());
+        var common = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
+        Assert.StartsWith(common, directory, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("quadbrain-cli", directory, StringComparison.OrdinalIgnoreCase);
     }
 }

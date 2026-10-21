@@ -1,0 +1,12 @@
+{
+  "TimestampUtc": "2026-10-20T01:14:02.8688795Z",
+  "TimestampLocal": "2026-10-19T20:14:02",
+  "Mode": "Read",
+  "Arguments": [
+    "docs/receipts/hv/hv-ug-r1-buildtests-20261019T200947.out.log"
+  ],
+  "Offset": 0,
+  "Count": 80,
+  "ExitCode": 0,
+  "Output": "FILE: docs/receipts/hv/hv-ug-r1-buildtests-20261019T200947.out.log; LINES: 0"
+}

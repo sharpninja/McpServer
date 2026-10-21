@@ -37,6 +37,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
         try { Directory.Delete(_tempDir, true); } catch { /* best-effort cleanup */ }
     }
 
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task WhenImportingJsonSessionLogThenSessionIsPersisted()
     {
@@ -219,6 +220,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
     /// AC-FR-MCP-SESSIONLOGCTX-001-007 / TEST-MCP-SESSIONLOG-006:
     /// ingest of omitted planFile/todoId persists extractor result or None, never null.
     /// </summary>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task Ingest_OmittedFields_PersistsExtractorResultOrNone()
     {
@@ -336,6 +338,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
 
     // --- Phase 4a: Markdown import tests ---
 
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task WhenImportingValidMarkdownThenSessionIsPersisted()
     {
@@ -381,6 +384,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
         Assert.Equal(0, result.Imported);
     }
 
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task WhenUpsertingMarkdownThenSessionIsUpdated()
     {
@@ -420,6 +424,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
         Assert.Contains("V2", stored!.Title, StringComparison.Ordinal);
     }
 
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task WhenImportingJsonAndMarkdownThenBothAreProcessed()
     {
