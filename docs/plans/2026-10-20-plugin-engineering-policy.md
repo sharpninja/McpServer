@@ -951,7 +951,7 @@ per job; oversize is Unknown/artifact_budget, never partial Pass.
 
 Canonical JSON shapes: CommandJson={executableId,argv:[]};
 ScopeJson={projectPaths:[],testIds:[],filter:string|null};
-ArtifactsJson=[{artifactId:sha256,kind:Trx|Pester|Stdout|Stderr|HvReceipt,
+ArtifactsJson=[{artifactId:sha256,kind:Trx|Pester|Stdout|Stderr|HvReceipt|EvalProtocol|EvalRunManifest|EvalResult,
 sha256,byteLength}]; ReviewRefsJson=[attestationId];
 CoverageJson=[{requirementId,acId,revision,testId,gateId,assertionKey}].
 ManifestJson={headSha,entries:[{path,mode,length,sha256,indexBlob,indexMode,deleted}]};
@@ -1684,8 +1684,9 @@ Add operator-only POST
 `/admin/engineering-policy/{workspaceId}/review-materializations`, mTLS policy
 EngineeringPolicyAdmin, client `CreateReviewMaterializationAsync`. Input:
 {subjectKind,subjectRef,reviewWorkspaceId}; references are Slice evidenceId/revision,
-Inventory proposed canonical inventory payload, Baseline proposed snapshot/diff
-reference, or Evaluation immutable harness-manifest artifact ID. Resolve the
+Inventory proposed canonical inventory payload, Baseline capture request (no
+preexisting snapshot required), or Evaluation harness-manifest artifact ID created
+by17.1. Resolve the
 subject using14.2's formulas, not a caller's claimed digest. No arbitrary path/URL.
 ReviewWorkspaceId must be registered with process None on this owner, outside
 all source roots, with empty materialization destinations (or identical ready
@@ -1697,7 +1698,7 @@ under that review workspace. Preserve15.3's repository directory layout. Recompu
 bundle/manifest/file hashes before Ready, enforce OS read-only access to reviewed
 bytes, and write `review-materialization.json` containing {schemaVersion:1,
 materializationId,subjectKind,subjectDigest,snapshotIds:[],bundleSha256s:[],
-reviewedDiffSha256:null|hash,reviewProfileDigest}. Secret-scan failure refuses
+reviewedDiffSha256:null|hash,reviewProfileDigest}. Known-live-credential scan failure (17.2) refuses
 materialization, never silently redacts bytes and retains their old digest.
 No automatic provider upload: operator launches the reviewer with the approved
 materialization/brief. This explicitly replaces the base rule that the implementing
@@ -1726,7 +1727,8 @@ Current plan-readiness packets before these runtime gates exist are explicitly
 outside this future attestation protocol, not claimed as deployed materializations.
 Tests: byte equality, before/after manifests, read-only enforcement, stale/missing/
 foreign materialization, mismatch refusal, idempotent destination and final-response
-receipt capture. No source-workspace credential is in the materialized packet.
+receipt capture. Known-live source/review credentials are refused; pattern-only
+findings remain visible for operator inspection under17.2, without byte redaction.
 
 ### 16.2 Format-support boundary and migration ownership
 
@@ -1774,3 +1776,80 @@ does not change.
 Round5: DISAGREE, confidence74, accuracy.95/completeness.93; four findings.
 Exact continued-review output is retained under claude-round-5. This revision
 addresses R5-01..04 for the next independent review, without changing thresholds.
+
+## 17. Round 6 contract completion
+
+### 17.1 Producing baseline, inventory and evaluation review inputs
+
+Baseline and Inventory review-materializations **capture** the registered checkout
+and inputRepositories using6/14.4: double capture, canonical hashes, budgets and
+persisted EngineeringSourceSnapshot row. They do not require an agent evidence
+revision or prior baseline attestation. For Baseline, oldSnapshotId is the current
+certified pointer or null; compute14.2's full diff and ReviewedDiffSha256 and put
+them in review-materialization.json. For Inventory, capture the proposed
+inventory's SourceInputs as context, explicitly outside its canonical inventory
+digest. This supports initial Inventory review before a certified baseline exists.
+RecordBaseline recaptures on adoption: SnapshotId and complete diff must reproduce
+the reviewed values, or409 engineering_baseline_conflict; do not silently adopt a
+later checkout. Owners: TurnReviews behavior and DESIGN surface, as16.1.
+
+Add operator-only POST
+`/admin/engineering-policy/{workspaceId}/evaluation-artifacts`, EngineeringPolicyAdmin
+mTLS, client `StoreEvaluationArtifactsAsync`.
+Request DTO: {operation:FreezeProtocol|RecordResults,protocolId,
+protocol:null|protocolJson,protocolSha256:null|hash,
+anonymousRunManifest:null|manifestJson,results:[]}. Result entries are
+{runId,resultJson,observableArtifactIds:[]}. FreezeProtocol requires protocol only,
+returns protocolArtifactId; RecordResults requires its stored hash, complete
+anonymous manifest/results and no replacement protocol. The embedded protocol/run/
+result documents follow the frozen fields/rubric of9/10; opaque existing artifact
+IDs reference raw observations, never caller paths/URLs. It content-addresses the frozen
+protocol, anonymous run manifest and result payloads as EvalProtocol,
+EvalRunManifest and EvalResult. Protocol-only requests freeze protocolId/hash before
+runs; later requests must reference that immutable protocol hash and cannot replace
+its bytes under the same ID. Result/manifest requests validate the frozen task/run/
+condition/rerun/model/build/settings schema of9/10/14/15, store result artifacts,
+then a harness manifest referencing protocol/results and anonymous run records.
+Return harnessManifestArtifactId (the EvalRunManifest SHA-256) when that complete
+packet exists. Standard size/count/hash/403/400/404/409 and unavailable-store503
+rules apply; incomplete packets cannot receive Evaluation attestation.
+
+Evaluation materialization source/ contains that **anonymized artifact packet**,
+not an invented repository snapshot: frozen protocol, anonymous run manifest,
+results and referenced observable artifacts. Keep the unblinding map outside the
+grader packet as13.5 requires. All referenced bytes/hashes are checked; SubjectDigest
+uses14.2's evaluation formula. Evaluation attestation is recorded in the source
+workspace **being activated**, while the grader's Chore turn belongs to its separate
+review workspace. TurnReviews owns storage/handler behavior; DESIGN the management
+surface, SharedComponents the DTOs. No agent-facing upload/approval tool is added.
+Tests: clean bootstrap with no evidence/baseline, Inventory context capture,
+Baseline mutation-before-adoption refusal, frozen protocol immutability, complete
+evaluation packet creation/materialization, missing results and correct attestation
+workspace. These operations supply the references used by16.1.
+
+### 17.2 Exact live-credential refusal and fixture-safe findings
+
+The refusing materialization scan uses **exact matches** against the owner's known
+live credential values: active source and review workspace marker/API keys, plus
+other already-configured live secret values from the owner's credential providers.
+Obtain this set in broker memory from existing trusted auth/secret services;
+never discover/read unrelated credential files, place secrets in manifests or
+audit their values/hashes. Empty values are ignored. A match refuses409
+review_materialization_sensitive, reporting path and rule ID only, never the
+matched value. The broker snapshots/rechecks the active credential-catalog revision
+before Ready so a rotation cannot silently invalidate the scan.
+
+Reuse base SecretRedactor's **pattern** rules only for non-blocking findings in
+review-materialization.json: secretScanFindings=[{path,ruleId}]. Do not redact or
+change reviewed bytes, and do not refuse merely because a fake redaction fixture
+resembles a credential. This mirrors the base receipt check against current marker
+keys. Ready certifies integrity and this known-live check, not exhaustive detection
+of every possible unknown secret; operator inspects the approved packet/findings
+before launching any provider review. No automatic upload is introduced. Tests:
+fixture-bearing repo succeeds with findings and identical bytes; a known live key
+is refused without disclosure; key rotation reruns/refuses; no credential-file
+discovery or secret value is recorded in output/audit.
+
+Round6: DISAGREE, confidence80, accuracy.97/completeness.95; two findings.
+Exact output retained under claude-round-6. These R6-01/R6-02 resolutions await
+independent confirmation under unchanged claims and thresholds.

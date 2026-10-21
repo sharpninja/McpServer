@@ -1,0 +1,194 @@
+{
+  "Receipt": {
+    "TimestampUtc": "2026-10-21T00:00:00Z",
+    "ValidatorIdentity": "ClaudeIndependentHostile",
+    "RequestedAgent": "ClaudeCode",
+    "RequestedModel": "claude-opus-5-5",
+    "RequestedEffort": "max",
+    "ReviewStage": "PlanReadiness",
+    "ReviewedCommit": "d3371a5f3daf8ff58c96feec9647d4ba689d1b89",
+    "PlanSha256": "EDE98A25B693363EC9DEAB37783D0839A71F5764FF31A8002513B55A4BCFFDCD",
+    "OverallVerdict": "DISAGREE",
+    "verdict": "NOT-READY",
+    "confidence": 80,
+    "AccuracyScore": 0.97,
+    "CompletenessScore": 0.95,
+    "Counts": {
+      "PASS": 7,
+      "FAIL": 5,
+      "UNKNOWN": 0
+    },
+    "Claims": [
+      {
+        "Id": "C1",
+        "Summary": "Scope, intent, precedence, full enforcement, default-on guidance, nine hosts and their limits",
+        "Verdict": "PASS",
+        "Evidence": [
+          "plan §1 L8-42: shared policy with authoritative server enforcement, guidance on by default, nine hosts, explicit precedence, no model authority over administrative gates",
+          "plan §3 L96-120 and §11 L640-643: compatible-deploy defaults, operator-only process selection, staged activation",
+          "plan §5 L290-319: nine adapter rows with limits; nine passing rows required for final acceptance"
+        ]
+      },
+      {
+        "Id": "C2",
+        "Summary": "Architecture dependencies explicit, compatible, owned and ordered; planned versus implemented types distinguished",
+        "Verdict": "PASS",
+        "Evidence": [
+          "plan §1 L22-37 separates the existing ValidateTerminalTurnCompliance (verified in round 4; source hash unchanged) from planned foundations",
+          "§9 L541-544 now limits this plan's StorageSchema to engineering tables, and §16.2 L1733-1735 makes the Format column, backfill and DTO a single base prerequisite. This resolves R5-02's ownership contradiction",
+          "§15.1 L1478-1481 and §16.1 L1702-1707 explicitly amend the base HV protocol, now including who launches the reviewer and how it emits its receipt. §16.1 L1713-1714 assigns owners for the materialization behavior, entity and surface"
+        ]
+      },
+      {
+        "Id": "C3",
+        "Summary": "Canonical policy, provenance, version/hash, attribution, locations, distribution and integrity",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§2 L46-89 is unchanged. sync-plugin-core.ps1 L115-151 distributes lib-ps/policy byte-identically with hashes. The PowerShell-only rules are acknowledged at L88-89, and §14.2 L1086-1088 bans en/em dashes in the asset"
+        ]
+      },
+      {
+        "Id": "C4",
+        "Summary": "Configuration, selection, reload/default/disabled behavior, phase selection and status",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§3 L93-138, §13.1 L691-711 and §14.5 L1236-1344 define typed settings, generation and manifest format. §15.4 L1617-1637 defines the manifest channel, its lifecycle and error codes, and plugin status selection"
+        ]
+      },
+      {
+        "Id": "C5",
+        "Summary": "PowerShell delivery, adapters, dedupe, compaction/stateless, mandatory context, deadlines, unavailable behavior",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§5 L279-335, §13.4 L898-920 and §14.7 L1423-1435 are unchanged (consistent with base §3.1 L221). §15.4 L1632-1637 keeps plugin status read-only and per host session"
+        ]
+      },
+      {
+        "Id": "C6",
+        "Summary": "Public evidence models, endpoints/tool/client/REPL, persistence and migration rules",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "§16.1 L1683-1729 adds the review-materializations endpoint, client, entity, errors and ArtifactRefs shape. §15.4 L1605-1615 with §16.3 L1751-1756 define ingressReplay. §13.3 L819/L828 with §16.3 L1758-1762 define SupersedesAttestationIdsJson. Together these resolve R5-01's interface gap, R5-03 and R5-04a",
+          "FAIL: §16.1 L1687-1688 accepts a 'Baseline proposed snapshot/diff reference' and an 'Evaluation immutable harness-manifest artifact ID', but no operation creates either one. The ArtifactsJson kinds (§13.4 L954) cover no evaluation artifacts (R6-01)"
+        ]
+      },
+      {
+        "Id": "C7",
+        "Summary": "Completion gate covers writers, terminal states, classes, origins, atomic rejection and authentic evidence",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§15.2 L1498-1530 and §16.3 L1758-1772 define subject lookup, newest non-superseded AGREE with no unresolved DISAGREE, plural supersession, same-turn evidence and TODO re-preflight. The failure-memory tuple is authoritative and now matches §14.1 L1026-1029 (resolves R5-04)",
+          "Baseline reuse validates under the current Slice profile, which carries all four baseline claims (§14.3 L1143-1144; §15.1 L1487; §16.3 L1763-1766)",
+          "§8 L490-523, §13.3 L861-894 and §14.1 L1054-1069 are unchanged and consistent"
+        ]
+      },
+      {
+        "Id": "C8",
+        "Summary": "Snapshots, working-copy changes, freshness, scope, raw verification and coverage",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "§16.1 L1694-1701 writes exact read-only source/ and before/ through the §14.4 materializer, recomputes hashes and writes a manifest, keeping the §15.3 layout (resolves R5-01's core gap)",
+          "FAIL: nothing defines how a Baseline proposal's snapshot is captured. Capture currently happens only at agent evidence creation, validation jobs, completion preflight, or RecordBaseline, which itself requires the attestation (§13.1 L727-736). §13.3 L836 assumes a 'captured snapshot/diff'. What source/ contains for Inventory and Evaluation reviews is also unstated (R6-01)",
+          "FAIL: §16.1 L1700-1701 refuses on a secret scan whose semantics are never defined (R6-02)"
+        ]
+      },
+      {
+        "Id": "C9",
+        "Summary": "BDPv4 traceability, test-first ordering, cumulative gates, executable named validations",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§9 L527-593, §13.2 L770-780, §14.6 L1348-1372 and §15.3 L1541-1601 are unchanged and executable. Build.Test.cs L27-37 confirms TestRunId-driven TRX output"
+        ]
+      },
+      {
+        "Id": "C10",
+        "Summary": "Failure recovery, legacy compatibility, rollout, rollback and configuration ownership",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "§16.2 L1733-1747 defines format-aware as capability>=1 from package metadata and refuses rollback to capability-0 targets, with tests (resolves R5-02). §16.3 resolves the replay rule (R5-03)",
+          "FAIL: enforcement cannot be enabled without an approved baseline (§14.5 L1243-1244; §13.3 L834-839), and adoptions other than Slice reuse need a Baseline HV (§15.1 L1488-1490). No operator path captures the proposed snapshot, so bootstrap and post-merge adoption are not implementable as written (R6-01)"
+        ]
+      },
+      {
+        "Id": "C11",
+        "Summary": "Bounded evaluation and independent review with honest evidence",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "§13.5, §14.3 and §15.5 L1641-1647 keep the evaluation bounded, with its contamination rule. §16.1 L1702-1707 defines how the receipt is emitted and captured",
+          "FAIL: the Evaluation review references a harness-manifest artifact that no operation stores (R6-01). An undefined secret scan could refuse every review of this repository (R6-02)"
+        ]
+      },
+      {
+        "Id": "C12",
+        "Summary": "No consequential choice left to implementers; implementation behind approvals",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "Approvals are retained: Status L3-4, §14.7 L1447-1449, §16.1 L1725-1726",
+          "FAIL: R6-01 and R6-02 still leave decisions to implementers"
+        ]
+      }
+    ],
+    "FailList": [
+      {
+        "Id": "R6-01",
+        "Severity": "Medium",
+        "Location": "plan §16.1 L1683-1700; §13.3 L820-821, L826-828, L834-839; §13.1 L727-736; §14.2 L1129-1133; §13.4 L954; §13.5 L990-997; §14.5 L1243-1244",
+        "Trigger": "Bootstrap or non-reuse baseline adoption, any Inventory review, and the activation-blocking Evaluation review",
+        "Problem": "§16.1 materializes subjects from a 'Baseline proposed snapshot/diff reference' and an 'Evaluation immutable harness-manifest artifact ID', but no operation creates either. Snapshots are captured only by agent evidence, jobs, completion preflight, or RecordBaseline, and RecordBaseline already requires the attestation. No operator operation stores the evaluation protocol, run manifest or results, and the artifact kinds lack them. The plan also never says which snapshot becomes source/ for an Inventory review, or what the Evaluation source/ packet contains",
+        "Consequence": "The approved baseline that enforcement requires, post-merge adoptions and the evaluation attestation cannot be produced without invented interfaces",
+        "RequiredResolution": "In §16.1, Baseline and Inventory materializations capture the registered checkout and inputRepositories through §6/§14.4 (double capture, budgets) and persist the snapshot row. For Baseline, oldSnapshotId is the current certified pointer or null, and the §14.2 diff and ReviewedDiffSha256 go into the manifest. For Inventory, the snapshot is review context only, outside the inventory digest. RecordBaseline recaptures and must reproduce the same SnapshotId and diff, otherwise 409 engineering_baseline_conflict. Add operator-only POST /admin/engineering-policy/{workspaceId}/evaluation-artifacts (mTLS) that stores the frozen protocol, anonymous run manifest and results content-addressed under new kinds EvalProtocol, EvalRunManifest and EvalResult, and returns the harness-manifest artifact ID. The Evaluation source/ is that anonymized packet, and the attestation is recorded on the workspace being activated. Owners: TurnReviews and DESIGN. Add tests"
+      },
+      {
+        "Id": "R6-02",
+        "Severity": "Low",
+        "Location": "plan §16.1 L1700-1701, L1715-1718, L1729; base arch §3 L87 (SecretRedactor); base plan L198 (marker-key scan)",
+        "Trigger": "Materializing a repository whose tracked tests or fixtures contain credential-shaped strings, such as redaction test fixtures",
+        "Problem": "A secret-scan failure refuses materialization (409 sensitive), but the scanner, its rules and the credential set are never defined. Reusing the base pattern-based SecretRedactor would flag fake fixture credentials, and the plan offers no allowlist or acknowledgement path",
+        "Consequence": "If implementers choose a pattern scan, reviews of this repository could be refused permanently, blocking every SliceExit",
+        "RequiredResolution": "Define the refusing scan as exact matching against the owner's known live credentials (source and review workspace marker/API key values and other configured secret values), mirroring the base receipt rule of scanning against current marker keys. Record pattern-only hits as non-blocking manifest findings (path and rule) without redaction. Add a test with a fixture-bearing repository and a test that a live key is refused"
+      }
+    ],
+    "blocking_gaps": [
+      "1 R6-01 Medium: no operation captures the proposed snapshot for Baseline/Inventory reviews or stores evaluation harness artifacts that §16.1 materializations reference",
+      "2 R6-02 Low: the secret scan that refuses materialization is undefined, and a pattern-based reading could refuse every review"
+    ],
+    "defects": [
+      "§16.1 L1687-1688 Baseline and Evaluation subjectRefs point to snapshots and artifacts that no operation creates; §13.3 L836's 'captured snapshot/diff' has no capturing operation",
+      "§16.1 L1700-1701 and L1717-1718 refuse on a secret scan that is never defined"
+    ],
+    "path_to_threshold": [
+      "1 R6-01: §16.1 Baseline/Inventory materialization captures the snapshot (§6/§14.4), and RecordBaseline requires the recapture to match. Add the evaluation-artifacts admin operation with new artifact kinds, define the Evaluation source/ packet and the workspace that holds its attestation. Add owners and tests",
+      "2 R6-02: refuse only on exact matches to known live credentials; record pattern hits as non-blocking findings. Add tests",
+      "3 These two edits cover every consequential gap found in this pass. With them in place and no new contradictions introduced, all 12 claims are projected to PASS"
+    ],
+    "R5ResolutionCheck": {
+      "Resolved": [
+        "R5-01",
+        "R5-02",
+        "R5-03",
+        "R5-04"
+      ],
+      "NewFindings": {
+        "R6-01": "The Baseline-capture part was latent since §13.3's bootstrap text; I did not flag it in earlier rounds. §16.1's explicit subjectRef list exposes it and adds the Evaluation-artifact part",
+        "R6-02": "Introduced by §16.1's secret-scan refusal"
+      }
+    },
+    "Limitations": [
+      "This was a read-only review of the round-6 packet. No build, test or product code was executed, and no executed check is claimed",
+      "SHA-256 values were not recomputed; the commit and PlanSha256 come from the manifest",
+      "Base and source files were not re-read. Their manifest hashes are identical to rounds 4 and 5, so those reads were reused",
+      "Whether repository fixtures actually contain credential-shaped strings could not be checked, because test sources are outside the packet. R6-02 is therefore framed as an undefined decision with a plausible blocking consequence",
+      "Files outside the packet were not inspected: build.ps1, Build.UpdateService.cs, TodoExecutionService, the requirement entities, resolve-cache-dir.ps1, and the --gate-started-at-utc parameter",
+      "TimestampUtc carries the session date only; the coordinator confirms runtime identity"
+    ],
+    "CommandsExecuted": [
+      "Read round-6 review-manifest.json",
+      "Read the round-6 plan L1-1777 (complete)",
+      "Grep the round-6 plan for captur (case-insensitive)",
+      "Grep the round-6 plan for secret|redact|sensitive",
+      "Grep the round-6 plan for harness|artifact ID|artifactId|upload",
+      "Reused round-4/5 reads of the hash-identical base architecture, base plan, and build, plugin and src sources"
+    ]
+  },
+  "MarkdownReceipt": "# Claude independent hostile receipt: plan readiness, round 6\n\n**Identity:** ClaudeIndependentHostile, a continued independent reviewer session separate from the Codex author. Requested: ClaudeCode / claude-opus-5-5 / max.\n**Snapshot:** commit d3371a5f3daf8ff58c96feec9647d4ba689d1b89; plan SHA-256 EDE98A25B693363EC9DEAB37783D0839A71F5764FF31A8002513B55A4BCFFDCD (manifest value). I read the plan in full (L1-1777). Source hashes are unchanged, so earlier source reads were reused.\n**Verdict:** DISAGREE / NOT-READY. Accuracy 0.97, completeness 0.95, confidence 80. Claims: 7 PASS (C1, C2, C3, C4, C5, C7, C9), 5 FAIL (C6, C8, C10, C11, C12).\n\nAll four round-5 findings are resolved. Two new gaps remain, both in the §16.1 review-materialization contract.\n\n## Findings\n\n**R6-01 Medium: Baseline/Inventory review snapshots and evaluation artifacts have no creating operation.** §16.1 L1687-1688 materializes a 'Baseline proposed snapshot/diff reference' and an 'Evaluation immutable harness-manifest artifact ID'. Nothing creates either one:\n- Snapshots are captured only by agent evidence, validation jobs, completion preflight, or RecordBaseline, and RecordBaseline already requires the attestation (§13.1 L727-736). §13.3 L836's 'captured snapshot' has no capturing operation.\n- No operator operation stores evaluation protocols, run manifests or results, and the ArtifactsJson kinds (§13.4 L954) cover none of them.\n- The plan never says which snapshot becomes source/ for an Inventory review, or what the Evaluation source/ packet contains.\n\nAs a result, the bootstrap baseline that enforcement requires (§14.5 L1243-1244), post-merge adoptions and the evaluation attestation cannot be produced. This gap was latent in earlier rounds and I missed it; §16.1's explicit subject-reference list exposes it.\n\n*Fix:*\n- Baseline/Inventory materialization captures the checkout and input repositories via §6/§14.4 and persists the snapshot. For Baseline, the old snapshot is the certified pointer and the manifest records the diff and ReviewedDiffSha256.\n- RecordBaseline recaptures and must match, otherwise 409 engineering_baseline_conflict.\n- Add an operator-only evaluation-artifacts admin operation with new artifact kinds. Define the Evaluation source/ packet and the workspace that holds its attestation. Add owners and tests.\n\n**R6-02 Low: the secret scan is undefined.** §16.1 L1700-1701 refuses materialization when a secret scan fails but defines no scanner, rules or credential set. Reusing the pattern-based SecretRedactor (base arch §3 L87) could flag fixture credentials and permanently refuse reviews of this repository, with no allowlist or acknowledgement path.\n\n*Fix:* refuse only on exact matches to known live credentials (source and review marker/API keys and other configured secrets), mirroring the marker-key scan at base plan L198. Record pattern hits as non-blocking findings without redaction. Add tests.\n\n## Round-5 verification\n- **R5-01:** resolved by §16.1 (endpoint, entity, errors, materializationId binding, operator launch, VERDICT-block receipt, explicit base-protocol amendment).\n- **R5-02:** resolved by §9 L541-544 and §16.2 (capability>=1 boundary, package metadata, refusal to capability-0 targets).\n- **R5-03:** resolved by §15.4 and §16.3 (ingressReplay object; top-level boundAtUtc is 400).\n- **R5-04:** resolved by §13.3, §14.1, §14.3, §15.1, §15.2 and §16.3 (supersession ID array, four-claim Slice profile, authoritative failure-memory tuple).\n\n## Claim verdicts\n- **C1 PASS:** §1, §3, §5, §11.\n- **C2 PASS:** §1 L22-37; §9 L541-544; §15.1 and §16.1 amendments and owners.\n- **C3 PASS:** §2 is unchanged and matches sync-plugin-core.ps1.\n- **C4 PASS:** §3, §13.1, §14.5, §15.4.\n- **C5 PASS:** §5, §13.4, §14.7, §15.4.\n- **C6 FAIL:** R6-01 (missing interfaces and artifact kinds).\n- **C7 PASS:** §15.2 and §16.3 bindings, consistent with §14.1.\n- **C8 FAIL:** R6-01 and R6-02.\n- **C9 PASS:** §9, §13.2, §14.6, §15.3.\n- **C10 FAIL:** no bootstrap or adoption capture path (R6-01).\n- **C11 FAIL:** evaluation artifacts (R6-01) and the scan risk (R6-02).\n- **C12 FAIL:** approvals are retained, but R6-01 and R6-02 remain open.\n\n## Path to threshold\nApply the two fixes above, then run a fresh review. No other consequential gap was found. With these fixes and no new contradictions introduced, all 12 claims are projected to PASS.\n\n## Limitations\n- Read-only review; no execution or hash recomputation.\n- Base and source files were reused from earlier rounds because their hashes are unchanged.\n- Whether repository fixtures contain credential-shaped strings could not be checked, because test sources are outside the packet.\n- TimestampUtc carries the session date only.\n\n## Commands\nRead and Grep only, as listed in Receipt.CommandsExecuted. No shell, build or test commands were run."
+}
