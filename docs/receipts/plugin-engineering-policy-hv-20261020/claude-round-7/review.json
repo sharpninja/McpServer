@@ -1,0 +1,178 @@
+{
+  "Receipt": {
+    "TimestampUtc": "2026-10-21T00:00:00Z",
+    "ValidatorIdentity": "ClaudeIndependentHostile",
+    "RequestedAgent": "ClaudeCode",
+    "RequestedModel": "claude-opus-5-5",
+    "RequestedEffort": "max",
+    "ReviewStage": "PlanReadiness",
+    "ReviewedCommit": "1c21bc5ab1653c09a7681f68fe6de7a7e981906e",
+    "PlanSha256": "F9EBC2EEF5BEBD42CB5D5271FB205848572AA4FF398857FD87B719112A706ED7",
+    "OverallVerdict": "DISAGREE",
+    "verdict": "NOT-READY",
+    "confidence": 86,
+    "AccuracyScore": 0.97,
+    "CompletenessScore": 0.97,
+    "Counts": {
+      "PASS": 10,
+      "FAIL": 2,
+      "UNKNOWN": 0
+    },
+    "Claims": [
+      {
+        "Id": "C1",
+        "Summary": "Scope, intent, precedence, full enforcement, default-on guidance, nine hosts and limits",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§1 L8-42; §3 L96-120; §5 L290-319; §11 L640-643. All unchanged and consistent"
+        ]
+      },
+      {
+        "Id": "C2",
+        "Summary": "Dependencies explicit, compatible, owned and ordered; planned versus implemented types distinguished",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§1 L22-37 (the distinction was verified against SessionLogService.cs earlier; its hash is unchanged)",
+          "Owners and merge order: §9 L541-557, §13.4 L922-932, §14.7 L1437-1449, §15.5 L1666-1673, §16.1 L1714-1715, §17.1 L1794 and L1822-1824",
+          "Explicit base-HV protocol amendments: §15.1 L1478-1481, §16.1 L1703-1708"
+        ]
+      },
+      {
+        "Id": "C3",
+        "Summary": "Canonical policy, provenance, version/hash, distribution and integrity",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§2 L46-89 is unchanged. sync-plugin-core.ps1 L115-151 copies lib-ps/policy with hashes; PowerShell-only rules are acknowledged (L88-89); §14.2 L1086-1088 bans en/em dashes"
+        ]
+      },
+      {
+        "Id": "C4",
+        "Summary": "Configuration, selection, reload/default/disabled, phase selection, status",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§3 L93-138, §13.1 L691-711, §14.5 L1236-1344, §15.4 L1617-1637"
+        ]
+      },
+      {
+        "Id": "C5",
+        "Summary": "Delivery, adapters, dedupe, compaction/stateless, mandatory context, deadlines, unavailable behavior",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§5 L279-335, §13.4 L898-920, §14.7 L1423-1435 and §15.4 L1632-1637 are unchanged and consistent with base §3.1 L221"
+        ]
+      },
+      {
+        "Id": "C6",
+        "Summary": "Public models, endpoints/tool/client/REPL, persistence, migration",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§17.1 L1796-1815 adds the evaluation-artifacts endpoint (mTLS), client, two-mode DTO, content addressing, immutability, return ID and error rules. §13.4 L954 ArtifactsJson kinds now include EvalProtocol, EvalRunManifest and EvalResult (resolves R6-01's interface part)",
+          "§16.1 L1687-1689 now references the Baseline capture request and the 17.1-created harness ID. Earlier contracts (§4, §7, §13-§16) remain consistent",
+          "Advisory only: the persisted protocolId-to-hash binding has no named table, but the immutability invariant and its 409 behavior are specified"
+        ]
+      },
+      {
+        "Id": "C7",
+        "Summary": "Completion gate writers, states, classes, origins, atomicity, authentic evidence",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§8 L490-523, §13.3 L861-894, §14.1 L1018-1069, §15.2 L1498-1530 and §16.3 L1760-1774 are unchanged and consistent"
+        ]
+      },
+      {
+        "Id": "C8",
+        "Summary": "Snapshots, freshness, scope, raw verification, coverage, review sources",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§17.1 L1784-1794: Baseline and Inventory materializations double-capture the checkout and input repositories within budgets and persist the snapshot. No prior evidence or attestation is needed. The Baseline uses the old pointer (or null) and the full §14.2 diff; RecordBaseline recaptures and must match exactly, otherwise 409 (resolves R6-01)",
+          "§17.2 L1832-1851: refusal is exact matching against known live credentials held in broker memory; pattern hits are non-blocking findings; no redaction; credential-catalog recheck; the 'Ready' state is honestly bounded (resolves R6-02). The 16.1 wording is corrected at L1701-1702 and L1730-1731"
+        ]
+      },
+      {
+        "Id": "C9",
+        "Summary": "Traceability, test-first ordering, cumulative gates, executable validations",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§9 L527-593, §13.2 L770-780, §14.6 L1348-1372 and §15.3 L1541-1601 are unchanged; Build.Test.cs L27-37 confirms TestRunId-driven TRX output"
+        ]
+      },
+      {
+        "Id": "C10",
+        "Summary": "Recovery, legacy compatibility, rollout, rollback, configuration ownership",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§17.1 L1789-1793 and L1825-1828 now give a bootstrap path: an Inventory review capture before any baseline exists, then a Baseline capture, then a matching recapture. §14.5 L1243-1244 activation preconditions are now reachable. §16.2 sets the rollback capability boundary; §15.4 covers replay and config; §11 and §14.6 cover census and rollback"
+        ]
+      },
+      {
+        "Id": "C11",
+        "Summary": "Bounded evaluation and independent review with honest evidence",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "§10, §13.5, §14.3, §15.5 and §17.1 L1817-1828 bound the evaluation, store a frozen, anonymized packet, and record the attestation workspace",
+          "FAIL: the grader must be condition-blind and receive only task, rubric and observable outcomes (§10 L614; §13.5 L993-994). However, it runs as a plugin-enabled Claude Code session with its own Chore turn in a review workspace on the owner (§15.1 L1463-1471; §16.1 L1691; §17.1 L1822-1823). GuidanceEnabled is instance-only (§3 L96), and the policy is delivered on every prompt (§5 L280-281), so the grader receives the treatment text itself. §15.1 L1472 also applies the global/operator profile to grader sessions (R7-01)"
+        ]
+      },
+      {
+        "Id": "C12",
+        "Summary": "No consequential choice left to implementers; implementation behind approvals",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "Approvals are retained: Status L3-4, §14.7 L1447-1449, §16.1 L1726-1727",
+          "FAIL: R7-01 leaves the grader's context control to implementers"
+        ]
+      }
+    ],
+    "FailList": [
+      {
+        "Id": "R7-01",
+        "Severity": "Medium",
+        "Location": "plan §10 L614; §13.5 L990-997; §15.1 L1463-1473; §16.1 L1691; §17.1 L1817-1823; §3 L96; §5 L279-282",
+        "Trigger": "Grading the 72-run evaluation (activation-blocking) in a review workspace on the owner instance",
+        "Problem": "The plan promises a condition-blind grader that receives only the task, rubric and observable outcomes. But the grader must be a plugin-enabled session that records its own Chore turn, in a review workspace on the owner where GuidanceEnabled is instance-wide and default-on. No per-workspace suppression exists, so every grader prompt carries the engineering-policy baseline/activity text, which is the treatment being evaluated. §15.1 also explicitly applies the global/operator profile context to graders",
+        "Consequence": "The grader is primed with the intervention, contradicting the stated blinding and the honesty of the gating evidence. Implementers must improvise whether and how to suppress it",
+        "RequiredResolution": "Specify that Evaluation grader review workspaces carry an operator-signed EngineeringGuidanceSuppressed=true, valid only with DevelopmentProcess=None and SubjectKind Evaluation. Status then reports guidanceEnabled=false for that workspace and the plugin records Disabled; HV review workspaces are unchanged. Grading is infrastructure-invalid unless every grader prompt's ledger outcome is Disabled, under the single paired-rerun rule. Reconcile §13.5 with §15.1: grader context is the task, rubric and observable outcomes plus an operator profile that does not describe the evaluated policy, conditions or fixtures. Add a test that a policy canary never reaches the grader context"
+      }
+    ],
+    "blocking_gaps": [
+      "1 R7-01 Medium: the Evaluation grader receives default-on engineering-policy guidance, contradicting condition-blind grading on 'task, rubric and observable outcomes only'"
+    ],
+    "defects": [
+      "§13.5 L993-994 ('only' task/rubric/outcomes) and §10 L614 (condition-blind) contradict instance-only GuidanceEnabled (§3 L96) plus per-prompt delivery (§5 L280-281) into the plugin-enabled grader review workspace (§15.1, §16.1 L1691, §17.1 L1822-1823). §15.1 L1472 also adds the global/operator profile to grader sessions"
+    ],
+    "path_to_threshold": [
+      "1 R7-01: add per-workspace EngineeringGuidanceSuppressed for Evaluation grader workspaces only, mark grading invalid unless every grader ledger outcome is Disabled, reconcile §13.5 with §15.1 on grader context, and add a canary test",
+      "2 This is the only consequential gap found. With this edit and no new contradictions introduced, all 12 claims are projected to PASS"
+    ],
+    "R6ResolutionCheck": {
+      "Resolved": [
+        "R6-01",
+        "R6-02"
+      ],
+      "NewFindings": {
+        "R7-01": "Latent since §15.1 (round 5) placed graders in plugin-enabled owner review workspaces; I did not flag it in rounds 5-6"
+      }
+    },
+    "NonBlockingObservations": [
+      "§17.1 needs a durable protocolId-to-hash binding but names no table; the invariant and the 409 on replacement are specified, so storage form is an implementation detail",
+      "observableArtifactIds may reference only artifacts already in the owner store; observations from the isolated evaluation instances would be embedded in resultJson",
+      "Both the server-built harness manifest and the caller's anonymous run manifest map to the EvalRunManifest kind; the server computes the §14.2 subject internally, so naming does not affect correctness"
+    ],
+    "Limitations": [
+      "This was a read-only review of the round-7 packet. No build, test or product code was executed, and no executed check is claimed",
+      "SHA-256 values were not recomputed; the commit and PlanSha256 come from the manifest",
+      "Base and source files were not re-read. Their manifest hashes are identical to rounds 4-6, so those reads were reused",
+      "R7-01 rests on the plan's own statements: hooks are required for the grader's turn, GuidanceEnabled is instance-only, and delivery happens on every prompt. Real host behavior was not executed",
+      "Files outside the packet were not inspected: build.ps1, Build.UpdateService.cs, TodoExecutionService, the requirement entities, resolve-cache-dir.ps1, and the gate-started-at-utc parameter",
+      "TimestampUtc carries the session date only; the coordinator confirms runtime identity"
+    ],
+    "CommandsExecuted": [
+      "Read round-7 review-manifest.json",
+      "Read the round-7 plan L1-1856 (complete)",
+      "Grep the round-7 plan for grader|Grader",
+      "Grep the round-7 plan for GuidanceEnabled|guidanceEnabled|Guidance disable|per-workspace|Workspaces:<name>",
+      "Reused round-4 to round-6 reads of the hash-identical base, build, plugin and src sources"
+    ]
+  },
+  "MarkdownReceipt": "# Claude independent hostile receipt: plan readiness, round 7\n\n**Identity:** ClaudeIndependentHostile, a continued independent reviewer session separate from the Codex author. Requested: ClaudeCode / claude-opus-5-5 / max.\n**Snapshot:** commit 1c21bc5ab1653c09a7681f68fe6de7a7e981906e; plan SHA-256 F9EBC2EEF5BEBD42CB5D5271FB205848572AA4FF398857FD87B719112A706ED7 (manifest value). I read the plan in full (L1-1856). Source hashes are unchanged.\n**Verdict:** DISAGREE / NOT-READY. Accuracy 0.97, completeness 0.97, confidence 86. Claims: 10 PASS, 2 FAIL (C11, C12).\n\nBoth round-6 findings are resolved. One finding remains: it was latent since round 5 and I missed it earlier.\n\n## Finding\n\n**R7-01 Medium: the evaluation grader is exposed to the policy it is grading.** The plan promises a condition-blind grader that receives only the task, rubric and observable outcomes (§10 L614; §13.5 L993-994). However:\n- The grader must be a plugin-enabled Claude Code session that records its own Chore turn, in a review workspace on the owner (§15.1 L1463-1471; §16.1 L1691; §17.1 L1822-1823).\n- GuidanceEnabled is an instance-only, default-on setting (§3 L96), and the policy is delivered on every prompt (§5 L280-281).\n- So every grader prompt carries the engineering-policy baseline and activity text, which is the treatment under evaluation.\n- §15.1 L1472 also applies the global/operator profile to grader sessions.\n\nThis contradicts the stated blinding of an activation-blocking evaluation and leaves suppression to implementers.\n\n*Fix:*\n- Add an operator-signed EngineeringGuidanceSuppressed flag for Evaluation grader review workspaces only (DevelopmentProcess=None). Status then reports guidanceEnabled=false and the plugin records Disabled; HV review workspaces are unchanged.\n- Treat grading as infrastructure-invalid unless every grader prompt's ledger outcome is Disabled, under the single paired-rerun rule.\n- Reconcile §13.5 with §15.1: grader context is the task, rubric and outcomes plus an operator profile that does not describe the evaluated policy, conditions or fixtures.\n- Add a test that a policy canary never reaches the grader context.\n\n## Round-6 verification\n- **R6-01 resolved:** §17.1 has Baseline/Inventory materializations capture snapshots directly (double capture, budgets, persisted row), with a bootstrap path that needs no prior evidence. RecordBaseline recaptures and must match exactly, otherwise 409. A new mTLS evaluation-artifacts operation has a two-mode DTO, an immutable frozen protocol and new artifact kinds (§13.4 L954). The Evaluation source/ is the anonymized packet, and the attestation is recorded on the workspace being activated. §16.1 references are corrected.\n- **R6-02 resolved:** §17.2 refuses only on exact matches to known live credentials, read in broker memory with a catalog recheck. Pattern hits are non-blocking findings, bytes are never redacted, and 'Ready' is honestly bounded. The 16.1 wording is corrected.\n\n## Claim verdicts\n- **C1-C10 PASS.** Notably: C6 (17.1 endpoint, DTO and kinds), C8 (17.1 capture, 17.2 scan), C10 (bootstrap and adoption path now exist).\n- **C11 FAIL:** R7-01.\n- **C12 FAIL:** R7-01 leaves a validation-design choice open.\n\n## Non-blocking observations\n- The protocolId-to-hash binding has no named table, though its invariant is specified.\n- Evaluation observations would be embedded in resultJson.\n- The harness manifest and the anonymous run manifest share the EvalRunManifest kind.\n\n## Path to threshold\nApply the R7-01 fix above. No other consequential gap was found. With this edit and no new contradictions introduced, all 12 claims are projected to PASS.\n\n## Limitations\n- Read-only review; no execution or hash recomputation.\n- Hash-identical base and source reads were reused from earlier rounds.\n- R7-01 relies on the plan's own statements about hooks and instance-wide guidance; real host behavior was not executed.\n- TimestampUtc carries the session date only.\n\n## Commands\nRead and Grep only, as listed in Receipt.CommandsExecuted. No shell, build or test commands were run."
+}

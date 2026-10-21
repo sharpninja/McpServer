@@ -93,7 +93,9 @@ and path restrictions; design documentation is not copied as runtime instruction
 Validated `EngineeringPolicyOptions`, canonical `QBrainAi:EngineeringPolicy`
 projected onto `Mcp:EngineeringPolicy`:
 
-- `GuidanceEnabled`: instance bool, default true.
+- `GuidanceEnabled`: instance bool, default true. Effective workspace guidance is
+  this value AND NOT its signed `EngineeringGuidanceSuppressed` setting; section18
+  restricts suppression to Evaluation grader review workspaces.
 - `EnforcementEnabled`: instance bool, default false for compatible deployment.
 - `HookReadTimeoutMs`: int, default 100, range 10..250.
 - `MaxInstructionBytes`: int, default 8192, range 1024..8192.
@@ -125,7 +127,9 @@ Read `GET /qbrainai/engineering-policy/status` (alias `/mcpserver/...`), client
 `policyGeneration`, `guidanceEnabled`, `enforcementEnabled`, `developmentProcess`,
 `agentContextMode`, `assetAvailable`, `compatible`, `minimumPluginVersion`,
 `diagnostics` (ordered code/message pairs), `hookReadTimeoutMs`,
-`maxInstructionBytes`, `structuredAcceptanceCriteriaEnabled`.
+`maxInstructionBytes`, `structuredAcceptanceCriteriaEnabled`,
+`engineeringGuidanceSuppressed` (workspace bool). `guidanceEnabled` is the effective
+workspace value, not the unadjusted instance setting.
 
 `mcp-status.ps1.engineeringPolicy` adds `packagedVersion`, `packagedSha256`, `host`,
 `hostSessionKey`, `lastRequestId`, `deliveryOutcome` (Delivered/Duplicate/Disabled/
@@ -278,7 +282,8 @@ text hashes, YAML parity, rendering escaping and coverage-staleness tests.
 
 Invocation means one delivered human prompt, including absorbed mid-turn messages;
 not tool/background events. Deliver baseline plus all three compact activity
-sections every time, and BDPv4 only when selected. No prompt-time requestClass or
+sections every time guidance is enabled, and BDPv4 only when selected. Evaluation
+grader suppression follows section18, including Stateless context. No prompt-time requestClass or
 natural-language activity classifier. This also teaches format establishment.
 
 Use base arrival identity. Dedupe `(hostSessionKey, requestId)` or stable ingress
@@ -611,7 +616,8 @@ Code claude-opus-5-5/max, fixed CLI, permissions and budgets; unexposed sampling
 settings recorded unexposed. Predetermine alternating order, no selective retry;
 infra-invalid paired runs retained and rerun both with recorded reason.
 
-Independent condition-blind grader: correctness=correct exercised outcomes/total;
+Independent condition-blind grader under section18's signed context isolation:
+correctness=correct exercised outcomes/total;
 completeness=met ACs/total. Require integrated aggregates >=0.98 and not below
 baseline, zero unauthorized scope/dependency, interface/security/data/accessibility,
 precedence or fabricated-evidence violations, deterministic gates all green.
@@ -991,7 +997,8 @@ Grader is separate Claude Code claude-opus-5-5/max session, read-only, fixed CLI
 version, never the behavioral session/coordinator. Evaluation harness strips
 condition labels, randomizes anonymous run IDs with a preregistered recorded seed,
 normalizes artifact metadata that reveals package version, and gives grader task,
-rubric and observable outcomes only. Preserve reversible mapping outside grader
+rubric and observable outcomes plus the neutral operator context defined in18.
+Suppress engineering guidance for every grader prompt. Preserve reversible mapping outside grader
 packet until scores are signed/hashed, then unblind for comparison. Some behavior
 may reveal condition; record that limitation, do not claim perfect blinding.
 Operator attests this evaluator receipt using the same review contract.
@@ -1302,7 +1309,8 @@ snapshot; restart applies changes. Delivery flags/limits refresh as section3;
 structured-write enablement takes effect after signed config reconciliation.
 
 Protected-setting set is **all** EngineeringPolicyOptions keys enumerated in
-sections3/14.3/14.5 plus workspace DevelopmentProcess. Producer/inventory/baseline/
+sections3/14.3/14.5 plus workspace DevelopmentProcess and section18's
+EngineeringGuidanceSuppressed/EvaluationGraderContext. Producer/inventory/baseline/
 attestation management operations use mTLS and the same operator audit. Signed
 change manifest v1 = {schemaVersion:1,keyId,algorithm:"PS256",payload,signatureBase64}.
 Payload = {deploymentId UUID,issuedUtc,reason,operatorId,workspaceIds:[],
@@ -1469,8 +1477,9 @@ registers this workspace/configuration and launches the reviewer there; the revi
 brief binds original WorkspaceId, snapshot/subject digests and allowed artifact
 scope. Reviewer records/completes its own Chore turn in that review workspace under
 base rules; it cannot mutate source, create validations or attest its own verdict.
-Global/operator profile and scoped approved review context still apply; no source
-workspace marker/API key is added to the provider packet.
+Global/operator profile and scoped approved review context still apply to ordinary
+HV workspaces. Evaluation graders instead use section18's neutral context and
+signed guidance suppression. No source workspace marker/API key is added to the provider packet.
 Review tool allowlist includes own-workspace session-log MCP operations solely
 for its audit lifecycle; read-only restrictions apply to reviewed source. Local
 registration/hooks bootstrap with redacted trust diagnostics, never exposing
@@ -1691,6 +1700,8 @@ subject using14.2's formulas, not a caller's claimed digest. No arbitrary path/U
 ReviewWorkspaceId must be registered with process None on this owner, outside
 all source roots, with empty materialization destinations (or identical ready
 materialization for an idempotent repeat). A different existing subject refuses.
+An Evaluation grader workspace must also satisfy section18; suppression is invalid
+for Slice/Inventory/Baseline materializations.
 
 TurnReviews behavior reuses14.4's bundle verifier/materializer to write exact
 read-only `source/` and, where a before/after comparison is required, `before/`
@@ -1814,10 +1825,11 @@ Return harnessManifestArtifactId (the EvalRunManifest SHA-256) when that complet
 packet exists. Standard size/count/hash/403/400/404/409 and unavailable-store503
 rules apply; incomplete packets cannot receive Evaluation attestation.
 
-Evaluation materialization source/ contains that **anonymized artifact packet**,
-not an invented repository snapshot: frozen protocol, anonymous run manifest,
-results and referenced observable artifacts. Keep the unblinding map outside the
-grader packet as13.5 requires. All referenced bytes/hashes are checked; SubjectDigest
+Evaluation materialization source/ contains section18's **blinded grading projection**
+of that anonymized artifact packet, not an invented repository snapshot. The full
+frozen protocol, anonymous run manifest, results and referenced observables remain
+immutable in the broker store; the full protocol and unblinding map are withheld
+until quality scores are locked as13.5/18 require. All referenced bytes/hashes are checked; SubjectDigest
 uses14.2's evaluation formula. Evaluation attestation is recorded in the source
 workspace **being activated**, while the grader's Chore turn belongs to its separate
 review workspace. TurnReviews owns storage/handler behavior; DESIGN the management
@@ -1853,3 +1865,93 @@ discovery or secret value is recorded in output/audit.
 Round6: DISAGREE, confidence80, accuracy.97/completeness.95; two findings.
 Exact output retained under claude-round-6. These R6-01/R6-02 resolutions await
 independent confirmation under unchanged claims and thresholds.
+
+## 18. Round 7 evaluation-grader isolation
+
+This resolves R7-01 and explicitly amends the base required-profile/memory/context
+injection contract **only for Evaluation grader review workspaces**. It does not
+change source-agent guidance or ordinary Slice/Inventory/Baseline HV context.
+
+Add operator-protected workspace keys beside DevelopmentProcess:
+
+- `EngineeringGuidanceSuppressed`: bool=false. True requires process None and
+  `EvaluationGraderContext.subjectKind=Evaluation`. No agent setter or per-turn
+  switch. Apply through the signed configuration/reconciliation of14.5/15.4.
+- `EvaluationGraderContext`: nullable object, default null. When suppression is
+  true, require {subjectKind:"Evaluation",operatorProfileText,allowedMemoryIds:[],
+  contextSha256}. Profile text is UTF-8, at most8192 bytes. Memory IDs are unique,
+  existing IDs in effective scope; an empty list is valid. contextSha256 hashes
+  canonical JSON of the other three fields plus the exact selected memory texts
+  in Global-ID then Workspace-ID order. Operator signs the full configuration and
+  attests that the profile/memories describe neither the evaluated policy nor its
+  conditions, fixtures or treatment mapping. A changed selected memory invalidates
+  that hash and requires renewed operator approval before another grader prompt.
+
+Registration/configuration may declare this intended subject before materialization
+exists. CreateReviewMaterialization for Evaluation requires these settings and
+binds their hash into review-materialization.json as graderContextSha256. Suppressed
+workspaces refuse other subject kinds. Launch requires a Ready Evaluation
+materialization whose context hash still matches; no grader session starts against
+an unmaterialized or mismatched subject. Invalid settings fail startup/reload using
+section3's last-valid configuration rule; materialization/launch mismatches are409
+evaluation_grader_context_invalid. None plus suppression never disables the
+ordinary session-audit lifecycle or grants source/administrative mutation access.
+
+GetStatus returns engineeringGuidanceSuppressed=true and guidanceEnabled=false
+for this workspace even if instance GuidanceEnabled=true. Hooks emit no engineering
+baseline/activity/BDPv4 text; Stateless excludes its mandatory EngineeringPolicy
+item. Every grader prompt's delivery ledger records Disabled, including tool-loop
+dispatch, restored/compacted context and any absorbed prompt. Tool-loop dispatch
+rechecks its bound human request's Disabled entry without inventing another
+arrival; an absorbed human prompt has its own entry. Require a successful
+current descriptor read and verify the signed context before launch and dispatch;
+descriptor unavailable/stale or context verification failure aborts grading before
+model dispatch, never falls back to packaged policy. Ordinary HV workspaces retain
+their existing default-on guidance and profile behavior.
+
+Each grading session starts with fresh, history-free context. It never resumes an
+implementation, behavioral-run or HV conversation. During quality grading, allowed
+task content is the blinded task, frozen scoring rubric and observable outcomes,
+plus the signed neutral operator profile and selected raw memories above. Preserve
+selected memories verbatim and in effective order; do not summarize or change the
+authoritative store. This narrowly scoped override replaces automatic global/
+workspace profile, required-memory and other policy-bearing project-context
+autoload for the grader. Host system/developer instructions, security boundaries
+and audit tools still apply. If a mandatory host context cannot be isolated from
+the policy, conditions or fixture provenance, setup is infrastructure-invalid;
+do not claim a blind grade from that host.
+
+The materializer creates a separate, content-addressed grading projection with its
+own manifest/hash, preserving raw source artifacts unchanged in the broker store.
+Only neutral task/rubric fields from the frozen protocol, anonymous run IDs and
+observable outcomes are readable by the grader before quality scores are signed/
+hashed. The treatment assignment, package metadata and full protocol remain outside
+all grader-readable roots and tool/context sources. Record the projection hash and
+source artifact hashes in the materialization; server recomputes SubjectDigest from
+the full immutable evaluation inputs as14.2 requires. After quality scores are
+locked, unblind for EV protocol/aggregate audit; locked quality grades cannot be
+revised in response to the mapping. This does not claim behavior itself can never
+reveal a condition; retain13.5's stated limitation.
+
+Grading is infrastructure-invalid unless **every grader prompt ledger outcome is
+Disabled** and the neutral-context/projection checks pass. Preserve contaminated
+artifacts and use the existing single paired infrastructure-rerun allowance,
+rerunning both conditions and grading with fresh clean context; this is not an
+additional retry budget. A second infrastructure failure for that paired case
+blocks activation under13.5/15.5. TurnReviews owns launch/materialization checks,
+SharedComponents the typed settings/status/hash DTOs, plugin core and each adapter
+the suppression/context path; DESIGN owns the signed operator configuration.
+
+Add a canary fixture whose unique policy token is present in the canonical policy
+and ordinary profile/autoload context but absent from task/rubric/observables.
+Capture actual grader model-request context across all9 adapters, including
+Stateless, tool loops, restored context and descriptor failure. Assert that the
+canary never reaches any grader request, the permitted neutral profile/memories
+remain exact, and each dispatched prompt records Disabled. Also test non-Evaluation
+suppression refusal, context-memory hash change, missing materialization, unavailable
+descriptor refusing dispatch, locked-score immutability, and unchanged ordinary HV
+guidance. These tests are planned gates, not claimed executed checks.
+
+Round7: DISAGREE, confidence86, accuracy.97/completeness.97; one finding.
+Exact output is retained under claude-round-7. This resolution awaits independent
+confirmation under the unchanged12-claim/.98/confidence98 acceptance contract.
