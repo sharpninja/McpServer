@@ -130,7 +130,9 @@ Read `GET /qbrainai/engineering-policy/status` (alias `/mcpserver/...`), client
 `agentContextMode`, `assetAvailable`, `compatible`, `minimumPluginVersion`,
 `diagnostics` (ordered code/message pairs), `hookReadTimeoutMs`,
 `maxInstructionBytes`, `structuredAcceptanceCriteriaEnabled`, `evaluationGateRequired`,
-`engineeringGuidanceSuppressed` (workspace bool), `graderContext` (section19.2).
+`engineeringGuidanceSuppressed` (workspace bool), `graderContext` (section19.2),
+`activationState` (Active|Dormant|HeldInactive), `buildArtifactSha256` (nullable
+until a release manifest is installed). Section21 defines their semantics.
 `guidanceEnabled` is the effective workspace value, not the unadjusted instance setting.
 
 `mcp-status.ps1.engineeringPolicy` adds `packagedVersion`, `packagedSha256`, `host`,
@@ -893,7 +895,10 @@ Applicability is the following exhaustive ordered decision list (no table):
    TODOs have no invented declared class or opening snapshot; section 14 supplies
    the complete applicability cases.
 
-Remedy codes respectively: engineeringPolicy=refresh_policy;
+HeldInactive under21.2 adds engineeringPolicy/obtain_activation_evaluation to
+exactly rules5-6's Agent targets through normal HTTP400, never a completion409.
+Other branches remain unchanged. Remedy codes respectively: engineeringPolicy=refresh_policy
+(obtain_activation_evaluation instead when HeldInactive);
 engineeringEvidence=record_evidence (approve_todo_type if missing/unapproved TodoType);
 engineeringSnapshot=refresh_snapshot_or_baseline;
 engineeringValidation=run_approved_inventory; engineeringCoverage=link_ac_tests;
@@ -993,7 +998,10 @@ TODO mutator policies; extend golden/tool DTO tests for format, not raw REST byp
 
 ### 13.5 Evaluation placement and artifact lifecycle
 
-Run all 72 evaluations after Phase 4 integration gates, before staging activation.
+Run each 72-run evaluation after Phase4 integration gates and identical pre-run
+protocol freeze in every declared target store under21.3, before those targets'
+staging/production activation. Each target independently records, grades, locks
+and attests the same captured behavioral runs; no inert import promotes evidence.
 Failure or invalid evaluation blocks staging/production activation; fix under RED/
 green process, bump policy version/hash for any instruction change and rerun all
 72, plus affected deterministic gates. At most one infrastructure rerun per paired
@@ -1324,7 +1332,8 @@ EngineeringGuidanceSuppressed/EvaluationGraderContext. Producer/inventory/baseli
 attestation management operations use mTLS and the same operator audit. Signed
 change manifest v1 = {schemaVersion:1,keyId,algorithm:"PS256",payload,signatureBase64}.
 Payload = {deploymentId UUID,issuedUtc,reason,operatorId,workspaceIds:[],
-validUntilUtc,expectedWorkspaceRevisions:{...},
+validUntilUtc,expectedWorkspaceRevisions:{...},buildArtifactSha256:null|hash,
+evaluationAbandonment:null|{protocolId,protocolSha256},
 effectiveSettings:{...complete protected settings...}}. Validity is at most24h;
 reject expired new manifests, future issue time beyond5min or stale expected
 revisions before applying. Canonicalize keys ordinally,
@@ -1817,15 +1826,20 @@ later checkout. Owners: TurnReviews behavior and DESIGN surface, as16.1.
 Add operator-only POST
 `/admin/engineering-policy/{workspaceId}/evaluation-artifacts`, EngineeringPolicyAdmin
 mTLS, client `StoreEvaluationArtifactsAsync`.
-Request DTO: {operation:FreezeProtocol|RecordResults|LockBlindGrades,protocolId,
+Request DTO: {operation:FreezeProtocol|RecordResults|LockBlindGrades|AbandonProtocol,protocolId,
 protocol:null|protocolJson,protocolSha256:null|hash,
 anonymousRunManifest:null|manifestJson,results:[],unblindingMap:null|mapJson,
-materializationId:null|uuid,capturedResponseArtifactId:null|sha256}. Result entries are
-{runId,resultJson,observableArtifactIds:[]}. FreezeProtocol requires protocol only,
+materializationId:null|uuid,capturedResponseArtifactId:null|sha256,reason:null|string,
+signedChangeManifest:null|manifestJson,
+freezeReceipts:[]}. Result entries are
+{runId,resultJson,observableArtifactIds:[],capture:{cliResultUtf8Base64,
+sessionExportUtf8Base64,deliveryLedgerUtf8Base64,launch,evaluationInstanceId}}.
+Capture validation and pre-run target-store freeze use21.3. FreezeProtocol requires protocol only,
 returns protocolArtifactId; its protocol includes the preregistered map SHA-256
 under19.1. RecordResults requires its stored hash, complete anonymous manifest/
 results and matching unblindingMap, with no replacement protocol. LockBlindGrades
-uses the stored captured response and materialization under19.1. Unused mode fields
+uses the stored captured response and materialization under19.1/21.1.
+AbandonProtocol uses21.1's signed administrative audit. Unused mode fields
 must be null/empty. The embedded protocol/run/
 result documents follow the frozen fields/rubric of9/10; opaque existing artifact
 IDs reference raw observations, never caller paths/URLs. It content-addresses the frozen
@@ -1952,10 +1966,10 @@ reveal a condition; retain13.5's stated limitation.
 
 Grading is infrastructure-invalid unless **every grader prompt ledger outcome is
 Disabled** and the neutral-context/projection checks pass. Preserve contaminated
-artifacts and use the existing single paired infrastructure-rerun allowance,
-rerunning both conditions and grading with fresh clean context; this is not an
-additional retry budget. A second infrastructure failure for that paired case
-blocks activation under13.5/15.5. TurnReviews owns launch/materialization checks,
+artifacts. Behavioral infrastructure failures retain the single paired-rerun rule;
+grading-only failures use21.1's single invalid-only regrade of unchanged results,
+with no behavioral rerun. A second failure in either applicable budget blocks
+activation. TurnReviews owns launch/materialization checks,
 SharedComponents the typed settings/status/hash DTOs, plugin core and each adapter
 the suppression/context path; DESIGN owns the signed operator configuration.
 
@@ -1976,6 +1990,9 @@ confirmation under the unchanged12-claim/.98/confidence98 acceptance contract.
 ## 19. Round 8 grade locking and delivery contracts
 
 ### 19.1 Single blind grader and deterministic aggregation
+
+Per21.1, capture intake permits at most one distinct capture per grading attempt,
+with invalid-only retry and server-minted session binding; no capture selection.
 
 Choose one blind grading session and **no post-unblinding model audit**. The
 grader's captured final response contains the standard14.3 Evaluation receipt
@@ -2049,9 +2066,10 @@ the behavioral thresholds above. It verifies current evaluation subject inputs,
 not a caller's aggregate claim. Activation repeats these checks against the
 attested artifact bindings; any mismatch/failing aggregate blocks activation.
 The operator attests the blind review and server result together. No second
-materialization or post-unblinding grader session is needed. Infrastructure retry
-uses a new immutable results manifest/materialization and retains any old lock;
-it never overwrites grades or increases the existing single paired-retry cap.
+materialization or post-unblinding grader session is needed. Behavioral infrastructure
+retry uses a new immutable results manifest/materialization and retains old records;
+grading-only retry uses21.1's unchanged results/new workspace. Neither overwrites
+grades or increases its applicable single-retry cap.
 
 Tests: map commitment/withholding, exact accepted run set and denominators,
 captured-response binding, atomic lock/idempotence/overwrite refusal, deterministic
@@ -2136,8 +2154,9 @@ DeliveryLedgerArtifactId, CapturedResponseArtifactId, CaptureDigest, CreatedUtc,
 CreatedByOperatorId. CaptureDigest hashes canonical launch metadata and artifact
 hashes plus materializationId/manifest hash; store append-only with a uniqueness
 index on WorkspaceId/MaterializationId/CaptureDigest. Same bytes/bindings return
-the same record. Different capture targeting a locked materialization refuses409
-evaluation_grades_locked. Return {captureId,capturedResponseArtifactId}; lookup by
+the same record. Section21.1 additionally permits only one distinct capture per
+attempt and records GradingInvalid on refusal; no multiple pre-lock captures.
+Return {captureId,capturedResponseArtifactId}; lookup by
 that artifact must identify exactly one matching materialization binding, otherwise
 refuse ambiguity. LockBlindGrades resolves this record and repeats the identity,
 server-turn coverage and Disabled checks; raw receipt upload is not a substitute.
@@ -2178,7 +2197,7 @@ the same check, preventing an unchecked first signed deployment.
 
 Startup/restart also verifies this invariant before allowing gated BDP work; a
 persisted active selection with a changed build/policy or invalid evaluation is
-held inactive with engineering_activation_evaluation_required, never silently
+HeldInactive under21.2 with engineering_activation_evaluation_required, never silently
 grandfathered. Status/administrative recovery remain available; do not claim a
 completed activation. An explicitly signed operator change can disable enforcement
 or select None for recovery under the existing audited procedure. This does not
@@ -2199,3 +2218,185 @@ and the recorded plugin-release attestation reference.
 Round9: DISAGREE, confidence86, accuracy.97/completeness.97; R9-01/R9-02.
 Exact output is retained under claude-round-9. These interface corrections await
 independent review; no product implementation or activation is claimed.
+
+## 21. Round 10 evaluation lifecycle completion
+
+### 21.1 Bounded grading attempts and selection prevention
+
+Per WorkspaceId/Evaluation SubjectDigest, allow GradingAttempt0, and Attempt1
+**only** after server-recorded GradingInvalid for0 and before any grade lock.
+Each attempt uses a new registered review workspace, one Ready materialization,
+exactly one server-minted MCP session created since Ready, and at most one distinct
+capture. CreateReviewMaterialization allocates the attempt atomically; uniqueness
+and the attempt counter prevent concurrent alternatives. Bind the first MCP session
+creation in that review workspace to it. A second session or distinct capture is
+refused409 review_capture_invalid and records GradingInvalid. Identical capture
+replay is idempotent, not another grading. No regrade follows a valid low score.
+
+Add EngineeringEvaluationGradingAttempt with composite WorkspaceId/SubjectDigest/
+AttemptNo PK, AttemptNo0|1, unique ReviewWorkspaceId and MaterializationId,
+McpSessionId nullable, CaptureId nullable, State Reserved|GradingInvalid|Locked,
+InvalidReasonJson, CreatedUtc, InvalidUtc nullable. Materialization/capture FKs
+are in the subject store. MCP session binding is verified through the owner's
+registered review-store catalog, not a cross-database FK or caller URL. Only server
+materialization/session/capture/lock handlers write it under the same serialized
+subject transaction. StorageSchema owns its Phase4 migration, TurnReviews the
+state machine, SharedComponents the DTOs; no agent mutation tool exists. The
+session-start guard reserves the candidate MCP ID in the subject store before
+creating the review-store session; repeat of that ID is idempotent, a different
+ID invalidates the attempt. These are not a distributed transaction: failed or
+unknown review-session creation records GradingInvalid, never retries another ID.
+Capture verifies the actual review-store session set against that reservation.
+
+GradingInvalid means CLI failure; not exactly one final response; missing or
+non-Disabled ledger entry; context/projection mismatch; any refused authenticated
+capture for that attempt; or a400 from LockBlindGrades. The handler records the
+invalid state/reason durably before returning its refusal. Operator reports a crash
+or absent final output through captures with the failed/empty CLI export; it is
+an invalid grading record, not an accepted capture. Unauthorized or foreign-ID
+requests cannot invalidate another attempt. A refused capture stores only safe
+diagnostics when raw bytes fail credential checks. Grading-only failure retries
+the **same immutable behavioral results**, with a fresh session/workspace, once;
+it does not consume or grant a behavioral paired rerun. Attempt1 invalid blocks
+activation for that workspace/policy/build, including after protocol abandonment.
+
+Add a unique index EngineeringEvaluationGradeLock(WorkspaceId,SubjectDigest).
+At most one lock exists per subject; it binds that attempt's sole capture.
+Evaluation AttestReview must use a raw receipt artifact **equal to the lock's
+CapturedResponseArtifactId**, not another receipt with matching claims. Aggregate
+infrastructure accounting lists every grading attempt, session and capture,
+including invalid attempts and reasons. A later extra session/capture records
+GradingInvalid without editing the immutable lock; it invalidates activation and
+cannot produce a replacement lock. Activation rechecks current attempt accounting.
+
+For the same workspace/policySha256/buildArtifactSha256, activation also refuses
+if **any** lock has a failing behavioral threshold verdict, if two grading attempts
+were invalid, or if any frozen protocol has no lock and no explicit abandonment.
+A successful lock under a new protocol cannot hide an earlier failing lock for
+the same policy/build. Repair requires changed policy/build and a new evaluation,
+not selective receipt supersession. Existing same-subject DISAGREE rules still apply.
+
+AbandonProtocol on17.1's operator-only endpoint requires protocolId/hash, reason
+and signedChangeManifest under14.5's PS256 verifier, with evaluationAbandonment
+bound to that exact protocol and otherwise-current settings/build hash. Verify
+the operator/certificate/expiry/deploymentId as usual; this operation does not
+apply new settings. Sign-EngineeringPolicyChange supports that typed payload.
+It writes PolicyAudit
+Kind EvaluationAbandoned with protocol/workspace/policy/build, operator, UTC and
+reason; show it in status diagnostics and all later aggregate accounting. An
+abandonment is not a lock or passing grade. Refuse abandoning a locked protocol;
+it cannot erase a failing lock or two-invalid-grading block. Unfinished protocol
+abandonment permits a new fully disclosed evaluation only under those constraints.
+
+Tests: concurrent attempt allocation, second-session/distinct-capture refusal,
+invalid persistence despite400/409, identical retry, crash/empty response, one
+invalid-only regrade with identical results, second invalid blocking, unique lock,
+receipt/lock equality, aggregate attempt completeness, late capture invalidation,
+failed-lock selection refusal and visible signed abandonment with no failure erasure.
+
+### 21.2 HeldInactive gates and exact build identity
+
+Committed enforcement/process settings stay unchanged during a hold. Status is
+Dormant when enforcement is off or process None; HeldInactive when enforced BDPv4
+requires but lacks valid activation evidence; Active otherwise with respect to
+this evaluation check. Existing inventory/runner/baseline checks still apply.
+For every Agent target that13.3 rules5-6 would gate, HeldInactive causes the
+completion gate and EngineeringTodoExitPolicy to refuse through their **normal
+HTTP400 contracts**, adding engineeringPolicy with remedy
+`obtain_activation_evaluation`. It takes precedence over refresh_policy for that
+item, occurs once in the normal engineering-item order, and does not suppress
+other normally applicable missing items. No completion409 or fallback to base rules.
+Base-only targets, failed/canceled targets, trusted origins, guidance delivery,
+evidence create/run/read, status and administrative recovery remain unchanged.
+Amend the C8 golden contract, remedy enum/list, Get-CloseRemedy fixtures and drain
+handling to recognize this remedy like the other engineering items. CompletionGate/
+TurnReviews own the gate/query; HostPluginAdoption owns the drain/fixture update.
+
+BuildArtifactManifest v1 is canonical JSON
+{schemaVersion:1,releaseVersion,serverPackageSha256,
+plugins:[{id,version,packageSha256}]}. Exactly nine unique IDs: ClaudeCode,
+ClaudeCowork,Cline,ClineV2,Codex,Copilot,Grok,GrokBot,OpenCode, sorted ordinally.
+Versions are exact package versions and hashes SHA-256 of exact distributable
+package bytes. Apply14.5's canonical UTF-8/no-BOM/key-order rules. BuildTooling's
+release build emits it **after** all packages are built; the manifest is outside
+the hashed server/plugin packages, avoiding a self-hash cycle. buildArtifactSha256
+is SHA-256 of those canonical manifest bytes. The signed change-manifest payload
+includes this value; null is allowed only for local non-release guidance with
+EvaluationGateRequired=false, never for freezing an evaluation or gated activation.
+
+UpdateService verifies the installed server package against serverPackageSha256
+and installs the manifest beside the binary. Retain the immutable installed
+package for verification; verify installed packaged payload files against its
+entries before activation/startup, rather than equating a ZIP hash with one binary.
+Reconciliation requires installed manifest digest = signed change-manifest value
+= attested buildArtifactSha256; mismatch refuses or holds activation as20.2/above.
+The harness reads/verifies the same manifest/digest for both isolated conditions.
+Plugin package entries are enforced by the operator release checklist, not by a
+claim that the server can inspect remote host installations.
+
+Every changed server or plugin package changes this build identity and requires
+a fresh72-run evaluation before affected staging/production activation, even if
+the policy text is unchanged. Only targets installing the same exact manifest
+share runs; a different server package/OS manifest requires its own evaluation.
+BuildTooling owns canonical emission and release-checklist metadata, UpdateService
+installed verification, ConfigurationReconciliationService signed equality.
+Tests: all9 IDs/order/version/hash/canonicalization, no self-hash, tampered installed
+package/payload/manifest, harness digest equality, server-only patch staleness,
+HeldInactive normal400/remedy/order/TODO/drain behavior and unchanged exemptions.
+
+### 21.3 Behavioral captures and pre-run target-store freeze
+
+Each RecordResults run entry carries its exact CLI result, session export,
+delivery ledger and launch bytes through17.1's capture object plus
+evaluationInstanceId. Apply20.1's parsers, identity checks, budgets, exact credential
+refusal and400/409 errors; store HvReceipt/DeliveryLedger artifacts and reference
+them from that run's observableArtifactIds. Validate every captured human ingress
+and tool-loop request binding against15.5: baseline Disabled; integrated
+Delivered/Duplicate with a Delivered bound entry. Reserved/Unavailable, absent
+bindings, incomplete exports or contradictory states refuse409 review_capture_invalid
+and durably record that run as infrastructure-invalid before returning409 under
+the single paired-rerun rule. Retain safe raw captures/artifact IDs, or diagnostics
+only when credential refusal forbids storage. A later complete RecordResults may
+reference those server-recorded Invalid attempts as retained history alongside
+valid paired retries; it must not reclassify them as accepted runs or erase them.
+Reject newly claimed valid runs with invalid captures. Accepted-run selection uses
+the server's immutable attempt states, not caller assertions of validity.
+Binding exports to the isolated instance's minted turns is **operator-attested**;
+the target server cannot query a foreign store's private turn rows or claim stronger
+remote execution proof. Record the instance identity, claimed remote session/turn
+IDs and that trust limitation. Harness-authored counts alone are not valid captures.
+
+FreezeProtocol's frozen protocol includes sorted unique targetWorkspaceIds and
+the build manifest/map commitments. Before the first behavioral run, the operator
+harness must call FreezeProtocol through **each target store's authenticated
+management surface** and receive the identical protocol hash. Return/store a
+freeze receipt {targetWorkspaceId,protocolId,protocolSha256,frozenUtc}; the harness
+records all receipts before dispatching any run. RecordResults requires that set,
+the current target's own immutable freeze row, matching target IDs/hash and
+pre-run ordering evidence; another store's receipt/order is operator-attested.
+No raw database write, inert federation import or post-run backdated freeze counts.
+A target lacking the pre-run freeze requires a new evaluation; it cannot adopt
+earlier runs by merely importing their result artifacts.
+
+Provision each target's format-aware server/management API before freezing; an
+existing enforced BDP workspace stays HeldInactive until evidence is complete.
+Local isolated behavioral instances keep EvaluationGateRequired=false. Admin/
+status/evidence paths remain available during a hold, avoiding bootstrap circularity.
+After shared runs, **each target** records the identical raw captures through its
+own RecordResults, creates its own projection and bounded grading attempts, locks
+and attests locally. Staging's lock/attestation is not production evidence by
+import. Differences between independent target gradings remain visible; each
+target must meet its own gates. The72 behavioral runs may be shared only by the
+pre-frozen target set and exact build manifest; per-target grading is additional
+accounted review work, never silently omitted or selected across stores.
+
+TurnReviews owns capture validation/local lifecycle, DESIGN the authenticated
+multi-store harness orchestration/target registration, SharedComponents the capture/
+freeze DTOs, BuildTooling the pinned harness inputs. Tests: contamination in any
+prompt/tool loop, missing/foreign capture, declared remote trust, same captures/
+hashes in two stores, all freezes before dispatch, mismatched/late/missing target
+freeze refusal, independent target locks/attestations, and held production setup.
+
+Round10: DISAGREE, confidence81, accuracy.96/completeness.95; three findings.
+Exact output is retained under claude-round-10. These R10-01/R10-02/R10-03
+resolutions await independent review under the unchanged acceptance contract.
