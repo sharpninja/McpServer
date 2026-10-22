@@ -1,0 +1,220 @@
+{
+  "Receipt": {
+    "TimestampUtc": "2026-10-21T00:00:00Z",
+    "ValidatorIdentity": "ClaudeIndependentHostile",
+    "RequestedAgent": "ClaudeCode",
+    "RequestedModel": "claude-opus-5-5",
+    "RequestedEffort": "max",
+    "ReviewStage": "PlanReadiness",
+    "Round": 11,
+    "ReviewedCommit": "eec058b4ff8ecfe23b0836698a6f9eca5efb1ae4",
+    "PlanPath": "docs/plans/2026-10-20-plugin-engineering-policy.md",
+    "PlanSha256": "4C1CCAC95FA09D576ABD462D4816549C0ACF54802EEF64EFB354992E74A7057F",
+    "PlanBytes": 163286,
+    "OverallVerdict": "DISAGREE",
+    "verdict": "NOT-READY",
+    "confidence": 90,
+    "AccuracyScore": 0.97,
+    "CompletenessScore": 0.97,
+    "Counts": {
+      "PASS": 10,
+      "FAIL": 2,
+      "UNKNOWN": 0
+    },
+    "R10ResolutionCheck": {
+      "R10-01": {
+        "Status": "ResolvedAsScoped",
+        "Evidence": [
+          "§21.1 L2226-2234: GradingAttempt 0, and attempt 1 only after a server-recorded GradingInvalid and before any lock. Each attempt gets a new review workspace, one Ready materialization, one server-minted MCP session and at most one capture, allocated atomically. A second session or distinct capture returns 409 and records GradingInvalid. No regrade follows a valid low score.",
+          "§21.1 L2236-2249: EngineeringEvaluationGradingAttempt with PK, state, owners and migration. The session reservation across stores is honestly described as not a distributed transaction.",
+          "§21.1 L2251-2261: GradingInvalid cases are persisted before the refusal is returned. The regrade reuses the same immutable results and consumes no paired rerun. A second invalid attempt blocks activation, even after abandonment.",
+          "§21.1 L2263-2270: one lock per subject (unique index). AttestReview requires its receipt to equal the lock's CapturedResponseArtifactId. Every attempt, session and capture is accounted for; a late extra session invalidates activation.",
+          "§21.1 L2272-2289: activation also refuses on any failing lock, two invalid attempts, or an unfinished protocol without abandonment. AbandonProtocol requires a PS256 manifest (§14.5 L1336) and records PolicyAudit EvaluationAbandoned in status; it cannot erase a failure.",
+          "Corrected cross-references verified: §18 L1967-1972, §19.1 L1994-1995 and L2069-2072, §20.1 L2157-2158."
+        ]
+      },
+      "R10-02": {
+        "Status": "ResolvedAsScoped",
+        "Evidence": [
+          "§21.2 L2299-2313: during HeldInactive, committed settings are unchanged. Only rules 5-6 targets get engineeringPolicy with remedy obtain_activation_evaluation, through the normal HTTP 400, with no 409 and no fallback. Exemptions are unchanged. The C8 contract, Get-CloseRemedy and drain are amended, and status shows Active|Dormant|HeldInactive (§3 L134-135; §13.3 L898-901).",
+          "§21.2 L2315-2345: BuildArtifactManifest v1 lists the nine exact plugin ids in order and is emitted after packaging, so there is no self-hash. The signed payload carries buildArtifactSha256 (§14.5 L1335). UpdateService verifies the installed package, and installed, signed and attested hashes must be equal. Any changed package requires a fresh 72-run evaluation. Owners and tests are given."
+        ]
+      },
+      "R10-03": {
+        "Status": "ResolvedAsScopedWithResidual",
+        "Evidence": [
+          "§21.3 L2349-2367: every run carries exact captures checked by §20.1's parsers and limits. Each ingress and tool loop is validated against §15.5, and an Invalid is persisted before the 409. Invalid runs cannot be reclassified. Remote binding is stated as operator-attested.",
+          "§21.3 L2369-2392: the protocol lists sorted targetWorkspaceIds. Every target freezes before the first run, and each target store needs its own pre-run freeze row. Imports and backdating are rejected. Provisioning during a hold is defined, and each target grades, locks and attests locally. Corrected §13.5 L1001-1004 and §17.1 L1829-1837.",
+          "Residual: §21.3 L2352-2353 makes these captures each run's observables, which causes R11-01."
+        ]
+      }
+    },
+    "Claims": [
+      {
+        "Id": "C1",
+        "Summary": "Scope, intent, precedence and the nine hosts with their limits.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§1 L8-14 and L39-42; §5 L299-327 (Unsupported on a failed probe, nine passing rows required); §13.4 L930-938 (canary probes). Unchanged."
+        ]
+      },
+      {
+        "Id": "C2",
+        "Summary": "Dependencies are explicit, owned and ordered; planned and implemented types are distinguished.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§1 L22-37 pins the baseline, separates planned from implemented, and marks the base plan NOT APPROVED. Source hashes are unchanged.",
+          "§9 L550-566, §14.7 L1464-1476 and §15.5 L1677-1701 set ownership and order. New work has owners at §21.1 L2242-2244, §21.2 L2312-2313 and L2341-2342, and §21.3 L2393-2395."
+        ]
+      },
+      {
+        "Id": "C3",
+        "Summary": "Canonical policy, provenance, version/hash and distribution integrity.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§2 L46-89 and §14.2 L1110-1111. The §21.2 manifest (L2315-2335) binds the exact plugin packages, and the §20.2 release checklist (L2206-2210) cites the matching attestation."
+        ]
+      },
+      {
+        "Id": "C4",
+        "Summary": "Configuration, selection, reload, defaults and status.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§3 L93-136, including EvaluationGateRequired, activationState and buildArtifactSha256.",
+          "§14.5 L1329-1349 (protected signed payload), §15.4 L1645-1665 and §21.2 L2299-2302 (status semantics)."
+        ]
+      },
+      {
+        "Id": "C5",
+        "Summary": "PowerShell delivery, adapters, dedupe, compaction/stateless handling, deadlines and unavailable behavior.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§5 L287-344, §13.4 L911-928, §14.7 L1450-1462 and §19.2 L2094-2101. Guidance delivery is unchanged during a hold (§21.2 L2309-2310)."
+        ]
+      },
+      {
+        "Id": "C6",
+        "Summary": "Evidence models, endpoints, persistence and migration.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§7 L400-458, §13.1-13.4, §16.1 L1740-1749, §17.1 L1826-1854, §19.1 L2046-2055, §20.1 L2148-2171, §21.1 L2236-2249 and L2263.",
+          "The registries for freeze rows and run-attempt states are implied with their fields and invariants, which is non-blocking (see NonBlockingObservations). R11-01 can be fixed through a projection rule alone, without changing the model."
+        ]
+      },
+      {
+        "Id": "C7",
+        "Summary": "Server completion gate: writers, states, origins, atomicity and authenticity.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§8 L460-532, §13.3 L871-907, §14.1 L1077-1092 and §21.2 L2303-2313. HeldInactive goes through the normal 400 with ordered items and no 409 leaving a completion endpoint."
+        ]
+      },
+      {
+        "Id": "C8",
+        "Summary": "Snapshots, freshness, scope, raw verification and coverage.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§6 L346-398, §13.1 L752-761, §14.2 L1094-1160, §14.4 L1246-1256 and §14.7 L1434-1448. Unchanged."
+        ]
+      },
+      {
+        "Id": "C9",
+        "Summary": "Traceability, test-first ordering, zero-fail/zero-skip gates and named validations.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§9 L534-609 and §14.6 L1375-1399. §21 lists planned tests at L2291-2295, L2343-2345 and L2395-2398; none were executed."
+        ]
+      },
+      {
+        "Id": "C10",
+        "Summary": "Recovery, compatibility, rollout, rollback and configuration ownership.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§11 L638-663, §14.6 L1401-1430, §16.2 L1763-1779 and §20.2 L2173-2216.",
+          "§21.2 L2297-2345 covers HeldInactive, exact build identity and the re-evaluation scope. §21.3 L2369-2392 covers per-target pre-run freeze, provisioning during a hold and the absence of any import promotion."
+        ]
+      },
+      {
+        "Id": "C11",
+        "Summary": "Bounded evaluation and independent review with honest evidence.",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "Sound: §10 L611-636, §13.5 L1001-1029, §14.3 L1195-1204, §15.5 L1669-1675, §18, §19.1, §21.1 (selection prevention), and §21.3 L2349-2367 (operator-attested remote binding).",
+          "R11-01: captures are classified as grader observables (L2352-2353). §18 L1958-1959 makes observable outcomes grader-readable, and §19.1 L2004-2006 puts 'infrastructure ledger evidence' into the projection. This contradicts the condition-blind claim (L623, L1959-1960) and §18's canary premise (L1976-1977)."
+        ]
+      },
+      {
+        "Id": "C12",
+        "Summary": "No consequential choice is left to implementers; implementation stays behind approvals.",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "Approvals are kept: §1 L3-4, §9 L604-609, §14.7 L1474-1476.",
+          "R11-01 leaves the content of the grading projection to the implementer, and the current text leans toward including artifacts that reveal the condition."
+        ]
+      }
+    ],
+    "FailList": [
+      {
+        "Id": "R11-01",
+        "Severity": "Medium",
+        "Location": "§21.3 L2349-2353; §17.1 L1835-1836, L1844-1845, L1856-1861; §18 L1956-1960, L1976-1984; §19.1 L2004-2006; §13.5 L1012-1019; §10 L623",
+        "Trigger": "An Evaluation materialization builds the blind grading projection from a RecordResults packet whose runs now reference their raw behavioral captures as observables.",
+        "Problem": "§21.3 stores each run's exact CLI result, session export and DeliveryLedger and references them from that run's observableArtifactIds. §18 makes observable outcomes grader-readable, and §19.1 includes infrastructure ledger evidence in the projection. No rule excludes or neutralizes these artifacts. Integrated session exports contain the injected engineering-policy context, ledger entries show Disabled versus Delivered with policy hash, sections and bytes, and status traces show guidanceEnabled. Each of these reveals the condition deterministically. That contradicts 'without treatment labels' and the treatment-assignment exclusion, and it breaks §18's canary premise ('absent from task/rubric/observables'), because the canonical-policy canary is present in integrated captures.",
+        "Consequence": "Implemented literally, the grader that gates activation is un-blinded for every run. The condition-blind evidence and the canary gate become false or untestable, and the projection's contents get decided during implementation.",
+        "RequiredResolution": "Add normative text: (1) Behavioral capture artifacts (CLI result, session export, DeliveryLedger, launch) are validation and audit evidence only. They are referenced from a per-run captureArtifactIds field, or excluded by artifact kind, and are never placed in any grading projection. (2) The projection is an explicit allowlist: neutral frozen task and rubric fields; anonymous run IDs; resultJson's frozen outcome fields (final diff, fixture check results, final response — never condition, settings, model, build or ledger fields); protocol-classified outcome artifacts; and a neutral per-run infrastructure summary {anonymousRunId, valid|invalid, reasonClass, retryUsed}. It contains no ledger states, policy hashes, sections, bytes, hook/system context or status/diagnostic fields. EV4 is judged from that summary, and only the server verifies ledger states (§21.3). (3) Before Ready, materialization refuses a projection containing any non-allowlisted field or artifact with 409 evaluation_projection_invalid; this consumes no grading attempt. (4) Extend the §18 canary test so the canary must appear in integrated captures and be absent from the projection and from every grader request. Keep the stated limitation that behavior itself may reveal the condition."
+      }
+    ],
+    "blocking_gaps": [
+      "R11-01 (Medium): raw behavioral captures are grader-readable observables and the projection has no allowlist, which un-blinds grading and contradicts the §18 canary premise."
+    ],
+    "defects": [
+      {
+        "Id": "R11-01",
+        "Severity": "Medium",
+        "Claims": [
+          "C11",
+          "C12"
+        ]
+      }
+    ],
+    "path_to_threshold": "Add R11-01's RequiredResolution as normative text (about one paragraph). Propagate it to §17.1's observable wording, §18's projection and canary test, and §19.1's EV4 evidence wording, then re-review. This complete read found no other blocking gap. The NonBlockingObservations are optional clarity edits and are not required to reach the threshold.",
+    "NonBlockingObservations": [
+      "The frozen-protocol freeze rows (L2375, used by L2274) and behavioral run-attempt states (L2357-2363) have their fields and invariants in prose but no named entity. Define them in the Phase 1 data diagrams and Phase 2 stubs (StorageSchema).",
+      "RecordResults carries every run's raw captures in one request (L1835-1837). State that the §20.1 budgets apply per capture, and set a per-route body limit or streaming in the Phase 2 contract.",
+      "§17.1 L1844-1845 still calls observableArtifactIds 'opaque existing', but §21.3 creates them in the same request.",
+      "§21.2 L2313 assigns the drain and Get-CloseRemedy updates to HostPluginAdoption, while the drain is shared plugin-core code. Record the cross-owner Phase 2 amendment.",
+      "Base WorkspaceId is the canonical workspace path (architecture L5623), so identically pathed staging and production targets collapse in targetWorkspaceIds. This is benign because each store still needs its own pre-run freeze row.",
+      "The 'unavailable policy' and 'stateless overflow' fixtures must keep every prompt Disabled or Delivered/Duplicate under §15.5. For example, the outage should occur after the successful pre-run descriptor read and be served from the session cache. Otherwise those cases are always infrastructure-invalid. Fixture contents are frozen in Phase 1."
+    ],
+    "LatentFindingsAcknowledged": [
+      "R11-01 comes partly from my own R10-03 RequiredResolution, which said to store captures as artifacts 'referenced by observableArtifactIds'. I should have required that they stay outside the grading projection."
+    ],
+    "Limitations": [
+      "This was a read-only review of the round-11 packet with the full plan read (L1-2403). No build, test or implementation was executed; tests in the plan are planned only.",
+      "I did not recompute hashes. The commit and plan hash come from the manifest. The 13 non-plan hashes are identical to the round-4 and round-10 manifests, so I reused my prior source observations.",
+      "I only grepped the base architecture for the WorkspaceId definition. I did not inspect other sources, the worktreeChanges receipts or prior receipts.",
+      "I did not seek any transcript, credential, live store or execution environment.",
+      "Remote reviewer identity, independence and capture honesty remain operator-attested, as the plan states.",
+      "Fixture contents are a Phase 1 deliverable and were not verifiable.",
+      "TimestampUtc is accurate to the date only."
+    ],
+    "CommandsExecuted": [
+      "Read round-11/packet/review-manifest.json",
+      "Read round-11 plan L1-300",
+      "Read round-11 plan L300-659",
+      "Read round-11 plan L660-1019",
+      "Read round-11 plan L1020-1379",
+      "Read round-11 plan L1380-1739",
+      "Read round-11 plan L1740-2139",
+      "Read round-11 plan L2140-2403",
+      "Grep plan 'Engineering(Evaluation|Review|Source|Validation|Baseline|Workspace|Policy)[A-Za-z]*' (only-matching)",
+      "Grep plan '(?i)freeze row|freeze receipt|attempt state|infrastructure-invalid|Invalid attempt|frozen protocol has no lock|protocol registry'",
+      "Grep architecture '(?i)workspaceId (is|=|:) |WorkspaceId (uniquely|identifies)|workspace identity|workspace key is|WorkspaceId format' (no matches)",
+      "Grep plan '(?i)targetWorkspaceIds|target store|ownerInstanceId|InstanceId'",
+      "Grep architecture '(?i)WorkspaceId[^\\n]{0,80}(guid|uuid|path|name|slug|canonical)'",
+      "Grep architecture '(?i).{0,160}WorkspaceId.{0,40}(guid|uuid|path|name|slug|canonical).{0,160}' (only-matching)",
+      "Grep plan '(?i)projection|observableArtifactIds|observables|condition-blind|blinding|treatment'"
+    ]
+  },
+  "MarkdownReceipt": "# Round 11 plan-readiness receipt (ClaudeIndependentHostile, claude-opus-5-5/max)\n\n**DISAGREE / NOT-READY**: confidence 90, accuracy 0.97, completeness 0.97; 10 PASS / 2 FAIL / 0 UNKNOWN. Commit `eec058b4`, plan SHA-256 `4C1CCAC9...057F` (from the manifest, not recomputed); 2403 lines read in full.\n\n## Finding\n- **R11-01 (Medium): the blind grading projection can expose the treatment.** §21.3 stores each run's raw CLI result, session export and DeliveryLedger and lists them as that run's observables. §18 makes observable outcomes grader-readable, and §19.1 puts ledger evidence into the projection. Integrated session exports contain the injected policy text, and ledger entries say Disabled or Delivered, so the grader can tell which condition each run belongs to. This contradicts 'without treatment labels' and §18's canary premise. **Fix:** keep captures as server-only validation and audit evidence and never project them. Make the projection an explicit allowlist: neutral task/rubric fields, anonymous run IDs, frozen outcome fields, and a neutral per-run validity summary (no ledger, policy, hook or status data). Refuse a non-allowlisted projection with 409 evaluation_projection_invalid before Ready, consuming no attempt. Extend the canary test so the canary is present in captures but absent from the projection and grader requests. This partly comes from my own R10-03 wording.\n\n## R10 resolutions\n- **R10-01: resolved.** §21.1 bounds grading attempts, persists the invalid states, enforces one lock per subject, requires the attested receipt to match the lock, and refuses activation on failing locks or unfinished protocols unless abandonment is signed.\n- **R10-02: resolved.** HeldInactive goes through the normal 400 with a new remedy and status states. The exact nine-package BuildArtifactManifest is verified end to end.\n- **R10-03: resolved as scoped,** but its observables wording causes R11-01. Per-run exact captures are now ingested with operator-attested remote binding. Every target freezes before runs and grades, locks and attests locally.\n\n## Claims\n- PASS: C1 C2 C3 C4 C5 C6 C7 C8 C9 C10\n- FAIL: C11 (honest blind evidence), C12 (projection content left to implementers)\n\n## Non-blocking observations\n- The freeze-row and run-attempt registries are implied rather than named entities.\n- The RecordResults request size and streaming are unspecified.\n- §17.1 still describes observables as 'existing'.\n- The drain update is assigned to HostPluginAdoption but is shared plugin-core code.\n- WorkspaceId is a path, so targets can collide; this is benign.\n- The unavailable-policy and overflow fixtures must stay valid under §15.5.\n\n## Path to threshold\nAdd R11-01's correction, propagate it to §17.1, §18 and §19.1, then re-review. This complete read found no other blocking gap.\n\n## Limitations\nRead-only packet review; no tests or hash recomputation; source hashes match prior rounds; base architecture only grepped for WorkspaceId; operator-attested trust boundaries apply; timestamp is date-only."
+}

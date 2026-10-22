@@ -1,0 +1,199 @@
+{
+  "Receipt": {
+    "TimestampUtc": "2026-10-21T00:00:00Z",
+    "ValidatorIdentity": "ClaudeIndependentHostile",
+    "RequestedAgent": "ClaudeCode",
+    "RequestedModel": "claude-opus-5-5",
+    "RequestedEffort": "max",
+    "ReviewStage": "PlanReadiness",
+    "Round": 12,
+    "ReviewedCommit": "ff3060983ba7e40113f412501a5c033de3ce2cdd",
+    "PlanPath": "docs/plans/2026-10-20-plugin-engineering-policy.md",
+    "PlanSha256": "A176796D5F4BCE6EAE3EBAE727BB87FB4393161A2A44E026ED2AFA7A2262F075",
+    "PlanBytes": 167443,
+    "OverallVerdict": "DISAGREE",
+    "verdict": "NOT-READY",
+    "confidence": 90,
+    "AccuracyScore": 0.97,
+    "CompletenessScore": 0.97,
+    "Counts": {
+      "PASS": 10,
+      "FAIL": 2,
+      "UNKNOWN": 0
+    },
+    "R11ResolutionCheck": {
+      "R11-01": {
+        "Status": "Resolved",
+        "Evidence": [
+          "Point 1, captures are audit-only: verified. §22 L2413-2418, §21.3 L2358-2360 and §17.1 L1837-1839 put captures in server-populated captureArtifactIds, never in observableArtifactIds or any projection; inline launch metadata is also audit-only.",
+          "Point 2, strict allowlist: verified. §22 L2420-2443 allows only neutral task/rubric fields, commitment and freeze time, anonymous IDs, the frozen outcome fields of resultJson, schema-bound Outcome artifacts, and a neutral validity summary with a closed reasonClass enum. No ledger, policy, hook, status or diagnostic data is included. EV4 is judged from the summary only (§19.1 L2007-2010, §18 L1958-1962).",
+          "Point 3, refusal before Ready: verified. §22 L2445-2451 and §21.1 L2234-2236 return 409 evaluation_projection_invalid before Ready and before an attempt is allocated, so no attempt is consumed. The check is on the actual projected data, and owners are named.",
+          "Point 4, canary test: verified. §22 L2453-2461 requires the canary to be present in the integrated raw capture but absent from the projection and every grader request, using non-echoing outcomes, mislabeled-artifact and injection tests, and the limitation is retained."
+        ]
+      }
+    },
+    "Claims": [
+      {
+        "Id": "C1",
+        "Summary": "Scope, intent, precedence and the nine hosts with their limits.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§1 L8-14 and L39-42; §5 L299-327; §13.4 L930-938. Unchanged."
+        ]
+      },
+      {
+        "Id": "C2",
+        "Summary": "Dependencies are explicit, owned and ordered; planned and implemented types are distinguished.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§1 L22-37; §9 L550-566; §14.7 L1464-1476; §15.5 L1677-1701.",
+          "New work has owners: §21.1 L2249-2250, §21.2 L2318-2319 and L2347-2348, §21.3 L2400-2402, §22 L2450-2451. Source hashes are unchanged."
+        ]
+      },
+      {
+        "Id": "C3",
+        "Summary": "Canonical policy, provenance, hashing and distribution integrity.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§2 L46-89; §14.2 L1110-1111; §21.2 L2321-2341 (manifest of nine packages); §20.2 L2210-2214 (release checklist)."
+        ]
+      },
+      {
+        "Id": "C4",
+        "Summary": "Configuration, selection, reload, defaults and status.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§3 L93-136; §14.5 L1329-1349; §15.4 L1645-1665; §21.2 L2305-2308."
+        ]
+      },
+      {
+        "Id": "C5",
+        "Summary": "Delivery, adapters, dedupe, compaction and Stateless handling, deadlines, and the unavailable case.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§5 L287-344; §13.4 L911-928; §14.7 L1450-1462; §19.2 L2098-2102; §21.2 L2315-2316."
+        ]
+      },
+      {
+        "Id": "C6",
+        "Summary": "Evidence models, endpoints, persistence and migration.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§7 L400-458; §13; §16.1 L1740-1749; §17.1 L1826-1856 (captureArtifactIds at L1837-1839); §19.1 L2050-2059; §20.1 L2152-2175; §21.1 L2242-2255 and L2269; §22 L2413-2418 and L2445-2451.",
+          "Non-blocking gaps: the freeze-row and run-attempt registries are implied rather than named, and observableArtifactIds has no producer (see NonBlockingObservations)."
+        ]
+      },
+      {
+        "Id": "C7",
+        "Summary": "Server completion gate: writers, states, origins, atomicity and authenticity.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§8 L460-532; §13.3 L871-907; §14.1 L1077-1092; §21.2 L2309-2319 (HeldInactive returns the normal 400 and never a 409 from completion)."
+        ]
+      },
+      {
+        "Id": "C8",
+        "Summary": "Snapshots, freshness, scope, raw verification and coverage.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§6 L351-398; §13.1 L752-761; §14.2 L1094-1160; §14.4 L1246-1256; §14.7 L1434-1448. Unchanged."
+        ]
+      },
+      {
+        "Id": "C9",
+        "Summary": "Traceability, test-first ordering, zero-fail/zero-skip gates and named validations.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§9 L534-609; §14.6 L1375-1399.",
+          "Planned tests: §21.1 L2297-2301, §21.2 L2349-2351, §21.3 L2402-2405, §22 L2453-2461. None were executed."
+        ]
+      },
+      {
+        "Id": "C10",
+        "Summary": "Recovery, compatibility, rollout, rollback and configuration ownership.",
+        "Verdict": "PASS",
+        "Evidence": [
+          "§11 L638-663; §14.6 L1401-1430; §16.2 L1763-1779; §20.2 L2177-2220; §21.2 L2303-2351; §21.3 L2376-2398."
+        ]
+      },
+      {
+        "Id": "C11",
+        "Summary": "Bounded evaluation and independent review with honest evidence.",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "Sound: §10 L611-636, §13.5 L999-1029, §18 L1958-1975, §19.1 L2007-2013, §21.3, and the §22 blinding allowlist.",
+          "R12-01: selection prevention holds only per SubjectDigest (§21.1 L2230-2240). RecordResults packets are not final per protocol (§17.1 L1840-1856; §14.2 L1154-1156), AbandonProtocol refuses only locked protocols (L2293), and activation ignores accepted gradings that were never locked (L2278-2283). A valid low grading can therefore be discarded."
+        ]
+      },
+      {
+        "Id": "C12",
+        "Summary": "No consequential choice left to implementers; implementation stays behind approvals.",
+        "Verdict": "FAIL",
+        "Evidence": [
+          "Approvals are kept: §1 L3-4, §9 L604-609, §14.7 L1474-1476.",
+          "R12-01 leaves undecided whether results packets are final per protocol and whether a protocol can be abandoned after an accepted grading."
+        ]
+      }
+    ],
+    "FailList": [
+      {
+        "Id": "R12-01",
+        "Severity": "Medium",
+        "Location": "§21.1 L2230-2240, L2278-2283, L2285-2295; §17.1 L1840-1856; §21.3 L2366-2370; §14.2 L1154-1156; §19.1 L2071-2076",
+        "Trigger": "A valid grading capture is accepted, and the operator, who holds the unblinding map, computes an unfavorable aggregate before calling LockBlindGrades.",
+        "Problem": "The attempt limits, the one-lock rule and 'No regrade follows a valid low score' all apply per Evaluation SubjectDigest, and that digest includes the results digests. Nothing makes a protocol's complete RecordResults packet final. A later complete packet with any byte change in resultJson creates a new subject with a fresh attempt 0, and that subject's lock satisfies the 'frozen protocol has a lock' check. AbandonProtocol also refuses only locked protocols, so a protocol with an accepted but unlocked grading can be abandoned. Activation never refuses on such a grading.",
+        "Consequence": "A valid unfavorable blind grading can be discarded, either by re-recording results (leaving no abandonment record) or by abandoning the protocol (which records the abandonment but hides that a valid grading existed). This reopens the selective-grading path that §21.1 claims to close for the evaluation that gates activation.",
+        "RequiredResolution": "Add to §21.1: (a) Per workspace and protocolId, once a grading attempt is allocated for a results subject, that complete RecordResults packet is final. A different later complete packet for the protocol is refused with 409 evaluation_results_locked; an identical repeat is idempotent. Before any attempt exists, a corrected packet may supersede it, with both retained in accounting. Accepted runs' EvalResult bytes become immutable once an attempt exists. (b) AbandonProtocol is refused once any grading attempt for that protocol holds an accepted capture; that grading must reach LockBlindGrades or GradingInvalid, and the failing-lock rule then applies. (c) Activation for a workspace/policy/build also refuses while any grading attempt holds an accepted capture without a lock. Tests: a differing packet after attempt allocation is refused; abandonment after an accepted capture is refused; an unlocked accepted capture blocks activation; correction before any attempt is allowed and disclosed."
+      }
+    ],
+    "blocking_gaps": [
+      "R12-01 (Medium): a valid low grading can be discarded by re-recording results or abandoning the protocol, because results packets are not final per protocol and protocols with accepted gradings remain abandonable."
+    ],
+    "defects": [
+      {
+        "Id": "R12-01",
+        "Severity": "Medium",
+        "Claims": [
+          "C11",
+          "C12"
+        ]
+      }
+    ],
+    "path_to_threshold": "Add R12-01's three rules (a)-(c) and their tests to §21.1, and align §17.1's RecordResults text with them. This complete read found no other blocking gap; the NonBlockingObservations are optional.",
+    "NonBlockingObservations": [
+      "After §22, observableArtifactIds may reference only Outcome artifacts, but no operation ingests them into a target store, and §17.1 L1846-1847 still calls them 'opaque existing'. Either state that outcomes travel only inline in resultJson or add an outcome-bytes field.",
+      "The frozen 'final diff' outcome should apply §6 snapshot rules to fixture source only, excluding ignored host, plugin or MCP state caches. resolve-cache-dir.ps1 is outside the packet, so the cache location could not be checked. The leak test should also use ledger-state markers, because ledgers contain no policy text and the canary cannot detect them.",
+      "EV1 evidence is thin. The allowlist gives the grader only the commitment and freeze time. Add a neutral server-verified 'pre-run freeze verified' fact, or state in the rubric that Ready implies §21.3's verified ordering.",
+      "State that resultJson.finalResponse must equal the capture's server-extracted final response, and that the final diff and fixture check results are operator-attested harness outputs.",
+      "Carry-overs from round 11: implied entities for freeze rows and run-attempt states; RecordResults request size and streaming; drain ownership wording; WorkspaceId path collisions (benign)."
+    ],
+    "LatentFindingsAcknowledged": [
+      "R12-01 was already present in round 11's text. I missed it there and in my R10-01 correction, which scoped grading attempts per SubjectDigest without making results packets final or forbidding abandonment after an accepted grading."
+    ],
+    "Limitations": [
+      "This was a read-only review of the round-12 packet with the full plan read (L1-2466). No build, test or implementation was executed; the plan's tests are planned only.",
+      "I did not recompute hashes; the commit and plan hash come from the manifest. The 13 non-plan hashes are identical to prior rounds, so I reused my earlier source observations.",
+      "Only targeted greps and reads of plugin-hook.ps1 were made. resolve-cache-dir.ps1 is outside the packet and was not sought.",
+      "I did not inspect the worktreeChanges receipts or prior receipts.",
+      "I did not seek any transcript, credential, live store or execution environment.",
+      "Reviewer identity, capture honesty and remote run binding remain operator-attested, as the plan states.",
+      "TimestampUtc is accurate to the date only."
+    ],
+    "CommandsExecuted": [
+      "Read round-12/packet/review-manifest.json",
+      "Read round-12 plan L1-330",
+      "Read round-12 plan L330-669",
+      "Read round-12 plan L670-1039",
+      "Read round-12 plan L1040-1399",
+      "Read round-12 plan L1400-1769",
+      "Read round-12 plan L1770-2169",
+      "Read round-12 plan L2170-2466",
+      "Grep plugin-hook.ps1 '(?i)turn-state|turn-open\\.lock|StateDir|stateRoot|\\.mcpServer|Join-Path[^\\n]{0,80}state'",
+      "Grep plugin-hook.ps1 '\\$cacheDir\\s*=|function Get-[A-Za-z]*Cache[A-Za-z]*|CLAUDE_PLUGIN_DATA|LOCALAPPDATA|XDG_CACHE_HOME|\\.mcp-cache|cache-dir'",
+      "Read plugin-hook.ps1 L85-109",
+      "Grep plan '(?i)cache dir|cacheDir|plugin state|\\.mcpServer|gitignore|ignored untracked|final diff|RecordResults'",
+      "Grep plan '(?i)AbandonProtocol|abandon|evaluation_results|complete packet|one complete|immutable attempt|Reserved\\|GradingInvalid\\|Locked'"
+    ]
+  },
+  "MarkdownReceipt": "# Round 12 plan-readiness receipt (ClaudeIndependentHostile, claude-opus-5-5/max)\n\n**DISAGREE / NOT-READY**: confidence 90, accuracy 0.97, completeness 0.97; 10 PASS / 2 FAIL / 0 UNKNOWN. Commit `ff306098`, plan SHA-256 `A176796D...F075` (from the manifest, not recomputed); 2466 lines read in full.\n\n## Finding\n- **R12-01 (Medium): a valid low grading can still be thrown away.** The grading-attempt limits, the one-lock rule and 'no regrade after a valid low score' (§21.1) apply per Evaluation SubjectDigest, and that digest includes the results digests. Nothing makes a protocol's complete RecordResults packet final, so re-recording results with any byte change creates a fresh subject whose lock satisfies 'frozen protocol has a lock'. AbandonProtocol refuses only locked protocols, so a protocol with an accepted but unlocked grading can be abandoned. Activation never refuses on accepted gradings that were not locked. Because the operator holds the map, they can see an unfavorable result before locking and discard it.\n- **Fix:** (a) once a grading attempt exists, the protocol's complete packet is final (409 evaluation_results_locked; identical repeat idempotent; corrections only before any attempt) and accepted EvalResult bytes are immutable; (b) refuse AbandonProtocol once a grading capture is accepted; (c) activation refuses while any accepted capture is unlocked. Add tests for each.\n- I missed this in round 11 and in my R10-01 correction.\n\n## R11-01 resolution\nResolved on all four points. §22 keeps captures audit-only, enforces a strict projection allowlist with neutral summaries, refuses invalid projections before Ready without consuming an attempt, and extends the canary test.\n\n## Claims\n- PASS: C1 C2 C3 C4 C5 C6 C7 C8 C9 C10\n- FAIL: C11, C12 (both R12-01)\n\n## Non-blocking observations\n- observableArtifactIds has no producer after §22, and §17.1 still calls them 'existing'.\n- The frozen final-diff definition should exclude host and plugin state, and the leak test should add ledger-state markers.\n- EV1 evidence is thin.\n- finalResponse should be cross-checked against the capture.\n- Carry-overs from round 11.\n\n## Path to threshold\nAdd R12-01's three rules and tests to §21.1, align §17.1, then re-review. This complete read found no other blocking gap.\n\n## Limitations\nRead-only packet review; no execution or hash recomputation; source hashes match prior rounds; resolve-cache-dir.ps1 is outside the packet; operator-attested trust boundaries apply; timestamp is date-only."
+}
