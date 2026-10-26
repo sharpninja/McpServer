@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Reflection;
 using QBrainAi.Support.Mcp.Storage;
 using QBrainAi.Support.Mcp.Tests.Storage;
+using QBrainAi.Support.Mcp.Tests.TestSupport;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
@@ -329,27 +330,9 @@ public sealed class BugTriage139EighteenthTraversalTests
                 return;
             }
 
-            var start = new ProcessStartInfo
-            {
-                FileName = "cmd.exe",
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-            };
-            start.ArgumentList.Add("/d");
-            start.ArgumentList.Add("/c");
-            start.ArgumentList.Add("mklink");
-            start.ArgumentList.Add("/J");
-            start.ArgumentList.Add(aliasPath);
-            start.ArgumentList.Add(targetPath);
-            using var process = Process.Start(start)
-                ?? throw new InvalidOperationException("Unable to start mklink.");
-            process.WaitForExit();
-            if (process.ExitCode != 0)
-            {
-                throw new InvalidOperationException(
-                    $"Unable to create test junction: {process.StandardError.ReadToEnd()}");
-            }
+            // TR-MCP-USECASE-019 AC-008 as replaced 2026-10-26T14:18:23: the junction is created with operating-system
+            // calls in the test process instead of a cmd.exe mklink helper process.
+            WindowsJunction.Create(aliasPath, targetPath);
         }
 
         private static void DeleteAlias(string path)
