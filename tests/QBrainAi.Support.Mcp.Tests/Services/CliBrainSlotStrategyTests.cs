@@ -706,10 +706,11 @@ public sealed class CliBrainSlotStrategyTests
             TimeoutSeconds = 180,
         };
 
-    // Every CLI temp variable points at one test-owned folder while the body runs, then is restored (the shared
-    // CliTempVariables helper; this class runs in the serialized ProcessEnvironmentCollection).
+    // MCPSERVER_QUADBRAIN_CLI_TEMP, which the client reads first, points at a test-owned folder and every other CLI temp
+    // variable at a separate fallback folder while the body runs, then all are restored (the shared CliTempVariables
+    // helper; this class runs in the serialized ProcessEnvironmentCollection).
     private static Task WithIsolatedQuadbrainTemp(Func<string, Task> body) =>
-        CliTempVariables.RunWithTestFolderAsync(body);
+        CliTempVariables.RunWithTestFolderAsync("MCPSERVER_QUADBRAIN_CLI_TEMP", body);
 
     private static string? ArgumentAfter(ProcessStartInfo startInfo, string name)
     {

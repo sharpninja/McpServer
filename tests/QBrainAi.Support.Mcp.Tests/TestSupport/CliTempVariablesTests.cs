@@ -5,21 +5,25 @@ namespace QBrainAi.Support.Mcp.Tests.TestSupport;
 
 /// <summary>
 /// Tests the shared CLI temporary-folder variable support of <see cref="CliTempVariables"/>: its name list matches the
-/// four strategies' fallback chains, and its snapshot assertions accept a run that pointed every name at the test
-/// folder and restored every name, and reject one that missed or mis-set a name.
+/// four strategies' fallback chains, and its snapshot assertions accept a run that pointed the primary name at the test
+/// folder, every other name at a separate fallback folder, and restored every name, and reject one that missed or
+/// mis-set a name.
 /// </summary>
 /// <remarks>
-/// Requirement coverage: TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 as amended 2026-10-26 ("sets and
-/// restores every variable its assertions or the code it calls depend on, every name of a fallback chain the code
-/// reads"; operator: "Strengthen AC, move 14 (Recommended)"; hostile validation finding R6-F1). Test data: scripted
-/// snapshots (dictionaries of name to value); these mock gate controls read and write no process environment, so
-/// they are unit tests. The class runs in <see cref="ProcessEnvironmentCollection"/> because its binding tests write
-/// the process environment; those are integration tests.
+/// Requirement coverage: TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 as amended 2026-10-26 ("set and
+/// restore every variable their assertions or the code they call depend on, every name of a fallback chain the code
+/// reads"; operator: "Strengthen AC, move 14 (Recommended)" and "Dependence + proof AC (Recommended)"; hostile
+/// validation finding R6-F1). Test data: scripted snapshots (dictionaries of name to value); these mock gate controls
+/// read and write no process environment, so they are unit tests. The class runs in
+/// <see cref="ProcessEnvironmentCollection"/> because its binding tests write the process environment; those are
+/// integration tests.
 /// </remarks>
 [Collection(ProcessEnvironmentCollection.Name)]
 public sealed class CliTempVariablesTests
 {
     private const string Folder = "/scripted/cli-temp-folder";
+
+    private const string Fallback = "/scripted/cli-temp-fallback";
 
     /// <summary>
     /// The name list holds the five chain names once each: CliBrainSlotChatClient (QUADBRAIN_CLI, ONESHOT), Codex
@@ -40,26 +44,41 @@ public sealed class CliTempVariablesTests
         Assert.Equal(expected, Names.Order(StringComparer.Ordinal));
     }
 
-    /// <summary>Mock gate positive control: a scripted snapshot with every name at the folder passes.</summary>
-    [Fact]
-    public void ScriptedSnapshot_EveryNameAtTheFolder_Passes() =>
-        AssertAllAt(Scripted(_ => Folder), Folder);
+    /// <summary>
+    /// Mock gate positive control: a scripted snapshot with the primary name at the folder and every other name at the
+    /// fallback folder passes, for each name as the primary.
+    /// </summary>
+    /// <param name="primaryName">The name read first.</param>
+    [Theory]
+    [InlineData("MCPSERVER_QUADBRAIN_CLI_TEMP")]
+    [InlineData("MCPSERVER_ONESHOT_TEMP")]
+    [InlineData("MCPSERVER_CODEX_ONESHOT_TEMP")]
+    public void ScriptedChain_PrimaryAtFolderOthersAtFallback_Passes(string primaryName) =>
+        AssertChainAt(Scripted(name => name == primaryName ? Folder : Fallback), primaryName, Folder, Fallback);
 
     /// <summary>
-    /// Mock gate negative controls: a snapshot missing one name, one with a name at another folder, and one with a
-    /// name unset are each rejected, inside a passing harness.
+    /// Mock gate negative controls: the primary name at the fallback folder, another name at the primary folder, a
+    /// missing name, an unset name, a fallback folder equal to the primary folder, and a primary name outside the
+    /// chain are each rejected, inside a passing harness.
     /// </summary>
     [Fact]
-    public void ScriptedSnapshot_MissingOrWrongName_IsRejectedInsidePassingHarness()
+    public void ScriptedChain_WrongSnapshot_IsRejectedInsidePassingHarness()
     {
-        var missing = Scripted(_ => Folder);
-        missing.Remove("MCPSERVER_CODEX_TRIAGE_TEMP");
-        var elsewhere = Scripted(name => name == "MCPSERVER_GROK_ONESHOT_TEMP" ? "/scripted/other-folder" : Folder);
-        var unset = Scripted(name => name == "MCPSERVER_ONESHOT_TEMP" ? null : Folder);
+        const string primary = "MCPSERVER_QUADBRAIN_CLI_TEMP";
+        var good = Scripted(name => name == primary ? Folder : Fallback);
+        var primaryAtFallback = Scripted(_ => Fallback);
+        var otherAtFolder = Scripted(name => name == primary || name == "MCPSERVER_ONESHOT_TEMP" ? Folder : Fallback);
+        var missing = Scripted(name => name == primary ? Folder : Fallback);
+        missing.Remove("MCPSERVER_GROK_ONESHOT_TEMP");
+        var unset = Scripted(name => name == primary ? Folder : name == "MCPSERVER_CODEX_TRIAGE_TEMP" ? null : Fallback);
+        var sameFolders = Scripted(_ => Folder);
 
-        Assert.NotNull(Record.Exception(() => AssertAllAt(missing, Folder)));
-        Assert.NotNull(Record.Exception(() => AssertAllAt(elsewhere, Folder)));
-        Assert.NotNull(Record.Exception(() => AssertAllAt(unset, Folder)));
+        Assert.NotNull(Record.Exception(() => AssertChainAt(primaryAtFallback, primary, Folder, Fallback)));
+        Assert.NotNull(Record.Exception(() => AssertChainAt(otherAtFolder, primary, Folder, Fallback)));
+        Assert.NotNull(Record.Exception(() => AssertChainAt(missing, primary, Folder, Fallback)));
+        Assert.NotNull(Record.Exception(() => AssertChainAt(unset, primary, Folder, Fallback)));
+        Assert.NotNull(Record.Exception(() => AssertChainAt(sameFolders, primary, Folder, Folder)));
+        Assert.NotNull(Record.Exception(() => AssertChainAt(good, "MCPSERVER_NOT_A_CHAIN_NAME", Folder, Fallback)));
     }
 
     /// <summary>Mock gate positive control: equal before and after snapshots, an unset name included, pass.</summary>
@@ -86,14 +105,21 @@ public sealed class CliTempVariablesTests
     }
 
     /// <summary>
-    /// Binding: the helper points every name at one new folder under the official temporary folder while the body
-    /// runs, then restores every scripted earlier value (an unset name included) and deletes the folder. The test
-    /// writes the process environment and restores the ambient values, so it is an integration test.
+    /// Binding: for each name as the primary, the helper points that name at a new test folder and every other name at
+    /// a separate new fallback folder, both under the official temporary folder, while the body runs, then restores
+    /// every scripted earlier value (an unset name included) and deletes both folders. The test writes the process
+    /// environment and restores the ambient values, so it is an integration test.
     /// </summary>
+    /// <param name="primaryName">The name read first.</param>
     /// <returns>A task that completes when the assertions have run.</returns>
-    [Fact]
+    [Theory]
     [Trait("Category", "Integration")]
-    public async Task RunWithTestFolderAsync_PointsEveryNameAtItsFolderThenRestoresThem()
+    [InlineData("MCPSERVER_QUADBRAIN_CLI_TEMP")]
+    [InlineData("MCPSERVER_ONESHOT_TEMP")]
+    [InlineData("MCPSERVER_CODEX_ONESHOT_TEMP")]
+    [InlineData("MCPSERVER_CODEX_TRIAGE_TEMP")]
+    [InlineData("MCPSERVER_GROK_ONESHOT_TEMP")]
+    public async Task RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(string primaryName)
     {
         var ambient = Snapshot();
         try
@@ -101,23 +127,29 @@ public sealed class CliTempVariablesTests
             SetAll(Prior);
             var before = Snapshot();
             string? seenFolder = null;
+            string? seenFallback = null;
             Dictionary<string, string?>? inside = null;
             var existed = false;
 
-            await RunWithTestFolderAsync(folder =>
+            await RunWithTestFoldersAsync(primaryName, (folder, fallbackFolder) =>
             {
                 seenFolder = folder;
+                seenFallback = fallbackFolder;
                 inside = Snapshot();
-                existed = Directory.Exists(folder);
+                existed = Directory.Exists(folder) && Directory.Exists(fallbackFolder);
                 return Task.CompletedTask;
             }).ConfigureAwait(true);
 
             Assert.NotNull(seenFolder);
+            Assert.NotNull(seenFallback);
             Assert.NotNull(inside);
-            AssertAllAt(inside, seenFolder);
+            AssertChainAt(inside, primaryName, seenFolder, seenFallback);
             Assert.True(existed);
-            Assert.StartsWith(Path.GetFullPath(Path.GetTempPath()), Path.GetFullPath(seenFolder), StringComparison.OrdinalIgnoreCase);
+            var temp = Path.GetFullPath(Path.GetTempPath());
+            Assert.StartsWith(temp, Path.GetFullPath(seenFolder), StringComparison.OrdinalIgnoreCase);
+            Assert.StartsWith(temp, Path.GetFullPath(seenFallback), StringComparison.OrdinalIgnoreCase);
             Assert.False(Directory.Exists(seenFolder));
+            Assert.False(Directory.Exists(seenFallback));
             AssertRestored(before, Snapshot());
         }
         finally
@@ -128,7 +160,7 @@ public sealed class CliTempVariablesTests
 
     /// <summary>
     /// Binding: when the body throws, the exception reaches the caller and the helper still restores every scripted
-    /// earlier value and deletes the folder. The test writes the process environment and restores the ambient
+    /// earlier value and deletes both folders. The test writes the process environment and restores the ambient
     /// values, so it is an integration test.
     /// </summary>
     /// <returns>A task that completes when the assertions have run.</returns>
@@ -142,21 +174,47 @@ public sealed class CliTempVariablesTests
             SetAll(Prior);
             var before = Snapshot();
             string? seenFolder = null;
+            string? seenFallback = null;
 
-            await Assert.ThrowsAsync<InvalidOperationException>(() => RunWithTestFolderAsync(folder =>
+            await Assert.ThrowsAsync<InvalidOperationException>(() => RunWithTestFoldersAsync("MCPSERVER_CODEX_ONESHOT_TEMP", (folder, fallbackFolder) =>
             {
                 seenFolder = folder;
+                seenFallback = fallbackFolder;
                 throw new InvalidOperationException("scripted body failure");
             })).ConfigureAwait(true);
 
             Assert.NotNull(seenFolder);
+            Assert.NotNull(seenFallback);
             Assert.False(Directory.Exists(seenFolder));
+            Assert.False(Directory.Exists(seenFallback));
             AssertRestored(before, Snapshot());
         }
         finally
         {
             SetAll(name => ambient[name]);
         }
+    }
+
+    /// <summary>
+    /// Binding: a primary name outside the chain is refused before any variable is written or any folder is made.
+    /// The test reads the process environment to prove nothing changed, so it is an integration test.
+    /// </summary>
+    /// <returns>A task that completes when the assertions have run.</returns>
+    [Fact]
+    [Trait("Category", "Integration")]
+    public async Task RunWithTestFolderAsync_UnknownPrimary_IsRefusedWithoutChanges()
+    {
+        var before = Snapshot();
+        var ran = false;
+
+        await Assert.ThrowsAsync<ArgumentException>(() => RunWithTestFolderAsync("MCPSERVER_NOT_A_CHAIN_NAME", _ =>
+        {
+            ran = true;
+            return Task.CompletedTask;
+        })).ConfigureAwait(true);
+
+        Assert.False(ran);
+        AssertRestored(before, Snapshot());
     }
 
     private static void SetAll(Func<string, string?> value)

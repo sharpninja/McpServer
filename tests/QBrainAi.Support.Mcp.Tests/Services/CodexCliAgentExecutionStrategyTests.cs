@@ -21,6 +21,12 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 public sealed class CodexCliAgentExecutionStrategyTests
 {
     /// <summary>
+    /// The CLI temp variable the Codex strategy reads first; tests point it at the test folder and every other CLI temp
+    /// variable at a fallback folder, so an output path under the test folder proves it won.
+    /// </summary>
+    internal const string PrimaryTempName = "MCPSERVER_CODEX_ONESHOT_TEMP";
+
+    /// <summary>
     /// TEST-MCP-TRIAGE-003: launches the strategy against the capturing spawner with the default request, with every
     /// CLI temp variable at a test-owned folder. Shared by the Windows and Linux launch cases, which live in
     /// integration classes because the strategy chooses its launcher by the running OS (TR-MCP-USECASE-018 AC-006).
@@ -29,7 +35,7 @@ public sealed class CodexCliAgentExecutionStrategyTests
     internal static async Task<CapturingProcessSpawner> LaunchDefaultAsync()
     {
         var spawner = new CapturingProcessSpawner(exitCode: 0, outputBody: """{"title":"triage result"}""");
-        await CliTempVariables.RunWithTestFolderAsync(async _ =>
+        await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async _ =>
         {
             var strategy = new CodexCliAgentExecutionStrategy(
                 new CapturingProcessEnvironmentService(),
@@ -91,7 +97,7 @@ public sealed class CodexCliAgentExecutionStrategyTests
     [Trait("Category", "Integration")]
     public async Task ReadInitialResponseAsync_WhenCodexFails_ReturnsErrorResult()
     {
-        await CliTempVariables.RunWithTestFolderAsync(async _ =>
+        await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async _ =>
         {
             var spawner = new CapturingProcessSpawner(exitCode: 2, stderr: "not authenticated");
             var strategy = new CodexCliAgentExecutionStrategy(
@@ -119,7 +125,7 @@ public sealed class CodexCliAgentExecutionStrategyTests
     [Trait("Category", "Integration")]
     public async Task ReadInitialResponseAsync_WhenCodexTimesOut_PreservesPartialStreams()
     {
-        await CliTempVariables.RunWithTestFolderAsync(async _ =>
+        await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async _ =>
         {
             var spawner = new CapturingProcessSpawner(
                 exitCode: 0,
@@ -154,7 +160,7 @@ public sealed class CodexCliAgentExecutionStrategyTests
     [Trait("Category", "Integration")]
     public async Task ReadInitialResponseAsync_WithOutputCallback_StreamsAgentOutput()
     {
-        await CliTempVariables.RunWithTestFolderAsync(async _ =>
+        await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async _ =>
         {
             var streamed = new List<string>();
             var spawner = new CapturingProcessSpawner(
@@ -186,17 +192,18 @@ public sealed class CodexCliAgentExecutionStrategyTests
     /// <summary>
     /// TEST-MCP-TRIAGE-003: The Codex CLI strategy writes one-shot output
     /// files under the configured shared temp root so a service-spawned
-    /// interactive-user codex process can write the final response file. The test points every CLI temp variable,
-    /// <c>MCPSERVER_CODEX_ONESHOT_TEMP</c> (read first) and its fallback included, at a test-owned folder and restores
-    /// them through <see cref="CliTempVariables"/>, so it writes the process environment and is an integration test
-    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+    /// interactive-user codex process can write the final response file. The test points
+    /// <c>MCPSERVER_CODEX_ONESHOT_TEMP</c>, which the strategy reads first, at a test-owned folder and every other CLI
+    /// temp variable, its fallback <c>MCPSERVER_CODEX_TRIAGE_TEMP</c> included, at a separate fallback folder, and
+    /// restores them through <see cref="CliTempVariables"/>, so the output path proves the primary name won; it writes
+    /// the process environment and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
     /// </summary>
     /// <returns>A task that completes when the assertions have run.</returns>
     [Fact]
     [Trait("Category", "Integration")]
     public async Task ReadInitialResponseAsync_WithConfiguredSharedTempRoot_UsesSharedOutputPath()
     {
-        await CliTempVariables.RunWithTestFolderAsync(async tempRoot =>
+        await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async tempRoot =>
         {
             var spawner = new CapturingProcessSpawner(exitCode: 0, outputBody: """{"title":"triage result"}""");
             var strategy = new CodexCliAgentExecutionStrategy(
@@ -430,7 +437,7 @@ public sealed class CodexCliAgentExecutionStrategyWindowsTests
                 stdout: "codex stdout",
                 stderr: "codex stderr");
             AgentCliResult? launched = null;
-            await CliTempVariables.RunWithTestFolderAsync(async _ =>
+            await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async _ =>
             {
                 var strategy = new CodexCliAgentExecutionStrategy(
                     new CodexCliAgentExecutionStrategyTests.CapturingProcessEnvironmentService(),

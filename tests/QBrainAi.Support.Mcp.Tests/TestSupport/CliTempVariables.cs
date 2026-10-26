@@ -8,9 +8,11 @@ namespace QBrainAi.Support.Mcp.Tests.TestSupport;
 /// <c>CodexCliAgentExecutionStrategy</c> reads MCPSERVER_CODEX_ONESHOT_TEMP then MCPSERVER_CODEX_TRIAGE_TEMP;
 /// <c>OneShotCliAgentExecutionStrategy</c> reads MCPSERVER_ONESHOT_TEMP, MCPSERVER_CODEX_ONESHOT_TEMP, then
 /// MCPSERVER_CODEX_TRIAGE_TEMP; <c>GrokCliAgentExecutionStrategy</c> reads MCPSERVER_GROK_ONESHOT_TEMP then
-/// MCPSERVER_ONESHOT_TEMP. A test that reaches one of them sets every name of the chain and restores it
-/// (TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 as amended 2026-10-26; operator: "Strengthen AC, move 14
-/// (Recommended)"; hostile validation finding R6-F1). Shared by the three strategy test classes.
+/// MCPSERVER_ONESHOT_TEMP. A test that reaches one of them sets every name of the chain and restores it: the name the
+/// strategy under test reads first points at the test folder and every other name at a separate test-owned fallback
+/// folder, so an assertion on the test folder proves the primary name won over a set fallback (TR-MCP-USECASE-018
+/// AC-006 and TR-MCP-USECASE-019 AC-008 as amended 2026-10-26; operator: "Strengthen AC, move 14 (Recommended)" and
+/// "Dependence + proof AC (Recommended)"; hostile validation finding R6-F1). Shared by the three strategy test classes.
 /// </summary>
 internal static class CliTempVariables
 {
@@ -25,34 +27,57 @@ internal static class CliTempVariables
     ];
 
     /// <summary>
-    /// Runs <paramref name="body"/> with every name of <see cref="Names"/> pointing at one new folder under the
-    /// official temporary folder, then restores every name to its earlier value (an unset name stays unset) and
-    /// deletes the folder, also when the body throws. Callers belong to <see cref="ProcessEnvironmentCollection"/>.
+    /// Runs <paramref name="body"/> with <paramref name="primaryName"/> pointing at a new test folder and every other
+    /// name of <see cref="Names"/> at a second new fallback folder, both under the official temporary folder, then
+    /// restores every name to its earlier value (an unset name stays unset) and deletes both folders, also when the
+    /// body throws. Callers belong to <see cref="ProcessEnvironmentCollection"/>.
     /// </summary>
-    /// <param name="body">The test body; it receives the folder.</param>
+    /// <param name="primaryName">The name the strategy under test reads first; one of <see cref="Names"/>.</param>
+    /// <param name="body">The test body; it receives the test folder.</param>
     /// <returns>A task that completes when the body has run and the variables are restored.</returns>
-    internal static async Task RunWithTestFolderAsync(Func<string, Task> body)
+    internal static Task RunWithTestFolderAsync(string primaryName, Func<string, Task> body)
     {
         ArgumentNullException.ThrowIfNull(body);
+        return RunWithTestFoldersAsync(primaryName, (folder, _) => body(folder));
+    }
+
+    /// <summary>
+    /// The same as <see cref="RunWithTestFolderAsync"/>, with the body receiving the fallback folder too.
+    /// </summary>
+    /// <param name="primaryName">The name the strategy under test reads first; one of <see cref="Names"/>.</param>
+    /// <param name="body">The test body; it receives the test folder and the fallback folder.</param>
+    /// <returns>A task that completes when the body has run and the variables are restored.</returns>
+    internal static async Task RunWithTestFoldersAsync(string primaryName, Func<string, string, Task> body)
+    {
+        ArgumentNullException.ThrowIfNull(body);
+        if (!Names.Contains(primaryName, StringComparer.Ordinal))
+            throw new ArgumentException($"{primaryName} is not a CLI temp variable name.", nameof(primaryName));
+
         var previous = Snapshot();
-        var folder = Path.Combine(Path.GetTempPath(), "qbt-cli-temp-" + Guid.NewGuid().ToString("N"));
+        var stem = Path.Combine(Path.GetTempPath(), "qbt-cli-temp-" + Guid.NewGuid().ToString("N"));
+        var folder = stem + "-primary";
+        var fallbackFolder = stem + "-fallback";
         Directory.CreateDirectory(folder);
+        Directory.CreateDirectory(fallbackFolder);
         try
         {
             foreach (var name in Names)
-                Environment.SetEnvironmentVariable(name, folder);
-            await body(folder).ConfigureAwait(true);
+                Environment.SetEnvironmentVariable(name, name == primaryName ? folder : fallbackFolder);
+            await body(folder, fallbackFolder).ConfigureAwait(true);
         }
         finally
         {
             foreach (var (name, value) in previous)
                 Environment.SetEnvironmentVariable(name, value);
-            try
+            foreach (var created in new[] { folder, fallbackFolder })
             {
-                Directory.Delete(folder, recursive: true);
-            }
-            catch (IOException)
-            {
+                try
+                {
+                    Directory.Delete(created, recursive: true);
+                }
+                catch (IOException)
+                {
+                }
             }
         }
     }
@@ -63,18 +88,24 @@ internal static class CliTempVariables
         Names.ToDictionary(name => name, name => Environment.GetEnvironmentVariable(name), StringComparer.Ordinal);
 
     /// <summary>
-    /// Asserts that a snapshot of the variables holds every name of <see cref="Names"/> and that each one points at
-    /// <paramref name="folder"/>.
+    /// Asserts that a snapshot of the variables points the name a strategy reads first, <paramref name="primaryName"/>,
+    /// at <paramref name="folder"/> and every other name of <see cref="Names"/> at a different folder,
+    /// <paramref name="fallbackFolder"/>, so a test that asserts on <paramref name="folder"/> proves the primary name
+    /// won over a set fallback.
     /// </summary>
     /// <param name="observed">The variable values seen, by name.</param>
-    /// <param name="folder">The folder every name must point at.</param>
-    internal static void AssertAllAt(IReadOnlyDictionary<string, string?> observed, string folder)
+    /// <param name="primaryName">The name the strategy under test reads first; one of <see cref="Names"/>.</param>
+    /// <param name="folder">The folder the primary name must point at.</param>
+    /// <param name="fallbackFolder">The folder every other name must point at; not <paramref name="folder"/>.</param>
+    internal static void AssertChainAt(IReadOnlyDictionary<string, string?> observed, string primaryName, string folder, string fallbackFolder)
     {
         ArgumentNullException.ThrowIfNull(observed);
+        Assert.Contains(primaryName, Names);
+        Assert.NotEqual(folder, fallbackFolder);
         foreach (var name in Names)
         {
             Assert.True(observed.TryGetValue(name, out var value), $"{name} was not observed.");
-            Assert.Equal(folder, value);
+            Assert.Equal(name == primaryName ? folder : fallbackFolder, value);
         }
     }
 

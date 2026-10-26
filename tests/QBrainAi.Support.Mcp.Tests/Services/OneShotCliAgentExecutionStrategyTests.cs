@@ -19,6 +19,10 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 [Collection(ProcessEnvironmentCollection.Name)]
 public sealed class OneShotCliAgentExecutionStrategyTests
 {
+    // The CLI temp variable the one-shot strategy reads first; it points at the test folder and every other CLI temp
+    // variable at a fallback folder.
+    private const string PrimaryTempName = "MCPSERVER_ONESHOT_TEMP";
+
     /// <summary>
     /// The Codex one-shot command runs <c>codex exec</c> with the effort, working folder, output file and stdin
     /// prompt. The test sets and restores every CLI temp variable through <see cref="CliTempVariables"/>, so it is an
@@ -29,7 +33,7 @@ public sealed class OneShotCliAgentExecutionStrategyTests
     [Trait("Category", "Integration")]
     public async Task ReadInitialResponseAsync_WithCodexAgent_UsesCodexOneShotCommandShape()
     {
-        await CliTempVariables.RunWithTestFolderAsync(async _ =>
+        await CliTempVariables.RunWithTestFolderAsync(PrimaryTempName, async _ =>
         {
             CapturingProcessSpawner spawner = new(outputBody: "codex final");
             OneShotCliAgentExecutionStrategy strategy = CreateStrategy(spawner);
@@ -61,7 +65,7 @@ public sealed class OneShotCliAgentExecutionStrategyTests
     [Trait("Category", "Integration")]
     public async Task ReadInitialResponseAsync_WithClaudeAgent_UsesClaudePlanModeCommandShape()
     {
-        await CliTempVariables.RunWithTestFolderAsync(async _ =>
+        await CliTempVariables.RunWithTestFolderAsync(PrimaryTempName, async _ =>
         {
             CapturingProcessSpawner spawner = new(stdout: "claude final");
             OneShotCliAgentExecutionStrategy strategy = CreateStrategy(spawner);
@@ -92,7 +96,7 @@ public sealed class OneShotCliAgentExecutionStrategyTests
     [Trait("Category", "Integration")]
     public async Task ReadInitialResponseAsync_WithGrokAgent_UsesGrokPromptFileCommandShape()
     {
-        await CliTempVariables.RunWithTestFolderAsync(async _ =>
+        await CliTempVariables.RunWithTestFolderAsync(PrimaryTempName, async _ =>
         {
             CapturingProcessSpawner spawner = new(stdout: "grok final");
             OneShotCliAgentExecutionStrategy strategy = CreateStrategy(spawner);
@@ -125,7 +129,7 @@ public sealed class OneShotCliAgentExecutionStrategyTests
     [Trait("Category", "Integration")]
     public async Task ReadInitialResponseAsync_WithClineAgent_UsesClineParameterizedPromptCommandShape()
     {
-        await CliTempVariables.RunWithTestFolderAsync(async _ =>
+        await CliTempVariables.RunWithTestFolderAsync(PrimaryTempName, async _ =>
         {
             CapturingProcessSpawner spawner = new(stdout: "cline final");
             OneShotCliAgentExecutionStrategy strategy = CreateStrategy(spawner);
