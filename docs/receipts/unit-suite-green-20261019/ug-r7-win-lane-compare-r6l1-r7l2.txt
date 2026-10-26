@@ -1,0 +1,36 @@
+RECEIPT 2026-10-26T11:16:57 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Compare-WinTrxRuns.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-10-26T11:16:56 project=QBrainAi.Support.Mcp.Tests
+A ug-r6-win-lane-1 results=376 start=2026-10-21T14:00:22.1030549-05:00 finish=2026-10-21T14:06:16.8610074-05:00
+B ug-r7-win-lane-2 results=397 start=2026-10-26T11:08:13.0662615-05:00 finish=2026-10-26T11:15:34.5815132-05:00
+ONLY-B QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: "MCPSERVER_QUADBRAIN_CLI_TEMP") outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_NonZeroExit_StillThrows outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClaudeAgent_UsesClaudePlanModeCommandShape outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_GrokSecondCall_ResumesSameSession outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFolderAsync_BodyThrows_StillRestoresAndDeletes outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: "MCPSERVER_GROK_ONESHOT_TEMP") outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.Factory_Create_CliSlot_ReturnsCliClient outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WhenCodexTimesOut_PreservesPartialStreams outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithCodexAgent_UsesCodexOneShotCommandShape outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_ReturnsStdoutInsteadOfThrowing outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithOutputCallback_StreamsAgentOutput outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: "MCPSERVER_ONESHOT_TEMP") outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClineAgent_UsesClineParameterizedPromptCommandShape outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithGrokAgent_UsesGrokPromptFileCommandShape outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_ResumeSessionMissing_RetriesWithoutResume outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WhenCodexFails_ReturnsErrorResult outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_CodexSecondCall_ResumesExtractedThread outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: "MCPSERVER_CODEX_ONESHOT_TEMP") outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFolderAsync_UnknownPrimary_IsRefusedWithoutChanges outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: "MCPSERVER_CODEX_TRIAGE_TEMP") outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_EmptyStdout_DoesNotThrow outcome=Passed
+NAMED B QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: "MCPSERVER_QUADBRAIN_CLI_TEMP") outcome=Passed duration=00:00:00.0016755 start=2026-10-26T11:15:17.8466201-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFolderAsync_BodyThrows_StillRestoresAndDeletes outcome=Passed duration=00:00:00.0026364 start=2026-10-26T11:15:17.8530237-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: "MCPSERVER_GROK_ONESHOT_TEMP") outcome=Passed duration=00:00:00.0013270 start=2026-10-26T11:15:17.8499754-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: "MCPSERVER_ONESHOT_TEMP") outcome=Passed duration=00:00:00.0032851 start=2026-10-26T11:15:17.8431637-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: "MCPSERVER_CODEX_ONESHOT_TEMP") outcome=Passed duration=00:00:00.0013736 start=2026-10-26T11:15:17.8484537-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFolderAsync_UnknownPrimary_IsRefusedWithoutChanges outcome=Passed duration=00:00:00.0008007 start=2026-10-26T11:15:17.8558527-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: "MCPSERVER_CODEX_TRIAGE_TEMP") outcome=Passed duration=00:00:00.0013245 start=2026-10-26T11:15:17.8514416-05:00
+END 2026-10-26T11:16:56

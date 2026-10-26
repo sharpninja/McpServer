@@ -1,0 +1,9 @@
+RECEIPT 2026-10-26T11:01:18 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Invoke-WinNukeTarget.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+START 2026-10-26T11:01:17 host=PAYTON-LEGION2 user=kingd session=0 interactive=False
+What if: Performing the operation "Output to File" on target "C:\Users\kingd\AppData\Local\Temp\unit-green-r3-ssh\fetch.txt".
+REF origin/fix/unit-suite-green-20261019=c31f36d81dc87509b605175c5ced0d3b0f08180c expected=c31f36d81dc87509b605175c5ced0d3b0f08180c match=True
+What if: Performing the operation "check out c31f36d81dc87509b605175c5ced0d3b0f08180c and run Nuke Test with run id ug-r7-win-test-ssh-2" on target "F:/GitHub/McpServer/.worktrees/unit-green-r3-ssh".
+WHATIF: no checkout, no target run
