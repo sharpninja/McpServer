@@ -17,8 +17,10 @@ namespace QBrainAi.Support.Mcp.Tests.TestSupport;
 /// <see cref="CollectionAssertions"/>, so no test is run. Negative controls prove the membership assertion rejects a
 /// type outside any collection and a type in another collection; the definition assertion's own controls are in
 /// <c>SqlServerLocalDbCollectionTests</c>. The binding checks the real definition and the classes that write the
-/// process environment, found by the one-time environment sweep of plan section 19.3 (stated limit: the list is not
-/// discovered from source; a new class that writes the process environment must be added to it).
+/// process environment, found by the one-time environment sweep of plan section 19.3 and its extension through
+/// production code in plan section 20 (the one-shot strategy tests, the two Codex platform classes and the
+/// <see cref="CliTempVariables"/> tests, which write the CLI temp variables; hostile validation finding R6-F1). Stated
+/// limit: the list is not discovered from source; a new class that writes the process environment must be added to it.
 /// </remarks>
 public sealed class ProcessEnvironmentCollectionTests
 {
@@ -73,6 +75,10 @@ public sealed class ProcessEnvironmentCollectionTests
                      typeof(QBrainAi.Support.Mcp.Tests.DatabaseMaintenance.McpDatabaseEncryptionTransitionCommandTests),
                      typeof(QBrainAi.Support.Mcp.Tests.Services.ProcessEnvironmentServiceTests),
                      typeof(QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchHarnessTests),
+                     typeof(QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests),
+                     typeof(QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyWindowsTests),
+                     typeof(QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyLinuxTests),
+                     typeof(CliTempVariablesTests),
                  })
         {
             AssertInCollection(type, RequiredCollection);

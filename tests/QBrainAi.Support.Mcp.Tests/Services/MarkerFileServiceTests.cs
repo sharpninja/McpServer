@@ -732,8 +732,10 @@ public sealed class MarkerFileServiceTests
     }
 
     /// <summary>
-    /// TEST-MCP-PLUGIN-PSONLY-001: marker plugin contracts publish the current synced plugin version. Resolution reads
-    /// the assembly's hermetic sources (<see cref="HermeticUserProfileFixture"/>), so no installed plugin is seen.
+    /// TEST-MCP-PLUGIN-PSONLY-001 (historical; no such record is in the requirements store, hostile validation finding
+    /// R6-F2, so this is not an active coverage claim): marker plugin contracts publish the current synced plugin
+    /// version. Resolution reads the assembly's hermetic sources (<see cref="HermeticUserProfileFixture"/>), so no
+    /// installed plugin is seen (TR-MCP-WS-005 AC-TR-MCP-WS-005-001).
     /// </summary>
     [Fact]
     public void BuildDefaultAgentPlugins_UsesCurrentSyncedPluginVersion()

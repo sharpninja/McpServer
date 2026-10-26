@@ -12,32 +12,37 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// <summary>
 /// TEST-MCP-TRIAGE-003: Verifies the Codex CLI execution strategy used by
 /// background triage invokes <c>codex exec</c> non-interactively. The class runs in
-/// <see cref="ProcessEnvironmentCollection"/> because one of its tests writes the process environment
-/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+/// <see cref="ProcessEnvironmentCollection"/> because every test that starts a session writes the process environment:
+/// the strategy's temp-folder lookup reads the CLI temp variables, so those tests set and restore them through
+/// <see cref="CliTempVariables"/> and are integration tests (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008;
+/// hostile validation finding R6-F1).
 /// </summary>
 [Collection(ProcessEnvironmentCollection.Name)]
 public sealed class CodexCliAgentExecutionStrategyTests
 {
     /// <summary>
-    /// TEST-MCP-TRIAGE-003: launches the strategy against the capturing spawner with the default request.
-    /// Shared by the Windows and Linux launch cases, which live in integration classes because the
-    /// strategy chooses its launcher by the running OS (TR-MCP-USECASE-018 AC-006).
+    /// TEST-MCP-TRIAGE-003: launches the strategy against the capturing spawner with the default request, with every
+    /// CLI temp variable at a test-owned folder. Shared by the Windows and Linux launch cases, which live in
+    /// integration classes because the strategy chooses its launcher by the running OS (TR-MCP-USECASE-018 AC-006).
     /// </summary>
     /// <returns>The spawner holding the captured launch.</returns>
     internal static async Task<CapturingProcessSpawner> LaunchDefaultAsync()
     {
         var spawner = new CapturingProcessSpawner(exitCode: 0, outputBody: """{"title":"triage result"}""");
-        var strategy = new CodexCliAgentExecutionStrategy(
-            new CapturingProcessEnvironmentService(),
-            spawner,
-            NullLogger<CodexCliAgentExecutionStrategy>.Instance);
+        await CliTempVariables.RunWithTestFolderAsync(async _ =>
+        {
+            var strategy = new CodexCliAgentExecutionStrategy(
+                new CapturingProcessEnvironmentService(),
+                spawner,
+                NullLogger<CodexCliAgentExecutionStrategy>.Instance);
 
-        await using var session = await strategy.CreateSessionAsync(CreateRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            await using var session = await strategy.CreateSessionAsync(CreateRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var result = await session.ReadInitialResponseAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var result = await session.ReadInitialResponseAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        Assert.Equal(AgentCliResultState.Success, result.State);
-        Assert.Equal("""{"title":"triage result"}""", result.Body);
+            Assert.Equal(AgentCliResultState.Success, result.State);
+            Assert.Equal("""{"title":"triage result"}""", result.Body);
+        }).ConfigureAwait(true);
         Assert.NotNull(spawner.StartInfo);
         return spawner;
     }
@@ -77,102 +82,121 @@ public sealed class CodexCliAgentExecutionStrategyTests
 
     /// <summary>
     /// TEST-MCP-TRIAGE-005: A failed Codex CLI run preserves stderr as the
-    /// inspectable research-run failure reason.
+    /// inspectable research-run failure reason. The strategy's temp-folder lookup reads the CLI temp variables, so the
+    /// test sets and restores them through <see cref="CliTempVariables"/> and is an integration test
+    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1).
     /// </summary>
+    /// <returns>A task that completes when the assertions have run.</returns>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task ReadInitialResponseAsync_WhenCodexFails_ReturnsErrorResult()
     {
-        var spawner = new CapturingProcessSpawner(exitCode: 2, stderr: "not authenticated");
-        var strategy = new CodexCliAgentExecutionStrategy(
-            new CapturingProcessEnvironmentService(),
-            spawner,
-            NullLogger<CodexCliAgentExecutionStrategy>.Instance);
+        await CliTempVariables.RunWithTestFolderAsync(async _ =>
+        {
+            var spawner = new CapturingProcessSpawner(exitCode: 2, stderr: "not authenticated");
+            var strategy = new CodexCliAgentExecutionStrategy(
+                new CapturingProcessEnvironmentService(),
+                spawner,
+                NullLogger<CodexCliAgentExecutionStrategy>.Instance);
 
-        await using var session = await strategy.CreateSessionAsync(CreateRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            await using var session = await strategy.CreateSessionAsync(CreateRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var result = await session.ReadInitialResponseAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var result = await session.ReadInitialResponseAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        Assert.Equal(AgentCliResultState.Error, result.State);
-        Assert.Contains("not authenticated", result.Stderr, StringComparison.OrdinalIgnoreCase);
+            Assert.Equal(AgentCliResultState.Error, result.State);
+            Assert.Contains("not authenticated", result.Stderr, StringComparison.OrdinalIgnoreCase);
+        }).ConfigureAwait(true);
     }
 
     /// <summary>
     /// TEST-MCP-TRIAGE-005: Timed-out Codex CLI triage runs preserve partial
-    /// stdout and stderr instead of returning only the timeout message.
+    /// stdout and stderr instead of returning only the timeout message. The strategy's temp-folder lookup reads the
+    /// CLI temp variables, so the test sets and restores them through <see cref="CliTempVariables"/> and is an
+    /// integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1).
     /// </summary>
+    /// <returns>A task that completes when the assertions have run.</returns>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task ReadInitialResponseAsync_WhenCodexTimesOut_PreservesPartialStreams()
     {
-        var spawner = new CapturingProcessSpawner(
-            exitCode: 0,
-            stdout: "analysis started",
-            stderr: "loading context",
-            waitForCancellation: true);
-        var strategy = new CodexCliAgentExecutionStrategy(
-            new CapturingProcessEnvironmentService(),
-            spawner,
-            NullLogger<CodexCliAgentExecutionStrategy>.Instance);
+        await CliTempVariables.RunWithTestFolderAsync(async _ =>
+        {
+            var spawner = new CapturingProcessSpawner(
+                exitCode: 0,
+                stdout: "analysis started",
+                stderr: "loading context",
+                waitForCancellation: true);
+            var strategy = new CodexCliAgentExecutionStrategy(
+                new CapturingProcessEnvironmentService(),
+                spawner,
+                NullLogger<CodexCliAgentExecutionStrategy>.Instance);
 
-        await using var session = await strategy.CreateSessionAsync(CreateRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        using var timeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(10));
+            await using var session = await strategy.CreateSessionAsync(CreateRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            using var timeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(10));
 
-        var result = await session.ReadInitialResponseAsync(timeout.Token).ConfigureAwait(true);
+            var result = await session.ReadInitialResponseAsync(timeout.Token).ConfigureAwait(true);
 
-        Assert.Equal(AgentCliResultState.Error, result.State);
-        Assert.Contains("analysis started", result.Stdout, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("loading context", result.Stderr, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("cancelled or timed out", result.Stderr, StringComparison.OrdinalIgnoreCase);
+            Assert.Equal(AgentCliResultState.Error, result.State);
+            Assert.Contains("analysis started", result.Stdout, StringComparison.OrdinalIgnoreCase);
+            Assert.Contains("loading context", result.Stderr, StringComparison.OrdinalIgnoreCase);
+            Assert.Contains("cancelled or timed out", result.Stderr, StringComparison.OrdinalIgnoreCase);
+        }).ConfigureAwait(true);
     }
 
     /// <summary>
     /// TEST-MCP-TRIAGE-005: Codex CLI triage runs stream stdout and stderr
-    /// chunks to the configured output callback while the process is running.
+    /// chunks to the configured output callback while the process is running. The strategy's temp-folder lookup reads
+    /// the CLI temp variables, so the test sets and restores them through <see cref="CliTempVariables"/> and is an
+    /// integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1).
     /// </summary>
+    /// <returns>A task that completes when the assertions have run.</returns>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task ReadInitialResponseAsync_WithOutputCallback_StreamsAgentOutput()
     {
-        var streamed = new List<string>();
-        var spawner = new CapturingProcessSpawner(
-            exitCode: 0,
-            outputBody: """{"title":"triage result"}""",
-            stdout: "analysis started" + Environment.NewLine + "analysis done",
-            stderr: "loading context");
-        var strategy = new CodexCliAgentExecutionStrategy(
-            new CapturingProcessEnvironmentService(),
-            spawner,
-            NullLogger<CodexCliAgentExecutionStrategy>.Instance);
-        var request = CreateRequest(outputReceivedAsync: (streamName, text) =>
+        await CliTempVariables.RunWithTestFolderAsync(async _ =>
         {
-            streamed.Add($"{streamName}:{text}");
-            return Task.CompletedTask;
-        });
+            var streamed = new List<string>();
+            var spawner = new CapturingProcessSpawner(
+                exitCode: 0,
+                outputBody: """{"title":"triage result"}""",
+                stdout: "analysis started" + Environment.NewLine + "analysis done",
+                stderr: "loading context");
+            var strategy = new CodexCliAgentExecutionStrategy(
+                new CapturingProcessEnvironmentService(),
+                spawner,
+                NullLogger<CodexCliAgentExecutionStrategy>.Instance);
+            var request = CreateRequest(outputReceivedAsync: (streamName, text) =>
+            {
+                streamed.Add($"{streamName}:{text}");
+                return Task.CompletedTask;
+            });
 
-        await using var session = await strategy.CreateSessionAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            await using var session = await strategy.CreateSessionAsync(request, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var result = await session.ReadInitialResponseAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var result = await session.ReadInitialResponseAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        Assert.Equal(AgentCliResultState.Success, result.State);
-        Assert.Contains("stdout:analysis started", streamed);
-        Assert.Contains("stdout:analysis done", streamed);
-        Assert.Contains("stderr:loading context", streamed);
+            Assert.Equal(AgentCliResultState.Success, result.State);
+            Assert.Contains("stdout:analysis started", streamed);
+            Assert.Contains("stdout:analysis done", streamed);
+            Assert.Contains("stderr:loading context", streamed);
+        }).ConfigureAwait(true);
     }
 
     /// <summary>
     /// TEST-MCP-TRIAGE-003: The Codex CLI strategy writes one-shot output
     /// files under the configured shared temp root so a service-spawned
-    /// interactive-user codex process can write the final response file. The test sets and restores
-    /// <c>MCPSERVER_CODEX_ONESHOT_TEMP</c>, which the strategy reads first, so it writes the process environment and is
-    /// an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+    /// interactive-user codex process can write the final response file. The test points every CLI temp variable,
+    /// <c>MCPSERVER_CODEX_ONESHOT_TEMP</c> (read first) and its fallback included, at a test-owned folder and restores
+    /// them through <see cref="CliTempVariables"/>, so it writes the process environment and is an integration test
+    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
     /// </summary>
+    /// <returns>A task that completes when the assertions have run.</returns>
     [Fact]
     [Trait("Category", "Integration")]
     public async Task ReadInitialResponseAsync_WithConfiguredSharedTempRoot_UsesSharedOutputPath()
     {
-        var tempRoot = Path.Combine(Path.GetTempPath(), $"codex-oneshot-shared-{Guid.NewGuid():N}");
-        Directory.CreateDirectory(tempRoot);
-        var previous = Environment.GetEnvironmentVariable("MCPSERVER_CODEX_ONESHOT_TEMP");
-        Environment.SetEnvironmentVariable("MCPSERVER_CODEX_ONESHOT_TEMP", tempRoot);
-        try
+        await CliTempVariables.RunWithTestFolderAsync(async tempRoot =>
         {
             var spawner = new CapturingProcessSpawner(exitCode: 0, outputBody: """{"title":"triage result"}""");
             var strategy = new CodexCliAgentExecutionStrategy(
@@ -189,12 +213,7 @@ public sealed class CodexCliAgentExecutionStrategyTests
             Assert.StartsWith(tempRoot, spawner.OutputLastMessagePath, StringComparison.OrdinalIgnoreCase);
             Assert.Null(spawner.OutputSchemaPath);
             Assert.Null(spawner.OutputSchemaJson);
-        }
-        finally
-        {
-            Environment.SetEnvironmentVariable("MCPSERVER_CODEX_ONESHOT_TEMP", previous);
-            Directory.Delete(tempRoot, recursive: true);
-        }
+        }).ConfigureAwait(true);
     }
 
     /// <summary>
@@ -367,10 +386,13 @@ public sealed class CodexCliAgentExecutionStrategyTests
 /// <summary>
 /// TEST-MCP-TRIAGE-003: the Codex CLI strategy on a Windows host launches through <c>cmd.exe /c</c>.
 /// The strategy chooses its launcher by the running OS, so these are integration tests on Windows hosts
-/// (operator 2026-10-19: "Integration + Platform (Recommended)"; TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019).
+/// (operator 2026-10-19: "Integration + Platform (Recommended)"; TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019). Each
+/// launch sets and restores every CLI temp variable through <see cref="CliTempVariables"/>, so the class runs in the
+/// serialized <see cref="ProcessEnvironmentCollection"/> (TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1).
 /// </summary>
 [Trait("Category", "Integration")]
 [Trait("Platform", "Windows")]
+[Collection(ProcessEnvironmentCollection.Name)]
 public sealed class CodexCliAgentExecutionStrategyWindowsTests
 {
     /// <summary>
@@ -407,15 +429,20 @@ public sealed class CodexCliAgentExecutionStrategyWindowsTests
                 outputBody: """{"title":"triage result"}""",
                 stdout: "codex stdout",
                 stderr: "codex stderr");
-            var strategy = new CodexCliAgentExecutionStrategy(
-                new CodexCliAgentExecutionStrategyTests.CapturingProcessEnvironmentService(),
-                spawner,
-                NullLogger<CodexCliAgentExecutionStrategy>.Instance);
+            AgentCliResult? launched = null;
+            await CliTempVariables.RunWithTestFolderAsync(async _ =>
+            {
+                var strategy = new CodexCliAgentExecutionStrategy(
+                    new CodexCliAgentExecutionStrategyTests.CapturingProcessEnvironmentService(),
+                    spawner,
+                    NullLogger<CodexCliAgentExecutionStrategy>.Instance);
 
-            await using var session = await strategy.CreateSessionAsync(CodexCliAgentExecutionStrategyTests.CreateRequest(cmdPath), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+                await using var session = await strategy.CreateSessionAsync(CodexCliAgentExecutionStrategyTests.CreateRequest(cmdPath), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-            var result = await session.ReadInitialResponseAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+                launched = await session.ReadInitialResponseAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            }).ConfigureAwait(true);
 
+            var result = Assert.IsType<AgentCliResult>(launched);
             Assert.Equal(AgentCliResultState.Success, result.State);
             Assert.Equal("codex stdout", result.Stdout);
             Assert.Equal("codex stderr", result.Stderr);
@@ -441,10 +468,13 @@ public sealed class CodexCliAgentExecutionStrategyWindowsTests
 /// <summary>
 /// TEST-MCP-TRIAGE-003: the Codex CLI strategy off Windows launches the agent directly. The strategy
 /// chooses its launcher by the running OS, so this is an integration test on Linux hosts (operator
-/// 2026-10-19: "Integration + Platform (Recommended)"; TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019).
+/// 2026-10-19: "Integration + Platform (Recommended)"; TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019). The launch sets
+/// and restores every CLI temp variable through <see cref="CliTempVariables"/>, so the class runs in the serialized
+/// <see cref="ProcessEnvironmentCollection"/> (TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1).
 /// </summary>
 [Trait("Category", "Integration")]
 [Trait("Platform", "Linux")]
+[Collection(ProcessEnvironmentCollection.Name)]
 public sealed class CodexCliAgentExecutionStrategyLinuxTests
 {
     /// <summary>

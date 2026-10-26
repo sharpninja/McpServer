@@ -4,11 +4,17 @@ using QBrainAi.Support.Mcp.Tests.TestSupport;
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011:
+/// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011 (historical):
 /// S2 Green acceptance for the dedicated memory indexer, ANN/FTS fusion,
 /// and EmbeddingStatus transitions. The class runs in <see cref="ProcessEnvironmentCollection"/> because one of its
 /// tests writes the process environment (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
 /// </summary>
+/// <remarks>
+/// The TEST-MCP-MEMORY-011, TR-MCP-MEMORY-SEARCH-002 and FR-MCP-MEMORY-011 citations in this file, its
+/// AC-TR-MCP-MEMORY-SEARCH-002 criteria included, are historical: those records are not in the requirements store
+/// (hostile validation finding R6-F2), so they make no active coverage claim. The active claims are the
+/// TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 classification of the integration test.
+/// </remarks>
 [Collection(ProcessEnvironmentCollection.Name)]
 public sealed class MemoryIndexerTests : IDisposable
 {
@@ -147,7 +153,7 @@ public sealed class MemoryIndexerTests : IDisposable
     }
 
     /// <summary>
-    /// AC-TR-MCP-MEMORY-SEARCH-002-09: Local ONNX path works without cloud credentials in the test host. The test
+    /// AC-TR-MCP-MEMORY-SEARCH-002-09 (historical): Local ONNX path works without cloud credentials in the test host. The test
     /// clears both cloud keys, so it writes the process environment and is an integration test; it restores both
     /// keys afterwards, which it did not do before (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
     /// </summary>

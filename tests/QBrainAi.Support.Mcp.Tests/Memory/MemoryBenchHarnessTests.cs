@@ -4,10 +4,16 @@ using QBrainAi.Support.Mcp.Tests.TestSupport;
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018: Harness conditions, metrics, isolation, and modes. The class runs in
-/// <see cref="ProcessEnvironmentCollection"/> because two of its integration tests write the process environment
-/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018 (historical): Harness conditions, metrics, isolation, and modes. The class
+/// runs in <see cref="ProcessEnvironmentCollection"/> because two of its integration tests write the process
+/// environment (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
 /// </summary>
+/// <remarks>
+/// The TEST-MCP-MEMORY-018 and FR-MCP-MEMORY-018 citations in this file, its AC-FR-MCP-MEMORY-018 criteria included,
+/// are historical: those records are not in the requirements store (hostile validation finding R6-F2), so they make
+/// no active coverage claim. The active claims are the TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008
+/// classification of the integration tests.
+/// </remarks>
 [Collection(ProcessEnvironmentCollection.Name)]
 public sealed class MemoryBenchHarnessTests
 {
