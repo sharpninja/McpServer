@@ -1,0 +1,6 @@
+RECEIPT ug-r8-precommit-lane-2 (TRX summary of /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8-precommit-lane-2, written 2026-10-26T16:28:31)
+provider/Build.Tests/Build.Tests.trx: total=16 executed=16 passed=16 failed=0 notExecuted=0
+provider/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx: total=1 executed=1 passed=1 failed=0 notExecuted=0
+provider/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx: total=2 executed=2 passed=2 failed=0 notExecuted=0
+provider/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx: total=3 executed=3 passed=3 failed=0 notExecuted=0
+provider/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx: total=411 executed=411 passed=411 failed=0 notExecuted=0

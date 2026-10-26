@@ -1,0 +1,28 @@
+RECEIPT 2026-10-26T14:04:10 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinInteractiveLane.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-10-26T14:04:07 host=PAYTON-LEGION2 user=kingd
+WORKTREE HEAD f5cda3c15455b8f42f97bb35768c142757323378
+PROOF START 2026-10-26T13:54:35 user=kingd session=1 interactive=True head=f5cda3c15455b8f42f97bb35768c142757323378
+EXIT -1 2026-10-26T14:03:06
+TASK state=Ready lastRun=10/26/2026 13:54:31 result=0
+LOG lines=160
+  LOG 13:54:47 [INF] Integration lane filter: Category=Integration&Platform!=Linux
+  LOG 14:02:35 [DBG] Failed!  - Failed:     2, Passed:   395, Skipped:     0, Total:   397, Duration: 6 m 55 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+  LOG 14:02:45 [DBG] Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 105 ms - QBrainAi.McpAgent.Tests.dll (net10.0)
+  LOG 14:02:52 [DBG] Passed!  - Failed:     0, Passed:     3, Skipped:     0, Total:     3, Duration: 325 ms - QBrainAi.Repl.Core.Tests.dll (net10.0)
+  LOG 14:02:59 [DBG] Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 49 ms - QBrainAi.QBAgent.Tests.dll (net10.0)
+  LOG 14:03:06 [DBG] Passed!  - Failed:     0, Passed:     6, Skipped:     0, Total:     6, Duration: 2 s - Build.Tests.dll (net10.0)
+  LOG 14:03:06 [ERR] Target MigrationIntegrationTests has thrown an exception
+  LOG [ERR] MigrationIntegration: Target MigrationIntegrationTests has thrown an exception
+  LOG Build failed on 10/26/2026 2:03:06 PM. (╯°□°）╯︵ ┻━┻
+TRX \provider\Build.Tests\Build.Tests.trx total=6 executed=6 passed=6 failed=0 notExecuted=0
+TRX \provider\QBrainAi.McpAgent.Tests\QBrainAi.McpAgent.Tests.trx total=1 executed=1 passed=1 failed=0 notExecuted=0
+TRX \provider\QBrainAi.QBAgent.Tests\QBrainAi.QBAgent.Tests.trx total=2 executed=2 passed=2 failed=0 notExecuted=0
+TRX \provider\QBrainAi.Repl.Core.Tests\QBrainAi.Repl.Core.Tests.trx total=3 executed=3 passed=3 failed=0 notExecuted=0
+TRX \provider\QBrainAi.Support.Mcp.Tests\QBrainAi.Support.Mcp.Tests.trx total=397 executed=397 passed=395 failed=2 notExecuted=0
+  Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForRead_DirectoryAliasSwap_NeverReadsExternalObject :: System.TimeoutException : Junction creation timed out.
+  Failed QBrainAi.Support.Mcp.Tests.Services.RequirementsTwelfthAdversarialReviewTests.OpenFileForWrite_DirectoryAliasSwap_NeverWritesExternalObject :: System.TimeoutException : Junction creation timed out.
+TASK REMOVED McpUnitGreenLane-ug-r8-win-lane-1 present-after=False
+END 2026-10-26T14:04:10
