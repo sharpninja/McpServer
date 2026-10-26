@@ -1,0 +1,13 @@
+Now: 2026-10-26T10:54:26 before=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-linux-lane-1 (428) after=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-precommit-lane-2 (433)
+onlyBefore=1 onlyAfter=6 common=427
+onlyBefore QBrainAi.Support.Mcp.Tests=1
+onlyAfter QBrainAi.Support.Mcp.Tests=6
+--- only in before ---
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFolderAsync_PointsEveryNameAtItsFolderThenRestoresThem
+--- only in after ---
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFolderAsync_UnknownPrimary_IsRefusedWithoutChanges
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: "MCPSERVER_CODEX_ONESHOT_TEMP")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: "MCPSERVER_CODEX_TRIAGE_TEMP")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: "MCPSERVER_GROK_ONESHOT_TEMP")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: "MCPSERVER_ONESHOT_TEMP")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: "MCPSERVER_QUADBRAIN_CLI_TEMP")
