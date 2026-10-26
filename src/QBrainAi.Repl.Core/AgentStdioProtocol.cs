@@ -34,7 +34,6 @@ public interface IAgentStdioProtocol
 public sealed class AgentStdioProtocol : IAgentStdioProtocol
 {
     private const string CommandTimeoutEnvVar = "MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS";
-    private static readonly TimeSpan DefaultCommandTimeout = TimeSpan.FromMinutes(2);
 
     private readonly IYamlSerializer _serializer;
     private readonly IReplCommandDispatcher _dispatcher;
@@ -159,8 +158,11 @@ public sealed class AgentStdioProtocol : IAgentStdioProtocol
         }
 
         IYamlEnvelope response;
+        // TR-MCP-REPL-001 AC-002: the configured timeout is read once and only a valid value is used, so the
+        // timeout message names the timeout that applied and a misconfigured value never fails the request.
+        var commandTimeout = ReplCommandTimeout.FromEnvironment(CommandTimeoutEnvVar);
         using var commandCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        commandCts.CancelAfter(ResolveCommandTimeout());
+        commandCts.CancelAfter(commandTimeout);
 
         try
         {
@@ -189,7 +191,7 @@ public sealed class AgentStdioProtocol : IAgentStdioProtocol
                 {
                     RequestId = (envelope.Payload as IRequestPayload)?.RequestId ?? "unknown",
                     Code = "command_timeout",
-                    Message = $"Command timed out after {ResolveCommandTimeout().TotalSeconds:0} seconds.",
+                    Message = $"Command timed out after {commandTimeout.TotalSeconds:0} seconds.",
                     Retryable = true,
                 },
             };
@@ -212,17 +214,6 @@ public sealed class AgentStdioProtocol : IAgentStdioProtocol
         }
 
         await WriteEnvelopeAsync(response, writer, cancellationToken).ConfigureAwait(false);
-    }
-
-    private static TimeSpan ResolveCommandTimeout()
-    {
-        var configured = Environment.GetEnvironmentVariable(CommandTimeoutEnvVar);
-        if (int.TryParse(configured, out var seconds) && seconds > 0)
-        {
-            return TimeSpan.FromSeconds(seconds);
-        }
-
-        return DefaultCommandTimeout;
     }
 
     private async Task WriteEnvelopeAsync(IYamlEnvelope envelope, TextWriter writer, CancellationToken cancellationToken)

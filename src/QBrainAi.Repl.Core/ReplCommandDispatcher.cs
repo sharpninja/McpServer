@@ -62,7 +62,6 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
 {
     private const string StreamCommandTimeoutEnvVar = "MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS";
     private const string ServerProtocolVersion = "1.0";
-    private static readonly TimeSpan DefaultStreamCommandTimeout = TimeSpan.FromMinutes(2);
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
     {
         PropertyNameCaseInsensitive = true,
@@ -3005,8 +3004,11 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         CancellationToken cancellationToken)
     {
         var events = new List<IStreamingEvent>();
+        // TR-MCP-REPL-001 AC-002: the configured stream timeout is read once and only a valid value is used, so the
+        // timeout event names the timeout that applied and a misconfigured value never fails the stream.
+        var streamTimeout = ReplCommandTimeout.FromEnvironment(StreamCommandTimeoutEnvVar);
         using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        timeoutCts.CancelAfter(ResolveStreamCommandTimeout());
+        timeoutCts.CancelAfter(streamTimeout);
 
         try
         {
@@ -3028,7 +3030,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                     new Dictionary<string, object?>
                     {
                         ["requestId"] = requestId,
-                        ["message"] = $"Stream command timed out after {ResolveStreamCommandTimeout().TotalSeconds:0} seconds.",
+                        ["message"] = $"Stream command timed out after {streamTimeout.TotalSeconds:0} seconds.",
                     },
                     DateTimeOffset.UtcNow,
                     events.Count + 1);
@@ -3041,17 +3043,6 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         }
 
         return events;
-    }
-
-    private static TimeSpan ResolveStreamCommandTimeout()
-    {
-        var configured = Environment.GetEnvironmentVariable(StreamCommandTimeoutEnvVar);
-        if (int.TryParse(configured, out var seconds) && seconds > 0)
-        {
-            return TimeSpan.FromSeconds(seconds);
-        }
-
-        return DefaultStreamCommandTimeout;
     }
 
     private static IYamlEnvelope BuildTodoStreamEventEnvelope(string requestId, string method, IStreamingEvent evt)
