@@ -1,0 +1,927 @@
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs
+index 9285e55a..6b21329d 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs
+@@ -6,6 +6,12 @@ namespace QBrainAi.Support.Mcp.Tests.Memory;
+ /// <summary>
+-/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018: Harness conditions, metrics, isolation, and modes. The class runs in
+-/// <see cref="ProcessEnvironmentCollection"/> because two of its integration tests write the process environment
+-/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
++/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018 (historical): Harness conditions, metrics, isolation, and modes. The class
++/// runs in <see cref="ProcessEnvironmentCollection"/> because two of its integration tests write the process
++/// environment (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+ /// </summary>
++/// <remarks>
++/// The TEST-MCP-MEMORY-018 and FR-MCP-MEMORY-018 citations in this file, its AC-FR-MCP-MEMORY-018 criteria included,
++/// are historical: those records are not in the requirements store (hostile validation finding R6-F2), so they make
++/// no active coverage claim. The active claims are the TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008
++/// classification of the integration tests.
++/// </remarks>
+ [Collection(ProcessEnvironmentCollection.Name)]
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs
+index 8a922378..9a0f5751 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs
+@@ -6,3 +6,3 @@ namespace QBrainAi.Support.Mcp.Tests.Memory;
+ /// <summary>
+-/// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011:
++/// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011 (historical):
+ /// S2 Green acceptance for the dedicated memory indexer, ANN/FTS fusion,
+@@ -11,2 +11,8 @@ namespace QBrainAi.Support.Mcp.Tests.Memory;
+ /// </summary>
++/// <remarks>
++/// The TEST-MCP-MEMORY-011, TR-MCP-MEMORY-SEARCH-002 and FR-MCP-MEMORY-011 citations in this file, its
++/// AC-TR-MCP-MEMORY-SEARCH-002 criteria included, are historical: those records are not in the requirements store
++/// (hostile validation finding R6-F2), so they make no active coverage claim. The active claims are the
++/// TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 classification of the integration test.
++/// </remarks>
+ [Collection(ProcessEnvironmentCollection.Name)]
+@@ -149,3 +155,3 @@ public sealed class MemoryIndexerTests : IDisposable
+     /// <summary>
+-    /// AC-TR-MCP-MEMORY-SEARCH-002-09: Local ONNX path works without cloud credentials in the test host. The test
++    /// AC-TR-MCP-MEMORY-SEARCH-002-09 (historical): Local ONNX path works without cloud credentials in the test host. The test
+     /// clears both cloud keys, so it writes the process environment and is an integration test; it restores both
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs
+index 49cef600..475dfccb 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs
+@@ -14,7 +14,13 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
+ /// <summary>
+-/// TEST-MCP-QBCLI-001: QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session reuse. The
+-/// class runs in <see cref="ProcessEnvironmentCollection"/> because its temp-folder tests write the process environment
+-/// through <c>WithIsolatedQuadbrainTemp</c>; those tests are integration tests (TR-MCP-USECASE-018 AC-006,
+-/// TR-MCP-USECASE-019 AC-008; the sweep of plan section 19.3).
++/// TEST-MCP-QBCLI-001 (historical): QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session
++/// reuse. The class runs in <see cref="ProcessEnvironmentCollection"/> because every test that reaches
++/// <c>CliBrainSlotChatClient.CompleteAsync</c> or its temp-folder lookup writes the process environment through
++/// <c>WithIsolatedQuadbrainTemp</c>; those tests are integration tests (TR-MCP-USECASE-018 AC-006,
++/// TR-MCP-USECASE-019 AC-008; plan sections 19.3 and 20).
+ /// </summary>
++/// <remarks>
++/// The TEST-MCP-QBCLI-001 citations in this file are historical: no such record is in the requirements store
++/// (hostile validation finding R6-F2), so they make no active coverage claim. The active claims are the
++/// TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 classification of the integration tests.
++/// </remarks>
+ [Collection(ProcessEnvironmentCollection.Name)]
+@@ -22,4 +28,2 @@ public sealed class CliBrainSlotStrategyTests
+ {
+-    private static readonly SemaphoreSlim TempEnvLock = new(1, 1);
+-
+     [Theory]
+@@ -123,3 +127,3 @@ public sealed class CliBrainSlotStrategyTests
+     /// <summary>
+-    /// TEST-MCP-QBCLI-001: Grok runs in an isolated working folder with its dashboard, memory and subagents off and
++    /// TEST-MCP-QBCLI-001 (historical): Grok runs in an isolated working folder with its dashboard, memory and subagents off and
+     /// without the inherited <c>GROK_PLUGIN_ROOT</c> and <c>GROK_HOME</c>. The test writes the process environment
+@@ -178,4 +182,14 @@ public sealed class CliBrainSlotStrategyTests
+ 
++    /// <summary>
++    /// TEST-MCP-QBCLI-001 (historical): Grok output that stops at the turn limit is returned instead of thrown. The
++    /// client's temp-folder lookup reads the CLI temp variables, so the test sets and restores them through
++    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019
++    /// AC-008; hostile validation finding R6-F1).
++    /// </summary>
++    /// <returns>A task that completes when the assertions have run.</returns>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task CompleteAsync_Grok_MaxTurnsReached_ReturnsStdoutInsteadOfThrowing()
++    {
++        await WithIsolatedQuadbrainTemp(async _ =>
+         {
+@@ -196,6 +210,17 @@ public sealed class CliBrainSlotStrategyTests
+             Assert.Equal("Creativity analysis for ArbiterOfTruth", output);
++        }).ConfigureAwait(true);
+     }
+ 
++    /// <summary>
++    /// TEST-MCP-QBCLI-001 (historical): Grok stopping at the turn limit with empty output returns empty text. The
++    /// client's temp-folder lookup reads the CLI temp variables, so the test sets and restores them through
++    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019
++    /// AC-008; hostile validation finding R6-F1).
++    /// </summary>
++    /// <returns>A task that completes when the assertions have run.</returns>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task CompleteAsync_Grok_MaxTurnsReached_EmptyStdout_DoesNotThrow()
++    {
++        await WithIsolatedQuadbrainTemp(async _ =>
+         {
+@@ -213,6 +238,17 @@ public sealed class CliBrainSlotStrategyTests
+             Assert.Equal(string.Empty, output);
++        }).ConfigureAwait(true);
+     }
+ 
++    /// <summary>
++    /// TEST-MCP-QBCLI-001 (historical): any other Grok failure still throws with its error text. The client's
++    /// temp-folder lookup reads the CLI temp variables, so the test sets and restores them through
++    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019
++    /// AC-008; hostile validation finding R6-F1).
++    /// </summary>
++    /// <returns>A task that completes when the assertions have run.</returns>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task CompleteAsync_Grok_NonZeroExit_StillThrows()
++    {
++        await WithIsolatedQuadbrainTemp(async _ =>
+         {
+@@ -231,6 +267,17 @@ public sealed class CliBrainSlotStrategyTests
+             Assert.Contains("Access is denied", ex.Message, StringComparison.Ordinal);
++        }).ConfigureAwait(true);
+     }
+ 
++    /// <summary>
++    /// TEST-MCP-QBCLI-001 (historical): a Grok resume whose session is missing retries once without resume. The
++    /// client's temp-folder lookup reads the CLI temp variables, so the test sets and restores them through
++    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019
++    /// AC-008; hostile validation finding R6-F1).
++    /// </summary>
++    /// <returns>A task that completes when the assertions have run.</returns>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task CompleteAsync_Grok_ResumeSessionMissing_RetriesWithoutResume()
++    {
++        await WithIsolatedQuadbrainTemp(async _ =>
+         {
+@@ -264,2 +311,3 @@ public sealed class CliBrainSlotStrategyTests
+             Assert.DoesNotContain("--resume", spawner.StartInfos[2].ArgumentList);
++        }).ConfigureAwait(true);
+     }
+@@ -339,3 +387,3 @@ public sealed class CliBrainSlotStrategyTests
+     /// <summary>
+-    /// TEST-MCP-QBCLI-001: Codex returns the assistant text from the JSONL stream, not the raw events. The test writes
++    /// TEST-MCP-QBCLI-001 (historical): Codex returns the assistant text from the JSONL stream, not the raw events. The test writes
+     /// the process environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test
+@@ -378,3 +426,3 @@ public sealed class CliBrainSlotStrategyTests
+     /// <summary>
+-    /// TEST-MCP-QBCLI-001: Codex prefers the JSONL assistant text over tool-call JSON in the output file. The test
++    /// TEST-MCP-QBCLI-001 (historical): Codex prefers the JSONL assistant text over tool-call JSON in the output file. The test
+     /// writes the process environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test
+@@ -414,3 +462,3 @@ public sealed class CliBrainSlotStrategyTests
+     /// <summary>
+-    /// TEST-MCP-QBCLI-001: the temp folder comes from the configured variable without the Windows service ACL. The
++    /// TEST-MCP-QBCLI-001 (historical): the temp folder comes from the configured variable without the Windows service ACL. The
+     /// test writes the process environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test
+@@ -432,3 +480,3 @@ public sealed class CliBrainSlotStrategyTests
+     /// <summary>
+-    /// TEST-MCP-QBCLI-001: Grok writes its prompt file under the configured temp folder and points TEMP and TMP at it.
++    /// TEST-MCP-QBCLI-001 (historical): Grok writes its prompt file under the configured temp folder and points TEMP and TMP at it.
+     /// The test writes the process environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test
+@@ -471,3 +519,3 @@ public sealed class CliBrainSlotStrategyTests
+     /// <summary>
+-    /// TEST-MCP-QBCLI-001: Codex writes its output file under the configured temp folder. The test writes the process
++    /// TEST-MCP-QBCLI-001 (historical): Codex writes its output file under the configured temp folder. The test writes the process
+     /// environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test (TR-MCP-USECASE-018 AC-006,
+@@ -507,4 +555,14 @@ public sealed class CliBrainSlotStrategyTests
+ 
++    /// <summary>
++    /// TEST-MCP-QBCLI-001 (historical): a second Grok call on the same slot resumes the first call's session. The
++    /// client's temp-folder lookup reads the CLI temp variables, so the test sets and restores them through
++    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019
++    /// AC-008; hostile validation finding R6-F1).
++    /// </summary>
++    /// <returns>A task that completes when the assertions have run.</returns>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task CompleteAsync_GrokSecondCall_ResumesSameSession()
++    {
++        await WithIsolatedQuadbrainTemp(async _ =>
+         {
+@@ -536,6 +594,17 @@ public sealed class CliBrainSlotStrategyTests
+             Assert.Equal("xhigh", ArgumentAfter(spawner.StartInfos[0], "--effort"));
++        }).ConfigureAwait(true);
+     }
+ 
++    /// <summary>
++    /// TEST-MCP-QBCLI-001 (historical): a second Codex call on the same slot resumes the thread the first call
++    /// reported. The client's temp-folder lookup reads the CLI temp variables, so the test sets and restores them
++    /// through <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006,
++    /// TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1).
++    /// </summary>
++    /// <returns>A task that completes when the assertions have run.</returns>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task CompleteAsync_CodexSecondCall_ResumesExtractedThread()
++    {
++        await WithIsolatedQuadbrainTemp(async _ =>
+         {
+@@ -562,6 +631,17 @@ public sealed class CliBrainSlotStrategyTests
+             Assert.Contains("gpt-5.6-sol", spawner.StartInfos[0].ArgumentList);
++        }).ConfigureAwait(true);
+     }
+ 
++    /// <summary>
++    /// TEST-MCP-QBCLI-001 (historical): the factory creates the CLI client for a CLI slot, and the client completes.
++    /// The client's temp-folder lookup reads the CLI temp variables, so the test sets and restores them through
++    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019
++    /// AC-008; hostile validation finding R6-F1).
++    /// </summary>
++    /// <returns>A task that completes when the assertions have run.</returns>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task Factory_Create_CliSlot_ReturnsCliClient()
++    {
++        await WithIsolatedQuadbrainTemp(async _ =>
+         {
+@@ -579,2 +659,3 @@ public sealed class CliBrainSlotStrategyTests
+             Assert.Equal("ok", output);
++        }).ConfigureAwait(true);
+     }
+@@ -627,30 +708,7 @@ public sealed class CliBrainSlotStrategyTests
+ 
+-    private static async Task WithIsolatedQuadbrainTemp(Func<string, Task> body)
+-    {
+-        await TempEnvLock.WaitAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
+-        var previousQuad = Environment.GetEnvironmentVariable("MCPSERVER_QUADBRAIN_CLI_TEMP");
+-        var previousOneShot = Environment.GetEnvironmentVariable("MCPSERVER_ONESHOT_TEMP");
+-        var temp = Path.Combine(Path.GetTempPath(), "qbt-" + Guid.NewGuid().ToString("N"));
+-        Directory.CreateDirectory(temp);
+-        try
+-        {
+-            Environment.SetEnvironmentVariable("MCPSERVER_QUADBRAIN_CLI_TEMP", temp);
+-            Environment.SetEnvironmentVariable("MCPSERVER_ONESHOT_TEMP", null);
+-            await body(temp).ConfigureAwait(true);
+-        }
+-        finally
+-        {
+-            Environment.SetEnvironmentVariable("MCPSERVER_QUADBRAIN_CLI_TEMP", previousQuad);
+-            Environment.SetEnvironmentVariable("MCPSERVER_ONESHOT_TEMP", previousOneShot);
+-            try
+-            {
+-                Directory.Delete(temp, recursive: true);
+-            }
+-            catch (IOException)
+-            {
+-            }
+-
+-            TempEnvLock.Release();
+-        }
+-    }
++    // MCPSERVER_QUADBRAIN_CLI_TEMP, which the client reads first, points at a test-owned folder and every other CLI temp
++    // variable at a separate fallback folder while the body runs, then all are restored (the shared CliTempVariables
++    // helper; this class runs in the serialized ProcessEnvironmentCollection).
++    private static Task WithIsolatedQuadbrainTemp(Func<string, Task> body) =>
++        CliTempVariables.RunWithTestFolderAsync("MCPSERVER_QUADBRAIN_CLI_TEMP", body);
+ 
+@@ -797,3 +855,3 @@ public sealed class CliBrainSlotStrategyTests
+ /// <summary>
+-/// TEST-MCP-QBCLI-001: the default shared CLI temp directory on a Windows host lives under the machine's
++/// TEST-MCP-QBCLI-001 (historical; no such record in the requirements store): the default shared CLI temp directory on a Windows host lives under the machine's
+ /// common application data folder. Windows-only behavior, so an integration test on Windows hosts
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs
+index d3ad9bb2..3c1e48e6 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs
+@@ -14,4 +14,6 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
+ /// background triage invokes <c>codex exec</c> non-interactively. The class runs in
+-/// <see cref="ProcessEnvironmentCollection"/> because one of its tests writes the process environment
+-/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
++/// <see cref="ProcessEnvironmentCollection"/> because every test that starts a session writes the process environment:
++/// the strategy's temp-folder lookup reads the CLI temp variables, so those tests set and restore them through
++/// <see cref="CliTempVariables"/> and are integration tests (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008;
++/// hostile validation finding R6-F1).
+ /// </summary>
+@@ -21,5 +23,11 @@ public sealed class CodexCliAgentExecutionStrategyTests
+     /// <summary>
+-    /// TEST-MCP-TRIAGE-003: launches the strategy against the capturing spawner with the default request.
+-    /// Shared by the Windows and Linux launch cases, which live in integration classes because the
+-    /// strategy chooses its launcher by the running OS (TR-MCP-USECASE-018 AC-006).
++    /// The CLI temp variable the Codex strategy reads first; tests point it at the test folder and every other CLI temp
++    /// variable at a fallback folder, so an output path under the test folder proves it won.
++    /// </summary>
++    internal const string PrimaryTempName = "MCPSERVER_CODEX_ONESHOT_TEMP";
++
++    /// <summary>
++    /// TEST-MCP-TRIAGE-003: launches the strategy against the capturing spawner with the default request, with every
++    /// CLI temp variable at a test-owned folder. Shared by the Windows and Linux launch cases, which live in
++    /// integration classes because the strategy chooses its launcher by the running OS (TR-MCP-USECASE-018 AC-006).
+     /// </summary>
+@@ -29,2 +37,4 @@ public sealed class CodexCliAgentExecutionStrategyTests
+         var spawner = new CapturingProcessSpawner(exitCode: 0, outputBody: """{"title":"triage result"}""");
++        await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async _ =>
++        {
+             var strategy = new CodexCliAgentExecutionStrategy(
+@@ -40,2 +50,3 @@ public sealed class CodexCliAgentExecutionStrategyTests
+             Assert.Equal("""{"title":"triage result"}""", result.Body);
++        }).ConfigureAwait(true);
+         Assert.NotNull(spawner.StartInfo);
+@@ -79,6 +90,12 @@ public sealed class CodexCliAgentExecutionStrategyTests
+     /// TEST-MCP-TRIAGE-005: A failed Codex CLI run preserves stderr as the
+-    /// inspectable research-run failure reason.
++    /// inspectable research-run failure reason. The strategy's temp-folder lookup reads the CLI temp variables, so the
++    /// test sets and restores them through <see cref="CliTempVariables"/> and is an integration test
++    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1).
+     /// </summary>
++    /// <returns>A task that completes when the assertions have run.</returns>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task ReadInitialResponseAsync_WhenCodexFails_ReturnsErrorResult()
++    {
++        await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async _ =>
+         {
+@@ -96,2 +113,3 @@ public sealed class CodexCliAgentExecutionStrategyTests
+             Assert.Contains("not authenticated", result.Stderr, StringComparison.OrdinalIgnoreCase);
++        }).ConfigureAwait(true);
+     }
+@@ -100,6 +118,12 @@ public sealed class CodexCliAgentExecutionStrategyTests
+     /// TEST-MCP-TRIAGE-005: Timed-out Codex CLI triage runs preserve partial
+-    /// stdout and stderr instead of returning only the timeout message.
++    /// stdout and stderr instead of returning only the timeout message. The strategy's temp-folder lookup reads the
++    /// CLI temp variables, so the test sets and restores them through <see cref="CliTempVariables"/> and is an
++    /// integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1).
+     /// </summary>
++    /// <returns>A task that completes when the assertions have run.</returns>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task ReadInitialResponseAsync_WhenCodexTimesOut_PreservesPartialStreams()
++    {
++        await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async _ =>
+         {
+@@ -124,2 +148,3 @@ public sealed class CodexCliAgentExecutionStrategyTests
+             Assert.Contains("cancelled or timed out", result.Stderr, StringComparison.OrdinalIgnoreCase);
++        }).ConfigureAwait(true);
+     }
+@@ -128,6 +153,12 @@ public sealed class CodexCliAgentExecutionStrategyTests
+     /// TEST-MCP-TRIAGE-005: Codex CLI triage runs stream stdout and stderr
+-    /// chunks to the configured output callback while the process is running.
++    /// chunks to the configured output callback while the process is running. The strategy's temp-folder lookup reads
++    /// the CLI temp variables, so the test sets and restores them through <see cref="CliTempVariables"/> and is an
++    /// integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1).
+     /// </summary>
++    /// <returns>A task that completes when the assertions have run.</returns>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task ReadInitialResponseAsync_WithOutputCallback_StreamsAgentOutput()
++    {
++        await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async _ =>
+         {
+@@ -157,2 +188,3 @@ public sealed class CodexCliAgentExecutionStrategyTests
+             Assert.Contains("stderr:loading context", streamed);
++        }).ConfigureAwait(true);
+     }
+@@ -162,6 +194,9 @@ public sealed class CodexCliAgentExecutionStrategyTests
+     /// files under the configured shared temp root so a service-spawned
+-    /// interactive-user codex process can write the final response file. The test sets and restores
+-    /// <c>MCPSERVER_CODEX_ONESHOT_TEMP</c>, which the strategy reads first, so it writes the process environment and is
+-    /// an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
++    /// interactive-user codex process can write the final response file. The test points
++    /// <c>MCPSERVER_CODEX_ONESHOT_TEMP</c>, which the strategy reads first, at a test-owned folder and every other CLI
++    /// temp variable, its fallback <c>MCPSERVER_CODEX_TRIAGE_TEMP</c> included, at a separate fallback folder, and
++    /// restores them through <see cref="CliTempVariables"/>, so the output path proves the primary name won; it writes
++    /// the process environment and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+     /// </summary>
++    /// <returns>A task that completes when the assertions have run.</returns>
+     [Fact]
+@@ -170,7 +205,3 @@ public sealed class CodexCliAgentExecutionStrategyTests
+     {
+-        var tempRoot = Path.Combine(Path.GetTempPath(), $"codex-oneshot-shared-{Guid.NewGuid():N}");
+-        Directory.CreateDirectory(tempRoot);
+-        var previous = Environment.GetEnvironmentVariable("MCPSERVER_CODEX_ONESHOT_TEMP");
+-        Environment.SetEnvironmentVariable("MCPSERVER_CODEX_ONESHOT_TEMP", tempRoot);
+-        try
++        await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async tempRoot =>
+         {
+@@ -191,8 +222,3 @@ public sealed class CodexCliAgentExecutionStrategyTests
+             Assert.Null(spawner.OutputSchemaJson);
+-        }
+-        finally
+-        {
+-            Environment.SetEnvironmentVariable("MCPSERVER_CODEX_ONESHOT_TEMP", previous);
+-            Directory.Delete(tempRoot, recursive: true);
+-        }
++        }).ConfigureAwait(true);
+     }
+@@ -369,3 +395,5 @@ public sealed class CodexCliAgentExecutionStrategyTests
+ /// The strategy chooses its launcher by the running OS, so these are integration tests on Windows hosts
+-/// (operator 2026-10-19: "Integration + Platform (Recommended)"; TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019).
++/// (operator 2026-10-19: "Integration + Platform (Recommended)"; TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019). Each
++/// launch sets and restores every CLI temp variable through <see cref="CliTempVariables"/>, so the class runs in the
++/// serialized <see cref="ProcessEnvironmentCollection"/> (TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1).
+ /// </summary>
+@@ -373,2 +401,3 @@ public sealed class CodexCliAgentExecutionStrategyTests
+ [Trait("Platform", "Windows")]
++[Collection(ProcessEnvironmentCollection.Name)]
+ public sealed class CodexCliAgentExecutionStrategyWindowsTests
+@@ -409,2 +438,5 @@ public sealed class CodexCliAgentExecutionStrategyWindowsTests
+                 stderr: "codex stderr");
++            AgentCliResult? launched = null;
++            await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async _ =>
++            {
+                 var strategy = new CodexCliAgentExecutionStrategy(
+@@ -416,4 +448,6 @@ public sealed class CodexCliAgentExecutionStrategyWindowsTests
+ 
+-            var result = await session.ReadInitialResponseAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
++                launched = await session.ReadInitialResponseAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
++            }).ConfigureAwait(true);
+ 
++            var result = Assert.IsType<AgentCliResult>(launched);
+             Assert.Equal(AgentCliResultState.Success, result.State);
+@@ -443,3 +477,5 @@ public sealed class CodexCliAgentExecutionStrategyWindowsTests
+ /// chooses its launcher by the running OS, so this is an integration test on Linux hosts (operator
+-/// 2026-10-19: "Integration + Platform (Recommended)"; TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019).
++/// 2026-10-19: "Integration + Platform (Recommended)"; TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019). The launch sets
++/// and restores every CLI temp variable through <see cref="CliTempVariables"/>, so the class runs in the serialized
++/// <see cref="ProcessEnvironmentCollection"/> (TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1).
+ /// </summary>
+@@ -447,2 +483,3 @@ public sealed class CodexCliAgentExecutionStrategyWindowsTests
+ [Trait("Platform", "Linux")]
++[Collection(ProcessEnvironmentCollection.Name)]
+ public sealed class CodexCliAgentExecutionStrategyLinuxTests
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs
+index e64830ac..e4a602d3 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs
+@@ -734,4 +734,6 @@ public sealed class MarkerFileServiceTests
+     /// <summary>
+-    /// TEST-MCP-PLUGIN-PSONLY-001: marker plugin contracts publish the current synced plugin version. Resolution reads
+-    /// the assembly's hermetic sources (<see cref="HermeticUserProfileFixture"/>), so no installed plugin is seen.
++    /// TEST-MCP-PLUGIN-PSONLY-001 (historical; no such record is in the requirements store, hostile validation finding
++    /// R6-F2, so this is not an active coverage claim): marker plugin contracts publish the current synced plugin
++    /// version. Resolution reads the assembly's hermetic sources (<see cref="HermeticUserProfileFixture"/>), so no
++    /// installed plugin is seen (TR-MCP-WS-005 AC-TR-MCP-WS-005-001).
+     /// </summary>
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs
+index 3c035498..d8a15c6b 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs
+@@ -5,2 +5,3 @@ using QBrainAi.Common.AgentCli;
+ using QBrainAi.Support.Mcp.Services;
++using QBrainAi.Support.Mcp.Tests.TestSupport;
+ 
+@@ -10,6 +11,27 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
+ 
++/// <summary>
++/// Tests the one-shot CLI execution strategy's command shapes for Codex, Claude, Grok and Cline, and the strategy
++/// name. The class runs in <see cref="ProcessEnvironmentCollection"/> because every test that starts a session writes
++/// the process environment: the strategy's temp-folder lookup reads the CLI temp variables, so those tests set and
++/// restore them through <see cref="CliTempVariables"/> and are integration tests (TR-MCP-USECASE-018 AC-006,
++/// TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1).
++/// </summary>
++[Collection(ProcessEnvironmentCollection.Name)]
+ public sealed class OneShotCliAgentExecutionStrategyTests
+ {
++    // The CLI temp variable the one-shot strategy reads first; it points at the test folder and every other CLI temp
++    // variable at a fallback folder.
++    private const string PrimaryTempName = "MCPSERVER_ONESHOT_TEMP";
++
++    /// <summary>
++    /// The Codex one-shot command runs <c>codex exec</c> with the effort, working folder, output file and stdin
++    /// prompt. The test sets and restores every CLI temp variable through <see cref="CliTempVariables"/>, so it is an
++    /// integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
++    /// </summary>
++    /// <returns>A task that completes when the assertions have run.</returns>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task ReadInitialResponseAsync_WithCodexAgent_UsesCodexOneShotCommandShape()
++    {
++        await CliTempVariables.RunWithTestFolderAsync(PrimaryTempName, async _ =>
+         {
+@@ -32,6 +54,16 @@ public sealed class OneShotCliAgentExecutionStrategyTests
+             Assert.Equal("rendered prompt", spawner.Process!.StandardInputText);
++        });
+     }
+ 
++    /// <summary>
++    /// The Claude one-shot command runs <c>claude -p</c> in plan mode with the model, effort and working folder and a
++    /// stdin prompt. The test sets and restores every CLI temp variable through <see cref="CliTempVariables"/>, so it
++    /// is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
++    /// </summary>
++    /// <returns>A task that completes when the assertions have run.</returns>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task ReadInitialResponseAsync_WithClaudeAgent_UsesClaudePlanModeCommandShape()
++    {
++        await CliTempVariables.RunWithTestFolderAsync(PrimaryTempName, async _ =>
+         {
+@@ -53,6 +85,16 @@ public sealed class OneShotCliAgentExecutionStrategyTests
+             Assert.Equal("rendered prompt", spawner.Process!.StandardInputText);
++        });
+     }
+ 
++    /// <summary>
++    /// The Grok one-shot command runs <c>grok</c> in plan mode with a prompt file, plain output and max effort. The
++    /// test sets and restores every CLI temp variable through <see cref="CliTempVariables"/>, so it is an integration
++    /// test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
++    /// </summary>
++    /// <returns>A task that completes when the assertions have run.</returns>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task ReadInitialResponseAsync_WithGrokAgent_UsesGrokPromptFileCommandShape()
++    {
++        await CliTempVariables.RunWithTestFolderAsync(PrimaryTempName, async _ =>
+         {
+@@ -76,6 +118,16 @@ public sealed class OneShotCliAgentExecutionStrategyTests
+             Assert.Equal(string.Empty, spawner.Process!.StandardInputText);
++        });
+     }
+ 
++    /// <summary>
++    /// The Cline one-shot command runs <c>cline -p</c> with the prompt as an argument, the working folder and xhigh
++    /// thinking. The test sets and restores every CLI temp variable through <see cref="CliTempVariables"/>, so it is
++    /// an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
++    /// </summary>
++    /// <returns>A task that completes when the assertions have run.</returns>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task ReadInitialResponseAsync_WithClineAgent_UsesClineParameterizedPromptCommandShape()
++    {
++        await CliTempVariables.RunWithTestFolderAsync(PrimaryTempName, async _ =>
+         {
+@@ -96,4 +148,6 @@ public sealed class OneShotCliAgentExecutionStrategyTests
+             Assert.Equal(string.Empty, spawner.Process!.StandardInputText);
++        });
+     }
+ 
++    /// <summary>The one-shot strategy name is supported and is the default instead of Copilot.</summary>
+     [Fact]
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs b/tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs
+new file mode 100644
+index 00000000..e53ac797
+--- /dev/null
++++ b/tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs
+@@ -0,0 +1,129 @@
++using Xunit;
++
++namespace QBrainAi.Support.Mcp.Tests.TestSupport;
++
++/// <summary>
++/// The process-environment variables the CLI strategies read to choose their temporary folder, in each strategy's
++/// fallback order: <c>CliBrainSlotChatClient</c> reads MCPSERVER_QUADBRAIN_CLI_TEMP then MCPSERVER_ONESHOT_TEMP;
++/// <c>CodexCliAgentExecutionStrategy</c> reads MCPSERVER_CODEX_ONESHOT_TEMP then MCPSERVER_CODEX_TRIAGE_TEMP;
++/// <c>OneShotCliAgentExecutionStrategy</c> reads MCPSERVER_ONESHOT_TEMP, MCPSERVER_CODEX_ONESHOT_TEMP, then
++/// MCPSERVER_CODEX_TRIAGE_TEMP; <c>GrokCliAgentExecutionStrategy</c> reads MCPSERVER_GROK_ONESHOT_TEMP then
++/// MCPSERVER_ONESHOT_TEMP. A test that reaches one of them sets every name of the chain and restores it: the name the
++/// strategy under test reads first points at the test folder and every other name at a separate test-owned fallback
++/// folder, so an assertion on the test folder proves the primary name won over a set fallback (TR-MCP-USECASE-018
++/// AC-006 and TR-MCP-USECASE-019 AC-008 as amended 2026-10-26; operator: "Strengthen AC, move 14 (Recommended)" and
++/// "Dependence + proof AC (Recommended)"; hostile validation finding R6-F1). Shared by the three strategy test classes.
++/// </summary>
++internal static class CliTempVariables
++{
++    /// <summary>Every name of the four fallback chains, once each.</summary>
++    internal static IReadOnlyList<string> Names { get; } =
++    [
++        "MCPSERVER_QUADBRAIN_CLI_TEMP",
++        "MCPSERVER_ONESHOT_TEMP",
++        "MCPSERVER_CODEX_ONESHOT_TEMP",
++        "MCPSERVER_CODEX_TRIAGE_TEMP",
++        "MCPSERVER_GROK_ONESHOT_TEMP",
++    ];
++
++    /// <summary>
++    /// Runs <paramref name="body"/> with <paramref name="primaryName"/> pointing at a new test folder and every other
++    /// name of <see cref="Names"/> at a second new fallback folder, both under the official temporary folder, then
++    /// restores every name to its earlier value (an unset name stays unset) and deletes both folders, also when the
++    /// body throws. Callers belong to <see cref="ProcessEnvironmentCollection"/>.
++    /// </summary>
++    /// <param name="primaryName">The name the strategy under test reads first; one of <see cref="Names"/>.</param>
++    /// <param name="body">The test body; it receives the test folder.</param>
++    /// <returns>A task that completes when the body has run and the variables are restored.</returns>
++    internal static Task RunWithTestFolderAsync(string primaryName, Func<string, Task> body)
++    {
++        ArgumentNullException.ThrowIfNull(body);
++        return RunWithTestFoldersAsync(primaryName, (folder, _) => body(folder));
++    }
++
++    /// <summary>
++    /// The same as <see cref="RunWithTestFolderAsync"/>, with the body receiving the fallback folder too.
++    /// </summary>
++    /// <param name="primaryName">The name the strategy under test reads first; one of <see cref="Names"/>.</param>
++    /// <param name="body">The test body; it receives the test folder and the fallback folder.</param>
++    /// <returns>A task that completes when the body has run and the variables are restored.</returns>
++    internal static async Task RunWithTestFoldersAsync(string primaryName, Func<string, string, Task> body)
++    {
++        ArgumentNullException.ThrowIfNull(body);
++        if (!Names.Contains(primaryName, StringComparer.Ordinal))
++            throw new ArgumentException($"{primaryName} is not a CLI temp variable name.", nameof(primaryName));
++
++        var previous = Snapshot();
++        var stem = Path.Combine(Path.GetTempPath(), "qbt-cli-temp-" + Guid.NewGuid().ToString("N"));
++        var folder = stem + "-primary";
++        var fallbackFolder = stem + "-fallback";
++        Directory.CreateDirectory(folder);
++        Directory.CreateDirectory(fallbackFolder);
++        try
++        {
++            foreach (var name in Names)
++                Environment.SetEnvironmentVariable(name, name == primaryName ? folder : fallbackFolder);
++            await body(folder, fallbackFolder).ConfigureAwait(true);
++        }
++        finally
++        {
++            foreach (var (name, value) in previous)
++                Environment.SetEnvironmentVariable(name, value);
++            foreach (var created in new[] { folder, fallbackFolder })
++            {
++                try
++                {
++                    Directory.Delete(created, recursive: true);
++                }
++                catch (IOException)
++                {
++                }
++            }
++        }
++    }
++
++    /// <summary>Reads the current value of every name of <see cref="Names"/> from the process environment.</summary>
++    /// <returns>The values by name, null for an unset name.</returns>
++    internal static Dictionary<string, string?> Snapshot() =>
++        Names.ToDictionary(name => name, name => Environment.GetEnvironmentVariable(name), StringComparer.Ordinal);
++
++    /// <summary>
++    /// Asserts that a snapshot of the variables points the name a strategy reads first, <paramref name="primaryName"/>,
++    /// at <paramref name="folder"/> and every other name of <see cref="Names"/> at a different folder,
++    /// <paramref name="fallbackFolder"/>, so a test that asserts on <paramref name="folder"/> proves the primary name
++    /// won over a set fallback.
++    /// </summary>
++    /// <param name="observed">The variable values seen, by name.</param>
++    /// <param name="primaryName">The name the strategy under test reads first; one of <see cref="Names"/>.</param>
++    /// <param name="folder">The folder the primary name must point at.</param>
++    /// <param name="fallbackFolder">The folder every other name must point at; not <paramref name="folder"/>.</param>
++    internal static void AssertChainAt(IReadOnlyDictionary<string, string?> observed, string primaryName, string folder, string fallbackFolder)
++    {
++        ArgumentNullException.ThrowIfNull(observed);
++        Assert.Contains(primaryName, Names);
++        Assert.NotEqual(folder, fallbackFolder);
++        foreach (var name in Names)
++        {
++            Assert.True(observed.TryGetValue(name, out var value), $"{name} was not observed.");
++            Assert.Equal(name == primaryName ? folder : fallbackFolder, value);
++        }
++    }
++
++    /// <summary>
++    /// Asserts that every name of <see cref="Names"/> holds the same value after a run as before it, an unset name
++    /// included.
++    /// </summary>
++    /// <param name="before">The values before the run, by name.</param>
++    /// <param name="after">The values after the run, by name.</param>
++    internal static void AssertRestored(IReadOnlyDictionary<string, string?> before, IReadOnlyDictionary<string, string?> after)
++    {
++        ArgumentNullException.ThrowIfNull(before);
++        ArgumentNullException.ThrowIfNull(after);
++        foreach (var name in Names)
++        {
++            Assert.True(before.TryGetValue(name, out var expected), $"{name} was not recorded before the run.");
++            Assert.True(after.TryGetValue(name, out var actual), $"{name} was not recorded after the run.");
++            Assert.Equal(expected, actual);
++        }
++    }
++}
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs b/tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs
+new file mode 100644
+index 00000000..58226294
+--- /dev/null
++++ b/tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs
+@@ -0,0 +1,231 @@
++using Xunit;
++using static QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariables;
++
++namespace QBrainAi.Support.Mcp.Tests.TestSupport;
++
++/// <summary>
++/// Tests the shared CLI temporary-folder variable support of <see cref="CliTempVariables"/>: its name list matches the
++/// four strategies' fallback chains, and its snapshot assertions accept a run that pointed the primary name at the test
++/// folder, every other name at a separate fallback folder, and restored every name, and reject one that missed or
++/// mis-set a name.
++/// </summary>
++/// <remarks>
++/// Requirement coverage: TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 as amended 2026-10-26 ("set and
++/// restore every variable their assertions or the code they call depend on, every name of a fallback chain the code
++/// reads"; operator: "Strengthen AC, move 14 (Recommended)" and "Dependence + proof AC (Recommended)"; hostile
++/// validation finding R6-F1). Test data: scripted snapshots (dictionaries of name to value); these mock gate controls
++/// read and write no process environment, so they are unit tests. The class runs in
++/// <see cref="ProcessEnvironmentCollection"/> because its binding tests write the process environment; those are
++/// integration tests.
++/// </remarks>
++[Collection(ProcessEnvironmentCollection.Name)]
++public sealed class CliTempVariablesTests
++{
++    private const string Folder = "/scripted/cli-temp-folder";
++
++    private const string Fallback = "/scripted/cli-temp-fallback";
++
++    /// <summary>
++    /// The name list holds the five chain names once each: CliBrainSlotChatClient (QUADBRAIN_CLI, ONESHOT), Codex
++    /// (CODEX_ONESHOT, CODEX_TRIAGE), one-shot (ONESHOT, CODEX_ONESHOT, CODEX_TRIAGE) and Grok (GROK_ONESHOT, ONESHOT).
++    /// </summary>
++    [Fact]
++    public void Names_HoldEveryChainNameOnce()
++    {
++        string[] expected =
++        [
++            "MCPSERVER_CODEX_ONESHOT_TEMP",
++            "MCPSERVER_CODEX_TRIAGE_TEMP",
++            "MCPSERVER_GROK_ONESHOT_TEMP",
++            "MCPSERVER_ONESHOT_TEMP",
++            "MCPSERVER_QUADBRAIN_CLI_TEMP",
++        ];
++
++        Assert.Equal(expected, Names.Order(StringComparer.Ordinal));
++    }
++
++    /// <summary>
++    /// Mock gate positive control: a scripted snapshot with the primary name at the folder and every other name at the
++    /// fallback folder passes, for each name as the primary.
++    /// </summary>
++    /// <param name="primaryName">The name read first.</param>
++    [Theory]
++    [InlineData("MCPSERVER_QUADBRAIN_CLI_TEMP")]
++    [InlineData("MCPSERVER_ONESHOT_TEMP")]
++    [InlineData("MCPSERVER_CODEX_ONESHOT_TEMP")]
++    public void ScriptedChain_PrimaryAtFolderOthersAtFallback_Passes(string primaryName) =>
++        AssertChainAt(Scripted(name => name == primaryName ? Folder : Fallback), primaryName, Folder, Fallback);
++
++    /// <summary>
++    /// Mock gate negative controls: the primary name at the fallback folder, another name at the primary folder, a
++    /// missing name, an unset name, a fallback folder equal to the primary folder, and a primary name outside the
++    /// chain are each rejected, inside a passing harness.
++    /// </summary>
++    [Fact]
++    public void ScriptedChain_WrongSnapshot_IsRejectedInsidePassingHarness()
++    {
++        const string primary = "MCPSERVER_QUADBRAIN_CLI_TEMP";
++        var good = Scripted(name => name == primary ? Folder : Fallback);
++        var primaryAtFallback = Scripted(_ => Fallback);
++        var otherAtFolder = Scripted(name => name == primary || name == "MCPSERVER_ONESHOT_TEMP" ? Folder : Fallback);
++        var missing = Scripted(name => name == primary ? Folder : Fallback);
++        missing.Remove("MCPSERVER_GROK_ONESHOT_TEMP");
++        var unset = Scripted(name => name == primary ? Folder : name == "MCPSERVER_CODEX_TRIAGE_TEMP" ? null : Fallback);
++        var sameFolders = Scripted(_ => Folder);
++
++        Assert.NotNull(Record.Exception(() => AssertChainAt(primaryAtFallback, primary, Folder, Fallback)));
++        Assert.NotNull(Record.Exception(() => AssertChainAt(otherAtFolder, primary, Folder, Fallback)));
++        Assert.NotNull(Record.Exception(() => AssertChainAt(missing, primary, Folder, Fallback)));
++        Assert.NotNull(Record.Exception(() => AssertChainAt(unset, primary, Folder, Fallback)));
++        Assert.NotNull(Record.Exception(() => AssertChainAt(sameFolders, primary, Folder, Folder)));
++        Assert.NotNull(Record.Exception(() => AssertChainAt(good, "MCPSERVER_NOT_A_CHAIN_NAME", Folder, Fallback)));
++    }
++
++    /// <summary>Mock gate positive control: equal before and after snapshots, an unset name included, pass.</summary>
++    [Fact]
++    public void ScriptedRestore_EqualSnapshots_Pass() =>
++        AssertRestored(Scripted(Prior), Scripted(Prior));
++
++    /// <summary>
++    /// Mock gate negative controls: an after snapshot that left one name at the folder, one that set a previously
++    /// unset name, and one missing a name are each rejected, inside a passing harness.
++    /// </summary>
++    [Fact]
++    public void ScriptedRestore_UnrestoredName_IsRejectedInsidePassingHarness()
++    {
++        var before = Scripted(Prior);
++        var leftSet = Scripted(name => name == "MCPSERVER_QUADBRAIN_CLI_TEMP" ? Folder : Prior(name));
++        var newlySet = Scripted(name => name == "MCPSERVER_GROK_ONESHOT_TEMP" ? Folder : Prior(name));
++        var missing = Scripted(Prior);
++        missing.Remove("MCPSERVER_ONESHOT_TEMP");
++
++        Assert.NotNull(Record.Exception(() => AssertRestored(before, leftSet)));
++        Assert.NotNull(Record.Exception(() => AssertRestored(before, newlySet)));
++        Assert.NotNull(Record.Exception(() => AssertRestored(before, missing)));
++    }
++
++    /// <summary>
++    /// Binding: for each name as the primary, the helper points that name at a new test folder and every other name at
++    /// a separate new fallback folder, both under the official temporary folder, while the body runs, then restores
++    /// every scripted earlier value (an unset name included) and deletes both folders. The test writes the process
++    /// environment and restores the ambient values, so it is an integration test.
++    /// </summary>
++    /// <param name="primaryName">The name read first.</param>
++    /// <returns>A task that completes when the assertions have run.</returns>
++    [Theory]
++    [Trait("Category", "Integration")]
++    [InlineData("MCPSERVER_QUADBRAIN_CLI_TEMP")]
++    [InlineData("MCPSERVER_ONESHOT_TEMP")]
++    [InlineData("MCPSERVER_CODEX_ONESHOT_TEMP")]
++    [InlineData("MCPSERVER_CODEX_TRIAGE_TEMP")]
++    [InlineData("MCPSERVER_GROK_ONESHOT_TEMP")]
++    public async Task RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(string primaryName)
++    {
++        var ambient = Snapshot();
++        try
++        {
++            SetAll(Prior);
++            var before = Snapshot();
++            string? seenFolder = null;
++            string? seenFallback = null;
++            Dictionary<string, string?>? inside = null;
++            var existed = false;
++
++            await RunWithTestFoldersAsync(primaryName, (folder, fallbackFolder) =>
++            {
++                seenFolder = folder;
++                seenFallback = fallbackFolder;
++                inside = Snapshot();
++                existed = Directory.Exists(folder) && Directory.Exists(fallbackFolder);
++                return Task.CompletedTask;
++            }).ConfigureAwait(true);
++
++            Assert.NotNull(seenFolder);
++            Assert.NotNull(seenFallback);
++            Assert.NotNull(inside);
++            AssertChainAt(inside, primaryName, seenFolder, seenFallback);
++            Assert.True(existed);
++            var temp = Path.GetFullPath(Path.GetTempPath());
++            Assert.StartsWith(temp, Path.GetFullPath(seenFolder), StringComparison.OrdinalIgnoreCase);
++            Assert.StartsWith(temp, Path.GetFullPath(seenFallback), StringComparison.OrdinalIgnoreCase);
++            Assert.False(Directory.Exists(seenFolder));
++            Assert.False(Directory.Exists(seenFallback));
++            AssertRestored(before, Snapshot());
++        }
++        finally
++        {
++            SetAll(name => ambient[name]);
++        }
++    }
++
++    /// <summary>
++    /// Binding: when the body throws, the exception reaches the caller and the helper still restores every scripted
++    /// earlier value and deletes both folders. The test writes the process environment and restores the ambient
++    /// values, so it is an integration test.
++    /// </summary>
++    /// <returns>A task that completes when the assertions have run.</returns>
++    [Fact]
++    [Trait("Category", "Integration")]
++    public async Task RunWithTestFolderAsync_BodyThrows_StillRestoresAndDeletes()
++    {
++        var ambient = Snapshot();
++        try
++        {
++            SetAll(Prior);
++            var before = Snapshot();
++            string? seenFolder = null;
++            string? seenFallback = null;
++
++            await Assert.ThrowsAsync<InvalidOperationException>(() => RunWithTestFoldersAsync("MCPSERVER_CODEX_ONESHOT_TEMP", (folder, fallbackFolder) =>
++            {
++                seenFolder = folder;
++                seenFallback = fallbackFolder;
++                throw new InvalidOperationException("scripted body failure");
++            })).ConfigureAwait(true);
++
++            Assert.NotNull(seenFolder);
++            Assert.NotNull(seenFallback);
++            Assert.False(Directory.Exists(seenFolder));
++            Assert.False(Directory.Exists(seenFallback));
++            AssertRestored(before, Snapshot());
++        }
++        finally
++        {
++            SetAll(name => ambient[name]);
++        }
++    }
++
++    /// <summary>
++    /// Binding: a primary name outside the chain is refused before any variable is written or any folder is made.
++    /// The test reads the process environment to prove nothing changed, so it is an integration test.
++    /// </summary>
++    /// <returns>A task that completes when the assertions have run.</returns>
++    [Fact]
++    [Trait("Category", "Integration")]
++    public async Task RunWithTestFolderAsync_UnknownPrimary_IsRefusedWithoutChanges()
++    {
++        var before = Snapshot();
++        var ran = false;
++
++        await Assert.ThrowsAsync<ArgumentException>(() => RunWithTestFolderAsync("MCPSERVER_NOT_A_CHAIN_NAME", _ =>
++        {
++            ran = true;
++            return Task.CompletedTask;
++        })).ConfigureAwait(true);
++
++        Assert.False(ran);
++        AssertRestored(before, Snapshot());
++    }
++
++    private static void SetAll(Func<string, string?> value)
++    {
++        foreach (var name in Names)
++            Environment.SetEnvironmentVariable(name, value(name));
++    }
++
++    private static string? Prior(string name) =>
++        name == "MCPSERVER_GROK_ONESHOT_TEMP" ? null : "/scripted/prior/" + name;
++
++    private static Dictionary<string, string?> Scripted(Func<string, string?> value) =>
++        Names.ToDictionary(name => name, value, StringComparer.Ordinal);
++}
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs b/tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs
+index f3dd8f5a..483143d4 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs
+@@ -19,4 +19,6 @@ namespace QBrainAi.Support.Mcp.Tests.TestSupport;
+ /// <c>SqlServerLocalDbCollectionTests</c>. The binding checks the real definition and the classes that write the
+-/// process environment, found by the one-time environment sweep of plan section 19.3 (stated limit: the list is not
+-/// discovered from source; a new class that writes the process environment must be added to it).
++/// process environment, found by the one-time environment sweep of plan section 19.3 and its extension through
++/// production code in plan section 20 (the one-shot strategy tests, the two Codex platform classes and the
++/// <see cref="CliTempVariables"/> tests, which write the CLI temp variables; hostile validation finding R6-F1). Stated
++/// limit: the list is not discovered from source; a new class that writes the process environment must be added to it.
+ /// </remarks>
+@@ -75,2 +77,6 @@ public sealed class ProcessEnvironmentCollectionTests
+                      typeof(QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchHarnessTests),
++                     typeof(QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests),
++                     typeof(QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyWindowsTests),
++                     typeof(QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyLinuxTests),
++                     typeof(CliTempVariablesTests),
+                  })

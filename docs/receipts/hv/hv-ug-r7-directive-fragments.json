@@ -1,0 +1,292 @@
+[
+  {
+    "Line": 7386,
+    "Timestamp": "2026-10-19T21:30:10.072Z",
+    "Keys": [
+      "parentUuid",
+      "isSidechain",
+      "promptId",
+      "type",
+      "message",
+      "isVisibleInTranscriptOnly",
+      "isCompactSummary",
+      "uuid",
+      "timestamp",
+      "turnPosition",
+      "turnOrigin",
+      "userType",
+      "entrypoint",
+      "cwd",
+      "sessionId",
+      "version",
+      "gitBranch",
+      "slug"
+    ],
+    "MessageKeys": [
+      "role",
+      "content"
+    ],
+    "Fragment": " by the ownership decision below.\\n     - \\\"There should be ZERO platform specific UNIT tests. If it depends on the environment, it's an integration test.\\\" This arrived relayed by C4. The operator then said directly: \\\"I wasn't told they were unit tests! I assumed they were integration tests because they were platform specific. See how that works?\\\" and \\\"No, it is not a requirement change. It is a clarification of the rules since day one.\\\"\\n  "
+  },
+  {
+    "Line": 10938,
+    "Timestamp": "2026-10-20T00:22:15.488Z",
+    "Keys": [
+      "parentUuid",
+      "isSidechain",
+      "promptId",
+      "type",
+      "message",
+      "isVisibleInTranscriptOnly",
+      "isCompactSummary",
+      "uuid",
+      "timestamp",
+      "turnPosition",
+      "turnOrigin",
+      "userType",
+      "entrypoint",
+      "cwd",
+      "sessionId",
+      "version",
+      "gitBranch",
+      "slug"
+    ],
+    "MessageKeys": [
+      "role",
+      "content"
+    ],
+    "Fragment": "eviewer is Codex gpt-6-astra max.\\n     - \\\"There should be ZERO platform specific UNIT tests. If it depends on the environment, it's an integration test.\\\" (day-one rule, not a requirement change).\\n     - Profile 4.5: no plan step checked and no done state before hostile AGREE.\\n\\n2. Key Technical Concepts:\\n   - **BDPv4 order:** requirements, then tests with scripted mock data and negative controls, then a green mock gate, then production with"
+  },
+  {
+    "Line": 13872,
+    "Timestamp": "2026-10-20T12:40:59.87Z",
+    "Keys": [
+      "parentUuid",
+      "isSidechain",
+      "promptId",
+      "type",
+      "message",
+      "isVisibleInTranscriptOnly",
+      "isCompactSummary",
+      "uuid",
+      "timestamp",
+      "turnPosition",
+      "turnOrigin",
+      "userType",
+      "entrypoint",
+      "cwd",
+      "sessionId",
+      "version",
+      "gitBranch",
+      "slug"
+    ],
+    "MessageKeys": [
+      "role",
+      "content"
+    ],
+    "Fragment": "erify by hash, keep the original.\\n     - \\\"There should be ZERO platform specific UNIT tests.  If it depends on the environment, it's an integration test.\\\"\\n     - Profile 4.5: no done state before AGREE.\\n     - Every text block opens with a stamp from /home/sharpninja/.claude/hooks/timestamp-guard/Get-LocalNow.ps1, measured right before it.\\n     - add-profile is the first action after every compaction or resume.\\n\\n2. Key Technical Concepts:"
+  },
+  {
+    "Line": 16823,
+    "Timestamp": "2026-10-20T14:57:35.682Z",
+    "Keys": [
+      "parentUuid",
+      "isSidechain",
+      "promptId",
+      "type",
+      "message",
+      "isVisibleInTranscriptOnly",
+      "isCompactSummary",
+      "uuid",
+      "timestamp",
+      "turnPosition",
+      "turnOrigin",
+      "userType",
+      "entrypoint",
+      "cwd",
+      "sessionId",
+      "version",
+      "gitBranch",
+      "slug"
+    ],
+    "MessageKeys": [
+      "role",
+      "content"
+    ],
+    "Fragment": "  - \\\"I need you to get your goal completed without further scope creep.\\\"\\n     - \\\"Pause the C4 agent until your goal is complete.\\\" This was done and the C4 session confirmed. It asked to be notified when PR 87 merges after AGREE.\\n     - \\\"Looks like an opportunity to DRY\\\", about the repository-root walk-up copies. This became the shared TestRepositoryRoot.\\n     - \\\"Please use ssh with the kingd key for execution on Legion2 so you have full"
+  },
+  {
+    "Line": 20098,
+    "Timestamp": "2026-10-20T19:50:10.939Z",
+    "Keys": [
+      "parentUuid",
+      "isSidechain",
+      "promptId",
+      "type",
+      "message",
+      "isVisibleInTranscriptOnly",
+      "isCompactSummary",
+      "uuid",
+      "timestamp",
+      "turnPosition",
+      "turnOrigin",
+      "userType",
+      "entrypoint",
+      "cwd",
+      "sessionId",
+      "version",
+      "gitBranch",
+      "slug"
+    ],
+    "MessageKeys": [
+      "role",
+      "content"
+    ],
+    "Fragment": "\\n- \\\"I need you to get your goal completed without further scope creep.\\\"\\n- \\\"Pause the C4 agent until your goal is complete.\\\" The C4 session asked to be notified when PR 87 merges after AGREE.\\n- \\\"Looks like an opportunity to DRY\\\"\\n- \\\"Please use ssh with the kingd key for execution on Legion2 so you have full access to the contents of the kingd home folder.\\\" This supersedes the goal's \\\"over WSMan\\\".\\n- \\\"You have guidelines to make decis"
+  },
+  {
+    "Line": 23817,
+    "Timestamp": "2026-10-20T23:34:48.453Z",
+    "Keys": [
+      "parentUuid",
+      "isSidechain",
+      "promptId",
+      "type",
+      "message",
+      "isVisibleInTranscriptOnly",
+      "isCompactSummary",
+      "uuid",
+      "timestamp",
+      "turnPosition",
+      "turnOrigin",
+      "userType",
+      "entrypoint",
+      "cwd",
+      "sessionId",
+      "version",
+      "gitBranch",
+      "slug"
+    ],
+    "MessageKeys": [
+      "role",
+      "content"
+    ],
+    "Fragment": "\\n- \\\"I need you to get your goal completed without further scope creep.\\\"\\n- \\\"Pause the C4 agent until your goal is complete.\\\" The C4 session asked to be notified when PR 87 merges after AGREE.\\n- \\\"Please use ssh with the kingd key for execution on Legion2 so you have full access to the contents of the kingd home folder.\\\" This supersedes WSMan.\\n- \\\"You have guidelines to make decisions within.\\\"\\n- The LAB-OMARCHY 10.42.0.214 and PAYTON-LEG"
+  },
+  {
+    "Line": 27467,
+    "Timestamp": "2026-10-21T10:33:07.746Z",
+    "Keys": [
+      "parentUuid",
+      "isSidechain",
+      "promptId",
+      "type",
+      "message",
+      "isVisibleInTranscriptOnly",
+      "isCompactSummary",
+      "uuid",
+      "timestamp",
+      "turnPosition",
+      "turnOrigin",
+      "userType",
+      "entrypoint",
+      "cwd",
+      "sessionId",
+      "version",
+      "gitBranch",
+      "slug"
+    ],
+    "MessageKeys": [
+      "role",
+      "content"
+    ],
+    "Fragment": "\\n- \\\"I need you to get your goal completed without further scope creep.\\\"\\n- \\\"Pause the C4 agent until your goal is complete.\\\" The C4 session asked to be notified when PR 87 merges after AGREE.\\n- \\\"Please use ssh with the kingd key for execution on Legion2 so you have full access to the contents of the kingd home folder.\\\"\\n- \\\"You have guidelines to make decisions within.\\\"\\n- \\\"Use IP addresses, not hostnames\\\"\\n- \\\"If LEGION2 is off, the p"
+  },
+  {
+    "Line": 31466,
+    "Timestamp": "2026-10-21T16:19:34.516Z",
+    "Keys": [
+      "parentUuid",
+      "isSidechain",
+      "promptId",
+      "type",
+      "message",
+      "isVisibleInTranscriptOnly",
+      "isCompactSummary",
+      "uuid",
+      "timestamp",
+      "turnPosition",
+      "turnOrigin",
+      "userType",
+      "entrypoint",
+      "cwd",
+      "sessionId",
+      "version",
+      "gitBranch",
+      "slug"
+    ],
+    "MessageKeys": [
+      "role",
+      "content"
+    ],
+    "Fragment": "ated errors.\\\"\\n- 07:12:22 replies: \\\"Explicitly state that temporary files in official temporary folders are not a system change.\\\"; \\\"This damn scanner situation never should have gotten this far.  It is a workspace rule, not something that needs to be mechanically enforced.\\\"; \\\"No recipt is a fail.\\\"; \\\"Then do the dry run.\\\"; \\\"If any of this is easy to remediate, then do so.\\\"\\n- ~07:17: on R3-P12: \\\"Why bring it up?\\\"\\n- 07:22: \\\"Not yet\\\""
+  },
+  {
+    "Line": 34501,
+    "Timestamp": "2026-10-26T13:38:30.422Z",
+    "Keys": [
+      "parentUuid",
+      "isSidechain",
+      "promptId",
+      "type",
+      "message",
+      "isVisibleInTranscriptOnly",
+      "isCompactSummary",
+      "uuid",
+      "timestamp",
+      "turnPosition",
+      "turnOrigin",
+      "userType",
+      "entrypoint",
+      "cwd",
+      "sessionId",
+      "version",
+      "gitBranch",
+      "slug"
+    ],
+    "MessageKeys": [
+      "role",
+      "content"
+    ],
+    "Fragment": "the hostile gate...\\\"\\n- 2026-10-21T12:26 (a correction): \\\"Strengthening Acceptance Criteria should always be the recommended option.\\\"\\n- Plan section 19 approval, answered by 12:37:44: \\\"Approve, strengthen AC-006/008 (Recommended)\\\".\\n- 2026-10-22T01:00:08 local (transcript 06:00:08Z): \\\"Confirm, launch HV r6 (Recommended)\\\". Its option text: commit the prelaunch records, docs only, signed, normal push; publish PR body r7; launch round 6 (Cod"
+  },
+  {
+    "Line": 37857,
+    "Timestamp": "2026-10-26T16:29:43.424Z",
+    "Keys": [
+      "parentUuid",
+      "isSidechain",
+      "promptId",
+      "type",
+      "message",
+      "isVisibleInTranscriptOnly",
+      "isCompactSummary",
+      "uuid",
+      "timestamp",
+      "turnPosition",
+      "turnOrigin",
+      "userType",
+      "entrypoint",
+      "cwd",
+      "sessionId",
+      "version",
+      "gitBranch",
+      "slug"
+    ],
+    "MessageKeys": [
+      "role",
+      "content"
+    ],
+    "Fragment": "till in force (verbatim):** \\\"Fix both, strengthen ACs\\\"; \\\"Strengthening Acceptance Criteria should always be the recommended option.\\\"; \\\"Approve, strengthen AC-006/008 (Recommended)\\\"; \\\"Confirm, launch HV r6 (Recommended)\\\"; \\\"I don't want any more scanner work.  None.  Add an operator override to the HV.\\\"; \\\"Azure is no longer in the picture.  Create a global memory not to gate on azure related errors.\\\" (MEMORY-PROCESS-009); \\\"Explicitly s"
+  }
+]

@@ -1,0 +1,35 @@
+type: result
+payload:
+  requestId: req-20261026T171719Z-9f5f
+  result:
+    id: TR-MCP-PATHNORM-001
+    title: Forward-slash storage keys, rekey maintenance command and startup guard
+    description: "WorkspaceIdentityPath.NormalizeLexicalPath emits '/' for Windows paths (UNC keeps leading '//'; \\\\?\\ device prefixes stripped to drive or // form); BuildStorageKey becomes windows:C:/USERS/KINGD style. IsRemoteWindowsPath, IsNormalizedPathWithinRoot and NormalizeLocalAdministrativeShareAlias accept both separators. A ToNativePath helper produces backslash paths only for Win32 CreateFile/GetFinalPathNameByHandle, \\\\?\\ long-path prefixes and cmd.exe arguments. Persisted data is rewritten by an explicit maintenance command --workspace-path-rekey (decision D5, 2026-10-07) modelled on McpDatabaseEncryptionTransitionCommand: required backup unless --dry-run, report with old->new mapping and before/after counts; one transaction per database with foreign keys deferred or suspended and fully re-validated (decision D6: SQLite defer_foreign_keys, SQL Server NOCHECK then WITH CHECK CHECK, PostgreSQL DEFERRABLE + SET CONSTRAINTS ALL DEFERRED); set-based UPDATE per workspace column from a mapping table limited to Windows-shaped values; C# recomputation of hashed values (federation GlobalWorkspaceId/CanonicalWorkspaceId and hub hash-keyed Workspaces rows, TriageGroups GroupKey/GroupId with repointed children, HandoffIngestionRuns ReplayIdentity); FileGitHubWorkspaceTokenStore keys rewritten. No legacy dual-key lookup (decision D7): a startup guard refuses to start while any Windows-shaped workspace id still contains a backslash. Enrolled proxies are re-enrolled once after deploy (only PAYTON-LEGION2 today). Plan: docs/plans/2026-10-07-federation-fixes.md section 4c."
+    status: pending
+    priority: medium
+    area: MCP
+    subarea: PATHNORM
+    notes: 'P1.5 operator decisions 2026-10-16: Policy A uses existing Windows lexical normalizer including device-prefix stripping and case preservation. Distinct old keys converging abort before mutation. Manual triage keys are SHA-256(workspacePath|manual|random GUID); retain their GroupKey/GroupId because GUID is not stored. Only recompute derived identities verified from persisted inputs. Worktree-only implementation and disposable fixture/copy tests; no live apply, service operations, deploy, or merge. Current task explicitly requests requirements/tests first (red), then implementation.'
+    acceptanceCriteria:
+    - id: p15-policy-a
+      text: Reuse P1.4 Windows lexical normalization, preserve case, and reject distinct old keys converging before any database mutation.
+      isSatisfied: false
+    - id: p15-safety
+      text: Apply requires successful verified backup; all database changes and FK validation occur in one transaction; repeat apply is a no-op.
+      isSatisfied: false
+    - id: p15-preview
+      text: Dry-run inventory and planning run only on a database copy; report mappings, table and workspace counts, and retained manual triage hashes without secrets.
+      isSatisfied: false
+    - id: p15-guard
+      text: HTTP and STDIO startup refuse legacy Windows workspace ids and point to --workspace-path-rekey.
+      isSatisfied: false
+    - id: p15-derived
+      text: Recompute only derivable triage, handoff, and federation identities; repoint children; preserve manual triage hashes and rewrite token-store keys with file backup.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-26T17:17:20.6348195+00:00
+    updatedAt: 2026-10-26T17:17:20.6349443+00:00
+  deprecated: true
+
+---
+

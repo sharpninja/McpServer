@@ -1,0 +1,20 @@
+{
+  "TimestampUtc": "2026-10-26T18:29:19.2948463Z",
+  "TimestampLocal": "2026-10-26T13:29:19",
+  "SessionId": "Codex-20261026T171400Z-plugin-session",
+  "RequestId": "req-20261026T171448Z-unitgreen-r7",
+  "TurnStatus": "completed",
+  "PartCount": 23,
+  "ExpectedCharacters": 458004,
+  "RestoredCharacters": 458004,
+  "ExpectedSha256": "29C2DE750C0A165EF66ED45C745232905D05D2D447CA091FD21E33D0811C7295",
+  "RestoredSha256": "29C2DE750C0A165EF66ED45C745232905D05D2D447CA091FD21E33D0811C7295",
+  "ExactContentEqual": true,
+  "EntireProseResponseEqual": true,
+  "HistoryQueryFound": true,
+  "DesignDecisionCount": 1,
+  "ActionCount": 4,
+  "FullReadbackMethod": "client.sessionLog.queryAsync",
+  "HistoryMethod": "workflow.sessionlog.queryHistory",
+  "PluginRoot": "/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0"
+}

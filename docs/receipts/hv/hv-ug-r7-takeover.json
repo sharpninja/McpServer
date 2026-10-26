@@ -1,0 +1,98 @@
+[
+  {
+    "Path": ".nuke/build.schema.json",
+    "SourceBlob": "d9fad69e8622f9365b3d334338fb6ba439188e9d",
+    "ImportedBlob": "342d0757244c252cd7b79ecf18cfac092575f240",
+    "Equal": false
+  },
+  {
+    "Path": "build/Build.TestDependencies.cs",
+    "SourceBlob": "7206fba621ac3b4e5f636e92c5c7e00c3d04216d",
+    "ImportedBlob": "7206fba621ac3b4e5f636e92c5c7e00c3d04216d",
+    "Equal": true
+  },
+  {
+    "Path": "build/LinuxProviderTestProvisioner.cs",
+    "SourceBlob": "2649ae8c503a46d799c037629b2dd05e5a5c4d1c",
+    "ImportedBlob": "2649ae8c503a46d799c037629b2dd05e5a5c4d1c",
+    "Equal": true
+  },
+  {
+    "Path": "build/ProviderTestProvisioningContracts.cs",
+    "SourceBlob": "c9fe9f5c8683a9d10cdade22919faedbff1e751b",
+    "ImportedBlob": "c9fe9f5c8683a9d10cdade22919faedbff1e751b",
+    "Equal": true
+  },
+  {
+    "Path": "src/QBrainAi.Services/Services/GitHubCliService.cs",
+    "SourceBlob": "0c9ca325e4dd982818392d7b04005af0f07810ba",
+    "ImportedBlob": "0c9ca325e4dd982818392d7b04005af0f07810ba",
+    "Equal": true
+  },
+  {
+    "Path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "SourceBlob": "fef74b60b6ccccdc2064d961de4d9054b9acf21b",
+    "ImportedBlob": "fef74b60b6ccccdc2064d961de4d9054b9acf21b",
+    "Equal": true
+  },
+  {
+    "Path": "tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs",
+    "SourceBlob": "281a8b2c77ddbcf2058c3e3a7e97dae3caa51c12",
+    "ImportedBlob": "281a8b2c77ddbcf2058c3e3a7e97dae3caa51c12",
+    "Equal": true
+  },
+  {
+    "Path": "tests/Build.Tests/ProviderTestProvisioningTests.cs",
+    "SourceBlob": "a523887077a2747de826facb16add62e0d2a89a8",
+    "ImportedBlob": "a523887077a2747de826facb16add62e0d2a89a8",
+    "Equal": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceResolutionMiddlewareTests.cs",
+    "SourceBlob": "98a15c728af7c1db2ef6bc74395e5484a4009775",
+    "ImportedBlob": "98a15c728af7c1db2ef6bc74395e5484a4009775",
+    "Equal": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "SourceBlob": "e7350e77a85a05a23d273a8e49d2d33d3711146d",
+    "ImportedBlob": "e7350e77a85a05a23d273a8e49d2d33d3711146d",
+    "Equal": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "SourceBlob": "a594df1af7170c9bdabb9cad0289c60f68183ce1",
+    "ImportedBlob": "a594df1af7170c9bdabb9cad0289c60f68183ce1",
+    "Equal": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Storage/Decompose4nfBackfillMigrationTests.cs",
+    "SourceBlob": "f354ddc970f8243c1b0f36ceb63f4460734bbfe2",
+    "ImportedBlob": "f354ddc970f8243c1b0f36ceb63f4460734bbfe2",
+    "Equal": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs",
+    "SourceBlob": "3ad458c9988c2f22ecc8f3694c40c5a339ea401d",
+    "ImportedBlob": "3ad458c9988c2f22ecc8f3694c40c5a339ea401d",
+    "Equal": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertions.cs",
+    "SourceBlob": "14d553ebff1e9b244b802ec665f77957f644e27a",
+    "ImportedBlob": "14d553ebff1e9b244b802ec665f77957f644e27a",
+    "Equal": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs",
+    "SourceBlob": "364880bdecc87546a46ddb8a99f706c9729e545c",
+    "ImportedBlob": "364880bdecc87546a46ddb8a99f706c9729e545c",
+    "Equal": true
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs",
+    "SourceBlob": "04b803279c573cb5bb57d402b49215de85d487a6",
+    "ImportedBlob": "04b803279c573cb5bb57d402b49215de85d487a6",
+    "Equal": true
+  }
+]

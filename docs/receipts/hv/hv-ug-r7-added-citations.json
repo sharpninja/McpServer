@@ -1,0 +1,2908 @@
+[
+  {
+    "File": "tests/Build.Tests/IntegrationLaneFilterContract.cs",
+    "Line": 4,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-NUKE-019 (AC-1): Contract cases and assertions for <see cref=\"IIntegrationLaneFilter\"/>. The expected filters"
+  },
+  {
+    "File": "tests/Build.Tests/IntegrationLaneFilterContract.cs",
+    "Line": 25,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <summary>The filter TR-MCP-NUKE-019 AC-1 requires for <paramref name=\"host\"/>.</summary>"
+  },
+  {
+    "File": "tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+    "Line": 4,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-NUKE-019 (AC-1), BDPv4 mock gate: proves the <see cref=\"IntegrationLaneFilterContract\"/> assertions accept a"
+  },
+  {
+    "File": "tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+    "Line": 10,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <summary>TR-MCP-NUKE-019: every host passes against the scripted filter.</summary>"
+  },
+  {
+    "File": "tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+    "Line": 18,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <summary>TR-MCP-NUKE-019: the theory above covers every contract host.</summary>"
+  },
+  {
+    "File": "tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+    "Line": 24,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TR-MCP-NUKE-019 negative controls: each wrong filter is rejected (the other host's cases admitted, untagged"
+  },
+  {
+    "File": "tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+    "Line": 43,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TR-MCP-NUKE-019 negative controls: the selection assertions alone, without the exact-text check, reject each"
+  },
+  {
+    "File": "tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+    "Line": 65,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <summary>TR-MCP-NUKE-019: the contract evaluator refuses a term it cannot read instead of guessing.</summary>"
+  },
+  {
+    "File": "tests/Build.Tests/IntegrationLaneFilterTests.cs",
+    "Line": 4,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-NUKE-019 (AC-1): Binds the <see cref=\"IntegrationLaneFilterContract\"/> cases and assertions, unchanged from"
+  },
+  {
+    "File": "tests/Build.Tests/IntegrationLaneFilterTests.cs",
+    "Line": 12,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <summary>TR-MCP-NUKE-019: the production filter meets the contract on every host.</summary>"
+  },
+  {
+    "File": "tests/Build.Tests/IntegrationLaneFilterTests.cs",
+    "Line": 20,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <summary>TR-MCP-NUKE-019: the theory above covers every contract host.</summary>"
+  },
+  {
+    "File": "tests/Build.Tests/IntegrationLanePreconditionContract.cs",
+    "Line": 4,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-NUKE-019 (AC-5): contract scenarios and assertions for <see cref=\"IIntegrationLanePrecondition\"/>. The"
+  },
+  {
+    "File": "tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs",
+    "Line": 4,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-NUKE-019 (AC-5), BDPv4 mock gate: proves the <see cref=\"IntegrationLanePreconditionContract\"/> assertions"
+  },
+  {
+    "File": "tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs",
+    "Line": 10,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <summary>TR-MCP-NUKE-019 AC-5: every scenario passes against the scripted precondition.</summary>"
+  },
+  {
+    "File": "tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs",
+    "Line": 20,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <summary>TR-MCP-NUKE-019 AC-5: the theory above covers every contract scenario.</summary>"
+  },
+  {
+    "File": "tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs",
+    "Line": 26,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TR-MCP-NUKE-019 AC-5 negative controls: a precondition that runs a non-interactive Windows session, stops"
+  },
+  {
+    "File": "tests/Build.Tests/IntegrationLanePreconditionTests.cs",
+    "Line": 4,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-NUKE-019 (AC-5): binds the <see cref=\"IntegrationLanePreconditionContract\"/> scenarios and assertions,"
+  },
+  {
+    "File": "tests/Build.Tests/IntegrationLanePreconditionTests.cs",
+    "Line": 12,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <summary>TR-MCP-NUKE-019 AC-5: the production precondition meets every contract scenario.</summary>"
+  },
+  {
+    "File": "tests/Build.Tests/IntegrationLanePreconditionTests.cs",
+    "Line": 22,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <summary>TR-MCP-NUKE-019 AC-5: the theory above covers every contract scenario.</summary>"
+  },
+  {
+    "File": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "Line": 4,
+    "Id": "TR-MCP-NUKE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-NUKE-018 (AC-1 to AC-4, AC-6): Contract scenarios and assertions for <see cref=\"IProviderTestProvisioner\"/>."
+  },
+  {
+    "File": "tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs",
+    "Line": 4,
+    "Id": "TR-MCP-NUKE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-NUKE-018 (AC-1 to AC-4), BDPv4 mock gate: proves the <see cref=\"ProviderTestProvisioningContract\"/>"
+  },
+  {
+    "File": "tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs",
+    "Line": 10,
+    "Id": "TR-MCP-NUKE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <summary>TR-MCP-NUKE-018: every scenario passes against the scripted provisioner.</summary>"
+  },
+  {
+    "File": "tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs",
+    "Line": 24,
+    "Id": "TR-MCP-NUKE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <summary>TR-MCP-NUKE-018: the theory above covers every contract scenario.</summary>"
+  },
+  {
+    "File": "tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs",
+    "Line": 30,
+    "Id": "TR-MCP-NUKE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TR-MCP-NUKE-018 negative controls: each wrong provisioner is rejected by the scenario it violates"
+  },
+  {
+    "File": "tests/Build.Tests/ProviderTestProvisioningTests.cs",
+    "Line": 4,
+    "Id": "TR-MCP-NUKE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-NUKE-018 (AC-1 to AC-4): Binds the <see cref=\"ProviderTestProvisioningContract\"/> scenarios and assertions,"
+  },
+  {
+    "File": "tests/Build.Tests/ProviderTestProvisioningTests.cs",
+    "Line": 12,
+    "Id": "TR-MCP-NUKE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <summary>TR-MCP-NUKE-018: the production provisioner meets every contract scenario.</summary>"
+  },
+  {
+    "File": "tests/Build.Tests/ProviderTestProvisioningTests.cs",
+    "Line": 26,
+    "Id": "TR-MCP-NUKE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <summary>TR-MCP-NUKE-018: the theory above covers every contract scenario.</summary>"
+  },
+  {
+    "File": "tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs",
+    "Line": 36,
+    "Id": "TR-MCP-QBRAIN-005",
+    "Present": true,
+    "HistoricalLines": [
+      "    /// TR-MCP-QBRAIN-005: McpServer:McpAgent still binds when the canonical section is absent."
+    ],
+    "AddedText": "/// TR-MCP-QBRAIN-005: the legacy McpServer:McpAgent section binds through the options validator, which"
+  },
+  {
+    "File": "tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs",
+    "Line": 38,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// by host, so this is an integration test on every host (TR-MCP-USECASE-018 AC-006: no unit test depends"
+  },
+  {
+    "File": "tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs",
+    "Line": 45,
+    "Id": "TR-MCP-QBRAIN-005",
+    "Present": true,
+    "HistoricalLines": [
+      "    /// TR-MCP-QBRAIN-005: McpServer:McpAgent still binds when the canonical section is absent."
+    ],
+    "AddedText": "    /// TR-MCP-QBRAIN-005: McpServer:McpAgent still binds when the canonical section is absent."
+  },
+  {
+    "File": "tests/QBrainAi.QBAgent.Tests/Skills/AuthoredSkillsTests.cs",
+    "Line": 8,
+    "Id": "FR-MCP-QBSKILLS-003",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// with valid frontmatter and are discoverable (FR-MCP-QBSKILLS-003 ac-2). The skills are read from the repository"
+  },
+  {
+    "File": "tests/QBrainAi.QBAgent.Tests/Skills/AuthoredSkillsTests.cs",
+    "Line": 10,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// (TR-MCP-USECASE-018 AC-006, hostile validation round 2 finding R2-F1)."
+  },
+  {
+    "File": "tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs",
+    "Line": 18,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// hosts (TR-MCP-USECASE-018 AC-006, hostile validation round 2 finding R2-F1)."
+  },
+  {
+    "File": "tests/QBrainAi.Repl.Core.Tests/MemorySchemaContractTests.cs",
+    "Line": 9,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// <see cref=\"TestRepositoryRoot\"/>, so this is an integration test on both hosts (TR-MCP-USECASE-018 AC-006,"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "Line": 198,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// Requirement coverage: Byrd Development Process V4 validation discipline; TR-MCP-USECASE-018 (AC-006),"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "Line": 199,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TR-MCP-USECASE-019 (AC-008): platform-specific tests neither skip nor silently return."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "Line": 237,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TR-MCP-USECASE-018 (AC-006), BDPv4 mock gate for <see cref=\"UnitSuitePlatformScanner.FindSkipLines\"/>:"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "Line": 283,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TR-MCP-USECASE-018 (AC-006) negative controls: the single-line patterns this guard used before"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "Line": 313,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// resolves only for an integration test (TR-MCP-USECASE-018 AC-006)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "Line": 6,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008), BDPv4 mock gate for the trait policy of"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "Line": 6,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008), BDPv4 mock gate for the trait policy of"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "Line": 8,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008): finds platform dependence in unit tests by reading"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "Line": 8,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008): finds platform dependence in unit tests by reading"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "Line": 61,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TR-MCP-USECASE-018 (AC-006): the one definition of an xUnit skip shared by this scanner and the skip guard."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "Line": 83,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008), DRY guard for repository reads: returns the 1-based"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "Line": 83,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008), DRY guard for repository reads: returns the 1-based"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "Line": 388,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// <summary>TR-MCP-USECASE-018 (AC-006): one platform-dependent line in a unit test class.</summary>"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs",
+    "Line": 6,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008): the unit-suite platform scanner resolves a using alias"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs",
+    "Line": 6,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008): the unit-suite platform scanner resolves a using alias"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "Line": 8,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008), BDPv4 mock gate for"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "Line": 8,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008), BDPv4 mock gate for"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs",
+    "Line": 6,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008): binds <see cref=\"UnitSuitePlatformScanner\"/>,"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs",
+    "Line": 6,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008): binds <see cref=\"UnitSuitePlatformScanner\"/>,"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+    "Line": 15,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// environment (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+    "Line": 15,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// environment (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+    "Line": 62,
+    "Id": "FR-MCP-077",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// Requirement coverage: FR-MCP-077, TR-MCP-CFG-007; classification TR-MCP-USECASE-018 (AC-006),"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+    "Line": 62,
+    "Id": "TR-MCP-CFG-007",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// Requirement coverage: FR-MCP-077, TR-MCP-CFG-007; classification TR-MCP-USECASE-018 (AC-006),"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+    "Line": 62,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// Requirement coverage: FR-MCP-077, TR-MCP-CFG-007; classification TR-MCP-USECASE-018 (AC-006),"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+    "Line": 63,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TR-MCP-USECASE-019 (AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs",
+    "Line": 10,
+    "Id": "TR-MCP-WS-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-WS-005 / AC-TR-MCP-WS-005-001: gives marker agent-plugin version resolution test-owned sources for the whole"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs",
+    "Line": 10,
+    "Id": "TR-MCP-WS-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-WS-005 / AC-TR-MCP-WS-005-001: gives marker agent-plugin version resolution test-owned sources for the whole"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "Line": 12,
+    "Id": "TR-MCP-WS-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 (operator 2026-10-20: \"Fix scans in PR 87"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "Line": 12,
+    "Id": "TR-MCP-WS-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 (operator 2026-10-20: \"Fix scans in PR 87"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "Line": 7,
+    "Id": "TEST-MCP-MEMORY-018",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018 (historical): Harness conditions, metrics, isolation, and modes. The class"
+    ],
+    "AddedText": "/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018 (historical): Harness conditions, metrics, isolation, and modes. The class"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "Line": 7,
+    "Id": "FR-MCP-MEMORY-018",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018 (historical): Harness conditions, metrics, isolation, and modes. The class"
+    ],
+    "AddedText": "/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018 (historical): Harness conditions, metrics, isolation, and modes. The class"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "Line": 9,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// environment (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "Line": 9,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// environment (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "Line": 12,
+    "Id": "TEST-MCP-MEMORY-018",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018 (historical): Harness conditions, metrics, isolation, and modes. The class"
+    ],
+    "AddedText": "/// The TEST-MCP-MEMORY-018 and FR-MCP-MEMORY-018 citations in this file, its AC-FR-MCP-MEMORY-018 criteria included,"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "Line": 12,
+    "Id": "FR-MCP-MEMORY-018",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018 (historical): Harness conditions, metrics, isolation, and modes. The class"
+    ],
+    "AddedText": "/// The TEST-MCP-MEMORY-018 and FR-MCP-MEMORY-018 citations in this file, its AC-FR-MCP-MEMORY-018 criteria included,"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "Line": 12,
+    "Id": "FR-MCP-MEMORY-018",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018 (historical): Harness conditions, metrics, isolation, and modes. The class"
+    ],
+    "AddedText": "/// The TEST-MCP-MEMORY-018 and FR-MCP-MEMORY-018 citations in this file, its AC-FR-MCP-MEMORY-018 criteria included,"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "Line": 14,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// no active coverage claim. The active claims are the TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "Line": 14,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// no active coverage claim. The active claims are the TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "Line": 7,
+    "Id": "TEST-MCP-MEMORY-011",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011 (historical):"
+    ],
+    "AddedText": "/// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011 (historical):"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "Line": 7,
+    "Id": "TR-MCP-MEMORY-SEARCH-002",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011 (historical):",
+      "/// AC-TR-MCP-MEMORY-SEARCH-002 criteria included, are historical: those records are not in the requirements store",
+      "    /// AC-TR-MCP-MEMORY-SEARCH-002-09 (historical): Local ONNX path works without cloud credentials in the test host. The test"
+    ],
+    "AddedText": "/// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011 (historical):"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "Line": 7,
+    "Id": "FR-MCP-MEMORY-011",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011 (historical):"
+    ],
+    "AddedText": "/// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011 (historical):"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "Line": 10,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// tests writes the process environment (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "Line": 10,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// tests writes the process environment (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "Line": 13,
+    "Id": "TEST-MCP-MEMORY-011",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011 (historical):"
+    ],
+    "AddedText": "/// The TEST-MCP-MEMORY-011, TR-MCP-MEMORY-SEARCH-002 and FR-MCP-MEMORY-011 citations in this file, its"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "Line": 13,
+    "Id": "TR-MCP-MEMORY-SEARCH-002",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011 (historical):",
+      "/// AC-TR-MCP-MEMORY-SEARCH-002 criteria included, are historical: those records are not in the requirements store",
+      "    /// AC-TR-MCP-MEMORY-SEARCH-002-09 (historical): Local ONNX path works without cloud credentials in the test host. The test"
+    ],
+    "AddedText": "/// The TEST-MCP-MEMORY-011, TR-MCP-MEMORY-SEARCH-002 and FR-MCP-MEMORY-011 citations in this file, its"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "Line": 13,
+    "Id": "FR-MCP-MEMORY-011",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011 (historical):"
+    ],
+    "AddedText": "/// The TEST-MCP-MEMORY-011, TR-MCP-MEMORY-SEARCH-002 and FR-MCP-MEMORY-011 citations in this file, its"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "Line": 14,
+    "Id": "TR-MCP-MEMORY-SEARCH-002",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011 (historical):",
+      "/// AC-TR-MCP-MEMORY-SEARCH-002 criteria included, are historical: those records are not in the requirements store",
+      "    /// AC-TR-MCP-MEMORY-SEARCH-002-09 (historical): Local ONNX path works without cloud credentials in the test host. The test"
+    ],
+    "AddedText": "/// AC-TR-MCP-MEMORY-SEARCH-002 criteria included, are historical: those records are not in the requirements store"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "Line": 16,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 classification of the integration test."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "Line": 16,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 classification of the integration test."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "Line": 156,
+    "Id": "TR-MCP-MEMORY-SEARCH-002",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011 (historical):",
+      "/// AC-TR-MCP-MEMORY-SEARCH-002 criteria included, are historical: those records are not in the requirements store",
+      "    /// AC-TR-MCP-MEMORY-SEARCH-002-09 (historical): Local ONNX path works without cloud credentials in the test host. The test"
+    ],
+    "AddedText": "    /// AC-TR-MCP-MEMORY-SEARCH-002-09 (historical): Local ONNX path works without cloud credentials in the test host. The test"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "Line": 158,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// keys afterwards, which it did not do before (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "Line": 158,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// keys afterwards, which it did not do before (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs",
+    "Line": 6,
+    "Id": "TEST-MCP-MEMORY-002",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TEST-MCP-MEMORY-002 / FR-MCP-MEMORY-002 (test harness): <see cref=\"MemoryS1Harness\"/>, the shared fixture of the"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs",
+    "Line": 6,
+    "Id": "FR-MCP-MEMORY-002",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TEST-MCP-MEMORY-002 / FR-MCP-MEMORY-002 (test harness): <see cref=\"MemoryS1Harness\"/>, the shared fixture of the"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs",
+    "Line": 12,
+    "Id": "FR-MCP-MEMORY-002",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// round 4; operator 2026-10-20: \"Extend fix, then round 4 (Recommended)\". Traceability: FR-MCP-MEMORY-002 (Memory"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs",
+    "Line": 13,
+    "Id": "TR-MCP-MEMORY-002",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// CRUD tools), TR-MCP-MEMORY-002 and TEST-MCP-MEMORY-002 are present and mapped in the requirements store; the"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs",
+    "Line": 13,
+    "Id": "TEST-MCP-MEMORY-002",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// CRUD tools), TR-MCP-MEMORY-002 and TEST-MCP-MEMORY-002 are present and mapped in the requirements store; the"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs",
+    "Line": 14,
+    "Id": "TEST-MCP-MEMORY-010",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-MEMORY-010 that the concurrency tests cite is absent from it (hostile validation round 4 finding R4-F3)."
+    ],
+    "AddedText": "/// TEST-MCP-MEMORY-010 that the concurrency tests cite is absent from it (hostile validation round 4 finding R4-F3)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceResolutionMiddlewareTests.cs",
+    "Line": 40,
+    "Id": "TR-MCP-FED-PATH-001",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "            // TR-MCP-FED-PATH-001 / TEST-MCP-PATHNORM-001: the middleware passes the canonical workspace identity"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceResolutionMiddlewareTests.cs",
+    "Line": 40,
+    "Id": "TEST-MCP-PATHNORM-001",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "            // TR-MCP-FED-PATH-001 / TEST-MCP-PATHNORM-001: the middleware passes the canonical workspace identity"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    "Line": 10,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// because two of its tests write the process environment; those two are integration tests (TR-MCP-USECASE-018"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    "Line": 11,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// AC-006, TR-MCP-USECASE-019 AC-008; hostile validation round 5 finding R5-F2 and the sweep of plan section 19.3)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    "Line": 198,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    "Line": 198,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    "Line": 225,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    "Line": 225,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs",
+    "Line": 15,
+    "Id": "TR-MCP-QBRAIN-004",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-QBRAIN-004 and TR-MCP-QBRAIN-005: product route and configuration aliases. The class runs in"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs",
+    "Line": 15,
+    "Id": "TR-MCP-QBRAIN-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-QBRAIN-004 and TR-MCP-QBRAIN-005: product route and configuration aliases. The class runs in"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs",
+    "Line": 17,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs",
+    "Line": 17,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs",
+    "Line": 72,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation round 5 finding R5-F2, where an ambient"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs",
+    "Line": 72,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation round 5 finding R5-F2, where an ambient"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentHelp/AgentHelpTestPaths.cs",
+    "Line": 7,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// CopyToOutputDirectory), never a file in the repository checkout (TR-MCP-USECASE-018 AC-006)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "Line": 13,
+    "Id": "TR-MCP-WS-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 (unit tests take every plugin-version input from"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "Line": 13,
+    "Id": "TR-MCP-WS-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 (unit tests take every plugin-version input from"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotCredentialResolverTests.cs",
+    "Line": 9,
+    "Id": "TEST-MCP-177",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// Tests for safe brain-slot credential reference resolution. TEST-MCP-177. The class runs in"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotCredentialResolverTests.cs",
+    "Line": 11,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotCredentialResolverTests.cs",
+    "Line": 11,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotCredentialResolverTests.cs",
+    "Line": 19,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotCredentialResolverTests.cs",
+    "Line": 19,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 15,
+    "Id": "TEST-MCP-QBCLI-001",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-QBCLI-001 (historical): QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session",
+      "/// The TEST-MCP-QBCLI-001 citations in this file are historical: no such record is in the requirements store",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok runs in an isolated working folder with its dashboard, memory and subagents off and",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok output that stops at the turn limit is returned instead of thrown. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok stopping at the turn limit with empty output returns empty text. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): any other Grok failure still throws with its error text. The client's",
+      "    /// TEST-MCP-QBCLI-001 (historical): a Grok resume whose session is missing retries once without resume. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex returns the assistant text from the JSONL stream, not the raw events. The test writes",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex prefers the JSONL assistant text over tool-call JSON in the output file. The test",
+      "    /// TEST-MCP-QBCLI-001 (historical): the temp folder comes from the configured variable without the Windows service ACL. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok writes its prompt file under the configured temp folder and points TEMP and TMP at it.",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex writes its output file under the configured temp folder. The test writes the process",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Grok call on the same slot resumes the first call's session. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Codex call on the same slot resumes the thread the first call",
+      "    /// TEST-MCP-QBCLI-001 (historical): the factory creates the CLI client for a CLI slot, and the client completes.",
+      "/// TEST-MCP-QBCLI-001 (historical; no such record in the requirements store): the default shared CLI temp directory on a Windows host lives under the machine's"
+    ],
+    "AddedText": "/// TEST-MCP-QBCLI-001 (historical): QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 18,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// <c>WithIsolatedQuadbrainTemp</c>; those tests are integration tests (TR-MCP-USECASE-018 AC-006,"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 19,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-USECASE-019 AC-008; plan sections 19.3 and 20)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 22,
+    "Id": "TEST-MCP-QBCLI-001",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-QBCLI-001 (historical): QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session",
+      "/// The TEST-MCP-QBCLI-001 citations in this file are historical: no such record is in the requirements store",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok runs in an isolated working folder with its dashboard, memory and subagents off and",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok output that stops at the turn limit is returned instead of thrown. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok stopping at the turn limit with empty output returns empty text. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): any other Grok failure still throws with its error text. The client's",
+      "    /// TEST-MCP-QBCLI-001 (historical): a Grok resume whose session is missing retries once without resume. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex returns the assistant text from the JSONL stream, not the raw events. The test writes",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex prefers the JSONL assistant text over tool-call JSON in the output file. The test",
+      "    /// TEST-MCP-QBCLI-001 (historical): the temp folder comes from the configured variable without the Windows service ACL. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok writes its prompt file under the configured temp folder and points TEMP and TMP at it.",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex writes its output file under the configured temp folder. The test writes the process",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Grok call on the same slot resumes the first call's session. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Codex call on the same slot resumes the thread the first call",
+      "    /// TEST-MCP-QBCLI-001 (historical): the factory creates the CLI client for a CLI slot, and the client completes.",
+      "/// TEST-MCP-QBCLI-001 (historical; no such record in the requirements store): the default shared CLI temp directory on a Windows host lives under the machine's"
+    ],
+    "AddedText": "/// The TEST-MCP-QBCLI-001 citations in this file are historical: no such record is in the requirements store"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 24,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 classification of the integration tests."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 24,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 classification of the integration tests."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 128,
+    "Id": "TEST-MCP-QBCLI-001",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-QBCLI-001 (historical): QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session",
+      "/// The TEST-MCP-QBCLI-001 citations in this file are historical: no such record is in the requirements store",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok runs in an isolated working folder with its dashboard, memory and subagents off and",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok output that stops at the turn limit is returned instead of thrown. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok stopping at the turn limit with empty output returns empty text. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): any other Grok failure still throws with its error text. The client's",
+      "    /// TEST-MCP-QBCLI-001 (historical): a Grok resume whose session is missing retries once without resume. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex returns the assistant text from the JSONL stream, not the raw events. The test writes",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex prefers the JSONL assistant text over tool-call JSON in the output file. The test",
+      "    /// TEST-MCP-QBCLI-001 (historical): the temp folder comes from the configured variable without the Windows service ACL. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok writes its prompt file under the configured temp folder and points TEMP and TMP at it.",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex writes its output file under the configured temp folder. The test writes the process",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Grok call on the same slot resumes the first call's session. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Codex call on the same slot resumes the thread the first call",
+      "    /// TEST-MCP-QBCLI-001 (historical): the factory creates the CLI client for a CLI slot, and the client completes.",
+      "/// TEST-MCP-QBCLI-001 (historical; no such record in the requirements store): the default shared CLI temp directory on a Windows host lives under the machine's"
+    ],
+    "AddedText": "    /// TEST-MCP-QBCLI-001 (historical): Grok runs in an isolated working folder with its dashboard, memory and subagents off and"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 131,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 131,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 184,
+    "Id": "TEST-MCP-QBCLI-001",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-QBCLI-001 (historical): QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session",
+      "/// The TEST-MCP-QBCLI-001 citations in this file are historical: no such record is in the requirements store",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok runs in an isolated working folder with its dashboard, memory and subagents off and",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok output that stops at the turn limit is returned instead of thrown. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok stopping at the turn limit with empty output returns empty text. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): any other Grok failure still throws with its error text. The client's",
+      "    /// TEST-MCP-QBCLI-001 (historical): a Grok resume whose session is missing retries once without resume. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex returns the assistant text from the JSONL stream, not the raw events. The test writes",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex prefers the JSONL assistant text over tool-call JSON in the output file. The test",
+      "    /// TEST-MCP-QBCLI-001 (historical): the temp folder comes from the configured variable without the Windows service ACL. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok writes its prompt file under the configured temp folder and points TEMP and TMP at it.",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex writes its output file under the configured temp folder. The test writes the process",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Grok call on the same slot resumes the first call's session. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Codex call on the same slot resumes the thread the first call",
+      "    /// TEST-MCP-QBCLI-001 (historical): the factory creates the CLI client for a CLI slot, and the client completes.",
+      "/// TEST-MCP-QBCLI-001 (historical; no such record in the requirements store): the default shared CLI temp directory on a Windows host lives under the machine's"
+    ],
+    "AddedText": "    /// TEST-MCP-QBCLI-001 (historical): Grok output that stops at the turn limit is returned instead of thrown. The"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 186,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 186,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 215,
+    "Id": "TEST-MCP-QBCLI-001",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-QBCLI-001 (historical): QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session",
+      "/// The TEST-MCP-QBCLI-001 citations in this file are historical: no such record is in the requirements store",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok runs in an isolated working folder with its dashboard, memory and subagents off and",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok output that stops at the turn limit is returned instead of thrown. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok stopping at the turn limit with empty output returns empty text. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): any other Grok failure still throws with its error text. The client's",
+      "    /// TEST-MCP-QBCLI-001 (historical): a Grok resume whose session is missing retries once without resume. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex returns the assistant text from the JSONL stream, not the raw events. The test writes",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex prefers the JSONL assistant text over tool-call JSON in the output file. The test",
+      "    /// TEST-MCP-QBCLI-001 (historical): the temp folder comes from the configured variable without the Windows service ACL. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok writes its prompt file under the configured temp folder and points TEMP and TMP at it.",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex writes its output file under the configured temp folder. The test writes the process",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Grok call on the same slot resumes the first call's session. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Codex call on the same slot resumes the thread the first call",
+      "    /// TEST-MCP-QBCLI-001 (historical): the factory creates the CLI client for a CLI slot, and the client completes.",
+      "/// TEST-MCP-QBCLI-001 (historical; no such record in the requirements store): the default shared CLI temp directory on a Windows host lives under the machine's"
+    ],
+    "AddedText": "    /// TEST-MCP-QBCLI-001 (historical): Grok stopping at the turn limit with empty output returns empty text. The"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 217,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 217,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 243,
+    "Id": "TEST-MCP-QBCLI-001",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-QBCLI-001 (historical): QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session",
+      "/// The TEST-MCP-QBCLI-001 citations in this file are historical: no such record is in the requirements store",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok runs in an isolated working folder with its dashboard, memory and subagents off and",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok output that stops at the turn limit is returned instead of thrown. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok stopping at the turn limit with empty output returns empty text. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): any other Grok failure still throws with its error text. The client's",
+      "    /// TEST-MCP-QBCLI-001 (historical): a Grok resume whose session is missing retries once without resume. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex returns the assistant text from the JSONL stream, not the raw events. The test writes",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex prefers the JSONL assistant text over tool-call JSON in the output file. The test",
+      "    /// TEST-MCP-QBCLI-001 (historical): the temp folder comes from the configured variable without the Windows service ACL. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok writes its prompt file under the configured temp folder and points TEMP and TMP at it.",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex writes its output file under the configured temp folder. The test writes the process",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Grok call on the same slot resumes the first call's session. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Codex call on the same slot resumes the thread the first call",
+      "    /// TEST-MCP-QBCLI-001 (historical): the factory creates the CLI client for a CLI slot, and the client completes.",
+      "/// TEST-MCP-QBCLI-001 (historical; no such record in the requirements store): the default shared CLI temp directory on a Windows host lives under the machine's"
+    ],
+    "AddedText": "    /// TEST-MCP-QBCLI-001 (historical): any other Grok failure still throws with its error text. The client's"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 245,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 245,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 272,
+    "Id": "TEST-MCP-QBCLI-001",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-QBCLI-001 (historical): QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session",
+      "/// The TEST-MCP-QBCLI-001 citations in this file are historical: no such record is in the requirements store",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok runs in an isolated working folder with its dashboard, memory and subagents off and",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok output that stops at the turn limit is returned instead of thrown. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok stopping at the turn limit with empty output returns empty text. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): any other Grok failure still throws with its error text. The client's",
+      "    /// TEST-MCP-QBCLI-001 (historical): a Grok resume whose session is missing retries once without resume. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex returns the assistant text from the JSONL stream, not the raw events. The test writes",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex prefers the JSONL assistant text over tool-call JSON in the output file. The test",
+      "    /// TEST-MCP-QBCLI-001 (historical): the temp folder comes from the configured variable without the Windows service ACL. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok writes its prompt file under the configured temp folder and points TEMP and TMP at it.",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex writes its output file under the configured temp folder. The test writes the process",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Grok call on the same slot resumes the first call's session. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Codex call on the same slot resumes the thread the first call",
+      "    /// TEST-MCP-QBCLI-001 (historical): the factory creates the CLI client for a CLI slot, and the client completes.",
+      "/// TEST-MCP-QBCLI-001 (historical; no such record in the requirements store): the default shared CLI temp directory on a Windows host lives under the machine's"
+    ],
+    "AddedText": "    /// TEST-MCP-QBCLI-001 (historical): a Grok resume whose session is missing retries once without resume. The"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 274,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 274,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 388,
+    "Id": "TEST-MCP-QBCLI-001",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-QBCLI-001 (historical): QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session",
+      "/// The TEST-MCP-QBCLI-001 citations in this file are historical: no such record is in the requirements store",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok runs in an isolated working folder with its dashboard, memory and subagents off and",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok output that stops at the turn limit is returned instead of thrown. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok stopping at the turn limit with empty output returns empty text. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): any other Grok failure still throws with its error text. The client's",
+      "    /// TEST-MCP-QBCLI-001 (historical): a Grok resume whose session is missing retries once without resume. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex returns the assistant text from the JSONL stream, not the raw events. The test writes",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex prefers the JSONL assistant text over tool-call JSON in the output file. The test",
+      "    /// TEST-MCP-QBCLI-001 (historical): the temp folder comes from the configured variable without the Windows service ACL. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok writes its prompt file under the configured temp folder and points TEMP and TMP at it.",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex writes its output file under the configured temp folder. The test writes the process",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Grok call on the same slot resumes the first call's session. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Codex call on the same slot resumes the thread the first call",
+      "    /// TEST-MCP-QBCLI-001 (historical): the factory creates the CLI client for a CLI slot, and the client completes.",
+      "/// TEST-MCP-QBCLI-001 (historical; no such record in the requirements store): the default shared CLI temp directory on a Windows host lives under the machine's"
+    ],
+    "AddedText": "    /// TEST-MCP-QBCLI-001 (historical): Codex returns the assistant text from the JSONL stream, not the raw events. The test writes"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 390,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 390,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 427,
+    "Id": "TEST-MCP-QBCLI-001",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-QBCLI-001 (historical): QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session",
+      "/// The TEST-MCP-QBCLI-001 citations in this file are historical: no such record is in the requirements store",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok runs in an isolated working folder with its dashboard, memory and subagents off and",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok output that stops at the turn limit is returned instead of thrown. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok stopping at the turn limit with empty output returns empty text. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): any other Grok failure still throws with its error text. The client's",
+      "    /// TEST-MCP-QBCLI-001 (historical): a Grok resume whose session is missing retries once without resume. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex returns the assistant text from the JSONL stream, not the raw events. The test writes",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex prefers the JSONL assistant text over tool-call JSON in the output file. The test",
+      "    /// TEST-MCP-QBCLI-001 (historical): the temp folder comes from the configured variable without the Windows service ACL. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok writes its prompt file under the configured temp folder and points TEMP and TMP at it.",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex writes its output file under the configured temp folder. The test writes the process",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Grok call on the same slot resumes the first call's session. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Codex call on the same slot resumes the thread the first call",
+      "    /// TEST-MCP-QBCLI-001 (historical): the factory creates the CLI client for a CLI slot, and the client completes.",
+      "/// TEST-MCP-QBCLI-001 (historical; no such record in the requirements store): the default shared CLI temp directory on a Windows host lives under the machine's"
+    ],
+    "AddedText": "    /// TEST-MCP-QBCLI-001 (historical): Codex prefers the JSONL assistant text over tool-call JSON in the output file. The test"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 429,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 429,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 463,
+    "Id": "TEST-MCP-QBCLI-001",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-QBCLI-001 (historical): QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session",
+      "/// The TEST-MCP-QBCLI-001 citations in this file are historical: no such record is in the requirements store",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok runs in an isolated working folder with its dashboard, memory and subagents off and",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok output that stops at the turn limit is returned instead of thrown. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok stopping at the turn limit with empty output returns empty text. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): any other Grok failure still throws with its error text. The client's",
+      "    /// TEST-MCP-QBCLI-001 (historical): a Grok resume whose session is missing retries once without resume. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex returns the assistant text from the JSONL stream, not the raw events. The test writes",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex prefers the JSONL assistant text over tool-call JSON in the output file. The test",
+      "    /// TEST-MCP-QBCLI-001 (historical): the temp folder comes from the configured variable without the Windows service ACL. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok writes its prompt file under the configured temp folder and points TEMP and TMP at it.",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex writes its output file under the configured temp folder. The test writes the process",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Grok call on the same slot resumes the first call's session. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Codex call on the same slot resumes the thread the first call",
+      "    /// TEST-MCP-QBCLI-001 (historical): the factory creates the CLI client for a CLI slot, and the client completes.",
+      "/// TEST-MCP-QBCLI-001 (historical; no such record in the requirements store): the default shared CLI temp directory on a Windows host lives under the machine's"
+    ],
+    "AddedText": "    /// TEST-MCP-QBCLI-001 (historical): the temp folder comes from the configured variable without the Windows service ACL. The"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 465,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 465,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 481,
+    "Id": "TEST-MCP-QBCLI-001",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-QBCLI-001 (historical): QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session",
+      "/// The TEST-MCP-QBCLI-001 citations in this file are historical: no such record is in the requirements store",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok runs in an isolated working folder with its dashboard, memory and subagents off and",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok output that stops at the turn limit is returned instead of thrown. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok stopping at the turn limit with empty output returns empty text. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): any other Grok failure still throws with its error text. The client's",
+      "    /// TEST-MCP-QBCLI-001 (historical): a Grok resume whose session is missing retries once without resume. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex returns the assistant text from the JSONL stream, not the raw events. The test writes",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex prefers the JSONL assistant text over tool-call JSON in the output file. The test",
+      "    /// TEST-MCP-QBCLI-001 (historical): the temp folder comes from the configured variable without the Windows service ACL. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok writes its prompt file under the configured temp folder and points TEMP and TMP at it.",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex writes its output file under the configured temp folder. The test writes the process",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Grok call on the same slot resumes the first call's session. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Codex call on the same slot resumes the thread the first call",
+      "    /// TEST-MCP-QBCLI-001 (historical): the factory creates the CLI client for a CLI slot, and the client completes.",
+      "/// TEST-MCP-QBCLI-001 (historical; no such record in the requirements store): the default shared CLI temp directory on a Windows host lives under the machine's"
+    ],
+    "AddedText": "    /// TEST-MCP-QBCLI-001 (historical): Grok writes its prompt file under the configured temp folder and points TEMP and TMP at it."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 483,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 483,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 520,
+    "Id": "TEST-MCP-QBCLI-001",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-QBCLI-001 (historical): QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session",
+      "/// The TEST-MCP-QBCLI-001 citations in this file are historical: no such record is in the requirements store",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok runs in an isolated working folder with its dashboard, memory and subagents off and",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok output that stops at the turn limit is returned instead of thrown. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok stopping at the turn limit with empty output returns empty text. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): any other Grok failure still throws with its error text. The client's",
+      "    /// TEST-MCP-QBCLI-001 (historical): a Grok resume whose session is missing retries once without resume. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex returns the assistant text from the JSONL stream, not the raw events. The test writes",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex prefers the JSONL assistant text over tool-call JSON in the output file. The test",
+      "    /// TEST-MCP-QBCLI-001 (historical): the temp folder comes from the configured variable without the Windows service ACL. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok writes its prompt file under the configured temp folder and points TEMP and TMP at it.",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex writes its output file under the configured temp folder. The test writes the process",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Grok call on the same slot resumes the first call's session. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Codex call on the same slot resumes the thread the first call",
+      "    /// TEST-MCP-QBCLI-001 (historical): the factory creates the CLI client for a CLI slot, and the client completes.",
+      "/// TEST-MCP-QBCLI-001 (historical; no such record in the requirements store): the default shared CLI temp directory on a Windows host lives under the machine's"
+    ],
+    "AddedText": "    /// TEST-MCP-QBCLI-001 (historical): Codex writes its output file under the configured temp folder. The test writes the process"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 521,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test (TR-MCP-USECASE-018 AC-006,"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 522,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 557,
+    "Id": "TEST-MCP-QBCLI-001",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-QBCLI-001 (historical): QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session",
+      "/// The TEST-MCP-QBCLI-001 citations in this file are historical: no such record is in the requirements store",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok runs in an isolated working folder with its dashboard, memory and subagents off and",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok output that stops at the turn limit is returned instead of thrown. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok stopping at the turn limit with empty output returns empty text. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): any other Grok failure still throws with its error text. The client's",
+      "    /// TEST-MCP-QBCLI-001 (historical): a Grok resume whose session is missing retries once without resume. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex returns the assistant text from the JSONL stream, not the raw events. The test writes",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex prefers the JSONL assistant text over tool-call JSON in the output file. The test",
+      "    /// TEST-MCP-QBCLI-001 (historical): the temp folder comes from the configured variable without the Windows service ACL. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok writes its prompt file under the configured temp folder and points TEMP and TMP at it.",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex writes its output file under the configured temp folder. The test writes the process",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Grok call on the same slot resumes the first call's session. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Codex call on the same slot resumes the thread the first call",
+      "    /// TEST-MCP-QBCLI-001 (historical): the factory creates the CLI client for a CLI slot, and the client completes.",
+      "/// TEST-MCP-QBCLI-001 (historical; no such record in the requirements store): the default shared CLI temp directory on a Windows host lives under the machine's"
+    ],
+    "AddedText": "    /// TEST-MCP-QBCLI-001 (historical): a second Grok call on the same slot resumes the first call's session. The"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 559,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 559,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 599,
+    "Id": "TEST-MCP-QBCLI-001",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-QBCLI-001 (historical): QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session",
+      "/// The TEST-MCP-QBCLI-001 citations in this file are historical: no such record is in the requirements store",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok runs in an isolated working folder with its dashboard, memory and subagents off and",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok output that stops at the turn limit is returned instead of thrown. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok stopping at the turn limit with empty output returns empty text. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): any other Grok failure still throws with its error text. The client's",
+      "    /// TEST-MCP-QBCLI-001 (historical): a Grok resume whose session is missing retries once without resume. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex returns the assistant text from the JSONL stream, not the raw events. The test writes",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex prefers the JSONL assistant text over tool-call JSON in the output file. The test",
+      "    /// TEST-MCP-QBCLI-001 (historical): the temp folder comes from the configured variable without the Windows service ACL. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok writes its prompt file under the configured temp folder and points TEMP and TMP at it.",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex writes its output file under the configured temp folder. The test writes the process",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Grok call on the same slot resumes the first call's session. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Codex call on the same slot resumes the thread the first call",
+      "    /// TEST-MCP-QBCLI-001 (historical): the factory creates the CLI client for a CLI slot, and the client completes.",
+      "/// TEST-MCP-QBCLI-001 (historical; no such record in the requirements store): the default shared CLI temp directory on a Windows host lives under the machine's"
+    ],
+    "AddedText": "    /// TEST-MCP-QBCLI-001 (historical): a second Codex call on the same slot resumes the thread the first call"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 601,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// through <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006,"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 602,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 636,
+    "Id": "TEST-MCP-QBCLI-001",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-QBCLI-001 (historical): QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session",
+      "/// The TEST-MCP-QBCLI-001 citations in this file are historical: no such record is in the requirements store",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok runs in an isolated working folder with its dashboard, memory and subagents off and",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok output that stops at the turn limit is returned instead of thrown. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok stopping at the turn limit with empty output returns empty text. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): any other Grok failure still throws with its error text. The client's",
+      "    /// TEST-MCP-QBCLI-001 (historical): a Grok resume whose session is missing retries once without resume. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex returns the assistant text from the JSONL stream, not the raw events. The test writes",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex prefers the JSONL assistant text over tool-call JSON in the output file. The test",
+      "    /// TEST-MCP-QBCLI-001 (historical): the temp folder comes from the configured variable without the Windows service ACL. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok writes its prompt file under the configured temp folder and points TEMP and TMP at it.",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex writes its output file under the configured temp folder. The test writes the process",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Grok call on the same slot resumes the first call's session. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Codex call on the same slot resumes the thread the first call",
+      "    /// TEST-MCP-QBCLI-001 (historical): the factory creates the CLI client for a CLI slot, and the client completes.",
+      "/// TEST-MCP-QBCLI-001 (historical; no such record in the requirements store): the default shared CLI temp directory on a Windows host lives under the machine's"
+    ],
+    "AddedText": "    /// TEST-MCP-QBCLI-001 (historical): the factory creates the CLI client for a CLI slot, and the client completes."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 638,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 638,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 856,
+    "Id": "TEST-MCP-QBCLI-001",
+    "Present": false,
+    "HistoricalLines": [
+      "/// TEST-MCP-QBCLI-001 (historical): QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session",
+      "/// The TEST-MCP-QBCLI-001 citations in this file are historical: no such record is in the requirements store",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok runs in an isolated working folder with its dashboard, memory and subagents off and",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok output that stops at the turn limit is returned instead of thrown. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok stopping at the turn limit with empty output returns empty text. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): any other Grok failure still throws with its error text. The client's",
+      "    /// TEST-MCP-QBCLI-001 (historical): a Grok resume whose session is missing retries once without resume. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex returns the assistant text from the JSONL stream, not the raw events. The test writes",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex prefers the JSONL assistant text over tool-call JSON in the output file. The test",
+      "    /// TEST-MCP-QBCLI-001 (historical): the temp folder comes from the configured variable without the Windows service ACL. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): Grok writes its prompt file under the configured temp folder and points TEMP and TMP at it.",
+      "    /// TEST-MCP-QBCLI-001 (historical): Codex writes its output file under the configured temp folder. The test writes the process",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Grok call on the same slot resumes the first call's session. The",
+      "    /// TEST-MCP-QBCLI-001 (historical): a second Codex call on the same slot resumes the thread the first call",
+      "    /// TEST-MCP-QBCLI-001 (historical): the factory creates the CLI client for a CLI slot, and the client completes.",
+      "/// TEST-MCP-QBCLI-001 (historical; no such record in the requirements store): the default shared CLI temp directory on a Windows host lives under the machine's"
+    ],
+    "AddedText": "/// TEST-MCP-QBCLI-001 (historical; no such record in the requirements store): the default shared CLI temp directory on a Windows host lives under the machine's"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 858,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Line": 858,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Line": 17,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// <see cref=\"CliTempVariables\"/> and are integration tests (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008;"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Line": 17,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// <see cref=\"CliTempVariables\"/> and are integration tests (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008;"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Line": 30,
+    "Id": "TEST-MCP-TRIAGE-003",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TEST-MCP-TRIAGE-003: launches the strategy against the capturing spawner with the default request, with every"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Line": 32,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// integration classes because the strategy chooses its launcher by the running OS (TR-MCP-USECASE-018 AC-006)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Line": 57,
+    "Id": "TEST-MCP-TRIAGE-003",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TEST-MCP-TRIAGE-003: Codex uses reusable one-shot <c>exec -C ... -o ... -</c> invocation and never"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Line": 93,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Line": 93,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Line": 118,
+    "Id": "TEST-MCP-TRIAGE-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TEST-MCP-TRIAGE-005: Timed-out Codex CLI triage runs preserve partial"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Line": 121,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Line": 121,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Line": 153,
+    "Id": "TEST-MCP-TRIAGE-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TEST-MCP-TRIAGE-005: Codex CLI triage runs stream stdout and stderr"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Line": 156,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Line": 156,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Line": 199,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// the process environment and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Line": 199,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// the process environment and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Line": 394,
+    "Id": "TEST-MCP-TRIAGE-003",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TEST-MCP-TRIAGE-003: the Codex CLI strategy on a Windows host launches through <c>cmd.exe /c</c>."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Line": 396,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// (operator 2026-10-19: \"Integration + Platform (Recommended)\"; TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019). Each"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Line": 396,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// (operator 2026-10-19: \"Integration + Platform (Recommended)\"; TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019). Each"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Line": 398,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// serialized <see cref=\"ProcessEnvironmentCollection\"/> (TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Line": 406,
+    "Id": "TEST-MCP-TRIAGE-003",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TEST-MCP-TRIAGE-003: the one-shot exec launch goes through cmd.exe, which needs the TOML quotes escaped."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Line": 422,
+    "Id": "TEST-MCP-TRIAGE-003",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TEST-MCP-TRIAGE-003: Windows npm command shims are wrapped through"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Line": 476,
+    "Id": "TEST-MCP-TRIAGE-003",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TEST-MCP-TRIAGE-003: the Codex CLI strategy off Windows launches the agent directly. The strategy"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Line": 478,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// 2026-10-19: \"Integration + Platform (Recommended)\"; TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019). The launch sets"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Line": 478,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// 2026-10-19: \"Integration + Platform (Recommended)\"; TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019). The launch sets"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Line": 480,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// <see cref=\"ProcessEnvironmentCollection\"/> (TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Line": 488,
+    "Id": "TEST-MCP-TRIAGE-003",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TEST-MCP-TRIAGE-003, BUG-BASELINE-004: codex is started directly and receives the TOML literal as"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+    "Line": 49,
+    "Id": "TEST-MCP-TRIAGE-003",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TEST-MCP-TRIAGE-003: the default spawner on an interactive Windows host. Windows-only and dependent on an"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+    "Line": 52,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+    "Line": 52,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+    "Line": 59,
+    "Id": "TEST-MCP-TRIAGE-003",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TEST-MCP-TRIAGE-003: Interactive local hosts use the default process spawner"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "Line": 12,
+    "Id": "TR-MCP-WS-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 and TR-MCP-SESSIONLOG-006 /"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "Line": 12,
+    "Id": "TR-MCP-WS-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 and TR-MCP-SESSIONLOG-006 /"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "Line": 12,
+    "Id": "TR-MCP-SESSIONLOG-006",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 and TR-MCP-SESSIONLOG-006 /"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "Line": 13,
+    "Id": "TR-MCP-SESSIONLOG-006",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// AC-TR-MCP-SESSIONLOG-006-009 (operator 2026-10-20: \"Fix scans in PR 87 (Recommended)\"; triage"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "Line": 286,
+    "Id": "TR-MCP-WS-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// itself a directory symbolic link (AC-TR-MCP-WS-005-001, AC-TR-MCP-SESSIONLOG-006-009; hostile validation"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "Line": 286,
+    "Id": "TR-MCP-SESSIONLOG-006",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// itself a directory symbolic link (AC-TR-MCP-WS-005-001, AC-TR-MCP-SESSIONLOG-006-009; hostile validation"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "Line": 475,
+    "Id": "TR-MCP-WS-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// the root may be walked. Expected values come from the strengthened criteria AC-TR-MCP-WS-005-001 and"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "Line": 476,
+    "Id": "TR-MCP-SESSIONLOG-006",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// AC-TR-MCP-SESSIONLOG-006-009 (operator 2026-10-21: \"Fix both, strengthen ACs\"): the root and every folder"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/DocsSyncG8OverlayTests.cs",
+    "Line": 13,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// temporary export root, so the class is an integration test on every host (TR-MCP-USECASE-018 AC-006,"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/DocsSyncG8OverlayTests.cs",
+    "Line": 14,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-NUKE-019)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "Line": 35,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TR-MCP-USECASE-018 AC-006)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "Line": 399,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// Windows path comparison (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "Line": 399,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// Windows path comparison (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "Line": 413,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// case-sensitive path comparison (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "Line": 413,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// case-sensitive path comparison (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "Line": 400,
+    "Id": "TR-MCP-GH-003",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TR-MCP-GH-003 with TR-MCP-FED-PATH-001: a stored workspace token is passed as the process-run override, and the"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "Line": 400,
+    "Id": "TR-MCP-FED-PATH-001",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TR-MCP-GH-003 with TR-MCP-FED-PATH-001: a stored workspace token is passed as the process-run override, and the"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "Line": 446,
+    "Id": "TR-MCP-GH-004",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TR-MCP-GH-004 with TR-MCP-FED-PATH-001: the host-native workspace from the accessor (a temporary directory, so"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "Line": 446,
+    "Id": "TR-MCP-FED-PATH-001",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TR-MCP-GH-004 with TR-MCP-FED-PATH-001: the host-native workspace from the accessor (a temporary directory, so"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "Line": 475,
+    "Id": "FR-MCP-FED-PATH-001",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// FR-MCP-FED-PATH-001 / TR-MCP-FED-PATH-001: a foreign-platform workspace (a Windows path on a POSIX host, a"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "Line": 475,
+    "Id": "TR-MCP-FED-PATH-001",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// FR-MCP-FED-PATH-001 / TR-MCP-FED-PATH-001: a foreign-platform workspace (a Windows path on a POSIX host, a"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "Line": 479,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TR-MCP-USECASE-018 AC-006)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "Line": 501,
+    "Id": "TR-MCP-FED-PATH-001",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TR-MCP-FED-PATH-001, BDPv4 mock gate for the working-directory predicates used above: they accept the"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "Line": 614,
+    "Id": "FR-MCP-FED-PATH-001",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// FR-MCP-FED-PATH-001 / TR-MCP-FED-PATH-001 on a Windows host: a POSIX workspace path is foreign there"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "Line": 614,
+    "Id": "TR-MCP-FED-PATH-001",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// FR-MCP-FED-PATH-001 / TR-MCP-FED-PATH-001 on a Windows host: a POSIX workspace path is foreign there"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "Line": 615,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "Line": 615,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "Line": 628,
+    "Id": "FR-MCP-FED-PATH-001",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// FR-MCP-FED-PATH-001 / TR-MCP-FED-PATH-001 on a Linux host: a Windows drive workspace path is foreign"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "Line": 628,
+    "Id": "TR-MCP-FED-PATH-001",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// FR-MCP-FED-PATH-001 / TR-MCP-FED-PATH-001 on a Linux host: a Windows drive workspace path is foreign"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "Line": 629,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// there (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "Line": 629,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// there (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/GrokCliAgentExecutionStrategyTests.cs",
+    "Line": 42,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// is preserved. Fixed data for both spellings on every host (TR-MCP-USECASE-018 AC-006)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs",
+    "Line": 149,
+    "Id": "TEST-HANDOFF-002",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TEST-HANDOFF-002: Windows final-path resolution of a handle. Windows-only, so an integration test on Windows"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs",
+    "Line": 150,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// hosts without a silent return elsewhere (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs",
+    "Line": 150,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// hosts without a silent return elsewhere (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs",
+    "Line": 11,
+    "Id": "TEST-HANDOFF-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TEST-HANDOFF-005 / TEST-HANDOFF-007 (test harness): the handoff durability tests give each database context its own"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs",
+    "Line": 11,
+    "Id": "TEST-HANDOFF-007",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TEST-HANDOFF-005 / TEST-HANDOFF-007 (test harness): the handoff durability tests give each database context its own"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs",
+    "Line": 462,
+    "Id": "TR-MCP-HOSTILEREVIEW-003",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TR-MCP-HOSTILEREVIEW-003: invalid worker options fail host startup validation. The failure"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs",
+    "Line": 470,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; the sweep of plan section 19.3). Its assertion depends on"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs",
+    "Line": 470,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; the sweep of plan section 19.3). Its assertion depends on"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "Line": 30,
+    "Id": "TR-MCP-WS-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// Test-owned plugin-version sources for a temporary workspace (AC-TR-MCP-WS-005-001): no plugin-root variable,"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "Line": 735,
+    "Id": "TEST-MCP-PLUGIN-PSONLY-001",
+    "Present": false,
+    "HistoricalLines": [
+      "    /// TEST-MCP-PLUGIN-PSONLY-001 (historical; no such record is in the requirements store, hostile validation finding"
+    ],
+    "AddedText": "    /// TEST-MCP-PLUGIN-PSONLY-001 (historical; no such record is in the requirements store, hostile validation finding"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "Line": 738,
+    "Id": "TR-MCP-WS-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// installed plugin is seen (TR-MCP-WS-005 AC-TR-MCP-WS-005-001)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "Line": 738,
+    "Id": "TR-MCP-WS-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// installed plugin is seen (TR-MCP-WS-005 AC-TR-MCP-WS-005-001)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "Line": 16,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// restore them through <see cref=\"CliTempVariables\"/> and are integration tests (TR-MCP-USECASE-018 AC-006,"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "Line": 17,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "Line": 29,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "Line": 29,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "Line": 61,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "Line": 61,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "Line": 92,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "Line": 92,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "Line": 125,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "Line": 125,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs",
+    "Line": 12,
+    "Id": "TR-MCP-WS-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 (operator 2026-10-20: \"Fold R3-P3 in first\", whose"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs",
+    "Line": 12,
+    "Id": "TR-MCP-WS-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 (operator 2026-10-20: \"Fold R3-P3 in first\", whose"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+    "Line": 14,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// Windows hosts only, without a silent return elsewhere (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019). The class runs"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+    "Line": 14,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// Windows hosts only, without a silent return elsewhere (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019). The class runs"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+    "Line": 16,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+    "Line": 16,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseDiagramGraphCqrsTests.cs",
+    "Line": 17,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// integration test on every host (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseDiagramGraphCqrsTests.cs",
+    "Line": 17,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// integration test on every host (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseGetWorkspaceResolutionContractTests.cs",
+    "Line": 23,
+    "Id": "FR-MCP-PATHNORM-001",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <summary>FR-MCP-PATHNORM-001: the stored and returned workspace key uses '/' (test-side oracle).</summary>"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseGetWorkspaceResolutionContractTests.cs",
+    "Line": 52,
+    "Id": "TEST-MCP-PATHNORM-001",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TEST-MCP-PATHNORM-001 negative control: a result that returns the caller's backslash spelling"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "Line": 13,
+    "Id": "TR-MCP-WS-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 and TR-MCP-SESSIONLOG-006 /"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "Line": 13,
+    "Id": "TR-MCP-WS-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 and TR-MCP-SESSIONLOG-006 /"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "Line": 13,
+    "Id": "TR-MCP-SESSIONLOG-006",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 and TR-MCP-SESSIONLOG-006 /"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "Line": 14,
+    "Id": "TR-MCP-SESSIONLOG-006",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// AC-TR-MCP-SESSIONLOG-006-009 (operator 2026-10-20: \"Fix scans in PR 87 (Recommended)\"; triage report"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "Line": 97,
+    "Id": "TR-MCP-WS-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// AC-TR-MCP-WS-005-001: with an untrusted mount point and a linked higher version in the Claude plugin cache,"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "Line": 111,
+    "Id": "TR-MCP-WS-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// AC-TR-MCP-WS-005-001: when the plugin cache root itself cannot be listed, resolution does not throw and"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "Line": 142,
+    "Id": "TR-MCP-WS-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// AC-TR-MCP-WS-005-001: when the higher cached version's <c>.version</c> cannot be read, resolution does not"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "Line": 156,
+    "Id": "TR-MCP-WS-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// AC-TR-MCP-WS-005-001: when every cached version file cannot be read, resolution does not throw and falls back"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "Line": 185,
+    "Id": "TR-MCP-SESSIONLOG-006",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// AC-TR-MCP-SESSIONLOG-006-009: with an untrusted mount point and a linked history folder under ~/.claude, the"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "Line": 204,
+    "Id": "TR-MCP-WS-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// The cache layouts of AC-TR-MCP-WS-005-001, each with the folder (relative to the profile) a case reports as a"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "Line": 239,
+    "Id": "TR-MCP-WS-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// AC-TR-MCP-WS-005-001: with the only cached version under a cache root that is a link, or under a folder"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "Line": 258,
+    "Id": "TR-MCP-WS-005",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// AC-TR-MCP-WS-005-001: a user profile that is itself a link is still scanned, so the cached version resolves"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "Line": 269,
+    "Id": "TR-MCP-SESSIONLOG-006",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <summary>The four agent-history roots of AC-TR-MCP-SESSIONLOG-006-009.</summary>"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "Line": 273,
+    "Id": "TR-MCP-SESSIONLOG-006",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// AC-TR-MCP-SESSIONLOG-006-009: when a history root is a link, the extractor does not throw and the turn keeps"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "Line": 299,
+    "Id": "TR-MCP-SESSIONLOG-006",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// AC-TR-MCP-SESSIONLOG-006-009: when ~/.claude itself cannot be listed, the extractor does not throw and the"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceTokenServiceTests.cs",
+    "Line": 103,
+    "Id": "TR-MCP-FED-PATH-001",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "        // TR-MCP-FED-PATH-001, FR-MCP-PATHNORM-001: the canonical identity, not host Path.GetFullPath (which"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceTokenServiceTests.cs",
+    "Line": 103,
+    "Id": "FR-MCP-PATHNORM-001",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "        // TR-MCP-FED-PATH-001, FR-MCP-PATHNORM-001: the canonical identity, not host Path.GetFullPath (which"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceTokenServiceTests.cs",
+    "Line": 105,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "        // the test oracle, not the process host (TR-MCP-USECASE-018 AC-006: no unit test depends on the platform)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+    "Line": 293,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// Platform (Recommended)\"; TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+    "Line": 337,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// classes below (TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+    "Line": 380,
+    "Id": "TEST-MCP-USECASE-020",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TEST-MCP-USECASE-020-AC001: opaque workspace identity on a Windows host keeps the Windows-platform"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+    "Line": 381,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// key (TR-MCP-USECASE-019 AC-008, TR-MCP-NUKE-019)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+    "Line": 381,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// key (TR-MCP-USECASE-019 AC-008, TR-MCP-NUKE-019)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+    "Line": 400,
+    "Id": "TEST-MCP-USECASE-020",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TEST-MCP-USECASE-020-AC001: opaque workspace identity on a Linux host keeps the case-sensitive key"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+    "Line": 401,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// (TR-MCP-USECASE-019 AC-008, TR-MCP-NUKE-019)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+    "Line": 401,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// (TR-MCP-USECASE-019 AC-008, TR-MCP-NUKE-019)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/Decompose4nfBackfillMigrationTests.cs",
+    "Line": 37,
+    "Id": "TR-MCP-DB-001",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// Workspace-scoped child rows must carry exactly the parent workspace key (TR-MCP-DB-001),"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs",
+    "Line": 91,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TR-MCP-NUKE-019 AC-2: the pg_ctl start arguments: wait for the server (-w), print only errors (-s), listen on"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs",
+    "Line": 102,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TR-MCP-NUKE-019 AC-2: the pg_ctl stop arguments: immediate mode, wait for the shutdown (-w), print only errors"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureArgumentsTests.cs",
+    "Line": 13,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// Requirement coverage: TR-MCP-NUKE-019 AC-2 (every integration case runs and passes in its host's lane at"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertions.cs",
+    "Line": 6,
+    "Id": "TR-MCP-DB-001",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-DB-001: raw-SQL workspace-key assertions for SQLite data-migration tests. A data migration copies the parent"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs",
+    "Line": 6,
+    "Id": "TR-MCP-DB-001",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-DB-001, BDPv4 mock gate for <see cref=\"MigrationKeyAssertions\"/>: scripted SQLite tables (no migrations)"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs",
+    "Line": 27,
+    "Id": "TR-MCP-DB-001",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// <summary>TR-MCP-DB-001: child rows that carry exactly the seeded legacy parent key are accepted.</summary>"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs",
+    "Line": 39,
+    "Id": "TR-MCP-DB-001",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TR-MCP-DB-001 negative controls: each wrong database state is rejected by the assertion (canonical respelling in"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/RemoveTodoRecordsMigrationTests.cs",
+    "Line": 18,
+    "Id": "FR-MCP-PATHNORM-001",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    // FR-MCP-PATHNORM-001: seeds hold the canonical stored key form; LINQ predicates are canonicalized"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/RemoveTodoRecordsMigrationTests.cs",
+    "Line": 100,
+    "Id": "TEST-MCP-TRIAGE-004",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TEST-MCP-TRIAGE-004 negative control: without a triage group naming the TODO, the backfill"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs",
+    "Line": 31,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// Its SQL Server case opens LocalDB, so the class runs in <see cref=\"SqlServerLocalDbCollection\"/> (TR-MCP-NUKE-019 AC-2)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollection.cs",
+    "Line": 6,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-NUKE-019 AC-2: the test classes that open connections to the shared LocalDB instance run one after another"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs",
+    "Line": 12,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// Requirement coverage: TR-MCP-NUKE-019 AC-2 (every integration case runs and passes in its host's lane at"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnection.cs",
+    "Line": 6,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-NUKE-019 AC-2: the server connection of the SQL Server integration test classes. The built-in default is"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnectionTests.cs",
+    "Line": 12,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// Requirement coverage: TR-MCP-NUKE-019 AC-2 (every integration case runs and passes in its host's lane at"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs",
+    "Line": 12,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// (TR-MCP-USECASE-018 AC-006: no unit test depends on the platform)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathContractTests.cs",
+    "Line": 10,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// simulated host in <see cref=\"WorkspaceNativePathHostContractTests\"/> (TR-MCP-USECASE-018 AC-006: no"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs",
+    "Line": 6,
+    "Id": "TEST-MCP-PATHNORM-001",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TEST-MCP-PATHNORM-001 (criterion unitgreen-native-host) / TR-MCP-PATHNORM-001 (plan P1.4c): the"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs",
+    "Line": 6,
+    "Id": "TR-MCP-PATHNORM-001",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TEST-MCP-PATHNORM-001 (criterion unitgreen-native-host) / TR-MCP-PATHNORM-001 (plan P1.4c): the"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs",
+    "Line": 9,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// (TR-MCP-USECASE-018 AC-006: no unit test depends on the platform). BDP v4: MockData then Real."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs",
+    "Line": 90,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// TR-MCP-USECASE-018 (AC-006) negative controls: a native-spelling function that keeps forward slashes"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostRealTests.cs",
+    "Line": 6,
+    "Id": "TEST-MCP-PATHNORM-001",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// BDP v4 step 5: the host-aware native-boundary contract (TEST-MCP-PATHNORM-001 criterion"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs",
+    "Line": 25,
+    "Id": "TEST-MCP-FED-PATH-001",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TEST-MCP-FED-PATH-001: the production normalizer bound to the real process host. It depends on the"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs",
+    "Line": 26,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// host it runs on, so it is an integration test on every host (TR-MCP-USECASE-018 AC-006)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs",
+    "Line": 37,
+    "Id": "FR-MCP-PATHNORM-001",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// LinuxHost_WindowsDrivePath_IsNotPrefixedWithWorkingDirectory). FR-MCP-PATHNORM-001: the"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceRemotePathContractTests.cs",
+    "Line": 11,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// Windows filesystem, so it is an integration test that runs on Windows hosts only (TR-MCP-USECASE-018"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceRemotePathContractTests.cs",
+    "Line": 12,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// AC-006, TR-MCP-NUKE-019), without a skip."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceRemotePathContractTests.cs",
+    "Line": 63,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// through the Windows filesystem: an integration test on Windows hosts (TR-MCP-USECASE-018 AC-006)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs",
+    "Line": 13,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// folder, so an assertion on the test folder proves the primary name won over a set fallback (TR-MCP-USECASE-018"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs",
+    "Line": 14,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// AC-006 and TR-MCP-USECASE-019 AC-008 as amended 2026-10-26; operator: \"Strengthen AC, move 14 (Recommended)\" and"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "Line": 13,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// Requirement coverage: TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 as amended 2026-10-26 (\"set and"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "Line": 13,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// Requirement coverage: TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 as amended 2026-10-26 (\"set and"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CollectionAssertions.cs",
+    "Line": 8,
+    "Id": "TR-MCP-NUKE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// so no test is run. Shared by the collection tests of TR-MCP-NUKE-019 AC-2 (<c>SqlServerLocalDbCollectionTests</c>)"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CollectionAssertions.cs",
+    "Line": 9,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// and of TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 (<c>ProcessEnvironmentCollectionTests</c>)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CollectionAssertions.cs",
+    "Line": 9,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// and of TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 (<c>ProcessEnvironmentCollectionTests</c>)."
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollection.cs",
+    "Line": 6,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008: the test classes that write the process environment run"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollection.cs",
+    "Line": 6,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008: the test classes that write the process environment run"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs",
+    "Line": 13,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// Requirement coverage: TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 (\"the tests that write the process"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs",
+    "Line": 13,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// Requirement coverage: TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 (\"the tests that write the process"
+  },
+  {
+    "File": "tests/Shared/TestRepositoryRoot.cs",
+    "Line": 6,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008): the one repository-root locator for the unit-test"
+  },
+  {
+    "File": "tests/Shared/TestRepositoryRoot.cs",
+    "Line": 6,
+    "Id": "TR-MCP-USECASE-019",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008): the one repository-root locator for the unit-test"
+  },
+  {
+    "File": "tests/Shared/TestRepositoryRoot.cs",
+    "Line": 33,
+    "Id": "TR-MCP-USECASE-018",
+    "Present": true,
+    "HistoricalLines": [],
+    "AddedText": "    /// The <c>McpRepositoryRoot</c> build metadata of the test assembly (TR-MCP-USECASE-018: the deterministic"
+  }
+]

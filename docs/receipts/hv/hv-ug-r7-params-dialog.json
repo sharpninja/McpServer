@@ -1,0 +1,10 @@
+{
+  "dialogItems": [
+    {
+      "timestamp": "2026-10-26T18:28:38.3557380Z",
+      "content": "{\n  \"TimestampUtc\": \"2026-10-26T18:28:04.2102738Z\",\n  \"TimestampLocal\": \"2026-10-26T13:28:04\",\n  \"SessionId\": \"Codex-20261026T171400Z-plugin-session\",\n  \"RequestId\": \"req-20261026T171448Z-unitgreen-r7\",\n  \"TurnStatus\": \"completed\",\n  \"PartCount\": 23,\n  \"ExpectedCharacters\": 458004,\n  \"RestoredCharacters\": 458004,\n  \"ExpectedSha256\": \"29C2DE750C0A165EF66ED45C745232905D05D2D447CA091FD21E33D0811C7295\",\n  \"RestoredSha256\": \"29C2DE750C0A165EF66ED45C745232905D05D2D447CA091FD21E33D0811C7295\",\n  \"ExactContentEqual\": true,\n  \"EntireProseResponseEqual\": true,\n  \"HistoryQueryFound\": true,\n  \"DesignDecisionCount\": 1,\n  \"ActionCount\": 4,\n  \"FullReadbackMethod\": \"client.sessionLog.queryAsync\",\n  \"HistoryMethod\": \"workflow.sessionlog.queryHistory\",\n  \"PluginRoot\": \"/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0\"\n}\n",
+      "category": "observation",
+      "role": "model"
+    }
+  ]
+}

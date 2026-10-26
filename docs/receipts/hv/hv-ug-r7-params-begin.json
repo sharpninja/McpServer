@@ -1,0 +1,7 @@
+{
+  "agent": "Codex",
+  "model": "gpt-6-astra",
+  "requestId": "req-20261026T171448Z-unitgreen-r7",
+  "queryTitle": "Hostile validation round 7 of IMPL-UNITGREEN-001",
+  "queryText": "Independent hostile review of PR 87 at 8b97aa4bee778273688e53a64a737c3170a41823, gate unitgreen-r7. Review only; 22 claims with scanner override. Request receipt: docs/receipts/hv/20261026T120945-unitgreen-r7.request.jsonl. Live reviewer proof: Codex gpt-6-astra effort max, thread 01a17930-88ee-7ee3-957d-0661e4d19fe3."
+}

@@ -1,0 +1,96 @@
+src/QBrainAi.Launcher/Services/ProcessLauncher.cs:148:        foreach (var entry in Environment.GetEnvironmentVariables())
+src/QBrainAi.Support.Mcp/McpStdio/McpStdioHost.cs:43:        var builder = Host.CreateApplicationBuilder(args);
+src/QBrainAi.Common.AgentCli/ProductEnvironment.cs:22:            return Environment.GetEnvironmentVariable(UntrustedSentinel);
+src/QBrainAi.Common.AgentCli/ProductEnvironment.cs:27:            var modern = Environment.GetEnvironmentVariable(modernName);
+src/QBrainAi.Common.AgentCli/ProductEnvironment.cs:32:        return Environment.GetEnvironmentVariable(legacyName);
+src/QBrainAi.Common.AgentCli/ProcessEnvironmentService.cs:23:            : Environment.GetEnvironmentVariable("GH_TOKEN");
+src/QBrainAi.Common.AgentCli/ProcessEnvironmentService.cs:63:                : Environment.GetEnvironmentVariable("PATH");
+src/QBrainAi.Common.AgentCli/ProcessEnvironmentService.cs:184:        var currentProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+src/QBrainAi.Common.AgentCli/ProcessEnvironmentService.cs:262:        var profileRoot = Environment.GetEnvironmentVariable("PUBLIC");
+src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs:202:                ?? NormalizeOptionalValue(QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_INSTANCE")),
+src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs:292:        var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
+src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs:293:            ?? Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")
+src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs:296:        var builder = Host.CreateApplicationBuilder(configurationArguments.ToArray());
+src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs:303:            .AddEnvironmentVariables();
+src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:411:        var configured = Environment.GetEnvironmentVariable("MCPSERVER_QUADBRAIN_CLI_TEMP")
+src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:412:                         ?? Environment.GetEnvironmentVariable("MCPSERVER_ONESHOT_TEMP");
+src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:441:                Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:576:        psi.FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "cmd.exe");
+src/QBrainAi.Support.Mcp/Services/BrainSlotCredentialResolver.cs:26:            "env" => NormalizeSecret(Environment.GetEnvironmentVariable(value)),
+src/QBrainAi.Repl.Core/TodoSelectionStore.cs:139:            QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_WORKSPACE_PATH"),
+src/QBrainAi.Repl.Core/TodoSelectionStore.cs:140:            Environment.GetEnvironmentVariable("MCPSERVER_WORKSPACE_PATH"),
+src/QBrainAi.Repl.Core/TodoSelectionStore.cs:141:            QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_WORKSPACE_START_DIR"),
+src/QBrainAi.Repl.Core/TodoSelectionStore.cs:142:            Environment.GetEnvironmentVariable("CLAUDE_PROJECT_DIR"),
+src/QBrainAi.Repl.Core/TodoSelectionStore.cs:158:            ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_AGENT_NAME")
+src/QBrainAi.Repl.Core/TodoSelectionStore.cs:159:            ?? Environment.GetEnvironmentVariable("PLUGIN_AGENT_NAME")
+src/QBrainAi.Repl.Core/TodoSelectionStore.cs:160:            ?? Environment.GetEnvironmentVariable("PLUGIN_AGENT_DEFAULT")
+src/QBrainAi.Repl.Core/TodoSelectionStore.cs:161:            ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_PLUGIN_HOST")
+src/QBrainAi.Repl.Core/TodoSelectionStore.cs:201:        var envSession = QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_SESSION_ID");
+src/QBrainAi.Support.Mcp/Program.cs:121:builder.Configuration.AddEnvironmentVariables();
+src/QBrainAi.Support.Mcp/Program.cs:172:var portFromEnv = Environment.GetEnvironmentVariable("PORT");
+src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs:3048:        var configured = Environment.GetEnvironmentVariable(StreamCommandTimeoutEnvVar);
+src/QBrainAi.Repl.Core/AgentStdioProtocol.cs:219:        var configured = Environment.GetEnvironmentVariable(CommandTimeoutEnvVar);
+src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs:75:            ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_DATABASE_MIGRATIONS_ASSEMBLY");
+src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs:111:            ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_SQLITE_DATA_SOURCE");
+src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs:159:            ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_SQLSERVER_CONNECTION_STRING");
+src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs:173:            ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_DATABASE_PROVIDER")
+src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs:179:            ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_DATABASE_ENCRYPTION_ENABLED");
+src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs:185:                ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_SQLITE_ENCRYPTION_KEY"),
+src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs:187:                ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_SQLITE_SEE_TOOL_PATH"),
+src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs:189:                ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_POSTGRES_TDE_KEY_PROVIDER"),
+src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs:191:                ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_POSTGRES_TDE_PRINCIPAL_KEY"),
+src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs:193:                ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_SQLSERVER_TDE_CERTIFICATE"),
+src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs:195:                ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY"));
+src/QBrainAi.QBAgent/QBAgentSessionLog.cs:49:        var home = Environment.GetEnvironmentVariable("QBAGENT_HOME");
+src/QBrainAi.QBAgent/QBAgentSessionLog.cs:51:            home = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".qbagent");
+src/QBrainAi.QBAgent/QBAgentCliOptions.cs:104:            map[name] = Environment.GetEnvironmentVariable(name);
+src/QBrainAi.McpAgent.SampleHost/SampleHostPreviewFactory.cs:1101:        var value = Environment.GetEnvironmentVariable(name);
+src/QBrainAi.McpAgent.SampleHost/Program.cs:19:    HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
+src/QBrainAi.ServiceDefaults/RailwayConnectionStringBuilder.cs:161:            var value = Environment.GetEnvironmentVariable(name);
+src/QBrainAi.ServiceDefaults/PostgresConnectionStringResolver.cs:97:                var fromEnv = Environment.GetEnvironmentVariable(name);
+src/QBrainAi.Services/Options/McpInstanceResolver.cs:20:        var fromEnv = ProductEnvironment.GetLegacy("MCP_INSTANCE");
+src/QBrainAi.Services/Native/DesktopProcessLauncher.cs:464:        var root = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+src/QBrainAi.Services/Native/DesktopProcessLauncher.cs:617:        foreach (var entry in Environment.GetEnvironmentVariables())
+src/QBrainAi.Repl.Host/Program.cs:81:    return Host.CreateDefaultBuilder()
+src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs:22:        Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".mcpserver");
+src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs:55:                : QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_AGENT_NAME")
+src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs:56:                    ?? Environment.GetEnvironmentVariable("PLUGIN_AGENT_NAME")
+src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs:57:                    ?? Environment.GetEnvironmentVariable("PLUGIN_AGENT_DEFAULT")
+src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs:58:                    ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_PLUGIN_HOST")
+src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs:123:        var configuredServerUrl = QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_SERVER_URL");
+src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs:148:        var explicitWorkspacePath = QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_WORKSPACE_PATH");
+src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs:154:        explicitWorkspacePath = QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_WORKSPACE");
+src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs:289:                : QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_WORKSPACE_PATH")
+src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs:290:                    ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_WORKSPACE")
+src/QBrainAi.Repl.Host/LoginHandler.cs:25:        Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".mcpserver");
+src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs:114:            ?? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+src/QBrainAi.Services/Services/MarkerFileService.cs:106:        new(Environment.GetEnvironmentVariable, SiblingPluginRoot, Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
+src/QBrainAi.Services/Services/GrokCliAgentExecutionStrategy.cs:369:            psi.FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "cmd.exe");
+src/QBrainAi.Services/Services/GrokCliAgentExecutionStrategy.cs:477:            var configured = Environment.GetEnvironmentVariable("MCPSERVER_GROK_ONESHOT_TEMP")
+src/QBrainAi.Services/Services/GrokCliAgentExecutionStrategy.cs:478:                             ?? Environment.GetEnvironmentVariable("MCPSERVER_ONESHOT_TEMP");
+src/QBrainAi.Services/Services/GrokCliAgentExecutionStrategy.cs:503:                    Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+src/QBrainAi.Services/Services/DesktopProcessSpawner.cs:94:        var currentEnvironment = Environment.GetEnvironmentVariables();
+src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs:301:            psi.FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "cmd.exe");
+src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs:417:            var configured = Environment.GetEnvironmentVariable("MCPSERVER_CODEX_ONESHOT_TEMP")
+src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs:418:                             ?? Environment.GetEnvironmentVariable("MCPSERVER_CODEX_TRIAGE_TEMP");
+src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs:443:                    Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+src/QBrainAi.Services/Services/VoiceConversationService.cs:1322:        var systemDrive = Environment.GetEnvironmentVariable("SystemDrive") ?? @"C:";
+src/QBrainAi.Services/Services/VoiceConversationService.cs:1465:            Environment.GetFolderPath(Environment.SpecialFolder.System), "cmd.exe");
+src/QBrainAi.Services/Memory/Bench/MemoryBenchRecordedTurn.cs:128:        if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(liveEnvironmentVariable)))
+src/QBrainAi.Services/Memory/Bench/MemoryBenchGrokMultiTurnAdapter.cs:25:            && string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("XAI_API_KEY")))
+src/QBrainAi.Services/Memory/Bench/MemoryBenchGrokAdapter.cs:26:            && string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("XAI_API_KEY")))
+src/QBrainAi.Services/Services/SessionLogTurnContextValidator.cs:143:                ?? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
+src/QBrainAi.Services/Services/SessionLogTurnContextValidator.cs:144:                ?? Environment.GetEnvironmentVariable("HOME")
+src/QBrainAi.Services/Services/SessionLogTurnContextValidator.cs:145:                ?? Environment.GetEnvironmentVariable("USERPROFILE")
+src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:378:            psi.FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "cmd.exe");
+src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:494:            var configured = Environment.GetEnvironmentVariable("MCPSERVER_ONESHOT_TEMP")
+src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:495:                             ?? Environment.GetEnvironmentVariable("MCPSERVER_CODEX_ONESHOT_TEMP")
+src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:496:                             ?? Environment.GetEnvironmentVariable("MCPSERVER_CODEX_TRIAGE_TEMP");
+src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:521:                    Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+src/QBrainAi.Storage/Indexing/EmbeddingService.cs:226:            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+src/QBrainAi.Storage/McpDbContextFactory.cs:26:            ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_EF_PROVIDER")
+src/QBrainAi.Storage/McpDbContextFactory.cs:30:            ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_EF_MIGRATIONS_ASSEMBLY");
+src/QBrainAi.Storage/McpDbContextFactory.cs:41:            ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_EF_CONNECTION_STRING");
+src/QBrainAi.Storage/McpDbContextFactory.cs:52:                    ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_SQLITE_DATA_SOURCE")
+src/QBrainAi.Storage/McpDbContextFactory.cs:54:            McpDatabaseProviderKind.PostgreSql => QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_POSTGRES_CONNECTION_STRING")
+src/QBrainAi.Storage/McpDbContextFactory.cs:56:            McpDatabaseProviderKind.SqlServer => QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_SQLSERVER_CONNECTION_STRING")
