@@ -29,9 +29,13 @@ internal static class ReplCommandTimeout
             ? TimeSpan.FromSeconds(seconds)
             : Default;
 
-    /// <summary>Reads one environment variable and parses it.</summary>
+    /// <summary>Reads the variable that configures a timeout once and parses it; both call sites use this.</summary>
+    /// <param name="readVariable">Reads one environment variable by name; the call sites default to the process environment.</param>
     /// <param name="variableName">The variable that configures the timeout.</param>
     /// <returns>The timeout that applies.</returns>
-    internal static TimeSpan FromEnvironment(string variableName) =>
-        Parse(Environment.GetEnvironmentVariable(variableName));
+    internal static TimeSpan Read(Func<string, string?> readVariable, string variableName)
+    {
+        ArgumentNullException.ThrowIfNull(readVariable);
+        return Parse(readVariable(variableName));
+    }
 }

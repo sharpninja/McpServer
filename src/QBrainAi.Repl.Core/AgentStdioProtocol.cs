@@ -49,6 +49,12 @@ public sealed class AgentStdioProtocol : IAgentStdioProtocol
         _dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
     }
 
+    /// <summary>
+    /// TR-MCP-REPL-001 AC-002: reads one environment variable by name for the command timeout. The default reads the
+    /// process environment; tests give a scripted reader so the call site is bound without the process environment.
+    /// </summary>
+    internal Func<string, string?> ReadVariable { get; init; } = Environment.GetEnvironmentVariable;
+
     /// <inheritdoc />
     public async Task RunAsync(TextReader reader, TextWriter writer, CancellationToken cancellationToken)
     {
@@ -160,7 +166,7 @@ public sealed class AgentStdioProtocol : IAgentStdioProtocol
         IYamlEnvelope response;
         // TR-MCP-REPL-001 AC-002: the configured timeout is read once and only a valid value is used, so the
         // timeout message names the timeout that applied and a misconfigured value never fails the request.
-        var commandTimeout = ReplCommandTimeout.FromEnvironment(CommandTimeoutEnvVar);
+        var commandTimeout = ReplCommandTimeout.Read(ReadVariable, CommandTimeoutEnvVar);
         using var commandCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         commandCts.CancelAfter(commandTimeout);
 

@@ -113,14 +113,16 @@ public sealed class ReplCommandTimeoutTests
         Assert.NotNull(Record.Exception(() => AssertParseContract(configured => Bounded(configured, 2, LargestSeconds))));
     }
 
-    private static TimeSpan ScriptedReference(string? configured) => Bounded(configured, 1, LargestSeconds);
+    /// <summary>The scripted reference parse, also used by <see cref="ReplCommandTimeoutCallSiteTests"/>.</summary>
+    internal static TimeSpan ScriptedReference(string? configured) => Bounded(configured, 1, LargestSeconds);
 
     private static TimeSpan Bounded(string? configured, long smallest, long largest) =>
         long.TryParse(configured, NumberStyles.Integer, CultureInfo.InvariantCulture, out var seconds) && seconds >= smallest && seconds <= largest
             ? TimeSpan.FromSeconds(seconds)
             : DefaultTimeout;
 
-    private static TimeSpan Unbounded(string? configured) =>
+    /// <summary>The parse from before the R7-F1 fix, a negative control here and in <see cref="ReplCommandTimeoutCallSiteTests"/>.</summary>
+    internal static TimeSpan Unbounded(string? configured) =>
         int.TryParse(configured, out var seconds) && seconds > 0 ? TimeSpan.FromSeconds(seconds) : DefaultTimeout;
 
     private static TimeSpan Capping(string? configured) =>

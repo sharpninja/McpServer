@@ -133,6 +133,12 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         _clientMutationPolicy = clientMutationPolicy;
     }
 
+    /// <summary>
+    /// TR-MCP-REPL-001 AC-002: reads one environment variable by name for the stream command timeout. The default reads
+    /// the process environment; tests give a scripted reader so the call site is bound without the process environment.
+    /// </summary>
+    internal Func<string, string?> ReadVariable { get; init; } = Environment.GetEnvironmentVariable;
+
     /// <inheritdoc />
     public Task<IYamlEnvelope> DispatchAsync(IYamlEnvelope envelope, CancellationToken cancellationToken)
         => DispatchAsync(envelope, emitEnvelopeAsync: null, cancellationToken);
@@ -2996,7 +3002,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         };
     }
 
-    private static async Task<IReadOnlyList<IStreamingEvent>> CollectTodoEventsAsync(
+    private async Task<IReadOnlyList<IStreamingEvent>> CollectTodoEventsAsync(
         string requestId,
         string method,
         Func<Func<IStreamingEvent, Task>, CancellationToken, Task> stream,
@@ -3006,7 +3012,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         var events = new List<IStreamingEvent>();
         // TR-MCP-REPL-001 AC-002: the configured stream timeout is read once and only a valid value is used, so the
         // timeout event names the timeout that applied and a misconfigured value never fails the stream.
-        var streamTimeout = ReplCommandTimeout.FromEnvironment(StreamCommandTimeoutEnvVar);
+        var streamTimeout = ReplCommandTimeout.Read(ReadVariable, StreamCommandTimeoutEnvVar);
         using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         timeoutCts.CancelAfter(streamTimeout);
 
