@@ -1,0 +1,16 @@
+type: result
+payload:
+  requestId: req-20261026T123547Z-cb53
+  result:
+    items:
+    - frId: FR-MCP-MEMORY-002
+      trId: TR-MCP-MEMORY-002
+      createdAt: 2026-10-26T12:35:49.1594277+00:00
+    - frId: FR-MCP-MEMORY-002
+      testId: TEST-MCP-MEMORY-002
+      createdAt: 2026-10-26T12:35:49.1600306+00:00
+    totalCount: 2
+  deprecated: true
+
+---
+

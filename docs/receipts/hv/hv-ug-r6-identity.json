@@ -1,0 +1,70 @@
+{
+  "TimestampUtc": "2026-10-26T13:40:35.1892076Z",
+  "TimestampLocal": "2026-10-26T08:40:35",
+  "threadId": "01a1782b-67b5-7ac0-b313-b48aa91fbca2",
+  "rolloutPath": "/home/sharpninja/.codex/sessions/2026/10/26/rollout-2026-10-26T07-24-33-01a1782b-67b5-7ac0-b313-b48aa91fbca2.jsonl",
+  "records": [
+    {
+      "type": "session_meta",
+      "line": 1,
+      "timestamp": "2026-10-26T12:24:33.696Z",
+      "id": "01a1782b-67b5-7ac0-b313-b48aa91fbca2",
+      "originator": "codex_exec",
+      "cliVersion": "0.160.1",
+      "source": "exec"
+    },
+    {
+      "type": "turn_context",
+      "line": 8,
+      "timestamp": "2026-10-26T12:24:35.048Z",
+      "model": "gpt-6-astra",
+      "effort": "max",
+      "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "turnId": "01a1782b-6a8b-7462-b504-c29f97649200",
+      "collaborationMode": {
+        "mode": "default",
+        "settings": {
+          "model": "gpt-6-astra",
+          "reasoning_effort": "max",
+          "developer_instructions": null
+        }
+      }
+    },
+    {
+      "type": "turn_context",
+      "line": 401,
+      "timestamp": "2026-10-26T12:51:14.387Z",
+      "model": "gpt-6-astra",
+      "effort": "max",
+      "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "turnId": "01a1782b-6a8b-7462-b504-c29f97649200",
+      "collaborationMode": {
+        "mode": "default",
+        "settings": {
+          "model": "gpt-6-astra",
+          "reasoning_effort": "max",
+          "developer_instructions": null
+        }
+      }
+    },
+    {
+      "type": "turn_context",
+      "line": 839,
+      "timestamp": "2026-10-26T13:32:11.711Z",
+      "model": "gpt-6-astra",
+      "effort": "max",
+      "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "turnId": "01a1782b-6a8b-7462-b504-c29f97649200",
+      "collaborationMode": {
+        "mode": "default",
+        "settings": {
+          "model": "gpt-6-astra",
+          "reasoning_effort": "max",
+          "developer_instructions": null
+        }
+      }
+    }
+  ],
+  "addProfileFileCount": 1,
+  "markerReadInFull": true
+}

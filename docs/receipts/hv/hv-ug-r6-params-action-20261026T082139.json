@@ -1,0 +1,11 @@
+{
+  "actions": [
+    {
+      "order": 4,
+      "filePath": "docs/receipts/hv/",
+      "description": "Confirmed narrow R6-F2 traceability claim defect: dedicated getters and effective view do not contain FR-MCP-MEMORY-018, TEST-MCP-MEMORY-018, TEST-MCP-PLUGIN-PSONLY-001, TEST-MCP-QBCLI-001, or TR-MCP-MEMORY-SEARCH-002, while modified test files retain these as active coverage citations. UG7 explicitly claims every cited requirement is present and mapped. The finding concerns that current PR claim and the affected citations, not repair of unrelated store drift or Azure exports. Correct the active coverage annotations/claims against authoritative mapped records, identifying unavailable historical references as historical; do not invent records. The scoped four criteria, intended mappings, retired FR absences, TODO counts, and repaired MEMORY-002 binding are otherwise confirmed. Both Windows worktree heads are c8418301 and 189 source/test/build files each match locally after CRLF normalization. No scanner changes after override, 50 signature trailers, no force-push events or secret hits. A third full hostile run now tests the sibling Codex/one-shot temp inputs because source inspection found the same production environment-reading path in remaining Codex strategy units.",
+      "status": "completed",
+      "type": "design_decision"
+    }
+  ]
+}

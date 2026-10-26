@@ -1,0 +1,130 @@
+{
+  "TimestampLocal": "2026-10-26T07:57:04",
+  "Head": "3ce97b3e3dd31dbe009a3716d2b15d43ce60bb5b",
+  "Assembly": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/QBrainAi.Services.dll",
+  "AssemblySha256": "27899C91392DEE788AEF76F68771987C89E27AFAA3F42520CBB1BA45EA9F9BD6",
+  "Fixture": "/tmp/hv-ug-r6-root-links-116745c6207f40aea2e21e582ece819d",
+  "Results": [
+    {
+      "Case": "codex-normal",
+      "Expected": "9.9.9",
+      "Actual": "9.9.9",
+      "Pass": true,
+      "ScanRoot": "/tmp/hv-ug-r6-root-links-116745c6207f40aea2e21e582ece819d/codex-normal/profile/.codex/plugins/cache/mcpserver-hv-root-link",
+      "RootAttributes": "Directory"
+    },
+    {
+      "Case": "codex-child-link",
+      "Expected": "1.26.0",
+      "Actual": "1.26.0",
+      "Pass": true,
+      "ScanRoot": "/tmp/hv-ug-r6-root-links-116745c6207f40aea2e21e582ece819d/codex-child-link/profile/.codex/plugins/cache/mcpserver-hv-root-link",
+      "RootAttributes": "Directory"
+    },
+    {
+      "Case": "codex-root-link",
+      "Expected": "1.26.0",
+      "Actual": "1.26.0",
+      "Pass": true,
+      "ScanRoot": "/tmp/hv-ug-r6-root-links-116745c6207f40aea2e21e582ece819d/codex-root-link/profile/.codex/plugins/cache/mcpserver-hv-root-link",
+      "RootAttributes": "Directory, ReparsePoint"
+    },
+    {
+      "Case": "codex-ancestor-link",
+      "Expected": "1.26.0",
+      "Actual": "1.26.0",
+      "Pass": true,
+      "ScanRoot": "/tmp/hv-ug-r6-root-links-116745c6207f40aea2e21e582ece819d/codex-ancestor-link/profile/.codex/plugins/cache/mcpserver-hv-root-link",
+      "RootAttributes": "Directory"
+    },
+    {
+      "Case": "claude-normal",
+      "Expected": "9.9.9",
+      "Actual": "9.9.9",
+      "Pass": true,
+      "ScanRoot": "/tmp/hv-ug-r6-root-links-116745c6207f40aea2e21e582ece819d/claude-normal/profile/.claude/plugins/cache",
+      "RootAttributes": "Directory"
+    },
+    {
+      "Case": "claude-child-link",
+      "Expected": "1.26.0",
+      "Actual": "1.26.0",
+      "Pass": true,
+      "ScanRoot": "/tmp/hv-ug-r6-root-links-116745c6207f40aea2e21e582ece819d/claude-child-link/profile/.claude/plugins/cache",
+      "RootAttributes": "Directory"
+    },
+    {
+      "Case": "claude-root-link",
+      "Expected": "1.26.0",
+      "Actual": "1.26.0",
+      "Pass": true,
+      "ScanRoot": "/tmp/hv-ug-r6-root-links-116745c6207f40aea2e21e582ece819d/claude-root-link/profile/.claude/plugins/cache",
+      "RootAttributes": "Directory, ReparsePoint"
+    },
+    {
+      "Case": "claude-ancestor-link",
+      "Expected": "1.26.0",
+      "Actual": "1.26.0",
+      "Pass": true,
+      "ScanRoot": "/tmp/hv-ug-r6-root-links-116745c6207f40aea2e21e582ece819d/claude-ancestor-link/profile/.claude/plugins/cache",
+      "RootAttributes": "Directory"
+    },
+    {
+      "Case": "grok-normal",
+      "Expected": "9.9.9",
+      "Actual": "9.9.9",
+      "Pass": true,
+      "ScanRoot": "/tmp/hv-ug-r6-root-links-116745c6207f40aea2e21e582ece819d/grok-normal/profile/.grok/installed-plugins",
+      "RootAttributes": "Directory"
+    },
+    {
+      "Case": "grok-child-link",
+      "Expected": "1.26.0",
+      "Actual": "1.26.0",
+      "Pass": true,
+      "ScanRoot": "/tmp/hv-ug-r6-root-links-116745c6207f40aea2e21e582ece819d/grok-child-link/profile/.grok/installed-plugins",
+      "RootAttributes": "Directory"
+    },
+    {
+      "Case": "grok-root-link",
+      "Expected": "1.26.0",
+      "Actual": "1.26.0",
+      "Pass": true,
+      "ScanRoot": "/tmp/hv-ug-r6-root-links-116745c6207f40aea2e21e582ece819d/grok-root-link/profile/.grok/installed-plugins",
+      "RootAttributes": "Directory, ReparsePoint"
+    },
+    {
+      "Case": "grok-ancestor-link",
+      "Expected": "1.26.0",
+      "Actual": "1.26.0",
+      "Pass": true,
+      "ScanRoot": "/tmp/hv-ug-r6-root-links-116745c6207f40aea2e21e582ece819d/grok-ancestor-link/profile/.grok/installed-plugins",
+      "RootAttributes": "Directory"
+    },
+    {
+      "Case": "history-normal",
+      "Expected": "PLAN-LINKEDROOT-001",
+      "Actual": "PLAN-LINKEDROOT-001",
+      "Pass": true,
+      "ScanRoot": "/tmp/hv-ug-r6-root-links-116745c6207f40aea2e21e582ece819d/history-normal/profile/.claude",
+      "RootAttributes": "Hidden, Directory"
+    },
+    {
+      "Case": "history-child-link",
+      "Expected": "None",
+      "Actual": "None",
+      "Pass": true,
+      "ScanRoot": "/tmp/hv-ug-r6-root-links-116745c6207f40aea2e21e582ece819d/history-child-link/profile/.claude",
+      "RootAttributes": "Hidden, Directory"
+    },
+    {
+      "Case": "history-root-link",
+      "Expected": "None",
+      "Actual": "None",
+      "Pass": true,
+      "ScanRoot": "/tmp/hv-ug-r6-root-links-116745c6207f40aea2e21e582ece819d/history-root-link/profile/.claude",
+      "RootAttributes": "Hidden, Directory, ReparsePoint"
+    }
+  ],
+  "FailureCount": 0
+}

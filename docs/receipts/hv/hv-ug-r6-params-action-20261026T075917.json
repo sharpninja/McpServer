@@ -1,0 +1,11 @@
+{
+  "actions": [
+    {
+      "status": "completed",
+      "description": "Confirmed R6-F1, implementer edit: seven untagged CliBrainSlotStrategyTests depend on ambient MCPSERVER_QUADBRAIN_CLI_TEMP through real CliBrainSlotChatClient.ResolveTempDirectory. Independent full Nuke Test under sandbox with v4 variables passed 4558/0/0; changing only that variable to a test-owned regular file produced 4551 passed, 7 failed, 0 not executed, Nuke exit 255. Raw TRX stacks and counts saved in hv-ug-r6-own-results.json. This violates the day-one rule and strengthened USECASE AC-006/008, makes the sweep incomplete, and prevents post-AGREE satisfaction. Fix is to classify the seven cases Integration and control/restore their temp variables, preserving assertions, then rerun required gates. No production error-handling change is inferred or requested. R5-F1 independent compiled probe now passes all 15 cases, including all seven prior failures. Root-link closure is supported; R5-F2 named ProductAlias fix remains supported separately from this newly found sibling gap.",
+      "type": "design_decision",
+      "order": 3,
+      "filePath": "docs/receipts/hv/"
+    }
+  ]
+}

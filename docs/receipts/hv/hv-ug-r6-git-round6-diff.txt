@@ -1,0 +1,1423 @@
+diff --git a/src/QBrainAi.Services/Services/DirectoryTreeWalker.cs b/src/QBrainAi.Services/Services/DirectoryTreeWalker.cs
+index 66fc3ab2..08a2d74d 100644
+--- a/src/QBrainAi.Services/Services/DirectoryTreeWalker.cs
++++ b/src/QBrainAi.Services/Services/DirectoryTreeWalker.cs
+@@ -10,10 +10,15 @@ namespace QBrainAi.Support.Mcp.Services;
+ /// <remarks>
+ /// A directory is yielded when its parent lists it, unless it is a link; its contents are walked only when its own
+ /// listing succeeds. File links are yielded as files. Listing errors other than <see cref="IOException"/> and
+-/// <see cref="UnauthorizedAccessException"/> propagate.
++/// <see cref="UnauthorizedAccessException"/> propagate. A scan root below the user profile or home is walked only
++/// when <see cref="IsReachable"/> holds for it (hostile validation round 5 finding R5-F1; operator 2026-10-21:
++/// "Fix both, strengthen ACs").
+ /// </remarks>
+ internal sealed class DirectoryTreeWalker
+ {
++    private static readonly StringComparison s_pathComparison =
++        OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
++
+     private static readonly EnumerationOptions s_singleLevel = new()
+     {
+         RecurseSubdirectories = false,
+@@ -45,6 +50,62 @@ internal sealed class DirectoryTreeWalker
+     /// <returns>The reached files, breadth first.</returns>
+     internal IEnumerable<string> EnumerateFiles(string root) => Walk(root, yieldDirectories: false);
+ 
++    /// <summary>
++    /// AC-TR-MCP-WS-005-001, AC-TR-MCP-SESSIONLOG-006-009: whether <paramref name="root"/> may be walked from
++    /// <paramref name="boundary"/>: the root and every folder between the boundary and it must each be listed by
++    /// its parent as a directory that is not a link or other reparse point. The boundary itself is trusted (a user
++    /// profile or home that is itself a link is still scanned) and its parent is never listed; a root that is the
++    /// boundary is reachable without any listing.
++    /// </summary>
++    /// <remarks>
++    /// A folder whose listing fails with an <see cref="IOException"/> or <see cref="UnauthorizedAccessException"/>
++    /// cannot be traversed, so the root is not reachable; any other listing error propagates. A root that is not
++    /// below the boundary, or that a parent does not list as a directory, is not reachable.
++    /// </remarks>
++    /// <param name="boundary">The trusted folder the scan starts from (the user profile or home).</param>
++    /// <param name="root">The scan root below <paramref name="boundary"/>.</param>
++    /// <returns>True when the root may be walked.</returns>
++    internal bool IsReachable(string boundary, string root)
++    {
++        ArgumentNullException.ThrowIfNull(boundary);
++        ArgumentNullException.ThrowIfNull(root);
++        var target = Path.TrimEndingDirectorySeparator(root);
++        var current = Path.TrimEndingDirectorySeparator(boundary);
++        while (!string.Equals(current, target, s_pathComparison))
++        {
++            IReadOnlyList<DirectoryListingEntry> entries;
++            try
++            {
++                entries = _list(current);
++            }
++            catch (IOException)
++            {
++                return false;
++            }
++            catch (UnauthorizedAccessException)
++            {
++                return false;
++            }
++
++            var found = entries
++                .Where(entry => LeadsTo(entry.Path, target))
++                .Select(entry => (DirectoryListingEntry?)entry)
++                .FirstOrDefault();
++            if (found is not { } next || !next.IsDirectory || next.IsLink || next.Path.Length <= current.Length)
++                return false;
++            current = next.Path;
++        }
++
++        return true;
++    }
++
++    /// <summary>True when <paramref name="path"/> is <paramref name="target"/> or a folder above it.</summary>
++    private static bool LeadsTo(string path, string target) =>
++        target.StartsWith(path, s_pathComparison)
++        && (target.Length == path.Length
++            || target[path.Length] == Path.DirectorySeparatorChar
++            || target[path.Length] == Path.AltDirectorySeparatorChar);
++
+     /// <summary>Lists one real directory with each entry's directory and link flags.</summary>
+     /// <param name="directory">Directory to list.</param>
+     /// <returns>The entries of <paramref name="directory"/>.</returns>
+diff --git a/src/QBrainAi.Services/Services/MarkerFileService.cs b/src/QBrainAi.Services/Services/MarkerFileService.cs
+index b6af899c..7489f6dd 100644
+--- a/src/QBrainAi.Services/Services/MarkerFileService.cs
++++ b/src/QBrainAi.Services/Services/MarkerFileService.cs
+@@ -732,15 +732,17 @@ public static class MarkerFileService
+         DirectoryTreeWalker walker,
+         Func<string, string?> readText)
+     {
++        // AC-TR-MCP-WS-005-001: a cache root that is a link, or that is reached through a link below the user
++        // profile, contributes no candidate (hostile validation round 5 finding R5-F1).
+         var codexCache = Path.Combine(userProfile, ".codex", "plugins", "cache", pluginName);
+-        if (Directory.Exists(codexCache))
++        if (Directory.Exists(codexCache) && walker.IsReachable(userProfile, codexCache))
+         {
+             foreach (var candidate in OrderPluginVersionRoots(walker.EnumerateDirectories(codexCache), readText))
+                 yield return candidate;
+         }
+ 
+         var claudeCache = Path.Combine(userProfile, ".claude", "plugins", "cache");
+-        if (Directory.Exists(claudeCache))
++        if (Directory.Exists(claudeCache) && walker.IsReachable(userProfile, claudeCache))
+         {
+             var candidates = walker.EnumerateDirectories(claudeCache)
+                 .Where(path => path.Contains(pluginName, StringComparison.OrdinalIgnoreCase)
+@@ -750,7 +752,7 @@ public static class MarkerFileService
+         }
+ 
+         var grokCache = Path.Combine(userProfile, ".grok", "installed-plugins");
+-        if (Directory.Exists(grokCache))
++        if (Directory.Exists(grokCache) && walker.IsReachable(userProfile, grokCache))
+         {
+             var candidates = walker.EnumerateDirectories(grokCache)
+                 .Where(path => path.Contains(pluginName, StringComparison.OrdinalIgnoreCase)
+diff --git a/src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs b/src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs
+index 61c4354e..685efc7a 100644
+--- a/src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs
++++ b/src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs
+@@ -122,7 +122,9 @@ public sealed class SessionLogTurnContextExtractor
+         foreach (var rootName in new[] { ".grok", ".claude", ".codex", ".cursor" })
+         {
+             var root = Path.Combine(home, rootName);
+-            if (!Directory.Exists(root))
++            // AC-TR-MCP-SESSIONLOG-006-009: a history root that is a link contributes no file, the same as a link
++            // inside it (hostile validation round 5 finding R5-F1); a home that is itself a link is still scanned.
++            if (!Directory.Exists(root) || !walker.IsReachable(home, root))
+                 continue;
+ 
+             // AC-TR-MCP-SESSIONLOG-006-009: the walk skips directory links and any directory it cannot list.
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs b/tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs
+index 2a81b0dd..d035adab 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs
+@@ -1,5 +1,6 @@
+ using QBrainAi.Support.Mcp.DatabaseMaintenance;
+ using QBrainAi.Support.Mcp.Storage.Database;
++using QBrainAi.Support.Mcp.Tests.TestSupport;
+ 
+ namespace QBrainAi.Support.Mcp.Tests.DatabaseMaintenance;
+ 
+@@ -10,7 +11,10 @@ namespace QBrainAi.Support.Mcp.Tests.DatabaseMaintenance;
+ /// Requirement coverage: FR-MCP-077, TR-MCP-SEC-004, TR-MCP-CFG-007.
+ /// Test data uses deterministic provider connection strings, placeholder keys, and dry-run command arguments so
+ /// the maintenance workflow can be validated without requiring live SEE, pg_tde, or SQL Server TDE infrastructure.
++/// The class runs in <see cref="ProcessEnvironmentCollection"/> because one of its integration tests writes the process
++/// environment (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+ /// </remarks>
++[Collection(ProcessEnvironmentCollection.Name)]
+ public sealed class McpDatabaseEncryptionTransitionCommandTests
+ {
+     /// <summary>
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs
+index 370a7b43..9285e55a 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs
+@@ -1,10 +1,14 @@
+ using QBrainAi.Support.Mcp.Services;
++using QBrainAi.Support.Mcp.Tests.TestSupport;
+ 
+ namespace QBrainAi.Support.Mcp.Tests.Memory;
+ 
+ /// <summary>
+-/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018: Harness conditions, metrics, isolation, and modes.
++/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018: Harness conditions, metrics, isolation, and modes. The class runs in
++/// <see cref="ProcessEnvironmentCollection"/> because two of its integration tests write the process environment
++/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+ /// </summary>
++[Collection(ProcessEnvironmentCollection.Name)]
+ public sealed class MemoryBenchHarnessTests
+ {
+     /// <summary>AC-FR-MCP-MEMORY-018-05: without_memory has no injection and no successful recall tools.</summary>
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs
+index 012cea1c..8a922378 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs
+@@ -1,12 +1,15 @@
+ using QBrainAi.Support.Mcp.Services;
++using QBrainAi.Support.Mcp.Tests.TestSupport;
+ 
+ namespace QBrainAi.Support.Mcp.Tests.Memory;
+ 
+ /// <summary>
+ /// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011:
+ /// S2 Green acceptance for the dedicated memory indexer, ANN/FTS fusion,
+-/// and EmbeddingStatus transitions.
++/// and EmbeddingStatus transitions. The class runs in <see cref="ProcessEnvironmentCollection"/> because one of its
++/// tests writes the process environment (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+ /// </summary>
++[Collection(ProcessEnvironmentCollection.Name)]
+ public sealed class MemoryIndexerTests : IDisposable
+ {
+     private readonly MemoryS1Harness _harness = new();
+@@ -143,24 +146,39 @@ public sealed class MemoryIndexerTests : IDisposable
+         Assert.NotEqual("ready", status);
+     }
+ 
+-    /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-09: Local ONNX path works without cloud credentials in the test host.</summary>
++    /// <summary>
++    /// AC-TR-MCP-MEMORY-SEARCH-002-09: Local ONNX path works without cloud credentials in the test host. The test
++    /// clears both cloud keys, so it writes the process environment and is an integration test; it restores both
++    /// keys afterwards, which it did not do before (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
++    /// </summary>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task OnnxLocal_NoCloudRequired()
+     {
+-        Environment.SetEnvironmentVariable("OPENAI_API_KEY", null);
+-        Environment.SetEnvironmentVariable("AZURE_OPENAI_API_KEY", null);
+-        var memory = await SeedAsync("onnx local embedding body").ConfigureAwait(true);
++        var previousOpenAi = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
++        var previousAzure = Environment.GetEnvironmentVariable("AZURE_OPENAI_API_KEY");
++        try
++        {
++            Environment.SetEnvironmentVariable("OPENAI_API_KEY", null);
++            Environment.SetEnvironmentVariable("AZURE_OPENAI_API_KEY", null);
++            var memory = await SeedAsync("onnx local embedding body").ConfigureAwait(true);
+ 
+-        var indexed = await _harness.IndexAsync(
+-            memory.Id,
+-            provider: "onnx",
+-            cloudEnabled: false,
+-            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+-        var status = indexed.EmbeddingStatus
+-            ?? await _harness.GetEmbeddingStatusAsync(memory.Id).ConfigureAwait(true);
++            var indexed = await _harness.IndexAsync(
++                memory.Id,
++                provider: "onnx",
++                cloudEnabled: false,
++                cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
++            var status = indexed.EmbeddingStatus
++                ?? await _harness.GetEmbeddingStatusAsync(memory.Id).ConfigureAwait(true);
+ 
+-        Assert.True(indexed.StatusCode is 200 or 201, indexed.Error);
+-        Assert.Equal("ready", status);
++            Assert.True(indexed.StatusCode is 200 or 201, indexed.Error);
++            Assert.Equal("ready", status);
++        }
++        finally
++        {
++            Environment.SetEnvironmentVariable("OPENAI_API_KEY", previousOpenAi);
++            Environment.SetEnvironmentVariable("AZURE_OPENAI_API_KEY", previousAzure);
++        }
+     }
+ 
+     /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-10: Cloud embedding path is opt-in and fails closed when disabled.</summary>
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs
+index 6006d76f..bc369d57 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs
+@@ -1,9 +1,16 @@
+ using QBrainAi.Support.Mcp.Options;
++using QBrainAi.Support.Mcp.Tests.TestSupport;
+ using Microsoft.Extensions.Configuration;
+ using Xunit;
+ 
+ namespace QBrainAi.Support.Mcp.Tests.Options;
+ 
++/// <summary>
++/// Tests instance-name resolution and instance validation. The class runs in <see cref="ProcessEnvironmentCollection"/>
++/// because two of its tests write the process environment; those two are integration tests (TR-MCP-USECASE-018
++/// AC-006, TR-MCP-USECASE-019 AC-008; hostile validation round 5 finding R5-F2 and the sweep of plan section 19.3).
++/// </summary>
++[Collection(ProcessEnvironmentCollection.Name)]
+ public sealed class McpInstanceResolverTests
+ {
+     [Fact]
+@@ -187,9 +194,11 @@ public sealed class McpInstanceResolverTests
+ 
+     /// <summary>
+     /// TEST-MCP-QBRAIN-005: QBRAINAI_INSTANCE wins over MCP_INSTANCE when both are set.
+-    /// Restores both variables after the assertion.
++    /// Restores both variables after the assertion. It writes the process environment, so it is an integration test
++    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+     /// </summary>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public void GetRequestedInstanceName_PrefersQBrainAiEnvironmentVariable()
+     {
+         var previousModern = Environment.GetEnvironmentVariable("QBRAINAI_INSTANCE");
+@@ -212,9 +221,11 @@ public sealed class McpInstanceResolverTests
+ 
+     /// <summary>
+     /// TEST-MCP-QBRAIN-005: MCP_INSTANCE still selects the instance when QBRAINAI_INSTANCE is unset.
+-    /// Restores both variables after the assertion.
++    /// Restores both variables after the assertion. It writes the process environment, so it is an integration test
++    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+     /// </summary>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public void GetRequestedInstanceName_FallsBackToLegacyEnvironmentVariable()
+     {
+         var previousModern = Environment.GetEnvironmentVariable("QBRAINAI_INSTANCE");
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs
+index 9945184e..d86e9f7f 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs
+@@ -7,12 +7,16 @@ using Microsoft.Extensions.DependencyInjection;
+ using Microsoft.Extensions.FileProviders;
+ using Microsoft.Extensions.Hosting;
+ using Microsoft.Extensions.Options;
++using QBrainAi.Support.Mcp.Tests.TestSupport;
+ 
+ namespace QBrainAi.Support.Mcp.Tests.Options;
+ 
+ /// <summary>
+-/// TR-MCP-QBRAIN-004 and TR-MCP-QBRAIN-005: product route and configuration aliases.
++/// TR-MCP-QBRAIN-004 and TR-MCP-QBRAIN-005: product route and configuration aliases. The class runs in
++/// <see cref="ProcessEnvironmentCollection"/> because one of its tests writes the process environment
++/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+ /// </summary>
++[Collection(ProcessEnvironmentCollection.Name)]
+ public sealed class ProductAliasCompatibilityTests
+ {
+     /// <summary>
+@@ -63,15 +67,26 @@ public sealed class ProductAliasCompatibilityTests
+     /// <summary>
+     /// TR-MCP-QBRAIN-005: operator Mcp environment and command-line values beat file and image QBrainAi values.
+     /// </summary>
++    /// <remarks>
++    /// The test imports the whole process environment (<c>AddEnvironmentVariables</c>), so it is an integration test
++    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation round 5 finding R5-F2, where an ambient
++    /// <c>QBrainAi__ProjectionProbe</c> won over the legacy value and the first assertion failed). It sets the two
++    /// variables its assertions read, clears the canonical and legacy forms of every other variable they depend on
++    /// (both probe names and both port names), and restores all six; the assertions are unchanged.
++    /// </remarks>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public void ProjectCanonicalSection_EnvironmentAndCommandLineBeatFileQBrainAi()
+     {
+         var envName = "Mcp__ProjectionProbe";
+         var cliName = "QBrainAi__ProjectionCliProbe";
+-        var previousEnv = Environment.GetEnvironmentVariable(envName);
+-        var previousCli = Environment.GetEnvironmentVariable(cliName);
++        string[] cleared = ["QBrainAi__ProjectionProbe", "Mcp__ProjectionCliProbe", "Mcp__Port", "QBrainAi__Port"];
++        var previous = new[] { envName, cliName }.Concat(cleared)
++            .ToDictionary(name => name, Environment.GetEnvironmentVariable, StringComparer.Ordinal);
+         try
+         {
++            foreach (var name in cleared)
++                Environment.SetEnvironmentVariable(name, null);
+             Environment.SetEnvironmentVariable(envName, "/myrepo");
+             Environment.SetEnvironmentVariable(cliName, "/fromenv");
+             using var configuration = new ConfigurationManager();
+@@ -94,8 +109,8 @@ public sealed class ProductAliasCompatibilityTests
+         }
+         finally
+         {
+-            Environment.SetEnvironmentVariable(envName, previousEnv);
+-            Environment.SetEnvironmentVariable(cliName, previousCli);
++            foreach (var (name, value) in previous)
++                Environment.SetEnvironmentVariable(name, value);
+         }
+     }
+ 
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotCredentialResolverTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotCredentialResolverTests.cs
+index 287477a5..233af749 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotCredentialResolverTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotCredentialResolverTests.cs
+@@ -1,14 +1,25 @@
+ using QBrainAi.Support.Mcp.Services;
++using QBrainAi.Support.Mcp.Tests.TestSupport;
+ using Microsoft.Extensions.Configuration;
+ using Xunit;
+ 
+ namespace QBrainAi.Support.Mcp.Tests.Services;
+ 
+-/// <summary>Tests for safe brain-slot credential reference resolution. TEST-MCP-177.</summary>
++/// <summary>
++/// Tests for safe brain-slot credential reference resolution. TEST-MCP-177. The class runs in
++/// <see cref="ProcessEnvironmentCollection"/> because one of its tests writes the process environment
++/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
++/// </summary>
++[Collection(ProcessEnvironmentCollection.Name)]
+ public sealed class BrainSlotCredentialResolverTests
+ {
+-    /// <summary>Environment references resolve through the named variable and trim whitespace.</summary>
++    /// <summary>
++    /// Environment references resolve through the named variable and trim whitespace. The test sets and clears a
++    /// uniquely named variable, so it writes the process environment and is an integration test
++    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
++    /// </summary>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task ResolveAsync_WithEnvironmentReference_ReturnsTrimmedSecret()
+     {
+         var variableName = "MCP_BRAIN_SLOT_TEST_KEY_" + Guid.NewGuid().ToString("N");
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs
+index 41d94939..49cef600 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs
+@@ -6,13 +6,18 @@ using QBrainAi.Support.Mcp.Storage.Entities;
+ using Microsoft.Extensions.Configuration;
+ using Microsoft.Extensions.Logging.Abstractions;
+ using Microsoft.Extensions.Options;
++using QBrainAi.Support.Mcp.Tests.TestSupport;
+ using Xunit;
+ 
+ namespace QBrainAi.Support.Mcp.Tests.Services;
+ 
+ /// <summary>
+-/// TEST-MCP-QBCLI-001: QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session reuse.
++/// TEST-MCP-QBCLI-001: QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session reuse. The
++/// class runs in <see cref="ProcessEnvironmentCollection"/> because its temp-folder tests write the process environment
++/// through <c>WithIsolatedQuadbrainTemp</c>; those tests are integration tests (TR-MCP-USECASE-018 AC-006,
++/// TR-MCP-USECASE-019 AC-008; the sweep of plan section 19.3).
+ /// </summary>
++[Collection(ProcessEnvironmentCollection.Name)]
+ public sealed class CliBrainSlotStrategyTests
+ {
+     private static readonly SemaphoreSlim TempEnvLock = new(1, 1);
+@@ -115,38 +120,62 @@ public sealed class CliBrainSlotStrategyTests
+         Assert.DoesNotContain("--session-id", args);
+     }
+ 
++    /// <summary>
++    /// TEST-MCP-QBCLI-001: Grok runs in an isolated working folder with its dashboard, memory and subagents off and
++    /// without the inherited <c>GROK_PLUGIN_ROOT</c> and <c>GROK_HOME</c>. The test writes the process environment
++    /// (the temp variables, and both Grok variables set to scripted values so their removal is observed), restores it,
++    /// and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
++    /// </summary>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task CompleteAsync_Grok_UsesIsolatedCwdNotConfiguredRepoRoot()
+     {
+-        await WithIsolatedQuadbrainTemp(async _ =>
++        await WithIsolatedQuadbrainTemp(async temp =>
+         {
+-            var spawner = new RecordingSpawner(stdout: "ok");
+-            var client = new CliBrainSlotChatClient(
+-                spawner,
+-                new NoopProcessEnvironmentService(),
+-                new CliBrainSlotSessionStore(),
+-                new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions
+-                {
+-                    CliWorkingDirectory = @"Q:\__mcp_unit_test__\QBrainAi",
+-                }),
+-                NullLogger.Instance);
+-
+-            await client.CompleteAsync(GrokSlot(), "ping", temperature: null, TestContext.Current.CancellationToken)
+-                .ConfigureAwait(true);
+-
+-            var cwd = spawner.StartInfos[0].WorkingDirectory;
+-            Assert.False(string.IsNullOrWhiteSpace(cwd));
+-            Assert.Contains("grok-work", cwd, StringComparison.OrdinalIgnoreCase);
+-            Assert.DoesNotContain(@"Q:\__mcp_unit_test__\QBrainAi", cwd, StringComparison.OrdinalIgnoreCase);
+-            Assert.Equal(cwd, ArgumentAfter(spawner.StartInfos[0], "--cwd"));
+-            Assert.Equal("0", spawner.StartInfos[0].Environment["GROK_AGENT_DASHBOARD"]);
+-            Assert.Equal("0", spawner.StartInfos[0].Environment["GROK_MEMORY"]);
+-            Assert.Equal("0", spawner.StartInfos[0].Environment["GROK_SUBAGENTS"]);
+-            Assert.False(spawner.StartInfos[0].Environment.ContainsKey("GROK_PLUGIN_ROOT"));
+-            Assert.False(spawner.StartInfos[0].Environment.ContainsKey("GROK_HOME"));
++            var previousPluginRoot = Environment.GetEnvironmentVariable("GROK_PLUGIN_ROOT");
++            var previousGrokHome = Environment.GetEnvironmentVariable("GROK_HOME");
++            Environment.SetEnvironmentVariable("GROK_PLUGIN_ROOT", Path.Combine(temp, "inherited-grok-plugin-root"));
++            Environment.SetEnvironmentVariable("GROK_HOME", Path.Combine(temp, "inherited-grok-home"));
++            try
++            {
++                await AssertGrokRunsIsolatedAsync().ConfigureAwait(true);
++            }
++            finally
++            {
++                Environment.SetEnvironmentVariable("GROK_PLUGIN_ROOT", previousPluginRoot);
++                Environment.SetEnvironmentVariable("GROK_HOME", previousGrokHome);
++            }
+         }).ConfigureAwait(true);
+     }
+ 
++    private static async Task AssertGrokRunsIsolatedAsync()
++    {
++        var spawner = new RecordingSpawner(stdout: "ok");
++        var client = new CliBrainSlotChatClient(
++            spawner,
++            new NoopProcessEnvironmentService(),
++            new CliBrainSlotSessionStore(),
++            new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions
++            {
++                CliWorkingDirectory = @"Q:\__mcp_unit_test__\QBrainAi",
++            }),
++            NullLogger.Instance);
++
++        await client.CompleteAsync(GrokSlot(), "ping", temperature: null, TestContext.Current.CancellationToken)
++            .ConfigureAwait(true);
++
++        var cwd = spawner.StartInfos[0].WorkingDirectory;
++        Assert.False(string.IsNullOrWhiteSpace(cwd));
++        Assert.Contains("grok-work", cwd, StringComparison.OrdinalIgnoreCase);
++        Assert.DoesNotContain(@"Q:\__mcp_unit_test__\QBrainAi", cwd, StringComparison.OrdinalIgnoreCase);
++        Assert.Equal(cwd, ArgumentAfter(spawner.StartInfos[0], "--cwd"));
++        Assert.Equal("0", spawner.StartInfos[0].Environment["GROK_AGENT_DASHBOARD"]);
++        Assert.Equal("0", spawner.StartInfos[0].Environment["GROK_MEMORY"]);
++        Assert.Equal("0", spawner.StartInfos[0].Environment["GROK_SUBAGENTS"]);
++        Assert.False(spawner.StartInfos[0].Environment.ContainsKey("GROK_PLUGIN_ROOT"));
++        Assert.False(spawner.StartInfos[0].Environment.ContainsKey("GROK_HOME"));
++    }
++
+     [Fact]
+     public async Task CompleteAsync_Grok_MaxTurnsReached_ReturnsStdoutInsteadOfThrowing()
+     {
+@@ -307,7 +336,13 @@ public sealed class CliBrainSlotStrategyTests
+         Assert.Equal("working on it", CliBrainSlotChatClient.ExtractCodexAssistantText(jsonl));
+     }
+ 
++    /// <summary>
++    /// TEST-MCP-QBCLI-001: Codex returns the assistant text from the JSONL stream, not the raw events. The test writes
++    /// the process environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test
++    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
++    /// </summary>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task CompleteAsync_Codex_ReturnsAssistantTextFromJsonlNotRawEvents()
+     {
+         await WithIsolatedQuadbrainTemp(async temp =>
+@@ -340,7 +375,13 @@ public sealed class CliBrainSlotStrategyTests
+         }).ConfigureAwait(true);
+     }
+ 
++    /// <summary>
++    /// TEST-MCP-QBCLI-001: Codex prefers the JSONL assistant text over tool-call JSON in the output file. The test
++    /// writes the process environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test
++    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
++    /// </summary>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task CompleteAsync_Codex_PrefersJsonlAssistantTextOverOutputFileToolCallJson()
+     {
+         await WithIsolatedQuadbrainTemp(async _ =>
+@@ -370,7 +411,13 @@ public sealed class CliBrainSlotStrategyTests
+         }).ConfigureAwait(true);
+     }
+ 
++    /// <summary>
++    /// TEST-MCP-QBCLI-001: the temp folder comes from the configured variable without the Windows service ACL. The
++    /// test writes the process environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test
++    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
++    /// </summary>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task ResolveTempDirectory_HonorsConfiguredEnvVar_WithoutWindowsServiceAcl()
+     {
+         await WithIsolatedQuadbrainTemp(async temp =>
+@@ -382,7 +429,13 @@ public sealed class CliBrainSlotStrategyTests
+         }).ConfigureAwait(true);
+     }
+ 
++    /// <summary>
++    /// TEST-MCP-QBCLI-001: Grok writes its prompt file under the configured temp folder and points TEMP and TMP at it.
++    /// The test writes the process environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test
++    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
++    /// </summary>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task CompleteAsync_Grok_WritesPromptFileUnderConfiguredTempAndSetsTempEnv()
+     {
+         await WithIsolatedQuadbrainTemp(async temp =>
+@@ -415,7 +468,13 @@ public sealed class CliBrainSlotStrategyTests
+         }).ConfigureAwait(true);
+     }
+ 
++    /// <summary>
++    /// TEST-MCP-QBCLI-001: Codex writes its output file under the configured temp folder. The test writes the process
++    /// environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test (TR-MCP-USECASE-018 AC-006,
++    /// TR-MCP-USECASE-019 AC-008).
++    /// </summary>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task CompleteAsync_Codex_WritesOutputFileUnderConfiguredTemp()
+     {
+         await WithIsolatedQuadbrainTemp(async temp =>
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs
+index 1c98166a..d3ad9bb2 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs
+@@ -3,6 +3,7 @@ using System.Text;
+ using System.Text.RegularExpressions;
+ using QBrainAi.Common.AgentCli;
+ using QBrainAi.Support.Mcp.Services;
++using QBrainAi.Support.Mcp.Tests.TestSupport;
+ using Microsoft.Extensions.Logging.Abstractions;
+ using Xunit;
+ 
+@@ -10,8 +11,11 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
+ 
+ /// <summary>
+ /// TEST-MCP-TRIAGE-003: Verifies the Codex CLI execution strategy used by
+-/// background triage invokes <c>codex exec</c> non-interactively.
++/// background triage invokes <c>codex exec</c> non-interactively. The class runs in
++/// <see cref="ProcessEnvironmentCollection"/> because one of its tests writes the process environment
++/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+ /// </summary>
++[Collection(ProcessEnvironmentCollection.Name)]
+ public sealed class CodexCliAgentExecutionStrategyTests
+ {
+     /// <summary>
+@@ -156,9 +160,12 @@ public sealed class CodexCliAgentExecutionStrategyTests
+     /// <summary>
+     /// TEST-MCP-TRIAGE-003: The Codex CLI strategy writes one-shot output
+     /// files under the configured shared temp root so a service-spawned
+-    /// interactive-user codex process can write the final response file.
++    /// interactive-user codex process can write the final response file. The test sets and restores
++    /// <c>MCPSERVER_CODEX_ONESHOT_TEMP</c>, which the strategy reads first, so it writes the process environment and is
++    /// an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+     /// </summary>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task ReadInitialResponseAsync_WithConfiguredSharedTempRoot_UsesSharedOutputPath()
+     {
+         var tempRoot = Path.Combine(Path.GetTempPath(), $"codex-oneshot-shared-{Guid.NewGuid():N}");
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs
+index 7727f501..a78828c2 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs
+@@ -18,7 +18,14 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
+ /// are walked only when its own listing succeeds, and file links are yielded as files. Negative controls run
+ /// deliberately wrong walks (one that follows links, one that propagates listing errors as the legacy recursive
+ /// enumeration did, one that stops at the first error, one that drops an unlistable directory) over the same trees
+-/// and prove the walk assertion rejects each.
++/// and prove the walk assertion rejects each. The reachability cases (hostile validation round 5 finding R5-F1;
++/// operator 2026-10-21: "Fix both, strengthen ACs" and "Approve, strengthen AC-006/008 (Recommended)") script the
++/// folders between a boundary (the user profile or home) and a scan root: a scan root is walked only when it and
++/// every folder between the boundary and it are listed by their parents as directories that are not links, and the
++/// boundary itself is trusted. Their negative controls run wrong checks (the unchecked root, a check that follows
++/// links, a check of the root alone, a check that also rejects a linked boundary, a prefix match without a
++/// separator, a check that propagates listing errors, a check that also lists the root) and prove the reachability
++/// assertion rejects each.
+ /// </remarks>
+ public sealed class DirectoryTreeWalkerTests
+ {
+@@ -246,6 +253,78 @@ public sealed class DirectoryTreeWalkerTests
+         Assert.Throws<ArgumentNullException>(() => new DirectoryTreeWalker(null!));
+     }
+ 
++    /// <summary>
++    /// Production binding of the scripted reachability cases: <see cref="DirectoryTreeWalker.IsReachable"/> over
++    /// each scripted tree gives the required answer and never lists a directory link below the boundary.
++    /// </summary>
++    /// <param name="name">Scripted reachability case name.</param>
++    [Theory]
++    [MemberData(nameof(ReachCaseNames))]
++    public void ScriptedReachCase_ProductionCheck_GivesTheRequiredAnswer(string name) =>
++        RunReachAndAssert(name, (list, boundary, root) => new DirectoryTreeWalker(list).IsReachable(boundary, root));
++
++    /// <summary>
++    /// Production binding of the reachability error filter: a listing error that is neither an IO nor an access
++    /// error propagates out of <see cref="DirectoryTreeWalker.IsReachable"/> instead of being taken as unreachable.
++    /// </summary>
++    [Fact]
++    public void ProductionReach_UnexpectedListingError_Propagates()
++    {
++        var tree = new ScriptedDirectoryTree()
++            .Lists("/p", DirEntry("/p/.codex"))
++            .Throws("/p/.codex", () => new InvalidOperationException("not an IO error"));
++
++        Assert.Throws<InvalidOperationException>(() => new DirectoryTreeWalker(tree.List).IsReachable("/p", "/p/.codex/plugins"));
++        Assert.Throws<ArgumentNullException>(() => new DirectoryTreeWalker(tree.List).IsReachable(null!, "/p"));
++        Assert.Throws<ArgumentNullException>(() => new DirectoryTreeWalker(tree.List).IsReachable("/p", null!));
++    }
++
++    /// <summary>
++    /// Integration: on the real file system, <see cref="DirectoryTreeWalker.FileSystem"/> reaches a real folder below
++    /// a boundary, does not reach a scan root that is a directory symbolic link or one reached through a linked
++    /// ancestor (each link's target lies outside the boundary), and still reaches a root below a boundary that is
++    /// itself a directory symbolic link (AC-TR-MCP-WS-005-001, AC-TR-MCP-SESSIONLOG-006-009; hostile validation
++    /// round 5 finding R5-F1). Creating symbolic links depends on the host (on Windows, Developer Mode or the
++    /// create-symbolic-link privilege), so this is an integration test.
++    /// </summary>
++    [Fact]
++    [Trait("Category", "Integration")]
++    public void FileSystemReach_RealRootAndAncestorLinks_AreNotReachable()
++    {
++        var boundary = Path.Combine(Path.GetTempPath(), $"mcp-reach-links-{Guid.NewGuid():N}");
++        var outside = boundary + "-outside";
++        var linkedBoundary = boundary + "-boundary-link";
++        var realRoot = Path.Combine(boundary, "real", "plugins", "cache");
++        var rootLink = Path.Combine(boundary, "real", "plugins", "root-link");
++        var ancestorLink = Path.Combine(boundary, "ancestor-link");
++        Directory.CreateDirectory(realRoot);
++        Directory.CreateDirectory(Path.Combine(outside, "cache"));
++        try
++        {
++            Directory.CreateSymbolicLink(rootLink, Path.Combine(outside, "cache"));
++            Directory.CreateSymbolicLink(ancestorLink, outside);
++            Directory.CreateSymbolicLink(linkedBoundary, boundary);
++            Assert.True(Directory.Exists(rootLink));
++            Assert.True(Directory.Exists(Path.Combine(ancestorLink, "cache")));
++
++            Assert.True(DirectoryTreeWalker.FileSystem.IsReachable(boundary, realRoot));
++            Assert.False(DirectoryTreeWalker.FileSystem.IsReachable(boundary, rootLink));
++            Assert.False(DirectoryTreeWalker.FileSystem.IsReachable(boundary, Path.Combine(ancestorLink, "cache")));
++            Assert.True(DirectoryTreeWalker.FileSystem.IsReachable(linkedBoundary, Path.Combine(linkedBoundary, "real", "plugins", "cache")));
++        }
++        finally
++        {
++            foreach (var link in new[] { linkedBoundary, ancestorLink, rootLink })
++            {
++                if (Directory.Exists(link))
++                    Directory.Delete(link);
++            }
++
++            Directory.Delete(boundary, recursive: true);
++            Directory.Delete(outside, recursive: true);
++        }
++    }
++
+     /// <summary>
+     /// Integration: on the real file system, <see cref="DirectoryTreeWalker.ListFileSystem"/> flags a directory
+     /// symbolic link and a file symbolic link as links, and <see cref="DirectoryTreeWalker.FileSystem"/> neither
+@@ -383,6 +462,292 @@ public sealed class DirectoryTreeWalkerTests
+         return (directories, files);
+     }
+ 
++    // Reachability of a scan root below a boundary (hostile validation round 5 finding R5-F1).
++
++    /// <summary>A reachability check under test: lists through <c>list</c> from <c>boundary</c> down to <c>root</c>.</summary>
++    private delegate bool ReachFunction(
++        Func<string, IReadOnlyList<DirectoryListingEntry>> list,
++        string boundary,
++        string root);
++
++    /// <summary>
++    /// Scripted reachability cases: the tree, the boundary (the user profile or home), the scan root, and whether
++    /// the root may be walked. Expected values come from the strengthened criteria AC-TR-MCP-WS-005-001 and
++    /// AC-TR-MCP-SESSIONLOG-006-009 (operator 2026-10-21: "Fix both, strengthen ACs"): the root and every folder
++    /// between the boundary and it must each be listed by its parent as a directory that is not a link; a folder
++    /// whose listing fails with an IO or access error cannot be traversed; the boundary itself is trusted, so a
++    /// linked profile or home is still scanned; a root that is the boundary is reachable without any listing.
++    /// </summary>
++    private static readonly Dictionary<string, (Func<ScriptedDirectoryTree> Tree, string Boundary, string Root, bool Reachable)> ReachCases =
++        new(StringComparer.Ordinal)
++        {
++            ["reach-normal"] = (() => CodexTree(rootIsLink: false), "/p", "/p/.codex/plugins/cache", true),
++            ["reach-root-link"] = (() => CodexTree(rootIsLink: true), "/p", "/p/.codex/plugins/cache", false),
++            ["reach-top-ancestor-link"] = (
++                () => new ScriptedDirectoryTree()
++                    .Lists("/", DirEntry("/p"))
++                    .Lists("/p", DirLinkEntry("/p/.codex"), FileEntry("/p/.bashrc")),
++                "/p",
++                "/p/.codex/plugins/cache",
++                false),
++            ["reach-middle-ancestor-link"] = (
++                () => new ScriptedDirectoryTree()
++                    .Lists("/", DirEntry("/p"))
++                    .Lists("/p", DirEntry("/p/.codex"))
++                    .Lists("/p/.codex", DirLinkEntry("/p/.codex/plugins")),
++                "/p",
++                "/p/.codex/plugins/cache",
++                false),
++            ["reach-boundary-link"] = (
++                () => CodexTree(rootIsLink: false).Lists("/", DirLinkEntry("/p")),
++                "/p",
++                "/p/.codex/plugins/cache",
++                true),
++            ["reach-parent-unlistable"] = (
++                () => new ScriptedDirectoryTree()
++                    .Lists("/", DirEntry("/p"))
++                    .Lists("/p", DirEntry("/p/.codex"))
++                    .Throws("/p/.codex", () => new IOException(UntrustedMountPointMessage)),
++                "/p",
++                "/p/.codex/plugins/cache",
++                false),
++            ["reach-parent-access-denied"] = (
++                () => new ScriptedDirectoryTree()
++                    .Lists("/", DirEntry("/p"))
++                    .Lists("/p", DirEntry("/p/.codex"))
++                    .Throws("/p/.codex", () => new UnauthorizedAccessException("Access to the path is denied.")),
++                "/p",
++                "/p/.codex/plugins/cache",
++                false),
++            ["reach-root-absent"] = (
++                () => new ScriptedDirectoryTree()
++                    .Lists("/", DirEntry("/p"))
++                    .Lists("/p", DirEntry("/p/.codex"))
++                    .Lists("/p/.codex", DirEntry("/p/.codex/plugins"))
++                    .Lists("/p/.codex/plugins", DirEntry("/p/.codex/plugins/other")),
++                "/p",
++                "/p/.codex/plugins/cache",
++                false),
++            ["reach-root-is-file"] = (
++                () => new ScriptedDirectoryTree()
++                    .Lists("/", DirEntry("/p"))
++                    .Lists("/p", DirEntry("/p/.codex"))
++                    .Lists("/p/.codex", DirEntry("/p/.codex/plugins"))
++                    .Lists("/p/.codex/plugins", FileEntry("/p/.codex/plugins/cache")),
++                "/p",
++                "/p/.codex/plugins/cache",
++                false),
++            ["reach-root-unlistable"] = (
++                () => CodexTree(rootIsLink: false).Throws("/p/.codex/plugins/cache", () => new IOException(UntrustedMountPointMessage)),
++                "/p",
++                "/p/.codex/plugins/cache",
++                true),
++            ["reach-root-is-boundary"] = (() => new ScriptedDirectoryTree().Lists("/", DirEntry("/p")), "/p", "/p", true),
++            ["reach-outside-boundary"] = (
++                () => new ScriptedDirectoryTree()
++                    .Lists("/", DirEntry("/p"), DirEntry("/q"))
++                    .Lists("/p", DirEntry("/p/.codex")),
++                "/p",
++                "/q/.codex",
++                false),
++            ["reach-prefix-sibling-link"] = (
++                () => new ScriptedDirectoryTree()
++                    .Lists("/", DirEntry("/p"))
++                    .Lists("/p", DirLinkEntry("/p/.cod"), DirEntry("/p/.codex"))
++                    .Lists("/p/.codex", DirEntry("/p/.codex/plugins")),
++                "/p",
++                "/p/.codex/plugins",
++                true),
++            ["reach-trailing-separator"] = (() => CodexTree(rootIsLink: false), "/p", "/p/.codex/plugins/cache/", true),
++            ["reach-history-root"] = (
++                () => new ScriptedDirectoryTree()
++                    .Lists("/", DirEntry("/h"))
++                    .Lists("/h", DirEntry("/h/.claude"), DirEntry("/h/.codex")),
++                "/h",
++                "/h/.claude",
++                true),
++            ["reach-history-root-link"] = (
++                () => new ScriptedDirectoryTree()
++                    .Lists("/", DirEntry("/h"))
++                    .Lists("/h", DirLinkEntry("/h/.claude"), DirEntry("/h/.codex")),
++                "/h",
++                "/h/.claude",
++                false),
++        };
++
++    /// <summary>The scripted reachability case names, for the theories.</summary>
++    public static TheoryData<string> ReachCaseNames => new(ReachCases.Keys.Order(StringComparer.Ordinal));
++
++    /// <summary>
++    /// The Codex cache layout <c>/p/.codex/plugins/cache</c> under the boundary <c>/p</c>, with the cache root
++    /// listed as a link when <paramref name="rootIsLink"/>.
++    /// </summary>
++    private static ScriptedDirectoryTree CodexTree(bool rootIsLink) =>
++        new ScriptedDirectoryTree()
++            .Lists("/", DirEntry("/p"))
++            .Lists("/p", DirEntry("/p/.codex"), FileEntry("/p/.bashrc"))
++            .Lists("/p/.codex", DirEntry("/p/.codex/plugins"))
++            .Lists("/p/.codex/plugins", rootIsLink ? DirLinkEntry("/p/.codex/plugins/cache") : DirEntry("/p/.codex/plugins/cache"))
++            .Lists("/p/.codex/plugins/cache", DirEntry("/p/.codex/plugins/cache/mcpserver"));
++
++    /// <summary>
++    /// Asserts one reachability result against a case: the answer equals the required one, and the check never
++    /// listed a directory link below the boundary (it never descends into a link to find the root).
++    /// </summary>
++    private static void AssertReach(string boundary, bool expected, bool actual, ScriptedDirectoryTree tree)
++    {
++        Assert.Equal(expected, actual);
++        Assert.DoesNotContain(tree.Listed, directory => !string.Equals(directory, boundary, StringComparison.Ordinal) && tree.IsLink(directory));
++    }
++
++    /// <summary>Runs one reachability check over a fresh copy of a case's tree and asserts its result.</summary>
++    private static void RunReachAndAssert(string name, ReachFunction reach)
++    {
++        var (treeFactory, boundary, root, reachable) = ReachCases[name];
++        var tree = treeFactory();
++        AssertReach(boundary, reachable, reach(tree.List, boundary, root), tree);
++    }
++
++    /// <summary>
++    /// Mock gate positive control: each reachability case's required answer passes the reachability assertion on a
++    /// tree that has listed nothing.
++    /// </summary>
++    /// <param name="name">Scripted reachability case name.</param>
++    [Theory]
++    [MemberData(nameof(ReachCaseNames))]
++    public void ScriptedReachCase_RequiredAnswer_PassesTheReachAssertion(string name)
++    {
++        var (treeFactory, boundary, _, reachable) = ReachCases[name];
++        AssertReach(boundary, reachable, reachable, treeFactory());
++    }
++
++    /// <summary>The reachability theories cover every scripted case.</summary>
++    [Fact]
++    public void ScriptedReachTheory_CoversEveryCase() => Assert.Equal(16, ReachCases.Count);
++
++    /// <summary>
++    /// Mock gate negative controls: each wrong reachability check is rejected by the reachability assertion on the
++    /// case that exposes it, inside a passing harness. The unchecked root (the behavior before the fix) fails on a
++    /// linked root, a linked ancestor and a linked history root; a check that follows links fails on a linked root
++    /// and a linked ancestor; a check of the root alone fails on a linked ancestor; a check that also rejects a
++    /// linked boundary fails on a linked profile; a prefix match without a separator takes the linked sibling
++    /// <c>.cod</c> for <c>.codex</c>; a check that propagates listing errors fails on an unlistable parent; a check
++    /// that also lists the root fails when only the root cannot be listed.
++    /// </summary>
++    [Fact]
++    public void WrongReachNegativeControls_AreRejectedInsidePassingHarness()
++    {
++        foreach (var name in new[] { "reach-root-link", "reach-top-ancestor-link", "reach-history-root-link" })
++            Assert.NotNull(Record.Exception(() => RunReachAndAssert(name, UncheckedReach)));
++
++        Assert.NotNull(Record.Exception(() => RunReachAndAssert("reach-root-link", FollowsLinksReach)));
++        Assert.NotNull(Record.Exception(() => RunReachAndAssert("reach-middle-ancestor-link", FollowsLinksReach)));
++        Assert.NotNull(Record.Exception(() => RunReachAndAssert("reach-top-ancestor-link", RootOnlyReach)));
++        Assert.NotNull(Record.Exception(() => RunReachAndAssert("reach-middle-ancestor-link", RootOnlyReach)));
++        Assert.NotNull(Record.Exception(() => RunReachAndAssert("reach-boundary-link", ChecksBoundaryReach)));
++        Assert.NotNull(Record.Exception(() => RunReachAndAssert("reach-prefix-sibling-link", PrefixMatchReach)));
++        Assert.NotNull(Record.Exception(() => RunReachAndAssert("reach-parent-unlistable", PropagatesListingErrorsReach)));
++        Assert.NotNull(Record.Exception(() => RunReachAndAssert("reach-root-unlistable", ListsRootReach)));
++
++        // Each wrong check is wrong only where a case exposes it: on the normal layout, which has no link and no
++        // listing error, every one of them gives the required answer, so the rejections above come from the
++        // behavior under test and not from an assertion that rejects everything.
++        foreach (var reach in new ReachFunction[] { UncheckedReach, FollowsLinksReach, RootOnlyReach, ChecksBoundaryReach, PrefixMatchReach, PropagatesListingErrorsReach, ListsRootReach })
++            Assert.Null(Record.Exception(() => RunReachAndAssert("reach-normal", reach)));
++    }
++
++    /// <summary>
++    /// Mock gate negative control for the reachability error filter: a scripted listing error that is neither an IO
++    /// nor an access error escapes the scripted tree, and a check with a catch-all filter hides it; the production
++    /// binding requires the check to let it propagate.
++    /// </summary>
++    [Fact]
++    public void UnexpectedReachListingError_EscapesTheScriptedTree()
++    {
++        var tree = new ScriptedDirectoryTree()
++            .Lists("/p", DirEntry("/p/.codex"))
++            .Throws("/p/.codex", () => new InvalidOperationException("not an IO error"));
++
++        Assert.Throws<InvalidOperationException>(() => PropagatesListingErrorsReach(tree.List, "/p", "/p/.codex/plugins"));
++        Assert.Null(Record.Exception(() => SwallowsEverythingReach(tree.List, "/p", "/p/.codex/plugins")));
++    }
++
++    // Wrong reachability checks used only as negative controls.
++
++    private static readonly ReachFunction UncheckedReach = (_, _, _) => true;
++
++    private static bool FollowsLinksReach(Func<string, IReadOnlyList<DirectoryListingEntry>> list, string boundary, string root) =>
++        ConfigurableReach(list, boundary, root, checkLinks: false, checkAncestors: true, checkBoundary: false, requireSeparator: true, catchListingErrors: true, catchAll: false, listRoot: false);
++
++    private static bool RootOnlyReach(Func<string, IReadOnlyList<DirectoryListingEntry>> list, string boundary, string root) =>
++        ConfigurableReach(list, boundary, root, checkLinks: true, checkAncestors: false, checkBoundary: false, requireSeparator: true, catchListingErrors: true, catchAll: false, listRoot: false);
++
++    private static bool ChecksBoundaryReach(Func<string, IReadOnlyList<DirectoryListingEntry>> list, string boundary, string root) =>
++        ConfigurableReach(list, boundary, root, checkLinks: true, checkAncestors: true, checkBoundary: true, requireSeparator: true, catchListingErrors: true, catchAll: false, listRoot: false);
++
++    private static bool PrefixMatchReach(Func<string, IReadOnlyList<DirectoryListingEntry>> list, string boundary, string root) =>
++        ConfigurableReach(list, boundary, root, checkLinks: true, checkAncestors: true, checkBoundary: false, requireSeparator: false, catchListingErrors: true, catchAll: false, listRoot: false);
++
++    private static bool PropagatesListingErrorsReach(Func<string, IReadOnlyList<DirectoryListingEntry>> list, string boundary, string root) =>
++        ConfigurableReach(list, boundary, root, checkLinks: true, checkAncestors: true, checkBoundary: false, requireSeparator: true, catchListingErrors: false, catchAll: false, listRoot: false);
++
++    private static bool ListsRootReach(Func<string, IReadOnlyList<DirectoryListingEntry>> list, string boundary, string root) =>
++        ConfigurableReach(list, boundary, root, checkLinks: true, checkAncestors: true, checkBoundary: false, requireSeparator: true, catchListingErrors: true, catchAll: false, listRoot: true);
++
++    private static bool SwallowsEverythingReach(Func<string, IReadOnlyList<DirectoryListingEntry>> list, string boundary, string root) =>
++        ConfigurableReach(list, boundary, root, checkLinks: true, checkAncestors: true, checkBoundary: false, requireSeparator: true, catchListingErrors: true, catchAll: true, listRoot: false);
++
++    private static bool ConfigurableReach(
++        Func<string, IReadOnlyList<DirectoryListingEntry>> list,
++        string boundary,
++        string root,
++        bool checkLinks,
++        bool checkAncestors,
++        bool checkBoundary,
++        bool requireSeparator,
++        bool catchListingErrors,
++        bool catchAll,
++        bool listRoot)
++    {
++        var target = root.Length > 1 ? root.TrimEnd('/') : root;
++        try
++        {
++            if (checkBoundary && boundary.Length > 1)
++            {
++                var parent = boundary[..Math.Max(1, boundary.LastIndexOf('/'))];
++                var self = list(parent)
++                    .Where(entry => entry.Path == boundary)
++                    .Select(entry => (DirectoryListingEntry?)entry)
++                    .FirstOrDefault();
++                if (self is null || self.Value.IsLink)
++                    return false;
++            }
++
++            var current = boundary;
++            while (current != target)
++            {
++                var found = list(current)
++                    .Where(entry => target.StartsWith(entry.Path, StringComparison.Ordinal)
++                        && (!requireSeparator || target.Length == entry.Path.Length || target[entry.Path.Length] == '/'))
++                    .Select(entry => (DirectoryListingEntry?)entry)
++                    .FirstOrDefault();
++                if (found is not { } next || !next.IsDirectory || next.Path.Length <= current.Length)
++                    return false;
++                if (next.IsLink && checkLinks && (checkAncestors || next.Path == target))
++                    return false;
++                current = next.Path;
++            }
++
++            if (listRoot)
++                _ = list(target);
++            return true;
++        }
++        catch (Exception ex) when (catchAll || (catchListingErrors && ex is IOException or UnauthorizedAccessException))
++        {
++            return false;
++        }
++    }
++
+     /// <summary>
+     /// Scripted in-memory directory tree: each directory lists fixed entries or throws a fixed exception, every
+     /// listing is recorded in order, and an unscripted directory throws <see cref="InvalidOperationException"/>.
+@@ -391,13 +756,20 @@ public sealed class DirectoryTreeWalkerTests
+     {
+         private readonly Dictionary<string, Func<IReadOnlyList<DirectoryListingEntry>>> _listings = new(StringComparer.Ordinal);
+ 
++        private readonly HashSet<string> _directoryLinks = new(StringComparer.Ordinal);
++
+         /// <summary>Directories listed so far, in order.</summary>
+         public List<string> Listed { get; } = [];
+ 
++        /// <summary>True when some scripted listing reports <paramref name="directory"/> as a directory link.</summary>
++        public bool IsLink(string directory) => _directoryLinks.Contains(directory);
++
+         /// <summary>Scripts <paramref name="directory"/> to list <paramref name="entries"/>.</summary>
+         public ScriptedDirectoryTree Lists(string directory, params DirectoryListingEntry[] entries)
+         {
+             _listings[directory] = () => entries;
++            foreach (var entry in entries.Where(entry => entry.IsDirectory && entry.IsLink))
++                _directoryLinks.Add(entry.Path);
+             return this;
+         }
+ 
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs
+index 3aade352..122de3a9 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs
+@@ -465,7 +465,15 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
+     /// and an account without Event Log write access (PAYTON-LEGION2 lab-wsman) failed startup with
+     /// "Cannot open log for source '.NET Runtime'" before options validation could report.
+     /// </summary>
++    /// <remarks>
++    /// The default host builder imports the whole process environment, so this is an integration test
++    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; the sweep of plan section 19.3). Its assertion depends on
++    /// no environment variable: the in-memory source, added after the environment, sets the five worker keys, and the
++    /// renewal interval equal to the lease duration fails validation whatever else the environment holds. It writes no
++    /// variable, so it stays outside <c>ProcessEnvironmentCollection</c>.
++    /// </remarks>
+     [Fact]
++    [Trait("Category", "Integration")]
+     public async Task HostileReviewWorker_InvalidOptions_FailStartup()
+     {
+         var builder = Host.CreateApplicationBuilder();
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs
+index 44118522..6a1d5ed4 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs
+@@ -4,13 +4,18 @@ using QBrainAi.Common.AgentCli;
+ 
+ using Microsoft.Extensions.Logging.Abstractions;
+ 
++using QBrainAi.Support.Mcp.Tests.TestSupport;
++
+ namespace QBrainAi.Support.Mcp.Tests.Services;
+ 
+ /// <summary>
+ /// Verifies service-launched agent processes inherit user CLI install paths needed by triage agents.
+ /// The cases exercise Windows profile and PATH resolution, so they are integration tests that run on
+-/// Windows hosts only, without a silent return elsewhere (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019).
++/// Windows hosts only, without a silent return elsewhere (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019). The class runs
++/// in <see cref="ProcessEnvironmentCollection"/> because one of its tests writes the process environment
++/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+ /// </summary>
++[Collection(ProcessEnvironmentCollection.Name)]
+ [Trait("Category", "Integration")]
+ [Trait("Platform", "Windows")]
+ public sealed class ProcessEnvironmentServiceTests
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs
+index 4eed9a53..4a25c7e6 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs
+@@ -19,7 +19,10 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
+ /// result changes, so the expected values come from the link and error handling rather than from the layout. The
+ /// version-file cases (operator 2026-10-20: "Fold R3-P3 in first") read the same profile through
+ /// <see cref="MarkerFileService.ReadExistingFileText"/> with named <c>.version</c> files scripted to throw the
+-/// sharing-violation <see cref="IOException"/> of a locked file; their seam control reads every file normally.
++/// sharing-violation <see cref="IOException"/> of a locked file; their seam control reads every file normally. The
++/// linked-root cases (hostile validation round 5 finding R5-F1; operator 2026-10-21: "Fix both, strengthen ACs")
++/// report a cache or history root, or a folder between the profile and it, as a link and prove it contributes
++/// nothing, while a profile reported as a link by its own parent is still scanned.
+ /// </remarks>
+ public sealed class UserProfileScanBindingTests : IDisposable
+ {
+@@ -197,6 +200,101 @@ public sealed class UserProfileScanBindingTests : IDisposable
+         Assert.Equal(SessionLogTurnContextValidator.NoneSentinel, followed.TodoId);
+     }
+ 
++    /// <summary>
++    /// The cache layouts of AC-TR-MCP-WS-005-001, each with the folder (relative to the profile) a case reports as a
++    /// link: the cache root itself or one of the folders between the profile and it (hostile validation round 5
++    /// finding R5-F1).
++    /// </summary>
++    public static TheoryData<string, string> LinkedCacheComponents => new()
++    {
++        { "codex", ".codex" },
++        { "codex", ".codex/plugins" },
++        { "codex", ".codex/plugins/cache" },
++        { "codex", ".codex/plugins/cache/" + PluginName },
++        { "claude", ".claude" },
++        { "claude", ".claude/plugins" },
++        { "claude", ".claude/plugins/cache" },
++        { "grok", ".grok" },
++        { "grok", ".grok/installed-plugins" },
++    };
++
++    /// <summary>A path the scripted walker treats as unlistable that no case creates.</summary>
++    private string NoUnlistableFolder => Path.Combine(_root, "no-such-folder");
++
++    private void CreateSingleCacheProfile(string kind)
++    {
++        var versionRoot = kind switch
++        {
++            "codex" => Path.Combine(Profile, ".codex", "plugins", "cache", PluginName, "9.9.9"),
++            "claude" => Path.Combine(Profile, ".claude", "plugins", "cache", PluginName, "9.9.9"),
++            "grok" => Path.Combine(Profile, ".grok", "installed-plugins", PluginName, "9.9.9"),
++            _ => throw new ArgumentOutOfRangeException(nameof(kind), kind, "Unknown cache layout."),
++        };
++        Directory.CreateDirectory(versionRoot);
++        Directory.CreateDirectory(Workspace);
++        File.WriteAllText(Path.Combine(versionRoot, ".version"), "9.9.9");
++    }
++
++    /// <summary>
++    /// AC-TR-MCP-WS-005-001: with the only cached version under a cache root that is a link, or under a folder
++    /// between the profile and that root that is a link, resolution does not throw and falls back to the synced
++    /// plugin version; with the link flag removed (seam control) the cached version wins, so the link at or above
++    /// the root is what was skipped.
++    /// </summary>
++    /// <param name="kind">Cache layout: codex, claude or grok.</param>
++    /// <param name="linkedRelative">The folder, relative to the profile, reported as a link.</param>
++    [Theory]
++    [MemberData(nameof(LinkedCacheComponents))]
++    public void ResolveAgentPluginVersion_LinkedCacheRootOrAncestor_FallsBackToTheSyncedVersion(string kind, string linkedRelative)
++    {
++        CreateSingleCacheProfile(kind);
++        var linked = Path.Combine(Profile, linkedRelative.Replace('/', Path.DirectorySeparatorChar));
++
++        Assert.Equal(MarkerFileService.SyncedAgentPluginVersion, Resolve(ScriptedWalker(NoUnlistableFolder, linked)));
++        Assert.Equal("9.9.9", Resolve(ScriptedWalker(NoUnlistableFolder, link: null)));
++    }
++
++    /// <summary>
++    /// AC-TR-MCP-WS-005-001: a user profile that is itself a link is still scanned, so the cached version resolves
++    /// with the profile reported as a link by its parent listing, which the scan never reads.
++    /// </summary>
++    [Fact]
++    public void ResolveAgentPluginVersion_LinkedProfile_IsStillScanned()
++    {
++        CreateSingleCacheProfile("claude");
++
++        Assert.Equal("9.9.9", Resolve(ScriptedWalker(NoUnlistableFolder, Profile)));
++    }
++
++    /// <summary>The four agent-history roots of AC-TR-MCP-SESSIONLOG-006-009.</summary>
++    public static TheoryData<string> HistoryRoots => new() { ".grok", ".claude", ".codex", ".cursor" };
++
++    /// <summary>
++    /// AC-TR-MCP-SESSIONLOG-006-009: when a history root is a link, the extractor does not throw and the turn keeps
++    /// None; with the link flag removed (seam control) the history under it yields the TODO id, and a home that is
++    /// itself a link is still scanned (hostile validation round 5 finding R5-F1).
++    /// </summary>
++    /// <param name="rootName">The history root under the profile.</param>
++    [Theory]
++    [MemberData(nameof(HistoryRoots))]
++    public void Extract_LinkedHistoryRoot_KeepsNone(string rootName)
++    {
++        var history = Path.Combine(Profile, rootName, "projects", "agent-linkedroot");
++        Directory.CreateDirectory(history);
++        File.WriteAllText(Path.Combine(history, "chat.jsonl"), "working PLAN-LINKEDROOT-001");
++
++        var linkedRoot = new SessionLogTurnContextExtractor(ScriptedWalker(NoUnlistableFolder, Path.Combine(Profile, rootName)))
++            .Extract(new SessionLogTurnEntity(), workspacePath: null, userProfilePath: Profile, agentSessionId: "agent-linkedroot");
++        var plain = new SessionLogTurnContextExtractor(ScriptedWalker(NoUnlistableFolder, link: null))
++            .Extract(new SessionLogTurnEntity(), workspacePath: null, userProfilePath: Profile, agentSessionId: "agent-linkedroot");
++        var linkedHome = new SessionLogTurnContextExtractor(ScriptedWalker(NoUnlistableFolder, Profile))
++            .Extract(new SessionLogTurnEntity(), workspacePath: null, userProfilePath: Profile, agentSessionId: "agent-linkedroot");
++
++        Assert.Equal(SessionLogTurnContextValidator.NoneSentinel, linkedRoot.TodoId);
++        Assert.Equal("PLAN-LINKEDROOT-001", plain.TodoId);
++        Assert.Equal("PLAN-LINKEDROOT-001", linkedHome.TodoId);
++    }
++
+     /// <summary>
+     /// AC-TR-MCP-SESSIONLOG-006-009: when ~/.claude itself cannot be listed, the extractor does not throw and the
+     /// turn keeps None.
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs b/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs
+index d68b4c4f..4464f74c 100644
+--- a/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs
++++ b/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs
+@@ -1,5 +1,6 @@
+ using System.Reflection;
+ using Xunit;
++using static QBrainAi.Support.Mcp.Tests.TestSupport.CollectionAssertions;
+ 
+ namespace QBrainAi.Support.Mcp.Tests.Storage;
+ 
+@@ -33,38 +34,6 @@ public sealed class SqlServerLocalDbCollectionTests
+ 
+     private const string ScriptedExplicitParallelName = "Scripted explicit parallel collection";
+ 
+-    /// <summary>
+-    /// Asserts that <paramref name="type"/> carries exactly one xUnit collection attribute and that it names
+-    /// <paramref name="collection"/>.
+-    /// </summary>
+-    private static void AssertInCollection(Type type, string collection)
+-    {
+-        var names = type.GetCustomAttributesData()
+-            .Where(attribute => attribute.AttributeType == typeof(CollectionAttribute))
+-            .Select(attribute => attribute.ConstructorArguments.Count == 1 ? attribute.ConstructorArguments[0].Value as string : null)
+-            .ToList();
+-        var name = Assert.Single(names);
+-        Assert.Equal(collection, name);
+-    }
+-
+-    /// <summary>
+-    /// Asserts that <paramref name="definition"/> carries exactly one xUnit collection definition, that it names
+-    /// <paramref name="collection"/>, and that it sets <c>DisableParallelization</c> to true, so the collection never
+-    /// runs beside another collection.
+-    /// </summary>
+-    private static void AssertSerializedDefinition(Type definition, string collection)
+-    {
+-        var attribute = Assert.Single(
+-            definition.GetCustomAttributesData(),
+-            data => data.AttributeType == typeof(CollectionDefinitionAttribute));
+-        var name = Assert.Single(attribute.ConstructorArguments);
+-        Assert.Equal(collection, name.Value as string);
+-        var flag = Assert.Single(
+-            attribute.NamedArguments,
+-            argument => argument.MemberName == nameof(CollectionDefinitionAttribute.DisableParallelization));
+-        Assert.True(flag.TypedValue.Value is true);
+-    }
+-
+     /// <summary>Mock gate positive control: a scripted type in the required collection passes the assertion.</summary>
+     [Fact]
+     public void ScriptedMember_PassesTheMembershipAssertion() =>
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/TestSupport/CollectionAssertions.cs b/tests/QBrainAi.Support.Mcp.Tests/TestSupport/CollectionAssertions.cs
+new file mode 100644
+index 00000000..af75f264
+--- /dev/null
++++ b/tests/QBrainAi.Support.Mcp.Tests/TestSupport/CollectionAssertions.cs
+@@ -0,0 +1,48 @@
++using System.Reflection;
++using Xunit;
++
++namespace QBrainAi.Support.Mcp.Tests.TestSupport;
++
++/// <summary>
++/// Assertions on xUnit collection membership and collection definitions, read through <see cref="CustomAttributeData"/>
++/// so no test is run. Shared by the collection tests of TR-MCP-NUKE-019 AC-2 (<c>SqlServerLocalDbCollectionTests</c>)
++/// and of TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 (<c>ProcessEnvironmentCollectionTests</c>).
++/// </summary>
++internal static class CollectionAssertions
++{
++    /// <summary>
++    /// Asserts that <paramref name="type"/> carries exactly one xUnit collection attribute and that it names
++    /// <paramref name="collection"/>.
++    /// </summary>
++    /// <param name="type">The test class.</param>
++    /// <param name="collection">The required collection name.</param>
++    internal static void AssertInCollection(Type type, string collection)
++    {
++        var names = type.GetCustomAttributesData()
++            .Where(attribute => attribute.AttributeType == typeof(CollectionAttribute))
++            .Select(attribute => attribute.ConstructorArguments.Count == 1 ? attribute.ConstructorArguments[0].Value as string : null)
++            .ToList();
++        var name = Assert.Single(names);
++        Assert.Equal(collection, name);
++    }
++
++    /// <summary>
++    /// Asserts that <paramref name="definition"/> carries exactly one xUnit collection definition, that it names
++    /// <paramref name="collection"/>, and that it sets <c>DisableParallelization</c> to true, so the collection never
++    /// runs beside another collection.
++    /// </summary>
++    /// <param name="definition">The collection definition class.</param>
++    /// <param name="collection">The required collection name.</param>
++    internal static void AssertSerializedDefinition(Type definition, string collection)
++    {
++        var attribute = Assert.Single(
++            definition.GetCustomAttributesData(),
++            data => data.AttributeType == typeof(CollectionDefinitionAttribute));
++        var name = Assert.Single(attribute.ConstructorArguments);
++        Assert.Equal(collection, name.Value as string);
++        var flag = Assert.Single(
++            attribute.NamedArguments,
++            argument => argument.MemberName == nameof(CollectionDefinitionAttribute.DisableParallelization));
++        Assert.True(flag.TypedValue.Value is true);
++    }
++}
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollection.cs b/tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollection.cs
+new file mode 100644
+index 00000000..d828181f
+--- /dev/null
++++ b/tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollection.cs
+@@ -0,0 +1,16 @@
++using Xunit;
++
++namespace QBrainAi.Support.Mcp.Tests.TestSupport;
++
++/// <summary>
++/// TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008: the test classes that write the process environment run
++/// one at a time in this collection, with parallelization disabled, so no other test runs while one of them has a
++/// variable changed (operator 2026-10-21: "Fix both, strengthen ACs" and "Approve, strengthen AC-006/008
++/// (Recommended)"; hostile validation round 5 finding R5-F2). Each such test also restores every variable it sets.
++/// </summary>
++[CollectionDefinition(Name, DisableParallelization = true)]
++public sealed class ProcessEnvironmentCollection
++{
++    /// <summary>The collection name.</summary>
++    public const string Name = "Process environment";
++}
+diff --git a/tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs b/tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs
+new file mode 100644
+index 00000000..f3dd8f5a
+--- /dev/null
++++ b/tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs
+@@ -0,0 +1,106 @@
++using QBrainAi.Support.Mcp.Tests.Documentation;
++using Xunit;
++using static QBrainAi.Support.Mcp.Tests.TestSupport.CollectionAssertions;
++
++namespace QBrainAi.Support.Mcp.Tests.TestSupport;
++
++/// <summary>
++/// Tests that the test classes which write the process environment run one at a time: each belongs to an xUnit
++/// collection with parallelization disabled, so no two of them, and no other test, run while one of them has a
++/// variable changed.
++/// </summary>
++/// <remarks>
++/// Requirement coverage: TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 ("the tests that write the process
++/// environment run one at a time"; operator 2026-10-21: "Fix both, strengthen ACs" and "Approve, strengthen AC-006/008
++/// (Recommended)"; hostile validation round 5 finding R5-F2). Test data: scripted nested types carrying a collection
++/// attribute with the required name, another name, or none; the attributes are read through the shared
++/// <see cref="CollectionAssertions"/>, so no test is run. Negative controls prove the membership assertion rejects a
++/// type outside any collection and a type in another collection; the definition assertion's own controls are in
++/// <c>SqlServerLocalDbCollectionTests</c>. The binding checks the real definition and the classes that write the
++/// process environment, found by the one-time environment sweep of plan section 19.3 (stated limit: the list is not
++/// discovered from source; a new class that writes the process environment must be added to it).
++/// </remarks>
++public sealed class ProcessEnvironmentCollectionTests
++{
++    private const string RequiredCollection = "Process environment";
++
++    /// <summary>Mock gate positive control: a scripted type in the required collection passes the assertion.</summary>
++    [Fact]
++    public void ScriptedMember_PassesTheMembershipAssertion() =>
++        AssertInCollection(typeof(ScriptedMember), RequiredCollection);
++
++    /// <summary>
++    /// Mock gate negative controls: a scripted type with no collection, one in another collection, and one in the
++    /// repository-root collection are each rejected by the membership assertion for the required collection, inside
++    /// a passing harness.
++    /// </summary>
++    [Fact]
++    public void MembershipNegativeControls_AreRejectedInsidePassingHarness()
++    {
++        Assert.NotNull(Record.Exception(() => AssertInCollection(typeof(ScriptedOutsider), RequiredCollection)));
++        Assert.NotNull(Record.Exception(() => AssertInCollection(typeof(ScriptedOtherMember), RequiredCollection)));
++        Assert.NotNull(Record.Exception(() => AssertInCollection(typeof(ScriptedRepositoryRootMember), RequiredCollection)));
++    }
++
++    /// <summary>
++    /// Mock gate positive control for the existing serialized collection that already holds the repository-root
++    /// writer: its definition passes the definition assertion.
++    /// </summary>
++    [Fact]
++    public void RepositoryRootCollection_IsSerialized() =>
++        AssertSerializedDefinition(typeof(RepositoryRootProcessStateCollection), RepositoryRootProcessStateCollection.Name);
++
++    /// <summary>
++    /// Binding: the collection is defined with the required name and parallelization disabled (the same definition
++    /// assertion the scripted definitions of <c>SqlServerLocalDbCollectionTests</c> passed and failed); each class the
++    /// sweep found writing the process environment passes the same membership assertion; and the repository-root
++    /// writer stays in its own serialized collection.
++    /// </summary>
++    [Fact]
++    public void ProcessEnvironmentWriters_AreInASerializedCollection()
++    {
++        Assert.Equal(RequiredCollection, ProcessEnvironmentCollection.Name);
++        AssertSerializedDefinition(typeof(ProcessEnvironmentCollection), RequiredCollection);
++
++        foreach (var type in new[]
++                 {
++                     typeof(QBrainAi.Support.Mcp.Tests.Options.ProductAliasCompatibilityTests),
++                     typeof(QBrainAi.Support.Mcp.Tests.Options.McpInstanceResolverTests),
++                     typeof(QBrainAi.Support.Mcp.Tests.Services.BrainSlotCredentialResolverTests),
++                     typeof(QBrainAi.Support.Mcp.Tests.Memory.MemoryIndexerTests),
++                     typeof(QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests),
++                     typeof(QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests),
++                     typeof(QBrainAi.Support.Mcp.Tests.DatabaseMaintenance.McpDatabaseEncryptionTransitionCommandTests),
++                     typeof(QBrainAi.Support.Mcp.Tests.Services.ProcessEnvironmentServiceTests),
++                     typeof(QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchHarnessTests),
++                 })
++        {
++            AssertInCollection(type, RequiredCollection);
++        }
++
++        AssertInCollection(typeof(BugTriage139FourteenthHarnessTests), RepositoryRootProcessStateCollection.Name);
++    }
++
++    /// <summary>Scripted type in the required collection; it holds no tests.</summary>
++    [Collection(RequiredCollection)]
++    private sealed class ScriptedMember
++    {
++    }
++
++    /// <summary>Scripted type in no collection.</summary>
++    private sealed class ScriptedOutsider
++    {
++    }
++
++    /// <summary>Scripted type in another collection; it holds no tests.</summary>
++    [Collection("Another collection")]
++    private sealed class ScriptedOtherMember
++    {
++    }
++
++    /// <summary>Scripted type in the repository-root collection; it holds no tests.</summary>
++    [Collection(RepositoryRootProcessStateCollection.Name)]
++    private sealed class ScriptedRepositoryRootMember
++    {
++    }
++}

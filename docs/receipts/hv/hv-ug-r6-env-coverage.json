@@ -1,0 +1,403 @@
+{
+  "filesSearched": 1886,
+  "literalAndExpandedNames": 74,
+  "legacyNames": [
+    "MCP_AGENT_NAME",
+    "MCP_DATABASE_ENCRYPTION_ENABLED",
+    "MCP_DATABASE_MIGRATIONS_ASSEMBLY",
+    "MCP_DATABASE_PROVIDER",
+    "MCP_EF_CONNECTION_STRING",
+    "MCP_EF_MIGRATIONS_ASSEMBLY",
+    "MCP_EF_PROVIDER",
+    "MCP_INSTANCE",
+    "MCP_PLUGIN_HOST",
+    "MCP_POSTGRES_CONNECTION_STRING",
+    "MCP_POSTGRES_TDE_KEY_PROVIDER",
+    "MCP_POSTGRES_TDE_PRINCIPAL_KEY",
+    "MCP_SERVER_URL",
+    "MCP_SESSION_ID",
+    "MCP_SQLITE_DATA_SOURCE",
+    "MCP_SQLITE_ENCRYPTION_KEY",
+    "MCP_SQLITE_SEE_TOOL_PATH",
+    "MCP_SQLSERVER_CONNECTION_STRING",
+    "MCP_SQLSERVER_TDE_CERTIFICATE",
+    "MCP_SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY",
+    "MCP_WORKSPACE",
+    "MCP_WORKSPACE_PATH",
+    "MCP_WORKSPACE_START_DIR"
+  ],
+  "gateVariableCount": 126,
+  "missing": [],
+  "names": [
+    {
+      "name": "MCP_INSTANCE",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "QBRAINAI_INSTANCE",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCP_REPOSITORY_ROOT",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "XAI_API_KEY",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "OPENAI_API_KEY",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "AZURE_OPENAI_API_KEY",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "PLUGIN_AGENT_NAME",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "PLUGIN_AGENT_DEFAULT",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCP_AGENT_NAME",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "QBRAINAI_AGENT_NAME",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCP_PLUGIN_HOST",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "QBRAINAI_PLUGIN_HOST",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCP_SERVER_URL",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "QBRAINAI_SERVER_URL",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCP_WORKSPACE_PATH",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "QBRAINAI_WORKSPACE_PATH",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCP_WORKSPACE",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "QBRAINAI_WORKSPACE",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCP_TEST_POSTGRES_CONNECTION",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCP_TEST_SQLSERVER_CONNECTION",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "GH_TOKEN",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "PATH",
+      "inGate": false,
+      "preservedByDirective": true
+    },
+    {
+      "name": "PUBLIC",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCPSERVER_WORKSPACE_PATH",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "CLAUDE_PROJECT_DIR",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCP_WORKSPACE_START_DIR",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "QBRAINAI_WORKSPACE_START_DIR",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCP_SESSION_ID",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "QBRAINAI_SESSION_ID",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "QBAGENT_HOME",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCP_DATABASE_MIGRATIONS_ASSEMBLY",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "QBRAINAI_DATABASE_MIGRATIONS_ASSEMBLY",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCP_SQLITE_DATA_SOURCE",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "QBRAINAI_SQLITE_DATA_SOURCE",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCP_SQLSERVER_CONNECTION_STRING",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "QBRAINAI_SQLSERVER_CONNECTION_STRING",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCP_DATABASE_PROVIDER",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "QBRAINAI_DATABASE_PROVIDER",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCP_DATABASE_ENCRYPTION_ENABLED",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "QBRAINAI_DATABASE_ENCRYPTION_ENABLED",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCP_SQLITE_ENCRYPTION_KEY",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "QBRAINAI_SQLITE_ENCRYPTION_KEY",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCP_SQLITE_SEE_TOOL_PATH",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "QBRAINAI_SQLITE_SEE_TOOL_PATH",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCP_POSTGRES_TDE_KEY_PROVIDER",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "QBRAINAI_POSTGRES_TDE_KEY_PROVIDER",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCP_POSTGRES_TDE_PRINCIPAL_KEY",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "QBRAINAI_POSTGRES_TDE_PRINCIPAL_KEY",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCP_SQLSERVER_TDE_CERTIFICATE",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "QBRAINAI_SQLSERVER_TDE_CERTIFICATE",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCP_SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "QBRAINAI_SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "ASPNETCORE_ENVIRONMENT",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "DOTNET_ENVIRONMENT",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCPSERVER_QUADBRAIN_CLI_TEMP",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCPSERVER_ONESHOT_TEMP",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "PORT",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCP_EF_PROVIDER",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "QBRAINAI_EF_PROVIDER",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCP_EF_MIGRATIONS_ASSEMBLY",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "QBRAINAI_EF_MIGRATIONS_ASSEMBLY",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCP_EF_CONNECTION_STRING",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "QBRAINAI_EF_CONNECTION_STRING",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCP_POSTGRES_CONNECTION_STRING",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "QBRAINAI_POSTGRES_CONNECTION_STRING",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCPSERVER_CODEX_ONESHOT_TEMP",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCPSERVER_CODEX_TRIAGE_TEMP",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "MCPSERVER_GROK_ONESHOT_TEMP",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "TEMP",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "HOME",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "USERPROFILE",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "SystemDrive",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "GROK_PLUGIN_ROOT",
+      "inGate": true,
+      "preservedByDirective": false
+    },
+    {
+      "name": "GROK_HOME",
+      "inGate": true,
+      "preservedByDirective": false
+    }
+  ]
+}

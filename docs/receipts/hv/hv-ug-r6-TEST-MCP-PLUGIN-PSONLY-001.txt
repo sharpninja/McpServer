@@ -1,0 +1,13 @@
+type: error
+payload:
+  requestId: req-20261026T131725Z-eb4d
+  code: not_found
+  message: TEST 'TEST-MCP-PLUGIN-PSONLY-001' not found.
+  retryable: false
+  details:
+    methodName: workflow.requirements.getTest
+    exceptionType: McpServer.Client.McpNotFoundException
+    reason: not_found
+
+---
+

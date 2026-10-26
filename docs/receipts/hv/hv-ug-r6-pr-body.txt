@@ -1,0 +1,108 @@
+## IMPL-UNITGREEN-001: the unit suite green on both lab hosts (BDPv4: 0 failed, 0 skipped)
+
+Operator, 2026-10-19: "BDPv4 requires all unit tests be green." and "There should be ZERO platform specific UNIT tests.  If it depends on the environment, it's an integration test." Plan: `docs/plans/2026-10-19-unit-suite-green.md` (approved 14:50; amendments in sections 7 to 9, 11 and 17 to 19; execution record in sections 10, 12 and 14 to 19; decisions in section 13).
+
+Draft until hostile validation (Codex gpt-6-astra max) returns AGREE at 98/98. No done state is claimed: every new or changed criterion is unsatisfied and every TODO task is unchecked.
+
+### Commits (over develop `3da2db93`)
+
+- `cbc74e82`: System.Security.Cryptography.Xml and Pkcs pinned to the advisory-patched 10.0.13 (TR-MCP-QUALITY-001 ac-21).
+- `28bf0b22`, `de581353`: canonical workspace-key tests, provider traits, and the host-aware `WorkspaceIdentityPath.ToNativePath` overload (FR, TR and TEST-MCP-PATHNORM-001; additive public API).
+- `a4c358ef`: narrowing to leave PLAN-C4MODEL-001's fixes to that effort (superseded by `11681680`).
+- `b2319488`: the HostileReviewWorker startup test no longer depends on Event Log write access (TR-MCP-HOSTILEREVIEW-003).
+- `11681680`: takeover of PLAN-C4MODEL-001's unit-suite code and Linux provider provisioning (TR-MCP-NUKE-018), blob-identical to `c2125c42`, by operator decision.
+- `8c2b83ab`: host-scoped MigrationIntegrationTests lane (TR-MCP-NUKE-019 AC-1 to AC-4).
+- `8a617334`: merge of develop with PR 86.
+- `b2bd50b3`: platform-dependent tests classified as integration tests, with the unit-suite guard and a strengthened skip guard. Its first guard run, `unit-green-guard-mock-20261019T1720`, was red (4692 results, 1 failed, 16 not executed); see plan section 10.
+- `4f668b76`: the plan and the PR 82 handoff correction.
+- `59249260`: the interactive desktop-spawner case fails loudly as a Windows integration test.
+- `69d8f3f5`: amendment H1, under which the Windows integration lane refuses a non-interactive session before any test (TR-MCP-NUKE-019 AC-5).
+- `12746834`: the invalid-handle final-path case runs only on Windows, without a silent return.
+- `83417029`, `6b4295b7`: docs only (the plan as built, the code-head receipts, the 19:41 decisions).
+- `49cfec92`: hostile validation round 1, findings F3 and F5 (one skip definition for both guards; interpolation holes kept as code).
+- `b4ad42aa`: round 1 finding F2 (36 native-boundary and tracked-file cases move to Integration, assertions unchanged).
+- `a94579db`: docs only (the round 1 receipts and record, the round 2 gate receipts).
+- `45a3197c`: round 2 finding R2-F2. `UnitSuitePlatformScanner` reads Roslyn syntax trees instead of regex lines; the five central Roslyn pins move from 5.3.0 to 5.9.0 (operator: "Use the latest Roslyn tools!").
+- `27c43bcc`: round 2 finding R2-F1. One repository-root locator, `tests/Shared/TestRepositoryRoot.cs`, refuses outside `Category=Integration` (operator: "Looks like an opportunity to DRY"); 34 locator copies delegate to it; the tests it refused, plus link-creating and host-state tests, move to Integration with assertions unchanged; Repl.Core.Tests and QBAgent.Tests join MigrationIntegrationTests.
+- `538d0ccf`: the user-profile scan fix (operator: "Fix scans in PR 87 (Recommended)"; this PR carries the fix for `triage-report-b0e41c36f93c4c91b1bf2524eb579ef8`). `DirectoryTreeWalker` (QBrainAi.Services) serves the marker plugin-cache scan and the session-log history scan: no directory link or other reparse point is followed, and a directory whose listing throws an IO or access error is skipped. The 12 import-path tests are tagged Integration.
+- `56d14d7c`: a race in the new hermetic-profile check, found by the pre-HV what-if pass, fixed.
+- `6042dbb3`, `0210244d`, `68fa7b39`: the LocalDB flake (operator: "Fix the flake in PR 87 (Recommended)", then "Serialize SQL Server tests (Recommended)"): one LocalDB default with a 120 s connect timeout, and the four classes that open LocalDB in one collection defined with `DisableParallelization = true`.
+- `6ea425ab`: the Windows lane's lost results (operator: "Diagnose the loss in PR 87"): pg_ctl start and stop run with `-s`, so pg_ctl no longer writes into the xUnit v3 message stream (see "Lost Windows lane results" below).
+- `395b4cd8`, `6b89998f`, `64fc4b14`: docs only (the round 2 HV receipts, the round 3 gate receipts and plan record, the round 3 pre-launch records).
+- `e0b078c8`: pre-HV problem R3-P3 (operator: "Fold R3-P3 in first"): a plugin version file that exists but cannot be read no longer fails the marker.
+- `0996a116`: docs only, the hostile validation round 3 receipts as received.
+- `801e6862`: round 3 findings R3-F1 and R3-F2 (operator: "Structural fix, round 4 (Recommended)"). One source seam, `AgentPluginVersionSources`, holds every input marker plugin-version resolution reads; the unit-test assembly fixture installs test-owned sources and resolution tests pass explicit sources. The Roslyn scanner resolves aliases and static imports in their lexical scope, within the limit declared below.
+- `c31c2918`: docs only, round 3 finding R3-F4 (the round 3 self-review sentence corrected in both copies).
+- `26fc8348`: the two red results at `801e6862`. `HandoffDurabilityTests` gives each context its own connection to one temporary database file (operator: "Fix the race in PR 87 (Recommended)"; `triage-report-9b96ada18d72483dad2a3113e455c01b`, closed by this PR); the process sources and sibling rule moved back into `MarkerFileService`, so the `Path.GetFullPath` ratchet (TR-MCP-FED-PATH-001) passes again.
+- `50b58ce5`: docs only, the round 4 run receipts through `26fc8348`.
+- `97b78114`: the siblings of the race class found by the pre-HV sweep, `HandoffAuditDefectTests` and `MemoryS1Harness`, get the same fix (operator: "Extend fix, then round 4 (Recommended)").
+- `b0db5b09`, `094e47f4`: docs only (the plan's round 4 record, the receipts at `97b78114`, the round 4 pre-launch records; the round 4 HV receipts as received).
+- `8c254695`: round 4 finding R4-F3. The memory harness binding cites FR-MCP-MEMORY-002, TR-MCP-MEMORY-002 and TEST-MCP-MEMORY-002, present and mapped, instead of TEST-MCP-MEMORY-010, which neither lab store holds. Documentation comment only.
+- `ccc78b7a`: round 4 finding R4-F1, as the operator decided (see "Declared scanner limit"). The scanner's own documentation states the limit. Documentation comments only.
+- `3a9f8ff4`, `5b818847`: docs only (the round 5 run receipts, plan section 18, the corrected round 4 copies, the console logs and the Windows dry-run receipt).
+- `810ee8aa`: found by the widened hostile-environment gate. `McpDatabaseEncryptionTransitionCommandTests.TryParse_UsesEnvironmentInstance_WhenCliInstanceIsOmitted` set only `MCP_INSTANCE` while `QBRAINAI_INSTANCE` wins; it is now `Category=Integration` and clears `QBRAINAI_INSTANCE` for its duration; assertions unchanged; test-only.
+- `8b7a49ea`, `780b6513`, `c3625a64`: docs only (the widened-gate receipts and plan section 18; the round 5 prelaunch records; the round 5 HV receipts as received).
+- `9933796c`: round 5 finding R5-F1 (operator: "Fix both, strengthen ACs"). The profile scans checked links only among the entries they listed, so a linked plugin-cache root, a linked folder between the profile and it, or a linked agent-history root was walked. `DirectoryTreeWalker.IsReachable` now requires the scan root and every folder between the profile or home and it to be a directory that is not a link; it is checked before walking each of the seven scan roots (three cache roots, four history roots). A profile or home that is itself a link is still scanned. Tests first: 16 scripted cases with seven wrong-check negative controls, mock gate `ug-r6-reach-mockgate-1` 4536/0/0 before any production change; then the binding, resolve-level cases and a real-link integration test in both lanes.
+- `c8418301`: round 5 finding R5-F2 and the environment sweep (operator: "Approve, strengthen AC-006/008 (Recommended)"), test-only. 13 unit tests that read or write the process environment, or import it, move to `Category=Integration` with every variable they depend on controlled and restored (both forms where a pair exists) and assertions unchanged; the classes that write the environment run in one serialized collection (`ProcessEnvironmentCollection`, `DisableParallelization = true`); the collection assertions are shared (`TestSupport/CollectionAssertions`). Negative control first: hostile gate v3 at `9933796c` failed exactly the R5-F2 test. This is the last code, test or build change.
+- Docs only after it: `44e9d810` (the round 6 run receipts and plan section 19) and `3ce97b3e` (the round 6 prelaunch brief, self-review, the confirmed projected problems, the hostile gate v4 receipt). `git diff --name-only c8418301..HEAD` lists only `docs/` paths.
+
+### Gates at `c8418301`
+
+- Linux Test `ug-r6-linux-test-2` (committed tree, before the push): 4558 total, 4558 passed, 0 failed, 0 not executed.
+- Hostile gate v3 `ug-r6-hostile-wide-2` (86 scripted variables): 4558/0/0. Hostile gate v4 `ug-r6-hostile-wide-3` (126 variables: v3 plus `Mcp__Port`, `QBrainAi__Port` and both forms of the 19 HostileReviewWorker settings, the keys of the moved tests), at the docs head `44e9d810`, code-identical: 4558/0/0.
+- Windows Test `ug-r6-win-test-ssh-1` (PAYTON-LEGION2 over SSH as kingd, dry run first, HEAD verified): 4558 total, 4558 passed, 0 failed, 0 not executed (Support.Mcp 3176, Repl.Core 865, Client 306, QBAgent 94, McpAgent 64, Cqrs 33, Launcher 20).
+- Windows MigrationIntegrationTests from kingd's interactive desktop session `ug-r6-win-lane-1` (pinned gate runner; proof `session=1 interactive=True head=c8418301`; log line `Integration lane filter: Category=Integration&Platform!=Linux`): 388 passed (Support.Mcp 376, McpAgent 1, Repl.Core 3, QBAgent 2, Build.Tests 6), 0 failed, 0 not executed; by name the round 5 lane plus the 13 moved tests and the real-link test.
+- Linux MigrationIntegrationTests `ug-r6-linux-lane-1`: 412 passed (Support.Mcp 390, McpAgent 1, Repl.Core 3, QBAgent 2, Build.Tests 16), 0 failed, 0 not executed.
+- Full Build.Tests (raw `dotnet test`) `ug-r6-build-tests-1`, TMPDIR on `/home`: 436 total, 436 passed, 0 failed, 0 not executed. Operator: "Explicitly state that temporary files in official temporary folders are not a system change."
+- ValidateTraceability `ug-r6-traceability-1`: passed. It reads the committed `docs/Project` exports (see "Information, not a gate").
+- Slice evidence before the commits: `ug-r6-reach-binding-1` 4567/0/0, `ug-r6-precommit-lane-1` 399/0/0, `ug-r6-linux-test-1` 4567/0/0 at `9933796c`; `ug-r6-envcoll-mockgate-1` 4570/0/0, `ug-r6-env-binding-1` 4558/0/0, `ug-r6-hostile-wide-1` 4558/0/0, `ug-r6-precommit-lane-2` 412/0/0; by name the unit run lost and the lane gained exactly the 13 moved tests.
+- Receipts: `docs/receipts/unit-suite-green-20261019/` (the `ug-r6-*` files, including the environment sweep `ug-r6-env-sweep.txt`).
+
+### The hostile-environment gate
+
+- It started as five plugin-root variables and HOME (round 4), was widened to every variable the unit projects or production read by literal name and both forms of the 25 `ProductEnvironment.GetLegacy` names (round 5, operator: "If it needs to be done, do it."), and now also scripts the four configuration-probe names, `GROK_HOME` (v3) and the remaining keys of the moved tests (v4), at hostile directories or scripted values (no real secret). PATH, TMPDIR, NUGET_PACKAGES and DOTNET_CLI_HOME stay real. The credential test's variable name is random per run and cannot be scripted.
+- Negative controls: at `5b818847` the widened gate failed the test fixed in `810ee8aa`; at `9933796c` gate v3 failed exactly the R5-F2 test.
+
+### Declared scanner limit
+
+- `UnitSuitePlatformScanner` resolves a using alias whose target names a type, and a `using static` that names a type, each in its lexical scope. It does not resolve an alias whose target is another alias, or a `using static` that names an alias. Operator, 2026-10-21T05:10:50: "Declare the limit, no fix"; 05:43:12: "Correct the doc comments (Recommended)" (built in `ccc78b7a`) and "New TODO for the scanner".
+- Operator, 2026-10-21T06:06:46: "I don't want any more scanner work.  None.  Add an operator override to the HV." Hostile validation carries that override. The scanner alias work is TODO `IMPL-SCANNERALIAS-001`, an open record with no work scheduled.
+- TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 state the outcome, not the scanner. Operator, 2026-10-21T07:12:22: "It is a workspace rule, not something that needs to be mechanically enforced."
+
+### Lost Windows lane results
+
+- Lanes 1, 3 and 5 of round 3 each dropped 1 or 2 Support.Mcp results without any outcome; total still equaled executed, so each run is compared by name with a complete one. Cause: pg_ctl output garbled xUnit v3's message stream; fixed in `6ea425ab`; every lane since is complete by name.
+
+### Hostile validation
+
+- Round 1 (`unitgreen-r1`): DISAGREE, 95/93. Round 2 (`unitgreen-r2`): DISAGREE, 96/94. Round 3 (`unitgreen-r3`): DISAGREE, 97/96. Round 4 (`unitgreen-r4`): DISAGREE, 97/97. Plan sections 14 to 18.
+- Round 5 (`unitgreen-r5`, HEAD `780b6513`, last code head `810ee8aa`): DISAGREE, 97/96, 12 PASS, 7 FAIL, 0 UNKNOWN, 1 OVERRIDDEN (the scanner). Findings R5-F1 (linked scan roots and linked folders above them were walked) and R5-F2 (one unit test imported the process environment), both implementer edits. Receipts: `docs/receipts/hv/20261021T111806-unitgreen-r5.*` and `hostile-validator-unitgreen-r5-20261021T111806.*` (`c3625a64`); the full result is in reviewer turn `req-20261021T162141Z-unitgreen-r5`. It was the fourth DISAGREE on environment-dependent unit tests, a goal stop condition; the operator chose "Fix both, strengthen ACs". Plan section 19.
+- Round 6 (`unitgreen-r6`, last code head `c8418301`): launched after the operator confirmed the projected problems ("Confirm, launch HV r6 (Recommended)", 2026-10-22T01:00:08).
+
+### Requirements
+
+- TR-MCP-NUKE-019 created under FR-MCP-BUILD-001 (AC-1 to AC-5).
+- FR-MCP-USECASE-016 and -017 converted into TR-MCP-USECASE-018 and -019 under FR-MCP-USECASE-001 and deleted.
+- TR-MCP-QUALITY-001 ac-21 reopened and strengthened; TEST-MCP-PATHNORM-001 gained `unitgreen-native-host`.
+- Strengthened on 2026-10-21 through the plugin, each the only changed criterion on its record and unsatisfied: AC-TR-MCP-WS-005-001 (12:33:54) and AC-TR-MCP-SESSIONLOG-006-009 (12:34:05), a scan skips a linked scan root and every linked folder between the profile or home and it, and a linked profile or home is still scanned; TR-MCP-USECASE-018 AC-006 (12:39:00) and TR-MCP-USECASE-019 AC-008 (12:39:12), no unit test depends on the platform or on the process environment, environment-touching tests are integration tests that control the variables they depend on, and environment writers run one at a time. Operator, 12:26: "Strengthening Acceptance Criteria should always be the recommended option."
+- After AGREE, these are set satisfied (plan section 13, D-B): TR-MCP-NUKE-019 AC-1 to AC-5, TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008, TR-MCP-QUALITY-001 ac-21, TEST-MCP-PATHNORM-001 `unitgreen-native-host`, AC-TR-MCP-WS-005-001 and AC-TR-MCP-SESSIONLOG-006-009. The other 17 USECASE criteria stay unsatisfied. All 22 tasks of IMPL-UNITGREEN-001 are checked and it is marked done; IMPL-SCANNERALIAS-001 stays open.
+
+### Open
+
+- The scanner alias limit (above), recorded in TODO IMPL-SCANNERALIAS-001; no scanner work is planned (operator override).
+- This store holds 1 criterion for TR-MCP-SESSIONLOG-006 where the committed export lists 8 (`triage-report-647e35bbdf9e43f5a8752cfc32f6c7a4`).
+- The writer list of the environment sweep is not discovered by a test; a new class that writes the process environment must be added to `ProcessEnvironmentCollectionTests` (stated limit).
+- `hv-ug-r5-test-results.json` (98.19 MB, a round 5 reviewer evidence file) stays in branch history; removing it needs a force push.
+
+### Information, not a gate
+
+- Operator, 2026-10-21T06:54:47: "Azure is no longer in the picture.  Create a global memory not to gate on azure related errors." (global MCP memory MEMORY-PROCESS-009). The requirements wiki export fails on its Azure-specific cleanup path (`triage-report-a6927fca10364155ab9992506e1abc9c`), so the generated `docs/Project` exports stay as committed. That is recorded here and is not a gate.
+- Risk, flagged (operator: "Then flag the risk and roll on."): the race cause is an inference.
+- Behavior change, declared: a directory link or other reparse point below a scanned profile root is no longer followed by either scan, and since `9933796c` a scan root that is a link, or one reached through a link below the profile or home, contributes nothing.
+- Develop gained PR 88 (one docs file, not touched here) after the branch base; the merge base stays `3da2db93` and a test merge is clean.
+- Route: Windows evidence runs over SSH as kingd (operator 2026-10-20), by IP 10.42.0.143.
+
+Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+

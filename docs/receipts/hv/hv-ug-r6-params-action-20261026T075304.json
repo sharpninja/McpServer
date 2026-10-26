@@ -1,0 +1,11 @@
+{
+  "actions": [
+    {
+      "type": "validation",
+      "status": "completed",
+      "description": "Profile reloaded after compaction: 1 file read in full. Live MCP getters and effective view confirm obsolete USECASE FRs and TEST-MCP-MEMORY-010 absent. TODOs have 22 and 3 open tasks. Raw TRXs confirm all claimed round 6 counts, exact 13 moves, and no Windows lane result lost from round 5. Independent sandbox hostile v4 Nuke Test exited 0. Investigating a potential remaining ambient temp dependency with a second full Nuke run using a regular file as MCPSERVER_QUADBRAIN_CLI_TEMP; no finding concluded yet. Own transcript extraction output formatting failed after saving data; fixed DateTime formatting and rerunning.",
+      "order": 2,
+      "filePath": "docs/receipts/hv/"
+    }
+  ]
+}

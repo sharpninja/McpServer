@@ -1,0 +1,11 @@
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs:7:/// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011:
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs:20:    /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-01: Indexing a memory flips EmbeddingStatus to ready (or failed with reason).</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs:37:    /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-02: Startup/consolidate reconcile repairs stale EmbeddingStatus vs row hash.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs:59:    /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-05: Failed embedding does not crash the host; memory remains listable via CRUD.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs:81:    /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-06: Re-index after Content change updates vector/FTS; old vector is not exclusive.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs:109:    /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-07: HNSW/FTS side tables are workspace-safe (no cross-workspace ANN leakage).</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs:133:    /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-08: Indexer respects CancellationToken and leaves status failed/pending, not half-ready.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs:150:    /// AC-TR-MCP-MEMORY-SEARCH-002-09: Local ONNX path works without cloud credentials in the test host. The test
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs:184:    /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-10: Cloud embedding path is opt-in and fails closed when disabled.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs:205:    /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-11: Empty Content cannot reach ready status (validation precedes index).</summary>
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs:236:    /// <summary>AC-TR-MCP-MEMORY-SEARCH-002-12: Batch index of N fixtures completes with all ready or explicit failures counted.</summary>
