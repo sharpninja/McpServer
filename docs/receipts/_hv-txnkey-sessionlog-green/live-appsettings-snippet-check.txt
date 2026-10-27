@@ -16,7 +16,7 @@ Mcp:
   IdentityServer:
     IssuerUri: ''
     ApiScopeName: mcp-api
-    DefaultAdminPassword: McpAdmin1!
+    DefaultAdminPassword: [REDACTED]
     SeedDefaults: true
     ApiResourceName: mcp-server-api
     ConnectionString: ''
@@ -25,7 +25,7 @@ Mcp:
     DatabaseName: McpIdentity
   WebsiteBlockedHosts:
   - localhost
-  ApiKey: KLB1LbdDv1vfuXM2PpHfhcVWhgja9qyI4DTxmuQEEHs
+  ApiKey: [REDACTED]
   DataDirectory: .
   ToolRegistry:
     DefaultBuckets:
@@ -36,7 +36,7 @@ Mcp:
       ManifestPath: /
   PairingUsers:
   - Username: plbyrd
-    PasswordHash: f50a71e1b0e3884dbddbdc95b6ab6caee7b11a4317fb778e8ea1ddc514165a22
+    PasswordHash: [REDACTED]
   RepoAllowlist:
   - src/McpServer.Cqrs/**/*.cs
   - src/McpServer.Cqrs.Mvvm/**/*.cs
@@ -76,7 +76,7 @@ Mcp:
   Database:
     MigrationsAssembly: ''
     SqlServer:
-      ConnectionString: Server=PAYTON-DESKTOP;Database=McpServer_PAYTON_LEGION2;User Id=mcpserver_payton_legion2;Password=McpLegion2026!;TrustServerCertificate=True;MultipleActiveResultSets=True;
+      ConnectionString: Server=PAYTON-DESKTOP;Database=McpServer_PAYTON_LEGION2;User Id=mcpserver_payton_legion2;Password=[REDACTED];TrustServerCertificate=True;MultipleActiveResultSets=True;
     Sqlite:
       DataSource: mcp.db
     Provider: sqlserver
@@ -128,7 +128,7 @@ Mcp:
       Name: ngrok
     Enabled: false
     DefaultTarget: ngrok
-  SqlServerConnectionString: Server=PAYTON-DESKTOP;Database=McpServer_PAYTON_LEGION2;User Id=mcpserver_payton_legion2;Password=McpLegion2026!;TrustServerCertificate=True;MultipleActiveResultSets=True;
+  SqlServerConnectionString: Server=PAYTON-DESKTOP;Database=McpServer_PAYTON_LEGION2;User Id=mcpserver_payton_legion2;Password=[REDACTED];TrustServerCertificate=True;MultipleActiveResultSets=True;
   DatabaseProvider: sqlserver
   UnifiedModelSchemaPath: docs/schemas/UnifiedModel.schema.json
   WebsiteAllowedSchemes:
@@ -141,7 +141,7 @@ Mcp:
     Port: 7147
     Provider: ngrok
     Ngrok:
-      AuthToken: 39PlC1rVQvxL7JLCUnvZ7BwWP1h_5EKMeqsnVoTTrLfuR79h3
+      AuthToken: [REDACTED]
       ExecutablePath: C:\ProgramData\McpServer\tools\ngrok.exe
       Enabled: true
       PoolingEnabled: true

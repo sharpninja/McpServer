@@ -18,7 +18,7 @@
       "Bash(\"C:/ProgramData/McpServer/tools/ngrok.exe\" http:*)",
       "Bash(\"C:/ProgramData/McpServer/tools/ngrok.exe\" api:*)",
       "Bash(C:/ProgramData/McpServer/tools/ngrok.exe version:*)",
-      "Bash(NGROK_AUTHTOKEN=39PlC1rVQvxL7JLCUnvZ7BwWP1h_5EKMeqsnVoTTrLfuR79h3 \"C:/ProgramData/McpServer/tools/ngrok.exe\" http 7147 --log stdout --log-format json)",
+      "Bash(NGROK_AUTHTOKEN=[REDACTED] \"C:/ProgramData/McpServer/tools/ngrok.exe\" http 7147 --log stdout --log-format json)",
       "Bash(grep -h \"Route\\\\|HttpGet\\\\|HttpPost\\\\|HttpPut\\\\|HttpDelete\" /f/GitHub/McpServer/src/QBrainAi.Support.Mcp/Controllers/*.cs)",
       "Bash(sed 's/.*Name = \"//')",
       "Bash(sed 's/\".*//')",
