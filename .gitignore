@@ -541,3 +541,11 @@ todo-bootstrap.marker
 
 # Workspace cache
 cache/
+
+# Runtime state written by a running server or agent host; never tracked.
+# Duende IdentityServer automatic signing keys (written under the content root).
+/keys/
+# MCP tool descriptor caches written by agent hosts.
+/mcps/
+# Host-global GraphRAG store under a data folder (GraphRagOptions.GlobalRootPath).
+graphrag-global/
