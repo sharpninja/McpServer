@@ -16,8 +16,9 @@ partial class Build
     const string PostgresBinariesZipUrl =
         "https://get.enterprisedb.com/postgresql/postgresql-17.5-1-windows-x64-binaries.zip";
 
-    const string OllamaBinariesZipUrl =
-        "https://github.com/ollama/ollama/releases/latest/download/ollama-windows-amd64.zip";
+    /// <summary>TR-MCP-NUKE-019 AC-4: the release download folder; the host's asset name comes from <see cref="OllamaInstallLayout"/>.</summary>
+    const string OllamaReleaseBaseUrl =
+        "https://github.com/ollama/ollama/releases/latest/download/";
 
     const string OllamaTagsEndpoint = "http://localhost:11434/api/tags";
 
@@ -102,10 +103,12 @@ partial class Build
     /// <c>*.IntegrationTests</c> projects remain separate (their classes carry the same trait).
     /// TR-MCP-NUKE-019: the selection is host-scoped through <see cref="IntegrationLaneFilter"/>; cases tagged
     /// <c>Platform=Linux</c> run only on Linux hosts, <c>Platform=Windows</c> only on Windows hosts, untagged on both.
+    /// TR-MCP-NUKE-019 AC-4: the lane also provisions Ollama and the QuadBrain test model on both hosts
+    /// (<see cref="InstallOllama"/>) before any test runs.
     /// </summary>
     public Target MigrationIntegrationTests => _ => _
         .Description("Run Category=Integration tests (provider migrations, process spawns) with provisioned dependencies")
-        .DependsOn(InstallTestDependencies)
+        .DependsOn(InstallTestDependencies, InstallOllama)
         .Executes(() =>
         {
             // Only projects that contain Category=Integration tests: an empty filter match
@@ -192,13 +195,15 @@ partial class Build
 
     /// <summary>
     /// Idempotent installer for the local Ollama service used by the QuadBrain Ollama integration
-    /// tests (TEST-MCP-QBOLLAMA-001): installs the portable Ollama binaries when absent (existing
-    /// installation preferred), starts the server on localhost:11434 when not running, and pulls
-    /// the required model (default llama3.2:1b, override with MCP_QUADBRAIN_OLLAMA_MODEL) when it
-    /// is not present. Re-running when everything is in place is a no-op.
+    /// tests (TEST-MCP-QBOLLAMA-001), on Windows and Linux (TR-MCP-NUKE-019 AC-4): an installed
+    /// executable is used when one exists (<see cref="OllamaInstallLayout.Candidates"/>), otherwise the
+    /// host's portable release is placed in the user's QBrainAi test-tools folder; the server is started
+    /// on localhost:11434 when none answers; the required model (<see cref="RequiredOllamaModel"/>, default
+    /// gemma4:e4b) is pulled when the server does not list it. Re-running when everything is in place is a
+    /// no-op; a failure fails the target, and the lane that depends on it, before any test runs.
     /// </summary>
     public Target InstallOllama => _ => _
-        .Description("Ensure Ollama is installed, running on localhost:11434, and has the required model (idempotent)")
+        .Description("Ensure Ollama is installed, running on localhost:11434, and has the required model (idempotent; Windows and Linux)")
         .Executes(() =>
         {
             if (TryGetOllamaTags(out var tags) && tags.Contains($"\"{RequiredOllamaModel}\"", StringComparison.OrdinalIgnoreCase))
@@ -207,7 +212,7 @@ partial class Build
                 return;
             }
 
-            var ollamaExe = EnsureOllamaBinaries();
+            var ollamaExe = EnsureOllamaBinaries(IntegrationLaneFilter.CurrentHost());
             EnsureOllamaServerRunning(ollamaExe);
 
             if (!TryGetOllamaTags(out tags))
@@ -222,29 +227,39 @@ partial class Build
             Log.Information("Ollama ready with model {Model}.", RequiredOllamaModel);
         });
 
-    static string EnsureOllamaBinaries()
+    /// <summary>
+    /// TR-MCP-NUKE-019 AC-4: returns an installed Ollama executable (PATH, then the usual install, then the portable
+    /// location; <see cref="OllamaInstallLayout"/>), or places the host's portable release in the test-tools folder and
+    /// returns its executable: on Windows the zip is extracted in process, on Linux the zstd tarball is extracted with
+    /// tar --zstd (GNU tar and zstd on the host).
+    /// </summary>
+    static string EnsureOllamaBinaries(IntegrationLaneHost host)
     {
-        var candidates = new[]
-        {
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs", "Ollama", "ollama.exe"),
-            (string)(TestToolsDirectory / "ollama" / "ollama.exe"),
-        };
-        var existing = candidates.FirstOrDefault(File.Exists);
+        var layout = new OllamaInstallLayout();
+        var pathDirectories = (Environment.GetEnvironmentVariable("PATH") ?? string.Empty)
+            .Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries);
+        var localApplicationData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        var existing = layout.Candidates(host, pathDirectories, localApplicationData, (string)TestToolsDirectory).FirstOrDefault(File.Exists);
         if (existing is not null)
         {
             Log.Information("Using existing Ollama binaries: {Path}", existing);
             return existing;
         }
 
-        Log.Information("Ollama missing; downloading portable binaries zip ...");
-        var zipPath = Path.Combine(Path.GetTempPath(), "ollama-windows-amd64.zip");
-        DownloadFile(OllamaBinariesZipUrl, zipPath);
+        var asset = layout.ReleaseAsset(host);
+        Log.Information("Ollama missing; downloading the portable release {Asset} ...", asset);
+        var archivePath = Path.Combine(Path.GetTempPath(), asset);
+        DownloadFile(OllamaReleaseBaseUrl + asset, archivePath);
         var targetDirectory = TestToolsDirectory / "ollama";
         targetDirectory.CreateDirectory();
-        System.IO.Compression.ZipFile.ExtractToDirectory(zipPath, targetDirectory, overwriteFiles: true);
-        var extracted = targetDirectory / "ollama.exe";
+        if (host == IntegrationLaneHost.Windows)
+            System.IO.Compression.ZipFile.ExtractToDirectory(archivePath, targetDirectory, overwriteFiles: true);
+        else
+            RunTool("tar", $"--zstd -xf \"{archivePath}\" -C \"{targetDirectory}\"");
+
+        var extracted = layout.PortableExecutable(host, (string)TestToolsDirectory);
         if (!File.Exists(extracted))
-            throw new InvalidOperationException($"ollama.exe not found under {targetDirectory} after extraction.");
+            throw new InvalidOperationException($"The Ollama executable {extracted} was not found after placing {asset} under {targetDirectory}.");
         Log.Information("Portable Ollama binaries ready: {Path}", extracted);
         return extracted;
     }
@@ -255,14 +270,16 @@ partial class Build
             return;
 
         Log.Information("Starting Ollama server (detached) ...");
-        // UseShellExecute detaches the child from this process's console pipes; with handle
-        // inheritance the long-lived server would keep the build's stdout pipe open and hang
-        // any caller that captures build output. The server intentionally outlives the build.
+        // On Windows, UseShellExecute detaches the child from this process's console pipes; with handle
+        // inheritance the long-lived server would keep the build's stdout pipe open and hang any caller
+        // that captures build output. On Linux shell execution cannot start a program directly, so the
+        // server inherits the build's output handles (the lane's runners write them to a log file, not a
+        // pipe). The server intentionally outlives the build.
         var started = Process.Start(new ProcessStartInfo
         {
             FileName = ollamaExe,
             Arguments = "serve",
-            UseShellExecute = true,
+            UseShellExecute = OperatingSystem.IsWindows(),
             WindowStyle = ProcessWindowStyle.Hidden,
         }) ?? throw new InvalidOperationException("Failed to start the Ollama server process.");
         _ = started;
