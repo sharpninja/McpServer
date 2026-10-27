@@ -28,7 +28,7 @@ public sealed class AddProductMemberCommandHandler(McpDbContext db) : ICommandHa
             if (keyError is not null)
                 return Result<ProductDto>.Failure(keyError);
 
-            var memberId = (command.MemberWorkspaceId ?? string.Empty).Trim();
+            var memberId = WorkspaceIdentity.CanonicalizeWorkspaceId((command.MemberWorkspaceId ?? string.Empty).Trim());
             if (memberId.Length == 0)
                 return Result<ProductDto>.Failure(ProductResultCodes.BadRequestMsg("Member workspace id is required."));
 

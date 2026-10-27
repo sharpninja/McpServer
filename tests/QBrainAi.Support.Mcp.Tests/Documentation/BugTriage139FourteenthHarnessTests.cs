@@ -55,7 +55,7 @@ public sealed class BugTriage139FourteenthHarnessTests
         {
             ["QBrainAi.Support.Mcp.Tests.Storage.BugTriage139FifteenthLinuxNativeTests"] = 3,
             ["QBrainAi.Support.Mcp.Tests.Storage.BugTriage139SixteenthLinuxTests"] = 8,
-            ["QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests"] = 25,
+            ["QBrainAi.Support.Mcp.Tests.Storage.BugTriage139EighteenthLinuxTests"] = 28,
             ["QBrainAi.Support.Mcp.Tests.Services.RequirementsFourteenthLinuxNativeTests"] = 1,
         };
         var applicableInventory = OperatingSystem.IsWindows()
@@ -84,7 +84,7 @@ public sealed class BugTriage139FourteenthHarnessTests
             unsupportedInventory.Keys,
             typeName => Assert.Null(assembly.GetType(typeName, throwOnError: false)));
         Assert.Equal(
-            OperatingSystem.IsWindows() ? 11 : 37,
+            OperatingSystem.IsWindows() ? 11 : 40,
             applicableInventory.Values.Sum());
     }
 

@@ -14,7 +14,7 @@ namespace QBrainAi.Support.Mcp.Controllers;
 [ApiController]
 [Route("qbrainai/sessionlog")]
 [Route("mcpserver/sessionlog")]
-public sealed class SessionLogController : ControllerBase
+public sealed partial class SessionLogController : ControllerBase
 {
     private const int MaxTurnCount = 5000;
 

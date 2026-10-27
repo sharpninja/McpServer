@@ -1,0 +1,22 @@
+plugin-hook.ps1:804:$openQuery = if ($openTurn.Contains('queryText')) { [string]$openTurn['queryText'] } else { '' }
+plugin-hook.ps1:870:queryText = $prompt
+plugin-hook.ps1:1009:$stopText = (Get-YamlScalar -Path $turnFile -Key 'queryText') ?? ''
+repl-invoke.ps1:147:# on that object. Do not replace queryText, planFile, todoId, or audit fields.
+repl-invoke.ps1:852:function Get-ReplCurrentTurnQueryText {
+repl-invoke.ps1:854:if ($turnState -and $turnState.Contains('queryText')) {
+repl-invoke.ps1:855:return [string]$turnState['queryText']
+repl-invoke.ps1:1262:$queryText = Get-ReplCurrentTurnQueryText
+repl-invoke.ps1:1263:if ([string]::IsNullOrWhiteSpace($queryText)) {
+repl-invoke.ps1:1265:# Update, append, and fail omit it so the server QueryText stays.
+repl-invoke.ps1:1267:$queryText = Get-ReplCurrentTurnValue -Key 'queryTitle'
+repl-invoke.ps1:1268:if ([string]::IsNullOrWhiteSpace($queryText)) {
+repl-invoke.ps1:1269:$queryText = 'Recovered session-log turn'
+repl-invoke.ps1:1272:$queryText = ''
+repl-invoke.ps1:1309:-QueryText $queryText `
+repl-invoke.ps1:1662:queryText = [string](Get-ReplObjectValue -InputObject $turnObj.turn -Name 'queryText')
+repl-invoke.ps1:2110:$queryText = if ($State.Contains('queryText')) { [string]$State['queryText'] } else { '' }
+repl-invoke.ps1:2112:$promptFirstLine = @(($queryText -replace "`r`n", "`n" -replace "`r", "") -split "`n")[0].Trim()
+repl-invoke.ps1:2171:$queryText = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'queryText'
+repl-invoke.ps1:2172:if ([string]::IsNullOrWhiteSpace($queryText)) { $queryText = $queryTitle }
+repl-invoke.ps1:2255:$turnState['queryText'] = $queryText
+repl-invoke.ps1:2277:queryText = $queryText

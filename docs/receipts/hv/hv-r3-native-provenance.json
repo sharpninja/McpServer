@@ -1,0 +1,2028 @@
+{
+  "TimestampUtc": "2026-10-18T06:38:50.3240915+00:00",
+  "Streams": [
+    {
+      "Source": "cli-runs-3/cline-verbose-run.txt",
+      "JsonRecords": 10,
+      "ReadOnlyFileSystem": false,
+      "CannotAskApproval": false,
+      "ShellRunInPlan": false,
+      "DisabledShellWrite": false
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "JsonRecords": 17,
+      "ReadOnlyFileSystem": false,
+      "CannotAskApproval": false,
+      "ShellRunInPlan": false,
+      "DisabledShellWrite": false
+    },
+    {
+      "Source": "cli-write-probe/codex-readonly.stdout.txt",
+      "JsonRecords": 7,
+      "ReadOnlyFileSystem": true,
+      "CannotAskApproval": false,
+      "ShellRunInPlan": false,
+      "DisabledShellWrite": false
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "JsonRecords": 27,
+      "ReadOnlyFileSystem": false,
+      "CannotAskApproval": false,
+      "ShellRunInPlan": false,
+      "DisabledShellWrite": false
+    },
+    {
+      "Source": "cli-write-probe/claude-plan.stdout.txt",
+      "JsonRecords": 8,
+      "ReadOnlyFileSystem": false,
+      "CannotAskApproval": false,
+      "ShellRunInPlan": false,
+      "DisabledShellWrite": false
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "JsonRecords": 13,
+      "ReadOnlyFileSystem": false,
+      "CannotAskApproval": false,
+      "ShellRunInPlan": false,
+      "DisabledShellWrite": false
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "JsonRecords": 101,
+      "ReadOnlyFileSystem": false,
+      "CannotAskApproval": false,
+      "ShellRunInPlan": true,
+      "DisabledShellWrite": false
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "JsonRecords": 18,
+      "ReadOnlyFileSystem": false,
+      "CannotAskApproval": false,
+      "ShellRunInPlan": false,
+      "DisabledShellWrite": false
+    },
+    {
+      "Source": "cli-effort-probe/codex-max.stdout.txt",
+      "JsonRecords": 4,
+      "ReadOnlyFileSystem": false,
+      "CannotAskApproval": false,
+      "ShellRunInPlan": false,
+      "DisabledShellWrite": false
+    },
+    {
+      "Source": "cli-claude-effort/claude-max.stdout.txt",
+      "JsonRecords": 1,
+      "ReadOnlyFileSystem": false,
+      "CannotAskApproval": false,
+      "ShellRunInPlan": false,
+      "DisabledShellWrite": false
+    }
+  ],
+  "Fields": [
+    {
+      "Source": "cli-runs-3/cline-verbose-run.txt",
+      "Path": "$.type",
+      "Value": "run_start"
+    },
+    {
+      "Source": "cli-runs-3/cline-verbose-run.txt",
+      "Path": "$.modelId",
+      "Value": "gpt-6-astra"
+    },
+    {
+      "Source": "cli-runs-3/cline-verbose-run.txt",
+      "Path": "$.thinking",
+      "Value": "on"
+    },
+    {
+      "Source": "cli-runs-3/cline-verbose-run.txt",
+      "Path": "$.type",
+      "Value": "hook_event"
+    },
+    {
+      "Source": "cli-runs-3/cline-verbose-run.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-runs-3/cline-verbose-run.txt",
+      "Path": "$.event.type",
+      "Value": "iteration_start"
+    },
+    {
+      "Source": "cli-runs-3/cline-verbose-run.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-runs-3/cline-verbose-run.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-runs-3/cline-verbose-run.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-runs-3/cline-verbose-run.txt",
+      "Path": "$.event.type",
+      "Value": "usage"
+    },
+    {
+      "Source": "cli-runs-3/cline-verbose-run.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-runs-3/cline-verbose-run.txt",
+      "Path": "$.event.type",
+      "Value": "content_end"
+    },
+    {
+      "Source": "cli-runs-3/cline-verbose-run.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-runs-3/cline-verbose-run.txt",
+      "Path": "$.event.type",
+      "Value": "iteration_end"
+    },
+    {
+      "Source": "cli-runs-3/cline-verbose-run.txt",
+      "Path": "$.type",
+      "Value": "hook_event"
+    },
+    {
+      "Source": "cli-runs-3/cline-verbose-run.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-runs-3/cline-verbose-run.txt",
+      "Path": "$.event.type",
+      "Value": "done"
+    },
+    {
+      "Source": "cli-runs-3/cline-verbose-run.txt",
+      "Path": "$.type",
+      "Value": "run_result"
+    },
+    {
+      "Source": "cli-runs-3/cline-verbose-run.txt",
+      "Path": "$.model.info.reasoningOptions[0].type",
+      "Value": "effort"
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.type",
+      "Value": "session.mcp_server_status_changed"
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.type",
+      "Value": "session.mcp_server_status_changed"
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.type",
+      "Value": "session.auto_mode_resolved"
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.type",
+      "Value": "session.mcp_servers_loaded"
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.type",
+      "Value": "session.tools_updated"
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.data.model",
+      "Value": "mai-code-1.1-flash"
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.type",
+      "Value": "user.message"
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.type",
+      "Value": "assistant.turn_start"
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.type",
+      "Value": "model.call_start"
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.data.model",
+      "Value": "mai-code-1.1-flash"
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.type",
+      "Value": "assistant.message_start"
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.type",
+      "Value": "assistant.message_delta"
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.type",
+      "Value": "model.call_finished"
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.type",
+      "Value": "assistant.message"
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.data.model",
+      "Value": "mai-code-1.1-flash"
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.type",
+      "Value": "model.call_final_result"
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.data.model",
+      "Value": "mai-code-1.1-flash"
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.type",
+      "Value": "assistant.turn_end"
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.type",
+      "Value": "session.usage_checkpoint"
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.data.modelCacheState[0].modelId",
+      "Value": "mai-code-1.1-flash"
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.data.promptCacheBreakState[0].models.mai-code-1.1-flash.model",
+      "Value": "mai-code-1.1-flash"
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.data.promptCacheBreakState[0].models.mai-code-1.1-flash.reasoning_effort",
+      "Value": "medium"
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.data.promptCacheBreakState[0].models.mai-code-1.1-flash.tool_count",
+      "Value": 26
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.data.accountingSnapshot.providerModelMetrics[0].modelId",
+      "Value": "mai-code-1.1-flash"
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.data.providerModelMetrics[0].modelId",
+      "Value": "mai-code-1.1-flash"
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.type",
+      "Value": "assistant.idle"
+    },
+    {
+      "Source": "cli-runs-3/copilot-run.txt",
+      "Path": "$.type",
+      "Value": "result"
+    },
+    {
+      "Source": "cli-write-probe/codex-readonly.stdout.txt",
+      "Path": "$.type",
+      "Value": "thread.started"
+    },
+    {
+      "Source": "cli-write-probe/codex-readonly.stdout.txt",
+      "Path": "$.type",
+      "Value": "turn.started"
+    },
+    {
+      "Source": "cli-write-probe/codex-readonly.stdout.txt",
+      "Path": "$.type",
+      "Value": "item.completed"
+    },
+    {
+      "Source": "cli-write-probe/codex-readonly.stdout.txt",
+      "Path": "$.item.type",
+      "Value": "agent_message"
+    },
+    {
+      "Source": "cli-write-probe/codex-readonly.stdout.txt",
+      "Path": "$.type",
+      "Value": "item.started"
+    },
+    {
+      "Source": "cli-write-probe/codex-readonly.stdout.txt",
+      "Path": "$.item.type",
+      "Value": "command_execution"
+    },
+    {
+      "Source": "cli-write-probe/codex-readonly.stdout.txt",
+      "Path": "$.type",
+      "Value": "item.completed"
+    },
+    {
+      "Source": "cli-write-probe/codex-readonly.stdout.txt",
+      "Path": "$.item.type",
+      "Value": "command_execution"
+    },
+    {
+      "Source": "cli-write-probe/codex-readonly.stdout.txt",
+      "Path": "$.type",
+      "Value": "item.completed"
+    },
+    {
+      "Source": "cli-write-probe/codex-readonly.stdout.txt",
+      "Path": "$.item.type",
+      "Value": "agent_message"
+    },
+    {
+      "Source": "cli-write-probe/codex-readonly.stdout.txt",
+      "Path": "$.type",
+      "Value": "turn.completed"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "available_commands"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "available_commands"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "text"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "text"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "text"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "text"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "text"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "text"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "text"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "text"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "text"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "text"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "text"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "text"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "text"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "text"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "text"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "text"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "text"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "text"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "text"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "available_commands"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "usage"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "tool_call"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "tool_call_update"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.content[0].type",
+      "Value": "diff"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "tool_call_update"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.content[0].type",
+      "Value": "content"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.content[0].content.type",
+      "Value": "text"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "end"
+    },
+    {
+      "Source": "cli-write-probe/grok-plan.stdout.txt",
+      "Path": "$.stopReason",
+      "Value": "cancelled"
+    },
+    {
+      "Source": "cli-write-probe/claude-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "system"
+    },
+    {
+      "Source": "cli-write-probe/claude-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "system"
+    },
+    {
+      "Source": "cli-write-probe/claude-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "system"
+    },
+    {
+      "Source": "cli-write-probe/claude-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "assistant"
+    },
+    {
+      "Source": "cli-write-probe/claude-plan.stdout.txt",
+      "Path": "$.message.model",
+      "Value": "claude-opus-5-5"
+    },
+    {
+      "Source": "cli-write-probe/claude-plan.stdout.txt",
+      "Path": "$.message.type",
+      "Value": "message"
+    },
+    {
+      "Source": "cli-write-probe/claude-plan.stdout.txt",
+      "Path": "$.message.content[0].type",
+      "Value": "thinking"
+    },
+    {
+      "Source": "cli-write-probe/claude-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "assistant"
+    },
+    {
+      "Source": "cli-write-probe/claude-plan.stdout.txt",
+      "Path": "$.message.model",
+      "Value": "claude-opus-5-5"
+    },
+    {
+      "Source": "cli-write-probe/claude-plan.stdout.txt",
+      "Path": "$.message.type",
+      "Value": "message"
+    },
+    {
+      "Source": "cli-write-probe/claude-plan.stdout.txt",
+      "Path": "$.message.content[0].type",
+      "Value": "text"
+    },
+    {
+      "Source": "cli-write-probe/claude-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "rate_limit_event"
+    },
+    {
+      "Source": "cli-write-probe/claude-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "system"
+    },
+    {
+      "Source": "cli-write-probe/claude-plan.stdout.txt",
+      "Path": "$.usage.iterations[0].type",
+      "Value": "message"
+    },
+    {
+      "Source": "cli-write-probe/claude-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "result"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "system"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "system"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "system"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "assistant"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.message.model",
+      "Value": "claude-opus-5-5"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.message.type",
+      "Value": "message"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.message.content[0].type",
+      "Value": "thinking"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "assistant"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.message.model",
+      "Value": "claude-opus-5-5"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.message.type",
+      "Value": "message"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.message.content[0].type",
+      "Value": "text"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "assistant"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.message.model",
+      "Value": "claude-opus-5-5"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.message.type",
+      "Value": "message"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.message.content[0].type",
+      "Value": "tool_use"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.message.content[0].caller.type",
+      "Value": "direct"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "rate_limit_event"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "system"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "user"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.message.content[0].type",
+      "Value": "tool_result"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "assistant"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.message.model",
+      "Value": "claude-opus-5-5"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.message.type",
+      "Value": "message"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.message.content[0].type",
+      "Value": "text"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "system"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.usage.iterations[0].type",
+      "Value": "message"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "result"
+    },
+    {
+      "Source": "cli-write-probe-2/claude-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "system"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "hook_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "iteration_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "usage"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_end"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_end"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "hook_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_update"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_update"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "hook_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_end"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "iteration_end"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "iteration_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_start"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "usage"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "content_end"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "iteration_end"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "hook_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "agent_event"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.event.type",
+      "Value": "done"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.type",
+      "Value": "run_result"
+    },
+    {
+      "Source": "cli-write-probe-2/cline-plan.stdout.txt",
+      "Path": "$.model.info.reasoningOptions[0].type",
+      "Value": "effort"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.type",
+      "Value": "session.info"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.type",
+      "Value": "session.auto_mode_resolved"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.type",
+      "Value": "session.mcp_servers_loaded"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.type",
+      "Value": "session.tools_updated"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.data.model",
+      "Value": "gpt-6-luna"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.type",
+      "Value": "user.message"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.data.responsesReasoning.model",
+      "Value": "gpt-6-luna"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.data.responsesReasoning.effort",
+      "Value": "medium"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.type",
+      "Value": "assistant.turn_start"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.type",
+      "Value": "model.call_start"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.data.model",
+      "Value": "gpt-6-luna"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.type",
+      "Value": "assistant.message_start"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.type",
+      "Value": "assistant.message_delta"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.type",
+      "Value": "assistant.message_delta"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.type",
+      "Value": "model.call_finished"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.type",
+      "Value": "assistant.message"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.data.model",
+      "Value": "gpt-6-luna"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.data.reasoningBlocks.blocks[0].type",
+      "Value": "reasoning"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.type",
+      "Value": "assistant.reasoning"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.type",
+      "Value": "model.call_final_result"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.data.model",
+      "Value": "gpt-6-luna"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.type",
+      "Value": "assistant.turn_end"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.type",
+      "Value": "session.usage_checkpoint"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.data.modelCacheState[0].modelId",
+      "Value": "gpt-6-luna"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.data.promptCacheBreakState[0].models.gpt-6-luna.model",
+      "Value": "gpt-6-luna"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.data.promptCacheBreakState[0].models.gpt-6-luna.reasoning_effort",
+      "Value": "medium"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.data.promptCacheBreakState[0].models.gpt-6-luna.tool_count",
+      "Value": 3
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.data.accountingSnapshot.providerModelMetrics[0].modelId",
+      "Value": "gpt-6-luna"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.data.providerModelMetrics[0].modelId",
+      "Value": "gpt-6-luna"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.type",
+      "Value": "assistant.idle"
+    },
+    {
+      "Source": "cli-write-probe/copilot-available.stdout.txt",
+      "Path": "$.type",
+      "Value": "result"
+    },
+    {
+      "Source": "cli-effort-probe/codex-max.stdout.txt",
+      "Path": "$.type",
+      "Value": "thread.started"
+    },
+    {
+      "Source": "cli-effort-probe/codex-max.stdout.txt",
+      "Path": "$.type",
+      "Value": "turn.started"
+    },
+    {
+      "Source": "cli-effort-probe/codex-max.stdout.txt",
+      "Path": "$.type",
+      "Value": "item.completed"
+    },
+    {
+      "Source": "cli-effort-probe/codex-max.stdout.txt",
+      "Path": "$.item.type",
+      "Value": "agent_message"
+    },
+    {
+      "Source": "cli-effort-probe/codex-max.stdout.txt",
+      "Path": "$.type",
+      "Value": "turn.completed"
+    },
+    {
+      "Source": "cli-claude-effort/claude-max.stdout.txt",
+      "Path": "$.usage.iterations[0].type",
+      "Value": "message"
+    },
+    {
+      "Source": "cli-claude-effort/claude-max.stdout.txt",
+      "Path": "$.type",
+      "Value": "result"
+    },
+    {
+      "Source": "/home/sharpninja/.codex/sessions/2026/10/16/rollout-2026-10-16T15-32-42-01a1466a-b858-7c22-8f8d-eb99725342e7.jsonl",
+      "Path": "$.payload.sandbox_policy.type",
+      "Value": "read-only"
+    },
+    {
+      "Source": "/home/sharpninja/.codex/sessions/2026/10/16/rollout-2026-10-16T15-32-42-01a1466a-b858-7c22-8f8d-eb99725342e7.jsonl",
+      "Path": "$.payload.permission_profile.type",
+      "Value": "managed"
+    },
+    {
+      "Source": "/home/sharpninja/.codex/sessions/2026/10/16/rollout-2026-10-16T15-32-42-01a1466a-b858-7c22-8f8d-eb99725342e7.jsonl",
+      "Path": "$.payload.permission_profile.file_system.type",
+      "Value": "restricted"
+    },
+    {
+      "Source": "/home/sharpninja/.codex/sessions/2026/10/16/rollout-2026-10-16T15-32-42-01a1466a-b858-7c22-8f8d-eb99725342e7.jsonl",
+      "Path": "$.payload.permission_profile.file_system.entries[0].path.type",
+      "Value": "special"
+    },
+    {
+      "Source": "/home/sharpninja/.codex/sessions/2026/10/16/rollout-2026-10-16T15-32-42-01a1466a-b858-7c22-8f8d-eb99725342e7.jsonl",
+      "Path": "$.payload.model",
+      "Value": "gpt-6-astra"
+    },
+    {
+      "Source": "/home/sharpninja/.codex/sessions/2026/10/16/rollout-2026-10-16T15-32-42-01a1466a-b858-7c22-8f8d-eb99725342e7.jsonl",
+      "Path": "$.payload.collaboration_mode.settings.model",
+      "Value": "gpt-6-astra"
+    },
+    {
+      "Source": "/home/sharpninja/.codex/sessions/2026/10/16/rollout-2026-10-16T15-32-42-01a1466a-b858-7c22-8f8d-eb99725342e7.jsonl",
+      "Path": "$.payload.collaboration_mode.settings.reasoning_effort",
+      "Value": "max"
+    },
+    {
+      "Source": "/home/sharpninja/.codex/sessions/2026/10/16/rollout-2026-10-16T15-32-42-01a1466a-b858-7c22-8f8d-eb99725342e7.jsonl",
+      "Path": "$.payload.effort",
+      "Value": "max"
+    },
+    {
+      "Source": "/home/sharpninja/.claude/projects/-home-sharpninja--claude-scratch-hv-amendment-20261016-cc-cli-claude-effort/570f3678-325c-4107-8645-3d759619c22e.jsonl",
+      "Path": "$.type",
+      "Value": "user"
+    },
+    {
+      "Source": "/home/sharpninja/.claude/projects/-home-sharpninja--claude-scratch-hv-amendment-20261016-cc-cli-claude-effort/570f3678-325c-4107-8645-3d759619c22e.jsonl",
+      "Path": "$.message.model",
+      "Value": "claude-opus-5-5"
+    },
+    {
+      "Source": "/home/sharpninja/.claude/projects/-home-sharpninja--claude-scratch-hv-amendment-20261016-cc-cli-claude-effort/570f3678-325c-4107-8645-3d759619c22e.jsonl",
+      "Path": "$.message.type",
+      "Value": "message"
+    },
+    {
+      "Source": "/home/sharpninja/.claude/projects/-home-sharpninja--claude-scratch-hv-amendment-20261016-cc-cli-claude-effort/570f3678-325c-4107-8645-3d759619c22e.jsonl",
+      "Path": "$.message.content[0].type",
+      "Value": "thinking"
+    },
+    {
+      "Source": "/home/sharpninja/.claude/projects/-home-sharpninja--claude-scratch-hv-amendment-20261016-cc-cli-claude-effort/570f3678-325c-4107-8645-3d759619c22e.jsonl",
+      "Path": "$.message.usage.iterations[0].type",
+      "Value": "message"
+    },
+    {
+      "Source": "/home/sharpninja/.claude/projects/-home-sharpninja--claude-scratch-hv-amendment-20261016-cc-cli-claude-effort/570f3678-325c-4107-8645-3d759619c22e.jsonl",
+      "Path": "$.type",
+      "Value": "assistant"
+    },
+    {
+      "Source": "/home/sharpninja/.claude/projects/-home-sharpninja--claude-scratch-hv-amendment-20261016-cc-cli-claude-effort/570f3678-325c-4107-8645-3d759619c22e.jsonl",
+      "Path": "$.effort",
+      "Value": "max"
+    },
+    {
+      "Source": "/home/sharpninja/.claude/projects/-home-sharpninja--claude-scratch-hv-amendment-20261016-cc-cli-claude-effort/570f3678-325c-4107-8645-3d759619c22e.jsonl",
+      "Path": "$.message.model",
+      "Value": "claude-opus-5-5"
+    },
+    {
+      "Source": "/home/sharpninja/.claude/projects/-home-sharpninja--claude-scratch-hv-amendment-20261016-cc-cli-claude-effort/570f3678-325c-4107-8645-3d759619c22e.jsonl",
+      "Path": "$.message.type",
+      "Value": "message"
+    },
+    {
+      "Source": "/home/sharpninja/.claude/projects/-home-sharpninja--claude-scratch-hv-amendment-20261016-cc-cli-claude-effort/570f3678-325c-4107-8645-3d759619c22e.jsonl",
+      "Path": "$.message.content[0].type",
+      "Value": "text"
+    },
+    {
+      "Source": "/home/sharpninja/.claude/projects/-home-sharpninja--claude-scratch-hv-amendment-20261016-cc-cli-claude-effort/570f3678-325c-4107-8645-3d759619c22e.jsonl",
+      "Path": "$.message.usage.iterations[0].type",
+      "Value": "message"
+    },
+    {
+      "Source": "/home/sharpninja/.claude/projects/-home-sharpninja--claude-scratch-hv-amendment-20261016-cc-cli-claude-effort/570f3678-325c-4107-8645-3d759619c22e.jsonl",
+      "Path": "$.type",
+      "Value": "assistant"
+    },
+    {
+      "Source": "/home/sharpninja/.claude/projects/-home-sharpninja--claude-scratch-hv-amendment-20261016-cc-cli-claude-effort/570f3678-325c-4107-8645-3d759619c22e.jsonl",
+      "Path": "$.effort",
+      "Value": "max"
+    }
+  ],
+  "FoundationPlanMatchingLines": 1
+}

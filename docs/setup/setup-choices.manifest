@@ -5,7 +5,7 @@
   "agentIdentity": "Codex",
   "host": {
     "os": "linux",
-    "hostname": "PAYTON-OMARCHY",
+    "hostname": "LAB-OMARCHY",
     "notes": "Existing Omarchy host. Operator requested a local system service."
   },
   "endpoint": {
@@ -163,7 +163,7 @@
         "127.0.0.2:7147",
         "[::1]:7147"
       ],
-      "localHostnameMapping": "/etc/hosts: PAYTON-OMARCHY -> 127.0.0.1",
+      "localHostnameMapping": "/etc/hosts: LAB-OMARCHY -> 127.0.0.1",
       "mainPID": 611688,
       "configurationSha256": "A8ECF6298B42E9BA3D437D8FA9E0097A9379BF832A8135C95E5C3B61A446A9A7"
     }
@@ -185,7 +185,7 @@
       "code": "SYSTEMD_PENDING_VALIDATION",
       "disposition": "explicit-operator-override",
       "operatorInstruction": "override ddraft block",
-      "scope": "Local systemd installation on PAYTON-OMARCHY; create and validate a Type=simple unit. Verification gates remain mandatory."
+      "scope": "Local systemd installation on LAB-OMARCHY; create and validate a Type=simple unit. Verification gates remain mandatory."
     }
   ],
   "artifacts": {

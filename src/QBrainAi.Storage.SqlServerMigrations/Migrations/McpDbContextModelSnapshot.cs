@@ -2041,8 +2041,8 @@ namespace QBrainAi.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<int>("Order")
-                        .HasColumnType("int");
+                    b.Property<long>("Order")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("SessionLogTurnId")
                         .HasColumnType("bigint");
@@ -2058,6 +2058,12 @@ namespace QBrainAi.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.Property<string>("WorkspaceId")
                         .IsRequired()
                         .HasColumnType("nvarchar(1024)");
+
+                    b.Property<string>("AuditEventId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("AuditEventOrder")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -2370,6 +2376,15 @@ namespace QBrainAi.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(1024)");
 
+                    b.Property<string>("AuditEventId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("AuditEventOrder")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("OriginalTimestamp")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("SessionLogTurnId");
@@ -2623,6 +2638,12 @@ namespace QBrainAi.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.Property<string>("WorkspaceId")
                         .IsRequired()
                         .HasColumnType("nvarchar(1024)");
+
+                    b.Property<string>("AuditEventId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("AuditEventOrder")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -5324,6 +5345,117 @@ namespace QBrainAi.Support.Mcp.Storage.SqlServerMigrations.Migrations
             modelBuilder.Entity("QBrainAi.Support.Mcp.Storage.Entities.WorkspaceEntity", b =>
                 {
                     b.Navigation("BannedItems");
+                });
+
+            modelBuilder.Entity("QBrainAi.Support.Mcp.Storage.Entities.SessionAuditEventEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<bool>("Accepted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("AgentIdentity")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<long>("CapturedOrder")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("CapturedWorkspacePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("EventId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Kind")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
+
+                    b.Property<string>("McpSessionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PayloadHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("PayloadJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("PositionKey")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RequestId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("SessionLogTurnId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("StoredStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId")
+                        .IsUnique();
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("SessionLogTurnId", "PositionKey")
+                        .IsUnique()
+                        .HasFilter("[PositionKey] IS NOT NULL");
+
+                    b.ToTable("SessionAuditEvents");
+                });
+
+            modelBuilder.Entity("QBrainAi.Support.Mcp.Storage.Entities.SessionAuditEventEntity", b =>
+                {
+                    b.HasOne("QBrainAi.Support.Mcp.Storage.Entities.SessionLogTurnEntity", null)
+                        .WithMany()
+                        .HasForeignKey("SessionLogTurnId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("QBrainAi.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
         }

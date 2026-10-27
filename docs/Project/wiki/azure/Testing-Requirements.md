@@ -1,4 +1,4 @@
-# Testing Requirements (MCP Server)
+# Testing Requirements (QBrain.AI)
 
 ## TEST-GRAPHRAG-ADHOC
 
@@ -742,18 +742,31 @@ Given templates/prompt-templates.yaml, when the marker-template contract tests r
 
 ### TEST-MCP-138
 
-Unit tests must fail red until WorkspaceService is database-authoritative and DbForeignKeyContractTests prove every WorkspaceId entity has a Workspaces FK with non-cascade delete behavior.
+Unit and provider tests must fail red until WorkspaceService is database-authoritative and DbFkContractTests prove every WorkspaceId entity has a canonical Workspaces FK with non-cascade delete behavior. Non-memory FKs are required; MemoryEntity and MemoryIndexEntity use optional FKs because Global scope stores null WorkspaceId. Provider tests must prove the same physical constraints.
 
+**Acceptance Criteria:**
+- [ ] DbFkContractTests fails when a non-memory WorkspaceId entity lacks a required non-cascade Workspaces FK.
+- [ ] Memory relationship tests prove optional Workspaces FKs accept Global null, reject orphan non-null workspace IDs, and preserve parent/index ownership consistency.
+- [ ] SQLite, PostgreSQL, and SQL Server migrated physical schemas expose the expected FK nullability and delete action with existing rows preserved.
 
 ### TEST-MCP-139
 
 Unit tests must fail red until persistent delete paths preserve rows through soft-delete metadata and every mutable entity writes DataAuditLog rows for create, update, and soft-delete operations.
 
+**Acceptance Criteria:**
+- [ ] A negative-control model with Cascade fails the memory relationship contract; the real EF model uses Restrict or NoAction.
+- [ ] Provider tests soft-delete a memory and prove its version and index rows remain queryable for audit and recovery.
+- [ ] Migrated SQLite, PostgreSQL, and SQL Server schemas have non-cascade MemoryId FKs and preserve seeded row counts.
 
 ### TEST-MCP-140
 
 Unit and provider tests must fail red until TODO requirement links and requirement traceability links enforce FKs, missing requirements are backfilled, and SQLite, SQL Server, and PostgreSQL migrations preserve data.
 
+**Acceptance Criteria:**
+- [ ] Unit tests fail when TODO requirement links omit a durable TODO or Requirements FK.
+- [ ] Unit tests fail when FR/TR/TEST traceability links omit source or target Requirements FKs.
+- [ ] Provider migrations backfill missing requirement anchors and preserve existing TODO, requirement, and traceability rows.
+- [ ] SQLite, SQL Server, and PostgreSQL migrations enforce the physical FKs without data loss.
 
 ### TEST-MCP-141
 
@@ -923,7 +936,8 @@ Deferred-scope documentation tests SHALL prove remaining future autonomous Quad-
 aiUnit plan review tests SHALL validate committed aiUnit run-log evidence for PLAN-TURNTRANSACTIONS-001 and fail on critical/high findings.
 
 **Acceptance Criteria:**
-- [x] `PlanTransactionReviewTests` validates `artifacts/aiunit-plan-review/aiunit-review-plan-20260612T060729.901Z.json`, reviewed scope, pass status, and absence of critical/high findings.
+- [x] PlanTransactionReviewTests validates the original committed aiUnit JSON run log for PLAN-TURNTRANSACTIONS-001, its reviewed scope, pass status, and absence of critical or high findings. (evidence: Git commit dd502e001f4ea9c4b7c175cee9d8c0b27b7b56cf blob 8f046a33caf8c0e04d74ac7f67628df5e86145e1; tests/McpServer.PlanReview.Tests/TestResults/original-runlog-green.trx (1 passed, 0 failed, 0 skipped))
+- [x] The byte-identical original run log is copied as a test resource and read from test output; running the test does not use a repository path or write docs/reviews. (evidence: tests/McpServer.PlanReview.Tests/Fixtures/README.md; SHA-256 D826A458802C3252EEE88D898D633E610331506D186350D54E71573686B51878; original-runlog-green.trx)
 
 ### TEST-MCP-165
 
@@ -1210,6 +1224,24 @@ aiUnit must independently review warning suppression governance decisions, requi
 - [ ] Named tests exist: Build_HasNormalizeGeneratedMigrationObsoletePragmasTarget; NormalizeGeneratedMigrationTarget_UsesMockCatalogAndAtomicWriter; NormalizeGeneratedMigrationObsoletePragmas_ReplacesOnlyExactPairsWithBlankLines; NormalizeGeneratedMigrationObsoletePragmas_IgnoresNonGeneratedAndNonMigrationFiles; NormalizeGeneratedMigrationObsoletePragmas_IsIdempotent; ValidateWarningSuppressions_GeneratedMigrationPragmas_FailsReadOnlyWithoutMutation.
 
 
+## TEST-MCP-AUDIT
+
+### TEST-MCP-AUDIT-001
+
+AuditPayloadMigrationTests and AuditPayloadProviderMigrationTests apply the real SQLite, PostgreSQL, and SQL Server migrations in scratch databases, verify legacy text reads and all four compressed payload round trips, and confirm the new migration ID is applied.
+
+
+### TEST-MCP-AUDIT-002
+
+DbFkBehaviorTests reject tracked audit updates. SqlServerAuditPayloadMigrationTests assert seven SQL Server runtime-role DENY permissions. AuditPayloadMigrationTests verify AutoMigrate false rejects pending schema and accepts migrated schema.
+
+
+### TEST-MCP-AUDIT-003
+
+FederationStateAdapterRegistryTests verify TODO snapshots omit audit history; WikiDumpG7OverlayTests verify both audit tables are marked OMIT-LOCAL and audit sentinels are absent from exported payloads.
+
+
+
 ## TEST-MCP-AUTH
 
 ### TEST-MCP-AUTH-010
@@ -1295,6 +1327,38 @@ Pester proves Test-ReplFailsafeBackendUnreachable is true for backend_unavailabl
 
 **Acceptance Criteria:**
 - [ ] Named tests cover TEST-MCP-FAILSAFE-001 acceptance criteria
+
+
+## TEST-MCP-FED-BACKFILL
+
+### TEST-MCP-FED-BACKFILL-001
+
+Per adapter: EnumerateAsync pages all workspace rows; hub ApplyAsync with GlobalWorkspaceId stores rows under the canonical workspace (not empty workspace) preserving ids/timestamps/versions; replay returns already_applied without duplicates. Backfill envelopes create no fanout rows. FederationBackfillService resumes from the durable cursor after interruption and marks per-workspace completion. FederationMiddleware serves reads locally while a workspace backfill is incomplete and forwards writes; switches to hub after completion. federation/status reports backfill state and staleReadStatus non-clear until complete. Parity report detects a missing row.
+
+
+
+## TEST-MCP-FED-PATH
+
+### TEST-MCP-FED-PATH-001
+
+Unit matrix {host: Windows, simulated Linux} x {input: C:\x, C:/x, \\srv\sh\x, //srv/sh/x, /home/x, relative, mixed separators} for IWorkspacePathNormalizer: foreign-platform inputs are never prefixed with the process cwd and keep their platform. TriageService on simulated Linux: submit with C:\Users\kingd stores OriginalWorkspacePath C:/Users/kingd (no /opt/... prefix), getReport and queryGroups by the original path succeed. WorkspaceService.Init on simulated Linux with a Windows path does not create directories. Architecture test: no direct Path.GetFullPath on request-supplied workspace paths under src/ outside the allowlist. Mocks first: host-platform and file-system abstractions mocked.
+
+
+
+## TEST-MCP-FED-ROUTE
+
+### TEST-MCP-FED-ROUTE-001
+
+Hub middleware/controller tests with in-memory topology: forwarded request (hub token, X-Mcp-Proxy-Id PAYTON-LEGION2, X-Workspace-Path F:\GitHub\McpServer) resolves to the proxy workspace canonical row and returns its TODOs; same with X-Workspace-Path = GlobalWorkspaceId; request with X-Mcp-Federation-Hop and unknown or missing workspace returns 4xx and never the hub primary workspace; hub token cannot address a workspace registered to a different proxy; LocalProxy FederationMiddleware sends GlobalWorkspaceId in X-Mcp-Global-Workspace-Id.
+
+
+
+## TEST-MCP-FED-WSSYNC
+
+### TEST-MCP-FED-WSSYNC-001
+
+FederationTopologyService tests: enroll with configuration fields creates canonical rows whose proxy-owned fields equal the request; heartbeat with changed TodoPath updates the row; CurrentRequirementLayerKey set on the hub is preserved across heartbeats and reported as drift when the proxy differs; registration without configuration fields (old proxy) keeps current defaults. FederationLocalProxyEnrollmentService builds inventory carrying all proxy-owned fields.
+
 
 
 ## TEST-MCP-FILETOOLS
@@ -1598,6 +1662,14 @@ Memory federation tests SHALL prove memory adapter diagnostics, /mcpserver/memor
 - [ ] Federation operation tests prove signed memory envelopes apply, stale versions conflict without overwrite, and hub fanout can be applied by a recipient.
 
 
+## TEST-MCP-PATHNORM
+
+### TEST-MCP-PATHNORM-001
+
+Per BDP v4 (MockData fixture green before production code, then Real fixture). Storage-key equivalence: C:\Users\kingd, C:/Users/kingd, c:/users/KINGD -> one key windows:C:/USERS/KINGD; \\srv\share\x and //srv/share/x -> one key keeping leading //; \\?\C:\x -> C:/x. Remote-path detection treats //srv/share as remote. ToNativePath returns backslash paths on Windows. Rekey: value mapping f(x) touches only Windows-shaped values and is idempotent; planner builds the mapping and statement plan from a scripted snapshot; executors per provider (SQLite in-memory; SQL Server and PostgreSQL provider fixtures) rewrite all workspace columns and recompute hashed values with FK validation; report counts unchanged per table and per workspace; startup guard rejects an unconverted store; rehearsal on a restored copy of McpServer_PAYTON_LEGION2 recorded as receipts. GlobalWorkspaceId for (PAYTON-LEGION2, F:/GitHub/McpServer) is stable across both input separators.
+
+
+
 ## TEST-MCP-PLUGIN
 
 ### TEST-MCP-PLUGIN-011
@@ -1698,6 +1770,7 @@ A shared deterministic Theory and companion AiTheory matrix must exercise the re
 - [x] A legacy PLUGIN_ROOT_OVERRIDE value is injected and proven unable to alter the expected cache path. (evidence: tests/McpServer.PluginIntegration.Tests; overlay G2 Codex extra-high AGREE)
 - [x] The focused target and each plugin native suite complete with zero failures and zero skips. (evidence: tests/McpServer.PluginIntegration.Tests; overlay G2 Codex extra-high AGREE)
 - [x] Retain P1-P20 names from the incorporated catalog. Eight production-entrypoint rows and eight real aiUnit rows are discovered. Failed and skipped counts are zero. Direct-client-only or prewritten-success fixtures fail the gate. (evidence: tests/McpServer.PluginIntegration.Tests; overlay G2 Codex extra-high AGREE)
+- [ ] All eight production-entrypoint rows execute a dense existing-session update and an induced retryable persistence failure followed by recovery, assert the same normalized outcome fields, and independently prove either exact durable readback or retained then drained recovery work with zero failures and zero skips.
 
 
 ## TEST-MCP-PRODUCT
@@ -1854,6 +1927,77 @@ An inbound OpenAI ChatCompletion request maps to QuadBrain orchestration and ret
 
 Unit tests prove (1) full orchestration reports started then completed for Creativity, Logic, and ArbiterOfTruth with role output on completed, and Creativity/Logic started events occur before Arbiter started; (2) stream=true SSE contains quadbrain.role events for those reports before the final assistant chunk; (3) QBAgent SSE client prints Creativity started and Creativity completed with output from a canned SSE body without waiting for [DONE] to print the first role line. Tests use mocks or in-memory HTTP, not the Windows service.
 
+
+
+## TEST-MCP-QBRAIN
+
+### TEST-MCP-QBRAIN-001
+
+Locked tokens. Namespaces and assemblies use QBrainAi. Package ids use the QBrainAI prefix. QBAgent and qbagent stay.
+
+**Acceptance Criteria:**
+- [ ] No C# namespace declaration uses QBrainAI or QBrain.AI.
+- [ ] QBrainAi.QBAgent is present and qbagent remains the QBAgent tool command.
+
+### TEST-MCP-QBRAIN-002
+
+Solution, project folders, and RootNamespace use QBrainAi. NukeBuild.Tests and _build stay.
+
+**Acceptance Criteria:**
+- [ ] QBrainAi.sln exists and McpServer.sln does not.
+- [ ] tests/Build.Tests keeps RootNamespace NukeBuild.Tests.
+- [ ] build/_build.csproj is still _build.
+
+### TEST-MCP-QBRAIN-003
+
+New package ids and 1.x SharpNinja.McpServer.* facades. qbrain-ai-repl is canonical and mcpserver-repl remains on the facade. NuGet push of QBrainAI.* stays gated.
+
+**Acceptance Criteria:**
+- [ ] The seven published projects use QBrainAI package ids.
+- [ ] Seven facade projects keep the old SharpNinja.McpServer package ids.
+- [ ] The workflow skips pushing QBrainAI packages unless the Phase 4 gate is set.
+
+### TEST-MCP-QBRAIN-004
+
+Phase 1 does not rename the GitHub repository. RepositoryUrl still points at the live repo.
+
+**Acceptance Criteria:**
+- [ ] Packed project RepositoryUrl values still contain SharpNinja/McpServer or sharpninja/McpServer.
+
+### TEST-MCP-QBRAIN-005
+
+/qbrainai and /mcpserver both declared for a representative controller. /mcp-transport unchanged. QBrainAi config wins over Mcp. QBRAINAI_* env wins over MCP_*. MCP_UNTRUSTED stays.
+
+**Acceptance Criteria:**
+- [ ] Todo route templates include qbrainai/todo and mcpserver/todo.
+- [ ] MapMcp still uses /mcp-transport.
+- [ ] GetEffectiveMcpValue prefers QBrainAi and falls back to Mcp.
+- [ ] GetRequestedInstanceName prefers QBRAINAI_INSTANCE and falls back to MCP_INSTANCE.
+
+### TEST-MCP-QBRAIN-006
+
+Docker names use qbrain-ai. Service script defaults use QBrainAi, QBrain.AI, and C:\ProgramData\QBrainAi. Octopus deploy stays off. McpServer_Omarchy and PAYTON-LEGION2 remain.
+
+**Acceptance Criteria:**
+- [ ] docker-compose.mcp.yml uses image qbrain-ai:latest.
+- [ ] Manage-McpService.ps1 defaults match the new service name, display name, and install path.
+- [ ] azure-pipelines.yml does not deploy unless AllowLegionDeploy is true.
+
+### TEST-MCP-QBRAIN-007
+
+Inventory TSV classifies every hit. Persisted names mcp.db, .mcpServer, and McpDbContext remain. No new EF table-rename migration is added for the rebrand.
+
+**Acceptance Criteria:**
+- [ ] docs/receipts/qbrain-ai-rebrand-phase1-inventory.tsv has a class and a closed action on every row.
+- [ ] Source still contains mcp.db, .mcpServer, and class McpDbContext.
+
+### TEST-MCP-QBRAIN-008
+
+Requirements ids are stored before the rename, and Phase 1 is not claimed done without the astra hostile-validation receipt.
+
+**Acceptance Criteria:**
+- [ ] The five FR and eight TR headings exist in the requirements documents.
+- [ ] No docs/receipts/hv file in this change records OverallVerdict AGREE for Phase 1.
 
 
 ## TEST-MCP-QBSEED
@@ -2338,12 +2482,42 @@ Verifies generateDocument accepts format=markdown for docType=matrix (and other 
 
 
 
+## TEST-MCP-REQRECOVERY
+
+### TEST-MCP-REQRECOVERY-001
+
+Provider-backed and production-entrypoint tests must prove deterministic dry-run, atomic mixed apply, rollback, stale-precondition rejection, idempotent replay, concurrency safety, exact audit readback, and synchronized supported-plugin behavior.
+
+**Acceptance Criteria:**
+- [ ] A mixed create, update, delete, acceptance-criteria, mapping-upsert, and mapping-delete plan commits once and exact post-query state and counts match the approved dry-run.
+- [ ] Injected validation and persistence failures at each operation class leave the effective requirements, criteria, mappings, idempotency state, and audit state byte-equivalent to the pre-state.
+- [ ] Stale pre-state hash, duplicate operations, missing references, and idempotency-key content mismatch are rejected before mutation with stable classified errors.
+- [ ] Dry-run is mutation-free, identical replay returns the original receipt, and repeated post-state queries contain no duplicates or drift.
+- [ ] Two concurrent plans using the same pre-state prove that at most one commits and the loser receives a stale-precondition outcome without partial state.
+- [ ] All supported production plugin entrypoints that advertise requirements operations execute the canonical dry-run and apply fixtures with identical normalized results, zero failures, and zero skips.
+- [ ] A zero-skip matrix executes mixed commit, validation rollback, persistence rollback, stale precondition, idempotent replay, and concurrent-plan cases against SQLite, SQL Server, and PostgreSQL. Every provider row proves exact raw and effective post-state plus audit and idempotency state.
+- [ ] Layered fixtures containing inherited, shadowed, and out-of-bounds records prove that dry-run binds every scope and layer field, apply writes only the target layer, and any change to bound raw state, effective state, layer metadata, or scope bounds produces a no-mutation stale-precondition result.
+
+
 ## TEST-MCP-REQWS
 
 ### TEST-MCP-REQWS-001
 
 Explicit workspacePath override for requirements document generation (follow-up to triage-report-f77331f9a33e4bd0ae4f55f0470743ed). RequirementsClientTests verify GenerateAsync with a workspacePath override replaces the client-bound X-Workspace-Path header for that call only and the bound header is preserved without an override. RequirementsWorkflowWorkspaceOverrideTests verify the real RequirementsWorkflow forwards the override to the generate request, preserves the bound workspace when absent, and the ReplCommandDispatcher forwards the workspacePath param from workflow.requirements.generateDocument envelopes to the workflow. Cross-workspace override without the target workspace's API key fails with 401 (per-workspace keys) instead of silently exporting the session-bound workspace's requirements. Evidence 2026-07-14: red before implementation, Client 23/23 and Repl.Core 810/810 green after; deployed in service and mcpserver-repl 1.4.15+.
 
+
+
+## TEST-MCP-SERVICEUPDATE
+
+### TEST-MCP-SERVICEUPDATE-001
+
+Mocks-first ordering/failure/path tests, Windows defaults regression, preservation policy tests, real temporary tar metadata smoke, full unit gates, independent review and local Nuke service update verification per docs/plans/2026-09-28-cross-platform-update-service.md.
+
+**Acceptance Criteria:**
+- [ ] UpdateService selects Windows or Linux at runtime; Windows defaults/launcher remain compatible; Linux x64/arm64 use extensionless apphost; unsupported hosts fail before changes.
+- [ ] Both platforms preserve live appsettings.yaml and configured DataFolder with legacy fallback. Linux also preserves unit/drop-ins/environment files and Unix ownership/modes/ACLs/xattrs through a private retained archive.
+- [ ] Linux validates installed service identity and stage before stop; backup precedes replacement; restore precedes start; service executable and server/workspace health must pass. Failures preserve recovery artifacts and never report success.
+- [ ] Mocks-first tests and full applicable unit suites pass with zero failures/skips; independent gates pass; existing local Linux service update preserves configuration/data and trusted workspace behavior.
 
 
 ## TEST-MCP-SESSIONATTR
@@ -2405,6 +2579,8 @@ Schema guard, DbUpdateException details.inner, uniqueness retry, contention vers
 - [ ] Import recovery tests start from canonical and reconstructed bundles and cover missing source, traversal, reparse escape, malformed schema, size bounds, cancellation, concurrent replay, content-hash drift, and delete-only-after-verified-persistence.
 - [ ] Provider-specific uniqueness and schema tests use disposable databases and leave no remnant; an approved prior migration is not reopened solely because infrastructure is degraded.
 - [ ] The accepted cumulative test scope exits with zero failures, zero skips, no missing reports, and no zero-discovery projects.
+- [ ] Provider-backed tests seed a dense session graph, update it through SubmitAsync, and prove bounded completion, exact child-collection readback, and no Cartesian query shape. Concurrent same-session submissions prove bounded retry or classified retryable failure with no partial or duplicate rows.
+- [ ] A zero-skip matrix executes dense SubmitAsync and concurrent same-session updates against SQLite, SQL Server, and PostgreSQL. The SQL Server row covers error 1205 deadlock and five-second command-budget expiry, proves one normalized retryable outcome without false primary success or partial state, then proves exact readback after successful retry.
 
 ### TEST-MCP-SESSIONLIFE-005
 
@@ -2507,6 +2683,19 @@ Pester proves the TEMP alignment helper sets TEMP and TMP to the workspace volum
 
 **Acceptance Criteria:**
 - [ ] Named tests cover TEST-MCP-TEMPVOL-001 acceptance criteria
+
+
+## TEST-MCP-TESTRESOURCE
+
+### TEST-MCP-TESTRESOURCE-001
+
+Tests prove packaged fixture inputs and isolated generated artifacts work without repository-root lookup, while source-contract tests retain live-source validation. Run focused mock-validation, real-red/real-green, and applicable full suites.
+
+**Acceptance Criteria:**
+- [ ] Focused fixture tests run from test output with the checkout root unavailable and still load exact packaged bytes.
+- [ ] Writer tests use an injected disposable output directory and prove no generated file appears under repository docs/reviews or fixture source paths.
+- [ ] A source inventory finds no remaining fixture-input or generated-output path that walks to the repository root in applicable test code.
+- [ ] Focused build/source-contract tests still validate current repository and sibling plugin source, including checksum drift when present.
 
 
 ## TEST-MCP-TODO-CLOSE
@@ -2849,6 +3038,19 @@ GenerateNextTodoId skips same-workspace soft-deleted EXEC ids. CreateAsync of a 
 - [ ] GenerateNextTodoId skips same-workspace soft-deleted EXEC ids. CreateAsync of a soft-deleted id revives or skips instead of opaque UNIQUE. Invalid dependsOn fails before insert.
 
 
+## TEST-MCP-TRIM
+
+### TEST-MCP-TRIM-001
+
+ProcessRunnerDependencyTests verifies all five public runner types belong to McpServer.Common.AgentCli; QBAgent runtime dependency graph excludes McpServer.Services, McpServer.Storage and Entity Framework; Services type forwards preserve old qualified names. Existing mocked git/bash and full unit suites remain passing. Trim analysis records only the actual remaining client-side warnings, with no added suppression.
+
+**Acceptance Criteria:**
+- [ ] Runner implementation, options, interface, request and result reside in Common.AgentCli with unchanged namespaces and signatures.
+- [ ] QBAgent dependency graph excludes server Services, Storage and EF assemblies.
+- [ ] Services forwards all moved public types, and existing mock-backed process/tool unit tests remain green.
+- [ ] Trim inventory is reduced from verified diagnostics only, with no new suppression or relaxed assertions.
+
+
 ## TEST-MCP-USECASE
 
 ### TEST-MCP-USECASE-001
@@ -2980,6 +3182,17 @@ For each sixteenth-review finding, preserve a failing consumer-facing test and a
 - [ ] Focused RED and GREEN, external deterministic 20/20, Agent Help 18/18, SQLite, LocalDB, fresh PostgreSQL, full BDPv4, build.ps1 Compile/Test/ValidateTraceability, exact-final-HEAD 12-project Release, repository/history/harness/EOL, cleanup, and all seven-current plus ten-prior maps pass exactly as required.
 - [ ] A generated-migration inventory proves the exact 23 historical SQL Server OPENJSON backfills remain byte-immutable and the test-only command interceptor scopes bounded plans to that inventory; a real LocalDB provider run completes within the finite 300-second allowance, preserves values, and leaves no database remnant.
 - [ ] Consumer and real Windows boundary tests persist and read acceptance criteria with opaque ws:test-style workspace identifiers without native path errors, while existing rooted-path cancellation, alias, and mount tests continue to require physical resolution.
+
+### TEST-MCP-USECASE-021
+
+Prove identity-preserving actor, flow, and step editing through discriminating independent fakes before production, then bind the same assertions to CQRS, REST, client, MCP, persistence, and authenticated readback.
+
+**Acceptance Criteria:**
+- [ ] Before production edits, contract tests pass against correct independent fake editor responses and prove inside the passing harness that wrong IDs, parent IDs, fields, and mutation counts are rejected.
+- [ ] The same contract cases and assertions pass against the real CQRS handlers for actor, flow, and step updates, including validation, missing, cross-workspace, and parent-mismatch cases.
+- [ ] Controller tests prove the three update routes and classified 400/404 responses; typed-client tests prove HTTP methods, paths, payloads, cancellation, and response deserialization; MCP-tool tests prove dispatcher inputs and serialized results.
+- [ ] A persistence test proves IDs and row counts are unchanged, aggregate approval/version and unrelated data are unchanged, UpdatedAtUtc advances, and authenticated readback returns the edited values.
+- [ ] Focused tests, the full applicable unit suite, Compile, and ValidateTraceability complete with zero failures and zero skips before deployment.
 
 
 ## TEST-MCP-VERIFYWRAP
@@ -3189,6 +3402,18 @@ When PUT is used on the turn-append route instead of POST, the endpoint returns 
 **Acceptance Criteria:**
 - [x] PUT request returns 405 Method Not Allowed
 - [x] Response includes Allow: POST header
+
+
+## TEST-TIMER
+
+### TEST-TIMER-001
+
+Run the same scenario and assertions against independently scripted ITimerService/ITimerHandle mocks and both real services. Correct mock and deliberate negative responses must yield a green outer mock gate before product edits. Cover blocked cancellation registration, overlapping Restart against Stop and Dispose, new run after Stop, final Dispose, repeated shutdown, and reentrant calls.
+
+**Acceptance Criteria:**
+- [ ] Mock contract gate passes with zero failures/skips and rejects forbidden restart, stale token, and restart-after-dispose behaviors as expected negative controls.
+- [ ] The same contract tests pass against Core and UI.Core, and all four reproduced race cases no longer require external rescue.
+- [ ] Full five-project Manager suites, extension tests, and deployment-script tests have zero failures/skips before acceptance; deferred Claude HV must review all changed code/tests/docs before Phase 2 closure.
 
 
 ## TEST-TRIAGE

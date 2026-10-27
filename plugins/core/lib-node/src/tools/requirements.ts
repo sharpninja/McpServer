@@ -2,6 +2,7 @@ import type { ToolDescriptor as Tool } from './tool-descriptor.js';
 import type { ReplBridge, ReplResponse } from '../transport/repl-bridge.js';
 import { cacheDelete, cacheWrite } from '../cache/cache-manager.js';
 import * as yaml from 'js-yaml';
+import { CoreOperationError } from '../runtime/operation-failure.js';
 
 const STATUS_ENUM = ['pending', 'in_progress', 'completed', 'deferred'] as const;
 const PRIORITY_ENUM = ['critical', 'high', 'medium', 'low'] as const;
@@ -1073,12 +1074,25 @@ async function invokeRequirementsTool(
   const workflowMethod = workflowMethodMap[name];
   if (!workflowMethod) throw new Error(`Unknown requirements tool: ${name}`);
 
-  if (isWikiGenerate(name, args)) {
+  if (!bridge.governed && isWikiGenerate(name, args)) {
     const httpResponse = await generateDocumentHttpFallback(args);
     if (httpResponse) return httpResponse;
   }
 
   const workflowResponse = await bridge.invoke(workflowMethod, workflowParams(name, args));
+  if (bridge.governed) {
+    // The pinned contract is required. Never repeat a possibly committed call
+    // through a different API, or consult ambient credentials for missing data.
+    if (workflowResponse.type === 'error') return workflowResponse;
+    if (workflowResponse.type !== 'result' || !Object.prototype.hasOwnProperty.call(workflowResponse.payload, 'result') || isEmptyResult(workflowResponse))
+      throw new CoreOperationError('required_result_missing', false);
+    const normalized = name === 'req_generate_document' ? normalizeGenerateResponse(workflowResponse) : workflowResponse;
+    if (isWikiGenerate(name, args) && (!hasZipContent(normalized) ||
+      !(normalized.payload.result as { contentBase64: string }).contentBase64.trim()))
+      throw new CoreOperationError('required_result_missing', false);
+    assertAcceptanceCriteriaCaptured(name, args, normalized);
+    return normalized;
+  }
   if (workflowResponse.type !== 'error' && !isEmptyResult(workflowResponse)) {
     if (isWikiGenerate(name, args)) {
       const normalized = normalizeGenerateResponse(workflowResponse);
@@ -1120,19 +1134,19 @@ export async function handleRequirementsTool(
 ) {
   const method = workflowMethodMap[name];
   const normalizedArgs = normalizeRequirementArgs(name, args);
-  const failsafePath = mutatingRequirementsTools.has(name) && method ? await cacheWrite(method, normalizedArgs) : undefined;
+  const failsafePath = !bridge.governed && mutatingRequirementsTools.has(name) && method ? await cacheWrite(method, normalizedArgs) : undefined;
   let response: ReplResponse;
   try {
     response = await invokeRequirementsTool(name, normalizedArgs, bridge);
   } catch (error) {
     const suffix = failsafePath ? ` Local failsafe saved: ${failsafePath}` : '';
-    throw new Error(`${error instanceof Error ? error.message : String(error)}${suffix}`);
+    throw new Error(`${error instanceof Error ? error.message : String(error)}${suffix}`, { cause: error });
   }
 
   if (response.type === 'error') {
     const payload = response.payload as { message?: string; code?: string };
     const suffix = failsafePath ? ` Local failsafe saved: ${failsafePath}` : '';
-    throw new Error(`${payload.code ?? 'error'}: ${payload.message ?? 'Unknown error'}${suffix}`);
+    throw new Error(`${payload.code ?? 'error'}: ${payload.message ?? 'Unknown error'}${suffix}`, { cause: payload });
   }
 
   if (failsafePath) await cacheDelete(failsafePath);

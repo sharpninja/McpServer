@@ -228,6 +228,7 @@ public sealed class SessionLogSanitizer : ISessionLogSanitizer
 
         return actions.Select(action => new UnifiedActionDto
         {
+            EventId = action.EventId,
             Order = action.Order,
             Description = SanitizeString(action.Description),
             Type = SanitizeString(action.Type),
@@ -243,6 +244,7 @@ public sealed class SessionLogSanitizer : ISessionLogSanitizer
 
         return dialog.Select(item => new ProcessingDialogItemDto
         {
+            EventId = item.EventId,
             Timestamp = SanitizeString(item.Timestamp),
             Role = SanitizeString(item.Role),
             Content = SanitizeString(item.Content),

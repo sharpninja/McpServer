@@ -16,7 +16,7 @@ namespace QBrainAi.Support.Mcp.Storage;
 /// FR-SUPPORT-010: SQLite storage for local MCP server.
 /// TR-MCP-MT-003: Global query filter on WorkspaceId for multi-tenant data isolation.
 /// </summary>
-public sealed class McpDbContext : DbContext
+public sealed partial class McpDbContext : DbContext
 {
     private string _workspaceId;
 
@@ -25,7 +25,7 @@ public sealed class McpDbContext : DbContext
     public McpDbContext(DbContextOptions<McpDbContext> options, WorkspaceContext? workspaceContext = null)
         : base(options)
     {
-        _workspaceId = workspaceContext?.WorkspacePath ?? string.Empty;
+        _workspaceId = WorkspaceIdentity.CanonicalizeWorkspaceId(workspaceContext?.WorkspacePath);
         RegisterSqliteSessionLogHeaderDdl();
     }
 
@@ -44,7 +44,7 @@ public sealed class McpDbContext : DbContext
     public string CurrentWorkspaceId => _workspaceId;
 
     /// <summary>TR-MCP-MT-001: Overrides the workspace ID for this context instance (e.g. from an MCP tool parameter).</summary>
-    public void OverrideWorkspaceId(string workspaceId) => _workspaceId = workspaceId;
+    public void OverrideWorkspaceId(string workspaceId) => _workspaceId = WorkspaceIdentity.CanonicalizeWorkspaceId(workspaceId);
 
     /// <summary>
     /// TR-HANDOFF-SURFACE-001: Pushes a workspace id and restores the previous value when disposed.
@@ -54,7 +54,7 @@ public sealed class McpDbContext : DbContext
     public IDisposable PushWorkspaceId(string workspaceId)
     {
         var previous = _workspaceId;
-        _workspaceId = workspaceId;
+        _workspaceId = WorkspaceIdentity.CanonicalizeWorkspaceId(workspaceId);
         return new WorkspaceIdScope(this, previous);
     }
 
@@ -1208,7 +1208,9 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<TriageGroupEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<TriageResearchRunEntity>().HasIndex(e => e.WorkspaceId);
 
+        ConfigureSessionAuditEvents(modelBuilder);
         ApplyDbFkConventions(modelBuilder);
+        WorkspaceKeyConversion.Apply(modelBuilder);
     }
 
     /// <inheritdoc />
@@ -1351,6 +1353,7 @@ public sealed class McpDbContext : DbContext
     private void PrepareDbFkChanges()
     {
         StampWorkspaceId();
+        WorkspaceKeyConversion.CanonicalizeTrackedValues(ChangeTracker.Entries());
         ApplySoftDeletes();
         BlockPhysicalDeletes();
         BlockAuditRowUpdates();
@@ -1451,13 +1454,13 @@ public sealed class McpDbContext : DbContext
             .Where(e => e.Entity is not WorkspaceEntity)
             .Select(e => TryGetWorkspaceId(e))
             .Where(id => id is not null)
-            .Select(id => id!)
+            .Select(id => WorkspaceIdentity.CanonicalizeWorkspaceId(id))
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToArray();
 
         foreach (var workspaceId in workspaceIds)
         {
-            if (Workspaces.Local.Any(w => string.Equals(w.WorkspaceId, workspaceId, StringComparison.OrdinalIgnoreCase)))
+            if (Workspaces.Local.Any(w => string.Equals(WorkspaceIdentity.CanonicalizeWorkspaceId(w.WorkspaceId), workspaceId, StringComparison.OrdinalIgnoreCase)))
                 continue;
 
             try
@@ -1648,7 +1651,7 @@ public sealed class McpDbContext : DbContext
             {
                 var resolvedWorkspaceId = ResolveWorkspaceIdForAddedEntity(entry.Entity);
                 if (resolvedWorkspaceId is not null)
-                    prop.CurrentValue = resolvedWorkspaceId;
+                    prop.CurrentValue = WorkspaceIdentity.CanonicalizeWorkspaceId(resolvedWorkspaceId);
             }
         }
     }

@@ -34,40 +34,11 @@ public sealed class TranscriptMcpStdioHostTests
         File.Copy(fixturePath, workspaceFixture, overwrite: true);
 
         using var process = StartStdioHost(executablePath, workspaceRoot, dataRoot, dbPath);
-        var stdout = new StringBuilder();
-        var stderr = new StringBuilder();
-        var stdoutTask = CaptureAsync(process.StandardOutput, stdout, TestContext.Current.CancellationToken);
-        var stderrTask = CaptureAsync(process.StandardError, stderr, TestContext.Current.CancellationToken);
-
-        foreach (var message in CreateMessages(workspaceRoot, relativeFixture))
-        {
-            await process.StandardInput.WriteLineAsync(message.AsMemory(), TestContext.Current.CancellationToken).ConfigureAwait(true);
-            await process.StandardInput.FlushAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
-        }
-
-        await WaitForOutputAsync(
-            stdout,
-            text => text.Contains("compatibilityArtifactPath", StringComparison.Ordinal),
-            TimeSpan.FromSeconds(45),
-            TestContext.Current.CancellationToken).ConfigureAwait(true);
-
-        process.StandardInput.Close();
-        using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(30));
-        using var linked = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken, timeout.Token);
-        try
-        {
-            await process.WaitForExitAsync(linked.Token).ConfigureAwait(true);
-        }
-        catch (OperationCanceledException) when (timeout.IsCancellationRequested)
-        {
-            process.Kill(entireProcessTree: true);
-            throw;
-        }
-
-        await stdoutTask.ConfigureAwait(true);
-        await stderrTask.ConfigureAwait(true);
-        var stdoutText = stdout.ToString();
-        var stderrText = stderr.ToString();
+        var observation = await OwnedStdioProcessAdapter.RunAsync(
+            process, CreateMessages(workspaceRoot, relativeFixture), CaptureAsync,
+            WaitForOutputAsync, TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var stdoutText = observation.Stdout;
+        var stderrText = observation.Stderr;
 
         Assert.Equal(0, process.ExitCode);
         Assert.DoesNotContain("threw an unhandled exception", stderrText, StringComparison.OrdinalIgnoreCase);

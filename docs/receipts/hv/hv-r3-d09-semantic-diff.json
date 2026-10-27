@@ -1,0 +1,133 @@
+{
+  "TimestampUtc": "2026-10-18T06:34:08.6178420+00:00",
+  "RecordCount": 7,
+  "MappingEdges": 11,
+  "DifferenceCount": 25,
+  "Differences": [
+    {
+      "Path": "FR-MCP-HOSTILEREVIEW-002.createdAt",
+      "Before": "2026-10-17T22:21:25.3293423-05:00",
+      "After": "2026-10-18T01:23:52.3147891-05:00"
+    },
+    {
+      "Path": "FR-MCP-HOSTILEREVIEW-002.updatedAt",
+      "Before": "2026-10-17T22:21:25.3293676-05:00",
+      "After": "2026-10-18T01:23:52.3148265-05:00"
+    },
+    {
+      "Path": "FR-MCP-HOSTILEREVIEW-003.createdAt",
+      "Before": "2026-10-17T22:21:25.330443-05:00",
+      "After": "2026-10-18T01:23:52.3161588-05:00"
+    },
+    {
+      "Path": "FR-MCP-HOSTILEREVIEW-003.updatedAt",
+      "Before": "2026-10-17T22:21:25.3304684-05:00",
+      "After": "2026-10-18T01:23:52.3161954-05:00"
+    },
+    {
+      "Path": "FR-MCP-SESSIONLIFE-004.createdAt",
+      "Before": "2026-10-17T22:21:25.431597-05:00",
+      "After": "2026-10-18T01:23:52.4068898-05:00"
+    },
+    {
+      "Path": "FR-MCP-SESSIONLIFE-004.updatedAt",
+      "Before": "2026-10-17T22:21:25.4316218-05:00",
+      "After": "2026-10-18T01:23:52.4069125-05:00"
+    },
+    {
+      "Path": "FR-MCP-SESSIONLIFE-005.createdAt",
+      "Before": "2026-10-17T22:21:25.4325136-05:00",
+      "After": "2026-10-18T01:23:52.4077828-05:00"
+    },
+    {
+      "Path": "FR-MCP-SESSIONLIFE-005.updatedAt",
+      "Before": "2026-10-17T22:21:25.4325384-05:00",
+      "After": "2026-10-18T01:23:52.4078055-05:00"
+    },
+    {
+      "Path": "TEST-MCP-HOSTILEREVIEW-002.createdAt",
+      "Before": "2026-10-17T22:21:32.9237858-05:00",
+      "After": "2026-10-18T01:24:00.0967888-05:00"
+    },
+    {
+      "Path": "TEST-MCP-HOSTILEREVIEW-002.updatedAt",
+      "Before": "2026-10-17T22:21:32.9238085-05:00",
+      "After": "2026-10-18T01:24:00.0968121-05:00"
+    },
+    {
+      "Path": "TEST-MCP-HOSTILEREVIEW-003.createdAt",
+      "Before": "2026-10-17T22:21:32.9240119-05:00",
+      "After": "2026-10-18T01:24:00.0970226-05:00"
+    },
+    {
+      "Path": "TEST-MCP-HOSTILEREVIEW-003.updatedAt",
+      "Before": "2026-10-17T22:21:32.9240343-05:00",
+      "After": "2026-10-18T01:24:00.0970457-05:00"
+    },
+    {
+      "Path": "TEST-MCP-SESSIONLIFE-002.createdAt",
+      "Before": "2026-10-17T22:21:33.0111513-05:00",
+      "After": "2026-10-18T01:24:00.169212-05:00"
+    },
+    {
+      "Path": "TEST-MCP-SESSIONLIFE-002.updatedAt",
+      "Before": "2026-10-17T22:21:33.0111808-05:00",
+      "After": "2026-10-18T01:24:00.1692359-05:00"
+    },
+    {
+      "Path": "mappings[0].createdAt",
+      "Before": "2026-10-17T22:21:36.5561025-05:00",
+      "After": "2026-10-18T01:24:03.7955688-05:00"
+    },
+    {
+      "Path": "mappings[1].createdAt",
+      "Before": "2026-10-17T22:21:36.5562335-05:00",
+      "After": "2026-10-18T01:24:03.7956347-05:00"
+    },
+    {
+      "Path": "mappings[2].createdAt",
+      "Before": "2026-10-17T22:21:36.5563302-05:00",
+      "After": "2026-10-18T01:24:03.7956998-05:00"
+    },
+    {
+      "Path": "mappings[3].createdAt",
+      "Before": "2026-10-17T22:21:36.5564132-05:00",
+      "After": "2026-10-18T01:24:03.7957673-05:00"
+    },
+    {
+      "Path": "mappings[4].createdAt",
+      "Before": "2026-10-17T22:21:36.5739198-05:00",
+      "After": "2026-10-18T01:24:03.8136255-05:00"
+    },
+    {
+      "Path": "mappings[5].createdAt",
+      "Before": "2026-10-17T22:21:36.5739863-05:00",
+      "After": "2026-10-18T01:24:03.8136919-05:00"
+    },
+    {
+      "Path": "mappings[6].createdAt",
+      "Before": "2026-10-17T22:21:36.5740518-05:00",
+      "After": "2026-10-18T01:24:03.8137575-05:00"
+    },
+    {
+      "Path": "mappings[7].createdAt",
+      "Before": "2026-10-17T22:21:36.5741173-05:00",
+      "After": "2026-10-18T01:24:03.8138232-05:00"
+    },
+    {
+      "Path": "mappings[8].createdAt",
+      "Before": "2026-10-17T22:21:36.5741816-05:00",
+      "After": "2026-10-18T01:24:03.813888-05:00"
+    },
+    {
+      "Path": "mappings[9].createdAt",
+      "Before": "2026-10-17T22:21:36.5742547-05:00",
+      "After": "2026-10-18T01:24:03.813955-05:00"
+    },
+    {
+      "Path": "mappings[10].createdAt",
+      "Before": "2026-10-17T22:21:36.5743208-05:00",
+      "After": "2026-10-18T01:24:03.814025-05:00"
+    }
+  ]
+}

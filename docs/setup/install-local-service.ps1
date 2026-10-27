@@ -136,7 +136,7 @@ ALTER ROLE [db_owner] ADD MEMBER [mcpserver_omarchy];
 
     $unitText = @'
 [Unit]
-Description=MCP Server for PAYTON-OMARCHY
+Description=MCP Server for LAB-OMARCHY
 After=network-online.target docker.service
 Wants=network-online.target docker.service
 StartLimitIntervalSec=60

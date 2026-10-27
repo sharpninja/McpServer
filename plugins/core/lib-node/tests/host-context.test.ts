@@ -90,7 +90,7 @@ describe('createQBrainAiPluginCore', () => {
     expect(context.pluginId).toBe('opencode');
   });
 
-  test('TEST-MCP-PLUGIN-PSONLY-001 forces configured Node host identity over inherited environment', () => {
+  test('TEST-MCP-PLUGIN-PSONLY-001/TEST-QB-005 keeps configured identity without overwriting the parent environment', () => {
     const snapshot = snapshotIdentityEnv();
     try {
       for (const key of identityEnvKeys) {
@@ -101,16 +101,9 @@ describe('createQBrainAiPluginCore', () => {
 
       expect(context.agentName).toBe('OpenCode');
       expect(context.pluginId).toBe('opencode');
-      expect(process.env.PLUGIN_AGENT_NAME).toBe('OpenCode');
-      expect(process.env.PLUGIN_AGENT_DEFAULT).toBe('OpenCode');
-      expect(process.env.MCP_AGENT_NAME).toBe('OpenCode');
-      expect(process.env.MCP_AGENT_ID).toBe('OpenCode');
-      expect(process.env.MCP_SESSION_AGENT).toBe('OpenCode');
-      expect(process.env.CT2R_SOURCE_TYPE).toBe('OpenCode');
-      expect(process.env.PLUGIN_TAG).toBe('opencode');
-      expect(process.env.MCP_SESSION_MODEL).toBe('opencode');
-      expect(process.env.CT2R_MODEL).toBe('opencode');
-      expect(process.env.CT2R_TAGS).toBe('opencode');
+      // Child-local identity propagation is asserted in governed-repl.test.ts.
+      // The parent may concurrently host other agents and must stay untouched.
+      for (const key of identityEnvKeys) expect(process.env[key]).toBe('WrongAgent');
     } finally {
       restoreIdentityEnv(snapshot);
     }

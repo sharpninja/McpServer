@@ -240,8 +240,8 @@ public sealed class WikiDumpG6OverlayTests : IDisposable
         }, TestContext.Current.CancellationToken);
         Assert.True(imported.Success, imported.Error);
         var todo = Assert.Single(destDb.TodoItems);
-        Assert.Equal(dest, todo.WorkspaceId);
-        Assert.DoesNotContain(_workspace, todo.WorkspaceId, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal(ExpectedWorkspaceKey.Of(dest), todo.WorkspaceId);
+        Assert.DoesNotContain(ExpectedWorkspaceKey.Of(_workspace), todo.WorkspaceId, StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>TEST-MCP-WIKIEXPORT-004: malformed dump, version mismatch, missing tables, unsafe path are rejected.</summary>

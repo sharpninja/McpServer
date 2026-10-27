@@ -872,13 +872,13 @@ public sealed class MemoryFederationStateAdapter : DatabaseFederationStateAdapte
         string text)
         => string.Equals(existing.Category, category, StringComparison.Ordinal) &&
            string.Equals(existing.Scope, ToEntityScope(scope), StringComparison.Ordinal) &&
-           string.Equals(existing.WorkspaceId, workspaceId, StringComparison.OrdinalIgnoreCase) &&
+           string.Equals(existing.WorkspaceId, WorkspaceIdentity.CanonicalizeWorkspaceId(workspaceId), StringComparison.OrdinalIgnoreCase) &&
            string.Equals(existing.Text, text, StringComparison.Ordinal);
 
     private static bool OwnsWorkspace(MemoryEntity entity, string? globalWorkspaceId)
         => !string.Equals(entity.Scope, MemoryEntity.WorkspaceScope, StringComparison.Ordinal) ||
            (!string.IsNullOrWhiteSpace(globalWorkspaceId) &&
-            string.Equals(entity.WorkspaceId, globalWorkspaceId.Trim(), StringComparison.OrdinalIgnoreCase));
+            string.Equals(entity.WorkspaceId, WorkspaceIdentity.CanonicalizeWorkspaceId(globalWorkspaceId), StringComparison.OrdinalIgnoreCase));
 
     private static string? ResolveWorkspaceId(MemoryScope scope, FederationStateOperation operation)
         => scope == MemoryScope.Global ? null : NormalizeOptional(operation.GlobalWorkspaceId);

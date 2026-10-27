@@ -77,7 +77,7 @@ public sealed class MemoryFederationStateAdapterTests
         var workspace = await db.Memories.IgnoreQueryFilters().SingleAsync(m => m.Id == "MEMORY-OPERATOR-001", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal("OPERATOR", workspace.Category);
         Assert.Equal(MemoryEntity.WorkspaceScope, workspace.Scope);
-        Assert.Equal(WorkspaceA, workspace.WorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(WorkspaceA), workspace.WorkspaceId);
         Assert.Equal("Keep this raw text exactly.\nSecond line.", workspace.Text);
         Assert.Equal(1, workspace.Version);
         Assert.Equal("Codex", workspace.UpdatedBy);
@@ -122,7 +122,7 @@ public sealed class MemoryFederationStateAdapterTests
         var row = await db.Memories.IgnoreQueryFilters().SingleAsync(m => m.Id == "MEMORY-OPERATOR-002", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal("After", row.Text);
         Assert.Equal(2, row.Version);
-        Assert.Equal(WorkspaceA, row.WorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(WorkspaceA), row.WorkspaceId);
         Assert.Equal(MemoryEntity.WorkspaceScope, row.Scope);
     }
 
@@ -307,7 +307,7 @@ public sealed class MemoryFederationStateAdapterTests
         using var hub = CreateProvider();
         var hubTopology = hub.GetRequiredService<IFederationTopologyService>();
         await hubTopology.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "PAYTON-LEGION2" }, CancellationToken.None).ConfigureAwait(true);
-        await hubTopology.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "PAYTON-DESKTOP" }, CancellationToken.None).ConfigureAwait(true);
+        await hubTopology.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "LAB-OMARCHY" }, CancellationToken.None).ConfigureAwait(true);
         var hubSigner = hub.GetRequiredService<IFederationEnvelopeSigner>();
         var hubApply = hub.GetRequiredService<IFederationOperationApplyService>();
         var hubController = CreateController(hub, hubTopology, hubSigner, hubApply);
@@ -319,7 +319,7 @@ public sealed class MemoryFederationStateAdapterTests
         var applyResponse = Assert.IsType<FederationOperationResponse>(applyOk.Value);
         Assert.Equal("applied", applyResponse.Status);
 
-        var syncResult = await hubController.Sync("PAYTON-DESKTOP", 0, CancellationToken.None).ConfigureAwait(true);
+        var syncResult = await hubController.Sync("LAB-OMARCHY", 0, CancellationToken.None).ConfigureAwait(true);
         var syncOk = Assert.IsType<OkObjectResult>(syncResult.Result);
         var syncItems = Assert.IsAssignableFrom<IReadOnlyList<FederationSyncItem>>(syncOk.Value);
         var syncItem = Assert.Single(syncItems);
@@ -335,7 +335,7 @@ public sealed class MemoryFederationStateAdapterTests
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         var row = await db.Memories.IgnoreQueryFilters().SingleAsync(m => m.Id == "MEMORY-OPERATOR-008", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal("Fanout apply", row.Text);
-        Assert.Equal(WorkspaceA, row.WorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(WorkspaceA), row.WorkspaceId);
     }
 
     private static IFederationStateAdapter ResolveMemoryAdapter(ServiceProvider provider)

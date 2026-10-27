@@ -1,0 +1,334 @@
+# LAB-OMARCHY configuration migration
+
+Date: 2026-10-07. This continuation changed 55 existing files. Existing changes from other sessions were preserved. No commits, pushes, deployments, releases, key rotations, or Windows computer renames were performed.
+
+## Decisions
+- Use LAB-OMARCHY for connection hostnames. PAYTON-LEGION2 remains unchanged.
+- User approved changing four Docker numeric bind addresses from 192.168.0.149 to 192.168.1.182. Host settings and URLs use LAB-OMARCHY, not that IP.
+- User directed editable configuration only; do not regenerate or re-sign release artifacts. Both signed manifests remain byte-identical. Their only legacy-name match is signature.keyId=payton-desktop-prod-001, not a connection hostname.
+- Preserve historical receipts, retired operational documentation, generated requirement/use-case projections, test references to those artifacts, signing-key IDs, credential filenames, synthetic example.test names, and installed-service identifiers.
+
+## Changed files and values
+- `C:\Users\kingd\fix-winrm-agent-prompt.md`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `C:\Users\kingd\fix-winrm.ps1`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `C:\Users\kingd\key.ps1`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `C:\Users\kingd\reconfigure-agent-prompt.md`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `C:\Users\kingd\rotate-remoteadmin.ps1`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\.octopus\truckmate-proxy-containers\variables.ocl`: `payton-desktop` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\build\Build.cs`: `PAYTON-DESKTOP`, `PAYTON-OMARCHY` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\build\Build.LoadPlanningContainers.cs`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\build\RouteAreaGraphArchivePublisher.Qualified.cs`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\deployment\octopus\control-plane\docker-compose.yml`: `PAYTON-DESKTOP`, `192.168.0.149` -> `LAB-OMARCHY; numeric port bindings 192.168.1.182`.
+- `F:\GitHub\TruckMate\deployment\octopus\Invoke-OctopusOwnedProxyDeployment.ps1`: `PAYTON-OMARCHY` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\deployment\octopus\Invoke-ProxyServicesDeployment.ps1`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\deployment\octopus\proxy-containers-deployment.json`: `PAYTON-DESKTOP`, `PAYTON-OMARCHY` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\deployment\octopus\proxy-services-deployment.json`: `PAYTON-DESKTOP`, `PAYTON-OMARCHY` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\deployment\octopus\ProxyContainerDeployment.ContainerCommon.psm1`: `PAYTON-DESKTOP`, `PAYTON-OMARCHY` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\deployment\octopus\Rollback-ProxyServices.ps1`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\docs\BUSINESS-PLAN-OPERATING-MODEL.md`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\docs\operations\PROXY-CONTAINERS-RUNBOOK.md`: `PAYTON-DESKTOP`, `PAYTON-OMARCHY` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\docs\PLAN-AMENDMENT-DRAFT-AMD-MJOLNIRFRONTIER-001-L48-DEFER.md`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\docs\PLAN-FINISH-PHASE-MJOLNIRFRONTIER-001.md`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\docs\PLAN-GATEWAY-001-Status.md`: `PAYTON-DESKTOP`, `PAYTON-OMARCHY` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\docs\PLAN-PHASE-MJOLNIRFRONTIER-001-Pooled-Value-Type-Node-Frontier.md`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\docs\Project\20261001-octopus-desktop-bootstrap-amendment.md`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\docs\Project\gigmerge-r0-tdd-plan-r1.md`: `PAYTON-DESKTOP`, `PAYTON-OMARCHY` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\docs\Project\PLAN-GIGMERGE-001-lower48-freshness-feasibility.md`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\HANDOFF.md`: `PAYTON-DESKTOP`, `PAYTON-OMARCHY` -> `LAB-OMARCHY in active sections; historical section preserved`.
+- `F:\GitHub\TruckMate\README.md`: `PAYTON-DESKTOP`, `PAYTON-OMARCHY` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\scripts\featureflags-bootstrap.ps1`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\scripts\featureflags-keytool\featureflags-keytool.csproj`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\scripts\featureflags-keytool\Program.cs`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\scripts\featureflags-publish-manifest.ps1`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\scripts\README-FEATUREFLAGS.md`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\src\TruckMate.Avalonia\Infrastructure\AvaloniaServiceCollectionExtensions.cs`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\src\TruckMate.Avalonia\TruckMate.Avalonia.csproj`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\tests\TruckMate.Avalonia.Tests\AppHost\GigDrivingFeatureFlagsDistributionEndpointTests.cs`: `PAYTON-DESKTOP`, `PAYTON-DESKTOP.local` -> `LAB-OMARCHY; .local negative-test variant preserved`.
+- `F:\GitHub\TruckMate\tests\TruckMate.Build.Tests\GatewayContainerDeploymentContractTests.cs`: `PAYTON-DESKTOP`, `PAYTON-OMARCHY` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\tests\TruckMate.Build.Tests\GatewayProductionDeploymentContractTests.cs`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\tests\TruckMate.Build.Tests\GatewayProductionHostileBehaviorTests.cs`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\tests\TruckMate.Build.Tests\GigDrivingFeatureFlagsReleaseEndpointTests.cs`: `PAYTON-DESKTOP`, `PAYTON-DESKTOP.local` -> `LAB-OMARCHY; .local negative-test variant preserved`.
+- `F:\GitHub\TruckMate\tests\TruckMate.Build.Tests\GigDrivingRouteAreaReleasePinTests.cs`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\tests\TruckMate.Build.Tests\Lower48GraphEvidenceTests.cs`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\tests\TruckMate.Build.Tests\NukeContainerRuntimeTrustTests.cs`: `PAYTON-DESKTOP`, `PAYTON-OMARCHY` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\tests\TruckMate.Build.Tests\OctopusOwnedBuildContractTests.cs`: `PAYTON-DESKTOP`, `PAYTON-OMARCHY` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\tests\TruckMate.Build.Tests\ProxyContainerOctopusInfrastructureTests.cs`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\tests\TruckMate.LoadPlanning.Service.Tests\GenerationDistributionConfigurationTests.cs`: `payton-desktop` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\tests\TruckMate.LoadPlanning.Service.Tests\GenerationPublisherTests.cs`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\tests\TruckMate.LoadPlanning.Service.Tests\LoadPlanningPreProductionSecurityTests.cs`: `payton-desktop` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\tests\TruckMate.VendorProxy.Service.Tests\GatewayCaTrustValidationTests.cs`: `payton-desktop` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\tools\Invoke-DesktopFreshLoadPlanningBuild-260920.ps1`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\tools\Invoke-DesktopProxyNukeDeploy-260919.ps1`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\tools\New-GigDrivingPlayStackProof.ps1`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\tools\New-Lower48GraphEvidenceReceipt.ps1`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\tools\Orchestrate-Lower48-RefreshBuild-260919.ps1`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\tools\Publish-QualifiedNashvilleGraph.ps1`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+- `F:\GitHub\TruckMate\tools\Verify-Lower48GraphEvidence.ps1`: `PAYTON-DESKTOP` -> `LAB-OMARCHY`.
+
+## Earlier live-service correction
+- `C:\ProgramData\McpServer\appsettings.yaml`: `Mcp:Database:SqlServer:ConnectionString` and `Mcp:SqlServerConnectionString` now use `LAB-OMARCHY,1433`. Original `PAYTON-DESKTOP.local,1433`; an intermediate IP substitution was corrected at the user direction. Credentials and all other connection properties were preserved. This file was not changed in this continuation.
+- The user supplied the hosts-file mapping. SSH configuration, credential files, and WinRM trusted hosts were already updated when checked; this continuation did not rewrite them.
+
+## Validation
+- Inventoried 67 top-level repositories and 23 initialized submodule repositories. Submodule scan found zero old-host references.
+- Scanned editable JSON/YAML/TOML/config/env files under F:\GitHub, including ignored files, excluding worktrees, caches, build outputs, logs, receipts, agent caches and docs. Remaining matches were signed key IDs, seed comments/key ID, and historical scratch records.
+- Changed PowerShell files: 16; parser errors: 0. Two deployment JSON files round-tripped. YAML readback found exactly four approved numeric port bindings. Changed project XML parsed. git diff --check passed.
+- Focused build classes: 150 passed, 0 failed, 0 skipped. LoadPlanning: 10 passed, 0 failed, 0 skipped. VendorProxy CA trust: 4 passed, 0 failed, 0 skipped. Avalonia host: 7 passed, 0 failed, 0 skipped. Total: 171 passed.
+- Initial full TruckMate.Build.Tests run: 673 passed, 8 failed, 0 skipped, 681 total. Two migration-introduced assertions against unchanged historical/generated documents were restored and passed in the focused rerun. Six prerequisite failures remain: two tests require docker.exe, and four require TRUCKMATE_GIGDRIVING_RELEASE_AAB. The full suite is NOT claimed green.
+- No matching old-host values in User/Machine environment settings, Git remote URLs, scheduled-task actions, or Credential Manager target names. Windows computer name remains PAYTON-LEGION2.
+- MCP Server was Running at PID50148 after this pass; restart and Healthy/storage reachable verification were recorded in the preceding turn.
+- TRX files: `F:\GitHub\McpServer\.mcpServer\codex\hostname-migration-tests\`.
+
+## Remaining / deliberately unchanged
+- Signed manifests: `F:\GitHub\TruckMate\src\TruckMate.Avalonia\flags\flags.gigdriving.json` and `flags.truckmate.json`. Both retain the valid legacy signing-key identifier; no hostname endpoint rewrite or re-signing was needed.
+- Generated requirements/wiki/use-case projections retain historical names. They were not hand-edited; any desired projection refresh must follow their authoritative MCP workflows.
+- Active worktrees, remote machine files, live Octopus records and deployed containers were not rewritten or deployed by this continuation. Their migration is not certified by this local-file inventory.
+- Docker/release-AAB prerequisite failures prevent a clean full-suite validation gate. No tests were skipped, disabled or removed to conceal them.
+
+## Residual tracked-file inventory
+These files matched old-name tokens during the final scan. Matches include evidence, generated projections, stable identifiers and synthetic or historical test fixtures; this is not a list of live endpoints.
+- `F:\GitHub\EternalX.Blazor\docs\diagnostics\payton-desktop-eternalx\VOLUME-CLEAR-RECEIPT.md`
+- `F:\GitHub\FunWasHad\.mcpSession\current-session.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-20260819T164408Z\06-query-refresh-docs-wrap-up.txt`
+- `F:\GitHub\McpServer\docs\receipts\_hv-20260821T113500Z\memory-list-effective.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-20260821T113500Z\memory-list-lab.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-20260821T113500Z\todo-list-done-false.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-234800Z\req-tr.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-c-green-p19\sl-query-implementer-sid.txt`
+- `F:\GitHub\McpServer\docs\receipts\_hv-closeout-s2\tr-dump.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-d15-20260822T012452Z\req-tr.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-d2g-20260822T032428Z\req-tr.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-e-red-20260822T151657Z\requirements-all.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-failsafe-post-review\todo-list-done-false.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-failsafe-post-review\todo-list-done-true.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-h2-green-req-tr.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-h3-green-req-tr.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-h3-red-req-tr.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-h4-green-req-tr.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-h4-red-req-tr.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-h5-done-req-tr.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-h5-rerun-req-tr.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-h5-skeptic-req-tr.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-happly-hdone\03-todo-list-open.txt`
+- `F:\GitHub\McpServer\docs\receipts\_hv-ops-running-20260821\todo-list-done.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-s0-leftover\req-tr.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-s0-leftover\tr-TR-MCP-FAILSAFE-001.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-s0-leftover\tr-TR-MCP-SESSIONATTR-001.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-s0-leftover\tr-TR-MCP-SESSIONEND-001.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-s0-leftover\tr-TR-MCP-STRICTCOUNT-001.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-s0-leftover\tr-TR-MCP-TEMPVOL-001.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-s0-leftover\tr-TR-MCP-TRANSCRIPT-SEARCH-001.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-s0-leftover\tr-TR-MCP-VERIFYWRAP-001.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-s0-leftover\tr-TR-MCP-XAGENT-001.json`
+- `F:\GitHub\McpServer\docs\receipts\_hv-txnkey-sessionlog-green\live-appsettings-snippet-check.txt`
+- `F:\GitHub\McpServer\docs\receipts\_p19-green-bootstrap\sl-query-sid.txt`
+- `F:\GitHub\McpServer\docs\receipts\completion-program-20260906\linux-preflight-20260906T185128Z.md`
+- `F:\GitHub\McpServer\docs\receipts\disable-azure-pipeline-runners-payton-desktop-20260725T112041Z.json`
+- `F:\GitHub\McpServer\docs\receipts\hv-remediate-20260924T035119Z\BLOCKER-mcp-storage-unreachable.txt`
+- `F:\GitHub\McpServer\docs\receipts\hv-remediate-20260924T035119Z\S0-SESSIONLIFE-proof.txt`
+- `F:\GitHub\McpServer\docs\receipts\hv-remediate-20260924T035119Z\TODO-35-DoneFalse-proof.txt`
+- `F:\GitHub\McpServer\docs\receipts\hv-remediate-20260924T142043Z\01-health-sql.txt`
+- `F:\GitHub\McpServer\docs\receipts\hv-remediate-20260924T142043Z\hv-turn-body.txt`
+- `F:\GitHub\McpServer\docs\receipts\hv-remediate-20260924T142043Z\SESSIONLOG-HV-turn.txt`
+- `F:\GitHub\McpServer\docs\receipts\hv\20260927T205200Z-omarchy-repl\independent-checks.json`
+- `F:\GitHub\McpServer\docs\receipts\hv\20260927T205200Z-omarchy-repl\installation.json`
+- `F:\GitHub\McpServer\docs\receipts\hv\20260928-local-service-runtime.verdict.txt`
+- `F:\GitHub\McpServer\docs\receipts\octopus-legion2-server-20260725.txt`
+- `F:\GitHub\McpServer\docs\receipts\octopus-validate-desktop-target-20260725.json`
+- `F:\GitHub\McpServer\docs\receipts\share-add-profile-codex-desktop-20260725T112246Z.json`
+- `F:\GitHub\McpServerManager\docs\architecture\compliance\UI-USECASE-MATRIX.md`
+- `F:\GitHub\McpServerManager\docs\receipts\refresh-docs-20260920T021833Z.md`
+- `F:\GitHub\MouseKeyProxy\docs\historical\receipts\receipts-delegation-phase-8-codex.txt`
+- `F:\GitHub\MouseKeyProxy\docs\historical\receipts\receipts-desktop-uninstall-step0.txt`
+- `F:\GitHub\MouseKeyProxy\docs\historical\receipts\receipts-hid-provision-20260707T103933Z.txt`
+- `F:\GitHub\MouseKeyProxy\docs\historical\receipts\receipts-plan-readiness-20260704T121609Z.txt`
+- `F:\GitHub\MouseKeyProxy\docs\historical\receipts\receipts-plan-readiness-20260704T122607Z.txt`
+- `F:\GitHub\MouseKeyProxy\docs\historical\receipts\receipts-plan-readiness-20260704T122942Z.txt`
+- `F:\GitHub\MouseKeyProxy\docs\historical\receipts\receipts-plan-readiness-20260704T123253Z.txt`
+- `F:\GitHub\MouseKeyProxy\docs\historical\receipts\receipts-plan-readiness-20260704T125300Z.txt`
+- `F:\GitHub\MouseKeyProxy\docs\historical\receipts\receipts-plan-readiness-20260704T125400Z.txt`
+- `F:\GitHub\MouseKeyProxy\docs\historical\receipts\receipts-plan-readiness-20260704T125706Z.txt`
+- `F:\GitHub\MouseKeyProxy\docs\historical\receipts\receipts-plan-readiness-20260704T141156Z.txt`
+- `F:\GitHub\MouseKeyProxy\docs\historical\receipts\receipts-plan-readiness-20260704T141229Z.txt`
+- `F:\GitHub\MouseKeyProxy\docs\historical\receipts\receipts-plan-readiness-20260704T144720Z.txt`
+- `F:\GitHub\MouseKeyProxy\docs\historical\receipts\receipts-soak-20260704T080015Z.txt`
+- `F:\GitHub\MouseKeyProxy\docs\historical\receipts\receipts-transition-e2e.txt`
+- `F:\GitHub\MouseKeyProxy\docs\receipts\20260927-hid-transfer-diagnosis.md`
+- `F:\GitHub\rideaudit-caddy-tls\docs\receipts\ac-coverage\20260928-ledger.md`
+- `F:\GitHub\rideaudit-caddy-tls\docs\receipts\distribution\20260929T002318Z-ngrok-omarchy-18080.md`
+- `F:\GitHub\rideaudit-caddy-tls\docs\receipts\distribution\20260929T015822Z-octopus-payton-desktop.md`
+- `F:\GitHub\rideaudit-caddy-tls\docs\receipts\distribution\20260929T030643Z-ngrok-desktop-28080.md`
+- `F:\GitHub\rideaudit-caddy-tls\docs\receipts\distribution\20260929T124653Z-p11b-signing-inventory.md`
+- `F:\GitHub\rideaudit-caddy-tls\docs\receipts\distribution\20260929T145508Z-caddy-edge-tls.md`
+- `F:\GitHub\rideaudit-caddy-tls\docs\receipts\distribution\cd-receipts.md`
+- `F:\GitHub\rideaudit-caddy-tls\docs\receipts\distribution\legion2-omarchy-20260928.md`
+- `F:\GitHub\rideaudit-caddy-tls\docs\receipts\hostile-validator-20260929T041746Z.md`
+- `F:\GitHub\rideaudit-caddy-tls\docs\receipts\hostile-validator-20260929T044700Z.json`
+- `F:\GitHub\rideaudit-caddy-tls\docs\receipts\hostile-validator-20260929T044700Z.md`
+- `F:\GitHub\rideaudit-caddy-tls\docs\receipts\hostile-validator-20260929T151244Z.json`
+- `F:\GitHub\rideaudit-caddy-tls\docs\receipts\hostile-validator-20260929T151244Z.md`
+- `F:\GitHub\rideaudit-caddy-tls\docs\receipts\requirements\20260928T234854Z-post-planning-octopus-ngrok.md`
+- `F:\GitHub\rideaudit-caddy\docs\receipts\ac-coverage\20260928-ledger.md`
+- `F:\GitHub\rideaudit-caddy\docs\receipts\distribution\20260929T002318Z-ngrok-omarchy-18080.md`
+- `F:\GitHub\rideaudit-caddy\docs\receipts\distribution\20260929T015822Z-octopus-payton-desktop.md`
+- `F:\GitHub\rideaudit-caddy\docs\receipts\distribution\20260929T030643Z-ngrok-desktop-28080.md`
+- `F:\GitHub\rideaudit-caddy\docs\receipts\distribution\20260929T124653Z-p11b-signing-inventory.md`
+- `F:\GitHub\rideaudit-caddy\docs\receipts\distribution\cd-receipts.md`
+- `F:\GitHub\rideaudit-caddy\docs\receipts\distribution\legion2-omarchy-20260928.md`
+- `F:\GitHub\rideaudit-caddy\docs\receipts\hostile-validator-20260929T041746Z.md`
+- `F:\GitHub\rideaudit-caddy\docs\receipts\hostile-validator-20260929T044700Z.json`
+- `F:\GitHub\rideaudit-caddy\docs\receipts\hostile-validator-20260929T044700Z.md`
+- `F:\GitHub\rideaudit-caddy\docs\receipts\requirements\20260928T234854Z-post-planning-octopus-ngrok.md`
+- `F:\GitHub\rideaudit-rc080\docs\receipts\ac-coverage\20260928-ledger.md`
+- `F:\GitHub\rideaudit-rc080\docs\receipts\distribution\20260929T002318Z-ngrok-omarchy-18080.md`
+- `F:\GitHub\rideaudit-rc080\docs\receipts\distribution\20260929T015822Z-octopus-payton-desktop.md`
+- `F:\GitHub\rideaudit-rc080\docs\receipts\distribution\20260929T030643Z-ngrok-desktop-28080.md`
+- `F:\GitHub\rideaudit-rc080\docs\receipts\distribution\20260929T124653Z-p11b-signing-inventory.md`
+- `F:\GitHub\rideaudit-rc080\docs\receipts\distribution\cd-receipts.md`
+- `F:\GitHub\rideaudit-rc080\docs\receipts\distribution\legion2-omarchy-20260928.md`
+- `F:\GitHub\rideaudit-rc080\docs\receipts\hostile-validator-20260929T041746Z.md`
+- `F:\GitHub\rideaudit-rc080\docs\receipts\hostile-validator-20260929T044700Z.json`
+- `F:\GitHub\rideaudit-rc080\docs\receipts\hostile-validator-20260929T044700Z.md`
+- `F:\GitHub\rideaudit-rc080\docs\receipts\requirements\20260928T234854Z-post-planning-octopus-ngrok.md`
+- `F:\GitHub\rideaudit-ui-font\docs\receipts\ac-coverage\20260928-ledger.md`
+- `F:\GitHub\rideaudit-ui-font\docs\receipts\distribution\20260929T002318Z-ngrok-omarchy-18080.md`
+- `F:\GitHub\rideaudit-ui-font\docs\receipts\distribution\20260929T015822Z-octopus-payton-desktop.md`
+- `F:\GitHub\rideaudit-ui-font\docs\receipts\distribution\20260929T030643Z-ngrok-desktop-28080.md`
+- `F:\GitHub\rideaudit-ui-font\docs\receipts\distribution\20260929T124653Z-p11b-signing-inventory.md`
+- `F:\GitHub\rideaudit-ui-font\docs\receipts\distribution\cd-receipts.md`
+- `F:\GitHub\rideaudit-ui-font\docs\receipts\distribution\legion2-omarchy-20260928.md`
+- `F:\GitHub\rideaudit-ui-font\docs\receipts\hostile-validator-20260929T041746Z.md`
+- `F:\GitHub\rideaudit-ui-font\docs\receipts\hostile-validator-20260929T044700Z.json`
+- `F:\GitHub\rideaudit-ui-font\docs\receipts\hostile-validator-20260929T044700Z.md`
+- `F:\GitHub\rideaudit-ui-font\docs\receipts\requirements\20260928T234854Z-post-planning-octopus-ngrok.md`
+- `F:\GitHub\rideaudit\deploy\containers\admission\README.md`
+- `F:\GitHub\rideaudit\deploy\containers\counsel\README.md`
+- `F:\GitHub\rideaudit\deploy\omarchy\ngrok\README.md`
+- `F:\GitHub\rideaudit\docs\architecture\stack.md`
+- `F:\GitHub\rideaudit\docs\plans\PLAN-RIDEAUDIT-001-implementation.md`
+- `F:\GitHub\rideaudit\docs\plans\PLAN-RIDEAUDIT-001-SERVER.md`
+- `F:\GitHub\rideaudit\docs\Project\Additive-Operator-Capture-20260929-Batch.yaml`
+- `F:\GitHub\rideaudit\docs\Project\Additive-PostPlanning-Deploy-Ngrok-Batch.yaml`
+- `F:\GitHub\rideaudit\docs\Project\wiki\azure\Functional-Requirements.md`
+- `F:\GitHub\rideaudit\docs\Project\wiki\azure\Technical-Requirements.md`
+- `F:\GitHub\rideaudit\docs\Project\wiki\azure\Testing-Requirements.md`
+- `F:\GitHub\rideaudit\docs\Project\wiki\github\Functional-Requirements.md`
+- `F:\GitHub\rideaudit\docs\Project\wiki\github\Technical-Requirements.md`
+- `F:\GitHub\rideaudit\docs\Project\wiki\github\Testing-Requirements.md`
+- `F:\GitHub\rideaudit\docs\receipts\ac-coverage\20260928-ledger.md`
+- `F:\GitHub\rideaudit\docs\receipts\distribution\20260929T002318Z-ngrok-omarchy-18080.md`
+- `F:\GitHub\rideaudit\docs\receipts\distribution\20260929T015822Z-octopus-payton-desktop.md`
+- `F:\GitHub\rideaudit\docs\receipts\distribution\20260929T030643Z-ngrok-desktop-28080.md`
+- `F:\GitHub\rideaudit\docs\receipts\distribution\20260929T124653Z-p11b-signing-inventory.md`
+- `F:\GitHub\rideaudit\docs\receipts\distribution\cd-receipts.md`
+- `F:\GitHub\rideaudit\docs\receipts\distribution\legion2-omarchy-20260928.md`
+- `F:\GitHub\rideaudit\docs\receipts\hostile-validator-20260929T041746Z.md`
+- `F:\GitHub\rideaudit\docs\receipts\hostile-validator-20260929T044700Z.json`
+- `F:\GitHub\rideaudit\docs\receipts\hostile-validator-20260929T044700Z.md`
+- `F:\GitHub\rideaudit\docs\receipts\remediation\20261007T161645Z-pr26-safe-remedia-own-submissions.md`
+- `F:\GitHub\rideaudit\docs\receipts\remediation\20261007T163302Z-pr26-fr072-csharp-lab-toolchain.md`
+- `F:\GitHub\rideaudit\docs\receipts\remediation\20261007T164200Z-pr26-concierge-out-of-scope-removed.md`
+- `F:\GitHub\rideaudit\docs\receipts\requirements\20260928T234854Z-post-planning-octopus-ngrok.md`
+- `F:\GitHub\rideaudit\docs\receipts\requirements\20260929T151500Z-operator-capture.md`
+- `F:\GitHub\rideaudit\docs\receipts\requirements\20261007T165500Z-concierge-invent-kill.md`
+- `F:\GitHub\rideaudit\HANDOFF.md`
+- `F:\GitHub\rideaudit\src\RideAudit.Sec\DistributionReceipts.cs`
+- `F:\GitHub\rideaudit\tests\RideAudit.Client.Tests\AcCoverageLedgerTests.cs`
+- `F:\GitHub\rideaudit\tests\RideAudit.Server.Admission.Tests\NgrokDeploySecretsTests.cs`
+- `F:\GitHub\rideaudit\tests\RideAudit.Server.Admission.Tests\TestRide052LabConductTests.cs`
+- `F:\GitHub\rideaudit\tests\RideAudit.Workflow.Tests\IngestAnalysisTests.cs`
+- `F:\GitHub\tm-r0\docs\archive\HANDOFF-2026-04-28-bitnet.md`
+- `F:\GitHub\tm-r0\docs\Project\grok-validations\grok-r1-storage-applied-20260909T141625Z\review.md`
+- `F:\GitHub\tm-r0\docs\Project\grok-validations\grok-r1-storage-applied-20260909T141625Z\snapshot\src\TruckMate.Avalonia\Infrastructure\AvaloniaServiceCollectionExtensions.cs`
+- `F:\GitHub\tm-r0\docs\Project\grok-validations\grok-r1-storage-green-20260909T132616Z\review.md`
+- `F:\GitHub\tm-r0\docs\Project\grok-validations\grok-r1-storage-green-20260909T132616Z\stdout.txt`
+- `F:\GitHub\tm-r0\docs\receipts\20260919T180318-0500-featureflags-distribution-local-contract.md`
+- `F:\GitHub\tm-r0\docs\receipts\20260919T182359-0500-valhalla-source-copy-hash.md`
+- `F:\GitHub\tm-r0\docs\receipts\20260919T182955-0500-valhalla-ext4-builder-launch.md`
+- `F:\GitHub\tm-r0\docs\receipts\20260919T185315-0500-fresh-source-refresh-start.md`
+- `F:\GitHub\tm-r0\docs\receipts\20260919T191226-0500-ngrok-tunnel-blocker.md`
+- `F:\GitHub\tm-r0\docs\receipts\20260919T195448-0500-desktop-gateway-source-preflight.md`
+- `F:\GitHub\tm-r0\docs\receipts\20260919T213420-0500-lower48-builder-manifest-capture.json`
+- `F:\GitHub\tm-r0\docs\receipts\20260919T214549-0500-lower48-live-memory-cap.json`
+- `F:\GitHub\tm-r0\docs\receipts\20260919T225248Z-lower48-builder-oracle-red-green.md`
+- `F:\GitHub\tm-r0\docs\receipts\20260921T111652-0500-uc125-trace-reconciliation.md`
+- `F:\GitHub\tm-r0\docs\receipts\20260921T111908-0500-uc83-play-gate-trace-reconciliation.md`
+- `F:\GitHub\tm-r0\docs\receipts\20260921T142437-0500-lower48-qualification-resume-identity-fix.md`
+- `F:\GitHub\tm-r0\docs\receipts\20260921T152024-0500-navigation-disabled-release-gate.md`
+- `F:\GitHub\tm-r0\docs\receipts\build-lower48-ext4-260919-launch.json`
+- `F:\GitHub\tm-r0\docs\receipts\orchestrate-lower48-refresh-build-260919.json`
+- `F:\GitHub\tm-r0\docs\receipts\preprocess-lower48-260919.json`
+- `F:\GitHub\tm-r0\docs\receipts\service-gate\20260920T021914-desktop-fresh-loadplanning-handoff.json`
+- `F:\GitHub\tm-r0\docs\receipts\service-gate\20260920T030406-0500-ngrok-v3-random-probe.md`
+- `F:\GitHub\tm-r0\docs\receipts\service-gate\20260920T032131-0500-desktop-artifact-signing-input.md`
+- `F:\GitHub\tm-r0\docs\receipts\service-gate\20260920T032508-0500-featureflags-local-negative-probes.md`
+- `F:\GitHub\tm-r0\docs\receipts\source-update-260919.json`
+- `F:\GitHub\TruckMate\build\Build.cs`
+- `F:\GitHub\TruckMate\docs\archive\HANDOFF-2026-04-28-bitnet.md`
+- `F:\GitHub\TruckMate\docs\AUDIT-PHASE-MJOLNIRFRONTIER-001-code-completeness.md`
+- `F:\GitHub\TruckMate\docs\operations\PROXY-SERVICES-RUNBOOK.md`
+- `F:\GitHub\TruckMate\docs\Project\20261001-octopus-desktop-bootstrap-amendment.md`
+- `F:\GitHub\TruckMate\docs\Project\grok-validations\grok-r1-storage-applied-20260909T141625Z\review.md`
+- `F:\GitHub\TruckMate\docs\Project\grok-validations\grok-r1-storage-applied-20260909T141625Z\snapshot\src\TruckMate.Avalonia\Infrastructure\AvaloniaServiceCollectionExtensions.cs`
+- `F:\GitHub\TruckMate\docs\Project\grok-validations\grok-r1-storage-green-20260909T132616Z\review.md`
+- `F:\GitHub\TruckMate\docs\Project\grok-validations\grok-r1-storage-green-20260909T132616Z\stdout.txt`
+- `F:\GitHub\TruckMate\docs\Project\PLAN-GIGMERGE-001-lower48-freshness-feasibility.md`
+- `F:\GitHub\TruckMate\docs\Project\usecases\gigdriving\desktop-services-uc125-ac-trace.json`
+- `F:\GitHub\TruckMate\docs\Project\usecases\gigdriving\desktop-services-uc125.mmd`
+- `F:\GitHub\TruckMate\docs\Project\usecases\gigdriving\lower48-graph-uc124.mmd`
+- `F:\GitHub\TruckMate\docs\Project\usecases\gigdriving\lower48-nvme-resume-uc124-ac-trace.json`
+- `F:\GitHub\TruckMate\docs\Project\usecases\gigdriving\play-publication-uc83-current.mmd`
+- `F:\GitHub\TruckMate\docs\Project\usecases\gigdriving\play-service-gates-uc83-ac-trace.json`
+- `F:\GitHub\TruckMate\docs\Project\usecases\gigdriving\route-area-device-provision-uc126.mmd`
+- `F:\GitHub\TruckMate\docs\Project\wiki\azure\Functional-Requirements.md`
+- `F:\GitHub\TruckMate\docs\Project\wiki\azure\Gateway-Implementation-Status.md`
+- `F:\GitHub\TruckMate\docs\Project\wiki\azure\Gateway-Pre-Production-Container-Operations.md`
+- `F:\GitHub\TruckMate\docs\Project\wiki\azure\Project-Overview.md`
+- `F:\GitHub\TruckMate\docs\Project\wiki\azure\Technical-Requirements.md`
+- `F:\GitHub\TruckMate\docs\Project\wiki\azure\Testing-Requirements.md`
+- `F:\GitHub\TruckMate\docs\Project\wiki\github\Functional-Requirements.md`
+- `F:\GitHub\TruckMate\docs\Project\wiki\github\Gateway-Implementation-Status.md`
+- `F:\GitHub\TruckMate\docs\Project\wiki\github\Gateway-Pre-Production-Container-Operations.md`
+- `F:\GitHub\TruckMate\docs\Project\wiki\github\Project-Overview.md`
+- `F:\GitHub\TruckMate\docs\Project\wiki\github\Technical-Requirements.md`
+- `F:\GitHub\TruckMate\docs\Project\wiki\github\Testing-Requirements.md`
+- `F:\GitHub\TruckMate\docs\receipts\20260919T180318-0500-featureflags-distribution-local-contract.md`
+- `F:\GitHub\TruckMate\docs\receipts\20260919T182359-0500-valhalla-source-copy-hash.md`
+- `F:\GitHub\TruckMate\docs\receipts\20260919T182955-0500-valhalla-ext4-builder-launch.md`
+- `F:\GitHub\TruckMate\docs\receipts\20260919T185315-0500-fresh-source-refresh-start.md`
+- `F:\GitHub\TruckMate\docs\receipts\20260919T191226-0500-ngrok-tunnel-blocker.md`
+- `F:\GitHub\TruckMate\docs\receipts\20260919T195448-0500-desktop-gateway-source-preflight.md`
+- `F:\GitHub\TruckMate\docs\receipts\20260919T213420-0500-lower48-builder-manifest-capture.json`
+- `F:\GitHub\TruckMate\docs\receipts\20260919T214549-0500-lower48-live-memory-cap.json`
+- `F:\GitHub\TruckMate\docs\receipts\20260919T225248Z-lower48-builder-oracle-red-green.md`
+- `F:\GitHub\TruckMate\docs\receipts\20260921T111652-0500-uc125-trace-reconciliation.md`
+- `F:\GitHub\TruckMate\docs\receipts\20260921T111908-0500-uc83-play-gate-trace-reconciliation.md`
+- `F:\GitHub\TruckMate\docs\receipts\20260921T142437-0500-lower48-qualification-resume-identity-fix.md`
+- `F:\GitHub\TruckMate\docs\receipts\20260921T152024-0500-navigation-disabled-release-gate.md`
+- `F:\GitHub\TruckMate\docs\receipts\build-lower48-ext4-260919-launch.json`
+- `F:\GitHub\TruckMate\docs\receipts\orchestrate-lower48-refresh-build-260919.json`
+- `F:\GitHub\TruckMate\docs\receipts\preprocess-lower48-260919.json`
+- `F:\GitHub\TruckMate\docs\receipts\service-gate\20260920T021914-desktop-fresh-loadplanning-handoff.json`
+- `F:\GitHub\TruckMate\docs\receipts\service-gate\20260920T030406-0500-ngrok-v3-random-probe.md`
+- `F:\GitHub\TruckMate\docs\receipts\service-gate\20260920T032131-0500-desktop-artifact-signing-input.md`
+- `F:\GitHub\TruckMate\docs\receipts\service-gate\20260920T032508-0500-featureflags-local-negative-probes.md`
+- `F:\GitHub\TruckMate\docs\receipts\source-update-260919.json`
+- `F:\GitHub\TruckMate\docs\reviews\code-review-20260621T152729402Z.md`
+- `F:\GitHub\TruckMate\docs\reviews\project-review-20260621T152800323Z.md`
+- `F:\GitHub\TruckMate\HANDOFF.md`
+- `F:\GitHub\TruckMate\scripts\featureflags-seed.yaml`
+- `F:\GitHub\TruckMate\scripts\README-FEATUREFLAGS.md`
+- `F:\GitHub\TruckMate\src\TruckMate.Avalonia\flags\flags.gigdriving.json`
+- `F:\GitHub\TruckMate\src\TruckMate.Avalonia\flags\flags.truckmate.json`
+- `F:\GitHub\TruckMate\src\TruckMate.Avalonia\TruckMate.Avalonia.csproj`
+- `F:\GitHub\TruckMate\tests\TruckMate.Build.Tests\GatewayProductionDeploymentContractTests.cs`
+- `F:\GitHub\TruckMate\tests\TruckMate.Build.Tests\OctopusOwnedBuildContractTests.cs`
+- `F:\GitHub\TruckMate\tests\TruckMate.FeatureFlags.Tests\MultiProductManifestTests.cs`
+- `F:\GitHub\TruckMate\tests\TruckMate.Plaid.Service.Tests\ProductionCertificateValidationBehaviorTests.cs`
+- `F:\GitHub\vice-sharp-romless\docs\receipts-test-baseline-2026-07-07.md`
+- `F:\GitHub\vice-sharp-romm\docs\receipts-test-baseline-2026-07-07.md`
+- `F:\GitHub\vice-sharp\docs\grok\2026-08-11-vic20-exact-session\session\compaction_requests\60789dd9-e305-4e57-838e-c9cd255fdcd6.json`
+- `F:\GitHub\vice-sharp\docs\grok\2026-08-11-vic20-exact-session\session\recap_requests\299d0a60-2384-4338-9e04-d692c5a83498.json`
+- `F:\GitHub\vice-sharp\docs\grok\2026-08-11-vic20-exact-session\session\recap_requests\a301a8d0-67fd-414b-967b-013dee66cb07.json`
+- `F:\GitHub\vice-sharp\docs\receipts-test-baseline-2026-07-07.md`
+- `F:\GitHub\vice-sharp\docs\receipts\requirements-recovery\20260928T195211Z\audit-evidence.json`

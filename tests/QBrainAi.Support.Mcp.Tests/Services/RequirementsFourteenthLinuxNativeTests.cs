@@ -40,13 +40,22 @@ public sealed class RequirementsFourteenthLinuxNativeTests
         {
             if (!open.IsCompleted)
             {
-                using var releaseBlockedReader = new FileStream(fifo, FileMode.Open, FileAccess.Write, FileShare.ReadWrite);
+                // A racing reader can finish between IsCompleted and cleanup. Never block opening its writer.
+                var writer = OpenFifoNonBlocking(fifo, 1 | 0x800); // O_WRONLY | O_NONBLOCK
+                if (writer >= 0)
+                    _ = CloseDescriptor(writer);
+                _ = await Task.WhenAny(open, Task.Delay(TimeSpan.FromSeconds(5), CancellationToken.None));
             }
 
             Directory.Delete(root, recursive: true);
         }
     }
 
+    [DllImport("libc", EntryPoint = "open", SetLastError = true)]
+    private static extern int OpenFifoNonBlocking([MarshalAs(UnmanagedType.LPUTF8Str)] string path, int flags);
+
+    [DllImport("libc", EntryPoint = "close", SetLastError = true)]
+    private static extern int CloseDescriptor(int descriptor);
     [DllImport("libc", EntryPoint = "mkfifo", SetLastError = true)]
     private static extern int CreateFifo(
         [MarshalAs(UnmanagedType.LPUTF8Str)] string path,

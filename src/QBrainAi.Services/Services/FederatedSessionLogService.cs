@@ -12,6 +12,18 @@ namespace QBrainAi.Support.Mcp.Services;
 /// </summary>
 public sealed class FederatedSessionLogService : ISessionLogService
 {
+    /// <inheritdoc />
+    public Task<SessionAuditEventReceipt> AppendAuditEventAsync(SessionAuditEventRequest auditEvent, CancellationToken cancellationToken = default)
+        => _inner.AppendAuditEventAsync(auditEvent, cancellationToken);
+
+    /// <inheritdoc />
+    public Task<SessionAuditEventReceipt?> ReadAuditEventAsync(string sourceType, string sessionId, string requestId, string eventId, CancellationToken cancellationToken = default)
+        => _inner.ReadAuditEventAsync(sourceType, sessionId, requestId, eventId, cancellationToken);
+
+    /// <inheritdoc />
+    public Task<SessionAuditCompletionResult> CheckAuditCompletionAsync(string sourceType, string sessionId, string requestId, CancellationToken cancellationToken = default)
+        => _inner.CheckAuditCompletionAsync(sourceType, sessionId, requestId, cancellationToken);
+
     private readonly ISessionLogService _inner;
     private readonly FederationRegistry _registry;
     private readonly IFederationDataClient _client;

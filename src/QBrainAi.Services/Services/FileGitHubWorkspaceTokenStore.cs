@@ -314,13 +314,16 @@ public sealed class FileGitHubWorkspaceTokenStore : IGitHubWorkspaceTokenStore, 
             AccessControlType.Allow));
     }
 
-    private static string NormalizeWorkspacePath(string workspacePath)
+    private static string NormalizeWorkspacePath(string workspacePath) =>
+        NormalizeWorkspacePath(workspacePath, QBrainAi.Client.WorkspacePathNormalizer.Process);
+
+    /// <summary>TR-MCP-FED-PATH-001: token-store key from the canonical workspace path.</summary>
+    internal static string NormalizeWorkspacePath(string workspacePath, QBrainAi.Client.IWorkspacePathNormalizer normalizer)
     {
         if (string.IsNullOrWhiteSpace(workspacePath))
             throw new ArgumentException("Workspace path is required.", nameof(workspacePath));
 
-        return Path.GetFullPath(workspacePath.Trim())
-            .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        return normalizer.Normalize(workspacePath);
     }
 
 }

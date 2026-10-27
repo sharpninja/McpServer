@@ -38,7 +38,7 @@ public sealed class WorkspaceServiceDatabaseAuthorityBehaviorTests
         Assert.True(result.Success, result.Error);
         Assert.True(projectionWriter.SawCommittedWorkspace);
         Assert.Single(projectionWriter.LastProjection);
-        Assert.Equal(workspacePath, projectionWriter.LastProjection[0].WorkspacePath);
+        Assert.Equal(ExpectedWorkspaceKey.Of(workspacePath), projectionWriter.LastProjection[0].WorkspacePath);
     }
 
     /// <summary>
@@ -102,7 +102,7 @@ public sealed class WorkspaceServiceDatabaseAuthorityBehaviorTests
         Assert.True(created.Success, created.Error);
 
         var afterCreate = (await sut.ListAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true)).Items
-            .Single(i => i.WorkspacePath == workspacePath);
+            .Single(i => i.WorkspacePath == ExpectedWorkspaceKey.Of(workspacePath));
         Assert.Equal(["GPL-3.0", "AGPL-3.0"], afterCreate.BannedLicenses);
         Assert.Equal(["CN", "RU"], afterCreate.BannedCountriesOfOrigin);
         Assert.Equal(["EvilCorp"], afterCreate.BannedOrganizations);
@@ -116,7 +116,7 @@ public sealed class WorkspaceServiceDatabaseAuthorityBehaviorTests
         Assert.True(updated.Success, updated.Error);
 
         var afterUpdate = (await sut.ListAsync(ct: TestContext.Current.CancellationToken).ConfigureAwait(true)).Items
-            .Single(i => i.WorkspacePath == workspacePath);
+            .Single(i => i.WorkspacePath == ExpectedWorkspaceKey.Of(workspacePath));
         Assert.Equal(["MIT"], afterUpdate.BannedLicenses);
         Assert.Equal(["CN", "RU"], afterUpdate.BannedCountriesOfOrigin);
         Assert.Equal(["EvilCorp"], afterUpdate.BannedOrganizations);

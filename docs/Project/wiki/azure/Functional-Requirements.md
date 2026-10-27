@@ -1,4 +1,4 @@
-# Functional Requirements (MCP Server)
+# Functional Requirements (QBrain.AI)
 
 ## FR-HANDOFF-001 Ingest workspace-scoped handoff documents
 
@@ -842,6 +842,10 @@ Scope: layer-1+
 
 The MCP Server must preserve database integrity across all supported providers by enforcing workspace, TODO, requirement, federation, soft-delete, and audit relationships as durable relational contracts.
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Every workspace-scoped memory index row references a canonical Workspaces row; global memory and index rows retain null WorkspaceId.
+- [ ] Memory version and index rows remain durable when a parent memory is soft-deleted; database relationships do not cascade-delete them.
+- [ ] SQLite, PostgreSQL, and SQL Server migrate existing memory rows to the corrected constraints without data loss and reject orphan workspace references.
 
 ## FR-MCP-106 Reliable plugin requirement updates
 
@@ -1246,6 +1250,16 @@ Scope: layer-1+
 Legacy agent-parity functional TODO link retained for historical traceability. Status: superseded by concrete plugin/core parity requirements and matrix rows; no active implementation work is tracked under this stub.
 Scope: layer-1+
 
+## FR-MCP-AUDIT-001 Permanent local audit history
+
+Audit rows for mutable MCP state remain permanent in the local database and are excluded from federation and wiki exports. Runtime storage preserves legacy audit reads and stores new generic payloads compactly.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Audit rows are omitted from federation payloads and wiki exports while local audit version checks remain usable.
+- [ ] The SQL Server runtime principal can insert audit rows but cannot update or delete either audit ledger or write migration history.
+- [ ] Legacy JSON rows remain readable; new generic audit rows persist all four snapshot, diff, and metadata payloads with versioned compression.
+- [ ] SQLite, SQL Server, and PostgreSQL provider migrations apply and round-trip audit payloads without rewriting historical text.
+
 ## FR-MCP-BATCH-001 Plugin requirement batch payload parsing
 
 All MCP server plugins SHALL accept valid YAML and JSON records arrays for requirement batch operations without schema-validation rejection.
@@ -1279,6 +1293,26 @@ Scope: layer-1+
 - [ ] Submit/append still returns retryable backend_unavailable and keeps failsafe YAML
 - [ ] Test-ReplFailsafeBackendUnreachable treats HTTP 503 and code backend_unavailable as unreachable
 - [ ] Drain does not latch failed=1 as permanently completed in-process
+
+## FR-MCP-FED-BACKFILL-001 LocalProxy backfills existing workspace data to the hub after enrollment
+
+After enrollment a LocalProxy must copy all existing workspace-scoped data for each enrolled workspace to the hub, idempotently, preserving ids, versions, timestamps and history where the domain supports it, using batched signed envelopes (decision D2). AC1: Domains todo (items, tasks, list items, requirement links, document metadata, audit history), session_log (full graph), requirements (acceptance criteria, traceability, scope layers), memory (+versions), use cases, documents/chunks, triage, tools buckets/definitions, agents, brain slots, handoff runs, actors are each backfilled or explicitly listed as local-only with a reason. AC2: Re-running creates no duplicates and reports already_applied counts. AC3: Backfill operations do not fan out to other proxies. AC4: federation/status reports backfill state per workspace and domain; staleReadStatus is non-clear until complete; while a workspace is incomplete the proxy serves its reads locally and forwards writes (decision D4). AC5: Per-domain per-workspace row-count and checksum parity report after completion. Evidence 2026-10-06: ~1.885M proxy rows vs 1,650 hub rows for the enrolled proxy's workspaces.
+Scope: layer-1+
+
+## FR-MCP-FED-PATH-001 Syntax-based interpretation of request-supplied workspace paths
+
+A server must interpret any request-supplied workspace path by its own syntax (drive letter, UNC, POSIX root), never by the host OS, so a Linux host accepts and stores Windows paths unchanged in meaning and a Windows host accepts POSIX paths. AC1: On a Linux host, C:\Users\kingd and C:/Users/kingd resolve to the same Windows identity and nothing is prefixed with the process working directory. AC2: On a Windows host, /home/x stays a POSIX path. AC3: Triage submit/getReport/queryGroups round-trip on a Linux hub using the submitter's original Windows path. AC4: WorkspaceService.Init never creates a directory from a foreign-platform path. Evidence: TriageService.cs:1417 Path.GetFullPath produced /opt/mcpserver/app/C:\Users\kingd on hub LAB-OMARCHY (2026-10-06). Plan: docs/plans/2026-10-07-federation-fixes.md (P1).
+Scope: layer-1+
+
+## FR-MCP-FED-ROUTE-001 Hub resolves forwarded requests to the proxy workspace and fails closed
+
+The federation hub must resolve a request forwarded by a LocalProxy to that proxy workspace's canonical row using (X-Mcp-Proxy-Id, proxy-local workspace path) or the GlobalWorkspaceId. AC1: Forwarded GET /todo with X-Workspace-Path F:\GitHub\McpServer from PAYTON-LEGION2 returns that workspace's data (200), never 400 and never the hub primary workspace. AC2: X-Workspace-Path set to the GlobalWorkspaceId resolves to the same workspace. AC3: A request carrying X-Mcp-Federation-Hop without a resolvable workspace fails closed with a 4xx diagnostic and never falls back to the API key's default workspace. AC4: The LocalProxy forwards the hub GlobalWorkspaceId (not its local path) in X-Mcp-Global-Workspace-Id. AC5: The inter-server hub token can only address workspaces registered to the presenting proxy. Evidence 2026-10-07 hub probe: no header -> 200 hub McpServer TODOs (58); proxy path, hash id and forwarded headers -> 400 Unknown workspace path.
+Scope: layer-1+
+
+## FR-MCP-FED-WSSYNC-001 Proxy workspace configuration propagates to hub canonical rows
+
+Proxy-owned workspace configuration (Name, IsEnabled, TodoPath, RunAs, AgentPath, PromptTemplate, StatusPrompt, ImplementPrompt, PlanPrompt, IsPrimary, DataDirectory, TunnelProvider) must propagate to the hub canonical Workspaces row on enroll and heartbeat. Hub-maintained state (CurrentRequirementLayerKey) is hub-owned (decision D3): never overwritten by heartbeats, drift reported. AC1: After enroll, every proxy-owned field on every canonical row equals the proxy row (lab repro 55/55). AC2: A TodoPath change on the proxy is visible on the hub after the next heartbeat. AC3: GET federation/workspaces exposes a drift indicator for hub-owned fields that differ from the proxy. AC4: Older proxies that send no configuration fields keep current behaviour. Evidence 2026-10-06: 1 TodoPath and 8 CurrentRequirementLayerKey mismatches of 55; EnsureFederatedWorkspaceRow hard-codes TodoPath docs/todo.yaml.
+Scope: layer-1+
 
 ## FR-MCP-FILETOOLS-001 Global repository discovery tools
 
@@ -1571,6 +1605,11 @@ Scope: layer-1+
 - [ ] Offline queued memory update and delete operations replay through signed envelopes.
 - [ ] Stale memory base-version operations create federation conflicts and do not overwrite hub state.
 
+## FR-MCP-PATHNORM-001 Persist workspace paths with forward slashes and platform tag
+
+Operator directive (PLAN-PATHNORM-001, decision D1 2026-10-07: delivered in P1). Persisted workspace paths, storage keys and identity hashes use '/' as the separator for all platforms; the windows: (case-insensitive) / case-sensitive: tag is kept; Windows-origin paths are detected by drive letter (C:/) or UNC (//server/share), not by separator; the UNC leading '//' is preserved; paths are converted to '\' only at OS boundaries that require it (\\?\ long-path prefixes, cmd.exe arguments, native APIs). AC1: C:\Users\kingd, C:/Users/kingd and c:/users/KINGD produce one storage key. AC2: \\srv\share\x and //srv/share/x produce one storage key that still starts with //. AC3: Existing stores are converted by the --workspace-path-rekey maintenance command (decisions D5-D7 2026-10-07): after it runs no Windows-shaped workspace value contains a backslash, per-table and per-workspace row counts are unchanged, and foreign keys validate; the server refuses to start against an unconverted store (no dual-key lookup). AC4: Native file operations on Windows receive backslash paths where the OS requires them.
+Scope: layer-1+
+
 ## FR-MCP-PLUGIN-BATCH-001 Plugin requirement batch payload parsing
 
 All MCP server plugins SHALL accept valid YAML and JSON records arrays for requirement batch operations without schema-validation rejection.
@@ -1616,6 +1655,7 @@ Scope: layer-1+
 - [x] The deterministic workflow assertions and companion aiUnit semantic assertions execute for all eight plugin scenarios. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
 - [x] The validation target reports zero failed and zero skipped tests and identifies the exact plugin source revision used by each scenario. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
 - [x] Every one of the eight catalog rows executes its production plugin entrypoint for bootstrap, begin, append dialog, append actions, complete, failed submit, and retry. Direct McpServer.Client calls do not satisfy plugin invocation. Persisted state is independently queried after process success. The aiUnit assertion invokes the configured aiUnit evaluator against a redacted execution receipt and fails closed on malformed, skipped, unavailable, or synthetic output. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [ ] For each server-side session persistence contract changed by this remediation, all eight supported production plugin entrypoints normalize primary success, retryable degraded or queued state, and terminal failure identically. Process exit alone never proves persistence; primary success requires exact server readback.
 
 ## FR-MCP-PLUGIN-SKILLS-001 Package workflow closeout skills across McpServer plugins
 
@@ -1737,6 +1777,53 @@ Scope: layer-1+
 
 While a qbagent prompt is running, the operator SHALL see each QuadBrain role (Creativity, Logic, CuriosityEngine, ArbiterOfTruth) as it starts and when it completes, including that role's output text, without waiting for the full orchestration to finish. The OpenAI chat-completions stream SHALL emit those role events before the final Arbiter assistant message. The final assistant message remains the Arbiter decision (FR-MCP-QBOPENAI-001). Heartbeat still-working lines are not a substitute for role progress.
 Scope: layer-1+
+
+## FR-MCP-QBRAIN-001 Product display brand is QBrain.AI
+
+Where this product is named for a person, the display brand is QBrain.AI. That includes the README title, live documentation titles, the Windows service DisplayName, and other human-readable product titles. It does not by itself rename a namespace, a package id, a path, or a repository.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] A reader of the live README title sees QBrain.AI.
+- [ ] The Windows service DisplayName is QBrain.AI where the service is installed under the new name.
+- [ ] Live product titles no longer use "MCP Server" for this product.
+- [ ] Historical receipts are not rewritten to satisfy this requirement.
+
+## FR-MCP-QBRAIN-002 Product identity stays distinct from the Model Context Protocol
+
+The open protocol remains the Model Context Protocol. Protocol wording and the protocol endpoint stay recognizable as MCP. The product rename must not make agents treat `/mcp-transport` or MCP JSON-RPC as a retired product name.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Live docs that describe the wire protocol still say Model Context Protocol where they mean the protocol.
+- [ ] `/mcp-transport` remains the MCP endpoint and is not redirected onto a QBrain.AI path.
+- [ ] Bare "MCP" in protocol sentences is classified and left in place. It is not bulk-replaced.
+
+## FR-MCP-QBRAIN-003 Product identity stays distinct from QuadBrain and QBAgent
+
+QuadBrain remains the four-role feature. QBAgent remains the agent tool. The command `qbagent` remains `qbagent`. The product brand QBrain.AI must not absorb those names, and those names must not be rewritten into QBrain.AI.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Live docs still describe QuadBrain as the feature and QBrain.AI as the product.
+- [ ] The tool command `qbagent` still exists.
+- [ ] The namespace segment `QBAgent` remains `QBAgent` after the product root changes.
+
+## FR-MCP-QBRAIN-004 1.x callers keep a working product identity
+
+Through the 1.x line, a caller that still uses the old product route, the old config section, the old product environment variables, or the old NuGet package ids can still operate. At 2.0 those aliases end. This is the continuity requirement. How the aliases are built is a technical requirement.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] A 1.x request to the old product HTTP prefix still succeeds for the representative route covered by tests.
+- [ ] A 1.x configuration that contains only the old config section still boots.
+- [ ] A 1.x package reference to each published `SharpNinja.McpServer.*` id still compiles against the moved public types via the type-forward package.
+- [ ] 2.0 is the version where those aliases are allowed to stop. They are not removed inside 1.x.
+
+## FR-MCP-QBRAIN-005 Historical identity and host names stay
+
+People can still read historical receipts, existing requirement IDs, and the host names PAYTON-LEGION2 and LAB-OMARCHY as they were written. The rebrand does not rewrite that history and does not rename those machines or that lab.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Existing files under `docs/receipts/**` are not rewritten. New inventory and hostile-validation receipts may be added. They do not replace historical receipt bodies.
+- [ ] Existing `FR-MCP-*`, `TR-MCP-*`, and `TEST-MCP-*` IDs are not renamed. The new IDs in this plan are additions.
+- [ ] The hostname PAYTON-LEGION2 and the lab name LAB-OMARCHY still appear where they identify that host and that lab.
 
 ## FR-MCP-QBSEED-001 Config-driven Quad-Brain provisioning and live-loop readiness
 
@@ -1984,6 +2071,20 @@ Scope: layer-1+
 - [x] If a caller supplies acceptanceCriteria and a successful mutation response explicitly returns acceptanceCriteria empty, the plugin reports requirements_acceptance_criteria_not_captured instead of success. (evidence: Direct sourced shell assertions and focused Jest tests exercise the explicit empty-response case.)
 - [x] Requirement create/update calls without acceptanceCriteria continue to work without injecting an empty criteria list. (evidence: Shell no-AC create assertions passed and existing TypeScript focused tests remain green.)
 
+## FR-MCP-REQRECOVERY-001 Atomic requirements ledger recovery
+
+The MCP Server shall support dry-running and atomically applying an auditable recovery plan that can create, update, or delete FR, TR, TEST, acceptance-criteria, and mapping state without exposing a partially recovered ledger.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Dry-run performs no mutation and returns a deterministic ordered plan containing every create, update, delete, mapping upsert, and mapping delete plus a normalized hash of the effective pre-state.
+- [ ] Apply commits all validated requirement records, acceptance criteria, deletions, and mappings in one transaction. Any validation, referential-integrity, concurrency, or persistence failure rolls the complete plan back.
+- [ ] Apply requires the dry-run pre-state hash and an idempotency key. A stale hash or reuse of the key with different content is rejected without mutation.
+- [ ] Replaying an identical committed request with the same idempotency key returns the original committed result and creates no duplicate records, criteria, mappings, or audit entries.
+- [ ] A committed result reports exact per-operation counts and IDs, the new effective-state hash, and a query-verifiable audit receipt whose post-state matches the approved plan.
+- [ ] Every supported agent plugin that advertises requirements operations exposes the same dry-run and apply schema and normalizes success, stale-precondition, idempotent replay, and rollback outcomes identically through its production entrypoint.
+- [ ] Dry-run and apply bind the plan to the exact workspace ID, target layer key, productScope value, layer-catalog version or hash, scopeStartLayerKey, scopeEndLayerKey, normalized raw target-layer state including shadowed rows, and normalized effective projection. Every bound value is returned in the plan and audit receipt.
+- [ ] Apply compares every bound raw, effective, layer-catalog, and scope precondition inside the transaction immediately before the first mutation, rejects stale or out-of-bound plans without mutation, writes only records owned by the declared target layer, and never silently mutates inherited or shadowed records outside the declared bounds.
+
 ## FR-MCP-REQSCOPE-001 FR-MCP-REQSCOPE-001
 
 Placeholder requirement backfilled for TODO link FR-MCP-REQSCOPE-001.
@@ -2003,6 +2104,16 @@ Scope: layer-1+
 
 Placeholder requirement backfilled for TODO link FR-MCP-REQSCOPE-004.
 Scope: layer-1+
+
+## FR-MCP-SERVICEUPDATE-001 Cross-platform service update preserving live state
+
+The existing Nuke UpdateService target detects Windows or Linux and updates the selected service while preserving the live configuration and file data strategy. Linux updates an existing systemd service without rewriting its operator configuration.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] UpdateService selects Windows or Linux at runtime; Windows defaults/launcher remain compatible; Linux x64/arm64 use extensionless apphost; unsupported hosts fail before changes.
+- [ ] Both platforms preserve live appsettings.yaml and configured DataFolder with legacy fallback. Linux also preserves unit/drop-ins/environment files and Unix ownership/modes/ACLs/xattrs through a private retained archive.
+- [ ] Linux validates installed service identity and stage before stop; backup precedes replacement; restore precedes start; service executable and server/workspace health must pass. Failures preserve recovery artifacts and never report success.
+- [ ] Mocks-first tests and full applicable unit suites pass with zero failures/skips; independent gates pass; existing local Linux service update preserves configuration/data and trusted workspace behavior.
 
 ## FR-MCP-SESSIONATTR-001 Session-log foreign filesModified and commits are rejected or marked
 
@@ -2061,6 +2172,7 @@ Scope: layer-1+
 - [ ] A primary-success result is accepted only with exact server readback of the intended response, interpretation, tags, contextList, actions or dialog, and identity.
 - [ ] Repeated unchanged updates and sequential append/complete calls are idempotent: no duplicate recovery work, child rows, or outcome ambiguity is introduced.
 - [ ] Write-ahead recovery is retained before backend submission and deleted only after durable confirmation; a queued result is never represented as primary persistence or accepted TODO completion evidence.
+- [ ] A dense existing session containing representative turns and every supported child collection accepts a session update inside the five-second storage command budget, or returns one classified retryable outcome inside that budget. A successful retry has exact durable readback and introduces no duplicate or partial child rows.
 
 ## FR-MCP-SESSIONLIFE-004 Failsafe replay, child deadline, and contention classification
 
@@ -2143,6 +2255,15 @@ Scope: layer-1+
 - [ ] TEMP/TMP on workspace volume when workspace is not on TEMP drive
 - [ ] templates still document same-volume TEMP and verify-after-edit
 - [ ] failed move is a visible error
+
+## FR-MCP-TESTRESOURCE-001 Repository-independent test fixtures and outputs
+
+Fixture inputs must be packaged as test-project resources and generated test artifacts must use test-owned output locations, without depending on the repository root. Tests that intentionally verify live repository or sibling plugin source may read those sources as their subject.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Fixture inputs for applicable tests are packaged as resources in their owning test projects and load without using a checkout-root path.
+- [ ] Generated test artifacts are written only to test-owned disposable output locations, not to repository fixture or documentation paths.
+- [ ] Tests whose subject is the live repository or sibling plugin source retain their real-source integrity checks; the no-repo-path rule does not replace those checks with synthetic fixtures.
 
 ## FR-MCP-TODO-CLOSE-001 Close TODO item by ID
 
@@ -2449,6 +2570,17 @@ Scope: layer-1+
 - [ ] Historical rejected receipts remain intact but are explicitly superseded; final evidence identifies the exact immutable tested SHA, contains executable commands or a mechanically complete ledger, independently reconciles hashes, mappings and totals, and limits conclusions to the proven local and retained-evidence boundary.
 - [ ] All current and prior requirements pass focused and cumulative Windows, native Linux/FUSE/non-root, SQLite, LocalDB, fresh PostgreSQL, deterministic external, BDPv4, build, traceability, Release, repository, history, harness, and EOL gates from C:-physical outputs with exact zero failures and zero skips.
 
+## FR-MCP-USECASE-018 Edit existing use-case actors, flows, and steps in place
+
+Operators and agents shall edit actor, flow, and step records through supported authenticated operations while preserving the existing component identities and parent relationships.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] A supported authenticated operation updates an actor already associated with a use case, preserves ActorId and UseCaseId, and returns the changed name, description, type, and IsPrimary values.
+- [ ] A supported authenticated operation updates an existing flow in its parent use case, preserves FlowId and UseCaseId, and returns the changed FlowType, Name, and SequenceNumber values.
+- [ ] A supported authenticated operation updates an existing step in its parent flow and use case, preserves StepId and FlowId, and returns the changed StepNumber, ActorId, Action, SystemResponse, and DataEntities values.
+- [ ] Component updates reject missing, soft-deleted, cross-workspace, and parent-mismatched IDs without changing any row or creating duplicates.
+- [ ] Updating actors, flows, or steps leaves the use case approval status, version, links, unrelated actors, unrelated flows, and unrelated steps unchanged while advancing only the aggregate update timestamp.
+
 ## FR-MCP-VERIFYWRAP-001 Code-verify reports disk-full and honors timeout without hanging
 
 code-verify.ps1 reports a typed disk-capacity failure instead of an unhandled WriteAllText when the workspace drive is full, and preserves current-turn audit state. Each invocation completes or fails within its documented timeout and does not occupy the console after the child build exits. BUG-TRIAGE-125, BUG-TRIAGE-130.
@@ -2621,6 +2753,15 @@ Scope: layer-1+
 
 Placeholder requirement backfilled for TODO link FR-TEST-002.
 Scope: layer-1+
+
+## FR-TIMER-001 Stop and Dispose take precedence over overlapping Restart
+
+Manager Core and UI.Core timer handles ignore Restart overlapping Stop or Dispose, cancel in-flight callbacks without deadlock, allow a new fresh-token Restart after Stop returns, and never restart after Dispose. Operator approved 2026-10-08 in the Phase 2 rebrand repair.
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Restart while Stop or Dispose is in progress cannot create a new callback run or change the stored interval.
+- [ ] Stop/Dispose cancel the active token before waiting for a synchronous callback and return without external rescue when that callback cooperates with cancellation.
+- [ ] Restart after Stop returns uses a fresh uncanceled token; Dispose is final and repeated stop/dispose calls remain safe.
 
 ## FR-TRIAGE-001 Triage dashboard inspection
 
@@ -2822,4 +2963,9 @@ Scope: layer-1+
 - [ ] Saving hourly and daily caps persists on the agent configuration.
 - [ ] When the hourly cap is exceeded, a new dispatch for that agent fails closed and the TODO stays pending or failed, not silently running.
 - [ ] Clearing caps restores unlimited dispatch for that agent.
+
+## FR-WF-005 FR-WF-005
+
+Placeholder requirement backfilled for TODO link FR-WF-005.
+Scope: layer-1+
 

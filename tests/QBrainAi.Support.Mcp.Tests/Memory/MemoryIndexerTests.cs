@@ -123,7 +123,7 @@ public sealed class MemoryIndexerTests : IDisposable
         Assert.DoesNotContain(recall.Items ?? [], item => item.Id == foreign.Id);
         var hit = Assert.Single(recall.Items ?? [], item => item.Id == local.Id);
         Assert.True(hit.Score.HasValue);
-        Assert.Equal(_harness.WorkspaceA, hit.AnnWorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(_harness.WorkspaceA), hit.AnnWorkspaceId);
         Assert.Equal("hybrid", recall.RankingMode, ignoreCase: true);
     }
 

@@ -1,0 +1,102 @@
+==== FR-MCP-SESSIONLIFE-001-AC002 STATUS=FAIL
+TEXT=Prompt-hook status reports durable opened only after confirmed primary persistence; otherwise it reports opened-degraded and identifies the retained recovery artifact without representing the turn as server-persisted.
+RATIONALE=The new fresh prompt-hook It at SessionLogP2Contracts.Tests.ps1:1308 does semantically distinguish turn-opened from turn-opened-degraded, verifies typed disposition and a retained artifact, and passes in XML. However, its sole manifest link at acceptance-manifest.json:337 contains outcomes.. while XML contains outcomes. Exact executed mapping is absent. This is a mapping-only failure; the old duplicate-turn It is not re-credited.
+  MAP added=True allPassed=False
+  NAME=FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..fresh prompt hook reports turn-opened after primary readback and turn-opened-degraded with the retained artifact
+
+==== TR-MCP-SESSIONLIFE-001-AC001 STATUS=FAIL
+TEXT=One real begin-turn builder or shim preserves the complete cached turn on degraded persistence and exposes a shared, truthful degraded transition used by all hooks.
+RATIONALE=Both replacement links have the double-dot name defect. Independently of naming, the consumer It calls Assert-P2FullCache, which checks six fields only. It neither seeds nor asserts full identity/status/context/build/audit preservation. The fresh-hook case does not fill that gap. The actual helper accepts a reduced six-field object in the independent probe, with a failing wrong-query control.
+  MAP added=True allPassed=False
+  NAME=FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..fresh prompt hook reports turn-opened after primary readback and turn-opened-degraded with the retained artifact
+  MAP added=True allPassed=False
+  NAME=FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..prompt stop-gate update and dialog consumers keep the full degraded cache omit empty query and do not claim server persistence
+
+==== TR-MCP-SESSIONLIFE-001-AC002 STATUS=FAIL
+TEXT=Prompt, complete, update, and dialog hooks consume the shared transition without reduced-object replacement, empty-query overwrite, or false server-persisted status.
+RATIONALE=Both replacement links have the name defect. Even after name reconciliation, the consumer assertions cannot detect reduced-object loss beyond six fields. The empty-query branch sends a cached nonempty query and forbids an empty string; it does not prove absent queryText at the persistence boundary. Stop has no asserted new receipt method, exit, or completed/degraded status, so a stale prior receipt or early return can satisfy its checks. The absent-cache dialog case does not establish all hook transition consumption.
+  MAP added=True allPassed=False
+  NAME=FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..prompt stop-gate update and dialog consumers keep the full degraded cache omit empty query and do not claim server persistence
+  MAP added=True allPassed=False
+  NAME=FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..missing-turn dialog recovery stays bounded and does not claim server persistence
+
+==== TEST-MCP-SESSIONLIFE-001-AC001 STATUS=FAIL
+TEXT=Mock-backed consumer tests prove degraded complete-turn preservation, truthful hook status, empty-query omission, bounded missing-turn dialog recovery, and same-request cached metadata.
+RATIONALE=All three replacement links have the name defect. Independently, the new missing-turn It at :1404 starts without current-turn.yaml, receives lost before transport, and asserts no resubmit count or session_dialog artifact. It is not the degraded remote-404 recovery scenario. The correctly bounded older lifecycle case was removed from this criterion-specific list. Six-field cache checks and cached-query resubmission also fail the full-object and omission assertions required here.
+  MAP added=True allPassed=False
+  NAME=FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..fresh prompt hook reports turn-opened after primary readback and turn-opened-degraded with the retained artifact
+  MAP added=True allPassed=False
+  NAME=FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..prompt stop-gate update and dialog consumers keep the full degraded cache omit empty query and do not claim server persistence
+  MAP added=True allPassed=False
+  NAME=FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..missing-turn dialog recovery stays bounded and does not claim server persistence
+
+==== TEST-MCP-SESSIONLIFE-001-AC002 STATUS=FAIL
+TEXT=At least one real builder or shim test runs with MCP_PLUGIN_PERSIST_LOG unset and asserts the complete cached object and serialized persistence payload rather than only fixture echo.
+RATIONALE=Its only replacement link has the name defect. Independently, :1417 invokes a primary begin, calls the six-field Assert-P2FullCache and checks five payload fields. It never asserts sessionId, status, context, build state or audit counters as a complete cached object. MCP_PLUGIN_PERSIST_LOG really is unset, but that alone does not satisfy the explicit complete-object assertion requirement. Independent execution proves the helper accepts a reduced object.
+  MAP added=True allPassed=False
+  NAME=FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..asserts the complete cached object and the serialized payload with MCP_PLUGIN_PERSIST_LOG unset
+
+==== NAME RECONCILIATIONS
+[{"mappedName":"FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..asserts the complete cached object and the serialized payload with MCP_PLUGIN_PERSIST_LOG unset","exactMatchCount":0,"actualName":"FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.asserts the complete cached object and the serialized payload with MCP_PLUGIN_PERSIST_LOG unset","actualMatchCount":1,"actualResults":["Success"],"meaning":"The It really executed and passed under the single-dot name. No silent repair of the manifest or exact-name credit."},{"mappedName":"FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..fresh prompt hook reports turn-opened after primary readback and turn-opened-degraded with the retained artifact","exactMatchCount":0,"actualName":"FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.fresh prompt hook reports turn-opened after primary readback and turn-opened-degraded with the retained artifact","actualMatchCount":1,"actualResults":["Success"],"meaning":"The It really executed and passed under the single-dot name. No silent repair of the manifest or exact-name credit."},{"mappedName":"FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..missing-turn dialog recovery stays bounded and does not claim server persistence","exactMatchCount":0,"actualName":"FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.missing-turn dialog recovery stays bounded and does not claim server persistence","actualMatchCount":1,"actualResults":["Success"],"meaning":"The It really executed and passed under the single-dot name. No silent repair of the manifest or exact-name credit."},{"mappedName":"FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..prompt stop-gate update and dialog consumers keep the full degraded cache omit empty query and do not claim server persistence","exactMatchCount":0,"actualName":"FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.prompt stop-gate update and dialog consumers keep the full degraded cache omit empty query and do not claim server persistence","actualMatchCount":1,"actualResults":["Success"],"meaning":"The It really executed and passed under the single-dot name. No silent repair of the manifest or exact-name credit."},{"mappedName":"FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..rejects null empty and whitespace todoId and empty planFile on ordinary first persistence without a server row","exactMatchCount":0,"actualName":"FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects null empty and whitespace todoId and empty planFile on ordinary first persistence without a server row","actualMatchCount":1,"actualResults":["Success"],"meaning":"The It really executed and passed under the single-dot name. No silent repair of the manifest or exact-name credit."},{"mappedName":"FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..stores exact None for canceled supersession when metadata is omitted and normalizes cancelled to canceled","exactMatchCount":0,"actualName":"FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores exact None for canceled supersession when metadata is omitted and normalizes cancelled to canceled","actualMatchCount":1,"actualResults":["Success"],"meaning":"The It really executed and passed under the single-dot name. No silent repair of the manifest or exact-name credit."}]
+==== CACHE COUNTEREXAMPLE
+{
+  "TimestampUtc": "2026-10-02T18:59:42.5117164-05:00",
+  "source": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\plugins\\core\\test-fixtures\\pester\\SessionLogP2Contracts.Tests.ps1",
+  "sourceHash": "5EB2A4B935424518FDF0EEA7418E3C617F9ECBD1D7C7EA3433CF2000C6BD55F7",
+  "helperLine": 317,
+  "helper": "function Assert-P2FullCache {\r\n            param($Turn, [string]$QueryText, [string]$PlanFile, [string]$TodoId)\r\n            [string]$Turn.queryText | Should -Be $QueryText\r\n            [string]$Turn.queryTitle | Should -Not -BeNullOrEmpty\r\n            [string]$Turn.planFile | Should -Be $PlanFile\r\n            [string]$Turn.todoId | Should -Be $TodoId\r\n            [string]$Turn.openedAt | Should -Not -BeNullOrEmpty\r\n            [string]$Turn.turnRequestId | Should -Not -BeNullOrEmpty\r\n        }",
+  "input": {
+    "queryText": "keep me",
+    "queryTitle": "kept title",
+    "planFile": "docs/plans/p2.md",
+    "todoId": "BUG-TRIAGE-246",
+    "openedAt": "2026-10-02T00:00:00Z",
+    "turnRequestId": "req-p2-verb"
+  },
+  "absentFields": [
+    "sessionId",
+    "status",
+    "contextList",
+    "codeEdits",
+    "lastBuildStatus",
+    "auditActions",
+    "auditFiles",
+    "auditDialog",
+    "auditDecisions",
+    "auditCommits"
+  ],
+  "reducedObjectAccepted": true,
+  "reducedObjectError": null,
+  "wrongQueryRejected": true,
+  "wrongQueryError": "Expected strings to be the same, but they were different.\nExpected length: 15\nActual length:   7\nStrings differ at index 0.\nExpected: 'different query'\nBut was:  'keep me'\n           ^",
+  "interpretation": "A passing six-field object demonstrates the helper does not assert the complete cached object. This is a test-coverage finding, not a production-state failure."
+}
+==== COMPLETENESS
+{
+  "core": 35,
+  "governingLegacy": 8,
+  "deferred": 3,
+  "denominator": 40,
+  "numerator": 34,
+  "percentage": 85,
+  "failedCriteria": [
+    "FR-MCP-SESSIONLIFE-001-AC002",
+    "TR-MCP-SESSIONLIFE-001-AC001",
+    "TR-MCP-SESSIONLIFE-001-AC002",
+    "TEST-MCP-SESSIONLIFE-001-AC001",
+    "TEST-MCP-SESSIONLIFE-001-AC002",
+    "TEST-MCP-SESSIONLIFE-002-AC001"
+  ],
+  "semanticFailures": [
+    "TR-MCP-SESSIONLIFE-001-AC001",
+    "TR-MCP-SESSIONLIFE-001-AC002",
+    "TEST-MCP-SESSIONLIFE-001-AC001",
+    "TEST-MCP-SESSIONLIFE-001-AC002"
+  ],
+  "counterfactualWithNameTyposResolved": {
+    "numerator": 36,
+    "denominator": 40,
+    "percentage": 90
+  },
+  "b7b8AffectScore": false
+}

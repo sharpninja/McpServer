@@ -1,0 +1,140 @@
+    5|# MCP_PLUGIN_PERSIST_LOG stays unset. A local executable stands in for mcpserver-repl;
+    8|Describe 'FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes' {
+   76|        if ($env:MCP_PLUGIN_PERSIST_LOG) { Remove-Item Env:MCP_PLUGIN_PERSIST_LOG }
+  121|                queryText = 'keep me'
+  133|        function Invoke-P2Verb {
+  169|            if (-not [string]::IsNullOrWhiteSpace([string]$env:MCP_PLUGIN_PERSIST_LOG)) {
+  170|                $psi.Environment['MCP_PLUGIN_PERSIST_LOG'] = [string]$env:MCP_PLUGIN_PERSIST_LOG
+  198|        function Assert-P2Receipt {
+  213|        function Assert-P2PrimaryEnvelope {
+  225|        function Assert-P2SessionTitleBinding {
+  232|        function Initialize-P2VerifiedSession {
+  247|        function Invoke-P2Hook {
+  302|        function Get-P2ServerTurns {
+  305|            foreach ($line in ([string]$ServerState -split "\r?\n")) {
+  317|        function Assert-P2FullCache {
+  318|            param($Turn, [string]$QueryText, [string]$PlanFile, [string]$TodoId)
+  319|            [string]$Turn.queryText | Should -Be $QueryText
+  334|    It 'covers primary queued and lost outcomes for every session verb' {
+  336|            @{ Verb = 'workflow.sessionlog.beginTurn'; Yaml = "requestId: req-p2-verb`nqueryTitle: P2 title`nqueryText: P2 query`nplanFile: None`ntodoId: None"; NeedsTurn = $false },
+  340|            @{ Verb = 'workflow.sessionlog.completeTurn'; Yaml = "response: done`n"; NeedsTurn = $true },
+  380|                        if ($verb.Verb -eq 'workflow.sessionlog.completeTurn') {
+  408|    It 'rejects an absent current-turn cache without a server write' {
+  417|    It 'preserves degraded creation metadata and sends cached plan on the same request' {
+  419|        $first = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: keep me`nplanFile: docs/plans/p2.md`ntodoId: BUG-TRIAGE-246`n" -Mode 'queued'
+  429|        $second = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: keep me`n" -Mode 'primary'
+  434|        [string]$kept.queryText | Should -Be 'keep me'
+  441|    It 'omits metadata on durable reopen unless the caller sends an explicit value' {
+  443|        $first = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: keep me`nplanFile: docs/plans/p2.md`ntodoId: BUG-TRIAGE-246`n" -Mode 'primary'
+  446|        $second = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: keep me`n" -Mode 'primary'
+  448|        $payloads = @($second.ServerState -split "(?<=\})\s*\n" | Where-Object { $_.Trim() })
+  458|    It 'stores canceled with exact None when a new request supersedes an open turn' {
+  461|        $result = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-new`nqueryTitle: next`nqueryText: next text`nplanFile: None`ntodoId: None`n" -Mode 'primary'
+  468|    It 'rejects whitespace metadata on ordinary first persistence' {
+  470|        $result = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: P2 title`nqueryText: P2 query`nplanFile: `" `"`ntodoId: None`n" -Mode 'primary'
+  476|    It 'omits an empty query through the real builder and shim' {
+  487|            $updated.turn.Contains('queryText') | Should -BeFalse
+  489|            $shim = New-McpPluginTurnUpsertRequest -Agent 'Codex' -SessionId 'Codex-20260930T000000Z-p2' -RequestId 'req-p2-empty' -Timestamp '2026-09-30T00:00:00Z' -QueryText '' -Title '' -Status 'in_progress' -Model 'codex'
+  491|            $map.turn.Contains('queryText') | Should -BeFalse
+  494|            [string]$canceled.turn.queryText | Should -Be 'kept title'
+  500|    It 'does not write a second failsafe for an unchanged queued update and keeps additive methods distinct' {
+  534|    It 'rejects a request mismatch and a wrong-workspace marker without changing session A or request R' {
+  553|            queryText = 'keep me'
+  571|    It 'refreshes same-path marker drift without rewriting the bound session' {
+  603|    It 'keeps Codex cache and audit identity when Grok agent variables are inherited' {
+  632|    It 'preserves session A and request R from a native turn through a plugin append' {
+  649|    It 'proves BUG-TRIAGE-246 module bootstrap user guide and message schema' {
+  741|        @($begin.required) | Should -Contain 'queryText'
+  756|    It 'rejects unproven persistence envelopes without clearing failsafe recovery' {
+  766|        function Invoke-ReplTurnUpsertParams { param($SourceType,$SessionId,$RequestId,$Title,$Status,$ResponseText,$ActionsYaml,$ProcessingDialog,$Interpretation,$TokenCount,$Tags,$ContextList,$PlanFile,$TodoId) return @{ turn = @{ queryText = 'q'; timestamp = '2026-09-30T00:00:00Z' } } }
+  786|    It 'rejects update and appendDialog caller request mismatches and binds explicit update metadata' {
+  805|    It 'refuses beginTurn session rebind without durable proof and reports degraded recovery path' {
+  815|        $result = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-R`nqueryTitle: x`nqueryText: x`nplanFile: None`ntodoId: None`n" -Mode 'primary'
+  820|        $deg = Invoke-P2Verb -Layout $degLayout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml ("requestId: req-DEG`nqueryTitle: deg`nqueryText: deg`nplanFile: None`ntodoId: None`n") -Mode 'queued'
+  828|    It 'binds cached planFile and todoId on appendActions completeTurn and recovery submit' {
+  835|        $complete = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.completeTurn' -ParamsYaml "requestId: req-R`nresponse: done`n" -Mode 'primary'
+  841|    It 'sends exact None on updateTurn when caller clears planFile and todoId' {
+  852|    It 'refuses durable reopen without sessionId and without workspace marker proof' {
+  860|        $noSession = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-R`nqueryTitle: x`nqueryText: x`nplanFile: None`ntodoId: None`n" -Mode 'primary'
+  868|        $wrongWs = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-R`nqueryTitle: x`nqueryText: x`nplanFile: None`ntodoId: None`n" -Mode 'primary'
+  874|    It 'rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation' {
+  884|        $complete = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.completeTurn' -ParamsYaml "requestId: req-OTHER`nresponse: nope`nqueryTitle: hijack`n" -Mode 'primary'
+  894|    It 'round-trips hash and space failsafePath through object YAML and clears degraded after primary success' {
+  917|    It 'retries primary submit for identical degraded fingerprint instead of only reusing failsafe' {
+  919|        $first = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: keep me`nplanFile: docs/plans/p2.md`ntodoId: BUG-TRIAGE-246`n" -Mode 'queued'
+  923|        $second = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: keep me`nplanFile: docs/plans/p2.md`ntodoId: BUG-TRIAGE-246`n" -Mode 'primary'
+  930|    It 'emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path' {
+  961|        $doc['queryText'] = 'same prompt'
+  994|        $out | Should -Match 'recoveryArtifactPath'
+  998|    It 'HV10 durable update/append/complete omit planFile and todoId when caller omits them' {
+ 1000|        $null = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: kept query`nplanFile: docs/plans/p2.md`ntodoId: BUG-TRIAGE-246"
+ 1003|        $env:MCP_PLUGIN_PERSIST_LOG = $persistLog
+ 1009|            $fin = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.completeTurn' -ParamsYaml "response: done`n"
+ 1012|            Remove-Item Env:MCP_PLUGIN_PERSIST_LOG -ErrorAction SilentlyContinue
+ 1028|    It 'HV11 explicit append metadata updates cache used by later complete' {
+ 1030|        $null = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: kept query`nplanFile: docs/plans/p2.md`ntodoId: BUG-TRIAGE-246"
+ 1033|        $env:MCP_PLUGIN_PERSIST_LOG = $persistLog
+ 1040|            $fin = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.completeTurn' -ParamsYaml "response: done`n"
+ 1043|            Remove-Item Env:MCP_PLUGIN_PERSIST_LOG -ErrorAction SilentlyContinue
+ 1059|    It 'HV12 beginTurn rejects missing marker proof and wrong-marker degraded reopen' {
+ 1061|        $null = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: kept query`nplanFile: docs/plans/p2.md`ntodoId: BUG-TRIAGE-246"
+ 1068|        $missing = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: kept query`n"
+ 1073|        $null = Invoke-P2Verb -Layout $layout2 -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: kept query`nplanFile: docs/plans/p2.md`ntodoId: BUG-TRIAGE-246"
+ 1080|        $wrong = Invoke-P2Verb -Layout $layout2 -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: kept query`n"
+ 1087|    It 'HV13 request mismatch does not mutate current-turn when markers are missing' {
+ 1089|        $null = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: kept query`nplanFile: docs/plans/p2.md`ntodoId: BUG-TRIAGE-246"
+ 1102|    It 'HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false' {
+ 1104|        $null = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: kept query`nplanFile: docs/plans/p2.md`ntodoId: BUG-TRIAGE-246"
+ 1125|                @(Get-ChildItem -LiteralPath $layout.Failsafe -ErrorAction SilentlyContinue).Count | Should -BeGreaterThan 0 -Because "title recovery retained for $fault"
+ 1141|    It 'proves unit inventory excludes PluginIntegration and keeps SessionLife gate scripts' {
+ 1167|    It 'HV16 case-different caller requestId is rejected without mutation' {
+ 1191|    It 'HV17 case-different typed sessionId or requestId is not primary' {
+ 1219|    It 'rejects explicit empty and null planFile on ordinary first persistence' {
+ 1223|        $empty = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-raw-empty`nqueryTitle: t`nqueryText: q`nplanFile: `"`"`ntodoId: None`n" -Mode 'primary'
+ 1227|        $nullish = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-raw-null`nqueryTitle: t`nqueryText: q`nplanFile: null`ntodoId: None`n" -Mode 'primary'
+ 1235|    It 'HV19 case-different SubmitAsync response identity is not persisted and keeps recovery' {
+ 1240|                @{ Method = 'workflow.sessionlog.completeTurn'; Yaml = "requestId: req-p2-verb`nresponse: done`n" },
+ 1265|    It 'HV20 beginTurn case-different request or session does not durable-reopen overwrite' {
+ 1276|        $result = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-20261001T000000Z-caseA`nqueryTitle: overwrite?`nqueryText: must not reopen`n" -Mode 'primary'
+ 1299|        $result2 = Invoke-P2Verb -Layout $layout2 -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-20261001T000000Z-casea`nqueryTitle: overwrite?`nqueryText: must not reopen`n" -Mode 'primary'
+ 1308|    It 'fresh prompt hook reports turn-opened after primary readback and turn-opened-degraded with the retained artifact' {
+ 1317|        $opened.Stdout | Should -Not -Match 'recoveryArtifactPath'
+ 1323|        [string]$primaryTurn.queryText | Should -Be 'fresh primary prompt'
+ 1331|        $queued.Stdout | Should -Match 'recoveryArtifactPath'
+ 1338|        $artifact = [string]$queuedDoc.hookSpecificOutput.recoveryArtifactPath
+ 1342|        [string]$queuedTurn.queryText | Should -Be 'fresh queued prompt'
+ 1347|    It 'prompt stop-gate update and dialog consumers keep the full degraded cache omit empty query and do not claim server persistence' {
+ 1350|        $begin = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: same prompt`nplanFile: docs/plans/p2.md`ntodoId: BUG-TRIAGE-246`n" -Mode 'queued'
+ 1360|        $prompt.Stdout | Should -Match 'recoveryArtifactPath'
+ 1363|        Assert-P2FullCache -Turn $afterPrompt -QueryText 'same prompt' -PlanFile 'docs/plans/p2.md' -TodoId 'BUG-TRIAGE-246'
+ 1366|        $update = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.updateTurn' -ParamsYaml "queryText: `"`"`nresponse: noted`n" -Mode 'queued'
+ 1373|        Assert-P2FullCache -Turn $afterUpdate -QueryText 'same prompt' -PlanFile 'docs/plans/p2.md' -TodoId 'BUG-TRIAGE-246'
+ 1381|        Assert-P2FullCache -Turn $afterDialog -QueryText 'same prompt' -PlanFile 'docs/plans/p2.md' -TodoId 'BUG-TRIAGE-246'
+ 1389|        Assert-P2FullCache -Turn $afterStop -QueryText 'same prompt' -PlanFile 'docs/plans/p2.md' -TodoId 'BUG-TRIAGE-246'
+ 1392|        $null = Invoke-P2Verb -Layout $payloadLayout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: keep me`nplanFile: docs/plans/p2.md`ntodoId: BUG-TRIAGE-246`n" -Mode 'primary'
+ 1394|        $primaryUpdate = Invoke-P2Verb -Layout $payloadLayout -Method 'workflow.sessionlog.updateTurn' -ParamsYaml "queryText: `"`"`nresponse: noted`n" -Mode 'primary'
+ 1398|        [string]$sent[-1].queryText | Should -Be 'keep me'
+ 1399|        $primaryUpdate.ServerState | Should -Not -Match '"queryText"\s*:\s*""'
+ 1401|        [string]$kept.queryText | Should -Be 'keep me'
+ 1404|    It 'missing-turn dialog recovery stays bounded and does not claim server persistence' {
+ 1417|    It 'asserts the complete cached object and the serialized payload with MCP_PLUGIN_PERSIST_LOG unset' {
+ 1418|        if ($env:MCP_PLUGIN_PERSIST_LOG) { Remove-Item Env:MCP_PLUGIN_PERSIST_LOG }
+ 1419|        $env:MCP_PLUGIN_PERSIST_LOG | Should -BeNullOrEmpty
+ 1421|        $result = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-verb`nqueryTitle: kept title`nqueryText: keep me`nplanFile: docs/plans/p2.md`ntodoId: BUG-TRIAGE-246`n" -Mode 'primary'
+ 1423|        $env:MCP_PLUGIN_PERSIST_LOG | Should -BeNullOrEmpty
+ 1425|        Assert-P2FullCache -Turn $cached -QueryText 'keep me' -PlanFile 'docs/plans/p2.md' -TodoId 'BUG-TRIAGE-246'
+ 1429|        [string]$sent[0].queryText | Should -Be 'keep me'
+ 1436|    It 'rejects null empty and whitespace todoId and empty planFile on ordinary first persistence without a server row' {
+ 1438|            @{ Name = 'null-todo'; Yaml = "requestId: req-null-todo`nqueryTitle: t`nqueryText: q`nplanFile: docs/plans/p2.md`ntodoId: null`n" },
+ 1439|            @{ Name = 'empty-todo'; Yaml = "requestId: req-empty-todo`nqueryTitle: t`nqueryText: q`nplanFile: docs/plans/p2.md`ntodoId: `"`"`n" },
+ 1440|            @{ Name = 'whitespace-todo'; Yaml = "requestId: req-ws-todo`nqueryTitle: t`nqueryText: q`nplanFile: docs/plans/p2.md`ntodoId: `"  `"`n" },
+ 1441|            @{ Name = 'empty-plan'; Yaml = "requestId: req-empty-plan`nqueryTitle: t`nqueryText: q`nplanFile: `"`"`ntodoId: BUG-TRIAGE-246`n" }
+ 1453|    It 'stores exact None for canceled supersession when metadata is omitted and normalizes cancelled to canceled' {
+ 1459|            queryText = 'old query'
+ 1465|        $result = Invoke-P2Verb -Layout $layout -Method 'workflow.sessionlog.beginTurn' -ParamsYaml "requestId: req-p2-new`nqueryTitle: next`nqueryText: next text`nplanFile: None`ntodoId: None`n" -Mode 'primary'
+==== TEST-002-AC001
+STATUS=FAIL
+TEXT=Named Pester tests cover metadata precedence, immutable identity, ordinary first persist, canceled/cancelled supersession, durable reopen, and all three contract documents.
+RATIONALE=The new todoId-rejection and canceled/cancelled Pester Its actually pass under single-dot names, but both appended names in this criterion-specific list use double dots. Existing exact Pester names still omit the new todoId input matrix. C# tests repair the raw-service criteria but do not supply the named-Pester mappings this criterion explicitly requires. Name reconciliation would repair this row for P2; no silent manifest correction is credited.
+  FAILNAME=FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..rejects null empty and whitespace todoId and empty planFile on ordinary first persistence without a server row
+  FAILNAME=FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes..stores exact None for canceled supersession when metadata is omitted and normalizes cancelled to canceled

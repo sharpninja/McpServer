@@ -1,0 +1,49 @@
+{
+  "TimestampUtc": "2026-10-17T15:16:50.7127016Z",
+  "ClaimPass": 1,
+  "ClaimFail": 10,
+  "ClaimUnknown": 1,
+  "Findings": 21,
+  "Unknowns": 2,
+  "MissingSources": [],
+  "RuntimeIdentityChecks": [
+    {
+      "Line": 8,
+      "TimestampUtc": "2026-10-17T14:19:10.378Z",
+      "Model": "gpt-6-astra",
+      "Effort": "max"
+    },
+    {
+      "Line": 329,
+      "TimestampUtc": "2026-10-17T14:33:55.677Z",
+      "Model": "gpt-6-astra",
+      "Effort": "max"
+    },
+    {
+      "Line": 739,
+      "TimestampUtc": "2026-10-17T14:57:20.047Z",
+      "Model": "gpt-6-astra",
+      "Effort": "max"
+    }
+  ],
+  "WrongIdentityCount": 0,
+  "Artifacts": [
+    {
+      "Path": "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hostile-validator-amendment1-r1-20261017T091907.md",
+      "Bytes": 201992
+    },
+    {
+      "Path": "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hostile-validator-amendment1-r1-20261017T091907.json",
+      "Bytes": 246723
+    },
+    {
+      "Path": "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/20261017T091907-amendment1-r1.request.jsonl",
+      "Bytes": 16680
+    },
+    {
+      "Path": "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/20261017T091907-amendment1-r1.response.jsonl",
+      "Bytes": 4487551
+    }
+  ],
+  "JsonRoundTrip": true
+}

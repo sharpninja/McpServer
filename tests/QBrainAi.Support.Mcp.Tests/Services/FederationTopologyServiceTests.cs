@@ -61,7 +61,7 @@ public sealed class FederationTopologyServiceTests : IDisposable
 
         var workspaces = await sut.ListWorkspacesAsync("PAYTON-LEGION2", CancellationToken.None).ConfigureAwait(true);
         var workspace = Assert.Single(workspaces);
-        Assert.True(string.Equals(_workspacePath, workspace.WorkspacePath,
+        Assert.True(string.Equals(ExpectedWorkspaceKey.Of(_workspacePath), workspace.WorkspacePath,
             OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal));
         Assert.NotEmpty(workspace.GlobalWorkspaceId);
     }
@@ -113,7 +113,7 @@ public sealed class FederationTopologyServiceTests : IDisposable
         var sut = provider.GetRequiredService<IFederationTopologyService>();
         await sut.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "PAYTON-LEGION2" }, CancellationToken.None)
             .ConfigureAwait(true);
-        await sut.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "PAYTON-DESKTOP" }, CancellationToken.None)
+        await sut.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "LAB-OMARCHY" }, CancellationToken.None)
             .ConfigureAwait(true);
 
         var first = await sut.RecordOperationAsync(new FederationOperationRequest
@@ -141,18 +141,18 @@ public sealed class FederationTopologyServiceTests : IDisposable
         Assert.Equal(1, queued.QueueDepth);
         Assert.Equal(0, queued.FanoutDepth);
 
-        var syncItems = await sut.GetSyncItemsAsync("PAYTON-DESKTOP", 0, CancellationToken.None).ConfigureAwait(true);
+        var syncItems = await sut.GetSyncItemsAsync("LAB-OMARCHY", 0, CancellationToken.None).ConfigureAwait(true);
         var syncItem = Assert.Single(syncItems);
         Assert.Equal("op-1", syncItem.OperationId);
         Assert.Equal("PAYTON-LEGION2", syncItem.ProxyId);
         Assert.Equal("POST", syncItem.HttpMethod);
         Assert.Equal("/qbrainai/todo", syncItem.Path);
 
-        var ack = await sut.AcknowledgeSyncItemAsync("PAYTON-DESKTOP", syncItem.Sequence, new FederationSyncAckRequest(), CancellationToken.None)
+        var ack = await sut.AcknowledgeSyncItemAsync("LAB-OMARCHY", syncItem.Sequence, new FederationSyncAckRequest(), CancellationToken.None)
             .ConfigureAwait(true);
         Assert.Equal("acknowledged", ack.Status);
 
-        var drained = await sut.GetQueueStatusAsync("PAYTON-DESKTOP", CancellationToken.None).ConfigureAwait(true);
+        var drained = await sut.GetQueueStatusAsync("LAB-OMARCHY", CancellationToken.None).ConfigureAwait(true);
         Assert.Equal(0, drained.FanoutDepth);
     }
 
@@ -164,7 +164,7 @@ public sealed class FederationTopologyServiceTests : IDisposable
         var sut = provider.GetRequiredService<IFederationTopologyService>();
         await sut.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "PAYTON-LEGION2" }, CancellationToken.None)
             .ConfigureAwait(true);
-        await sut.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "PAYTON-DESKTOP" }, CancellationToken.None)
+        await sut.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "LAB-OMARCHY" }, CancellationToken.None)
             .ConfigureAwait(true);
         await sut.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "PAYTON-LAB" }, CancellationToken.None)
             .ConfigureAwait(true);
@@ -186,7 +186,7 @@ public sealed class FederationTopologyServiceTests : IDisposable
             .ConfigureAwait(true);
 
         Assert.Equal("applied", operationAck.Status);
-        Assert.Single(await sut.GetSyncItemsAsync("PAYTON-DESKTOP", 0, CancellationToken.None).ConfigureAwait(true));
+        Assert.Single(await sut.GetSyncItemsAsync("LAB-OMARCHY", 0, CancellationToken.None).ConfigureAwait(true));
         Assert.Single(await sut.GetSyncItemsAsync("PAYTON-LAB", 0, CancellationToken.None).ConfigureAwait(true));
     }
 
@@ -198,7 +198,7 @@ public sealed class FederationTopologyServiceTests : IDisposable
         var sut = provider.GetRequiredService<IFederationTopologyService>();
         await sut.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "PAYTON-LEGION2" }, CancellationToken.None)
             .ConfigureAwait(true);
-        await sut.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "PAYTON-DESKTOP" }, CancellationToken.None)
+        await sut.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "LAB-OMARCHY" }, CancellationToken.None)
             .ConfigureAwait(true);
 
         await sut.RecordOperationAsync(new FederationOperationRequest
@@ -216,7 +216,7 @@ public sealed class FederationTopologyServiceTests : IDisposable
             .ConfigureAwait(true);
 
         Assert.Equal("conflict", operationAck.Status);
-        Assert.Empty(await sut.GetSyncItemsAsync("PAYTON-DESKTOP", 0, CancellationToken.None).ConfigureAwait(true));
+        Assert.Empty(await sut.GetSyncItemsAsync("LAB-OMARCHY", 0, CancellationToken.None).ConfigureAwait(true));
     }
 
     /// <summary>Local proxy queue rows are durable replay candidates and track failed attempts.</summary>

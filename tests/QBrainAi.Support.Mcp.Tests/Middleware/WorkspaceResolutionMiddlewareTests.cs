@@ -103,7 +103,7 @@ public sealed class WorkspaceResolutionMiddlewareTests
         var ctx = CreateContext("/qbrainai/sessionlog", workspaceHeader: WorkspaceA);
         await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService, dbContext);
 
-        Assert.Equal(WorkspaceA, dbContext.CurrentWorkspaceId);
+        Assert.Equal(ExpectedWorkspaceKey.Of(WorkspaceA), dbContext.CurrentWorkspaceId);
     }
 
     [Fact]

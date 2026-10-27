@@ -2041,8 +2041,8 @@ namespace QBrainAi.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
-                    b.Property<int>("Order")
-                        .HasColumnType("integer");
+                    b.Property<long>("Order")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("SessionLogTurnId")
                         .HasColumnType("bigint");
@@ -2058,6 +2058,12 @@ namespace QBrainAi.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.Property<string>("WorkspaceId")
                         .IsRequired()
                         .HasColumnType("character varying(1024)");
+
+                    b.Property<string>("AuditEventId")
+                        .HasColumnType("text");
+
+                    b.Property<long?>("AuditEventOrder")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -2370,6 +2376,15 @@ namespace QBrainAi.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .IsRequired()
                         .HasColumnType("character varying(1024)");
 
+                    b.Property<string>("AuditEventId")
+                        .HasColumnType("text");
+
+                    b.Property<long?>("AuditEventOrder")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("OriginalTimestamp")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("SessionLogTurnId");
@@ -2622,6 +2637,12 @@ namespace QBrainAi.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.Property<string>("WorkspaceId")
                         .IsRequired()
                         .HasColumnType("character varying(1024)");
+
+                    b.Property<string>("AuditEventId")
+                        .HasColumnType("text");
+
+                    b.Property<long?>("AuditEventOrder")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -5322,6 +5343,117 @@ namespace QBrainAi.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
             modelBuilder.Entity("QBrainAi.Support.Mcp.Storage.Entities.WorkspaceEntity", b =>
                 {
                     b.Navigation("BannedItems");
+                });
+
+            modelBuilder.Entity("QBrainAi.Support.Mcp.Storage.Entities.SessionAuditEventEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<bool>("Accepted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("AgentIdentity")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<long>("CapturedOrder")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("CapturedWorkspacePath")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("EventId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("character varying(36)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Kind")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
+
+                    b.Property<string>("McpSessionId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PayloadHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("PayloadJson")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long?>("PositionKey")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RequestId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long>("SessionLogTurnId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("StoredStatus")
+                        .HasColumnType("text");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("character varying(1024)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId")
+                        .IsUnique();
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("SessionLogTurnId", "PositionKey")
+                        .IsUnique()
+                        .HasFilter("\"PositionKey\" IS NOT NULL");
+
+                    b.ToTable("SessionAuditEvents");
+                });
+
+            modelBuilder.Entity("QBrainAi.Support.Mcp.Storage.Entities.SessionAuditEventEntity", b =>
+                {
+                    b.HasOne("QBrainAi.Support.Mcp.Storage.Entities.SessionLogTurnEntity", null)
+                        .WithMany()
+                        .HasForeignKey("SessionLogTurnId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("QBrainAi.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
         }

@@ -1,0 +1,20 @@
+Stopped under instruction 4: the migration rules conflict with the existing normalizer. **Deployment hold remains in effect.**
+
+- **Findings:** [PR #79](https://github.com/sharpninja/McpServer/pull/79) merged without P1.5. No workspace-rekey command or startup guard was found. The [approved plan](F:/GitHub/McpServer/.worktrees/p1-5-workspace-rekey-20261016/docs/plans/2026-10-07-federation-fixes.md:163) requires backup, dry-run, transactional rekey, and refusal to start against legacy IDs.
+- **Conflict:** P1.5’s separator-only mapping converts `\\?\C:\x` to `//?/C:/x`. Existing P1.4 normalization produces `C:/x`. These keys would still mismatch. Collision resolution is also unspecified.
+
+Choose the migration policy:
+
+- **A — Recommended:** Use existing Windows lexical normalization, preserve path case, and abort before mutation if distinct keys converge.
+- **B:** Only replace separators in ordinary drive/UNC paths; reject device paths, other noncanonical forms, and collisions for manual resolution.
+- **C:** Require an explicit operator-approved old→new mapping, including collision resolutions, before applying changes.
+
+Current receipt:
+
+- **Branch:** `feature/p1-5-workspace-rekey-20261016`
+- **HEAD SHA:** `ebf84590998d28045ec432298907b3fea3c593e0`
+- **Changes/commit/push:** None; worktree remains clean.
+- **New draft PR:** None.
+- **Tests:** Not run; stopped before test or implementation changes.
+- **Deployment/merge:** Neither performed.
+

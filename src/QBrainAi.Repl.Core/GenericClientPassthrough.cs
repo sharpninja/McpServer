@@ -490,6 +490,10 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<SessionLogTurnSubmitResult> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<SessionAuditEventReceipt> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<SessionAuditCompletionResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<SessionLogWorkspaceStampRepairResult> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<SetTodoTestPlanResult> typedTask:
@@ -576,6 +580,9 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<TurnTransactionStatusResponse> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            // TEST-QB-069: preserve the complete session graph through the existing typed client readback.
+            case Task<UnifiedSessionLogDto> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<UpdateTodoStatusResult> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<UseCaseActor> typedTask:
@@ -609,6 +616,8 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
             case Task<WebsiteIngestResult> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<WorkspaceCurrentRequirementLayer> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<WorkspaceVerificationPolicySnapshot> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<WorkspaceDto> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);

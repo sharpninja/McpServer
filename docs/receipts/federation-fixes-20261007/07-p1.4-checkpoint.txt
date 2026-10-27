@@ -1,0 +1,58 @@
+P1.4 (a-d) checkpoint, 2026-10-08 (committed 2026-10-16 on operator request "commit and push to origin")
+Branch claude/federation-fixes-20261007, parent 982201f9 (P1.R).
+
+STATUS: CHECKPOINT, GATE NOT RUN. The baseline-relative three-suite gate for P1.4 was started on
+2026-10-08 08:03 CT and stopped partway through QBrainAi.Support.Mcp.Tests when the operator said
+"pause work". No gate result exists for this commit. P1.4 is not closed until that gate runs and is
+compared against the f56dcf70 baseline (receipt 06).
+
+== Scope (plan section 4c.2, "As built" notes)
+P1.4a lexical form: Windows paths emit '/' (C:/x, //srv/share/x); device prefixes stripped;
+      unrooted Windows-platform values (opaque ids, relative values) keep their spelling.
+P1.4a database boundary: WorkspaceIdentity.CanonicalizeWorkspaceId; McpDbContext canonicalizes its
+      discriminator; WorkspaceKeyConversion (EF converter + canonicalizing comparer on every
+      WorkspaceId / OwnerWorkspaceId / WorkspacePath property, plus in-place canonicalization of
+      tracked values before save); entry-point canonicalization for in-memory comparisons
+      (memory promote/consolidate, federation memory ownership, EnsureWorkspaceRows, session-log
+      stamp, product caller/member ids).
+P1.4b predicates: IsRemoteWindowsPath accepts //server/share; containment uses '/';
+      //localhost/C$ admin-share alias.
+P1.4c native boundary: public WorkspaceIdentityPath.ToNativePath(path, platform).
+P1.4d mis-compares: ToolRegistryService, AgentService, WorkspaceService RepoRoot,
+      WorkspaceServiceAccessor default route through the normalizer; ratchet tightened
+      (three files moved to the zero-call identity list, WorkspaceService 4 -> 2).
+P1.4e: about 70 existing assertions moved to the canonical form via the test-side oracle
+      ExpectedWorkspaceKey.Of (does not call production code).
+Not in this commit: P1.5 (rekey command and startup guard). An existing store with backslash
+      workspace ids must not run this build until P1.5 lands (decision D7).
+
+== BDP v4 evidence (main worktree, files under artifacts-local/, not committed)
+Step 2 MockData (after test changes; only the P1.4d seams in src):
+  p1.4-mockdata-6.log: Passed!  - Failed: 0, Passed: 131, Skipped: 1, Total: 132
+  Earlier MockData runs with zero src changes: p1.4a-mockdata-3.log 115/115, -4.log 117/117,
+  -5.log 118/118.
+Step 3 Real (all P1.4 production applied):
+  p1.4-real.log: Passed!  - Failed: 0, Passed: 129, Skipped: 1, Total: 130
+  The one skip in each run is WorkspaceNativePathContractTests.NonWindowsHost_IsUnchanged
+  (Assert.SkipWhen on a Windows host, by design).
+Main src is byte-identical (Get-FileHash) to the probe worktree's src for all 15 changed files.
+
+== Impact probe (.worktrees/fed-p14a-probe, same src and tests)
+probe9-full.trx (full QBrainAi.Support.Mcp.Tests, 2026-10-08 08:00):
+  total=3251 passed=3232 failed=17
+  13 = the f56dcf70 baseline set (Decompose4nf x7 across providers, RemoveTodoRecords x2,
+       BugTriage139 evidence x3, HandoffD3D5 x1)
+   2 = SqlServerAuditPayloadMigrationTests / SqlServerRenameQuadBrainRolesMigrationTests
+       "Execution Timeout Expired" (known flake, triaged in receipt 06; both passed in an
+       isolated rerun on 2026-10-08: Passed 2/2)
+   2 = AgentServiceRuntimeTests Launch/Stop: stale expectations (agent-workspace key is now
+       canonical); fixed after probe9 and rerun Passed 5/5 (AgentService filter). No full run
+       has been made since that fix.
+QBrainAi.Client.Tests in the probe: Passed 304/304 (console result in session, not saved to file).
+Build.Tests: not run for P1.4.
+
+== Remaining to close P1.4
+1. Run the full gate (Support.Mcp, Client, Build) and compare with the f56dcf70 baseline.
+2. Record the gate receipt; remove the probe worktree.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

@@ -1,0 +1,4700 @@
+[
+  {
+    "TimestampUtc": "2026-10-18T03:17:26.891Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_c8a40fa73db7472aa2047e8333c1ac7f",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 712,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:17:27.459Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_c8a40fa73db7472aa2047e8333c1ac7f",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 40151,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:17:43.923Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_0ff66b93c9e64834b89b55b038300a1d",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 369,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:17:44.401Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_0ff66b93c9e64834b89b55b038300a1d",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 25594,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:17:46.74Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_c207ae7276da4946bf23e000f438a7b6",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 235,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:17:47.219Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_c207ae7276da4946bf23e000f438a7b6",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 37894,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:18:02.715Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_0cdac4b652be425bb5fa4c1a19f01b6d",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 2045,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:18:04.316Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_0cdac4b652be425bb5fa4c1a19f01b6d",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 23150,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:18:35.669Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_49822f565f7444b7b91f1bc24622eb5a",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 3713,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:18:38.236Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_49822f565f7444b7b91f1bc24622eb5a",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 32764,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:18:43.363Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_c79c5a95b38c4df79dc4f0be8c68aedc",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 628,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:18:44.255Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_c79c5a95b38c4df79dc4f0be8c68aedc",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 22657,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:19:25.917Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_af26de967388462aadada65489d4a925",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 5979,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:19:27.249Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_af26de967388462aadada65489d4a925",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 375,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:19:29.556Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_66b3eb0d1d6e4dc3b161934c3d5b409f",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 194,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:19:30.735Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_66b3eb0d1d6e4dc3b161934c3d5b409f",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 194,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:19:35.896Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_957a1c1395bc45e1bd53089125c11316",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 101,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:19:40.914Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_957a1c1395bc45e1bd53089125c11316",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 1780,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:19:46.968Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_edddcde88e2e4700bc5082107f73a2bf",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 393,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:19:47.79Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_edddcde88e2e4700bc5082107f73a2bf",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 18565,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:20:10.65Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_e8f8567318064f11968c14a0b521dd93",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 2184,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:20:12.36Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_e8f8567318064f11968c14a0b521dd93",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 40150,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:20:18.913Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_8d19e0120c68404ba01f595713ab49a3",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 642,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:20:19.84Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_8d19e0120c68404ba01f595713ab49a3",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 40150,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:20:24.894Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_1085c9763fe8492b99f355271763ef4d",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 263,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:20:25.671Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_1085c9763fe8492b99f355271763ef4d",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 26980,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:21:06.514Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_8d951fe0a5204a68a5ce9bf98be58216",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 4523,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:21:07.967Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_8d951fe0a5204a68a5ce9bf98be58216",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 389,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:21:12.141Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_a8f04c5206e94e07a2f1f56c66e4b5ad",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 509,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:21:13.324Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_a8f04c5206e94e07a2f1f56c66e4b5ad",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 40150,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:21:18.713Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_089d02e9b1604d6e86113f8668db6c53",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 385,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:21:24.499Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_089d02e9b1604d6e86113f8668db6c53",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 24680,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:21:31.423Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_21aea57225c14c67b3310278fe9b7a85",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 285,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:21:32.231Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_21aea57225c14c67b3310278fe9b7a85",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 22773,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:21:35.679Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_e5e0ddaa45494128a45aae7cf471a812",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 285,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:21:36.488Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_e5e0ddaa45494128a45aae7cf471a812",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 35591,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:21:44.092Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_6b69795133944f4696a18064f486c5a5",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 387,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:21:44.885Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_6b69795133944f4696a18064f486c5a5",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 26979,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:21:48.13Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_041a35d178c54d20aeca4d7c4a006a2a",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 285,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:21:48.929Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_041a35d178c54d20aeca4d7c4a006a2a",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 33248,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:22:05.995Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_f42b86e872fa4bafa313132a992dbce8",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 286,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:22:06.804Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_f42b86e872fa4bafa313132a992dbce8",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 23278,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:22:15.988Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_c1978c303cae480ca62eb59cb44e4ff0",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 286,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:22:16.796Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_c1978c303cae480ca62eb59cb44e4ff0",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 29362,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:22:27.584Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_3ea21bb7e67343d6b99eadd6cca0cc2c",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 286,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:22:28.426Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_3ea21bb7e67343d6b99eadd6cca0cc2c",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 19723,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:22:33.537Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_12a61f20f0574521b61c7263eb6b63b9",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 286,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:22:34.356Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_12a61f20f0574521b61c7263eb6b63b9",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 29542,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:22:37.667Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_37df171f87c344b6963a96fd3160a227",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 286,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:22:38.458Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_37df171f87c344b6963a96fd3160a227",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 38681,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:22:43.448Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_0b2e3c4d0e4a438f96d55243687b514b",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 286,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:22:44.271Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_0b2e3c4d0e4a438f96d55243687b514b",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 32734,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:23:01.297Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_5001bbd6adae4a978b388738c1e493a1",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 286,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:23:02.105Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_5001bbd6adae4a978b388738c1e493a1",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 26362,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:23:21.646Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_eb774425334248f8b8074adf5d265b21",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 482,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:23:22.485Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_eb774425334248f8b8074adf5d265b21",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 30734,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:23:57.772Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_38e52116496b4e5d8cd8db4703279ca3",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 3857,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:23:59.342Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_38e52116496b4e5d8cd8db4703279ca3",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 333,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:24:07.182Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_9dd2b80de61e49c5b7bbbecf686f9182",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 1211,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:24:09.213Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_9dd2b80de61e49c5b7bbbecf686f9182",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 17446,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:24:15.094Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_c11f7a8b3b154df1936779142f185d63",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 486,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:24:15.915Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_c11f7a8b3b154df1936779142f185d63",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 27601,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:27:35.881Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_3c2123aa5b5642a7a241f5ad7cd40544",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 347,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:27:36.318Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_3c2123aa5b5642a7a241f5ad7cd40544",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 40150,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:27:40.972Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_9bc8fbafa1ec4d1a99960c7f9f59c960",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 328,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:27:41.485Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_9bc8fbafa1ec4d1a99960c7f9f59c960",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 63405,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:27:45.678Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_a4f2e8aa070d487089656d131e0d3615",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 193,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:27:46.152Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_a4f2e8aa070d487089656d131e0d3615",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 18901,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:27:56.514Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_47682dad78a64cd6a499e707fcf73cc9",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 797,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:27:57.412Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_47682dad78a64cd6a499e707fcf73cc9",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 19240,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:28:38.147Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_5db562afd3214caf87028af2db0d29b7",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 5393,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:28:40.947Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_5db562afd3214caf87028af2db0d29b7",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 233,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:28:50.125Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_83c54ea26f4b4c108b8325776013f7af",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 653,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:28:52.775Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_83c54ea26f4b4c108b8325776013f7af",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 28928,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:29:13.292Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_310cf0874dd64a19ac9ad26da6e94fc3",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 3264,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:29:15.416Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_310cf0874dd64a19ac9ad26da6e94fc3",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 8554,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:29:22.052Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_db8f17a5e1f8419fad23ef34329a26a5",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 875,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:29:23.143Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_db8f17a5e1f8419fad23ef34329a26a5",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 33316,
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:29:30.514Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_b890c63840be4bc79d434943a5c795a7",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 549,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:29:32.025Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_b890c63840be4bc79d434943a5c795a7",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 29575,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:30:29.159Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_135c349789d94f798a33a05a906586e4",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 7693,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:30:31.244Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_135c349789d94f798a33a05a906586e4",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 566,
+    "ExitCodes": [
+      1
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:30:38.869Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_dee4c4c20e0a4d9095603dd609c57ae2",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 933,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:30:43.225Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_dee4c4c20e0a4d9095603dd609c57ae2",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 5586,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:31:00.416Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_2f5bfc14afc049688d92b4b1d88852e6",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 1490,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:31:05.587Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_2f5bfc14afc049688d92b4b1d88852e6",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 26761,
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:31:16.514Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_e2e2e2cb8cd74d3cbc349416c344e602",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 1088,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:31:17.512Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_e2e2e2cb8cd74d3cbc349416c344e602",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 40150,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:31:27.069Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_ce4fc82ffcbe47588a40ce9a18218112",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 1359,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:31:29.761Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_ce4fc82ffcbe47588a40ce9a18218112",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 20510,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:31:38.956Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_f22228807baa47b490fe720cf62cc9aa",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 469,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:31:40.535Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_f22228807baa47b490fe720cf62cc9aa",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 40150,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:31:55.473Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_7d7fb47ab1304b38982ed9dc0714369b",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 1647,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:31:58.363Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_7d7fb47ab1304b38982ed9dc0714369b",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 5331,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:32:24.749Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_450ea9292dca4f39a8245cfb8d375f0a",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 4535,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:32:28.438Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_450ea9292dca4f39a8245cfb8d375f0a",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 1508,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:32:38.917Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_99d70f8691414932811e41cb624e0cc1",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 800,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:32:39.838Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_99d70f8691414932811e41cb624e0cc1",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 44700,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:32:48.266Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_c3841e5979524cb09f1892d67c152e14",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 989,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:32:49.245Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_c3841e5979524cb09f1892d67c152e14",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 21502,
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:33:29.332Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_cc077ef71fe5453eba532aff2a634273",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 4432,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:33:33.04Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_cc077ef71fe5453eba532aff2a634273",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 912,
+    "ExitCodes": [
+      0,
+      0,
+      1
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:33:40.702Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_657283065eec4adba731192758f15b3d",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 1172,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:33:44.595Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_657283065eec4adba731192758f15b3d",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 14698,
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:33:52.826Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_ef9462ecfe444f0aba027f49ba01f3cb",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 581,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:33:53.712Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_ef9462ecfe444f0aba027f49ba01f3cb",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 34805,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:34:00.454Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_fb1c2c73ca354548b35ee856e0557938",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 581,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:34:01.331Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_fb1c2c73ca354548b35ee856e0557938",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 41666,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:34:10.971Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_4641cfce7ad74180b6a4b4d599334c2a",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 760,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:34:13.243Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_4641cfce7ad74180b6a4b4d599334c2a",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 33564,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:34:22.49Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_eb28d4b649374f5ea130b71a3f3e84d3",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 631,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:34:23.895Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_eb28d4b649374f5ea130b71a3f3e84d3",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 33912,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:34:47.69Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_9fa6ee970ca545b7a21cae3e5c0b0175",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 947,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:34:48.586Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_9fa6ee970ca545b7a21cae3e5c0b0175",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 41607,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:34:55.601Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_5a9b7590890a43af8725860de90f0224",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 812,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:34:57.886Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_5a9b7590890a43af8725860de90f0224",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 32249,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:35:12.378Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_0545e57deb1a402d99e29f84befce92e",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 1176,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:35:15.43Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_0545e57deb1a402d99e29f84befce92e",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 12870,
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:36:00.795Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_1d1c995a805f462ba4531ee3105e151c",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 5632,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:36:04.536Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_1d1c995a805f462ba4531ee3105e151c",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 567,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:36:29.605Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_21eec9132f2047cb913d0ef3533c4225",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 1322,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:36:30.609Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_21eec9132f2047cb913d0ef3533c4225",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 20720,
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:39:42.778Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_0987812557fb4fc7a1146a126a232056",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 243,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:39:43.515Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_0987812557fb4fc7a1146a126a232056",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 4918,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:39:49.114Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_763261b0b9eb4d49bbd5817c2a7663f2",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 551,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:39:49.931Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_763261b0b9eb4d49bbd5817c2a7663f2",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 36722,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:39:54.31Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_1243e35acd9b4d428edc18418995d215",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 461,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:39:55.798Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_1243e35acd9b4d428edc18418995d215",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 30270,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:40:07.696Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_3fca8a8de5634f40a5bc78a7c6d09ae1",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 1121,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:40:09.679Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_3fca8a8de5634f40a5bc78a7c6d09ae1",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 498,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:40:15.689Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_00da399173c74be5a069bb3de4fdfeef",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 465,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:40:16.517Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_00da399173c74be5a069bb3de4fdfeef",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 13011,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:40:26.176Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_da65bd3b7a594614a8a63722bc7de70c",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 1383,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:40:40.293Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_da65bd3b7a594614a8a63722bc7de70c",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 6151,
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:40:46.078Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_add91c7c5ce6410894c384e39c2b2677",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 610,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:40:46.923Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_add91c7c5ce6410894c384e39c2b2677",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 29325,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:40:53.426Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_99bb713754724c50916b7934c5c7c82d",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 584,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:40:54.278Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_99bb713754724c50916b7934c5c7c82d",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 40145,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:41:03.567Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_8dcccf22ce6b4e4e963823d5ceac9bb9",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 708,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:41:04.484Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_8dcccf22ce6b4e4e963823d5ceac9bb9",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 15194,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:41:14.565Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_007b39f058154192a25ef318a287d370",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 532,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:41:15.368Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_007b39f058154192a25ef318a287d370",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 40149,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:41:24.63Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_89ceb5581e344641b8b5088668d23b66",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 580,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:41:25.445Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_89ceb5581e344641b8b5088668d23b66",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 14687,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:42:13.078Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_ad8367e34bc34731aa107f17a0a7a637",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 6135,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:42:15.24Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_ad8367e34bc34731aa107f17a0a7a637",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 226,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:42:19.377Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_17df980e5ab44172ac52f99590bc7748",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 367,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:42:21.182Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_17df980e5ab44172ac52f99590bc7748",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 366,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:42:31.957Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_5c3d0690f2a04004a693837612780cc6",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 968,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:42:32.814Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_5c3d0690f2a04004a693837612780cc6",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 40145,
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:43:21.787Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_04a81afbea8743498e6948716e699607",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 5197,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:43:23.608Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_04a81afbea8743498e6948716e699607",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 236,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:43:31.867Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_2b5df17600f3418f996a272b8b2eced4",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 643,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:43:34.485Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_2b5df17600f3418f996a272b8b2eced4",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 1869,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:43:48.178Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_87b116d26c3b41bba27e07a6818286c1",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 712,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:43:49.011Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_87b116d26c3b41bba27e07a6818286c1",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 40149,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:44:19.023Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_cbccfa25f47f48dcbccda882b3c69d0a",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 1368,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:44:21.634Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_cbccfa25f47f48dcbccda882b3c69d0a",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 1662,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:44:42.761Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_27bf36643e0e41f4b6c0d5d76d11b807",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 981,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:44:43.651Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_27bf36643e0e41f4b6c0d5d76d11b807",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 29606,
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:45:17.741Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_fc1ca83780cd4183a714bd8421a68df2",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 296,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:45:18.533Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_fc1ca83780cd4183a714bd8421a68df2",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 7758,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:45:24.437Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_f8581116b5be451aba2bd2cd4d7f70e1",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 509,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:45:26.004Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_f8581116b5be451aba2bd2cd4d7f70e1",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 10973,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:45:43.396Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_d94bc4610d1643d89954d9da0fd8d605",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 909,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:45:44.264Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_d94bc4610d1643d89954d9da0fd8d605",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 8483,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:46:02.703Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_178c76adec684ffcb199504dfdbe3432",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 784,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:46:04.94Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_178c76adec684ffcb199504dfdbe3432",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 15581,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:46:39.29Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_c0e6de1dfa6540f58ef822348adf33f2",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 2843,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:46:42.677Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_c0e6de1dfa6540f58ef822348adf33f2",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 4103,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:47:37.618Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_c5f8ea28e38249258c3b368983d9875b",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 3458,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:47:41.722Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_c5f8ea28e38249258c3b368983d9875b",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 6042,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:48:14.781Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_dd1af38c02c24ee1932037382d347d59",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 2010,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:48:18.999Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_dd1af38c02c24ee1932037382d347d59",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 6103,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:48:55.183Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_6ecee14f2cb04afc8e3d77d92107cd0a",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 518,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:48:56.723Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_6ecee14f2cb04afc8e3d77d92107cd0a",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 16361,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:49:55.473Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_20f29fd76ba641ed9c83a258062a3b0d",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 575,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:49:56.901Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_20f29fd76ba641ed9c83a258062a3b0d",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 8293,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:50:03.888Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_36a422eab2784e73909179d1f7c08c3f",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 316,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:50:04.588Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_36a422eab2784e73909179d1f7c08c3f",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 2090,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:50:08.914Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_7b3a3bd1a1a54f7f839929058097a014",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 528,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:50:10.432Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_7b3a3bd1a1a54f7f839929058097a014",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 11934,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:50:17.309Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_0c4db78a4fa441108a0c460973b9755d",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 516,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:50:18.762Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_0c4db78a4fa441108a0c460973b9755d",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 11917,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:50:24.761Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_579803286e184929a4d1dddb9309487b",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 485,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:50:26.184Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_579803286e184929a4d1dddb9309487b",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 2859,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:50:34.513Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_1e9471b4efe14f31b7b669e20a2c2c74",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 749,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:50:36.776Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_1e9471b4efe14f31b7b669e20a2c2c74",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 4006,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:50:45.245Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_e6c7cf8854d44fbbbe6a5d5dca0063af",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 553,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:50:46.661Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_e6c7cf8854d44fbbbe6a5d5dca0063af",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 1575,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:50:52.246Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_6b8a874b988e4ecfaf8d3092de5cb971",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 652,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:50:53.641Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_6b8a874b988e4ecfaf8d3092de5cb971",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 1247,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:50:56.873Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_ed9c0c30e63a4309b7f31198c0c7e444",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 293,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:50:57.634Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_ed9c0c30e63a4309b7f31198c0c7e444",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 4496,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:55:19.056Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_e2ea869adc1042eabe97d26fbcbed497",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 44669,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:55:20.7Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_e2ea869adc1042eabe97d26fbcbed497",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 231,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:56:04.187Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_ee50eab0e071405292c8f0e855c3dc24",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 593,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:56:06.442Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_ee50eab0e071405292c8f0e855c3dc24",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 5331,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:58:43.56Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_d6e57262ec014a1fbe96327186fe4718",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 16920,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:58:46.326Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_d6e57262ec014a1fbe96327186fe4718",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 4504,
+    "ExitCodes": [
+      1
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:59:02.255Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_13b26691ef4949d2948f051b18101788",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 1978,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:59:06.873Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_13b26691ef4949d2948f051b18101788",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 1367,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:59:13.358Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_91f5065aa7244551b43571d1690f42be",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 413,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:59:15.281Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_91f5065aa7244551b43571d1690f42be",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 373,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:59:34.472Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_14992aea817740e9bca3916db22213e7",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 349,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:59:35.589Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_14992aea817740e9bca3916db22213e7",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 1027,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:59:41.619Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_c9975e3381534c619ccbd8bb477eead2",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 463,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:59:43.555Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_c9975e3381534c619ccbd8bb477eead2",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 373,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:59:57.577Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_24cc5896daec451a9b114ccd12aec024",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 339,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T03:59:58.757Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_24cc5896daec451a9b114ccd12aec024",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 449,
+    "ExitCodes": [
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:00:54.414Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_3cb68007237f43c7a5c23904d2f475f4",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 4603,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:00:57.725Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_3cb68007237f43c7a5c23904d2f475f4",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 634,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:01:07.124Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_8bbd37d9fb4446699701475cc2b229a6",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 717,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:01:10.114Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_8bbd37d9fb4446699701475cc2b229a6",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 849,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:01:31.262Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_12706c6718b24458a126cb1a5c3917f5",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 615,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:01:33.212Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_12706c6718b24458a126cb1a5c3917f5",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 4567,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:01:44.168Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_0cee2df0a649475191e6c9f223d79891",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 738,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:01:52.092Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_0cee2df0a649475191e6c9f223d79891",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 3859,
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:02:46.925Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_caf66372f8e64fc885118deb73c83660",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 4013,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:02:51.508Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_caf66372f8e64fc885118deb73c83660",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 557,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:03:11.936Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_b1d50f4c12d8402bba42ecfb1e8e5984",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 542,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:03:13.863Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_b1d50f4c12d8402bba42ecfb1e8e5984",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 3152,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:03:33.712Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_c1404ac4c8554690b7d67fe55deef1b7",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 517,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:03:35.619Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_c1404ac4c8554690b7d67fe55deef1b7",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 3261,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:03:55.708Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_92b3f12bc2e74b978bd85f68ca517875",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 544,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:03:57.675Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_92b3f12bc2e74b978bd85f68ca517875",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 16692,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:04:21.881Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_6b6a520c3a38442b9eaf7ead052296a2",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 1792,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:04:26.526Z",
+    "Type": "custom_tool_call_output",
+    "Name": null,
+    "CallId": "call_6b6a520c3a38442b9eaf7ead052296a2",
+    "Keys": [
+      "type",
+      "id",
+      "call_id",
+      "output",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 0,
+    "OutputLength": 4251,
+    "ExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "LegacyExitCodes": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T04:05:07.68Z",
+    "Type": "custom_tool_call",
+    "Name": "exec",
+    "CallId": "call_7bf078d39f81423b93772b597d45ca26",
+    "Keys": [
+      "type",
+      "id",
+      "status",
+      "call_id",
+      "name",
+      "input",
+      "internal_chat_message_metadata_passthrough"
+    ],
+    "ArgumentsLength": 0,
+    "InputLength": 2451,
+    "OutputLength": 0,
+    "ExitCodes": [],
+    "LegacyExitCodes": []
+  }
+]

@@ -2014,7 +2014,7 @@ namespace QBrainAi.Support.Mcp.Storage.SqliteMigrations.Migrations
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(false);
 
-                    b.Property<int>("Order")
+                    b.Property<long>("Order")
                         .HasColumnType("INTEGER");
 
                     b.Property<long>("SessionLogTurnId")
@@ -2031,6 +2031,12 @@ namespace QBrainAi.Support.Mcp.Storage.SqliteMigrations.Migrations
                     b.Property<string>("WorkspaceId")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("AuditEventId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long?>("AuditEventOrder")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -2335,6 +2341,15 @@ namespace QBrainAi.Support.Mcp.Storage.SqliteMigrations.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("AuditEventId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long?>("AuditEventOrder")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("OriginalTimestamp")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("SessionLogTurnId");
@@ -2579,6 +2594,12 @@ namespace QBrainAi.Support.Mcp.Storage.SqliteMigrations.Migrations
                     b.Property<string>("WorkspaceId")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("AuditEventId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long?>("AuditEventOrder")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -5243,6 +5264,115 @@ namespace QBrainAi.Support.Mcp.Storage.SqliteMigrations.Migrations
             modelBuilder.Entity("QBrainAi.Support.Mcp.Storage.Entities.WorkspaceEntity", b =>
                 {
                     b.Navigation("BannedItems");
+                });
+
+            modelBuilder.Entity("QBrainAi.Support.Mcp.Storage.Entities.SessionAuditEventEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Accepted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AgentIdentity")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("CapturedOrder")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CapturedWorkspacePath")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DeleteReason")
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DeletedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EventId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Kind")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("McpSessionId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PayloadHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PayloadJson")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<long?>("PositionKey")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RequestId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("SessionLogTurnId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("StoredStatus")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId")
+                        .IsUnique();
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("SessionLogTurnId", "PositionKey")
+                        .IsUnique()
+                        .HasFilter("\"PositionKey\" IS NOT NULL");
+
+                    b.ToTable("SessionAuditEvents");
+                });
+
+            modelBuilder.Entity("QBrainAi.Support.Mcp.Storage.Entities.SessionAuditEventEntity", b =>
+                {
+                    b.HasOne("QBrainAi.Support.Mcp.Storage.Entities.SessionLogTurnEntity", null)
+                        .WithMany()
+                        .HasForeignKey("SessionLogTurnId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("QBrainAi.Support.Mcp.Storage.Entities.WorkspaceEntity", null)
+                        .WithMany()
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
         }

@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace QBrainAi.McpAgent.PowerShellSessions;
 
-internal sealed class HostedPowerShellSessionManager : IHostedPowerShellSessionManager
+internal sealed class HostedPowerShellSessionManager : IHostedPowerShellObjectSessionManager
 {
     private readonly ILogger _logger;
 
@@ -79,6 +79,23 @@ internal sealed class HostedPowerShellSessionManager : IHostedPowerShellSessionM
             command,
             static (session, script, token) => session.ExecuteAsync(script, token),
             cancellationToken);
+
+    /// <inheritdoc />
+    public Task<PowerShellSessionCommandResult> ExecuteCommandAsync(
+        string sessionId,
+        string command,
+        IReadOnlyDictionary<string, object?> parameters,
+        CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(parameters);
+        // Capture names and value references before waiting; never serialize host objects.
+        var capturedParameters = new Dictionary<string, object?>(parameters, StringComparer.Ordinal);
+        return ExecuteAsync(
+            sessionId,
+            command,
+            (session, script, token) => session.ExecuteAsync(script, capturedParameters, token),
+            cancellationToken);
+    }
 
     public Task<PowerShellSessionCommandResult> ExecuteInteractiveCommandAsync(
         string sessionId,
@@ -264,6 +281,19 @@ internal sealed class HostedPowerShellSessionManager : IHostedPowerShellSessionM
                     captureHostOutput: true),
                 cancellationToken);
 
+        /// <summary>Uses the same session gate and runspace with native named values.</summary>
+        public Task<PowerShellSessionCommandResult> ExecuteAsync(
+            string command,
+            IReadOnlyDictionary<string, object?> parameters,
+            CancellationToken cancellationToken) =>
+            ExecuteCoreAsync(
+                command,
+                new HostedPowerShellCommandExecutionContext(
+                    cancellationToken,
+                    captureHostOutput: true),
+                cancellationToken,
+                parameters);
+
         public Task<PowerShellSessionCommandResult> ExecuteInteractiveAsync(
             string command,
             Func<CancellationToken, string?> readLine,
@@ -293,7 +323,8 @@ internal sealed class HostedPowerShellSessionManager : IHostedPowerShellSessionM
         private async Task<PowerShellSessionCommandResult> ExecuteCoreAsync(
             string command,
             HostedPowerShellCommandExecutionContext executionContext,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken,
+            IReadOnlyDictionary<string, object?>? parameters = null)
         {
             await _gate.WaitAsync(cancellationToken).ConfigureAwait(false);
             try
@@ -302,8 +333,13 @@ internal sealed class HostedPowerShellSessionManager : IHostedPowerShellSessionM
 
                 using var powerShell = System.Management.Automation.PowerShell.Create();
                 powerShell.Runspace = _runspace;
+                powerShell.AddScript(command);
+                if (parameters is not null)
+                {
+                    foreach (var parameter in parameters)
+                        powerShell.AddParameter(parameter.Key, parameter.Value);
+                }
                 powerShell
-                    .AddScript(command)
                     .AddCommand("Out-String")
                     .AddParameter("Width", 4096);
 
@@ -438,3 +474,5 @@ internal sealed class HostedPowerShellSessionManager : IHostedPowerShellSessionM
                 : value.ReplaceLineEndings(Environment.NewLine).TrimEnd();
     }
 }
+
+

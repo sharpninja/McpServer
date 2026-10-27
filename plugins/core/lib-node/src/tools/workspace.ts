@@ -1,4 +1,5 @@
 import * as path from 'path';
+import { CoreOperationError } from '../runtime/operation-failure.js';
 import type { ToolDescriptor as Tool } from './tool-descriptor.js';
 import type { ReplBridge, ReplResponse } from '../transport/repl-bridge.js';
 import { cacheDelete, cacheWrite } from '../cache/cache-manager.js';
@@ -78,7 +79,7 @@ export async function invokeOrThrow(bridge: ReplBridge, method: string, params: 
   const response = await bridge.invoke(method, params);
   if (response.type === 'error') {
     const payload = response.payload as { code?: string; message?: string };
-    throw new Error(`${payload.code ?? 'error'}: ${payload.message ?? 'Unknown error'}`);
+    throw new Error(`${payload.code ?? 'error'}: ${payload.message ?? 'Unknown error'}`, { cause: payload });
   }
 
   return response;
@@ -95,7 +96,7 @@ async function invokeMutatingWithFailsafe(
     await cacheDelete(failsafePath);
     return response;
   } catch (error) {
-    throw new Error(`${error instanceof Error ? error.message : String(error)} Local failsafe saved: ${failsafePath}`);
+    throw new Error(`${error instanceof Error ? error.message : String(error)} Local failsafe saved: ${failsafePath}`, { cause: error });
   }
 }
 
@@ -106,6 +107,22 @@ export async function handleWorkspaceTool(
   defaultWorkspacePath?: string,
 ) {
   if (name !== 'workspace_ensure') throw new Error(`Unknown workspace tool: ${name}`);
+
+  if (bridge.governed) {
+    const identity = bridge.verifiedWorkspace;
+    if (!identity) throw new CoreOperationError('workspace_context_missing', false);
+    const samePath = (value: string) => {
+      const left = path.resolve(value), right = path.resolve(identity.workspacePath);
+      return process.platform === 'win32' ? left.toLowerCase() === right.toLowerCase() : left === right;
+    };
+    for (const selector of [args.workspacePath, args.path, defaultWorkspacePath]) {
+      if (selector !== undefined && (typeof selector !== 'string' || !path.isAbsolute(selector) || !samePath(selector)))
+        throw new CoreOperationError('workspace_context_mismatch', false);
+    }
+    // Startup owns trust and registration. A model-facing ensure cannot probe a
+    // different workspace, re-register it, or replace process-wide credentials.
+    return { trusted: true, registered: true, initialized: true, created: false, ...identity };
+  }
 
   const workspacePath = path.resolve(
     stringArg(args, 'workspacePath', 'path') ||

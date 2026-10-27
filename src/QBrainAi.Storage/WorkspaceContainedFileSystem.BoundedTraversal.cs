@@ -1110,10 +1110,11 @@ public static partial class WorkspaceContainedFileSystem
             Name = "McpContainedTraversal",
         };
 
-        pinnedHandle?.DangerousAddRef(ref pinnedHandleAdded);
         ReserveTraversalWorkerSlot();
         try
         {
+            // Admission rejection must not acquire a handle reference; startup failure releases both resources.
+            pinnedHandle?.DangerousAddRef(ref pinnedHandleAdded);
             thread.Start();
         }
         catch

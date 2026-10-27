@@ -30,8 +30,8 @@ public sealed class CreateProductCommandHandlerTests : IDisposable
 
         Assert.True(result.IsSuccess, result.Error);
         Assert.Equal("PROD-MCPSERVER", result.Value!.Key);
-        Assert.Equal(ProductHandlerTestContext.Owner, result.Value.OwnerWorkspaceId);
-        Assert.Contains(ProductHandlerTestContext.Owner, result.Value.MemberWorkspaceIds);
+        Assert.Equal(ExpectedWorkspaceKey.Of(ProductHandlerTestContext.Owner), result.Value.OwnerWorkspaceId);
+        Assert.Contains(ExpectedWorkspaceKey.Of(ProductHandlerTestContext.Owner), result.Value.MemberWorkspaceIds);
     }
 
     /// <summary>Invalid keys are rejected (400 semantics in the result error).</summary>

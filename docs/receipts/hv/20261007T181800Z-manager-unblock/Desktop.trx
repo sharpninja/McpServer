@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="28f261ea-e955-4416-84f0-fa5e67671e6c" name="kingd@PAYTON-LEGION2 2026-10-07 13:14:04" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-07T13:14:04.5431229-05:00" queuing="2026-10-07T13:14:04.5431234-05:00" start="2026-10-07T13:13:54.3598029-05:00" finish="2026-10-07T13:14:05.3591510-05:00" />
+  <TestSettings name="default" id="71dfdb98-9c4d-4a2f-80dd-a19fa38c978b">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-10-07_13_14_04" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="0e815549-5b79-48c6-a9bb-bd05aefdc7d9" testId="d7443cb2-78c0-4195-a3fe-6695464bee1d" testName="McpServerManager.Desktop.Tests.DesktopVoiceStartupIntegrationTests.RequestDetailsView_RendersCommitsSection" computerName="PAYTON-LEGION2" duration="00:00:00.2269191" startTime="2026-10-07T13:14:04.5170419-05:00" endTime="2026-10-07T13:14:04.7440575-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0e815549-5b79-48c6-a9bb-bd05aefdc7d9" />
+    <UnitTestResult executionId="bcb006ce-7711-471d-b738-45e085fe80d9" testId="538703b4-4cd3-437d-2219-27b6379b5cf7" testName="McpServerManager.Desktop.Tests.TodoListViewEditorTests.TodoListView_LoadingDifferentTodoText_ResetsEditorCaretAndScroll" computerName="PAYTON-LEGION2" duration="00:00:04.2459349" startTime="2026-10-07T13:14:00.1662033-05:00" endTime="2026-10-07T13:14:04.4263401-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bcb006ce-7711-471d-b738-45e085fe80d9" />
+    <UnitTestResult executionId="dfea4aca-3dda-48b1-9877-c75b2f0d260f" testId="dcaa6ef0-480a-cd5b-acf4-f02f9792443a" testName="McpServerManager.Desktop.Tests.DesktopVoiceStartupIntegrationTests.SimplifiedVoiceView_DefaultLayout_DoesNotShiftManualInputRows" computerName="PAYTON-LEGION2" duration="00:00:00.0293924" startTime="2026-10-07T13:14:05.2033224-05:00" endTime="2026-10-07T13:14:05.2327777-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dfea4aca-3dda-48b1-9877-c75b2f0d260f" />
+    <UnitTestResult executionId="211c1bd8-9edd-417c-83d8-82b38e54a66b" testId="d89dcb8b-d207-55f8-f5ca-593064d06f05" testName="McpServerManager.Desktop.Tests.DesktopVoiceStartupIntegrationTests.SimplifiedVoiceView_PhoneLayout_ShiftsManualInputRowsByManualRowHeight" computerName="PAYTON-LEGION2" duration="00:00:00.0703987" startTime="2026-10-07T13:14:04.4445915-05:00" endTime="2026-10-07T13:14:04.5152505-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="211c1bd8-9edd-417c-83d8-82b38e54a66b" />
+    <UnitTestResult executionId="120c3b9a-cde5-42ad-8fbc-ec6b6624f797" testId="d81c11a9-ef56-1132-651e-98b3f0422c72" testName="McpServerManager.Desktop.Tests.DesktopVoiceStartupIntegrationTests.DesktopStartup_ToVoiceStartButton_InvokesStartFlow" computerName="PAYTON-LEGION2" duration="00:00:00.0113573" startTime="2026-10-07T13:14:05.2335953-05:00" endTime="2026-10-07T13:14:05.2457366-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="120c3b9a-cde5-42ad-8fbc-ec6b6624f797">
+      <Output>
+        <ErrorInfo>
+          <Message>System.MissingMethodException : Method not found: 'Avalonia.Data.IBinding Avalonia.Markup.Xaml.MarkupExtensions.DynamicResourceExtension.ProvideValue(System.IServiceProvider)'.</Message>
+          <StackTrace>   at Markdown.Avalonia.StyleCollections.MarkdownStyleFluentTheme.!XamlIlPopulate(IServiceProvider, MarkdownStyleFluentTheme) in F:\GitHub\McpServerManager\lib\Markdown.Avalonia\Markdown.Avalonia.Tight\StyleCollections/MarkdownStyleFluentTheme.axaml:line 1&#xD;
+   at Markdown.Avalonia.StyleCollections.MarkdownStyleFluentTheme.!XamlIlPopulate(IServiceProvider, MarkdownStyleFluentTheme) in F:\GitHub\McpServerManager\lib\Markdown.Avalonia\Markdown.Avalonia.Tight\StyleCollections/MarkdownStyleFluentTheme.axaml:line 1&#xD;
+   at Markdown.Avalonia.StyleCollections.MarkdownStyleFluentTheme.!XamlIlPopulateTrampoline(MarkdownStyleFluentTheme)&#xD;
+   at Markdown.Avalonia.StyleCollections.MarkdownStyleFluentTheme..ctor() in F:\GitHub\McpServerManager\lib\Markdown.Avalonia\Markdown.Avalonia.Tight\StyleCollections\MarkdownStyleFluentTheme.axaml.cs:line 16&#xD;
+   at Markdown.Avalonia.MarkdownStyle.get_FluentTheme() in F:\GitHub\McpServerManager\lib\Markdown.Avalonia\Markdown.Avalonia.Tight\MarkdownStyle.cs:line 36&#xD;
+   at Markdown.Avalonia.MarkdownScrollViewer..ctor() in F:\GitHub\McpServerManager\lib\Markdown.Avalonia\Markdown.Avalonia.Tight\MarkdownScrollViewer.cs:line 111&#xD;
+   at McpServerManager.Desktop.Views.McpServerManagerView.!XamlIlPopulate(IServiceProvider, McpServerManagerView) in F:\GitHub\McpServerManager\src\McpServerManager.Desktop\Views/McpServerManagerView.axaml:line 125&#xD;
+   at McpServerManager.Desktop.Views.McpServerManagerView.!XamlIlPopulateTrampoline(McpServerManagerView)&#xD;
+   at McpServerManager.Desktop.Views.McpServerManagerView.InitializeComponent(Boolean loadXaml) in F:\GitHub\McpServerManager\src\McpServerManager.Desktop\obj\Debug\net10.0\Avalonia.Generators\Avalonia.Generators.NameGenerator.AvaloniaNameIncrementalGenerator\McpServerManager.Desktop.Views.McpServerManagerView.g.cs:line 47&#xD;
+   at McpServerManager.Desktop.Views.McpServerManagerView..ctor() in F:\GitHub\McpServerManager\src\McpServerManager.Desktop\Views\McpServerManagerView.axaml.cs:line 19&#xD;
+   at McpServerManager.Desktop.Views.MainWindow.!XamlIlPopulate(IServiceProvider, MainWindow) in F:\GitHub\McpServerManager\src\McpServerManager.Desktop\Views/MainWindow.axaml:line 25&#xD;
+   at McpServerManager.Desktop.Views.MainWindow.!XamlIlPopulateTrampoline(MainWindow)&#xD;
+   at McpServerManager.Desktop.Views.MainWindow.InitializeComponent(Boolean loadXaml) in F:\GitHub\McpServerManager\src\McpServerManager.Desktop\obj\Debug\net10.0\Avalonia.Generators\Avalonia.Generators.NameGenerator.AvaloniaNameIncrementalGenerator\McpServerManager.Desktop.Views.MainWindow.g.cs:line 55&#xD;
+   at McpServerManager.Desktop.Views.MainWindow..ctor() in F:\GitHub\McpServerManager\src\McpServerManager.Desktop\Views\MainWindow.axaml.cs:line 37&#xD;
+   at McpServerManager.Desktop.Tests.DesktopVoiceStartupIntegrationTests.DesktopStartup_ToVoiceStartButton_InvokesStartFlow() in F:\GitHub\McpServerManager\tests\McpServerManager.Desktop.Tests\DesktopVoiceStartupIntegrationTests.cs:line 41&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="249a84a9-fc2a-4df6-94b8-660f5297d23d" testId="45f8186c-25c5-8d36-2ebd-0876c8471f3b" testName="McpServerManager.Desktop.Tests.DesktopVoiceStartupIntegrationTests.DesktopVoiceFlyout_CloseButton_HidesFlyoutWithoutThrowing" computerName="PAYTON-LEGION2" duration="00:00:00.4190586" startTime="2026-10-07T13:14:04.7471029-05:00" endTime="2026-10-07T13:14:05.2013982-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="249a84a9-fc2a-4df6-94b8-660f5297d23d">
+      <Output>
+        <ErrorInfo>
+          <Message>System.MissingMethodException : Method not found: 'Avalonia.Data.IBinding Avalonia.Markup.Xaml.MarkupExtensions.DynamicResourceExtension.ProvideValue(System.IServiceProvider)'.</Message>
+          <StackTrace>   at Markdown.Avalonia.StyleCollections.MarkdownStyleFluentTheme.!XamlIlPopulate(IServiceProvider, MarkdownStyleFluentTheme) in F:\GitHub\McpServerManager\lib\Markdown.Avalonia\Markdown.Avalonia.Tight\StyleCollections/MarkdownStyleFluentTheme.axaml:line 1&#xD;
+   at Markdown.Avalonia.StyleCollections.MarkdownStyleFluentTheme.!XamlIlPopulate(IServiceProvider, MarkdownStyleFluentTheme) in F:\GitHub\McpServerManager\lib\Markdown.Avalonia\Markdown.Avalonia.Tight\StyleCollections/MarkdownStyleFluentTheme.axaml:line 1&#xD;
+   at Markdown.Avalonia.StyleCollections.MarkdownStyleFluentTheme.!XamlIlPopulateTrampoline(MarkdownStyleFluentTheme)&#xD;
+   at Markdown.Avalonia.StyleCollections.MarkdownStyleFluentTheme..ctor() in F:\GitHub\McpServerManager\lib\Markdown.Avalonia\Markdown.Avalonia.Tight\StyleCollections\MarkdownStyleFluentTheme.axaml.cs:line 16&#xD;
+   at Markdown.Avalonia.MarkdownStyle.get_FluentTheme() in F:\GitHub\McpServerManager\lib\Markdown.Avalonia\Markdown.Avalonia.Tight\MarkdownStyle.cs:line 36&#xD;
+   at Markdown.Avalonia.MarkdownScrollViewer..ctor() in F:\GitHub\McpServerManager\lib\Markdown.Avalonia\Markdown.Avalonia.Tight\MarkdownScrollViewer.cs:line 111&#xD;
+   at McpServerManager.Desktop.Views.McpServerManagerView.!XamlIlPopulate(IServiceProvider, McpServerManagerView) in F:\GitHub\McpServerManager\src\McpServerManager.Desktop\Views/McpServerManagerView.axaml:line 125&#xD;
+   at McpServerManager.Desktop.Views.McpServerManagerView.!XamlIlPopulateTrampoline(McpServerManagerView)&#xD;
+   at McpServerManager.Desktop.Views.McpServerManagerView.InitializeComponent(Boolean loadXaml) in F:\GitHub\McpServerManager\src\McpServerManager.Desktop\obj\Debug\net10.0\Avalonia.Generators\Avalonia.Generators.NameGenerator.AvaloniaNameIncrementalGenerator\McpServerManager.Desktop.Views.McpServerManagerView.g.cs:line 47&#xD;
+   at McpServerManager.Desktop.Views.McpServerManagerView..ctor() in F:\GitHub\McpServerManager\src\McpServerManager.Desktop\Views\McpServerManagerView.axaml.cs:line 19&#xD;
+   at McpServerManager.Desktop.Views.MainWindow.!XamlIlPopulate(IServiceProvider, MainWindow) in F:\GitHub\McpServerManager\src\McpServerManager.Desktop\Views/MainWindow.axaml:line 25&#xD;
+   at McpServerManager.Desktop.Views.MainWindow.!XamlIlPopulateTrampoline(MainWindow)&#xD;
+   at McpServerManager.Desktop.Views.MainWindow.InitializeComponent(Boolean loadXaml) in F:\GitHub\McpServerManager\src\McpServerManager.Desktop\obj\Debug\net10.0\Avalonia.Generators\Avalonia.Generators.NameGenerator.AvaloniaNameIncrementalGenerator\McpServerManager.Desktop.Views.MainWindow.g.cs:line 55&#xD;
+   at McpServerManager.Desktop.Views.MainWindow..ctor() in F:\GitHub\McpServerManager\src\McpServerManager.Desktop\Views\MainWindow.axaml.cs:line 37&#xD;
+   at McpServerManager.Desktop.Tests.DesktopVoiceStartupIntegrationTests.DesktopVoiceFlyout_CloseButton_HidesFlyoutWithoutThrowing() in F:\GitHub\McpServerManager\tests\McpServerManager.Desktop.Tests\DesktopVoiceStartupIntegrationTests.cs:line 105&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServerManager.Desktop.Tests.DesktopVoiceStartupIntegrationTests.RequestDetailsView_RendersCommitsSection" storage="f:\github\mcpservermanager\tests\mcpservermanager.desktop.tests\bin\debug\net10.0\mcpservermanager.desktop.tests.dll" id="d7443cb2-78c0-4195-a3fe-6695464bee1d">
+      <Execution id="0e815549-5b79-48c6-a9bb-bd05aefdc7d9" />
+      <TestMethod codeBase="F:\GitHub\McpServerManager\tests\McpServerManager.Desktop.Tests\bin\Debug\net10.0\McpServerManager.Desktop.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServerManager.Desktop.Tests.DesktopVoiceStartupIntegrationTests" name="RequestDetailsView_RendersCommitsSection" />
+    </UnitTest>
+    <UnitTest name="McpServerManager.Desktop.Tests.DesktopVoiceStartupIntegrationTests.DesktopStartup_ToVoiceStartButton_InvokesStartFlow" storage="f:\github\mcpservermanager\tests\mcpservermanager.desktop.tests\bin\debug\net10.0\mcpservermanager.desktop.tests.dll" id="d81c11a9-ef56-1132-651e-98b3f0422c72">
+      <Execution id="120c3b9a-cde5-42ad-8fbc-ec6b6624f797" />
+      <TestMethod codeBase="F:\GitHub\McpServerManager\tests\McpServerManager.Desktop.Tests\bin\Debug\net10.0\McpServerManager.Desktop.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServerManager.Desktop.Tests.DesktopVoiceStartupIntegrationTests" name="DesktopStartup_ToVoiceStartButton_InvokesStartFlow" />
+    </UnitTest>
+    <UnitTest name="McpServerManager.Desktop.Tests.DesktopVoiceStartupIntegrationTests.SimplifiedVoiceView_PhoneLayout_ShiftsManualInputRowsByManualRowHeight" storage="f:\github\mcpservermanager\tests\mcpservermanager.desktop.tests\bin\debug\net10.0\mcpservermanager.desktop.tests.dll" id="d89dcb8b-d207-55f8-f5ca-593064d06f05">
+      <Execution id="211c1bd8-9edd-417c-83d8-82b38e54a66b" />
+      <TestMethod codeBase="F:\GitHub\McpServerManager\tests\McpServerManager.Desktop.Tests\bin\Debug\net10.0\McpServerManager.Desktop.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServerManager.Desktop.Tests.DesktopVoiceStartupIntegrationTests" name="SimplifiedVoiceView_PhoneLayout_ShiftsManualInputRowsByManualRowHeight" />
+    </UnitTest>
+    <UnitTest name="McpServerManager.Desktop.Tests.DesktopVoiceStartupIntegrationTests.DesktopVoiceFlyout_CloseButton_HidesFlyoutWithoutThrowing" storage="f:\github\mcpservermanager\tests\mcpservermanager.desktop.tests\bin\debug\net10.0\mcpservermanager.desktop.tests.dll" id="45f8186c-25c5-8d36-2ebd-0876c8471f3b">
+      <Execution id="249a84a9-fc2a-4df6-94b8-660f5297d23d" />
+      <TestMethod codeBase="F:\GitHub\McpServerManager\tests\McpServerManager.Desktop.Tests\bin\Debug\net10.0\McpServerManager.Desktop.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServerManager.Desktop.Tests.DesktopVoiceStartupIntegrationTests" name="DesktopVoiceFlyout_CloseButton_HidesFlyoutWithoutThrowing" />
+    </UnitTest>
+    <UnitTest name="McpServerManager.Desktop.Tests.TodoListViewEditorTests.TodoListView_LoadingDifferentTodoText_ResetsEditorCaretAndScroll" storage="f:\github\mcpservermanager\tests\mcpservermanager.desktop.tests\bin\debug\net10.0\mcpservermanager.desktop.tests.dll" id="538703b4-4cd3-437d-2219-27b6379b5cf7">
+      <Execution id="bcb006ce-7711-471d-b738-45e085fe80d9" />
+      <TestMethod codeBase="F:\GitHub\McpServerManager\tests\McpServerManager.Desktop.Tests\bin\Debug\net10.0\McpServerManager.Desktop.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServerManager.Desktop.Tests.TodoListViewEditorTests" name="TodoListView_LoadingDifferentTodoText_ResetsEditorCaretAndScroll" />
+    </UnitTest>
+    <UnitTest name="McpServerManager.Desktop.Tests.DesktopVoiceStartupIntegrationTests.SimplifiedVoiceView_DefaultLayout_DoesNotShiftManualInputRows" storage="f:\github\mcpservermanager\tests\mcpservermanager.desktop.tests\bin\debug\net10.0\mcpservermanager.desktop.tests.dll" id="dcaa6ef0-480a-cd5b-acf4-f02f9792443a">
+      <Execution id="dfea4aca-3dda-48b1-9877-c75b2f0d260f" />
+      <TestMethod codeBase="F:\GitHub\McpServerManager\tests\McpServerManager.Desktop.Tests\bin\Debug\net10.0\McpServerManager.Desktop.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServerManager.Desktop.Tests.DesktopVoiceStartupIntegrationTests" name="SimplifiedVoiceView_DefaultLayout_DoesNotShiftManualInputRows" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="d7443cb2-78c0-4195-a3fe-6695464bee1d" executionId="0e815549-5b79-48c6-a9bb-bd05aefdc7d9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="538703b4-4cd3-437d-2219-27b6379b5cf7" executionId="bcb006ce-7711-471d-b738-45e085fe80d9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dcaa6ef0-480a-cd5b-acf4-f02f9792443a" executionId="dfea4aca-3dda-48b1-9877-c75b2f0d260f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d89dcb8b-d207-55f8-f5ca-593064d06f05" executionId="211c1bd8-9edd-417c-83d8-82b38e54a66b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d81c11a9-ef56-1132-651e-98b3f0422c72" executionId="120c3b9a-cde5-42ad-8fbc-ec6b6624f797" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="45f8186c-25c5-8d36-2ebd-0876c8471f3b" executionId="249a84a9-fc2a-4df6-94b8-660f5297d23d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="6" executed="6" passed="4" failed="2" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.12)&#xD;
+[xUnit.net 00:00:02.37]   Discovering: McpServerManager.Desktop.Tests&#xD;
+[xUnit.net 00:00:02.74]   Discovered:  McpServerManager.Desktop.Tests&#xD;
+[xUnit.net 00:00:03.09]   Starting:    McpServerManager.Desktop.Tests&#xD;
+[xUnit.net 00:00:08.41]       System.MissingMethodException : Method not found: 'Avalonia.Data.IBinding Avalonia.Markup.Xaml.MarkupExtensions.DynamicResourceExtension.ProvideValue(System.IServiceProvider)'.&#xD;
+[xUnit.net 00:00:08.41]       Stack Trace:&#xD;
+[xUnit.net 00:00:08.41]         F:\GitHub\McpServerManager\lib\Markdown.Avalonia\Markdown.Avalonia.Tight\StyleCollections/MarkdownStyleFluentTheme.axaml(1,0): at Markdown.Avalonia.StyleCollections.MarkdownStyleFluentTheme.!XamlIlPopulate(IServiceProvider, MarkdownStyleFluentTheme)&#xD;
+[xUnit.net 00:00:08.41]         F:\GitHub\McpServerManager\lib\Markdown.Avalonia\Markdown.Avalonia.Tight\StyleCollections/MarkdownStyleFluentTheme.axaml(1,0): at Markdown.Avalonia.StyleCollections.MarkdownStyleFluentTheme.!XamlIlPopulate(IServiceProvider, MarkdownStyleFluentTheme)&#xD;
+[xUnit.net 00:00:08.41]            at Markdown.Avalonia.StyleCollections.MarkdownStyleFluentTheme.!XamlIlPopulateTrampoline(MarkdownStyleFluentTheme)&#xD;
+[xUnit.net 00:00:08.41]         F:\GitHub\McpServerManager\lib\Markdown.Avalonia\Markdown.Avalonia.Tight\StyleCollections\MarkdownStyleFluentTheme.axaml.cs(16,0): at Markdown.Avalonia.StyleCollections.MarkdownStyleFluentTheme..ctor()&#xD;
+[xUnit.net 00:00:08.41]         F:\GitHub\McpServerManager\lib\Markdown.Avalonia\Markdown.Avalonia.Tight\MarkdownStyle.cs(36,0): at Markdown.Avalonia.MarkdownStyle.get_FluentTheme()&#xD;
+[xUnit.net 00:00:08.41]         F:\GitHub\McpServerManager\lib\Markdown.Avalonia\Markdown.Avalonia.Tight\MarkdownScrollViewer.cs(111,0): at Markdown.Avalonia.MarkdownScrollViewer..ctor()&#xD;
+[xUnit.net 00:00:08.41]         F:\GitHub\McpServerManager\src\McpServerManager.Desktop\Views/McpServerManagerView.axaml(125,0): at McpServerManager.Desktop.Views.McpServerManagerView.!XamlIlPopulate(IServiceProvider, McpServerManagerView)&#xD;
+[xUnit.net 00:00:08.41]            at McpServerManager.Desktop.Views.McpServerManagerView.!XamlIlPopulateTrampoline(McpServerManagerView)&#xD;
+[xUnit.net 00:00:08.41]         F:\GitHub\McpServerManager\src\McpServerManager.Desktop\obj\Debug\net10.0\Avalonia.Generators\Avalonia.Generators.NameGenerator.AvaloniaNameIncrementalGenerator\McpServerManager.Desktop.Views.McpServerManagerView.g.cs(47,0): at McpServerManager.Desktop.Views.McpServerManagerView.InitializeComponent(Boolean loadXaml)&#xD;
+[xUnit.net 00:00:08.41]         F:\GitHub\McpServerManager\src\McpServerManager.Desktop\Views\McpServerManagerView.axaml.cs(19,0): at McpServerManager.Desktop.Views.McpServerManagerView..ctor()&#xD;
+[xUnit.net 00:00:08.41]         F:\GitHub\McpServerManager\src\McpServerManager.Desktop\Views/MainWindow.axaml(25,0): at McpServerManager.Desktop.Views.MainWindow.!XamlIlPopulate(IServiceProvider, MainWindow)&#xD;
+[xUnit.net 00:00:08.41]            at McpServerManager.Desktop.Views.MainWindow.!XamlIlPopulateTrampoline(MainWindow)&#xD;
+[xUnit.net 00:00:08.41]         F:\GitHub\McpServerManager\src\McpServerManager.Desktop\obj\Debug\net10.0\Avalonia.Generators\Avalonia.Generators.NameGenerator.AvaloniaNameIncrementalGenerator\McpServerManager.Desktop.Views.MainWindow.g.cs(55,0): at McpServerManager.Desktop.Views.MainWindow.InitializeComponent(Boolean loadXaml)&#xD;
+[xUnit.net 00:00:08.41]         F:\GitHub\McpServerManager\src\McpServerManager.Desktop\Views\MainWindow.axaml.cs(37,0): at McpServerManager.Desktop.Views.MainWindow..ctor()&#xD;
+[xUnit.net 00:00:08.41]         F:\GitHub\McpServerManager\tests\McpServerManager.Desktop.Tests\DesktopVoiceStartupIntegrationTests.cs(105,0): at McpServerManager.Desktop.Tests.DesktopVoiceStartupIntegrationTests.DesktopVoiceFlyout_CloseButton_HidesFlyoutWithoutThrowing()&#xD;
+[xUnit.net 00:00:08.41]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:08.45]       System.MissingMethodException : Method not found: 'Avalonia.Data.IBinding Avalonia.Markup.Xaml.MarkupExtensions.DynamicResourceExtension.ProvideValue(System.IServiceProvider)'.&#xD;
+[xUnit.net 00:00:08.45]       Stack Trace:&#xD;
+[xUnit.net 00:00:08.45]         F:\GitHub\McpServerManager\lib\Markdown.Avalonia\Markdown.Avalonia.Tight\StyleCollections/MarkdownStyleFluentTheme.axaml(1,0): at Markdown.Avalonia.StyleCollections.MarkdownStyleFluentTheme.!XamlIlPopulate(IServiceProvider, MarkdownStyleFluentTheme)&#xD;
+[xUnit.net 00:00:08.45]         F:\GitHub\McpServerManager\lib\Markdown.Avalonia\Markdown.Avalonia.Tight\StyleCollections/MarkdownStyleFluentTheme.axaml(1,0): at Markdown.Avalonia.StyleCollections.MarkdownStyleFluentTheme.!XamlIlPopulate(IServiceProvider, MarkdownStyleFluentTheme)&#xD;
+[xUnit.net 00:00:08.45]            at Markdown.Avalonia.StyleCollections.MarkdownStyleFluentTheme.!XamlIlPopulateTrampoline(MarkdownStyleFluentTheme)&#xD;
+[xUnit.net 00:00:08.45]         F:\GitHub\McpServerManager\lib\Markdown.Avalonia\Markdown.Avalonia.Tight\StyleCollections\MarkdownStyleFluentTheme.axaml.cs(16,0): at Markdown.Avalonia.StyleCollections.MarkdownStyleFluentTheme..ctor()&#xD;
+[xUnit.net 00:00:08.45]         F:\GitHub\McpServerManager\lib\Markdown.Avalonia\Markdown.Avalonia.Tight\MarkdownStyle.cs(36,0): at Markdown.Avalonia.MarkdownStyle.get_FluentTheme()&#xD;
+[xUnit.net 00:00:08.45]         F:\GitHub\McpServerManager\lib\Markdown.Avalonia\Markdown.Avalonia.Tight\MarkdownScrollViewer.cs(111,0): at Markdown.Avalonia.MarkdownScrollViewer..ctor()&#xD;
+[xUnit.net 00:00:08.45]         F:\GitHub\McpServerManager\src\McpServerManager.Desktop\Views/McpServerManagerView.axaml(125,0): at McpServerManager.Desktop.Views.McpServerManagerView.!XamlIlPopulate(IServiceProvider, McpServerManagerView)&#xD;
+[xUnit.net 00:00:08.45]            at McpServerManager.Desktop.Views.McpServerManagerView.!XamlIlPopulateTrampoline(McpServerManagerView)&#xD;
+[xUnit.net 00:00:08.45]         F:\GitHub\McpServerManager\src\McpServerManager.Desktop\obj\Debug\net10.0\Avalonia.Generators\Avalonia.Generators.NameGenerator.AvaloniaNameIncrementalGenerator\McpServerManager.Desktop.Views.McpServerManagerView.g.cs(47,0): at McpServerManager.Desktop.Views.McpServerManagerView.InitializeComponent(Boolean loadXaml)&#xD;
+[xUnit.net 00:00:08.45]         F:\GitHub\McpServerManager\src\McpServerManager.Desktop\Views\McpServerManagerView.axaml.cs(19,0): at McpServerManager.Desktop.Views.McpServerManagerView..ctor()&#xD;
+[xUnit.net 00:00:08.45]         F:\GitHub\McpServerManager\src\McpServerManager.Desktop\Views/MainWindow.axaml(25,0): at McpServerManager.Desktop.Views.MainWindow.!XamlIlPopulate(IServiceProvider, MainWindow)&#xD;
+[xUnit.net 00:00:08.45]            at McpServerManager.Desktop.Views.MainWindow.!XamlIlPopulateTrampoline(MainWindow)&#xD;
+[xUnit.net 00:00:08.45]         F:\GitHub\McpServerManager\src\McpServerManager.Desktop\obj\Debug\net10.0\Avalonia.Generators\Avalonia.Generators.NameGenerator.AvaloniaNameIncrementalGenerator\McpServerManager.Desktop.Views.MainWindow.g.cs(55,0): at McpServerManager.Desktop.Views.MainWindow.InitializeComponent(Boolean loadXaml)&#xD;
+[xUnit.net 00:00:08.45]         F:\GitHub\McpServerManager\src\McpServerManager.Desktop\Views\MainWindow.axaml.cs(37,0): at McpServerManager.Desktop.Views.MainWindow..ctor()&#xD;
+[xUnit.net 00:00:08.45]         F:\GitHub\McpServerManager\tests\McpServerManager.Desktop.Tests\DesktopVoiceStartupIntegrationTests.cs(41,0): at McpServerManager.Desktop.Tests.DesktopVoiceStartupIntegrationTests.DesktopStartup_ToVoiceStartButton_InvokesStartFlow()&#xD;
+[xUnit.net 00:00:08.45]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:08.45]   Finished:    McpServerManager.Desktop.Tests (ID = 'a36203f62957431379114df8313566849c319cb8f57f7e04017cba227d7fface')&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-07T13:14:05.2099069-05:00">
+        <Text>[xUnit.net 00:00:08.41]     McpServerManager.Desktop.Tests.DesktopVoiceStartupIntegrationTests.DesktopVoiceFlyout_CloseButton_HidesFlyoutWithoutThrowing [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-10-07T13:14:05.2468181-05:00">
+        <Text>[xUnit.net 00:00:08.44]     McpServerManager.Desktop.Tests.DesktopVoiceStartupIntegrationTests.DesktopStartup_ToVoiceStartButton_InvokesStartFlow [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

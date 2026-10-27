@@ -6,9 +6,11 @@
  * server + content envelope).
  */
 import * as path from 'path';
+import { randomUUID } from 'crypto';
 import { ReplBridge } from '../transport/repl-bridge.js';
 import { fullBootstrap, type MarkerContext } from '../discovery/marker-resolver.js';
 import { cacheFlush } from '../cache/cache-manager.js';
+import { CoreRuntimeError } from './core-runtime-error.js';
 import { todoTools, canHandleTodoTool, handleTodoTool } from '../tools/todo.js';
 import { sessionTools, canHandleSessionTool, handleSessionTool } from '../tools/session.js';
 import { memoryTools, canHandleMemoryTool, handleMemoryTool } from '../tools/memory.js';
@@ -32,7 +34,6 @@ import { validateToolArguments } from '../tools/schema-validation.js';
 import type { ToolDescriptor, ToolResult } from '../tools/tool-descriptor.js';
 import {
   getCoreConfig,
-  setCoreConfig,
   type QBrainAiPluginCoreConfig,
 } from './core-config.js';
 
@@ -179,6 +180,9 @@ function corePlugin(): string {
   return getCoreConfig().pluginId || process.env.PLUGIN_TAG || 'cline-v2';
 }
 
+// Ownership bookkeeping contains no credentials or active session state.
+const ownedBridges = new WeakSet<ReplBridge>();
+
 /**
  * Host-neutral session/run controller: marker bootstrap, failsafe replay,
  * tool dispatch, and the startSession/completeSession/appendToolAction
@@ -192,17 +196,41 @@ export class HostContext {
   private bootstrappedWorkspace: string | undefined;
   private activeSessionId: string | undefined;
   private activeRequestId: string | undefined;
+  private sessionOpened = false;
   private actionOrder = 0;
   private cacheFlushed = false;
 
   constructor(config: QBrainAiPluginCoreConfig = {}) {
-    this.config = config;
-    setCoreConfig(config);
-    this.bridge = config.bridge ?? new ReplBridge();
-    this.setupWorkspacePath = config.workspacePath;
-    if (config.replCommand && !process.env.MCPSERVER_REPL_COMMAND) {
-      process.env.MCPSERVER_REPL_COMMAND = config.replCommand;
+    if (config.governed) {
+      if (!config.agentName?.trim() || !config.pluginId?.trim() || !config.workspacePath || !path.isAbsolute(config.workspacePath)) {
+        throw new Error('Governed hosts require explicit agent identity, plugin identity and absolute workspace');
+      }
+      if (config.autoBootstrap === false || config.autoFlushCache === false) {
+        throw new Error('Governed hosts cannot disable bootstrap or failsafe replay');
+      }
+      if (config.bridge && !config.bridge.governed) {
+        throw new Error('Governed hosts require a governed REPL bridge');
+      }
     }
+    this.config = Object.freeze({
+      ...config,
+      agentName: config.agentName || process.env.PLUGIN_AGENT_NAME || 'Cline',
+      pluginId: config.pluginId || process.env.PLUGIN_TAG || 'cline-v2',
+    });
+    this.bridge = config.bridge ?? new ReplBridge({
+      governed: config.governed,
+      command: config.replCommand,
+      workspacePath: config.workspacePath,
+      agentName: this.config.agentName,
+      pluginId: this.config.pluginId,
+      timeoutMs: config.toolTimeoutMs,
+    });
+    if (ownedBridges.has(this.bridge)) throw new Error('REPL bridge is already owned by another host');
+    if (config.governed) this.bridge.assertHostBinding({
+      workspacePath: config.workspacePath!, agentName: this.config.agentName!, pluginId: this.config.pluginId!,
+    });
+    ownedBridges.add(this.bridge);
+    this.setupWorkspacePath = config.workspacePath;
   }
 
   get agentName(): string {
@@ -218,10 +246,18 @@ export class HostContext {
   }
 
   setWorkspacePath(value: string | undefined): void {
+    this.assertWorkspace(value);
     if (value) this.setupWorkspacePath = value;
   }
 
+  private assertWorkspace(value: string | undefined): void {
+    if (this.config.governed && value && path.resolve(value) !== path.resolve(this.config.workspacePath!)) {
+      throw new Error('Governed host workspace is immutable; construct a new context for another workspace');
+    }
+  }
+
   resolveWorkspacePath(context?: unknown): string {
+    this.assertWorkspace(contextWorkspacePath(context));
     const workspacePath =
       this.config.workspacePath ||
       contextWorkspacePath(context) ||
@@ -244,16 +280,25 @@ export class HostContext {
       return null;
     }
 
-    const marker = await fullBootstrap(workspacePath);
-    setMarkerEnvironment(marker, this.agentName);
-    this.bootstrappedWorkspace = marker.workspacePath;
-    return marker;
+    try {
+      const marker = await fullBootstrap(workspacePath, {
+        fetch: this.config.fetch,
+        expectedWorkspacePath: this.config.governed ? workspacePath : undefined,
+      });
+      this.bridge.configureContext(marker);
+      this.bootstrappedWorkspace = marker.workspacePath;
+      return marker;
+    } catch (error) {
+      if (this.config.governed) throw new CoreRuntimeError('bootstrap_failed', error);
+      throw error;
+    }
   }
 
   async bootstrapBestEffort(context?: unknown): Promise<void> {
     try {
       await this.bootstrap(context);
     } catch (error) {
+      if (this.config.governed) throw error;
       const message = `[mcpserver-${this.pluginId}] marker bootstrap failed; continuing with failsafe behavior: ${
         error instanceof Error ? error.message : String(error)
       }`;
@@ -266,6 +311,9 @@ export class HostContext {
     if (this.config.autoFlushCache === false || this.cacheFlushed) return;
     try {
       const result = await cacheFlush(this.bridge);
+      if (this.config.governed && (result.failed > 0 || result.pending > 0)) {
+        throw new CoreRuntimeError('failsafe_replay_failed', result);
+      }
       this.cacheFlushed = true;
       if (result.flushed > 0 || result.failed > 0) {
         process.stderr.write(
@@ -273,6 +321,9 @@ export class HostContext {
         );
       }
     } catch (error) {
+      if (this.config.governed) {
+        throw error instanceof CoreRuntimeError ? error : new CoreRuntimeError('failsafe_replay_failed', error);
+      }
       const message = `[mcpserver-${this.pluginId}] failsafe replay failed: ${
         error instanceof Error ? error.message : String(error)
       }`;
@@ -289,7 +340,7 @@ export class HostContext {
       return handleWorkspaceTool(name, args, this.bridge, this.setupWorkspacePath);
     }
     if (canHandleTodoTool(name)) return handleTodoTool(name, args, this.bridge);
-    if (canHandleSessionTool(name)) return handleSessionTool(name, args, this.bridge);
+    if (canHandleSessionTool(name)) return this.invokeSession(name, args);
     if (canHandleMemoryTool(name)) return handleMemoryTool(name, args, this.bridge);
     if (canHandleRequirementsTool(name)) return handleRequirementsTool(name, args, this.bridge);
     if (canHandleGraphragTool(name)) return handleGraphragTool(name, args, this.bridge);
@@ -297,23 +348,35 @@ export class HostContext {
     throw new Error(`Unknown tool: ${name}`);
   }
 
-  private async invokeSession(name: string, args: Record<string, unknown>): Promise<void> {
-    await handleSessionTool(name, args, this.bridge);
+  private async invokeSession(name: string, args: Record<string, unknown>): Promise<ToolResult> {
+    try {
+      return await handleSessionTool(name, args, this.bridge);
+    } catch (error) {
+      if (this.config.governed) throw new CoreRuntimeError('session_failed', error);
+      throw error;
+    }
   }
 
   async startSession(context?: unknown): Promise<void> {
+    if (this.config.governed && this.activeRequestId) {
+      throw new CoreRuntimeError('session_failed', new Error('The current turn must finish before another starts'));
+    }
     const stamp = utcStamp();
     const prompt = contextPrompt(context, this.agentName);
     this.activeSessionId =
-      this.activeSessionId ?? `${this.agentName}-${stamp}-${slug(this.setupWorkspacePath ?? 'workspace')}`;
-    this.activeRequestId = `req-${stamp}-${slug(prompt)}`;
+      this.activeSessionId ?? `${this.agentName}-${stamp}-${slug(this.setupWorkspacePath ?? 'workspace')}${this.config.governed ? '-' + randomUUID() : ''}`;
+    this.activeRequestId = `req-${stamp}-${slug(prompt)}${this.config.governed ? '-' + randomUUID() : ''}`;
+    this.actionOrder = 0;
     await this.invokeSession('session_bootstrap', {});
-    await this.invokeSession('session_open', {
-      agent: this.agentName,
-      sessionId: this.activeSessionId,
-      title: this.config.sessionTitle ?? prompt.slice(0, 120),
-      model: contextModel(context),
-    });
+    if (!this.config.governed || !this.sessionOpened) {
+      await this.invokeSession('session_open', {
+        agent: this.agentName,
+        sessionId: this.activeSessionId,
+        title: this.config.sessionTitle ?? prompt.slice(0, 120),
+        model: contextModel(context),
+      });
+      this.sessionOpened = true;
+    }
     await this.invokeSession('session_begin_turn', {
       requestId: this.activeRequestId,
       queryTitle: prompt.slice(0, 120),
@@ -331,7 +394,7 @@ export class HostContext {
         errorMessage: error,
         errorCode: `${this.pluginId.replace(/-/g, '_')}_run_failed`,
       });
-      await this.invokeSession('session_close', {
+      if (!this.config.governed) await this.invokeSession('session_close', {
         agent: this.agentName,
         sessionId: this.activeSessionId,
         status: 'failed',
@@ -343,7 +406,7 @@ export class HostContext {
           stringValue(record.response) ||
           `${this.agentName} run completed.`,
       });
-      await this.invokeSession('session_close', {
+      if (!this.config.governed) await this.invokeSession('session_close', {
         agent: this.agentName,
         sessionId: this.activeSessionId,
         status: 'completed',
@@ -364,7 +427,7 @@ export class HostContext {
       actions: [
         {
           order: ++this.actionOrder,
-          type: 'design_decision',
+          type: 'tool_execution',
           status,
           description: error
             ? `${this.agentName} tool ${name} failed: ${error}`

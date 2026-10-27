@@ -1,0 +1,47 @@
+## SessionLogP2Contracts.Tests.ps1 / function Write-P2Turn|function New-P2Layout|auditActions|contextList|lastBuildStatus|codeEdits
+   84|        function New-P2Layout {
+  115|        function Write-P2Turn {
+  116|            param($Layout, [string]$RequestId = 'req-p2-verb', [int]$AuditActions = 2, [string]$OpenedAt = '2026-09-30T00:00:00Z')
+  126|                auditActions = $AuditActions
+  423|        $turn['auditActions'] = 4
+  433|        [string]$kept.auditActions | Should -Be '4'
+  587|            function Invoke-ReplPersistTurn { param($RequestId,$Title,$IncludeSessionTitle,$Status,$ResponseText,$ActionsYaml,$ProcessingDialog,$Interpretation,$TokenCount,$Tags,$ContextList,$PlanFile,$TodoId) return $true }
+  766|        function Invoke-ReplTurnUpsertParams { param($SourceType,$SessionId,$RequestId,$Title,$Status,$ResponseText,$ActionsYaml,$ProcessingDialog,$Interpretation,$TokenCount,$Tags,$ContextList,$PlanFile,$TodoId) return @{ turn = @{ queryText = 'q'; timestamp = '2026-09-30T00:00:00Z' } } }
+ 1383|        $afterDialog['auditActions'] = 2
+## repl-invoke.ps1 / 404|session_dialog|Deny-ReplMissingCurrentTurn|queryText
+  147|        # on that object. Do not replace queryText, planFile, todoId, or audit fields.
+  824|function Deny-ReplMissingCurrentTurn {
+  852|function Get-ReplCurrentTurnQueryText {
+  854|    if ($turnState -and $turnState.Contains('queryText')) {
+  855|        return [string]$turnState['queryText']
+ 1262|    $queryText = Get-ReplCurrentTurnQueryText
+ 1263|    if ([string]::IsNullOrWhiteSpace($queryText)) {
+ 1265|        # Update, append, and fail omit it so the server QueryText stays.
+ 1267|            $queryText = Get-ReplCurrentTurnValue -Key 'queryTitle'
+ 1268|            if ([string]::IsNullOrWhiteSpace($queryText)) {
+ 1269|                $queryText = 'Recovered session-log turn'
+ 1272|            $queryText = ''
+ 1309|        -QueryText $queryText `
+ 1662|        queryText = [string](Get-ReplObjectValue -InputObject $turnObj.turn -Name 'queryText')
+ 2110|    $queryText = if ($State.Contains('queryText')) { [string]$State['queryText'] } else { '' }
+ 2112|    $promptFirstLine = @(($queryText -replace "`r`n", "`n" -replace "`r", "") -split "`n")[0].Trim()
+ 2171|    $queryText = Get-ReplParamString -ParamsYaml $ParamsYaml -Name 'queryText'
+ 2172|    if ([string]::IsNullOrWhiteSpace($queryText)) { $queryText = $queryTitle }
+ 2255|            $turnState['queryText'] = $queryText
+ 2277|            queryText = $queryText
+ 2354|        return (Deny-ReplMissingCurrentTurn -Method 'workflow.sessionlog.appendActions')
+ 2456|        return (Deny-ReplMissingCurrentTurn -Method 'workflow.sessionlog.appendDialog')
+ 2513|    if ($combined -match 'not_found|not found|HTTP 404|http 404') {
+ 2551|            $queueMessage = "appendDialog degraded turn not stored; session_dialog failsafe retained requestId=$reqId"
+ 2569|        $failsafe = Write-ReplFailsafe -Method 'client.SessionLog.AppendDialogAsync' -ParamsYaml $callYaml -Label 'session_dialog' -PayloadFingerprint $dialogFingerprint
+ 2591|        return (Deny-ReplMissingCurrentTurn -Method 'workflow.sessionlog.updateTurn')
+ 2691|        return (Deny-ReplMissingCurrentTurn -Method 'workflow.sessionlog.completeTurn')
+ 2780|        return (Deny-ReplMissingCurrentTurn -Method 'workflow.sessionlog.failTurn')
+ 2885|        return (Deny-ReplMissingCurrentTurn -Method 'workflow.sessionlog.setTurnTitle')
+## plugin-hook.ps1 / stop-gate|completeTurn|Close-PluginTurn
+    5|    [ValidateSet('session-start', 'session-end', 'pre-compact', 'post-compact', 'user-prompt-submit', 'stop-gate', 'code-verify', 'plan-approved', 'plan-modified', 'cache-flush', 'health-check', 'subagent-import')]
+  939|function Close-PluginTurnIfNeeded {
+ 1021|        $completeOutput = Invoke-PluginRepl -Method 'workflow.sessionlog.completeTurn' -ParamsYaml $paramsYaml
+ 1023|            Write-PluginJson ([ordered]@{ decision = 'block'; reason = 'workflow.sessionlog.completeTurn failed; current turn remains in_progress'; output = (($completeOutput | Out-String).Trim()) })
+ 1028|            Write-PluginJson ([ordered]@{ decision = 'block'; reason = 'workflow.sessionlog.completeTurn did not mark the current turn completed' })
+ 1527|    'stop-gate' { Close-PluginTurnIfNeeded }

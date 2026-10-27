@@ -109,8 +109,7 @@ function Get-PluginStartPath {
     if ($currentPath -and (Get-Command Find-MarkerFile -ErrorAction SilentlyContinue)) {
         try {
             if (Find-MarkerFile -StartDir $currentPath) { return $currentPath }
-        } catch {
-        }
+        } catch { Write-Verbose -Message 'MCP best-effort fallback: Get-PluginStartPath.' }
     }
 
     if ($env:MCP_WORKSPACE_START_DIR) { return $env:MCP_WORKSPACE_START_DIR }
@@ -135,7 +134,7 @@ function Set-PluginWorkspaceIdentity {
     $env:MCP_WORKSPACE_PATH = $resolved
     $env:MCPSERVER_WORKSPACE_PATH = $resolved
     $env:MCP_WORKSPACE_START_DIR = $resolved
-    try { Set-Location -LiteralPath $resolved } catch { }
+    try { Set-Location -LiteralPath $resolved } catch { Write-Verbose -Message 'MCP best-effort fallback: Set-PluginWorkspaceIdentity.' }
 }
 
 function Get-YamlScalar {
@@ -159,7 +158,7 @@ function Set-YamlScalar {
     )
 
     if (-not (Test-Path -LiteralPath $Path)) { return }
-    Set-McpYamlObjectValue -Path $Path -KeyPath @($Key) -Value $Value | Out-Null
+    Set-McpYamlObjectValue -Path $Path -KeyPath @($Key) -Value $Value -ExactScalars | Out-Null
 }
 
 function Read-HookInput {
@@ -261,8 +260,8 @@ function Invoke-PluginOpenSession {
     $stdoutTask = $process.StandardOutput.ReadToEndAsync()
     $stderrTask = $process.StandardError.ReadToEndAsync()
     $process.WaitForExit()
-    try { $null = $stdoutTask.GetAwaiter().GetResult() } catch { }
-    try { $null = $stderrTask.GetAwaiter().GetResult() } catch { }
+    try { $null = $stdoutTask.GetAwaiter().GetResult() } catch { Write-Verbose -Message 'MCP best-effort fallback: Invoke-PluginOpenSession.' }
+    try { $null = $stderrTask.GetAwaiter().GetResult() } catch { Write-Verbose -Message 'MCP best-effort fallback: Invoke-PluginOpenSession.' }
     $script:LastPluginReplExitCode = [int]$process.ExitCode
     return ($process.ExitCode -eq 0)
 }
@@ -302,7 +301,7 @@ function Start-PluginSession {
             $untrustedState['markerFilePath'] = $markerSnapshot.markerFilePath
             $untrustedState['markerLastWriteUtc'] = $markerSnapshot.markerLastWriteUtc
         }
-        Write-McpYamlObject -Path $sessionFile -Document $untrustedState
+        Write-McpYamlObject -Path $sessionFile -Document $untrustedState -ExactScalars
         Write-PluginJson ([ordered]@{})
         return
     }
@@ -348,7 +347,7 @@ function Start-PluginSession {
         agentExecutablePath = [string]$agentHeaders.agentExecutablePath
         agentExecutableVersion = [string]$agentHeaders.agentExecutableVersion
     }
-    Write-McpYamlObject -Path $sessionFile -Document $sessionState
+    Write-McpYamlObject -Path $sessionFile -Document $sessionState -ExactScalars
     Write-PluginJson ([ordered]@{})
 }
 
@@ -466,7 +465,7 @@ function Write-PluginRecoveryFailsafe {
             timestamp = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
             payload = $Payload
         }
-        Write-McpYamlObject -Path $path -Document $record
+        Write-McpYamlObject -Path $path -Document $record -ExactScalars
         return $path
     } catch {
         return ''
@@ -570,7 +569,7 @@ function Invoke-PluginNoSessionRecovery {
             $state['markerFilePath'] = $snapshot.markerFilePath
             $state['markerLastWriteUtc'] = $snapshot.markerLastWriteUtc
         }
-        Write-McpYamlObject -Path (Get-PluginNoSessionRecoveryPath -CacheDir $CacheDir) -Document $state
+        Write-McpYamlObject -Path (Get-PluginNoSessionRecoveryPath -CacheDir $CacheDir) -Document $state -ExactScalars
         return $state
     }
 
@@ -586,7 +585,7 @@ function Invoke-PluginNoSessionRecovery {
             status = 'session-create-failed'
         }
         $state['failsafePath'] = Write-PluginRecoveryFailsafe -CacheDir $CacheDir -Label 'no-session-recovery' -RootId $rootId -Method 'workflow.sessionlog.recovery' -Payload $failsafePayload
-        Write-McpYamlObject -Path (Get-PluginNoSessionRecoveryPath -CacheDir $CacheDir) -Document $state
+        Write-McpYamlObject -Path (Get-PluginNoSessionRecoveryPath -CacheDir $CacheDir) -Document $state -ExactScalars
         return $state
     }
 
@@ -619,7 +618,7 @@ function Invoke-PluginNoSessionRecovery {
         failsafePath = $failsafePath
         message = 'Session creation failed after a healthy marker/bootstrap check; retry suppressed until the marker timestamp changes.'
     }
-    Write-McpYamlObject -Path (Get-PluginNoSessionRecoveryPath -CacheDir $CacheDir) -Document $failureState
+    Write-McpYamlObject -Path (Get-PluginNoSessionRecoveryPath -CacheDir $CacheDir) -Document $failureState -ExactScalars
     return $failureState
 }
 
@@ -683,9 +682,8 @@ function Ensure-PluginMarkerFresh {
             $snapshot = Get-MarkerFileSnapshot -StartDir $start
             $untrustedState['markerFilePath'] = $snapshot.markerFilePath
             $untrustedState['markerLastWriteUtc'] = $snapshot.markerLastWriteUtc
-        } catch {
-        }
-        Write-McpYamlObject -Path $sessionFile -Document $untrustedState
+        } catch { Write-Verbose -Message 'MCP best-effort fallback: Ensure-PluginMarkerFresh.' }
+        Write-McpYamlObject -Path $sessionFile -Document $untrustedState -ExactScalars
         return $false
     }
 }
@@ -854,13 +852,11 @@ function Open-PluginTurn {
         }
     }
 
-    $markerSnapshot = $null
     try {
-        $markerSnapshot = Get-MarkerFileSnapshot -StartDir $startPath
-    } catch {
-    }
+        $null = Get-MarkerFileSnapshot -StartDir $startPath
+    } catch { Write-Verbose -Message 'MCP best-effort fallback: Open-PluginTurn.' }
     $sessionState = Read-McpYamlObject -Path $sessionFile -Create
-    $sessionId = if ($sessionState.Contains('sessionId')) { [string]$sessionState['sessionId'] } else { '' }
+    $null = if ($sessionState.Contains('sessionId')) { [string]$sessionState['sessionId'] } else { '' }
 
     $turnRequestId = 'req-{0}-prompt-{1:x4}' -f (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ'), (Get-Random -Maximum 0xffff)
     $turnContext = Resolve-PluginTurnPlanContext
@@ -936,6 +932,193 @@ function Open-PluginTurn {
     })
 }
 
+function Get-PluginMapValue {
+    param($Map, [string]$Key)
+
+    if ($null -eq $Map -or [string]::IsNullOrWhiteSpace($Key)) { return $null }
+    if ($Map -is [System.Collections.IDictionary]) {
+        if ($Map.Contains($Key)) { return $Map[$Key] }
+        return $null
+    }
+
+    $property = $Map.PSObject.Properties[$Key]
+    if ($property) { return $property.Value }
+    return $null
+}
+
+function Test-PluginStopEvidenceKnown {
+    <#
+    .SYNOPSIS
+        True when a cache file carries build or audit evidence keys.
+    #>
+    param([Parameter(Mandatory)][string]$Path)
+
+    if (-not (Test-Path -LiteralPath $Path)) { return $false }
+    $document = Read-McpYamlObject -Path $Path
+    if ($document -isnot [System.Collections.IDictionary]) { return $false }
+    foreach ($key in @('codeEdits', 'lastBuildStatus', 'auditActions', 'auditFiles', 'auditDialog', 'auditDecisions', 'auditCommits')) {
+        if ($document.Contains($key)) { return $true }
+    }
+    return $false
+}
+
+function Get-PluginStopEnforcementDecision {
+    <#
+    .SYNOPSIS
+        FR-MCP-SESSIONLIFE-004: failed-build and incomplete-audit before any allow or recency write.
+    .DESCRIPTION
+        Returns 'allow' for an operator override, a block reason, or $null when the evidence does not block.
+    #>
+    param(
+        [Parameter(Mandatory)][string]$EvidencePath,
+        [Parameter(Mandatory)][string]$CacheDir
+    )
+
+    if (-not (Test-Path -LiteralPath $EvidencePath)) { return $null }
+
+    $edits = 0
+    $editsText = Get-YamlScalar -Path $EvidencePath -Key 'codeEdits'
+    if ($editsText) {
+        $parsedEdits = 0
+        if ([int]::TryParse($editsText, [ref]$parsedEdits)) { $edits = $parsedEdits }
+    }
+    $buildStatus = Get-YamlScalar -Path $EvidencePath -Key 'lastBuildStatus'
+    if ($edits -gt 0 -and $buildStatus -eq 'failed') {
+        $acceptFailure = Join-Path $CacheDir 'turn-accept-failure.marker'
+        if (Test-Path -LiteralPath $acceptFailure) {
+            Remove-Item -LiteralPath $acceptFailure -Force
+            return 'allow'
+        }
+
+        return "Last build in this turn failed after $edits code edit(s)."
+    }
+
+    $auditActions = Get-YamlScalar -Path $EvidencePath -Key 'auditActions'
+    $auditFiles = Get-YamlScalar -Path $EvidencePath -Key 'auditFiles'
+    $auditDialog = Get-YamlScalar -Path $EvidencePath -Key 'auditDialog'
+    $auditDecisions = Get-YamlScalar -Path $EvidencePath -Key 'auditDecisions'
+    $auditCommits = Get-YamlScalar -Path $EvidencePath -Key 'auditCommits'
+    $hasAuditSchema = $null -ne $auditActions -or $null -ne $auditFiles -or $null -ne $auditDialog -or $null -ne $auditDecisions -or $null -ne $auditCommits
+    if ($edits -gt 0 -and $hasAuditSchema) {
+        $auditTotal = [int](($auditActions ?? '0')) + [int](($auditFiles ?? '0')) + [int](($auditDialog ?? '0')) + [int](($auditDecisions ?? '0')) + [int](($auditCommits ?? '0'))
+        if ($auditTotal -le 0) {
+            $acceptAudit = Join-Path $CacheDir 'turn-accept-incomplete-audit.marker'
+            if (Test-Path -LiteralPath $acceptAudit) {
+                Remove-Item -LiteralPath $acceptAudit -Force
+                return 'allow'
+            }
+
+            return 'audit is incomplete for a completed code-edit turn'
+        }
+    }
+
+    return $null
+}
+
+function Test-PluginPathMatch {
+    param([string]$Left, [string]$Right)
+
+    if ([string]::IsNullOrWhiteSpace($Left) -or [string]::IsNullOrWhiteSpace($Right)) { return $false }
+    $leftText = $Left.Trim().Trim('"').TrimEnd('\', '/')
+    $rightText = $Right.Trim().Trim('"').TrimEnd('\', '/')
+    if ([string]::Equals($leftText, $rightText, [System.StringComparison]::Ordinal)) { return $true }
+    try {
+        if ((Test-Path -LiteralPath $leftText) -and (Test-Path -LiteralPath $rightText)) {
+            $resolvedLeft = (Resolve-Path -LiteralPath $leftText).ProviderPath.TrimEnd('\', '/')
+            $resolvedRight = (Resolve-Path -LiteralPath $rightText).ProviderPath.TrimEnd('\', '/')
+            return [string]::Equals($resolvedLeft, $resolvedRight, [System.StringComparison]::Ordinal)
+        }
+    } catch { Write-Verbose -Message 'MCP best-effort fallback: Test-PluginPathMatch.' }
+
+    return $false
+}
+
+function Get-PluginTurnPersistenceProof {
+    <#
+    .SYNOPSIS
+        FR-MCP-SESSIONLIFE-004: exact-turn proof through client.SessionLog.GetAsync.
+    .DESCRIPTION
+        Calls the typed session client once via the plugin bridge. Only an exact
+        completed identity is Kind Reconcile. Missing, unavailable, workspace
+        mismatch, and identity mismatch fail closed.
+    #>
+    param(
+        [string]$WorkspacePath,
+        [string]$Agent,
+        [string]$SessionId,
+        [string]$RequestId
+    )
+
+    $paramsYaml = ConvertTo-PluginParamsYaml ([ordered]@{
+        agent = $Agent
+        sessionId = $SessionId
+        requestId = $RequestId
+        workspacePath = $WorkspacePath
+    })
+    $raw = $null
+    try {
+        $raw = @(Invoke-PluginRepl -Method 'client.SessionLog.GetAsync' -ParamsYaml $paramsYaml)
+    } catch {
+        # No proof document. Keep the historical stale pin instead of inventing a server outcome.
+        return [pscustomobject]@{ Kind = 'Active' }
+    }
+
+    $text = ($raw | ForEach-Object { [string]$_ }) -join "`n"
+    if ([string]::IsNullOrWhiteSpace($text)) {
+        return [pscustomobject]@{ Kind = 'Active' }
+    }
+
+    $document = $null
+    try {
+        $document = ConvertFrom-Yaml -Yaml $text -Ordered -ErrorAction Stop
+    } catch {
+        return [pscustomobject]@{ Kind = 'Active' }
+    }
+
+    $payload = Get-PluginMapValue -Map $document -Key 'payload'
+    $result = Get-PluginMapValue -Map $payload -Key 'result'
+    if ($null -eq $result) {
+        return [pscustomobject]@{ Kind = 'Active' }
+    }
+
+    $proofWorkspace = [string](Get-PluginMapValue -Map $result -Key 'workspacePath')
+    $workspaceCandidates = @($WorkspacePath, $env:MCP_WORKSPACE_PATH, $env:MCPSERVER_WORKSPACE_PATH) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+    $workspaceMatch = $false
+    foreach ($candidate in $workspaceCandidates) {
+        if (Test-PluginPathMatch -Left $proofWorkspace -Right $candidate) { $workspaceMatch = $true; break }
+    }
+    if (-not $workspaceMatch) {
+        return [pscustomobject]@{ Kind = 'Block'; Reason = 'authoritative turn workspace does not match the local workspace' }
+    }
+
+    $proofAgent = [string](Get-PluginMapValue -Map $result -Key 'sourceType')
+    $proofSession = [string](Get-PluginMapValue -Map $result -Key 'sessionId')
+    $proofRequest = [string](Get-PluginMapValue -Map $result -Key 'requestId')
+    $agentMatch = [string]::Equals($proofAgent.Trim(), ([string]$Agent).Trim(), [System.StringComparison]::OrdinalIgnoreCase)
+    $sessionMatch = [string]::Equals($proofSession.Trim(), ([string]$SessionId).Trim(), [System.StringComparison]::Ordinal)
+    $requestMatch = [string]::Equals($proofRequest.Trim(), ([string]$RequestId).Trim(), [System.StringComparison]::Ordinal)
+    if (-not $agentMatch -or -not $sessionMatch -or -not $requestMatch) {
+        return [pscustomobject]@{ Kind = 'Block'; Reason = "identity-changed: authoritative turn '$proofRequest' is not local turn '$RequestId'" }
+    }
+
+    $outcome = ([string](Get-PluginMapValue -Map $result -Key 'outcome')).Trim()
+    $serverStatus = ([string](Get-PluginMapValue -Map $result -Key 'serverStatus')).Trim()
+    if ($outcome -eq 'Missing') {
+        return [pscustomobject]@{ Kind = 'Block'; Reason = "authoritative turn is missing for $RequestId" }
+    }
+    if ($outcome -eq 'Unavailable') {
+        return [pscustomobject]@{ Kind = 'Block'; Reason = "authoritative session query is unavailable for $RequestId" }
+    }
+    if ($outcome -eq 'Active') {
+        return [pscustomobject]@{ Kind = 'Active' }
+    }
+    if ($outcome -eq 'Completed' -and $serverStatus -eq 'completed') {
+        return [pscustomobject]@{ Kind = 'Reconcile' }
+    }
+
+    return [pscustomobject]@{ Kind = 'Block'; Reason = 'authoritative session query is unavailable' }
+}
+
 function Close-PluginTurnIfNeeded {
     $startPath = Get-PluginStartPath -PreferredPath $WorkspacePath
     Set-PluginWorkspaceIdentity -ResolvedPath $startPath
@@ -953,25 +1136,50 @@ function Close-PluginTurnIfNeeded {
         $timestampText = Get-YamlScalar -Path $sessionFile -Key 'timestamp'
         $updatedText = Get-YamlScalar -Path $sessionFile -Key 'lastUpdated'
         $timestampStale = $false
+        $timestampKnown = $false
         $updatedStale = $true
         $parsedTimestamp = [datetime]::MinValue
         if ($timestampText -and [datetime]::TryParse($timestampText.Trim('"'), [ref]$parsedTimestamp)) {
+            $timestampKnown = $true
             $timestampStale = $parsedTimestamp.ToUniversalTime() -lt $cutoff
         }
         $parsedUpdated = [datetime]::MinValue
         if ($updatedText -and [datetime]::TryParse($updatedText.Trim('"'), [ref]$parsedUpdated)) {
             $updatedStale = $parsedUpdated.ToUniversalTime() -lt $cutoff
         }
-        # A fresh lastUpdated does not clear a stale timestamp pin.
+        # A present timestamp that cannot be parsed is unknown age. A fresh
+        # lastUpdated does not clear a stale or unknown timestamp pin.
         if ($timestampText) {
-            $sessionAgeStale = $timestampStale
+            $sessionAgeStale = (-not $timestampKnown) -or $timestampStale
         } else {
             $sessionAgeStale = $updatedStale
         }
     }
 
+    $evidencePath = $null
+    if (Test-Path -LiteralPath $turnFile) {
+        $evidencePath = $turnFile
+    } elseif (Test-Path -LiteralPath $sessionFile) {
+        $evidencePath = $sessionFile
+    }
+    if ($evidencePath) {
+        $enforcement = Get-PluginStopEnforcementDecision -EvidencePath $evidencePath -CacheDir $cacheDir
+        if ($enforcement -eq 'allow') {
+            Write-PluginJson ([ordered]@{})
+            return
+        }
+        if ($enforcement) {
+            Write-PluginJson ([ordered]@{ decision = 'block'; reason = $enforcement })
+            return
+        }
+    }
+
     if (-not (Test-Path -LiteralPath $turnFile)) {
         if ($sessionAgeStale -and (Test-Path -LiteralPath $sessionFile)) {
+            if (-not (Test-PluginStopEvidenceKnown -Path $sessionFile)) {
+                Write-PluginJson ([ordered]@{ decision = 'block'; reason = 'unknown failed-build and audit state cannot authorize a clean allow' })
+                return
+            }
             Set-YamlScalar -Path $sessionFile -Key 'lastUpdated' -Value ((Get-Date).ToUniversalTime().ToString('o'))
         }
         Write-PluginJson ([ordered]@{})
@@ -981,7 +1189,26 @@ function Close-PluginTurnIfNeeded {
     $status = Get-YamlScalar -Path $turnFile -Key 'status'
     if ($sessionAgeStale -and $status -eq 'in_progress') {
         $requestId = Get-YamlScalar -Path $turnFile -Key 'turnRequestId'
-        Write-PluginJson ([ordered]@{ decision = 'block'; reason = "stale cached session cannot be reused for $requestId" })
+        $sessionId = Get-YamlScalar -Path $sessionFile -Key 'sessionId'
+        if (-not $sessionId) { $sessionId = Get-YamlScalar -Path $turnFile -Key 'sessionId' }
+        $agent = Get-YamlScalar -Path $sessionFile -Key 'agent'
+        if (-not $agent) { $agent = $env:MCP_AGENT_NAME }
+        $workspace = Get-YamlScalar -Path $sessionFile -Key 'workspacePath'
+        if (-not $workspace) { $workspace = $env:MCP_WORKSPACE_PATH }
+        $proof = Get-PluginTurnPersistenceProof -WorkspacePath $workspace -Agent $agent -SessionId $sessionId -RequestId $requestId
+        if ($proof.Kind -eq 'Reconcile') {
+            Set-YamlScalar -Path $turnFile -Key 'status' -Value 'completed'
+            if (Test-Path -LiteralPath $sessionFile) {
+                Set-YamlScalar -Path $sessionFile -Key 'lastUpdated' -Value ((Get-Date).ToUniversalTime().ToString('o'))
+            }
+            Write-PluginJson ([ordered]@{})
+            return
+        }
+        if ($proof.Kind -eq 'Active') {
+            Write-PluginJson ([ordered]@{ decision = 'block'; reason = "stale cached session cannot be reused for $requestId" })
+            return
+        }
+        Write-PluginJson ([ordered]@{ decision = 'block'; reason = [string]$proof.Reason })
         return
     }
     if ($sessionAgeStale -and (Test-Path -LiteralPath $sessionFile)) {
@@ -1181,13 +1408,13 @@ function Invoke-PluginBoundedProcess {
     $waitMs = [Math]::Max(1, $TimeoutSeconds) * 1000
     if (-not $process.WaitForExit($waitMs)) {
         $timedOut = $true
-        try { $process.Kill($true) } catch { }
-        try { [void]$process.WaitForExit(2000) } catch { }
+        try { $process.Kill($true) } catch { Write-Verbose -Message 'MCP best-effort fallback: Invoke-PluginBoundedProcess.' }
+        try { [void]$process.WaitForExit(2000) } catch { Write-Verbose -Message 'MCP best-effort fallback: Invoke-PluginBoundedProcess.' }
     }
 
     $output = ''
-    try { $output = [string]$stdoutTask.Result } catch { }
-    try { $output += [string]$stderrTask.Result } catch { }
+    try { $output = [string]$stdoutTask.Result } catch { Write-Verbose -Message 'MCP best-effort fallback: Invoke-PluginBoundedProcess.' }
+    try { $output += [string]$stderrTask.Result } catch { Write-Verbose -Message 'MCP best-effort fallback: Invoke-PluginBoundedProcess.' }
 
     return [pscustomobject]@{
         exitCode = $(if ($timedOut) { -1 } else { $process.ExitCode })
@@ -1213,8 +1440,7 @@ function Invoke-CodeVerify {
         try {
             $json = $payload | ConvertFrom-Json -Depth 20 -ErrorAction Stop
             $filePath = [string]$json.tool_input.file_path
-        } catch {
-        }
+        } catch { Write-Verbose -Message 'MCP best-effort fallback: Invoke-CodeVerify.' }
     }
 
     if (-not $filePath -or -not (Test-Path -LiteralPath $filePath)) {
@@ -1336,8 +1562,7 @@ function Get-PlanFilePathFromInput {
             $json = $payload | ConvertFrom-Json -Depth 20 -ErrorAction Stop
             $filePath = [string]$json.tool_input.file_path
             if (-not $filePath) { $filePath = [string]$json.tool_input.path }
-        } catch {
-        }
+        } catch { Write-Verbose -Message 'MCP best-effort fallback: Get-PlanFilePathFromInput.' }
     }
     if (-not $filePath -and $env:TOOL_INPUT) { $filePath = $env:TOOL_INPUT }
     return $filePath
@@ -1532,3 +1757,4 @@ switch ($HookName) {
     'health-check' { Invoke-PluginRepl -Method 'client.Health.GetAsync' }
     'subagent-import' { Write-PluginJson ([ordered]@{ status = 'skipped' }) }
 }
+

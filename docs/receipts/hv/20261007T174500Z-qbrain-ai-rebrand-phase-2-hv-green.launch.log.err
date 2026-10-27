@@ -1,0 +1,6 @@
+ForEach-Object: F:\GitHub\McpServer\docs\receipts\hv\20261007T174500Z-qbrain-ai-rebrand-phase-2-hv-green.runner.ps1:77
+Line |
+  77 |  . lter ("*" + $fullStamp + "*") -EA SilentlyContinue | ForEach-Object {
+     |                                                         ~~~~~~~~~~~~~~~~
+     | Exception calling "ReadAllText" with "1" argument(s): "Access to the path
+     | 'F:\GitHub\McpServer\.worktrees\federation-fixes-20261007\docs\receipts\hv\20261007T174500Z-qbrain-ai-rebrand-phase-2-hv-green-evidence' is denied."

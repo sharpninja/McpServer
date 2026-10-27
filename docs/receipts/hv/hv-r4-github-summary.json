@@ -1,0 +1,232 @@
+{
+  "MergedAt": "2026-10-16T22:41:48Z",
+  "MergeSha": "a2cbd57897c588f178da3a191186726b8adab1b1",
+  "Reviews": [
+    {
+      "id": 5554472359,
+      "submitted_at": "2026-10-16T22:48:12Z",
+      "commit_id": "6dbc384323c036a57c37fd9eaf2259879c1d956f",
+      "body": "<!-- codex-review-receipt:v1 -->\n\n\n### 💡 Codex Review\n\nHere are some automated review suggestions for this pull request.\n\n**Reviewed commit:** `6dbc384323`\n    \n\n<details> <summary>ℹ️ About Codex in GitHub</summary>\n<br/>\n\n[Your team has set up Codex to review pull requests in this repo](https://chatgpt.com/codex/cloud/settings/general). Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\".\n\nIf Codex has suggestions, it will comment; otherwise it will react with 👍.\n\n\n\n\nCodex can also answer questions or update the PR. Try commenting \"@codex address that feedback\".\n            \n</details>"
+    }
+  ],
+  "Comments": [
+    {
+      "id": 4300020822,
+      "path": "src/QBrainAi.Storage/WorkspaceKeyConversion.cs",
+      "line": 26,
+      "created_at": "2026-10-16T22:48:12Z",
+      "html_url": "https://github.com/sharpninja/McpServer/pull/81#discussion_r4300020822",
+      "body": "**<sub><sub>![P1 Badge](https://img.shields.io/badge/P1-orange?style=flat)</sub></sub>  Migrate legacy workspace keys before canonical queries**\n\nOn an upgraded Windows installation, existing rows contain the previous `Q:\\workspace` spelling, while this converter canonicalizes new writes and query parameters to `Q:/workspace` but leaves values read from storage unchanged. Because this commit includes no data migration, SQLite/PostgreSQL comparisons against the canonical discriminator no longer match those legacy rows, so tenant-filtered data becomes invisible and workspace bootstrap can create parallel rows. Add a provider migration that rewrites every affected key and foreign key before enabling this converter.\n\nUseful? React with 👍 / 👎.\n\n<!-- codex-code-review-finding:v1 -->"
+    },
+    {
+      "id": 4300020832,
+      "path": "plugins/core/lib-ps/plugin-hook.ps1",
+      "line": 1065,
+      "created_at": "2026-10-16T22:48:12Z",
+      "html_url": "https://github.com/sharpninja/McpServer/pull/81#discussion_r4300020832",
+      "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Return a proof shape that the stop hook can consume**\n\nWhen a cached session is stale, this production REPL call cannot produce the proof consumed below: the added client method returns `Task<UnifiedSessionLogDto>`, which is absent from `GenericClientPassthrough.AwaitTaskResultAsync` and therefore raises `Unsupported task result type`; even after adding that case, `UnifiedSessionLogDto` contains `status` and `turns`, not the expected `workspacePath`, `requestId`, `outcome`, or `serverStatus`. The catch consequently treats completed persisted turns as active, leaving the stop gate blocked indefinitely; expose a matching proof DTO or derive the requested turn outcome from the returned session DTO.\n\nUseful? React with 👍 / 👎.\n\n<!-- codex-code-review-finding:v1 -->"
+    },
+    {
+      "id": 4300020839,
+      "path": "src/QBrainAi.Client/WorkspacePathNormalizer.cs",
+      "line": 130,
+      "created_at": "2026-10-16T22:48:12Z",
+      "html_url": "https://github.com/sharpninja/McpServer/pull/81#discussion_r4300020839",
+      "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Treat root-relative Windows segments as rooted**\n\nOn a Windows host, a segment such as `\\repo` is rooted and must replace the path after retaining the current drive, but `IsWindowsRooted` recognizes only drive-qualified and UNC paths. `Combine(\"C:/content\", \"\\\\repo\")` therefore returns `C:/content/repo` instead of `C:/repo`; in particular, `ResolveRepoRootWorkspacePath` now resolves a root-relative `RepoRoot` under the content directory and selects the wrong workspace and tenant. Handle a leading backslash as Windows-root-relative using the root drive.\n\nUseful? React with 👍 / 👎.\n\n<!-- codex-code-review-finding:v1 -->"
+    },
+    {
+      "id": 4300020846,
+      "path": "src/QBrainAi.Services/Services/FileGitHubWorkspaceTokenStore.cs",
+      "line": 326,
+      "created_at": "2026-10-16T22:48:12Z",
+      "html_url": "https://github.com/sharpninja/McpServer/pull/81#discussion_r4300020846",
+      "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Preserve access to legacy GitHub token entries**\n\nAfter upgrading on Windows, this changes the persistent token-store lookup key from the prior `C:\\repo` form to `C:/repo`, but entries already stored in the JSON document are never canonicalized on read. The `OrdinalIgnoreCase` comparisons in `GetAsync`, `UpsertAsync`, and `DeleteAsync` do not equate different separators, so existing GitHub credentials become inaccessible, an upsert creates a duplicate entry, and deletion leaves the legacy secret behind. Normalize loaded entry paths or migrate the token document before using the new key format.\n\nUseful? React with 👍 / 👎.\n\n<!-- codex-code-review-finding:v1 -->"
+    },
+    {
+      "id": 4300020851,
+      "path": "plugins/core/lib-ps/repl-invoke.ps1",
+      "line": 738,
+      "created_at": "2026-10-16T22:48:12Z",
+      "html_url": "https://github.com/sharpninja/McpServer/pull/81#discussion_r4300020851",
+      "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Keep descendants killable after the root process exits**\n\nWhen the REPL wrapper starts a background descendant and then exits before the deadline, `HasExited` is already true here, so `Kill(true)` is skipped even if the descendant still owns stdout/stderr or continues running detached. The subsequent loop can only time out—or can report success once the pipes close—while leaving that descendant alive, defeating the bounded-child guarantee. Start the child in an owned process group/job and terminate that group independently of the root process's exit state.\n\nUseful? React with 👍 / 👎.\n\n<!-- codex-code-review-finding:v1 -->"
+    },
+    {
+      "id": 4300020859,
+      "path": "plugins/core/lib-ps/plugin-hook.ps1",
+      "line": 1174,
+      "created_at": "2026-10-16T22:48:12Z",
+      "html_url": "https://github.com/sharpninja/McpServer/pull/81#discussion_r4300020859",
+      "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Complete the turn after consuming a stop override**\n\nFor an `in_progress` code-edit turn with a failed build or incomplete audit, consuming the corresponding acceptance marker returns immediately here, before the later `workflow.sessionlog.completeTurn` branch runs. The stop is therefore allowed while both the cache and authoritative session remain in progress, unlike the previous ordering where completion happened before enforcement; this leaves an unaudited stale turn for the next session. Treat the override as bypassing only its specific gate, then continue through turn completion.\n\nAGENTS.md reference: [AGENTS.md:L17-L19](https://github.com/sharpninja/McpServer/blob/6dbc384323c036a57c37fd9eaf2259879c1d956f/AGENTS.md#L17-L19)\n\nUseful? React with 👍 / 👎.\n\n<!-- codex-code-review-finding:v1 -->"
+    }
+  ],
+  "Activity": [
+    {
+      "id": 46884186122,
+      "activity_type": "push",
+      "timestamp": "2026-10-18T07:41:20Z",
+      "before": "4c5208c7f6d8bbedff692d1739c4f434baed4e01",
+      "after": "437695dc16b928ee0c8b50e611231aa1903aa083",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016"
+    },
+    {
+      "id": 46883454740,
+      "activity_type": "push",
+      "timestamp": "2026-10-18T07:28:12Z",
+      "before": "ecdab88b5446423d30a4c2748caf38277fa35b95",
+      "after": "4c5208c7f6d8bbedff692d1739c4f434baed4e01",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016"
+    },
+    {
+      "id": 46882426448,
+      "activity_type": "push",
+      "timestamp": "2026-10-18T07:09:22Z",
+      "before": "9e6822246e0e13f51612c638bc72d148954ccc18",
+      "after": "ecdab88b5446423d30a4c2748caf38277fa35b95",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016"
+    },
+    {
+      "id": 46876759978,
+      "activity_type": "push",
+      "timestamp": "2026-10-18T05:19:30Z",
+      "before": "92df2c49d7f06f359190b8574dd5545d7174e294",
+      "after": "9e6822246e0e13f51612c638bc72d148954ccc18",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016"
+    },
+    {
+      "id": 46876188876,
+      "activity_type": "push",
+      "timestamp": "2026-10-18T05:08:00Z",
+      "before": "ab082d18054caedade5c13cc42c4a7278c284af6",
+      "after": "92df2c49d7f06f359190b8574dd5545d7174e294",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016"
+    },
+    {
+      "id": 46875278207,
+      "activity_type": "push",
+      "timestamp": "2026-10-18T04:49:47Z",
+      "before": "67297000747bcfacc481bc8891c35f8fe4aff65f",
+      "after": "ab082d18054caedade5c13cc42c4a7278c284af6",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016"
+    },
+    {
+      "id": 46874820225,
+      "activity_type": "push",
+      "timestamp": "2026-10-18T04:40:24Z",
+      "before": "cef5fcaabec866b83d114a7c0ebfb260499119ea",
+      "after": "67297000747bcfacc481bc8891c35f8fe4aff65f",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016"
+    },
+    {
+      "id": 46873323697,
+      "activity_type": "push",
+      "timestamp": "2026-10-18T04:10:11Z",
+      "before": "6c848a4e56f8dee101672dcca1435d600c21eb41",
+      "after": "cef5fcaabec866b83d114a7c0ebfb260499119ea",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016"
+    },
+    {
+      "id": 46857187896,
+      "activity_type": "push",
+      "timestamp": "2026-10-17T22:59:11Z",
+      "before": "168478c3c5d96b08e965ac9e63d78feb26e359e1",
+      "after": "6c848a4e56f8dee101672dcca1435d600c21eb41",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016"
+    },
+    {
+      "id": 46832379297,
+      "activity_type": "push",
+      "timestamp": "2026-10-17T16:32:05Z",
+      "before": "3fba1b1336a92767904e344dbe9d531200049a0d",
+      "after": "168478c3c5d96b08e965ac9e63d78feb26e359e1",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016"
+    },
+    {
+      "id": 46831910604,
+      "activity_type": "push",
+      "timestamp": "2026-10-17T16:25:16Z",
+      "before": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d",
+      "after": "3fba1b1336a92767904e344dbe9d531200049a0d",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016"
+    },
+    {
+      "id": 46828548698,
+      "activity_type": "push",
+      "timestamp": "2026-10-17T15:36:15Z",
+      "before": "d3a0beb10b0879f20fb307f205a3bff25ac3a441",
+      "after": "caaa41b008cccb8d76dd7a5ecb8cdafb1e14041d",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016"
+    },
+    {
+      "id": 46823032126,
+      "activity_type": "push",
+      "timestamp": "2026-10-17T14:16:08Z",
+      "before": "0a449314528c5bfc07e9b386c97034716e2ddbd4",
+      "after": "d3a0beb10b0879f20fb307f205a3bff25ac3a441",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016"
+    },
+    {
+      "id": 46821753827,
+      "activity_type": "push",
+      "timestamp": "2026-10-17T13:57:14Z",
+      "before": "31904493381cfef56c57790950e23e72f3ecc39b",
+      "after": "0a449314528c5bfc07e9b386c97034716e2ddbd4",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016"
+    },
+    {
+      "id": 46821378338,
+      "activity_type": "push",
+      "timestamp": "2026-10-17T13:51:25Z",
+      "before": "f5fd5ab24ad00b09053daf07ed3c0d850f70498d",
+      "after": "31904493381cfef56c57790950e23e72f3ecc39b",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016"
+    },
+    {
+      "id": 46820417271,
+      "activity_type": "push",
+      "timestamp": "2026-10-17T13:36:45Z",
+      "before": "bd6e37b33f043b1ede3a1feeaf7073d357ea21cf",
+      "after": "f5fd5ab24ad00b09053daf07ed3c0d850f70498d",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016"
+    },
+    {
+      "id": 46820358054,
+      "activity_type": "push",
+      "timestamp": "2026-10-17T13:35:52Z",
+      "before": "6dbc384323c036a57c37fd9eaf2259879c1d956f",
+      "after": "bd6e37b33f043b1ede3a1feeaf7073d357ea21cf",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016"
+    },
+    {
+      "id": 46765499077,
+      "activity_type": "push",
+      "timestamp": "2026-10-16T21:40:04Z",
+      "before": "9fd6b653b2522212ad8151091e3a8cdec25e75bd",
+      "after": "6dbc384323c036a57c37fd9eaf2259879c1d956f",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016"
+    },
+    {
+      "id": 46762976355,
+      "activity_type": "push",
+      "timestamp": "2026-10-16T21:07:20Z",
+      "before": "99cb42b24a442377a776aebd58e9df6894c2ce40",
+      "after": "9fd6b653b2522212ad8151091e3a8cdec25e75bd",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016"
+    },
+    {
+      "id": 46761710122,
+      "activity_type": "push",
+      "timestamp": "2026-10-16T20:52:02Z",
+      "before": "31af8c597e3570a2469a48a238a4aa76107f30bb",
+      "after": "99cb42b24a442377a776aebd58e9df6894c2ce40",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016"
+    },
+    {
+      "id": 46756800940,
+      "activity_type": "branch_creation",
+      "timestamp": "2026-10-16T19:54:08Z",
+      "before": "0000000000000000000000000000000000000000",
+      "after": "31af8c597e3570a2469a48a238a4aa76107f30bb",
+      "ref": "refs/heads/docs/hv-architecture-amendment-20261016"
+    }
+  ]
+}

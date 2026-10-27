@@ -1,0 +1,56 @@
+[
+    {
+        "repo":  "mcpserver-grok-bot-plugin",
+        "total":  29,
+        "fails":  0,
+        "skipped":  0,
+        "exit":  0,
+        "tip":  "6e1edf9",
+        "status":  "PASS"
+    },
+    {
+        "repo":  "mcpserver-grok-plugin",
+        "total":  29,
+        "fails":  0,
+        "skipped":  0,
+        "exit":  0,
+        "tip":  "b2a0ec7",
+        "status":  "PASS"
+    },
+    {
+        "repo":  "mcpserver-claude-code-plugin",
+        "total":  36,
+        "fails":  0,
+        "skipped":  0,
+        "exit":  0,
+        "tip":  "2510cc1",
+        "status":  "PASS"
+    },
+    {
+        "repo":  "mcpserver-claude-cowork-plugin",
+        "total":  29,
+        "fails":  0,
+        "skipped":  0,
+        "exit":  0,
+        "tip":  "95bce13",
+        "status":  "PASS"
+    },
+    {
+        "repo":  "mcpserver-codex-plugin",
+        "total":  41,
+        "fails":  0,
+        "skipped":  0,
+        "exit":  0,
+        "tip":  "ae35f22",
+        "status":  "PASS"
+    },
+    {
+        "repo":  "mcpserver-copilot-plugin",
+        "total":  29,
+        "fails":  0,
+        "skipped":  0,
+        "exit":  0,
+        "tip":  "a0792f4",
+        "status":  "PASS"
+    }
+]

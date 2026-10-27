@@ -28,6 +28,10 @@ public sealed class YamlSerializer : IYamlSerializer
     {
         _serializer = new SerializerBuilder()
             .WithNamingConvention(CamelCaseNamingConvention.Instance)
+            // FR-QB-003/005: numeric-looking lexical scores stay strings, and
+            // multiline audit text keeps exact CR/LF and Unicode separators.
+            .WithQuotingNecessaryStrings(quoteYaml1_1Strings: true)
+            .WithEventEmitter(next => new LosslessStringEventEmitter(next))
             .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull)
             .Build();
 
@@ -76,6 +80,16 @@ public sealed class YamlSerializer : IYamlSerializer
         root.TryGetValue("payload", out var payloadObj);
 
         var payload = MaterializePayload(type, payloadObj);
+        if (payload is RequestPayload request)
+        {
+            payload = new RequestPayload
+            {
+                RequestId = request.RequestId,
+                Method = request.Method,
+                Params = request.Params,
+                RawParamsJson = ReadOriginalJsonParams(yaml),
+            };
+        }
         return new YamlEnvelope { Type = type, Payload = payload };
     }
 
@@ -134,6 +148,30 @@ public sealed class YamlSerializer : IYamlSerializer
         }
 
         return envelopes;
+    }
+
+    // JSON is already accepted by the YAML protocol. Preserve its params slice
+    // without changing legacy YAML materialization or coercing numeric lexemes.
+    private static string? ReadOriginalJsonParams(string input)
+    {
+        if (!input.AsSpan().TrimStart().StartsWith("{"))
+            return null;
+        try
+        {
+            using var document = System.Text.Json.JsonDocument.Parse(input);
+            var root = document.RootElement;
+            if (root.ValueKind == System.Text.Json.JsonValueKind.Object &&
+                root.TryGetProperty("payload", out var payload) &&
+                payload.ValueKind == System.Text.Json.JsonValueKind.Object &&
+                payload.TryGetProperty("params", out var parameters) &&
+                parameters.ValueKind == System.Text.Json.JsonValueKind.Object)
+                return parameters.GetRawText();
+        }
+        catch (System.Text.Json.JsonException)
+        {
+            // A valid YAML flow mapping need not be valid JSON. Keep that path.
+        }
+        return null;
     }
 
     private static object? MaterializePayload(string type, object? payloadObj)

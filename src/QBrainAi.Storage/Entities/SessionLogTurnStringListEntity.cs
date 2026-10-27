@@ -30,6 +30,12 @@ public sealed class SessionLogTurnStringListEntity
     /// <summary>The string value of this list item.</summary>
     public required string Value { get; set; }
 
+    /// <summary>FR-QB-003: Immutable captured event identity, absent on legacy rows.</summary>
+    public string? AuditEventId { get; set; }
+
+    /// <summary>TR-QB-AUDIT-001: Original safe integer captured position, independent of arrival.</summary>
+    public long? AuditEventOrder { get; set; }
+
     /// <summary>TR-PLANNED-CORE-013: Navigation to parent entry.</summary>
     public SessionLogTurnEntity? SessionLogTurn { get; set; }
 }

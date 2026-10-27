@@ -1,0 +1,68 @@
+﻿[
+    {
+        "Repo":  "mcpserver-grok-plugin",
+        "Tip":  "b2a0ec7e03869f0f2863728ccdc7da75ba1b0bda",
+        "Dirty":  "",
+        "Path":  "F:\\GitHub\\mcpserver-grok-plugin"
+    },
+    {
+        "Repo":  "mcpserver-grok-bot-plugin",
+        "Tip":  "6e1edf99f6b5c40fd3576e364b7cd725261b7df1",
+        "Dirty":  "",
+        "Path":  "F:\\GitHub\\mcpserver-grok-bot-plugin"
+    },
+    {
+        "Repo":  "mcpserver-claude-code-plugin",
+        "Tip":  "2510cc1be501b028e59736fb638cf38df3d29ccb",
+        "Dirty":  "",
+        "Path":  "F:\\GitHub\\mcpserver-claude-code-plugin"
+    },
+    {
+        "Repo":  "mcpserver-claude-cowork-plugin",
+        "Tip":  "95bce132f1c71e4c4d10bf3943e0c700ed5968f8",
+        "Dirty":  "",
+        "Path":  "F:\\GitHub\\mcpserver-claude-cowork-plugin"
+    },
+    {
+        "Repo":  "mcpserver-codex-plugin",
+        "Tip":  "ae35f225bd896fdc2bea2fdd6b923703beaaec39",
+        "Dirty":  "",
+        "Path":  "F:\\GitHub\\mcpserver-codex-plugin"
+    },
+    {
+        "Repo":  "mcpserver-copilot-plugin",
+        "Tip":  "a0792f4fcb1cca8e7ac8d5f20d6917218a30dbd0",
+        "Dirty":  "",
+        "Path":  "F:\\GitHub\\mcpserver-copilot-plugin"
+    },
+    {
+        "Repo":  "mcpserver-cline-plugin",
+        "Tip":  "c7f2449550aadf66f24ce8153138c0411614efc9",
+        "Dirty":  "",
+        "Path":  "F:\\GitHub\\mcpserver-cline-plugin"
+    },
+    {
+        "Repo":  "mcpserver-cline-v2-plugin",
+        "Tip":  "1e13d8e12f74d92b5bdc6f367e86cbd2201f066e",
+        "Dirty":  "",
+        "Path":  "F:\\GitHub\\mcpserver-cline-v2-plugin"
+    },
+    {
+        "Repo":  "mcpserver-opencode-plugin",
+        "Tip":  "fc20aafda2da612d72ad0171792e369e4438a121",
+        "Dirty":  "",
+        "Path":  "F:\\GitHub\\mcpserver-opencode-plugin"
+    },
+    {
+        "Repo":  "McpServerTools",
+        "Tip":  "origin/cursor/qbrain-ai-rebrand-phase2-91dd",
+        "Dirty":  "",
+        "Path":  "F:\\GitHub\\McpServerTools"
+    },
+    {
+        "Repo":  "McpServerManager",
+        "Tip":  "43d3158119c6b9fef38dafdaad3cf3addc2d8609",
+        "Dirty":  "",
+        "Path":  "F:\\GitHub\\McpServerManager"
+    }
+]

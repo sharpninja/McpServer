@@ -505,6 +505,88 @@ public sealed class RepoFileServiceTests : IDisposable
         }
     }
 
+    /// <summary>
+    /// TR-MCP-QBTOOLS-000 AC-001: absolute paths still obey the relative allowlist. Temporary fixture
+    /// files distinguish an allowed code file from forbidden notes without touching operator files.
+    /// </summary>
+    [Fact]
+    public async Task RootedInsidePath_EnforcesAllowlistBeforeEveryOperation()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions
+        {
+            RepoRoot = _tempDir,
+            RepoAllowlist = new[] { "src/**/*.cs" }
+        });
+        var sut = new RepoFileService(options, new WorkspaceContext(), _auditLog, NullLogger<RepoFileService>.Instance);
+        var allowed = Path.Combine(_tempDir, "src", "code.cs");
+        var forbidden = Path.Combine(_tempDir, "src", "notes.txt");
+        Assert.NotNull(await sut.ReadAsync(allowed, ct).ConfigureAwait(true));
+        Assert.Null(await sut.ReadAsync(forbidden, ct).ConfigureAwait(true));
+        Assert.False((await sut.WriteAsync(forbidden, "changed", ct).ConfigureAwait(true)).Written);
+        Assert.False((await sut.EditAsync(forbidden, "notes", "changed", cancellationToken: ct).ConfigureAwait(true)).Written);
+        Assert.Null(await sut.CaptureForWriteAsync(forbidden, ct).ConfigureAwait(true));
+        var list = await sut.ListAsync(Path.Combine(_tempDir, "src"), ct).ConfigureAwait(true);
+        Assert.Contains(list.Entries, entry => entry.Name == "code.cs");
+        Assert.DoesNotContain(list.Entries, entry => entry.Name == "notes.txt");
+        Assert.Equal("notes", await File.ReadAllTextAsync(forbidden, ct).ConfigureAwait(true));
+    }
+
+    /// <summary>
+    /// TR-MCP-QBTOOLS-000 AC-001: a lexically contained absolute path through an external symlink
+    /// remains rejected across operations. Isolated temporary roots prove outside bytes stay intact.
+    /// </summary>
+    [Fact]
+    public async Task RootedPathThroughExternalSymlink_AcrossRepoOperations_IsRejected()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var outside = Directory.CreateTempSubdirectory("repo-absolute-outside-").FullName;
+        var link = Path.Combine(_tempDir, "absolute-link");
+        var outsideFile = Path.Combine(outside, "outside.cs");
+        await File.WriteAllTextAsync(outsideFile, "outside", ct).ConfigureAwait(true);
+        try
+        {
+            Assert.True(TryCreateDirectoryLink(link, outside), "This native gate requires directory symlink creation.");
+            var requested = Path.Combine(link, "outside.cs");
+            Assert.Null(await _sut.ReadAsync(requested, ct).ConfigureAwait(true));
+            Assert.Empty((await _sut.ListAsync(link, ct).ConfigureAwait(true)).Entries);
+            Assert.False((await _sut.WriteAsync(requested, "changed", ct).ConfigureAwait(true)).Written);
+            Assert.False((await _sut.EditAsync(requested, "outside", "changed", cancellationToken: ct).ConfigureAwait(true)).Written);
+            Assert.Null(await _sut.CaptureForWriteAsync(requested, ct).ConfigureAwait(true));
+            Assert.Equal("outside", await File.ReadAllTextAsync(outsideFile, ct).ConfigureAwait(true));
+        }
+        finally
+        {
+            if (Directory.Exists(link))
+                Directory.Delete(link);
+            Directory.Delete(outside, recursive: true);
+        }
+    }
+    /// <summary>
+    /// TR-MCP-QBTOOLS-000 AC-001: a filesystem root remains rooted during core path normalization.
+    /// Reads only the owned temporary fixture file through absolute and root-relative addresses.
+    /// </summary>
+    /// <param name="absolute">Whether to use the absolute fixture address.</param>
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task FileSystemRootWorkspace_ReadsOwnedFixtureWithoutLosingRoot(bool absolute)
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var root = Path.GetPathRoot(_tempDir)!;
+        var owned = Path.Combine(_tempDir, "readme.md");
+        var relative = Path.GetRelativePath(root, owned).Replace('\\', '/');
+        var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions
+        {
+            RepoRoot = root,
+            RepoAllowlist = new[] { relative }
+        });
+        var sut = new RepoFileService(options, new WorkspaceContext(), _auditLog, NullLogger<RepoFileService>.Instance);
+        var result = await sut.ReadAsync(absolute ? owned : relative, ct).ConfigureAwait(true);
+        Assert.NotNull(result);
+        Assert.Equal("# Hello", result.Content);
+        Assert.Equal(relative, result.RelativePath);
+    }
     private static bool TryCreateDirectoryLink(string linkPath, string targetPath)
     {
         try

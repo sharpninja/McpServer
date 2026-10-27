@@ -1,0 +1,12 @@
+{
+  "requestId": "req-20261017T142304Z-hv-amendment1-r1",
+  "dialogItems": [
+    {
+      "order": 1076,
+      "timestamp": "2026-10-17T15:16:49.5667368Z",
+      "role": "model",
+      "category": "decision",
+      "content": "[HV-R1 complete-receipt-json part 42/42]\n \"Codex-20261017T142241Z-hv-amendment1-r1\",\n    \"reviewerRequestId\": \"req-20261017T142304Z-hv-amendment1-r1\"\n  },\n  \"ReceiptPaths\": [\n    \"/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hostile-validator-amendment1-r1-20261017T091907.md\",\n    \"/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hostile-validator-amendment1-r1-20261017T091907.json\",\n    \"/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/20261017T091907-amendment1-r1.request.jsonl\",\n    \"/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/20261017T091907-amendment1-r1.response.jsonl\"\n  ]\n}"
+    }
+  ]
+}

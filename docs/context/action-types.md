@@ -17,3 +17,8 @@ Use these standardized type values when logging actions in session log turns.
 - `entity_violation` — banned organization or individual detected
 - `copilot_invocation` — server-initiated Copilot call
 - `policy_change` — workspace policy configuration change
+- `tool_execution` - executed tool metadata: nonnegative `order` (including zero), nonblank `description` and `status`, and optional `filePath`. Recognition is case-insensitive; the supplied type and metadata are preserved. Validation applies atomically to the effective action batch at every session write boundary.
+
+`tool_call` and `tool_result` remain processing-dialog categories. Execution metadata does not imply a design decision; record an explicit decision separately using its required decision dialog, action, and design-decision field.
+
+An execution action never substitutes for an explicit decision or no-decision attestation. (FR-MCP-AUDITACTION-001 / TR-MCP-AUDITACTION-001)

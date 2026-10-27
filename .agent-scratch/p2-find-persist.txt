@@ -1,0 +1,11 @@
+  238|function Test-ReplBeginTurnDegradedQueued {
+  852|function Get-ReplCurrentTurnQueryText {
+ 1396|        degraded = ($Disposition -eq 'queued')
+ 1424|function Test-ReplSessionVerbQueued {
+ 1589|function Clear-ReplTurnDegradedMarkers {
+ 1593|    if ($state.Contains('degraded')) { $state.Remove('degraded'); $changed = $true }
+ 1599|function Invoke-ReplPersistTurn {
+ 1633|        Clear-ReplTurnDegradedMarkers | Out-Null
+ 1662|        queryText = [string](Get-ReplObjectValue -InputObject $turnObj.turn -Name 'queryText')
+ 1671|    # HV05: identical degraded retry must still attempt primary SubmitAsync rather
+ 1783|function Update-ReplTurnCacheStatus {

@@ -98,7 +98,7 @@ public sealed class ProductRequirementContextSurfaceTests : IDisposable
         var ok = Assert.IsType<OkObjectResult>(action.Result);
         var json = JsonSerializer.Serialize(ok.Value);
         Assert.Contains("SIBLING-FR-BODY-UNIQUE", json, StringComparison.Ordinal);
-        Assert.Contains(Sibling.Replace("\\", "\\\\"), json, StringComparison.Ordinal);
+        Assert.Contains(ExpectedWorkspaceKey.Of(Sibling), json, StringComparison.Ordinal);
         Assert.DoesNotContain("class Secret", json, StringComparison.Ordinal);
         Assert.DoesNotContain("Secret.cs", json, StringComparison.Ordinal);
     }
@@ -119,7 +119,7 @@ public sealed class ProductRequirementContextSurfaceTests : IDisposable
         var ok = Assert.IsType<OkObjectResult>(action.Result);
         var pack = Assert.IsType<ContextPack>(ok.Value);
         Assert.Contains(pack.Chunks, c => c.Content.Contains("SIBLING-FR-BODY-UNIQUE", StringComparison.Ordinal)
-            && c.Content.Contains(Sibling, StringComparison.Ordinal));
+            && c.Content.Contains(ExpectedWorkspaceKey.Of(Sibling), StringComparison.Ordinal));
         Assert.DoesNotContain(pack.Chunks, c =>
             c.Content.Contains("class Secret", StringComparison.Ordinal)
             || c.Content.Contains("Secret.cs", StringComparison.Ordinal));

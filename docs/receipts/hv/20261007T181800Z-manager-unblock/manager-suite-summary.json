@@ -1,0 +1,42 @@
+[
+    {
+        "suite":  "Core",
+        "exit":  0,
+        "passed":  141,
+        "failed":  0,
+        "skipped":  0,
+        "status":  "PASS"
+    },
+    {
+        "suite":  "UI.Core",
+        "exit":  0,
+        "passed":  403,
+        "failed":  0,
+        "skipped":  0,
+        "status":  "PASS"
+    },
+    {
+        "suite":  "Desktop",
+        "exit":  1,
+        "passed":  4,
+        "failed":  2,
+        "skipped":  0,
+        "status":  "FAIL"
+    },
+    {
+        "suite":  "Director",
+        "exit":  0,
+        "passed":  138,
+        "failed":  0,
+        "skipped":  0,
+        "status":  "PASS"
+    },
+    {
+        "suite":  "Web",
+        "exit":  0,
+        "passed":  122,
+        "failed":  0,
+        "skipped":  0,
+        "status":  "PASS"
+    }
+]

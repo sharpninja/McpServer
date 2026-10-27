@@ -1,0 +1,28 @@
+Work ONLY in this worktree (branch feature/p1-5-workspace-rekey-20261016, cut from origin/develop and ALREADY at develop 36783b79 (PR #75 merged); do not re-merge or rebase). Never touch main or the root checkout F:\GitHub\McpServer. Never print secrets or AGENTS-README-FIRST.yaml contents.
+
+Task: implement P1.5 per docs/plans/2026-10-07-federation-fixes.md (~line 163): a workspace-key rekey command for the local McpServer database.
+Policy A (decided by Payton): reuse the existing P1.4 Windows lexical normalizer (so \\?\C:\x -> C:/x), preserve path case, and ABORT BEFORE ANY MUTATION if distinct old keys converge to the same new key.
+Requirements:
+1. Mandatory backup first (apply refuses without a successful backup).
+2. --dry-run prints old->new key mapping and counts per table (no secrets), mutates nothing, and runs ONLY against a copy of the DB (never the live DB).
+3. Transactional apply; idempotent (second run is a no-op).
+4. Startup guard: server refuses to start against legacy C:\ workspace ids and points to the rekey command.
+BDPv4: write requirements/tests first (red), then implement, get relevant tests green. Follow repo conventions (AGENTS/CLAUDE docs, session log if required).
+Then commit on the branch, git push origin feature/p1-5-workspace-rekey-20261016 (NO force), and open a DRAFT PR into develop with gh (gh pr create --draft --base develop). Do NOT merge. Do NOT deploy, do NOT run Nuke UpdateService, do NOT stop/restart any running server, do NOT apply to any live DB; dry-run only against a copy, do NOT apply to any live DB.
+If anything is ambiguous, stop and report labeled A/B/C choices.
+Final message: branch, commit SHA, PR URL, tests run and results, files changed, anything blocked. Keep it free of secrets.
+
+
+Payton's decision: the AGENTS-README-FIRST.yaml marker lookup searching parent directories up into the root checkout IS the intended design. Do not stop on it. Use the helper's normal marker verification and MCP session logging as CLAUDE.md requires, never print, copy, commit or cat the marker or any key, and never modify the root checkout's files. Proceed with the P1.5 implementation per this prompt.
+
+Payton decision (2026-10-16): leave manual triage group keys unchanged (they are SHA-256 hashes of workspacePath|manual|random GUID and cannot be recomputed); rekey only WorkspaceId columns and other keys that can be recomputed from stored data; document this in the plan/tests and the dry-run report. Continue the P1.5 work; do not stop for this question again. The sandbox may reject direct shell commands; use the powershell MCP tool if so.
+
+
+## DECISION UPDATE (Payton): NU A - NU1902/NU1903
+Fix the NU1902/NU1903 vulnerable-package audit warnings (System.Security.Cryptography.Pkcs / .Xml) via scoped dependency fixes: upgrade or pin only the affected packages narrowly. KEEP the NuGet audit gate and warnings-as-errors. No blanket suppression (no NoWarn / NuGetAudit disable). Do not discard existing uncommitted work in this worktree.
+
+## Added coverage requirement (PR #81 P1 review finding)
+Legacy workspace keys must be migrated BEFORE canonical queries run (see WorkspaceKeyConversion.cs:26). P1.5 must cover this. Manual triage group keys stay unchanged per the earlier decision (rekey only WorkspaceId and recomputable keys).
+
+## Constraints
+No merges, no deploys, no live DB changes, no force pushes. Deploy hold stays. Never print or commit AGENTS-README-FIRST.yaml or API keys. No --dangerously-* flags.

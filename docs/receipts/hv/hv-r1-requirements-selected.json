@@ -1,0 +1,2171 @@
+[
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Given options missing one of the five reviewers, naming an unknown or duplicate reviewer, an unknown strategy, or an enabled Copilot reviewer without a configured model (section 10), when the server starts, then startup fails naming the entry (`HostileValidationOptionsMissingUnknownOrDuplicateReviewerFailsStartup`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Given a fresh workspace, when the server starts, then five `HvReviewer` rows exist `Unverified`, and a second start does not overwrite a row changed through the API (`ReviewerSeedingInsertsFiveOnceNeverOverwrites`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Given a reviewer with no configured effort, and a reviewer other than Copilot with no configured model, when its launch is built, then the effort is the highest its CLI accepts (Codex `max`, Claude `max`, Cline `xhigh`, Grok `xhigh`, Copilot `max`; VI-08), never a lower or a refused value, and the model is the CLI default recorded from provenance (`ReviewerAdapterDefaultsToHighestEffortAndCliDefaultModel`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Given an update with a stale `expectedStateVersion`, when it is applied, then 409 `conflict` with `retryable: false` and `details.field` `expectedStateVersion` and nothing changes (`UpdateReviewerStaleStateVersion409NothingChanged`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC005",
+        "text": "Given an update that changes the strategy, agent path, model, or effort, when it commits, then the reviewer is `Unverified` with reason `configuration_changed` and `reviewer_unverified` is appended (`UpdateReviewerLaunchChangeMakesUnverifiedAndNotifies`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC006",
+        "text": "Given the REST, MCP, client, REPL, and Director surfaces, when each lists, gets, and updates a reviewer, then each returns the same record and the same error codes (`ReviewerSurfacesParityGoldenContract`).",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Reviewer pool configuration and real-time management. Sources: S-02, R-08. Use cases: UC-HV-01.",
+    "id": "FR-MCP-HVPIPE-001",
+    "title": "Reviewer pool configuration and real-time management",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:08.8543231+00:00",
+    "updatedAt": "2026-10-17T14:25:08.8543604+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Given each alias of the alias table in any case and with any separators, when normalized, then it maps to its reviewer id, in C# and in PowerShell from one golden contract (`AgentIdentityGoldenContractTests`, C# and Pester).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Given a submitting turn whose agent is `ClaudeCode` (or `ClaudeCowork`, `claude-code`, `cowork`), when a request is admitted, then Claude is never assigned, and V-5 refuses a run whose reviewer is Claude (`SubmitterAliasesNeverAssignedClaudeFamily`, `FinalVerificationSubmitterReviewerRefusedNotIndependent`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Given a free-text submitter name that differs from the submitting turn's agent, when a request is admitted, then exclusion uses the turn's agent (`SubmitterExclusionUsesTurnAgentNeverFreeText`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Given the cursor at Copilot, every reviewer enabled and `Online`, and three requests that Cline submits over Cline sessions (so only Cline is excluded), when they are admitted one after another, then Claude, Codex, and Grok are assigned and the cursor ends at Grok (`RoundRobinAssignsInPoolOrderAfterCursor`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC005",
+        "text": "Given the server restarts between two submissions, when the second is admitted, then it takes the reviewer after the cursor stored before the restart (`RoundRobinCursorSurvivesRestart`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC006",
+        "text": "Given two concurrent submissions, when both commit, then they take the next two eligible reviewers in cyclic order, never the same cursor value, on SQLite, PostgreSQL, and SQL Server (`RoundRobinConcurrentSubmissionsConsecutiveReviewersThreeProviders`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC007",
+        "text": "Given the assignee becomes `Offline` before the claim, when the request is claimed, then it is reassigned to the next eligible reviewer and the reassignment is recorded (`ClaimReassignsWhenAssigneeNoLongerEligible`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC008",
+        "text": "Given a request over a Grok session submitted by Claude, and another submitted by an `Operator`, when each is admitted and claimed, then Grok is never assigned to either, `AuthorReviewerId` is `Grok`, and V-5 refuses a run whose reviewer is Grok with `reviewer_not_independent` (`AuthorAgentNeverAssignedAndRefusedByVerification`).",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Identity normalization, submitter and author exclusion, and round-robin assignment. Sources: S-17, S-28, P-01, P-07, R-07, R-08. Use cases: UC-HV-03, UC-HV-04.",
+    "id": "FR-MCP-HVPIPE-002",
+    "title": "Identity normalization, submitter and author exclusion, and round-robin assignment",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:08.8566767+00:00",
+    "updatedAt": "2026-10-17T14:25:08.8567153+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Given an `Offline` reviewer, when nothing but an execution or a configuration change happens, then it never becomes `Online`; only a passing probe makes it `Online` (`ReviewerBecomesOnlineOnlyByPassingProbe`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Given a probe whose log echoes the run's nonce, whose provenance names the expected model and effort, and whose reviewer turn exists, when it closes, then the reviewer is `Online` with the resolved model and effort and `reviewer_online` is appended (`ProbePassedReviewerOnlineResolvedModelAndEffort`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Given a probe with a wrong nonce, missing or different provenance, or no reviewer turn, when it closes, then the reviewer is `Offline` with `probe_nonce_mismatch`, `runtime_identity_mismatch`, or `reviewer_turn_logging_unsupported` and an incident is `Pending` (`ProbeFailuresOfflineWithCodeAndIncident`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Given a probe already requested or running, when another NONCE is requested, then 202 `AlreadyRequested` or `Running` and no second probe exists (`NonceRepeatNoSecondProbe`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC005",
+        "text": "Given a disabled reviewer, when a NONCE is requested, then 409 `hv_reviewer_disabled` (`NonceDisabledReviewer409`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC006",
+        "text": "Given enabled `Unverified` reviewers at startup, when the worker starts, then a probe is requested for each and none for a disabled or `Offline` reviewer (`WorkerStartupProbesUnverifiedEnabledReviewersOnly`).",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Reviewer readiness: NONCE, offline, and online. Sources: S-15, S-27, P-04, R-10, R-24. Use cases: UC-HV-02.",
+    "id": "FR-MCP-HVPIPE-003",
+    "title": "Reviewer readiness: NONCE, offline, and online",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:08.8584378+00:00",
+    "updatedAt": "2026-10-17T14:25:08.8584780+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Given a turn scope, a range scope, and a session scope, when each is admitted, then the members are that turn, every turn from start to end inclusive in session order, and every turn of the session at admission (`ScopeResolutionTurnRangeAndSessionMembers`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Given a session scope submitted from a turn of that session, when admitted, then the submitting turn is not a member and `excludedSubmittingTurn` is true; given a turn or range scope that contains the submitting turn, then 400 `hv_scope_includes_submitting_turn` (`ScopeResolutionSubmittingTurnExcludedOrRefused`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Given a session with `MaxTurnsPerRequest` plus one turns, when a session scope is submitted, then 400 `hv_scope_too_large` with the count and no request exists (`ScopeResolutionOverMaxRefusedNeverTruncated`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Given a turn added to the session after admission, when the request finalizes, then the turn is not a member (`SessionScopeSnapshotAtAdmissionLaterTurnNotMember`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC005",
+        "text": "Given a member turn with class `Chore` and hostile review `Unnecessary`, when the request finalizes, then the turn has an assessment and its hostile review holds the HV result (`UnnecessaryTurnIncludedAssessedAndReviewed`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC006",
+        "text": "Given a range whose start is after its end, an endpoint outside the session, or an unknown session, when submitted, then 400 `hv_scope_invalid` naming the field (`ScopeResolutionInvalidRangeOrSession400`).",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Submission scopes and snapshot membership. Sources: S-03, S-09, S-11, R-05, R-26. Use cases: UC-HV-03.",
+    "id": "FR-MCP-HVPIPE-004",
+    "title": "Submission scopes and snapshot membership",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:08.8601642+00:00",
+    "updatedAt": "2026-10-17T14:25:08.8601959+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Given members that are not terminal, under review, and already reviewed, when submitted, then 409 with the first code of that order and `details` listing every affected turn of every kind (`AdmissionRefusalListsEveryAffectedTurn`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Given two concurrent submissions over overlapping turns, when both run, then exactly one is admitted and the other is refused `hv_turns_pending`, on three providers (`AdmissionConcurrentOverlapOneWinsThreeProviders`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Given no eligible reviewer, when submitted, then 409 `hv_no_reviewer_available` with every reviewer's enabled flag, readiness, reason, and open incident, and no request exists (`AdmissionNoEligibleReviewer409WithReviewerContext`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Given that refusal through the plugin verb, when the model receives it, then the report carries the reviewer statuses, the open incidents, and the NONCE remedy text (`HvSubmitVerbNoReviewerAddsContext`, Pester).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC005",
+        "text": "Given the same idempotency key and inputs, when submitted twice, then the second returns 200 with the stored request; with other inputs, 409 `conflict` with `retryable: false` (`SubmitIdempotencyKeyReplayAndReuse`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC006",
+        "text": "Given any submission surface, when a caller asks to re-review, then no force or re-review parameter exists in any request shape (`SubmitRequestShapeHasNoForceFlag`).",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Admission eligibility and refusal with context. Sources: S-16, S-20, R-05, R-27. Use cases: UC-HV-03, UC-HV-12.",
+    "id": "FR-MCP-HVPIPE-005",
+    "title": "Admission eligibility and refusal with context",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:08.8615054+00:00",
+    "updatedAt": "2026-10-17T14:25:08.8615371+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Given a Markdown or YAML context naming FR, TR, and TEST ids, acceptance-criterion forms, and a use case, when admitted, then each reference is stored in order of first appearance without duplicates, resolved against the effective requirements and use cases, and listed in the brief (`RequirementReferenceExtractorFindsResolvesAndOrders`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Given a reference that resolves to nothing, when admitted, then it is listed unresolved and the request is admitted (`RequirementReferenceUnresolvedListedNeverRefused`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Given a context over 65536 characters or an unknown format, when submitted, then 400 `validation_error` naming the field (`SubmitContextTooLongOrUnknownFormat400`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Given a context holding a secret, when the brief is built, then the secret is redacted in the brief and the stored context is returned redacted on every read surface (`ContextSecretRedactedInBriefAndReads`).",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Request context and requirement references. Sources: S-14, R-23. Use cases: UC-HV-03.",
+    "id": "FR-MCP-HVPIPE-006",
+    "title": "Request context and requirement references",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:08.8625235+00:00",
+    "updatedAt": "2026-10-17T14:25:08.8625534+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Given a submission, when it commits, then the worker is woken and claims it without a manual trigger, and when the wake-up is lost (a crash after the commit, W-01) the next poll claims it (`SubmitWakesWorkerAutoStart`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Given two workers claiming at once, when both run, then exactly one run is claimed per request, on three providers (W-11, `ClaimConcurrentWorkersOneRunPerRequestThreeProviders`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Given a run whose lease expired before its process started, while it ran, or after its process exited but before its close committed (W-02, W-03, W-04), when the sweep runs, then the run is `Abandoned`, its fence token is incremented, its output stays stored as evidence (L-02), and the request is `Queued` with attempts left; on its last counted attempt it is `Failed`, and with a cancel requested it is `Canceled`, each ended request with its turns `None`, its `Pending` responses `Closed` with `request_ended`, and `hv_failed` or `hv_canceled` appended, exactly as after FailHvRunCommand (`LeaseExpiryAbandonsFencesAndRequeues`, `LeaseExpiryEndsRequestLikeFailedRun`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Given a worker whose lease was taken over, when it appends, heartbeats, closes, or fails, then each answers `stale_fence` and nothing changes (`StaleFenceEveryWorkerWriteRefusedNothingChanged`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC005",
+        "text": "Given a request `Finalizing` when the server restarted (W-05), when the sweep runs, then FinalizeHvRequestCommand finalizes it once (`SweepFinalizesFinalizingRequestOnce`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC006",
+        "text": "Given a graceful shutdown during a run, when the worker stops, then the run ends `worker_shutdown`, no incident exists, the reviewer is unchanged, and the attempt is not counted (`GracefulShutdownNotCountedNoIncident`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC007",
+        "text": "Given two registered workspaces, each with queued requests, when each workspace's worker claims, then no run or request crosses workspaces (`WorkerClaimsOnlyItsWorkspace`).",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Durable scheduling: queue, leases, fences, and restart safety. Sources: S-17, S-24, handoff requirement 10, R-07, R-13. Use cases: UC-HV-04, UC-HV-09.",
+    "id": "FR-MCP-HVPIPE-007",
+    "title": "Durable scheduling: queue, leases, fences, and restart safety",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:08.8642256+00:00",
+    "updatedAt": "2026-10-17T14:25:08.8642569+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Given a reviewer that writes lines over time, when it runs, then every line is appended within `OutputFlushInterval` of being written, in order (`OutputLinesAppendedWithinFlushIntervalInOrder`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Given a buffer reaching `OutputFlushBytes`, when the next line arrives, then the buffer is appended at once (`OutputFlushedAtByteThreshold`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Given a scripted fake reviewer that writes one line and then blocks on a gate the test controls, when the test reads the run's output stream, then the line arrives while the gate is closed and the process is still running (operator-confirmed P8, `LiveOutputLineObservableBeforeReviewerExits`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Given a reviewer running longer than any interval the configuration names, when nothing else happens, then no unit or process ends it (`ReviewerRunHasNoTimeLimit`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC005",
+        "text": "Given a `Queued` request, when canceled, then it is `Canceled`, its turns are `None`, and `hv_canceled` is appended; given a `Running` request, then it becomes `CancelRequested`, and at the next heartbeat the process is stopped and the request is `Canceled` (`CancelQueuedImmediateRunningAtNextHeartbeat`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC006",
+        "text": "Given a cancel racing a finalization, a claim, or a close of one request (W-10), when both run, then exactly one commits and the other sees its state, on three providers (`CancelVersusFinalizeOneCommitsThreeProviders`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC007",
+        "text": "Given a `Finalizing`, `Completed`, or `Failed` request, when canceled, then 409 `hv_request_not_cancelable` (`CancelTerminalOrFinalizing409`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC008",
+        "text": "Given an interactive session of a reviewer's agent live in the workspace, when a review run and a probe run of that reviewer start and end, then the interactive session's plugin state files and its session-log session are byte-for-byte unchanged, and the reviewer's turn is in a session of its own (H1 Pester per plugin host, and the live check: `ReviewerRunLeavesSameAgentLiveSessionUnchanged`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC009",
+        "text": "Given each adapter's launch and a reviewer told to create or change a workspace file, when the run ends, then the attempt was refused or the tool was never offered, and the workspace tree outside the plugin's own host-session state is unchanged (H1, per adapter, with the probe streams of 2026-10-16 as fixtures: `ReviewerRunCannotChangeWorkspaceFilesPerAdapter`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC010",
+        "text": "Given a server-launched reviewer whose host enforces the foundation's Stop gate, when it has emitted its verdict record, then its own `Chore` turn is closed through the completion gate and the process exits on its own, never held open by the gate (H1 Pester per host and the live check: `ReviewerClosesOwnTurnAndExitsUnderStopGate`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC011",
+        "text": "Given a scripted fake reviewer that starts a child process which keeps the reviewer's output pipes open, when its run is canceled, its fence goes stale, or the ledger fails, and also when the reviewer's root process exits on its own first, then the reviewer and every descendant are ended, the output is read to its end, and the attempt ends with no process left running (H3: `ReviewerStopEndsWholeProcessTree`).",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Execution lifecycle: true live output, heartbeats, no time limit, cancellation. Sources: S-18, S-22, P-02, R-11, R-12, R-28. Use cases: UC-HV-04, UC-HV-08.",
+    "id": "FR-MCP-HVPIPE-008",
+    "title": "Execution lifecycle: true live output, heartbeats, no time limit, cancellation",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:08.8670100+00:00",
+    "updatedAt": "2026-10-17T14:25:08.8670428+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Given a reviewer-attributable failure, when recorded, then the reviewer is `Offline` with the code and incident, and an incident is `Pending` with `dedupeKey` `hv-reviewer-<reviewerId>-<code>` (`ReviewerFailureOfflineWithIncident`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Given a pending incident, when filed, then the triage service receives its `dedupeKey` and the incident records the report and group ids (`IncidentFiledThroughTriageWithDedupeKey`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Given the same failure twice, or one filing retried after triage accepted it but before its report id was recorded (W-09, L-03), when both are filed, then triage groups them in one group (`RepeatedFailureSameTriageGroup`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Given triage unreachable, or a crash after the incident committed and before its filing (W-08), when filing, then the incident stays `Pending` with the error and the next sweep files it (`IncidentFilingRetriedUntilFiled`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC005",
+        "text": "Given attempts spent, when the last attempt fails, then the request is `Failed` with `attempts_exhausted`, its turns are `None`, and `hv_failed` is appended (`AttemptsExhaustedRequestFailedTurnsReleased`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC006",
+        "text": "Given a server-attributable failure (`evidence_corrupt`, `snapshot_changed`, `reviewer_not_independent`), when recorded, then an incident with `hv-server-<code>` exists and the reviewer is unchanged (`ServerFailureIncidentReviewerUnchanged`).",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Execution failures: incidents through triage, offline, retry bound. Sources: S-15, S-26, R-17. Use cases: UC-HV-09.",
+    "id": "FR-MCP-HVPIPE-009",
+    "title": "Execution failures: incidents through triage, offline, retry bound",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:08.8685943+00:00",
+    "updatedAt": "2026-10-17T14:25:08.8686352+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Given a log with one assessment per member, one holistic record, and one verdict record last, when finalized, then each requested turn has its score and the holistic evaluation is stored separately (`FinalizeStoresPerTurnScoresAndSeparateHolistic`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Given a log missing an assessment, with two verdict records, without a holistic record, or with a finding without remediation, when finalized, then `reviewer_output_invalid` and nothing is committed (`FinalizeIncompleteOutputRefusedNothingCommitted`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Given a holistic correctness of 0.97 with every turn AGREE, when finalized, then the overall verdict is DISAGREE (`OverallVerdictHolisticBelow098Disagree`); given an AGREE verdict with a FAIL finding, then `reviewer_output_invalid` (`VerdictAgreeWithFailFindingRefused`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Given turn scores whose mean differs from the holistic scores, when finalized, then the stored holistic scores are the reviewer's own, never recomputed (`HolisticScoresNeverComputedFromTurnScores`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC005",
+        "text": "Given a record the reviewer forged as `hv_provenance` or `hv_brief` inside its message text, when the log is read, then it is not accepted as a worker record (`ForgedWorkerRecordInMessageTextIgnored`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC006",
+        "text": "Given native streams of each CLI, recorded from the probe runs of 2026-10-16, in which a record is split across events (Grok's per-token text), repeated in a delta and in the whole message (Copilot), inside a fenced block, or beside other text on its line, when the records are extracted as the lines arrive and again over the stored log, then each record is extracted exactly once, the line with other text is free text, and both extractions return the same records (`ReviewerRecordsExtractedOnceFromAssembledMessagesPerCli`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC007",
+        "text": "Given a run that exits with code 0 and holds no reviewer records (an empty output, or a stream its CLI ended `cancelled`), when it closes, then a review fails with `reviewer_output_invalid`, the reviewer is `Offline` with an incident, and a probe fails with `probe_nonce_mismatch`; an exit code never stands in for a verdict (`ExitZeroWithoutReviewerRecordsIsNotAReview`).",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Reviewer output contract, per-turn and holistic evaluation. Sources: S-03, S-10, S-13, S-21, R-31. Use cases: UC-HV-05.",
+    "id": "FR-MCP-HVPIPE-010",
+    "title": "Reviewer output contract, per-turn and holistic evaluation",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:08.8708855+00:00",
+    "updatedAt": "2026-10-17T14:25:08.8709165+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Given an accepted request and a run's lines, when stored, then every payload is a GZIP member that decompresses to the exact bytes, and no uncompressed copy is stored (`EvidenceStoredGzipOnlyRoundTripExact`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Given a chunk whose bytes, SHA-256, or chain hash was altered, or a missing sequence, when finalized, then `evidence_corrupt` and nothing is committed (`FinalizeCorruptOrTruncatedLogRefused`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Given a compression whose round trip fails, when admitted or appended, then 500 `evidence_corrupt` and nothing is saved (`CompressionRoundTripFailureNothingSaved`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Given a finalized run, when the response log is downloaded compressed and read back as one GZIP stream (VI-07), then decompression yields every stored line in order and its SHA-256 chain equals the run's (`ResponseLogDownloadMultiMemberGzipMatchesChain`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC005",
+        "text": "Given a reviewer output of any size, when appended, then no limit truncates it (`OutputHasNoSizeLimitNeverTruncated`).",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Evidence completeness, GZIP at rest, round-trip verification. Sources: S-13, S-30, R-12, R-14. Use cases: UC-HV-04, UC-HV-05, UC-HV-10.",
+    "id": "FR-MCP-HVPIPE-011",
+    "title": "Evidence completeness, GZIP at rest, round-trip verification",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:08.8720305+00:00",
+    "updatedAt": "2026-10-17T14:25:08.8720604+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Given a fault injected after each write of CommitFinalResult (W-06), when finalization runs, then nothing of the result is visible after the rollback, the request stays `Finalizing`, and the next sweep finalizes it, on three providers (`FinalizeFaultAfterEachWriteNothingVisibleThreeProviders`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Given an admitted turn, when any turn write, review write, review reset, section write, dialog append, title change, or session replace or delete targets it from any origin but `HvFinalization`, then 409 `turn_immutable` with `hv_pending`, and after finalization with `hv_final` (`FrozenTurnEveryWritePathRefused`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Given a canceled or failed request, when it ends, then its turns are writable again (`EndedRequestReleasesTurns`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Given a request finalized, when FinalizeHvRequestCommand runs again, then it returns the stored outcome and writes nothing (`FinalizeTwiceSecondReturnsStoredNothingWritten`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC005",
+        "text": "Given a member turn changed by a path that bypasses the guard (a fixture writing the store directly), when finalized, then V-2 refuses with `snapshot_changed` (`FinalizeSnapshotChangedRefused`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC006",
+        "text": "Given a `Code` turn completed with hostile review `Other` \"HV requested\", when its HV finalizes, then its hostile review holds the HV result and its status stays `completed` (`FinalizeReplacesOtherPendingHvReviewKeepsStatus`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC007",
+        "text": "Given turns whose hostile review is `Pass` or `Fail`, `Other`, or absent when the A-11 migration adds the HV columns, when the migration runs, then exactly the `Pass` and `Fail` turns are `Final` with no request id, every write to them is refused with 409 `turn_immutable` `hv_final`, and an HV over them is refused with 409 `hv_turns_already_reviewed`, on three providers (HvStorageSchema: `MigrationMarksHvReviewedTurnsFinalThreeProviders`).",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Atomic finalization and turn finality. Sources: S-06, S-07, S-23, R-04, R-15. Use cases: UC-HV-05, UC-HV-12.",
+    "id": "FR-MCP-HVPIPE-012",
+    "title": "Atomic finalization and turn finality",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:08.8736455+00:00",
+    "updatedAt": "2026-10-17T14:25:08.8736753+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Given one turn with no agent review, one with `Unstarted`, one with `Running`, one with `Pass` at 1.0, one with `Fail` at 0.1, and one with `Other`, all otherwise equal, when each is submitted, then admission, assignment, and the brief bytes are identical (`SelfReviewVariedAdmissionAssignmentAndBriefIdentical`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Given those turns reviewed with the same reviewer output, when finalized, then the stored hostile reviews and verdicts are identical (`SelfReviewVariedVerdictIdentical`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Given the HostileValidation assemblies, when scanned, then no HV unit, policy, or process reads an `agentReview` field (architecture test `HostileValidationNeverReadsAgentReview`).",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Self-review independence. Sources: S-28, R-21. Use cases: UC-HV-03, UC-HV-05.",
+    "id": "FR-MCP-HVPIPE-013",
+    "title": "Self-review independence",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:08.8745045+00:00",
+    "updatedAt": "2026-10-17T14:25:08.8745335+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Given member turns naming TODOs, when an HV finalizes AGREE or DISAGREE, then every TODO is byte-for-byte unchanged (`FinalizeNeverChangesTodos`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Given the HostileValidation assemblies, when scanned, then none references the TODO write services (architecture test `HostileValidationHasNoTodoWriteDependency`).",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Verdict only: no TODO automation. Sources: S-25, R-22. Use cases: UC-HV-05, UC-HV-12.",
+    "id": "FR-MCP-HVPIPE-014",
+    "title": "Verdict only: no TODO automation",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:08.8752503+00:00",
+    "updatedAt": "2026-10-17T14:25:08.8752796+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Given a completed request, when its result is read, then it holds the complete accepted request, every log record in order, every requested turn with its score, the holistic evaluation, and every FAIL and UNKNOWN with remediation (`ResultDocumentCompleteAndDelineated`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Given a request not completed, when its result is read, then 409 `hv_result_not_ready` (`ResultBeforeCompletion409`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Given running requests, when queried with `status` `Running`, then each has its reviewer, progress, ETA status, and, when read singly, its last 20 lines (`RunningRequestsQueryAndLastOutput`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Given the REST, MCP, client, REPL, and Director surfaces, when each submits, reads, queries, cancels, and retrieves, then each returns the same shapes and codes (`HvSurfacesParityGoldenContract`).",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Results, evidence retrieval, and the standard result document. Sources: S-13, S-18, S-21. Use cases: UC-HV-06, UC-HV-10.",
+    "id": "FR-MCP-HVPIPE-015",
+    "title": "Results, evidence retrieval, and the standard result document",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:08.8762526+00:00",
+    "updatedAt": "2026-10-17T14:25:08.8762823+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Given a stream attached mid-run, when the caller reconnects with its last event id, then it receives exactly the missed chunks and then live chunks (`OutputStreamReconnectExactlyMissedEvents`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Given a progress record with a percentage and an ETA, when read, then `etaStatus` is `Reported` with those values; given none, then `Unknown` with no number (`EtaReportedOrUnknownNeverEstimated`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Given a second attempt, when streamed, then the stream continues with the new run's events (`OutputStreamContinuesAcrossAttempts`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Given a malformed `Last-Event-ID`, when attaching, then 400 `validation_error` (`OutputStreamMalformedLastEventId400`).",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Live output stream, progress, and honest ETA. Sources: S-18, S-22, P-03, R-12, R-18. Use cases: UC-HV-06.",
+    "id": "FR-MCP-HVPIPE-016",
+    "title": "Live output stream, progress, and honest ETA",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:08.8771671+00:00",
+    "updatedAt": "2026-10-17T14:25:08.8771981+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Given a state change and its notification in one transaction, when the transaction rolls back, then no notification is visible; when it commits, the notification is visible with the next sequence and no gap (`NotificationOutboxCommittedWithChangeGapFree`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Given a notification stream that drops, or a server that stops after a commit and before any stream delivered its notification (W-07), when the stream reconnects with its last sequence, then it receives every later notification exactly once (`NotificationStreamReconnectNoLossNoDuplicate`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Given the plugin watcher and a completion of a request its host session submitted, when the next prompt arrives, then the model's context holds the completion once (`HvWatcherDeliversOwnCompletionOnce`, Pester).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Given a completion of another host session's request, when the watcher receives it, then it records the sequence and inboxes nothing (`HvWatcherIgnoresOtherSessionsRequests`, Pester).",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Completion notification stream. Sources: S-19, R-16, R-30. Use cases: UC-HV-07.",
+    "id": "FR-MCP-HVPIPE-017",
+    "title": "Completion notification stream",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:08.8782289+00:00",
+    "updatedAt": "2026-10-17T14:25:08.8782585+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Given every HV command, when it commits, then a ledger row exists for each entity it changed (`EveryHvMutationHasLedgerRows`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Given the ledger unwritable, when any HV command runs, then 503 `audit_unavailable` and nothing is written (`AuditUnavailableEveryHvCommandRefusedNothingWritten`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Given an evidence read (result, evidence, output stream, last output), when it returns bytes, then a `read` ledger row exists, and with the ledger unwritable the read is refused (`EvidenceReadsAuditedOrRefused`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Given the ledger unwritable during a run (W-12), when the worker appends, then it stops the reviewer and writes nothing, and the lease expiry recovers the request later (`AuditFailureDuringRunHardStop`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC005",
+        "text": "Given evidence written (an appended chunk and a stored evidence item) and then removed, when the removal commits, then every ledger row written before it is byte-for-byte unchanged, the ledger still holds the history of those writes, the removal adds its own rows, and an architecture scan finds no HV unit or process that updates or deletes a ledger row (I-13, `EvidenceRemovalLeavesAuditLedgerUnchanged`).",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Audit participation and hard stop. Sources: S-29, R-19. Use cases: Every UC.",
+    "id": "FR-MCP-HVPIPE-018",
+    "title": "Audit participation and hard stop",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:08.8794367+00:00",
+    "updatedAt": "2026-10-17T14:25:08.8794667+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Given evidence of any age, when any unit or process other than RemoveHvEvidenceCommand runs, then no evidence or chunk payload is removed (`NoAutomaticEvidenceRemoval`, with an architecture scan for payload writes).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Given a terminal request, when its evidence is removed with a reason and a name, then the payloads in the evidence tables are null, every audit ledger row is unchanged (I-13), the hashes, sizes, result rows, findings, and turn reviews stay, and the removal is audited (`RemoveEvidenceKeepsResultAndHashes`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Given an active request, when removal is asked, then 409 `hv_request_active` (`RemoveEvidenceActiveRequest409`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Given removed evidence, when read, then 410 `hv_evidence_removed` with the kept hashes and sizes (`RemovedEvidenceRead410WithHashes`).",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Retention until explicit removal. Sources: S-29, R-20. Use cases: UC-HV-11.",
+    "id": "FR-MCP-HVPIPE-019",
+    "title": "Retention until explicit removal",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:08.8804011+00:00",
+    "updatedAt": "2026-10-17T14:25:08.8804308+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Given the golden contract of the public units, when each surface runs it, then the shapes, statuses, and codes match (`HvSurfacesParityGoldenContract`, shared with FR-MCP-HVPIPE-015-AC004).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Given the internal units, when the routes, tools, client, and REPL are scanned, then none exposes them (`HvInternalUnitsHaveNoPublicSurface`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Given the plugin's submit verb, when it runs, then it binds the submitting turn and builds a stable idempotency key for the same call (`HvSubmitVerbBindsTurnStableKey`, Pester).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Given a retryable answer to the plugin's submit verb, when it returns, then it reports `retryable: true` with exit 1 and writes no failsafe record (`HvSubmitVerbRetryableNotQueued`, Pester).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC005",
+        "text": "Given the REPL client mutation policy, when it classifies `hostileValidation`, then writes are service-gated and reads are allowed (`ReplPolicyHostileValidationClassification`).",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Surface parity: REST, MCP, client, REPL, Director, and plugin. Sources: S-02, S-16, S-19, R-29, R-30. Use cases: Every UC.",
+    "id": "FR-MCP-HVPIPE-020",
+    "title": "Surface parity: REST, MCP, client, REPL, Director, and plugin",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:08.8815009+00:00",
+    "updatedAt": "2026-10-17T14:25:08.8815313+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Given member turns with agent responses and Mode not `Off`, when finalized, then each pending response gets one model grade from the run's reviewer and its trust decision, in the finalization transaction (`FinalizeGradesLinkedResponsesInSameTransaction`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Given Mode `Off` at finalization, when finalized, then the linked responses are `NotGraded` with `agent_context_disabled` and the turns are finalized (`FinalizeModeOffResponsesNotGraded`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Given a response rejected or superseded while pending, when the transition commits, then its item is `Closed` with that reason and the request's state is unchanged (`ResponseTransitionClosesHvItemOnly`).",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Given the public model-grade route and tool of the foundation, when the surfaces are scanned, then neither exists (`ModelGradeHasNoPublicSurface`).",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Response grading and trust through finalization. Sources: the foundation's Phase C, R-02, R-03, A-04, A-05. Use cases: UC-HV-05.",
+    "id": "FR-MCP-HVPIPE-021",
+    "title": "Response grading and trust through finalization",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:08.8826843+00:00",
+    "updatedAt": "2026-10-17T14:25:08.8827235+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "The units, policies, processes, components, and entities named in this contract satisfy every acceptance criterion of FR-MCP-HVPIPE-001 (6 criteria), proven by TEST-MCP-HVPIPE-001.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Implementation contract of FR-MCP-HVPIPE-001: HostileValidationOptions, HvReviewer, ListHvReviewersQuery, GetHvReviewerQuery, UpdateHvReviewerCommand, IHvReviewerAdapter. Each named unit, policy, process, component, and entity is specified in docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md (sections 10 to 16).",
+    "id": "TR-MCP-HVPIPE-001",
+    "title": "Reviewer pool configuration and real-time management: implementation contract",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:12.9526121+00:00",
+    "subarea": "HVPIPE",
+    "updatedAt": "2026-10-17T14:25:12.9526394+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "The units, policies, processes, components, and entities named in this contract satisfy every acceptance criterion of FR-MCP-HVPIPE-002 (8 criteria), proven by TEST-MCP-HVPIPE-002.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Implementation contract of FR-MCP-HVPIPE-002: AgentIdentity, HvReviewerEligibility, RoundRobinAssignment, HvWorkspaceState. Each named unit, policy, process, component, and entity is specified in docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md (sections 10 to 16).",
+    "id": "TR-MCP-HVPIPE-002",
+    "title": "Identity normalization, submitter and author exclusion, and round-robin assignment: implementation contract",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:12.9531494+00:00",
+    "subarea": "HVPIPE",
+    "updatedAt": "2026-10-17T14:25:12.9531729+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "The units, policies, processes, components, and entities named in this contract satisfy every acceptance criterion of FR-MCP-HVPIPE-003 (6 criteria), proven by TEST-MCP-HVPIPE-003.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Implementation contract of FR-MCP-HVPIPE-003: StartHvReviewerNonceCommand, ClaimHvRunCommand (probe), CloseHvRunOutputCommand, ReadinessProbeVerdict. Each named unit, policy, process, component, and entity is specified in docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md (sections 10 to 16).",
+    "id": "TR-MCP-HVPIPE-003",
+    "title": "Reviewer readiness: NONCE, offline, and online: implementation contract",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:12.9536888+00:00",
+    "subarea": "HVPIPE",
+    "updatedAt": "2026-10-17T14:25:12.9537127+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "The units, policies, processes, components, and entities named in this contract satisfy every acceptance criterion of FR-MCP-HVPIPE-004 (6 criteria), proven by TEST-MCP-HVPIPE-004.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Implementation contract of FR-MCP-HVPIPE-004: SubmitHvRequestCommand, HvScopeResolution, TurnSnapshotBuilder, HvRequestTurn. Each named unit, policy, process, component, and entity is specified in docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md (sections 10 to 16).",
+    "id": "TR-MCP-HVPIPE-004",
+    "title": "Submission scopes and snapshot membership: implementation contract",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:12.9542217+00:00",
+    "subarea": "HVPIPE",
+    "updatedAt": "2026-10-17T14:25:12.9542454+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "The units, policies, processes, components, and entities named in this contract satisfy every acceptance criterion of FR-MCP-HVPIPE-005 (6 criteria), proven by TEST-MCP-HVPIPE-005.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Implementation contract of FR-MCP-HVPIPE-005: HvAdmissionEligibility, RoundRobinAssignment, SubmitHvFromPlugin. Each named unit, policy, process, component, and entity is specified in docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md (sections 10 to 16).",
+    "id": "TR-MCP-HVPIPE-005",
+    "title": "Admission eligibility and refusal with context: implementation contract",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:12.9547377+00:00",
+    "subarea": "HVPIPE",
+    "updatedAt": "2026-10-17T14:25:12.9547613+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "The units, policies, processes, components, and entities named in this contract satisfy every acceptance criterion of FR-MCP-HVPIPE-006 (4 criteria), proven by TEST-MCP-HVPIPE-006.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Implementation contract of FR-MCP-HVPIPE-006: RequirementReferenceExtractor, HvRequestRequirementRef. Each named unit, policy, process, component, and entity is specified in docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md (sections 10 to 16).",
+    "id": "TR-MCP-HVPIPE-006",
+    "title": "Request context and requirement references: implementation contract",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:12.9552663+00:00",
+    "subarea": "HVPIPE",
+    "updatedAt": "2026-10-17T14:25:12.9552899+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "The units, policies, processes, components, and entities named in this contract satisfy every acceptance criterion of FR-MCP-HVPIPE-007 (7 criteria), proven by TEST-MCP-HVPIPE-007.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Implementation contract of FR-MCP-HVPIPE-007: ClaimHvRunCommand, RecordHvRunHeartbeatCommand, ExpireHvRunLeasesCommand, FencedLease, HvRetryDecision, HvWorkerHost. Each named unit, policy, process, component, and entity is specified in docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md (sections 10 to 16).",
+    "id": "TR-MCP-HVPIPE-007",
+    "title": "Durable scheduling: queue, leases, fences, and restart safety: implementation contract",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:12.9558109+00:00",
+    "subarea": "HVPIPE",
+    "updatedAt": "2026-10-17T14:25:12.9558345+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "The units, policies, processes, components, and entities named in this contract satisfy every acceptance criterion of FR-MCP-HVPIPE-008 (11 criteria), proven by TEST-MCP-HVPIPE-008.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Implementation contract of FR-MCP-HVPIPE-008: RunReviewerProcess, StreamReviewerOutput, IHvReviewerAdapter live lines and launch barrier, AppendHvRunOutputCommand, CancelHvRequestCommand. Each named unit, policy, process, component, and entity is specified in docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md (sections 10 to 16).",
+    "id": "TR-MCP-HVPIPE-008",
+    "title": "Execution lifecycle: true live output, heartbeats, no time limit, cancellation: implementation contract",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:12.9563875+00:00",
+    "subarea": "HVPIPE",
+    "updatedAt": "2026-10-17T14:25:12.9564382+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "The units, policies, processes, components, and entities named in this contract satisfy every acceptance criterion of FR-MCP-HVPIPE-009 (6 criteria), proven by TEST-MCP-HVPIPE-009.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Implementation contract of FR-MCP-HVPIPE-009: FailHvRunCommand, FileHvIncidentCommand, HvIncident, HvRetryDecision. Each named unit, policy, process, component, and entity is specified in docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md (sections 10 to 16).",
+    "id": "TR-MCP-HVPIPE-009",
+    "title": "Execution failures: incidents through triage, offline, retry bound: implementation contract",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:12.9571111+00:00",
+    "subarea": "HVPIPE",
+    "updatedAt": "2026-10-17T14:25:12.9571419+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "The units, policies, processes, components, and entities named in this contract satisfy every acceptance criterion of FR-MCP-HVPIPE-010 (7 criteria), proven by TEST-MCP-HVPIPE-010.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Implementation contract of FR-MCP-HVPIPE-010: reviewer contract v1, IHvReviewerAdapter ExtractReviewerRecords, HvFinalVerification V-4 and V-8, HvTurnAssessment, HvFinding. Each named unit, policy, process, component, and entity is specified in docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md (sections 10 to 16).",
+    "id": "TR-MCP-HVPIPE-010",
+    "title": "Reviewer output contract, per-turn and holistic evaluation: implementation contract",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:12.9578378+00:00",
+    "subarea": "HVPIPE",
+    "updatedAt": "2026-10-17T14:25:12.9578683+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "The units, policies, processes, components, and entities named in this contract satisfy every acceptance criterion of FR-MCP-HVPIPE-011 (5 criteria), proven by TEST-MCP-HVPIPE-011.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Implementation contract of FR-MCP-HVPIPE-011: GzipCodec, HvEvidence, HvRunOutputChunk, V-1. Each named unit, policy, process, component, and entity is specified in docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md (sections 10 to 16).",
+    "id": "TR-MCP-HVPIPE-011",
+    "title": "Evidence completeness, GZIP at rest, round-trip verification: implementation contract",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:12.9585452+00:00",
+    "subarea": "HVPIPE",
+    "updatedAt": "2026-10-17T14:25:12.9585761+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "The units, policies, processes, components, and entities named in this contract satisfy every acceptance criterion of FR-MCP-HVPIPE-012 (7 criteria), proven by TEST-MCP-HVPIPE-012.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Implementation contract of FR-MCP-HVPIPE-012: FinalizeHvRequestCommand, CommitFinalResult, HvTurnFreeze, A-07, A-08, A-11. Each named unit, policy, process, component, and entity is specified in docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md (sections 10 to 16).",
+    "id": "TR-MCP-HVPIPE-012",
+    "title": "Atomic finalization and turn finality: implementation contract",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:12.9592585+00:00",
+    "subarea": "HVPIPE",
+    "updatedAt": "2026-10-17T14:25:12.9592892+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "The units, policies, processes, components, and entities named in this contract satisfy every acceptance criterion of FR-MCP-HVPIPE-013 (3 criteria), proven by TEST-MCP-HVPIPE-013.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Implementation contract of FR-MCP-HVPIPE-013: HvAdmissionEligibility, TurnSnapshotBuilder, HvFinalVerification. Each named unit, policy, process, component, and entity is specified in docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md (sections 10 to 16).",
+    "id": "TR-MCP-HVPIPE-013",
+    "title": "Self-review independence: implementation contract",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:12.9599652+00:00",
+    "subarea": "HVPIPE",
+    "updatedAt": "2026-10-17T14:25:12.9599962+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "The units, policies, processes, components, and entities named in this contract satisfy every acceptance criterion of FR-MCP-HVPIPE-014 (2 criteria), proven by TEST-MCP-HVPIPE-014.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Implementation contract of FR-MCP-HVPIPE-014: FinalizeHvRequestCommand. Each named unit, policy, process, component, and entity is specified in docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md (sections 10 to 16).",
+    "id": "TR-MCP-HVPIPE-014",
+    "title": "Verdict only: no TODO automation: implementation contract",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:12.9608847+00:00",
+    "subarea": "HVPIPE",
+    "updatedAt": "2026-10-17T14:25:12.9609328+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "The units, policies, processes, components, and entities named in this contract satisfy every acceptance criterion of FR-MCP-HVPIPE-015 (4 criteria), proven by TEST-MCP-HVPIPE-015.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Implementation contract of FR-MCP-HVPIPE-015: GetHvRequestQuery, QueryHvRequestsQuery, GetHvResultQuery, GetHvEvidenceQuery, HvResultDocument. Each named unit, policy, process, component, and entity is specified in docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md (sections 10 to 16).",
+    "id": "TR-MCP-HVPIPE-015",
+    "title": "Results, evidence retrieval, and the standard result document: implementation contract",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:12.9617492+00:00",
+    "subarea": "HVPIPE",
+    "updatedAt": "2026-10-17T14:25:12.9617857+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "The units, policies, processes, components, and entities named in this contract satisfy every acceptance criterion of FR-MCP-HVPIPE-016 (4 criteria), proven by TEST-MCP-HVPIPE-016.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Implementation contract of FR-MCP-HVPIPE-016: StreamHvRunOutputQuery, OrderedEventReplay. Each named unit, policy, process, component, and entity is specified in docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md (sections 10 to 16).",
+    "id": "TR-MCP-HVPIPE-016",
+    "title": "Live output stream, progress, and honest ETA: implementation contract",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:12.9625969+00:00",
+    "subarea": "HVPIPE",
+    "updatedAt": "2026-10-17T14:25:12.9626225+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "The units, policies, processes, components, and entities named in this contract satisfy every acceptance criterion of FR-MCP-HVPIPE-017 (4 criteria), proven by TEST-MCP-HVPIPE-017.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Implementation contract of FR-MCP-HVPIPE-017: NotificationOutbox, StreamHvNotificationsQuery, QueryHvNotificationsQuery, WatchHvNotifications. Each named unit, policy, process, component, and entity is specified in docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md (sections 10 to 16).",
+    "id": "TR-MCP-HVPIPE-017",
+    "title": "Completion notification stream: implementation contract",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:12.9631299+00:00",
+    "subarea": "HVPIPE",
+    "updatedAt": "2026-10-17T14:25:12.9631545+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "The units, policies, processes, components, and entities named in this contract satisfy every acceptance criterion of FR-MCP-HVPIPE-018 (5 criteria), proven by TEST-MCP-HVPIPE-018.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Implementation contract of FR-MCP-HVPIPE-018: AuditLedgerGuard, the HV entities' `IsDeleted`. Each named unit, policy, process, component, and entity is specified in docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md (sections 10 to 16).",
+    "id": "TR-MCP-HVPIPE-018",
+    "title": "Audit participation and hard stop: implementation contract",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:12.9636416+00:00",
+    "subarea": "HVPIPE",
+    "updatedAt": "2026-10-17T14:25:12.9636652+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "The units, policies, processes, components, and entities named in this contract satisfy every acceptance criterion of FR-MCP-HVPIPE-019 (4 criteria), proven by TEST-MCP-HVPIPE-019.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Implementation contract of FR-MCP-HVPIPE-019: RemoveHvEvidenceCommand. Each named unit, policy, process, component, and entity is specified in docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md (sections 10 to 16).",
+    "id": "TR-MCP-HVPIPE-019",
+    "title": "Retention until explicit removal: implementation contract",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:12.9641345+00:00",
+    "subarea": "HVPIPE",
+    "updatedAt": "2026-10-17T14:25:12.9641574+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "The units, policies, processes, components, and entities named in this contract satisfy every acceptance criterion of FR-MCP-HVPIPE-020 (5 criteria), proven by TEST-MCP-HVPIPE-020.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Implementation contract of FR-MCP-HVPIPE-020: HostileValidationController, FwhMcpTools.HostileValidation, HostileValidationClient, HostileValidationWorkflow, HostileValidationDirectorCommands, the plugin verbs and watcher. Each named unit, policy, process, component, and entity is specified in docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md (sections 10 to 16).",
+    "id": "TR-MCP-HVPIPE-020",
+    "title": "Surface parity: REST, MCP, client, REPL, Director, and plugin: implementation contract",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:12.9647038+00:00",
+    "subarea": "HVPIPE",
+    "updatedAt": "2026-10-17T14:25:12.9647266+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "The units, policies, processes, components, and entities named in this contract satisfy every acceptance criterion of FR-MCP-HVPIPE-021 (4 criteria), proven by TEST-MCP-HVPIPE-021.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Implementation contract of FR-MCP-HVPIPE-021: HvRequestResponse, FinalizeHvRequestCommand, RecordModelGradeCommand (amended). Each named unit, policy, process, component, and entity is specified in docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md (sections 10 to 16).",
+    "id": "TR-MCP-HVPIPE-021",
+    "title": "Response grading and trust through finalization: implementation contract",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:12.9652322+00:00",
+    "subarea": "HVPIPE",
+    "updatedAt": "2026-10-17T14:25:12.9652552+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-001-AC001: HostileValidationOptionsMissingUnknownOrDuplicateReviewerFailsStartup.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-001-AC002: ReviewerSeedingInsertsFiveOnceNeverOverwrites.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-001-AC003: ReviewerAdapterDefaultsToHighestEffortAndCliDefaultModel.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-001-AC004: UpdateReviewerStaleStateVersion409NothingChanged.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC005",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-001-AC005: UpdateReviewerLaunchChangeMakesUnverifiedAndNotifies.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC006",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-001-AC006: ReviewerSurfacesParityGoldenContract.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Named tests of FR-MCP-HVPIPE-001: HostileValidationOptionsMissingUnknownOrDuplicateReviewerFailsStartup; ReviewerSeedingInsertsFiveOnceNeverOverwrites; ReviewerAdapterDefaultsToHighestEffortAndCliDefaultModel; UpdateReviewerStaleStateVersion409NothingChanged; UpdateReviewerLaunchChangeMakesUnverifiedAndNotifies; ReviewerSurfacesParityGoldenContract.",
+    "id": "TEST-MCP-HVPIPE-001",
+    "title": "Reviewer pool configuration and real-time management: named tests",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:17.1716891+00:00",
+    "testType": "unit",
+    "updatedAt": "2026-10-17T14:25:17.1717127+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-002-AC001: AgentIdentityGoldenContractTests.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-002-AC002: SubmitterAliasesNeverAssignedClaudeFamily; FinalVerificationSubmitterReviewerRefusedNotIndependent.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-002-AC003: SubmitterExclusionUsesTurnAgentNeverFreeText.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-002-AC004: RoundRobinAssignsInPoolOrderAfterCursor.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC005",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-002-AC005: RoundRobinCursorSurvivesRestart.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC006",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-002-AC006: RoundRobinConcurrentSubmissionsConsecutiveReviewersThreeProviders.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC007",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-002-AC007: ClaimReassignsWhenAssigneeNoLongerEligible.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC008",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-002-AC008: AuthorAgentNeverAssignedAndRefusedByVerification.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Named tests of FR-MCP-HVPIPE-002: AgentIdentityGoldenContractTests; SubmitterAliasesNeverAssignedClaudeFamily; FinalVerificationSubmitterReviewerRefusedNotIndependent; SubmitterExclusionUsesTurnAgentNeverFreeText; RoundRobinAssignsInPoolOrderAfterCursor; RoundRobinCursorSurvivesRestart; RoundRobinConcurrentSubmissionsConsecutiveReviewersThreeProviders; ClaimReassignsWhenAssigneeNoLongerEligible; AuthorAgentNeverAssignedAndRefusedByVerification.",
+    "id": "TEST-MCP-HVPIPE-002",
+    "title": "Identity normalization, submitter and author exclusion, and round-robin assignment: named tests",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:17.1728223+00:00",
+    "testType": "unit",
+    "updatedAt": "2026-10-17T14:25:17.1728457+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-003-AC001: ReviewerBecomesOnlineOnlyByPassingProbe.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-003-AC002: ProbePassedReviewerOnlineResolvedModelAndEffort.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-003-AC003: ProbeFailuresOfflineWithCodeAndIncident.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-003-AC004: NonceRepeatNoSecondProbe.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC005",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-003-AC005: NonceDisabledReviewer409.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC006",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-003-AC006: WorkerStartupProbesUnverifiedEnabledReviewersOnly.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Named tests of FR-MCP-HVPIPE-003: ReviewerBecomesOnlineOnlyByPassingProbe; ProbePassedReviewerOnlineResolvedModelAndEffort; ProbeFailuresOfflineWithCodeAndIncident; NonceRepeatNoSecondProbe; NonceDisabledReviewer409; WorkerStartupProbesUnverifiedEnabledReviewersOnly.",
+    "id": "TEST-MCP-HVPIPE-003",
+    "title": "Reviewer readiness: NONCE, offline, and online: named tests",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:17.1737062+00:00",
+    "testType": "unit",
+    "updatedAt": "2026-10-17T14:25:17.1737330+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-004-AC001: ScopeResolutionTurnRangeAndSessionMembers.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-004-AC002: ScopeResolutionSubmittingTurnExcludedOrRefused.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-004-AC003: ScopeResolutionOverMaxRefusedNeverTruncated.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-004-AC004: SessionScopeSnapshotAtAdmissionLaterTurnNotMember.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC005",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-004-AC005: UnnecessaryTurnIncludedAssessedAndReviewed.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC006",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-004-AC006: ScopeResolutionInvalidRangeOrSession400.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Named tests of FR-MCP-HVPIPE-004: ScopeResolutionTurnRangeAndSessionMembers; ScopeResolutionSubmittingTurnExcludedOrRefused; ScopeResolutionOverMaxRefusedNeverTruncated; SessionScopeSnapshotAtAdmissionLaterTurnNotMember; UnnecessaryTurnIncludedAssessedAndReviewed; ScopeResolutionInvalidRangeOrSession400.",
+    "id": "TEST-MCP-HVPIPE-004",
+    "title": "Submission scopes and snapshot membership: named tests",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:17.1746124+00:00",
+    "testType": "unit",
+    "updatedAt": "2026-10-17T14:25:17.1746363+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-005-AC001: AdmissionRefusalListsEveryAffectedTurn.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-005-AC002: AdmissionConcurrentOverlapOneWinsThreeProviders.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-005-AC003: AdmissionNoEligibleReviewer409WithReviewerContext.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-005-AC004: HvSubmitVerbNoReviewerAddsContext.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC005",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-005-AC005: SubmitIdempotencyKeyReplayAndReuse.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC006",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-005-AC006: SubmitRequestShapeHasNoForceFlag.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Named tests of FR-MCP-HVPIPE-005: AdmissionRefusalListsEveryAffectedTurn; AdmissionConcurrentOverlapOneWinsThreeProviders; AdmissionNoEligibleReviewer409WithReviewerContext; HvSubmitVerbNoReviewerAddsContext; SubmitIdempotencyKeyReplayAndReuse; SubmitRequestShapeHasNoForceFlag.",
+    "id": "TEST-MCP-HVPIPE-005",
+    "title": "Admission eligibility and refusal with context: named tests",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:17.1754882+00:00",
+    "testType": "unit",
+    "updatedAt": "2026-10-17T14:25:17.1755118+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-006-AC001: RequirementReferenceExtractorFindsResolvesAndOrders.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-006-AC002: RequirementReferenceUnresolvedListedNeverRefused.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-006-AC003: SubmitContextTooLongOrUnknownFormat400.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-006-AC004: ContextSecretRedactedInBriefAndReads.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Named tests of FR-MCP-HVPIPE-006: RequirementReferenceExtractorFindsResolvesAndOrders; RequirementReferenceUnresolvedListedNeverRefused; SubmitContextTooLongOrUnknownFormat400; ContextSecretRedactedInBriefAndReads.",
+    "id": "TEST-MCP-HVPIPE-006",
+    "title": "Request context and requirement references: named tests",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:17.1761798+00:00",
+    "testType": "unit",
+    "updatedAt": "2026-10-17T14:25:17.1762105+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-007-AC001: SubmitWakesWorkerAutoStart.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-007-AC002: ClaimConcurrentWorkersOneRunPerRequestThreeProviders.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-007-AC003: LeaseExpiryAbandonsFencesAndRequeues; LeaseExpiryEndsRequestLikeFailedRun.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-007-AC004: StaleFenceEveryWorkerWriteRefusedNothingChanged.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC005",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-007-AC005: SweepFinalizesFinalizingRequestOnce.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC006",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-007-AC006: GracefulShutdownNotCountedNoIncident.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC007",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-007-AC007: WorkerClaimsOnlyItsWorkspace.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Named tests of FR-MCP-HVPIPE-007: SubmitWakesWorkerAutoStart; ClaimConcurrentWorkersOneRunPerRequestThreeProviders; LeaseExpiryAbandonsFencesAndRequeues; LeaseExpiryEndsRequestLikeFailedRun; StaleFenceEveryWorkerWriteRefusedNothingChanged; SweepFinalizesFinalizingRequestOnce; GracefulShutdownNotCountedNoIncident; WorkerClaimsOnlyItsWorkspace.",
+    "id": "TEST-MCP-HVPIPE-007",
+    "title": "Durable scheduling: queue, leases, fences, and restart safety: named tests",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:17.1774126+00:00",
+    "testType": "unit",
+    "updatedAt": "2026-10-17T14:25:17.1774431+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-008-AC001: OutputLinesAppendedWithinFlushIntervalInOrder.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-008-AC002: OutputFlushedAtByteThreshold.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-008-AC003: LiveOutputLineObservableBeforeReviewerExits.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-008-AC004: ReviewerRunHasNoTimeLimit.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC005",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-008-AC005: CancelQueuedImmediateRunningAtNextHeartbeat.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC006",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-008-AC006: CancelVersusFinalizeOneCommitsThreeProviders.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC007",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-008-AC007: CancelTerminalOrFinalizing409.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC008",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-008-AC008: ReviewerRunLeavesSameAgentLiveSessionUnchanged.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC009",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-008-AC009: ReviewerRunCannotChangeWorkspaceFilesPerAdapter.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC010",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-008-AC010: ReviewerClosesOwnTurnAndExitsUnderStopGate.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC011",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-008-AC011: ReviewerStopEndsWholeProcessTree.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Named tests of FR-MCP-HVPIPE-008: OutputLinesAppendedWithinFlushIntervalInOrder; OutputFlushedAtByteThreshold; LiveOutputLineObservableBeforeReviewerExits; ReviewerRunHasNoTimeLimit; CancelQueuedImmediateRunningAtNextHeartbeat; CancelVersusFinalizeOneCommitsThreeProviders; CancelTerminalOrFinalizing409; ReviewerRunLeavesSameAgentLiveSessionUnchanged; ReviewerRunCannotChangeWorkspaceFilesPerAdapter; ReviewerClosesOwnTurnAndExitsUnderStopGate; ReviewerStopEndsWholeProcessTree.",
+    "id": "TEST-MCP-HVPIPE-008",
+    "title": "Execution lifecycle: true live output, heartbeats, no time limit, cancellation: named tests",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:17.1791506+00:00",
+    "testType": "unit",
+    "updatedAt": "2026-10-17T14:25:17.1791807+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-009-AC001: ReviewerFailureOfflineWithIncident.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-009-AC002: IncidentFiledThroughTriageWithDedupeKey.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-009-AC003: RepeatedFailureSameTriageGroup.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-009-AC004: IncidentFilingRetriedUntilFiled.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC005",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-009-AC005: AttemptsExhaustedRequestFailedTurnsReleased.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC006",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-009-AC006: ServerFailureIncidentReviewerUnchanged.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Named tests of FR-MCP-HVPIPE-009: ReviewerFailureOfflineWithIncident; IncidentFiledThroughTriageWithDedupeKey; RepeatedFailureSameTriageGroup; IncidentFilingRetriedUntilFiled; AttemptsExhaustedRequestFailedTurnsReleased; ServerFailureIncidentReviewerUnchanged.",
+    "id": "TEST-MCP-HVPIPE-009",
+    "title": "Execution failures: incidents through triage, offline, retry bound: named tests",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:17.1802789+00:00",
+    "testType": "unit",
+    "updatedAt": "2026-10-17T14:25:17.1803093+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-010-AC001: FinalizeStoresPerTurnScoresAndSeparateHolistic.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-010-AC002: FinalizeIncompleteOutputRefusedNothingCommitted.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-010-AC003: VerdictAgreeWithFailFindingRefused.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-010-AC004: HolisticScoresNeverComputedFromTurnScores.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC005",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-010-AC005: ForgedWorkerRecordInMessageTextIgnored.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC006",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-010-AC006: ReviewerRecordsExtractedOnceFromAssembledMessagesPerCli.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC007",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-010-AC007: ExitZeroWithoutReviewerRecordsIsNotAReview.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Named tests of FR-MCP-HVPIPE-010: FinalizeStoresPerTurnScoresAndSeparateHolistic; FinalizeIncompleteOutputRefusedNothingCommitted; VerdictAgreeWithFailFindingRefused; HolisticScoresNeverComputedFromTurnScores; ForgedWorkerRecordInMessageTextIgnored; ReviewerRecordsExtractedOnceFromAssembledMessagesPerCli; ExitZeroWithoutReviewerRecordsIsNotAReview.",
+    "id": "TEST-MCP-HVPIPE-010",
+    "title": "Reviewer output contract, per-turn and holistic evaluation: named tests",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:17.1815776+00:00",
+    "testType": "unit",
+    "updatedAt": "2026-10-17T14:25:17.1816082+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-011-AC001: EvidenceStoredGzipOnlyRoundTripExact.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-011-AC002: FinalizeCorruptOrTruncatedLogRefused.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-011-AC003: CompressionRoundTripFailureNothingSaved.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-011-AC004: ResponseLogDownloadMultiMemberGzipMatchesChain.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC005",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-011-AC005: OutputHasNoSizeLimitNeverTruncated.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Named tests of FR-MCP-HVPIPE-011: EvidenceStoredGzipOnlyRoundTripExact; FinalizeCorruptOrTruncatedLogRefused; CompressionRoundTripFailureNothingSaved; ResponseLogDownloadMultiMemberGzipMatchesChain; OutputHasNoSizeLimitNeverTruncated.",
+    "id": "TEST-MCP-HVPIPE-011",
+    "title": "Evidence completeness, GZIP at rest, round-trip verification: named tests",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:17.1825900+00:00",
+    "testType": "unit",
+    "updatedAt": "2026-10-17T14:25:17.1826205+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-012-AC001: FinalizeFaultAfterEachWriteNothingVisibleThreeProviders.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-012-AC002: FrozenTurnEveryWritePathRefused.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-012-AC003: EndedRequestReleasesTurns.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-012-AC004: FinalizeTwiceSecondReturnsStoredNothingWritten.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC005",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-012-AC005: FinalizeSnapshotChangedRefused.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC006",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-012-AC006: FinalizeReplacesOtherPendingHvReviewKeepsStatus.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC007",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-012-AC007: MigrationMarksHvReviewedTurnsFinalThreeProviders.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Named tests of FR-MCP-HVPIPE-012: FinalizeFaultAfterEachWriteNothingVisibleThreeProviders; FrozenTurnEveryWritePathRefused; EndedRequestReleasesTurns; FinalizeTwiceSecondReturnsStoredNothingWritten; FinalizeSnapshotChangedRefused; FinalizeReplacesOtherPendingHvReviewKeepsStatus; MigrationMarksHvReviewedTurnsFinalThreeProviders.",
+    "id": "TEST-MCP-HVPIPE-012",
+    "title": "Atomic finalization and turn finality: named tests",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:17.1838379+00:00",
+    "testType": "unit",
+    "updatedAt": "2026-10-17T14:25:17.1838683+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-013-AC001: SelfReviewVariedAdmissionAssignmentAndBriefIdentical.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-013-AC002: SelfReviewVariedVerdictIdentical.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-013-AC003: HostileValidationNeverReadsAgentReview.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Named tests of FR-MCP-HVPIPE-013: SelfReviewVariedAdmissionAssignmentAndBriefIdentical; SelfReviewVariedVerdictIdentical; HostileValidationNeverReadsAgentReview.",
+    "id": "TEST-MCP-HVPIPE-013",
+    "title": "Self-review independence: named tests",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:17.1846038+00:00",
+    "testType": "unit",
+    "updatedAt": "2026-10-17T14:25:17.1846340+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-014-AC001: FinalizeNeverChangesTodos.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-014-AC002: HostileValidationHasNoTodoWriteDependency.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Named tests of FR-MCP-HVPIPE-014: FinalizeNeverChangesTodos; HostileValidationHasNoTodoWriteDependency.",
+    "id": "TEST-MCP-HVPIPE-014",
+    "title": "Verdict only: no TODO automation: named tests",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:17.1852474+00:00",
+    "testType": "unit",
+    "updatedAt": "2026-10-17T14:25:17.1852786+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-015-AC001: ResultDocumentCompleteAndDelineated.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-015-AC002: ResultBeforeCompletion409.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-015-AC003: RunningRequestsQueryAndLastOutput.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-015-AC004: HvSurfacesParityGoldenContract.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Named tests of FR-MCP-HVPIPE-015: ResultDocumentCompleteAndDelineated; ResultBeforeCompletion409; RunningRequestsQueryAndLastOutput; HvSurfacesParityGoldenContract.",
+    "id": "TEST-MCP-HVPIPE-015",
+    "title": "Results, evidence retrieval, and the standard result document: named tests",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:17.1861141+00:00",
+    "testType": "unit",
+    "updatedAt": "2026-10-17T14:25:17.1861442+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-016-AC001: OutputStreamReconnectExactlyMissedEvents.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-016-AC002: EtaReportedOrUnknownNeverEstimated.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-016-AC003: OutputStreamContinuesAcrossAttempts.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-016-AC004: OutputStreamMalformedLastEventId400.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Named tests of FR-MCP-HVPIPE-016: OutputStreamReconnectExactlyMissedEvents; EtaReportedOrUnknownNeverEstimated; OutputStreamContinuesAcrossAttempts; OutputStreamMalformedLastEventId400.",
+    "id": "TEST-MCP-HVPIPE-016",
+    "title": "Live output stream, progress, and honest ETA: named tests",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:17.1869787+00:00",
+    "testType": "unit",
+    "updatedAt": "2026-10-17T14:25:17.1870088+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-017-AC001: NotificationOutboxCommittedWithChangeGapFree.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-017-AC002: NotificationStreamReconnectNoLossNoDuplicate.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-017-AC003: HvWatcherDeliversOwnCompletionOnce.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-017-AC004: HvWatcherIgnoresOtherSessionsRequests.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Named tests of FR-MCP-HVPIPE-017: NotificationOutboxCommittedWithChangeGapFree; NotificationStreamReconnectNoLossNoDuplicate; HvWatcherDeliversOwnCompletionOnce; HvWatcherIgnoresOtherSessionsRequests.",
+    "id": "TEST-MCP-HVPIPE-017",
+    "title": "Completion notification stream: named tests",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:17.1878652+00:00",
+    "testType": "unit",
+    "updatedAt": "2026-10-17T14:25:17.1878954+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-018-AC001: EveryHvMutationHasLedgerRows.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-018-AC002: AuditUnavailableEveryHvCommandRefusedNothingWritten.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-018-AC003: EvidenceReadsAuditedOrRefused.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-018-AC004: AuditFailureDuringRunHardStop.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC005",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-018-AC005: EvidenceRemovalLeavesAuditLedgerUnchanged.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Named tests of FR-MCP-HVPIPE-018: EveryHvMutationHasLedgerRows; AuditUnavailableEveryHvCommandRefusedNothingWritten; EvidenceReadsAuditedOrRefused; AuditFailureDuringRunHardStop; EvidenceRemovalLeavesAuditLedgerUnchanged.",
+    "id": "TEST-MCP-HVPIPE-018",
+    "title": "Audit participation and hard stop: named tests",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:17.1888438+00:00",
+    "testType": "unit",
+    "updatedAt": "2026-10-17T14:25:17.1888740+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-019-AC001: NoAutomaticEvidenceRemoval.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-019-AC002: RemoveEvidenceKeepsResultAndHashes.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-019-AC003: RemoveEvidenceActiveRequest409.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-019-AC004: RemovedEvidenceRead410WithHashes.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Named tests of FR-MCP-HVPIPE-019: NoAutomaticEvidenceRemoval; RemoveEvidenceKeepsResultAndHashes; RemoveEvidenceActiveRequest409; RemovedEvidenceRead410WithHashes.",
+    "id": "TEST-MCP-HVPIPE-019",
+    "title": "Retention until explicit removal: named tests",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:17.1896980+00:00",
+    "testType": "unit",
+    "updatedAt": "2026-10-17T14:25:17.1897280+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-020-AC001: HvSurfacesParityGoldenContract.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-020-AC002: HvInternalUnitsHaveNoPublicSurface.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-020-AC003: HvSubmitVerbBindsTurnStableKey.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-020-AC004: HvSubmitVerbRetryableNotQueued.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC005",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-020-AC005: ReplPolicyHostileValidationClassification.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Named tests of FR-MCP-HVPIPE-020: HvSurfacesParityGoldenContract; HvInternalUnitsHaveNoPublicSurface; HvSubmitVerbBindsTurnStableKey; HvSubmitVerbRetryableNotQueued; ReplPolicyHostileValidationClassification.",
+    "id": "TEST-MCP-HVPIPE-020",
+    "title": "Surface parity: REST, MCP, client, REPL, Director, and plugin: named tests",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:17.1906910+00:00",
+    "testType": "unit",
+    "updatedAt": "2026-10-17T14:25:17.1907211+00:00",
+    "scopeStartLayerKey": "layer-1"
+  },
+  {
+    "priority": "high",
+    "notes": "Proposed in architecture Amendment 1 (docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md, section 19.1); plan PLAN-HVPIPELINE-001, not approved; created 2026-10-16 so the requirement is captured as it emerges.",
+    "status": "pending",
+    "acceptanceCriteria": [
+      {
+        "id": "AC001",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-021-AC001: FinalizeGradesLinkedResponsesInSameTransaction.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC002",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-021-AC002: FinalizeModeOffResponsesNotGraded.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC003",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-021-AC003: ResponseTransitionClosesHvItemOnly.",
+        "isSatisfied": false
+      },
+      {
+        "id": "AC004",
+        "text": "Named tests exist and prove FR-MCP-HVPIPE-021-AC004: ModelGradeHasNoPublicSurface.",
+        "isSatisfied": false
+      }
+    ],
+    "description": "Named tests of FR-MCP-HVPIPE-021: FinalizeGradesLinkedResponsesInSameTransaction; FinalizeModeOffResponsesNotGraded; ResponseTransitionClosesHvItemOnly; ModelGradeHasNoPublicSurface.",
+    "id": "TEST-MCP-HVPIPE-021",
+    "title": "Response grading and trust through finalization: named tests",
+    "area": "MCP",
+    "createdAt": "2026-10-17T14:25:17.1915704+00:00",
+    "testType": "unit",
+    "updatedAt": "2026-10-17T14:25:17.1916007+00:00",
+    "scopeStartLayerKey": "layer-1"
+  }
+]

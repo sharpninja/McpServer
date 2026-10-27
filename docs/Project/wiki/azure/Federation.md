@@ -9,7 +9,7 @@ Load this file when implementing, testing, or diagnosing MCP server federation.
 - `Hub`: authoritative server for enrolled proxies, global workspace inventory, operation intake, sync fanout, queue status, and conflicts.
 - `LocalProxy`: local server that forwards `/mcpserver/*` and `/mcp-transport` requests to `HubBaseUrl`, excluding local health/readiness/marker/federation diagnostics. Supported mutating REST requests are queued when the hub is unavailable; raw `/mcp-transport` streams are not accepted into the offline queue.
 
-For implementation and validation, `PAYTON-DESKTOP` is the default hub machine and `PAYTON-LEGION2` is the default local proxy machine. Treat these as environment defaults, not hard-coded product constants.
+For implementation and validation, `LAB-OMARCHY` is the default hub machine and `PAYTON-LEGION2` is the default local proxy machine. Treat these as environment defaults, not hard-coded product constants.
 
 ## Required Status Surface
 

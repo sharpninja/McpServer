@@ -1,0 +1,26 @@
+{
+  "requestId": "req-20261017T142304Z-hv-amendment1-r1",
+  "actions": [
+    {
+      "order": 1,
+      "type": "design_decision",
+      "status": "completed",
+      "filePath": "docs/receipts/hv/hv-r1-findings-in-progress.md",
+      "description": "F01-F08 are material implementer fixes: their concrete failure traces contradict settled requirements or specified contracts. Rejected treating them as wording polish, or asking the operator to choose whether existing requirements apply. Full decisions and evidence are persisted in the ordered decision dialog and this receipt."
+    },
+    {
+      "order": 2,
+      "type": "design_decision",
+      "status": "completed",
+      "filePath": "docs/receipts/hv/hv-r1-process-correction.md",
+      "description": "Acknowledge reviewer credential extraction error and redact only reviewer-owned receipts. Keep original source unchanged. Reject concealing the error or attributing it to the implementer. Own runtime transcript outside the worktree remains outside write authorization."
+    },
+    {
+      "order": 3,
+      "type": "web_reference",
+      "status": "completed",
+      "filePath": "docs/receipts/hv/hv-r1-pr81-facts.json",
+      "description": "https://github.com/sharpninja/McpServer/pull/81#pullrequestreview-5554472359 ; Codex PR81 review; read-only gh API verifies six comments posted 2026-10-16T22:48:12Z after merge 2026-10-16T22:41:48Z, and their precise requested remedies."
+    }
+  ]
+}

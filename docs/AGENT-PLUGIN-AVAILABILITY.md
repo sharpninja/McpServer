@@ -140,3 +140,30 @@ Root `UserPromptSubmit` stays on the root session while background agents run (F
 - `docs/context/federation.md`
 - `docs/context/memory.md`
 - `docs/benchmarks/README.md`
+
+## ClineQb bundled V2 contract
+
+To issue a signed ClineQb marker contract, configure the McpServer process with
+`CLINE_QB_PLUGIN_ROOT` set to the absolute reviewed V2 bundle directory. Its
+`package.json` must have name `@sharpninja/mcpserver-cline-v2-plugin` and a
+semantic version. Also configure `CLINE_QB_PLUGIN_ARTIFACT_SHA256` with the reviewed built archive SHA-256 (64 hexadecimal characters). Without that pin, no ClineQb profile is issued. On marker generation, the server adds a required `ClineQb`
+profile and includes it in the existing contract digest and marker signature.
+Missing, relative, unreadable, malformed, foreign-package, or unversioned
+configuration omits this profile; a client requiring ClineQb then refuses
+bootstrap. Other agent profiles keep their existing behavior.
+
+The profile specifies in-process governed-host activation with no install
+command, environment-driven client discovery, or optional root hints.
+Advertising a manifest version is not bundle-integrity proof: the host must
+verify its reviewed artifact and compare the exact pin before using this
+contract. Do not edit generated markers to enable the product. This source
+change does not configure a running server or advance a reviewed dependency pin.
+
+The profile's `artifact_sha256` is included in its signed contract digest;
+changing the artifact pin changes both contract digest and marker signature.
+The server accepts this pin from its operator-controlled configuration; it does
+not independently rebuild or approve the artifact. Host startup must compare its
+reviewed pin, verify the actual archive bytes, and consume the verified snapshot.
+Existing agent profiles without artifact pins retain their canonical digest
+encoding. No running server configuration or accepted dependency pin is advanced
+by this source change.

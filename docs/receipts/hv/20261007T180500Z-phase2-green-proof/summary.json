@@ -1,0 +1,65 @@
+[
+    {
+        "repo":  "mcpserver-grok-plugin",
+        "total":  null,
+        "fails":  null,
+        "skipped":  null,
+        "passed":  null,
+        "tip":  "b2a0ec7e03869f0f2863728ccdc7da75ba1b0bda",
+        "status":  "FAIL"
+    },
+    {
+        "repo":  "mcpserver-grok-bot-plugin",
+        "total":  null,
+        "fails":  null,
+        "skipped":  null,
+        "passed":  null,
+        "tip":  "6e1edf99f6b5c40fd3576e364b7cd725261b7df1",
+        "status":  "FAIL"
+    },
+    {
+        "repo":  "mcpserver-claude-code-plugin",
+        "total":  null,
+        "fails":  null,
+        "skipped":  null,
+        "passed":  null,
+        "tip":  "2510cc1be501b028e59736fb638cf38df3d29ccb",
+        "status":  "FAIL"
+    },
+    {
+        "repo":  "mcpserver-claude-cowork-plugin",
+        "total":  null,
+        "fails":  null,
+        "skipped":  null,
+        "passed":  null,
+        "tip":  "95bce132f1c71e4c4d10bf3943e0c700ed5968f8",
+        "status":  "FAIL"
+    },
+    {
+        "repo":  "mcpserver-codex-plugin",
+        "total":  null,
+        "fails":  null,
+        "skipped":  null,
+        "passed":  null,
+        "tip":  "ae35f225bd896fdc2bea2fdd6b923703beaaec39",
+        "status":  "FAIL"
+    },
+    {
+        "repo":  "mcpserver-copilot-plugin",
+        "total":  null,
+        "fails":  null,
+        "skipped":  null,
+        "passed":  null,
+        "tip":  "a0792f4fcb1cca8e7ac8d5f20d6917218a30dbd0",
+        "status":  "FAIL"
+    },
+    {
+        "repo":  "mcpserver-cline-plugin",
+        "total":  32,
+        "fails":  0,
+        "skipped":  0,
+        "passed":  32,
+        "tip":  "c7f2449550aadf66f24ce8153138c0411614efc9",
+        "status":  "PASS"
+    }
+]

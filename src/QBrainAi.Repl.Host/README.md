@@ -35,6 +35,47 @@ dotnet tool update --global QBrainAI.Repl --add-source ./local-packages
 dotnet tool uninstall --global QBrainAI.Repl
 ```
 
+### Self-contained application bundles
+
+From the repository root, using the .NET SDK selected by `global.json`:
+
+```powershell
+# Build all six supported platforms.
+./build.ps1 BuildReplBundles --configuration Release
+
+# Build only the current Linux x64 platform during development.
+./build.ps1 BuildReplBundles --configuration Release --repl-runtime-identifiers linux-x64
+```
+
+Supported runtimes are `linux-x64`, `linux-arm64`, `osx-x64`, `osx-arm64`,
+`win-x64`, and `win-arm64`. Each run creates a separate directory under
+`artifacts/repl-bundles/`, with one `.tar.gz` per selected runtime and a
+`manifest.json` containing source commit, dirty-source status, version, the project
+license file path, archive SHA256, and per-file lengths and SHA256 digests. Archives retain
+all published supporting files. `LICENSE.QBrainAI.txt` copies the repository's
+root `LICENSE` verbatim; `LICENSE.NET.txt` and `THIRD-PARTY-NOTICES.NET.txt`
+come from the exact resolved runtime package. Unix executable
+permissions are recorded in the archive. A failed run cannot overwrite an
+earlier snapshot and does not produce a completion manifest.
+
+The root `LICENSE` currently contains Apache 2.0 while the REPL project's existing
+package metadata declares MIT. The bundle manifest references the copied file
+without assigning a conflicting license identifier. Resolve this existing
+metadata conflict before publishing a distribution.
+
+The target publishes a self-contained `qbrain-ai-repl` application
+(`qbrain-ai-repl.exe` on Windows), with tool packing and trimming disabled.
+Application naming is scoped to the REPL host project, preserving referenced
+assembly names and the existing global-tool build. Bundle users do not install
+.NET; the target platform's native OS libraries remain prerequisites.
+
+When a selected runtime matches the build host, the target also runs the built
+executable with `--version`, without a discoverable shared .NET installation.
+Other runtimes still need execution tests on their own hosts. This version smoke
+does not verify MCP bootstrap, server compatibility, or an approved artifact pin.
+Use a reviewed source commit and the manifest digests when advancing a host pin.
+This target builds local artifacts only; it does not install or deploy them.
+
 ## Usage
 
 ### Check Version

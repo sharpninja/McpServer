@@ -1365,3 +1365,6 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-QBRAIN-006 | In progress | tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs |
 | TEST-MCP-QBRAIN-007 | In progress | tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs |
 | TEST-MCP-QBRAIN-008 | In progress | tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs |
+| FR-MCP-AUDITACTION-001 | Pending | SessionLogService; docs/context/action-types.md |
+| TR-MCP-AUDITACTION-001 | Pending | Session action metadata validation |
+| TEST-MCP-AUDITACTION-001 | Pending | tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogToolExecutionTests.cs |

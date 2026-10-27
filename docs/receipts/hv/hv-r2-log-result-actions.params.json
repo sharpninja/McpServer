@@ -1,0 +1,40 @@
+{
+  "requestId": "req-20261018T031720Z-hv-amendment1-r2",
+  "actions": [
+    {
+      "type": "web_reference",
+      "description": "Read-only GitHub source, https://github.com/sharpninja/McpServer/pull/81; used for PR81 findings, post-merge timing or server push activity. Queried with gh, not a new review or comment.",
+      "status": "completed",
+      "filePath": "https://github.com/sharpninja/McpServer/pull/81",
+      "order": 20
+    },
+    {
+      "type": "web_reference",
+      "description": "Read-only GitHub source, https://github.com/sharpninja/McpServer/pull/81#pullrequestreview-5554472359; used for PR81 findings, post-merge timing or server push activity. Queried with gh, not a new review or comment.",
+      "status": "completed",
+      "filePath": "https://github.com/sharpninja/McpServer/pull/81#pullrequestreview-5554472359",
+      "order": 21
+    },
+    {
+      "type": "web_reference",
+      "description": "Read-only GitHub source, https://api.github.com/repos/sharpninja/McpServer/activity?ref=refs%2Fheads%2Fdocs%2Fhv-architecture-amendment-20261016&per_page=100; used for PR81 findings, post-merge timing or server push activity. Queried with gh, not a new review or comment.",
+      "status": "completed",
+      "filePath": "https://api.github.com/repos/sharpninja/McpServer/activity?ref=refs%2Fheads%2Fdocs%2Fhv-architecture-amendment-20261016&per_page=100",
+      "order": 22
+    },
+    {
+      "type": "create",
+      "description": "Created complete native-PowerShell verdict receipts and independent evidence; no product or store mutation.",
+      "status": "completed",
+      "filePath": "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hostile-validator-amendment1-r2-20261017T221717.md",
+      "order": 30
+    },
+    {
+      "type": "design_decision",
+      "description": "DISAGREE at 94 accuracy / 89 completeness. Twelve material implementer edits, no operator-decision failures; all AM claims and round 1 items recorded in full ordered dialog parts.",
+      "status": "completed",
+      "filePath": "/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hostile-validator-amendment1-r2-20261017T221717.json",
+      "order": 31
+    }
+  ]
+}

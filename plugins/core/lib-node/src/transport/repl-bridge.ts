@@ -1,8 +1,26 @@
 import { spawn, ChildProcess } from 'child_process';
+import { classifyOperationFailure, type OperationFailure } from '../runtime/operation-failure.js';
 import { existsSync, statSync } from 'fs';
-import { delimiter, join } from 'path';
+import { delimiter, isAbsolute, join, resolve } from 'path';
 import { createInterface } from 'readline';
 import * as yaml from 'js-yaml';
+import type { MarkerContext } from '../discovery/marker-resolver.js';
+
+/** TR-QB-TRUST-001: launch settings owned by one host instance. */
+export interface ReplBridgeOptions {
+  /** Require a pinned executable and verified context; ignore ambient launch overrides. */
+  governed?: boolean;
+  /** Explicit executable selected by the host. */
+  command?: string;
+  /** Owning workspace, independent of other host contexts. */
+  workspacePath?: string;
+  /** Audit agent identity for this transport. */
+  agentName?: string;
+  /** Host plugin identity for child-local cache routing. */
+  pluginId?: string;
+  /** Host-owned request deadline; governed mode never reads an environment override. */
+  timeoutMs?: number;
+}
 
 export interface ReplResponse {
   type: 'result' | 'error' | 'event';
@@ -66,10 +84,66 @@ export function resolveReplWorkingDirectory(): string {
  * Multiplexes concurrent YAML-over-STDIO requests by requestId.
  */
 export class ReplBridge {
+  private readonly options: Readonly<ReplBridgeOptions>;
+  private markerContext: Readonly<MarkerContext> | undefined;
   private proc: ChildProcess | null = null;
   private pending = new Map<string, PendingRequest>();
   private buffer = '';
   private docBuffer = '';
+
+  /** Capture host launch configuration without changing process-wide state. */
+  constructor(options: ReplBridgeOptions = {}) {
+    this.options = Object.freeze({ ...options });
+  }
+
+  /** Install an already-verified marker for this bridge before it starts. */
+  configureContext(marker: MarkerContext): void {
+    if (this.proc) throw new Error('Close the REPL bridge before changing its workspace credentials');
+    if (this.options.governed && (!marker.apiKey || !marker.baseUrl || !marker.workspacePath || !this.options.workspacePath || resolve(marker.workspacePath) !== resolve(this.options.workspacePath))) {
+      throw new Error('Governed REPL context must match the configured workspace and contain credentials');
+    }
+    this.markerContext = Object.freeze({ ...marker });
+  }
+
+  /** Nonsecret identity from this bridge's verified context; never consults ambient routing. */
+  get verifiedWorkspace(): Readonly<Pick<MarkerContext, 'workspacePath' | 'workspace' | 'markerFile'>> | undefined {
+    if (!this.governed || !this.markerContext) return undefined;
+    const { workspacePath, workspace, markerFile } = this.markerContext;
+    return Object.freeze({ workspacePath, workspace, markerFile });
+  }
+
+  /** Whether the transport is bound to a verified workspace rather than ambient routing. */
+  get hasWorkspaceContext(): boolean {
+    return this.markerContext !== undefined;
+  }
+
+  /** TR-QB-TRUST-001: governed callers must never fall back to ambient routing. */
+  get governed(): boolean {
+    return this.options.governed === true;
+  }
+
+  /** TR-QB-TRUST-001: reject a supplied transport belonging to another host context. */
+  assertHostBinding(binding: { workspacePath: string; agentName: string; pluginId: string }): void {
+    if (!this.governed || !this.options.workspacePath ||
+      resolve(this.options.workspacePath) !== resolve(binding.workspacePath) ||
+      this.options.agentName !== binding.agentName || this.options.pluginId !== binding.pluginId) {
+      throw new Error('Governed REPL binding does not match the owning host');
+    }
+  }
+
+  private childEnvironment(): NodeJS.ProcessEnv {
+    if (!this.governed) return { ...process.env };
+    // Preserve platform/runtime facilities, never arbitrary inherited credentials,
+    // workspace selectors, failsafe paths, or executable injection settings.
+    const allowed = /^(PATH|HOME|USERPROFILE|HOMEDRIVE|HOMEPATH|SYSTEMROOT|WINDIR|COMSPEC|PATHEXT|TEMP|TMP|TMPDIR|LANG|LC_[A-Z_]+|TZ|HTTP_PROXY|HTTPS_PROXY|ALL_PROXY|NO_PROXY|SSL_CERT_FILE|SSL_CERT_DIR)$/i;
+    return Object.fromEntries(Object.entries(process.env).filter(([key]) => allowed.test(key)));
+  }
+
+  private timeoutMilliseconds(): number {
+    const value = this.options.timeoutMs ?? (this.options.governed ? 15000 : Number(process.env.MCPSERVER_REPL_TIMEOUT_MS ?? '15000'));
+    if (!Number.isFinite(value) || value <= 0) throw new Error('REPL timeout must be positive and finite');
+    return value;
+  }
 
   /** Generate a request ID matching ^req-\d{8}T\d{6}Z-[a-z0-9]+$ */
   static generateRequestId(slug = 'req'): string {
@@ -96,62 +170,111 @@ export class ReplBridge {
     if (this.proc && this.proc.exitCode === null && !this.proc.killed) {
       return;
     }
-    const replCommand = resolveReplCommand();
-    let replArgs = process.env.MCPSERVER_REPL_ARGS
+    if (this.options.governed) {
+      if (!this.markerContext) throw new Error('Governed REPL requires a verified workspace context');
+      if (!this.options.command || !isAbsolute(this.options.command) || !existsSync(this.options.command) || isDirectory(this.options.command)) {
+        throw new Error('Governed REPL requires an existing absolute pinned executable');
+      }
+      if (!this.options.agentName?.trim() || !this.options.pluginId?.trim()) {
+        throw new Error('Governed REPL requires explicit agent and plugin identity');
+      }
+    }
+    const replCommand = this.options.command || resolveReplCommand();
+    let replArgs = !this.options.governed && process.env.MCPSERVER_REPL_ARGS
       ? process.env.MCPSERVER_REPL_ARGS.split(' ').filter(Boolean)
       : ['--agent-stdio'];
     // Ensure --agent is passed on every invocation for per-agent cache isolation (Codex vs Claude etc.).
-    const agent = process.env.MCP_AGENT_NAME || process.env.PLUGIN_AGENT_NAME || process.env.PLUGIN_AGENT_DEFAULT || process.env.MCP_PLUGIN_HOST || 'default';
+    const agent = this.options.agentName || process.env.MCP_AGENT_NAME || process.env.PLUGIN_AGENT_NAME || process.env.PLUGIN_AGENT_DEFAULT || process.env.MCP_PLUGIN_HOST || 'default';
     if (!replArgs.includes('--agent')) {
       replArgs = [...replArgs, '--agent', agent];
     }
-    this.proc = spawn(replCommand, replArgs, {
+    const environment = this.childEnvironment();
+    if (this.options.agentName) {
+      for (const key of ['PLUGIN_AGENT_NAME', 'PLUGIN_AGENT_DEFAULT', 'MCP_AGENT_NAME', 'MCP_AGENT_ID', 'MCP_SESSION_AGENT', 'CT2R_SOURCE_TYPE']) environment[key] = agent;
+    }
+    if (this.options.pluginId) {
+      for (const key of ['PLUGIN_TAG', 'MCP_SESSION_MODEL', 'CT2R_MODEL', 'CT2R_TAGS']) environment[key] = this.options.pluginId;
+    }
+    const workspacePath = this.markerContext?.workspacePath || this.options.workspacePath;
+    if (workspacePath) {
+      environment.MCPSERVER_WORKSPACE_PATH = workspacePath;
+      environment.MCP_WORKSPACE_PATH = workspacePath;
+    }
+    if (this.markerContext) {
+      environment.MCPSERVER_BASE_URL = this.markerContext.baseUrl;
+      environment.MCPSERVER_API_KEY = this.markerContext.apiKey;
+      environment.MCPSERVER_WORKSPACE = this.markerContext.workspace;
+    }
+    const proc = spawn(replCommand, replArgs, {
       stdio: ['pipe', 'pipe', 'pipe'],
-      env: { ...process.env },
-      cwd: resolveReplWorkingDirectory(),
+      env: environment,
+      cwd: workspacePath || resolveReplWorkingDirectory(),
+    });
+    this.proc = proc;
+
+    proc.stderr?.on('data', (data: Buffer) => {
+      if (this.proc === proc) process.stderr.write(`[repl] ${data}`);
     });
 
-    this.proc.stderr?.on('data', (data: Buffer) => {
-      process.stderr.write(`[repl] ${data}`);
-    });
+    const rl = createInterface({ input: proc.stdout! });
+    // Spawn failures need not emit exit; pipe failures can arrive after a
+    // replacement starts. Handle every error emitter without letting an old
+    // child reject the replacement's requests or crash the host process.
+    const fail = (error: Error): void => {
+      rl.close();
+      if (this.proc !== proc) return;
+      this.proc = null;
+      this.docBuffer = '';
+      this.rejectPending(`qbrain-ai-repl transport failed: ${error.message}`, undefined, classifyOperationFailure(error));
+      this.terminateProcess(proc);
+    };
+    proc.on('error', fail);
+    proc.stdin?.on('error', fail);
+    // Keep a direct listener after readline.close() detaches its forwarding
+    // listener, since a retired child's pipe can still fail later.
+    proc.stdout?.on('error', fail);
+    proc.stderr?.on('error', fail);
+    rl.on('error', fail);
+    // A timed-out child may still emit output or exit after its replacement
+    // starts. Only the current process owns framing and pending requests.
+    rl.on('line', (line: string) => { if (this.proc === proc) this.onLine(line); });
 
-    const rl = createInterface({ input: this.proc.stdout! });
-    rl.on('line', (line: string) => this.onLine(line));
-
-    this.proc.on('exit', (code) => {
+    proc.on('exit', (code) => {
+      rl.close();
+      if (this.proc !== proc) return;
       process.stderr.write(`[repl] qbrain-ai-repl exited with code ${code}\n`);
-      // Reject all pending requests
-      for (const [, req] of this.pending) {
-        if (req.timer) clearTimeout(req.timer);
-        req.reject(new Error(`qbrain-ai-repl exited with code ${code}`));
-      }
-      this.pending.clear();
+      this.rejectPending(`qbrain-ai-repl exited with code ${code}`);
+      this.docBuffer = '';
       this.proc = null;
     });
+  }
+
+  private rejectPending(message: string, exceptRequestId?: string, failure: OperationFailure = { detailCode: 'transport_unavailable', retryable: true }): void {
+    for (const [requestId, req] of this.pending) {
+      if (req.timer) clearTimeout(req.timer);
+      if (requestId !== exceptRequestId) req.reject(Object.assign(new Error(message), failure));
+    }
+    this.pending.clear();
+  }
+
+  private terminateProcess(proc: ChildProcess): void {
+    if (proc.exitCode !== null || proc.signalCode != null) return;
+    proc.kill('SIGTERM');
+    const escalation = setTimeout(() => {
+      // killed means a signal was delivered, not that the child has exited.
+      if (proc.exitCode === null && proc.signalCode == null) {
+        proc.kill('SIGKILL');
+      }
+    }, 2000).unref();
+    proc.once('exit', () => clearTimeout(escalation));
   }
 
   private terminateAfterTimeout(message: string, exceptRequestId?: string): void {
     const proc = this.proc;
     this.proc = null;
     this.docBuffer = '';
-
-    for (const [requestId, req] of this.pending) {
-      if (requestId === exceptRequestId) continue;
-      if (req.timer) clearTimeout(req.timer);
-      req.reject(new Error(message));
-    }
-    this.pending.clear();
-
-    if (!proc || proc.exitCode !== null || proc.killed) {
-      return;
-    }
-
-    proc.kill('SIGTERM');
-    setTimeout(() => {
-      if (proc.exitCode === null && !proc.killed) {
-        proc.kill('SIGKILL');
-      }
-    }, 2000).unref();
+    this.rejectPending(message, exceptRequestId, { detailCode: 'transport_timeout', retryable: true });
+    if (proc) this.terminateProcess(proc);
   }
 
   private onLine(line: string): void {
@@ -209,18 +332,20 @@ export class ReplBridge {
     params?: Record<string, unknown>,
   ): Promise<ReplResponse> {
     await this.ensure();
+    const proc = this.proc;
+    if (!proc?.stdin) throw Object.assign(new Error('qbrain-ai-repl transport unavailable'), { detailCode: 'transport_unavailable', retryable: true });
 
     const requestId = ReplBridge.generateRequestId(
       method.split('.').pop() ?? 'req',
     );
 
     return new Promise<ReplResponse>((resolve, reject) => {
-      const timeoutMs = Number(process.env.MCPSERVER_REPL_TIMEOUT_MS ?? '15000');
+      const timeoutMs = this.timeoutMilliseconds();
       const timer = setTimeout(() => {
         this.pending.delete(requestId);
         const message = `qbrain-ai-repl timed out after ${timeoutMs}ms for ${method}`;
         this.terminateAfterTimeout(message, requestId);
-        reject(new Error(message));
+        reject(Object.assign(new Error(message), { detailCode: 'transport_timeout', retryable: true }));
       }, timeoutMs);
       this.pending.set(requestId, { resolve, reject, events: [], timer });
 
@@ -235,7 +360,7 @@ export class ReplBridge {
 
       // Object then serialize (JSON preferred to avoid any YAML construction issues)
       const jsonStr = JSON.stringify(envelope);
-      this.proc!.stdin!.write(jsonStr + '\n');
+      proc.stdin!.write(jsonStr + '\n');
     });
   }
 
@@ -248,18 +373,20 @@ export class ReplBridge {
     onEvent: (event: ReplResponse) => void,
   ): Promise<ReplResponse> {
     await this.ensure();
+    const proc = this.proc;
+    if (!proc?.stdin) throw Object.assign(new Error('qbrain-ai-repl transport unavailable'), { detailCode: 'transport_unavailable', retryable: true });
 
     const requestId = ReplBridge.generateRequestId(
       method.split('.').pop() ?? 'stream',
     );
 
     return new Promise<ReplResponse>((resolve, reject) => {
-      const timeoutMs = Number(process.env.MCPSERVER_REPL_TIMEOUT_MS ?? '15000');
+      const timeoutMs = this.timeoutMilliseconds();
       const timer = setTimeout(() => {
         this.pending.delete(requestId);
         const message = `qbrain-ai-repl timed out after ${timeoutMs}ms for ${method}`;
         this.terminateAfterTimeout(message, requestId);
-        reject(new Error(message));
+        reject(Object.assign(new Error(message), { detailCode: 'transport_timeout', retryable: true }));
       }, timeoutMs);
       this.pending.set(requestId, { resolve, reject, events: [], onEvent, timer });
 
@@ -270,20 +397,27 @@ export class ReplBridge {
 
       // Object then serialize to JSON
       const jsonStr = JSON.stringify(envelope);
-      this.proc!.stdin!.write(jsonStr + '\n');
+      proc.stdin!.write(jsonStr + '\n');
     });
   }
 
   /** Gracefully terminate the REPL process. */
   async close(): Promise<void> {
-    if (this.proc) {
-      this.proc.stdin?.end();
-      await new Promise<void>((resolve) => {
-        this.proc!.on('exit', () => resolve());
-        setTimeout(resolve, 2000);
-      });
-      if (!this.proc?.killed) this.proc?.kill();
-      this.proc = null;
-    }
+    const proc = this.proc;
+    if (!proc) return;
+    this.proc = null;
+    this.docBuffer = '';
+    this.rejectPending('qbrain-ai-repl bridge closed', undefined, { detailCode: 'transport_closed', retryable: false });
+    await new Promise<void>((resolveClosed) => {
+      const exited = () => { clearTimeout(deadline); resolveClosed(); };
+      const deadline = setTimeout(() => {
+        proc.removeListener('exit', exited);
+        this.terminateProcess(proc);
+        resolveClosed();
+      }, 2000);
+      proc.once('exit', exited);
+      proc.stdin?.end();
+      if (proc.exitCode !== null || proc.signalCode != null) exited();
+    });
   }
 }

@@ -29,6 +29,7 @@
         "AiWarningSuppressionReview",
         "BenchMemory",
         "BuildAgent",
+        "BuildReplBundles",
         "BuildTrustedThirdParty",
         "BumpVersion",
         "CaptureSessionLifeUnitGate",
@@ -49,6 +50,7 @@
         "Publish",
         "PublishAgent",
         "PublishNuGet",
+        "PublishReplBundles",
         "PublishTrustedThirdParty",
         "Restore",
         "StartServer",
@@ -61,7 +63,9 @@
         "ValidateConfig",
         "ValidatePluginPowerShellOnly",
         "ValidateTraceability",
-        "ValidateWarningSuppressions"
+        "ValidateWarningSuppressions",
+        "TestGovernedTurnBinding",
+        "TestGovernedTurnStore"
       ]
     },
     "Verbosity": {
@@ -224,6 +228,17 @@
           "type": "string",
           "description": "Path to pre-built publish output (used with --skip-build)"
         },
+        "ReplBundleCatalog": {
+          "type": "string",
+          "description": "Explicit native JSON catalog containing pinned staged runtime/module files and original per-package license provenance. No download fallback"
+        },
+        "ReplBundleRids": {
+          "type": "array",
+          "description": "Runtime identifiers to publish. All six are required for P5; Windows P1 may request its exact native platform",
+          "items": {
+            "type": "string"
+          }
+        },
         "SecondInstance": {
           "type": "string",
           "description": "Second MCP instance name"
@@ -293,6 +308,14 @@
         "WorkspacePath": {
           "type": "string",
           "description": "Workspace path for GraphRAG smoke test"
+        },
+        "A8BindingMode": {
+          "type": "string",
+          "description": "A8 selection contract provider: Mock or Production"
+        },
+        "A8StoreMode": {
+          "type": "string",
+          "description": "A8 store contract provider: Mock or Production"
         }
       }
     },

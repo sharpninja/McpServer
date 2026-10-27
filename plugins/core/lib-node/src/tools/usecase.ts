@@ -330,24 +330,26 @@ export async function handleUseCaseTool(
   if (!method) throw new Error(`Unknown use case tool: ${name}`);
 
   const params = buildUseCaseParams(name, args);
-  const failsafePath = mutatingUseCaseTools.has(name) ? await cacheWrite(method, params) : undefined;
+  const failsafePath = !bridge.governed && mutatingUseCaseTools.has(name) ? await cacheWrite(method, params) : undefined;
 
   let response: ReplResponse;
   try {
     response = await bridge.invoke(method, params);
   } catch (error) {
     const suffix = failsafePath ? ` Local failsafe saved: ${failsafePath}` : '';
-    throw new Error(`${error instanceof Error ? error.message : String(error)}${suffix}`);
+    throw new Error(`${error instanceof Error ? error.message : String(error)}${suffix}`, { cause: error });
   }
 
   if (response.type === 'error') {
     const payload = response.payload as { message?: string; code?: string };
     const suffix = failsafePath ? ` Local failsafe saved: ${failsafePath}` : '';
-    throw new Error(`${payload.code ?? 'error'}: ${payload.message ?? 'Unknown error'}${suffix}`);
+    throw new Error(`${payload.code ?? 'error'}: ${payload.message ?? 'Unknown error'}${suffix}`, { cause: payload });
   }
 
   if (failsafePath) await cacheDelete(failsafePath);
-  await appendMutationAction(name, unwrapRequest(args), bridge);
+  // Governed host owns durable, explicitly turn-bound auditing; do not emit
+  // an extra best-effort record against a REPL's implicit current turn.
+  if (!bridge.governed) await appendMutationAction(name, unwrapRequest(args), bridge);
 
   const payload = response.payload as { result?: unknown };
   if (payload && typeof payload === 'object' && 'result' in payload) {

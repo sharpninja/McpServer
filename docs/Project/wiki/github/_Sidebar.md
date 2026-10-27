@@ -49,3 +49,4 @@
   - [Cloudflare Tunnel](Operations/Tunnel-Cloudflare)
   - [FRP Railway Tunnel](Operations/Tunnel-FRP-Railway)
   - [Ngrok Tunnel](Operations/Tunnel-Ngrok)
+  - [Permanent Local Audit Storage](Operations/Permanent-Local-Audit-Storage)

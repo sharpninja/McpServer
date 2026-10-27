@@ -863,6 +863,51 @@ public sealed class BugTriage139EighteenthLinuxTests
         [MarshalAs(UnmanagedType.LPUTF8Str)] string path,
         uint mode);
 
+    /// <summary>TR-MCP-USECASE-017 AC-002: nested empty directories delete, nonempty ones and absent parents return false.</summary>
+    [Fact]
+    public void DeleteEmptyDirectory_NestedEntries_HandlesEmptyNonEmptyAndMissingParent()
+    {
+        using var fixture = new LinuxMutationFixture();
+        var empty = Path.Combine(fixture.LiveParent, "empty");
+        Directory.CreateDirectory(empty);
+        Assert.True(WorkspaceContainedFileSystem.DeleteEmptyDirectory(fixture.Root, empty));
+        Assert.False(Directory.Exists(empty));
+        Assert.False(WorkspaceContainedFileSystem.DeleteEmptyDirectory(fixture.Root, empty));
+        var absent = Path.Combine(fixture.Root, "absent-parent", "child");
+        Assert.False(WorkspaceContainedFileSystem.DeleteEmptyDirectory(fixture.Root, absent));
+        Assert.False(WorkspaceContainedFileSystem.DeleteFileIfExists(fixture.Root, absent));
+        var retained = Path.Combine(fixture.LiveParent, "retained.txt");
+        File.WriteAllText(retained, "retained");
+        Assert.False(WorkspaceContainedFileSystem.DeleteEmptyDirectory(fixture.Root, fixture.LiveParent));
+        Assert.Equal("retained", File.ReadAllText(retained));
+    }
+
+    /// <summary>TR-MCP-USECASE-017 AC-002: moving an empty directory's pinned parent outside cannot permit deletion.</summary>
+    [Fact]
+    public void DeleteEmptyDirectory_ParentMovedOutsideBeforeUnlink_IsDeniedByLandlock()
+    {
+        using var fixture = new LinuxMutationFixture();
+        var empty = Path.Combine(fixture.LiveParent, "empty");
+        Directory.CreateDirectory(empty);
+        using var seam = BeforeConfinedMutation(() => Directory.Move(fixture.LiveParent, fixture.ExternalParent));
+        Assert.ThrowsAny<IOException>(() => WorkspaceContainedFileSystem.DeleteEmptyDirectory(fixture.Root, empty));
+        Assert.True(Directory.Exists(Path.Combine(fixture.ExternalParent, "empty")));
+    }
+
+    /// <summary>TR-MCP-USECASE-017 AC-002: wrong-kind nested targets remain unchanged.</summary>
+    [Fact]
+    public void DeleteNestedEntry_KindMismatch_PreservesFileAndDirectory()
+    {
+        using var fixture = new LinuxMutationFixture();
+        var directory = Path.Combine(fixture.LiveParent, "directory");
+        var file = Path.Combine(fixture.LiveParent, "file.txt");
+        Directory.CreateDirectory(directory);
+        File.WriteAllText(file, "retained");
+        Assert.ThrowsAny<IOException>(() => WorkspaceContainedFileSystem.DeleteFileIfExists(fixture.Root, directory));
+        Assert.ThrowsAny<IOException>(() => WorkspaceContainedFileSystem.DeleteEmptyDirectory(fixture.Root, file));
+        Assert.True(Directory.Exists(directory));
+        Assert.Equal("retained", File.ReadAllText(file));
+    }
     private static FieldInfo StorageSeam(string name)
     {
         var field = typeof(WorkspaceContainedFileSystem).GetField(

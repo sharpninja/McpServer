@@ -20,7 +20,7 @@ public sealed class FederationFanoutSyncServiceTests
         var operation = new FederationOperationRequest
         {
             OperationId = "op-1",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "LAB-OMARCHY",
             Domain = "todo",
             ResourceId = "PLAN-FEDERATION-001",
             BodyBase64 = Convert.ToBase64String("{\"done\":true}"u8.ToArray()),
@@ -29,7 +29,7 @@ public sealed class FederationFanoutSyncServiceTests
         {
             Sequence = 7,
             OperationId = "op-1",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "LAB-OMARCHY",
             Domain = "todo",
             ResourceId = "PLAN-FEDERATION-001",
             Envelope = signer.Sign(operation, "hub", "PAYTON-LEGION2"),
@@ -59,16 +59,16 @@ public sealed class FederationFanoutSyncServiceTests
         var operation = new FederationOperationRequest
         {
             OperationId = "op-1",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "LAB-OMARCHY",
             Domain = "todo",
             BodyBase64 = Convert.ToBase64String("{}"u8.ToArray()),
         };
-        var envelope = signer.Sign(operation, "hub", "PAYTON-DESKTOP");
+        var envelope = signer.Sign(operation, "hub", "LAB-OMARCHY");
         var item = new FederationSyncItem
         {
             Sequence = 8,
             OperationId = "op-1",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "LAB-OMARCHY",
             Domain = "todo",
             Envelope = envelope,
         };
@@ -93,7 +93,7 @@ public sealed class FederationFanoutSyncServiceTests
         {
             Sequence = 11,
             OperationId = "op-unsigned-1",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "LAB-OMARCHY",
             Domain = "todo",
             ResourceId = "PLAN-FEDERATION-001",
         };
@@ -124,7 +124,7 @@ public sealed class FederationFanoutSyncServiceTests
         var operation = new FederationOperationRequest
         {
             OperationId = "op-local-1",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "LAB-OMARCHY",
             Domain = "local_execution",
             BodyBase64 = Convert.ToBase64String(JsonSerializer.SerializeToUtf8Bytes(request, new JsonSerializerOptions(JsonSerializerDefaults.Web))),
         };
@@ -132,7 +132,7 @@ public sealed class FederationFanoutSyncServiceTests
         {
             Sequence = 9,
             OperationId = "op-local-1",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "LAB-OMARCHY",
             Domain = "local_execution",
             Envelope = signer.Sign(operation, "hub", "PAYTON-LEGION2", "local_execution"),
         };
@@ -164,7 +164,7 @@ public sealed class FederationFanoutSyncServiceTests
         var operation = new FederationOperationRequest
         {
             OperationId = "op-local-1",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "LAB-OMARCHY",
             Domain = "local_execution",
             Method = "desktop_launch",
             BodyBase64 = Convert.ToBase64String("{}"u8.ToArray()),
@@ -173,7 +173,7 @@ public sealed class FederationFanoutSyncServiceTests
         {
             Sequence = 10,
             OperationId = "op-local-1",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "LAB-OMARCHY",
             Domain = "local_execution",
             Method = "desktop_launch",
             Envelope = signer.Sign(operation, "hub", "PAYTON-LEGION2", "local_execution"),

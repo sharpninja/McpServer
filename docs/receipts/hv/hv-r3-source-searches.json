@@ -1,0 +1,162 @@
+[
+  {
+    "Pattern": "AcceptReviewerOutputAsync",
+    "Path": "src",
+    "ExitCode": 0,
+    "Matches": [
+      "src/QBrainAi.Services/Services/IHostileReviewService.cs:25:    Task<HostileReviewResult> AcceptReviewerOutputAsync(string requestId, HostileReviewerOutput output, CancellationToken cancellationToken = default);",
+      "src/QBrainAi.Services/Services/HostileReviewService.cs:196:    public async Task<HostileReviewResult> AcceptReviewerOutputAsync(string requestId, HostileReviewerOutput output, CancellationToken cancellationToken = default)"
+    ]
+  },
+  {
+    "Pattern": "LeaseSeconds|HeartbeatSeconds|HostileReviewWorker",
+    "Path": "src",
+    "ExitCode": 0,
+    "Matches": [
+      "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityServiceCollectionExtensions.cs:145:                    TimeSpan.FromSeconds(Math.Max(0, options.PubSubInProgressClaimLeaseSeconds)),",
+      "src/QBrainAi.TransactionSecurity/Options/TransactionSecurityOptions.cs:233:    public int PubSubInProgressClaimLeaseSeconds { get; set; } = 300;",
+      "src/QBrainAi.Services/Options/HostileReviewWorkerOptions.cs:4:public sealed class HostileReviewWorkerOptions",
+      "src/QBrainAi.Services/Options/HostileReviewWorkerOptions.cs:7:    public const string SectionName = \"Mcp:HostileReviewWorker\";",
+      "src/QBrainAi.Services/Options/HostileReviewWorkerOptions.cs:70:            throw new InvalidOperationException(\"HostileReviewWorker RenewalInterval must be less than LeaseDuration.\");",
+      "src/QBrainAi.Services/Options/HostileReviewWorkerOptions.cs:72:            throw new InvalidOperationException(\"HostileReviewWorker MaximumActiveQueue must be at least 1.\");",
+      "src/QBrainAi.Services/Options/HostileReviewWorkerOptions.cs:74:            throw new InvalidOperationException(\"HostileReviewWorker MaximumConcurrentReviews must be at least 1.\");",
+      "src/QBrainAi.Services/Options/HostileReviewWorkerOptions.cs:76:            throw new InvalidOperationException(\"HostileReviewWorker MaximumAttempts must be at least 1.\");",
+      "src/QBrainAi.Services/Options/HostileReviewWorkerOptions.cs:78:            throw new InvalidOperationException(\"HostileReviewWorker AgentName must be Astra.\");",
+      "src/QBrainAi.Services/Options/HostileReviewWorkerOptions.cs:80:            throw new InvalidOperationException(\"HostileReviewWorker RequiredModel must be gpt-6-astra.\");",
+      "src/QBrainAi.Services/Options/HostileReviewWorkerOptions.cs:82:            throw new InvalidOperationException(\"HostileReviewWorker RequiredEffort must be xhigh.\");",
+      "src/QBrainAi.Services/Options/FederationOptions.cs:145:    public int HeartbeatSeconds { get; set; } = 30;",
+      "src/QBrainAi.Support.Mcp/appsettings.yaml:193:      HeartbeatSeconds: 30",
+      "src/QBrainAi.Support.Mcp/appsettings.Staging.yaml:84:      HeartbeatSeconds: 30",
+      "src/QBrainAi.Services/Services/FederationTopologyService.cs:88:            HeartbeatSeconds = _options.CurrentValue.Sync.HeartbeatSeconds,",
+      "src/QBrainAi.Services/Services/FederationTopologyModels.cs:38:    public int HeartbeatSeconds { get; set; }",
+      "src/QBrainAi.Services/Services/FederationLocalProxyEnrollmentService.cs:67:            var interval = Math.Max(1, _options.CurrentValue.Sync.HeartbeatSeconds);",
+      "src/QBrainAi.Services/Services/HostileReviewServiceCollectionExtensions.cs:14:        services.AddOptions<HostileReviewWorkerOptions>()",
+      "src/QBrainAi.Services/Services/HostileReviewServiceCollectionExtensions.cs:15:            .BindConfiguration(HostileReviewWorkerOptions.SectionName)",
+      "src/QBrainAi.Services/Services/HostileReviewServiceCollectionExtensions.cs:29:                \"HostileReviewWorker options failed startup validation.\")",
+      "src/QBrainAi.Services/Services/HostileReviewServiceCollectionExtensions.cs:34:            var options = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<HostileReviewWorkerOptions>>().Value;",
+      "src/QBrainAi.Services/Services/HostileReviewServiceCollectionExtensions.cs:39:        services.AddScoped<IHostileReviewWorker>(sp => sp.GetRequiredService<HostileReviewService>());",
+      "src/QBrainAi.Services/Services/HostileReviewService.cs:12:public sealed class HostileReviewService : IHostileReviewService, IHostileReviewWorker",
+      "src/QBrainAi.Services/Services/HostileReviewService.cs:26:    private readonly HostileReviewWorkerOptions _options;",
+      "src/QBrainAi.Services/Services/HostileReviewService.cs:30:    public HostileReviewService(McpDbContext db, HostileReviewWorkerOptions? options = null, TimeProvider? time = null)",
+      "src/QBrainAi.Services/Services/HostileReviewService.cs:34:        _options = options ?? new HostileReviewWorkerOptions();",
+      "src/QBrainAi.Services/Services/IHostileReviewService.cs:22:public interface IHostileReviewWorker",
+      "src/QBrainAi.Client/Models/FederationModels.cs:176:    public int HeartbeatSeconds { get; set; }"
+    ]
+  },
+  {
+    "Pattern": "Task<UnifiedSessionLogDto>|Unsupported task result type",
+    "Path": "src/QBrainAi.Repl.Core/GenericClientPassthrough.cs",
+    "ExitCode": 0,
+    "Matches": [
+      "640:            throw new InvalidOperationException($\"Unsupported task result type: {taskType.FullName ?? taskType.Name}\");"
+    ]
+  },
+  {
+    "Pattern": "FR-MCP-045",
+    "Path": "src/QBrainAi.Support.Mcp/Controllers/EventStreamController.cs",
+    "ExitCode": 0,
+    "Matches": [
+      "11:/// FR-MCP-045: Server-Sent Events stream for REST clients to receive change notifications."
+    ]
+  },
+  {
+    "Pattern": "Highest.*Effort|Effort.*=|xhigh",
+    "Path": "src/QBrainAi.Services/Services/GrokCliAgentExecutionStrategy.cs",
+    "ExitCode": 0,
+    "Matches": [
+      "24:    // QuadBrain persistent slots use xhigh on grok-4.6.",
+      "25:    private const string HighestEffort = \"high\";",
+      "26:    internal const string PersistentEffort = \"xhigh\";",
+      "82:            \"--effort\", HighestEffort,",
+      "83:            \"--reasoning-effort\", HighestEffort,",
+      "90:    /// Builds Grok CLI args for a QuadBrain Cli slot: xhigh effort, a stable session UUID, and"
+    ]
+  },
+  {
+    "Pattern": "xhigh",
+    "Path": "src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs",
+    "ExitCode": 0,
+    "Matches": [
+      "21:    internal const string HighestReasoningEffortConfig = \"model_reasoning_effort=\\\"xhigh\\\"\";"
+    ]
+  },
+  {
+    "Pattern": "xhigh",
+    "Path": "src/QBrainAi.Common.AgentCli/AgentCliClient.cs",
+    "ExitCode": 0,
+    "Matches": [
+      "17:    private const string ClineHighestThinkingLevel = \"xhigh\";"
+    ]
+  },
+  {
+    "Pattern": "OrderBy\\(.*\\.Id\\)|OrderBy\\(.*\\.Timestamp\\)",
+    "Path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+    "ExitCode": 0,
+    "Matches": [
+      "504:                .Include(s => s.Turns.OrderBy(e => e.Id))",
+      "693:            .Include(s => s.Turns.OrderBy(e => e.Id))",
+      "2002:        var turns = entity.Turns.OrderBy(e => e.Id).ToList();"
+    ]
+  },
+  {
+    "Pattern": "OrderBy\\(.*\\.Id\\)|OrderBy\\(.*\\.Timestamp\\)",
+    "Path": "src/QBrainAi.Support.Mcp/Services/TransactionGatedSessionLogService.cs",
+    "ExitCode": 0,
+    "Matches": [
+      "445:            .Include(session => session.Turns.OrderBy(turn => turn.Id))",
+      "476:        foreach (var sourceTurn in source.Turns.OrderBy(turn => turn.Id))",
+      "694:        AddRange(clone.Turns, source.Turns.OrderBy(turn => turn.Id).Select(CloneTurn));"
+    ]
+  },
+  {
+    "Pattern": "OrderBy\\(.*\\.Id\\)|OrderBy\\(.*\\.Timestamp\\)",
+    "Path": "src/QBrainAi.Services/Services/FederationAdapters/FederationStateAdapterImplementations.cs",
+    "ExitCode": 0,
+    "Matches": [
+      "1063:            .OrderBy(t => t.Timestamp)",
+      "1199:            .Include(session => session.Turns.OrderBy(turn => turn.Id))",
+      "1774:            .OrderBy(a => a.Id)"
+    ]
+  },
+  {
+    "Pattern": "workspace-path-rekey|WorkspacePathRekey|backslash",
+    "Path": "src",
+    "ExitCode": 0,
+    "Matches": [
+      "src/QBrainAi.Common.AgentCli/Processes/ProcessRunner.Windows.cs:110:        var backslashes = 0;",
+      "src/QBrainAi.Common.AgentCli/Processes/ProcessRunner.Windows.cs:115:                backslashes++;",
+      "src/QBrainAi.Common.AgentCli/Processes/ProcessRunner.Windows.cs:121:                quoted.Append('\\\\', (backslashes * 2) + 1);",
+      "src/QBrainAi.Common.AgentCli/Processes/ProcessRunner.Windows.cs:123:                backslashes = 0;",
+      "src/QBrainAi.Common.AgentCli/Processes/ProcessRunner.Windows.cs:127:            quoted.Append('\\\\', backslashes);",
+      "src/QBrainAi.Common.AgentCli/Processes/ProcessRunner.Windows.cs:128:            backslashes = 0;",
+      "src/QBrainAi.Common.AgentCli/Processes/ProcessRunner.Windows.cs:132:        quoted.Append('\\\\', backslashes * 2);",
+      "src/QBrainAi.Client/WorkspacePathNormalizer.cs:42:    /// (host <see cref=\"Path.GetFileName(string)\"/> treats a backslash as text on POSIX hosts).",
+      "src/QBrainAi.Client/WorkspaceIdentityPath.cs:11:    /// <summary>Windows paths compare without case and use backslash separators.</summary>",
+      "src/QBrainAi.Client/WorkspaceIdentityPath.cs:999:    /// root parser works on backslashes internally; only the emitted form changes. Values with no drive,",
+      "src/QBrainAi.Client/WorkspaceIdentityPath.cs:1000:    /// UNC or root (opaque identifiers, relative values) keep the backslash form.",
+      "src/QBrainAi.Client/WorkspaceIdentityPath.cs:1009:        var backslashForm = segments.Count == 0",
+      "src/QBrainAi.Client/WorkspaceIdentityPath.cs:1012:        return root.Length > 0 ? backslashForm.Replace((char)92, '/') : backslashForm;",
+      "src/QBrainAi.Client/WorkspaceIdentityPath.cs:1016:    private static string StripWindowsDevicePrefix(string backslashPath)",
+      "src/QBrainAi.Client/WorkspaceIdentityPath.cs:1020:        if (backslashPath.StartsWith(deviceUncPrefix, StringComparison.OrdinalIgnoreCase))",
+      "src/QBrainAi.Client/WorkspaceIdentityPath.cs:1021:            return @\"\\\\\" + backslashPath[deviceUncPrefix.Length..];",
+      "src/QBrainAi.Client/WorkspaceIdentityPath.cs:1023:        if (backslashPath.StartsWith(devicePrefix, StringComparison.OrdinalIgnoreCase) &&",
+      "src/QBrainAi.Client/WorkspaceIdentityPath.cs:1024:            backslashPath.Length >= devicePrefix.Length + 2 &&",
+      "src/QBrainAi.Client/WorkspaceIdentityPath.cs:1025:            char.IsAsciiLetter(backslashPath[devicePrefix.Length]) &&",
+      "src/QBrainAi.Client/WorkspaceIdentityPath.cs:1026:            backslashPath[devicePrefix.Length + 1] == ':')",
+      "src/QBrainAi.Client/WorkspaceIdentityPath.cs:1028:            return backslashPath[devicePrefix.Length..];",
+      "src/QBrainAi.Client/WorkspaceIdentityPath.cs:1031:        return backslashPath;",
+      "src/QBrainAi.Client/WorkspaceIdentityPath.cs:1037:    /// Windows-platform path switches to backslashes; POSIX-platform paths and non-Windows hosts are",
+      "src/QBrainAi.Support.Mcp/graphrag-global/input/canonical/templates/prompt-templates.yaml:480:      - The PowerShell escape character is the backtick `` ` ``, not the backslash. Never use C or bash-style `\\\"` escaping inside PowerShell command strings.",
+      "src/QBrainAi.QBAgent.Tools/BashCommandTool.cs:64:        // backslashes so the argv string handed to bash.exe is a single token.",
+      "src/QBrainAi.Services/Services/GitHubCliService.cs:496:        var backslashCount = 0;",
+      "src/QBrainAi.Services/Services/GitHubCliService.cs:501:                backslashCount++;",
+      "src/QBrainAi.Services/Services/GitHubCliService.cs:507:                builder.Append('\\\\', backslashCount * 2 + 1);",
+      "src/QBrainAi.Services/Services/GitHubCliService.cs:509:                backslashCount = 0;",
+      "src/QBrainAi.Services/Services/GitHubCliService.cs:513:            if (backslashCount > 0)",
+      "src/QBrainAi.Services/Services/GitHubCliService.cs:515:                builder.Append('\\\\', backslashCount);",
+      "src/QBrainAi.Services/Services/GitHubCliService.cs:516:                backslashCount = 0;",
+      "src/QBrainAi.Services/Services/GitHubCliService.cs:522:        if (backslashCount > 0)",
+      "src/QBrainAi.Services/Services/GitHubCliService.cs:523:            builder.Append('\\\\', backslashCount * 2);"
+    ]
+  }
+]

@@ -1,0 +1,1524 @@
+[
+  {
+    "TimestampUtc": "2026-10-18T06:18:18.246Z",
+    "CallId": "call_fbe408474be941a8970ce7ce9869dea4",
+    "Commands": [
+      "Get-Content -LiteralPath '/home/sharpninja/.claude/skills/add-profile/SKILL.md' -Raw"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:18:27.63Z",
+    "CallId": "call_ab4a5b192b594cca88d7631de1456aff",
+    "Commands": [
+      "Get-ChildItem -LiteralPath '/home/sharpninja/.claude/profile/' -File -Filter '*.md' | Where-Object { $_.Name -notlike 'add-profile*.md' -and $_.Name -ne 'SKILL.md' } | ForEach-Object { Write-Output ('PROFILE_FILE ' + $_.FullName); Get-Content -LiteralPath $_.FullName -Raw }\nGet-ChildItem -LiteralPath '/home/sharpninja/.claude/profile/' -File -Filter '*.md' | Where-Object { $_.Name -notlike 'add-profile*.md' -and $_.Name -ne 'SKILL.md' } | Measure-Object | Select-Object -ExpandProperty Count\nGet-Date -Format 'yyyy-MM-ddTHH:mm:sszzz'"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:18:32.928Z",
+    "CallId": "call_4cb2f263271f462fb6a52eb3f8b51a82",
+    "Commands": [
+      "Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' -Raw"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:18:36.473Z",
+    "CallId": "call_20a0a7483f6a4f16865813927b18f994",
+    "Commands": [
+      "Get-Content -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' | Select-Object -Skip 165 -First 138"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:19:07.188Z",
+    "CallId": "call_f26a3a95505e468681ddef76b555cdda",
+    "Commands": [
+      "$hvTokens = $null\n$hvErrors = $null\n[void][System.Management.Automation.Language.Parser]::ParseFile('/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hv-r3-bootstrap.ps1', [ref]$hvTokens, [ref]$hvErrors)\n$hvErrors\nInvoke-ScriptAnalyzer -Path '/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hv-r3-bootstrap.ps1' -Severity Warning,Error"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:19:10.623Z",
+    "CallId": "call_78237c6d508e4ecfaba2535fb2329df1",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File '/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016/docs/receipts/hv/hv-r3-bootstrap.ps1'"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:19:33.411Z",
+    "CallId": "call_49d3dfc0efb74993a552ec8d1b9f6b85",
+    "Commands": [
+      "$hvTokens = $null\n$hvErrors = $null\n[void][System.Management.Automation.Language.Parser]::ParseFile('docs/receipts/hv/hv-r3-read.ps1', [ref]$hvTokens, [ref]$hvErrors)\n$hvErrors\nInvoke-ScriptAnalyzer -Path 'docs/receipts/hv/hv-r3-read.ps1' -Severity Warning,Error\n[void][System.Management.Automation.Language.Parser]::ParseFile('docs/receipts/hv/hv-r3-bootstrap.ps1', [ref]$hvTokens, [ref]$hvErrors)\n$hvErrors\nInvoke-ScriptAnalyzer -Path 'docs/receipts/hv/hv-r3-bootstrap.ps1' -Severity Warning,Error"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:19:39.758Z",
+    "CallId": "call_dcd35d1945a04107a87c468df7c21a1c",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-bootstrap.ps1' -Tail",
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/Invoke-CodexMcpPlugin.ps1' -Count 260",
+      "rg --files /home/sharpninja/.codex/sessions -g '*01a14da9-1b10-75e2-bfac-c13091d343b1*'"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:20:02.709Z",
+    "CallId": "call_f943d4fe58b446cc844b0206436e9a99",
+    "Commands": [
+      "$hvTokens = $null\n$hvErrors = $null\n[void][System.Management.Automation.Language.Parser]::ParseFile('docs/receipts/hv/hv-r3-identity.ps1', [ref]$hvTokens, [ref]$hvErrors)\n$hvErrors\nInvoke-ScriptAnalyzer -Path 'docs/receipts/hv/hv-r3-identity.ps1' -Severity Warning,Error"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:20:10.178Z",
+    "CallId": "call_d84d62cf5e944e9782d22274cfdd53cc",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-identity.ps1' -WhatIf",
+      "rg -n 'sessionId|session.init|New-McpSessionLogSlug|generate|bootstrap' /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/lib/session-start.ps1 /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/lib/repl-invoke.ps1"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:20:16.356Z",
+    "CallId": "call_181bf7f6f9f44716b59ff4f1b6c91fe0",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-identity.ps1'",
+      "pwsh.exe -NoProfile -NonInteractive -File '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/Invoke-CodexMcpPlugin.ps1' -Command Status -WorkspacePath '/home/sharpninja/github/McpServer/.claude/worktrees/hv-amendment-20261016' -CacheRoot '/tmp/hv-r3-codex-plugin-cache-20261018T011809'"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": [
+      87307
+    ]
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:20:21.058Z",
+    "CallId": "call_2ee23688a7224ef0b77620628c8076a0",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/lib/session-start.ps1' -Count 180"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:20:29.948Z",
+    "CallId": "call_69dcda38dfe14416a0b4a416ae43bb31",
+    "Commands": [
+      "rg -n 'bootstrap|openSession|function New-ReplPluginSessionId|switch.*Method' /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/lib/repl-invoke.ps1 /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/lib/plugin-bootstrap.ps1",
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/lib/repl-invoke.ps1' -Start 340 -Count 75"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      1,
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:21:06.878Z",
+    "CallId": "call_fc942a72e3a5448880abdece8488cc4a",
+    "Commands": [
+      "$hvTokens = $null\n$hvErrors = $null\n[void][System.Management.Automation.Language.Parser]::ParseFile('docs/receipts/hv/hv-r3-plugin.ps1', [ref]$hvTokens, [ref]$hvErrors)\n$hvErrors\nInvoke-ScriptAnalyzer -Path 'docs/receipts/hv/hv-r3-plugin.ps1' -Severity Warning,Error"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:21:20.463Z",
+    "CallId": "call_47aa3ef306e540cdbb0768f778e06dd5",
+    "Commands": [
+      "$hvTokens = $null\n$hvErrors = $null\n[void][System.Management.Automation.Language.Parser]::ParseFile('docs/receipts/hv/hv-r3-plugin.ps1', [ref]$hvTokens, [ref]$hvErrors)\n$hvErrors\nInvoke-ScriptAnalyzer -Path 'docs/receipts/hv/hv-r3-plugin.ps1' -Severity Warning,Error",
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-plugin.ps1' -Operation Begin -WhatIf",
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-plugin.ps1' -Operation Begin"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": [
+      12584
+    ]
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:21:27.078Z",
+    "CallId": "call_42459ff028344b88b5ffeafae1678403",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/skills/requirements/SKILL.md' -Count 280"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      1,
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:21:37.062Z",
+    "CallId": "call_560d78978cc44f80aae2eecf54d98dba",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/lib/repl-invoke.ps1' -Start 240 -Count 85",
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path '/tmp/hv-r3-codex-plugin-cache-20261018T011809/session-state.yaml' -Count 100"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:21:52.968Z",
+    "CallId": "call_b05dcbac779b4220bc04f549d465d814",
+    "Commands": [
+      "$hvTokens = $null\n$hvErrors = $null\n[void][System.Management.Automation.Language.Parser]::ParseFile('docs/receipts/hv/hv-r3-plugin.ps1', [ref]$hvTokens, [ref]$hvErrors)\n$hvErrors\nInvoke-ScriptAnalyzer -Path 'docs/receipts/hv/hv-r3-plugin.ps1' -Severity Warning,Error",
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-plugin.ps1' -Operation Begin -WhatIf",
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-plugin.ps1' -Operation Begin"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": [
+      74929
+    ]
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:22:03.822Z",
+    "CallId": "call_5b05bc86dcc74423b19628335ab771d9",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path '/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.120.0/skills/requirements/SKILL.md' -Start 281 -Count 300"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": [
+      74929
+    ]
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:22:19.01Z",
+    "CallId": "call_5e209a1793f3429db34fee2a685e73bd",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Count 260",
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/receipts/hv/hostile-validator-amendment1-r2-20261017T221717.md' -Count 270",
+      "git rev-parse HEAD\ngit status --short\ngit log --format='%H%n%B' 36783b79..9e6822246e0e13f51612c638bc72d148954ccc18 -- docs/architecture docs/receipts"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:22:42.047Z",
+    "CallId": "call_fed703f51ef64a16921ce9fd00368d99",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path 'CLAUDE.md' -Count 400\npwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path '.github/copilot-instructions.md' -Count 400",
+      "rg --files docs/receipts/hv -g 'hv-r2-*.ps1'\nrg -n '^##|^###' docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:22:51.214Z",
+    "CallId": "call_31aa596b66cb4fb1abb8de1a9d24df62",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 139 -Count 172",
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/receipts/hv/hv-r2-store-read.ps1' -Count 240\npwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/receipts/hv/hv-r2-compare.ps1' -Count 250"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:22:59.685Z",
+    "CallId": "call_410bc075697240688f4863f1adc97bfb",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/receipts/hv/hv-r2-store-read.ps1' -Count 70"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:23:37.051Z",
+    "CallId": "call_dd610798234b479aa1c54d11178e2c50",
+    "Commands": [
+      "$hvTokens = $null\n$hvErrors = $null\n[void][System.Management.Automation.Language.Parser]::ParseFile('docs/receipts/hv/hv-r3-store-read.ps1', [ref]$hvTokens, [ref]$hvErrors)\n$hvErrors\nInvoke-ScriptAnalyzer -Path 'docs/receipts/hv/hv-r3-store-read.ps1' -Severity Warning,Error",
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-store-read.ps1' -WhatIf",
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-store-read.ps1'"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": [
+      11188
+    ]
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:23:42.957Z",
+    "CallId": "call_cf2c193dda50457d92649f8d1b7bd9a9",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 311 -Count 145"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:24:02.642Z",
+    "CallId": "call_42e229502b284d45a07dc8a5ddf1da33",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 456 -Count 118"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": [
+      11188
+    ]
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:24:12.732Z",
+    "CallId": "call_5a796ebd640c41ff9ad49f9173215b85",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 574 -Count 185"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:24:25.999Z",
+    "CallId": "call_29d48b53366c4fd7b70036aa890a6643",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 759 -Count 194"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:24:35.512Z",
+    "CallId": "call_1218edd2a49b42218b3ead3876a1f95c",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 953 -Count 193"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:24:58.343Z",
+    "CallId": "call_ae6e9b003a8348ceab03ff9f463a5e50",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1146 -Count 180"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:25:09.653Z",
+    "CallId": "call_9d058957eabc42c0b53a0ccdbe70844b",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1326 -Count 174"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:25:26.904Z",
+    "CallId": "call_03d491aeff57409c9199cc0a32cddf80",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1500 -Count 116"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:25:34.294Z",
+    "CallId": "call_45b690da6c754825ba51fae0cb1b3861",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1616 -Count 100"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:25:45.344Z",
+    "CallId": "call_898c25bfde6e488c8e49aec2556f5878",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1716 -Count 167"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:26:19.688Z",
+    "CallId": "call_c02afbb112384d6dbc81834e63d1beb0",
+    "Commands": [
+      "$hvTokens = $null\n$hvErrors = $null\n[void][System.Management.Automation.Language.Parser]::ParseFile('docs/receipts/hv/hv-r3-plugin.ps1', [ref]$hvTokens, [ref]$hvErrors)\n$hvErrors\nInvoke-ScriptAnalyzer -Path 'docs/receipts/hv/hv-r3-plugin.ps1' -Severity Warning,Error",
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-plugin.ps1' -Operation Note -WhatIf -Text 'Read-only review checkpoint.'",
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-plugin.ps1' -Operation Note -Category decision -Text 'Scope decision: treat this as class 1 documentation and plan validation, with BDPv4 evaluated as a plan structure requirement only. No implementation is present or authorized. Reject applying implementation test gates to the reviewer. Runtime identity is independently proven by turn_context gpt-6-astra/max. Store reads are now captured through the Codex wrapper. The first openSession attempt incorrectly used a missing sessionId from Status and was rejected; I corrected the caller to read the generated id from its isolated cache, then beginTurn and appendDialog persisted. Source reads through section 17.3 identify candidate concurrency and audit-read rollback traces for further verification; no final finding yet.'"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": [
+      64792
+    ]
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:26:30.393Z",
+    "CallId": "call_06cf766940be44be9d9dae69c0e7191b",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1883 -Count 266"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:26:42.413Z",
+    "CallId": "call_c8d02d6eeacf4c36804c34fdd37aa5ab",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 2148 -Count 241"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:26:50.982Z",
+    "CallId": "call_c870c1eaa81d43fda29da91aeb580175",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/receipts/hv/hv-r2-compare.ps1' -Count 140"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:26:59.678Z",
+    "CallId": "call_8d5bba18c21e4f41ba3c59c4ba8fd0ec",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 2389 -Count 247"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:27:11.458Z",
+    "CallId": "call_690c2616138d4e0bbd74d0d2d8891cbc",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 2636 -Count 74"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:27:20.77Z",
+    "CallId": "call_d6e42557999246c7bf7360338ae6f498",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 2710 -Count 90"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:27:30.478Z",
+    "CallId": "call_94cf4cf5559341f98a774c2f15dd9346",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 2800 -Count 74"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:27:50.699Z",
+    "CallId": "call_60417db21c434c75b8ec5c93444192df",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File 'docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 2875 -Count 74"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:31:51.761Z",
+    "CallId": "call_b73ade85050c449b848736de8e3206bc",
+    "Commands": [
+      "Get-Content -Raw -LiteralPath '/home/sharpninja/.claude/skills/add-profile/SKILL.md'\nGet-Content -Raw -LiteralPath '/home/sharpninja/.claude/profile/PROFILE-MERGED.md'"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:31:58.385Z",
+    "CallId": "call_d035889f981f47208f4bc55fd5b0d08e",
+    "Commands": [
+      "Get-ChildItem -LiteralPath '/home/sharpninja/.claude/profile' -Filter '*.md' -File | Where-Object Name -NotLike 'add-profile*.md' | Select-Object Name\n& './docs/receipts/hv/hv-r3-read.ps1' -Path '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' -Start 125 -Count 180\nGet-Date -Format s"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:32:03.647Z",
+    "CallId": "call_77f2a45a424c4d3a8f044b8943234f73",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' -Start 100 -Count 25",
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 2949 -Count 300"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:32:11.126Z",
+    "CallId": "call_ca15f09feb19473c9ba65fa3df8bede7",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r3-bootstrap.ps1' -Count 200\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r2-compare.ps1' -Count 110\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r3-store-PLAN-HVPIPELINE-001.txt' -Count 240"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:33:09.25Z",
+    "CallId": "call_b9167c955a8d44c19832f0ea9c0fde33",
+    "Commands": [
+      "$parseTokens=$null\n$parseErrors=$null\n[void][System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path './docs/receipts/hv/hv-r3-compare.ps1'),[ref]$parseTokens,[ref]$parseErrors)\n$parseErrors\nInvoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r3-compare.ps1' -Severity Warning,Error\n[void][System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path './docs/receipts/hv/hv-r3-bootstrap.ps1'),[ref]$parseTokens,[ref]$parseErrors)\n$parseErrors\nInvoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r3-bootstrap.ps1' -Severity Warning,Error"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:33:11.81Z",
+    "CallId": "call_b1aae9f86ac641b5aa5695157bc0f2f3",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-compare.ps1' -WhatIf"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:33:18.387Z",
+    "CallId": "call_689535d406c04cd59d9e47b3f4dcac45",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-compare.ps1'",
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r3-store-REMED-HVPIPELINE-001.txt' -Count 160",
+      "& './docs/receipts/hv/hv-r3-bootstrap.ps1' -Tail -Start 265"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:33:36.435Z",
+    "CallId": "call_ac0829042e07406ab38bc549df2c355b",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-plugin.ps1' -Operation Note -Text 'Post-compaction profile reload completed: add-profile skill and 1 profile file read in full. Amendment end-to-end read completed including Addendum B. Independent catalog comparison checked 1269 fields: all 63 HVPIPE records and 21 mapping pairs match section 19.1, with 138 FR criteria, 146 named-test occurrences, 145 distinct tests. D-09 old/current whole-object serialization differs; I will compare semantic fields before treating that as any record change. No verdict inferred from formatting differences.' -EvidenceName 'checkpoint-catalog'"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:33:56.6Z",
+    "CallId": "call_75bbb69f151249ae98cbaba84fe5145c",
+    "Commands": [
+      "$t=$null\n$e=$null\n[void][System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path './docs/receipts/hv/hv-r3-semantic-diff.ps1'),[ref]$t,[ref]$e)\n$e\nInvoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r3-semantic-diff.ps1' -Severity Warning,Error"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:34:01.74Z",
+    "CallId": "call_62373c40275c4ca980badf83176c2fe0",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-semantic-diff.ps1' -WhatIf"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:34:08.685Z",
+    "CallId": "call_a23c57bc22cb4553a70b2b1286aafe70",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-semantic-diff.ps1'",
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r2-provenance.ps1' -Count 300\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r2-collect.ps1' -Count 250",
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r2-hygiene.ps1' -Count 250\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r2-phase-continuity.ps1' -Count 250"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:34:35.714Z",
+    "CallId": "call_c8c6d17294d941d180f226a50050b174",
+    "Commands": [
+      "$t=$null\n$e=$null\n[void][System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path './docs/receipts/hv/hv-r3-prepare-evidence.ps1'),[ref]$t,[ref]$e)\n$e\nInvoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r3-prepare-evidence.ps1' -Severity Warning,Error"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:34:37.902Z",
+    "CallId": "call_05e49cf6245e485ea8544750acff1bb4",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-prepare-evidence.ps1' -WhatIf"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:34:40.467Z",
+    "CallId": "call_e29bf27cdac04e2e9c33aa6c570725aa",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-prepare-evidence.ps1'"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:34:45.396Z",
+    "CallId": "call_28ef933fa6cb4e458dae3b19174519f4",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-prepare-evidence.ps1' -Mode Check"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:34:49.442Z",
+    "CallId": "call_5ff17e614d304de3852e381cee432419",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-collect.ps1' -WhatIf\n& './docs/receipts/hv/hv-r3-hygiene.ps1' -WhatIf\n& './docs/receipts/hv/hv-r3-provenance.ps1' -WhatIf\n& './docs/receipts/hv/hv-r3-phase-continuity.ps1' -WhatIf"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:34:55.447Z",
+    "CallId": "call_a09c4d254e54434499cbc18130759734",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-collect.ps1'",
+      "& './docs/receipts/hv/hv-r3-phase-continuity.ps1'",
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path '/home/sharpninja/github/McpServer/docs/handoffs/hv-architecture-amendment-handoff-20261016T182551Z.md' -Count 260"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": [
+      41379,
+      24547
+    ]
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:35:04.486Z",
+    "CallId": "call_c39559cd2c7a4c72903a9bb1f88c568f",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r2-source-read.ps1' -Count 250\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r2-search.ps1' -Count 180\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './AGENTS.md' -Count 260\n& './docs/receipts/hv/hv-r3-read.ps1' -Path '/home/sharpninja/github/McpServer/docs/handoffs/hv-architecture-amendment-handoff-20261016T182551Z.md' -Start 260 -Count 40"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:35:16.33Z",
+    "CallId": "call_b415de8dd1c34681b6ab704df566889b",
+    "Commands": [
+      "$t=$null\n$e=$null\n[void][System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path './docs/receipts/hv/hv-r3-prepare-evidence.ps1'),[ref]$t,[ref]$e)\n$e\nInvoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r3-prepare-evidence.ps1' -Severity Warning,Error"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:35:19.014Z",
+    "CallId": "call_9e088be32e0f407fae4f134772306232",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-prepare-evidence.ps1' -Names source-read,search -WhatIf"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:35:21.69Z",
+    "CallId": "call_9a87488bfb954d1eadc1fd86b3c5b92b",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-prepare-evidence.ps1' -Names source-read,search"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:35:25.294Z",
+    "CallId": "call_40ffa1531b1540e9801f2c48bb797690",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-prepare-evidence.ps1' -Mode Check -Names source-read,search"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:35:28.071Z",
+    "CallId": "call_b90e90a6852a4992a5fced2d80b55914",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-source-read.ps1' -WhatIf"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:35:33.801Z",
+    "CallId": "call_7c8959c2a5614d4bb4ec12d6bf6a9823",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-source-read.ps1'",
+      "& './docs/receipts/hv/hv-r3-hygiene.ps1'",
+      "& './docs/receipts/hv/hv-r3-provenance.ps1'"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": [
+      79247,
+      43069
+    ]
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:35:47.131Z",
+    "CallId": "call_44ae18e05c86428ca01b1e43a8e8ea6d",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r3-source-problems-1.txt' -Count 300\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r3-store-related.json' -Count 260",
+      "& './docs/receipts/hv/hv-r3-search.ps1' -Pattern 'ModelGrader|ConvertHvReceiptToReview|agent_context_grader_not_allowed|codex gpt-6-astra|gpt-6-astra|max effort|manual HV|manual review' -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture.md'\n& './docs/receipts/hv/hv-r3-search.ps1' -Pattern 'CreatedAt =|CreatedAt.*Now|UpdatedAt.*Now|DateTimeOffset.Now' -Path './src/QBrainAi.Services/Services/RequirementsService.cs'",
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r3-source-problems-2.txt' -Count 450"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:35:54.734Z",
+    "CallId": "call_2fdc999091084e9281bd284d981a6aad",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-search.ps1' -Pattern 'ModelGrader|ConvertHvReceiptToReview|agent_context_grader_not_allowed|codex gpt-6-astra|gpt-6-astra|max effort|manual HV|manual review' -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture.md'\n& './docs/receipts/hv/hv-r3-search.ps1' -Pattern 'CreatedAt =|CreatedAt.*Now|UpdatedAt.*Now|DateTimeOffset.Now' -Path './src/QBrainAi.Services/Services/RequirementsService.cs'\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r3-store-related.json' -Start 78 -Count 170"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [
+      0,
+      1
+    ],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:36:25.267Z",
+    "CallId": "call_5318b5228fbd4ebe9d162511a2ba214c",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r3-source-problems-3.txt' -Count 330",
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r3-source-problems-4.txt' -Count 240",
+      "& './docs/receipts/hv/hv-r3-search.ps1' -Pattern 'class Requirement.*Dto|CreatedAt|UpdatedAt' -Path './src/QBrainAi.Client/Models/RequirementModels.cs'\n& './docs/receipts/hv/hv-r3-search.ps1' -Pattern 'readonly|read-only|permission-mode|available-tools|output-format|reasoning-effort|thinking|effort|sandbox' -Path './docs/receipts/hv/hv-r3-cli-claude-help.txt'\n& './docs/receipts/hv/hv-r3-search.ps1' -Pattern 'effort|model|available-tools|output-format|prompt|allow|deny' -Path './docs/receipts/hv/hv-r3-cli-copilot-help.txt'"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [
+      2,
+      0,
+      0
+    ],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:36:35.916Z",
+    "CallId": "call_2b52c5d25fbb46cf9b1f424279bc8bca",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-search.ps1' -Pattern 'CreatedAt.*Now|UpdatedAt.*Now' -Path './src'\n& './docs/receipts/hv/hv-r3-search.ps1' -Pattern 'ReadableKeyAllocator|### 3.5' -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture.md'\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 163 -Count 28\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hostile-validator-amendment1-r2-20261017T221717.md' -Start 97 -Count 20"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "NativeRgExitCodes": [
+      0
+    ],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:36:57.864Z",
+    "CallId": "call_ba2631bb91c545a6a2d73e76d4f3e1ba",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture.md' -Start 341 -Count 70\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1616 -Count 153"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:37:17.467Z",
+    "CallId": "call_2f4901277ae14a95b9636f1696173212",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-search.ps1' -Pattern 'shortened parent|shorten|first 40|prefix.*hash' -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture.md'\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1118 -Count 28\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 368 -Count 30\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1050 -Count 38"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [
+      0
+    ],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:37:33.66Z",
+    "CallId": "call_6a866aadec2b4ee7914e048159676acf",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 533 -Count 18\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 691 -Count 68\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 585 -Count 20\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1915 -Count 105"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:37:49.556Z",
+    "CallId": "call_8c637697dda44b70926dc2cd81a8cd73",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-plugin.ps1' -Operation Note -Category decision -Text 'Independent D-09 comparison: all seven existing record bodies and eleven mapping edges are unchanged from rounds 1 and 2. The only raw differences are generated createdAt/updatedAt values; RequirementsWorkflow.cs:963-964,1021-1022,1085-1086,1133 returns UtcNow on read. I reject interpreting those metadata differences as unauthorized store edits. Two material counterexamples are confirmed for further finding write-up: ExpireHvRunLeasesCommand rechecks only expiry, unlike the repaired artifact sweep active-state guard, allowing a second preselected sweep to reapply retry to an already abandoned run; probe RecordRead is enlisted in the transaction that later consumes bytes and may roll back, so the access audit is not durable before consumption.' -EvidenceName 'checkpoint-traces'"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:38:15.228Z",
+    "CallId": "call_864a3d9985ca4d89b6e388b6b28b056e",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 163 -Count 30\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r3-source-problems-4.txt' -Start 240 -Count 240"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:38:31.795Z",
+    "CallId": "call_06b48881a36a4343a6b989e195d69ccc",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r2-native-provenance.ps1' -Count 200\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r2-inspect.ps1' -Count 230\n& './docs/receipts/hv/hv-r3-read.ps1' -Path '/home/sharpninja/.claude/receipts/McpServer/20261016T153600-hv-amendment-vi-probes/MANIFEST.md' -Count 110"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:38:35.727Z",
+    "CallId": "call_1059544d0ad941c1bee4d974726bfbd1",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-prepare-evidence.ps1' -Names native-provenance,inspect -WhatIf"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:38:38.825Z",
+    "CallId": "call_ffb44ea1ec2248009b267bddf4914ba8",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-prepare-evidence.ps1' -Names native-provenance,inspect"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:38:42.918Z",
+    "CallId": "call_b0a9fe471b924de2ac437bca2f777ff3",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-prepare-evidence.ps1' -Mode Check -Names native-provenance,inspect"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:38:45.875Z",
+    "CallId": "call_9d9419cb802e4fafbd9741c199256e3d",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-native-provenance.ps1' -WhatIf"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:38:50.431Z",
+    "CallId": "call_62c0070e16544e0cae7977dd3a38e82d",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-native-provenance.ps1'",
+      "& './docs/receipts/hv/hv-r3-inspect.ps1' -Kind github"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:39:06.509Z",
+    "CallId": "call_8214035d8916499ba8fdbc27c4ef8c89",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path '/home/sharpninja/.claude/receipts/McpServer/20261016T153600-hv-amendment-vi-probes/out-effort-probe.txt' -Count 110\n& './docs/receipts/hv/hv-r3-read.ps1' -Path '/home/sharpninja/.claude/receipts/McpServer/20261016T153600-hv-amendment-vi-probes/out-gzip.txt' -Count 50\n& './docs/receipts/hv/hv-r3-read.ps1' -Path '/home/sharpninja/.claude/receipts/McpServer/20261016T153600-hv-amendment-vi-probes/out-write-probe-2.txt' -Count 100\n& './docs/receipts/hv/hv-r3-search.ps1' -Pattern 'grok|Cline|Copilot|VI-0' -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md'"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [
+      0
+    ],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:39:28.087Z",
+    "CallId": "call_5fa93399ba7543d79fc2dbe30c8f7b5c",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 634 -Count 55\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1410 -Count 145"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:40:06.899Z",
+    "CallId": "call_6444f97623734b908fed161c5501ebf1",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 456 -Count 65\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1145 -Count 112"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:40:32.742Z",
+    "CallId": "call_437cf5103d2145609624daf721af3033",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/plans/2026-10-07-federation-fixes.md' -Start 135 -Count 50\n& './docs/receipts/hv/hv-r3-search.ps1' -Pattern 'D5|D7|automatic|startup guard|dual-key' -Path './docs/plans/2026-10-07-federation-fixes.md'\n& './docs/receipts/hv/hv-r3-search.ps1' -Pattern 'FR-MCP-SESSIONTURN-005|A7|never closes|never call' -Path './docs/receipts/hv/hv-r3-foundation-stop-clauses.txt'\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r3-store-PLAN-SESSIONTRIAGEFIX-001.txt' -Start 1 -Count 40\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './src/QBrainAi.Repl.Core/GenericClientPassthrough.cs' -Start 618 -Count 25"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [
+      0,
+      0
+    ],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:40:50.992Z",
+    "CallId": "call_8b645656876846fc8223c2640f769f85",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-search.ps1' -Pattern '^.*FR-MCP-SESSIONTURN-005|^.*A7 |^.*A7:' -Path './docs/receipts/hv/hv-r3-store-PLAN-SESSIONTURNREVIEW-001.txt'\n& './docs/receipts/hv/hv-r3-search.ps1' -Pattern 'B9|paused' -Path './docs/receipts/hv/hv-r3-store-PLAN-SESSIONTRIAGEFIX-001.txt'\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/handoffs/federation-fixes-handoff-20261016T121400.md' -Start 1 -Count 23\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/handoffs/federation-fixes-handoff-20261016T121400.md' -Start 88 -Count 15"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [
+      0,
+      0
+    ],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:41:13.492Z",
+    "CallId": "call_df2af8c9fc064932bb42deea61d8253a",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path '/home/sharpninja/.claude/receipts/McpServer/20261016T153600-hv-amendment-vi-probes/out-cline-effort.txt' -Count 100\n& './docs/receipts/hv/hv-r3-read.ps1' -Path '/home/sharpninja/.claude/receipts/McpServer/20261016T153600-hv-amendment-vi-probes/out-cline-effort-2.txt' -Count 100\n& './docs/receipts/hv/hv-r3-search.ps1' -Pattern 'reasoning_effort|grok-4.7-build|summary.json' -Path '/home/sharpninja/.claude/receipts/McpServer/20261016T153600-hv-amendment-vi-probes/cli-runs/probe-report.txt'\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r3-cli-cline-help.txt' -Count 120\n& './docs/receipts/hv/hv-r3-search.ps1' -Pattern 'effort|model|permission-mode|output-format' -Path './docs/receipts/hv/hv-r3-cli-grok-help.txt'"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [
+      0,
+      0
+    ],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:41:25.449Z",
+    "CallId": "call_e58d568044604eed89c442ac8d1bc89f",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path '/home/sharpninja/.claude/receipts/McpServer/20261016T153600-hv-amendment-vi-probes/cli-runs/probe-report.txt' -Count 50\n& './docs/receipts/hv/hv-r3-read.ps1' -Path '/home/sharpninja/.claude/receipts/McpServer/20261016T153600-hv-amendment-vi-probes/cli-runs-2/probe-report.txt' -Count 50\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 41 -Count 45\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r3-cli-grok-help.txt' -Start 80 -Count 43"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:41:48.136Z",
+    "CallId": "call_a2fee222ae5740a8920c67e2ee2b78f3",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/20261018T011809-amendment1-r3.selfreview.md' -Count 240\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/diagrams/amendment1-r3-20261018T001837/survey.txt' -Count 130"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:42:05.692Z",
+    "CallId": "call_65d037f331ea489386e68cb42025ccd8",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-search.ps1' -Pattern 'mermaid@|mermaid.version|chromium|import .*mermaid|font.*conflict|failures' -Path './docs/receipts/diagrams/amendment1-r3-20261018T001837/mermaid-render.html'\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r3-git-effort-log.txt' -Start 360 -Count 160\n& './docs/receipts/hv/hv-r3-search.ps1' -Pattern 'claude-opus|No time|No implementation|create worktree|Nuke|Octopus|separate' -Path './docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md'"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [],
+    "NativeRgExitCodes": [
+      0
+    ],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:46:24.71Z",
+    "CallId": "call_d210112e218c4e2baeb57799ffe0ac34",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path '/home/sharpninja/.claude/skills/add-profile/SKILL.md' -Start 1 -Count 250\n& './docs/receipts/hv/hv-r3-read.ps1' -Path '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' -Start 1 -Count 124"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:46:31.883Z",
+    "CallId": "call_00476c16082d451c8b7e126035867d7f",
+    "Commands": [
+      "Get-ChildItem -LiteralPath '/home/sharpninja/.claude/profile/' -Filter '*.md' -File | Where-Object { $_.Name -notlike 'add-profile*.md' } | Select-Object -ExpandProperty FullName\n& './docs/receipts/hv/hv-r3-read.ps1' -Path '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' -Start 125 -Count 121"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:46:34.924Z",
+    "CallId": "call_638f83f1a0a04f44be74efc7ee86efaa",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path '/home/sharpninja/.claude/profile/PROFILE-MERGED.md' -Start 246 -Count 150\nGet-Date -Format s"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:46:44.231Z",
+    "CallId": "call_df75ae57c3aa42cfb1da33fcdbc31e2a",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r3-plugin.ps1' -Count 220\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r2-command-audit.ps1' -Count 240",
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/Development-Process-draft-v4.md' -Count 260\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r3-git-effort-log.txt' -Start 310 -Count 150"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0,
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:47:10.415Z",
+    "CallId": "call_3181afa6510343bfb275d88154bd3354",
+    "Commands": [
+      "$parserTokens = $null\n$parserErrors = $null\n[void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) 'docs/receipts/hv/hv-r3-followup.ps1'), [ref]$parserTokens, [ref]$parserErrors)\n$parserErrors\nInvoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r3-followup.ps1' -Severity Warning,Error\nif ($parserErrors.Count) { exit 1 }\n& './docs/receipts/hv/hv-r3-followup.ps1' -Mode Render -WhatIf"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:47:24.503Z",
+    "CallId": "call_9e0ee29b4f584f11b06d6b2d09c7f77d",
+    "Commands": [
+      "$parserTokens = $null\n$parserErrors = $null\n[void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) 'docs/receipts/hv/hv-r3-followup.ps1'), [ref]$parserTokens, [ref]$parserErrors)\n$analyzerFindings = @(Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r3-followup.ps1' -Severity Warning,Error)\nif ($parserErrors.Count -or $analyzerFindings.Count) { $parserErrors; $analyzerFindings | Format-List; exit 1 }\n'Parser errors: 0; analyzer warning/error: 0'\n& './docs/receipts/hv/hv-r3-followup.ps1' -Mode Render -WhatIf"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:47:29.283Z",
+    "CallId": "call_32deea3c50c940568ed58dc9bab5b31b",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r3-followup.ps1' -Mode Render\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/Development-Process-draft-v4.md' -Start 60 -Count 12\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r3-git-effort-log.txt' -Start 502 -Count 190"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:47:45.398Z",
+    "CallId": "call_7c3444e0df7d4e13ad0c871269ed13de",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r3-plugin.ps1' -Operation Note -Category decision -EvidenceName review-decisions -Text 'After full profile reload (one file), the propagation audit confirms six material candidate defects: duplicate HV lease expiration can change a newer or completed request; probe read audit can roll back after consumption; Submit replay returns evidence-bearing currentRun without a recorded read; artifact completion lacks complete execution metadata and terminal field writers; caller activity diagrams continue after refused finalization/failure; corruption wire contracts disagree. These are implementer edits under existing requirements, not new operator decisions. Rejected counterexample: readable child key length is already handled by the foundation allocator truncation rule. All 104 current Mermaid sources exactly equal the final render receipt sources. I used some inline PowerShell read/check expressions and a Render WhatIf before fixing an analyzer warning; this was my review-process deviation, corrected in the checked script, and will be disclosed rather than attributed to the implementer.'"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:47:49.004Z",
+    "CallId": "call_d727ad00b75f46ee887ac100097d3ed5",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r3-followup.ps1' -Mode Foundation"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:47:58.319Z",
+    "CallId": "call_d5e1fcc0f9a84cd280171dd6705a93ae",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r3-store-PLAN-SESSIONTURNREVIEW-001.json' -Count 12\n& './docs/receipts/hv/hv-r3-search.ps1' -Pattern '^.*FR-MCP-SESSIONTURN-005-AC00[14].*' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture.md'"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [
+      0
+    ],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:48:06.962Z",
+    "CallId": "call_163025e419924782b7427248b8d5fadd",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-search.ps1' -Pattern '^  \"[A-Za-z]+\": (\\[|\\{|\"{0,1}$)' -Path './docs/receipts/hv/hv-r3-store-PLAN-SESSIONTURNREVIEW-001.json'\n& './docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1120 -Count 25\n& './docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1451 -Count 50"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [
+      0
+    ],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:48:18.386Z",
+    "CallId": "call_e7ff7d89e2b0416d97b4aa7e02d3119f",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 365 -Count 23\n& './docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 530 -Count 21\n& './docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 692 -Count 36\n& './docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1050 -Count 36"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:48:25.13Z",
+    "CallId": "call_9b40a9145d0948feb8d311eab06fe99e",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1616 -Count 117"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:48:31.957Z",
+    "CallId": "call_909c4443f12c46b7b29b51bb66b20238",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path 'src/QBrainAi.Storage/Entities/HostileReviewExecutionEntity.cs' -Count 180\n& './docs/receipts/hv/hv-r3-search.ps1' -Pattern 'R2-F0[389]|R2-F10|^##|^###' -Path './docs/receipts/hv/hostile-validator-amendment1-r2-20261017T221717.md'"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [
+      0
+    ],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:48:54.073Z",
+    "CallId": "call_b4c2cdbee73e4824abd6f66a9712f3b0",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-search.ps1' -Pattern '^### 19|^#### FR|^- FR-MCP-HVPIPE-[0-9]{3} ' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md'\n& './docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/receipts/hv/hostile-validator-amendment1-r2-20261017T221717.md' -Start 76 -Count 54\n& './docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/receipts/hv/hv-r3-store-read.ps1' -Count 145\n& './docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/receipts/hv/hv-r2-persist-verdict.ps1' -Count 220"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [
+      0
+    ],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:48:59.788Z",
+    "CallId": "call_086cdd2f0600495eb31e7843043575ea",
+    "Commands": [
+      "& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r3-store-read.ps1' -Count 125\n& './docs/receipts/hv/hv-r3-read.ps1' -Path './docs/receipts/hv/hv-r2-persist-verdict.ps1' -Count 75"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:49:07.29Z",
+    "CallId": "call_667d05095694492a9875904e818c4ad7",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r3-followup.ps1' -Mode Identity\n& './docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 572 -Count 31\n& './docs/receipts/hv/hv-r3-read.ps1' -Path 'docs/architecture/SessionTurn-Review-AgentContext-Architecture-Amendment-1-Durable-HV.md' -Start 1934 -Count 32"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:50:11.342Z",
+    "CallId": "call_ba46737c458b4c8680b585fa5de48ab5",
+    "Commands": [
+      "$checkPaths = @('./docs/receipts/hv/hv-r3-followup.ps1','./docs/receipts/hv/hv-r3-command-audit.ps1')\nforeach ($checkPath in $checkPaths) {\n$parserTokens = $null\n$parserErrors = $null\n[void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) $checkPath), [ref]$parserTokens, [ref]$parserErrors)\n$analyzerFindings = @(Invoke-ScriptAnalyzer -Path $checkPath -Severity Warning,Error)\nif ($parserErrors.Count -or $analyzerFindings.Count) { $parserErrors; $analyzerFindings | Format-List; exit 1 }\nWrite-Output \"$checkPath parser=0 analyzer=0\"\n}\npwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r3-command-audit.ps1' -WhatIf"
+    ],
+    "IsPoll": true,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:50:15.573Z",
+    "CallId": "call_6a6297fcdb11476d89c8ee0815c379e3",
+    "Commands": [
+      "pwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r3-followup.ps1' -Mode Foundation\npwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r3-command-audit.ps1'"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:50:32.122Z",
+    "CallId": "call_2a4dc2f486bc4ff2b7a8b0f6eae504c3",
+    "Commands": [
+      "$parserTokens = $null\n$parserErrors = $null\n[void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) 'docs/receipts/hv/hv-r3-followup.ps1'), [ref]$parserTokens, [ref]$parserErrors)\n$analyzerFindings = @(Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r3-followup.ps1' -Severity Warning,Error)\nif ($parserErrors.Count -or $analyzerFindings.Count) { $parserErrors; $analyzerFindings | Format-List; exit 1 }\n'Parser errors: 0; analyzer warning/error: 0'\npwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r3-followup.ps1' -Mode Foundation"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:55:31.418Z",
+    "CallId": "call_d663a8e2a8f24ddaaeeed6e3fe2d49eb",
+    "Commands": [
+      "$parserTokens = $null\n$parserErrors = $null\n[void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) 'docs/receipts/hv/hv-r3-build-verdict.ps1'), [ref]$parserTokens, [ref]$parserErrors)\n$analyzerFindings = @(Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r3-build-verdict.ps1' -Severity Warning,Error)\nif ($parserErrors.Count -or $analyzerFindings.Count) { $parserErrors; $analyzerFindings | Format-List; exit 1 }\n'Parser errors: 0; analyzer warning/error: 0'\npwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r3-build-verdict.ps1' -WhatIf\n& './docs/receipts/hv/hv-r3-search.ps1' -Pattern 'Set-Content|WriteAllText|\\.json' -Path './docs/receipts/hv/hv-r3-provenance.ps1'\n& './docs/receipts/hv/hv-r3-search.ps1' -Pattern 'foundation' -Path './docs/receipts/hv/hv-r3-collect.ps1'"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      1
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:55:41.58Z",
+    "CallId": "call_f29a8da0bf654194a5b81b2562db55fd",
+    "Commands": [
+      "$parserTokens = $null\n$parserErrors = $null\n[void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) 'docs/receipts/hv/hv-r3-build-verdict.ps1'), [ref]$parserTokens, [ref]$parserErrors)\n$analyzerFindings = @(Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r3-build-verdict.ps1' -Severity Warning,Error)\nif ($parserErrors.Count -or $analyzerFindings.Count) { $parserErrors; $analyzerFindings | Format-List; exit 1 }\n'Parser errors: 0; analyzer warning/error: 0'\npwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r3-build-verdict.ps1' -WhatIf\n& './docs/receipts/hv/hv-r3-search.ps1' -Pattern 'Set-Content|WriteAllText|\\.json' -Path './docs/receipts/hv/hv-r3-provenance.ps1'\n& './docs/receipts/hv/hv-r3-search.ps1' -Pattern 'foundation' -Path './docs/receipts/hv/hv-r3-collect.ps1'"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [
+      0,
+      0
+    ],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:58:03.559Z",
+    "CallId": "call_4163aefc407d4d4b8c4f03c8e36c7428",
+    "Commands": [
+      "$checkPaths = @('./docs/receipts/hv/hv-r3-build-verdict.ps1','./docs/receipts/hv/hv-r3-persist-verdict.ps1')\nforeach ($checkPath in $checkPaths) {\n$parserTokens = $null\n$parserErrors = $null\n[void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) $checkPath), [ref]$parserTokens, [ref]$parserErrors)\n$analyzerFindings = @(Invoke-ScriptAnalyzer -Path $checkPath -Severity Warning,Error)\nif ($parserErrors.Count -or $analyzerFindings.Count) { $parserErrors; $analyzerFindings | Format-List; exit 1 }\nWrite-Output \"$checkPath parser=0 analyzer=0\"\n}\npwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r3-build-verdict.ps1' -WhatIf\npwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r3-persist-verdict.ps1' -Stage Prepare -WhatIf"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      1
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  },
+  {
+    "TimestampUtc": "2026-10-18T06:58:17.586Z",
+    "CallId": "call_646320434d914b5db949ca0f751ced9e",
+    "Commands": [
+      "$parserTokens = $null\n$parserErrors = $null\n[void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) 'docs/receipts/hv/hv-r3-persist-verdict.ps1'), [ref]$parserTokens, [ref]$parserErrors)\n$analyzerFindings = @(Invoke-ScriptAnalyzer -Path './docs/receipts/hv/hv-r3-persist-verdict.ps1' -Severity Warning,Error)\nif ($parserErrors.Count -or $analyzerFindings.Count) { $parserErrors; $analyzerFindings | Format-List; exit 1 }\n'Parser errors: 0; analyzer warning/error: 0'\npwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r3-build-verdict.ps1' -WhatIf\npwsh.exe -NoProfile -NonInteractive -File './docs/receipts/hv/hv-r3-persist-verdict.ps1' -Stage Prepare -WhatIf"
+    ],
+    "IsPoll": false,
+    "ExitCodes": [
+      0
+    ],
+    "NativeRgExitCodes": [],
+    "SessionIds": []
+  }
+]

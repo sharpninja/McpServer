@@ -351,10 +351,20 @@ function New-McpPluginActionRecord {
     #>
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory)][hashtable]$Values
+        [Parameter(Mandatory)][object]$Values
     )
 
-    return [McpPluginActionRecord]::new($Values)
+    # JSON workflow parameters arrive as PSCustomObject; YAML arrives as a map.
+    # Copy native members directly so scalar bytes/types survive either parser.
+    $nativeValues = @{}
+    if ($Values -is [Collections.IDictionary]) {
+        foreach ($key in $Values.Keys) { $nativeValues[$key] = $Values[$key] }
+    } elseif ($Values -is [pscustomobject]) {
+        foreach ($property in $Values.PSObject.Properties) { $nativeValues[$property.Name] = $property.Value }
+    } else {
+        throw 'Action values must be a native object or dictionary.'
+    }
+    return [McpPluginActionRecord]::new($nativeValues)
 }
 
 function ConvertTo-McpPluginStringList {
@@ -417,6 +427,7 @@ function New-McpPluginTurnUpsertRequest {
         [string[]]$ContextList = @(),
         [string[]]$FilesModified = @(),
         [object[]]$Actions = @(),
+        [string[]]$DesignDecisions = @(),
         [object[]]$ProcessingDialog = @(),
         [string]$PlanFile = '',
         [string]$TodoId = ''
@@ -465,6 +476,12 @@ function New-McpPluginTurnUpsertRequest {
     if ($null -ne $Actions) { $actionItems = @($Actions) }
     if ($actionItems.Count -gt 0) {
         $turn.actions = @($actionItems)
+    }
+
+    # Explicit caller decisions remain distinct from actions; never infer them.
+    $decisionItems = ConvertTo-McpPluginStringList -Value $DesignDecisions
+    if ($decisionItems.Count -gt 0) {
+        $turn.designDecisions = $decisionItems
     }
 
     $dialogItems = @()

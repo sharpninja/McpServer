@@ -5,6 +5,7 @@ Binding team guidance for writing and structuring .NET tests with xUnit.net v3. 
 - Document owner: Payton Byrd
 - Research date: Oct 20, 2026
 - Versions verified on that date (xunit.net home page and NuGet): `xunit.v3` 4.0.2, `xunit.analyzers` 2.2.0, `xunit.runner.visualstudio` 4.0.1, `xunit.v3.templates` 4.0.2, `xunit-console-tool` 4.0.2
+- Version target versus current pin: 4.0.2 is the target version for test projects. It is not what every repository uses today. For example, McpServer's `Directory.Packages.props` centrally pins `xunit.v3` to 3.2.2 at the time of writing. Until a repository completes the 4.0 migration (section 16), its checked-in pin wins, and rules marked as 4.0 only do not apply to it yet.
 - All facts come from live primary sources (xunit.net, the xunit GitHub repositories, NuGet, Microsoft Learn, and Avalonia's own docs and repository). Anything I could not verify is either left out or listed in the "Unverified items and discrepancies" section.
 
 ## How to read this document
@@ -12,6 +13,8 @@ Binding team guidance for writing and structuring .NET tests with xUnit.net v3. 
 - **MUST** / **MUST NOT**: mandatory. A violation blocks merge.
 - **SHOULD** / **SHOULD NOT**: the default. Any deviation needs a written reason in the PR description.
 - **MAY**: optional. Use your judgment.
+- Adoption: rules that require per-project or repository configuration (XU-020, XU-094, XU-110, XU-131) bind new test projects immediately and existing ones from the first PR that brings them under this guide. Until then an existing project is not in violation and needs no per-PR deviation reason. Each of those rules says so.
+- Adoption of code rules: every other rule applies to test code that a PR adds or changes. Existing test code that a PR does not touch is not in violation until it is migrated; for example, McpServer had existing tests on Oct 20, 2026 that read `DateTimeOffset.UtcNow` (XU-091) or wait with a real delay (XU-092). Bringing such code into compliance is tracked as separate migration work, not as a blocker for unrelated PRs.
 - Every rule has an ID (XU-NNN), a short rationale, and a source. If a rule's source says "Team policy", the rule is our own convention and not an xUnit.net requirement. Those rules still link the xUnit.net documentation that motivates them.
 - These rules use the API names from xUnit.net v3 4.0.x. Some names changed in 4.0, mostly around parallelization. Where that matters, the rule says which version it applies to.
 
@@ -39,6 +42,11 @@ Binding team guidance for writing and structuring .NET tests with xUnit.net v3. 
 - Rationale: v3 test projects are executables, so `dotnet test` or `dotnet run` gives a fast local signal.
 - Source: https://xunit.net/docs/getting-started/v3/getting-started
 
+**XU-005 (MUST)** Test code follows the repository's documentation policy. In McpServer, all code must have XML documentation comments and all public APIs must be documented, and that includes test classes, test methods, fixtures, and helpers. Code samples in this document omit those comments for brevity, except the sample under XU-035, which shows the expected shape. Do not copy a sample without adding them.
+
+- Rationale: Samples are trimmed to show the xUnit.net point being made. Without XML documentation, projects that generate a documentation file report CS1591 for public members.
+- Source: Team policy (AGENTS.md, "Correctness"); https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/
+
 ---
 
 ## 2. Project structure and packages
@@ -50,34 +58,36 @@ Binding team guidance for writing and structuring .NET tests with xUnit.net v3. 
 
 **XU-011 (MUST)** Test projects MUST set `<OutputType>Exe</OutputType>`.
 
-- Rationale: v3 test projects are stand-alone executables. For .NET (not .NET Framework) projects, the tests live in the `.dll` and the `.exe` is only a stub launcher. Multi-assembly runners must be given the `.dll` path.
-- Source: https://xunit.net/docs/getting-started/v3/migration
+- Rationale: v3 test projects are stand-alone executables. For .NET (not .NET Framework) projects, the tests live in the `.dll` and the `.exe` is only a stub launcher, so multi-assembly runners must be given the `.dll` path. The exception is a Native AOT project after `dotnet publish`: the produced executable is self-contained, and xUnit.net's first-party multi-assembly runners are given that executable as the test assembly.
+- Source: https://xunit.net/docs/getting-started/v3/migration ; https://xunit.net/docs/getting-started/v3/native-aot
 
 **XU-012 (MUST)** Each test project MUST reference exactly one core package. Choose one of:
 
 - `xunit.v3` (the default MTP version, which is MTP v2 for 4.0.0 and later)
 - `xunit.v3.mtp-v2` (MTP v2, chosen explicitly)
 - `xunit.v3.mtp-off` (MTP support disabled)
+- For a project that opts into Native AOT (4.0 or later, C# only, .NET 9 or later): the AOT variant of the same choice, `xunit.v3.aot`, `xunit.v3.aot.mtp-v2`, or `xunit.v3.aot.mtp-off`
+- For a test project that references a shared test utility library built with `xunit.v3.assert.source` (XU-014): the matching core-only package (`xunit.v3.core`, `xunit.v3.core.mtp-v2`, or `xunit.v3.core.mtp-off`; for Native AOT, `xunit.v3.core.aot`, `xunit.v3.core.aot.mtp-v2`, or `xunit.v3.core.aot.mtp-off`) plus an explicit `xunit.analyzers` reference, instead of `xunit.v3` or `xunit.v3.aot`
 
 Do not reference v2 packages (`xunit`, `xunit.abstractions`, `xunit.core`, `xunit.assert`, `xunit.console`).
 
-- Rationale: `xunit.v3` brings in `xunit.v3.core`, `xunit.v3.assert`, and `xunit.analyzers`. Support for MTP v1 (`xunit.v3.mtp-v1`) was removed in 4.0.0.
-- Source: https://xunit.net/docs/nuget-packages-v3 ; https://xunit.net/docs/getting-started/v3/microsoft-testing-platform ; https://xunit.net/releases/v3/4.0.0
+- Rationale: `xunit.v3` brings in `xunit.v3.core`, `xunit.v3.assert`, and `xunit.analyzers`. Support for MTP v1 (`xunit.v3.mtp-v1`) was removed in 4.0.0. Native AOT projects use the `.aot` package variants, which xUnit.net lists side by side with the reflection packages.
+- Source: https://xunit.net/docs/nuget-packages-v3 ; https://xunit.net/docs/getting-started/v3/microsoft-testing-platform ; https://xunit.net/releases/v3/4.0.0 ; https://xunit.net/docs/getting-started/v3/native-aot
 
-**XU-013 (MUST NOT)** Do not reference `xunit.v3` or `xunit.v3.core` from a project that is not a test project. That includes shared test harness libraries. Shared libraries reference `xunit.v3.extensibility.core` (for framework types) and/or `xunit.v3.assert` or `xunit.v3.assert.source` (for assertions).
+**XU-013 (MUST NOT)** Do not reference `xunit.v3` or `xunit.v3.core` from a project that is not a test project. That includes shared test harness libraries. Shared libraries reference `xunit.v3.extensibility.core` (for framework types) and/or `xunit.v3.assert` or `xunit.v3.assert.source` (for assertions). A shared library consumed by a Native AOT test project uses the AOT mapping in XU-018 instead (`xunit.v3.extensibility.core.aot`, `xunit.v3.assert.aot`, or `xunit.v3.assert.source` 4.0 or later with `XUNIT_AOT` defined).
 
 - Rationale: `xunit.v3.core` injects an entry point that turns the project into an executable.
-- Source: https://xunit.net/docs/nuget-packages-v3
+- Source: https://xunit.net/docs/nuget-packages-v3 ; https://xunit.net/docs/getting-started/v3/native-aot
 
-**XU-014 (SHOULD)** Put custom assertions in a shared "test utility" library that references `xunit.v3.assert.source`. Extend the partial `Assert` class there.
+**XU-014 (SHOULD)** Put custom assertions in a shared "test utility" library that references `xunit.v3.assert.source`. Extend the partial `Assert` class there. If the utility serves Native AOT test projects, it MUST use version 4.0 or later of the source package and define the `XUNIT_AOT` constant (XU-018); otherwise it compiles the reflection-mode assertion implementations. Test projects that reference that library MUST NOT also receive `xunit.v3.assert`, so they use the core-only package from XU-012 instead of `xunit.v3`.
 
-- Rationale: The source package exposes `Assert` as a partial class so you can add methods to it. This is the documented pattern for multi-project test suites.
-- Source: https://xunit.net/docs/nuget-packages-v3
+- Rationale: The source package exposes `Assert` as a partial class so you can add methods to it. This is the documented pattern for multi-project test suites. The source `Assert` class is `public` by default, and `xunit.v3` (through `xunit.v3.mtp-v2` in 4.x) depends on `xunit.v3.assert`, so a test project with both sees two public `Xunit.Assert` types and fails with CS0433. The core-only packages do not depend on `xunit.v3.assert` or `xunit.analyzers`, which is why the analyzers must be added explicitly. Verified on Oct 20, 2026 by building a 3.2.2 test project against such a utility library: with `xunit.v3` it failed with CS0433, and with `xunit.v3.core` it built.
+- Source: https://xunit.net/docs/nuget-packages-v3 ; https://github.com/xunit/assert.xunit/blob/main/README.md ; https://api.nuget.org/v3-flatcontainer/xunit.v3.mtp-v2/4.0.2/xunit.v3.mtp-v2.nuspec ; https://api.nuget.org/v3-flatcontainer/xunit.v3.core.mtp-v2/4.0.2/xunit.v3.core.mtp-v2.nuspec
 
-**XU-015 (MUST NOT)** Do not remove or disable `xunit.analyzers`.
+**XU-015 (MUST NOT)** Do not remove or disable `xunit.analyzers`. Projects on the 3.2.x line MUST reference `xunit.analyzers` 2.2.0 explicitly (centrally pinned), because the transitive version is too old for section 13.
 
-- Rationale: The analyzers enforce most of this document at compile time (see section 13).
-- Source: https://xunit.net/docs/nuget-packages-v3
+- Rationale: The analyzers enforce most of this document at compile time (see section 13). Section 13 is written against analyzers 2.2.0. `xunit.v3.mtp-v1` 3.2.2 (which `xunit.v3` 3.2.2 depends on) only requires `xunit.analyzers` 1.27.0, so without an explicit reference NuGet resolves 1.27.0. That version lacks rules section 13 relies on; for example, xUnit1069 (XU-075) first appears in analyzers 2.0.0.
+- Source: https://xunit.net/docs/nuget-packages-v3 ; https://api.nuget.org/v3-flatcontainer/xunit.v3.mtp-v1/3.2.2/xunit.v3.mtp-v1.nuspec ; https://github.com/xunit/xunit.analyzers/blob/2.0.0/src/xunit.analyzers/Utility/Descriptors.xUnit1xxx.cs
 
 **XU-016 (SHOULD)** Pin package versions centrally, for example with Central Package Management, and upgrade every test project together. The exception is XU-161.
 
@@ -112,6 +122,13 @@ Minimal project file (MTP v2, .NET 10 SDK, with `global.json` as shown in XU-020
 </Project>
 ```
 
+**XU-018 (MUST)** A test project that opts into Native AOT (v3 4.0 or later, C# only, .NET 9 or later) MUST use only the Native AOT package variants from xUnit.net's package table, in the test project and in every shared harness it consumes. Rules in this guide that depend on a feature xUnit.net lists as not available in AOT mode do not apply to AOT projects. Each such rule says so.
+
+- Package mapping for shared harnesses: `xunit.v3.extensibility.core.aot` instead of `xunit.v3.extensibility.core`, `xunit.v3.assert.aot` instead of `xunit.v3.assert`, and `xunit.v3.assert.source` only at 4.0 or later with the `XUNIT_AOT` constant defined in the project that compiles that source.
+- Features not available in AOT mode: EventSource reporting, default interface methods inherited by test classes, generic test methods, interface-based attributes, serialization, `.uniqueid` override files, and implicit or explicit conversion operators for theory data.
+- Rationale: The AOT variants replace runtime reflection with source generation. A reflection package in an AOT dependency graph compiles against the wrong implementation.
+- Source: https://xunit.net/docs/getting-started/v3/native-aot
+
 ---
 
 ## 3. Runner choice: Microsoft Testing Platform versus VSTest
@@ -120,13 +137,15 @@ Minimal project file (MTP v2, .NET 10 SDK, with `global.json` as shown in XU-020
 
 - With .NET SDK 10 or later, put `{"test": {"runner": "Microsoft.Testing.Platform"}}` in the solution's `global.json`.
 - With .NET SDK 8 or 9, set `<TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>` in the project.
+- `<UseMicrosoftTestingPlatformRunner>` only selects the command line UX of the test executable (XU-022). It does not switch the `dotnet test` backend.
+- Adoption: existing projects that still run `dotnet test` through VSTest keep doing so, with the VSTest packages from XU-021, until the PR that migrates them. In McpServer on Oct 20, 2026, `global.json` (SDK 10.0.201) had no `test.runner` setting, so `dotnet test` still used VSTest there.
 - Rationale: xUnit.net v3 supports MTP natively, and the current template defaults to it.
 - Source: https://xunit.net/docs/getting-started/v3/microsoft-testing-platform ; https://xunit.net/docs/getting-started/v3/getting-started
 
-**XU-021 (MUST)** If any consumer still runs tests through VSTest (an older Visual Studio, or a CI task that only speaks VSTest), keep the `xunit.runner.visualstudio` (3.0.0 or later) and `Microsoft.NET.Test.Sdk` package references. If every consumer uses MTP, you MAY remove them.
+**XU-021 (MUST)** If any consumer still runs tests through VSTest (an older Visual Studio, or a CI task that only speaks VSTest), keep the `xunit.runner.visualstudio` and `Microsoft.NET.Test.Sdk` package references. The adapter must be 3.0.0 or later for reflection-mode projects, and 4.0 or later for Native AOT projects (XU-018). If every consumer uses MTP, you MAY remove them. On xUnit.net 4.x with the .NET 10 SDK or later, a project that must still run under VSTest MUST also use the MTP-off core package (`xunit.v3.mtp-off`, or `xunit.v3.aot.mtp-off` for Native AOT) instead of the default `xunit.v3`, or move that consumer to MTP.
 
-- Rationale: VSTest mode needs both packages. xUnit.net recommends keeping them until every environment uses MTP.
-- Source: https://xunit.net/docs/getting-started/v3/microsoft-testing-platform ; https://xunit.net/docs/getting-started/v3/migration
+- Rationale: VSTest mode needs both packages. xUnit.net recommends keeping them until every environment uses MTP. In 4.0 the default package enables MTP v2, and xUnit.net offers the MTP-off packages for those who want to use VSTest on the .NET 10 SDK or later. Without them, a run can fail with "Testing with VSTest target is no longer supported by Microsoft.Testing.Platform on .NET 10 SDK and later". The Native AOT package table lists `xunit.runner.visualstudio` as "Use version 4.0+". McpServer centrally pins the adapter to 3.1.5 on Oct 20, 2026, so an AOT project there would need that pin raised.
+- Source: https://xunit.net/docs/getting-started/v3/microsoft-testing-platform ; https://xunit.net/docs/getting-started/v3/migration ; https://xunit.net/releases/v3/4.0.0 ; https://xunit.net/docs/getting-started/v3/native-aot
 
 **XU-022 (MUST)** Every test project's README or build script MUST say which command line UX it uses: native xUnit.net (the default) or MTP (`<UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>`). Scripts MUST use the switches for that UX.
 
@@ -138,10 +157,10 @@ Minimal project file (MTP v2, .NET 10 SDK, with `global.json` as shown in XU-020
 - Rationale: There is no adapter overhead, and `-?` lists every switch.
 - Source: https://xunit.net/docs/getting-started/v3/migration ; https://xunit.net/docs/getting-started/v3/getting-started
 
-**XU-024 (MAY)** Use the console runner .NET tool (`dotnet tool install xunit-console-tool --global`, which requires .NET 10 SDK, then run `xunit-console`) to run several test assemblies in parallel, or to mix v1/v2 assemblies with v3 ones.
+**XU-024 (MAY)** Use the console runner .NET tool (`dotnet tool install xunit-console-tool --global`, which requires .NET 10 SDK, then run `xunit-console`) to run several test assemblies in parallel. Pass `-parallelAssemblies on` (4.0 or later), because assemblies only run in parallel with each other when every one opts in and `parallelizeAssembly` defaults to `false`. On Windows only, it MAY also mix v1/v2 assemblies with v3 ones.
 
-- Rationale: A single v3 project does not need it. Custom reporters do not work through it.
-- Source: https://xunit.net/docs/getting-started/v3/getting-started ; https://xunit.net/releases/v3/4.0.0
+- Rationale: A single v3 project does not need it. Custom reporters do not work through it. On Linux and macOS the runner supports only v3 .NET test projects, because v1 and v2 assemblies need .NET Framework, which is not supported on those operating systems.
+- Source: https://xunit.net/docs/getting-started/v3/getting-started ; https://xunit.net/releases/v3/4.0.0 ; https://xunit.net/docs/running-tests-in-parallel ; https://xunit.net/docs/config-xunit-runner-json ; https://github.com/xunit/xunit/blob/v3-4.0.2/src/xunit.v3.runner.console/CommandLine.cs
 
 ---
 
@@ -157,10 +176,10 @@ Minimal project file (MTP v2, .NET 10 SDK, with `global.json` as shown in XU-020
 - Rationale: These are framework errors. Overloads are reported at run time in reflection mode, and are not run at all in Native AOT mode.
 - Source: https://xunit.net/xunit.analyzers/rules/ ; https://xunit.net/releases/v3/4.0.2
 
-**XU-032 (MUST)** Helper methods in a test class must be `private` or `internal` (xUnit1013 flags public methods that are not tests).
+**XU-032 (MUST)** Helper methods in a test class must not be `public` unless they are tests. Use `private`, `internal`, or `protected` (for helpers that a base test class shares with derived test classes). xUnit1013 flags public methods that are not tests.
 
-- Rationale: A public helper looks like a test that someone forgot to mark.
-- Source: https://xunit.net/xunit.analyzers/rules/
+- Rationale: A public helper looks like a test that someone forgot to mark. The xUnit1013 page says any visibility other than public fixes the diagnostic.
+- Source: https://xunit.net/xunit.analyzers/rules/ ; https://xunit.net/xunit.analyzers/rules/xUnit1013
 
 **XU-033 (SHOULD)** Name things as follows:
 
@@ -183,8 +202,14 @@ Minimal project file (MTP v2, .NET 10 SDK, with `global.json` as shown in XU-020
 ```csharp
 namespace Emulator.Cpu.Tests;
 
+/// <summary>
+/// Unit tests for <see cref="Alu"/> arithmetic.
+/// </summary>
 public class AluTests
 {
+    /// <summary>
+    /// Verifies that ADC adds one extra when the carry flag is set.
+    /// </summary>
     [Fact]
     public void Adc_WithCarrySet_AddsOneExtra()
     {
@@ -210,9 +235,9 @@ public class AluTests
 
 - Facts take no parameters (xUnit1001) and carry no data (xUnit1005).
 - Theories must have data (xUnit1003), must have parameters (xUnit1006), and should use every parameter (xUnit1026).
-- Theory parameters cannot be `params` arrays (xUnit1022) or have default values (xUnit1023).
+- Theories MAY use default parameter values. In reflection mode they MAY also use `params` arrays. xUnit1022 and xUnit1023 only flag those on xUnit.net versions before 2.2.0, so they do not restrict v3 projects. In Native AOT mode a theory parameter MUST NOT use `params` (xUnit1064); build the array in the theory data instead.
 - Rationale: The analyzers enforce these rules. Most of them are errors by default.
-- Source: https://xunit.net/xunit.analyzers/rules/
+- Source: https://xunit.net/xunit.analyzers/rules/ ; https://xunit.net/xunit.analyzers/rules/xUnit1022 ; https://xunit.net/xunit.analyzers/rules/xUnit1023 ; https://xunit.net/xunit.analyzers/rules/xUnit1064
 
 **XU-042 (SHOULD)** New data sources should be a public static member that returns `IEnumerable<TheoryDataRow<...>>`, referenced with `[MemberData(nameof(...))]`.
 
@@ -234,8 +259,8 @@ public void Add_ReturnsWrappedSum(byte a, byte b, byte expected) =>
 
 **XU-043 (MAY)** Existing code MAY keep using `TheoryData<T1, ...>`. Do not wrap types that implement `ITheoryDataRow` in `TheoryData<...>` (xUnit1052).
 
-- Rationale: It is still supported and still type checked (xUnit1037 to xUnit1040), but it cannot carry per-row metadata.
-- Source: https://xunit.net/docs/getting-started/v3/theory-data-attributes ; https://xunit.net/xunit.analyzers/rules/
+- Rationale: It is still supported and still type checked (xUnit1037 to xUnit1040). It can also carry per-row metadata: `TheoryData<T>` and its multi-argument forms accept typed rows through `Add(TheoryDataRow<...>)`, `AddRange`, and the constructors. xUnit1052 is about a different case, a `TheoryData<...>` whose type argument is itself a row type, such as `TheoryData<TheoryDataRow<int>>`.
+- Source: https://xunit.net/docs/getting-started/v3/theory-data-attributes ; https://xunit.net/xunit.analyzers/rules/ ; https://api.xunit.net/v3/3.2.2/Xunit.TheoryData-1.html ; https://xunit.net/xunit.analyzers/rules/xUnit1052
 
 ```csharp
 public static TheoryData<int, bool> OddCases = new() { { 3, true }, { 6, false } };
@@ -272,7 +297,7 @@ public sealed class OpcodeCases : IEnumerable<TheoryDataRow<byte, string>>
 }
 ```
 
-**XU-047 (SHOULD)** Theory data should be serializable, so each row can be listed and run on its own in Test Explorer. Serializable means any of:
+**XU-047 (SHOULD)** In reflection mode, theory data should be serializable, so each row can be listed and run on its own in Test Explorer. This rule does not apply to Native AOT projects, because xUnit.net lists serialization as not available in AOT mode (see section 17 for what is not verified about AOT discovery). Serializable means any of:
 
 - the built-in intrinsics and system types (for example `int`, `string`, `byte`, `DateTime`, `Guid`, `Uri`, `Version`, `Type`)
 - enums, single-dimensional arrays of serializable values, and tuples (v3 3.0.1 or later)
@@ -281,32 +306,32 @@ public sealed class OpcodeCases : IEnumerable<TheoryDataRow<byte, string>>
 - types covered by an `IXunitSerializer` that you register with `[assembly: RegisterXunitSerializer(typeof(MySerializer), typeof(MyType))]`
 
 - Rationale: If any row is not serializable, discovery falls back to a single test for the whole method. xUnit1044 to xUnit1047 warn about this.
-- Source: https://github.com/xunit/xunit.net/blob/main/site/docs/getting-started/v3/custom-serialization.md ; https://xunit.net/xunit.analyzers/rules/xUnit1044 ; https://xunit.net/docs/getting-started/v3/theory-data-attributes
+- Source: https://github.com/xunit/xunit.net/blob/main/site/docs/getting-started/v3/custom-serialization.md ; https://xunit.net/xunit.analyzers/rules/xUnit1044 ; https://xunit.net/docs/getting-started/v3/theory-data-attributes ; https://xunit.net/docs/getting-started/v3/native-aot
 
 **XU-048 (MAY)** Use `[Theory(DisableDiscoveryEnumeration = true)]` for data sets that are large or expensive to build.
 
 - Rationale: It stops the data from being enumerated during discovery.
 - Source: https://xunit.net/docs/getting-started/v3/theory-data-attributes
 
-**XU-049 (MAY)** Use `MatrixTheoryData` to combine 2 to 5 data sets into every combination.
+**XU-049 (MAY)** Use `MatrixTheoryData` to combine 2 to 15 data sets into every combination (the 3.2.2 API lists `MatrixTheoryData<T1, T2>` through `MatrixTheoryData<T1, ..., T15>`).
 
 - Rationale: It builds combinatorial cases (for example opcode by flag state) without writing every row by hand.
-- Source: https://xunit.net/docs/getting-started/v3/whats-new
+- Source: https://xunit.net/docs/getting-started/v3/whats-new ; https://api.xunit.net/v3/3.2.2/Xunit.html
 
 ```csharp
 public static TheoryData<byte, bool> OpcodeByCarry =
     new MatrixTheoryData<byte, bool>([0x69, 0xE9], [true, false]);
 ```
 
-**XU-050 (SHOULD)** Put per-row metadata (`Skip`, `Explicit`, `Label`, `Timeout`, `Traits`, `TestDisplayName`, `DisableParallelization`) on the `TheoryDataRow` or the `InlineData` row, not on the whole theory.
+**XU-050 (SHOULD)** Put per-row metadata (`Skip`, `Explicit`, `Label`, `Timeout`, `Traits`, `TestDisplayName`, and, in v3 4.0 or later only, `DisableParallelization`) on the `TheoryDataRow` or the `InlineData` row, not on the whole theory.
 
-- Rationale: The setting then affects only the row that needs it.
-- Source: https://xunit.net/docs/getting-started/v3/theory-data-attributes
+- Rationale: The setting then affects only the row that needs it. `DisableParallelization` does not exist on data rows or data attributes in 3.2.x; it arrived with the 4.0 parallelization changes (XU-084).
+- Source: https://xunit.net/docs/getting-started/v3/theory-data-attributes ; https://xunit.net/releases/v3/4.0.0 ; https://github.com/xunit/xunit/blob/v3-4.0.2/src/xunit.v3.core/ITheoryDataRow.cs
 
-**XU-051 (MAY)** `MemberData` methods MAY be async and return `Task<>` or `ValueTask<>`. They MUST NOT fetch data from the network or other external systems (see XU-095).
+**XU-051 (MAY)** `MemberData` sources MAY be async: they MAY return `IAsyncEnumerable<TheoryDataRow<...>>` (for example, an async iterator), and either `IEnumerable<>` or `IAsyncEnumerable<>` MAY be wrapped in `Task<>` or `ValueTask<>`. They MUST NOT fetch data from the network or other external systems (see XU-095).
 
 - Rationale: v3 supports async data, but data from outside the test makes tests non-deterministic.
-- Source: https://xunit.net/docs/getting-started/v3/whats-new
+- Source: https://xunit.net/docs/getting-started/v3/whats-new ; https://api.xunit.net/v3/3.0.0/Xunit.MemberDataAttribute.html
 
 ---
 
@@ -371,15 +396,18 @@ public sealed class BootTests(RomImageFixture rom)
 - Rationale: An assembly fixture does not change parallelization, so several tests can use it at the same moment.
 - Source: https://xunit.net/docs/shared-context ; https://xunit.net/releases/v3/4.0.0
 
-**XU-065 (MUST)** A shared fixture (class, collection, or assembly) MUST NOT hold mutable state that tests change, unless the fixture resets that state before each test. In v3 4.0 or later, the fixture SHOULD do the reset by implementing `INotifyTestLifecycle` or `INotifyTestLifecycleAsync`.
+**XU-065 (MUST)** A shared fixture (class, collection, or assembly) MUST NOT hold mutable state that tests change, with two exceptions:
 
-- Rationale: Leftover state makes tests depend on run order. The 4.0 lifecycle notification interfaces exist for exactly this case, for example resetting data before each test.
-- Source: https://xunit.net/releases/v3/4.0.0
+- The fixture gives each test its own isolated state (for example, a new instance or scope per test).
+- The fixture resets that state before each test, and every consumer of the fixture runs serially. That holds for class and collection fixtures under the default `parallelMode` `collections`. It does not hold for assembly fixtures (XU-064), or for any fixture under `parallelMode` `all` (XU-084), because those can be used by several tests at the same moment. In v3 4.0 or later, the fixture SHOULD do the reset by implementing `INotifyTestLifecycle` or `INotifyTestLifecycleAsync`.
 
-**XU-066 (MUST)** Every fixture constructor argument must come from a declared fixture (xUnit1041). A fixture MUST NOT take another fixture as a constructor dependency. If you need ordering, write one fixture that builds and owns the others.
+- Rationale: Leftover state makes tests depend on run order. The 4.0 lifecycle notification interfaces exist for resetting data before each test, but a reset while another test is still using the fixture would corrupt that test, so resetting is only safe when consumers are serialized.
+- Source: https://xunit.net/releases/v3/4.0.0 ; https://xunit.net/docs/shared-context ; https://xunit.net/docs/running-tests-in-parallel
 
-- Rationale: xUnit.net does not control the order fixtures are created in, and fixtures cannot depend on each other.
-- Source: https://xunit.net/docs/shared-context ; https://xunit.net/xunit.analyzers/rules/
+**XU-066 (MUST)** Every fixture constructor argument must come from a declared fixture (xUnit1041). A fixture MAY take a fixture with a longer lifetime as a constructor argument: a class fixture MAY receive assembly and/or collection fixtures, and a collection fixture MAY receive assembly fixtures. A fixture MUST NOT take a fixture of the same or a shorter lifetime (for example, one class fixture taking another class fixture). If you need that, write one fixture that builds and owns the others.
+
+- Rationale: The `IClassFixture<T>` and `ICollectionFixture<T>` API contracts explicitly allow these parent-lifetime constructor arguments. xUnit.net does not control the creation order of fixtures at the same level, so same-level dependencies are unsupported.
+- Source: https://api.xunit.net/v3/4.0.0/Xunit.IClassFixture-1.html ; https://api.xunit.net/v3/4.0.0/Xunit.ICollectionFixture-1.html ; https://xunit.net/docs/shared-context ; https://xunit.net/xunit.analyzers/rules/
 
 **XU-067 (MAY)** Implement `ITestPipelineStartup` (registered with `[assembly: TestPipelineStartup(typeof(T))]`) only for global setup that both discovery and execution need. The interface has `ValueTask StartAsync(IMessageSink diagnosticMessageSink)` and `ValueTask StopAsync()`. Only one startup class is allowed. Use fixtures for anything that only execution needs.
 
@@ -418,9 +446,9 @@ public async Task ListTools_ReturnsRegisteredTools()
 - Rationale: Tests run on a limited pool of threads, so blocking can cause deadlocks.
 - Source: https://xunit.net/xunit.analyzers/rules/xUnit1031
 
-**XU-073 (MUST NOT)** Do not call `ConfigureAwait(false)` in test methods (xUnit1030). Turn off CA2007 in test projects. The analyzers package includes a CA2007 suppressor for test methods.
+**XU-073 (MUST NOT)** Do not call `ConfigureAwait(false)` in test methods, and do not call the `ConfigureAwait(ConfigureAwaitOptions)` overload without including `ConfigureAwaitOptions.ContinueOnCapturedContext` (for example, `ConfigureAwaitOptions.SuppressThrowing` alone). xUnit1030 flags both. Turn off CA2007 in test projects. The analyzers package includes a CA2007 suppressor for test methods.
 
-- Rationale: `ConfigureAwait(false)` moves the rest of the test onto the general thread pool, so xUnit.net can no longer limit how many tests run at once.
+- Rationale: Both forms move the rest of the test onto the general thread pool, so xUnit.net can no longer limit how many tests run at once.
 - Source: https://xunit.net/xunit.analyzers/rules/xUnit1030 ; https://github.com/xunit/xunit.analyzers/blob/main/src/xunit.analyzers/Utility/Descriptors.Suppressors.cs
 
 **XU-074 (MUST)** Always await async assertions (xUnit2021). Use `Assert.ThrowsAsync` for exceptions thrown asynchronously (xUnit2014).
@@ -481,10 +509,10 @@ public async Task ListTools_ReturnsRegisteredTools()
 - Rationale: xUnit.net randomizes order in a stable way, based on the test assembly's unique ID. That ID comes from the assembly's file path, so CI and local runs use different orders.
 - Source: https://xunit.net/docs/getting-started/v3/whats-new
 
-**XU-087 (SHOULD)** To reproduce a failure that depends on order, copy the assembly unique ID from the run output into a `<AssemblyName>.uniqueid` file next to the test assembly (v3 3.0.1 or later).
+**XU-087 (SHOULD)** In reflection mode, to reproduce a failure that depends on order, copy the assembly unique ID from the run output into a `<AssemblyName>.uniqueid` file next to the test assembly (v3 3.0.1 or later). This does not work for Native AOT projects.
 
-- Rationale: The same ID reproduces the same order.
-- Source: https://xunit.net/docs/getting-started/v3/whats-new
+- Rationale: The same ID reproduces the same order. xUnit.net lists the `.uniqueid` override file as a feature that is not available in AOT mode, so an AOT project has no documented way to replay an order this way.
+- Source: https://xunit.net/docs/getting-started/v3/whats-new ; https://xunit.net/docs/getting-started/v3/native-aot
 
 ---
 
@@ -519,12 +547,12 @@ Assert.Equal(1, vsync.FrameCount);
 - Rationale: A failing case can then be replayed exactly. xUnit.net itself moved to stable, repeatable test ordering for the same reason.
 - Source: Team policy; https://xunit.net/docs/getting-started/v3/whats-new
 
-**XU-094 (MUST)** Set the culture explicitly in `xunit.runner.json` (`"culture": "invariant"`, or a named culture). Tests that check behavior in specific cultures cover each culture explicitly (see XU-095).
+**XU-094 (MUST)** Set the culture explicitly in `xunit.runner.json` (`"culture": "invariant"`, or a named culture). Existing projects adopt this together with their `xunit.runner.json` (XU-110). Tests that check behavior in specific cultures cover each culture explicitly. See the "Cultured tests" item in section 17 for why this guide does not prescribe `CulturedFact` or `CulturedTheory`.
 
 - Rationale: The default is the machine's culture, so number and date formatting differ between developer machines and CI.
 - Source: https://xunit.net/docs/config-xunit-runner-json ; https://xunit.net/docs/getting-started/v3/whats-new
 
-**XU-095 (MUST)** Unit tests MUST mock or fake external I/O (network, databases, real devices, files outside a temp folder unique to the test). Integration tests that really need such a dependency MUST be marked `Explicit` or conditionally skipped (section 12), and SHOULD use fixtures to manage the resource.
+**XU-095 (MUST)** Unit tests MUST mock or fake external I/O (network, databases, real devices, files outside a temp folder unique to the test). Integration tests that really need such a dependency MUST be kept out of the required validation scope with a gate-excluded trait or a separate project (XU-121), and SHOULD use fixtures to manage the resource.
 
 - Rationale: This is how XU-001 works in practice. Mocked data proves a test is green before the production code is written, and keeps it green whatever the environment.
 - Source: Team policy; https://xunit.net/docs/shared-context
@@ -595,7 +623,7 @@ public sealed class DisassemblerTests(ITestOutputHelper output)
 
 ## 11. Configuration
 
-**XU-110 (MUST)** Each test project MUST have an `xunit.runner.json` at its root. The file includes `"$schema": "https://xunit.net/schema/current/xunit.runner.schema.json"` and is included as `Content` with `CopyToOutputDirectory="PreserveNewest"`.
+**XU-110 (MUST)** Each test project MUST have an `xunit.runner.json` at its root. New test projects comply from the start. An existing project adopts the file, with the team baseline below, in the first PR that brings it under this guide; until then it is not in violation. In McpServer, none of the test projects that reference `xunit.v3` had an `xunit.runner.json` on Oct 20, 2026, so this rollout is still to do. The file includes `"$schema": "https://xunit.net/schema/current/xunit.runner.schema.json"` and is included as `Content` with `CopyToOutputDirectory="PreserveNewest"`.
 
 - Rationale: Settings stay in source control, and editors get autocomplete from the schema.
 - Source: https://xunit.net/docs/config-xunit-runner-json
@@ -650,10 +678,12 @@ Team baseline `xunit.runner.json`:
   "culture": "invariant",
   "parallelMode": "collections",
   "parallelizeTestCollections": true,
-  "diagnosticMessages": false,
+  "diagnosticMessages": true,
   "longRunningTestSeconds": 60
 }
 ```
+
+`diagnosticMessages` is `true` because long-running test warnings are diagnostic messages and only appear when diagnostics are enabled (XU-143).
 
 `parallelizeTestCollections` is kept in the baseline so that older v3 projects (before 4.0), such as the Avalonia project pinned in XU-161, read the same intent. xUnit.net documents that setting both is safe.
 
@@ -661,29 +691,39 @@ Team baseline `xunit.runner.json`:
 
 ## 12. Skip and explicit tests
 
-**XU-120 (MUST NOT)** Do not commit a test with a static `Skip = "..."` unless it links to a work item and a human approved it in the PR. xUnit1004 is raised to error (section 13), so the skip also needs a reviewed suppression.
+**XU-120 (MUST NOT)** Do not commit a test with a static `Skip = "..."` unless it links to a work item, a human approved it in the PR, and the test is outside the required validation scope (excluded from the gate as XU-121 describes). xUnit1004 is raised to error (section 13), so the skip also needs a reviewed suppression.
 
-- Rationale: xUnit.net says skipping should be a temporary mechanism. Under XU-001, a skip that hides a failure is a red test.
+- Rationale: xUnit.net says skipping should be a temporary mechanism. Under XU-001, a skip that hides a failure is a red test. Approval does not change the result: a static skip is still reported as skipped, and the gate requires zero skips (XU-140).
 - Source: https://xunit.net/xunit.analyzers/rules/xUnit1004
 
-**XU-121 (SHOULD)** For skips that depend on the environment (operating system, missing hardware, licensed ROM images that CI does not have), use `SkipUnless` or `SkipWhen` together with `Skip` (the reason), and `SkipType` if the property lives on another class.
+**XU-121 (MUST)** A test that depends on the environment (operating system, missing hardware, licensed ROM images that CI does not have) MUST NOT be in the required validation scope unless that scope provides the dependency. The validation gate requires zero failures and zero skips in the executed scope (XU-140), so a skip inside that scope fails the gate. Either provide the dependency on the gate's agents, or keep the test out of the gate: tag it with a trait and exclude that trait from the gate run (`--filter-not-trait "name=value"` in MTP, `-trait- "name=value"` in the native UX), or put it in a separate test project that is not in the gate's project list. `Explicit = true` alone is not enough where the gate counts tests that were not run: xUnit.net reports unrequested explicit tests as "not run", and McpServer's `build/SessionLifeUnitGateValidator.cs` rejects a TRX whose `notExecuted` counter is above 0. `Explicit` MAY be combined with the trait exclusion.
 
-- The property must be `public static bool` (xUnit1054).
+Outside the required validation scope (for example a scheduled hardware job or a local run), such a test SHOULD use `SkipUnless` or `SkipWhen` together with `Skip` (the reason), and `SkipType` if the property lives on another class.
+
+- The property must be `public static bool` (xUnit1054). A method such as `OperatingSystem.IsWindows()` cannot be named directly; wrap it in a property.
 - Never set both `SkipUnless` and `SkipWhen` (xUnit1055).
-- Rationale: These skips are evaluated at run time and do not trigger xUnit1004.
-- Source: https://xunit.net/docs/getting-started/v3/whats-new ; https://xunit.net/xunit.analyzers/rules/xUnit1004 ; https://xunit.net/xunit.analyzers/rules/
+- Rationale: The repository gate treats skipped tests as not passing. Conditional skips are evaluated at run time and do not trigger xUnit1004, so they are only safe where a skip is an expected outcome.
+- Source: Team policy (AGENTS.md, "Byrd Test Gate"); https://xunit.net/docs/getting-started/v3/whats-new ; https://xunit.net/xunit.analyzers/rules/xUnit1004 ; https://xunit.net/xunit.analyzers/rules/xUnit1054 ; https://xunit.net/docs/getting-started/v3/microsoft-testing-platform
 
 ```csharp
-[Fact(Skip = "Requires Windows", SkipUnless = nameof(OperatingSystem.IsWindows), SkipType = typeof(OperatingSystem))]
+public static class TestEnvironment
+{
+    public static bool IsWindows => OperatingSystem.IsWindows();
+}
+
+// The gate run passes --filter-not-trait "Requires=Hardware" (MTP).
+[Trait("Requires", "Hardware")]
+[Fact(Skip = "Requires Windows", SkipUnless = nameof(TestEnvironment.IsWindows), SkipType = typeof(TestEnvironment))]
 public void NativeAudioBackend_Initializes() { /* ... */ }
 ```
 
-**XU-122 (MAY)** When the condition can only be checked inside the test, skip at run time with `Assert.Skip(reason)`, `Assert.SkipUnless(condition, reason)`, or `Assert.SkipWhen(condition, reason)`.
+**XU-122 (MAY)** Outside the required validation scope (XU-121), when the condition can only be checked inside the test, skip at run time with `Assert.Skip(reason)`, `Assert.SkipUnless(condition, reason)`, or `Assert.SkipWhen(condition, reason)`. The test itself MUST still be kept out of the gate run as XU-121 describes.
 
-- Rationale: This is the documented way to skip dynamically from within the test body.
+- Rationale: This is the documented way to skip dynamically from within the test body. Inside the gate, the resulting skip would fail validation.
 - Source: https://xunit.net/docs/getting-started/v3/whats-new
 
 ```csharp
+[Trait("Requires", "Hardware")]
 [Fact]
 public void FullRomSuite_Passes()
 {
@@ -695,12 +735,13 @@ public void FullRomSuite_Passes()
 
 **XU-123 (SHOULD)** Mark expensive, manual, or long-running tests `Explicit = true` instead of skipping them. Run them with `-explicit only` (native UX), `--explicit only` (MTP), or `"explicit": "only"` in `testconfig.json`. The values are `on`, `off`, and `only`, and the default is `off`.
 
+- In a gated project, an explicit test MUST also be excluded from the gate run by trait or by project (XU-121), because a gate that rejects not-run tests (as McpServer's does) would otherwise fail.
 - Rationale: Explicit tests show as "not run" unless someone asks for them, which states the intent more accurately than a skip.
 - Source: https://xunit.net/docs/getting-started/v3/whats-new ; https://xunit.net/docs/config-testconfig-json ; https://xunit.net/docs/getting-started/v3/microsoft-testing-platform
 
-**XU-124 (MAY)** Theories whose data can legitimately be empty in some environments MAY set `SkipTestWithoutData = true` on `[Theory]`.
+**XU-124 (MAY)** Outside the required validation scope (XU-121), theories whose data can legitimately be empty in some environments MAY set `SkipTestWithoutData = true` on `[Theory]`. Theories in the gate run MUST provide stable, non-empty data instead.
 
-- Rationale: An empty theory is then skipped instead of failing.
+- Rationale: An empty theory is then skipped instead of failing, and a skip inside the gate fails validation (XU-140, XU-147).
 - Source: https://xunit.net/docs/getting-started/v3/whats-new
 
 ---
@@ -739,8 +780,8 @@ Theory data correctness:
 - xUnit1014 (W) MemberData should use nameof operator for member name
 - xUnit1015 to xUnit1020 (E) MemberData must reference an existing, public, static member of a valid kind and data type, with a getter
 - xUnit1021 (W) MemberData should not have parameters if the referenced member is not a method
-- xUnit1022 (E) Theory methods cannot have a parameter array
-- xUnit1023 (E) Theory methods cannot have default parameter values
+- xUnit1022 (E) Theory methods cannot have a parameter array (applies only before xUnit.net 2.2.0)
+- xUnit1023 (E) Theory methods cannot have default parameter values (applies only before xUnit.net 2.2.0)
 - xUnit1025 (W) InlineData should be unique within the Theory it belongs to
 - xUnit1026 (W) Theory methods should use all of their parameters
 - xUnit1037, xUnit1038, xUnit1039 (E) Theory data type arguments must match the test method parameters
@@ -764,7 +805,6 @@ Fixtures, collections, and framework-created types:
 - xUnit1033 (I) Classes using IClassFixture or ICollectionFixture should add a constructor argument of type T
 - xUnit1041 (W) Fixture arguments to test classes must have fixture sources
 - xUnit1056 (E) Type must have a single public non-static constructor
-- xUnit1057 (E) Type must be public or internal
 - xUnit1059 (W) Test classes may not be decorated with ICollectionFixture<>
 
 Async and cancellation:
@@ -789,6 +829,7 @@ Skipping and culture:
 
 Native AOT only (relevant only if a project opts into Native AOT):
 
+- xUnit1057 (E) Type must be public or internal (reflection mode permits private types here)
 - xUnit1058, xUnit1062, xUnit1064, xUnit1066 (E)
 - xUnit1072 (W)
 
@@ -812,7 +853,7 @@ Sources: https://xunit.net/xunit.analyzers/rules/ ; https://github.com/xunit/xun
 - Rationale: The compiler then reports analyzer warnings as errors, so the xUnit warning rules block the build. Diagnostics at Info level (`suggestion`) do not fail the build. That is why section 13.3 raises selected Info rules to `warning` or `error`.
 - Source: https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/errors-warnings ; https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/configuration-options
 
-**XU-131 (MUST)** Use the `.editorconfig` in 13.3. Set the severity of the critical correctness rules to `error` explicitly, so they fail even in a local build where `TreatWarningsAsErrors` is off.
+**XU-131 (MUST)** Use the `.editorconfig` in 13.3. Set the severity of the critical correctness rules to `error` explicitly, so they fail even in a local build where `TreatWarningsAsErrors` is off. New test projects comply from the start. Existing test projects adopt it in the first PR that brings them under this guide; until then they are not in violation. In McpServer, the root `.editorconfig` had no `dotnet_diagnostic.xUnit*` entries on Oct 20, 2026, so this rollout is still to do.
 
 - Rationale: An entry for a single rule ID takes precedence over category-level and global entries.
 - Source: https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/configuration-options
@@ -826,6 +867,11 @@ Sources: https://xunit.net/xunit.analyzers/rules/ ; https://github.com/xunit/xun
 
 - Rationale: It turns off all compiler warnings in generated code. xUnit.net advises using it only when the generated code conflicts with an analyzer.
 - Source: https://xunit.net/releases/v3/4.0.1
+
+**XU-134 (MUST)** Team test projects are written in C#. A test project in another language (F# or Visual Basic) needs explicit human approval in the PR, and its review MUST check the section 13 rules by hand.
+
+- Rationale: xUnit.net v3 supports F# and Visual Basic, but `xunit.analyzers` only analyzes C#. In other languages, `TreatWarningsAsErrors` and the `.editorconfig` cannot raise diagnostics that are never produced.
+- Source: Team policy; https://github.com/xunit/xunit.analyzers/blob/main/README.md
 
 ### 13.3 Sample `.editorconfig` for test folders
 
@@ -861,11 +907,12 @@ dotnet_diagnostic.xUnit1052.severity = error
 dotnet_diagnostic.xUnit1053.severity = error
 dotnet_diagnostic.xUnit1059.severity = error
 
-# Typed data rows and serializability (Info by default, raised)
-dotnet_diagnostic.xUnit1042.severity = warning
-dotnet_diagnostic.xUnit1050.severity = warning
-dotnet_diagnostic.xUnit1044.severity = warning
-dotnet_diagnostic.xUnit1046.severity = warning
+# Typed data rows and serializability (XU-042, XU-046, XU-047 are SHOULD rules,
+# so these stay visible but non-blocking under TreatWarningsAsErrors)
+dotnet_diagnostic.xUnit1042.severity = suggestion
+dotnet_diagnostic.xUnit1050.severity = suggestion
+dotnet_diagnostic.xUnit1044.severity = suggestion
+dotnet_diagnostic.xUnit1046.severity = suggestion
 dotnet_diagnostic.xUnit1045.severity = suggestion
 dotnet_diagnostic.xUnit1047.severity = suggestion
 
@@ -889,46 +936,48 @@ Sources: https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/con
 
 ## 14. CI guidance
 
-**XU-140 (MUST)** On every PR, CI MUST build with `TreatWarningsAsErrors` and run every test project. Under MTP, a non-zero exit code fails the job.
+**XU-140 (MUST)** On every PR, CI MUST build with `TreatWarningsAsErrors` and run every test project in the required validation scope. That scope MUST finish with zero failures and zero skips. Tests excluded under XU-121 or XU-142 are outside the scope. Under MTP, a non-zero exit code fails the job.
 
-- Rationale: This enforces XU-001 and section 13. MTP reports failures through its exit codes (see https://aka.ms/testingplatform/exitcodes, which the MTP output links to).
-- Source: https://xunit.net/docs/getting-started/v3/getting-started ; https://xunit.net/docs/getting-started/v3/microsoft-testing-platform
+- Rationale: This enforces XU-001, section 13, and the repository's validation gate, which does not count skipped tests as passing. MTP reports failures through its exit codes (see https://aka.ms/testingplatform/exitcodes, which the MTP output links to).
+- Source: Team policy (AGENTS.md, "Byrd Test Gate"); https://xunit.net/docs/getting-started/v3/getting-started ; https://xunit.net/docs/getting-started/v3/microsoft-testing-platform
 
-**XU-141 (MUST)** CI MUST publish results in a machine-readable format.
+**XU-141 (MUST)** CI MUST publish results in a structured, machine-readable format: TRX, xUnit.net XML, JUnit, CTRF, or NUnit. The HTML and Markdown reports are for people to read and MAY be added, but they do not satisfy this rule on their own. In McpServer, the unit test gate requires a TRX per project (`build/SessionLifeUnitGateReports.cs` records `<lane>/<project>/<project>.trx`, and `build/SessionLifeUnitGateValidator.cs` rejects a run whose TRX is missing or defective), so McpServer CI MUST produce TRX.
 
-- MTP: `--report-xunit-trx` (others are `--report-xunit-xml`, `--report-xunit-junit`, `--report-xunit-ctrf`). Reports go to the results directory, which you can change with `--results-directory`.
-- Native UX in 4.0 or later: `-result-trx <file>` (others are `-result-xml`, `-result-junit`, `-result-ctrf`, `-result-markdown`). The old `-trx` and `-xml` style switches are deprecated.
-- Rationale: The 4.0 release renamed both sets of switches.
-- Source: https://xunit.net/releases/v3/4.0.0 ; https://xunit.net/releases/v3/4.0.1 ; https://xunit.net/docs/getting-started/v3/microsoft-testing-platform
+- MTP in 4.0 or later: `--report-xunit-trx` (others are `--report-xunit-xml`, `--report-xunit-junit`, `--report-xunit-ctrf`, `--report-xunit-nunit`, `--report-xunit-html`, and `--report-xunit-markdown` in 4.0.1 or later).
+- MTP in 3.2.x (for example McpServer's current pin): `--report-xunit-trx` and `--report-xunit-html` are the same, but XML, JUnit, CTRF, and NUnit use the old names `--report-xunit`, `--report-junit`, `--report-ctrf`, and `--report-nunit`. Each `-filename` switch follows the same rename.
+- Reports go to the results directory, which you can change with `--results-directory`.
+- Native UX in 4.0 or later: `-result-trx <file>` (others are `-result-xml`, `-result-junit`, `-result-ctrf`, and `-result-markdown` in 4.0.1 or later). The old `-trx` and `-xml` style switches are deprecated.
+- Rationale: Result publishers and gates read structured reports. The 4.0.1 release notes describe the Markdown report as a simplified report. The 4.0 release renamed both sets of switches. The 4.0.0 release notes list the MTP renames, and the 4.0.2 source builds every report option as `report-xunit-<format>`.
+- Source: https://xunit.net/releases/v3/4.0.0 ; https://xunit.net/releases/v3/4.0.1 ; https://github.com/xunit/xunit/blob/v3-4.0.2/src/common/MicrosoftTestingPlatform/CommandLineOptionsProvider.cs ; https://github.com/xunit/xunit/blob/v3-3.2.2/src/common/MicrosoftTestingPlatform/CommandLineOptionsProvider.cs
 
-**XU-142 (MUST NOT)** The default PR pipeline does not run explicit tests. A separate scheduled or manual job MAY run them with `--explicit only` (MTP) or `-explicit only` (native).
+**XU-142 (MUST NOT)** The default PR pipeline does not run explicit tests. Where the gate rejects tests that were not run (McpServer does), explicit tests are also excluded from the gate run by trait or project (XU-121), so they are not reported at all. A separate scheduled or manual job MAY run them with `--explicit only` (MTP) or `-explicit only` (native).
 
 - Rationale: The PR pipeline stays fast and deterministic. The default value of `explicit` is `off`.
 - Source: https://xunit.net/docs/config-testconfig-json
 
-**XU-143 (SHOULD)** CI should detect hung tests by setting `longRunningTestSeconds` above 0 together with `diagnosticMessages: true`, or with the `--long-running` / `-longRunning` switch.
+**XU-143 (SHOULD)** CI should detect hung tests by setting `longRunningTestSeconds` above 0 together with `diagnosticMessages: true`, or with the `--long-running <seconds>` / `-longRunning <seconds>` switch together with `--xunit-diagnostics on` (MTP) or `-diagnostics` (native UX). A job that still runs `dotnet test` through VSTest (XU-020 adoption path) also passes `--logger "console;verbosity=normal"`, so the warnings are shown.
 
-- Rationale: Long-running warnings are diagnostic messages, so they only appear when diagnostics are enabled.
+- Rationale: Long-running warnings are diagnostic messages, so they only appear when diagnostics are enabled. The threshold switch and the diagnostics switch are independent options, so the command line form needs both. The runner configuration page notes that `dotnet test` may hide xUnit.net messages unless the console logger runs at normal verbosity.
 - Source: https://xunit.net/docs/config-xunit-runner-json ; https://xunit.net/docs/getting-started/v3/microsoft-testing-platform
 
-**XU-144 (SHOULD)** CI should keep the assembly unique ID that appears in the run output, so a failure that depends on order can be reproduced locally (XU-087).
+**XU-144 (SHOULD)** For reflection-mode test projects, CI should keep the assembly unique ID that appears in the run output (the native execution summary ends with `ID: '<value>'`). In the MTP command line UX, pass `--xunit-info` so that the native xUnit.net output, including that summary, is shown alongside the MTP output. CI should keep that ID so a failure that depends on order can be reproduced locally (XU-087). This does not apply to Native AOT projects (XU-018), because the `.uniqueid` override is not available in AOT mode.
 
 - Rationale: CI and local runs use different orders because the ID is derived from the file path.
-- Source: https://xunit.net/docs/getting-started/v3/whats-new
+- Source: https://xunit.net/docs/getting-started/v3/whats-new ; https://xunit.net/docs/getting-started/v3/native-aot ; https://xunit.net/docs/getting-started/v3/microsoft-testing-platform
 
-**XU-145 (SHOULD)** Collect code coverage under MTP with the `Microsoft.Testing.Extensions.CodeCoverage` package (`dotnet test --coverage --coverage-output-format cobertura`). When `dotnet test` runs several projects, do not pass `--coverage-output`.
+**XU-145 (SHOULD)** Collect code coverage under MTP with the `Microsoft.Testing.Extensions.CodeCoverage` package (`dotnet test --coverage --coverage-output-format cobertura` with the .NET 10 SDK or later in MTP mode; with the .NET 8 or 9 SDK, where MTP runs on top of the VSTest-based `dotnet test`, add the separator: `dotnet test -- --coverage --coverage-output-format cobertura`). When `dotnet test` runs several projects, do not pass `--coverage-output`.
 
 - Rationale: The standard Coverlet experience is not supported under MTP. A fixed output name makes each project overwrite the previous project's report.
-- Source: https://xunit.net/docs/getting-started/v3/code-coverage-with-mtp ; https://xunit.net/docs/getting-started/v3/microsoft-testing-platform
+- Source: https://xunit.net/docs/getting-started/v3/code-coverage-with-mtp ; https://xunit.net/docs/getting-started/v3/microsoft-testing-platform ; https://learn.microsoft.com/dotnet/core/testing/migrating-vstest-microsoft-testing-platform
 
 **XU-146 (SHOULD NOT)** Do not enable `stopOnFail` in CI.
 
 - Rationale: The full list of failures is needed to diagnose a run. Even when enabled, tests already in flight still finish.
 - Source: https://xunit.net/docs/config-xunit-runner-json
 
-**XU-147 (MAY)** CI MAY enable `failSkips` for projects that have no skips depending on the environment. CI MAY set `TESTINGPLATFORM_TELEMETRY_OPTOUT=1` to opt out of MTP telemetry.
+**XU-147 (MUST)** Every gate job MUST enforce zero skips: either enable `failSkips` (`--fail-skips on` in MTP, `-failSkips` in the native UX, or `"failSkips": true` in `xunit.runner.json`), or validate the result files and reject any skipped or not-run test, as McpServer's `build/SessionLifeUnitGateValidator.cs` does for TRX (XU-140). CI MAY set `TESTINGPLATFORM_TELEMETRY_OPTOUT=1` to opt out of MTP telemetry.
 
-- Rationale: `failSkips` treats every skip as a failure, including `SkipUnless`/`SkipWhen` skips. The telemetry opt-out is documented by xUnit.net.
+- Rationale: `failSkips` defaults to `false`, so without it or an equivalent check a run with skipped tests can still succeed, and the zero-skip requirement in XU-140 would be advisory. `failSkips` treats every skip as a failure, including `SkipUnless`/`SkipWhen` skips. The telemetry opt-out is documented by xUnit.net.
 - Source: https://xunit.net/docs/config-xunit-runner-json ; https://xunit.net/docs/getting-started/v3/microsoft-testing-platform
 
 ---
@@ -957,7 +1006,7 @@ Each item below is forbidden unless a rule above explicitly allows it.
 - Relying on the machine's default culture (XU-094).
 - Mutable static fields shared between tests (XU-090).
 - Fixtures with state that tests change and that is never reset (XU-065).
-- Fixtures that take other fixtures as constructor arguments (XU-066).
+- Fixtures that take a same-level or shorter-lived fixture as a constructor argument (XU-066).
 - `ICollectionFixture<T>` on a test class instead of the collection definition (XU-063).
 - Collection names as magic strings when the type-based `[Collection]` is available (XU-063).
 - Using `ITestPipelineStartup` for work that a fixture can do (XU-067).
@@ -967,7 +1016,7 @@ Each item below is forbidden unless a rule above explicitly allows it.
 - `MemberData("Name")` string literals instead of `nameof` (XU-044).
 - New data sources returning `IEnumerable<object[]>` (XU-042).
 - Theory data that cannot be serialized, without a reason (XU-047).
-- Public helper methods in test classes (XU-032).
+- Public helper methods in test classes that are not tests (XU-032).
 - Storing `TestContext.Current` in a field (XU-076).
 - Referencing `xunit.v3` from a non-test library (XU-013).
 - Using the obsolete `CollectionBehavior` parallelism properties on 4.0 (XU-083).
@@ -1008,7 +1057,7 @@ Source: https://xunit.net/docs/getting-started/v3/migration
 - Rationale: 4.0 contains many breaking changes, mostly in extensibility APIs. A package compiled against an older version can fail at discovery time.
 - Source: https://xunit.net/releases/v3/4.0.0 ; https://github.com/AvaloniaUI/Avalonia/issues/22072
 
-**XU-161 (MUST)** Until AvaloniaUI/Avalonia issue #22072 is resolved, pin the Avalonia UI test project to the xUnit.net v3 3.2.x line (for example `xunit.v3.mtp-v2` 3.2.2). Do not upgrade that one project to 4.x. The other test projects stay on 4.0.2.
+**XU-161 (MUST)** Until AvaloniaUI/Avalonia issue #22072 is resolved, pin the Avalonia UI test project to the xUnit.net v3 3.2.x line (for example `xunit.v3.mtp-v2` 3.2.2). Do not upgrade that one project to 4.x. The other test projects target 4.0.2 once their repository completes the 4.0 migration; until then they stay on the repository's checked-in pin (McpServer currently pins 3.2.2 in `Directory.Packages.props`).
 
 - Rationale: `Avalonia.Headless.XUnit` 12.1.4 depends on `xunit.v3.extensibility.core` 3.2.2. Issue #22072 reports discovery failing with a `MissingMethodException` on xunit.v3 4.0.0, and an Avalonia maintainer called 4.0 unsupported for now. The issue was still open on Oct 20, 2026. Each v3 test project is its own executable, so different projects can be on different versions. In that project, write UI tests with `[AvaloniaFact]` / `[AvaloniaTheory]` and `[assembly: AvaloniaTestApplication(typeof(TestAppBuilder))]`. If you use `AvaloniaTestIsolationLevel.PerAssembly`, also disable parallelization, because Avalonia does not support concurrent execution in that mode.
 - Source: https://github.com/AvaloniaUI/Avalonia/issues/22072 ; https://www.nuget.org/packages/Avalonia.Headless.XUnit/ ; https://docs.avaloniaui.net/docs/testing/headless-xunit ; https://xunit.net/docs/getting-started/v3/microsoft-testing-platform
@@ -1022,9 +1071,13 @@ Source: https://xunit.net/docs/getting-started/v3/migration
 - **TheoryDataRow arity.** "What's new in v3" says the generic `TheoryDataRow<>` has 1 to 10 type arguments. The newer theory data page (Oct 6, 2026) says 1 to 15. This guide does not depend on either number.
 - **Rule title wording.** A few rule titles differ slightly between the website and the source descriptors. For example, xUnit1012 is "Null should not be used for value type parameters" on the site and "Null should only be used for nullable parameters" in source. xUnit1030 is "Do not call ConfigureAwait in test method" on the site and "Do not call ConfigureAwait(false) in test method" in source. The IDs and default severities match.
 - **Rule xUnit2019** appears on the rules page (Hidden) but not in the extracted `Descriptors.xUnit2xxx.cs` list. It is listed here as Hidden, as the website shows it.
-- **xUnit1056 and xUnit1057.** Their titles ("Type must have a single public non-static constructor", "Type must be public or internal") are verified. Which framework-created types they apply to is not, so this guide only lists them.
+- **xUnit1056.** Its title ("Type must have a single public non-static constructor") and scope (test classes, and types used as class or collection fixtures) are verified on its rule page. The page does not say whether it applies outside Native AOT mode, so this guide only lists it. xUnit1057 is documented as Native AOT only and is listed in that group.
 - **`dotnet test` default runner.** The MTP page (May 27, 2026) says `dotnet test` uses VSTest by default. The getting started page (May 2, 2026, template 4.0.0-pre.108) says the template defaults to MTP and writes `global.json`. In practice, a project's runner depends on its template version and settings. XU-020 sets the team default explicitly, so this does not matter for our projects.
 - **Avalonia and xUnit 4.0.** The status of AvaloniaUI/Avalonia#22072 is as of Oct 20, 2026. Check it again before lifting XU-161. Whether Avalonia needs the 3.2.x MTP v2 package or the default 3.2.x package was not tested. `xunit.v3.mtp-v2` 3.2.2 exists on NuGet, but I did not build it against Avalonia.
+- **Native AOT theory discovery.** The Native AOT page lists serialization as not available in AOT mode, so XU-047 is limited to reflection mode. How AOT mode discovers and lists individual theory rows without serialization was not verified, so this guide gives no AOT-specific rule for it.
+- **Explicit tests in TRX, and filtered-out tests.** xUnit.net documents that unrequested explicit tests are reported as "not run". That they land in the TRX `notExecuted` counter, and that tests removed by `--filter-not-trait` do not appear in the TRX at all, was not verified by running a build. XU-121 is written so the gate does not depend on either detail.
+- **MTP report switch names.** The MTP page (May 27, 2026) still maps `-xml`, `-jUnit`, `-ctrf`, and `-nUnit` to `--report-xunit`, `--report-junit`, `--report-ctrf`, and `--report-nunit`. Those are the 3.2.x names. The 4.0.0 release notes and the 4.0.2 source use `--report-xunit-xml`, `--report-xunit-junit`, `--report-xunit-ctrf`, and `--report-xunit-nunit`. XU-141 lists both by version.
+- **Console runner assembly parallelism switch.** The 4.0.0 release notes' deprecation table names the replacement switch `-parallelizeAssemblies`. The "Running Tests in Parallel" page and the 4.0.2 source (`xunit.v3.runner.console/CommandLine.cs`) use `-parallelAssemblies`. XU-024 uses `-parallelAssemblies`, which matches the source.
 - **The v3 command line options page** (https://xunit.net/docs/getting-started/v3/cmdline) returned HTTP 500 during research. Command line switches here were taken from the MTP page and the release notes instead.
 - **Team conventions.** The naming scheme (XU-033), seeded randomness (XU-093), temp folders (XU-096), and the agent rules (XU-003) are team policy, not xUnit.net requirements, and are labeled that way.
 - **Version-specific CI runner commands** (for example GitHub Actions task syntax) are deliberately left out, because I did not verify them against a primary source.
@@ -1044,6 +1097,12 @@ xUnit.net documentation:
 - https://xunit.net/docs/getting-started/v3/microsoft-testing-platform (accessed Oct 20, 2026)
 - https://xunit.net/docs/getting-started/v3/theory-data-attributes (accessed Oct 20, 2026)
 - https://xunit.net/docs/getting-started/v3/code-coverage-with-mtp (accessed Oct 20, 2026)
+- https://xunit.net/docs/getting-started/v3/native-aot (accessed Oct 20, 2026)
+- https://api.xunit.net/v3/4.0.0/Xunit.IClassFixture-1.html (accessed Oct 20, 2026)
+- https://api.xunit.net/v3/4.0.0/Xunit.ICollectionFixture-1.html (accessed Oct 20, 2026)
+- https://api.xunit.net/v3/3.2.2/Xunit.TheoryData-1.html (accessed Oct 20, 2026)
+- https://api.xunit.net/v3/3.2.2/Xunit.html (accessed Oct 20, 2026)
+- https://api.xunit.net/v3/3.0.0/Xunit.MemberDataAttribute.html (accessed Oct 20, 2026)
 - https://xunit.net/docs/getting-started/v3/cmdline (accessed Oct 20, 2026; returned HTTP 500, not used for facts)
 - https://github.com/xunit/xunit.net/blob/main/site/docs/getting-started/v3/custom-serialization.md (accessed Oct 20, 2026)
 - https://xunit.net/docs/shared-context (accessed Oct 20, 2026)
@@ -1063,7 +1122,15 @@ xUnit.net analyzer rules:
 - https://xunit.net/xunit.analyzers/rules/xUnit1004 (accessed Oct 20, 2026)
 - https://xunit.net/xunit.analyzers/rules/xUnit1030 (accessed Oct 20, 2026)
 - https://xunit.net/xunit.analyzers/rules/xUnit1031 (accessed Oct 20, 2026)
+- https://xunit.net/xunit.analyzers/rules/xUnit1013 (accessed Oct 20, 2026)
+- https://xunit.net/xunit.analyzers/rules/xUnit1022 (accessed Oct 20, 2026)
+- https://xunit.net/xunit.analyzers/rules/xUnit1023 (accessed Oct 20, 2026)
 - https://xunit.net/xunit.analyzers/rules/xUnit1044 (accessed Oct 20, 2026)
+- https://xunit.net/xunit.analyzers/rules/xUnit1052 (accessed Oct 20, 2026)
+- https://xunit.net/xunit.analyzers/rules/xUnit1054 (accessed Oct 20, 2026)
+- https://xunit.net/xunit.analyzers/rules/xUnit1056 (accessed Oct 20, 2026)
+- https://xunit.net/xunit.analyzers/rules/xUnit1057 (accessed Oct 20, 2026)
+- https://xunit.net/xunit.analyzers/rules/xUnit1064 (accessed Oct 20, 2026)
 - https://xunit.net/xunit.analyzers/rules/xUnit1051 (accessed Oct 20, 2026)
 - https://xunit.net/xunit.analyzers/rules/xUnit1069 (accessed Oct 20, 2026)
 
@@ -1071,6 +1138,9 @@ GitHub repositories:
 
 - https://github.com/xunit/xunit (accessed Oct 20, 2026)
 - https://github.com/xunit/xunit.analyzers (accessed Oct 20, 2026)
+- https://github.com/xunit/xunit.analyzers/blob/main/README.md (accessed Oct 20, 2026)
+- https://github.com/xunit/xunit.analyzers/blob/2.0.0/src/xunit.analyzers/Utility/Descriptors.xUnit1xxx.cs (accessed Oct 20, 2026)
+- https://api.nuget.org/v3-flatcontainer/xunit.v3.mtp-v1/3.2.2/xunit.v3.mtp-v1.nuspec (accessed Oct 20, 2026)
 - https://github.com/xunit/xunit.net (accessed Oct 20, 2026)
 - https://github.com/xunit/xunit.analyzers/blob/main/src/xunit.analyzers/Utility/Descriptors.xUnit1xxx.cs (accessed Oct 20, 2026)
 - https://github.com/xunit/xunit.analyzers/blob/main/src/xunit.analyzers/Utility/Descriptors.xUnit2xxx.cs (accessed Oct 20, 2026)
@@ -1082,6 +1152,9 @@ GitHub repositories:
 - https://github.com/xunit/xunit/blob/v3-4.0.2/src/xunit.v3.core/FactAttribute_reflection.cs (accessed Oct 20, 2026)
 - https://github.com/xunit/xunit/blob/v3-4.0.2/src/xunit.v3.core/TestClassAttribute_reflection.cs (accessed Oct 20, 2026)
 - https://github.com/xunit/xunit/blob/v3-4.0.2/src/xunit.v3.core/CulturedFactAttribute_reflection.cs (accessed Oct 20, 2026)
+- https://github.com/xunit/xunit/blob/v3-4.0.2/src/common/MicrosoftTestingPlatform/CommandLineOptionsProvider.cs (accessed Oct 20, 2026)
+- https://github.com/xunit/xunit/blob/v3-4.0.2/src/xunit.v3.runner.console/CommandLine.cs (accessed Oct 20, 2026)
+- https://github.com/xunit/xunit/blob/v3-3.2.2/src/common/MicrosoftTestingPlatform/CommandLineOptionsProvider.cs (accessed Oct 20, 2026)
 
 NuGet (version verification):
 
@@ -1101,8 +1174,18 @@ Microsoft Learn:
 
 - https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/errors-warnings (accessed Oct 20, 2026)
 - https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/configuration-options (accessed Oct 20, 2026)
+- https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/ (accessed Oct 20, 2026)
 - https://learn.microsoft.com/en-us/dotnet/standard/datetime/timeprovider-overview (accessed Oct 20, 2026)
+- https://learn.microsoft.com/dotnet/core/testing/migrating-vstest-microsoft-testing-platform (accessed Oct 20, 2026)
 - https://aka.ms/testingplatform/exitcodes (linked from the MTP output on the xunit.net getting started page, referenced in XU-140, accessed Oct 20, 2026)
+
+Repository policy:
+
+- `AGENTS.md`, sections "Byrd Test Gate" and "Correctness", in this repository (read Oct 20, 2026)
+- https://github.com/xunit/xunit/blob/v3-4.0.2/src/xunit.v3.core/ITheoryDataRow.cs (accessed Oct 20, 2026)
+- https://github.com/xunit/assert.xunit/blob/main/README.md (accessed Oct 20, 2026)
+- https://api.nuget.org/v3-flatcontainer/xunit.v3.mtp-v2/4.0.2/xunit.v3.mtp-v2.nuspec (accessed Oct 20, 2026)
+- https://api.nuget.org/v3-flatcontainer/xunit.v3.core.mtp-v2/4.0.2/xunit.v3.core.mtp-v2.nuspec (accessed Oct 20, 2026)
 
 Avalonia:
 

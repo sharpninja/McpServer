@@ -601,7 +601,14 @@ public sealed class AgentService : IAgentService
     }
 
     private static string NormalizePath(string path)
-        => Path.GetFullPath(path.Trim().TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+        => NormalizeWorkspacePath(path, QBrainAi.Client.WorkspacePathNormalizer.Process);
+
+    /// <summary>FR-MCP-PATHNORM-001 (plan P1.4d): canonical agent-workspace path by path syntax.</summary>
+    internal static string NormalizeWorkspacePath(string path, QBrainAi.Client.IWorkspacePathNormalizer normalizer)
+    {
+        ArgumentNullException.ThrowIfNull(normalizer);
+        return normalizer.Normalize(path);
+    }
 
     private async Task PublishChangeSafeAsync(string action, string entityId, CancellationToken ct)
     {
