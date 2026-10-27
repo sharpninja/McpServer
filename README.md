@@ -247,7 +247,7 @@ Sample host: `src/QBrainAi.McpAgent.SampleHost/`
 
 ## Tests
 
-22 test projects covering unit, integration, and Reqnroll validation (plus the `QBrainAi.ProcessTree.TestHelper` support project):
+22 test projects covering unit, integration, and xUnit v3 validation (plus the `QBrainAi.ProcessTree.TestHelper` support project):
 
 - `Build.Tests` - build system and configuration
 - `QBrainAi.Support.Mcp.Tests` / `.IntegrationTests` - server API and database
@@ -261,7 +261,7 @@ Sample host: `src/QBrainAi.McpAgent.SampleHost/`
 - `QBrainAi.TransactionSecurity.IntegrationTests` - durable transaction security storage
 - `QBrainAi.PlanReview.Tests` / `QBrainAi.Review.Tests` - plan and AI review flows
 - `QBrainAi.PluginIntegration.Tests` - plugin integration
-- 7 Reqnroll validation projects (Context, GitHub, Repo, SessionLog, Todo, ToolRegistry, Workspace)
+- 7 xUnit v3 validation projects (Context, GitHub, Repo, SessionLog, Todo, ToolRegistry, Workspace)
 
 `./build.ps1 Test` runs the unit gate only: it excludes every `*.IntegrationTests` project and filters out
 `Category=Integration` and `Category=AiReview` tests. Integration suites that need provisioned dependencies run

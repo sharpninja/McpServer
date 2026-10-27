@@ -45,7 +45,7 @@ Swagger UI: `http://localhost:7147/swagger`
 
 ## Architecture
 
-**QBrainAi** is an ASP.NET Core 9 server (.NET 9.0) providing workspace-scoped context retrieval, TODO management, session logging, repository operations, GraphRAG, and GitHub automation for AI agents.
+**QBrainAi** is an ASP.NET Core server on .NET 10 (`net10.0`) providing workspace-scoped context retrieval, TODO management, session logging, repository operations, GraphRAG, and GitHub automation for AI agents.
 
 ### Transports
 
@@ -81,7 +81,7 @@ EF Core with SQLite (`McpDbContext`), with migration projects for SQLite, Postgr
 - Unit tests: `QBrainAi.Support.Mcp.Tests`, `QBrainAi.Client.Tests`, `QBrainAi.Cqrs.Tests`, `QBrainAi.Launcher.Tests`, `QBrainAi.McpAgent.Tests`, `QBrainAi.Repl.Core.Tests`
 - Infrastructure (Nuke build, accountable through TR only; not unit tests, not part of `./build.ps1 Test`): `Build.Tests`
 - Integration: `QBrainAi.Support.Mcp.IntegrationTests`, `QBrainAi.Repl.IntegrationTests`
-- BDD/Validation (Reqnroll): `QBrainAi.Context.Validation`, `QBrainAi.GitHub.Validation`, `QBrainAi.Repo.Validation`, `QBrainAi.SessionLog.Validation`, `QBrainAi.Todo.Validation`, `QBrainAi.ToolRegistry.Validation`, `QBrainAi.Workspace.Validation`
+- Validation (xUnit v3): `QBrainAi.Context.Validation`, `QBrainAi.GitHub.Validation`, `QBrainAi.Repo.Validation`, `QBrainAi.SessionLog.Validation`, `QBrainAi.Todo.Validation`, `QBrainAi.ToolRegistry.Validation`, `QBrainAi.Workspace.Validation`
 
 ## Coding Conventions
 
@@ -205,7 +205,7 @@ Include the requirement ID in your session log turn's tags. Capture requirements
 
 ## CI/CD
 
-GitHub Actions (`.github/workflows/build.yml`) on Windows-latest with .NET 9.0. Triggers on push/PR to main/develop. Jobs: build-test, validate, package, msix, publish. The Nuke `Test` target excludes `*.IntegrationTests` projects.
+There is no GitHub Actions workflow in this repository (`.github/workflows` does not exist). Builds, tests and gates run through Nuke targets (`./build.ps1 <Target>`) on .NET 10, with the SDK pinned in `global.json`. The Nuke `Test` target excludes `*.IntegrationTests` projects.
 
 ## QBrain.AI Claude Plugin and Hook Contract
 
