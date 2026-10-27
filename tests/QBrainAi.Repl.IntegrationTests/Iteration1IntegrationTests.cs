@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
+using QBrainAi.TestSupport.TemporaryInstance;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -109,86 +110,64 @@ public sealed class Iteration1IntegrationTests : IDisposable
     }
 
     /// <summary>
-    /// Verifies trust bootstrap flow with health check validation.
+    /// Verifies trust bootstrap flow with health check validation: the temporary instance's health is 200 and echoes the
+    /// nonce (TR-MCP-NUKE-019 AC-6).
     /// </summary>
     [Fact]
     public async Task TrustBootstrap_HealthCheck_ReturnsExpectedResponse()
     {
-        var serverUrl = "http://localhost:5177";
-        
-        using var httpClient = new HttpClient { BaseAddress = new Uri(serverUrl) };
-        
-        try
-        {
-            var response = await httpClient.GetAsync("/health?nonce=test-nonce-123", cancellationToken: TestContext.Current.CancellationToken);
-            
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                var content = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
-                Assert.Contains("test-nonce-123", content);
-            }
-        }
-        catch (HttpRequestException)
-        {
-            // Server may not be running, which is acceptable for this test context
-        }
+        var testNonce = "test-nonce-123";
+        await _replProcess.EnsureInstanceAsync(TestContext.Current.CancellationToken);
+
+        using var httpClient = new HttpClient { BaseAddress = _replProcess.InstanceBaseUrl };
+        using var response = await httpClient.GetAsync($"/health?nonce={testNonce}", cancellationToken: TestContext.Current.CancellationToken);
+        var content = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.Null(TemporaryInstanceChecks.CheckHealthAnswer((int)response.StatusCode, content, testNonce));
     }
 
     /// <summary>
-    /// Verifies that workspace selection via X-Workspace-Path header is validated.
+    /// Verifies that workspace selection via X-Workspace-Path header is validated by the temporary instance
+    /// (TR-MCP-NUKE-019 AC-6).
     /// </summary>
     [Fact]
     public async Task WorkspaceSelection_XWorkspacePathHeader_IsRecognized()
     {
-        var serverUrl = "http://localhost:5177";
+        await _replProcess.EnsureInstanceAsync(TestContext.Current.CancellationToken);
         var testWorkspacePath = "/test/workspace";
         var testApiKey = "test-api-key-123";
-        
-        using var httpClient = new HttpClient { BaseAddress = new Uri(serverUrl) };
+
+        using var httpClient = new HttpClient { BaseAddress = _replProcess.InstanceBaseUrl };
         httpClient.DefaultRequestHeaders.Add("X-Workspace-Path", testWorkspacePath);
         httpClient.DefaultRequestHeaders.Add("X-Api-Key", testApiKey);
-        
-        try
-        {
-            var response = await httpClient.GetAsync("/health", cancellationToken: TestContext.Current.CancellationToken);
-            
-            Assert.True(
-                response.StatusCode == HttpStatusCode.OK || 
-                response.StatusCode == HttpStatusCode.Unauthorized ||
-                response.StatusCode == HttpStatusCode.NotFound,
-                "Should receive a valid HTTP response when X-Workspace-Path is provided");
-        }
-        catch (HttpRequestException)
-        {
-            // Server may not be running
-        }
+
+        using var response = await httpClient.GetAsync("/health", cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.True(
+            response.StatusCode == HttpStatusCode.OK ||
+            response.StatusCode == HttpStatusCode.Unauthorized ||
+            response.StatusCode == HttpStatusCode.NotFound,
+            "Should receive a valid HTTP response when X-Workspace-Path is provided");
     }
 
     /// <summary>
-    /// Verifies auth key acceptance in request headers.
+    /// Verifies auth key acceptance in request headers by the temporary instance (TR-MCP-NUKE-019 AC-6).
     /// </summary>
     [Fact]
     public async Task AuthKey_InHeader_IsValidated()
     {
-        var serverUrl = "http://localhost:5177";
+        await _replProcess.EnsureInstanceAsync(TestContext.Current.CancellationToken);
         var testApiKey = "test-api-key-456";
-        
-        using var httpClient = new HttpClient { BaseAddress = new Uri(serverUrl) };
+
+        using var httpClient = new HttpClient { BaseAddress = _replProcess.InstanceBaseUrl };
         httpClient.DefaultRequestHeaders.Add("X-Api-Key", testApiKey);
-        
-        try
-        {
-            var response = await httpClient.GetAsync("/health", cancellationToken: TestContext.Current.CancellationToken);
-            
-            Assert.True(
-                response.StatusCode == HttpStatusCode.OK || 
-                response.StatusCode == HttpStatusCode.Unauthorized,
-                "Should handle API key validation");
-        }
-        catch (HttpRequestException)
-        {
-            // Server may not be running
-        }
+
+        using var response = await httpClient.GetAsync("/health", cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.True(
+            response.StatusCode == HttpStatusCode.OK ||
+            response.StatusCode == HttpStatusCode.Unauthorized,
+            "Should handle API key validation");
     }
 
     /// <summary>
@@ -373,22 +352,13 @@ public sealed class Iteration1IntegrationTests : IDisposable
     [Fact]
     public async Task FullTrustBootstrapFlow_EndToEnd_CompletesSuccessfully()
     {
-        var serverUrl = "http://localhost:5177";
-        using var httpClient = new HttpClient { BaseAddress = new Uri(serverUrl) };
-        
-        try
-        {
-            var healthResponse = await httpClient.GetAsync("/health?nonce=bootstrap-nonce", cancellationToken: TestContext.Current.CancellationToken);
-            if (healthResponse.StatusCode == HttpStatusCode.OK)
-            {
-                var healthContent = await healthResponse.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
-                Assert.Contains("bootstrap-nonce", healthContent);
-            }
-        }
-        catch (HttpRequestException)
-        {
-            // Server not running
-        }
+        var bootstrapNonce = "bootstrap-nonce";
+        await _replProcess.EnsureInstanceAsync(TestContext.Current.CancellationToken);
+        using var httpClient = new HttpClient { BaseAddress = _replProcess.InstanceBaseUrl };
+
+        using var healthResponse = await httpClient.GetAsync($"/health?nonce={bootstrapNonce}", cancellationToken: TestContext.Current.CancellationToken);
+        var healthContent = await healthResponse.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Null(TemporaryInstanceChecks.CheckHealthAnswer((int)healthResponse.StatusCode, healthContent, bootstrapNonce));
 
         await _replProcess.StartAsync(cancellationToken: TestContext.Current.CancellationToken);
         await Task.Delay(1000, cancellationToken: TestContext.Current.CancellationToken);
@@ -403,7 +373,7 @@ public sealed class Iteration1IntegrationTests : IDisposable
                 @params = new
                 {
                     workspacePath = "/test/workspace",
-                    serverUrl = serverUrl,
+                    serverUrl = _replProcess.InstanceBaseUrl.ToString().TrimEnd('/'),
                     apiKey = "test-key-123",
                     nonce = "challenge-abc",
                     signature = "signature-xyz"

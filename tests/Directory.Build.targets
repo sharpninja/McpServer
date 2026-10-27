@@ -12,4 +12,25 @@
     <Compile Include="$(MSBuildThisFileDirectory)TestSupport.Shared\OllamaServerController.cs"
              Link="TestSupport.Shared\OllamaServerController.cs" />
   </ItemGroup>
+
+  <!-- TR-MCP-NUKE-019 AC-6: the temporary-instance checks, linked into the unit project that proves their contract and
+       the integration project whose cases call them. -->
+  <ItemGroup Condition="'$(MSBuildProjectName)' == 'QBrainAi.Repl.Core.Tests' Or '$(MSBuildProjectName)' == 'QBrainAi.Repl.IntegrationTests'">
+    <Compile Include="$(MSBuildThisFileDirectory)TestSupport.Shared\TemporaryInstanceChecks.cs"
+             Link="TestSupport.Shared\TemporaryInstanceChecks.cs" />
+  </ItemGroup>
+
+  <!-- TR-MCP-NUKE-019 AC-6: the one temporary QBrain.AI instance (a Support.Mcp process on a free port in a test-owned
+       root, with its own marker and database), linked into the integration projects that start REPL children against
+       it, with the repository-root locator and the scratch SQLite schema it uses. -->
+  <ItemGroup Condition="'$(MSBuildProjectName)' == 'QBrainAi.Repl.IntegrationTests' Or '$(MSBuildProjectName)' == 'QBrainAi.Support.Mcp.IntegrationTests'">
+    <Compile Include="$(MSBuildThisFileDirectory)TestSupport.Shared\ScratchQBrainAi.cs"
+             Link="TestSupport.Shared\ScratchQBrainAi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Shared\TestRepositoryRoot.cs"
+             Link="Shared\TestRepositoryRoot.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(MSBuildProjectName)' == 'QBrainAi.Repl.IntegrationTests'">
+    <Compile Include="$(MSBuildThisFileDirectory)QBrainAi.Support.Mcp.IntegrationTests\ScratchSqliteSchema.cs"
+             Link="TestSupport.Shared\ScratchSqliteSchema.cs" />
+  </ItemGroup>
 </Project>
