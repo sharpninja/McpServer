@@ -17,7 +17,9 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// </summary>
 public sealed class UseCaseGetWorkspaceResolutionContractTests
 {
-    private const string CanonicalWorkspaceId = @"F:\GitHub\TruckMate";
+    // FR/TR-MCP-PATHNORM-001: retain historical raw caller bytes and canonical DTO expectation separately.
+    private const string RawWorkspacePath = @"F:\GitHub\TruckMate";
+    private const string CanonicalWorkspaceId = "F:/GitHub/TruckMate";
 
     /// <summary>Correct canonical workspace output satisfies every contract assertion.</summary>
     [Fact]
@@ -44,6 +46,20 @@ public sealed class UseCaseGetWorkspaceResolutionContractTests
         Assert.Contains("raw workspace path", rejection.Message, StringComparison.Ordinal);
     }
 
+    /// <summary>FR-MCP-PATHNORM-001: a DTO leaking the original raw key is rejected by every retained assertion.</summary>
+    [Fact]
+    public async Task MockGate_RawWorkspaceDto_IsRejected()
+    {
+        await Assert.ThrowsAsync<EqualException>(
+            () => AssertCanonicalWorkspaceContractAsync(
+                () => Task.FromResult(Result<UseCaseDetailDto>.Success(new UseCaseDetailDto
+                {
+                    UseCaseId = 125,
+                    WorkspaceId = RawWorkspacePath,
+                    Title = "Start and certify LAB-OMARCHY TruckMate services",
+                })))).ConfigureAwait(true);
+    }
+
     /// <summary>Production binding resolves an equivalent raw path to the canonical workspace before get-by-id.</summary>
     [Fact]
     public async Task ProductionGate_EquivalentRawPath_UsesCanonicalWorkspace()
@@ -55,31 +71,31 @@ public sealed class UseCaseGetWorkspaceResolutionContractTests
             .Options;
         var workspaceContext = new WorkspaceContext
         {
-            WorkspacePath = CanonicalWorkspaceId,
+            WorkspacePath = RawWorkspacePath,
             WorkspaceName = "TruckMate",
-            DataDirectory = CanonicalWorkspaceId,
+            DataDirectory = RawWorkspacePath,
         };
 
         await using var db = new McpDbContext(options, workspaceContext);
         await db.Database.EnsureCreatedAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
-        db.OverrideWorkspaceId(CanonicalWorkspaceId);
+        db.OverrideWorkspaceId(RawWorkspacePath);
         db.Workspaces.Add(new WorkspaceEntity
         {
-            WorkspaceId = CanonicalWorkspaceId,
-            WorkspacePath = CanonicalWorkspaceId,
+            WorkspaceId = RawWorkspacePath,
+            WorkspacePath = RawWorkspacePath,
             Name = "TruckMate",
         });
         db.UseCases.Add(new UseCaseEntity
         {
             UseCaseId = 125,
-            WorkspaceId = CanonicalWorkspaceId,
+            WorkspaceId = RawWorkspacePath,
             Title = "Start and certify LAB-OMARCHY TruckMate services",
             CreatedAtUtc = DateTimeOffset.UtcNow,
             UpdatedAtUtc = DateTimeOffset.UtcNow,
         });
         await db.SaveChangesAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var equivalentRawPath = CanonicalWorkspaceId + Path.DirectorySeparatorChar + ".";
+        var equivalentRawPath = RawWorkspacePath + Path.DirectorySeparatorChar + ".";
         var handler = new GetUseCaseQueryHandler(db, workspaceContext);
 
         await AssertCanonicalWorkspaceContractAsync(

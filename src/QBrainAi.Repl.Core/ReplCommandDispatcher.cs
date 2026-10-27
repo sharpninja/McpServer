@@ -84,6 +84,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
     private readonly IHostileReviewWorkflow? _hostileReviewWorkflow;
     private readonly IWorkspaceValidationWorkflow? _workspaceValidationWorkflow;
     private readonly IClientMutationPolicy? _clientMutationPolicy;
+    private readonly IGovernedSessionDispatch? _governedSessionDispatch;
 
     /// <summary>
     /// Initializes a new <see cref="ReplCommandDispatcher"/>.
@@ -102,6 +103,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
     /// <param name="handoffWorkflow">The optional handoff workflow used to invoke <c>workflow.handoff.*</c> methods.</param>
     /// <param name="hostileReviewWorkflow">The optional hostile-review workflow used to invoke <c>workflow.hostileReview.*</c> methods.</param>
     /// <param name="workspaceValidationWorkflow">The optional workspace-validation workflow used to invoke <c>workspace.validate</c>.</param>
+    /// <param name="governedSessionDispatch">Validated host-constructor adapter to the canonical A8 lifecycle; absent for generic callers.</param>
     public ReplCommandDispatcher(
         IGenericClientPassthrough passthrough,
         ISessionLogWorkflow? sessionLogWorkflow = null,
@@ -116,7 +118,8 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         ITranscriptIngestionWorkflow? transcriptIngestionWorkflow = null,
         IHandoffWorkflow? handoffWorkflow = null,
         IHostileReviewWorkflow? hostileReviewWorkflow = null,
-        IWorkspaceValidationWorkflow? workspaceValidationWorkflow = null)
+        IWorkspaceValidationWorkflow? workspaceValidationWorkflow = null,
+        IGovernedSessionDispatch? governedSessionDispatch = null)
     {
         _passthrough = passthrough ?? throw new ArgumentNullException(nameof(passthrough));
         _sessionLogWorkflow = sessionLogWorkflow;
@@ -132,6 +135,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         _hostileReviewWorkflow = hostileReviewWorkflow;
         _workspaceValidationWorkflow = workspaceValidationWorkflow;
         _clientMutationPolicy = clientMutationPolicy;
+        _governedSessionDispatch = governedSessionDispatch;
     }
 
     /// <inheritdoc />
@@ -179,6 +183,26 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         CancellationToken cancellationToken)
     {
         var method = request.Method ?? "";
+        // The canonical host validates its captured roots/content. Generic legacy
+        // schemas require model-supplied lifecycle fields and cannot mint ingress.
+        if (_governedSessionDispatch is not null && IsGovernedSessionMethod(method))
+        {
+            if (string.IsNullOrWhiteSpace(request.RequestId))
+                return BuildError("unknown", "schema_validation_failed", "payload.requestId is required.");
+            if (request is not ILosslessRequestPayload { RawParamsJson: { } rawParams })
+                return BuildError(request.RequestId, "lossless_params_required", "Governed invocation requires original JSON parameters at the existing envelope boundary.");
+            try
+            {
+                var result = await _governedSessionDispatch.InvokeAsync(method, rawParams, cancellationToken).ConfigureAwait(false);
+                return new YamlEnvelope
+                {
+                    Type = "result",
+                    Payload = new ResultPayload { RequestId = request.RequestId, Result = result },
+                };
+            }
+            catch (OperationCanceledException) { throw; }
+            catch (Exception exception) { return BuildClassifiedError(request.RequestId, method, exception); }
+        }
         var schemaValidation = ReplYamlMessageValidator.ValidateRequest(request);
         if (!schemaValidation.IsValid)
         {
@@ -684,6 +708,14 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
             await workflow.UpdateTurnTitleAsync(queryTitle, cancellationToken).ConfigureAwait(false);
         }
     }
+
+    /// <summary>Recognizes only the canonical host's existing lifecycle/S6 methods.</summary>
+    private static bool IsGovernedSessionMethod(string method) => method is
+        "workflow.sessionlog.mintTurn" or "workflow.sessionlog.beginTurn" or
+        "workflow.sessionlog.currentSession" or "workflow.sessionlog.appendActions" or
+        "workflow.sessionlog.appendDialog" or "workflow.sessionlog.updateTurn" or
+        "workflow.sessionlog.recordReview" or "workflow.sessionlog.completeTurn" or
+        "workflow.sessionlog.failTurn";
 
     private async Task<IYamlEnvelope> DispatchSessionLogRequestAsync(IRequestPayload request, CancellationToken cancellationToken)
     {

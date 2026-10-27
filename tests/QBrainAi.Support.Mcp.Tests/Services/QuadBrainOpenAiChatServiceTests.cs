@@ -839,6 +839,19 @@ public sealed class QuadBrainOpenAiChatServiceTests
 
     private sealed class RecordingSessionLogService : ISessionLogService
     {
+        public Task<SessionAuditEventReceipt> AppendAuditEventAsync(
+            SessionAuditEventRequest auditEvent, CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+
+        public Task<SessionAuditEventReceipt?> ReadAuditEventAsync(
+            string sourceType, string sessionId, string requestId, string eventId,
+            CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+
+        public Task<SessionAuditCompletionResult> CheckAuditCompletionAsync(
+            string sourceType, string sessionId, string requestId, CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+
         public string? SourceType { get; private set; }
 
         public string? SessionId { get; private set; }

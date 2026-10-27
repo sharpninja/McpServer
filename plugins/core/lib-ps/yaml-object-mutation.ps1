@@ -108,15 +108,23 @@ function Write-McpYamlObject {
         Serializes a PowerShell object and saves it as a YAML document.
     .PARAMETER Path
         YAML file path to write.
+    .PARAMETER ExactScalars
+        Preserve governed audit scalars with native JSON, accepted by the existing YAML reader.
+    .PARAMETER NoClobber
+        Reject an occupied destination during the existing atomic publication.
     .PARAMETER Document
         PowerShell object to serialize.
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory)][string]$Path,
-        [Parameter(Mandatory)]$Document
+        [Parameter(Mandatory)]$Document,
+        [switch]$ExactScalars,
+        [switch]$NoClobber
     )
 
+    $overwriteExisting = -not $NoClobber
+    if (-not $PSCmdlet.ShouldProcess($Path, 'Write one serialized YAML-compatible document')) { return }
     Import-McpYamlSerializer
     $resolvedPath = Resolve-McpYamlFilePath -Path $Path
     $parentPath = Split-Path -Parent $resolvedPath
@@ -124,7 +132,11 @@ function Write-McpYamlObject {
         [System.IO.Directory]::CreateDirectory($parentPath) | Out-Null
     }
 
-    $yamlText = ConvertTo-Yaml -Data $Document -Options WithIndentedSequences
+    $yamlText = if ($ExactScalars) {
+        ConvertTo-Json -InputObject $Document -Depth 100 -Compress
+    } else {
+        ConvertTo-Yaml -Data $Document -Options WithIndentedSequences
+    }
     $tempPath = [System.IO.Path]::Combine(
         $parentPath,
         ([System.IO.Path]::GetFileName($resolvedPath) + "." + [System.Guid]::NewGuid().ToString("N") + ".tmp"))
@@ -132,7 +144,7 @@ function Write-McpYamlObject {
     try {
         [System.IO.File]::WriteAllText($tempPath, ($yamlText.TrimEnd() + "`n"), [System.Text.UTF8Encoding]::new($false))
         Invoke-McpYamlFileOperation -Operation {
-            [System.IO.File]::Move($tempPath, $resolvedPath, $true)
+            [System.IO.File]::Move($tempPath, $resolvedPath, $overwriteExisting)
         } | Out-Null
     } catch {
         Remove-Item -LiteralPath $tempPath -Force -ErrorAction SilentlyContinue
@@ -148,6 +160,8 @@ function Update-McpYamlObject {
         YAML file path to update.
     .PARAMETER Mutation
         Script block that receives the deserialized document and mutates it.
+    .PARAMETER ExactScalars
+        Preserve governed audit scalars with native JSON, accepted by the existing YAML reader.
     .PARAMETER Create
         Create an empty ordered map before mutation when the file is absent or empty.
     .EXAMPLE
@@ -156,16 +170,18 @@ function Update-McpYamlObject {
             $document['Triage'] = [ordered]@{ AgentPath = 'codex' }
         }
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory)][string]$Path,
         [Parameter(Mandatory)][scriptblock]$Mutation,
-        [switch]$Create
+        [switch]$Create,
+        [switch]$ExactScalars
     )
 
+    if (-not $PSCmdlet.ShouldProcess($Path, 'Mutate one deserialized document and serialize it')) { return }
     $document = Read-McpYamlObject -Path $Path -Create:$Create
     & $Mutation $document
-    Write-McpYamlObject -Path $Path -Document $document
+    Write-McpYamlObject -Path $Path -Document $document -ExactScalars:$ExactScalars
     return $document
 }
 
@@ -179,20 +195,26 @@ function Set-McpYamlObjectValue {
         One or more keys. Multiple keys create or update a nested mapping.
     .PARAMETER Value
         Value to assign at the key path. Prefer ordered maps or arrays for complex values.
+    .PARAMETER ExactScalars
+        Preserve governed audit scalars with native JSON, accepted by the existing YAML reader.
     .PARAMETER Create
         Create an empty ordered map before mutation when the file is absent or empty.
     .EXAMPLE
         Set-McpYamlObjectValue -Path .\appsettings.yaml -KeyPath Triage,AgentPath -Value 'codex' -Create
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory)][string]$Path,
         [Parameter(Mandatory)][ValidateNotNullOrEmpty()][string[]]$KeyPath,
         [Parameter(Mandatory)][AllowNull()]$Value,
-        [switch]$Create
+        [switch]$Create,
+        [switch]$ExactScalars
     )
 
-    Update-McpYamlObject -Path $Path -Create:$Create -Mutation {
+    if (-not $PSCmdlet.ShouldProcess($Path, 'Set one nested object value and serialize it')) { return }
+    $pathParts = @($KeyPath)
+    $assignedValue = $Value
+    Update-McpYamlObject -Path $Path -Create:$Create -ExactScalars:$ExactScalars -Mutation {
         param($document)
 
         if ($document -isnot [System.Collections.IDictionary]) {
@@ -200,8 +222,8 @@ function Set-McpYamlObjectValue {
         }
 
         $target = $document
-        for ($index = 0; $index -lt ($KeyPath.Count - 1); $index++) {
-            $key = $KeyPath[$index]
+        for ($index = 0; $index -lt ($pathParts.Count - 1); $index++) {
+            $key = $pathParts[$index]
             if (-not $target.Contains($key) -or $target[$key] -isnot [System.Collections.IDictionary]) {
                 $target[$key] = [ordered]@{}
             }
@@ -209,6 +231,8 @@ function Set-McpYamlObjectValue {
             $target = $target[$key]
         }
 
-        $target[$KeyPath[-1]] = $Value
+        $target[$pathParts[-1]] = $assignedValue
     }
 }
+
+

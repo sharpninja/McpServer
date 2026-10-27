@@ -31,6 +31,7 @@ $ErrorActionPreference = 'Stop'
 $shimModule = Join-Path $PSScriptRoot 'McpPluginShim.psm1'
 Import-Module $shimModule -ErrorAction Stop
 . (Join-Path $PSScriptRoot 'yaml-object-mutation.ps1')
+. (Join-Path $PSScriptRoot 'repl-params-transfer.ps1')
 
 $script:McpPluginParamsObjectBound = $PSBoundParameters.ContainsKey('ParamsObject')
 if ($script:McpPluginParamsObjectBound -and ($PSBoundParameters.ContainsKey('Params') -or $PSBoundParameters.ContainsKey('ParamsPath'))) {
@@ -40,7 +41,7 @@ if ($script:McpPluginParamsObjectBound -and ($PSBoundParameters.ContainsKey('Par
 $script:McpPluginParamsFromObject = ''
 if ($script:McpPluginParamsObjectBound) {
     Import-McpYamlSerializer
-    $script:McpPluginParamsFromObject = ConvertTo-Yaml -Data $ParamsObject -Options WithIndentedSequences
+    $script:McpPluginParamsFromObject = ConvertTo-Json -InputObject $ParamsObject -Depth 100 -Compress
 }
 
 function Resolve-McpPluginDefaultWorkspacePath {
@@ -171,7 +172,7 @@ function Resolve-McpPluginHostName {
     return ''
 }
 
-function Get-McpPluginHostDefaults {
+function Get-McpPluginHostDefault {
     param([Parameter(Mandatory)][string]$HostName)
 
     switch ($HostName.Trim().ToLowerInvariant()) {
@@ -238,7 +239,7 @@ function Invoke-PluginPowerShellScript {
     $startInfo.Environment['MCP_PLUGIN_ROOT'] = $pluginRootFull
     $startInfo.Environment['CLAUDE_PLUGIN_ROOT'] = $pluginRootFull
     $resolvedHost = Resolve-McpPluginHostName -Root $pluginRootFull
-    $hostDefaults = if ($resolvedHost) { Get-McpPluginHostDefaults -HostName $resolvedHost } else { $null }
+    $hostDefaults = if ($resolvedHost) { Get-McpPluginHostDefault -HostName $resolvedHost } else { $null }
     if ($hostDefaults) {
         $startInfo.Environment['MCP_PLUGIN_HOST'] = [string]$hostDefaults.Host
         $startInfo.Environment['PLUGIN_AGENT_DEFAULT'] = [string]$hostDefaults.Agent
@@ -285,8 +286,11 @@ function Invoke-PluginPowerShellScript {
         try {
             $process.Kill($true)
         } catch {
+            Write-Verbose 'Timed-out child termination was best effort; returning command_timeout.'
         }
-        try { [void]$process.WaitForExit(2000) } catch { }
+        try { [void]$process.WaitForExit(2000) } catch {
+            Write-Verbose 'Timed-out child exit observation was best effort; returning command_timeout.'
+        }
         # TR-MCP-TRIAGEPLUGIN-004 / BUG-TRIAGE-120: never throw an unclassified
         # timeout. Session-log callers treat command_timeout as retryable
         # degraded/queued and keep failsafe on disk.
@@ -339,7 +343,12 @@ switch ($script:McpPluginInvocation.Command) {
         } else {
             Read-OptionalText -Inline $script:McpPluginInvocation.Params -HasInline:$($PSBoundParameters.ContainsKey('Params')) -Path $script:McpPluginInvocation.ParamsPath -AllowRedirectedInput
         }
-        Invoke-PluginPowerShellScript -ScriptPath (Resolve-PluginPowerShellScript -Root $pluginRootFull -Name 'repl-invoke.ps1') -Arguments @('-Method', $script:McpPluginInvocation.Method, '-ParamsYaml', ($paramsText ?? ''))
+        $transfer = New-McpReplParamsTransfer -ParamsText ($paramsText ?? '')
+        try {
+            Invoke-PluginPowerShellScript -ScriptPath (Resolve-PluginPowerShellScript -Root $pluginRootFull -Name 'repl-invoke.ps1') -Arguments (@('-Method', $script:McpPluginInvocation.Method) + @($transfer.Arguments))
+        } finally {
+            Remove-McpReplParamsTransfer -Transfer $transfer
+        }
     }
     'CompleteTurn' {
         $responseText = Read-OptionalText -Inline $script:McpPluginInvocation.Response -HasInline:$($PSBoundParameters.ContainsKey('Response')) -Path $script:McpPluginInvocation.ResponsePath -AllowRedirectedInput

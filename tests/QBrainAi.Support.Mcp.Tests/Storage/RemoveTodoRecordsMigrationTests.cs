@@ -46,18 +46,7 @@ public sealed class RemoveTodoRecordsMigrationTests : IDisposable
         {
             db.Database.Migrate();
 
-            var todo = db.TodoItems
-                .IgnoreQueryFilters()
-                .Single(item => item.WorkspaceId == WorkspacePath && item.Id == "BUG-TRIAGE-123");
-
-            Assert.Equal("Backfilled triage bug", todo.Title);
-            Assert.Equal("Backlog", todo.Section);
-            Assert.Equal("medium", todo.Priority);
-            Assert.False(todo.Done);
-            Assert.Empty(db.TodoItems
-                .IgnoreQueryFilters()
-                .Where(item => item.WorkspaceId == StaleAnchorWorkspacePath && item.Id == "BUG-TRIAGE-123"));
-            Assert.Equal(0, CountTables("TodoRecords"));
+            HistoricalTodoMigrationContract.AssertAnchor(ReadRawTodoRows(), CountTables("TodoRecords"));
         }
     }
 
@@ -78,17 +67,7 @@ public sealed class RemoveTodoRecordsMigrationTests : IDisposable
         {
             db.Database.Migrate();
 
-            var todo = db.TodoItems
-                .IgnoreQueryFilters()
-                .Single(item => item.WorkspaceId == WorkspacePath && item.Id == "BUG-TRIAGE-124");
-
-            Assert.Equal("Existing stale workspace title", todo.Title);
-            Assert.Equal("Backlog", todo.Section);
-            Assert.Equal("high", todo.Priority);
-            Assert.False(todo.Done);
-            Assert.True(db.TodoItems
-                .IgnoreQueryFilters()
-                .Any(item => item.WorkspaceId == StaleAnchorWorkspacePath && item.Id == "BUG-TRIAGE-124"));
+            HistoricalTodoMigrationContract.AssertRepair(ReadRawTodoRows());
         }
     }
 
@@ -235,6 +214,34 @@ public sealed class RemoveTodoRecordsMigrationTests : IDisposable
             "docs/Project/TODO.yaml",
             now,
             "layer-1");
+    }
+
+    /// <summary>
+    /// TEST-MCP-TRIAGE-004: independent historical rows must pass the exact migration
+    /// assertion runner and all 21 damaged or destructive row controls must reject.
+    /// </summary>
+    [Fact]
+    public void HistoricalAssertions_IndependentRows_RejectDamagedMigrationResults()
+    {
+        Assert.Equal(new[] { 2, 21 }, HistoricalTodoMigrationContract.VerifyMockGate());
+    }
+
+    private IReadOnlyList<HistoricalTodoMigrationContract.Row> ReadRawTodoRows()
+    {
+        // Historical raw SQL seeds intentionally bypass today's workspace key converter.
+        // Observe the same raw storage boundary instead of converting query parameters.
+        using var command = _connection.CreateCommand();
+        command.CommandText = "SELECT WorkspaceId, Id, Title, Section, Priority, Done FROM TodoItems;";
+        using var reader = command.ExecuteReader();
+        var rows = new List<HistoricalTodoMigrationContract.Row>();
+        while (reader.Read())
+        {
+            rows.Add(new HistoricalTodoMigrationContract.Row(
+                reader.GetString(0), reader.GetString(1), reader.GetString(2),
+                reader.GetString(3), reader.GetString(4), reader.GetBoolean(5)));
+        }
+
+        return rows;
     }
 
     private int CountTables(string tableName)

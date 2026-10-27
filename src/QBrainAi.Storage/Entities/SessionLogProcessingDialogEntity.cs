@@ -38,6 +38,15 @@ public sealed class SessionLogProcessingDialogEntity
     [StringLength(128)]
     public string? Category { get; set; }
 
+    /// <summary>TR-QB-AUDIT-001: Exact captured timestamp text for immutable audit projections.</summary>
+    public string? OriginalTimestamp { get; set; }
+
+    /// <summary>FR-QB-003: Immutable captured event identity, absent on legacy rows.</summary>
+    public string? AuditEventId { get; set; }
+
+    /// <summary>TR-QB-AUDIT-001: Original safe integer captured position, independent of arrival.</summary>
+    public long? AuditEventOrder { get; set; }
+
     /// <summary>TR-PLANNED-CORE-013: Navigation to parent turn.</summary>
     public SessionLogTurnEntity? SessionLogTurn { get; set; }
 }

@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Sends a YAML request envelope through the PowerShell MCP runtime.
 .DESCRIPTION
@@ -20,10 +20,32 @@
 [CmdletBinding()]
 param(
     [string]$Method,
-    [string]$ParamsYaml = ''
+    [string]$ParamsYaml = '',
+    [string]$ParamsPath = ''
 )
 
 $ErrorActionPreference = 'Stop'
+
+function Read-ReplInvocationParam {
+    <# FR-QB-003/005 TEST-QB-069: match the installed wrapper's existing UTF8
+       file handoff without putting large payloads on a child command line. #>
+    [CmdletBinding()]
+    param([string]$ParamsYaml = '', [string]$ParamsPath = '')
+    if ($PSBoundParameters.ContainsKey('ParamsPath')) {
+        if ($PSBoundParameters.ContainsKey('ParamsYaml')) {
+            throw 'repl-invoke.ps1: pass -ParamsPath or -ParamsYaml, not both.'
+        }
+        if (-not (Test-Path -LiteralPath $ParamsPath -PathType Leaf)) {
+            throw "-ParamsPath file not found: $ParamsPath"
+        }
+        return [IO.File]::ReadAllText($ParamsPath, [Text.UTF8Encoding]::new($false))
+    }
+    return $ParamsYaml
+}
+$invocationParams = @{}
+if ($PSBoundParameters.ContainsKey('ParamsYaml')) { $invocationParams.ParamsYaml = $ParamsYaml }
+if ($PSBoundParameters.ContainsKey('ParamsPath')) { $invocationParams.ParamsPath = $ParamsPath }
+$ParamsYaml = Read-ReplInvocationParam @invocationParams
 
 $shimModule = Join-Path $PSScriptRoot 'McpPluginShim.psm1'
 Import-Module $shimModule -Force -ErrorAction Stop
@@ -155,7 +177,7 @@ function Complete-ReplBeginTurnAfterPersist {
                 if (-not [string]::IsNullOrWhiteSpace($FailsafePath)) {
                     $doc['failsafePath'] = $FailsafePath
                 }
-                Write-McpYamlObject -Path $CurrentTurnFile -Document $doc
+                Write-McpYamlObject -Path $CurrentTurnFile -Document $doc -ExactScalars
             } elseif ($TurnState) {
                 $doc = [ordered]@{
                     turnRequestId = $TurnState.turnRequestId
@@ -166,7 +188,7 @@ function Complete-ReplBeginTurnAfterPersist {
                 if (-not [string]::IsNullOrWhiteSpace($FailsafePath)) {
                     $doc['failsafePath'] = $FailsafePath
                 }
-                Write-McpYamlObject -Path $CurrentTurnFile -Document $doc
+                Write-McpYamlObject -Path $CurrentTurnFile -Document $doc -ExactScalars
             }
         }
         return @{ ok = $true; degraded = $true; failsafeRetained = (-not [string]::IsNullOrWhiteSpace($FailsafePath) -and (Test-Path -LiteralPath $FailsafePath)) }
@@ -288,7 +310,7 @@ function Invoke-WorkflowOpenSession {
         $state['agent'] = Get-ReplCanonicalAgentName $script:AgentName
     }
     $state['lastUpdated'] = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
-    Write-McpYamlObject -Path $sessionFile -Document $state
+    Write-McpYamlObject -Path $sessionFile -Document $state -ExactScalars
     return $true
 }
 
@@ -306,9 +328,7 @@ function Resolve-ReplWorkspaceDirectory {
         if ($location.Provider.Name -eq 'FileSystem') {
             $providerLocation = $location.ProviderPath
         }
-    } catch {
-        # Fall through to the env and .NET current directory fallbacks.
-    }
+    } catch { Write-Verbose -Message 'MCP best-effort fallback: Resolve-ReplWorkspaceDirectory.' }
 
     # Only the PowerShell provider location is trusted for the marker check: the
     # process-wide [Environment]::CurrentDirectory can be stale in shared hosts.
@@ -319,9 +339,7 @@ function Resolve-ReplWorkspaceDirectory {
                 (Find-MarkerFile -StartDir $providerLocation)) {
                 return (Resolve-Path -LiteralPath $providerLocation).ProviderPath
             }
-        } catch {
-            # No marker above the current directory; consult the env fallbacks below.
-        }
+        } catch { Write-Verbose -Message 'MCP best-effort fallback: Resolve-ReplWorkspaceDirectory.' }
     }
 
     $candidates = @(
@@ -381,7 +399,7 @@ function Assert-ReplMarkerFresh {
         $state['lastUpdated'] = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
         $state['markerFilePath'] = $snapshot.markerFilePath
         $state['markerLastWriteUtc'] = $snapshot.markerLastWriteUtc
-        Write-McpYamlObject -Path $sessionFile -Document $state
+        Write-McpYamlObject -Path $sessionFile -Document $state -ExactScalars
         return $true
     } catch {
         $untrustedState = [ordered]@{
@@ -392,9 +410,8 @@ function Assert-ReplMarkerFresh {
             $snapshot = Get-MarkerFileSnapshot -StartDir $workspace
             $untrustedState['markerFilePath'] = $snapshot.markerFilePath
             $untrustedState['markerLastWriteUtc'] = $snapshot.markerLastWriteUtc
-        } catch {
-        }
-        Write-McpYamlObject -Path $sessionFile -Document $untrustedState
+        } catch { Write-Verbose -Message 'MCP best-effort fallback: Assert-ReplMarkerFresh.' }
+        Write-McpYamlObject -Path $sessionFile -Document $untrustedState -ExactScalars
         [Console]::Error.WriteLine("MCP_UNTRUSTED: marker refresh failed before REPL request: $_")
         return $false
     }
@@ -424,10 +441,7 @@ function Convert-ReplParamsYamlToObject {
     if (Get-Command ConvertFrom-Yaml -ErrorAction SilentlyContinue) {
         try {
             return ($normalized | ConvertFrom-Yaml -ErrorAction Stop)
-        } catch {
-            # Fall through to the local subset parser so plugin runtime remains
-            # self-contained when the optional YAML module cannot parse input.
-        }
+        } catch { Write-Verbose -Message 'MCP best-effort fallback: Convert-ReplParamsYamlToObject.' }
     }
 
     return (ConvertFrom-ReplYamlSubset -Text $normalized)
@@ -594,10 +608,10 @@ function ConvertTo-ReplCanonicalSessionId {
 function Get-ReplSessionMeta {
     $f = Join-Path (Get-ReplInvokeCacheDir) 'session-state.yaml'
     if (-not (Test-Path $f)) { return $null }
-    $line = Select-String -Path $f -Pattern '^sessionId:' -SimpleMatch:$false |
-        Select-Object -First 1
-    if (-not $line) { return $null }
-    $sid = ($line.Line -replace '^sessionId:\s*', '').Trim()
+    $state = Read-McpYamlObject -Path $f
+    if ($state -isnot [Collections.IDictionary] -or -not $state.Contains('sessionId') -or
+        $state.sessionId -isnot [string] -or [string]::IsNullOrWhiteSpace($state.sessionId)) { return $null }
+    $sid = [string]$state.sessionId
     $sid = Get-ReplCompleteTurnPersistSessionId -CurrentTurnSessionId (Get-ReplCurrentTurnValue -Key 'sessionId') -ActiveSessionId $sid
     if (-not $sid) { return $null }
     $canonicalSessionId = ConvertTo-ReplCanonicalSessionId -SessionId $sid
@@ -607,7 +621,7 @@ function Get-ReplSessionMeta {
         if (-not $state.Contains('lastUpdated')) {
             $state['lastUpdated'] = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
         }
-        Write-McpYamlObject -Path $f -Document $state
+        Write-McpYamlObject -Path $f -Document $state -ExactScalars
         $sid = $canonicalSessionId
     }
     $prefix = ($sid -split '-', 2)[0]
@@ -726,18 +740,15 @@ function Stop-ReplChildTree {
     if ($null -eq $Process) { return $true }
     try {
         $Process.StandardInput.BaseStream.Dispose()
-    } catch {
-    }
+    } catch { Write-Verbose -Message 'MCP best-effort fallback: Stop-ReplChildTree.' }
     try {
         $Process.StandardInput.Dispose()
-    } catch {
-    }
+    } catch { Write-Verbose -Message 'MCP best-effort fallback: Stop-ReplChildTree.' }
     try {
         if (-not $Process.HasExited) {
             $Process.Kill($true)
         }
-    } catch {
-    }
+    } catch { Write-Verbose -Message 'MCP best-effort fallback: Stop-ReplChildTree.' }
 
     $cleanup = [System.Diagnostics.Stopwatch]::StartNew()
     do {
@@ -888,7 +899,7 @@ function Invoke-ReplRawCore {
         $copyStream = [System.IO.File]::OpenRead($envFile)
         $copyTask = $copyStream.CopyToAsync($proc.StandardInput.BaseStream)
         if (-not (Wait-ReplTaskWithinBudget -Task $copyTask -Budget $budget -DeadlineMs $workDeadlineMs)) {
-            try { $copyStream.Dispose() } catch { }
+            try { $copyStream.Dispose() } catch { Write-Verbose -Message 'MCP best-effort fallback: Invoke-ReplRawCore.' }
             $copyStream = $null
             $confirmed = Stop-ReplChildWithinBudget -Process $proc -StdoutTask $stdoutTask -StderrTask $stderrTask -Budget $budget -TimeoutMs $timeoutMs
             Remove-Item $envFile -ErrorAction SilentlyContinue
@@ -896,9 +907,9 @@ function Invoke-ReplRawCore {
             if (-not $confirmed) { $timeoutError = "$timeoutError; child termination was unconfirmed" }
             return (New-McpPluginReplResult -Success $false -Output '' -Error $timeoutError)
         }
-        try { $copyStream.Dispose() } catch { }
+        try { $copyStream.Dispose() } catch { Write-Verbose -Message 'MCP best-effort fallback: Invoke-ReplRawCore.' }
         $copyStream = $null
-        try { $proc.StandardInput.Close() } catch { }
+        try { $proc.StandardInput.Close() } catch { Write-Verbose -Message 'MCP best-effort fallback: Invoke-ReplRawCore.' }
         Remove-Item $envFile -ErrorAction SilentlyContinue
         $envFile = $null
 
@@ -959,7 +970,7 @@ function Invoke-ReplRawCore {
             [void](Stop-ReplChildTree -Process $proc -StdoutTask $stdoutTask -StderrTask $stderrTask -WaitMs 500)
         }
         if ($copyStream) {
-            try { $copyStream.Dispose() } catch { }
+            try { $copyStream.Dispose() } catch { Write-Verbose -Message 'MCP best-effort fallback: Invoke-ReplRawCore.' }
         }
         if ($envFile -and (Test-Path -LiteralPath $envFile)) {
             Remove-Item $envFile -ErrorAction SilentlyContinue
@@ -985,7 +996,7 @@ function Set-ReplSessionStateValue {
     $f = Join-Path (Get-ReplInvokeCacheDir) 'session-state.yaml'
     $state = Read-McpYamlObject -Path $f -Create
     $state[$Key] = $Value
-    Write-McpYamlObject -Path $f -Document $state
+    Write-McpYamlObject -Path $f -Document $state -ExactScalars
     return $true
 }
 
@@ -1029,7 +1040,7 @@ function Read-ReplCurrentTurnState {
 function Write-ReplCurrentTurnState {
     param([Parameter(Mandatory)]$State)
     $turnFile = Join-Path (Get-ReplInvokeCacheDir) 'current-turn.yaml'
-    Write-McpYamlObject -Path $turnFile -Document $State
+    Write-McpYamlObject -Path $turnFile -Document $State -ExactScalars
 }
 
 function Get-ReplCurrentTurnQueryText {
@@ -1094,7 +1105,7 @@ function Write-ReplFailsafe {
         if (-not [string]::IsNullOrWhiteSpace($PayloadFingerprint)) {
             $record.payloadFingerprint = $PayloadFingerprint
         }
-        Write-McpYamlObject -Path $file -Document $record
+        Write-McpYamlObject -Path $file -Document $record -ExactScalars
         [void]$script:ReplFailsafeInFlight.Add($file)
         return $file
     }
@@ -1327,7 +1338,7 @@ function Invoke-ReplFailsafeDrain {
                 continue
             }
 
-            $paramsYaml = ConvertTo-Yaml -Data $recordParams -Options WithIndentedSequences
+            $paramsYaml = ConvertTo-Json -InputObject $recordParams -Depth 100 -Compress
             try {
                 $result = Invoke-ReplRaw -Method $method -ParamsYaml $paramsYaml
             } catch {
@@ -1352,7 +1363,7 @@ function Invoke-ReplFailsafeDrain {
             try {
                 $document['drainAttempts'] = $attempts + 1
                 $document['lastDrainError'] = if ($detail.Length -gt 500) { $detail.Substring(0, 500) } else { $detail }
-                Write-McpYamlObject -Path $record.FullName -Document $document
+                Write-McpYamlObject -Path $record.FullName -Document $document -ExactScalars
             } catch {
                 [Console]::Error.WriteLine("Failsafe attempt counter update failed for '$($record.FullName)': $($_.Exception.Message)")
             }
@@ -1433,6 +1444,8 @@ function Invoke-ReplTurnUpsertParams {
         [Parameter(Mandatory)][string]$Status,
         [string]$ResponseText = '',
         [string]$ActionsYaml = '',
+        [object[]]$Actions = @(),
+        [string[]]$DesignDecisions = @(),
         [object[]]$ProcessingDialog = @(),
         [string]$Interpretation = '',
         [int]$TokenCount = 0,
@@ -1466,17 +1479,23 @@ function Invoke-ReplTurnUpsertParams {
                  else { 'codex' }
     }
 
-    $actions = @()
-    if ($ActionsYaml) {
+    # FR-QB-003/005, TEST-QB-069: preserve native collections and their scalar
+    # bytes. Legacy ActionsYaml remains supported for existing lifecycle callers.
+    $actionItems = @()
+    if (@($Actions).Count -gt 0) {
+        foreach ($action in $Actions) {
+            $actionItems += (New-McpPluginActionRecord -Values $action).ToMap()
+        }
+    } elseif ($ActionsYaml) {
         $actionParams = Convert-ReplParamsYamlToObject -ParamsYaml ("actions:`n$ActionsYaml")
         if ($actionParams -and $actionParams.actions) {
             foreach ($action in @($actionParams.actions)) {
-                $actions += (New-McpPluginActionRecord -Values $action).ToMap()
+                $actionItems += (New-McpPluginActionRecord -Values $action).ToMap()
             }
         }
     }
 
-    $filePaths = @($actions | ForEach-Object {
+    $filePaths = @($actionItems | ForEach-Object {
         if ($_ -is [hashtable] -and $_.ContainsKey('filePath') -and $_.filePath) {
             $_.filePath
         } elseif ($_.PSObject.Properties.Name -contains 'filePath' -and $_.filePath) {
@@ -1499,7 +1518,8 @@ function Invoke-ReplTurnUpsertParams {
         -Tags $Tags `
         -ContextList $ContextList `
         -FilesModified $filePaths `
-        -Actions $actions `
+        -Actions $actionItems `
+        -DesignDecisions $DesignDecisions `
         -ProcessingDialog $ProcessingDialog `
         -PlanFile $PlanFile `
         -TodoId $TodoId
@@ -1571,7 +1591,7 @@ function New-ReplSessionVerbReceipt {
             $sessionId = [string]$meta.SessionId
             $agent = [string]$meta.SourceType
         }
-    } catch { }
+    } catch { Write-Verbose -Message 'MCP best-effort fallback: New-ReplSessionVerbReceipt.' }
     return [ordered]@{
         code = $code
         retryable = ($Disposition -eq 'queued')
@@ -1594,10 +1614,9 @@ function Publish-ReplSessionVerbReceipt {
     try {
         $cache = Get-ReplInvokeCacheDir
         if ($cache) {
-            Write-McpYamlObject -Path (Join-Path $cache 'session-verb-outcome.yaml') -Document $Receipt
+            Write-McpYamlObject -Path (Join-Path $cache 'session-verb-outcome.yaml') -Document $Receipt -ExactScalars
         }
-    } catch {
-    }
+    } catch { Write-Verbose -Message 'MCP best-effort fallback: Publish-ReplSessionVerbReceipt.' }
     $code = [string](Get-ReplObjectValue -InputObject $Receipt -Name 'code')
     $persisted = Get-ReplObjectValue -InputObject $Receipt -Name 'persisted'
     $queued = Get-ReplObjectValue -InputObject $Receipt -Name 'queued'
@@ -1789,6 +1808,8 @@ function Invoke-ReplPersistTurn {
         [Parameter(Mandatory)][string]$Status,
         [string]$ResponseText = '',
         [string]$ActionsYaml = '',
+        [object[]]$Actions = @(),
+        [string[]]$DesignDecisions = @(),
         [object[]]$ProcessingDialog = @(),
         [string]$Interpretation = '',
         [int]$TokenCount = 0,
@@ -1821,7 +1842,7 @@ function Invoke-ReplPersistTurn {
     $meta = Get-ReplSessionMeta
     if (-not $meta) { throw 'Session log persistence failed because no session metadata is cached.' }
 
-    $turnObj = Invoke-ReplTurnUpsertParams -SourceType $meta.SourceType -SessionId $meta.SessionId -RequestId $RequestId -Title $Title -Status $Status -ResponseText $ResponseText -ActionsYaml $ActionsYaml -ProcessingDialog $ProcessingDialog -Interpretation $Interpretation -TokenCount $TokenCount -Tags $Tags -ContextList $ContextList -PlanFile $PlanFile -TodoId $TodoId
+    $turnObj = Invoke-ReplTurnUpsertParams -SourceType $meta.SourceType -SessionId $meta.SessionId -RequestId $RequestId -Title $Title -Status $Status -ResponseText $ResponseText -ActionsYaml $ActionsYaml -Actions $Actions -DesignDecisions $DesignDecisions -ProcessingDialog $ProcessingDialog -Interpretation $Interpretation -TokenCount $TokenCount -Tags $Tags -ContextList $ContextList -PlanFile $PlanFile -TodoId $TodoId
 
     $workspaceFingerprint = ''
     try { $workspaceFingerprint = [string](Resolve-ReplWorkspaceDirectory) } catch { $workspaceFingerprint = '' }
@@ -1838,7 +1859,9 @@ function Invoke-ReplPersistTurn {
         tokenCount = $TokenCount
         tags = @($Tags)
         contextList = @($ContextList)
-        actions = [string]$ActionsYaml
+        actionsYaml = [string]$ActionsYaml
+        actions = @($Actions)
+        designDecisions = @($DesignDecisions)
         processingDialog = @($ProcessingDialog)
         planFile = [string]$PlanFile
         todoId = [string]$TodoId
@@ -1900,7 +1923,7 @@ function Invoke-ReplPersistTurn {
     $payloadObject = [ordered]@{
         sessionLog = $sessionLog
     }
-    $paramsYaml = ConvertTo-Yaml -Data $payloadObject -Options WithIndentedSequences
+    $paramsYaml = ConvertTo-Json -InputObject $payloadObject -Depth 100 -Compress
     $failsafePath = if (-not [string]::IsNullOrWhiteSpace([string]$script:ReplPersistReuseFailsafePath)) {
         [string]$script:ReplPersistReuseFailsafePath
     } else {
@@ -2210,7 +2233,7 @@ function Get-ReplServerDialogCount {
             agent = $meta.SourceType
             limit = 25
         }
-        $callYaml = ConvertTo-Yaml -Data $callParams -Options WithIndentedSequences
+        $callYaml = ConvertTo-Json -InputObject $callParams -Depth 100 -Compress
         $result = Invoke-ReplRaw -Method 'client.SessionLog.QueryAsync' -ParamsYaml $callYaml
         if (-not $result.Success) { return -1 }
 
@@ -2250,7 +2273,7 @@ function Get-ReplServerTurnTitle {
             agent = $meta.SourceType
             limit = 25
         }
-        $callYaml = ConvertTo-Yaml -Data $callParams -Options WithIndentedSequences
+        $callYaml = ConvertTo-Json -InputObject $callParams -Depth 100 -Compress
         $result = Invoke-ReplRaw -Method 'client.SessionLog.QueryAsync' -ParamsYaml $callYaml
         if (-not $result.Success) { return '' }
 
@@ -2267,10 +2290,7 @@ function Get-ReplServerTurnTitle {
                 }
             }
         }
-    } catch {
-        # An unreadable query response must never block the supersede persist;
-        # fall through to '' so the title is simply omitted.
-    }
+    } catch { Write-Verbose -Message 'MCP best-effort fallback: Get-ReplServerTurnTitle.' }
     return ''
 }
 
@@ -2472,8 +2492,7 @@ function Invoke-WorkflowBeginTurn {
             $snapshot = Get-MarkerFileSnapshot -StartDir (Resolve-ReplWorkspaceDirectory)
             $turnState['markerFilePath'] = $snapshot.markerFilePath
             $turnState['markerLastWriteUtc'] = $snapshot.markerLastWriteUtc
-        } catch {
-        }
+        } catch { Write-Verbose -Message 'MCP best-effort fallback: Invoke-WorkflowBeginTurn.' }
     }
 
     try {
@@ -2544,24 +2563,22 @@ function Invoke-WorkflowAppendActions {
         return $false
     }
 
-    $added = 0
-    $actionsBlock = ''
-    if ($ParamsYaml) {
-        $p = $ParamsYaml -replace "`r`n", "`n" -replace "`r", ""
-        $actionsBlock = Get-ReplNormalizedActionsBlock -ParamsYaml $p
-        # Count only real filePath: fields (with value) for codeEdits. Substring matches in
-        # descriptions must be ignored. Non-file actions (design_decision etc.) must persist.
-        $added = ([regex]::Matches($p, '(?m)^\s*(?:-\s*)?filePath:\s*\S')).Count
-    }
+    # TEST-QB-069: parse complete native parameters, preserving JSON scalars and
+    # caller-explicit decisions/dialog. An action never becomes a decision.
+    $appendParams = if ($ParamsYaml) { Convert-ReplParamsYamlToObject -ParamsYaml $ParamsYaml } else { @{} }
+    $nativeActions = @($appendParams.actions | Where-Object { $null -ne $_ })
+    $nativeDecisions = @($appendParams.designDecisions | Where-Object { $null -ne $_ })
+    $nativeDialog = @($appendParams.processingDialog | Where-Object { $null -ne $_ })
+    $added = @($nativeActions | Where-Object { -not [string]::IsNullOrWhiteSpace([string]$_.filePath) }).Count
 
     if ($ParamsYaml -and $ParamsYaml.Trim()) {
         $explicitTitle = [bool](Update-ReplTurnTitleFromParams -ParamsYaml $ParamsYaml)
         if ($added -gt 0) {
             Update-ReplTurnCacheEdits -Increment $added | Out-Null
         }
-        $actionC = ([regex]::Matches($ParamsYaml, '(?m)^\s*(?:-\s*)?type:')).Count
-        $decC = ([regex]::Matches($ParamsYaml, '(?m)^\s*(?:-\s*)?type:\s*design_decision\b')).Count
-        $comC = ([regex]::Matches($ParamsYaml, '(?m)^\s*(?:-\s*)?type:\s*commit\b')).Count
+        $actionC = $nativeActions.Count
+        $decC = $nativeDecisions.Count
+        $comC = @($nativeActions | Where-Object { $_.type -ceq 'commit' }).Count
         Update-ReplTurnAudit -Field 'auditActions' -Increment $actionC | Out-Null
         Update-ReplTurnAudit -Field 'auditFiles' -Increment $added | Out-Null
         Update-ReplTurnAudit -Field 'auditDecisions' -Increment $decC | Out-Null
@@ -2579,7 +2596,9 @@ function Invoke-WorkflowAppendActions {
             Title = $title
             Status = 'in_progress'
             ResponseText = 'Actions appended.'
-            ActionsYaml = $actionsBlock
+            Actions = $nativeActions
+            DesignDecisions = $nativeDecisions
+            ProcessingDialog = $nativeDialog
         }
         Set-ReplPersistPlanTodoArgs -PersistArgs $persistArgs -MetaPT $metaPT -UpdateCache
         $persisted = [bool](Invoke-ReplPersistTurn @persistArgs)
@@ -2667,7 +2686,7 @@ function Invoke-WorkflowAppendDialog {
         requestId = $reqId
         items     = @($dialogItems)
     }
-    $callYaml = ConvertTo-Yaml -Data $callParams -Options WithIndentedSequences
+    $callYaml = ConvertTo-Json -InputObject $callParams -Depth 100 -Compress
     $dialogFingerprint = Get-ReplStableFingerprint -Value ([ordered]@{
         method = 'client.SessionLog.AppendDialogAsync'
         requestId = $reqId
@@ -3031,7 +3050,7 @@ function Invoke-WorkflowFailsafeDrain {
     }
     return [pscustomobject]@{
         Success = (-not $summary.aborted)
-        Output = (ConvertTo-Yaml -Data $summary -Options WithIndentedSequences)
+        Output = (ConvertTo-Json -InputObject $summary -Depth 100 -Compress)
     }
 }
 
@@ -3054,7 +3073,7 @@ function Invoke-WorkflowFailsafeStatus {
     }
     return [pscustomobject]@{
         Success = $true
-        Output = (ConvertTo-Yaml -Data $status -Options WithIndentedSequences)
+        Output = (ConvertTo-Json -InputObject $status -Depth 100 -Compress)
     }
 }
 
@@ -3100,7 +3119,7 @@ function Invoke-WorkflowSetTurnTitle {
         requestId = $reqId
         title     = $title
     }
-    $callYaml = ConvertTo-Yaml -Data $callParams -Options WithIndentedSequences
+    $callYaml = ConvertTo-Json -InputObject $callParams -Depth 100 -Compress
     $titleFingerprint = Get-ReplStableFingerprint -Value ([ordered]@{
         method = 'client.SessionLog.SetTurnTitleAsync'
         requestId = $reqId
@@ -3169,7 +3188,7 @@ function Invoke-WorkflowSetSessionTitle {
         sessionId = $meta.SessionId
         title     = $title
     }
-    $callYaml = ConvertTo-Yaml -Data $callParams -Options WithIndentedSequences
+    $callYaml = ConvertTo-Json -InputObject $callParams -Depth 100 -Compress
     $sessionFingerprint = Get-ReplStableFingerprint -Value ([ordered]@{
         method = 'client.SessionLog.SetSessionTitleAsync'
         sessionId = $meta.SessionId
@@ -3310,7 +3329,7 @@ function Invoke-ReplMethod {
     $receipt['method'] = $Method
     $script:LastInvokeReplMethodSuccess = ($receipt.code -in @('persisted', 'queued', 'unchanged'))
     $envelope = [ordered]@{ type = 'result'; payload = [ordered]@{ result = $receipt } }
-    ConvertTo-Yaml -Data $envelope -Options WithIndentedSequences
+    ConvertTo-Json -InputObject $envelope -Depth 100 -Compress
 }
 
 # Script-entry: only when invoked directly with -Method (not when dot-sourced).
@@ -3320,3 +3339,4 @@ if ($Method -and $MyInvocation.InvocationName -ne '.') {
     if (-not $script:LastInvokeReplMethodSuccess) { exit 1 }
     exit 0
 }
+

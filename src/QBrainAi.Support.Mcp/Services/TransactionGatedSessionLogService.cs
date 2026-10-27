@@ -47,6 +47,25 @@ public sealed class TransactionGatedSessionLogService : ISessionLogService
         _workspaceContext = workspaceContext;
         _transactionOptions = transactionOptions;
     }
+    /// <inheritdoc />
+    public Task<SessionAuditEventReceipt> AppendAuditEventAsync(
+        SessionAuditEventRequest auditEvent, CancellationToken cancellationToken = default)
+        => ExecuteMutationAsync("sessionlog.audit.event", auditEvent,
+            auditEvent.AgentIdentity, auditEvent.McpSessionId,
+            MissingSnapshotRollbackPolicy.RestorePreMutation,
+            ct => _inner.AppendAuditEventAsync(auditEvent, ct), cancellationToken);
+
+    /// <inheritdoc />
+    public Task<SessionAuditEventReceipt?> ReadAuditEventAsync(
+        string sourceType, string sessionId, string requestId, string eventId,
+        CancellationToken cancellationToken = default)
+        => _inner.ReadAuditEventAsync(sourceType, sessionId, requestId, eventId, cancellationToken);
+
+    /// <inheritdoc />
+    public Task<SessionAuditCompletionResult> CheckAuditCompletionAsync(
+        string sourceType, string sessionId, string requestId, CancellationToken cancellationToken = default)
+        => _inner.CheckAuditCompletionAsync(sourceType, sessionId, requestId, cancellationToken);
+
 
     /// <inheritdoc />
     public Task<SessionLogQueryResult> QueryAsync(

@@ -1,0 +1,202 @@
+{
+  "schemaVersion": 1,
+  "originalInputReceiptSha256": "86B5CAC4826554553C51649AFF5F9FB1992E0601881DD9AB5AB87E5D5D8DE291",
+  "originalInputReceipt": "S/recovery-selection-02-mock.json",
+  "scope": "Original fourteen independent recovery snapshots/pairs and pinned requirement-derived expected binding. The independent provider reads only input snapshots/pairs; expected binding is assertion data.",
+  "cases": [
+    {
+      "name": "same-pair",
+      "inputSnapshotJson": "{\"currentHostSessionKey\":\"original-host\",\"workspacePath\":\"F:/fixture/recovery\",\"aliases\":[],\"hosts\":[{\"hostSessionKey\":\"original-host\",\"turns\":[{\"boundAtUtc\":\"2026-01-01T00:00:00Z\",\"mcpSessionId\":\"original-session\",\"delivered\":true,\"requestId\":\"original-request\",\"hostSessionKey\":\"original-host\",\"ingressNonce\":\"original-nonce\",\"keySource\":\"native\",\"status\":\"open\",\"agentIdentity\":\"Codex\",\"workspacePath\":\"F:/fixture/recovery\"}]}],\"agentIdentity\":\"Codex\"}",
+      "trustedPair": {
+        "requestId": "original-request",
+        "mcpSessionId": "original-session"
+      },
+      "result": {
+        "binding": {
+          "workspacePath": "F:/fixture/recovery",
+          "agentIdentity": "Codex",
+          "mcpSessionId": "original-session",
+          "hostSessionKey": "original-host",
+          "keySource": "native",
+          "ingressNonce": "original-nonce",
+          "requestId": "original-request",
+          "boundAtUtc": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "name": "no-key-pair",
+      "inputSnapshotJson": "{\"hosts\":[{\"hostSessionKey\":\"original-host\",\"turns\":[{\"boundAtUtc\":\"2026-01-01T00:00:00Z\",\"mcpSessionId\":\"original-session\",\"delivered\":true,\"requestId\":\"original-request\",\"hostSessionKey\":\"original-host\",\"ingressNonce\":\"original-nonce\",\"keySource\":\"native\",\"status\":\"open\",\"agentIdentity\":\"Codex\",\"workspacePath\":\"F:/fixture/recovery\"}]}],\"aliases\":[],\"currentHostSessionKey\":null,\"agentIdentity\":\"Codex\",\"workspacePath\":\"F:/fixture/recovery\"}",
+      "trustedPair": {
+        "requestId": "original-request",
+        "mcpSessionId": "original-session"
+      },
+      "result": {
+        "binding": {
+          "workspacePath": "F:/fixture/recovery",
+          "agentIdentity": "Codex",
+          "mcpSessionId": "original-session",
+          "hostSessionKey": "original-host",
+          "keySource": "native",
+          "ingressNonce": "original-nonce",
+          "requestId": "original-request",
+          "boundAtUtc": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "name": "other-host-pair",
+      "inputSnapshotJson": "{\"hosts\":[{\"hostSessionKey\":\"original-host\",\"turns\":[{\"boundAtUtc\":\"2026-01-01T00:00:00Z\",\"mcpSessionId\":\"original-session\",\"delivered\":true,\"requestId\":\"original-request\",\"hostSessionKey\":\"original-host\",\"ingressNonce\":\"original-nonce\",\"keySource\":\"native\",\"status\":\"open\",\"agentIdentity\":\"Codex\",\"workspacePath\":\"F:/fixture/recovery\"}]}],\"aliases\":[],\"currentHostSessionKey\":\"current-other-host\",\"agentIdentity\":\"Codex\",\"workspacePath\":\"F:/fixture/recovery\"}",
+      "trustedPair": {
+        "requestId": "original-request",
+        "mcpSessionId": "original-session"
+      },
+      "result": {
+        "binding": {
+          "workspacePath": "F:/fixture/recovery",
+          "agentIdentity": "Codex",
+          "mcpSessionId": "original-session",
+          "hostSessionKey": "original-host",
+          "keySource": "native",
+          "ingressNonce": "original-nonce",
+          "requestId": "original-request",
+          "boundAtUtc": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "name": "request-only",
+      "inputSnapshotJson": "{\"currentHostSessionKey\":\"original-host\",\"workspacePath\":\"F:/fixture/recovery\",\"aliases\":[],\"hosts\":[{\"hostSessionKey\":\"original-host\",\"turns\":[{\"boundAtUtc\":\"2026-01-01T00:00:00Z\",\"mcpSessionId\":\"original-session\",\"delivered\":true,\"requestId\":\"original-request\",\"hostSessionKey\":\"original-host\",\"ingressNonce\":\"original-nonce\",\"keySource\":\"native\",\"status\":\"open\",\"agentIdentity\":\"Codex\",\"workspacePath\":\"F:/fixture/recovery\"}]}],\"agentIdentity\":\"Codex\"}",
+      "trustedPair": {
+        "requestId": "original-request"
+      },
+      "result": {
+        "binding": null
+      }
+    },
+    {
+      "name": "session-only",
+      "inputSnapshotJson": "{\"currentHostSessionKey\":\"original-host\",\"workspacePath\":\"F:/fixture/recovery\",\"aliases\":[],\"hosts\":[{\"hostSessionKey\":\"original-host\",\"turns\":[{\"boundAtUtc\":\"2026-01-01T00:00:00Z\",\"mcpSessionId\":\"original-session\",\"delivered\":true,\"requestId\":\"original-request\",\"hostSessionKey\":\"original-host\",\"ingressNonce\":\"original-nonce\",\"keySource\":\"native\",\"status\":\"open\",\"agentIdentity\":\"Codex\",\"workspacePath\":\"F:/fixture/recovery\"}]}],\"agentIdentity\":\"Codex\"}",
+      "trustedPair": {
+        "mcpSessionId": "original-session"
+      },
+      "result": {
+        "binding": null
+      }
+    },
+    {
+      "name": "wrong-session",
+      "inputSnapshotJson": "{\"currentHostSessionKey\":\"original-host\",\"workspacePath\":\"F:/fixture/recovery\",\"aliases\":[],\"hosts\":[{\"hostSessionKey\":\"original-host\",\"turns\":[{\"boundAtUtc\":\"2026-01-01T00:00:00Z\",\"mcpSessionId\":\"original-session\",\"delivered\":true,\"requestId\":\"original-request\",\"hostSessionKey\":\"original-host\",\"ingressNonce\":\"original-nonce\",\"keySource\":\"native\",\"status\":\"open\",\"agentIdentity\":\"Codex\",\"workspacePath\":\"F:/fixture/recovery\"}]}],\"agentIdentity\":\"Codex\"}",
+      "trustedPair": {
+        "mcpSessionId": "unknown",
+        "requestId": "original-request"
+      },
+      "result": {
+        "binding": null
+      }
+    },
+    {
+      "name": "wrong-request",
+      "inputSnapshotJson": "{\"currentHostSessionKey\":\"original-host\",\"workspacePath\":\"F:/fixture/recovery\",\"aliases\":[],\"hosts\":[{\"hostSessionKey\":\"original-host\",\"turns\":[{\"boundAtUtc\":\"2026-01-01T00:00:00Z\",\"mcpSessionId\":\"original-session\",\"delivered\":true,\"requestId\":\"original-request\",\"hostSessionKey\":\"original-host\",\"ingressNonce\":\"original-nonce\",\"keySource\":\"native\",\"status\":\"open\",\"agentIdentity\":\"Codex\",\"workspacePath\":\"F:/fixture/recovery\"}]}],\"agentIdentity\":\"Codex\"}",
+      "trustedPair": {
+        "mcpSessionId": "original-session",
+        "requestId": "unknown"
+      },
+      "result": {
+        "binding": null
+      }
+    },
+    {
+      "name": "foreign-workspace",
+      "inputSnapshotJson": "{\"hosts\":[{\"hostSessionKey\":\"original-host\",\"turns\":[{\"boundAtUtc\":\"2026-01-01T00:00:00Z\",\"mcpSessionId\":\"original-session\",\"delivered\":true,\"requestId\":\"original-request\",\"hostSessionKey\":\"original-host\",\"ingressNonce\":\"original-nonce\",\"keySource\":\"native\",\"status\":\"open\",\"agentIdentity\":\"Codex\",\"workspacePath\":\"F:/fixture/recovery\"}]}],\"aliases\":[],\"currentHostSessionKey\":\"original-host\",\"agentIdentity\":\"Codex\",\"workspacePath\":\"F:/foreign\"}",
+      "trustedPair": {
+        "requestId": "original-request",
+        "mcpSessionId": "original-session"
+      },
+      "result": {
+        "binding": null
+      }
+    },
+    {
+      "name": "foreign-agent",
+      "inputSnapshotJson": "{\"hosts\":[{\"hostSessionKey\":\"original-host\",\"turns\":[{\"boundAtUtc\":\"2026-01-01T00:00:00Z\",\"mcpSessionId\":\"original-session\",\"delivered\":true,\"requestId\":\"original-request\",\"hostSessionKey\":\"original-host\",\"ingressNonce\":\"original-nonce\",\"keySource\":\"native\",\"status\":\"open\",\"agentIdentity\":\"Codex\",\"workspacePath\":\"F:/fixture/recovery\"}]}],\"aliases\":[],\"currentHostSessionKey\":\"original-host\",\"agentIdentity\":\"Foreign\",\"workspacePath\":\"F:/fixture/recovery\"}",
+      "trustedPair": {
+        "requestId": "original-request",
+        "mcpSessionId": "original-session"
+      },
+      "result": {
+        "binding": null
+      }
+    },
+    {
+      "name": "duplicate-pair",
+      "inputSnapshotJson": "{\"hosts\":[{\"hostSessionKey\":\"original-host\",\"turns\":[{\"boundAtUtc\":\"2026-01-01T00:00:00Z\",\"mcpSessionId\":\"original-session\",\"delivered\":true,\"requestId\":\"original-request\",\"hostSessionKey\":\"original-host\",\"ingressNonce\":\"original-nonce\",\"keySource\":\"native\",\"status\":\"open\",\"agentIdentity\":\"Codex\",\"workspacePath\":\"F:/fixture/recovery\"}]},{\"hostSessionKey\":\"duplicate-host\",\"turns\":[{\"boundAtUtc\":\"2026-01-01T00:00:00Z\",\"mcpSessionId\":\"original-session\",\"agentIdentity\":\"Codex\",\"requestId\":\"original-request\",\"ingressNonce\":\"original-nonce\",\"hostSessionKey\":\"duplicate-host\",\"keySource\":\"native\",\"status\":\"open\",\"delivered\":true,\"workspacePath\":\"F:/fixture/recovery\"}]}],\"aliases\":[],\"currentHostSessionKey\":\"original-host\",\"agentIdentity\":\"Codex\",\"workspacePath\":\"F:/fixture/recovery\"}",
+      "trustedPair": {
+        "requestId": "original-request",
+        "mcpSessionId": "original-session"
+      },
+      "result": {
+        "binding": null
+      }
+    },
+    {
+      "name": "other-session-same-request",
+      "inputSnapshotJson": "{\"hosts\":[{\"hostSessionKey\":\"newer-host\",\"turns\":[{\"boundAtUtc\":\"2026-01-01T00:00:00Z\",\"mcpSessionId\":\"other-session\",\"agentIdentity\":\"Codex\",\"requestId\":\"original-request\",\"ingressNonce\":\"original-nonce\",\"hostSessionKey\":\"newer-host\",\"keySource\":\"native\",\"status\":\"open\",\"delivered\":true,\"workspacePath\":\"F:/fixture/recovery\"}]},{\"hostSessionKey\":\"original-host\",\"turns\":[{\"boundAtUtc\":\"2026-01-01T00:00:00Z\",\"mcpSessionId\":\"original-session\",\"delivered\":true,\"requestId\":\"original-request\",\"hostSessionKey\":\"original-host\",\"ingressNonce\":\"original-nonce\",\"keySource\":\"native\",\"status\":\"open\",\"agentIdentity\":\"Codex\",\"workspacePath\":\"F:/fixture/recovery\"}]}],\"aliases\":[],\"currentHostSessionKey\":\"original-host\",\"agentIdentity\":\"Codex\",\"workspacePath\":\"F:/fixture/recovery\"}",
+      "trustedPair": {
+        "requestId": "original-request",
+        "mcpSessionId": "original-session"
+      },
+      "result": {
+        "binding": {
+          "workspacePath": "F:/fixture/recovery",
+          "agentIdentity": "Codex",
+          "mcpSessionId": "original-session",
+          "hostSessionKey": "original-host",
+          "keySource": "native",
+          "ingressNonce": "original-nonce",
+          "requestId": "original-request",
+          "boundAtUtc": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "name": "tool-pair-spoof",
+      "inputSnapshotJson": "{\"hosts\":[{\"hostSessionKey\":\"original-host\",\"turns\":[{\"boundAtUtc\":\"2026-01-01T00:00:00Z\",\"mcpSessionId\":\"original-session\",\"delivered\":true,\"requestId\":\"original-request\",\"hostSessionKey\":\"original-host\",\"ingressNonce\":\"original-nonce\",\"keySource\":\"native\",\"status\":\"open\",\"agentIdentity\":\"Codex\",\"workspacePath\":\"F:/fixture/recovery\"}]}],\"untrustedToolParams\":{\"requestId\":\"original-request\",\"mcpSessionId\":\"original-session\"},\"aliases\":[],\"currentHostSessionKey\":\"original-host\",\"agentIdentity\":\"Codex\",\"workspacePath\":\"F:/fixture/recovery\"}",
+      "trustedPair": null,
+      "result": {
+        "binding": null
+      }
+    },
+    {
+      "name": "pending-alias",
+      "inputSnapshotJson": "{\"hosts\":[{\"hostSessionKey\":\"original-host\",\"turns\":[{\"boundAtUtc\":\"2026-01-01T00:00:00Z\",\"mcpSessionId\":\"original-session\",\"delivered\":true,\"requestId\":\"original-request\",\"hostSessionKey\":\"original-host\",\"ingressNonce\":\"original-nonce\",\"keySource\":\"native\",\"status\":\"open\",\"agentIdentity\":\"Codex\",\"workspacePath\":\"F:/fixture/recovery\"}]}],\"aliases\":[{\"mcpSessionId\":\"original-session\",\"ingressNonce\":\"original-nonce\",\"pendingId\":\"pending-original-nonce\",\"hostSessionKey\":\"original-host\",\"requestId\":\"original-request\"}],\"currentHostSessionKey\":\"original-host\",\"agentIdentity\":\"Codex\",\"workspacePath\":\"F:/fixture/recovery\"}",
+      "trustedPair": {
+        "mcpSessionId": "original-session",
+        "requestId": "pending-original-nonce"
+      },
+      "result": {
+        "binding": {
+          "workspacePath": "F:/fixture/recovery",
+          "agentIdentity": "Codex",
+          "mcpSessionId": "original-session",
+          "hostSessionKey": "original-host",
+          "keySource": "native",
+          "ingressNonce": "original-nonce",
+          "requestId": "original-request",
+          "boundAtUtc": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "name": "wrong-alias-owner",
+      "inputSnapshotJson": "{\"hosts\":[{\"hostSessionKey\":\"original-host\",\"turns\":[{\"boundAtUtc\":\"2026-01-01T00:00:00Z\",\"mcpSessionId\":\"original-session\",\"delivered\":true,\"requestId\":\"original-request\",\"hostSessionKey\":\"original-host\",\"ingressNonce\":\"original-nonce\",\"keySource\":\"native\",\"status\":\"open\",\"agentIdentity\":\"Codex\",\"workspacePath\":\"F:/fixture/recovery\"}]}],\"aliases\":[{\"hostSessionKey\":\"foreign-host\",\"ingressNonce\":\"original-nonce\",\"mcpSessionId\":\"original-session\",\"requestId\":\"original-request\",\"pendingId\":\"pending-original-nonce\"}],\"currentHostSessionKey\":\"original-host\",\"agentIdentity\":\"Codex\",\"workspacePath\":\"F:/fixture/recovery\"}",
+      "trustedPair": {
+        "mcpSessionId": "original-session",
+        "requestId": "pending-original-nonce"
+      },
+      "result": {
+        "binding": null
+      }
+    }
+  ]
+}

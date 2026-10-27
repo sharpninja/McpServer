@@ -11,7 +11,7 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 public abstract class WorkspaceNativePathContractTests
 {
     /// <summary>The native-spelling function under test.</summary>
-    protected abstract string ToNativePath(string path, WorkspacePathPlatform platform);
+    protected abstract string ToNativePath(string path, WorkspacePathPlatform platform, bool isWindowsHost);
 
     /// <summary>On a Windows host, Windows-platform paths switch to backslashes.</summary>
     [Theory]
@@ -21,9 +21,7 @@ public abstract class WorkspaceNativePathContractTests
     [InlineData(@"C:\already\native", @"C:\already\native")]
     public void WindowsPath_OnWindowsHost_UsesBackslashes(string path, string expected)
     {
-        Assert.SkipUnless(OperatingSystem.IsWindows(), "The backslash spelling applies on a Windows host only.");
-
-        Assert.Equal(expected, ToNativePath(path, WorkspacePathPlatform.Windows));
+        NativePathAssertionContract.AssertPath(expected, ToNativePath(path, WorkspacePathPlatform.Windows, isWindowsHost: true));
     }
 
     /// <summary>POSIX-platform paths are never rewritten.</summary>
@@ -32,16 +30,14 @@ public abstract class WorkspaceNativePathContractTests
     [InlineData("//srv/share/x")]
     public void PosixPath_IsUnchanged(string path)
     {
-        Assert.Equal(path, ToNativePath(path, WorkspacePathPlatform.CaseSensitive));
+        NativePathAssertionContract.AssertPath(path, ToNativePath(path, WorkspacePathPlatform.CaseSensitive, isWindowsHost: true));
     }
 
     /// <summary>On a non-Windows host nothing is rewritten, whatever the platform tag.</summary>
     [Fact]
     public void NonWindowsHost_IsUnchanged()
     {
-        Assert.SkipWhen(OperatingSystem.IsWindows(), "Applies to non-Windows hosts only.");
-
-        Assert.Equal("C:/Users/kingd/repo", ToNativePath("C:/Users/kingd/repo", WorkspacePathPlatform.Windows));
+        NativePathAssertionContract.AssertPath("C:/Users/kingd/repo", ToNativePath("C:/Users/kingd/repo", WorkspacePathPlatform.Windows, isWindowsHost: false));
     }
 }
 
@@ -59,9 +55,9 @@ public sealed class WorkspaceNativePathMockDataTests : WorkspaceNativePathContra
     };
 
     /// <inheritdoc />
-    protected override string ToNativePath(string path, WorkspacePathPlatform platform)
+    protected override string ToNativePath(string path, WorkspacePathPlatform platform, bool isWindowsHost)
     {
-        if (!OperatingSystem.IsWindows())
+        if (!isWindowsHost)
             return path;
 
         return WindowsHost.TryGetValue((path, platform), out var native)
