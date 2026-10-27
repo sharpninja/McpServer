@@ -7,6 +7,18 @@ namespace QBrainAi.Support.Mcp.Services;
 /// </summary>
 public sealed class SessionLogSanitizingService : ISessionLogService
 {
+    /// <inheritdoc />
+    public Task<SessionAuditEventReceipt> AppendAuditEventAsync(SessionAuditEventRequest auditEvent, CancellationToken cancellationToken = default)
+        => inner.AppendAuditEventAsync(auditEvent, cancellationToken);
+
+    /// <inheritdoc />
+    public Task<SessionAuditEventReceipt?> ReadAuditEventAsync(string sourceType, string sessionId, string requestId, string eventId, CancellationToken cancellationToken = default)
+        => inner.ReadAuditEventAsync(sourceType, sessionId, requestId, eventId, cancellationToken);
+
+    /// <inheritdoc />
+    public Task<SessionAuditCompletionResult> CheckAuditCompletionAsync(string sourceType, string sessionId, string requestId, CancellationToken cancellationToken = default)
+        => inner.CheckAuditCompletionAsync(sourceType, sessionId, requestId, cancellationToken);
+
     private readonly ISessionLogService inner;
     private readonly ISessionLogSanitizer sanitizer;
 

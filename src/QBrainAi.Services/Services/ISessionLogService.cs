@@ -8,6 +8,29 @@ namespace QBrainAi.Support.Mcp.Services;
 /// </summary>
 public interface ISessionLogService
 {
+    /// <summary>FR-QB-003/005: Commit one immutable event and its projections on an existing turn.</summary>
+    /// <param name="auditEvent">Exact captured event identity, position and payload.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The original committed event receipt or classified rejection.</returns>
+    Task<SessionAuditEventReceipt> AppendAuditEventAsync(SessionAuditEventRequest auditEvent, CancellationToken cancellationToken = default);
+
+    /// <summary>TR-QB-AUDIT-001: Independently read a stored event receipt through current workspace tenancy.</summary>
+    /// <param name="sourceType">Owning agent identity.</param>
+    /// <param name="sessionId">Owning session identifier.</param>
+    /// <param name="requestId">Owning request identifier.</param>
+    /// <param name="eventId">Immutable captured event identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The stored receipt, or null when no matching evidence exists.</returns>
+    Task<SessionAuditEventReceipt?> ReadAuditEventAsync(string sourceType, string sessionId, string requestId, string eventId, CancellationToken cancellationToken = default);
+
+    /// <summary>AC-QB-009/069: Inspect retained event rejections before governed completion.</summary>
+    /// <param name="sourceType">Owning agent identity.</param>
+    /// <param name="sessionId">Owning session identifier.</param>
+    /// <param name="requestId">Owning request identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The existing lifecycle's retained rejection completion assertion.</returns>
+    Task<SessionAuditCompletionResult> CheckAuditCompletionAsync(string sourceType, string sessionId, string requestId, CancellationToken cancellationToken = default);
+
     /// <summary>
     /// TR-PLANNED-CORE-013: Submit (upsert) a session log. Inserts or replaces by (SourceType, SessionId).
     /// </summary>

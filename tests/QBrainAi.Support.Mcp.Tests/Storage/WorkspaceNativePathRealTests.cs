@@ -6,6 +6,8 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 public sealed class WorkspaceNativePathRealTests : WorkspaceNativePathContractTests
 {
     /// <inheritdoc />
-    protected override string ToNativePath(string path, WorkspacePathPlatform platform) =>
-        WorkspaceIdentityPath.ToNativePath(path, platform);
+    protected override string ToNativePath(string path, WorkspacePathPlatform platform, bool isWindowsHost) =>
+        isWindowsHost == OperatingSystem.IsWindows()
+            ? WorkspaceIdentityPath.ToNativePath(path, platform)
+            : WorkspaceIdentityPath.ToNativePath(path, platform, isWindowsHost);
 }

@@ -16,7 +16,7 @@ namespace QBrainAi.Support.Mcp.Storage;
 /// FR-SUPPORT-010: SQLite storage for local MCP server.
 /// TR-MCP-MT-003: Global query filter on WorkspaceId for multi-tenant data isolation.
 /// </summary>
-public sealed class McpDbContext : DbContext
+public sealed partial class McpDbContext : DbContext
 {
     private string _workspaceId;
 
@@ -1208,6 +1208,7 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<TriageGroupEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<TriageResearchRunEntity>().HasIndex(e => e.WorkspaceId);
 
+        ConfigureSessionAuditEvents(modelBuilder);
         ApplyDbFkConventions(modelBuilder);
         WorkspaceKeyConversion.Apply(modelBuilder);
     }

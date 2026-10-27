@@ -1040,10 +1040,18 @@ public static class WorkspaceIdentityPath
     /// <param name="path">Canonical (or already native) path.</param>
     /// <param name="platform">Platform the path belongs to.</param>
     /// <returns>The host-native spelling.</returns>
-    public static string ToNativePath(string path, WorkspacePathPlatform platform)
+    public static string ToNativePath(string path, WorkspacePathPlatform platform) =>
+        ToNativePath(path, platform, OperatingSystem.IsWindows());
+
+    /// <summary>TR-MCP-PATHNORM-001: the same native boundary with an explicit host fact for deterministic branch coverage.</summary>
+    /// <param name="path">Canonical (or already native) path.</param>
+    /// <param name="platform">Platform the path belongs to.</param>
+    /// <param name="isWindowsHost">The host operating-system fact, supplied by the public boundary.</param>
+    /// <returns>The host-native spelling.</returns>
+    internal static string ToNativePath(string path, WorkspacePathPlatform platform, bool isWindowsHost)
     {
         ArgumentNullException.ThrowIfNull(path);
-        return OperatingSystem.IsWindows() && platform == WorkspacePathPlatform.Windows
+        return isWindowsHost && platform == WorkspacePathPlatform.Windows
             ? path.Replace('/', (char)92)
             : path;
     }

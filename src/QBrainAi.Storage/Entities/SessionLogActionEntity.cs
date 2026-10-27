@@ -19,7 +19,7 @@ public sealed class SessionLogActionEntity
     public long SessionLogTurnId { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Execution order within the request.</summary>
-    public int Order { get; set; }
+    public long Order { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Human-readable description of the action.</summary>
     public string? Description { get; set; }
@@ -35,6 +35,12 @@ public sealed class SessionLogActionEntity
     /// <summary>TR-PLANNED-CORE-013: File path affected by this action.</summary>
     [StringLength(1024)]
     public string? FilePath { get; set; }
+
+    /// <summary>FR-QB-003: Immutable captured event identity, absent on legacy rows.</summary>
+    public string? AuditEventId { get; set; }
+
+    /// <summary>TR-QB-AUDIT-001: Original safe integer captured position, independent of arrival.</summary>
+    public long? AuditEventOrder { get; set; }
 
     /// <summary>TR-PLANNED-CORE-013: Navigation to parent entry.</summary>
     public SessionLogTurnEntity? SessionLogTurn { get; set; }

@@ -14,7 +14,7 @@ namespace QBrainAi.Client;
 /// to existing log turns.
 /// </summary>
 /// <seealso cref="QBrainAiClient.SessionLog"/>
-public sealed class SessionLogClient : McpClientBase
+public sealed partial class SessionLogClient : McpClientBase
 {
     /// <inheritdoc />
     public SessionLogClient(HttpClient http, QBrainAiClientOptions options)

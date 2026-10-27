@@ -8,6 +8,7 @@ $ErrorActionPreference = 'Stop'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 . (Join-Path $scriptDir 'plugin-env.ps1')
 . (Join-Path $scriptDir 'resolve-cache-dir.ps1')
+. (Join-Path $scriptDir 'yaml-object-mutation.ps1')
 
 $cacheDir = Resolve-McpCacheDir
 $sessionFile = Join-Path $cacheDir 'session-state.yaml'
@@ -47,15 +48,11 @@ function Test-McpStatusSessionState {
     if (-not (Test-Path -LiteralPath $Path)) { return $false }
 
     try {
-        $statusLine = Select-String -LiteralPath $Path -Pattern '^status:\s*verified\s*$' | Select-Object -First 1
-        if (-not $statusLine) { return $false }
-
-        $sessionLine = Select-String -LiteralPath $Path -Pattern '^sessionId:\s*(?<value>.+)$' | Select-Object -First 1
-        if (-not $sessionLine) { return $false }
-
-        $sessionId = [string]$sessionLine.Matches[0].Groups['value'].Value
-        $sessionId = $sessionId.Trim().Trim('''').Trim('"')
-        return -not [string]::IsNullOrWhiteSpace($sessionId)
+        $state = Read-McpYamlObject -Path $Path
+        return ($state -is [Collections.IDictionary] -and $state.Contains('status') -and
+            $state.status -is [string] -and $state.status -ceq 'verified' -and
+            $state.Contains('sessionId') -and $state.sessionId -is [string] -and
+            -not [string]::IsNullOrWhiteSpace($state.sessionId))
     } catch {
         return $false
     }

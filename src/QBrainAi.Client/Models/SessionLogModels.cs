@@ -241,7 +241,7 @@ public sealed class UnifiedActionDto
 {
     /// <summary>Execution order.</summary>
     [JsonPropertyName("order")]
-    public int Order { get; set; }
+    public long Order { get; set; }
 
     /// <summary>Action description.</summary>
     [JsonPropertyName("description")]
@@ -258,6 +258,10 @@ public sealed class UnifiedActionDto
     /// <summary>File path affected.</summary>
     [JsonPropertyName("filePath")]
     public string? FilePath { get; set; }
+    /// <summary>FR-QB-003: Immutable event identity, when this item is an event projection.</summary>
+    [JsonPropertyName("eventId")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? EventId { get; set; }
 }
 
 /// <summary>A processing dialog item for streaming reasoning.</summary>
@@ -278,6 +282,10 @@ public sealed class ProcessingDialogItemDto
     /// <summary>Category: reasoning, tool_call, tool_result, observation, decision.</summary>
     [JsonPropertyName("category")]
     public string? Category { get; set; }
+    /// <summary>FR-QB-003: Immutable event identity, when this item is an event projection.</summary>
+    [JsonPropertyName("eventId")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? EventId { get; set; }
 }
 
 /// <summary>Git commit recorded during a session log request entry.</summary>

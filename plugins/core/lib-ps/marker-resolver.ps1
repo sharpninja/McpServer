@@ -215,7 +215,7 @@ function Invoke-FullBootstrap {
     $baseUrl = Get-MarkerField -MarkerFile $markerFile -FieldName 'baseUrl'
     $nonce = "nonce-$(Get-Date -Format 'yyyyMMddHHmmss')-$PID"
     try {
-        $response = Invoke-RestMethod -Uri "$baseUrl/health?nonce=$nonce" -TimeoutSec 5
+        $response = Invoke-RestMethod -Uri "$baseUrl/health?nonce=$nonce" -TimeoutSec 30
         if ($response.nonce -ne $nonce) {
             Write-Error "MCP_UNTRUSTED: Nonce verification failed"
             return $false

@@ -490,6 +490,10 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<SessionLogTurnSubmitResult> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<SessionAuditEventReceipt> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<SessionAuditCompletionResult> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<SessionLogWorkspaceStampRepairResult> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<SetTodoTestPlanResult> typedTask:
@@ -575,6 +579,9 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
             case Task<TunnelProviderInfo> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<TurnTransactionStatusResponse> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            // TEST-QB-069: preserve the complete session graph through the existing typed client readback.
+            case Task<UnifiedSessionLogDto> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<UpdateTodoStatusResult> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);

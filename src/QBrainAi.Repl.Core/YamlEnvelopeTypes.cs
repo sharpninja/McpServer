@@ -34,7 +34,7 @@ public sealed class HelloPayload : IHelloPayload
 /// <summary>
 /// Concrete <see cref="IRequestPayload"/> POCO for command-invocation envelopes.
 /// </summary>
-public sealed class RequestPayload : IRequestPayload
+public sealed class RequestPayload : ILosslessRequestPayload
 {
     /// <inheritdoc />
     public string RequestId { get; init; } = "";
@@ -44,6 +44,9 @@ public sealed class RequestPayload : IRequestPayload
 
     /// <inheritdoc />
     public IReadOnlyDictionary<string, object?>? Params { get; init; }
+
+    /// <inheritdoc />
+    public string? RawParamsJson { get; init; }
 }
 
 /// <summary>
