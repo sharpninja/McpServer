@@ -617,6 +617,8 @@ public sealed class GenericClientPassthrough : IGenericClientPassthrough
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<WorkspaceCurrentRequirementLayer> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
+            case Task<WorkspaceVerificationPolicySnapshot> typedTask:
+                return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<WorkspaceDto> typedTask:
                 return await AwaitTypedTaskResultAsync(typedTask).ConfigureAwait(false);
             case Task<WorkspaceInitResult> typedTask:

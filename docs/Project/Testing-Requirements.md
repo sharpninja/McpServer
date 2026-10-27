@@ -1744,3 +1744,8 @@ These tests must pass with mocks before the real client construction logic is fi
   **Acceptance Criteria:**
   - [ ] The five FR and eight TR headings exist in the requirements documents.
   - [ ] No docs/receipts/hv file in this change records OverallVerdict AGREE for Phase 1.
+
+- TEST-MCP-AUDITACTION-001: Exercise real SessionLogService writes and readback: valid tool_execution metadata and tool_call/tool_result dialog survive without design-decision promotion; malformed order/description/status selected for persistence reject on submit/upsert/replace/section paths before any tracked or persisted mutation; mixed batches remain atomic; unrelated legacy/custom actions remain accepted. Use SQLite persistence so a later save cannot accidentally commit a rejected mutation. P1 named cases: DuplicateRequestIds_LastWinsBeforeActionValidation checks both new/existing sessions and invalid winners/losers; LateSnapshot_InvalidActionsRemainIgnored checks retained terminal history; ZeroExecutionOrder_RoundTripsWithoutPositionalRewrite checks the zero boundary; OtherSection_IgnoresUnwrittenActions checks section isolation. InvalidLaterTurn_RejectsWholeSubmission checks atomic rejection for new and existing sessions; InvalidResubmission_LeavesDeletedSessionDeleted checks rejected tombstone recovery, including readback after clearing the change tracker.
+  Scope: layer-1+
+  **Status:** pending
+  **Source:** tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogToolExecutionTests.cs

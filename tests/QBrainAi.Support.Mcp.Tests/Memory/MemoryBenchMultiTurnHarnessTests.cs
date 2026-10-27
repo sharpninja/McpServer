@@ -109,14 +109,20 @@ public sealed class MemoryBenchMultiTurnHarnessTests
     [Fact]
     public void AllEight_WritesMultiTurnStubArtifacts()
     {
-        var directory = Path.Combine(MemoryBenchMultiTurnCatalog.FindRepoRoot(), "docs", "benchmarks", "results");
-        Directory.CreateDirectory(directory);
-        var result = MemoryBenchMultiTurnCatalog.RunStub(["all"], directory, utcStamp: "20260919T091800Z");
-        Assert.Equal(MemoryBenchAdapterRegistry.AllPluginIds, result.Plugins);
-        Assert.All(result.Jobs, job => Assert.True(job.Pass, job.Plugin + " " + job.JobId + " " + job.Condition));
-        Assert.True(File.Exists(Path.Combine(directory, "memory-bench-multiturn-20260919T091800Z.json")));
-        Assert.True(File.Exists(Path.Combine(directory, "memory-bench-multiturn-20260919T091800Z.md")));
-        Assert.Contains("SUCCESS-GATED mean tokens_total", result.SummaryMarkdown, StringComparison.Ordinal);
+        var directory = Directory.CreateTempSubdirectory("mcp-bench-multi-all-").FullName;
+        try
+        {
+            var result = MemoryBenchMultiTurnCatalog.RunStub(["all"], directory, utcStamp: "20260919T091800Z");
+            Assert.Equal(MemoryBenchAdapterRegistry.AllPluginIds, result.Plugins);
+            Assert.All(result.Jobs, job => Assert.True(job.Pass, job.Plugin + " " + job.JobId + " " + job.Condition));
+            Assert.True(File.Exists(Path.Combine(directory, "memory-bench-multiturn-20260919T091800Z.json")));
+            Assert.True(File.Exists(Path.Combine(directory, "memory-bench-multiturn-20260919T091800Z.md")));
+            Assert.Contains("SUCCESS-GATED mean tokens_total", result.SummaryMarkdown, StringComparison.Ordinal);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019: Writes multiturn artifacts with token tables first.</summary>

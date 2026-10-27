@@ -1,0 +1,24 @@
+{
+  "policy": "required",
+  "contract_digest": "321497CC48DFE12BA6900370D810603A54236BFDF44608801158DAE493F0CC87",
+  "agents": {
+    "ClineQb": {
+      "source_type": "ClineQb",
+      "plugin_name": "@sharpninja/mcpserver-cline-v2-plugin",
+      "plugin_version": "1.118.0",
+      "activation": "Mandatory host\r\ningress\u2028completion",
+      "startup_command": "",
+      "unavailable_failure": "MCP_PLUGIN_UNAVAILABLE:ClineQb",
+      "required_env_vars": [],
+      "hook_expectations": [
+        "host ingress",
+        "final tool gate",
+        "completion gate"
+      ],
+      "tool_expectations": [
+        "session_*"
+      ],
+      "root_hints": []
+    }
+  }
+}

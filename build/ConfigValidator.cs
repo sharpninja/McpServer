@@ -23,24 +23,27 @@ static partial class ConfigValidator
     [GeneratedRegex(@"^    ([A-Za-z0-9_][A-Za-z0-9_\-]*):\s*$")]
     private static partial Regex InstanceNameRegex();
 
-    [GeneratedRegex(@"^      RepoRoot:\s*(.+)$")]
+    [GeneratedRegex(@"^      RepoRoot:\s*(.*)$")]
     private static partial Regex RepoRootRegex();
 
-    [GeneratedRegex(@"^      Port:\s*(.+)$")]
+    [GeneratedRegex(@"^      Port:\s*(.*)$")]
     private static partial Regex PortRegex();
 
     [GeneratedRegex(@"^      TodoStorage:\s*$")]
     private static partial Regex TodoStorageSectionRegex();
 
-    [GeneratedRegex(@"^        Provider:\s*(.+)$")]
+    [GeneratedRegex(@"^        Provider:\s*(.*)$")]
     private static partial Regex ProviderRegex();
 
-    [GeneratedRegex(@"^        SqliteDataSource:\s*(.+)$")]
+    [GeneratedRegex(@"^        SqliteDataSource:\s*(.*)$")]
     private static partial Regex SqliteDataSourceRegex();
 
     /// <summary>Represents a parsed MCP instance from YAML.</summary>
     public sealed class InstanceConfig
     {
+        /// <summary>TR-MCP-NUKE-008 AC-003: distinguishes absent keys from explicitly empty or invalid values.</summary>
+        internal HashSet<string> ParsedFields { get; } = new(StringComparer.Ordinal);
+
         public string? RepoRoot { get; set; }
         public int? Port { get; set; }
         public string? TodoProvider { get; set; }
@@ -123,6 +126,7 @@ static partial class ConfigValidator
             var repoRootMatch = RepoRootRegex().Match(line);
             if (repoRootMatch.Success)
             {
+                instances[currentInstance].ParsedFields.Add(nameof(InstanceConfig.RepoRoot));
                 instances[currentInstance].RepoRoot = UnquoteScalar(repoRootMatch.Groups[1].Value);
                 inTodoStorage = false;
                 continue;
@@ -131,8 +135,9 @@ static partial class ConfigValidator
             var portMatch = PortRegex().Match(line);
             if (portMatch.Success)
             {
-                if (int.TryParse(UnquoteScalar(portMatch.Groups[1].Value), out var port))
-                    instances[currentInstance].Port = port;
+                instances[currentInstance].ParsedFields.Add(nameof(InstanceConfig.Port));
+                instances[currentInstance].Port = int.TryParse(UnquoteScalar(portMatch.Groups[1].Value), out var port)
+                    ? port : null;
                 inTodoStorage = false;
                 continue;
             }
@@ -142,6 +147,7 @@ static partial class ConfigValidator
                 var providerMatch = ProviderRegex().Match(line);
                 if (providerMatch.Success)
                 {
+                    instances[currentInstance].ParsedFields.Add(nameof(InstanceConfig.TodoProvider));
                     instances[currentInstance].TodoProvider = UnquoteScalar(providerMatch.Groups[1].Value);
                     continue;
                 }
@@ -149,6 +155,7 @@ static partial class ConfigValidator
                 var sqliteMatch = SqliteDataSourceRegex().Match(line);
                 if (sqliteMatch.Success)
                 {
+                    instances[currentInstance].ParsedFields.Add(nameof(InstanceConfig.SqliteDataSource));
                     instances[currentInstance].SqliteDataSource = UnquoteScalar(sqliteMatch.Groups[1].Value);
                 }
             }
@@ -192,10 +199,14 @@ static partial class ConfigValidator
                 if (!merged.TryGetValue(name, out var target))
                     merged[name] = target = new InstanceConfig();
 
-                target.RepoRoot = instance.RepoRoot ?? target.RepoRoot;
-                target.Port = instance.Port ?? target.Port;
-                target.TodoProvider = instance.TodoProvider ?? target.TodoProvider;
-                target.SqliteDataSource = instance.SqliteDataSource ?? target.SqliteDataSource;
+                if (instance.ParsedFields.Contains(nameof(InstanceConfig.RepoRoot)))
+                    target.RepoRoot = instance.RepoRoot;
+                if (instance.ParsedFields.Contains(nameof(InstanceConfig.Port)))
+                    target.Port = instance.Port;
+                if (instance.ParsedFields.Contains(nameof(InstanceConfig.TodoProvider)))
+                    target.TodoProvider = instance.TodoProvider;
+                if (instance.ParsedFields.Contains(nameof(InstanceConfig.SqliteDataSource)))
+                    target.SqliteDataSource = instance.SqliteDataSource;
             }
         }
 

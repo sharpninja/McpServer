@@ -2940,3 +2940,11 @@ Scope: layer-1+
 - [ ] Existing FR-MCP-*, TR-MCP-*, and TEST-MCP-* IDs are not renamed. The QBrain ids are additions.
 - [ ] The hostname PAYTON-LEGION2 and the lab name LAB-OMARCHY still appear where they identify that host and that lab.
 
+
+## FR-MCP-AUDITACTION-001 Recognized tool execution audit actions
+
+C6: Session logging SHALL recognize tool_execution as a distinct action type before governed hosts emit it. Stored actions SHALL retain their execution metadata without becoming design decisions. Separate tool_call and tool_result dialog SHALL remain intact. Existing action types and legacy/custom action payloads remain compatible. Malformed tool_execution metadata selected for persistence SHALL be rejected without changing visible session/turn state or allowing a later save to commit rejected changes. Selection follows TR-MCP-AUDITACTION-001.
+
+**Status:** pending
+Scope: layer-1+
+**Covered by:** TR-MCP-AUDITACTION-001; TEST-MCP-AUDITACTION-001

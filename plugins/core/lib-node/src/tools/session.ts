@@ -90,7 +90,7 @@ export const sessionTools: Tool[] = [
             properties: {
               order: { type: 'number' },
               description: { type: 'string' },
-              type: { type: 'string', enum: ['edit', 'create', 'delete', 'design_decision', 'commit', 'pr_comment', 'issue_comment', 'web_reference', 'dependency_add'] },
+              type: { type: 'string', enum: ['edit', 'create', 'delete', 'design_decision', 'commit', 'pr_comment', 'issue_comment', 'web_reference', 'dependency_add', 'tool_execution'] },
               status: { type: 'string', enum: ['completed', 'pending'] },
               filePath: { type: 'string' },
             },
@@ -99,6 +99,15 @@ export const sessionTools: Tool[] = [
         },
       },
       required: ['actions'],
+    },
+  },
+  {
+    name: 'session_append_decisions',
+    description: 'Record explicit design conclusions separately from tool actions.',
+    inputSchema: {
+      type: 'object',
+      properties: { decisions: { type: 'array', minItems: 1, items: { type: 'string', minLength: 1 } } },
+      required: ['decisions'],
     },
   },
   {
@@ -157,23 +166,33 @@ const knownTools = new Set([
   'session_update_turn',
   'session_append_dialog',
   'session_append_actions',
+  'session_append_decisions',
   'session_complete_turn',
   'session_fail_turn',
   'session_query_history',
   'session_close',
 ]);
 
-// Process-wide session state. The MCP server is one long-lived child of
-// the Cline VS Code extension, so a singleton matches the lifecycle.
-const sessionShim = new SessionShim();
+// TEST-QB-005: each transport owns its session state. Weak keys also release
+// completed host contexts without retaining their audit history indefinitely.
+let sessionShims = new WeakMap<ReplBridge, SessionShim>();
+
+function sessionShimFor(bridge: ReplBridge): SessionShim {
+  let shim = sessionShims.get(bridge);
+  if (!shim) {
+    shim = new SessionShim();
+    sessionShims.set(bridge, shim);
+  }
+  return shim;
+}
 
 export function canHandleSessionTool(name: string): boolean {
   return knownTools.has(name);
 }
 
 /** Re-export needed by cline v1 glue (plugin-helpers.ts). */
-export function getSessionShimState() {
-  return sessionShim.getState();
+export function getSessionShimState(bridge: ReplBridge) {
+  return sessionShimFor(bridge).getState();
 }
 
 export async function handleSessionTool(
@@ -183,7 +202,7 @@ export async function handleSessionTool(
 ) {
   if (!knownTools.has(name)) throw new Error(`Unknown session tool: ${name}`);
 
-  const response = await dispatchSessionTool(sessionShim, bridge, name, args);
+  const response = await dispatchSessionTool(sessionShimFor(bridge), bridge, name, args);
 
   if (response.type === 'error') {
     const payload = response.payload as { message?: string; code?: string };
@@ -193,7 +212,7 @@ export async function handleSessionTool(
   return response.payload;
 }
 
-/** Test-only: reset singleton between specs. Not part of the MCP surface. */
+/** Test-only: discard transport-scoped state between specs. */
 export function __resetSessionShimForTests(): void {
-  sessionShim.reset();
+  sessionShims = new WeakMap();
 }

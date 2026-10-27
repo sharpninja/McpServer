@@ -63,7 +63,9 @@
         "ValidateConfig",
         "ValidatePluginPowerShellOnly",
         "ValidateTraceability",
-        "ValidateWarningSuppressions"
+        "ValidateWarningSuppressions",
+        "TestGovernedTurnBinding",
+        "TestGovernedTurnStore"
       ]
     },
     "Verbosity": {
@@ -306,6 +308,14 @@
         "WorkspacePath": {
           "type": "string",
           "description": "Workspace path for GraphRAG smoke test"
+        },
+        "A8BindingMode": {
+          "type": "string",
+          "description": "A8 selection contract provider: Mock or Production"
+        },
+        "A8StoreMode": {
+          "type": "string",
+          "description": "A8 store contract provider: Mock or Production"
         }
       }
     },

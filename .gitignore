@@ -541,3 +541,4 @@ todo-bootstrap.marker
 
 # Workspace cache
 cache/
+!plugins/core/lib-node/src/cache/

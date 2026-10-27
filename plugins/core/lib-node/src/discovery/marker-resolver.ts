@@ -1,6 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as crypto from 'crypto';
+import { JSON_SCHEMA, load } from 'js-yaml';
+import { checkAgentPluginContractSnapshot, type RequiredAgentPluginBinding, type VerifiedAgentPluginContract } from './agent-plugin-contract.js';
 
 const MARKER_FILENAME = 'AGENTS-README-FIRST.yaml';
 const MAX_WALK_DEPTH = 20;
@@ -12,6 +14,18 @@ export interface MarkerContext {
   workspace: string;
   workspacePath: string;
   port: string;
+  /** Present only for an explicitly required, authenticated agent contract. */
+  readonly agentPluginContract?: VerifiedAgentPluginContract;
+}
+
+/** TR-QB-TRUST-001: network and workspace binding supplied by the owning host. */
+export interface BootstrapOptions {
+  /** Host's proxy-aware fetch implementation; required when workspace binding is requested. */
+  fetch?: typeof globalThis.fetch;
+  /** Reject a marker for a different execution workspace before contacting its server. */
+  expectedWorkspacePath?: string;
+  /** Host-owned exact identity and artifact pin. Requires explicit workspace binding and fetch. */
+  requiredAgentPlugin?: RequiredAgentPluginBinding;
 }
 
 /**
@@ -35,79 +49,43 @@ export function findMarkerFile(startDir: string): string | null {
   return null;
 }
 
-/**
- * Extract a top-level YAML field using line-by-line parsing (no yq dependency).
- * Also handles nested fields under endpoints:.
- * Mirrors parse_marker_field() in lib/marker-resolver.sh.
- */
-export function parseMarkerField(
-  markerFile: string,
-  fieldName: string,
-): string | null {
-  const lines = fs.readFileSync(markerFile, 'utf8').split('\n');
-
-  // Try top-level field: "fieldName: value"
-  for (const line of lines) {
-    const m = line.match(new RegExp(`^${fieldName}:\\s*(.*)`));
-    if (m) {
-      return m[1].trim().replace(/^["']|["']$/g, '');
-    }
-  }
-
-  // Try nested under endpoints:
-  let inEndpoints = false;
-  for (const line of lines) {
-    if (/^endpoints:/.test(line)) {
-      inEndpoints = true;
-      continue;
-    }
-    if (inEndpoints && /^[^\s]/.test(line)) {
-      inEndpoints = false;
-    }
-    if (inEndpoints) {
-      const m = line.match(new RegExp(`^\\s+${fieldName}:\\s*(.*)`));
-      if (m) {
-        return m[1].trim().replace(/^["']|["']$/g, '');
-      }
-    }
-  }
-
-  return null;
+/** Decode YAML scalars before authentication; quote escapes are not signed data. */
+export function parseMarkerField(markerFile: string, fieldName: string): string | null {
+  return markerField(parseMarkerSnapshot(fs.readFileSync(markerFile, 'utf8')), fieldName);
 }
 
-function parseMarkerNestedField(
-  markerFile: string,
-  sectionName: string,
-  fieldName: string,
-): string | null {
-  const lines = fs.readFileSync(markerFile, 'utf8').split('\n');
-  let inSection = false;
-
-  for (const line of lines) {
-    if (new RegExp(`^${sectionName}:`).test(line)) {
-      inSection = true;
-      continue;
-    }
-    if (inSection && /^[^\s]/.test(line)) {
-      break;
-    }
-    if (inSection) {
-      const m = line.match(new RegExp(`^\\s+${fieldName}:\\s*(.*)`));
-      if (m) {
-        return m[1].trim().replace(/^["']|["']$/g, '');
-      }
-    }
+type MarkerDocument = Record<string, unknown>;
+function mapping(value: unknown): MarkerDocument | null {
+  return value !== null && typeof value === 'object' && !Array.isArray(value)
+    ? value as MarkerDocument : null;
+}
+function scalar(value: unknown): string | null {
+  return typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean'
+    ? String(value) : null;
+}
+function parseMarkerSnapshot(raw: string): MarkerDocument {
+  try {
+    // Keep timestamps as strings and reject duplicate keys. Never expose YAML error snippets.
+    const document = mapping(load(raw, { schema: JSON_SCHEMA }));
+    if (!document) throw new Error();
+    return document;
+  } catch {
+    throw new Error('MCP_UNTRUSTED: Invalid marker YAML');
   }
-
-  return null;
+}
+function markerField(document: MarkerDocument, fieldName: string): string | null {
+  return scalar(document[fieldName]) ?? scalar(mapping(document.endpoints)?.[fieldName]);
+}
+function nestedField(document: MarkerDocument, section: string, field: string): string | null {
+  return scalar(mapping(document[section])?.[field]);
 }
 
 /**
  * Build the canonical payload for HMAC verification.
  * Field order MUST match the bash version in lib/marker-resolver.sh (marker-v1).
  */
-function buildCanonicalPayload(markerFile: string): string {
-  const get = (f: string) => parseMarkerField(markerFile, f) ?? '';
+function buildCanonicalPayload(document: MarkerDocument): string {
+  const get = (f: string) => markerField(document, f) ?? '';
   const lines: string[] = [
     'canonicalization=marker-v1',
     `port=${get('port')}`,
@@ -121,54 +99,22 @@ function buildCanonicalPayload(markerFile: string): string {
     `serverStartedAtUtc=${get('serverStartedAtUtc')}`,
   ];
 
-  // Append endpoints in file order
-  const rawLines = fs.readFileSync(markerFile, 'utf8').split('\n');
-  let inEndpoints = false;
-  for (const line of rawLines) {
-    if (/^endpoints:/.test(line)) {
-      inEndpoints = true;
-      continue;
-    }
-    if (inEndpoints && /^[^\s]/.test(line)) break;
-    if (inEndpoints) {
-      const m = line.match(/^\s+([^:]+):\s*(.*)/);
-      if (m) {
-        const key = m[1].trim();
-        const val = m[2].trim();
-        lines.push(`endpoints.${key}=${val}`);
-      }
-    }
+  // Preserve marker-v1 endpoint emission order, using decoded scalar values.
+  for (const [key, value] of Object.entries(mapping(document.endpoints) ?? {})) {
+    const decoded = scalar(value);
+    if (decoded === null) throw new Error('MCP_UNTRUSTED: Invalid endpoint scalar');
+    lines.push(`endpoints.${key}=${decoded}`);
   }
 
-  const agentPluginPolicy = parseMarkerNestedField(markerFile, 'agent_plugins', 'policy');
-  const agentPluginDigest = parseMarkerNestedField(markerFile, 'agent_plugins', 'contract_digest');
+  const agentPluginPolicy = nestedField(document, 'agent_plugins', 'policy');
+  const agentPluginDigest = nestedField(document, 'agent_plugins', 'contract_digest');
   if (agentPluginPolicy !== null || agentPluginDigest !== null) {
     lines.push(`agentPlugins.policy=${agentPluginPolicy ?? ''}`);
     lines.push(`agentPlugins.contractDigest=${agentPluginDigest ?? ''}`);
   }
 
   // CRITICAL: Use LF line endings, same as bash echo -n behavior
-  return lines.join('\n') + '\n';
-}
-
-/**
- * Extract the stored signature value from the marker file.
- */
-function extractStoredSignature(markerFile: string): string | null {
-  const rawLines = fs.readFileSync(markerFile, 'utf8').split('\n');
-  let inSignature = false;
-  for (const line of rawLines) {
-    if (/^signature:/.test(line)) {
-      inSignature = true;
-      continue;
-    }
-    if (inSignature && /^[^\s]/.test(line)) break;
-    if (inSignature) {
-      const m = line.match(/^\s+value:\s*(.*)/);
-      if (m) return m[1].trim();
-    }
-  }
-  return null;
+  return lines.map(line => line.replace(/\r\n|[\r\n\f\u0085\u2028\u2029]/g, '\n')).join('\n') + '\n';
 }
 
 /**
@@ -176,19 +122,27 @@ function extractStoredSignature(markerFile: string): string | null {
  * Mirrors verify_signature() in lib/marker-resolver.sh.
  */
 export function verifySignature(markerFile: string): boolean {
-  const apiKey = parseMarkerField(markerFile, 'apiKey');
+  try {
+    return verifySignatureSnapshot(parseMarkerSnapshot(fs.readFileSync(markerFile, 'utf8')));
+  } catch {
+    return false;
+  }
+}
+
+function verifySignatureSnapshot(document: MarkerDocument): boolean {
+  const apiKey = markerField(document, 'apiKey');
   if (!apiKey) {
     process.stderr.write('[marker] No apiKey found in marker file\n');
     return false;
   }
 
-  const storedSignature = extractStoredSignature(markerFile);
+  const storedSignature = nestedField(document, 'signature', 'value');
   if (!storedSignature) {
     process.stderr.write('[marker] No signature value found in marker file\n');
     return false;
   }
 
-  const payload = buildCanonicalPayload(markerFile);
+  const payload = buildCanonicalPayload(document);
   const computed = crypto
     .createHmac('sha256', apiKey)
     .update(payload)
@@ -199,7 +153,7 @@ export function verifySignature(markerFile: string): boolean {
     return true;
   }
   process.stderr.write(
-    `[marker] Signature mismatch (computed=${computed}, stored=${storedSignature})\n`,
+    '[marker] Signature mismatch\n',
   );
   return false;
 }
@@ -211,27 +165,43 @@ export function verifySignature(markerFile: string): boolean {
  */
 export async function fullBootstrap(
   startDir: string = process.cwd(),
+  options: BootstrapOptions = {},
 ): Promise<MarkerContext> {
   const markerFile = findMarkerFile(startDir);
   if (!markerFile) {
     throw new Error('MCP_UNTRUSTED: No marker file found');
   }
 
-  if (!verifySignature(markerFile)) {
+  const snapshot = fs.readFileSync(markerFile, 'utf8');
+  const document = parseMarkerSnapshot(snapshot);
+  if (!verifySignatureSnapshot(document)) {
     throw new Error('MCP_UNTRUSTED: Signature verification failed');
   }
 
-  const baseUrl = parseMarkerField(markerFile, 'baseUrl') ?? '';
-  const apiKey = parseMarkerField(markerFile, 'apiKey') ?? '';
-  const workspace = parseMarkerField(markerFile, 'workspace') ?? '';
-  const workspacePath = parseMarkerField(markerFile, 'workspacePath') ?? '';
-  const port = parseMarkerField(markerFile, 'port') ?? '';
+  const baseUrl = markerField(document, 'baseUrl') ?? '';
+  const apiKey = markerField(document, 'apiKey') ?? '';
+  const workspace = markerField(document, 'workspace') ?? '';
+  const workspacePath = markerField(document, 'workspacePath') ?? '';
+  const port = markerField(document, 'port') ?? '';
+
+  if (options.requiredAgentPlugin && options.expectedWorkspacePath === undefined) {
+    throw new Error('MCP_UNTRUSTED: Required agent contract needs explicit workspace binding');
+  }
+  if (options.expectedWorkspacePath !== undefined) {
+    if (typeof options.fetch !== 'function') throw new Error('MCP_UNTRUSTED: Governed bootstrap requires injected fetch');
+    if (!path.isAbsolute(workspacePath) || !path.isAbsolute(options.expectedWorkspacePath) || path.resolve(workspacePath) !== path.resolve(options.expectedWorkspacePath)) {
+      throw new Error('MCP_UNTRUSTED: Marker workspace does not match the execution workspace');
+    }
+  }
+  const agentPluginContract = options.requiredAgentPlugin
+    ? checkAgentPluginContractSnapshot(snapshot, { ...options.requiredAgentPlugin }) : undefined;
+  const fetcher = options.fetch ?? globalThis.fetch;
 
   // Health nonce check
-  const nonce = `nonce-${Date.now()}-${process.pid}`;
+  const nonce = `nonce-${crypto.randomUUID()}`;
   const healthUrl = `${baseUrl}/health?nonce=${nonce}`;
   try {
-    const resp = await fetch(healthUrl);
+    const resp = await fetcher(healthUrl, { redirect: 'error', signal: AbortSignal.timeout(15000) });
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const body = await resp.json() as Record<string, unknown>;
     if (body.nonce !== nonce) {
@@ -241,5 +211,9 @@ export async function fullBootstrap(
     throw new Error(`MCP_UNTRUSTED: Health check failed: ${e}`);
   }
 
-  return { markerFile, baseUrl, apiKey, workspace, workspacePath, port };
+  if (fs.readFileSync(markerFile, 'utf8') !== snapshot) {
+    throw new Error('MCP_UNTRUSTED: Marker changed during bootstrap; retry against the current signed marker');
+  }
+  return { markerFile, baseUrl, apiKey, workspace, workspacePath, port,
+    ...(agentPluginContract ? { agentPluginContract } : {}) };
 }

@@ -58,6 +58,7 @@ function createMockChildProcess(): ChildProcess {
     stdout: new PassThrough(),
     stderr: new PassThrough(),
     exitCode: null,
+    signalCode: null,
     killed: false,
     kill: jest.fn(),
   });
@@ -358,11 +359,7 @@ describe('ReplBridge timeout handling', () => {
     const timer = setTimeout(() => undefined, 5000);
     const rejected: Error[] = [];
 
-    (bridge as unknown as { proc: unknown }).proc = {
-      exitCode: null,
-      killed: false,
-      kill,
-    };
+    (bridge as unknown as { proc: unknown }).proc = Object.assign(createMockChildProcess(), { kill });
     pendingOf(bridge).set('req-other', {
       resolve: jest.fn(),
       reject: (error: Error) => rejected.push(error),
@@ -379,6 +376,7 @@ describe('ReplBridge timeout handling', () => {
     expect(kill).toHaveBeenCalledWith('SIGTERM');
     expect((bridge as unknown as { proc: unknown }).proc).toBeNull();
     expect(rejected[0].message).toBe('qbrain-ai-repl timed out');
+    expect(rejected[0]).toMatchObject({ detailCode: 'transport_timeout', retryable: true });
     expect(pendingOf(bridge).size).toBe(0);
 
     jest.advanceTimersByTime(2000);
@@ -389,7 +387,7 @@ describe('ReplBridge timeout handling', () => {
   test('leaves the excepted requestId pending while clearing the rest', () => {
     const bridge = new ReplBridge();
     const kill = jest.fn();
-    (bridge as unknown as { proc: unknown }).proc = { exitCode: null, killed: false, kill };
+    (bridge as unknown as { proc: unknown }).proc = Object.assign(createMockChildProcess(), { kill });
     const keptReject = jest.fn();
     const droppedReject = jest.fn();
     pendingOf(bridge).set('req-keep', { resolve: jest.fn(), reject: keptReject, events: [] });
@@ -404,5 +402,108 @@ describe('ReplBridge timeout handling', () => {
     expect(droppedReject).toHaveBeenCalledTimes(1);
     expect(keptReject).not.toHaveBeenCalled();
     expect(pendingOf(bridge).size).toBe(0);
+  });
+});
+
+/** TEST-QB-003: retired REPL children cannot affect a replacement transport. */
+describe('ReplBridge process ownership during recovery', () => {
+  beforeEach(() => { jest.useFakeTimers(); spawnMock.mockReset(); });
+  afterEach(() => { jest.clearAllTimers(); jest.useRealTimers(); });
+
+  async function requestId(child: ChildProcess): Promise<string> {
+    await Promise.resolve();
+    await Promise.resolve();
+    return JSON.parse((child.stdin as PassThrough).read().toString()).payload.requestId;
+  }
+  function reply(child: ChildProcess, id: string, type = 'result'): void {
+    (child.stdout as PassThrough).write(yaml.dump({ type, payload: { requestId: id, ok: true } }) + '---\n');
+  }
+
+  test.each(['process', 'stdin', 'stdout', 'stderr'] as const)('handles %s errors without crashing or stranding requests', async channel => {
+    const failed = createMockChildProcess();
+    const replacement = createMockChildProcess();
+    spawnMock.mockReturnValueOnce(failed).mockReturnValueOnce(replacement);
+    const bridge = new ReplBridge({ timeoutMs: 100 });
+    const pending = bridge.invoke('first').catch(error => error);
+    await requestId(failed);
+    const emitter = channel === 'process' ? failed : failed[channel]!;
+    expect(() => emitter.emit('error', new Error('transport unavailable'))).not.toThrow();
+    expect(await pending).toEqual(new Error('qbrain-ai-repl transport failed: transport unavailable'));
+    expect(pendingOf(bridge).size).toBe(0);
+
+    const next = bridge.invoke('next').catch(error => error);
+    const id = await requestId(replacement);
+    expect(() => emitter.emit('error', new Error('late pipe failure'))).not.toThrow();
+    expect(() => failed.emit('error', new Error('late failure'))).not.toThrow();
+    reply(replacement, id);
+    expect(await next).toEqual({ type: 'result', payload: { requestId: id, ok: true } });
+    expect(replacement.kill).not.toHaveBeenCalled();
+  });
+
+  test('a real missing executable rejects without an unhandled spawn error', async () => {
+    jest.useRealTimers();
+    spawnMock.mockImplementationOnce(jest.requireActual<typeof import('child_process')>('child_process').spawn);
+    const bridge = new ReplBridge({ command: join(tmpdir(), `qb-missing-repl-${process.pid}-${Date.now()}`), timeoutMs: 1000 });
+    await expect(bridge.invoke('probe')).rejects.toThrow(/qbrain-ai-repl transport (failed|unavailable)/);
+    expect(pendingOf(bridge).size).toBe(0);
+    await bridge.close();
+  });
+
+  test('late output and exit from a timed-out child cannot settle a replacement request', async () => {
+    const old = createMockChildProcess();
+    const replacement = createMockChildProcess();
+    spawnMock.mockReturnValueOnce(old).mockReturnValueOnce(replacement);
+    const bridge = new ReplBridge({ timeoutMs: 100 });
+    const first = bridge.invoke('first').catch(error => error);
+    await requestId(old);
+    await jest.advanceTimersByTimeAsync(100);
+    expect(await first).toBeInstanceOf(Error);
+
+    const onEvent = jest.fn();
+    const next = bridge.invokeStreaming('next', {}, onEvent).catch(error => error);
+    const id = await requestId(replacement);
+    reply(old, id, 'event');
+    old.emit('exit', null, 'SIGTERM');
+    reply(replacement, id);
+    expect(onEvent).not.toHaveBeenCalled();
+    expect(await next).toEqual({ type: 'result', payload: { requestId: id, ok: true } });
+    await bridge.ensure();
+    expect(spawnMock).toHaveBeenCalledTimes(2);
+  });
+
+  test('escalates after SIGTERM was delivered but the child is still alive', async () => {
+    const child = createMockChildProcess();
+    jest.mocked(child.kill).mockImplementation(() => { Object.assign(child, { killed: true }); return true; });
+    spawnMock.mockReturnValue(child);
+    const bridge = new ReplBridge({ timeoutMs: 100 });
+    const pending = bridge.invoke('hang').catch(error => error);
+    await requestId(child);
+    await jest.advanceTimersByTimeAsync(100);
+    expect(await pending).toBeInstanceOf(Error);
+    expect(child.kill).toHaveBeenCalledWith('SIGTERM');
+    await jest.advanceTimersByTimeAsync(2000);
+    expect(child.kill).toHaveBeenCalledWith('SIGKILL');
+  });
+
+  test('close owns only its original child and promptly rejects its outstanding requests', async () => {
+    const old = createMockChildProcess();
+    const replacement = createMockChildProcess();
+    spawnMock.mockReturnValueOnce(old).mockReturnValueOnce(replacement);
+    const bridge = new ReplBridge({ timeoutMs: 100 });
+    const rejected = jest.fn();
+    const first = bridge.invoke('first').catch(rejected);
+    await requestId(old);
+    const closing = bridge.close();
+    await jest.advanceTimersByTimeAsync(0);
+    expect(rejected).toHaveBeenCalledTimes(1);
+    await first;
+
+    const next = bridge.invoke('next').catch(error => error);
+    const id = await requestId(replacement);
+    old.emit('exit', 0, null);
+    await closing;
+    reply(replacement, id);
+    expect(await next).toEqual({ type: 'result', payload: { requestId: id, ok: true } });
+    expect(replacement.kill).not.toHaveBeenCalled();
   });
 });

@@ -89,6 +89,45 @@ public sealed class ConfigValidatorTests
         Assert.Equal("/alt", instances["alt-local"].RepoRoot);
     }
 
+    /// <summary>
+    /// TR-MCP-NUKE-008 AC-003: explicit canonical keys win even when empty or invalid,
+    /// so a valid legacy key cannot hide a configuration error. Both document orders
+    /// use a valid legacy instance and override exactly one canonical field.
+    /// </summary>
+    [Theory]
+    [InlineData(true, "Port", "not-a-port")]
+    [InlineData(false, "Port", "not-a-port")]
+    [InlineData(true, "Port", "")]
+    [InlineData(false, "Port", "")]
+    [InlineData(true, "RepoRoot", "")]
+    [InlineData(false, "RepoRoot", "")]
+    [InlineData(true, "Provider", "")]
+    [InlineData(false, "Provider", "")]
+    [InlineData(true, "SqliteDataSource", "")]
+    [InlineData(false, "SqliteDataSource", "")]
+    public void ParseInstances_ExplicitInvalidCanonicalKey_DoesNotInheritLegacy(
+        bool canonicalFirst, string field, string value)
+    {
+        string[] canonical = field is "Provider" or "SqliteDataSource"
+            ? ["QBrainAi:", "  Instances:", "    default:", "      TodoStorage:", $"        {field}: {value}"]
+            : ["QBrainAi:", "  Instances:", "    default:", $"      {field}: {value}"];
+        string[] legacy = ["Mcp:", "  Instances:", "    default:", "      RepoRoot: /legacy", "      Port: 7147",
+            "      TodoStorage:", "        Provider: sqlite", "        SqliteDataSource: legacy.db"];
+        string[] yaml = canonicalFirst ? [.. canonical, .. legacy] : [.. legacy, .. canonical];
+
+        var instances = ConfigValidator.ParseInstances(yaml)!;
+        var instance = instances["default"];
+        switch (field)
+        {
+            case "Port": Assert.Null(instance.Port); break;
+            case "RepoRoot": Assert.Equal("", instance.RepoRoot); break;
+            case "Provider": Assert.Equal("", instance.TodoProvider); break;
+            case "SqliteDataSource": Assert.Equal("", instance.SqliteDataSource); break;
+        }
+        if (field != "SqliteDataSource")
+            Assert.NotEmpty(ConfigValidator.Validate(instances, _ => true));
+    }
+
     [Fact]
     public void ParseInstances_NoMcpSection_ReturnsNull()
     {
