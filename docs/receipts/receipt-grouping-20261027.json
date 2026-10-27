@@ -1,0 +1,91 @@
+{
+  "createdLocal": "2026-10-27T14:38:33",
+  "operator": "Group receipts under a single tree. (2026-10-27)",
+  "rule": "Never move a file: copy, verify by SHA-256 and retain the original until the operator clears its deletion.",
+  "copies": [
+    {
+      "source": "docs/receipts-agenthelp-ask-turn.json",
+      "destination": "docs/receipts/agent-help/receipts-agenthelp-ask-turn.json",
+      "sha256": "7D95369159FF7AE9732DBE207C100479B7542D044B61CFFF99371FFAFBBCBE66",
+      "bytes": 1471,
+      "originalRetained": true
+    },
+    {
+      "source": "docs/receipts-agenthelp-global-graphrag-ask.json",
+      "destination": "docs/receipts/agent-help/receipts-agenthelp-global-graphrag-ask.json",
+      "sha256": "C022C888FB96A0AC647429F752CC3C5A9D30C6C18F7BD9F624C8579CE6E2C0A0",
+      "bytes": 9118,
+      "originalRetained": true
+    },
+    {
+      "source": "docs/receipts-agenthelp-smoke.json",
+      "destination": "docs/receipts/agent-help/receipts-agenthelp-smoke.json",
+      "sha256": "A374AFC053750C112B875FB19EDB5979032874D431A60F35054118097E783C90",
+      "bytes": 136,
+      "originalRetained": true
+    },
+    {
+      "source": "docs/receipts-agenthelp-tests.txt",
+      "destination": "docs/receipts/agent-help/receipts-agenthelp-tests.txt",
+      "sha256": "742EEC860161E35E53925D7BF417D0FB7F1D9F964D264532A303C2172CEAAECB",
+      "bytes": 879,
+      "originalRetained": true
+    },
+    {
+      "source": "docs/receipts-agenthelp-traceability.txt",
+      "destination": "docs/receipts/agent-help/receipts-agenthelp-traceability.txt",
+      "sha256": "C7993ADD397BD2318DB45AA2BCBB3A213E8FF289867B11FAB9A5FDA708C410DD",
+      "bytes": 3271,
+      "originalRetained": true
+    },
+    {
+      "source": "docs/receipts-agenthelp-updateservice.txt",
+      "destination": "docs/receipts/agent-help/receipts-agenthelp-updateservice.txt",
+      "sha256": "6601524AB07B694164AF6C238EFDECBD3EEB8749650008FD98945FB267B426B5",
+      "bytes": 12617,
+      "originalRetained": true
+    },
+    {
+      "source": "docs/receipts-graphrag-global-scope.txt",
+      "destination": "docs/receipts/graphrag-global/receipts-graphrag-global-scope.txt",
+      "sha256": "9EEA3BEF391035BC4980CCDD82DCD95AB7C083A806369B3B36F90582923EC2A4",
+      "bytes": 1750,
+      "originalRetained": true
+    },
+    {
+      "source": "docs/receipts-template-sync-restart.txt",
+      "destination": "docs/receipts/template-sync/receipts-template-sync-restart.txt",
+      "sha256": "A86CF7875657B6A4A6019D7423210C8495AD08F0F100153DD8B0D15DBFB36338",
+      "bytes": 384,
+      "originalRetained": true
+    },
+    {
+      "source": "docs/setup/bdpv4-binding-receipt.json",
+      "destination": "docs/receipts/setup/local-service-20260928/bdpv4-binding-receipt.json",
+      "sha256": "BC08ACBE67C763ECB95D1E40B8556183B0DB99A6CB5FD095888BE276345FA3A6",
+      "bytes": 2115,
+      "originalRetained": true
+    },
+    {
+      "source": "docs/setup/bdpv4-service-receipt.json",
+      "destination": "docs/receipts/setup/local-service-20260928/bdpv4-service-receipt.json",
+      "sha256": "25C481183F77EB514F0F8EF3A75B64DB783BB51C8A6AA3F76557F3E89CC5CF55",
+      "bytes": 504,
+      "originalRetained": true
+    },
+    {
+      "source": "docs/setup/cline-test-results.json",
+      "destination": "docs/receipts/setup/local-service-20260928/cline-test-results.json",
+      "sha256": "ED10A7534AE18F44B95C7C95D62CB86EA60C5578A9B8AA46B9473FB87E9BA358",
+      "bytes": 13518,
+      "originalRetained": true
+    },
+    {
+      "source": "docs/setup/final-service-receipt.json",
+      "destination": "docs/receipts/setup/local-service-20260928/final-service-receipt.json",
+      "sha256": "5241CA1BB6F194B01B40CECD360A9C313C42CBFC57F0E6BEBA25AECDDFFABF2F",
+      "bytes": 504,
+      "originalRetained": true
+    }
+  ]
+}

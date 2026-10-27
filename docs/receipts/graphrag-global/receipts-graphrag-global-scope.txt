@@ -1,0 +1,40 @@
+PLAN-GRAPHRAG-GLOBAL-001 implementation receipt
+Date: 2026-07-08
+
+Scope implemented:
+- GraphRagStorageScope enum (Workspace, Global)
+- GraphRagOptions: GlobalRootPath, SeedCanonicalDocsOnStartup, IndexGlobalCorpusOnStartup, CanonicalDocPaths
+- GraphRagService global scope resolution under {DataFolder}/{GlobalRootPath}
+- Global query searches graphrag-global input corpus directly (graphrag-global-input)
+- GraphRagGlobalCorpusStartupSeeder copies primary-workspace canonical docs at startup
+- Agent Help PreferGlobalGraphRag + IGlobalGraphRagCorpusSource wiring
+- Controller ?scope=global, MCP tools scope parameter, appsettings.yaml updates
+- PinnedPaths defaults reduced to workspace-only files
+
+Test command:
+dotnet test tests/QBrainAi.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~GraphRag|FullyQualifiedName~AgentHelp"
+
+Result:
+Passed!  - Failed: 0, Passed: 167, Skipped: 0, Total: 167
+Exit code: 0
+
+Full Support.Mcp.Tests:
+Passed!  - Failed: 0, Passed: 1487, Skipped: 0, Total: 1487
+Exit code: 0
+
+Commits:
+- ef822f79 feat(graphrag): add global scope and wire Agent Help corpus
+- 873c4b91 fix(graphrag): seed canonical docs from explicit source workspace
+
+Deploy:
+./build.ps1 UpdateService -> Succeeded (v1.4.3+873c4b91)
+Patched C:\ProgramData\QBrainAi\appsettings.yaml with GraphRag global settings
+Restart-Service QBrainAi (elevated)
+
+Live verification (2026-07-08):
+GET /qbrainai/graphrag/status?scope=global -> state=ready, inputDocumentCount=7, isIndexed=true
+POST /qbrainai/graphrag/query scope=global query=workflow.todo.update -> queryCorpus=graphrag-global-input
+Seeded files under C:\ProgramData\QBrainAi-Data\graphrag-global\input\canonical\ (7 docs)
+
+Push:
+git push origin develop -> f571b7b2..873c4b91 develop -> develop

@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-09-28T23:18:23.7440077Z",
+  "workspace": "/home/sharpninja/github/McpServer",
+  "route": "Codex workflow.memory; Workspace assignment",
+  "policyId": "MEMORY-DEVPROCESS-001",
+  "policyVersion": 3,
+  "policyScope": "Workspace",
+  "source": "docs/Development-Process-draft-v4.md",
+  "sourceCommit": "6546a59f2baad45d99e717bb8f20b56e06d5911f",
+  "sha256": "34D3C89A0550DAFC687B1A90DE266CB22B88AD63A453BC11917F9D10A2F0A06A",
+  "policyCharacters": 20129,
+  "policyExactMatch": true,
+  "assignmentId": "MEMORY-PROCESS-001",
+  "assignmentVersion": 2,
+  "assignmentText": "For workspace /home/sharpninja/github/McpServer, the active development process is Byrd Development Process v4 (BDPv4). The authoritative policy snapshot is Workspace memory MEMORY-DEVPROCESS-001, version 3, SHA256 34D3C89A0550DAFC687B1A90DE266CB22B88AD63A453BC11917F9D10A2F0A06A, containing docs/Development-Process-draft-v4.md at source commit 6546a59f2baad45d99e717bb8f20b56e06d5911f with exactly five punctuation-only substitutions (en/em dashes to ASCII hyphens); all other characters are preserved. Original source SHA256 0BC2B74ED718A58E53694A1B90D252A259366C20249E0E185DAB5C8197D97A57. Load that memory through the agent plugin before project planning or implementation. This MCP memory assignment supersedes the marker's Windows-only policy path for this workspace. Existing AGENTS.md zero-failure, zero-skip gates remain applicable. This is the supported memory-based assignment; it does not claim server-enforced process transitions. Operator selected BDPv4 and instructed binding on 2026-09-28.",
+  "assignmentExactMatch": true,
+  "requestBoundaryLoaderExactMatch": true,
+  "effectiveMemoryIds": [
+    "MEMORY-PREFERENCE-001",
+    "MEMORY-DEVPROCESS-001",
+    "MEMORY-PROCESS-001"
+  ],
+  "serverEnforcedTransitions": false,
+  "sourceSha256": "0BC2B74ED718A58E53694A1B90D252A259366C20249E0E185DAB5C8197D97A57",
+  "normalization": "Exactly five en/em dashes replaced by ASCII hyphens; all other characters unchanged. policyExactMatch refers to this explicitly normalized snapshot.",
+  "sourceByteExactMatch": false
+}

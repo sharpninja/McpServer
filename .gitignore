@@ -547,5 +547,6 @@ cache/
 /keys/
 # MCP tool descriptor caches written by agent hosts.
 /mcps/
-# Host-global GraphRAG store under a data folder (GraphRagOptions.GlobalRootPath).
-graphrag-global/
+# Host-global GraphRAG store under a data folder (GraphRagOptions.GlobalRootPath); anchored so that
+# docs/receipts/graphrag-global (receipts) stays tracked.
+/src/QBrainAi.Support.Mcp/graphrag-global/

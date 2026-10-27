@@ -1,0 +1,6 @@
+COPIED F:\GitHub\QBrainAi\templates\prompt-templates.yaml -> C:\ProgramData\QBrainAi-Data\templates\prompt-templates.yaml
+COPIED F:\GitHub\QBrainAi\templates\prompt-templates.yaml -> C:\ProgramData\QBrainAi\templates\prompt-templates.yaml
+SERVICE_STATUS=Running
+HEALTH_STATUS=Healthy
+HEALTH_NONCE=tpl-sync-461186633
+HEALTH_VERSION=1.4.2+c56f391a04c5858485251560a3bee95c695f5d9b
