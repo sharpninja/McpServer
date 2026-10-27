@@ -910,8 +910,9 @@ app.UseMiddleware<InteractionLoggingMiddleware>();
 // Content-Security / no inline-eval policy matches sibling Use Case Manager static UIs.
 // Missing /memory/unknown-asset and hashed bundles return Results.NotFound (404), not a false 200 index.
 // Deep link /memory/{id} opens detail or fail-closed.
+// TR-MCP-USECASE-007 AC-1: Markdown files under wwwroot (folder README.md files) are never served.
 app.UseDefaultFiles();
-app.UseStaticFiles();
+app.UseStaticFiles(StaticWebRoot.CreateOptions());
 
 app.UseMcpIdentityServer();
 app.UseAuthentication();
