@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="36" errors="0" failures="1" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2026-10-07" time="12:33:08">
+  <environment cwd="C:\Users\kingd\AppData\Local\Temp\mcp-hook-dedupe-03c0c2d9e3564670ad2fbbf42a4a3d1f" platform="Microsoft Windows 11 Pro|C:\WINDOWS|\Device\Harddisk1\Partition3" machine-name="PAYTON-LEGION2" clr-version="10.0.12" os-version="10.0.26200" nunit-version="2.5.8.0" user="kingd" user-domain="PAYTON-LEGION2" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite type="TestFixture" name="Pester" executed="True" result="Failure" success="False" time="13.1264" asserts="0" description="Pester">
+    <results>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\tests\ClaudeHookWiring.Tests.ps1" executed="True" result="Success" success="True" time="1.2423" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\tests\ClaudeHookWiring.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Claude hook validation and wiring" executed="True" result="Success" success="True" time="0.5108" asserts="0" description="Claude hook validation and wiring">
+            <results>
+              <test-case description="TEST-MCP-BUGTRIAGE-026 validate accepts enabled plugin hooks without settings hooks" name="Claude hook validation and wiring.TEST-MCP-BUGTRIAGE-026 validate accepts enabled plugin hooks without settings hooks" time="0.2738" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="TEST-MCP-BUGTRIAGE-026 install removes redundant managed settings hooks when plugin hooks are enabled" name="Claude hook validation and wiring.TEST-MCP-BUGTRIAGE-026 install removes redundant managed settings hooks when plugin hooks are enabled" time="0.1566" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\tests\CurrentTurnSessionRebind.Tests.ps1" executed="True" result="Success" success="True" time="0.9132" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\tests\CurrentTurnSessionRebind.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Assert-ReplCurrentTurnFresh session rotation re-bind" executed="True" result="Success" success="True" time="0.8582" asserts="0" description="Assert-ReplCurrentTurnFresh session rotation re-bind">
+            <results>
+              <test-case description="returns fresh and re-binds the turn to the active session id after rotation" name="Assert-ReplCurrentTurnFresh session rotation re-bind.returns fresh and re-binds the turn to the active session id after rotation" time="0.459" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\tests\HookTurnDedupe.Tests.ps1" executed="True" result="Success" success="True" time="3.797" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\tests\HookTurnDedupe.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Open-PluginTurn duplicate-prompt dedupe" executed="True" result="Success" success="True" time="3.7364" asserts="0" description="Open-PluginTurn duplicate-prompt dedupe">
+            <results>
+              <test-case description="reuses the open turn when the same prompt arrives again" name="Open-PluginTurn duplicate-prompt dedupe.reuses the open turn when the same prompt arrives again" time="0.865" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="opens a new turn when the prompt differs" name="Open-PluginTurn duplicate-prompt dedupe.opens a new turn when the prompt differs" time="2.8639" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\tests\MemoryInjection.Tests.ps1" executed="True" result="Failure" success="False" time="1.1862" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\tests\MemoryInjection.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="UserPromptSubmit required-memory injection" executed="True" result="Failure" success="False" time="1.1107" asserts="0" description="UserPromptSubmit required-memory injection">
+            <results>
+              <test-case description="loads the host descriptor and maps memory_* aliases to workflow.memory.*" name="UserPromptSubmit required-memory injection.loads the host descriptor and maps memory_* aliases to workflow.memory.*" time="0.107" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="renders explicit None when the stubbed memory fetch is empty" name="UserPromptSubmit required-memory injection.renders explicit None when the stubbed memory fetch is empty" time="0.0609" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="renders descriptor prefix plus raw memory text from a stubbed fetch" name="UserPromptSubmit required-memory injection.renders descriptor prefix plus raw memory text from a stubbed fetch" time="0.0576" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="uses a custom descriptor path for prefix and empty fallback" name="UserPromptSubmit required-memory injection.uses a custom descriptor path for prefix and empty fallback" time="0.0356" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="fail-softs to None when the memory fetch throws" name="UserPromptSubmit required-memory injection.fail-softs to None when the memory fetch throws" time="0.0322" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="merges stubbed memories into UserPromptSubmit hook JSON using the descriptor" name="UserPromptSubmit required-memory injection.merges stubbed memories into UserPromptSubmit hook JSON using the descriptor" time="0.0572" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="user-prompt-submit reads the descriptor and injects stubbed memories into additionalContext" name="UserPromptSubmit required-memory injection.user-prompt-submit reads the descriptor and injects stubbed memories into additionalContext" time="0.3387" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="user-prompt-submit injects explicit None and keeps going when memory fetch fails" name="UserPromptSubmit required-memory injection.user-prompt-submit injects explicit None and keeps going when memory fetch fails" time="0.3583" asserts="0" success="False" result="Failure" executed="True">
+                <failure>
+                  <message>Expected 0, but got 1.</message>
+                  <stack-trace>at $LASTEXITCODE | Should -Be 0, F:\GitHub\mcpserver-claude-code-plugin\tests\MemoryInjection.Tests.ps1:179
+at &lt;ScriptBlock&gt;, F:\GitHub\mcpserver-claude-code-plugin\tests\MemoryInjection.Tests.ps1:179</stack-trace>
+                </failure>
+              </test-case>
+              <test-case description="invoke.ps1 resolves memory_* aliases through the descriptor registry" name="UserPromptSubmit required-memory injection.invoke.ps1 resolves memory_* aliases through the descriptor registry" time="0.0373" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\tests\MemorySkill.Tests.ps1" executed="True" result="Success" success="True" time="0.1241" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\tests\MemorySkill.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Claude Code memory skill and descriptor" executed="True" result="Success" success="True" time="0.0731" asserts="0" description="Claude Code memory skill and descriptor">
+            <results>
+              <test-case description="loads the memory skill with required verbs and injection/fallback notes" name="Claude Code memory skill and descriptor.loads the memory skill with required verbs and injection/fallback notes" time="0.0223" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="loads the memory descriptor JSON without live cloud keys" name="Claude Code memory skill and descriptor.loads the memory descriptor JSON without live cloud keys" time="0.0408" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\tests\NativeSmoke.Tests.ps1" executed="True" result="Success" success="True" time="1.933" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\tests\NativeSmoke.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Official plugin PowerShell native smoke" executed="True" result="Success" success="True" time="1.8769" asserts="0" description="Official plugin PowerShell native smoke">
+            <results>
+              <test-case description="PowerShell session-start wrapper exists and is non-empty" name="Official plugin PowerShell native smoke.PowerShell session-start wrapper exists and is non-empty" time="0.0165" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="PowerShell user-prompt-submit wrapper exists and is non-empty" name="Official plugin PowerShell native smoke.PowerShell user-prompt-submit wrapper exists and is non-empty" time="0.0087" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="runtime wrappers are PowerShell, not bash" name="Official plugin PowerShell native smoke.runtime wrappers are PowerShell, not bash" time="0.0262" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="CORE-MANIFEST.yaml exists" name="Official plugin PowerShell native smoke.CORE-MANIFEST.yaml exists" time="0.0078" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="canonical lib-ps entrypoints exist" name="Official plugin PowerShell native smoke.canonical lib-ps entrypoints exist" time="0.0108" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="session-start wrapper emits JSON without crashing when no marker is present" name="Official plugin PowerShell native smoke.session-start wrapper emits JSON without crashing when no marker is present" time="1.7931" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\tests\ReplFailsafe.Tests.ps1" executed="True" result="Success" success="True" time="2.2235" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\tests\ReplFailsafe.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="REPL session-log persistence bridge" executed="True" result="Success" success="True" time="2.1622" asserts="0" description="REPL session-log persistence bridge">
+            <results>
+              <test-case description="submits the canonical SubmitAsync snapshot and accepts a durable result" name="REPL session-log persistence bridge.submits the canonical SubmitAsync snapshot and accepts a durable result" time="1.0039" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="reports the core failsafe path when close completes in degraded mode" name="REPL session-log persistence bridge.reports the core failsafe path when close completes in degraded mode" time="1.1484" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\tests\ReplMethodTimeout.Tests.ps1" executed="True" result="Success" success="True" time="0.2796" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\tests\ReplMethodTimeout.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Per-method REPL timeout" executed="True" result="Success" success="True" time="0.2314" asserts="0" description="Per-method REPL timeout">
+            <results>
+              <test-case description="gives analyzeRequirements an extended budget and keeps sessionlog at the short default" name="Per-method REPL timeout.gives analyzeRequirements an extended budget and keeps sessionlog at the short default" time="0.0299" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="honors REPL_TIMEOUT for the short default and REPL_LONG_TIMEOUT for long methods" name="Per-method REPL timeout.honors REPL_TIMEOUT for the short default and REPL_LONG_TIMEOUT for long methods" time="0.0142" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\tests\ReplWorkspaceResolution.Tests.ps1" executed="True" result="Success" success="True" time="0.3871" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\tests\ReplWorkspaceResolution.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Resolve-ReplWorkspaceDirectory precedence" executed="True" result="Success" success="True" time="0.3359" asserts="0" description="Resolve-ReplWorkspaceDirectory precedence">
+            <results>
+              <test-case description="prefers the marker-bearing current directory over an inherited MCP_WORKSPACE_PATH" name="Resolve-ReplWorkspaceDirectory precedence.prefers the marker-bearing current directory over an inherited MCP_WORKSPACE_PATH" time="0.0577" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="falls back to MCP_WORKSPACE_PATH when the current directory has no marker" name="Resolve-ReplWorkspaceDirectory precedence.falls back to MCP_WORKSPACE_PATH when the current directory has no marker" time="0.0524" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="falls back to the current directory when no workspace env vars are set" name="Resolve-ReplWorkspaceDirectory precedence.falls back to the current directory when no workspace env vars are set" time="0.0466" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\tests\SessionIdCanonicalAgent.Tests.ps1" executed="True" result="Success" success="True" time="0.3481" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\tests\SessionIdCanonicalAgent.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Canonical PascalCase agent + openSession persistence" executed="True" result="Success" success="True" time="0.292" asserts="0" description="Canonical PascalCase agent + openSession persistence">
+            <results>
+              <test-case description="maps default and lowercase hosts to a PascalCase agent matching the server regex" name="Canonical PascalCase agent + openSession persistence.maps default and lowercase hosts to a PascalCase agent matching the server regex" time="0.042" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="openSession persists the explicit sessionId into session-state.yaml" name="Canonical PascalCase agent + openSession persistence.openSession persists the explicit sessionId into session-state.yaml" time="0.0692" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\tests\Skills.Tests.ps1" executed="True" result="Success" success="True" time="0.1239" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\tests\Skills.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Claude plugin skill guidance" executed="True" result="Success" success="True" time="0.0693" asserts="0" description="Claude plugin skill guidance">
+            <results>
+              <test-case description="TEST-MCP-PLUGIN-PSONLY-001 sync-logs treats deprecated workflow metadata as success and blocks REST fallback" name="Claude plugin skill guidance.TEST-MCP-PLUGIN-PSONLY-001 sync-logs treats deprecated workflow metadata as success and blocks REST fallback" time="0.0142" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="TEST-MCP-PLUGIN-PSONLY-001 session skill treats deprecated workflow metadata and empty history as valid wrapper outcomes" name="Claude plugin skill guidance.TEST-MCP-PLUGIN-PSONLY-001 session skill treats deprecated workflow metadata and empty history as valid wrapper outcomes" time="0.0183" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="TEST-MCP-CLEARSESSION-001 clear-session skill ends session, clears context best-effort, reloads instruction file and profile, reports ready" name="Claude plugin skill guidance.TEST-MCP-CLEARSESSION-001 clear-session skill ends session, clears context best-effort, reloads instruction file and profile, reports ready" time="0.027" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="F:\GitHub\mcpserver-claude-code-plugin\tests\StopGateHardening.Tests.ps1" executed="True" result="Success" success="True" time="0.5684" asserts="0" description="F:\GitHub\mcpserver-claude-code-plugin\tests\StopGateHardening.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Close-PluginTurnIfNeeded hardening" executed="True" result="Success" success="True" time="0.5112" asserts="0" description="Close-PluginTurnIfNeeded hardening">
+            <results>
+              <test-case description="does not block a completed code-edit turn whose only audit signal is commits" name="Close-PluginTurnIfNeeded hardening.does not block a completed code-edit turn whose only audit signal is commits" time="0.2826" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="no-ops instead of blocking for a task-notification phantom turn" name="Close-PluginTurnIfNeeded hardening.no-ops instead of blocking for a task-notification phantom turn" time="0.2217" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

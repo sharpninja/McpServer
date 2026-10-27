@@ -1,0 +1,10 @@
+{
+  "effort": "xhigh",
+  "endedUtc": "2026-10-07T18:17:36.5248748Z",
+  "model": "gpt-6-astra",
+  "mdExists": true,
+  "exitCode": 0,
+  "respBytes": 364620,
+  "lastExists": true,
+  "stamp": "20261007T181500Z-qbrain-ai-rebrand-phase-2-hv-r2"
+}

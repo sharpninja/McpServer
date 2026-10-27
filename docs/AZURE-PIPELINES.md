@@ -41,7 +41,7 @@ If any optional variable is absent, the corresponding publish or deploy step is 
 After the main build/publish job steps, `azure-pipelines.yml` includes an **Octopus LEGION2 release** step. It uses the Octopus CLI (`C:\Program Files\Octopus CLI\octopus.exe`) on the self-hosted `Default` pool agent.
 
 - Octopus project name: `McpServer`
-- Default target on that server: deployment target **PAYTON-DESKTOP** (polling tentacle, role `app-server`)
+- Default target on that server: deployment target **LAB-OMARCHY** (polling tentacle, role `app-server`)
 - The step is additive to Azure Pipelines CI; it does not replace build/test/pack.
 
 Remotes in this repo use `origin` for GitHub and `azure` for Azure DevOps when both are configured.

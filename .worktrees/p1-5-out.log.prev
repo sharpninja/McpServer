@@ -1,0 +1,18 @@
+2026-10-16T14:55:55 - **Blocked before implementation.** Restore failed on existing cryptography dependencies with `NU1902`/`NU1903` warnings-as-errors. **Zero tests ran**; this is not TDD red evidence.
+
+- Branch: `feature/p1-5-workspace-rekey-20261016`
+- HEAD: `36783b79d061303bfb3e17abe685640a953491af`
+- New commit / push / PR: none.
+- Test attempted: `dotnet test ...QBrainAi.Support.Mcp.Tests.csproj -c Debug --filter FullyQualifiedName~WorkspacePathRekeyTests`
+- Files changed: federation plan amendment; new `WorkspacePathRekeyTests.cs`; [failure receipt](/F:/GitHub/McpServer/.worktrees/p1-5-workspace-rekey-20261016/docs/receipts/p1-5-workspace-rekey-20261016/01-test-restore-blocked.log).
+- MCP requirements and blocker recorded. No production implementation, live DB apply, deployment, or service operations.
+
+Following your stop-and-report instruction, choose:
+
+**A.** Authorize scoped dependency fixes, retaining the existing audit gate.  
+**B.** Authorize a command-only exception treating `NU1902`/`NU1903` as warnings during validation; retain audit output and repository settings.  
+**C.** Leave the current edits and stop.
+
+I need this decision because A expands dependency scope, while B changes validation policy.
+
+

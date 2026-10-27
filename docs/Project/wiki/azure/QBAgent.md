@@ -59,6 +59,12 @@ and `expectedOccurrences`). An ambiguous match (multiple occurrences without `re
 
 ### Shell tools
 
+QBAgent's process runner is provided by `McpServer.Common.AgentCli`, so the agent
+does not take a dependency on the server's Services, Storage, or Entity Framework
+assemblies. The existing `McpServer.Support.Mcp.Services` namespace remains intact,
+and `McpServer.Services` forwards the five public process-runner types for binary
+compatibility with existing consumers (TEST-MCP-TRIM-001).
+
 - `run_powershell` - runs PowerShell in a single hosted session reused across the agent run, so the working
   directory and variables persist between calls. Invocations are serialized.
 - `run_bash` - runs a command through Git Bash when available. If `bash.exe` is not on `PATH`, the tool

@@ -323,7 +323,7 @@ public sealed class FederationControllerTests
             {
                 Sequence = 7,
                 OperationId = "op-local-1",
-                ProxyId = "PAYTON-DESKTOP",
+                ProxyId = "LAB-OMARCHY",
                 Domain = "local_execution",
                 Method = "desktop_launch",
                 BodyBase64 = Convert.ToBase64String("{}"u8.ToArray()),

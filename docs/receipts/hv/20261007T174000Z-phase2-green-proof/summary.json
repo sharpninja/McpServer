@@ -1,0 +1,44 @@
+[
+  {
+    "repo": "mcpserver-grok-plugin",
+    "total": 29,
+    "fails": 0,
+    "status": "PASS"
+  },
+  {
+    "repo": "mcpserver-grok-bot-plugin",
+    "total": 29,
+    "fails": 0,
+    "status": "PASS"
+  },
+  {
+    "repo": "mcpserver-claude-code-plugin",
+    "total": 36,
+    "fails": 0,
+    "status": "PASS"
+  },
+  {
+    "repo": "mcpserver-claude-cowork-plugin",
+    "total": 29,
+    "fails": 0,
+    "status": "PASS"
+  },
+  {
+    "repo": "mcpserver-codex-plugin",
+    "total": 41,
+    "fails": 0,
+    "status": "PASS"
+  },
+  {
+    "repo": "mcpserver-copilot-plugin",
+    "total": 29,
+    "fails": 0,
+    "status": "PASS"
+  },
+  {
+    "repo": "mcpserver-cline-plugin",
+    "total": 32,
+    "fails": 0,
+    "status": "PASS"
+  }
+]

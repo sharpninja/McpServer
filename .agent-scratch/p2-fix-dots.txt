@@ -1,0 +1,6 @@
+BEFORE=17
+AFTER=0
+TOP=schemaVersion,generatedAtUtc,workspace,status,plan,scope,p1ReportPlumbing,supersessions,retainedObligationClarifications,requirementAcceptanceCoverage,todoAcceptanceRows,freezeGate,namingContract,existingCandidatePesterInventory,mappingFreeze,semanticValidation,approvedStoreCorrections,pathValidation,fr173TxnKeyScopeCorrections,revision2Correction,revision3Correction,p2MappingRevision
+STATE_COUNT=144
+ACCEPTED=0
+WROTE_MANIFEST

@@ -73,7 +73,7 @@ A new Grok session is the honest test of those knobs. Do not tell the operator t
 - Compile and run the Support.Mcp unit tests locally.
 - Do not mark FR/TEST ACs satisfied until tests prove catalog completeness.
 - Do not store-close `PLAN-LLMSTRATEGY-001`.
-- Do not run `Update-McpService` unless the operator asks. SQL `PAYTON-DESKTOP` has been flaky; live service pid/key rotate on restart. Re-read the marker.
+- Do not run `Update-McpService` unless the operator asks. SQL `LAB-OMARCHY` has been flaky; live service pid/key rotate on restart. Re-read the marker.
 
 You are not authorized to:
 

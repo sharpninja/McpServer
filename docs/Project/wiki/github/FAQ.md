@@ -351,7 +351,7 @@ gsudo pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateServic
 
 The Nuke target stops the service, creates backups, publishes, restores configuration and data, restarts the service, and verifies health. A timestamped archive is saved to `%USERPROFILE%\McpServer-Backups\` for rollback. Do not update the Windows service by manually copying files or by running lower-level deployment scripts directly.
 
-Nuke `UpdateService` is Windows-only. The Linux box close-out for PLAN-TXNKEYSERVER-001 published `develop` `8f30caf` and swapped it into `/opt/mcpserver`. That is not a Legion `UpdateService` run.
+Nuke `UpdateService` now detects Windows or Linux. On Linux, run `./build.ps1 UpdateService --skip-version-bump` from an elevated PowerShell session. Defaults are the existing `mcpserver.service` unit and `/opt/mcpserver/app`. Linux retains a private metadata-preserving configuration/data archive under `/var/backups/mcpserver`, including systemd unit and environment files. It does not provision the service, export an external SQL database or automatically roll back binaries. See the [Linux update requirements](USER-GUIDE.md#linux-systemd-service-update).
 
 ### What actions are available in the management script?
 

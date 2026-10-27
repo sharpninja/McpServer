@@ -1,0 +1,17 @@
+START 386
+  386|function New-McpPluginTurnUpsertRequest {
+  395|        SessionId - Target session identifier.
+  396|        Turn - Ordered turn payload with requestId, timestamp, queryText,
+  397|        queryTitle, response, status, model, tokenCount, filesModified,
+  401|        New-McpPluginTurnUpsertRequest -Agent Codex -SessionId Codex-1 -RequestId req-1 -Timestamp 2026-06-28T01:00:00Z -QueryText Hello -Title Hello -Status completed -Model codex
+  406|        [Parameter(Mandatory)][string]$SessionId,
+  409|        [Parameter(Mandatory)][AllowEmptyString()][string]$QueryText,
+  411|        [Parameter(Mandatory)][string]$Status,
+  429|        status = $Status
+  433|    if (-not [string]::IsNullOrWhiteSpace($QueryText)) {
+  434|        $turn.queryText = $QueryText
+  484|    return [McpPluginTurnUpsertRequest]::new($Agent, $SessionId, $turn)
+  487|function New-McpPluginFailsafeRecord {
+  516|function New-McpTriageReportParams {
+  531|        ErrorSignature - Stable error text, status code, or exception type.
+  551|        [string]$SessionId = '',

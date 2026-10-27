@@ -1,0 +1,11 @@
+2026-10-17T08:33:24 - Implemented and pushed. [Draft PR #83](https://github.com/sharpninja/McpServer/pull/83) targets `develop`.
+
+- **Branch:** `feature/p1-5-workspace-rekey-20261016`
+- **Commit:** `d22a1119d8c822e4a1ac62a6e9938d19559b7fdd`
+- **Tests:** Focused: 36 passed. Full Nuke restore/build/unit gate: **4,647 passed, 0 failed, 0 skipped**.
+- **Files:** [20-file diff](https://github.com/sharpninja/McpServer/pull/83/files): rekey engine/CLI/token migration, startup guard/wiring, five test files, scoped Xml/Pkcs pins, requirements, plan, instructions, and receipt.
+- **Evidence:** [Validation receipt](F:/GitHub/McpServer/.worktrees/p1-5-workspace-rekey-20261016/docs/receipts/2026-10-17-p1-5-workspace-rekey.md). MCP audit completion verified.
+- **Remaining:** SQL Server/PostgreSQL native rehearsals and independent acceptance are unrun. No delivery blocker; deploy hold remains. No merge, deployment, service operation, or live DB rekey.
+
+Self-assessed accuracy: 99%; completeness: 95%, reflecting the unrun provider rehearsals.
+

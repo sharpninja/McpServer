@@ -9,6 +9,7 @@ Standalone repository for `McpServer.Support.Mcp`, the MCP context server used f
 - MCP over STDIO transport (`--transport stdio`)
 - Single-port multi-tenant workspace hosting via `X-Workspace-Path` header
 - Database-backed TODO storage following `Mcp:Database:Provider`; `docs/Project/TODO.yaml` is a read-only projection (TR-MCP-CFG-007)
+- Permanent local audit ledgers with versioned compressed payloads and SQL Server runtime-role protection
 - Use case domain: `/mcpserver/usecases` (CRUD, structure, FR Realizes links, coverage, diagram-graph, approval/product) and first-party UI at `/usecases/`
 - Three-tier workspace resolution: header → API key reverse lookup → default
 - Optional interaction logging and Parseable sink support
@@ -77,6 +78,7 @@ Important keys:
 - `Mcp:TodoFilePath`
 - `Mcp:TodoStorage:Provider` (`database`; `sqlite` is a deprecated alias for `database`, and the removed `yaml` value fails fast per TR-MCP-CFG-007)
 - `Mcp:TodoStorage:SqliteDataSource`
+- `Mcp:Database:AutoMigrate` (default `true`; set `false` for a SQL Server runtime principal without schema privileges after an administrator applies migrations)
 - `Mcp:GraphRag:*` (GraphRAG enablement, query defaults, backend command, concurrency)
 - `Mcp:TurnTransactions:*` (coordinator + keyserver). Repo default `Enabled: false`. Live box MCP keeps `Enabled: true` for QuadBrain. Keyserver signing is QuadBrain/brain-slot only (`TurnTransactionKeyserverScope`; FR-MCP-173). First-party adapters bypass the coordinator.
 - `Mcp:Triage:*` (asynchronous triage research runner: `AgentPath`, `ExecutionStrategy`, quiet period, fallback tiers). `AgentModel: auto` is a sentinel meaning "let the agent CLI pick its default model"; the Grok strategy omits `--model` for it and pins effort to `high` (current Grok CLIs reject `max`)
@@ -282,6 +284,10 @@ paths that escape the upload root. Exceeded limits return 413; malformed or unsa
 
 Host-local products (`PROD-*` keys such as `PROD-MCPSERVER`) map workspaces together so members can union FR/TR/TEST/layers into `GET /mcpserver/requirements/effective` (default `productScope=product`). Rows stay in the origin workspace and are tagged with `originWorkspaceId`. Context source `product-requirements` synthesizes those texts; sibling source files are never included. REST lives at `/mcpserver/products`. MCP tools are `product_*` plus `requirements_effective`. Typed client is `McpServerClient.Products`. Acceptance criteria travel with the effective union. `ProductClient.RemoveMemberAsync` deserializes the DELETE body (self-leave is 404 on a later GET).
 
+## Permanent local audit storage
+
+`DataAuditLogs` and `TodoAuditHistory` are local audit ledgers. Audit rows are excluded from federation payloads and wiki exports. New generic audit payloads use versioned GZip columns while historical JSON text remains readable. The SQL Server migration also creates an `mcp_runtime` role with audit update/delete denials. See [Permanent local audit storage](Operations/permanent-local-audit-sqlserver.md) for the migration, runtime login, and permission checks.
+
 ## Requirements Wiki Export
 
 `docs/wiki.yaml` uses schema `mcp-wiki-export/v1` to define the requirements wiki document tree for GitHub and Azure exports. When the file is absent, wiki generation falls back to the canonical generated Home, requirements, traceability, matrix, GitHub sidebar/footer, Azure order files, and manifests. `GenerateAllAsync` opens a workspace-contained export root (`WorkspaceContainedFileSystem.OpenExportRoot`) before reading the on-disk requirements matrix so export I/O stays pinned inside the workspace.
@@ -378,6 +384,10 @@ Source: `src/McpServer.Client/` - see the [package README](https://github.com/sh
 `SessionLogSanitizingService` is the outermost HTTP and stdio decorator. Query/GET/MCP/stdio reads replace configured secrets in the outbound DTO. SQLite rows are not rewritten. Configure `Mcp:SessionLogSanitization` (`Enabled`, `MaxRuleCount`, `MaxPatternLength`, `RegexTimeoutMilliseconds`, `Rules` with `Id`/`Pattern`/`Replacement`). The in-repo example rule uses `example-token-` (not a live secret). Text filters still match the raw record; TotalCount/order/Limit/Offset stay the same. Regex timeout fails closed without logging the input.
 
 Plugin `workflow.sessionlog.appendDialog` persists an existing turn through `SessionLogClient.AppendDialogAsync` (POST `.../dialog`), not a full-session `SubmitAsync` upsert. HTTP 503 `backend_unavailable` on persist uses the same degrade-queue as timeout: failsafe retained, current-turn stays `in_progress`, no throw. SQLITE_BUSY under the storage budget is retryable persist contention, not storage-down, when TODO/requirements reads still succeed.
+
+Session-log `SubmitAsync` SaveChanges and `FindExistingSessionAsync` graph loads use `Mcp:SessionLog:SubmitCommandBudgetSeconds` (default and recommended deploy value **30**). Valid range is 1 through 300. The graph load uses `AsSplitQuery()` so sibling turn collections are not cartesian-joined. Raise the budget when a full-graph mutation is known to run longer than 30 seconds. Triage intake and session-log replace/section saves stay on the 5 second `StorageCommandBudget.Default`. Budget expiry and SQL deadlock 1205 during the graph load are HTTP 503 `backend_unavailable` and retryable. A failed load does not report the session as missing and does not persist the mutation.
+
+Requirements recovery is `POST /mcpserver/requirements/recovery` with `mode` `dry-run` or `apply`, and `GET /mcpserver/requirements/recovery/{idempotencyKey}`. REPL methods are `workflow.requirements.planRecovery`, `applyRecovery`, and `getRecovery`. Apply uses a serializable transaction. Dry-run does not store a run. The error contract is 400, 409, 404, and 503. See `docs/plans/PLAN-REQRECOVERY-ENABLER-20260928.md` for the operator deploy checklist.
 
 Mutating `/mcpserver/*` failures, MCP tool errors, REPL `type: error` payloads, and plugin shim failures share the machine-readable envelope `{ code, message, retryable, details }` (FR-MCP-TRIAGEERR-001). REST also carries those four fields as ProblemDetails extensions. `backend_unavailable` is retryable true. Persistence, validation, not-found, and conflict are retryable false unless the classifier maps SQLITE_BUSY or deadlock. Innermost EF or provider text lives in `details.inner`.
 

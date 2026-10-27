@@ -1,0 +1,33 @@
+  890|function Write-ReplFailsafe {
+  891|    # Capture the serialized request before the remote call so a crash cannot lose
+  892|    # the turn. The YAML document is written through the shared object serializer.
+  893|    param(
+  894|        [Parameter(Mandatory)][string]$Method,
+  895|        [Parameter(Mandatory)][string]$ParamsYaml,
+  896|        [Parameter(Mandatory)][string]$Label,
+  897|        [string]$PayloadFingerprint = ''
+  898|    )
+  899|    try {
+  900|        $dir = Get-ReplFailsafeDir
+  901|        [void][System.IO.Directory]::CreateDirectory($dir)
+  902|        $stamp = Get-Date -AsUTC -Format 'yyyyMMddTHHmmssZ'
+  903|        $file = Join-Path $dir ("{0}-{1}-{2:x4}.yaml" -f $stamp, $Label, (Get-Random -Maximum 0xFFFF))
+  904|        $paramsObject = Convert-ReplParamsYamlToObject -ParamsYaml $ParamsYaml
+  905|        $record = [ordered]@{
+  906|            method = $Method
+  907|            label = $Label
+  908|            timestamp = $stamp
+  909|            params = $paramsObject
+  910|        }
+  911|        if (-not [string]::IsNullOrWhiteSpace($PayloadFingerprint)) {
+  912|            $record.payloadFingerprint = $PayloadFingerprint
+  913|        }
+  914|        Write-McpYamlObject -Path $file -Document $record
+  915|        [void]$script:ReplFailsafeInFlight.Add($file)
+  916|        return $file
+  917|    }
+  918|    catch {
+  919|        return ''
+  920|    }
+  921|}
+  922|function Clear-ReplFailsafe {

@@ -49,11 +49,21 @@ Get-Service McpServer
 
 The default target bumps `GitVersion.yml` `next-version` (patch) and `git add`s that file. Pass `--skip-version-bump` (Nuke `--SkipVersionBump true`) only when you must leave `GitVersion.yml` unchanged.
 
-Nuke `UpdateService` is Windows-only. Do not treat a Linux box publish/swap as `UpdateService`, and do not claim a Windows Legion `UpdateService` run unless that host actually ran the Nuke target.
+Nuke `UpdateService` detects Windows or Linux. Windows retains its service registration, launcher, ZIP backup and restore behavior. A deployment receipt applies only to the host that actually ran the target.
 
-#### Linux box publish/swap
+#### Linux systemd service update
 
-On Linux, the shipped close-out path is a publish of `develop` followed by an atomic swap into `/opt/mcpserver`. PLAN-TXNKEYSERVER-001 closed on the box MCP after `develop` `8f30caf` was published that way, with live `Mcp:TurnTransactions:Enabled=true`. That is the box equivalent of the Windows service update, not Nuke `UpdateService`.
+Run from an elevated PowerShell session at the repository root:
+
+```powershell
+./build.ps1 UpdateService --skip-version-bump
+```
+
+Linux defaults to the existing `mcpserver.service` unit and `/opt/mcpserver/app`. Override them with `--service-name` and `--install-path`; use `--port` when health checks need a port other than 7147. This target updates an installed service; it does not provision an account or unit. It publishes the Linux x64/arm64 apphost before stopping the service. To use a prepared publish directory, pass `--skip-build --publish-source /absolute/path/to/publish`.
+
+Both platforms preserve live `appsettings.yaml` and its configured `DataFolder`, falling back to `Mcp:DataDirectory`. When data resolves to the install root, the existing legacy runtime folders and database-file patterns are preserved. Linux additionally archives the unit, drop-ins and environment files, retaining Unix ownership, modes, ACLs, extended attributes and symbolic links. Private recovery archives remain under `/var/backups/mcpserver` (override with `--linux-backup-root`). Service arguments, account, environment and boot policy are retained.
+
+The Linux updater requires a direct apphost service with matching working directory and a single base YAML configuration. Configuration overlays, data/instance/content-root overrides, filesystem namespace remapping and unsafe path overlaps fail before stopping. A per-installation lock also prevents concurrent updates through unit aliases. After replacement, live state is restored before service and workspace health verification. Failure retains the archive and restores preserved state when possible; it does not roll back binaries or back up an external SQL database.
 
 ### Verify startup
 
@@ -914,7 +924,7 @@ Queue one-shot example:
 - always use the Nuke target: `gsudo pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateService`
 - do not run `scripts\Update-McpService.ps1` directly for service redeployments
 - do not manually overwrite `C:\ProgramData\McpServer`
-- Nuke `UpdateService` is Windows-only. Linux box updates publish/swap into `/opt/mcpserver` and are not an `UpdateService` run
+- Linux updates also use `UpdateService`; see the existing-systemd requirements and recovery limits above
 
 ### Keyserver errors on TODO, session-log, or requirements writes
 

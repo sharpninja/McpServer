@@ -1,0 +1,6 @@
+ParserError: F:\GitHub\McpServer\docs\receipts\hv\20261007T173917Z-qbrain-ai-rebrand-phase-2-hv-green.runner.ps1:42
+Line |
+  42 |  . ing_effort="xhigh" -C "$workspace" -s workspace-write --skip-git-repo .
+     |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Unexpected token 'xhigh" -C "$workspace" -s workspace-write --skip-git-repo-check --json -o "$lastMsg" -"' in
+     | expression or statement.

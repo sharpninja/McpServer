@@ -1,0 +1,10 @@
+$ErrorActionPreference = 'Stop'
+$dir = 'F:\GitHub\McpServer\.worktrees\sessionlife-p2-contracts-5cb2\docs\receipts\hv'
+$log = Get-ChildItem $dir -Filter 'p2-unit-legion-20261002T21*-gate.log' | Sort-Object LastWriteTimeUtc -Descending | Select-Object -First 1
+Write-Output ("LOG=" + $log.FullName)
+Write-Output ("LEN=" + $log.Length)
+Write-Output ("MTIME=" + $log.LastWriteTimeUtc.ToString('o'))
+$lines = [System.IO.File]::ReadAllLines($log.FullName)
+Write-Output ("LINES=" + $lines.Length)
+$start = [Math]::Max(0, $lines.Length - 15)
+for ($i = $start; $i -lt $lines.Length; $i++) { Write-Output $lines[$i] }

@@ -1,0 +1,64 @@
+RuntimeException: workflow.sessionlog.beginTurn primary :: Expected strings to be the same, but they were different.
+Expected length: 0
+Actual length:   398
+Strings differ at index 0.
+Expected: ''
+But was:  'type: result\r\npayload:\r\n  result:\r\n    code: persisted\r\n    retryable: false\r\n    persiste...'
+           ^
+workflow.sessionlog.updateTurn primary :: Expected strings to be the same, but they were different.
+Expected length: 0
+Actual length:   399
+Strings differ at index 0.
+Expected: ''
+But was:  'type: result\r\npayload:\r\n  result:\r\n    code: persisted\r\n    retryable: false\r\n    persiste...'
+           ^
+workflow.sessionlog.appendActions primary :: Expected strings to be the same, but they were different.
+Expected length: 0
+Actual length:   402
+Strings differ at index 0.
+Expected: ''
+But was:  'type: result\r\npayload:\r\n  result:\r\n    code: persisted\r\n    retryable: false\r\n    persiste...'
+           ^
+workflow.sessionlog.appendDialog primary :: Expected strings to be the same, but they were different.
+Expected length: 0
+Actual length:   373
+Strings differ at index 0.
+Expected: ''
+But was:  'type: result\r\npayload:\r\n  result:\r\n    code: persisted\r\n    retryable: false\r\n    persiste...'
+           ^
+workflow.sessionlog.completeTurn primary :: Expected strings to be the same, but they were different.
+Expected length: 0
+Actual length:   401
+Strings differ at index 0.
+Expected: ''
+But was:  'type: result\r\npayload:\r\n  result:\r\n    code: persisted\r\n    retryable: false\r\n    persiste...'
+           ^
+workflow.sessionlog.failTurn primary :: Expected strings to be the same, but they were different.
+Expected length: 0
+Actual length:   397
+Strings differ at index 0.
+Expected: ''
+But was:  'type: result\r\npayload:\r\n  result:\r\n    code: persisted\r\n    retryable: false\r\n    persiste...'
+           ^
+workflow.sessionlog.setTurnTitle primary :: Expected strings to be the same, but they were different.
+Expected length: 0
+Actual length:   373
+Strings differ at index 0.
+Expected: ''
+But was:  'type: result\r\npayload:\r\n  result:\r\n    code: persisted\r\n    retryable: false\r\n    persiste...'
+           ^
+workflow.sessionlog.setSessionTitle primary :: Expected 0, but got 1.
+workflow.sessionlog.setSessionTitle queued :: Expected strings to be the same, but they were different.
+Expected length: 25
+Actual length:   0
+Strings differ at index 0.
+Expected: 'Codex-20260930T000000Z-p2'
+But was:  ''
+           ^
+workflow.sessionlog.setSessionTitle lost :: Expected strings to be the same, but they were different.
+Expected length: 25
+Actual length:   0
+Strings differ at index 0.
+Expected: 'Codex-20260930T000000Z-p2'
+But was:  ''
+           ^

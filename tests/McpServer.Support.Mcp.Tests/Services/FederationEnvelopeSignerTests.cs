@@ -21,9 +21,9 @@ public sealed class FederationEnvelopeSignerTests
             Domain = "todo",
             ResourceId = "PLAN-FEDERATION-001",
             BodyBase64 = Convert.ToBase64String("{}"u8.ToArray()),
-        }, "PAYTON-LEGION2", "PAYTON-DESKTOP");
+        }, "PAYTON-LEGION2", "LAB-OMARCHY");
 
-        var result = sut.Verify(envelope, "PAYTON-DESKTOP");
+        var result = sut.Verify(envelope, "LAB-OMARCHY");
 
         Assert.True(result.IsValid, result.Error);
         Assert.Equal("HMAC-SHA256", envelope.Signature?.Algorithm);
@@ -82,7 +82,7 @@ public sealed class FederationEnvelopeSignerTests
             Domain = "todo",
         }, "hub", "PAYTON-LEGION2");
 
-        var result = sut.Verify(envelope, "PAYTON-DESKTOP");
+        var result = sut.Verify(envelope, "LAB-OMARCHY");
 
         Assert.False(result.IsValid);
         Assert.Contains("target proxy", result.Error, StringComparison.OrdinalIgnoreCase);

@@ -1,4 +1,4 @@
-# Technical Requirements (MCP Server)
+# Technical Requirements (QBrain.AI)
 
 ## []
 
@@ -87,6 +87,18 @@ Scope: layer-1+
 ## TR-14
 
 **TR-14** — Placeholder requirement backfilled by DB-FK-001. PLAN-TODOALIGN-001: numeric stub noted; plugin updateTr rejects non-canonical id so status stays pending.
+**Status:** pending
+Scope: layer-1+
+
+## TR-API-001
+
+**TR-API-001** — Placeholder requirement backfilled for TODO link TR-API-001.
+**Status:** pending
+Scope: layer-1+
+
+## TR-API-002
+
+**TR-API-002** — Placeholder requirement backfilled for TODO link TR-API-002.
 **Status:** pending
 Scope: layer-1+
 
@@ -467,6 +479,27 @@ Scope: layer-1+
 **Covered by:** `AuditedCopilotClient`, `Program.cs` (`ICopilotClient` decorator wiring), `McpStdioHost` (`ICopilotClient` decorator wiring), `CopilotServiceCollectionExtensions`
 Scope: layer-1+
 
+## TR-MCP-AUDIT-002
+
+**Versioned compressed generic audit payloads** — Add nullable versioned GZip UTF-8 columns for the four generic audit JSON payloads on SQLite, SQL Server, and PostgreSQL. Preserve existing text columns and read legacy rows without a historical rewrite.
+**Covered by:** FR: FR-MCP-AUDIT-001; TEST: TEST-MCP-AUDIT-001, TEST-MCP-AUDIT-002, TEST-MCP-AUDIT-003
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-AUDIT-003
+
+**Restricted SQL Server audit runtime role** — The SQL Server migration creates a runtime role with ordinary application DML but denies update and delete on both audit ledgers and writes to EF migration history. With AutoMigrate false, HTTP and stdio startup reject pending migrations before serving runtime work.
+**Covered by:** FR: FR-MCP-AUDIT-001; TEST: TEST-MCP-AUDIT-001, TEST-MCP-AUDIT-002, TEST-MCP-AUDIT-003
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-AUDIT-004
+
+**Local-only audit federation and export policy** — TODO federation snapshots may use local audit history for version tokens but must omit audit rows. Wiki dump policy marks both audit tables local-only and export payloads omit their rows.
+**Covered by:** FR: FR-MCP-AUDIT-001; TEST: TEST-MCP-AUDIT-001, TEST-MCP-AUDIT-002, TEST-MCP-AUDIT-003
+**Status:** pending
+Scope: layer-1+
+
 ## TR-MCP-AUTH-001
 
 **OIDC JWT Bearer Authentication** — ASP.NET Core JWT Bearer middleware configured with OIDC authority/issuer, audience (`mcp-server-api`), and optional client secret based on provider requirements. `OidcAuthOptions` bound from `Mcp:Auth` configuration section. Management endpoints (agent mutations) require `[Authorize(Policy = "AgentManager")]`; read endpoints fall back to existing API key auth. `RequireHttpsMetadata` configurable for local development.
@@ -757,10 +790,15 @@ Scope: layer-1+
 
 ## TR-MCP-DB-002
 
-**Workspace foreign-key integrity** — Every persistent table with WorkspaceId must have a required FK to Workspaces, including global rows through a reserved empty WorkspaceId row and federation workspace mappings.
+**Workspace foreign-key integrity** — Every persistent table with WorkspaceId must have a canonical Workspaces foreign key with Restrict or NoAction delete behavior. The FK is required for non-memory tables, including global rows represented by the reserved empty WorkspaceId row and federation mappings. MemoryEntity and MemoryIndexEntity are explicit scope exceptions: Global rows have null WorkspaceId under TR-MCP-MEMORY-001 and the memory index contract; Workspace rows have non-null WorkspaceId, which must reference Workspaces. The index workspace stamp must match its parent memory.
 **Covered by:** FR: FR-MCP-105; TEST: TEST-MCP-138, TEST-MCP-139, TEST-MCP-140, TEST-MCP-DB-006
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Every persistent WorkspaceId column other than the memory-scope exceptions has a required canonical Workspaces FK with Restrict or NoAction deletion.
+- [ ] MemoryEntity and MemoryIndexEntity retain null WorkspaceId for Global rows and require a non-null workspace for Workspace rows.
+- [ ] MemoryEntity and MemoryIndexEntity have optional canonical Workspaces FKs that reject orphan non-null WorkspaceId values and do not cascade on workspace deletion.
+- [ ] MemoryIndexEntity WorkspaceId mirrors its parent MemoryEntity WorkspaceId on create, update, and reindex; tests reject a mismatched owner stamp.
 
 ## TR-MCP-DB-003
 
@@ -768,11 +806,15 @@ Scope: layer-1+
 **Covered by:** FR: FR-MCP-105; TEST: TEST-MCP-138, TEST-MCP-139, TEST-MCP-140, TEST-MCP-DB-006
 **Status:** pending
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] MemoryVersionEntity and MemoryIndexEntity required MemoryId foreign keys use Restrict or NoAction, and physical schema constraints agree on all supported providers.
+- [ ] Soft-deleting a memory preserves its version and index rows for audit and recovery; no durable memory row is physically removed by FK cascade.
+- [ ] Corrective migrations preserve existing memory, version, and index row counts and reject or repair orphan relationships before adding constraints.
 
 ## TR-MCP-DB-004
 
 **Generic audit ledger for mutable data** — Every mutable persistent database entity must emit append-only audit rows with workspace, entity key, action, actor/source, timestamps, and previous/current snapshots, while TODO-specific audit history remains compatible.
-**Covered by:** FR: FR-MCP-105; TEST: TEST-MCP-138, TEST-MCP-139, TEST-MCP-140, TEST-MCP-DB-006
+**Covered by:** FR: FR-MCP-105, FR-MCP-AUDIT-001; TEST: TEST-MCP-138, TEST-MCP-139, TEST-MCP-140, TEST-MCP-DB-006, TEST-MCP-AUDIT-001, TEST-MCP-AUDIT-002, TEST-MCP-AUDIT-003
 **Status:** pending
 Scope: layer-1+
 
@@ -956,6 +998,13 @@ Scope: layer-1+
 - [ ] Queued replay preserves domain, resource id, body, headers, base version, operation id, source operation id, and global workspace id.
 - [ ] Hub stale-version detection records conflicts and suppresses fanout for stale operations.
 
+## TR-MCP-FED-BACKFILL-001
+
+**Workspace-scoped adapter apply, bulk enumerate, backfill envelopes** — Hub-side IFederationStateAdapter.ApplyAsync runs inside a workspace scope set from the operation GlobalWorkspaceId (OverrideWorkspaceId on the scoped McpDbContext), for every adapter, not only memory. Adapters gain EnumerateAsync(workspace, cursor, batchSize) for bulk export. A proxy-side FederationBackfillService runs after first successful enrollment, iterates enrolled workspaces x domains with a durable per-workspace/domain cursor, and sends batched FederationExecutionEnvelopes with applyMode backfill (no fanout rows, no echo, BaseVersion null, preserved ids/timestamps). New adapters cover use cases, documents/chunks, triage, brain slots, handoff runs and actors, or the domain is declared local-only with a reason. FederationStatus exposes backfill state; FederationMiddleware serves reads locally for workspaces whose backfill is incomplete (D4). A parity report compares row counts and checksums per domain per workspace.
+**Covered by:** FR: FR-MCP-FED-BACKFILL-001; TEST: TEST-MCP-FED-BACKFILL-001
+**Status:** pending
+Scope: layer-1+
+
 ## TR-MCP-FED-MEMORY-001
 
 **Memory Federation Adapter Contract** — Memory federation SHALL register a memory state adapter that snapshots active memory rows by globally unique memory ID and applies signed REST-originated memory operations. The adapter SHALL preserve memory ID, scope, workspace ownership, category, raw text, timestamps, soft-delete semantics, and version tokens based on MemoryEntity.Version. Workspace-scoped memory rows SHALL only apply when the operation GlobalWorkspaceId matches the row owner. LocalProxy queueing SHALL accept POST /mcpserver/memory only when the JSON body supplies an explicit valid MEMORY-* ID, and SHALL accept PUT, PATCH, and DELETE /mcpserver/memory/{id} as replayable memory operations.
@@ -972,6 +1021,27 @@ Scope: layer-1+
 - [ ] Memory update applies only to an existing visible/non-deleted row and increments version.
 - [ ] Memory delete is an idempotent soft delete; missing or already deleted rows return applied success.
 - [ ] Workspace-scoped memory rows cannot be applied to a different workspace.
+
+## TR-MCP-FED-PATH-001
+
+**Single request-path normalizer with injectable host platform** — Introduce one request-path normalization entry point (IWorkspacePathNormalizer backed by WorkspaceIdentityPath) with an injectable host-platform abstraction so tests can simulate a Linux host on Windows. Every resolver that receives a request-supplied workspace path uses it: TriageService.ResolveSubmittingWorkspace/ResolveEffectiveWorkspaceAsync and query methods, WorkspaceService.NormalizePath (GetAsync/Create/Init), WorkspaceResolutionMiddleware.PopulateContext, HandoffWorkspacePaths, QBrainAiMcpTools.ApplyWorkspaceOverride, WorkspaceServiceAccessor, HandoffIngestionService, WorkspaceTokenService.Normalize, TodoServiceResolver, TodoServiceFactory, EfTodoService, RequirementsDatabaseDocumentService.CreateScope/TryGetRequestWorkspacePath, HostileReviewService, TodoExecutionService, FileGitHubWorkspaceTokenStore, AgentPoolService.BuildPooledDeviceId, AuditedAgentCliClient, RepoFileService, MarkerFileService, WikiDumpService, WorkspacePolicyDirectiveParser, AgentHelpPinnedPathResolver, HandoffSourceResolver, SessionLogWorkspaceAttributionValidator. Path.GetFullPath is applied only to host-native paths. An architecture test fails on any new direct Path.GetFullPath over request-supplied workspace paths outside an explicit allowlist.
+**Covered by:** FR: FR-MCP-FED-PATH-001; TEST: TEST-MCP-FED-PATH-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-FED-ROUTE-001
+
+**Federation-aware workspace resolution on the hub** — WorkspaceResolutionMiddleware gains a federation lookup before path lookup: when X-Mcp-Proxy-Id is present and authenticated by the inter-server hub token, resolve FederationWorkspaces by (ProxyId, normalized proxy-local path) or by GlobalWorkspaceId from X-Workspace-Path or X-Mcp-Global-Workspace-Id, then load the canonical Workspaces row by CanonicalWorkspaceId. Requests with X-Mcp-Federation-Hop and no resolvable workspace return 4xx (no API-key default fallback). The hub token is scoped to the proxy's registered workspaces. FederationMiddleware on the LocalProxy sends the hub GlobalWorkspaceId (cached from enrollment) in X-Mcp-Global-Workspace-Id.
+**Covered by:** FR: FR-MCP-FED-ROUTE-001; TEST: TEST-MCP-FED-ROUTE-001
+**Status:** pending
+Scope: layer-1+
+
+## TR-MCP-FED-WSSYNC-001
+
+**Typed workspace configuration on federation registration** — FederationWorkspaceRegistrationRequest gains optional typed configuration fields (TodoPath, RunAs, AgentPath, PromptTemplate, StatusPrompt, ImplementPrompt, PlanPrompt, IsPrimary, DataDirectory, TunnelProvider) with a payload version so older proxies remain compatible. FederationLocalProxyEnrollmentService.BuildWorkspaceInventoryAsync populates them; FederationTopologyService.UpsertWorkspaceAsync/EnsureFederatedWorkspaceRow apply them on create and update and only default TodoPath when the proxy supplies none. Hub-owned fields (CurrentRequirementLayerKey) are never written from the proxy; FederationWorkspaceInfo exposes a drift indicator. Add AgentPath to WorkspaceDto if needed.
+**Covered by:** FR: FR-MCP-FED-WSSYNC-001; TEST: TEST-MCP-FED-WSSYNC-001
+**Status:** pending
+Scope: layer-1+
 
 ## TR-MCP-FILETOOLS-001
 
@@ -1509,6 +1579,13 @@ Operational scripts for startup, health checks, packaging, config validation, an
 **Status:** pending
 Scope: layer-1+
 
+## TR-MCP-PATHNORM-001
+
+**Forward-slash storage keys, rekey maintenance command and startup guard** — WorkspaceIdentityPath.NormalizeLexicalPath emits '/' for Windows paths (UNC keeps leading '//'; \\?\ device prefixes stripped to drive or // form); BuildStorageKey becomes windows:C:/USERS/KINGD style. IsRemoteWindowsPath, IsNormalizedPathWithinRoot and NormalizeLocalAdministrativeShareAlias accept both separators. A ToNativePath helper produces backslash paths only for Win32 CreateFile/GetFinalPathNameByHandle, \\?\ long-path prefixes and cmd.exe arguments. Persisted data is rewritten by an explicit maintenance command --workspace-path-rekey (decision D5, 2026-10-07) modelled on McpDatabaseEncryptionTransitionCommand: required backup unless --dry-run, report with old->new mapping and before/after counts; one transaction per database with foreign keys deferred or suspended and fully re-validated (decision D6: SQLite defer_foreign_keys, SQL Server NOCHECK then WITH CHECK CHECK, PostgreSQL DEFERRABLE + SET CONSTRAINTS ALL DEFERRED); set-based UPDATE per workspace column from a mapping table limited to Windows-shaped values; C# recomputation of hashed values (federation GlobalWorkspaceId/CanonicalWorkspaceId and hub hash-keyed Workspaces rows, TriageGroups GroupKey/GroupId with repointed children, HandoffIngestionRuns ReplayIdentity); FileGitHubWorkspaceTokenStore keys rewritten. No legacy dual-key lookup (decision D7): a startup guard refuses to start while any Windows-shaped workspace id still contains a backslash. Enrolled proxies are re-enrolled once after deploy (only PAYTON-LEGION2 today). Plan: docs/plans/2026-10-07-federation-fixes.md section 4c.
+**Covered by:** FR: FR-MCP-PATHNORM-001; TEST: TEST-MCP-PATHNORM-001
+**Status:** pending
+Scope: layer-1+
+
 ## TR-MCP-PERSIST-001
 
 **Plugin appendDialog uses incremental dialog POST** — Invoke-WorkflowAppendDialog SHALL call SessionLogClient.AppendDialogAsync (or equivalent POST .../dialog) when a current turn exists. Failsafe for incremental dialog SHALL replay the dialog POST, not a full-session SubmitAsync upsert.
@@ -1665,7 +1742,7 @@ Scope: layer-1+
 
 **Shared multi-plugin Session Log integration harness** — A central integration test harness must drive each plugin repository through its supported entrypoint against one disposable real MCP Server workspace, use a shared scenario catalog, and add aiUnit semantic validation without replacing deterministic assertions.
 **Covered by:** FR: FR-MCP-PLUGININT-001; TEST: TEST-MCP-PLUGININT-001
-**Status:** completed
+**Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
 - [x] A typed PluginSessionLogScenario catalog contains agent identity, repository, supported entrypoint, environment variables, cache folder name, and expected source type for all eight plugins. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
@@ -1675,6 +1752,7 @@ Scope: layer-1+
 - [x] AiTheory rows use the same scenario catalog to review persisted YAML/receipt semantics; deterministic Theory rows remain the correctness gate. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
 - [x] The explicit plugin-integration target preflights aiUnit strategy availability and fails when any scenario is skipped. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
 - [x] Adapters capture executable, arguments, stdin, environment, cwd, timeout, exit, stdout, and stderr. Deterministic validation remains authoritative. Model and configuration failures are classified separately. Source revision and installed artifact hashes are recorded. (evidence: tests/McpServer.PluginIntegration.Tests; tests/Build.Tests/PluginSessionLogIntegrationTargetTests.cs; overlay G2 Codex extra-high AGREE)
+- [ ] The shared scenario catalog defines normalized persistence outcomes, retryability, queue retention, and durable-readback rules once. Transport adapters may differ only in invocation mechanics and may not redefine those semantics; source revision and installed artifact hashes prove the synchronized contract used by each row.
 
 ## TR-MCP-PLUGIN-SKILLS-001
 
@@ -2035,6 +2113,103 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-MCP-QBRAIN-001
+
+**Locked identifier tokens** — Use one token per surface class. Display text uses `QBrain.AI`. C# namespaces and assemblies use `QBrainAi`. NuGet package ids use `QBrainAI.<Component>` with no `SharpNinja` prefix. The lowercase single token that replaces `mcpserver` is `qbrainai`. Already-hyphenated slugs use `qbrain-ai`. npm scopes use `@qbrainai` and drop `@sharpninja`. Do not mix these forms. Do not replace the `QBAgent` segment or the `qbagent` command.
+**Covered by:** FR: FR-MCP-QBRAIN-001, FR-MCP-QBRAIN-003; TEST: TEST-MCP-QBRAIN-001, TEST-MCP-QBRAIN-006, TEST-MCP-QBRAIN-007, TEST-MCP-QBRAIN-008, TEST-MCP-QBRAIN-002
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] A review of the rename diff finds no `QBrainAI` and no `QBrain.AI` inside a C# namespace or assembly name, and no `QBrain` product root that dropped `Ai`. `QBrainAI` is allowed only as the NuGet package-id prefix.
+- [ ] Plugin repository names and the container image use `qbrain-ai`.
+- [ ] The HTTP product prefix, systemd unit, Linux account, and `/opt` path use `qbrainai` when those surfaces are renamed.
+- [ ] `QBAgent` and `qbagent` are unchanged apart from a leading `McpServer` root becoming `QBrainAi`.
+
+## TR-MCP-QBRAIN-002
+
+**Namespace, assembly, project, and solution rename** — Replace the root token `McpServer` with `QBrainAi` in namespaces, assembly names, project folders, `InternalsVisibleTo`, and `McpServer.sln`. Keep every segment after the root, including `.Mcp`, `.McpAgent`, and `.QBAgent`. Preserve RootNamespace exceptions: Storage, Services, and GraphRag stay under `QBrainAi.Support.Mcp`; migration projects keep their provider suffix; `tests/Build.Tests` stays `NukeBuild.Tests`; `_build` stays `_build`.
+**Covered by:** FR: FR-MCP-QBRAIN-003; TEST: TEST-MCP-QBRAIN-001, TEST-MCP-QBRAIN-002, TEST-MCP-QBRAIN-008
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] The solution file and project paths use `QBrainAi` as the root token.
+- [ ] No public namespace still starts with `McpServer.`.
+- [ ] `QBrainAi.QBAgent` exists and `QBrainAi.QBrainAi` does not.
+- [ ] `NukeBuild.Tests` and `_build` are not renamed into `QBrainAi`.
+
+## TR-MCP-QBRAIN-003
+
+**Package and tool migration** — Move published package ids from `SharpNinja.McpServer.<Component>` to `QBrainAI.<Component>` for Client, Cqrs, Cqrs.Mvvm, McpAgent, Repl.Core, Repl, and QBAgent. The new ids do not include a `SharpNinja` prefix. `QBrainAI.QBAgent` is the QBAgent package id. Ship type-forward facades under the old `SharpNinja.McpServer.*` ids through 1.x. Rename `ToolCommandName` `mcpserver-repl` to `qbrain-ai-repl` and keep the old command available from the deprecated package. Rename `@sharpninja/mcpserver-agent-core`, `@sharpninja/mcpserver-plugin-core`, and `@sharpninja/mcp-repl` to `@qbrainai/qbrain-ai-agent-core`, `@qbrainai/qbrain-ai-plugin-core`, and `@qbrainai/qbrain-ai-repl`, and keep a deprecated release on the old `@sharpninja` names through 1.x. Do not push the new ids to nuget.org before Phase 4.
+**Covered by:** FR: FR-MCP-QBRAIN-004; TEST: TEST-MCP-QBRAIN-003, TEST-MCP-QBRAIN-005, TEST-MCP-QBRAIN-008
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Each new package id packs.
+- [ ] Each old package id packs as a type-forward facade that depends on the new package.
+- [ ] `qbrain-ai-repl` is the new tool command and `mcpserver-repl` still installs from the deprecated package through 1.x.
+- [ ] Phase 1 CI does not push `QBrainAI.*` to nuget.org. New package ids do not start with `SharpNinja`.
+
+## TR-MCP-QBRAIN-004
+
+**Repository rename sequence** — Cloud pull requests land on the current GitHub names. Payton renames repositories only in Phase 3, in this order: `McpServerTools` to `QBrainAiTools`, `McpServerManager` to `QBrainAiManager`, each `mcpserver-*-plugin` to `qbrain-ai-*-plugin`, and `McpServer` to `QBrainAi` last. After each rename, update `RepositoryUrl` and live clone URLs. Tool-bucket rows accept `McpServerTools` and `QBrainAiTools` through 1.x. The data migration that writes `QBrainAiTools` runs after that repository exists and is reversible until 2.0. Do not rewrite historical receipt URLs.
+**Covered by:** FR: FR-MCP-QBRAIN-005; TEST: TEST-MCP-QBRAIN-004, TEST-MCP-QBRAIN-006, TEST-MCP-QBRAIN-007, TEST-MCP-QBRAIN-008
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] No cloud phase renames a GitHub repository.
+- [ ] Phase 2 pull requests merge under the old repository names.
+- [ ] After Phase 3, the old repository URL redirects and the new URL returns the same file.
+- [ ] A database row `McpServerTools` still resolves until the migration runs.
+
+## TR-MCP-QBRAIN-005
+
+**Route, config, and environment migration** — Add product HTTP prefix `/qbrainai/*` and keep `/mcpserver/*` through 1.x. Leave `/mcp-transport` unchanged. Configuration root becomes `QBrainAi:`. If only `Mcp:` is present, bind it. If both are present, `QBrainAi:` wins and startup logs one warning. Product `MCP_*` variables listed in the name map are read when the matching `QBRAINAI_*` variable is unset; when both are set, `QBRAINAI_*` wins. Do not rename the sentinel `MCP_UNTRUSTED` through 1.x.
+**Covered by:** FR: FR-MCP-QBRAIN-002, FR-MCP-QBRAIN-004; TEST: TEST-MCP-QBRAIN-005, TEST-MCP-QBRAIN-007, TEST-MCP-QBRAIN-008, TEST-MCP-QBRAIN-003
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] One representative product route answers on both `/qbrainai/...` and `/mcpserver/...`.
+- [ ] `/mcp-transport` is still mapped and is not an alias of the product prefix.
+- [ ] Config and environment alias precedence matches the two rules above.
+- [ ] `MCP_UNTRUSTED` remains the literal sentinel.
+
+## TR-MCP-QBRAIN-006
+
+**Install path, service, container, and feed migration** — Docker image, container, network, and volume use `qbrain-ai`. Windows service name becomes `QBrainAi`, DisplayName becomes QBrain.AI, and the default install path becomes `C:\ProgramData\QBrainAi`, with an override that can still target the old service and path. MSIX identity becomes `QBrainAi.Support.Mcp`. Octopus project string becomes `QBrainAi` only after that project exists. The pipeline must not call `octopus release deploy` during cloud phases. Linux paths, the `qbrainai` account, and `qbrainai.service` are Phase 4-L text until Payton starts that step. Do not rename database `McpServer_Omarchy` or login `mcpserver_omarchy` in Phases 0 through 4. Do not rename host PAYTON-LEGION2.
+**Covered by:** FR: FR-MCP-QBRAIN-001, FR-MCP-QBRAIN-005; TEST: TEST-MCP-QBRAIN-001, TEST-MCP-QBRAIN-006, TEST-MCP-QBRAIN-007, TEST-MCP-QBRAIN-008, TEST-MCP-QBRAIN-004
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Compose and Dockerfile names in git match the `qbrain-ai` forms when Phase 1 edits them.
+- [ ] Service script defaults in git match `QBrainAi` and `C:\ProgramData\QBrainAi`, and the old names remain available as parameters.
+- [ ] No cloud-phase log shows an Octopus deploy to PAYTON-LEGION2.
+- [ ] `McpServer_Omarchy` and `PAYTON-LEGION2` remain in the files that identify that database and that host.
+
+## TR-MCP-QBRAIN-007
+
+**Inventory before edit, and persisted state that stays** — Before any replace, write a classification TSV for the patterns in section 5. Allowed classes and actions are those listed there. Do not rewrite existing files under `docs/receipts/**`. New files are limited to the inventory TSV and to hostile-validation receipts under `docs/receipts/hv/`. Do not hand-edit `docs/Project/wiki/**`. Do not rename `mcp.db`, `.mcpServer`, the class `McpDbContext`, or EF table names. Do not emit a migration whose only effect is a context or table rename.
+**Covered by:** FR: FR-MCP-QBRAIN-001, FR-MCP-QBRAIN-002, FR-MCP-QBRAIN-005; TEST: TEST-MCP-QBRAIN-001, TEST-MCP-QBRAIN-006, TEST-MCP-QBRAIN-007, TEST-MCP-QBRAIN-008, TEST-MCP-QBRAIN-005, TEST-MCP-QBRAIN-004
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] The TSV exists before the first rename commit of an approved slice, and every hit has a class.
+- [ ] No `product-brand` row is still open at the end of the slice that claimed it.
+- [ ] `mcp.db`, `.mcpServer`, and `McpDbContext` remain the persisted-state names.
+- [ ] The EF model diff for the slice contains no table rename.
+
+## TR-MCP-QBRAIN-008
+
+**BDPv4 slice gate** — An implementation slice starts only after this plan is approved and only for the phase Payton has opened. The first commit of that slice registers the FR and TR ids it cites into the requirements workflow if they are not already stored. The next commit adds failing tests for that slice's acceptance criteria. Production edits come after those tests fail for the intended reason. The slice ends only when its unit scope and prior unit scope report zero failures and zero skips, and only after the hostile-validation checkpoint for that phase returns OverallVerdict AGREE from `gpt-6-astra` at reasoning effort `xhigh`. Operator shorthand `astra-6-xhigh` means that model and that effort. No other model satisfies the checkpoint. SessionLife tests are out of scope. This draft does not open that gate.
+**Covered by:** FR: FR-MCP-QBRAIN-001, FR-MCP-QBRAIN-002, FR-MCP-QBRAIN-003, FR-MCP-QBRAIN-004, FR-MCP-QBRAIN-005; TEST: TEST-MCP-QBRAIN-001, TEST-MCP-QBRAIN-006, TEST-MCP-QBRAIN-007, TEST-MCP-QBRAIN-008, TEST-MCP-QBRAIN-005, TEST-MCP-QBRAIN-002, TEST-MCP-QBRAIN-003, TEST-MCP-QBRAIN-004
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] No rename commit exists on this branch before approval.
+- [ ] After approval, a slice cites stored FR and TR ids before it changes product code.
+- [ ] The slice receipt shows a red test run before the green run.
+- [ ] The exit log shows zero failures and zero skips for the executed unit scope.
+- [ ] The phase receipt under `docs/receipts/hv/` records OverallVerdict AGREE from `gpt-6-astra` at effort `xhigh` before anyone marks the phase done.
+
 ## TR-MCP-QBSEED-002
 
 **Gated idempotent Quad-Brain startup provisioning and /v1 workspace scoping** — BrainSlotOptions gains Slots (List<BrainSlotSeedDefinition>), each carrying a SlotId plus UpsertBrainSlotRequest fields with safe credential references. BrainSlotStartupSeeder provisions the GLOBAL quad on StartAsync with idempotency keyed by SlotId. WorkspaceResolutionMiddleware resolves /v1 requests from X-Workspace-Path header or Bearer/X-Api-Key token, scoping internal-tool mutations to that workspace while brains remain global.
@@ -2213,7 +2388,7 @@ Scope: layer-1+
 ## TR-MCP-QUALITY-001
 
 **Warning suppression decision register and aiUnit audit** — Warning remediation must distinguish approved suppressions from required fixes through structured acceptance criteria, durable TODO state, suppression inventory validation, and a dedicated aiUnit governance review.
-**Covered by:** FR: FR-MCP-139; TEST: TEST-MCP-AIUNIT-002
+**Covered by:** FR: FR-MCP-139; TEST: TEST-MCP-AIUNIT-002, TEST-MCP-TRIM-001
 **Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
@@ -2527,6 +2702,21 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-MCP-REQRECOVERY-001
+
+**Transactional requirements recovery service and shared plugin contract** — A typed recovery service shall validate a complete mixed-operation plan before opening one provider transaction, enforce optimistic preconditions and persistent idempotency, apply dependency-safe record and mapping changes, and expose one canonical schema through the server, client, REPL, and supported plugins.
+**Covered by:** FR: FR-MCP-REQRECOVERY-001; TEST: TEST-MCP-REQRECOVERY-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] The service canonicalizes and validates all IDs, scopes, acceptance criteria, operation uniqueness, delete targets, and final referential integrity before the first mutation.
+- [ ] One database transaction contains requirement rows, acceptance-criteria rows, mappings, deletions, idempotency state, and the recovery audit row; rollback restores the exact pre-state on every provider.
+- [ ] The effective-state hash is compared immediately before mutation, and the idempotency key is reserved and committed in the same transaction. Competing plans cannot both commit against one pre-state.
+- [ ] The operation planner orders mapping removals before target deletes and validates the final graph before commit while preserving canonical requirement and acceptance-criterion identifiers.
+- [ ] Server, typed client, REPL schema, shared plugin core, and every generated or copied plugin surface derive from one canonical request and result contract using object-first serialization.
+- [ ] The canonical precondition envelope includes workspace ID, target layer key, productScope, layer-catalog version or hash, scopeStartLayerKey, scopeEndLayerKey, sorted raw target-layer records including shadowed rows, and the sorted effective projection. Canonical UTF-8 JSON and SHA-256 produce deterministic plan and state hashes.
+- [ ] Inside the serializable provider transaction, the service locks or concurrency-checks the target layer and catalog metadata, revalidates raw and effective hashes, and rejects mutation of records not owned by the declared target layer or outside the declared scope bounds.
+
 ## TR-MCP-REQSCOPE-001
 
 **TR-MCP-REQSCOPE-001** — Placeholder requirement backfilled for TODO link TR-MCP-REQSCOPE-001.
@@ -2605,6 +2795,18 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
+## TR-MCP-SERVICEUPDATE-001
+
+**Platform adapters and metadata-preserving Linux service lifecycle** — Preserve Windows behavior. Linux uses bounded shell-free systemctl/tar operations, installed-unit preflight, platform RID/apphost selection, shared preservation paths,0700 backup directories/0600 archives, ownership/mode/ACL/xattr preservation, failure restoration and same health checks. No SQL database export or automatic binary rollback claim.
+**Covered by:** FR: FR-MCP-SERVICEUPDATE-001; TEST: TEST-MCP-SERVICEUPDATE-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] UpdateService selects Windows or Linux at runtime; Windows defaults/launcher remain compatible; Linux x64/arm64 use extensionless apphost; unsupported hosts fail before changes.
+- [ ] Both platforms preserve live appsettings.yaml and configured DataFolder with legacy fallback. Linux also preserves unit/drop-ins/environment files and Unix ownership/modes/ACLs/xattrs through a private retained archive.
+- [ ] Linux validates installed service identity and stage before stop; backup precedes replacement; restore precedes start; service executable and server/workspace health must pass. Failures preserve recovery artifacts and never report success.
+- [ ] Mocks-first tests and full applicable unit suites pass with zero failures/skips; independent gates pass; existing local Linux service update preserves configuration/data and trusted workspace behavior.
+
 ## TR-MCP-SESSIONATTR-001
 
 **Validate filesModified and commit paths against workspace root** — SessionLogService or turn append validates filesModified and commit paths against X-Workspace-Path. Outside-root paths require foreignRepo or equivalent or are rejected. Forward-only. Covered by FR-MCP-SESSIONATTR-001 TEST-MCP-SESSIONATTR-001.
@@ -2648,13 +2850,14 @@ Scope: layer-1+
 ## TR-MCP-SESSIONLIFE-003
 
 **Wrapper three-outcome exit contract** — Invoke-McpPlugin reports primary success, classified queued success, or nonzero failure. appendActions honors requestId. updateTurn dedupes. Child REPL has one deadline with process-tree cleanup.
-**Covered by:** FR: FR-MCP-SESSIONLIFE-003; TEST: TEST-MCP-SESSIONLIFE-002
+**Covered by:** FR: FR-MCP-SESSIONLIFE-003; TEST: TEST-MCP-SESSIONLIFE-002, TEST-MCP-SESSIONLIFE-004
 **Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] The wrapper exposes a typed primary, queued, or failed outcome contract and no session-log mutation collapses that result to an unclassified boolean.
 - [ ] Result serialization includes identity, method, durability, queue, retryability, diagnostic, and failsafe fields without claiming primary success for queued work.
 - [ ] Child REPL execution uses one operation deadline with deterministic process-tree cleanup, and dedupe preserves sequential method labels and queue counts.
+- [ ] Existing-session graph materialization avoids multiplicative collection joins, remains update-tracked, and bounds transient SQL Server deadlock or timeout handling inside the storage command budget without converting retryable contention into primary success.
 
 ## TR-MCP-SESSIONLIFE-004
 
@@ -2826,6 +3029,18 @@ Scope: layer-1+
 Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Plugin entrypoints set TEMP/TMP on the workspace volume
+
+## TR-MCP-TESTRESOURCE-001
+
+**Test resource loading and artifact isolation** — Package fixture inputs in the owning test project, resolve them by resource identity or copied test output, and isolate generated artifacts under test-owned output roots. Repository-root discovery is not used to find fixture inputs or artifact destinations. Live source-contract tests retain repository/sibling-plugin reads when validating the current source tree.
+**Covered by:** FR: FR-MCP-TESTRESOURCE-001; TEST: TEST-MCP-164, TEST-MCP-TESTRESOURCE-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Fixture files are included as EmbeddedResource or copied to test output with explicit project metadata and stable logical names.
+- [ ] Fixture loaders resolve from the test assembly or AppContext.BaseDirectory; they do not walk parent directories to find the checkout.
+- [ ] Artifact writers accept an injected test output root or create a unique disposable directory and never write under docs/reviews or source fixture directories.
+- [ ] Build/source contract tests may read repository and sibling plugin paths only when the current source tree is the intended subject.
 
 ## TR-MCP-TODO-002
 
@@ -3485,6 +3700,18 @@ Scope: layer-1+
 - [ ] Historical SQL Server migration bytes remain identical to the approved base. The real LocalDB provider harness applies semantics-preserving bounded execution-plan hints only at test execution time, without extending production timeouts; the existing 300-second allowance remains finite and test-only.
 - [ ] Opaque logical workspace identifiers that are not rooted filesystem paths, including ws:test-style storage keys, are normalized lexically and never sent to native physical traversal; rooted filesystem inputs continue through cancellable physical identity resolution.
 
+## TR-MCP-USECASE-020
+
+**Identity-preserving use-case component update pipeline** — Implement workspace- and parent-scoped CQRS mutations for existing actor, flow, and step components, exposed consistently through REST, typed client, source-generated JSON, and MCP tool surfaces.
+**Covered by:** FR: FR-MCP-USECASE-018; TEST: TEST-MCP-USECASE-021
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] CQRS update commands scope every actor, flow, and step lookup by workspace and complete parent identity, use tracked in-place mutations, and return not-found for mismatches.
+- [ ] Actor updates validate name and actor type, flow updates validate flow type, name, and positive sequence, and step updates validate positive order, nonempty action, and an actor associated with the same use case when ActorId is supplied.
+- [ ] REST routes, the typed client, generated JSON metadata, and MCP tools expose update-actor, update-flow, and update-step with cancellation and classified failures.
+- [ ] Each successful component update advances UseCaseEntity.UpdatedAtUtc, emits the established use-case mutation audit signal, and leaves approval/version and unrelated aggregate data unchanged.
+
 ## TR-MCP-VERIFYWRAP-001
 
 **code-verify catch disk-full and enforce wrapper timeout** — code-verify.ps1 catches IOException for disk full as a typed status and applies a hard timeout around the wrapper so the console is released. Covered by FR-MCP-VERIFYWRAP-001 TEST-MCP-VERIFYWRAP-001.
@@ -3704,6 +3931,12 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] Assert-ReplCurrentTurnFresh refuses different sourceType prefixes
 
+## TR-MOBILE-001
+
+**TR-MOBILE-001** — Placeholder requirement backfilled for TODO link TR-MOBILE-001.
+**Status:** pending
+Scope: layer-1+
+
 ## TR-PLANNED-013A
 
 `AddControllers().ConfigureApiBehaviorOptions` installs an `InvalidModelStateResponseFactory` that produces `application/problem+json` responses for body-binding failures on `/mcpserver/*` endpoints. The factory strips the action parameter name (`dto`, `body`, `turn`) from the `errors` keys, replacing them with `$` so callers see the canonical JSON root marker instead of a misleading wrapper field name. `SessionLogController.SubmitAsync` and `GetByIdAsync` use `ValidationProblem` for domain validation to keep the response shape uniform.
@@ -3772,6 +4005,17 @@ Scope: layer-1+
 **Covered by:** FR: FR-TEST-002
 **Status:** pending
 Scope: layer-1+
+
+## TR-TIMER-LIFECYCLE-001
+
+**Serialize timer lifecycle admission separately from callback invocation** — Protect shutdown admission and token replacement with a short-lived state lock. Cancel outside locks before draining the callback invocation gate. Reject queued Restart if shutdown admission changed while it waited. Do not dispose cancellation sources still visible to callbacks. Preserve reentrant Stop/Dispose/Restart behavior.
+**Covered by:** FR: FR-TIMER-001; TEST: TEST-TIMER-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Both Manager timer implementations enforce the same shutdown admission and fresh-token rules without invoking user callbacks under the state lock.
+- [ ] Restart cannot replace the token after a shutdown captured it; multiple overlapping shutdowns cannot reopen admission early.
+- [ ] Cancellation registration and callback reentrancy cannot deadlock the lifecycle state lock.
 
 ## TR-TRIAGE-CLIENT-001
 

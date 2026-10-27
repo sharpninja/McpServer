@@ -20,7 +20,7 @@ public sealed class FederationOperationApplyServiceTests
         var result = await sut.ApplyAsync(new FederationOperationRequest
         {
             OperationId = "op-transactional-apply",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "LAB-OMARCHY",
             Domain = "todo",
             ResourceId = "PLAN-TURNTRANSACTIONS-001",
             HttpMethod = "PUT",
@@ -52,7 +52,7 @@ public sealed class FederationOperationApplyServiceTests
         var result = await sut.ApplyAsync(new FederationOperationRequest
         {
             OperationId = "op-rejected-apply",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "LAB-OMARCHY",
             Domain = "todo",
             ResourceId = "PLAN-TURNTRANSACTIONS-001",
             HttpMethod = "PUT",
@@ -77,7 +77,7 @@ public sealed class FederationOperationApplyServiceTests
         var operation = new FederationOperationRequest
         {
             OperationId = "op-pending-apply",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "LAB-OMARCHY",
             Domain = "todo",
             ResourceId = "PLAN-TURNTRANSACTIONS-001",
             HttpMethod = "PUT",
@@ -109,7 +109,7 @@ public sealed class FederationOperationApplyServiceTests
         var result = await sut.ApplyAsync(new FederationOperationRequest
         {
             OperationId = "op-degraded-apply",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "LAB-OMARCHY",
             Domain = "todo",
             ResourceId = "PLAN-TURNTRANSACTIONS-001",
             HttpMethod = "PUT",
@@ -133,7 +133,7 @@ public sealed class FederationOperationApplyServiceTests
         var result = await sut.ApplyAsync(new FederationOperationRequest
         {
             OperationId = "op-1",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "LAB-OMARCHY",
             Domain = "todo",
             ResourceId = "PLAN-FEDERATION-001",
             HttpMethod = "PUT",
@@ -157,7 +157,7 @@ public sealed class FederationOperationApplyServiceTests
         var result = await sut.ApplyAsync(new FederationOperationRequest
         {
             OperationId = "op-1",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "LAB-OMARCHY",
             Domain = "todo",
             BodyBase64 = "not-base64",
         }, CancellationToken.None).ConfigureAwait(true);
@@ -177,7 +177,7 @@ public sealed class FederationOperationApplyServiceTests
         var result = await sut.ApplyAsync(new FederationOperationRequest
         {
             OperationId = "op-1",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "LAB-OMARCHY",
             Domain = "marker_state",
             ResourceId = "AGENTS-README-FIRST.yaml",
         }, CancellationToken.None).ConfigureAwait(true);
@@ -198,7 +198,7 @@ public sealed class FederationOperationApplyServiceTests
         {
             OperationId = "op-1",
             SourceOperationId = "op-1",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "LAB-OMARCHY",
             Domain = "todo",
             ResourceId = "PLAN-FEDERATION-001",
             BodyBase64 = Convert.ToBase64String("{\"title\":\"Updated\"}"u8.ToArray()),
@@ -220,7 +220,7 @@ public sealed class FederationOperationApplyServiceTests
         var result = await sut.ApplyAsync(new FederationOperationRequest
         {
             OperationId = "op-1",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "LAB-OMARCHY",
             Domain = "session_log",
             ResourceId = "Codex/session",
         }, CancellationToken.None).ConfigureAwait(true);
