@@ -57,7 +57,7 @@ without_memory vs with_memory are pack conditions, not extra CLI flags: every ru
 ## Grok pilot validation path
 
 - Adapter: `MemoryBenchGrokAdapter` (`recorded-fixture` entrypoint; stub/recorded fixtures, no cloud).
-- Unit + fixture integration: `tests/McpServer.Support.Mcp.Tests/Memory/MemoryBench*.cs` and `MemoryIntegrationTests.cs`.
+- Unit + fixture integration: `tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBench*.cs` and `MemoryIntegrationTests.cs`.
 - Remember→recall/injection is asserted on the Grok lane with recorded fixtures. Live Grok is opt-in via `XAI_API_KEY` and tags `mode=live`; CI does not require a real XAI key.
 - After H7a AGREE (`docs/benchmarks/h7a-value-gate.json` cites `docs/receipts/hostile-validator-20260919T081530Z.md`), the same recorded-fixture adapters exist for all eight plugins. Live keys (`ANTHROPIC_API_KEY`, `CLINE_API_KEY`, `OPENAI_API_KEY`, `COPILOT_GITHUB_TOKEN`, `OPENCODE_API_KEY`) are opt-in only.
 - Success-gated multi-turn (`IMemoryBenchMultiTurnAdapter`) is registered per plugin. Failed jobs stay in the artifact and are excluded from token means.

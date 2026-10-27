@@ -116,8 +116,8 @@
       "role": "establish",
       "condition": "without_memory",
       "required": false,
-      "transcript": "user: After comparing container overhead versus host install friction, we decided local McpServer should use native Postgres installed on the host. Docker Postgres is rejected for this local loop. Please remember that decision as the current local database choice.\nassistant: I\u0027ll hold this in the current transcript: local McpServer should run native Postgres on the host, and Docker Postgres is rejected. Nothing is being written to a durable memory store.\n",
-      "prompt_payload": "memory-prompt-pack-v2-multiturn After comparing container overhead versus host install friction, we decided local McpServer should use native Postgres installed on the host. Docker Postgres is rejected for this local loop. Please remember that decision as the current local database choice.",
+      "transcript": "user: After comparing container overhead versus host install friction, we decided local QBrainAi should use native Postgres installed on the host. Docker Postgres is rejected for this local loop. Please remember that decision as the current local database choice.\nassistant: I\u0027ll hold this in the current transcript: local QBrainAi should run native Postgres on the host, and Docker Postgres is rejected. Nothing is being written to a durable memory store.\n",
+      "prompt_payload": "memory-prompt-pack-v2-multiturn After comparing container overhead versus host install friction, we decided local QBrainAi should use native Postgres installed on the host. Docker Postgres is rejected for this local loop. Please remember that decision as the current local database choice.",
       "tool_calls": [],
       "injection_present": false,
       "tokens_in": 39,
@@ -132,7 +132,7 @@
       "notes": "memory-bench-auto-rubric-v2-multiturn:establish",
       "injection_tokens": 0,
       "tool_tokens": 0,
-      "answer": "I\u0027ll hold this in the current transcript: local McpServer should run native Postgres on the host, and Docker Postgres is rejected. Nothing is being written to a durable memory store."
+      "answer": "I\u0027ll hold this in the current transcript: local QBrainAi should run native Postgres on the host, and Docker Postgres is rejected. Nothing is being written to a durable memory store."
     },
     {
       "plugin": "grok",
@@ -141,8 +141,8 @@
       "role": "query",
       "condition": "without_memory",
       "required": true,
-      "transcript": "user: What local database setup did we decide on for McpServer?\nassistant: The earlier establish turn in this conversation said the local database setup is native Postgres rather than Docker.\n",
-      "prompt_payload": "memory-prompt-pack-v2-multiturn user: After comparing container overhead versus host install friction, we decided local McpServer should use native Postgres installed on the host. Docker Postgres is rejected for this local loop. Please remember that decision as the current local database choice.\nassistant: I\u0027ll hold this in the current transcript: local McpServer should run native Postgres on the host, and Docker Postgres is rejected. Nothing is being written to a durable memory store. What local database setup did we decide on for McpServer?",
+      "transcript": "user: What local database setup did we decide on for QBrainAi?\nassistant: The earlier establish turn in this conversation said the local database setup is native Postgres rather than Docker.\n",
+      "prompt_payload": "memory-prompt-pack-v2-multiturn user: After comparing container overhead versus host install friction, we decided local QBrainAi should use native Postgres installed on the host. Docker Postgres is rejected for this local loop. Please remember that decision as the current local database choice.\nassistant: I\u0027ll hold this in the current transcript: local QBrainAi should run native Postgres on the host, and Docker Postgres is rejected. Nothing is being written to a durable memory store. What local database setup did we decide on for QBrainAi?",
       "tool_calls": [],
       "injection_present": false,
       "tokens_in": 81,
@@ -166,8 +166,8 @@
       "role": "establish",
       "condition": "with_memory",
       "required": false,
-      "transcript": "user: After comparing container overhead versus host install friction, we decided local McpServer should use native Postgres installed on the host. Docker Postgres is rejected for this local loop. Please remember that decision as the current local database choice.\ntool: memory_remember\nassistant: Logged the workspace decision with memory_remember: local McpServer uses native Postgres, not Docker.\n",
-      "prompt_payload": "memory-prompt-pack-v2-multiturn After comparing container overhead versus host install friction, we decided local McpServer should use native Postgres installed on the host. Docker Postgres is rejected for this local loop. Please remember that decision as the current local database choice.",
+      "transcript": "user: After comparing container overhead versus host install friction, we decided local QBrainAi should use native Postgres installed on the host. Docker Postgres is rejected for this local loop. Please remember that decision as the current local database choice.\ntool: memory_remember\nassistant: Logged the workspace decision with memory_remember: local QBrainAi uses native Postgres, not Docker.\n",
+      "prompt_payload": "memory-prompt-pack-v2-multiturn After comparing container overhead versus host install friction, we decided local QBrainAi should use native Postgres installed on the host. Docker Postgres is rejected for this local loop. Please remember that decision as the current local database choice.",
       "tool_calls": [
         "memory_remember"
       ],
@@ -184,7 +184,7 @@
       "notes": "memory-bench-auto-rubric-v2-multiturn:establish",
       "injection_tokens": 0,
       "tool_tokens": 3,
-      "answer": "Logged the workspace decision with memory_remember: local McpServer uses native Postgres, not Docker."
+      "answer": "Logged the workspace decision with memory_remember: local QBrainAi uses native Postgres, not Docker."
     },
     {
       "plugin": "grok",
@@ -193,8 +193,8 @@
       "role": "query",
       "condition": "with_memory",
       "required": true,
-      "transcript": "REQUIRED MEMORIES\n- BENCH-DECISION-DB=native-postgres-not-docker\n\nuser: What local database setup did we decide on for McpServer?\ntool: memory_recall\nassistant: Recalled decision text is BENCH-DECISION-DB=native-postgres-not-docker, which means native Postgres for local McpServer.\n",
-      "prompt_payload": "memory-prompt-pack-v2-multiturn What local database setup did we decide on for McpServer?\nREQUIRED MEMORIES\n- BENCH-DECISION-DB=native-postgres-not-docker\n",
+      "transcript": "REQUIRED MEMORIES\n- BENCH-DECISION-DB=native-postgres-not-docker\n\nuser: What local database setup did we decide on for QBrainAi?\ntool: memory_recall\nassistant: Recalled decision text is BENCH-DECISION-DB=native-postgres-not-docker, which means native Postgres for local QBrainAi.\n",
+      "prompt_payload": "memory-prompt-pack-v2-multiturn What local database setup did we decide on for QBrainAi?\nREQUIRED MEMORIES\n- BENCH-DECISION-DB=native-postgres-not-docker\n",
       "tool_calls": [
         "memory_recall"
       ],
@@ -211,7 +211,7 @@
       "notes": "memory-bench-auto-rubric-v2-multiturn:contains",
       "injection_tokens": 4,
       "tool_tokens": 12,
-      "answer": "Recalled decision text is BENCH-DECISION-DB=native-postgres-not-docker, which means native Postgres for local McpServer."
+      "answer": "Recalled decision text is BENCH-DECISION-DB=native-postgres-not-docker, which means native Postgres for local QBrainAi."
     },
     {
       "plugin": "grok",
@@ -349,8 +349,8 @@
       "role": "establish",
       "condition": "without_memory",
       "required": false,
-      "transcript": "user: Second bench decision: local McpServer database work uses native Postgres on the host. We explicitly rejected Docker for that local database. Store that as a decision.\nassistant: Second note stays in chat history only: local database work uses native Postgres on the host, and Docker was rejected.\n",
-      "prompt_payload": "memory-prompt-pack-v2-multiturn user: Bench preference note: I want neovim for this workspace. Keep that as my editor preference even if later questions never repeat the name of the editor.\nassistant: I\u0027ll keep your first bench note in this transcript: the editor you want is neovim. No durable write. Second bench decision: local McpServer database work uses native Postgres on the host. We explicitly rejected Docker for that local database. Store that as a decision.",
+      "transcript": "user: Second bench decision: local QBrainAi database work uses native Postgres on the host. We explicitly rejected Docker for that local database. Store that as a decision.\nassistant: Second note stays in chat history only: local database work uses native Postgres on the host, and Docker was rejected.\n",
+      "prompt_payload": "memory-prompt-pack-v2-multiturn user: Bench preference note: I want neovim for this workspace. Keep that as my editor preference even if later questions never repeat the name of the editor.\nassistant: I\u0027ll keep your first bench note in this transcript: the editor you want is neovim. No durable write. Second bench decision: local QBrainAi database work uses native Postgres on the host. We explicitly rejected Docker for that local database. Store that as a decision.",
       "tool_calls": [],
       "injection_present": false,
       "tokens_in": 73,
@@ -375,7 +375,7 @@
       "condition": "without_memory",
       "required": false,
       "transcript": "user: Third bench fact: the slice that implements agent memory lives on the memory branch. Please remember that branch fact independently of the editor and database notes.\nassistant: Third note stays in this conversation: the agent-memory slice lives on the memory branch.\n",
-      "prompt_payload": "memory-prompt-pack-v2-multiturn user: Bench preference note: I want neovim for this workspace. Keep that as my editor preference even if later questions never repeat the name of the editor.\nassistant: I\u0027ll keep your first bench note in this transcript: the editor you want is neovim. No durable write.\n\nuser: Second bench decision: local McpServer database work uses native Postgres on the host. We explicitly rejected Docker for that local database. Store that as a decision.\nassistant: Second note stays in chat history only: local database work uses native Postgres on the host, and Docker was rejected. Third bench fact: the slice that implements agent memory lives on the memory branch. Please remember that branch fact independently of the editor and database notes.",
+      "prompt_payload": "memory-prompt-pack-v2-multiturn user: Bench preference note: I want neovim for this workspace. Keep that as my editor preference even if later questions never repeat the name of the editor.\nassistant: I\u0027ll keep your first bench note in this transcript: the editor you want is neovim. No durable write.\n\nuser: Second bench decision: local QBrainAi database work uses native Postgres on the host. We explicitly rejected Docker for that local database. Store that as a decision.\nassistant: Second note stays in chat history only: local database work uses native Postgres on the host, and Docker was rejected. Third bench fact: the slice that implements agent memory lives on the memory branch. Please remember that branch fact independently of the editor and database notes.",
       "tool_calls": [],
       "injection_present": false,
       "tokens_in": 121,
@@ -400,7 +400,7 @@
       "condition": "without_memory",
       "required": true,
       "transcript": "user: Summarize my bench editor preference, the local database decision, and which branch carries the memory work.\nassistant: Replaying the three earlier turns: editor preference is neovim, the local database decision is native Postgres, and the work is on the memory branch.\n",
-      "prompt_payload": "memory-prompt-pack-v2-multiturn user: Bench preference note: I want neovim for this workspace. Keep that as my editor preference even if later questions never repeat the name of the editor.\nassistant: I\u0027ll keep your first bench note in this transcript: the editor you want is neovim. No durable write.\n\nuser: Second bench decision: local McpServer database work uses native Postgres on the host. We explicitly rejected Docker for that local database. Store that as a decision.\nassistant: Second note stays in chat history only: local database work uses native Postgres on the host, and Docker was rejected.\n\nuser: Third bench fact: the slice that implements agent memory lives on the memory branch. Please remember that branch fact independently of the editor and database notes.\nassistant: Third note stays in this conversation: the agent-memory slice lives on the memory branch. Summarize my bench editor preference, the local database decision, and which branch carries the memory work.",
+      "prompt_payload": "memory-prompt-pack-v2-multiturn user: Bench preference note: I want neovim for this workspace. Keep that as my editor preference even if later questions never repeat the name of the editor.\nassistant: I\u0027ll keep your first bench note in this transcript: the editor you want is neovim. No durable write.\n\nuser: Second bench decision: local QBrainAi database work uses native Postgres on the host. We explicitly rejected Docker for that local database. Store that as a decision.\nassistant: Second note stays in chat history only: local database work uses native Postgres on the host, and Docker was rejected.\n\nuser: Third bench fact: the slice that implements agent memory lives on the memory branch. Please remember that branch fact independently of the editor and database notes.\nassistant: Third note stays in this conversation: the agent-memory slice lives on the memory branch. Summarize my bench editor preference, the local database decision, and which branch carries the memory work.",
       "tool_calls": [],
       "injection_present": false,
       "tokens_in": 153,
@@ -451,8 +451,8 @@
       "role": "establish",
       "condition": "with_memory",
       "required": false,
-      "transcript": "user: Second bench decision: local McpServer database work uses native Postgres on the host. We explicitly rejected Docker for that local database. Store that as a decision.\ntool: memory_remember\nassistant: memory_remember added the decision BENCH-DECISION-DB=native-postgres-not-docker.\n",
-      "prompt_payload": "memory-prompt-pack-v2-multiturn Second bench decision: local McpServer database work uses native Postgres on the host. We explicitly rejected Docker for that local database. Store that as a decision.",
+      "transcript": "user: Second bench decision: local QBrainAi database work uses native Postgres on the host. We explicitly rejected Docker for that local database. Store that as a decision.\ntool: memory_remember\nassistant: memory_remember added the decision BENCH-DECISION-DB=native-postgres-not-docker.\n",
+      "prompt_payload": "memory-prompt-pack-v2-multiturn Second bench decision: local QBrainAi database work uses native Postgres on the host. We explicitly rejected Docker for that local database. Store that as a decision.",
       "tool_calls": [
         "memory_remember"
       ],

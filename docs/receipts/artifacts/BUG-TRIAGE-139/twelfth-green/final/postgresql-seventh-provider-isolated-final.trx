@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="2f8ee7e9-f6ad-439a-8d18-8fab374fbad6" name="SYSTEM@PAYTON-LEGION2 2026-09-03 21:53:28" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-03T21:53:28.0145903-05:00" queuing="2026-09-03T21:53:28.0145907-05:00" start="2026-09-03T21:53:17.2662347-05:00" finish="2026-09-03T21:53:31.4629876-05:00" />
+  <TestSettings name="default" id="be80c097-b5c0-44a7-9cc6-329f38901e53">
+    <Deployment runDeploymentRoot="SYSTEM_PAYTON-LEGION2_2026-09-03_21_53_28" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="7435ebfc-201f-43a8-ae20-98d0e9e14874" testId="b33aa20f-58d7-5b35-2160-9986c5b247fa" testName="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseSeventhProviderTests.ReceiptIdentityMigration_ControlUnicodeLegacyRows_UpgradeAndDowngrade" computerName="PAYTON-LEGION2" duration="00:00:03.0822561" startTime="2026-09-03T21:53:27.9912654-05:00" endTime="2026-09-03T21:53:31.0738045-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7435ebfc-201f-43a8-ae20-98d0e9e14874" />
+    <UnitTestResult executionId="704705c2-dde0-428a-886f-f16e54d02788" testId="926f9532-568b-9e71-5fe3-060df324cfce" testName="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseSeventhProviderTests.BlockingLock_ProviderNativeActivityWaitObservedBeforeCancellation" computerName="PAYTON-LEGION2" duration="00:00:06.1757835" startTime="2026-09-03T21:53:21.7844869-05:00" endTime="2026-09-03T21:53:27.9737076-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="704705c2-dde0-428a-886f-f16e54d02788" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseSeventhProviderTests.ReceiptIdentityMigration_ControlUnicodeLegacyRows_UpgradeAndDowngrade" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-twelfth-20260903t201419z\bin\mcpserver.support.mcp.tests\release\mcpserver.support.mcp.tests.dll" id="b33aa20f-58d7-5b35-2160-9986c5b247fa">
+      <Execution id="7435ebfc-201f-43a8-ae20-98d0e9e14874" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseSeventhProviderTests" name="ReceiptIdentityMigration_ControlUnicodeLegacyRows_UpgradeAndDowngrade" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseSeventhProviderTests.BlockingLock_ProviderNativeActivityWaitObservedBeforeCancellation" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-twelfth-20260903t201419z\bin\mcpserver.support.mcp.tests\release\mcpserver.support.mcp.tests.dll" id="926f9532-568b-9e71-5fe3-060df324cfce">
+      <Execution id="704705c2-dde0-428a-886f-f16e54d02788" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseSeventhProviderTests" name="BlockingLock_ProviderNativeActivityWaitObservedBeforeCancellation" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="b33aa20f-58d7-5b35-2160-9986c5b247fa" executionId="7435ebfc-201f-43a8-ae20-98d0e9e14874" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="926f9532-568b-9e71-5fe3-060df324cfce" executionId="704705c2-dde0-428a-886f-f16e54d02788" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="2" executed="2" passed="2" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.30]   Discovering: McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.25]   Discovered:  McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.54]   Starting:    McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:13.64]   Finished:    McpServer.Support.Mcp.Tests (ID = '49c64e8b9f14a534e582fae1cd8ff8a32cc46f1642a12507249b9aa0e8525416')&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

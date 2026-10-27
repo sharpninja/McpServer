@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Xunit;
 
@@ -20,21 +19,21 @@ public sealed partial class MigrationAssemblyObsoleteWarningTests
     [
         new(
             "SQLite",
-            Path.Combine("src", "McpServer.Storage.SqliteMigrations", "McpServer.Storage.SqliteMigrations.csproj"),
-            Path.Combine("src", "McpServer.Storage.SqliteMigrations"),
+            Path.Combine("src", "QBrainAi.Storage.SqliteMigrations", "QBrainAi.Storage.SqliteMigrations.csproj"),
+            Path.Combine("src", "QBrainAi.Storage.SqliteMigrations"),
             []),
         new(
             "SQL Server",
-            Path.Combine("src", "McpServer.Storage.SqlServerMigrations", "McpServer.Storage.SqlServerMigrations.csproj"),
-            Path.Combine("src", "McpServer.Storage.SqlServerMigrations"),
+            Path.Combine("src", "QBrainAi.Storage.SqlServerMigrations", "QBrainAi.Storage.SqlServerMigrations.csproj"),
+            Path.Combine("src", "QBrainAi.Storage.SqlServerMigrations"),
             [
                 "SqlServerModelBuilderExtensions.UseIdentityColumns",
                 "SqlServerPropertyBuilderExtensions.UseIdentityColumn",
             ]),
         new(
             "PostgreSQL",
-            Path.Combine("src", "McpServer.Storage.PostgreSqlMigrations", "McpServer.Storage.PostgreSqlMigrations.csproj"),
-            Path.Combine("src", "McpServer.Storage.PostgreSqlMigrations"),
+            Path.Combine("src", "QBrainAi.Storage.PostgreSqlMigrations", "QBrainAi.Storage.PostgreSqlMigrations.csproj"),
+            Path.Combine("src", "QBrainAi.Storage.PostgreSqlMigrations"),
             [
                 "NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns",
                 "NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn",
@@ -136,27 +135,13 @@ public sealed partial class MigrationAssemblyObsoleteWarningTests
     private static async Task<ProcessResult> RunDotnetBuildAsync(string relativeProjectPath)
     {
         var root = FindRepositoryRoot();
-        var processStartInfo = new ProcessStartInfo("dotnet")
-        {
-            WorkingDirectory = root,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-        };
+        var startInfo = BoundedProcess.Dotnet(
+            root,
+            ["build", Path.Combine(root, relativeProjectPath), "-c", "Debug", "--no-restore", "-v", "minimal"]);
+        var result = await BoundedProcess.RunAsync(startInfo, TimeSpan.FromMinutes(10), TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
 
-        processStartInfo.ArgumentList.Add("build");
-        processStartInfo.ArgumentList.Add(Path.Combine(root, relativeProjectPath));
-        processStartInfo.ArgumentList.Add("-c");
-        processStartInfo.ArgumentList.Add("Debug");
-        processStartInfo.ArgumentList.Add("--no-restore");
-        processStartInfo.ArgumentList.Add("-v");
-        processStartInfo.ArgumentList.Add("minimal");
-
-        using var process = Process.Start(processStartInfo) ?? throw new InvalidOperationException("Failed to start dotnet build.");
-        var stdoutTask = process.StandardOutput.ReadToEndAsync(cancellationToken: TestContext.Current.CancellationToken);
-        var stderrTask = process.StandardError.ReadToEndAsync(cancellationToken: TestContext.Current.CancellationToken);
-        await process.WaitForExitAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-
-        return new ProcessResult(process.ExitCode, await stdoutTask.ConfigureAwait(true), await stderrTask.ConfigureAwait(true));
+        return new ProcessResult(result.ExitCode, result.Stdout, result.Stderr);
     }
 
     private static string FindRepositoryRoot()
@@ -164,7 +149,7 @@ public sealed partial class MigrationAssemblyObsoleteWarningTests
         var directory = new DirectoryInfo(AppContext.BaseDirectory);
         while (directory is not null)
         {
-            if (File.Exists(Path.Combine(directory.FullName, "McpServer.sln")))
+            if (File.Exists(Path.Combine(directory.FullName, "QBrainAi.sln")))
             {
                 return directory.FullName;
             }
@@ -172,7 +157,7 @@ public sealed partial class MigrationAssemblyObsoleteWarningTests
             directory = directory.Parent;
         }
 
-        throw new DirectoryNotFoundException("Could not find repository root containing McpServer.sln.");
+        throw new DirectoryNotFoundException("Could not find repository root containing QBrainAi.sln.");
     }
 
     [GeneratedRegex(@"\b[A-Za-z0-9_]+Extensions\.[A-Za-z0-9_]+", RegexOptions.CultureInvariant)]

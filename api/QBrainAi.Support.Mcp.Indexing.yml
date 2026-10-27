@@ -1,0 +1,92 @@
+### YamlMime:ManagedReference
+items:
+- uid: QBrainAi.Support.Mcp.Indexing
+  commentId: N:QBrainAi.Support.Mcp.Indexing
+  id: QBrainAi.Support.Mcp.Indexing
+  children:
+  - QBrainAi.Support.Mcp.Indexing.Chunker
+  - QBrainAi.Support.Mcp.Indexing.EmbeddingOptions
+  - QBrainAi.Support.Mcp.Indexing.IEmbeddingService
+  - QBrainAi.Support.Mcp.Indexing.IVectorIndexService
+  - QBrainAi.Support.Mcp.Indexing.VectorIndexOptions
+  langs:
+  - csharp
+  - vb
+  name: QBrainAi.Support.Mcp.Indexing
+  nameWithType: QBrainAi.Support.Mcp.Indexing
+  fullName: QBrainAi.Support.Mcp.Indexing
+  type: Namespace
+  assemblies:
+  - QBrainAi.Support.Mcp
+references:
+- uid: QBrainAi.Support.Mcp.Indexing.Chunker
+  commentId: T:QBrainAi.Support.Mcp.Indexing.Chunker
+  parent: QBrainAi.Support.Mcp.Indexing
+  href: QBrainAi.Support.Mcp.Indexing.Chunker.html
+  name: Chunker
+  nameWithType: Chunker
+  fullName: QBrainAi.Support.Mcp.Indexing.Chunker
+- uid: QBrainAi.Support.Mcp.Indexing.EmbeddingOptions
+  commentId: T:QBrainAi.Support.Mcp.Indexing.EmbeddingOptions
+  href: QBrainAi.Support.Mcp.Indexing.EmbeddingOptions.html
+  name: EmbeddingOptions
+  nameWithType: EmbeddingOptions
+  fullName: QBrainAi.Support.Mcp.Indexing.EmbeddingOptions
+- uid: QBrainAi.Support.Mcp.Indexing.IEmbeddingService
+  commentId: T:QBrainAi.Support.Mcp.Indexing.IEmbeddingService
+  parent: QBrainAi.Support.Mcp.Indexing
+  href: QBrainAi.Support.Mcp.Indexing.IEmbeddingService.html
+  name: IEmbeddingService
+  nameWithType: IEmbeddingService
+  fullName: QBrainAi.Support.Mcp.Indexing.IEmbeddingService
+- uid: QBrainAi.Support.Mcp.Indexing.IVectorIndexService
+  commentId: T:QBrainAi.Support.Mcp.Indexing.IVectorIndexService
+  parent: QBrainAi.Support.Mcp.Indexing
+  href: QBrainAi.Support.Mcp.Indexing.IVectorIndexService.html
+  name: IVectorIndexService
+  nameWithType: IVectorIndexService
+  fullName: QBrainAi.Support.Mcp.Indexing.IVectorIndexService
+- uid: QBrainAi.Support.Mcp.Indexing.VectorIndexOptions
+  commentId: T:QBrainAi.Support.Mcp.Indexing.VectorIndexOptions
+  href: QBrainAi.Support.Mcp.Indexing.VectorIndexOptions.html
+  name: VectorIndexOptions
+  nameWithType: VectorIndexOptions
+  fullName: QBrainAi.Support.Mcp.Indexing.VectorIndexOptions
+- uid: QBrainAi.Support.Mcp.Indexing
+  commentId: N:QBrainAi.Support.Mcp.Indexing
+  href: QBrainAi.html
+  name: QBrainAi.Support.Mcp.Indexing
+  nameWithType: QBrainAi.Support.Mcp.Indexing
+  fullName: QBrainAi.Support.Mcp.Indexing
+  spec.csharp:
+  - uid: QBrainAi
+    name: QBrainAi
+    href: QBrainAi.html
+  - name: .
+  - uid: QBrainAi.Support
+    name: Support
+    href: QBrainAi.Support.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp
+    name: Mcp
+    href: QBrainAi.Support.Mcp.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp.Indexing
+    name: Indexing
+    href: QBrainAi.Support.Mcp.Indexing.html
+  spec.vb:
+  - uid: QBrainAi
+    name: QBrainAi
+    href: QBrainAi.html
+  - name: .
+  - uid: QBrainAi.Support
+    name: Support
+    href: QBrainAi.Support.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp
+    name: Mcp
+    href: QBrainAi.Support.Mcp.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp.Indexing
+    name: Indexing
+    href: QBrainAi.Support.Mcp.Indexing.html

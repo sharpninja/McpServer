@@ -2,7 +2,7 @@ records:
   - kind: fr
     id: FR-MCP-118
     title: Keyserver trust service
-    description: McpServer shall provide a keyserver service that registers trusted parties, manages public key metadata, signs transaction manifests, verifies signed manifests, rejects invalid or replayed manifests, and persists audit records without exposing private key material.
+    description: QBrainAi shall provide a keyserver service that registers trusted parties, manages public key metadata, signs transaction manifests, verifies signed manifests, rejects invalid or replayed manifests, and persists audit records without exposing private key material.
     priority: high
     area: MCP
     status: pending
@@ -31,7 +31,7 @@ records:
   - kind: fr
     id: FR-MCP-119
     title: Subscriber diffgram commit service
-    description: McpServer shall provide a subscriber service that verifies keyserver-signed manifests, decrypts intended diffgrams, validates hashes, durably commits accepted diffgrams, supports abort/status flows, and rejects invalid or conflicting commits.
+    description: QBrainAi shall provide a subscriber service that verifies keyserver-signed manifests, decrypts intended diffgrams, validates hashes, durably commits accepted diffgrams, supports abort/status flows, and rejects invalid or conflicting commits.
     priority: high
     area: MCP
     status: pending
@@ -62,15 +62,15 @@ records:
         isSatisfied: false
   - kind: fr
     id: FR-MCP-120
-    title: MCP Server transaction gating
-    description: McpServer shall gate mutating user turns behind transaction manifest signing and subscriber commit confirmation before returning a committed-success response.
+    title: QBrain.AI transaction gating
+    description: QBrainAi shall gate mutating user turns behind transaction manifest signing and subscriber commit confirmation before returning a committed-success response.
     priority: high
     area: MCP
     status: pending
   - kind: fr
     id: FR-MCP-121
     title: Degraded mode and rollback
-    description: McpServer shall enter explicit degraded mode when transaction dependencies are unavailable or commit cannot complete, allow only safe reads, and preserve audit records through rollback.
+    description: QBrainAi shall enter explicit degraded mode when transaction dependencies are unavailable or commit cannot complete, allow only safe reads, and preserve audit records through rollback.
     priority: high
     area: MCP
     status: pending
@@ -126,7 +126,7 @@ records:
   - kind: tr
     id: TR-MCP-KEYSERVER-001
     title: Transaction keyserver service
-    description: Add src/McpServer.KeyServer as a net10.0 ASP.NET Core service with service-local EF Core SQLite storage, party registry, public-key registry, manifest sign/verify endpoints, replay/sequence/expiry checks, audit rows, XMLDocs, and health endpoint.
+    description: Add src/QBrainAi.KeyServer as a net10.0 ASP.NET Core service with service-local EF Core SQLite storage, party registry, public-key registry, manifest sign/verify endpoints, replay/sequence/expiry checks, audit rows, XMLDocs, and health endpoint.
     priority: high
     area: MCP
     subarea: KEYSERVER
@@ -142,7 +142,7 @@ records:
   - kind: tr
     id: TR-MCP-SUBSCRIBER-001
     title: Transaction subscriber service
-    description: Add src/McpServer.Subscriber with durable commit storage, manifest verification, decrypt/hash pipeline, idempotency checks, abort/status endpoints, XMLDocs, and precise failure reasons.
+    description: Add src/QBrainAi.Subscriber with durable commit storage, manifest verification, decrypt/hash pipeline, idempotency checks, abort/status endpoints, XMLDocs, and precise failure reasons.
     priority: high
     area: MCP
     subarea: SUBSCRIBER
@@ -150,7 +150,7 @@ records:
   - kind: tr
     id: TR-MCP-TXN-001
     title: Turn transaction coordinator
-    description: Add MCP Server Mcp:TurnTransactions, ITurnTransactionCoordinator, diffgram models, keyserver/subscriber clients, commit gating, degraded behavior, and initial mutation adapters.
+    description: Add QBrain.AI Mcp:TurnTransactions, ITurnTransactionCoordinator, diffgram models, keyserver/subscriber clients, commit gating, degraded behavior, and initial mutation adapters.
     priority: high
     area: MCP
     subarea: TXN

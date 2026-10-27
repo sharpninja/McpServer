@@ -1,0 +1,23 @@
+### YamlMime:ManagedReference
+items:
+- uid: QBrainAi.Support.Mcp
+  commentId: N:QBrainAi.Support.Mcp
+  id: QBrainAi.Support.Mcp
+  children:
+  - QBrainAi.Support.Mcp.McpApiEntryPoint
+  langs:
+  - csharp
+  - vb
+  name: QBrainAi.Support.Mcp
+  nameWithType: QBrainAi.Support.Mcp
+  fullName: QBrainAi.Support.Mcp
+  type: Namespace
+  assemblies:
+  - QBrainAi.Support.Mcp
+references:
+- uid: QBrainAi.Support.Mcp.McpApiEntryPoint
+  commentId: T:QBrainAi.Support.Mcp.McpApiEntryPoint
+  href: QBrainAi.Support.Mcp.McpApiEntryPoint.html
+  name: McpApiEntryPoint
+  nameWithType: McpApiEntryPoint
+  fullName: QBrainAi.Support.Mcp.McpApiEntryPoint

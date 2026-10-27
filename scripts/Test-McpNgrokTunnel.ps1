@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Tests the ngrok tunnel for MCP Server.
+    Tests the ngrok tunnel for QBrain.AI.
 
 .DESCRIPTION
     Validates that the ngrok tunnel provider can be enabled, started, and that
@@ -8,7 +8,7 @@
     endpoints through the tunnel. Cleans up by stopping the tunnel on exit.
 
 .PARAMETER BaseUrl
-    Local MCP Server base URL. Default: http://localhost:7147
+    Local QBrain.AI base URL. Default: http://localhost:7147
 
 .PARAMETER ApiKey
     API key for authenticated endpoints. If omitted, reads from AGENTS-README-FIRST.yaml
@@ -121,7 +121,7 @@ catch {
 
 Write-Section "Tunnel Providers"
 Write-Step "Listing tunnel providers ..."
-$providers = Invoke-McpApi -Url "$BaseUrl/mcpserver/tunnel/list"
+$providers = Invoke-McpApi -Url "$BaseUrl/qbrainai/tunnel/list"
 $ngrok = $providers | Where-Object { $_.provider -eq "ngrok" }
 
 if (-not $ngrok) {
@@ -141,7 +141,7 @@ foreach ($p in $providers) {
 Write-Section "Enable ngrok"
 if (-not $ngrok.enabled) {
     Write-Step "Enabling ngrok provider ..."
-    $result = Invoke-McpApi -Method POST -Url "$BaseUrl/mcpserver/tunnel/ngrok/enable"
+    $result = Invoke-McpApi -Method POST -Url "$BaseUrl/qbrainai/tunnel/ngrok/enable"
     if ($result.enabled) {
         Write-Pass "ngrok enabled."
         $passed++
@@ -160,7 +160,7 @@ else {
 
 Write-Section "Start ngrok"
 Write-Step "Starting ngrok tunnel ..."
-$startResult = Invoke-McpApi -Method POST -Url "$BaseUrl/mcpserver/tunnel/ngrok/start"
+$startResult = Invoke-McpApi -Method POST -Url "$BaseUrl/qbrainai/tunnel/ngrok/start"
 if ($startResult.isRunning) {
     Write-Pass "ngrok is running."
     $passed++
@@ -178,7 +178,7 @@ $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
 
 Write-Step "Waiting up to ${TimeoutSeconds}s for public URL ..."
 while ((Get-Date) -lt $deadline) {
-    $status = Invoke-McpApi -Url "$BaseUrl/mcpserver/tunnel/ngrok/status"
+    $status = Invoke-McpApi -Url "$BaseUrl/qbrainai/tunnel/ngrok/status"
     if ($status.publicUrl) {
         $publicUrl = $status.publicUrl
         break
@@ -200,7 +200,7 @@ else {
     Write-Host "`n  Passed: $passed  |  Failed: $failed" -ForegroundColor $(if ($failed -gt 0) { "Red" } else { "Green" })
     if (-not $SkipCleanup) {
         Write-Step "Stopping ngrok ..."
-        Invoke-McpApi -Method POST -Url "$BaseUrl/mcpserver/tunnel/ngrok/stop" -AllowFailure | Out-Null
+        Invoke-McpApi -Method POST -Url "$BaseUrl/qbrainai/tunnel/ngrok/stop" -AllowFailure | Out-Null
     }
     exit 1
 }
@@ -228,21 +228,21 @@ catch {
 }
 
 # 6b. Tunnel list through tunnel (authenticated)
-Write-Step "Testing /mcpserver/tunnel/list through tunnel ..."
+Write-Step "Testing /qbrainai/tunnel/list through tunnel ..."
 try {
-    $remoteTunnels = Invoke-McpApi -Url "$publicUrl/mcpserver/tunnel/list" -ViaTunnel
+    $remoteTunnels = Invoke-McpApi -Url "$publicUrl/qbrainai/tunnel/list" -ViaTunnel
     $remoteNgrok = $remoteTunnels | Where-Object { $_.provider -eq "ngrok" }
     if ($remoteNgrok -and $remoteNgrok.isRunning) {
-        Write-Pass "/mcpserver/tunnel/list OK (ngrok running)."
+        Write-Pass "/qbrainai/tunnel/list OK (ngrok running)."
         $passed++
     }
     else {
-        Write-Fail "/mcpserver/tunnel/list returned unexpected data."
+        Write-Fail "/qbrainai/tunnel/list returned unexpected data."
         $failed++
     }
 }
 catch {
-    Write-Fail "/mcpserver/tunnel/list failed through tunnel: $_"
+    Write-Fail "/qbrainai/tunnel/list failed through tunnel: $_"
     $failed++
 }
 
@@ -320,7 +320,7 @@ if ($SkipCleanup) {
 }
 else {
     Write-Step "Stopping ngrok tunnel ..."
-    $stopResult = Invoke-McpApi -Method POST -Url "$BaseUrl/mcpserver/tunnel/ngrok/stop" -AllowFailure
+    $stopResult = Invoke-McpApi -Method POST -Url "$BaseUrl/qbrainai/tunnel/ngrok/stop" -AllowFailure
     if ($stopResult -and -not $stopResult.isRunning) {
         Write-Pass "ngrok stopped."
     }

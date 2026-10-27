@@ -1,0 +1,400 @@
+[
+  {
+    "fixture": "hook-consumers",
+    "turn": {
+      "turnRequestId": "req-p2-verb",
+      "queryTitle": "kept title",
+      "openedAt": "2026-10-03T01:29:36Z",
+      "status": "in_progress",
+      "sessionId": "Codex-20260930T000000Z-p2",
+      "codeEdits": 3,
+      "lastBuildStatus": "passed",
+      "auditActions": 2,
+      "auditDialog": 1,
+      "auditDecisions": 1,
+      "auditFiles": 1,
+      "auditCommits": 1,
+      "queryText": "same prompt",
+      "planFile": "docs/plans/p2.md",
+      "todoId": "BUG-TRIAGE-246",
+      "markerFilePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261003T011854Z-fresh-fixtures\\hook-consumers\\ws\\AGENTS-README-FIRST.yaml",
+      "markerLastWriteUtc": "2026-10-03T01:29:33.9198100Z",
+      "degraded": true,
+      "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261003T011854Z-fresh-fixtures\\hook-consumers\\failsafe\\20261003T012935Z-session_submit-a708.yaml",
+      "contextList": [
+        "kept-context"
+      ],
+      "response": "noted"
+    },
+    "receipt": {
+      "code": "queued",
+      "retryable": true,
+      "persisted": false,
+      "degraded": true,
+      "queued": true,
+      "method": "workflow.sessionlog.completeTurn",
+      "agent": "Codex",
+      "sessionId": "Codex-20260930T000000Z-p2",
+      "requestId": "req-p2-verb",
+      "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261003T011854Z-fresh-fixtures\\hook-consumers\\failsafe\\20261003T012943Z-session_submit-523b.yaml",
+      "message": "Session log persist timed out or returned HTTP 503 backend_unavailable; failsafe retained and current-turn stays active.",
+      "childStderr": "type: error\r\npayload:\r\n  code: backend_unavailable\r\n  message: HTTP 503\r\n  retryable: true\r\n "
+    },
+    "failsafe": [
+      {
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261003T011854Z-fresh-fixtures\\hook-consumers\\failsafe\\20261003T012935Z-session_submit-a708.yaml",
+        "envelope": {
+          "method": "client.SessionLog.SubmitAsync",
+          "label": "session_submit",
+          "timestamp": "20261003T012935Z",
+          "params": {
+            "sessionLog": {
+              "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+              "sourceType": "Codex",
+              "agentExecutableVersion": "codex-test-1",
+              "lastUpdated": "2026-10-03T01:29:35Z",
+              "status": "in_progress",
+              "title": "kept title",
+              "turns": [
+                {
+                  "queryText": "same prompt",
+                  "planFile": "docs/plans/p2.md",
+                  "timestamp": "2026-10-03T01:29:34Z",
+                  "todoId": "BUG-TRIAGE-246",
+                  "queryTitle": "kept title",
+                  "status": "in_progress",
+                  "response": "(turn opened)",
+                  "tokenCount": 0,
+                  "model": "codex",
+                  "requestId": "req-p2-verb"
+                }
+              ],
+              "turnCount": 1,
+              "model": "codex",
+              "sessionId": "Codex-20260930T000000Z-p2",
+              "started": "2026-10-03T01:29:34Z"
+            }
+          },
+          "payloadFingerprint": "CB9BECD9C864367861D0D59BED49879EE990A01642D70C48DE9DE3EB5DFF4107"
+        }
+      },
+      {
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261003T011854Z-fresh-fixtures\\hook-consumers\\failsafe\\20261003T012939Z-session_submit-f661.yaml",
+        "envelope": {
+          "method": "client.SessionLog.SubmitAsync",
+          "label": "session_submit",
+          "timestamp": "20261003T012939Z",
+          "params": {
+            "sessionLog": {
+              "turnCount": 1,
+              "lastUpdated": "2026-10-03T01:29:39Z",
+              "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+              "turns": [
+                {
+                  "planFile": "docs/plans/p2.md",
+                  "model": "codex",
+                  "status": "in_progress",
+                  "response": "noted",
+                  "tokenCount": 0,
+                  "timestamp": "2026-10-03T01:29:36Z",
+                  "requestId": "req-p2-verb",
+                  "queryText": "same prompt",
+                  "contextList": [
+                    "kept-context"
+                  ],
+                  "todoId": "BUG-TRIAGE-246"
+                }
+              ],
+              "model": "codex",
+              "started": "2026-10-03T01:29:36Z",
+              "sourceType": "Codex",
+              "agentExecutableVersion": "codex-test-1",
+              "status": "in_progress",
+              "sessionId": "Codex-20260930T000000Z-p2"
+            }
+          },
+          "payloadFingerprint": "579962FDE612D37A6E38AF004EBF6544C7E1362713DDEDB33A8F8202EFD2792C"
+        }
+      },
+      {
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261003T011854Z-fresh-fixtures\\hook-consumers\\failsafe\\20261003T012941Z-session_dialog-3126.yaml",
+        "envelope": {
+          "method": "client.SessionLog.AppendDialogAsync",
+          "label": "session_dialog",
+          "timestamp": "20261003T012941Z",
+          "params": {
+            "requestId": "req-p2-verb",
+            "sessionId": "Codex-20260930T000000Z-p2",
+            "items": [
+              {
+                "role": "model",
+                "content": "kept",
+                "category": "reasoning"
+              }
+            ],
+            "agent": "Codex"
+          },
+          "payloadFingerprint": "97577CE2C78559FF8E56099C4CEB76B452CD60097C8867B78FCB9300B50872B3"
+        }
+      },
+      {
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261003T011854Z-fresh-fixtures\\hook-consumers\\failsafe\\20261003T012943Z-session_submit-523b.yaml",
+        "envelope": {
+          "method": "client.SessionLog.SubmitAsync",
+          "label": "session_submit",
+          "timestamp": "20261003T012943Z",
+          "params": {
+            "sessionLog": {
+              "sourceType": "Codex",
+              "sessionId": "Codex-20260930T000000Z-p2",
+              "lastUpdated": "2026-10-03T01:29:43Z",
+              "model": "codex",
+              "status": "in_progress",
+              "started": "2026-10-03T01:29:36Z",
+              "turnCount": 1,
+              "turns": [
+                {
+                  "status": "completed",
+                  "response": "Auto-closed by PowerShell stop gate.",
+                  "model": "codex",
+                  "requestId": "req-p2-verb",
+                  "planFile": "docs/plans/p2.md",
+                  "queryText": "same prompt",
+                  "tokenCount": 0,
+                  "timestamp": "2026-10-03T01:29:36Z",
+                  "todoId": "BUG-TRIAGE-246"
+                }
+              ],
+              "agentExecutableVersion": "codex-test-1",
+              "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe"
+            }
+          },
+          "payloadFingerprint": "3567AC9D6EA014600F1E2A6D6A92BA1D2F6FC75C7D2EECD497EA567C4998E3C4"
+        }
+      }
+    ],
+    "submitCalls": 3,
+    "dialogCalls": 1,
+    "queryTextPresent": true
+  },
+  {
+    "fixture": "stop-primary-transition",
+    "turn": {
+      "turnRequestId": "req-p2-verb",
+      "queryTitle": "kept title",
+      "openedAt": "2026-10-03T01:29:45Z",
+      "status": "completed",
+      "sessionId": "Codex-20260930T000000Z-p2",
+      "codeEdits": 0,
+      "lastBuildStatus": "unknown",
+      "auditActions": 2,
+      "auditDialog": 0,
+      "auditDecisions": 0,
+      "auditFiles": 0,
+      "auditCommits": 0,
+      "queryText": "close me",
+      "planFile": "docs/plans/p2.md",
+      "todoId": "BUG-TRIAGE-246",
+      "markerFilePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261003T011854Z-fresh-fixtures\\stop-primary-transition\\ws\\AGENTS-README-FIRST.yaml",
+      "markerLastWriteUtc": "2026-10-03T01:29:44.6781489Z",
+      "lastPersistFingerprint": "744063E7E5051280860B67729098923E817FA3FD867FAE3E07D77EC8B421D4FD",
+      "persisted": "true"
+    },
+    "receipt": {
+      "code": "persisted",
+      "retryable": false,
+      "persisted": true,
+      "degraded": false,
+      "queued": false,
+      "method": "workflow.sessionlog.completeTurn",
+      "agent": "Codex",
+      "sessionId": "Codex-20260930T000000Z-p2",
+      "requestId": "req-p2-verb",
+      "failsafePath": "",
+      "message": "Session log persist confirmed a durable write for request 'req-p2-verb'.",
+      "childStderr": ""
+    },
+    "failsafe": [],
+    "submitCalls": 2,
+    "dialogCalls": 0,
+    "queryTextPresent": true
+  },
+  {
+    "fixture": "empty-query-omit",
+    "turn": {
+      "turnRequestId": "req-p2-verb",
+      "queryTitle": "kept title",
+      "openedAt": "2026-10-03T01:29:55Z",
+      "status": "in_progress",
+      "sessionId": "Codex-20260930T000000Z-p2",
+      "codeEdits": 0,
+      "lastBuildStatus": "unknown",
+      "auditActions": 0,
+      "auditDialog": 0,
+      "auditDecisions": 0,
+      "auditFiles": 0,
+      "auditCommits": 0,
+      "planFile": "docs/plans/p2.md",
+      "todoId": "BUG-TRIAGE-246",
+      "markerFilePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261003T011854Z-fresh-fixtures\\empty-query-omit\\ws\\AGENTS-README-FIRST.yaml",
+      "markerLastWriteUtc": "2026-10-03T01:29:54.1769475Z",
+      "lastPersistFingerprint": "1A54C171A4D1E5EBB15AB8101A9AAE6A4996E47568FAF04F23C352500574F875",
+      "persisted": "true",
+      "response": "noted"
+    },
+    "receipt": {
+      "code": "persisted",
+      "retryable": false,
+      "persisted": true,
+      "degraded": false,
+      "queued": false,
+      "method": "workflow.sessionlog.updateTurn",
+      "agent": "Codex",
+      "sessionId": "Codex-20260930T000000Z-p2",
+      "requestId": "req-p2-verb",
+      "failsafePath": "",
+      "message": "Session log persist confirmed a durable write for request 'req-p2-verb'.",
+      "childStderr": ""
+    },
+    "failsafe": [],
+    "submitCalls": 2,
+    "dialogCalls": 0,
+    "queryTextPresent": false
+  },
+  {
+    "fixture": "dialog-404",
+    "turn": {
+      "turnRequestId": "req-p2-verb",
+      "sessionId": "Codex-20260930T000000Z-p2",
+      "status": "in_progress",
+      "queryText": "keep me",
+      "queryTitle": "kept title",
+      "planFile": "docs/plans/p2.md",
+      "todoId": "BUG-TRIAGE-246",
+      "openedAt": "2026-10-03T01:29:58Z",
+      "auditActions": 2,
+      "auditDialog": 1,
+      "markerFilePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261003T011854Z-fresh-fixtures\\dialog-404\\ws\\AGENTS-README-FIRST.yaml",
+      "markerLastWriteUtc": "2026-10-03T01:29:58.4272310Z",
+      "degraded": true
+    },
+    "receipt": {
+      "code": "queued",
+      "retryable": true,
+      "persisted": false,
+      "degraded": true,
+      "queued": true,
+      "method": "workflow.sessionlog.appendDialog",
+      "agent": "Codex",
+      "sessionId": "Codex-20260930T000000Z-p2",
+      "requestId": "req-p2-verb",
+      "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261003T011854Z-fresh-fixtures\\dialog-404\\failsafe\\20261003T013001Z-session_dialog-b4a1.yaml",
+      "message": "appendDialog degraded turn not stored; session_dialog failsafe retained requestId=req-p2-verb",
+      "childStderr": "type: error\r\npayload:\r\n  code: not_found\r\n  message: HTTP 404\r\n  retryable: false\r\n "
+    },
+    "failsafe": [
+      {
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261003T011854Z-fresh-fixtures\\dialog-404\\failsafe\\20261003T013000Z-session_submit-3de8.yaml",
+        "envelope": {
+          "method": "client.SessionLog.SubmitAsync",
+          "label": "session_submit",
+          "timestamp": "20261003T013000Z",
+          "params": {
+            "sessionLog": {
+              "sourceType": "Codex",
+              "lastUpdated": "2026-10-03T01:30:00Z",
+              "agentExecutableVersion": "codex-test-1",
+              "model": "codex",
+              "started": "2026-10-03T01:29:58Z",
+              "turns": [
+                {
+                  "todoId": "BUG-TRIAGE-246",
+                  "queryTitle": "kept title",
+                  "tokenCount": 0,
+                  "model": "codex",
+                  "queryText": "keep me",
+                  "timestamp": "2026-10-03T01:29:58Z",
+                  "planFile": "docs/plans/p2.md",
+                  "response": "(recovery before dialog append)",
+                  "status": "in_progress",
+                  "requestId": "req-p2-verb"
+                }
+              ],
+              "sessionId": "Codex-20260930T000000Z-p2",
+              "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+              "status": "in_progress",
+              "turnCount": 1
+            }
+          },
+          "payloadFingerprint": "D852673692B8F45935F0474057CD8A98454F4CB0B871977C55E2F4CEA9FFF007"
+        }
+      },
+      {
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261003T011854Z-fresh-fixtures\\dialog-404\\failsafe\\20261003T013001Z-session_dialog-b4a1.yaml",
+        "envelope": {
+          "method": "client.SessionLog.AppendDialogAsync",
+          "label": "session_dialog",
+          "timestamp": "20261003T013001Z",
+          "params": {
+            "items": [
+              {
+                "category": "reasoning",
+                "role": "model",
+                "content": "orphan"
+              }
+            ],
+            "requestId": "req-p2-verb",
+            "sessionId": "Codex-20260930T000000Z-p2",
+            "agent": "Codex"
+          },
+          "payloadFingerprint": "216F1BD236419EBFED0EE1C3AAE6CF556CA2A8746A4A09BD30BFCF14B9A4ADF4"
+        }
+      }
+    ],
+    "submitCalls": 1,
+    "dialogCalls": 1,
+    "queryTextPresent": true
+  },
+  {
+    "fixture": "complete-payload",
+    "turn": {
+      "turnRequestId": "req-p2-verb",
+      "queryTitle": "kept title",
+      "openedAt": "2026-10-03T01:30:02Z",
+      "status": "in_progress",
+      "sessionId": "Codex-20260930T000000Z-p2",
+      "codeEdits": 0,
+      "lastBuildStatus": "unknown",
+      "auditActions": 0,
+      "auditDialog": 0,
+      "auditDecisions": 0,
+      "auditFiles": 0,
+      "auditCommits": 0,
+      "queryText": "keep me",
+      "planFile": "docs/plans/p2.md",
+      "todoId": "BUG-TRIAGE-246",
+      "markerFilePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261003T011854Z-fresh-fixtures\\complete-payload\\ws\\AGENTS-README-FIRST.yaml",
+      "markerLastWriteUtc": "2026-10-03T01:30:01.3224593Z",
+      "lastPersistFingerprint": "1E4D3CF4A304630286A33C02FE8B5184C1A38C84A064CDE5E16E8A8D2DEE3865",
+      "persisted": "true"
+    },
+    "receipt": {
+      "code": "persisted",
+      "retryable": false,
+      "persisted": true,
+      "degraded": false,
+      "queued": false,
+      "method": "workflow.sessionlog.beginTurn",
+      "agent": "Codex",
+      "sessionId": "Codex-20260930T000000Z-p2",
+      "requestId": "req-p2-verb",
+      "failsafePath": "",
+      "message": "Session log persist confirmed a durable write for request 'req-p2-verb'.",
+      "childStderr": ""
+    },
+    "failsafe": [],
+    "submitCalls": 1,
+    "dialogCalls": 0,
+    "queryTextPresent": true
+  }
+]

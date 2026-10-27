@@ -1,0 +1,179 @@
+{
+  "TimestampUtc": "2026-10-09T22:19:18Z",
+  "ValidatorIdentity": {
+    "agent": "Codex",
+    "model": "gpt-6-sol",
+    "reasoningEffort": "xhigh",
+    "liveProof": {
+      "threadId": "01a122b6-757a-7750-9ae5-38cc7e299182",
+      "rollout": "/home/sharpninja/.codex/sessions/2026/10/09/rollout-2026-10-09T17-09-08-01a122b6-757a-7750-9ae5-38cc7e299182.jsonl",
+      "firstTurnContextUtc": "2026-10-09T22:09:09Z",
+      "fields": "payload.model and payload.collaboration_mode.settings.reasoning_effort"
+    }
+  },
+  "Prerequisites": {
+    "addProfileFilesRead": 19,
+    "addProfileSkillRead": true,
+    "markerReadInFull": true,
+    "markerLines": 397,
+    "markerSecretsFiltered": true,
+    "effectiveMcpMemoriesRead": 15,
+    "memoryProcess008Read": true,
+    "memoryProcess007C3AckUtc": "2026-10-09T21:51:50Z"
+  },
+  "HeadSha": "84282e8107924389d22f63c5d29d901e43df8f19",
+  "PlanLines": 649,
+  "PlanNonEmptyLines": 529,
+  "TodoDescriptionExactParity": true,
+  "ImplementationTaskCount": 30,
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 91,
+  "Completeness": 86,
+  "Confidence": 97,
+  "PassCount": 3,
+  "FailCount": 6,
+  "UnknownCount": 1,
+  "Claims": [
+    {
+      "id": "P1",
+      "status": "FAIL",
+      "evidence": "Stale present-tense FR/TR/TEST totals in plan line 167"
+    },
+    {
+      "id": "P2",
+      "status": "PASS",
+      "evidence": "120 ids checked; 67 proposed P0 ids absent, zero collisions"
+    },
+    {
+      "id": "P3",
+      "status": "FAIL",
+      "evidence": "Arrival fallback and queue pairing violate D1/D2/D5/D6"
+    },
+    {
+      "id": "P4",
+      "status": "PASS",
+      "evidence": "All requested surfaces, nine hosts, and three schema providers have tasks"
+    },
+    {
+      "id": "P5",
+      "status": "FAIL",
+      "evidence": "Pairing, evidence, and remedies are not decision-complete"
+    },
+    {
+      "id": "P6",
+      "status": "UNKNOWN",
+      "evidence": "Targets structurally checked; SDK/bats/Pester runtime unavailable"
+    },
+    {
+      "id": "P7",
+      "status": "FAIL",
+      "evidence": "RED misses reverse hook order, late enqueue, commit-only, external writer"
+    },
+    {
+      "id": "P8",
+      "status": "FAIL",
+      "evidence": "Fallback, evidence, and remedies contradict across sections"
+    },
+    {
+      "id": "P9",
+      "status": "FAIL",
+      "evidence": "TODO parity passes; handoff line 66 has stale totals"
+    },
+    {
+      "id": "P10",
+      "status": "PASS",
+      "evidence": "Risk claims and filed triage ids checked"
+    }
+  ],
+  "Findings": [
+    {
+      "id": "F-R13-01",
+      "planLocation": "83,170,201,579",
+      "defect": "Queue position is no hook-to-dequeue key",
+      "change": "Prove order or shared id; add reversed-order RED; otherwise fail closed",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F-R13-02",
+      "planLocation": "83,201,579",
+      "defect": "No-prompt-id timeout leaves late enqueue unbound",
+      "change": "Define durable late claim or fail-closed path and RED",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F-R13-03",
+      "planLocation": "30-32,81,170,256",
+      "defect": "Processing-time fallback violates D5/D6",
+      "change": "Use turn_logging_unsupported until an enqueue adapter exists",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F-R13-04",
+      "planLocation": "224,441,481,548,587",
+      "defect": "Commit-only evidence is both accepted and refused",
+      "change": "Unify evidence predicate including model-authored commits",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F-R13-05",
+      "planLocation": "224-225,231,481,548",
+      "defect": "Generic stop text has wrong or insufficient remedies",
+      "change": "Specify code-specific accepted remedies and RED",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F-R13-06",
+      "planLocation": "167; handoff 66",
+      "defect": "Present-tense totals stale against live store",
+      "change": "Date import snapshot and sync current totals",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "F-R13-07",
+      "planLocation": "282,387,390,609,611",
+      "defect": "Local pre-check lacks external-writer RED",
+      "change": "Add PowerShell and Node stale-cache tests",
+      "classification": "implementer edit"
+    }
+  ],
+  "FailList": [
+    "P1",
+    "P3",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "UnknownList": [
+    "P6"
+  ],
+  "ImplementerFixes": [
+    "F-R13-01",
+    "F-R13-02",
+    "F-R13-03",
+    "F-R13-04",
+    "F-R13-05",
+    "F-R13-06",
+    "F-R13-07"
+  ],
+  "OperatorDecisionFails": [],
+  "ReviewerSessionId": "Codex-20261009T032846Z-plugin-session",
+  "ReviewerRequestId": "req-20261009T221157Z-hostile-plan-r13",
+  "ReceiptPaths": [
+    "docs/receipts/hv/hostile-validator-plan-readiness-r13-20261009T220905Z.md",
+    "docs/receipts/hv/hostile-validator-plan-readiness-r13-20261009T220905Z.json",
+    "docs/receipts/hv/20261009T220905Z-plan-readiness-r13.request.jsonl",
+    "docs/receipts/hv/20261009T220905Z-plan-readiness-r13.response.jsonl"
+  ],
+  "FullReport": "# Hostile validator: PLAN-SESSIONTURNREVIEW-001, round 13\n\n- TimestampUtc: 2026-10-09T22:19:18Z\n- OverallVerdict: DISAGREE\n- Accuracy: 91/100; Completeness: 86/100; Confidence: 97/100\n- Claims: 3 PASS, 6 FAIL, 1 UNKNOWN\n- HEAD: `84282e8107924389d22f63c5d29d901e43df8f19`\n- Reviewer sessionId: `Codex-20261009T032846Z-plugin-session`\n- Reviewer requestId: `req-20261009T221157Z-hostile-plan-r13`\n- Runner request/response: `docs/receipts/hv/20261009T220905Z-plan-readiness-r13.request.jsonl` and `.response.jsonl`\n\n## Validator and prerequisite proof\n\nThe live Codex rollout for thread `01a122b6-757a-7750-9ae5-38cc7e299182` is `/home/sharpninja/.codex/sessions/2026/10/09/rollout-2026-10-09T17-09-08-01a122b6-757a-7750-9ae5-38cc7e299182.jsonl`. Its first `turn_context` at 2026-10-09T22:09:09Z records `model=gpt-6-sol` and `collaboration_mode.settings.reasoning_effort=xhigh`; the runner response stream starts with the same thread id. This is proof from this reviewer's live session metadata.\n\nI executed add-profile: read its SKILL.md and all 19 non-skill Markdown files in `/home/sharpninja/.claude/profile/` in full. I read the main workspace's 397-line `AGENTS-README-FIRST.yaml` in full while filtering its secret line and Authentication block from output. I called `workflow.memory.list` on the main workspace and read every one of its 15 effective memories, including full `MEMORY-PROCESS-006`, `-007`, and `-008`. The C3 change was ACKed by Codex at 21:51:50Z after direct operator approval; all twelve coordination contracts are agreed. I used the installed Codex plugin wrapper with `-ParamsObject` and a `/tmp` cache for main-workspace read-only calls. No marker secret appears here.\n\nThe complete 649-line plan was read end to end. The TODO was read from the live main-workspace store: it remains NOT APPROVED, all 30 implementation tasks are undone, and its 529 description strings equal the 529 non-empty source lines exactly and in order. The handoff was read in full. I checked the source tree, docs/Project and docs/context, nine plugin checkout heads, the live requirements and triage stores, and prior r1-r12 receipts. I did not execute build or test gates because this is a read-only plan review and this host has SDK 10.0.111 while `global.json` requires 10.0.201; P0 explicitly includes toolchain setup.\n\n## Claim results\n\n- **P1 FAIL.** Source anchors and plugin heads checked out, but the plan's `store now FR 352, TR 480, TEST 512` statement is stale against the live store's 353/481/513. See F-R13-06. Historical transcript counts were treated as dated observations, not independently reproduced.\n- **P2 PASS.** Of 120 cited canonical FR/TR/TEST ids checked against docs and the live store, 67 are explicitly proposed for P0 and currently absent, no proposed id collides, and no cited existing id is missing. The proposed mapping and use-case declarations were traced in both directions; the defects below concern behavior and test allocation, not id existence.\n- **P3 FAIL.** The processing-time-only host fallback violates locked D5/D6; the queue-claim and late-enqueue paths do not guarantee the locked D1/D2 attribution. See F-R13-01 through F-R13-03.\n- **P4 PASS.** Concrete phase tasks cover server, client, REPL, MCP tools, both plugin cores, all eight named agent plugins plus grok-bot, compatibility/migration work, and SQLite, PostgreSQL, and SQL Server schema providers. Coverage alone does not cure the behavior defects.\n- **P5 FAIL.** The queue pairing has no proven hook-to-dequeue identity or ordering invariant; accepted evidence and stop remedies conflict. See F-R13-01, F-R13-02, F-R13-04, F-R13-05.\n- **P6 UNKNOWN.** Named commands, targets, test projects, receipt conventions, G1-G6, and BDPv4 sequence were structurally checked; their runtime success cannot be established with the current SDK mismatch and missing bats/Pester. P0 addresses environment setup. D10's all-green-before-HV and the pre-merge live checks appear in the intended order. This is not a claim that the gates passed.\n- **P7 FAIL.** Named RED cases do not distinguish two unequal concurrent prompts whose hook lock acquisition reverses dequeue order, do not cover late enqueue after the no-`prompt_id` timeout, omit commit-only close evidence, and omit an external-writer refresh for the local pre-check. See F-R13-01, F-R13-02, F-R13-04, F-R13-07.\n- **P8 FAIL.** The processing-time fallback conflicts with D5/D6, commit-only evidence conflicts across FR/TR/UC/stop text, and generic block text conflicts with specific close and completion remedies. See F-R13-03 through F-R13-05.\n- **P9 FAIL.** Plan/TODO description parity and the 30 task list pass; the handoff status and locations pass. The handoff still says the store is now 352/480/512, while live counts are 353/481/513. See F-R13-06.\n- **P10 PASS.** Risk claims checked against source and the cited triage reports. The misfiled `triage-group-804b21086f3019ab` is present in the worktree store, absent from the main-workspace route, and accurately described as failed/pending relocation. The plan schedules or files its listed risks.\n\n## FAIL findings and exact repairs\n\n### F-R13-01: queue position is not a hook-to-request key\n\n**Plan location:** Host binding table, line 83; P0.2, line 170; FR-MCP-SESSIONTURN-001-AC009, line 201; A3, line 579.\n\n**Defect:** The plan calls the `dequeue`-selected queue position a key shared by the hook and bridge, but a hook payload has no queue position or parent id. P0.2 verifies only that a dequeue selects the queue head. If requests A then B dequeue in order but B's hook acquires `turn-open.lock` before A's, B claims A's dequeue and A claims B's. Both mints can still be unique, so the listed equal-text/concurrency tests and mint-count assertions can pass while D2 attribution is wrong. No host ordering guarantee or shared identity is established.\n\n**Evidence:** The plan itself says `dequeue` has no content (line 83) and `queue-operation` has no parent id (line 201). Its A3 concurrency cases assert one or two mints, not per-request binding under reversed hook order. The permitted two-process hook model makes lock acquisition order independent of transcript order.\n\n**Make PASS:** Add a P0.2 probe and enforceable invariant proving hook invocation order matches dequeue order, or a durable per-event identity that joins hook and dequeue. Add RED with two *unequal* prompts and reversed hook lock acquisition, asserting each write/turn maps to the correct request. If neither is available, apply the existing D6/D7 fail-closed disposition and propagate it to the matrix, AC, A3, A9, and live check. **Classification:** implementer plan/AC/test edit under existing operator rulings; an operator decision is needed only to weaken D1/D2, which is not authorized.\n\n### F-R13-02: no-`prompt_id` timeout can leave a late arrival unbound\n\n**Plan location:** Host binding table, line 83; FR-MCP-SESSIONTURN-001-AC009, line 201; A3, line 579.\n\n**Defect:** In the no-`prompt_id` branch, the hook exits `turn-open-failed` after two seconds without reserving, minting, or persisting a claim. If the transcript writes its enqueue/dequeue after that timeout, the bridge can mint the enqueue, but the plan says dequeue alone does not deliver until a hook claims. That hook is gone. A model-processed request can therefore remain queued and lose its D2 write target.\n\n**Evidence:** Lines 83 and 201 explicitly define the no-reservation/no-mint timeout; A3 explicitly says a dequeue alone changes nothing until hook claim and only tests `NoPromptId_NoEnqueueObserved_TurnOpenFailed_NoMint`.\n\n**Make PASS:** Define a durable late-claim or fail-closed lifecycle for this observed ordering, including how it prevents writes from being assigned to another request; add a RED case with enqueue/dequeue after the two-second hook timeout and assert final state, attribution, and exactly-one-mint behavior. Propagate to AC009, A3, A9 and the live check. **Classification:** implementer plan/AC/test edit within D1/D5/D6; no new operator decision if it fails closed.\n\n### F-R13-03: processing-time mint fallback contradicts D5/D6\n\n**Plan location:** Locked decisions, lines 30-32; host binding table, line 81; P0.2, line 170; FR-MCP-SESSIONTURN-008-AC006, line 256.\n\n**Defect:** P0.2 and AC006 require a host whose prompt hook fires only when processed and has no enqueue record to stay supported as a D7 limitation, minting queued messages at processing time. D5 requires mint at enqueue; D6 requires `turn_logging_unsupported` when no arrival mechanism exists. The common host rule at line 81 correctly says unsupported, so the plan contradicts itself and the locked decision.\n\n**Evidence:** Directly conflicting clauses at the listed lines. D7's capability documentation does not permit a first-sight or processing-time waiver of D5/D6.\n\n**Make PASS:** Make the P0.2 and AC006 outcome `turn_logging_unsupported` with zero mints/writes until an enqueue adapter exists, and propagate this to host rows, A8/A9 tests, feature matrix, and smoke tests. **Classification:** implementer edit to honor existing D5/D6; only an explicit operator reversal could retain the current fallback.\n\n### F-R13-04: commit-only model evidence is both accepted and refused\n\n**Plan location:** FR-MCP-SESSIONTURN-005-AC002, line 224; TR-MCP-PLUGIN-011 AC003, line 441; UC-3, line 481; wire stop text, line 548; A7, line 587.\n\n**Defect:** AC002 and UC-3 say a close without a model-authored action or design decision is refused, while TR-MCP-PLUGIN-011 AC003 explicitly keeps commits as model evidence. A model-authored commit and no separate action/decision is therefore both sufficient and insufficient. The remedy text omits the accepted commit path.\n\n**Evidence:** Current `plugins/core/lib-ps/plugin-hook.ps1:1002-1007,1051-1056` includes `auditCommits` and says a completed code-edit turn recorded only via commits must not be falsely blocked. The plan preserves that rule at line 441.\n\n**Make PASS:** Define one evidence predicate that includes model-authored commits if the kept TR governs, apply it identically to AC002, wire text, UC-3, A7 RED, and stop tests. If commits are to be removed as evidence, explicitly revise the kept TR and its acceptance contract; that would need operator direction. **Classification:** implementer edit using the preserved commit rule.\n\n### F-R13-05: generic stop instruction cannot clear every block\n\n**Plan location:** FR-MCP-SESSIONTURN-005-AC002/003/009, lines 224-225 and 231; wire stop text, line 548; UC-3, line 481.\n\n**Defect:** The plan promises every block names an accepted remedy, but the exact generic block text tells the model to call either `completeTurn` or `failTurn` after an action/decision. A withdrawn request requires `failTurn` with reason `withdrawn before delivery`, a design decision, and after S10 a request class; the generic alternative permits the wrong close. A Code/Docs completion-gate block can require class and terminal reviews, none named in the generic text. Following the exact generic text need not make the next Stop pass.\n\n**Evidence:** Specific AC009 at line 231 and the completion gate at lines 225, 267-282 conflict with the generic imperative at line 548.\n\n**Make PASS:** Specify code-specific text for `turn_in_progress`, `turn_withdrawn_unclosed`, and `session_turn_completion_gate`, including required fields and the valid close verb for the current status. Add RED that follows each instruction literally and proves the next Stop passes. **Classification:** implementer edit; no operator decision.\n\n### F-R13-06: current requirement-store totals are stale in plan and handoff\n\n**Plan location:** P0 baseline, line 167. **Handoff location:** Done in session, line 66.\n\n**Defect:** Both say the store is *now* FR 352, TR 480, TEST 512. Live read-only `workflow.requirements.listFr`, `listTr`, and `listTest` returned 353, 481, 513. The earlier +13/+18/+19 import can remain a dated historical statement, but the present-tense totals are false for the next agent.\n\n**Make PASS:** Label the 352/480/512 figures as the import-time snapshot and state the current 353/481/513 totals with a read timestamp, or instruct P0 to re-query rather than treating the snapshot as current. Sync plan, TODO description, and handoff. **Classification:** implementer factual correction; no operator decision.\n\n### F-R13-07: local pre-check lacks an external-writer RED case\n\n**Plan location:** FR-MCP-SESSIONCLASS-004-AC002, line 282; TEST-MCP-SESSIONREVIEW-005/008, lines 387 and 390; S8/S9, lines 609 and 611.\n\n**Defect:** AC002 requires a local completion pre-check to honor class/review data written by another process, host session, or surface before completion. S8/S9 list pre-check message tests and generic policy parity, but no named case where the local cache is stale and the server has valid new evidence. A local-only implementation can pass the listed tests while falsely refusing an allowed completion.\n\n**Make PASS:** Add PowerShell and Node RED cases in which an independent writer records class/reviews after the plugin's cached read, then completion succeeds; pair them with a genuinely missing-data refusal and assert no false local block. Map the cases to the cited TEST records. **Classification:** implementer test allocation; no operator decision.\n\n## Propagation, coordination, and prior-round check\n\nThe round-12 textual repairs are present: both `prompt_id` branches, queue-position wording, missing-evidence warning/block split, sanitized `otherNotes`, per-family root-id envelopes, and pre-PR live deploy checks. F-R13-01/02 show the arrival repair is not sufficient; F-R13-04/05 are sibling contradictions exposed by propagating the new rules. The prior r1-r11 fixes checked here remain represented: no `skipped_duplicate` public outcome, no `FR-SUPPORT-010G` as a proposed id, Complete reopens to TestDesign, C2 all-consumer acknowledgement, D11 single Copilot hook, D12 Node 18/20, nine-repo sync repairs, and D10 all-green slice HV. No new regression in C1-C12 order, the MEMORY-PROCESS-006 phase order, root-id field sets, score grammar, review outcomes, or FR/TR/TEST mapping edges was found. This does not erase the listed failures.\n\nNo operator decision is required to repair F-R13-01 through F-R13-07 under the locked decisions; weakening D1/D2, D5/D6, or the preserved commit rule would require a new operator ruling. No implementation was performed.\n",
+  "McpPersistenceProof": {
+    "method": "client.SessionLog.QueryAsync through Codex plugin wrapper",
+    "sessionId": "Codex-20261009T032846Z-plugin-session",
+    "requestId": "req-20261009T221157Z-hostile-plan-r13",
+    "status": "completed",
+    "exactMarkdownResponse": true,
+    "responseCharacters": 14444,
+    "actionCount": 3,
+    "decisionDialogCount": 1
+  }
+}

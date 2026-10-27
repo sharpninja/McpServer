@@ -1,0 +1,172 @@
+{
+  "TimestampUtc": "2026-10-11T12:43:22Z",
+  "ValidatorIdentity": {
+    "agent": "Codex CLI",
+    "version": "0.160.1",
+    "model": "gpt-6-sol",
+    "effort": "xhigh",
+    "sessionId": "01a12af4-4e37-7110-b1b4-502f0605e792",
+    "proofPath": "/home/sharpninja/.codex/sessions/2026/10/11/rollout-2026-10-11T07-33-36-01a12af4-4e37-7110-b1b4-502f0605e792.jsonl",
+    "proofOrdinals": [
+      0,
+      7
+    ]
+  },
+  "AddProfile": {
+    "skillRead": true,
+    "nonSkillMarkdownCount": 19,
+    "allReadInFull": true
+  },
+  "MarkerRead": {
+    "path": "/home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml",
+    "lineCount": 397,
+    "allReadInFull": true
+  },
+  "MemoryRead": {
+    "method": "workflow.memory.list",
+    "count": 13,
+    "allTextsReadInFull": true
+  },
+  "HeadSha": "5edbc2d75c3c0487d5b6d15989c6bff12e9448a2",
+  "ReviewClass": "Project plan readiness",
+  "Claims": [
+    {
+      "id": "P1",
+      "status": "FAIL",
+      "evidence": "23 TODO failures corroborated by live store, batch2 receipt and unchanged source; plan line 17 cites OpenAt2Traversal at lines 30-52 although declaration is BoundedTraversal.cs:1290-1296; line 11 labels old 93746b9b as HEAD.",
+      "fix": "Correct declaration citation and separate historical source baseline from current HEAD.",
+      "classification": "Implementer edit"
+    },
+    {
+      "id": "P2",
+      "status": "FAIL",
+      "evidence": "Plan section 3 R1 bounds one empty directory and R2 bounds temp-name replacement deletion; D3 may create several components outside after a moved ancestor; D4/D5 may delete original target after parent moves outside.",
+      "fix": "Prove current R1/R2 bounds or seek operator approval for precisely expanded residuals.",
+      "classification": "Operator decision plus implementer edit"
+    },
+    {
+      "id": "P3",
+      "status": "PASS",
+      "evidence": "D2 line 40 uses root anchor, previous verified parent and accumulated parentRelative; existing BoundedTraversal.cs:263-293 checks remain."
+    },
+    {
+      "id": "P4",
+      "status": "FAIL",
+      "evidence": "D3 line 47 may leave multiple components outside before final capture. D3 line 48 reuses OpenDirectoryNoCrossDevice, whose full lexical TryStatxPath at Client:231-242,438-446 can follow a newly swapped intermediate symlink before anchored open.",
+      "fix": "Use anchored no-follow capture, bound intermediate creations, and add post-create FUSE-symlink and moved-ancestor tests.",
+      "classification": "Implementer edit; operator decision if R1 must expand"
+    },
+    {
+      "id": "P5",
+      "status": "FAIL",
+      "evidence": "D4 seam runs after parent re-verification; moving parent then leaves D5 rename/unlink operating outside. D5 rename-back may leave another external entry renamed. D4 statx ENOENT says both IOException and false.",
+      "fix": "Set one missing outcome per stage and reconcile moved-parent effects with operator-approved residual contract.",
+      "classification": "Implementer edit plus operator decision"
+    },
+    {
+      "id": "P6",
+      "status": "PASS",
+      "evidence": "Existing native declarations and constants verified at Storage.cs:959-977, BoundedTraversal.cs:36-49,1290-1296 and Client:25-27; Linux man-pages support specified mkdirat, statx, O_PATH, openat2, renameat2 and unlinkat facts."
+    },
+    {
+      "id": "P7",
+      "status": "FAIL",
+      "evidence": "Live TR-MCP-USECASE-017 has no ACs and existing FR/TEST mappings and TODO links are correct; planned AC-004 asserts the false R1/R2-only external-effect bound.",
+      "fix": "Reconcile AC-004 with approved demonstrable containment contract before MCP write.",
+      "classification": "Implementer edit after operator decision"
+    },
+    {
+      "id": "P8",
+      "status": "FAIL",
+      "evidence": "Named moved-parent-before-rename test expects fail-closed despite after-check seam. No named first-statx-failure, nonempty rollback, rename-back collision, multiple-root-component moved ancestor or post-create symlink-to-FUSE test.",
+      "fix": "Correct impossible expectation and add deterministic named cases plus both harness inventories.",
+      "classification": "Implementer edit after operator decision"
+    },
+    {
+      "id": "P9",
+      "status": "FAIL",
+      "evidence": "G2 seven unit projects correct and Windows untouched; D4 line 54 contradictory ENOENT mapping and D5 lines 63-64 contain placeholder error message and missing rename-back failure message.",
+      "fix": "Specify exact false/failure and exception/message for each failure path, then test them.",
+      "classification": "Implementer edit"
+    }
+  ],
+  "Commands": [
+    {
+      "command": "git rev-parse HEAD; git log; git show; git status",
+      "exitCode": 0,
+      "result": "HEAD 5edbc2d7; only pre-existing benchmark dirt plus runner JSONL and these receipts observed"
+    },
+    {
+      "command": "git diff --quiet 26c47e15 HEAD -- src tests build/Build.Test.cs",
+      "exitCode": 0,
+      "result": "No source/test/build Test target change"
+    },
+    {
+      "command": "Invoke-CodexMcpPlugin.ps1 Status; workflow.memory.list",
+      "exitCode": 0,
+      "result": "Available; 13 live memories read"
+    },
+    {
+      "command": "Main workspace wrapper todo.get/getTr/getFr/getTest/listMappings with -ParamsObject and /tmp cache",
+      "exitCode": 0,
+      "result": "Live TODO/TR/FR/TEST/mapping readbacks succeeded"
+    },
+    {
+      "command": "Read plan, round-1 receipt, source/test ranges, batch2/P0.1 receipts, rollout session metadata",
+      "exitCode": 0,
+      "result": "Claims source-pinned"
+    },
+    {
+      "command": "Inspect /proc/self/mountinfo for /tmp",
+      "exitCode": 0,
+      "result": "Two sandbox mount rows, 2297 and 2332"
+    },
+    {
+      "command": "Targeted dotnet test",
+      "exitCode": null,
+      "result": "Not rerun; round-1 88-test result applies to unchanged source/tests and isolates five sandbox-only failures"
+    },
+    {
+      "command": "Primary Linux man-pages web search",
+      "exitCode": 0,
+      "result": "Search results obtained; direct page opens timed out"
+    }
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 87,
+  "Completeness": 82,
+  "Confidence": 97,
+  "PassCount": 2,
+  "FailCount": 7,
+  "UnknownCount": 0,
+  "FailList": [
+    "P1",
+    "P2",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "UnknownList": [],
+  "ImplementerFixes": [
+    "Correct section-2 declaration citation and HEAD label",
+    "Use anchored no-follow post-create capture and test symlink swap",
+    "Make D4/D5 missing and restoration errors exact",
+    "Reconcile AC-004 after operator ruling",
+    "Add missing adversarial tests and correct moved-parent expectation"
+  ],
+  "OperatorDecisionFails": [
+    "Choose whether to accept expanded moved-parent external creation/rename/deletion residuals or require stronger containment preserving only current R1/R2"
+  ],
+  "ReviewerMcpTurn": {
+    "sessionId": "Codex-20261011T123908Z-plugin-session",
+    "requestId": "req-20261011T123916Z-linuxexportcreate-r2"
+  },
+  "ReceiptPaths": [
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-linuxexportcreate-r2-20261011T123336Z.md",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-linuxexportcreate-r2-20261011T123336Z.json",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261011T123336Z-plan-readiness-linuxexportcreate-r2.request.jsonl",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261011T123336Z-plan-readiness-linuxexportcreate-r2.response.jsonl"
+  ]
+}

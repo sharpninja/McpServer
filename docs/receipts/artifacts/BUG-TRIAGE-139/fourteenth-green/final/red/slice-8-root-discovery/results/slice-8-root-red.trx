@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="54cfed0b-0b2a-47ee-b18d-143c03ebdd2a" name="SYSTEM@PAYTON-LEGION2 2026-09-04 01:10:43" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-04T01:10:43.8977757-05:00" queuing="2026-09-04T01:10:43.8977760-05:00" start="2026-09-04T01:10:41.5800346-05:00" finish="2026-09-04T01:10:43.9033832-05:00" />
+  <TestSettings name="default" id="54704677-7072-49eb-9707-ceec5c493b14">
+    <Deployment runDeploymentRoot="SYSTEM_PAYTON-LEGION2_2026-09-04_01_10_43" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="948c793f-0e17-4f8b-a1fd-51cdc8848332" testId="f5b7df6f-3a43-3580-621a-a8126c9cdaf3" testName="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.RepositoryRoot_ExternalBinaryDirectoryWithoutOverride_ResolvesCheckout" computerName="PAYTON-LEGION2" duration="00:00:00.0162929" startTime="2026-09-04T01:10:43.7379610-05:00" endTime="2026-09-04T01:10:43.7783805-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="948c793f-0e17-4f8b-a1fd-51cdc8848332">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Explicit repository root is invalid: C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-8-root-discovery\artifacts\bin\McpServer.Support.Mcp.Tests\debug</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Infrastructure.RepositoryEvidenceTestSupport.ResolveRepositoryRoot() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Infrastructure\RepositoryEvidenceTestSupport.cs:line 42&#xD;
+   at McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.RepositoryRoot_ExternalBinaryDirectoryWithoutOverride_ResolvesCheckout() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Documentation\BugTriage139FourteenthHarnessTests.cs:line 34&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="304de068-6fed-400f-82ab-355a1abee5c7" testId="95dedfe3-9504-93af-50aa-69c39fdd8cc0" testName="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.RepositoryRootConsumers_DelegateToSharedResolver" computerName="PAYTON-LEGION2" duration="00:00:00.0055624" startTime="2026-09-04T01:10:43.7862510-05:00" endTime="2026-09-04T01:10:43.7945211-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="304de068-6fed-400f-82ab-355a1abee5c7">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.DoesNotContain() Failure: Sub-string found&#xD;
+                                           ↓ (pos 8995)&#xD;
+String: ···".Ordinal);\r\n    }\r\n\r\n    private static string Res"···&#xD;
+Found:  "private static string ResolveRepositoryRoot("</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.RepositoryRootConsumers_DelegateToSharedResolver() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Documentation\BugTriage139FourteenthHarnessTests.cs:line 87&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.RepositoryRootConsumers_DelegateToSharedResolver" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-fourteenth-20260904t050327z\red\slice-8-root-discovery\artifacts\bin\mcpserver.support.mcp.tests\debug\mcpserver.support.mcp.tests.dll" id="95dedfe3-9504-93af-50aa-69c39fdd8cc0">
+      <Execution id="304de068-6fed-400f-82ab-355a1abee5c7" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-8-root-discovery\artifacts\bin\McpServer.Support.Mcp.Tests\debug\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests" name="RepositoryRootConsumers_DelegateToSharedResolver" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.RepositoryRoot_ExternalBinaryDirectoryWithoutOverride_ResolvesCheckout" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-fourteenth-20260904t050327z\red\slice-8-root-discovery\artifacts\bin\mcpserver.support.mcp.tests\debug\mcpserver.support.mcp.tests.dll" id="f5b7df6f-3a43-3580-621a-a8126c9cdaf3">
+      <Execution id="948c793f-0e17-4f8b-a1fd-51cdc8848332" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-8-root-discovery\artifacts\bin\McpServer.Support.Mcp.Tests\debug\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests" name="RepositoryRoot_ExternalBinaryDirectoryWithoutOverride_ResolvesCheckout" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="f5b7df6f-3a43-3580-621a-a8126c9cdaf3" executionId="948c793f-0e17-4f8b-a1fd-51cdc8848332" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="95dedfe3-9504-93af-50aa-69c39fdd8cc0" executionId="304de068-6fed-400f-82ab-355a1abee5c7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="2" executed="2" passed="0" failed="2" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.36]   Discovering: McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.37]   Discovered:  McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.62]   Starting:    McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.74]       System.InvalidOperationException : Explicit repository root is invalid: C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-8-root-discovery\artifacts\bin\McpServer.Support.Mcp.Tests\debug&#xD;
+[xUnit.net 00:00:01.74]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.74]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Infrastructure\RepositoryEvidenceTestSupport.cs(42,0): at McpServer.Support.Mcp.Tests.Infrastructure.RepositoryEvidenceTestSupport.ResolveRepositoryRoot()&#xD;
+[xUnit.net 00:00:01.74]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Documentation\BugTriage139FourteenthHarnessTests.cs(34,0): at McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.RepositoryRoot_ExternalBinaryDirectoryWithoutOverride_ResolvesCheckout()&#xD;
+[xUnit.net 00:00:01.74]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.74]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.75]       Assert.DoesNotContain() Failure: Sub-string found&#xD;
+[xUnit.net 00:00:01.75]                                                  ↓ (pos 8995)&#xD;
+[xUnit.net 00:00:01.75]       String: ···".Ordinal);\r\n    }\r\n\r\n    private static string Res"···&#xD;
+[xUnit.net 00:00:01.75]       Found:  "private static string ResolveRepositoryRoot("&#xD;
+[xUnit.net 00:00:01.75]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.75]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Documentation\BugTriage139FourteenthHarnessTests.cs(87,0): at McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.RepositoryRootConsumers_DelegateToSharedResolver()&#xD;
+[xUnit.net 00:00:01.75]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.75]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.76]   Finished:    McpServer.Support.Mcp.Tests (ID = 'ded772e0f075ddb9b6f5176feb8bc7270b686e73d9b1781ad0d205cb5d506912')&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-09-04T01:10:43.7871489-05:00">
+        <Text>[xUnit.net 00:00:01.74]     McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.RepositoryRoot_ExternalBinaryDirectoryWithoutOverride_ResolvesCheckout [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-09-04T01:10:43.8012702-05:00">
+        <Text>[xUnit.net 00:00:01.75]     McpServer.Support.Mcp.Tests.Documentation.BugTriage139FourteenthHarnessTests.RepositoryRootConsumers_DelegateToSharedResolver [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

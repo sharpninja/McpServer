@@ -1,8 +1,8 @@
-# McpServer Agent Plugin Feature Matrix
+# QBrainAi Agent Plugin Feature Matrix
 
-This document provides a feature comparison matrix for the eight `mcpserver-*-plugin` packages that integrate the local McpServer workflow surface (session logging, TODO management, requirements traceability, GraphRAG, and workspace lifecycle) with different AI coding agents and platforms.
+This document provides a feature comparison matrix for the eight `mcpserver-*-plugin` packages that integrate the local QBrainAi workflow surface (session logging, TODO management, requirements traceability, GraphRAG, and workspace lifecycle) with different AI coding agents and platforms.
 
-All plugins share the core contract defined by `AGENTS-README-FIRST.yaml`: marker-based discovery with HMAC-SHA256 signature verification, health nonce challenges, `mcpserver-repl --agent-stdio` transport (or equivalent), and offline YAML failsafe caching.
+All plugins share the core contract defined by `AGENTS-README-FIRST.yaml`: marker-based discovery with HMAC-SHA256 signature verification, health nonce challenges, `qbrain-ai-repl --agent-stdio` transport (or equivalent), and offline YAML failsafe caching.
 
 ## Plugins
 
@@ -22,7 +22,7 @@ All plugins share the core contract defined by `AGENTS-README-FIRST.yaml`: marke
 | Feature | Claude Code | Claude Cowork | Cline | Cline v2 | Codex | Copilot | Grok | OpenCode |
 |---------|-------------|---------------|-------|----------|-------|---------|------|----------|
 | **Target Platform** | Claude Code | Claude Cowork/Desktop | Cline (VS Code MCP) | Cline V2 AgentPlugin | Codex CLI | GitHub Copilot | Grok 4.3 CLI/TUI | OpenCode |
-| **Integration Mechanism** | Claude hooks + plugin manifest + skills | .claude-plugin (mcpServers + skills + userConfig) | MCP Server (stdio, MCP SDK) | AgentPlugin (createTool + hooks cap) | .codex-plugin (skillsPath) + lib scripts | plugin.json (skills[] + hooks + mcpServers) | Grok/Claude-compatible plugin manifests + native SKILL.md + hooks + mcpServers | OpenCode plugin SDK (createMcpServerPlugin) |
+| **Integration Mechanism** | Claude hooks + plugin manifest + skills | .claude-plugin (mcpServers + skills + userConfig) | QBrain.AI (stdio, MCP SDK) | AgentPlugin (createTool + hooks cap) | .codex-plugin (skillsPath) + lib scripts | plugin.json (skills[] + hooks + mcpServers) | Grok/Claude-compatible plugin manifests + native SKILL.md + hooks + mcpServers | OpenCode plugin SDK (createQBrainAiPlugin) |
 | **Core Workflow Tools** | Full (TODO, Session, Reqs, GraphRAG, Workspace) | Full (same 5) | Full (via MCP tools) | Full (5 tools) | Full (5 + guidance) | Full (5) | Full (5) | Full (many explicit tools) |
 | **Additional Dedicated Skills** | claude-hook-validation, claude-hook-wiring | - | - | - | device, enforcement, workflow | - | - | - |
 | **Native SKILL.md Files** | Yes (17) | Yes (14) | Yes (10) | Yes (10) | Yes (18) | Yes (14) | Yes (15) | Yes (10) |
@@ -37,7 +37,7 @@ All plugins share the core contract defined by `AGENTS-README-FIRST.yaml`: marke
 | **Subagent / Session Log Ownership** | Models write session logs through workflow tools; plugin hooks only open/gate turns | Models write logs; no transcript ingestion helpers | Model-owned via MCP session tools | Model-owned via MCP session tools | Model-owned through enforcement scripts; no transcript parsing | Models write logs; hooks only open/gate turns | Models write logs; inherited hooks do not ingest transcripts | Model-owned via MCP/session tools |
 | **Android Device Validation (adb_step loops)** | No | No | No | No | Yes (dedicated device skill + guidance) | No | No | No |
 | **Marker + HMAC Signature + Nonce Bootstrap** | Yes | Yes (userConfig.workspace_path + strict contract) | Yes (fullBootstrap) | Yes | Yes | Yes | Yes (skills + hooks) | Yes |
-| **REPL Transport (mcpserver-repl --agent-stdio)** | Yes (primary) | Yes (stdio connector) | Yes (ReplBridge) | Yes (ReplBridge) | Yes | Yes (declared in mcpServers) | Via plugin shim helpers; sidecar .mcp.json uses Streamable HTTP MCP because agent-stdio is not an MCP transport | Yes (ReplBridge) |
+| **REPL Transport (qbrain-ai-repl --agent-stdio)** | Yes (primary) | Yes (stdio connector) | Yes (ReplBridge) | Yes (ReplBridge) | Yes | Yes (declared in mcpServers) | Via plugin shim helpers; sidecar .mcp.json uses Streamable HTTP MCP because agent-stdio is not an MCP transport | Yes (ReplBridge) |
 | **Unique Capabilities** | Auto-connect, rich hook surface, subagent import | Cowork-specific packaging, userConfig prompt, local stdio emphasis, cowork-contract | Classic MCP server bridge, explicit ENFORCEMENT.md | V2 AgentPlugin surface, full TS types | Workflow guidance, device loops, model-authored session logging, batch req validate | Explicit mcpServers + skills declaration, Copilot status helper | Native Grok skills priority + PWSh modules + Grok/Claude-compatible manifests + GROK-USAGE.md | Long explicit tool surface in README, OpenCode SDK |
 | **Primary Implementation** | Bash/Pwsh + Node helpers + SKILL.md | Node scripts + SKILL.md + .mcp.json | TypeScript (MCP SDK server) | TypeScript (Cline V2 AgentPlugin) | PowerShell/shell enforcement scripts + SKILL.md | Bash + SKILL.md + hooks.json | SKILL.md (primary) + Bash/Pwsh/Node | TypeScript (OpenCode plugin) |
 | **Test Framework** | bats + PowerShell Pester | bats + PowerShell Pester | Jest (TS) | Jest (TS, incl. workspace) | bats + JS | bats + helpers | bats + PowerShell Pester | Jest (TS) |
@@ -80,4 +80,4 @@ PLAN-TXNKEYSERVER-001 is shipped on `develop` (`8f30caf`) and live on the Linux 
 
 ---
 
-*Generated for the McpServer ecosystem. All plugins are MIT licensed and follow the Byrd Development Process (tests first with mocks, then implementation, all tests green).*
+*Generated for the QBrainAi ecosystem. All plugins are MIT licensed and follow the Byrd Development Process (tests first with mocks, then implementation, all tests green).*

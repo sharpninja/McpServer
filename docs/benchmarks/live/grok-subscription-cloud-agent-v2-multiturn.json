@@ -19,12 +19,12 @@
     },
     "JOB-DEC-001": {
       "EST-001": {
-        "without_memory": "I'll hold this in the current transcript: local McpServer should run native Postgres on the host, and Docker Postgres is rejected. Nothing is being written to a durable memory store.",
-        "with_memory": "Logged the workspace decision with memory_remember: local McpServer uses native Postgres, not Docker."
+        "without_memory": "I'll hold this in the current transcript: local QBrainAi should run native Postgres on the host, and Docker Postgres is rejected. Nothing is being written to a durable memory store.",
+        "with_memory": "Logged the workspace decision with memory_remember: local QBrainAi uses native Postgres, not Docker."
       },
       "QRY-001": {
         "without_memory": "The earlier establish turn in this conversation said the local database setup is native Postgres rather than Docker.",
-        "with_memory": "Recalled decision text is BENCH-DECISION-DB=native-postgres-not-docker, which means native Postgres for local McpServer."
+        "with_memory": "Recalled decision text is BENCH-DECISION-DB=native-postgres-not-docker, which means native Postgres for local QBrainAi."
       }
     },
     "JOB-FACT-001": {

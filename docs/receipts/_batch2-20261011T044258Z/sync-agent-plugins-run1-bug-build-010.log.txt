@@ -1,0 +1,138 @@
+started 2026-10-11T03:36:44Z dotnet 10.0.201
+​
+███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+██║ ╚████║╚██████╔╝██║  ██╗███████╗
+╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+​
+NUKE Execution Engine version 9.0.4 (Linux,.NETCoreApp,Version=v10.0)
+​
+​
+╬═════════════════════
+║ SyncAgentPlugins
+╬════════════
+​
+22:36:53 [INF] Plugin promotion allowed for environment Development (approval required=False).
+22:36:53 [INF] Syncing plugin core into plugins/core/.staged-plugin
+22:36:53 [INF] > /home/sharpninja/.local/bin/mono /home/sharpninja/.local/bin/pwsh.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "plugins/core/sync/sync-plugin-core.ps1" -PluginRoot "plugins/core/.staged-plugin"
+22:36:54 [DBG] synced 16 core files into plugins/core/.staged-plugin/lib (core 1badbb29)
+22:36:54 [INF] Generating claude-code PowerShell wrappers in plugins/core/.staged-plugin
+22:36:54 [INF] > /home/sharpninja/.local/bin/mono /home/sharpninja/.local/bin/pwsh.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "plugins/core/hooks-templates/generate-wrappers.ps1" -HostName "claude-code" -PluginRoot "plugins/core/.staged-plugin"
+22:36:55 [DBG] generated claude-code PowerShell wrappers in plugins/core/.staged-plugin/hooks/scripts
+22:36:55 [INF] > /home/sharpninja/.local/bin/mono /home/sharpninja/.local/bin/pwsh.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "plugins/core/sync/check-core-integrity.ps1" -PluginRoot "plugins/core/.staged-plugin"
+22:36:55 [DBG] core integrity OK: 14 files match
+22:36:55 [INF] Syncing plugin core into /home/sharpninja/github/mcpserver-claude-code-plugin
+22:36:55 [INF] > /home/sharpninja/.local/bin/mono /home/sharpninja/.local/bin/pwsh.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "plugins/core/sync/sync-plugin-core.ps1" -PluginRoot "/home/sharpninja/github/mcpserver-claude-code-plugin"
+22:36:56 [DBG] synced 16 core files into /home/sharpninja/github/mcpserver-claude-code-plugin/lib (core 1badbb29)
+22:36:56 [INF] Generating claude-code PowerShell wrappers in /home/sharpninja/github/mcpserver-claude-code-plugin
+22:36:56 [INF] > /home/sharpninja/.local/bin/mono /home/sharpninja/.local/bin/pwsh.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "plugins/core/hooks-templates/generate-wrappers.ps1" -HostName "claude-code" -PluginRoot "/home/sharpninja/github/mcpserver-claude-code-plugin"
+22:36:57 [DBG] generated claude-code PowerShell wrappers in /home/sharpninja/github/mcpserver-claude-code-plugin/hooks/scripts
+22:36:57 [INF] > /home/sharpninja/.local/bin/mono /home/sharpninja/.local/bin/pwsh.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "plugins/core/sync/check-core-integrity.ps1" -PluginRoot "/home/sharpninja/github/mcpserver-claude-code-plugin"
+22:36:57 [DBG] core integrity OK: 14 files match
+22:36:57 [INF] Syncing plugin core into /home/sharpninja/github/mcpserver-claude-cowork-plugin
+22:36:57 [INF] > /home/sharpninja/.local/bin/mono /home/sharpninja/.local/bin/pwsh.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "plugins/core/sync/sync-plugin-core.ps1" -PluginRoot "/home/sharpninja/github/mcpserver-claude-cowork-plugin"
+22:36:58 [DBG] synced 16 core files into /home/sharpninja/github/mcpserver-claude-cowork-plugin/lib (core 1badbb29)
+22:36:58 [INF] Generating claude-cowork PowerShell wrappers in /home/sharpninja/github/mcpserver-claude-cowork-plugin
+22:36:58 [INF] > /home/sharpninja/.local/bin/mono /home/sharpninja/.local/bin/pwsh.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "plugins/core/hooks-templates/generate-wrappers.ps1" -HostName "claude-cowork" -PluginRoot "/home/sharpninja/github/mcpserver-claude-cowork-plugin"
+22:36:59 [DBG] generated claude-cowork PowerShell wrappers in /home/sharpninja/github/mcpserver-claude-cowork-plugin/hooks/scripts
+22:36:59 [INF] > /home/sharpninja/.local/bin/mono /home/sharpninja/.local/bin/pwsh.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "plugins/core/sync/check-core-integrity.ps1" -PluginRoot "/home/sharpninja/github/mcpserver-claude-cowork-plugin"
+22:36:59 [DBG] core integrity OK: 14 files match
+22:36:59 [INF] Syncing plugin core into /home/sharpninja/github/mcpserver-cline-plugin
+22:36:59 [INF] > /home/sharpninja/.local/bin/mono /home/sharpninja/.local/bin/pwsh.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "plugins/core/sync/sync-plugin-core.ps1" -PluginRoot "/home/sharpninja/github/mcpserver-cline-plugin"
+22:37:00 [DBG] synced 16 core files into /home/sharpninja/github/mcpserver-cline-plugin/lib (core 1badbb29)
+22:37:00 [INF] No hook wrappers are generated for /home/sharpninja/github/mcpserver-cline-plugin
+22:37:00 [INF] > /home/sharpninja/.local/bin/mono /home/sharpninja/.local/bin/pwsh.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "plugins/core/sync/check-core-integrity.ps1" -PluginRoot "/home/sharpninja/github/mcpserver-cline-plugin"
+22:37:01 [DBG] core integrity OK: 14 files match
+22:37:01 [INF] Syncing plugin core into /home/sharpninja/github/mcpserver-cline-v2-plugin
+22:37:01 [INF] > /home/sharpninja/.local/bin/mono /home/sharpninja/.local/bin/pwsh.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "plugins/core/sync/sync-plugin-core.ps1" -PluginRoot "/home/sharpninja/github/mcpserver-cline-v2-plugin"
+22:37:02 [DBG] synced 16 core files into /home/sharpninja/github/mcpserver-cline-v2-plugin/lib (core 1badbb29)
+22:37:02 [INF] No hook wrappers are generated for /home/sharpninja/github/mcpserver-cline-v2-plugin
+22:37:02 [INF] > /home/sharpninja/.local/bin/mono /home/sharpninja/.local/bin/pwsh.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "plugins/core/sync/check-core-integrity.ps1" -PluginRoot "/home/sharpninja/github/mcpserver-cline-v2-plugin"
+22:37:03 [DBG] core integrity OK: 14 files match
+22:37:03 [INF] Syncing plugin core into /home/sharpninja/github/mcpserver-codex-plugin
+22:37:03 [INF] > /home/sharpninja/.local/bin/mono /home/sharpninja/.local/bin/pwsh.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "plugins/core/sync/sync-plugin-core.ps1" -PluginRoot "/home/sharpninja/github/mcpserver-codex-plugin"
+22:37:04 [DBG] synced 16 core files into /home/sharpninja/github/mcpserver-codex-plugin/lib (core 1badbb29)
+22:37:04 [INF] Generating codex PowerShell wrappers in /home/sharpninja/github/mcpserver-codex-plugin
+22:37:04 [INF] > /home/sharpninja/.local/bin/mono /home/sharpninja/.local/bin/pwsh.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "plugins/core/hooks-templates/generate-wrappers.ps1" -HostName "codex" -PluginRoot "/home/sharpninja/github/mcpserver-codex-plugin"
+22:37:04 [DBG] generated codex PowerShell wrappers in /home/sharpninja/github/mcpserver-codex-plugin/lib
+22:37:04 [INF] > /home/sharpninja/.local/bin/mono /home/sharpninja/.local/bin/pwsh.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "plugins/core/sync/check-core-integrity.ps1" -PluginRoot "/home/sharpninja/github/mcpserver-codex-plugin"
+22:37:05 [DBG] core integrity OK: 14 files match
+22:37:05 [INF] Syncing plugin core into /home/sharpninja/github/mcpserver-copilot-plugin
+22:37:05 [INF] > /home/sharpninja/.local/bin/mono /home/sharpninja/.local/bin/pwsh.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "plugins/core/sync/sync-plugin-core.ps1" -PluginRoot "/home/sharpninja/github/mcpserver-copilot-plugin"
+22:37:06 [DBG] synced 16 core files into /home/sharpninja/github/mcpserver-copilot-plugin/lib (core 1badbb29)
+22:37:06 [INF] Generating copilot PowerShell wrappers in /home/sharpninja/github/mcpserver-copilot-plugin
+22:37:06 [INF] > /home/sharpninja/.local/bin/mono /home/sharpninja/.local/bin/pwsh.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "plugins/core/hooks-templates/generate-wrappers.ps1" -HostName "copilot" -PluginRoot "/home/sharpninja/github/mcpserver-copilot-plugin"
+22:37:06 [DBG] generated copilot PowerShell wrappers in /home/sharpninja/github/mcpserver-copilot-plugin/hooks/scripts
+22:37:06 [INF] > /home/sharpninja/.local/bin/mono /home/sharpninja/.local/bin/pwsh.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "plugins/core/sync/check-core-integrity.ps1" -PluginRoot "/home/sharpninja/github/mcpserver-copilot-plugin"
+22:37:07 [DBG] core integrity OK: 14 files match
+22:37:07 [INF] Syncing plugin core into /home/sharpninja/github/mcpserver-grok-plugin
+22:37:07 [INF] > /home/sharpninja/.local/bin/mono /home/sharpninja/.local/bin/pwsh.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "plugins/core/sync/sync-plugin-core.ps1" -PluginRoot "/home/sharpninja/github/mcpserver-grok-plugin"
+22:37:08 [DBG] synced 16 core files into /home/sharpninja/github/mcpserver-grok-plugin/lib (core 1badbb29)
+22:37:08 [INF] Generating grok PowerShell wrappers in /home/sharpninja/github/mcpserver-grok-plugin
+22:37:08 [INF] > /home/sharpninja/.local/bin/mono /home/sharpninja/.local/bin/pwsh.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "plugins/core/hooks-templates/generate-wrappers.ps1" -HostName "grok" -PluginRoot "/home/sharpninja/github/mcpserver-grok-plugin"
+22:37:08 [DBG] generated grok PowerShell wrappers in /home/sharpninja/github/mcpserver-grok-plugin/hooks/scripts
+22:37:08 [INF] > /home/sharpninja/.local/bin/mono /home/sharpninja/.local/bin/pwsh.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "plugins/core/sync/check-core-integrity.ps1" -PluginRoot "/home/sharpninja/github/mcpserver-grok-plugin"
+22:37:09 [DBG] core integrity OK: 14 files match
+22:37:09 [INF] Syncing plugin core into /home/sharpninja/github/mcpserver-opencode-plugin
+22:37:09 [INF] > /home/sharpninja/.local/bin/mono /home/sharpninja/.local/bin/pwsh.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "plugins/core/sync/sync-plugin-core.ps1" -PluginRoot "/home/sharpninja/github/mcpserver-opencode-plugin"
+22:37:10 [DBG] synced 16 core files into /home/sharpninja/github/mcpserver-opencode-plugin/lib (core 1badbb29)
+22:37:10 [INF] No hook wrappers are generated for /home/sharpninja/github/mcpserver-opencode-plugin
+22:37:10 [INF] > /home/sharpninja/.local/bin/mono /home/sharpninja/.local/bin/pwsh.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "plugins/core/sync/check-core-integrity.ps1" -PluginRoot "/home/sharpninja/github/mcpserver-opencode-plugin"
+22:37:10 [DBG] core integrity OK: 14 files match
+22:37:11 [INF] Node plugin core is missing typescript/bin/tsc; running npm ci in plugins/core/lib-node
+22:37:11 [INF] > /home/sharpninja/.local/share/mise/shims/npm ci
+22:37:11 [INF] @ plugins/core/lib-node
+22:37:12 [ERR] npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+22:37:12 [ERR] npm warn deprecated glob@7.2.3: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+22:37:15 [DBG] 
+22:37:15 [DBG] added 283 packages, and audited 284 packages in 5s
+22:37:15 [DBG] 
+22:37:15 [DBG] 35 packages are looking for funding
+22:37:15 [DBG]   run `npm fund` for details
+22:37:15 [DBG] 
+22:37:15 [DBG] 36 vulnerabilities (3 moderate, 32 high, 1 critical)
+22:37:15 [DBG] 
+22:37:15 [DBG] To address issues that do not require attention, run:
+22:37:15 [DBG]   npm audit fix
+22:37:15 [DBG] 
+22:37:15 [DBG] To address all issues (including breaking changes), run:
+22:37:15 [DBG]   npm audit fix --force
+22:37:15 [DBG] 
+22:37:15 [DBG] Run `npm audit` for details.
+22:37:15 [INF] Building Node plugin core package for 3 plugin vendor target(s)
+22:37:15 [INF] > /home/sharpninja/.local/share/mise/shims/npm run build
+22:37:15 [INF] @ plugins/core/lib-node
+22:37:16 [DBG] 
+22:37:16 [DBG] > @qbrainai/qbrain-ai-plugin-core@0.2.0 build
+22:37:16 [DBG] > tsc -p tsconfig.json
+22:37:16 [DBG] 
+22:37:17 [INF] > /home/sharpninja/.local/share/mise/shims/npm pack --silent
+22:37:17 [INF] @ plugins/core/lib-node
+22:37:17 [ERR] Target SyncAgentPlugins has thrown an exception
+System.InvalidOperationException: npm pack produced 'qbrainai-qbrain-ai-plugin-core-0.2.0.tgz' but plugins/core/lib-node/package.json declares version 0.2.0 (expected 'sharpninja-mcpserver-plugin-core-0.2.0.tgz').
+   at Build.RefreshNodePluginCoreVendorPackages(AbsolutePath rootDirectory, IReadOnlyList`1 pluginRoots) in build/Build.SyncAgentPlugins.cs:line 554
+   at Build.<get_SyncAgentPlugins>b__96_1() in build/Build.SyncAgentPlugins.cs:line 61
+   at Nuke.Common.Execution.BuildExecutor.<>c.<Execute>b__4_2(Action x) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+   at System.Collections.Generic.List`1.ForEach(Action`1 action)
+   at Nuke.Common.Execution.BuildExecutor.Execute(NukeBuild build, ExecutableTarget target, IReadOnlyCollection`1 previouslyExecutedTargets, Boolean failureMode) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+​
+╬══════════════════════
+║ Errors & Warnings
+╬═════════════
+​
+[ERR] SyncAgentPlugins: npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+[ERR] SyncAgentPlugins: npm warn deprecated glob@7.2.3: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+[ERR] SyncAgentPlugins: Target SyncAgentPlugins has thrown an exception
+​
+════════════════════════════════════════
+Target              Status      Duration
+────────────────────────────────────────
+SyncAgentPlugins    Failed          0:24   // InvalidOperationException: npm pack produced 'qbrainai-qbrain-ai-plugin-core-0.2.0.tgz' but plugins/core/lib-node/package.json declares version 0.2.0 (expected 'sharpninja-mcpserver-plugin-core-0.2.0.tgz').
+────────────────────────────────────────
+Total                               0:24
+════════════════════════════════════════
+​
+Build failed on 10/10/2026 10:37:17 PM. (╯°□°）╯︵ ┻━┻
+exit=255 finished 2026-10-11T03:37:18Z

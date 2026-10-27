@@ -1,0 +1,25 @@
+{
+  "layout": "elk",
+  "sequence": {
+    "useMaxWidth": false,
+    "diagramMarginY": 16,
+    "diagramMarginX": 16,
+    "wrap": true,
+    "width": 180,
+    "messageFontSize": 16,
+    "noteFontSize": 16,
+    "actorFontSize": 16
+  },
+  "flowchart": {
+    "defaultRenderer": "elk",
+    "curve": "linear",
+    "htmlLabels": true
+  },
+  "theme": "default",
+  "themeVariables": {
+    "fontSize": "16px"
+  },
+  "er": {
+    "layoutDirection": "TB"
+  }
+}

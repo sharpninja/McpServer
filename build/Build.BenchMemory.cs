@@ -35,7 +35,7 @@ partial class Build
             // TOKEN MEANS (primary metric) must stay the first metrics block before DotNetTest.
             PrintTokenMeansFirst(plugin);
 
-            var project = TestsDirectory / "McpServer.Support.Mcp.Tests" / "McpServer.Support.Mcp.Tests.csproj";
+            var project = TestsDirectory / "QBrainAi.Support.Mcp.Tests" / "QBrainAi.Support.Mcp.Tests.csproj";
             DotNetTest(_ => _
                 .SetProjectFile(project)
                 .SetConfiguration(Configuration)

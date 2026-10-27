@@ -1,0 +1,218 @@
+using System.Text;
+using QBrainAi.Support.Mcp.Controllers;
+using QBrainAi.Support.Mcp.Indexing;
+using QBrainAi.Support.Mcp.Ingestion;
+using QBrainAi.Support.Mcp.Models;
+using QBrainAi.Support.Mcp.Options;
+using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Storage;
+using QBrainAi.TransactionSecurity.Models;
+using QBrainAi.TransactionSecurity.Options;
+using QBrainAi.TransactionSecurity.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Abstractions;
+using NSubstitute;
+using Xunit;
+using MsOptions = Microsoft.Extensions.Options;
+
+namespace QBrainAi.Support.Mcp.Tests.Controllers;
+
+/// <summary>
+/// TEST-MCP-161: Verifies context rebuild and website ingest endpoints fail closed while required turn transactions are active.
+/// </summary>
+public sealed class ContextControllerTransactionGateTests : IDisposable
+{
+    private readonly McpDbContext _db;
+    private readonly IContextSearchService _searchService = Substitute.For<IContextSearchService>();
+    private readonly IGraphRagService _graphRagService = Substitute.For<IGraphRagService>();
+    private readonly IWebsiteIngestor _websiteIngestor = Substitute.For<IWebsiteIngestor>();
+    private readonly WorkspaceContext _workspaceContext = new() { WorkspacePath = @"Q:\__mcp_unit_test__\QBrainAi" };
+
+    /// <summary>Initializes the in-memory context database used by these controller tests.</summary>
+    public ContextControllerTransactionGateTests()
+    {
+        var dbOptions = new DbContextOptionsBuilder<McpDbContext>()
+            .UseInMemoryDatabase($"ContextControllerTransactionGateTests_{Guid.NewGuid():N}")
+            .Options;
+        _db = new McpDbContext(dbOptions);
+        _db.Database.EnsureCreated();
+    }
+
+    /// <summary>Disposes the in-memory database.</summary>
+    public void Dispose()
+    {
+        _db.Dispose();
+    }
+
+    /// <summary>rebuild-index delegates to the search index rebuild path while required transactions are active.</summary>
+    [Fact]
+    public async Task RebuildIndexAsync_WhenTransactionsRequired_DelegatesToRebuild()
+    {
+        _searchService.RebuildAsync(Arg.Any<CancellationToken>()).Returns(Task.CompletedTask);
+        var controller = CreateController(new CapturingCoordinator(enabled: true));
+
+        var result = await controller.RebuildIndexAsync(CancellationToken.None).ConfigureAwait(true);
+
+        Assert.IsType<OkObjectResult>(result.Result);
+        await _searchService.Received(1)
+            .RebuildAsync(Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
+    /// <summary>ingest-website delegates to the website ingestor while required transactions are active.</summary>
+    [Fact]
+    public async Task IngestWebsiteAsync_WhenTransactionsRequired_DelegatesToWebsiteIngestor()
+    {
+        _websiteIngestor
+            .IngestAsync(Arg.Any<WebsiteIngestRequest>(), Arg.Any<Func<WebsiteIngestPage, Task>?>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult<IReadOnlyList<WebsiteIngestPage>>([CreatePage()]));
+        var controller = CreateController(new CapturingCoordinator(enabled: true));
+
+        var result = await controller.IngestWebsiteAsync(new WebsiteIngestRequest { Url = "https://example.test/docs" }, CancellationToken.None)
+            .ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(result.Result);
+        var ingestResult = Assert.IsType<WebsiteIngestResult>(ok.Value);
+        Assert.Equal(1, ingestResult.DocumentsIngested);
+        await _websiteIngestor.Received(1)
+            .IngestAsync(Arg.Any<WebsiteIngestRequest>(), Arg.Any<Func<WebsiteIngestPage, Task>?>(), Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
+    /// <summary>streaming website ingest starts when the coordinator is degraded.</summary>
+    [Fact]
+    public async Task IngestWebsiteStreamAsync_WhenCoordinatorDegraded_DelegatesToWebsiteIngestor()
+    {
+        _websiteIngestor
+            .IngestAsync(Arg.Any<WebsiteIngestRequest>(), Arg.Any<Func<WebsiteIngestPage, Task>?>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult<IReadOnlyList<WebsiteIngestPage>>([CreatePage()]));
+        var controller = CreateController(new CapturingCoordinator(enabled: true, degraded: true, message: "txn degraded"));
+        var httpContext = new DefaultHttpContext();
+        await using var responseBody = new MemoryStream();
+        httpContext.Response.Body = responseBody;
+        controller.ControllerContext = new ControllerContext { HttpContext = httpContext };
+
+        await controller.IngestWebsiteStreamAsync(new WebsiteIngestRequest { Url = "https://example.test/docs" }, CancellationToken.None)
+            .ConfigureAwait(true);
+
+        Assert.NotEqual(StatusCodes.Status409Conflict, httpContext.Response.StatusCode);
+        await _websiteIngestor.Received(1)
+            .IngestAsync(Arg.Any<WebsiteIngestRequest>(), Arg.Any<Func<WebsiteIngestPage, Task>?>(), Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
+    /// <summary>ingest-website delegates to the existing ingestion path when transaction gating is not required.</summary>
+    [Fact]
+    public async Task IngestWebsiteAsync_WhenTransactionsNotRequired_DelegatesToIngestionCoordinator()
+    {
+        _websiteIngestor
+            .IngestAsync(Arg.Any<WebsiteIngestRequest>(), Arg.Any<Func<WebsiteIngestPage, Task>?>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult<IReadOnlyList<WebsiteIngestPage>>([CreatePage()]));
+        var controller = CreateController(
+            new CapturingCoordinator(enabled: true),
+            new TurnTransactionOptions { Enabled = true, RequiredForMutations = false });
+
+        var result = await controller.IngestWebsiteAsync(new WebsiteIngestRequest { Url = "https://example.test/docs" }, CancellationToken.None)
+            .ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(result.Result);
+        var ingestResult = Assert.IsType<WebsiteIngestResult>(ok.Value);
+        Assert.Equal(1, ingestResult.DocumentsIngested);
+        await _websiteIngestor.Received(1)
+            .IngestAsync(Arg.Any<WebsiteIngestRequest>(), Arg.Any<Func<WebsiteIngestPage, Task>?>(), Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
+    private ContextController CreateController(
+        ITurnTransactionCoordinator coordinator,
+        TurnTransactionOptions? transactionOptions = null)
+    {
+        var ingestionOptions = MsOptions.Options.Create(new IngestionOptions { RepoRoot = TestWorkspacePaths.UnusedRepoRoot });
+        var chunker = new Chunker();
+        var gitHubCliService = Substitute.For<IGitHubCliService>();
+        var sessionLogService = Substitute.For<ISessionLogService>();
+        var ingestionCoordinator = new IngestionCoordinator(
+            _db,
+            new RepoIngestor(chunker, ingestionOptions, _workspaceContext, NullLogger<RepoIngestor>.Instance),
+            new SessionLogIngestor(chunker, ingestionOptions, _workspaceContext, sessionLogService, NullLogger<SessionLogIngestor>.Instance),
+            new ExternalDocsIngestor(chunker, ingestionOptions, _workspaceContext, NullLogger<ExternalDocsIngestor>.Instance),
+            new GitHubIngestor(chunker, gitHubCliService, NullLogger<GitHubIngestor>.Instance),
+            new IssueIngestor(chunker, gitHubCliService, NullLogger<IssueIngestor>.Instance),
+            _websiteIngestor,
+            Substitute.For<ISyncStatusStore>(),
+            Substitute.For<IEmbeddingService>(),
+            Substitute.For<IVectorIndexService>(),
+            null,
+            _workspaceContext,
+            NullLogger<IngestionCoordinator>.Instance);
+
+        return new ContextController(
+            _db,
+            _searchService,
+            _graphRagService,
+            ingestionCoordinator,
+            MsOptions.Options.Create(new GraphRagOptions()),
+            coordinator,
+            MsOptions.Options.Create(transactionOptions ?? new TurnTransactionOptions { Enabled = true, RequiredForMutations = true }));
+    }
+
+    private static WebsiteIngestPage CreatePage()
+    {
+        const string documentId = "website-example";
+        return new WebsiteIngestPage
+        {
+            Url = "https://example.test/docs",
+            Outcome = new WebsiteIngestUrlResult
+            {
+                Url = "https://example.test/docs",
+                Status = "ingested",
+                SourceKey = "https://example.test/docs",
+                ChunksWritten = 1,
+            },
+            Document = new ContextDocument
+            {
+                Id = documentId,
+                SourceType = "website",
+                SourceKey = "https://example.test/docs",
+                IngestedAt = DateTime.UtcNow,
+                ContentHash = "hash",
+            },
+            Chunks =
+            [
+                new ContextChunk
+                {
+                    Id = $"{documentId}-chunk-0",
+                    DocumentId = documentId,
+                    Content = "Website content",
+                    TokenCount = 2,
+                    ChunkIndex = 0,
+                },
+            ],
+        };
+    }
+
+    private sealed class CapturingCoordinator : ITurnTransactionCoordinator
+    {
+        private readonly TurnTransactionStatusResponse _status;
+
+        public CapturingCoordinator(bool enabled, bool degraded = false, string message = "")
+        {
+            _status = new TurnTransactionStatusResponse
+            {
+                Enabled = enabled,
+                Degraded = degraded,
+                Message = message,
+            };
+        }
+
+        public Task<TurnTransactionResult> ExecuteAsync(
+            TurnTransactionRequest request,
+            Func<CancellationToken, Task<TurnMutationResult>> mutation,
+            CancellationToken cancellationToken = default)
+            => throw new NotSupportedException();
+
+        public TurnTransactionStatusResponse GetStatus() => _status;
+    }
+}

@@ -1,0 +1,158 @@
+{
+  "TimestampUtc": "2026-10-10T04:23:42.2749993Z",
+  "ValidatorIdentity": {
+    "Name": "Codex",
+    "SessionId": "01a12403-342a-7b40-a25e-e7c882c1f313",
+    "Model": "gpt-6-sol",
+    "Effort": "xhigh",
+    "Proof": "CODEX_SESSION_ID matches runner thread.started and local rollout session_meta; rollout turn_context reports model and effort"
+  },
+  "MandatoryReads": {
+    "AddProfileSkillRead": true,
+    "ProfileMarkdownCount": 19,
+    "MainMarkerLinesRead": 397,
+    "AuthenticationAndKeyFiltered": true,
+    "McpMemoryCount": 15,
+    "AllMemoryTextsRead": true,
+    "MemoryProcess007Read": true,
+    "MemoryProcess008Read": true
+  },
+  "HeadSha": "0c0ba53292f791ed1c5572f571f18e9017e7f673",
+  "PlanLineCount": 651,
+  "PlanNonemptyLineCount": 531,
+  "TodoImplementationTaskCount": 30,
+  "Claims": [
+    {
+      "Id": "P1",
+      "Status": "PASS",
+      "Evidence": "651 lines reviewed; HEAD/source anchors and nine plugin inventory checked"
+    },
+    {
+      "Id": "P2",
+      "Status": "PASS",
+      "Evidence": "21 FR, 23 TR, 23 TEST IDs; live requirements zero collisions; TEST-SUPPORT-024 available"
+    },
+    {
+      "Id": "P3",
+      "Status": "PASS",
+      "Evidence": "D1-D12, coordination, license, failsafe, contracts and 98/98 reflected"
+    },
+    {
+      "Id": "P4",
+      "Status": "FAIL",
+      "Evidence": "F-R31-03: unavailable Cowork branch lacks executable A3 test"
+    },
+    {
+      "Id": "P5",
+      "Status": "FAIL",
+      "Evidence": "F-R31-01 through F-R31-04 leave contradictory slice instructions"
+    },
+    {
+      "Id": "P6",
+      "Status": "FAIL",
+      "Evidence": "F-R31-01 and F-R31-03 prevent the A3 green gate in allowed outcomes"
+    },
+    {
+      "Id": "P7",
+      "Status": "FAIL",
+      "Evidence": "F-R31-02 terminal DELETE lacks named RED test; F-R31-03 unavailable fixture"
+    },
+    {
+      "Id": "P8",
+      "Status": "FAIL",
+      "Evidence": "A3/A4 cycle and terminal DELETE and UC-7 cross-section contradictions"
+    },
+    {
+      "Id": "P9",
+      "Status": "PASS",
+      "Evidence": "TODO description equals 531 nonempty source lines; 30 tasks; handoff 214 lines accurate"
+    },
+    {
+      "Id": "P10",
+      "Status": "PASS",
+      "Evidence": "Nine live triage reports verified; failed worktree group called out"
+    }
+  ],
+  "Findings": [
+    {
+      "Id": "F-R31-01",
+      "PlanLocation": "P0.8:178; A3:581; A4:583; FR-007:242,247; TR-001:345; TR-003:347",
+      "Defect": "A3 requires binding and turn-state delivery whose interfaces and writer first occur in dependent A4",
+      "Evidence": "A3 names Binding_VerbDrainsTranscriptBeforeBinding and Binding_DequeueAppendedAfterStartBeforeLock_BindsToEarlier, while A4 introduces New-ReplInvocationBinding and Resolve-ReplTargetTurn",
+      "Fix": "Put minimal atomic queue/state writer in A3 and move binding tests and AC ownership to A4, or add a foundation slice; propagate to TODO and handoff",
+      "Classification": "implementer edit"
+    },
+    {
+      "Id": "F-R31-02",
+      "PlanLocation": "FR-SUPPORT-016:192; FR-SESSIONREVIEW-001:291; TR-SUPPORT-CORE-016:344; TEST-SUPPORT-024:394; wire:571; S4:603",
+      "Defect": "Terminal section DELETE must return 400 without mutation in specific AC, while general rules say reset unconditionally; no named terminal RED test",
+      "Evidence": "review_section_reset_on_terminal_turn occurs only in AC004 and error list, not named test or task",
+      "Fix": "Propagate terminal exception through contracts and S4/S5; name completed and failed 400/no-mutation tests and nonterminal reset test",
+      "Classification": "implementer edit"
+    },
+    {
+      "Id": "F-R31-03",
+      "PlanLocation": "host row:86; P0.2:172; FR-SESSIONTURN-001:203; TEST-SESSIONTURN-001:372; A3:581",
+      "Defect": "P0.2 permits Cowork unavailable/failed probe, but A3 unconditionally requires fixtures captured from Cowork",
+      "Evidence": "Allowed unsupported branch cannot produce live Cowork fixtures, yet A3 must green",
+      "Fix": "Condition live fixture tests on passing probe; require unsupported negative case otherwise and separate synthetic parser tests; propagate mappings/gates/TODO",
+      "Classification": "implementer edit"
+    },
+    {
+      "Id": "F-R31-04",
+      "PlanLocation": "process:156; UC-7:491; S8:611",
+      "Defect": "UC-7 requires hostileReview per slice from P0, while recordReview only ships in S8",
+      "Evidence": "Process says pre-S8 review uses coordinating turn dialog/designDecisions and RecordValidationResultAsync",
+      "Fix": "Split UC-7 flow and mapping by phase, and align handoff",
+      "Classification": "implementer edit"
+    }
+  ],
+  "Round30Recheck": "F-R30-01..03 corrected; main-workspace wrapper reads succeed with CacheRoot",
+  "PriorRounds": "r1-r29 receipt summaries reviewed; no regressions found in prior repaired clauses",
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 94,
+  "Completeness": 90,
+  "Confidence": 96,
+  "PassCount": 5,
+  "FailCount": 5,
+  "UnknownCount": 0,
+  "FailList": [
+    "F-R31-01",
+    "F-R31-02",
+    "F-R31-03",
+    "F-R31-04"
+  ],
+  "UnknownList": [],
+  "ImplementerFixes": [
+    "F-R31-01",
+    "F-R31-02",
+    "F-R31-03",
+    "F-R31-04"
+  ],
+  "OperatorDecisionFails": [],
+  "ReviewerSessionId": "Codex-20261010T041414Z-plugin-session",
+  "ReviewerRequestId": "req-20261010T041425Z-turn-6b06",
+  "ReceiptPaths": [
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r31-20261010T041231Z.md",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r31-20261010T041231Z.json",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261010T041231Z-plan-readiness-r31.request.jsonl",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261010T041231Z-plan-readiness-r31.response.jsonl"
+  ],
+  "PersistenceProof": {
+    "BeginTurnPersisted": true,
+    "AppendActionsPersisted": true,
+    "FullResponseReadback": true,
+    "CompletedStateReadback": true,
+    "SessionStatus": "in_progress",
+    "TurnStatus": "completed",
+    "ResponseCharacters": 13848,
+    "ActionCount": 2,
+    "DialogCount": 2,
+    "QueryAtUtc": "2026-10-10T04:25:57.0051478Z",
+    "FinalProofInDialog": true,
+    "SecretScanLeak": false,
+    "CorrectionInDialog": true,
+    "ActionCompletionAppendReadback": false,
+    "ActionReadbackNote": "A post-completion appendActions returned persisted but query retained only two initial actions; JSON creation action remains in_progress in the audit record. File existence, completed turn, and exact full-response readback were independently verified."
+  }
+}

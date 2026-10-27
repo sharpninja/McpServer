@@ -1,11 +1,11 @@
 # MCP Memory Workflow
 
-MCP memories are durable operator guidance stored by McpServer and scoped by workspace. Treat the MCP memory store as the authoritative shared record for cross-agent continuity. Agent-local memory files may be used as private caches or migration sources, but they are not the shared source of truth.
+MCP memories are durable operator guidance stored by QBrainAi and scoped by workspace. Treat the MCP memory store as the authoritative shared record for cross-agent continuity. Agent-local memory files may be used as private caches or migration sources, but they are not the shared source of truth.
 
 ## Scopes
 
 - `Global` memories apply to every workspace and must contain only guidance the operator intends to share everywhere.
-- Creating a `Global` memory succeeds when the active workspace is empty or is the configured default workspace. The stored row is `Scope=Global` and `WorkspaceId=null`. `memory_add` and `memory_remember` accept an empty, omitted, or configured default `workspacePath` for `Global` scope. On HTTP, only `POST /mcpserver/memory` and `POST /mcpserver/memory/remember` proceed without a resolved workspace; list, get, update, and remove still require one. Full auth (JWT or a full workspace API key) is required; a default read-only API key cannot write.
+- Creating a `Global` memory succeeds when the active workspace is empty or is the configured default workspace. The stored row is `Scope=Global` and `WorkspaceId=null`. `memory_add` and `memory_remember` accept an empty, omitted, or configured default `workspacePath` for `Global` scope. On HTTP, only `POST /qbrainai/memory` and `POST /qbrainai/memory/remember` proceed without a resolved workspace; list, get, update, and remove still require one. Full auth (JWT or a full workspace API key) is required; a default read-only API key cannot write.
 - `Workspace` memories apply only to the active workspace and must be stored with that workspace ownership. Workspace scope still requires a real workspace path.
 - `Effective` listing returns `Global` memories first sorted by ID, then current `Workspace` memories sorted by ID.
 - Workspace-scoped memories must not be copied, applied, or replayed into a different workspace unless the operator explicitly asks for that new memory to exist there.
@@ -17,7 +17,7 @@ Use the required plugin or MCP tool surface for normal work:
 - MCP tools: `memory_add`, `memory_list`, `memory_update`, `memory_remove`
 - Additive CQRS verbs: `memory_remember`, `memory_recall`, `memory_explore`, `memory_consolidate`, `memory_promote`, `memory_revert`
 - REPL workflow: `workflow.memory.add`, `workflow.memory.list`, `workflow.memory.update`, `workflow.memory.remove`, `workflow.memory.remember`, `workflow.memory.recall`, `workflow.memory.explore`, `workflow.memory.consolidate`, `workflow.memory.promote`, `workflow.memory.revert`
-- REST `/mcpserver/memory` only when explicitly allowed for non-plugin diagnostics
+- REST `/qbrainai/memory` only when explicitly allowed for non-plugin diagnostics
 
 `Idempotency-Key` is not supported on memory write endpoints. A duplicate `memory_remember` (or other write) creates a second memory with a new id; callers must treat duplicate posts as duplicate rows.
 
@@ -82,7 +82,7 @@ Agent-local memory stores may cache visible MCP memories for resiliency, but age
 
 Memory mutations have two audit layers:
 
-- Data audit: McpServer records memory row changes through storage auditing.
+- Data audit: QBrainAi records memory row changes through storage auditing.
 - Workflow audit: the active session log records the agent action that created, updated, or removed a memory.
 
 For every successful memory mutation, append a session-log action through `workflow.sessionlog.appendActions` when a turn is active. Use action `type: edit`, `status: completed`, and a description that identifies the memory operation and memory ID when known.
@@ -91,4 +91,4 @@ When importing memory content from a local source, keep source attribution in th
 
 ## Operator UI
 
-The first-party Memory UI is served at `/memory/` from packaged `wwwroot/memory` static assets. It lists only the active workspace Effective set, edits through the same CQRS REST update path (`PUT /mcpserver/memory/{id}`), and reverts in three actions (open versions, select, revert). Foreign ids fail closed. The ship path is Nuke `UpdateService`; do not run it unless the operator asks. Auth matches other `/mcpserver` pages (`X-Api-Key`). Content-Security / no inline-eval matches the Use Case Manager sibling UI. Missing hashed bundles and `/memory/unknown-asset` return 404, not a false 200 index.
+The first-party Memory UI is served at `/memory/` from packaged `wwwroot/memory` static assets. It lists only the active workspace Effective set, edits through the same CQRS REST update path (`PUT /qbrainai/memory/{id}`), and reverts in three actions (open versions, select, revert). Foreign ids fail closed. The ship path is Nuke `UpdateService`; do not run it unless the operator asks. Auth matches other `/mcpserver` pages (`X-Api-Key`). Content-Security / no inline-eval matches the Use Case Manager sibling UI. Missing hashed bundles and `/memory/unknown-asset` return 404, not a false 200 index.

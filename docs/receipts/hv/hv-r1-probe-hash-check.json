@@ -1,0 +1,396 @@
+{
+  "Count": 78,
+  "Failed": [],
+  "Checks": [
+    {
+      "Path": "cli-probe/help-claude.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-probe/help-cline.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-probe/help-codex.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-probe/help-copilot.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-probe/help-grok.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-runs/copilot-usage.json",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-runs/probe-report.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-runs/run-cline.stderr.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-runs/run-cline.stdout.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-runs/run-copilot.stderr.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-runs/run-copilot.stdout.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-runs/run-grok.stderr.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-runs/run-grok.stdout.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-runs-2/copilot-usage.json",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-runs-2/probe-report.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-runs-2/run-cline.stderr.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-runs-2/run-cline.stdout.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-runs-2/run-copilot.stderr.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-runs-2/run-copilot.stdout.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-runs-3/cline-verbose-run.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-runs-3/copilot-help-config.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-runs-3/copilot-run.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-runs-3/copilot-usage.json",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-write-probe/claude-plan.stderr.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-write-probe/claude-plan.stdout.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-write-probe/cline-plan.stderr.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-write-probe/cline-plan.stdout.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-write-probe/codex-readonly.stderr.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-write-probe/codex-readonly.stdout.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-write-probe/copilot-available.stderr.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-write-probe/copilot-available.stdout.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-write-probe/copilot-deny.stderr.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-write-probe/copilot-deny.stdout.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-write-probe/copilot-planmode.stderr.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-write-probe/copilot-planmode.stdout.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-write-probe/grok-plan.stderr.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-write-probe/grok-plan.stdout.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-write-probe/write-probe-report.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-write-probe-2/claude-plan.stderr.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-write-probe-2/claude-plan.stdout.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-write-probe-2/cline-plan.stderr.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-write-probe-2/cline-plan.stdout.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-write-probe-2/copilot-available.stderr.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-write-probe-2/copilot-available.stdout.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-write-probe-2/write-probe-report.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-effort-probe/codex-max.stderr.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-effort-probe/codex-max.stdout.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-effort-probe/effort-probe-report.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-effort-probe/grok-max.stderr.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-effort-probe/grok-max.stdout.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-effort-probe/grok-models.stderr.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-effort-probe/grok-models.stdout.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-claude-effort/claude-max.stderr.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "cli-claude-effort/claude-max.stdout.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "out-gzip.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "out-turn-order.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "out-effort-const.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "out-cline-effort.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "out-cline-effort-2.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "out-claude-effort.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "out-effort-probe.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "out-write-probe.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "out-write-probe-2.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "out-probe2-claude.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "out-probe2-cline.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "out-probe2-copilot.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "out-lint.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "out-survey.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "render2/survey.txt",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "Invoke-WriteRefusalProbe.ps1",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "Invoke-EffortProbe.ps1",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "Invoke-ClaudeEffortProbe.ps1",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "Invoke-CliProbeRuns.ps1",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "Invoke-BoundedCli.ps1",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "Test-GzipMultiMember.ps1",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "Find-RecentField.ps1",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "Find-InSource.ps1",
+      "HashMatches": true,
+      "LengthMatches": true
+    },
+    {
+      "Path": "Test-Amendment.ps1",
+      "HashMatches": true,
+      "LengthMatches": true
+    }
+  ]
+}

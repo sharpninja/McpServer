@@ -1,0 +1,5 @@
+**/console.txt -diff
+**/*-console.txt -diff
+**/*-stdout.txt -diff
+**/*-stderr.txt -diff
+**/*.trx -diff

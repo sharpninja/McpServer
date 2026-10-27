@@ -1,0 +1,1 @@
+MCP_REPOSITORY_ROOT absent. External runner and assemblies from C:. TEMP and TMP were C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\runtime-temp. This focused rerun followed verification that LocalDB had no active external requests and no leftover mcp_usecase_identity databases.

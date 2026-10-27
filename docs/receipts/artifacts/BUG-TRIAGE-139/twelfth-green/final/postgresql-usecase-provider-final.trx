@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="b7c0d7bc-3195-45f9-bdad-a450405083ea" name="SYSTEM@PAYTON-LEGION2 2026-09-03 21:48:32" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-03T21:48:32.6230364-05:00" queuing="2026-09-03T21:48:32.6230368-05:00" start="2026-09-03T21:48:22.1757880-05:00" finish="2026-09-03T21:49:01.3011241-05:00" />
+  <TestSettings name="default" id="081fe76f-bc8c-4044-a2ad-82872077e751">
+    <Deployment runDeploymentRoot="SYSTEM_PAYTON-LEGION2_2026-09-03_21_48_32" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="ce83fa85-ba93-4a2e-a31c-7be108da9dee" testId="bbeeff9f-380a-9e80-09e2-524843231a5b" testName="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseIdentityMigrationTests.Apply_BackfillsCanonicalHashes_AndSupportsLongKeys" computerName="PAYTON-LEGION2" duration="00:00:06.7636128" startTime="2026-09-03T21:48:35.8364843-05:00" endTime="2026-09-03T21:48:42.6002772-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ce83fa85-ba93-4a2e-a31c-7be108da9dee" />
+    <UnitTestResult executionId="1c56f055-1679-4aa4-bd03-4933020277db" testId="c2c6cbdd-0c48-17ca-a76f-849b903618bf" testName="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseIdentityMigrationTests.Apply_CollisionPreflight_HasNoPartialMutation" computerName="PAYTON-LEGION2" duration="00:00:04.8806544" startTime="2026-09-03T21:48:42.6024297-05:00" endTime="2026-09-03T21:48:47.4832201-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1c56f055-1679-4aa4-bd03-4933020277db" />
+    <UnitTestResult executionId="8d635beb-eacf-4e8c-999b-63cc8e21c9b6" testId="0952a2c3-e3b5-f514-3a6e-9d473fbbc89f" testName="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseIdentityMigrationTests.ConcurrentCreates_SucceedWithDurableDistinctReceipts" computerName="PAYTON-LEGION2" duration="00:00:03.2401635" startTime="2026-09-03T21:48:32.5927570-05:00" endTime="2026-09-03T21:48:35.8332742-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8d635beb-eacf-4e8c-999b-63cc8e21c9b6" />
+    <UnitTestResult executionId="3c322bc0-38e4-49fa-a70a-388d3d1073d2" testId="4eaa6486-3085-2fd7-875c-f03b48b05a7b" testName="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseFifthProviderTests.AggregateFailure_RollsBackImplicitWorkspaceAndChildren" computerName="PAYTON-LEGION2" duration="00:00:01.7557868" startTime="2026-09-03T21:48:49.6567789-05:00" endTime="2026-09-03T21:48:51.4126578-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3c322bc0-38e4-49fa-a70a-388d3d1073d2" />
+    <UnitTestResult executionId="a0683261-1f1e-4206-835b-e74ecadeef68" testId="5210167d-cf9f-dd6a-a618-6d17852783a8" testName="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseIdentityMigrationTests.Migration_DowngradesToReceiptSchema" computerName="PAYTON-LEGION2" duration="00:00:05.7752719" startTime="2026-09-03T21:48:26.7777256-05:00" endTime="2026-09-03T21:48:32.5657623-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a0683261-1f1e-4206-835b-e74ecadeef68" />
+    <UnitTestResult executionId="52fdd5c1-b898-48ff-9f2f-5b88d4fc84fa" testId="552148c2-cc97-4751-d27f-f971779f9382" testName="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseFifthProviderTests.MigratedReceipt_DistinctWorkspaceIdAndPath_ReplaysStablePayload" computerName="PAYTON-LEGION2" duration="00:00:05.1714409" startTime="2026-09-03T21:48:53.4883069-05:00" endTime="2026-09-03T21:48:58.6598282-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="52fdd5c1-b898-48ff-9f2f-5b88d4fc84fa" />
+    <UnitTestResult executionId="03accfc4-5f76-446c-90af-2ad0f484a36d" testId="62e170b6-d48b-4517-2d90-7728f03c6d9f" testName="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseFifthProviderTests.CommitAmbiguity_RecoversIdenticalPayload" computerName="PAYTON-LEGION2" duration="00:00:02.0719691" startTime="2026-09-03T21:48:51.4147340-05:00" endTime="2026-09-03T21:48:53.4868030-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="03accfc4-5f76-446c-90af-2ad0f484a36d" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseIdentityMigrationTests.Apply_BackfillsCanonicalHashes_AndSupportsLongKeys" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-twelfth-20260903t201419z\bin\mcpserver.support.mcp.tests\release\mcpserver.support.mcp.tests.dll" id="bbeeff9f-380a-9e80-09e2-524843231a5b">
+      <Execution id="ce83fa85-ba93-4a2e-a31c-7be108da9dee" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseIdentityMigrationTests" name="Apply_BackfillsCanonicalHashes_AndSupportsLongKeys" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseIdentityMigrationTests.ConcurrentCreates_SucceedWithDurableDistinctReceipts" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-twelfth-20260903t201419z\bin\mcpserver.support.mcp.tests\release\mcpserver.support.mcp.tests.dll" id="0952a2c3-e3b5-f514-3a6e-9d473fbbc89f">
+      <Execution id="8d635beb-eacf-4e8c-999b-63cc8e21c9b6" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseIdentityMigrationTests" name="ConcurrentCreates_SucceedWithDurableDistinctReceipts" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseFifthProviderTests.MigratedReceipt_DistinctWorkspaceIdAndPath_ReplaysStablePayload" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-twelfth-20260903t201419z\bin\mcpserver.support.mcp.tests\release\mcpserver.support.mcp.tests.dll" id="552148c2-cc97-4751-d27f-f971779f9382">
+      <Execution id="52fdd5c1-b898-48ff-9f2f-5b88d4fc84fa" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseFifthProviderTests" name="MigratedReceipt_DistinctWorkspaceIdAndPath_ReplaysStablePayload" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseIdentityMigrationTests.Migration_DowngradesToReceiptSchema" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-twelfth-20260903t201419z\bin\mcpserver.support.mcp.tests\release\mcpserver.support.mcp.tests.dll" id="5210167d-cf9f-dd6a-a618-6d17852783a8">
+      <Execution id="a0683261-1f1e-4206-835b-e74ecadeef68" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseIdentityMigrationTests" name="Migration_DowngradesToReceiptSchema" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseFifthProviderTests.CommitAmbiguity_RecoversIdenticalPayload" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-twelfth-20260903t201419z\bin\mcpserver.support.mcp.tests\release\mcpserver.support.mcp.tests.dll" id="62e170b6-d48b-4517-2d90-7728f03c6d9f">
+      <Execution id="03accfc4-5f76-446c-90af-2ad0f484a36d" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseFifthProviderTests" name="CommitAmbiguity_RecoversIdenticalPayload" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseIdentityMigrationTests.Apply_CollisionPreflight_HasNoPartialMutation" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-twelfth-20260903t201419z\bin\mcpserver.support.mcp.tests\release\mcpserver.support.mcp.tests.dll" id="c2c6cbdd-0c48-17ca-a76f-849b903618bf">
+      <Execution id="1c56f055-1679-4aa4-bd03-4933020277db" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseIdentityMigrationTests" name="Apply_CollisionPreflight_HasNoPartialMutation" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseFifthProviderTests.AggregateFailure_RollsBackImplicitWorkspaceAndChildren" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-twelfth-20260903t201419z\bin\mcpserver.support.mcp.tests\release\mcpserver.support.mcp.tests.dll" id="4eaa6486-3085-2fd7-875c-f03b48b05a7b">
+      <Execution id="3c322bc0-38e4-49fa-a70a-388d3d1073d2" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.PostgreSqlUseCaseFifthProviderTests" name="AggregateFailure_RollsBackImplicitWorkspaceAndChildren" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="bbeeff9f-380a-9e80-09e2-524843231a5b" executionId="ce83fa85-ba93-4a2e-a31c-7be108da9dee" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c2c6cbdd-0c48-17ca-a76f-849b903618bf" executionId="1c56f055-1679-4aa4-bd03-4933020277db" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0952a2c3-e3b5-f514-3a6e-9d473fbbc89f" executionId="8d635beb-eacf-4e8c-999b-63cc8e21c9b6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4eaa6486-3085-2fd7-875c-f03b48b05a7b" executionId="3c322bc0-38e4-49fa-a70a-388d3d1073d2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5210167d-cf9f-dd6a-a618-6d17852783a8" executionId="a0683261-1f1e-4206-835b-e74ecadeef68" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="552148c2-cc97-4751-d27f-f971779f9382" executionId="52fdd5c1-b898-48ff-9f2f-5b88d4fc84fa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="62e170b6-d48b-4517-2d90-7728f03c6d9f" executionId="03accfc4-5f76-446c-90af-2ad0f484a36d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="7" executed="7" passed="7" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.36]   Discovering: McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.46]   Discovered:  McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.79]   Starting:    McpServer.Support.Mcp.Tests&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-09-03T21:49:01.2719447-05:00">
+        <Text>The active test run was aborted. Reason: Test host process crashed</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

@@ -10,7 +10,7 @@ PASTE BELOW THIS LINE
 
 ---
 
-[McpServer](https://github.com/sharpninja/McpServer) is an open-source (Apache 2.0) ASP.NET Core 9 server that gives AI agents a shared, persistent backend over the Model Context Protocol: local semantic search over your code and docs, a queryable TODO list, session logging with a full audit trail, requirements traceability, and GitHub sync. One local process, one port, reachable over HTTP REST (Swagger) or MCP STDIO.
+[QBrainAi](https://github.com/sharpninja/McpServer) is an open-source (Apache 2.0) ASP.NET Core 9 server that gives AI agents a shared, persistent backend over the Model Context Protocol: local semantic search over your code and docs, a queryable TODO list, session logging with a full audit trail, requirements traceability, and GitHub sync. One local process, one port, reachable over HTTP REST (Swagger) or MCP STDIO.
 
 There is a Grok plugin. It ships Grok-compatible and Claude-compatible plugin manifests plus native SKILL.md files, hooks, and an mcpServers entry, so a Grok agent gets the full workflow surface (session, TODO, requirements, GraphRAG, workspace) without custom glue. The plugin repo includes a GROK-USAGE.md with the specifics.
 

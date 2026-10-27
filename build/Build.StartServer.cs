@@ -15,7 +15,7 @@ partial class Build
     public Target StartServer => _ => _
         .Executes(() =>
         {
-            var project = SourceDirectory / "McpServer.Support.Mcp" / "McpServer.Support.Mcp.csproj";
+            var project = SourceDirectory / "QBrainAi.Support.Mcp" / "QBrainAi.Support.Mcp.csproj";
 
             if (!NoBuild)
             {

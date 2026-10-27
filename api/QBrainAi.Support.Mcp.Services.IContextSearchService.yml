@@ -1,0 +1,325 @@
+### YamlMime:ManagedReference
+items:
+- uid: QBrainAi.Support.Mcp.Services.IContextSearchService
+  commentId: T:QBrainAi.Support.Mcp.Services.IContextSearchService
+  id: IContextSearchService
+  parent: QBrainAi.Support.Mcp.Services
+  children:
+  - QBrainAi.Support.Mcp.Services.IContextSearchService.RebuildAsync(System.Threading.CancellationToken)
+  - QBrainAi.Support.Mcp.Services.IContextSearchService.SearchAsync(System.String,System.Int32,System.String,System.Threading.CancellationToken)
+  langs:
+  - csharp
+  - vb
+  name: IContextSearchService
+  nameWithType: IContextSearchService
+  fullName: QBrainAi.Support.Mcp.Services.IContextSearchService
+  type: Interface
+  source:
+    id: IContextSearchService
+    path: E:\github\QBrainAi\src\QBrainAi.Support.Mcp\Services\IContextSearchService.cs
+    startLine: 6
+  assemblies:
+  - QBrainAi.Support.Mcp
+  namespace: QBrainAi.Support.Mcp.Services
+  summary: >-
+    TR-PLANNED-CORE-013: Abstraction for context chunk search (FTS5, vector, or hybrid).
+
+    FR-SUPPORT-010: Enables ranked search with BM25 scoring and snippet extraction.
+  example: []
+  syntax:
+    content: public interface IContextSearchService
+    content.vb: Public Interface IContextSearchService
+- uid: QBrainAi.Support.Mcp.Services.IContextSearchService.SearchAsync(System.String,System.Int32,System.String,System.Threading.CancellationToken)
+  commentId: M:QBrainAi.Support.Mcp.Services.IContextSearchService.SearchAsync(System.String,System.Int32,System.String,System.Threading.CancellationToken)
+  id: SearchAsync(System.String,System.Int32,System.String,System.Threading.CancellationToken)
+  parent: QBrainAi.Support.Mcp.Services.IContextSearchService
+  langs:
+  - csharp
+  - vb
+  name: SearchAsync(string, int, string?, CancellationToken)
+  nameWithType: IContextSearchService.SearchAsync(string, int, string?, CancellationToken)
+  fullName: QBrainAi.Support.Mcp.Services.IContextSearchService.SearchAsync(string, int, string?, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: SearchAsync
+    path: E:\github\QBrainAi\src\QBrainAi.Support.Mcp\Services\IContextSearchService.cs
+    startLine: 14
+  assemblies:
+  - QBrainAi.Support.Mcp
+  namespace: QBrainAi.Support.Mcp.Services
+  summary: 'TR-PLANNED-CORE-013: Search indexed context chunks by query text.'
+  example: []
+  syntax:
+    content: Task<ContextSearchResult> SearchAsync(string query, int limit = 20, string? sourceType = null, CancellationToken ct = default)
+    parameters:
+    - id: query
+      type: System.String
+      description: Search query text.
+    - id: limit
+      type: System.Int32
+      description: Maximum number of results to return (default 20).
+    - id: sourceType
+      type: System.String
+      description: Optional source type filter.
+    - id: ct
+      type: System.Threading.CancellationToken
+      description: Cancellation token.
+    return:
+      type: System.Threading.Tasks.Task{QBrainAi.Support.Mcp.Services.ContextSearchResult}
+      description: Search result with scored chunks and source keys.
+    content.vb: Function SearchAsync(query As String, limit As Integer = 20, sourceType As String = Nothing, ct As CancellationToken = Nothing) As Task(Of ContextSearchResult)
+  overload: QBrainAi.Support.Mcp.Services.IContextSearchService.SearchAsync*
+  nameWithType.vb: IContextSearchService.SearchAsync(String, Integer, String, CancellationToken)
+  fullName.vb: QBrainAi.Support.Mcp.Services.IContextSearchService.SearchAsync(String, Integer, String, System.Threading.CancellationToken)
+  name.vb: SearchAsync(String, Integer, String, CancellationToken)
+- uid: QBrainAi.Support.Mcp.Services.IContextSearchService.RebuildAsync(System.Threading.CancellationToken)
+  commentId: M:QBrainAi.Support.Mcp.Services.IContextSearchService.RebuildAsync(System.Threading.CancellationToken)
+  id: RebuildAsync(System.Threading.CancellationToken)
+  parent: QBrainAi.Support.Mcp.Services.IContextSearchService
+  langs:
+  - csharp
+  - vb
+  name: RebuildAsync(CancellationToken)
+  nameWithType: IContextSearchService.RebuildAsync(CancellationToken)
+  fullName: QBrainAi.Support.Mcp.Services.IContextSearchService.RebuildAsync(System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: RebuildAsync
+    path: E:\github\QBrainAi\src\QBrainAi.Support.Mcp\Services\IContextSearchService.cs
+    startLine: 18
+  assemblies:
+  - QBrainAi.Support.Mcp
+  namespace: QBrainAi.Support.Mcp.Services
+  summary: 'TR-PLANNED-CORE-013: Rebuild the search index.'
+  example: []
+  syntax:
+    content: Task RebuildAsync(CancellationToken ct = default)
+    parameters:
+    - id: ct
+      type: System.Threading.CancellationToken
+      description: Cancellation token.
+    return:
+      type: System.Threading.Tasks.Task
+    content.vb: Function RebuildAsync(ct As CancellationToken = Nothing) As Task
+  overload: QBrainAi.Support.Mcp.Services.IContextSearchService.RebuildAsync*
+references:
+- uid: QBrainAi.Support.Mcp.Services
+  commentId: N:QBrainAi.Support.Mcp.Services
+  href: QBrainAi.html
+  name: QBrainAi.Support.Mcp.Services
+  nameWithType: QBrainAi.Support.Mcp.Services
+  fullName: QBrainAi.Support.Mcp.Services
+  spec.csharp:
+  - uid: QBrainAi
+    name: QBrainAi
+    href: QBrainAi.html
+  - name: .
+  - uid: QBrainAi.Support
+    name: Support
+    href: QBrainAi.Support.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp
+    name: Mcp
+    href: QBrainAi.Support.Mcp.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp.Services
+    name: Services
+    href: QBrainAi.Support.Mcp.Services.html
+  spec.vb:
+  - uid: QBrainAi
+    name: QBrainAi
+    href: QBrainAi.html
+  - name: .
+  - uid: QBrainAi.Support
+    name: Support
+    href: QBrainAi.Support.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp
+    name: Mcp
+    href: QBrainAi.Support.Mcp.html
+  - name: .
+  - uid: QBrainAi.Support.Mcp.Services
+    name: Services
+    href: QBrainAi.Support.Mcp.Services.html
+- uid: QBrainAi.Support.Mcp.Services.IContextSearchService.SearchAsync*
+  commentId: Overload:QBrainAi.Support.Mcp.Services.IContextSearchService.SearchAsync
+  href: QBrainAi.Support.Mcp.Services.IContextSearchService.html#QBrainAi_Support_Mcp_Services_IContextSearchService_SearchAsync_System_String_System_Int32_System_String_System_Threading_CancellationToken_
+  name: SearchAsync
+  nameWithType: IContextSearchService.SearchAsync
+  fullName: QBrainAi.Support.Mcp.Services.IContextSearchService.SearchAsync
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task{QBrainAi.Support.Mcp.Services.ContextSearchResult}
+  commentId: T:System.Threading.Tasks.Task{QBrainAi.Support.Mcp.Services.ContextSearchResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<ContextSearchResult>
+  nameWithType: Task<ContextSearchResult>
+  fullName: System.Threading.Tasks.Task<QBrainAi.Support.Mcp.Services.ContextSearchResult>
+  nameWithType.vb: Task(Of ContextSearchResult)
+  fullName.vb: System.Threading.Tasks.Task(Of QBrainAi.Support.Mcp.Services.ContextSearchResult)
+  name.vb: Task(Of ContextSearchResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: QBrainAi.Support.Mcp.Services.ContextSearchResult
+    name: ContextSearchResult
+    href: QBrainAi.Support.Mcp.Services.ContextSearchResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: QBrainAi.Support.Mcp.Services.ContextSearchResult
+    name: ContextSearchResult
+    href: QBrainAi.Support.Mcp.Services.ContextSearchResult.html
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+- uid: QBrainAi.Support.Mcp.Services.IContextSearchService.RebuildAsync*
+  commentId: Overload:QBrainAi.Support.Mcp.Services.IContextSearchService.RebuildAsync
+  href: QBrainAi.Support.Mcp.Services.IContextSearchService.html#QBrainAi_Support_Mcp_Services_IContextSearchService_RebuildAsync_System_Threading_CancellationToken_
+  name: RebuildAsync
+  nameWithType: IContextSearchService.RebuildAsync
+  fullName: QBrainAi.Support.Mcp.Services.IContextSearchService.RebuildAsync
+- uid: System.Threading.Tasks.Task
+  commentId: T:System.Threading.Tasks.Task
+  parent: System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task
+  name: Task
+  nameWithType: Task
+  fullName: System.Threading.Tasks.Task

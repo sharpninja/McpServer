@@ -10,7 +10,7 @@ PASTE BELOW THIS LINE
 
 ---
 
-[McpServer](https://github.com/sharpninja/McpServer) is an open-source (Apache 2.0) ASP.NET Core 9 server that gives AI coding agents a shared, persistent backend over the Model Context Protocol: local semantic search over your code, a queryable TODO list, session logging with a full audit trail, requirements traceability, and GitHub sync. It runs locally on one port and speaks both HTTP REST (with Swagger) and MCP STDIO.
+[QBrainAi](https://github.com/sharpninja/McpServer) is an open-source (Apache 2.0) ASP.NET Core 9 server that gives AI coding agents a shared, persistent backend over the Model Context Protocol: local semantic search over your code, a queryable TODO list, session logging with a full audit trail, requirements traceability, and GitHub sync. It runs locally on one port and speaks both HTTP REST (with Swagger) and MCP STDIO.
 
 There is a Claude Code plugin for it. It wires the server into Claude Code through hooks and skills, so session logging, TODO updates, and bug triage happen on the turns you already take (SessionStart/End, UserPromptSubmit, Stop, PostToolUse plan+edit, the compaction events, and subagent completion) instead of being something you have to remember to do by hand.
 

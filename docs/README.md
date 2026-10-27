@@ -2,7 +2,7 @@
 
 - [Wiki export manifest](wiki.yaml)
 - [Byrd Development Process v4](Development-Process-draft-v4.md)
-- [MCP Server User Documentation](USER-GUIDE.md)
+- [QBrain.AI User Documentation](USER-GUIDE.md)
 - [Frontier agent setup prompt (DRAFT, HV AGREE)](setup/2026-09-28-frontier-agent-setup-prompt.DRAFT.md) — MCP-SETUPPROMPT-001 copy-paste setup for frontier agents
 - [Installation & prerequisites](USER-GUIDE.md#1-installation-and-prerequisites)
 - [Configuration reference](USER-GUIDE.md#2-configuration-reference-appsettings--marker-file)
@@ -19,7 +19,7 @@
 - [MCP Memories](context/memory.md)
 - [Memory benchmarks](benchmarks/README.md)
 - [Handoff Ingestion](Handoff-Ingestion.md)
-- [MCP Server Guide](MCP-SERVER.md)
+- [QBrain.AI Guide](MCP-SERVER.md)
 - [Permanent local audit storage](Operations/permanent-local-audit-sqlserver.md)
 - [QuadBrain User Guide](QUADBRAIN.md)
 - [QBAgent User Guide](QBAGENT.md)

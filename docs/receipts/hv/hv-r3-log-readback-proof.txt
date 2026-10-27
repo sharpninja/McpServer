@@ -1,0 +1,17 @@
+type: result
+payload:
+  result:
+    code: persisted
+    retryable: false
+    persisted: true
+    degraded: false
+    queued: false
+    method: workflow.sessionlog.appendDialog
+    agent: Codex
+    sessionId: Codex-20261018T062121Z-plugin-session
+    requestId: req-20261018T062156Z-amendment1-r3
+    failsafePath: ""
+    message: appendDialog persisted requestId=req-20261018T062156Z-amendment1-r3
+    childStderr: ""
+
+

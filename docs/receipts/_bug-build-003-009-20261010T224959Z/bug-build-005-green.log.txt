@@ -1,0 +1,8 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  _build -> build/bin/Debug/_build.dll
+  Build.Tests -> tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll
+Test run for tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    14, Skipped:     0, Total:    14, Duration: 59 ms - Build.Tests.dll (net10.0)

@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="9" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2026-10-02" time="20:29:08">
+  <environment user-domain="" nunit-version="2.5.8.0" user="SYSTEM" platform="Microsoft Windows 11 Pro|C:\WINDOWS|\Device\Harddisk1\Partition3" machine-name="PAYTON-LEGION2" clr-version="10.0.12" cwd="F:\GitHub\McpServer\.worktrees\sessionlife-p2-contracts-5cb2" os-version="10.0.26200" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite type="TestFixture" name="Pester" executed="True" result="Success" success="True" time="62.7349" asserts="0" description="Pester">
+    <results>
+      <test-suite type="TestFixture" name="F:\GitHub\McpServer\.worktrees\sessionlife-p2-contracts-5cb2\docs\receipts\hv\20261003T011854Z-fresh.Tests.ps1" executed="True" result="Success" success="True" time="62.7349" asserts="0" description="F:\GitHub\McpServer\.worktrees\sessionlife-p2-contracts-5cb2\docs\receipts\hv\20261003T011854Z-fresh.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Independent receipt reattack" executed="True" result="Success" success="True" time="62.438" asserts="0" description="Independent receipt reattack">
+            <results>
+              <test-case description="HV19 case-different SubmitAsync response identity is not persisted and keeps recovery" name="Independent receipt reattack.HV19 case-different SubmitAsync response identity is not persisted and keeps recovery" time="16.7793" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="HV20 beginTurn case-different request or session does not durable-reopen overwrite" name="Independent receipt reattack.HV20 beginTurn case-different request or session does not durable-reopen overwrite" time="2.5637" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="fresh prompt hook reports turn-opened after primary readback and turn-opened-degraded with the retained artifact" name="Independent receipt reattack.fresh prompt hook reports turn-opened after primary readback and turn-opened-degraded with the retained artifact" time="5.3604" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="prompt stop-gate update and dialog consumers keep the full degraded cache omit empty query and do not claim server persistence" name="Independent receipt reattack.prompt stop-gate update and dialog consumers keep the full degraded cache omit empty query and do not claim server persistence" time="24.5097" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="missing-turn dialog recovery stays bounded and does not claim server persistence" name="Independent receipt reattack.missing-turn dialog recovery stays bounded and does not claim server persistence" time="2.8915" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="asserts the complete cached object and the serialized payload with MCP_PLUGIN_PERSIST_LOG unset" name="Independent receipt reattack.asserts the complete cached object and the serialized payload with MCP_PLUGIN_PERSIST_LOG unset" time="2.114" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects null empty and whitespace todoId and empty planFile on ordinary first persistence without a server row" name="Independent receipt reattack.rejects null empty and whitespace todoId and empty planFile on ordinary first persistence without a server row" time="4.9845" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="stores exact None for canceled supersession when metadata is omitted and normalizes cancelled to canceled" name="Independent receipt reattack.stores exact None for canceled supersession when metadata is omitted and normalizes cancelled to canceled" time="2.9001" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="independent six-field counterexample is rejected while the complete object passes" name="Independent receipt reattack.independent six-field counterexample is rejected while the complete object passes" time="0.1889" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

@@ -1,0 +1,56 @@
+{
+  "timestampUtc": "2026-10-03T01:30:12.0764255+00:00",
+  "total": 9,
+  "passed": 9,
+  "failed": 0,
+  "skipped": 0,
+  "notRun": 0,
+  "duration": 62.7349348,
+  "tests": [
+    {
+      "name": "HV19 case-different SubmitAsync response identity is not persisted and keeps recovery",
+      "result": "Passed",
+      "error": ""
+    },
+    {
+      "name": "HV20 beginTurn case-different request or session does not durable-reopen overwrite",
+      "result": "Passed",
+      "error": ""
+    },
+    {
+      "name": "fresh prompt hook reports turn-opened after primary readback and turn-opened-degraded with the retained artifact",
+      "result": "Passed",
+      "error": ""
+    },
+    {
+      "name": "prompt stop-gate update and dialog consumers keep the full degraded cache omit empty query and do not claim server persistence",
+      "result": "Passed",
+      "error": ""
+    },
+    {
+      "name": "missing-turn dialog recovery stays bounded and does not claim server persistence",
+      "result": "Passed",
+      "error": ""
+    },
+    {
+      "name": "asserts the complete cached object and the serialized payload with MCP_PLUGIN_PERSIST_LOG unset",
+      "result": "Passed",
+      "error": ""
+    },
+    {
+      "name": "rejects null empty and whitespace todoId and empty planFile on ordinary first persistence without a server row",
+      "result": "Passed",
+      "error": ""
+    },
+    {
+      "name": "stores exact None for canceled supersession when metadata is omitted and normalizes cancelled to canceled",
+      "result": "Passed",
+      "error": ""
+    },
+    {
+      "name": "independent six-field counterexample is rejected while the complete object passes",
+      "result": "Passed",
+      "error": ""
+    }
+  ]
+}

@@ -1,0 +1,225 @@
+using System.Net;
+using QBrainAi.Support.Mcp.Options;
+using QBrainAi.Support.Mcp.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using NSubstitute;
+using Xunit;
+
+namespace QBrainAi.Support.Mcp.IntegrationTests.Controllers;
+
+/// <summary>Integration tests for <see cref="QBrainAi.Support.Mcp.Controllers.TunnelController"/> with <see cref="TunnelRegistry"/>.</summary>
+[Trait("Category", "Integration")]
+public sealed class TunnelControllerTests
+{
+    /// <summary>Creates a factory that injects mock tunnel providers via DI.</summary>
+    private static CustomWebApplicationFactory CreateFactory(
+        string activeProvider,
+        params ITunnelProvider[] providers) =>
+        new(services =>
+        {
+            // Remove the real tunnel provider registrations
+            var descriptors = services
+                .Where(d => d.ServiceType == typeof(ITunnelProvider)
+                    || d.ServiceType == typeof(NgrokTunnelProvider)
+                    || d.ServiceType == typeof(CloudflareTunnelProvider)
+                    || d.ServiceType == typeof(FrpTunnelProvider))
+                .ToList();
+            foreach (var d in descriptors)
+                services.Remove(d);
+
+            // Inject mock providers
+            foreach (var p in providers)
+                services.AddSingleton<ITunnelProvider>(p);
+
+            // Set the active provider in config
+            services.PostConfigure<TunnelOptions>(opts => opts.Provider = activeProvider);
+        });
+
+    [Fact]
+    public async Task List_EmptyRegistry_ReturnsEmptyArray()
+    {
+        await using var factory = CreateFactory("");
+        using var client = factory.CreateClient();
+        TestAuthHelper.AddAuthHeader(client, factory.Services);
+
+        var response = await client.GetAsync("/qbrainai/tunnel/list", cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var body = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Equal("[]", body);
+    }
+
+    [Fact]
+    public async Task Status_UnknownProvider_Returns404()
+    {
+        await using var factory = CreateFactory("");
+        using var client = factory.CreateClient();
+        TestAuthHelper.AddAuthHeader(client, factory.Services);
+
+        var response = await client.GetAsync("/qbrainai/tunnel/unknown/status", cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Enable_UnknownProvider_Returns404()
+    {
+        await using var factory = CreateFactory("");
+        using var client = factory.CreateClient();
+        TestAuthHelper.AddAuthHeader(client, factory.Services);
+
+        var response = await client.PostAsync("/qbrainai/tunnel/unknown/enable", null, cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task List_WithMockProvider_ReturnsProviderInfo()
+    {
+        var mockProvider = Substitute.For<ITunnelProvider>();
+        mockProvider.ProviderName.Returns("ngrok");
+        mockProvider.GetStatusAsync(Arg.Any<CancellationToken>())
+            .Returns(new TunnelStatus(false, Error: "Not started."));
+
+        await using var factory = CreateFactory("ngrok", mockProvider);
+        using var client = factory.CreateClient();
+        TestAuthHelper.AddAuthHeader(client, factory.Services);
+
+        var response = await client.GetAsync("/qbrainai/tunnel/list", cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var body = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Contains("ngrok", body, StringComparison.Ordinal);
+        Assert.Contains("\"enabled\":true", body, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task Status_WithProvider_ReturnsTunnelStatus()
+    {
+        var mockProvider = Substitute.For<ITunnelProvider>();
+        mockProvider.ProviderName.Returns("ngrok");
+        mockProvider.GetStatusAsync(Arg.Any<CancellationToken>())
+            .Returns(new TunnelStatus(true, "https://abc.ngrok.io"));
+
+        await using var factory = CreateFactory("ngrok", mockProvider);
+        using var client = factory.CreateClient();
+        TestAuthHelper.AddAuthHeader(client, factory.Services);
+
+        var response = await client.GetAsync("/qbrainai/tunnel/ngrok/status", cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var body = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Contains("abc.ngrok.io", body, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task Enable_Disable_TogglesState()
+    {
+        var mockProvider = Substitute.For<ITunnelProvider>();
+        mockProvider.ProviderName.Returns("cloudflare");
+        mockProvider.GetStatusAsync(Arg.Any<CancellationToken>())
+            .Returns(new TunnelStatus(false));
+
+        // Register as disabled (active provider is empty)
+        await using var factory = CreateFactory("", mockProvider);
+        using var client = factory.CreateClient();
+        TestAuthHelper.AddAuthHeader(client, factory.Services);
+
+        // Verify initially disabled
+        var statusResp = await client.GetAsync("/qbrainai/tunnel/cloudflare/status", cancellationToken: TestContext.Current.CancellationToken);
+        var statusBody = await statusResp.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Contains("\"enabled\":false", statusBody, StringComparison.Ordinal);
+
+        // Enable
+        var enableResp = await client.PostAsync("/qbrainai/tunnel/cloudflare/enable", null, cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Equal(HttpStatusCode.OK, enableResp.StatusCode);
+        var enableBody = await enableResp.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Contains("\"enabled\":true", enableBody, StringComparison.Ordinal);
+
+        // Disable
+        var disableResp = await client.PostAsync("/qbrainai/tunnel/cloudflare/disable", null, cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Equal(HttpStatusCode.OK, disableResp.StatusCode);
+        var disableBody = await disableResp.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Contains("\"enabled\":false", disableBody, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task Start_Disabled_ReturnsError()
+    {
+        var mockProvider = Substitute.For<ITunnelProvider>();
+        mockProvider.ProviderName.Returns("ngrok");
+        mockProvider.GetStatusAsync(Arg.Any<CancellationToken>())
+            .Returns(new TunnelStatus(false));
+
+        // Register as disabled (active provider is empty)
+        await using var factory = CreateFactory("", mockProvider);
+        using var client = factory.CreateClient();
+        TestAuthHelper.AddAuthHeader(client, factory.Services);
+
+        var response = await client.PostAsync("/qbrainai/tunnel/ngrok/start", null, cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var body = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Contains("disabled", body, StringComparison.OrdinalIgnoreCase);
+        await mockProvider.DidNotReceive().StartAsync(Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Start_Enabled_CallsStartOnProvider()
+    {
+        var mockProvider = Substitute.For<ITunnelProvider>();
+        mockProvider.ProviderName.Returns("ngrok");
+        mockProvider.GetStatusAsync(Arg.Any<CancellationToken>())
+            .Returns(
+                new TunnelStatus(false),
+                new TunnelStatus(true, "https://new.ngrok.io"));
+
+        await using var factory = CreateFactory("ngrok", mockProvider);
+        using var client = factory.CreateClient();
+        TestAuthHelper.AddAuthHeader(client, factory.Services);
+
+        var response = await client.PostAsync("/qbrainai/tunnel/ngrok/start", null, cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        await mockProvider.Received(1).StartAsync(Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Stop_CallsStopOnProvider()
+    {
+        var mockProvider = Substitute.For<ITunnelProvider>();
+        mockProvider.ProviderName.Returns("ngrok");
+        mockProvider.GetStatusAsync(Arg.Any<CancellationToken>())
+            .Returns(new TunnelStatus(false));
+
+        await using var factory = CreateFactory("ngrok", mockProvider);
+        using var client = factory.CreateClient();
+        TestAuthHelper.AddAuthHeader(client, factory.Services);
+
+        var response = await client.PostAsync("/qbrainai/tunnel/ngrok/stop", null, cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        await mockProvider.Received(1).StopAsync(Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Restart_CallsStopThenStart()
+    {
+        var mockProvider = Substitute.For<ITunnelProvider>();
+        mockProvider.ProviderName.Returns("ngrok");
+        mockProvider.GetStatusAsync(Arg.Any<CancellationToken>())
+            .Returns(new TunnelStatus(true, "https://restarted.ngrok.io"));
+
+        await using var factory = CreateFactory("ngrok", mockProvider);
+        using var client = factory.CreateClient();
+        TestAuthHelper.AddAuthHeader(client, factory.Services);
+
+        var response = await client.PostAsync("/qbrainai/tunnel/ngrok/restart", null, cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        Received.InOrder(() =>
+        {
+            mockProvider.StopAsync(Arg.Any<CancellationToken>());
+            mockProvider.StartAsync(Arg.Any<CancellationToken>());
+        });
+    }
+}

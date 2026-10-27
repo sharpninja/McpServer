@@ -12,7 +12,7 @@ Scope implemented:
 - PinnedPaths defaults reduced to workspace-only files
 
 Test command:
-dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~GraphRag|FullyQualifiedName~AgentHelp"
+dotnet test tests/QBrainAi.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~GraphRag|FullyQualifiedName~AgentHelp"
 
 Result:
 Passed!  - Failed: 0, Passed: 167, Skipped: 0, Total: 167
@@ -28,13 +28,13 @@ Commits:
 
 Deploy:
 ./build.ps1 UpdateService -> Succeeded (v1.4.3+873c4b91)
-Patched C:\ProgramData\McpServer\appsettings.yaml with GraphRag global settings
-Restart-Service McpServer (elevated)
+Patched C:\ProgramData\QBrainAi\appsettings.yaml with GraphRag global settings
+Restart-Service QBrainAi (elevated)
 
 Live verification (2026-07-08):
-GET /mcpserver/graphrag/status?scope=global -> state=ready, inputDocumentCount=7, isIndexed=true
-POST /mcpserver/graphrag/query scope=global query=workflow.todo.update -> queryCorpus=graphrag-global-input
-Seeded files under C:\ProgramData\McpServer-Data\graphrag-global\input\canonical\ (7 docs)
+GET /qbrainai/graphrag/status?scope=global -> state=ready, inputDocumentCount=7, isIndexed=true
+POST /qbrainai/graphrag/query scope=global query=workflow.todo.update -> queryCorpus=graphrag-global-input
+Seeded files under C:\ProgramData\QBrainAi-Data\graphrag-global\input\canonical\ (7 docs)
 
 Push:
 git push origin develop -> f571b7b2..873c4b91 develop -> develop

@@ -1,0 +1,3958 @@
+{
+  "TimestampUtc": "2026-10-01T00:39:35.5867475+00:00",
+  "ValidatorIdentity": "Codex/gpt-6-astra/xhigh",
+  "WorkClass": "project implementation: P2 SessionLife contracts",
+  "AddProfile": {
+    "executed": true,
+    "skill": "C:\\Users\\kingd\\.claude\\skills\\add-profile\\SKILL.md",
+    "profileFileCount": 21,
+    "files": [
+      {
+        "name": "accuracy-first-verify-sources.md",
+        "length": 1207,
+        "sha256": "D9BD665C6229E1D29A77EC7EF42B96DC52678817D5E88B711F20CDFD320F5E96"
+      },
+      {
+        "name": "adversarial-review-global.md",
+        "length": 7722,
+        "sha256": "2FA01939E3D7F626C514AC63FE9CE760F0B798E2CED31B86B4D2E26DC430BB49"
+      },
+      {
+        "name": "approve-before-execute.md",
+        "length": 2269,
+        "sha256": "A61FD0A5FACA21AC172474F0A0A7084CDAC70E8CD7EB3A7BC2C6D26560E4CAB4"
+      },
+      {
+        "name": "bring-the-receipts.md",
+        "length": 2056,
+        "sha256": "E425710866D9D7E50F38ADC6DA393D52721DD5482BEA08EAA246D70691F76F31"
+      },
+      {
+        "name": "hostile-on-goal-state.md",
+        "length": 1734,
+        "sha256": "480984F745566769A4D6479028BA311D4550105336540F49916D635FC77DAE87"
+      },
+      {
+        "name": "hostile-ops-vs-requirements.md",
+        "length": 2050,
+        "sha256": "A73EA4A7B125D94B6D2A64F20A160CDA12EB235A918FB034A5E56FCE97203602"
+      },
+      {
+        "name": "hostile-phase-gates.md",
+        "length": 1317,
+        "sha256": "EE448E9FD9E0F1C12E13277A89696482E57752CE0A4EC0FE5EF9B4093C754B9C"
+      },
+      {
+        "name": "hv-jsonl-and-session-log.md",
+        "length": 4208,
+        "sha256": "8A8CB1500FE6C35B2F267064EC47CE290E54C9F39713303729733B88EE073B52"
+      },
+      {
+        "name": "kill-assumption-iteration.md",
+        "length": 1240,
+        "sha256": "8D01893F00116712CB5822AF67C99304575B8A7D7EE7930F5E8463310E504094"
+      },
+      {
+        "name": "lab-authorization.md",
+        "length": 2183,
+        "sha256": "E7575409948FF11C59DC86D6D6DB943DC541592F579323838607E540868C575F"
+      },
+      {
+        "name": "log-decisions-as-conclusions.md",
+        "length": 2060,
+        "sha256": "DF2973F5353B194413C22722C3819A323AB12E1E6A9DFAB70F87A7BD7910E07A"
+      },
+      {
+        "name": "never-skip-explicit-actions.md",
+        "length": 2957,
+        "sha256": "577B1375C11D764018F076DF858C779E61602A2E19D7E3B1B36C967F94C2C84E"
+      },
+      {
+        "name": "no-attitude-honesty-tell.md",
+        "length": 1357,
+        "sha256": "4730B15F8B99DCC5ACF0796DC343FF915C037892BF9FFFEAF90FA1F551B578BD"
+      },
+      {
+        "name": "no-python-lab.md",
+        "length": 1096,
+        "sha256": "DC7E5D396873CD1F4899797E9914A76D3F9F748FD790E604CF0A913A5FCD895D"
+      },
+      {
+        "name": "no-shortcuts-precision-over-convenience.md",
+        "length": 2030,
+        "sha256": "E2A25D7D577DF221B69E7059E71BEEEDA91872C43447E4E2D5BF449CE4505392"
+      },
+      {
+        "name": "philosophical-dialogue-mode.md",
+        "length": 1230,
+        "sha256": "0C43A1A1899B36F6F73AF3B9A8091A5C05D26BF36B163048F8CDB46B09A0737F"
+      },
+      {
+        "name": "PROFILE.md",
+        "length": 18480,
+        "sha256": "A929C28D1DF2E7BFE4DB91C0E82FA27F2E4C1B5312D4E8E2E25F85A392B88A7A"
+      },
+      {
+        "name": "requirement-change-plan-first.md",
+        "length": 2215,
+        "sha256": "64A5558B0BC9C321D0CB3D206F73B16A680CA12E8D8390431D126FF02D8CF9F9"
+      },
+      {
+        "name": "session-turn-title-summary.md",
+        "length": 1196,
+        "sha256": "15DEE8BB21BC8FB948403078BEA6C525411161558E290A1C2A3ECF3B5E33BD95"
+      },
+      {
+        "name": "user-payton-byrd.md",
+        "length": 1519,
+        "sha256": "C47927C3086B462A9EE5031F8A8DF94697B7B384AFE9590324D81A8246D8DBDA"
+      },
+      {
+        "name": "wireframe-app-visual-fidelity.md",
+        "length": 945,
+        "sha256": "A6783BDE5BE9321045A432F13E848B9507BB3B5AA4CDEDDB24879C9012F7787D"
+      }
+    ],
+    "firstAttempt": "Requested pwsh exec failed before execution with sandbox helper OS error206; specified skill then read through available pwsh MCP."
+  },
+  "HostileValidatorSkill": "C:\\Users\\kingd\\.grok\\skills\\hostile-validator\\SKILL.md; surfaces A-D applied; operator overrides Grok with Astra",
+  "tipSha": "b262080199c26622ac495310317616837f9e2248",
+  "RunId": "p2-unit-legion-20260930T235736Z",
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 99,
+  "Completeness": 97,
+  "Confidence": 99,
+  "ScoreReason": "Accuracy99: claims anchored to current code, source hashes, native reports, live identity/PR and real-function probes. Completeness97: qualifying P2 acceptance evidence remains incomplete because AC links and regression oracles are not repaired and historical provenance/inter-phase proof is unresolved. Scores are reviewer assessments, not measured product coverage percentages; they are not inflated to meet98.",
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "status": "FAIL",
+      "claim": "All prior HV01-HV14 and A1/C2/C3/D1 failures are remediated without weakening the claim.",
+      "evidence": "HV01-HV06/HV08/HV10-HV14 runtime re-attacks pass. HV15 also passes. HV07 mapping/oracle defects remain unchanged and HV09 completeness remains below98. Thus C3 is repaired, while A1/C2/D1 are not. 81 actual-function cases plus three marker-helper probes and ten compiled metadata-validator checks feed65 passing explicit audit assertions."
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "status": "PASS",
+      "claim": "The named unit gate is green at the requested tip.",
+      "evidence": "Independently reparsed all208 NUnit cases and4573 TRX outcomes: Pester208/0/0, seven Nuke projects4252/0/0, Build.Tests321/0/0. Every individual result passes. Native FailedBlocks/FailedContainers/NotRun/Inconclusive are0; all three command exits0. Direct compiled SessionLifeUnitGateValidator.Validate accepts the reports using their recorded dotnet10.0.401 and pwsh7.6.5. No full-suite rerun is claimed. Tip committed2026-09-30T23:57:33Z before Pester started23:57:47Z; gate log accepted2026-10-01T00:10:53Z."
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "status": "PASS",
+      "claim": "PluginIntegration is excluded from unit inventory and remains P6-owned.",
+      "evidence": "build/Build.Test.cs:14-25 excludes PluginIntegration before the same selected array drives inventory and execution. selected-projects.json has exactly seven expected projects. Plan:400 retains PluginSessionLogIntegration in P6. Native exclusion regression passes."
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "status": "PASS",
+      "claim": "Gate source binding covers P2 runtime/docs inputs and remains stable.",
+      "evidence": "All2228 source SHA256 values match current files before and after probes. All eight named critical runtime/orchestrator/document/schema inputs are present. build/SessionLifeUnitGateManifest.cs:22 includes plugins/core/lib-ps, tools/validation, docs/context and docs/REPL-USER-GUIDE.md. All17 gate artifacts remain byte-identical."
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "status": "PASS",
+      "claim": "history-r1 is frozen and inherited P1 validation is not silently broken.",
+      "evidence": "All five frozen history-file hashes match history-manifest.json; manifest SHA256 B56354AA46F36AA092AEC7A38E0849353F77A6D34A4C07552FBF5EBC192C6DA4. Parsed Build.Tests contains95 inherited SessionLifeUnitGate cases plus the exclusion regression,96/0. No frozen-history edit was performed."
+    },
+    {
+      "id": "A6",
+      "surface": "A",
+      "status": "FAIL",
+      "claim": "Concrete AC coverage establishes completeness>=98 without closing TODOs.",
+      "evidence": "All35 TODO rows remain not-accepted and done=false. All35 core mapping arrays are populated, but wrong/nonexistent links and missing assertion branches remain. None of the five HV10-HV14 native test names appears in criterionSpecificExistingTests. Completeness97 does not satisfy98."
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "status": "PASS",
+      "claim": "The mandatory profile-first procedure was executed.",
+      "evidence": "First execution attempt was the specified Claude add-profile SKILL.md read; sandbox error206 prevented launch. The next evidence execution read that skill via available pwsh7.6.6. All21 non-skill profile Markdown files were fully read; truncated aggregate output was reread in complete smaller segments. No validation began until profile loading completed. Hostile-validator skill surfaces A-D were read and applied with the operator Astra override."
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "status": "PASS",
+      "claim": "This pass uses approved shells and accurate model identity.",
+      "evidence": "PAYTON-LEGION2. Evidence console runs pwsh7.6.6; child probes and bound validator use the recorded Codex-runtime pwsh7.6.5. No Python/Bash used. Windows PowerShell5.1 fallback authorized but unused. session_meta line1 and turn_context line8 of thread01a0f4d3-7de5-7c71-a588-b257433fa97c prove requested cwd, codex_exec, gpt-6-astra and effort xhigh; matching live launcher independently confirms flags."
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "status": "PASS",
+      "claim": "Review receipts honor the receipt-only persistence override.",
+      "evidence": "The operator explicitly waived MCP session-log persistence for this Astra pass. Exact user request, launcher/model/profile proof, visible tool/message stream, full Markdown/JSON verdict and supporting evidence are retained under docs/receipts/hv. Response JSONL includes a visible-stream snapshot and the complete result; the external runner may also capture its CLI stream. The root marker has only workspacePath and apiKey:test; it is not trusted MCP bootstrap proof. No live MCP durability claim is made."
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "status": "PASS",
+      "claim": "The requested source tip and live PR identity agree.",
+      "evidence": "Local HEAD and branch equal b262080199c26622ac495310317616837f9e2248 / cursor/sessionlife-p2-contracts-5cb2. GitHub get_pr_info independently returned PR72 open,draft=true,merged=false at the same head SHA. No PR write was made."
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "status": "PASS",
+      "claim": "No prior HV AGREE or accepted state is fabricated.",
+      "evidence": "p2-contracts-verdict.json:5-7 remains accepted=false, phaseComplete=false, hvAgreeClaimed=false. PR72 body explicitly disclaims P2 exit/HV AGREE and all35 TODOs remain open in the reviewed snapshot. Its older gate narrative is historical, not used as current green proof."
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "status": "PASS",
+      "claim": "The named HV08 runtime YAML and HV15 marker-helper defects are repaired.",
+      "evidence": "Actual Open-PluginTurn round-trips the space+#path recovery artifact. All three unchanged Get-TestMarkerSnapshot bodies reject a missing marker at their configured RepoRoot, create no marker there, and create explicit isolated fixtures through Write-McpYamlObject with exact workspace-path roundtrip. The actual repository marker SHA256 is unchanged. This is the tested helper contract, not an attribution of who created the pre-existing root marker."
+    },
+    {
+      "id": "B7",
+      "surface": "B",
+      "status": "UNKNOWN",
+      "claim": "Historical implementation automation and store provenance fully followed workspace rules.",
+      "evidence": "p2-contracts-verdict.json:53 and p2-unit-gate-failures.json:1037 still declare Python json module serializing native objects. Original author execution and authoritative MCP-store provenance were not independently established. The statement is preserved as conflicting historical evidence; neither compliance nor actual forbidden execution is invented."
+    },
+    {
+      "id": "B8",
+      "surface": "B",
+      "status": "UNKNOWN",
+      "claim": "Required P2 Red-test inter-phase hostile AGREE is established.",
+      "evidence": "No linked P2 Red-test AGREE was located in the reviewed P2 plan/receipt chain. Plan:259 and384 require it; plan:248 forbids pretending current reruns establish past chronology. No post-hoc timestamp inference is used. P1 acceptance is not P2 acceptance, and historical phaseComplete remains false."
+    },
+    {
+      "id": "B9",
+      "surface": "B",
+      "status": "PASS",
+      "claim": "Review-only boundaries are preserved.",
+      "evidence": "Only new receipts, scripts and isolated probe fixtures under docs/receipts/hv were written. No product remediation, merge, commit/push, deployment, TODO/goal/requirement-state mutation or real session-store write. All pre-existing tracked dirty-file hashes and HEAD are unchanged; all bound sources and gate artifacts were rehashed after probes."
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "status": "PASS",
+      "claim": "P2 requirements, structured ACs and FR/TR/TEST mapping evidence exist.",
+      "evidence": "The reviewed exported acceptance snapshot contains109 AC rows,47 unique FR/TR/TEST edges and35 unique TODO rows. The selected FR/TR/TEST SESSIONLIFE001..003 scope has35 core criteria. Each was given a fresh individual reviewer disposition; future P3/P4/P6 obligations are separated. This proves the accessible snapshot, not fresh authoritative server state."
+    },
+    {
+      "id": "C2",
+      "surface": "C",
+      "status": "FAIL",
+      "claim": "Criterion-specific mappings and committed regression oracles completely cover the P2 slice.",
+      "evidence": "HV07 remains. acceptance-manifest.json has the identical Git blob fd67e429f0fd7e44226eac4cc8e744528e7a29d2 at8f28c385 andb2620801. FR001-AC003:348 maps retry/path tests instead of complete-query fallback; FR001-AC004:399 contains an absent native name; FR002-AC002:558 maps marker-proof rejection instead of raw metadata branches; TR001-AC003:1744 lacks bounded404 assertions; TEST002-AC004:2917 maps docs/hook tests instead of cumulative gate validation. HV10-HV14 are unmapped. P2Tests:549-554 regex-matches guide YAML rather than parsing all documents; bootstrap parsing lacks raw/parsed completeness equality. Current independent parsing succeeds for48 blocks and five begin examples, but that does not repair the required regression oracle."
+    },
+    {
+      "id": "C3",
+      "surface": "C",
+      "status": "PASS",
+      "claim": "Previously failing real runtime branches are now repaired at this tip.",
+      "evidence": "65 explicit audit assertions pass: durable omission keeps both keys absent; explicit append metadata changes cache before completion; invalid marker reopen and all caller mismatches reject without cache mutation; degraded retry returns to primary and clears matching recovery flags; malformed typed identities reject, including missing/null/empty/whitespace/wrong IDs; failed title retains recovery and requires retitled. Ten first-persist payloads pass the compiled server validator. Local transport-boundary probes do not establish P6 durable readback."
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "status": "FAIL",
+      "claim": "The P2 plan DoD is holistically satisfied and the slice can exit.",
+      "evidence": "Plan:254-260,371,383-384,392 requires real contract coverage, concrete per-AC mapping, correct document proofs, cumulative zero-fail/skip gate and independent acceptance. The native gate and repaired runtime branches pass; HV07 mapping/oracle gaps, sub98 completeness and unresolved B7/B8 prevent P2 exit. No next-slice or done-state authorization is granted."
+    },
+    {
+      "id": "D2",
+      "surface": "D",
+      "status": "PASS",
+      "claim": "Later-phase scope and nonacceptance boundaries remain intact.",
+      "evidence": "P3 deadline/Stop, P4 replay/security/provider, P5 activation and P6 durable/provider/integration proofs remain deferred. PluginIntegration is excluded from this unit gate. All35 TODO acceptance rows remain not-accepted. This review neither bulk-closes rows nor treats suite green as whole-AC acceptance."
+    }
+  ],
+  "Reattack": [
+    {
+      "id": "HV01",
+      "status": "PASS",
+      "evidence": "Ten real first-persist payloads pass ValidateForNewEntry. Degraded404 attempts one recovery Submit and retains one session_dialog; never-degraded404 does neither."
+    },
+    {
+      "id": "HV02",
+      "status": "PASS",
+      "evidence": "Missing session, wrong workspace and invalid durable marker proof reject. Session-rotation append/title/update target original sessionA."
+    },
+    {
+      "id": "HV03",
+      "status": "PASS",
+      "evidence": "Six caller mismatch verbs have zero transport calls and identical before/after cache hashes."
+    },
+    {
+      "id": "HV04",
+      "status": "PASS",
+      "evidence": "Actual Open-PluginTurn initial/duplicate degraded outputs identify an existing recovery artifact."
+    },
+    {
+      "id": "HV05",
+      "status": "PASS",
+      "evidence": "Identical degraded begin retries primary and clears matching recovery after confirmed success."
+    },
+    {
+      "id": "HV06",
+      "status": "PASS",
+      "evidence": "Identical and changed successful retries clear degraded/failsafePath flags; changed retry retains the older distinct envelope. Broader P4 replay ordering is not claimed."
+    },
+    {
+      "id": "HV07",
+      "status": "FAIL",
+      "evidence": "Wrong/nonexistent/unlinked AC tests and incomplete document regression oracle remain; manifest unchanged from prior DISAGREE."
+    },
+    {
+      "id": "HV08",
+      "status": "PASS",
+      "evidence": "Real runtime space+#path YAML recovery artifact round-trips and exists."
+    },
+    {
+      "id": "HV09",
+      "status": "FAIL",
+      "evidence": "Completeness97 is below the mandatory98 threshold."
+    },
+    {
+      "id": "HV10",
+      "status": "PASS",
+      "evidence": "Durable update/appendActions/complete serialized turns contain neither omitted planFile nor omitted todoId."
+    },
+    {
+      "id": "HV11",
+      "status": "PASS",
+      "evidence": "Explicit append metadata is cached before completion; later durable completion omits both fields."
+    },
+    {
+      "id": "HV12",
+      "status": "PASS",
+      "evidence": "Persisted missing-marker and wrong-marker degraded begin probes reject with no transport/cache changes. Source check is persisted-only for incomplete marker proof. StrictCount runtime fixture reset was independently inspected."
+    },
+    {
+      "id": "HV13",
+      "status": "PASS",
+      "evidence": "Six missing-marker caller mismatches reject before freshness: zero transport and unchanged hashes."
+    },
+    {
+      "id": "HV14",
+      "status": "PASS",
+      "evidence": "Missing/partial/null/empty/whitespace/wrong typed identity rejects for both verbs. Title also rejects absent/false retitled and retains failsafe. Valid typed responses succeed."
+    },
+    {
+      "id": "HV15",
+      "status": "PASS",
+      "evidence": "All three marker helper bodies reject default RepoRoot creation; explicit isolated space+#path fixtures use Write-McpYamlObject and round-trip. Actual root marker unchanged."
+    }
+  ],
+  "FailList": [
+    "A1/HV07: prior mapping and regression-oracle failures remain; the all-remediated claim is false.",
+    "A6/HV09: completeness97 is below the required98 despite35 populated mapping arrays and correctly open TODOs.",
+    "C2/HV07: wrong/nonexistent AC test links, unmapped HV10-HV14 cases and incomplete YAML-document parsing regression remain.",
+    "D1: P2 holistic exit criteria are not met; mapping/oracle gaps and unresolved process evidence prevent acceptance."
+  ],
+  "Unknowns": [
+    {
+      "id": "B7",
+      "surface": "B",
+      "status": "UNKNOWN",
+      "claim": "Historical implementation automation and store provenance fully followed workspace rules.",
+      "evidence": "p2-contracts-verdict.json:53 and p2-unit-gate-failures.json:1037 still declare Python json module serializing native objects. Original author execution and authoritative MCP-store provenance were not independently established. The statement is preserved as conflicting historical evidence; neither compliance nor actual forbidden execution is invented."
+    },
+    {
+      "id": "B8",
+      "surface": "B",
+      "status": "UNKNOWN",
+      "claim": "Required P2 Red-test inter-phase hostile AGREE is established.",
+      "evidence": "No linked P2 Red-test AGREE was located in the reviewed P2 plan/receipt chain. Plan:259 and384 require it; plan:248 forbids pretending current reruns establish past chronology. No post-hoc timestamp inference is used. P1 acceptance is not P2 acceptance, and historical phaseComplete remains false."
+    }
+  ],
+  "ModelProof": {
+    "sessionFile": "C:\\Users\\kingd\\.codex\\sessions\\2026\\09\\30\\rollout-2026-09-30T19-18-16-01a0f4d3-7de5-7c71-a588-b257433fa97c.jsonl",
+    "events": [
+      {
+        "line": 1,
+        "type": "session_meta",
+        "id": "01a0f4d3-7de5-7c71-a588-b257433fa97c",
+        "originator": "codex_exec",
+        "cliVersion": "0.158.0-alpha.2.1",
+        "cwd": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2"
+      },
+      {
+        "line": 8,
+        "type": "turn_context",
+        "turnId": "01a0f4d3-8023-7ba3-a0a0-2617fc859011",
+        "model": "gpt-6-astra",
+        "effort": "xhigh",
+        "cwd": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2"
+      }
+    ],
+    "launcher": {
+      "ProcessId": 69244,
+      "CommandLine": "\"C:\\Users\\kingd\\AppData\\Local\\OpenAI\\Codex\\bin\\faa963e871dd422c\\codex.exe\" exec -m gpt-6-astra -c model_reasoning_effort=\"xhigh\" -C F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2 -s workspace-write --skip-git-repo-check --json -o \"F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\.agent-scratch\\hv-p2-astra-last-20261001T0018Z.txt\" -"
+    }
+  },
+  "OperatorOverrides": [
+    "Use Astra not Grok for this pass",
+    "PAYTON-LEGION2 Windows PowerShell5.1 approved when pwsh unavailable/remapped; actual pwsh7.6.6 and7.6.5 used",
+    "MCP session-log persistence waived; receipt-only JSONL/Markdown/JSON",
+    "Review only; no product remediations, merge, commit/push, TODO/goal acceptance or bulk closure",
+    "AGREE requires all applicable A-D PASS and accuracy/completeness>=98"
+  ],
+  "Gate": {
+    "TimestampUtc": "2026-09-30T19:23:52.6279115-05:00",
+    "RunId": "p2-unit-legion-20260930T235736Z",
+    "Shell": "7.6.5",
+    "Reports": [
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T235736Z\\build-tests\\Build.Tests.trx",
+        "sha256": "3EFA074638712D0070E0D43EE90BCC7B5A3D51FCDC1A73088914B326BEF470EE",
+        "outcome": "Completed",
+        "total": 321,
+        "executed": 321,
+        "passed": 321,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualResults": 321,
+        "actualNonPassed": 0,
+        "start": "2026-09-30T19:08:01.5505305-05:00",
+        "finish": "2026-09-30T19:10:46.4920131-05:00"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T235736Z\\unit\\McpServer.Client.Tests\\McpServer.Client.Tests.trx",
+        "sha256": "BC9DB4F5F4592E47A1180DC49B256E6BF86AA5BC7105618C89755339181E5D38",
+        "outcome": "Completed",
+        "total": 301,
+        "executed": 301,
+        "passed": 301,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualResults": 301,
+        "actualNonPassed": 0,
+        "start": "2026-09-30T19:07:39.1460005-05:00",
+        "finish": "2026-09-30T19:07:41.3377512-05:00"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T235736Z\\unit\\McpServer.Cqrs.Tests\\McpServer.Cqrs.Tests.trx",
+        "sha256": "31DE24F69C89CF4F760F61912EBFE1FDCBED7DF830F692ABC74D13469E7A3B72",
+        "outcome": "Completed",
+        "total": 33,
+        "executed": 33,
+        "passed": 33,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualResults": 33,
+        "actualNonPassed": 0,
+        "start": "2026-09-30T19:07:42.2945568-05:00",
+        "finish": "2026-09-30T19:07:43.8772346-05:00"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T235736Z\\unit\\McpServer.Launcher.Tests\\McpServer.Launcher.Tests.trx",
+        "sha256": "263F74ABF2A1B6F3EA2159AF4574B6A5C0AA3F80A31BCC57B75A934385C37E2E",
+        "outcome": "Completed",
+        "total": 20,
+        "executed": 20,
+        "passed": 20,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualResults": 20,
+        "actualNonPassed": 0,
+        "start": "2026-09-30T19:07:44.8137904-05:00",
+        "finish": "2026-09-30T19:07:46.2004596-05:00"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T235736Z\\unit\\McpServer.McpAgent.Tests\\McpServer.McpAgent.Tests.trx",
+        "sha256": "B8EDA3AD28BDD8733C693C7D68D87891BCE4A541A58E1A2554D115AA314D056A",
+        "outcome": "Completed",
+        "total": 63,
+        "executed": 63,
+        "passed": 63,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualResults": 63,
+        "actualNonPassed": 0,
+        "start": "2026-09-30T19:07:47.1156619-05:00",
+        "finish": "2026-09-30T19:07:51.0910086-05:00"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T235736Z\\unit\\McpServer.QBAgent.Tests\\McpServer.QBAgent.Tests.trx",
+        "sha256": "8FE4B4CE0E519E295016E4E8BD3B8378975BA50394D25AA062AD794D2249EA75",
+        "outcome": "Completed",
+        "total": 90,
+        "executed": 90,
+        "passed": 90,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualResults": 90,
+        "actualNonPassed": 0,
+        "start": "2026-09-30T19:07:55.6586527-05:00",
+        "finish": "2026-09-30T19:07:57.3949809-05:00"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T235736Z\\unit\\McpServer.Repl.Core.Tests\\McpServer.Repl.Core.Tests.trx",
+        "sha256": "1CA6473CCFA2F52A1A2A1C9007017D502206A08600D2DC9A3CBC20AB7279017B",
+        "outcome": "Completed",
+        "total": 866,
+        "executed": 866,
+        "passed": 866,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualResults": 866,
+        "actualNonPassed": 0,
+        "start": "2026-09-30T19:07:52.0879841-05:00",
+        "finish": "2026-09-30T19:07:54.587816-05:00"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T235736Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx",
+        "sha256": "EBEB46595C75DA1A0AE6AD7C7CF83B31C4824E3DAA2193F6BA441A8C5C4227B1",
+        "outcome": "Completed",
+        "total": 2879,
+        "executed": 2879,
+        "passed": 2879,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualResults": 2879,
+        "actualNonPassed": 0,
+        "start": "2026-09-30T19:04:48.4412254-05:00",
+        "finish": "2026-09-30T19:07:37.4653251-05:00"
+      }
+    ],
+    "ManifestSources": 2228,
+    "P1Results": [
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"pester\", defect: MissingExitCode)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateConsumerTests.ValidateSessionLifeUnitGate_DelegatesExactRequestExactlyOnce",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: StalePesterNativeResult)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: MissingProjectReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"pester\", defect: MalformedExitCode)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: NonPassingBuildTestsReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.PluginSessionLogIntegrationTargetTests.TestTarget_ExcludesPluginIntegrationFromUnitInventory",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: InconclusivePesterTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: StaleProjectReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"build-tests\", defect: MissingExitCode)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: DuplicateProject)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: ToolVersionDrift)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: MalformedTrxCounter)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: InconsistentTrxCounters)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: SkippedPesterTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_ValidProviderArtifacts_DoNotRequireUnitLane",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: StaleInventory)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: ProjectReportMismatch)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: StaleInventory)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: OptionalSkippedTrxTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"provider\", commandName: \"nuke-provider\", defect: MissingExitCode)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: FailedPesterBlocks)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"nuke-test\", defect: MalformedExitCode)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: NegativeTrxCounter)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: MalformedTrxCounter)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ToolByteHashDrift)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ToolVersionDrift)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: InvalidTrxTimes)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: EditedIncludedSource)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: AddedIncludedSource)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"nuke-test\", defect: Missing)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: OptionalAdverseTrxTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_NestedMcpServerAncestor_IncludedSourceDrift_IsRejected(invalidFixture: AddedIncludedSource)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: DuplicateReportFile)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"provider\", commandName: \"nuke-provider\", defect: MalformedExitCode)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: WrongRunId)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: DeletedIncludedSource)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: FailedTrxTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"provider\", commandName: \"nuke-provider\", defect: NonZero)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: WrongRunSourceManifest)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: FailedTrxTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: OptionalAdverseTrxTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: ZeroDiscoveredTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: IncompleteTrxOutcome)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: ScopeMismatch)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: NegativeTrxCounter)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateConsumerTests.ValidateSessionLifeUnitGate_RejectsMissingRepeatedCopiedOrWrongTargetCall",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ToolPathDrift)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"pester\", defect: NonZero)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: MissingPesterReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: DuplicateProject)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: NotExecutedTrxTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: MissingTrxCounter)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: DeletedIncludedSource)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: WrongRunCommandResults)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: EditedIncludedSource)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: WrongRunId)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: FailedPesterTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"build-tests\", defect: MalformedExitCode)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: InvalidTrxTimes)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: MissingPesterNativeCounter)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ProjectReportMismatch)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: OptionalSkippedTrxTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"nuke-test\", defect: MissingExitCode)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"build-tests\", defect: NonZero)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: InconsistentTrxCounters)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ScopeMismatch)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: NotExecutedTrxTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: WrongRunSourceManifest)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"build-tests\", defect: Missing)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: StaleBuildTestsReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: MissingProjectReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: AddedIncludedSource)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: StalePesterReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: WrongRunCommandResults)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: IncompleteTrxOutcome)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"provider\", commandName: \"nuke-provider\", defect: Missing)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_ValidUnitArtifacts_DoNotRequireProviderLane",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: MissingInventory)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: MissingTrxCounter)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: MissingBuildTestsReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_NestedMcpServerAncestor_AcceptsValidUnitArtifacts",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_NestedMcpServerAncestor_ReportOnlyWrite_DoesNotCauseSourceDrift",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_NestedMcpServerAncestor_IncludedSourceDrift_IsRejected(invalidFixture: EditedIncludedSource)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ZeroDiscoveredTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: ToolPathDrift)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_NestedMcpServerAncestor_IncludedSourceDrift_IsRejected(invalidFixture: DeletedIncludedSource)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"pester\", defect: Missing)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: NotRunPesterTests)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"nuke-test\", defect: NonZero)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: ToolByteHashDrift)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInProviderLane(invalidFixture: StaleProjectReport)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: FailedPesterContainers)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_ReportWrittenAfterManifest_DoesNotCauseSourceDrift",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: DuplicateReportFile)",
+        "outcome": "Passed"
+      },
+      {
+        "testName": "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: MissingInventory)",
+        "outcome": "Passed"
+      }
+    ],
+    "Pester": {
+      "total": 208,
+      "actualCases": 208,
+      "nonSuccess": 0,
+      "date": "2026-09-30",
+      "time": "23:57:48",
+      "native": {
+        "RunId": "p2-unit-legion-20260930T235736Z",
+        "ExecutedAt": "2026-09-30T18:57:47.7168483-05:00",
+        "Total": 208,
+        "Passed": 208,
+        "Failed": 0,
+        "Skipped": 0,
+        "Inconclusive": 0,
+        "NotRun": 0,
+        "FailedBlocks": 0,
+        "FailedContainers": 0
+      },
+      "sha256": "893A7F91D5A635167824407117BB4BD50B4B966D9E30BAD04F8049B8E8184684",
+      "P2Cases": [
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects an absent current-turn cache without a server write",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves degraded creation metadata and sends cached plan on the same request",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores canceled with exact None when a new request supersedes an open turn",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects whitespace metadata on ordinary first persistence",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits an empty query through the real builder and shim",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.does not write a second failsafe for an unchanged queued update and keeps additive methods distinct",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects a request mismatch and a wrong-workspace marker without changing session A or request R",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refreshes same-path marker drift without rewriting the bound session",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.keeps Codex cache and audit identity when Grok agent variables are inherited",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves session A and request R from a native turn through a plugin append",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.sends exact None on updateTurn when caller clears planFile and todoId",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses durable reopen without sessionId and without workspace marker proof",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.round-trips hash and space failsafePath through object YAML and clears degraded after primary success",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV11 explicit append metadata updates cache used by later complete",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV12 beginTurn rejects missing marker proof and wrong-marker degraded reopen",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV13 request mismatch does not mutate current-turn when markers are missing",
+          "result": "Success"
+        },
+        {
+          "name": "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false",
+          "result": "Success"
+        }
+      ]
+    },
+    "CommandResults": {
+      "schemaVersion": 1,
+      "runId": "p2-unit-legion-20260930T235736Z",
+      "scope": "unit",
+      "commands": [
+        {
+          "name": "pester",
+          "exitCode": 0,
+          "startedAtUtc": "2026-09-30T18:57:47.7168483-05:00",
+          "finishedAtUtc": "2026-09-30T19:02:33.40152-05:00"
+        },
+        {
+          "name": "nuke-test",
+          "exitCode": 0,
+          "startedAtUtc": "2026-09-30T19:02:33.4376597-05:00",
+          "finishedAtUtc": "2026-09-30T19:07:59.0880039-05:00"
+        },
+        {
+          "name": "build-tests",
+          "exitCode": 0,
+          "startedAtUtc": "2026-09-30T19:07:59.0903567-05:00",
+          "finishedAtUtc": "2026-09-30T19:10:46.6616117-05:00"
+        }
+      ]
+    },
+    "SourceMismatches": [],
+    "OmittedCriticalInputs": [
+      {
+        "path": "plugins/core/lib-ps/repl-invoke.ps1",
+        "inManifest": true,
+        "currentSha256": "586783497B2FBD60AE2B7A3206BAEC046F11C270A8C19844D6FFECEA77AD8D8C"
+      },
+      {
+        "path": "plugins/core/lib-ps/McpPluginShim.psm1",
+        "inManifest": true,
+        "currentSha256": "02A68CBDEE243F12DE6257473990A3D4B9B0CB6A34AB10F940F0AB2F0D207375"
+      },
+      {
+        "path": "plugins/core/lib-ps/plugin-hook.ps1",
+        "inManifest": true,
+        "currentSha256": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B"
+      },
+      {
+        "path": "plugins/core/lib-ps/resolve-cache-dir.ps1",
+        "inManifest": true,
+        "currentSha256": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405"
+      },
+      {
+        "path": "tools/validation/Invoke-SessionLifeUnitGate.ps1",
+        "inManifest": true,
+        "currentSha256": "B26FD1BD1E8BBC2573F44665610F74C460006B7D5D05FAAB9808CA40F29B1CB8"
+      },
+      {
+        "path": "docs/context/module-bootstrap.md",
+        "inManifest": true,
+        "currentSha256": "F4918499C18D4F16169012EB65834D3D66AE4362ABC8F34E613CB48DFEDCAE11"
+      },
+      {
+        "path": "docs/REPL-USER-GUIDE.md",
+        "inManifest": true,
+        "currentSha256": "D80D6074FF21BBDC1AFD57AC90D642E4C36F4A4E8C4A5707556DFC34D3AD24B9"
+      },
+      {
+        "path": "docs/context/repl-yaml-message.schema.json",
+        "inManifest": true,
+        "currentSha256": "FABCF8D539D1CCE2D3EE1CCE0D1573E654E6642D628A3ECFF1E46CF12F57A031"
+      }
+    ],
+    "ArtifactHashes": [
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T235736Z\\command-results.json",
+        "length": 671,
+        "sha256": "4B1F401B8281096A7079A0EDF02327526061CB4E91FFA9D8D7D47E4D4031F89B"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T235736Z\\source-manifest.json",
+        "length": 583012,
+        "sha256": "6ED45A70209333828C1DE7BB52843B4E6B941573D28B40A885C664994FC39589"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T235736Z\\build-tests\\Build.Tests.trx",
+        "length": 455434,
+        "sha256": "3EFA074638712D0070E0D43EE90BCC7B5A3D51FCDC1A73088914B326BEF470EE"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T235736Z\\logs\\build-tests.log",
+        "length": 794,
+        "sha256": "84D678F4CCB474B7A1646B7A4F56D5FE1989528F03808D32E8C7D22482F8E06C"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T235736Z\\logs\\capture-manifest.log",
+        "length": 3704,
+        "sha256": "3B271CCC426F37410C671C5126520E8A292F2DDF988EFD5D396C35BD93134651"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T235736Z\\logs\\nuke-test.log",
+        "length": 719925,
+        "sha256": "B9BE9C5DE48D82EDC894DC7E46F4FCE91665F40BF90EC964DBA0555304493390"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T235736Z\\logs\\validate.log",
+        "length": 3515,
+        "sha256": "F525B8C8C99FE81351812983EBB00AF0D1303F99E7C9C658678F0860C6F08450"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T235736Z\\pester\\native-run.json",
+        "length": 260,
+        "sha256": "84F2FD01227C1ED572077AB3E7E3A0FF23223E9D0954ACD21EBCD2F4D2DBA810"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T235736Z\\pester\\results.xml",
+        "length": 85184,
+        "sha256": "893A7F91D5A635167824407117BB4BD50B4B966D9E30BAD04F8049B8E8184684"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T235736Z\\unit\\selected-projects.json",
+        "length": 1761,
+        "sha256": "B1ADACF02F23160B6E862E23B5B2CD9250147EDF054F1F83597D018D2B5E3A17"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T235736Z\\unit\\McpServer.Client.Tests\\McpServer.Client.Tests.trx",
+        "length": 425697,
+        "sha256": "BC9DB4F5F4592E47A1180DC49B256E6BF86AA5BC7105618C89755339181E5D38"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T235736Z\\unit\\McpServer.Cqrs.Tests\\McpServer.Cqrs.Tests.trx",
+        "length": 46202,
+        "sha256": "31DE24F69C89CF4F760F61912EBFE1FDCBED7DF830F692ABC74D13469E7A3B72"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T235736Z\\unit\\McpServer.Launcher.Tests\\McpServer.Launcher.Tests.trx",
+        "length": 30732,
+        "sha256": "263F74ABF2A1B6F3EA2159AF4574B6A5C0AA3F80A31BCC57B75A934385C37E2E"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T235736Z\\unit\\McpServer.McpAgent.Tests\\McpServer.McpAgent.Tests.trx",
+        "length": 96112,
+        "sha256": "B8EDA3AD28BDD8733C693C7D68D87891BCE4A541A58E1A2554D115AA314D056A"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T235736Z\\unit\\McpServer.QBAgent.Tests\\McpServer.QBAgent.Tests.trx",
+        "length": 130319,
+        "sha256": "8FE4B4CE0E519E295016E4E8BD3B8378975BA50394D25AA062AD794D2249EA75"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T235736Z\\unit\\McpServer.Repl.Core.Tests\\McpServer.Repl.Core.Tests.trx",
+        "length": 1297942,
+        "sha256": "1CA6473CCFA2F52A1A2A1C9007017D502206A08600D2DC9A3CBC20AB7279017B"
+      },
+      {
+        "path": "TestResults\\p2-unit-legion-20260930T235736Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx",
+        "length": 4426245,
+        "sha256": "EBEB46595C75DA1A0AE6AD7C7CF83B31C4824E3DAA2193F6BA441A8C5C4227B1"
+      }
+    ],
+    "HistoryManifestSha256": "B56354AA46F36AA092AEC7A38E0849353F77A6D34A4C07552FBF5EBC192C6DA4",
+    "HistoryFiles": [
+      {
+        "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\build\\_build.csproj",
+        "expected": "1022D46F62CACDAC7D8D175E18201EC244F15E1A77313BFC132DDA86DD1097CD",
+        "actual": "1022D46F62CACDAC7D8D175E18201EC244F15E1A77313BFC132DDA86DD1097CD",
+        "match": true
+      },
+      {
+        "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\build\\SessionLifeUnitGate.cs",
+        "expected": "CE715D05FB1B6A7345E8F40476BFE42F1BADC62B09F2FB7E65155C962931A5AF",
+        "actual": "CE715D05FB1B6A7345E8F40476BFE42F1BADC62B09F2FB7E65155C962931A5AF",
+        "match": true
+      },
+      {
+        "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\p1-behavior-red-test-plan.md",
+        "expected": "715A7EA57F7B1A4DBF03071FC8D6C1B04BB2F4C714ABD3111165B23FD0178D95",
+        "actual": "715A7EA57F7B1A4DBF03071FC8D6C1B04BB2F4C714ABD3111165B23FD0178D95",
+        "match": true
+      },
+      {
+        "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\tests\\Build.Tests\\SessionLifeUnitGateConsumerTests.cs",
+        "expected": "1616AF1D93EA4E3209BB4B84DBB346AF50A868704A7653CDA3B557D259564736",
+        "actual": "1616AF1D93EA4E3209BB4B84DBB346AF50A868704A7653CDA3B557D259564736",
+        "match": true
+      },
+      {
+        "path": "docs\\receipts\\sessionlife-completion\\20260928-p1-behavior-red\\history-r1\\tests\\Build.Tests\\SessionLifeUnitGateValidatorTests.cs",
+        "expected": "C2D8104B765539AC133131A75F98149DD48DACF716682585A119C0CE77B33E97",
+        "actual": "C2D8104B765539AC133131A75F98149DD48DACF716682585A119C0CE77B33E97",
+        "match": true
+      }
+    ],
+    "ValidatorAssemblySha256": "FB9D1F12082F91FE16F6B02756C56221DA3CC42A03D5FEFB9D6EEF23FA437E02",
+    "IndependentValidatorResult": {
+      "status": "ACCEPTED",
+      "method": "SessionLifeUnitGateValidator.Validate",
+      "artifactMutation": false,
+      "note": "Direct compiled-validator invocation on existing normalized reports; not a fresh test-suite run."
+    }
+  },
+  "InitialValidatorAttempt": {
+    "status": "REJECTED-OR-ERROR",
+    "error": "System.Management.Automation.MethodInvocationException: Exception calling \"Invoke\" with \"2\" argument(s): \"Session-life gate rejected the run. reason=tool-path-drift affected=pwsh\"\r\n ---> System.IO.InvalidDataException: Session-life gate rejected the run. reason=tool-path-drift affected=pwsh\r\n   at SessionLifeUnitGateValidator.Reject(String reason, String affected) in F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\build\\SessionLifeUnitGateValidator.cs:line 777\r\n   at SessionLifeUnitGateValidator.ValidateTools(JsonObject manifest) in F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\build\\SessionLifeUnitGateValidator.cs:line 193\r\n   at SessionLifeUnitGateValidator.ValidateSourceManifest(SessionLifeUnitGateValidationRequest request) in F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\build\\SessionLifeUnitGateValidator.cs:line 124\r\n   at SessionLifeUnitGateValidator.Validate(SessionLifeUnitGateValidationRequest request) in F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\build\\SessionLifeUnitGateValidator.cs:line 105\r\n   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)\r\n   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)\r\n   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)\r\n   --- End of inner exception stack trace ---\r\n   at System.Management.Automation.ExceptionHandlingOps.CheckActionPreference(FunctionContext funcContext, Exception exception)\r\n   at System.Management.Automation.Interpreter.ActionCallInstruction`2.Run(InterpretedFrame frame)\r\n   at System.Management.Automation.Interpreter.EnterTryCatchFinallyInstruction.Run(InterpretedFrame frame)\r\n   at System.Management.Automation.Interpreter.EnterTryCatchFinallyInstruction.Run(InterpretedFrame frame)"
+  },
+  "ValidatorAttemptExplanation": "The initial evidence-console PATH resolved pwsh7.6.6, so the validator correctly rejected tool-path-drift. It was rerun using the actual manifest-bound Codex-runtime pwsh7.6.5, with live executable version/hash observations, and accepted. No fake observation callback or manifest edit was used.",
+  "ProbeEvaluation": {
+    "timestampUtc": "2026-09-30T19:29:08.2628262-05:00",
+    "assertions": [
+      {
+        "id": "HV01-server-first-persist-validator",
+        "status": "PASS",
+        "evidence": [
+          {
+            "plan": "docs/plans/updated.md",
+            "status": "PASS",
+            "todo": "BUG-TRIAGE-245",
+            "case": "metadata-updateTurn-explicit"
+          },
+          {
+            "plan": "docs/plans/p2.md",
+            "status": "PASS",
+            "todo": "BUG-TRIAGE-246",
+            "case": "metadata-updateTurn-cache"
+          },
+          {
+            "plan": "None",
+            "status": "PASS",
+            "todo": "None",
+            "case": "metadata-updateTurn-none"
+          },
+          {
+            "plan": "docs/plans/updated.md",
+            "status": "PASS",
+            "todo": "BUG-TRIAGE-245",
+            "case": "metadata-appendActions-explicit"
+          },
+          {
+            "plan": "docs/plans/p2.md",
+            "status": "PASS",
+            "todo": "BUG-TRIAGE-246",
+            "case": "metadata-appendActions-cache"
+          },
+          {
+            "plan": "None",
+            "status": "PASS",
+            "todo": "None",
+            "case": "metadata-appendActions-none"
+          },
+          {
+            "plan": "docs/plans/updated.md",
+            "status": "PASS",
+            "todo": "BUG-TRIAGE-245",
+            "case": "metadata-completeTurn-explicit"
+          },
+          {
+            "plan": "docs/plans/p2.md",
+            "status": "PASS",
+            "todo": "BUG-TRIAGE-246",
+            "case": "metadata-completeTurn-cache"
+          },
+          {
+            "plan": "None",
+            "status": "PASS",
+            "todo": "None",
+            "case": "metadata-completeTurn-none"
+          },
+          {
+            "plan": "docs/plans/p2.md",
+            "status": "PASS",
+            "todo": "BUG-TRIAGE-246",
+            "case": "degraded-dialog-recovery-real-payload"
+          }
+        ]
+      },
+      {
+        "id": "HV03-mismatch-updateTurn",
+        "status": "PASS",
+        "evidence": {
+          "calls": 0,
+          "after": "6B69AE64ACFD1AFD93A7A259A84D36E9D4E65E4200430B6A743E5A7AA0FA8811",
+          "before": "6B69AE64ACFD1AFD93A7A259A84D36E9D4E65E4200430B6A743E5A7AA0FA8811"
+        }
+      },
+      {
+        "id": "HV03-mismatch-appendActions",
+        "status": "PASS",
+        "evidence": {
+          "calls": 0,
+          "after": "DC3083725CA52C6107FE35AD7A4425AF994A8252A63CC8DE02129FFE586825AA",
+          "before": "DC3083725CA52C6107FE35AD7A4425AF994A8252A63CC8DE02129FFE586825AA"
+        }
+      },
+      {
+        "id": "HV03-mismatch-appendDialog",
+        "status": "PASS",
+        "evidence": {
+          "calls": 0,
+          "after": "0FB0C32EE4A1230C6D64DFAE3F43DEB735C07F8CC2518F160E3FCCC813609FBD",
+          "before": "0FB0C32EE4A1230C6D64DFAE3F43DEB735C07F8CC2518F160E3FCCC813609FBD"
+        }
+      },
+      {
+        "id": "HV03-mismatch-completeTurn",
+        "status": "PASS",
+        "evidence": {
+          "calls": 0,
+          "after": "18FB7322C960B7CE23AEFB52D4F06FBC521AAFE1371C105C71B89A325C8C8A98",
+          "before": "18FB7322C960B7CE23AEFB52D4F06FBC521AAFE1371C105C71B89A325C8C8A98"
+        }
+      },
+      {
+        "id": "HV03-mismatch-failTurn",
+        "status": "PASS",
+        "evidence": {
+          "calls": 0,
+          "after": "3EE9478E0BAE66634290228D0AD87615FB2C3C98349E363BE136F86959939E10",
+          "before": "3EE9478E0BAE66634290228D0AD87615FB2C3C98349E363BE136F86959939E10"
+        }
+      },
+      {
+        "id": "HV03-mismatch-setTurnTitle",
+        "status": "PASS",
+        "evidence": {
+          "calls": 0,
+          "after": "D5ECEE13D113580BCC263B4BBED69AE40081F3F683AACD5FB03FF84863A2DDC5",
+          "before": "D5ECEE13D113580BCC263B4BBED69AE40081F3F683AACD5FB03FF84863A2DDC5"
+        }
+      },
+      {
+        "id": "HV13-mismatch-missing-marker-updateTurn",
+        "status": "PASS",
+        "evidence": {
+          "calls": 0,
+          "after": "0CD99CA196B8193CE8515498EE451F6483C07B099EBDCDFA8BEAD425A88C939B",
+          "before": "0CD99CA196B8193CE8515498EE451F6483C07B099EBDCDFA8BEAD425A88C939B"
+        }
+      },
+      {
+        "id": "HV13-mismatch-missing-marker-appendActions",
+        "status": "PASS",
+        "evidence": {
+          "calls": 0,
+          "after": "AAC5C9C0BB0EB3BEE63ABF0D84475CBD888437540632A4DB4A59416071181F34",
+          "before": "AAC5C9C0BB0EB3BEE63ABF0D84475CBD888437540632A4DB4A59416071181F34"
+        }
+      },
+      {
+        "id": "HV13-mismatch-missing-marker-appendDialog",
+        "status": "PASS",
+        "evidence": {
+          "calls": 0,
+          "after": "5A52E2F2BFCCE534F1325C9BAA085CAF558561B25D231DB3C12FCAD98E7B2DF7",
+          "before": "5A52E2F2BFCCE534F1325C9BAA085CAF558561B25D231DB3C12FCAD98E7B2DF7"
+        }
+      },
+      {
+        "id": "HV13-mismatch-missing-marker-completeTurn",
+        "status": "PASS",
+        "evidence": {
+          "calls": 0,
+          "after": "41ACEEC1B81F9DE6556C3B87DBAB75D270A7B3FC147989D9D0C3043B402C9309",
+          "before": "41ACEEC1B81F9DE6556C3B87DBAB75D270A7B3FC147989D9D0C3043B402C9309"
+        }
+      },
+      {
+        "id": "HV13-mismatch-missing-marker-failTurn",
+        "status": "PASS",
+        "evidence": {
+          "calls": 0,
+          "after": "FD2EAA1A5119782ECE58550423A5C0D2AAEE27A925AA3E7BA71EEE5A89796D9A",
+          "before": "FD2EAA1A5119782ECE58550423A5C0D2AAEE27A925AA3E7BA71EEE5A89796D9A"
+        }
+      },
+      {
+        "id": "HV13-mismatch-missing-marker-setTurnTitle",
+        "status": "PASS",
+        "evidence": {
+          "calls": 0,
+          "after": "C45562A6B9998908CE0D587242584577D30B97C7DBA1C6DDE8BB23A66D1E69C1",
+          "before": "C45562A6B9998908CE0D587242584577D30B97C7DBA1C6DDE8BB23A66D1E69C1"
+        }
+      },
+      {
+        "id": "HV10-durable-omission-updateTurn",
+        "status": "PASS",
+        "evidence": {
+          "actualTurnKeys": [
+            "queryText",
+            "timestamp",
+            "status",
+            "model",
+            "tokenCount",
+            "requestId",
+            "response"
+          ]
+        }
+      },
+      {
+        "id": "HV10-durable-omission-appendActions",
+        "status": "PASS",
+        "evidence": {
+          "actualTurnKeys": [
+            "queryText",
+            "timestamp",
+            "status",
+            "model",
+            "tokenCount",
+            "actions",
+            "requestId",
+            "response"
+          ]
+        }
+      },
+      {
+        "id": "HV10-durable-omission-completeTurn",
+        "status": "PASS",
+        "evidence": {
+          "actualTurnKeys": [
+            "queryText",
+            "timestamp",
+            "status",
+            "model",
+            "tokenCount",
+            "actions",
+            "requestId",
+            "response"
+          ]
+        }
+      },
+      {
+        "id": "HV11-explicit-cache-then-complete-omission",
+        "status": "PASS",
+        "evidence": {
+          "cacheAfterAppend": {
+            "turnRequestId": "req-R",
+            "sessionId": "Codex-20260930T000000Z-sessionA",
+            "status": "in_progress",
+            "queryText": "original query",
+            "queryTitle": "original title",
+            "openedAt": "2026-09-30T19:24:43.6380344-05:00",
+            "auditActions": 4,
+            "auditDialog": 2,
+            "lastBuildStatus": "succeeded",
+            "markerFilePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-adversarial-fixtures-58897a5e63a145a690cc6ee7c70653b8\\explicit-append-then-complete\\ws\\AGENTS-README-FIRST.yaml",
+            "markerLastWriteUtc": "2026-10-01T00:24:43.6326517Z",
+            "planFile": "docs/plans/new-plan.md",
+            "todoId": "BUG-TRIAGE-245",
+            "auditDecisions": 1,
+            "lastPersistFingerprint": "A153F7769BA489F723E3B000C6B33E5EE0070BE20F7843ECD2DD864E1BCBF208",
+            "persisted": "true"
+          },
+          "turns": [
+            {
+              "queryText": "original query",
+              "timestamp": "2026-09-30T19:24:43.6380344-05:00",
+              "status": "in_progress",
+              "model": "codex",
+              "todoId": "BUG-TRIAGE-245",
+              "tokenCount": 0,
+              "actions": [
+                {
+                  "description": "explicit metadata",
+                  "type": "design_decision"
+                }
+              ],
+              "planFile": "docs/plans/new-plan.md",
+              "requestId": "req-R",
+              "response": "Actions appended."
+            },
+            {
+              "queryText": "original query",
+              "timestamp": "2026-09-30T19:24:43.6380344-05:00",
+              "status": "completed",
+              "model": "codex",
+              "tokenCount": 0,
+              "requestId": "req-R",
+              "response": "complete without changing metadata"
+            }
+          ]
+        }
+      },
+      {
+        "id": "HV12-begin-missing-marker-proof",
+        "status": "PASS",
+        "evidence": {
+          "beforeHash": "2667F0D945E789C2197FB9129D6810E4E790FCC11670F617263BE3BC36F35859",
+          "expected": "Refuse unproven or wrong-workspace identity before overwriting its proof",
+          "afterHash": "2667F0D945E789C2197FB9129D6810E4E790FCC11670F617263BE3BC36F35859"
+        }
+      },
+      {
+        "id": "HV12-begin-wrong-marker-degraded",
+        "status": "PASS",
+        "evidence": {
+          "beforeHash": "54C30F02681E9D84DE35C9CC0415EACB7A74B8FDB82239E715A346943F9323B6",
+          "expected": "Refuse unproven or wrong-workspace identity before overwriting its proof",
+          "afterHash": "54C30F02681E9D84DE35C9CC0415EACB7A74B8FDB82239E715A346943F9323B6"
+        }
+      },
+      {
+        "id": "HV02-begin-without-identity-proof",
+        "status": "PASS",
+        "evidence": {
+          "calls": 0
+        }
+      },
+      {
+        "id": "HV02-begin-wrong-workspace-proof",
+        "status": "PASS",
+        "evidence": {
+          "calls": 0
+        }
+      },
+      {
+        "id": "HV04-real-hook-degraded-path",
+        "status": "PASS",
+        "evidence": {
+          "path": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-probe-fixtures-fe5ea237583b446e8ec9071ff562e7b2\\real-hook-degraded-path\\failsafe\\20261001T002440Z-session_submit-b15a.yaml",
+          "hook": {
+            "hookSpecificOutput": {
+              "hookEventName": "UserPromptSubmit",
+              "status": "turn-opened-degraded",
+              "turnRequestId": "req-20261001T002440Z-prompt-67f4",
+              "additionalContext": "session log turn req-20261001T002440Z-prompt-67f4 is now active. Continue the current task after any incidental triage submission. Retained recovery artifact: F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-probe-fixtures-fe5ea237583b446e8ec9071ff562e7b2\\real-hook-degraded-path\\failsafe\\20261001T002440Z-session_submit-b15a.yaml",
+              "recoveryArtifactPath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-probe-fixtures-fe5ea237583b446e8ec9071ff562e7b2\\real-hook-degraded-path\\failsafe\\20261001T002440Z-session_submit-b15a.yaml"
+            }
+          }
+        }
+      },
+      {
+        "id": "HV04-real-hook-duplicate-degraded-path",
+        "status": "PASS",
+        "evidence": {
+          "path": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-probe-fixtures-fe5ea237583b446e8ec9071ff562e7b2\\real-hook-degraded-path\\failsafe\\20261001T002440Z-session_submit-b15a.yaml",
+          "hook": {
+            "hookSpecificOutput": {
+              "hookEventName": "UserPromptSubmit",
+              "status": "turn-already-open",
+              "turnRequestId": "req-20261001T002440Z-prompt-67f4",
+              "additionalContext": "session log turn req-20261001T002440Z-prompt-67f4 is now active. Continue the current task after any incidental triage submission. Retained recovery artifact: F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-probe-fixtures-fe5ea237583b446e8ec9071ff562e7b2\\real-hook-degraded-path\\failsafe\\20261001T002440Z-session_submit-b15a.yaml",
+              "degraded": true,
+              "recoveryArtifactPath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-probe-fixtures-fe5ea237583b446e8ec9071ff562e7b2\\real-hook-degraded-path\\failsafe\\20261001T002440Z-session_submit-b15a.yaml"
+            }
+          }
+        }
+      },
+      {
+        "id": "HV04-real-hook-degraded-hash-path",
+        "status": "PASS",
+        "evidence": {
+          "path": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-probe-fixtures-fe5ea237583b446e8ec9071ff562e7b2\\real-hook-degraded #path\\failsafe\\20261001T002440Z-session_submit-c66e.yaml",
+          "hook": {
+            "hookSpecificOutput": {
+              "hookEventName": "UserPromptSubmit",
+              "status": "turn-opened-degraded",
+              "turnRequestId": "req-20261001T002440Z-prompt-6534",
+              "additionalContext": "session log turn req-20261001T002440Z-prompt-6534 is now active. Continue the current task after any incidental triage submission. Retained recovery artifact: F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-probe-fixtures-fe5ea237583b446e8ec9071ff562e7b2\\real-hook-degraded #path\\failsafe\\20261001T002440Z-session_submit-c66e.yaml",
+              "recoveryArtifactPath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-probe-fixtures-fe5ea237583b446e8ec9071ff562e7b2\\real-hook-degraded #path\\failsafe\\20261001T002440Z-session_submit-c66e.yaml"
+            }
+          }
+        }
+      },
+      {
+        "id": "HV05-identical-degraded-retry",
+        "status": "PASS",
+        "evidence": {
+          "firstReturn": true,
+          "secondCalls": 1,
+          "firstCalls": 1
+        }
+      },
+      {
+        "id": "HV06-degraded-identical-retry",
+        "status": "PASS",
+        "evidence": {
+          "queueCount": 0,
+          "cache": {
+            "turnRequestId": "req-R",
+            "queryTitle": "original title",
+            "openedAt": "2026-10-01T00:24:38Z",
+            "status": "in_progress",
+            "sessionId": "Codex-20260930T000000Z-sessionA",
+            "codeEdits": 0,
+            "lastBuildStatus": "unknown",
+            "auditActions": 0,
+            "auditDialog": 0,
+            "auditDecisions": 0,
+            "auditFiles": 0,
+            "auditCommits": 0,
+            "queryText": "original query",
+            "planFile": "docs/plans/p2.md",
+            "todoId": "BUG-TRIAGE-246",
+            "markerFilePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-probe-fixtures-fe5ea237583b446e8ec9071ff562e7b2\\degraded-identical-retry\\ws\\AGENTS-README-FIRST.yaml",
+            "markerLastWriteUtc": "2026-10-01T00:24:38.7587452Z",
+            "lastPersistFingerprint": "F96018237CFE41677539DE2D7962AB3647E7D8687F36401F509C9A241C8DDDE5",
+            "persisted": "true"
+          }
+        }
+      },
+      {
+        "id": "HV06-degraded-changed-retry",
+        "status": "PASS",
+        "evidence": {
+          "queueCount": 1,
+          "cache": {
+            "turnRequestId": "req-R",
+            "queryTitle": "original title",
+            "openedAt": "2026-10-01T00:24:39Z",
+            "status": "in_progress",
+            "sessionId": "Codex-20260930T000000Z-sessionA",
+            "codeEdits": 0,
+            "lastBuildStatus": "unknown",
+            "auditActions": 0,
+            "auditDialog": 0,
+            "auditDecisions": 0,
+            "auditFiles": 0,
+            "auditCommits": 0,
+            "queryText": "original query",
+            "planFile": "docs/plans/p2.md",
+            "todoId": "BUG-TRIAGE-246",
+            "markerFilePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-probe-fixtures-fe5ea237583b446e8ec9071ff562e7b2\\degraded-changed-retry\\ws\\AGENTS-README-FIRST.yaml",
+            "markerLastWriteUtc": "2026-10-01T00:24:39.4543395Z",
+            "lastPersistFingerprint": "D6B59B7F4C4196639F8C1E07AA7F26EADAADF554321CC354A7E7B89DDEDFFB2E",
+            "persisted": "true"
+          }
+        }
+      },
+      {
+        "id": "HV14-expanded-appendDialog-both-missing",
+        "status": "PASS",
+        "evidence": {
+          "response": {
+            "totalDialogCount": 3,
+            "agent": "Codex",
+            "retitled": true
+          },
+          "queueCount": 0,
+          "receipt": {
+            "code": "rejected",
+            "retryable": false,
+            "persisted": false,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.appendDialog",
+            "requestId": "req-R",
+            "failsafePath": "",
+            "message": "workflow.sessionlog.appendDialog typed result sessionId is missing or blank.",
+            "childStderr": "workflow.sessionlog.appendDialog typed result sessionId is missing or blank."
+          }
+        }
+      },
+      {
+        "id": "HV14-expanded-appendDialog-session-missing",
+        "status": "PASS",
+        "evidence": {
+          "response": {
+            "totalDialogCount": 3,
+            "requestId": "req-R",
+            "agent": "Codex",
+            "retitled": true
+          },
+          "queueCount": 0,
+          "receipt": {
+            "code": "rejected",
+            "retryable": false,
+            "persisted": false,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.appendDialog",
+            "requestId": "req-R",
+            "failsafePath": "",
+            "message": "workflow.sessionlog.appendDialog typed result sessionId is missing or blank.",
+            "childStderr": "workflow.sessionlog.appendDialog typed result sessionId is missing or blank."
+          }
+        }
+      },
+      {
+        "id": "HV14-expanded-appendDialog-request-missing",
+        "status": "PASS",
+        "evidence": {
+          "response": {
+            "totalDialogCount": 3,
+            "agent": "Codex",
+            "retitled": true,
+            "sessionId": "Codex-20260930T000000Z-sessionA"
+          },
+          "queueCount": 0,
+          "receipt": {
+            "code": "rejected",
+            "retryable": false,
+            "persisted": false,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.appendDialog",
+            "requestId": "req-R",
+            "failsafePath": "",
+            "message": "workflow.sessionlog.appendDialog typed result requestId is missing or blank.",
+            "childStderr": "workflow.sessionlog.appendDialog typed result requestId is missing or blank."
+          }
+        }
+      },
+      {
+        "id": "HV14-expanded-appendDialog-both-whitespace",
+        "status": "PASS",
+        "evidence": {
+          "response": {
+            "totalDialogCount": 3,
+            "requestId": " ",
+            "sessionId": " ",
+            "retitled": true,
+            "agent": "Codex"
+          },
+          "queueCount": 0,
+          "receipt": {
+            "code": "rejected",
+            "retryable": false,
+            "persisted": false,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.appendDialog",
+            "requestId": "req-R",
+            "failsafePath": "",
+            "message": "workflow.sessionlog.appendDialog typed result sessionId is missing or blank.",
+            "childStderr": "workflow.sessionlog.appendDialog typed result sessionId is missing or blank."
+          }
+        }
+      },
+      {
+        "id": "HV14-expanded-setTurnTitle-both-missing",
+        "status": "PASS",
+        "evidence": {
+          "response": {
+            "totalDialogCount": 3,
+            "agent": "Codex",
+            "retitled": true
+          },
+          "queueCount": 1,
+          "receipt": {
+            "code": "rejected",
+            "retryable": false,
+            "persisted": false,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.setTurnTitle",
+            "requestId": "req-R",
+            "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-supplemental-fixtures-cc9ee2eb5fb9495f94f14835d502ca7a\\setTurnTitle-both-missing\\failsafe\\20261001T002450Z-session_setTurnTitle-2bd1.yaml",
+            "message": "workflow.sessionlog.setTurnTitle typed result sessionId is missing or blank.",
+            "childStderr": "workflow.sessionlog.setTurnTitle typed result sessionId is missing or blank."
+          }
+        }
+      },
+      {
+        "id": "HV14-expanded-setTurnTitle-session-missing",
+        "status": "PASS",
+        "evidence": {
+          "response": {
+            "totalDialogCount": 3,
+            "requestId": "req-R",
+            "agent": "Codex",
+            "retitled": true
+          },
+          "queueCount": 1,
+          "receipt": {
+            "code": "rejected",
+            "retryable": false,
+            "persisted": false,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.setTurnTitle",
+            "requestId": "req-R",
+            "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-supplemental-fixtures-cc9ee2eb5fb9495f94f14835d502ca7a\\setTurnTitle-session-missing\\failsafe\\20261001T002450Z-session_setTurnTitle-f334.yaml",
+            "message": "workflow.sessionlog.setTurnTitle typed result sessionId is missing or blank.",
+            "childStderr": "workflow.sessionlog.setTurnTitle typed result sessionId is missing or blank."
+          }
+        }
+      },
+      {
+        "id": "HV14-expanded-setTurnTitle-request-missing",
+        "status": "PASS",
+        "evidence": {
+          "response": {
+            "totalDialogCount": 3,
+            "agent": "Codex",
+            "retitled": true,
+            "sessionId": "Codex-20260930T000000Z-sessionA"
+          },
+          "queueCount": 1,
+          "receipt": {
+            "code": "rejected",
+            "retryable": false,
+            "persisted": false,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.setTurnTitle",
+            "requestId": "req-R",
+            "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-supplemental-fixtures-cc9ee2eb5fb9495f94f14835d502ca7a\\setTurnTitle-request-missing\\failsafe\\20261001T002450Z-session_setTurnTitle-ad80.yaml",
+            "message": "workflow.sessionlog.setTurnTitle typed result requestId is missing or blank.",
+            "childStderr": "workflow.sessionlog.setTurnTitle typed result requestId is missing or blank."
+          }
+        }
+      },
+      {
+        "id": "HV14-expanded-setTurnTitle-both-whitespace",
+        "status": "PASS",
+        "evidence": {
+          "response": {
+            "totalDialogCount": 3,
+            "requestId": " ",
+            "sessionId": " ",
+            "retitled": true,
+            "agent": "Codex"
+          },
+          "queueCount": 1,
+          "receipt": {
+            "code": "rejected",
+            "retryable": false,
+            "persisted": false,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.setTurnTitle",
+            "requestId": "req-R",
+            "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-supplemental-fixtures-cc9ee2eb5fb9495f94f14835d502ca7a\\setTurnTitle-both-whitespace\\failsafe\\20261001T002450Z-session_setTurnTitle-7d23.yaml",
+            "message": "workflow.sessionlog.setTurnTitle typed result sessionId is missing or blank.",
+            "childStderr": "workflow.sessionlog.setTurnTitle typed result sessionId is missing or blank."
+          }
+        }
+      },
+      {
+        "id": "F1-persist-envelope-empty",
+        "status": "PASS",
+        "evidence": {
+          "queueCount": 1,
+          "receipt": {
+            "code": "rejected",
+            "retryable": false,
+            "persisted": false,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.updateTurn",
+            "requestId": "req-R",
+            "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-supplemental-fixtures-cc9ee2eb5fb9495f94f14835d502ca7a\\persist-envelope-empty\\failsafe\\20261001T002451Z-session_submit-cd1f.yaml",
+            "message": "Session log persistence did not confirm a durable write for request 'req-R' because the success envelope lacked result details. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-supplemental-fixtures-cc9ee2eb5fb9495f94f14835d502ca7a\\persist-envelope-empty\\failsafe\\20261001T002451Z-session_submit-cd1f.yaml'.",
+            "childStderr": "Session log persistence did not confirm a durable write for request 'req-R' because the success envelope lacked result details. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-supplemental-fixtures-cc9ee2eb5fb9495f94f14835d502ca7a\\persist-envelope-empty\\failsafe\\20261001T002451Z-session_submit-cd1f.yaml'."
+          }
+        }
+      },
+      {
+        "id": "F1-persist-envelope-unrelated",
+        "status": "PASS",
+        "evidence": {
+          "queueCount": 1,
+          "receipt": {
+            "code": "rejected",
+            "retryable": false,
+            "persisted": false,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.updateTurn",
+            "requestId": "req-R",
+            "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-supplemental-fixtures-cc9ee2eb5fb9495f94f14835d502ca7a\\persist-envelope-unrelated\\failsafe\\20261001T002451Z-session_submit-f0d2.yaml",
+            "message": "Session log persistence did not confirm a durable write for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-supplemental-fixtures-cc9ee2eb5fb9495f94f14835d502ca7a\\persist-envelope-unrelated\\failsafe\\20261001T002451Z-session_submit-f0d2.yaml'.",
+            "childStderr": "Session log persistence did not confirm a durable write for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-supplemental-fixtures-cc9ee2eb5fb9495f94f14835d502ca7a\\persist-envelope-unrelated\\failsafe\\20261001T002451Z-session_submit-f0d2.yaml'."
+          }
+        }
+      },
+      {
+        "id": "F1-persist-envelope-wrong-identity",
+        "status": "PASS",
+        "evidence": {
+          "queueCount": 1,
+          "receipt": {
+            "code": "rejected",
+            "retryable": false,
+            "persisted": false,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.updateTurn",
+            "requestId": "req-R",
+            "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-supplemental-fixtures-cc9ee2eb5fb9495f94f14835d502ca7a\\persist-envelope-wrong-identity\\failsafe\\20261001T002452Z-session_submit-8a73.yaml",
+            "message": "Session log persistence returned mismatched identity for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-supplemental-fixtures-cc9ee2eb5fb9495f94f14835d502ca7a\\persist-envelope-wrong-identity\\failsafe\\20261001T002452Z-session_submit-8a73.yaml'.",
+            "childStderr": "Session log persistence returned mismatched identity for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-supplemental-fixtures-cc9ee2eb5fb9495f94f14835d502ca7a\\persist-envelope-wrong-identity\\failsafe\\20261001T002452Z-session_submit-8a73.yaml'."
+          }
+        }
+      },
+      {
+        "id": "F1-persist-envelope-contradictory",
+        "status": "PASS",
+        "evidence": {
+          "queueCount": 1,
+          "receipt": {
+            "code": "rejected",
+            "retryable": false,
+            "persisted": false,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.updateTurn",
+            "requestId": "req-R",
+            "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-supplemental-fixtures-cc9ee2eb5fb9495f94f14835d502ca7a\\persist-envelope-contradictory\\failsafe\\20261001T002452Z-session_submit-78aa.yaml",
+            "message": "Session log persistence returned contradictory persisted+degraded for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-supplemental-fixtures-cc9ee2eb5fb9495f94f14835d502ca7a\\persist-envelope-contradictory\\failsafe\\20261001T002452Z-session_submit-78aa.yaml'.",
+            "childStderr": "Session log persistence returned contradictory persisted+degraded for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-supplemental-fixtures-cc9ee2eb5fb9495f94f14835d502ca7a\\persist-envelope-contradictory\\failsafe\\20261001T002452Z-session_submit-78aa.yaml'."
+          }
+        }
+      },
+      {
+        "id": "F2-cross-session-queue-dedupe",
+        "status": "PASS",
+        "evidence": {
+          "queuedSessions": [
+            "Codex-20260930T000000Z-sessionA",
+            "Codex-20260930T000000Z-sessionB"
+          ],
+          "calls": 2
+        }
+      },
+      {
+        "id": "F2-changed-processing-dialog",
+        "status": "PASS",
+        "evidence": {
+          "calls": [
+            {
+              "method": "client.SessionLog.SubmitAsync",
+              "params": {
+                "sessionLog": {
+                  "sourceType": "Codex",
+                  "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+                  "lastUpdated": "2026-10-01T00:24:53Z",
+                  "sessionId": "Codex-20260930T000000Z-sessionA",
+                  "turnCount": 1,
+                  "turns": [
+                    {
+                      "processingDialog": [
+                        {
+                          "role": "model",
+                          "content": "first"
+                        }
+                      ],
+                      "response": "",
+                      "requestId": "req-R",
+                      "status": "in_progress",
+                      "model": "codex",
+                      "tokenCount": 0,
+                      "timestamp": "2026-09-30T19:24:53.2595671-05:00",
+                      "todoId": "None",
+                      "planFile": "None",
+                      "queryText": "original query"
+                    }
+                  ],
+                  "status": "in_progress",
+                  "started": "2026-09-30T19:24:53.2595671-05:00",
+                  "model": "codex",
+                  "agentExecutableVersion": "codex-cli 0.158.0"
+                }
+              }
+            },
+            {
+              "method": "client.SessionLog.SubmitAsync",
+              "params": {
+                "sessionLog": {
+                  "sourceType": "Codex",
+                  "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+                  "lastUpdated": "2026-10-01T00:24:53Z",
+                  "sessionId": "Codex-20260930T000000Z-sessionA",
+                  "turnCount": 1,
+                  "turns": [
+                    {
+                      "processingDialog": [
+                        {
+                          "role": "model",
+                          "content": "second"
+                        }
+                      ],
+                      "response": "",
+                      "requestId": "req-R",
+                      "status": "in_progress",
+                      "model": "codex",
+                      "tokenCount": 0,
+                      "timestamp": "2026-09-30T19:24:53.2595671-05:00",
+                      "todoId": "None",
+                      "planFile": "None",
+                      "queryText": "original query"
+                    }
+                  ],
+                  "status": "in_progress",
+                  "started": "2026-09-30T19:24:53.2595671-05:00",
+                  "model": "codex",
+                  "agentExecutableVersion": "codex-cli 0.158.0"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "identity-session-rotation-appendDialog",
+        "status": "PASS",
+        "evidence": {
+          "cacheSession": "Codex-20260930T000000Z-sessionA",
+          "payloadSessions": [
+            "Codex-20260930T000000Z-sessionA"
+          ]
+        }
+      },
+      {
+        "id": "identity-session-rotation-setTurnTitle",
+        "status": "PASS",
+        "evidence": {
+          "cacheSession": "Codex-20260930T000000Z-sessionA",
+          "payloadSessions": [
+            "Codex-20260930T000000Z-sessionA"
+          ]
+        }
+      },
+      {
+        "id": "identity-session-rotation-updateTurn",
+        "status": "PASS",
+        "evidence": {
+          "cacheSession": "Codex-20260930T000000Z-sessionA",
+          "payloadSessions": [
+            "Codex-20260930T000000Z-sessionA"
+          ]
+        }
+      },
+      {
+        "id": "HV14-appendDialog-both-wrong",
+        "status": "PASS",
+        "evidence": {
+          "queueCount": 0,
+          "receipt": {
+            "code": "rejected",
+            "retryable": false,
+            "persisted": false,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.appendDialog",
+            "requestId": "req-R",
+            "failsafePath": "",
+            "message": "workflow.sessionlog.appendDialog typed result sessionId 'Codex-20260930T000000Z-sessionB' does not match 'Codex-20260930T000000Z-sessionA'.",
+            "childStderr": "workflow.sessionlog.appendDialog typed result sessionId 'Codex-20260930T000000Z-sessionB' does not match 'Codex-20260930T000000Z-sessionA'."
+          }
+        }
+      },
+      {
+        "id": "HV14-setTurnTitle-both-wrong",
+        "status": "PASS",
+        "evidence": {
+          "queueCount": 1,
+          "receipt": {
+            "code": "rejected",
+            "retryable": false,
+            "persisted": false,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.setTurnTitle",
+            "requestId": "req-R",
+            "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-supplemental-fixtures-cc9ee2eb5fb9495f94f14835d502ca7a\\setTurnTitle-both-wrong\\failsafe\\20261001T002450Z-session_setTurnTitle-1a9f.yaml",
+            "message": "workflow.sessionlog.setTurnTitle typed result sessionId 'Codex-20260930T000000Z-sessionB' does not match 'Codex-20260930T000000Z-sessionA'.",
+            "childStderr": "workflow.sessionlog.setTurnTitle typed result sessionId 'Codex-20260930T000000Z-sessionB' does not match 'Codex-20260930T000000Z-sessionA'."
+          }
+        }
+      },
+      {
+        "id": "HV14-setTurnTitle-negative-title",
+        "status": "PASS",
+        "evidence": {
+          "queueCount": 1,
+          "receipt": {
+            "code": "rejected",
+            "retryable": false,
+            "persisted": false,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.setTurnTitle",
+            "requestId": "req-R",
+            "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-supplemental-fixtures-cc9ee2eb5fb9495f94f14835d502ca7a\\setTurnTitle-negative-title\\failsafe\\20261001T002450Z-session_setTurnTitle-08d5.yaml",
+            "message": "workflow.sessionlog.setTurnTitle typed result did not confirm retitled=true.",
+            "childStderr": "workflow.sessionlog.setTurnTitle typed result did not confirm retitled=true."
+          }
+        }
+      },
+      {
+        "id": "HV14-appendDialog-empty-both",
+        "status": "PASS",
+        "evidence": {
+          "name": "appendDialog-empty-both",
+          "expectedSuccess": false,
+          "actualSuccess": false,
+          "pass": true,
+          "receipt": {
+            "code": "rejected",
+            "retryable": false,
+            "persisted": false,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.appendDialog",
+            "requestId": "req-R",
+            "failsafePath": "",
+            "message": "workflow.sessionlog.appendDialog typed result sessionId is missing or blank.",
+            "childStderr": "workflow.sessionlog.appendDialog typed result sessionId is missing or blank."
+          },
+          "queueCount": 0
+        }
+      },
+      {
+        "id": "HV14-appendDialog-null-both",
+        "status": "PASS",
+        "evidence": {
+          "name": "appendDialog-null-both",
+          "expectedSuccess": false,
+          "actualSuccess": false,
+          "pass": true,
+          "receipt": {
+            "code": "rejected",
+            "retryable": false,
+            "persisted": false,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.appendDialog",
+            "requestId": "req-R",
+            "failsafePath": "",
+            "message": "workflow.sessionlog.appendDialog typed result sessionId is missing or blank.",
+            "childStderr": "workflow.sessionlog.appendDialog typed result sessionId is missing or blank."
+          },
+          "queueCount": 0
+        }
+      },
+      {
+        "id": "HV14-appendDialog-space-session",
+        "status": "PASS",
+        "evidence": {
+          "name": "appendDialog-space-session",
+          "expectedSuccess": false,
+          "actualSuccess": false,
+          "pass": true,
+          "receipt": {
+            "code": "rejected",
+            "retryable": false,
+            "persisted": false,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.appendDialog",
+            "requestId": "req-R",
+            "failsafePath": "",
+            "message": "workflow.sessionlog.appendDialog typed result sessionId is missing or blank.",
+            "childStderr": "workflow.sessionlog.appendDialog typed result sessionId is missing or blank."
+          },
+          "queueCount": 0
+        }
+      },
+      {
+        "id": "HV14-appendDialog-space-request",
+        "status": "PASS",
+        "evidence": {
+          "name": "appendDialog-space-request",
+          "expectedSuccess": false,
+          "actualSuccess": false,
+          "pass": true,
+          "receipt": {
+            "code": "rejected",
+            "retryable": false,
+            "persisted": false,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.appendDialog",
+            "requestId": "req-R",
+            "failsafePath": "",
+            "message": "workflow.sessionlog.appendDialog typed result requestId is missing or blank.",
+            "childStderr": "workflow.sessionlog.appendDialog typed result requestId is missing or blank."
+          },
+          "queueCount": 0
+        }
+      },
+      {
+        "id": "HV14-appendDialog-missing-retitled",
+        "status": "PASS",
+        "evidence": {
+          "name": "appendDialog-missing-retitled",
+          "expectedSuccess": true,
+          "actualSuccess": true,
+          "pass": true,
+          "receipt": {
+            "code": "persisted",
+            "retryable": false,
+            "persisted": true,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.appendDialog",
+            "requestId": "req-R",
+            "failsafePath": "",
+            "message": "appendDialog persisted requestId=req-R",
+            "childStderr": ""
+          },
+          "queueCount": 0
+        }
+      },
+      {
+        "id": "HV14-appendDialog-false-string-retitled",
+        "status": "PASS",
+        "evidence": {
+          "name": "appendDialog-false-string-retitled",
+          "expectedSuccess": true,
+          "actualSuccess": true,
+          "pass": true,
+          "receipt": {
+            "code": "persisted",
+            "retryable": false,
+            "persisted": true,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.appendDialog",
+            "requestId": "req-R",
+            "failsafePath": "",
+            "message": "appendDialog persisted requestId=req-R",
+            "childStderr": ""
+          },
+          "queueCount": 0
+        }
+      },
+      {
+        "id": "HV14-setTurnTitle-empty-both",
+        "status": "PASS",
+        "evidence": {
+          "name": "setTurnTitle-empty-both",
+          "expectedSuccess": false,
+          "actualSuccess": false,
+          "pass": true,
+          "receipt": {
+            "code": "rejected",
+            "retryable": false,
+            "persisted": false,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.setTurnTitle",
+            "requestId": "req-R",
+            "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-extra-fixtures-332f2b8d841d4a89bfe382a3f7ee198a\\setTurnTitle-empty-both\\failsafe\\20261001T002807Z-session_setTurnTitle-8147.yaml",
+            "message": "workflow.sessionlog.setTurnTitle typed result sessionId is missing or blank.",
+            "childStderr": "workflow.sessionlog.setTurnTitle typed result sessionId is missing or blank."
+          },
+          "queueCount": 1
+        }
+      },
+      {
+        "id": "HV14-setTurnTitle-null-both",
+        "status": "PASS",
+        "evidence": {
+          "name": "setTurnTitle-null-both",
+          "expectedSuccess": false,
+          "actualSuccess": false,
+          "pass": true,
+          "receipt": {
+            "code": "rejected",
+            "retryable": false,
+            "persisted": false,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.setTurnTitle",
+            "requestId": "req-R",
+            "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-extra-fixtures-332f2b8d841d4a89bfe382a3f7ee198a\\setTurnTitle-null-both\\failsafe\\20261001T002807Z-session_setTurnTitle-d6a2.yaml",
+            "message": "workflow.sessionlog.setTurnTitle typed result sessionId is missing or blank.",
+            "childStderr": "workflow.sessionlog.setTurnTitle typed result sessionId is missing or blank."
+          },
+          "queueCount": 1
+        }
+      },
+      {
+        "id": "HV14-setTurnTitle-space-session",
+        "status": "PASS",
+        "evidence": {
+          "name": "setTurnTitle-space-session",
+          "expectedSuccess": false,
+          "actualSuccess": false,
+          "pass": true,
+          "receipt": {
+            "code": "rejected",
+            "retryable": false,
+            "persisted": false,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.setTurnTitle",
+            "requestId": "req-R",
+            "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-extra-fixtures-332f2b8d841d4a89bfe382a3f7ee198a\\setTurnTitle-space-session\\failsafe\\20261001T002807Z-session_setTurnTitle-8e28.yaml",
+            "message": "workflow.sessionlog.setTurnTitle typed result sessionId is missing or blank.",
+            "childStderr": "workflow.sessionlog.setTurnTitle typed result sessionId is missing or blank."
+          },
+          "queueCount": 1
+        }
+      },
+      {
+        "id": "HV14-setTurnTitle-space-request",
+        "status": "PASS",
+        "evidence": {
+          "name": "setTurnTitle-space-request",
+          "expectedSuccess": false,
+          "actualSuccess": false,
+          "pass": true,
+          "receipt": {
+            "code": "rejected",
+            "retryable": false,
+            "persisted": false,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.setTurnTitle",
+            "requestId": "req-R",
+            "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-extra-fixtures-332f2b8d841d4a89bfe382a3f7ee198a\\setTurnTitle-space-request\\failsafe\\20261001T002807Z-session_setTurnTitle-4c47.yaml",
+            "message": "workflow.sessionlog.setTurnTitle typed result requestId is missing or blank.",
+            "childStderr": "workflow.sessionlog.setTurnTitle typed result requestId is missing or blank."
+          },
+          "queueCount": 1
+        }
+      },
+      {
+        "id": "HV14-setTurnTitle-missing-retitled",
+        "status": "PASS",
+        "evidence": {
+          "name": "setTurnTitle-missing-retitled",
+          "expectedSuccess": false,
+          "actualSuccess": false,
+          "pass": true,
+          "receipt": {
+            "code": "rejected",
+            "retryable": false,
+            "persisted": false,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.setTurnTitle",
+            "requestId": "req-R",
+            "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-extra-fixtures-332f2b8d841d4a89bfe382a3f7ee198a\\setTurnTitle-missing-retitled\\failsafe\\20261001T002807Z-session_setTurnTitle-632e.yaml",
+            "message": "workflow.sessionlog.setTurnTitle typed result did not confirm retitled=true.",
+            "childStderr": "workflow.sessionlog.setTurnTitle typed result did not confirm retitled=true."
+          },
+          "queueCount": 1
+        }
+      },
+      {
+        "id": "HV14-setTurnTitle-false-string-retitled",
+        "status": "PASS",
+        "evidence": {
+          "name": "setTurnTitle-false-string-retitled",
+          "expectedSuccess": false,
+          "actualSuccess": false,
+          "pass": true,
+          "receipt": {
+            "code": "rejected",
+            "retryable": false,
+            "persisted": false,
+            "degraded": false,
+            "queued": false,
+            "method": "workflow.sessionlog.setTurnTitle",
+            "requestId": "req-R",
+            "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-extra-fixtures-332f2b8d841d4a89bfe382a3f7ee198a\\setTurnTitle-false-string-retitled\\failsafe\\20261001T002807Z-session_setTurnTitle-1d7b.yaml",
+            "message": "workflow.sessionlog.setTurnTitle typed result did not confirm retitled=true.",
+            "childStderr": "workflow.sessionlog.setTurnTitle typed result did not confirm retitled=true."
+          },
+          "queueCount": 1
+        }
+      },
+      {
+        "id": "HV15-SessionLogLifecycle.Tests.ps1",
+        "status": "PASS",
+        "evidence": {
+          "source": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\plugins\\core\\test-fixtures\\pester\\SessionLogLifecycle.Tests.ps1",
+          "line": 8,
+          "sha256": "548C9C1729E14A48AC7A353962560E23E4CFAA02A1FED714BA976EDF040D7D5E",
+          "defaultRootRejected": true,
+          "defaultMarkerAbsent": true,
+          "error": "Get-TestMarkerSnapshot refuses to create a marker at the repository root; use an isolated fixture Workspace.",
+          "isolatedWorkspaceRoundTrips": true,
+          "snapshotPathMatches": true,
+          "objectSerializerUsed": true
+        }
+      },
+      {
+        "id": "HV15-SessionLogLifecycleMetadata.Tests.ps1",
+        "status": "PASS",
+        "evidence": {
+          "source": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\plugins\\core\\test-fixtures\\pester\\SessionLogLifecycleMetadata.Tests.ps1",
+          "line": 8,
+          "sha256": "3B51D972D70E0C28FBB9C3FA35CE0E95B80426085E8BF75BFBE462DC0C280215",
+          "defaultRootRejected": true,
+          "defaultMarkerAbsent": true,
+          "error": "Get-TestMarkerSnapshot refuses to create a marker at the repository root; use an isolated fixture Workspace.",
+          "isolatedWorkspaceRoundTrips": true,
+          "snapshotPathMatches": true,
+          "objectSerializerUsed": true
+        }
+      },
+      {
+        "id": "HV15-SessionLogAuditReconcile.Tests.ps1",
+        "status": "PASS",
+        "evidence": {
+          "source": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\plugins\\core\\test-fixtures\\pester\\SessionLogAuditReconcile.Tests.ps1",
+          "line": 9,
+          "sha256": "FCE258E4C721FD12A9B500855E875E7D74D80F393E6059B119B6C1F34620D94F",
+          "defaultRootRejected": true,
+          "defaultMarkerAbsent": true,
+          "error": "Get-TestMarkerSnapshot refuses to create a marker at the repository root; use an isolated fixture Workspace.",
+          "isolatedWorkspaceRoundTrips": true,
+          "snapshotPathMatches": true,
+          "objectSerializerUsed": true
+        }
+      },
+      {
+        "id": "HV15-actual-root-marker-unchanged",
+        "status": "PASS",
+        "evidence": "Before/after SHA256 equal."
+      },
+      {
+        "id": "HV01-404-degraded-True",
+        "status": "PASS",
+        "evidence": {
+          "calls": [
+            {
+              "method": "client.SessionLog.AppendDialogAsync",
+              "params": {
+                "requestId": "req-R",
+                "items": [
+                  {
+                    "content": "retain",
+                    "role": "model"
+                  }
+                ],
+                "agent": "Codex",
+                "sessionId": "Codex-20260930T000000Z-sessionA"
+              }
+            },
+            {
+              "method": "client.SessionLog.SubmitAsync",
+              "params": {
+                "sessionLog": {
+                  "agentExecutableVersion": "codex-cli 0.158.0",
+                  "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+                  "turnCount": 1,
+                  "status": "in_progress",
+                  "sessionId": "Codex-20260930T000000Z-sessionA",
+                  "model": "codex",
+                  "lastUpdated": "2026-10-01T00:24:45Z",
+                  "started": "2026-09-30T19:24:45.1277703-05:00",
+                  "turns": [
+                    {
+                      "queryText": "original query",
+                      "timestamp": "2026-09-30T19:24:45.1277703-05:00",
+                      "status": "in_progress",
+                      "model": "codex",
+                      "todoId": "BUG-TRIAGE-246",
+                      "tokenCount": 0,
+                      "planFile": "docs/plans/p2.md",
+                      "requestId": "req-R",
+                      "queryTitle": "original title",
+                      "response": "(recovery before dialog append)"
+                    }
+                  ],
+                  "sourceType": "Codex"
+                }
+              }
+            }
+          ],
+          "return": true,
+          "queue": [
+            {
+              "name": "20261001T002445Z-session_dialog-eea8.yaml",
+              "contents": {
+                "method": "client.SessionLog.AppendDialogAsync",
+                "label": "session_dialog",
+                "timestamp": "20261001T002445Z",
+                "params": {
+                  "requestId": "req-R",
+                  "items": [
+                    {
+                      "role": "model",
+                      "content": "retain"
+                    }
+                  ],
+                  "agent": "Codex",
+                  "sessionId": "Codex-20260930T000000Z-sessionA"
+                },
+                "payloadFingerprint": "3BB872E3C21B4BAFA81307F805F3D76C74456F1A09C34649B20365E4C21AD2D3"
+              }
+            },
+            {
+              "name": "20261001T002445Z-session_submit-5737.yaml",
+              "contents": {
+                "method": "client.SessionLog.SubmitAsync",
+                "label": "session_submit",
+                "timestamp": "20261001T002445Z",
+                "params": {
+                  "sessionLog": {
+                    "agentExecutableVersion": "codex-cli 0.158.0",
+                    "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+                    "turnCount": 1,
+                    "status": "in_progress",
+                    "sessionId": "Codex-20260930T000000Z-sessionA",
+                    "model": "codex",
+                    "lastUpdated": "2026-10-01T00:24:45Z",
+                    "started": "2026-09-30T19:24:45.1277703-05:00",
+                    "turns": [
+                      {
+                        "queryText": "original query",
+                        "timestamp": "2026-09-30T19:24:45.1277703-05:00",
+                        "status": "in_progress",
+                        "model": "codex",
+                        "todoId": "BUG-TRIAGE-246",
+                        "tokenCount": 0,
+                        "planFile": "docs/plans/p2.md",
+                        "requestId": "req-R",
+                        "queryTitle": "original title",
+                        "response": "(recovery before dialog append)"
+                      }
+                    ],
+                    "sourceType": "Codex"
+                  }
+                },
+                "payloadFingerprint": "BD3B8E7246AE7B4DABE14D7382401AE3A000A625D2708D68BC3A2E1138342D5F"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "HV01-404-degraded-False",
+        "status": "PASS",
+        "evidence": {
+          "calls": [
+            {
+              "method": "client.SessionLog.AppendDialogAsync",
+              "params": {
+                "requestId": "req-R",
+                "items": [
+                  {
+                    "content": "retain",
+                    "role": "model"
+                  }
+                ],
+                "agent": "Codex",
+                "sessionId": "Codex-20260930T000000Z-sessionA"
+              }
+            }
+          ],
+          "return": false,
+          "queue": []
+        }
+      }
+    ]
+  },
+  "ExtraProbes": {
+    "timestampUtc": "2026-09-30T19:28:05.8180294-05:00",
+    "tipSha": "b262080199c26622ac495310317616837f9e2248",
+    "markerHelpers": [
+      {
+        "source": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\plugins\\core\\test-fixtures\\pester\\SessionLogLifecycle.Tests.ps1",
+        "line": 8,
+        "sha256": "548C9C1729E14A48AC7A353962560E23E4CFAA02A1FED714BA976EDF040D7D5E",
+        "defaultRootRejected": true,
+        "defaultMarkerAbsent": true,
+        "error": "Get-TestMarkerSnapshot refuses to create a marker at the repository root; use an isolated fixture Workspace.",
+        "isolatedWorkspaceRoundTrips": true,
+        "snapshotPathMatches": true,
+        "objectSerializerUsed": true
+      },
+      {
+        "source": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\plugins\\core\\test-fixtures\\pester\\SessionLogLifecycleMetadata.Tests.ps1",
+        "line": 8,
+        "sha256": "3B51D972D70E0C28FBB9C3FA35CE0E95B80426085E8BF75BFBE462DC0C280215",
+        "defaultRootRejected": true,
+        "defaultMarkerAbsent": true,
+        "error": "Get-TestMarkerSnapshot refuses to create a marker at the repository root; use an isolated fixture Workspace.",
+        "isolatedWorkspaceRoundTrips": true,
+        "snapshotPathMatches": true,
+        "objectSerializerUsed": true
+      },
+      {
+        "source": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\plugins\\core\\test-fixtures\\pester\\SessionLogAuditReconcile.Tests.ps1",
+        "line": 9,
+        "sha256": "FCE258E4C721FD12A9B500855E875E7D74D80F393E6059B119B6C1F34620D94F",
+        "defaultRootRejected": true,
+        "defaultMarkerAbsent": true,
+        "error": "Get-TestMarkerSnapshot refuses to create a marker at the repository root; use an isolated fixture Workspace.",
+        "isolatedWorkspaceRoundTrips": true,
+        "snapshotPathMatches": true,
+        "objectSerializerUsed": true
+      }
+    ],
+    "metadataChecks": [
+      {
+        "plan": "docs/plans/updated.md",
+        "status": "PASS",
+        "todo": "BUG-TRIAGE-245",
+        "case": "metadata-updateTurn-explicit"
+      },
+      {
+        "plan": "docs/plans/p2.md",
+        "status": "PASS",
+        "todo": "BUG-TRIAGE-246",
+        "case": "metadata-updateTurn-cache"
+      },
+      {
+        "plan": "None",
+        "status": "PASS",
+        "todo": "None",
+        "case": "metadata-updateTurn-none"
+      },
+      {
+        "plan": "docs/plans/updated.md",
+        "status": "PASS",
+        "todo": "BUG-TRIAGE-245",
+        "case": "metadata-appendActions-explicit"
+      },
+      {
+        "plan": "docs/plans/p2.md",
+        "status": "PASS",
+        "todo": "BUG-TRIAGE-246",
+        "case": "metadata-appendActions-cache"
+      },
+      {
+        "plan": "None",
+        "status": "PASS",
+        "todo": "None",
+        "case": "metadata-appendActions-none"
+      },
+      {
+        "plan": "docs/plans/updated.md",
+        "status": "PASS",
+        "todo": "BUG-TRIAGE-245",
+        "case": "metadata-completeTurn-explicit"
+      },
+      {
+        "plan": "docs/plans/p2.md",
+        "status": "PASS",
+        "todo": "BUG-TRIAGE-246",
+        "case": "metadata-completeTurn-cache"
+      },
+      {
+        "plan": "None",
+        "status": "PASS",
+        "todo": "None",
+        "case": "metadata-completeTurn-none"
+      },
+      {
+        "plan": "docs/plans/p2.md",
+        "status": "PASS",
+        "todo": "BUG-TRIAGE-246",
+        "case": "degraded-dialog-recovery-real-payload"
+      }
+    ],
+    "typedIdentityCases": [
+      {
+        "name": "appendDialog-empty-both",
+        "expectedSuccess": false,
+        "actualSuccess": false,
+        "pass": true,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.appendDialog",
+          "requestId": "req-R",
+          "failsafePath": "",
+          "message": "workflow.sessionlog.appendDialog typed result sessionId is missing or blank.",
+          "childStderr": "workflow.sessionlog.appendDialog typed result sessionId is missing or blank."
+        },
+        "queueCount": 0
+      },
+      {
+        "name": "appendDialog-null-both",
+        "expectedSuccess": false,
+        "actualSuccess": false,
+        "pass": true,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.appendDialog",
+          "requestId": "req-R",
+          "failsafePath": "",
+          "message": "workflow.sessionlog.appendDialog typed result sessionId is missing or blank.",
+          "childStderr": "workflow.sessionlog.appendDialog typed result sessionId is missing or blank."
+        },
+        "queueCount": 0
+      },
+      {
+        "name": "appendDialog-space-session",
+        "expectedSuccess": false,
+        "actualSuccess": false,
+        "pass": true,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.appendDialog",
+          "requestId": "req-R",
+          "failsafePath": "",
+          "message": "workflow.sessionlog.appendDialog typed result sessionId is missing or blank.",
+          "childStderr": "workflow.sessionlog.appendDialog typed result sessionId is missing or blank."
+        },
+        "queueCount": 0
+      },
+      {
+        "name": "appendDialog-space-request",
+        "expectedSuccess": false,
+        "actualSuccess": false,
+        "pass": true,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.appendDialog",
+          "requestId": "req-R",
+          "failsafePath": "",
+          "message": "workflow.sessionlog.appendDialog typed result requestId is missing or blank.",
+          "childStderr": "workflow.sessionlog.appendDialog typed result requestId is missing or blank."
+        },
+        "queueCount": 0
+      },
+      {
+        "name": "appendDialog-missing-retitled",
+        "expectedSuccess": true,
+        "actualSuccess": true,
+        "pass": true,
+        "receipt": {
+          "code": "persisted",
+          "retryable": false,
+          "persisted": true,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.appendDialog",
+          "requestId": "req-R",
+          "failsafePath": "",
+          "message": "appendDialog persisted requestId=req-R",
+          "childStderr": ""
+        },
+        "queueCount": 0
+      },
+      {
+        "name": "appendDialog-false-string-retitled",
+        "expectedSuccess": true,
+        "actualSuccess": true,
+        "pass": true,
+        "receipt": {
+          "code": "persisted",
+          "retryable": false,
+          "persisted": true,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.appendDialog",
+          "requestId": "req-R",
+          "failsafePath": "",
+          "message": "appendDialog persisted requestId=req-R",
+          "childStderr": ""
+        },
+        "queueCount": 0
+      },
+      {
+        "name": "setTurnTitle-empty-both",
+        "expectedSuccess": false,
+        "actualSuccess": false,
+        "pass": true,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.setTurnTitle",
+          "requestId": "req-R",
+          "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-extra-fixtures-332f2b8d841d4a89bfe382a3f7ee198a\\setTurnTitle-empty-both\\failsafe\\20261001T002807Z-session_setTurnTitle-8147.yaml",
+          "message": "workflow.sessionlog.setTurnTitle typed result sessionId is missing or blank.",
+          "childStderr": "workflow.sessionlog.setTurnTitle typed result sessionId is missing or blank."
+        },
+        "queueCount": 1
+      },
+      {
+        "name": "setTurnTitle-null-both",
+        "expectedSuccess": false,
+        "actualSuccess": false,
+        "pass": true,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.setTurnTitle",
+          "requestId": "req-R",
+          "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-extra-fixtures-332f2b8d841d4a89bfe382a3f7ee198a\\setTurnTitle-null-both\\failsafe\\20261001T002807Z-session_setTurnTitle-d6a2.yaml",
+          "message": "workflow.sessionlog.setTurnTitle typed result sessionId is missing or blank.",
+          "childStderr": "workflow.sessionlog.setTurnTitle typed result sessionId is missing or blank."
+        },
+        "queueCount": 1
+      },
+      {
+        "name": "setTurnTitle-space-session",
+        "expectedSuccess": false,
+        "actualSuccess": false,
+        "pass": true,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.setTurnTitle",
+          "requestId": "req-R",
+          "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-extra-fixtures-332f2b8d841d4a89bfe382a3f7ee198a\\setTurnTitle-space-session\\failsafe\\20261001T002807Z-session_setTurnTitle-8e28.yaml",
+          "message": "workflow.sessionlog.setTurnTitle typed result sessionId is missing or blank.",
+          "childStderr": "workflow.sessionlog.setTurnTitle typed result sessionId is missing or blank."
+        },
+        "queueCount": 1
+      },
+      {
+        "name": "setTurnTitle-space-request",
+        "expectedSuccess": false,
+        "actualSuccess": false,
+        "pass": true,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.setTurnTitle",
+          "requestId": "req-R",
+          "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-extra-fixtures-332f2b8d841d4a89bfe382a3f7ee198a\\setTurnTitle-space-request\\failsafe\\20261001T002807Z-session_setTurnTitle-4c47.yaml",
+          "message": "workflow.sessionlog.setTurnTitle typed result requestId is missing or blank.",
+          "childStderr": "workflow.sessionlog.setTurnTitle typed result requestId is missing or blank."
+        },
+        "queueCount": 1
+      },
+      {
+        "name": "setTurnTitle-missing-retitled",
+        "expectedSuccess": false,
+        "actualSuccess": false,
+        "pass": true,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.setTurnTitle",
+          "requestId": "req-R",
+          "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-extra-fixtures-332f2b8d841d4a89bfe382a3f7ee198a\\setTurnTitle-missing-retitled\\failsafe\\20261001T002807Z-session_setTurnTitle-632e.yaml",
+          "message": "workflow.sessionlog.setTurnTitle typed result did not confirm retitled=true.",
+          "childStderr": "workflow.sessionlog.setTurnTitle typed result did not confirm retitled=true."
+        },
+        "queueCount": 1
+      },
+      {
+        "name": "setTurnTitle-false-string-retitled",
+        "expectedSuccess": false,
+        "actualSuccess": false,
+        "pass": true,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.setTurnTitle",
+          "requestId": "req-R",
+          "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-extra-fixtures-332f2b8d841d4a89bfe382a3f7ee198a\\setTurnTitle-false-string-retitled\\failsafe\\20261001T002807Z-session_setTurnTitle-1d7b.yaml",
+          "message": "workflow.sessionlog.setTurnTitle typed result did not confirm retitled=true.",
+          "childStderr": "workflow.sessionlog.setTurnTitle typed result did not confirm retitled=true."
+        },
+        "queueCount": 1
+      }
+    ],
+    "rootMarkerUnchanged": true
+  },
+  "P2AcDisposition": {
+    "timestampUtc": "2026-09-30T19:34:33.4122187-05:00",
+    "source": "docs/receipts/sessionlife-completion/20260928-p0-r3/acceptance-manifest.json",
+    "scope": "35 core FR/TR/TEST SESSIONLIFE001..003 ACs; explicit future-phase obligations are distinguished",
+    "rows": [
+      {
+        "criterionId": "FR-MCP-SESSIONLIFE-001-AC001",
+        "criterion": "A degraded begin retains every cached turn field, including prompt, context, metadata, identity, status, timestamps, title, and counters; it never replaces the turn with a reduced three-field object.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves degraded creation metadata and sends cached plan on the same request",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.round-trips hash and space failsafePath through object YAML and clears degraded after primary success"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "P2 behavioral evidence exists in degraded preservation tests and the real state-preserving implementation. The declared tests do not exhaust every context/counter field named by the criterion; this is not full-criterion acceptance."
+      },
+      {
+        "criterionId": "FR-MCP-SESSIONLIFE-001-AC002",
+        "criterion": "Prompt-hook status reports durable opened only after confirmed primary persistence; otherwise it reports opened-degraded and identifies the retained recovery artifact without representing the turn as server-persisted.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.round-trips hash and space failsafePath through object YAML and clears degraded after primary success"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "P2 real Open-PluginTurn initial and duplicate degraded probes report existing recovery paths. The direct hook test at SessionLogP2Contracts.Tests.ps1:757 is absent from this criterion mapping. Exact remote durability remains a P6 obligation."
+      },
+      {
+        "criterionId": "FR-MCP-SESSIONLIFE-001-AC003",
+        "criterion": "Complete recovers required query text from the cached query text, then a valid cached title, then the approved placeholder, without replacing a valid title; update omits empty query text so stored query text and title are preserved.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.round-trips hash and space failsafePath through object YAML and clears degraded after primary success"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "FAIL mapping: only retry and path-roundtrip tests are declared. Those bodies at P2:721 and :744 never assert complete-query fallback. Actual fallback tests exist in SessionLogLifecycle.Tests.ps1:107 and :133; they are not mapped here. Their fallback example asserts title and placeholder, not the entire declared precedence."
+      },
+      {
+        "criterionId": "FR-MCP-SESSIONLIFE-001-AC004",
+        "criterion": "A missing-turn appendDialog on an already degraded local turn performs at most one bounded recovery submit and then retains a session_dialog failsafe; an unrelated never-degraded not-found remains a classified nonretryable error.",
+        "declaredTests": [
+          "SessionLogLifecycle: degraded 404 queues session_dialog",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.round-trips hash and space failsafePath through object YAML and clears degraded after primary success"
+        ],
+        "missingNativeNames": [
+          "SessionLogLifecycle: degraded 404 queues session_dialog"
+        ],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "FAIL mapping/oracle: SessionLogLifecycle: degraded 404 queues session_dialog is absent from the native names. Actual Lifecycle:151 test asserts some retained dialog, but not exactly one recovery submit or the never-degraded branch. Reviewer real probes independently confirm both branches; they do not repair the committed mapping/regression oracle."
+      },
+      {
+        "criterionId": "FR-MCP-SESSIONLIFE-001-AC005",
+        "criterion": "A same-request retry supplies preserved creation metadata, normalizes canceled and cancelled supersession consistently, and never silently converts locally active state into proof of server persistence.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.round-trips hash and space failsafePath through object YAML and clears degraded after primary success"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "P2 retry/cache behavior passes probes. Declared tests do not name the supersession test at P2:337; canceled/cancelled completeness is not established by these mapping entries."
+      },
+      {
+        "criterionId": "FR-MCP-SESSIONLIFE-002-AC001",
+        "criterion": "First persistence resolves planFile and todoId using explicit request values, then verified cache values, then the exact sentinel None, and stores a non-null pair.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses durable reopen without sessionId and without workspace marker proof"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "FAIL complete mapping: explicit update and marker-proof rejection are mapped, not the full explicit/cache/None precedence. Ten independent first-persist payload checks pass the compiled validator; map the actual coverage rather than borrowing marker tests."
+      },
+      {
+        "criterionId": "FR-MCP-SESSIONLIFE-002-AC002",
+        "criterion": "Ordinary raw first persistence rejects omitted, null, empty, or whitespace metadata; canceled or cancelled supersession may omit it and stores None, and a durable reopen preserves that omission contract.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses durable reopen without sessionId and without workspace marker proof"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "FAIL mapping: only the missing-session/marker test at P2:679 is declared. It does not test raw ordinary omitted/null/empty/whitespace validation, both supersession spellings, or the durable omission contract."
+      },
+      {
+        "criterionId": "FR-MCP-SESSIONLIFE-002-AC003",
+        "criterion": "Explicit metadata updates both cache and outgoing persistence. Omission after binding is allowed only after durable identity is proven for the exact workspace, agent, session, and request.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses durable reopen without sessionId and without workspace marker proof"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "P2 real explicit append updates cache and first submit; subsequent durable completion omits both fields. HV10/HV11 native tests pass but are absent from the manifest mapping. Existing entries cover only part of the strengthened contract."
+      },
+      {
+        "criterionId": "FR-MCP-SESSIONLIFE-002-AC004",
+        "criterion": "Freshness validation rejects workspace, agent, session, or request drift and never rewrites or rebinds an already cached session identifier from a marker or inherited process value.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects a request mismatch and a wrong-workspace marker without changing session A or request R",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.does not write a second failsafe for an unchanged queued update and keeps additive methods distinct",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses durable reopen without sessionId and without workspace marker proof"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "P2 identity probes preserve sessionA/requestR and reject mismatches without cache changes. Declared tests omit the inherited-agent and native-to-plugin tests at P2:482/:511 and HV12/HV13. Coverage mapping is incomplete."
+      },
+      {
+        "criterionId": "FR-MCP-SESSIONLIFE-002-AC005",
+        "criterion": "The three governing contract documents consistently describe explicit/cache/None precedence, ordinary first-persist rejection, canceled/cancelled supersession, and durable-reopen omission.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses durable reopen without sessionId and without workspace marker proof"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "FAIL regression oracle: P2:549-554 regex-matches three guide examples rather than parsing every supported YAML document. Bootstrap parsing also has no raw-versus-parsed completeness equality. Independent current-doc parsing passes 48 blocks and five begin examples; this does not repair the required regression test."
+      },
+      {
+        "criterionId": "FR-MCP-SESSIONLIFE-003-AC001",
+        "criterion": "Every session-log mutation returns exactly one truthful outcome: primary persisted, degraded queued with a confirmed retained failsafe, or failed/lost with a nonzero process result.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "P2 8 verbs x 3 process outcomes are asserted at P2:217; native case passes. Typed append/title identity repairs pass real probes. Exact provider persistence is not inferred from the transport double."
+      },
+      {
+        "criterionId": "FR-MCP-SESSIONLIFE-003-AC002",
+        "criterion": "The result includes code, retryable, persisted, degraded, queued, method, requestId, failsafePath, message, and diagnostic stderr fields appropriate to the observed outcome.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "P2 outcome receipt assertions and process exits exist in the mapped all-verbs test. Malformed typed outcomes reject in reviewer probes. This is local wrapper evidence, not a durable server query."
+      },
+      {
+        "criterionId": "FR-MCP-SESSIONLIFE-003-AC003",
+        "criterion": "Caller requestId is honored only when it matches the active turn; mismatches are rejected without mutating cache, server state, or recovery artifacts.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "Runtime PASS for all six mismatched caller verbs with and without marker proof: zero calls and identical current-turn hashes. The new HV13 case is not linked in criterionSpecificExistingTests."
+      },
+      {
+        "criterionId": "FR-MCP-SESSIONLIFE-003-AC004",
+        "criterion": "A primary-success result is accepted only with exact server readback of the intended response, interpretation, tags, contextList, actions or dialog, and identity.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "DEFERRED full AC to P6: mapped fake transport/server-state output cannot prove exact real server readback of all child collections. P2 explicitly disclaims durable server query; no present P2 runtime failure is assigned solely for this deferral."
+      },
+      {
+        "criterionId": "FR-MCP-SESSIONLIFE-003-AC005",
+        "criterion": "Repeated unchanged updates and sequential append/complete calls are idempotent: no duplicate recovery work, child rows, or outcome ambiguity is introduced.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.does not write a second failsafe for an unchanged queued update and keeps additive methods distinct",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "P2 queue dedupe and distinct additive calls are exercised; cross-session dedupe probe produces two envelopes for two sessions. Full duplicate-free persisted child-row behavior remains P4/P6 and is not accepted."
+      },
+      {
+        "criterionId": "FR-MCP-SESSIONLIFE-003-AC006",
+        "criterion": "Write-ahead recovery is retained before backend submission and deleted only after durable confirmation; a queued result is never represented as primary persistence or accepted TODO completion evidence.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "P2 write-ahead/retention evidence passes for submit/title, including absent and whitespace typed identity title recovery. Durable verification-before-deletion/provider replay remains P4/P6. Do not treat queued data as accepted."
+      },
+      {
+        "criterionId": "TR-MCP-SESSIONLIFE-001-AC001",
+        "criterion": "One real begin-turn builder or shim preserves the complete cached turn on degraded persistence and exposes a shared, truthful degraded transition used by all hooks.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.round-trips hash and space failsafePath through object YAML and clears degraded after primary success",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "Real shared cache-preservation code and real hook probes pass. Declared all-verbs/retry/path entries are partial coverage of the complete state and all hook transitions; direct preservation and hook tests need explicit links."
+      },
+      {
+        "criterionId": "TR-MCP-SESSIONLIFE-001-AC002",
+        "criterion": "Prompt, complete, update, and dialog hooks consume the shared transition without reduced-object replacement, empty-query overwrite, or false server-persisted status.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.round-trips hash and space failsafePath through object YAML and clears degraded after primary success",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "FAIL complete mapping: all-verbs/path/retry entries do not assert complete fallback or empty-query omission. Appropriate lifecycle/P2 empty-query tests exist but are not declared for this row."
+      },
+      {
+        "criterionId": "TR-MCP-SESSIONLIFE-001-AC003",
+        "criterion": "Degraded missing-turn dialog recovery is bounded to one submit attempt and one retained dialog failsafe, while unrelated not-found remains nonretryable.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.round-trips hash and space failsafePath through object YAML and clears degraded after primary success",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "FAIL mapping/oracle: declared all-verbs/path/retry cases do not exercise the bounded degraded 404 branch. Reviewer probes prove one Submit attempt, one session_dialog envelope, and no recovery for never-degraded 404. Committed regression links/assertions remain incomplete."
+      },
+      {
+        "criterionId": "TR-MCP-SESSIONLIFE-002-AC001",
+        "criterion": "A single durability-first metadata resolver implements explicit, verified-cache, and None precedence for planFile and todoId.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses durable reopen without sessionId and without workspace marker proof",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects a request mismatch and a wrong-workspace marker without changing session A or request R"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "P2 production resolver now distinguishes durable omission and first-persist cache/None. Declared reopen/identity entries do not prove every resolver precedence branch; independent metadata probes supplement but do not replace the manifest."
+      },
+      {
+        "criterionId": "TR-MCP-SESSIONLIFE-002-AC002",
+        "criterion": "Workspace, agent, session, and request identity are immutable after binding; freshness checks diagnose drift and never rebind from markers or inherited variables.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses durable reopen without sessionId and without workspace marker proof",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects a request mismatch and a wrong-workspace marker without changing session A or request R"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "P2 runtime immutable-binding probes pass. Mapping omits inherited-agent/native-transition and added request-guard regression cases, so full criterion traceability is not established."
+      },
+      {
+        "criterionId": "TR-MCP-SESSIONLIFE-002-AC003",
+        "criterion": "Ordinary first persistence, canceled/cancelled supersession, durable reopen, and all three contract documents use the same resolver semantics.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses durable reopen without sessionId and without workspace marker proof",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects a request mismatch and a wrong-workspace marker without changing session A or request R"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "FAIL complete mapping: declared reopen/marker/mismatch entries do not link the governing-document test or all raw/supersession semantics. The document oracle is independently incomplete."
+      },
+      {
+        "criterionId": "TR-MCP-SESSIONLIFE-003-AC001",
+        "criterion": "The wrapper exposes a typed primary, queued, or failed outcome contract and no session-log mutation collapses that result to an unclassified boolean.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "FAIL mapping: declared mismatch tests show rejection, not the full primary/queued/failed outcome contract. The existing all-verbs case is appropriate P2 evidence but is absent here."
+      },
+      {
+        "criterionId": "TR-MCP-SESSIONLIFE-003-AC002",
+        "criterion": "Result serialization includes identity, method, durability, queue, retryability, diagnostic, and failsafe fields without claiming primary success for queued work.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "FAIL mapping: declared mismatch tests do not enumerate all serialized outcome fields. The mapped relationship cannot stand in for all-verbs receipt assertions and typed-identity cases."
+      },
+      {
+        "criterionId": "TR-MCP-SESSIONLIFE-003-AC003",
+        "criterion": "Child REPL execution uses one operation deadline with deterministic process-tree cleanup, and dedupe preserves sequential method labels and queue counts.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "MIXED: single operation deadline/process-tree cleanup belongs to P3. P2 dedupe/method-label portion has actual tests/probes, but this row maps mismatch tests rather than those cases. No P3 completion claim is made."
+      },
+      {
+        "criterionId": "TEST-MCP-SESSIONLIFE-001-AC001",
+        "criterion": "Mock-backed consumer tests prove degraded complete-turn preservation, truthful hook status, empty-query omission, bounded missing-turn dialog recovery, and same-request cached metadata.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.sends exact None on updateTurn when caller clears planFile and todoId",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "FAIL complete mapping: cache metadata and persistence-envelope cases do not cover every listed hook/query/bounded-recovery behavior. Missing bounded recovery regression assertions remain despite reviewer probes."
+      },
+      {
+        "criterionId": "TEST-MCP-SESSIONLIFE-001-AC002",
+        "criterion": "At least one real builder or shim test runs with MCP_PLUGIN_PERSIST_LOG unset and asserts the complete cached object and serialized persistence payload rather than only fixture echo.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.sends exact None on updateTurn when caller clears planFile and todoId",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "P2 real builder/shim execution with MCP_PLUGIN_PERSIST_LOG unset exists; native process tests and receipt-only real-function probes support this testing method. Individual full-field requirements remain separately assessed."
+      },
+      {
+        "criterionId": "TEST-MCP-SESSIONLIFE-001-AC003",
+        "criterion": "The accepted test scope exits with zero failures and zero skips and records the concrete test names and evidence paths in the acceptance manifest.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.sends exact None on updateTurn when caller clears planFile and todoId"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "P2 cumulative native results are zero fail/skip, independently reparsed. The manifest remains not-accepted, contains an absent native label, and lacks HV10-HV14 links; do not claim completed acceptance-index traceability."
+      },
+      {
+        "criterionId": "TEST-MCP-SESSIONLIFE-002-AC001",
+        "criterion": "Named Pester tests cover metadata precedence, immutable identity, ordinary first persist, canceled/cancelled supersession, durable reopen, and all three contract documents.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "FAIL mapping: only document and duplicate-hook tests are declared for a criterion listing metadata, identity, raw first-persist, both supersession spellings and reopen. Document regression enumeration is incomplete."
+      },
+      {
+        "criterionId": "TEST-MCP-SESSIONLIFE-002-AC002",
+        "criterion": "Named process tests cover primary, queued, and lost wrapper exits, structured result serialization, single child deadline and cleanup, Stop ordering, quarantine repair, audit reconciliation, and dialog classification.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "MIXED: P2 process outcomes are evidenced by the all-verbs case, but this row links only docs/hook tests. Deadline/Stop/quarantine/audit portions remain P3/P4/P6; no whole-criterion acceptance."
+      },
+      {
+        "criterionId": "TEST-MCP-SESSIONLIFE-002-AC003",
+        "criterion": "Every mock-backed consumer case has a corresponding real implementation assertion and recorded process exit or serialized receipt; unaccepted candidate tests remain explicitly not accepted.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "Incomplete crosswalk: real implementation and process evidence exists, but this criterion does not enumerate every consumer-to-real counterpart and the document oracle is deficient. All candidate states remain not-accepted."
+      },
+      {
+        "criterionId": "TEST-MCP-SESSIONLIFE-002-AC004",
+        "criterion": "The accepted cumulative test scope exits with zero failures, zero skips, no missing reports, and no zero-discovery projects.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "FAIL mapping: docs/hook cases cannot prove cumulative inventory/report rejection. Direct compiled validator accepts this run and 96 inherited gate/exclusion native cases pass, but none is mapped here."
+      },
+      {
+        "criterionId": "TEST-MCP-SESSIONLIFE-003-AC001",
+        "criterion": "Transaction-gated session-log tests prove non-QuadBrain action, dialog, update, and additive complete persistence without coordinator or keyserver invocation.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "DEFERRED: transaction-gated real service/coordinator/keyserver proof is P6. Current mapped plugin fakes do not establish it; preserve not-accepted and broader FR-MCP-173 obligations."
+      },
+      {
+        "criterionId": "TEST-MCP-SESSIONLIFE-003-AC002",
+        "criterion": "Exact durable readback verifies every child collection and repeated additive complete remains duplicate-free.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "DEFERRED: exact durable child-collection readback and additive database dedupe are P6. Current P2 fake transport is explicitly insufficient."
+      },
+      {
+        "criterionId": "TEST-MCP-SESSIONLIFE-003-AC003",
+        "criterion": "The subset proof is linked to FR-MCP-173 but does not mark its broader first-party adapter obligations satisfied.",
+        "declaredTests": [
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+          "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+        ],
+        "missingNativeNames": [],
+        "acceptanceState": "not-accepted",
+        "reviewerNote": "Boundary preserved: manifest links FR-MCP-173 subset and does not accept its broad adapter obligations. Mapped process tests do not themselves prove that governance relationship; current state inspection does."
+      }
+    ]
+  },
+  "Traceability": {
+    "traceCounts": {
+      "rows": 35,
+      "withConcreteTests": 35,
+      "withoutConcreteTests": 0,
+      "frRows": 16,
+      "frWithConcreteTests": 16,
+      "trRows": 9,
+      "trWithConcreteTests": 9,
+      "todoRows": 35,
+      "todoNotAccepted": 35,
+      "uniqueTodoIds": 35
+    },
+    "allAcCount": 109,
+    "uniqueMappingEdges": 47,
+    "manifestBlobAtTip": "fd67e429f0fd7e44226eac4cc8e744528e7a29d2",
+    "manifestBlobAtPrior": "fd67e429f0fd7e44226eac4cc8e744528e7a29d2",
+    "unmappedHvTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV11 explicit append metadata updates cache used by later complete",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV12 beginTurn rejects missing marker proof and wrong-marker degraded reopen",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV13 request mismatch does not mutate current-turn when markers are missing",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false"
+    ],
+    "documentParseResults": [
+      {
+        "path": "docs/context/module-bootstrap.md",
+        "sha256": "F4918499C18D4F16169012EB65834D3D66AE4362ABC8F34E613CB48DFEDCAE11",
+        "blocks": [
+          {
+            "line": 34,
+            "language": "json",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 40,
+            "language": "json",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 48,
+            "language": "json",
+            "rawBeginTurnOccurrences": 1,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": [
+              {
+                "requestId": "<unique-request-id>",
+                "planFile": "None",
+                "todoId": "None",
+                "nonemptyPair": true
+              }
+            ]
+          },
+          {
+            "line": 56,
+            "language": "json",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 60,
+            "language": "json",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 64,
+            "language": "json",
+            "rawBeginTurnOccurrences": 1,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": [
+              {
+                "requestId": "req-20260304T113901Z-003",
+                "planFile": "None",
+                "todoId": "None",
+                "nonemptyPair": true
+              }
+            ]
+          },
+          {
+            "line": 70,
+            "language": "json",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 74,
+            "language": "json",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 78,
+            "language": "json",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 84,
+            "language": "json",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 88,
+            "language": "json",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 92,
+            "language": "json",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 96,
+            "language": "json",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 112,
+            "language": "json",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 118,
+            "language": "json",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          }
+        ],
+        "rawBeginTurnOccurrences": 2,
+        "parsedBeginTurnExamples": 2
+      },
+      {
+        "path": "docs/REPL-USER-GUIDE.md",
+        "sha256": "D80D6074FF21BBDC1AFD57AC90D642E4C36F4A4E8C4A5707556DFC34D3AD24B9",
+        "blocks": [
+          {
+            "line": 114,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 1,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": [
+              {
+                "requestId": "req-20260304T113901Z-add-jwt-001",
+                "planFile": "None",
+                "todoId": "None",
+                "nonemptyPair": true
+              }
+            ]
+          },
+          {
+            "line": 131,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 143,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 156,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 186,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 200,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 232,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 252,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 291,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 303,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 326,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 358,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 370,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 417,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 429,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 449,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 458,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 471,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 1,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": [
+              {
+                "requestId": "req-20260304T113901Z-add-jwt-001",
+                "planFile": "None",
+                "todoId": "None",
+                "nonemptyPair": true
+              }
+            ]
+          },
+          {
+            "line": 485,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 503,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 523,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 535,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 547,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 557,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 567,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 577,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 2,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 604,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 615,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 630,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 643,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 746,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 1,
+            "beginTurnExamples": []
+          },
+          {
+            "line": 811,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 1,
+            "parseError": null,
+            "parsedDocuments": 2,
+            "beginTurnExamples": [
+              {
+                "requestId": "req-20260304T113901Z-add-auth-001",
+                "planFile": "None",
+                "todoId": "None",
+                "nonemptyPair": true
+              }
+            ]
+          },
+          {
+            "line": 846,
+            "language": "yaml",
+            "rawBeginTurnOccurrences": 0,
+            "parseError": null,
+            "parsedDocuments": 3,
+            "beginTurnExamples": []
+          }
+        ],
+        "rawBeginTurnOccurrences": 3,
+        "parsedBeginTurnExamples": 3
+      }
+    ],
+    "historicalVerdictFlags": {
+      "accepted": false,
+      "phaseComplete": false,
+      "hvAgreeClaimed": false
+    }
+  },
+  "PullRequest": {
+    "url": "https://github.com/sharpninja/McpServer/pull/72",
+    "source": "GitHub connector get_pr_info",
+    "headSha": "b262080199c26622ac495310317616837f9e2248",
+    "state": "open",
+    "draft": true,
+    "merged": false,
+    "writePerformed": false
+  },
+  "FinalVerification": {
+    "sourceMismatches": [],
+    "gateArtifactChanges": [],
+    "preexistingDirtyChanges": [],
+    "initialStatus": [
+      " M .nuke/build.schema.json",
+      " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+      " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json",
+      " M docs/receipts/hv/20260930T1918Z-sessionlife-p2-contracts-hv.response.jsonl",
+      " M docs/receipts/hv/hostile-validator-sessionlife-p2-20260930T1918Z.json",
+      " M docs/receipts/hv/hostile-validator-sessionlife-p2-20260930T1918Z.md",
+      "?? .agent-scratch/",
+      "?? docs/receipts/hv/20260930T1918Z-concurrent-receipt-commit.json",
+      "?? docs/receipts/hv/20260930T1918Z-final-verification.json",
+      "?? docs/receipts/hv/20260930T1918Z-probe-fixtures-2dc8f2d0aa444ce09b2de49abccf7d34/",
+      "?? docs/receipts/hv/20260930T1918Z-probe-fixtures-7a6dc128d92a463aadca97a3c90c54ad/",
+      "?? docs/receipts/hv/20260930T1918Z-probe-fixtures-9d5ed243a11d483db1a6ea91379aab6d/",
+      "?? docs/receipts/hv/20260930T1918Z-sessionlife-p2-contracts-hv.evidence.jsonl",
+      "?? docs/receipts/hv/20260930T1918Z-sessionlife-p2-expanded-probes.json",
+      "?? docs/receipts/hv/20260930T1918Z-sessionlife-p2-native-audit.json",
+      "?? docs/receipts/hv/20260930T1918Z-sessionlife-p2-probes.json",
+      "?? docs/receipts/hv/20260930T1918Z-sessionlife-p2-real-validator.json",
+      "?? docs/receipts/hv/20260930T1918Z-sessionlife-p2-trace-audit.json",
+      "?? docs/receipts/hv/20260930T2123Z-additional-probes.json",
+      "?? docs/receipts/hv/20260930T2123Z-adversarial-fixtures-1532c0f6c7ac4cde849b7d322aa70ec0/",
+      "?? docs/receipts/hv/20260930T2123Z-final-verification.json",
+      "?? docs/receipts/hv/20260930T2123Z-initial-status.txt",
+      "?? docs/receipts/hv/20260930T2123Z-probe-fixtures-4d33f919dcf04b8c8e2dbae5e199fe50/",
+      "?? docs/receipts/hv/20260930T2123Z-sessionlife-p2-contracts-hv.evidence.jsonl",
+      "?? docs/receipts/hv/20260930T2123Z-sessionlife-p2-contracts-hv.request.jsonl",
+      "?? docs/receipts/hv/20260930T2123Z-sessionlife-p2-contracts-hv.response.jsonl",
+      "?? docs/receipts/hv/20260930T2123Z-sessionlife-p2-expanded-probes.json",
+      "?? docs/receipts/hv/20260930T2123Z-sessionlife-p2-native-audit.json",
+      "?? docs/receipts/hv/20260930T2123Z-sessionlife-p2-trace-audit.json",
+      "?? docs/receipts/hv/20260930T2123Z-typed-outcome-probes-harness-initial.json",
+      "?? docs/receipts/hv/20260930T2123Z-typed-outcome-probes.json",
+      "?? docs/receipts/hv/20260930T2308Z-additional-probes.json",
+      "?? docs/receipts/hv/20260930T2308Z-adversarial-fixtures-25ced4cbe9d148a99e58149d695febe9/",
+      "?? docs/receipts/hv/20260930T2308Z-final-verification.json",
+      "?? docs/receipts/hv/20260930T2308Z-initial-state.json",
+      "?? docs/receipts/hv/20260930T2308Z-marker-helper-probe.json",
+      "?? docs/receipts/hv/20260930T2308Z-probe-evaluation.json",
+      "?? docs/receipts/hv/20260930T2308Z-probe-fixtures-008218ba4f6740eea7656fb1eb5b9908/",
+      "?? docs/receipts/hv/20260930T2308Z-sessionlife-p2-contracts-hv.evidence.jsonl",
+      "?? docs/receipts/hv/20260930T2308Z-sessionlife-p2-contracts-hv.request.jsonl",
+      "?? docs/receipts/hv/20260930T2308Z-sessionlife-p2-contracts-hv.response.jsonl",
+      "?? docs/receipts/hv/20260930T2308Z-sessionlife-p2-expanded-probes.json",
+      "?? docs/receipts/hv/20260930T2308Z-sessionlife-p2-native-audit.json",
+      "?? docs/receipts/hv/20260930T2308Z-sessionlife-p2-trace-audit.json",
+      "?? docs/receipts/hv/20260930T2308Z-supplemental-fixtures-6379c86ed3ab42309971f2642d3c18a5/",
+      "?? docs/receipts/hv/20260930T2308Z-supplemental-probes.json",
+      "?? docs/receipts/hv/20260930T2308Z-trace-review.json",
+      "?? docs/receipts/hv/20260930T2308Z-trace-review.md",
+      "?? docs/receipts/hv/20260930T2308Z-typed-fixtures-98aabac14d7b49b78a493120fd92f854/",
+      "?? docs/receipts/hv/20260930T2308Z-typed-outcome-probes.json",
+      "?? docs/receipts/hv/hostile-validator-sessionlife-p2-20260930T2123Z.json",
+      "?? docs/receipts/hv/hostile-validator-sessionlife-p2-20260930T2123Z.md",
+      "?? docs/receipts/hv/hostile-validator-sessionlife-p2-20260930T2308Z.json",
+      "?? docs/receipts/hv/hostile-validator-sessionlife-p2-20260930T2308Z.md",
+      "?? docs/receipts/hv/p2-unit-legion-20260930T1839Z-gate.log.err",
+      "?? docs/receipts/hv/p2-unit-legion-20260930T1842Z-gate.log.err",
+      "?? docs/receipts/hv/p2-unit-legion-20260930T1855Z-gate.err",
+      "?? docs/receipts/hv/p2-unit-legion-20260930T1856Z-gate.err",
+      "?? docs/receipts/hv/p2-unit-legion-20260930T1915Z-gate.err",
+      "?? docs/receipts/hv/p2-unit-legion-20260930T1932Z-gate.err",
+      "?? docs/receipts/hv/p2-unit-legion-20260930T193319Z-gate.err",
+      "?? docs/receipts/hv/p2-unit-legion-20260930T193839Z-gate.err",
+      "?? docs/receipts/hv/p2-unit-legion-20260930T194449Z-gate.err",
+      "?? docs/receipts/hv/p2-unit-legion-20260930T200336Z-gate.err",
+      "?? docs/receipts/hv/p2-unit-legion-20260930T202206Z-gate.err",
+      "?? docs/receipts/hv/p2-unit-legion-20260930T205133Z-gate.err",
+      "?? docs/receipts/hv/p2-unit-legion-20260930T224636Z-gate.err",
+      "?? docs/receipts/hv/verify-probes-out.json"
+    ],
+    "initialDirtyHashes": [
+      {
+        "path": ".nuke/build.schema.json",
+        "hash": "3228DAA614F0787B9B0AB5EC42120F6C8DB7A1B2DE95931DD29500FACB644616"
+      },
+      {
+        "path": "docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+        "hash": "94AFEB2429C6E8DC196046018C258AE2A32FE5012AA14E4FD6DDF831CFA7FFE8"
+      },
+      {
+        "path": "docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json",
+        "hash": "4C824F923D6C9A028FF18DD16C9BB962983AD28B993D673EEB10B5CDC66FB6AF"
+      },
+      {
+        "path": "docs/receipts/hv/20260930T1918Z-sessionlife-p2-contracts-hv.response.jsonl",
+        "hash": "3D6DE358FC078327A75FAAC61C2BF2FD2A3BF21048D864C5CE6DDD6EA27EF9BA"
+      },
+      {
+        "path": "docs/receipts/hv/hostile-validator-sessionlife-p2-20260930T1918Z.json",
+        "hash": "C71F80599E393528AC2A60E1BA84497CF8D166B638861A9B77911ADEC04685E6"
+      },
+      {
+        "path": "docs/receipts/hv/hostile-validator-sessionlife-p2-20260930T1918Z.md",
+        "hash": "F3DC3350484B3C6871D62D186DB7FEE69638A55ADD518C10990EDEC31138EADF"
+      }
+    ],
+    "tip": "b262080199c26622ac495310317616837f9e2248",
+    "rootMarkerUnchanged": true,
+    "scope": "Receipt-only writes under docs/receipts/hv"
+  },
+  "ReceiptPaths": {
+    "markdown": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\hostile-validator-sessionlife-p2-20261001T0018Z.md",
+    "json": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\hostile-validator-sessionlife-p2-20261001T0018Z.json",
+    "requestJsonl": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-sessionlife-p2-contracts-hv.request.jsonl",
+    "responseJsonl": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-sessionlife-p2-contracts-hv.response.jsonl",
+    "nativeAudit": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-native-audit.json",
+    "probeEvaluation": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-probe-evaluation.json",
+    "acDispositions": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-ac-dispositions.json",
+    "traceAudit": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-trace-audit.json"
+  },
+  "Limitations": [
+    "Full cumulative suite independently reparsed, not rerun. Runtime probes independently executed with only immediate transport doubled.",
+    "No real MCP server persistence/readback or provider integration is claimed; P6 remains deferred.",
+    "Acceptance-store assertions are limited to the exported snapshot; the root test marker is not trusted authoritative MCP access.",
+    "Historical inter-phase review and automation provenance remain UNKNOWN; current passing probes do not reconstruct past chronology.",
+    "Response JSONL retains visible tool/message events and complete verdict, not private reasoning or hidden instruction records. External runner may additionally save the CLI stream."
+  ],
+  "VerdictJson": {
+    "overallVerdict": "DISAGREE",
+    "accuracy": 99,
+    "completeness": 97,
+    "confidence": 99,
+    "failList": [
+      "A1/HV07: prior mapping and regression-oracle failures remain; the all-remediated claim is false.",
+      "A6/HV09: completeness97 is below the required98 despite35 populated mapping arrays and correctly open TODOs.",
+      "C2/HV07: wrong/nonexistent AC test links, unmapped HV10-HV14 cases and incomplete YAML-document parsing regression remain.",
+      "D1: P2 holistic exit criteria are not met; mapping/oracle gaps and unresolved process evidence prevent acceptance."
+    ],
+    "passCount": 14,
+    "failCount": 4,
+    "unknownCount": 2,
+    "tipSha": "b262080199c26622ac495310317616837f9e2248",
+    "receiptPaths": {
+      "markdown": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\hostile-validator-sessionlife-p2-20261001T0018Z.md",
+      "json": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\hostile-validator-sessionlife-p2-20261001T0018Z.json",
+      "requestJsonl": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-sessionlife-p2-contracts-hv.request.jsonl",
+      "responseJsonl": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-sessionlife-p2-contracts-hv.response.jsonl",
+      "nativeAudit": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-native-audit.json",
+      "probeEvaluation": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-probe-evaluation.json",
+      "acDispositions": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-ac-dispositions.json",
+      "traceAudit": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T0018Z-trace-audit.json"
+    }
+  }
+}

@@ -1,0 +1,103 @@
+xUnit.net v3 Microsoft.Testing.Platform v1 Runner v3.2.2+728c1dce01 (64-bit .NET 10.0.11)
+
+failed McpServer.Support.Mcp.Tests.Documentation.BugTriage139EleventhRepositoryAuditTests.ChangedCodeAndTestTextFiles_UseOneDominantByteLevelTerminatorStyle (9s 986ms)
+  Byte-level EOL drift:
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/SHA256SUMS.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/affected-providers-final7/affected-providers-final7-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/affected-providers-final7/affected-providers-final7-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/client-usecase-final3/client-usecase-final3-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/client-usecase-final3/client-usecase-final3-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/evidence-integrity/command-mapping-audit-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/evidence-integrity/command-mapping-audit-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/evidence-integrity/git-diff-cached-check-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/evidence-integrity/git-diff-cached-check-final-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/evidence-integrity/git-diff-cached-check-final-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/evidence-integrity/git-diff-cached-check-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/evidence-integrity/inventory-verification-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/evidence-integrity/inventory-verification-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/evidence-integrity/review-provenance-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/evidence-integrity/review-provenance-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/fourteenth-harness-final2/fourteenth-harness-final2-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/fourteenth-harness-final2/fourteenth-harness-final2-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/global-empty-workspace-green-rerun/global-empty-workspace-green-rerun-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/global-empty-workspace-green-rerun/global-empty-workspace-green-rerun-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/global-identity-agenthelp-green/global-identity-agenthelp-green-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/global-identity-agenthelp-green/global-identity-agenthelp-green-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/hermetic-external-build-after-timeout-adjustment/hermetic-external-build-after-timeout-adjustment-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/hermetic-external-build-after-timeout-adjustment/hermetic-external-build-after-timeout-adjustment-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/hermetic-external-no-env-final3/hermetic-external-no-env-final3-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/hermetic-external-no-env-final3/hermetic-external-no-env-final3-environment.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/hermetic-external-no-env-final3/hermetic-external-no-env-final3-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/hermetic-external-sqlserver-green/hermetic-external-sqlserver-green-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/hermetic-external-sqlserver-green/hermetic-external-sqlserver-green-environment.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/hermetic-external-sqlserver-green/hermetic-external-sqlserver-green-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/identity-static-policy-green/identity-static-policy-green-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/identity-static-policy-green/identity-static-policy-green-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/marker-trust-final2/marker-trust-final2-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/marker-trust-final2/marker-trust-final2-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/nuke-compile-final3/nuke-compile-final3-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/nuke-compile-final3/nuke-compile-final3-environment.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/nuke-compile-final3/nuke-compile-final3-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/nuke-test-final6/nuke-test-final6-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/nuke-test-final6/nuke-test-final6-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/nuke-traceability-final2/nuke-traceability-final2-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/nuke-traceability-final2/nuke-traceability-final2-environment.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/nuke-traceability-final2/nuke-traceability-final2-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/release-build-matrix-final3/release-build-matrix-final3-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/release-build-matrix-final3/release-build-matrix-final3-environment.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/release-build-matrix-final3/release-build-matrix-final3-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/repository-audits-final4/repository-audits-final4-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/repository-audits-final4/repository-audits-final4-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/repository-audits-post-evidence/repository-audits-post-evidence-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/repository-audits-post-evidence/repository-audits-post-evidence-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/requirements-wiki-final3/requirements-wiki-final3-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/requirements-wiki-final3/requirements-wiki-final3-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/rest-mcp-usecase-final3/rest-mcp-usecase-final3-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/rest-mcp-usecase-final3/rest-mcp-usecase-final3-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/slice-1-affected-diagnostic/command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/slice-2-identifiers-providers/command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/slice-3-physical-identity-affected-green2/command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/slice-4-5-6-affected-providers-final2/command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/slice-8-9-harness-affected/command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/usecase-authoritative-final2/usecase-authoritative-final2-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/usecase-authoritative-final2/usecase-authoritative-final2-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/workspace-identity-provider-final3/workspace-identity-provider-final3-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/green/workspace-identity-provider-final3/workspace-identity-provider-final3-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/global-empty-workspace-red/global-empty-workspace-red-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/global-empty-workspace-red/global-empty-workspace-red-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/hermetic-external-no-env-final/hermetic-external-no-env-final-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/hermetic-external-no-env-final/hermetic-external-no-env-final-environment.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/hermetic-external-no-env-final/hermetic-external-no-env-final-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/hermetic-external-no-env-final2/hermetic-external-no-env-final2-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/hermetic-external-no-env-final2/hermetic-external-no-env-final2-environment.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/hermetic-external-no-env-final2/hermetic-external-no-env-final2-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/hermetic-external-sqlserver-recovery/hermetic-external-sqlserver-recovery-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/hermetic-external-sqlserver-recovery/hermetic-external-sqlserver-recovery-environment.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/hermetic-external-sqlserver-recovery/hermetic-external-sqlserver-recovery-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/nuke-test-final4/nuke-test-final4-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/nuke-test-final4/nuke-test-final4-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/slice-1-intended/command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/slice-2-identifiers/command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/slice-3-physical-identity-intended/command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/slice-4-6-sqlite-state/command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/slice-4-sqlite-aggregate-state/command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/slice-5-sqlite-bounded-open/command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/slice-8-root-discovery/command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/slice-9-descendant-pipe-confirmed/command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/sqlite-save-cancellation-green-tests/sqlite-save-cancellation-green-tests-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/sqlite-save-cancellation-green-tests/sqlite-save-cancellation-green-tests-result.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/usecase-authoritative/usecase-authoritative-command.txt: missing final newline
+  docs/receipts/artifacts/BUG-TRIAGE-139/fourteenth-green/final/red/usecase-authoritative/usecase-authoritative-result.txt: missing final newline
+    at McpServer.Support.Mcp.Tests.Documentation.BugTriage139EleventhRepositoryAuditTests.ChangedCodeAndTestTextFiles_UseOneDominantByteLevelTerminatorStyle() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Documentation\BugTriage139EleventhRepositoryAuditTests.cs:194
+    at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+    at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+  In process file artifacts produced:
+    - C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\repository-audits-committed-evidence\repository-audits-committed-evidence.trx
+
+Test run summary: Failed! - C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\final-gates\hermetic-external-no-env-final\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll (net10.0|x64)
+  total: 14
+  failed: 1
+  succeeded: 13
+  skipped: 0
+  duration: 22s 083ms

@@ -1,0 +1,222 @@
+[
+  {
+    "Index": 0,
+    "Text": "<user_input mode=\"act\"><mode_notice>The user switched from plan mode to act mode before sending this message.</mode_notice>\ncreate worktree from develop</user_input>"
+  },
+  {
+    "Index": 24,
+    "Text": "<user_input mode=\"plan\"><mode_notice>The user switched from act mode to plan mode before sending this message.</mode_notice>\nWe need to plan a Hostile Validation queue and execution mechanism.</user_input>"
+  },
+  {
+    "Index": 43,
+    "Text": "<user_input mode=\"plan\">Option C</user_input>"
+  },
+  {
+    "Index": 51,
+    "Text": "<user_input mode=\"plan\">HV queue needs configuration for available HV agents (cline, copilot, claude, codex, grok) and either the agent's default (highest effort) model, or a model/effort specified in configuration.  The HV agent configuration must have endpoints and REPL coverage so Director and other tools can manage in real time.</user_input>"
+  },
+  {
+    "Index": 68,
+    "Text": "<user_input mode=\"plan\">When a HV request is received, it must submit a range of session log turns to include in the review.  The reviewer must grade each turn individualy and apply their review score and update the turn record.  The result will include the score for each turn, and an overall score for the whole HV request.  HV request/results will be store in the database.</user_input>"
+  },
+  {
+    "Index": 76,
+    "Text": "<user_input mode=\"plan\">worktree session-20261009 should have updates to the session log schema for storing both agent self-review and hv review outcome on the turn.</user_input>"
+  },
+  {
+    "Index": 96,
+    "Text": "<user_input mode=\"plan\">> Found the architecture doc \n\nThat document is the base we are building on in this plan.</user_input>"
+  },
+  {
+    "Index": 104,
+    "Text": "<user_input mode=\"plan\">Review of a turn should be considered final as any subsequent changes should be reflected in a later turn.</user_input>"
+  },
+  {
+    "Index": 110,
+    "Text": "<user_input mode=\"plan\">Do not waste tokens repeating a completed action.</user_input>"
+  },
+  {
+    "Index": 112,
+    "Text": "<user_input mode=\"plan\">Session log may not allow updates to a turn with an HV review.</user_input>"
+  },
+  {
+    "Index": 114,
+    "Text": "<user_input mode=\"plan\">> Nonterminal turn in range: refuse whole request?\n\nA turn must have an agent review before it can be included in a HV.</user_input>"
+  },
+  {
+    "Index": 118,
+    "Text": "<user_input mode=\"plan\">Turns submitted, but marked Unnecessary, should still be included in the overall HV grade for the request.</user_input>"
+  },
+  {
+    "Index": 120,
+    "Text": "<user_input mode=\"plan\">> Overall score stays server-recomputed mean plus worst-turn floor with AGREE requiring every turn PASS?\n\nNo, overall HV is a holistic review of the whole set of turns submitted.</user_input>"
+  },
+  {
+    "Index": 122,
+    "Text": "<user_input mode=\"plan\">If the request recieves a session id (not a session turn id) in the set of turns, then the totality of session turns in that session are included by default.</user_input>"
+  },
+  {
+    "Index": 124,
+    "Text": "<user_input mode=\"plan\">plugin core should present all missing agent reviews as a list for the agent to perform review on.</user_input>"
+  },
+  {
+    "Index": 128,
+    "Text": "<user_input mode=\"plan\">HV reviews must use a standard json payload for responses that must include the complete request, the complete jsonl response log, and delineated list of specific failures with adequest description to remediate.</user_input>"
+  },
+  {
+    "Index": 130,
+    "Text": "<user_input mode=\"plan\">HV request must supply a free text field for agent to add specific context in markdown or yaml format.  The request should be parsed for MCP Server FR/TR/AC/UC in the workspace and provided to the reviewing agent in a delineated list.</user_input>"
+  },
+  {
+    "Index": 132,
+    "Text": "<user_input mode=\"plan\">execution failures are to be triaged (prevent duplicates) and mark the HV agent as offline until resolved.</user_input>"
+  },
+  {
+    "Index": 134,
+    "Text": "<user_input mode=\"plan\">If there are no HV agents available to perform a review, the endpoint must refuse the request and the plugin core add the necessary context.</user_input>"
+  },
+  {
+    "Index": 136,
+    "Text": "<user_input mode=\"plan\">HV agent resolution should round-robin HV review agents, excluding the agent submitting the review.</user_input>"
+  },
+  {
+    "Index": 138,
+    "Text": "<user_input mode=\"plan\">need endpoints for getting running hvs, their last reported output, and eta.  Need endpoints for cancelling any hv.  need endpoint to attach to sse strem of the output of any running hv</user_input>"
+  },
+  {
+    "Index": 140,
+    "Text": "<user_input mode=\"plan\">need an HV notification stream endpoint to receive notifications of hv completion in the plugins</user_input>"
+  },
+  {
+    "Index": 142,
+    "Text": "<user_input mode=\"plan\">what questions remain?</user_input>"
+  },
+  {
+    "Index": 144,
+    "Text": "<user_input mode=\"plan\">> Force re-review flag: name and shape (force: bool default false)?\n\nNO</user_input>"
+  },
+  {
+    "Index": 146,
+    "Text": "<user_input mode=\"plan\">> Overall score: reviewer-stated holistic scores with server bounds-check, per-turn means shown separately?\n\nPer turn should be a list of the requested turns to review with their score.</user_input>"
+  },
+  {
+    "Index": 148,
+    "Text": "<user_input mode=\"plan\">> Reviewer-output cap: raise 2 MiB or chunk per-turn for full request + jsonl payloads?\n\nOutput should be captured live and streamed.</user_input>"
+  },
+  {
+    "Index": 150,
+    "Text": "<user_input mode=\"plan\">> Reviewer-output cap: raise 2 MiB or chunk per-turn for full request + jsonl payloa\n\nSingle trx at end.</user_input>"
+  },
+  {
+    "Index": 152,
+    "Text": "<user_input mode=\"plan\">> Auto-start runners on submit vs manual coordinator trigger?\n\nAuto-start</user_input>"
+  },
+  {
+    "Index": 154,
+    "Text": "<user_input mode=\"plan\">> AGREE auto-moves TODO Validating → Complete, or verdict-only?\n\nVerdict only</user_input>"
+  },
+  {
+    "Index": 156,
+    "Text": "<user_input mode=\"plan\">> Triage/incident store: new tables or reuse existing triage schema?\n\nFile through endpoint.</user_input>"
+  },
+  {
+    "Index": 158,
+    "Text": "<user_input mode=\"plan\">>  Health probe for offline→online: what constitutes passing (successful dry-run grade vs operator-only resolve)?\n\nNONCE the agent.</user_input>"
+  },
+  {
+    "Index": 160,
+    "Text": "<user_input mode=\"plan\">view plan</user_input>"
+  },
+  {
+    "Index": 162,
+    "Text": "<user_input mode=\"plan\">apply byrd dev proces v4</user_input>"
+  },
+  {
+    "Index": 166,
+    "Text": "<user_input mode=\"plan\">model updated.  Please reassemble the plan</user_input>"
+  },
+  {
+    "Index": 214,
+    "Text": "<user_input mode=\"plan\">> Define which existing self-review states satisfy admission.\n\nSelf-review of a turn is just a grade on the turn.  It is not relevant to the HV.</user_input>"
+  },
+  {
+    "Index": 229,
+    "Text": "<user_input mode=\"plan\">> Define “NONCE the agent”, including who may invoke it and what proves recovery.\n\nThis is just a check that the agent is available and can execute an HV.</user_input>"
+  },
+  {
+    "Index": 239,
+    "Text": "<user_input mode=\"plan\">> Approve evidence retention and protected-log access.\n\nMust participate in the audit log of the database.</user_input>"
+  },
+  {
+    "Index": 265,
+    "Text": "<user_input mode=\"plan\">>  session completion again returned Session not found;\n\nThen start a new session.</user_input>"
+  },
+  {
+    "Index": 285,
+    "Text": "<user_input mode=\"plan\">What plugin version are you on?</user_input>"
+  },
+  {
+    "Index": 289,
+    "Text": "<user_input mode=\"plan\">The Cline/ prefix on the session ID is unnecessary.</user_input>"
+  },
+  {
+    "Index": 309,
+    "Text": "<user_input mode=\"plan\">write the failsafe log records</user_input>"
+  },
+  {
+    "Index": 332,
+    "Text": "<user_input mode=\"plan\">ask agent helper about the problem</user_input>"
+  },
+  {
+    "Index": 392,
+    "Text": "<user_input mode=\"plan\">Continue writing failsafe logs for this session.  Need to finish planning.  Show me the plan.</user_input>"
+  },
+  {
+    "Index": 408,
+    "Text": "<user_input mode=\"plan\">view plan</user_input>"
+  },
+  {
+    "Index": 411,
+    "Text": "<user_input mode=\"plan\">what is the path to the plan?  Ignore mcpserver logging for this request</user_input>"
+  },
+  {
+    "Index": 414,
+    "Text": "<user_input mode=\"act\"><mode_notice>The user switched from plan mode to act mode before sending this message.</mode_notice>\ndisable mcpserver-cline-plugin</user_input>"
+  },
+  {
+    "Index": 435,
+    "Text": "<user_input mode=\"plan\"><mode_notice>The user switched from act mode to plan mode before sending this message.</mode_notice>\nview plan</user_input>"
+  },
+  {
+    "Index": 463,
+    "Text": "<user_input mode=\"plan\">> Confirm the worktree/base and foundation integration point.\n\nI don't understand the question.  I've already specified both.</user_input>"
+  },
+  {
+    "Index": 467,
+    "Text": "<user_input mode=\"plan\">> Choose evidence-retention duration, protected-access roles, and exact audit-failure policy.\n\nRetain until told to remove.  There are no access roles.  Audit-failure is a hard stop.</user_input>"
+  },
+  {
+    "Index": 469,
+    "Text": "<user_input mode=\"plan\">> Verify task/requirement links and persist the approved plan.\n\nThat's your job.</user_input>"
+  },
+  {
+    "Index": 474,
+    "Text": "<user_input mode=\"plan\">GZIP HV result logs to save space.</user_input>"
+  },
+  {
+    "Index": 478,
+    "Text": "<user_input mode=\"plan\">write plan to high todo</user_input>"
+  },
+  {
+    "Index": 483,
+    "Text": "<user_input mode=\"act\">The user approved switching to act mode. Continue with the approved plan now.</user_input>"
+  },
+  {
+    "Index": 497,
+    "Text": "<user_input mode=\"act\">Create an amendment to the architecture document with the same level of rigor for diagrams, interfaces, AC, UC, and descriptive documentation.</user_input>"
+  },
+  {
+    "Index": 503,
+    "Text": "<user_input mode=\"act\">save your work so I can get a functioning agent to finish it.</user_input>"
+  }
+]

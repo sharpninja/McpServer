@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Configurations>Debug;Release;Staging</Configurations>
+    <Platforms>AnyCPU;x64;x86</Platforms>
+    <RootNamespace>QBrainAi.Repl.Core</RootNamespace>
+    <PackageId>QBrainAI.Repl.Core</PackageId>
+    <Authors>SharpNinja</Authors>
+    <Description>Reusable REPL workflow helpers for QBrain.AI session log, TODO, requirements, and generic client passthrough operations.</Description>
+    <PackageProjectUrl>https://github.com/sharpninja/McpServer</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/sharpninja/McpServer</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryBranch>main</RepositoryBranch>
+    <PackageTags>mcp;repl;workflow;client</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IsPackable>true</IsPackable>
+    <!-- Common.AgentCli is private and embedded so consumers do not restore an unpublished package. -->
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeAgentCliInPackage</TargetsForTfmSpecificBuildOutput>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="YamlDotNet" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Options" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\QBrainAi.Client\QBrainAi.Client.csproj" />
+    <ProjectReference Include="..\QBrainAi.Common.AgentCli\QBrainAi.Common.AgentCli.csproj">
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
+  </ItemGroup>
+
+  <Target Name="IncludeAgentCliInPackage">
+    <ItemGroup>
+      <BuildOutputInPackage Include="$(OutputPath)QBrainAi.Common.AgentCli.dll" />
+    </ItemGroup>
+  </Target>
+  <ItemGroup>
+    <InternalsVisibleTo Include="QBrainAi.Repl.Core.Tests" />
+  </ItemGroup>
+</Project>

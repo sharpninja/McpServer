@@ -5,7 +5,7 @@
 **TODO:** MCP-MEMORY-002 (high, Architecture, live Done state unknown without marker)
 **Process:** Byrd Development Process v4 — `docs/Development-Process-draft-v4.md` + `skills/byrd-tdd-process/SKILL.md` + `docs/byrd-todo-execution-spec.md`
 **Status:** Superseded planning draft. Shipped path: S1-S7a H-done, S7b/H7b on develop, H7a `agree:true`, `-Plugin all` unblocked. Tokens remain the primary bench metric.
-**Baseline:** McpServer ~1.4.30 (`memory_*`, `/mcpserver/memory`, sessionlog, context hybrid, GraphRAG, `/mcp-transport`)
+**Baseline:** QBrainAi ~1.4.30 (`memory_*`, `/qbrainai/memory`, sessionlog, context hybrid, GraphRAG, `/mcp-transport`)
 **Breaking change:** No for v1. Compat CRUD retained; FR-MCP-MEMORY-001..007 contracts remain in force.
 **Hostile gates:** H-plan, H0, H1–H6 red/green, **H7a-red/green (Grok bench+integration value gate)**, **H7b-red/green (other plugins, after H7a)**, H-done. Default close after H7a. Tokens primary. AGREE+receipt required. See Hostile validation checkpoints.
 
@@ -27,7 +27,7 @@ Skill: `skills/byrd-tdd-process` on every implementation slice.
 
 ## Problem / Value (V²)
 
-**Problem:** Peer agent-memory products win with remember/recall/explore, hybrid retrieval, consolidate, graph, UI, and client kits. McpServer has guidance CRUD + adjacent surfaces, not a first-class consolidating memory substrate.
+**Problem:** Peer agent-memory products win with remember/recall/explore, hybrid retrieval, consolidate, graph, UI, and client kits. QBrainAi has guidance CRUD + adjacent surfaces, not a first-class consolidating memory substrate.
 
 **Value:** Durable cross-session facts for agents; human governance; peer-competitive recall inside workspace/CQRS/traceability.
 
@@ -37,7 +37,7 @@ Skill: `skills/byrd-tdd-process` on every implementation slice.
 
 ## Locked decisions
 
-1. Extend `/mcpserver/memory` and `memory_*` — do not fork.
+1. Extend `/qbrainai/memory` and `memory_*` — do not fork.
 2. Global + Workspace scopes; Products do not auto-share memories.
 3. CQRS-only; no public `IMemoryService` facade for new verbs (handlers own API; existing service adapters thin).
 4. Sessionlog stays transcript; promote is explicit only.
@@ -315,11 +315,11 @@ Explicit promote from sessionlog or context into memory with provenance.
 - **AC-FR-MCP-MEMORY-016-09** UI does not display raw API keys or workspace secrets.
 - **AC-FR-MCP-MEMORY-016-10** Recall/search from UI respects tag chips/filters when present.
 - **AC-FR-MCP-MEMORY-016-11** Keyboard: Escape closes detail/version panel without navigation errors.
-- **AC-FR-MCP-MEMORY-016-12** UI calls only /mcpserver/memory* REST (no direct DB, no undocumented admin routes).
+- **AC-FR-MCP-MEMORY-016-12** UI calls only /qbrainai/memory* REST (no direct DB, no undocumented admin routes).
 ### FR-MCP-MEMORY-017 Agent onboarding
 Documented Streamable HTTP + STDIO kits and plugins expose memory tools with agent-oriented descriptions. **Implement Grok plugin first**; other seven plugins only after Grok H7a value gate AGREE.
 
-- **AC-FR-MCP-MEMORY-017-01** New memory verbs appear in /mcpserver/tools search.
+- **AC-FR-MCP-MEMORY-017-01** New memory verbs appear in /qbrainai/tools search.
 - **AC-FR-MCP-MEMORY-017-02** Committed .mcp.json / docs examples for /mcp-transport and STDIO include the new verbs.
 - **AC-FR-MCP-MEMORY-017-03** Plugin sync order is **grok first**, then the remaining seven (claude-code, claude-cowork, cline, cline-v2, codex, copilot, opencode) only after Grok H7 value gate AGREE. Each plugin eventually exposes skill/descriptor/shim for new verbs; Grok is the pilot lane.
 - **AC-FR-MCP-MEMORY-017-04** One-prompt give-yourself-memory sample exists in docs with real tool names.
@@ -380,7 +380,7 @@ CQRS + REST + MCP + client + REPL + plugin descriptors; error envelope unchanged
 - **AC-TR-MCP-MEMORY-API-002-01** Controllers/MCP/REPL/plugins/MemoryClient only dispatch CQRS handlers (no parallel domain service API).
 - **AC-TR-MCP-MEMORY-API-002-02** Error responses use existing envelope (type/title/status/detail pattern) for new endpoints.
 - **AC-TR-MCP-MEMORY-API-002-03** Compat memory_add|list|update|remove remain registered.
-- **AC-TR-MCP-MEMORY-API-002-04** OpenAPI/swagger lists new routes under /mcpserver/memory.
+- **AC-TR-MCP-MEMORY-API-002-04** OpenAPI/swagger lists new routes under /qbrainai/memory.
 - **AC-TR-MCP-MEMORY-API-002-05** MemoryClient methods mirror REST 1:1 for remember/recall/explore/consolidate/promote/revert/versions.
 - **AC-TR-MCP-MEMORY-API-002-06** MCP tool input schemas reject unknown required-breaking fields per schema (additionalProperties policy documented).
 - **AC-TR-MCP-MEMORY-API-002-07** Optional context pack source memories is off unless requested; when on, only Effective memories of caller.

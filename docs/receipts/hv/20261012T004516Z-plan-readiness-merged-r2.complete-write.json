@@ -1,0 +1,19 @@
+{
+  "type": "result",
+  "payload": {
+    "result": {
+      "queued": false,
+      "message": "Session log persist confirmed a durable write for request 'req-20261012T004516Z-plan-readiness-merged-r2'.",
+      "code": "persisted",
+      "degraded": false,
+      "agent": "Codex",
+      "requestId": "req-20261012T004516Z-plan-readiness-merged-r2",
+      "failsafePath": "",
+      "childStderr": "",
+      "retryable": false,
+      "persisted": true,
+      "method": "workflow.sessionlog.completeTurn",
+      "sessionId": "Codex-20261012T004725Z-plugin-session"
+    }
+  }
+}

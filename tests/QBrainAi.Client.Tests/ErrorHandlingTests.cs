@@ -1,0 +1,72 @@
+using System;
+using System.Net;
+using System.Net.Http;
+using Xunit;
+
+namespace QBrainAi.Client.Tests;
+
+public sealed class ErrorHandlingTests
+{
+    private static readonly QBrainAiClientOptions DefaultOptions = new()
+    {
+        BaseUrl = new Uri("http://localhost:7147"),
+        ApiKey = "test-key"
+    };
+
+    [Fact]
+    public async System.Threading.Tasks.Task BadRequest_ThrowsMcpValidationException()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.BadRequest, """{"error":"Invalid request"}""");
+        using var http = new HttpClient(handler);
+        var client = new TodoClient(http, DefaultOptions);
+
+        var ex = await Assert.ThrowsAsync<McpValidationException>(() => client.QueryAsync(cancellationToken: TestContext.Current.CancellationToken));
+        Assert.Equal(400, ex.StatusCode);
+        Assert.Contains("Invalid request", ex.Message);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task Unauthorized_ThrowsMcpUnauthorizedException()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.Unauthorized, """{"error":"Invalid or missing API key."}""");
+        using var http = new HttpClient(handler);
+        var client = new TodoClient(http, DefaultOptions);
+
+        var ex = await Assert.ThrowsAsync<McpUnauthorizedException>(() => client.QueryAsync(cancellationToken: TestContext.Current.CancellationToken));
+        Assert.Equal(401, ex.StatusCode);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task NotFound_ThrowsMcpNotFoundException()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.NotFound, """{"error":"Item not found"}""");
+        using var http = new HttpClient(handler);
+        var client = new TodoClient(http, DefaultOptions);
+
+        var ex = await Assert.ThrowsAsync<McpNotFoundException>(() => client.GetAsync("NOPE", cancellationToken: TestContext.Current.CancellationToken));
+        Assert.Equal(404, ex.StatusCode);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task Conflict_ThrowsMcpConflictException()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.Conflict, """{"error":"Already exists"}""");
+        using var http = new HttpClient(handler);
+        var client = new TodoClient(http, DefaultOptions);
+
+        var ex = await Assert.ThrowsAsync<McpConflictException>(() =>
+            client.CreateAsync(new Models.TodoCreateRequest { Id = "X", Title = "T", Section = "s", Priority = "high" }, cancellationToken: TestContext.Current.CancellationToken));
+        Assert.Equal(409, ex.StatusCode);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task ServerError_ThrowsQBrainAiException()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.InternalServerError, "Internal error");
+        using var http = new HttpClient(handler);
+        var client = new TodoClient(http, DefaultOptions);
+
+        var ex = await Assert.ThrowsAsync<QBrainAiException>(() => client.QueryAsync(cancellationToken: TestContext.Current.CancellationToken));
+        Assert.Equal(500, ex.StatusCode);
+    }
+}

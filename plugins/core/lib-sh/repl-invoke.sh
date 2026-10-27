@@ -2,13 +2,15 @@
 set -uo pipefail
 
 # repl_invoke <method> [params_yaml]
-# Wrapper accepts YAML/JSON params. Direct mcpserver-repl --agent-stdio callers
+# Wrapper accepts YAML/JSON params. Direct qbrain-ai-repl --agent-stdio callers
 # should send single-line JSON request envelopes.
 # Workflow-prefixed methods are plugin-local shims that translate to either:
 # - local cache mutations under cache/
-# - the real client.* MCP methods exposed by mcpserver-repl
+# - the real client.* MCP methods exposed by qbrain-ai-repl
 
 REPL_INVOKE_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=./repl-bin.sh
+source "${REPL_INVOKE_SCRIPT_DIR}/repl-bin.sh"
 REPL_INVOKE_PLUGIN_ROOT="${MCP_PLUGIN_ROOT:-$(cd "$REPL_INVOKE_SCRIPT_DIR/.." && pwd)}"
 REPL_INVOKE_CACHE_DIR="${REPL_INVOKE_PLUGIN_ROOT}/cache"
 
@@ -538,7 +540,7 @@ const candidates = [
   path.join(pluginRoot, "node_modules"),
   path.join(scriptDir, "..", "node_modules"),
   path.join(scriptDir, "..", "..", "lib-node", "node_modules"),
-  path.join(pluginRoot, "..", "McpServer", "plugins", "core", "lib-node", "node_modules"),
+  path.join(pluginRoot, "..", "QBrainAi", "plugins", "core", "lib-node", "node_modules"),
   path.join(cwd, "plugins", "core", "lib-node", "node_modules"),
   path.join(cwd, "node_modules")
 ];
@@ -693,7 +695,7 @@ _repl_persistent_available() {
     [ "${MCPSERVER_REPL_PERSISTENT:-1}" != "0" ] \
         && command -v node >/dev/null 2>&1 \
         && [ -f "${REPL_INVOKE_SCRIPT_DIR}/repl-daemon.js" ] \
-        && { [ -n "${MCPSERVER_REPL_BIN:-}" ] || command -v mcpserver-repl >/dev/null 2>&1; }
+        && repl_bin_installed
 }
 
 _repl_run_request_envelope() {
@@ -703,8 +705,8 @@ _repl_run_request_envelope() {
         local daemon_dir repl_bin
         daemon_dir="${MCPSERVER_REPL_DAEMON_DIR:-${REPL_INVOKE_CACHE_DIR}/daemon}"
         mkdir -p "$daemon_dir" 2>/dev/null || true
-        repl_bin="${MCPSERVER_REPL_BIN:-}"
-        if [ -n "$repl_bin" ] && [ -e "$repl_bin" ]; then
+        repl_bin="$(resolve_repl_bin)" || return 1
+        if [ -e "$repl_bin" ]; then
             repl_bin="$(_repl_persistent_native_path "$repl_bin")"
         fi
 
@@ -725,12 +727,13 @@ _repl_run_request_envelope() {
         return $?
     fi
 
-    if ! command -v mcpserver-repl >/dev/null 2>&1; then
-        echo "ERROR: mcpserver-repl not found on PATH" >&2
+    local repl_bin
+    if ! repl_bin="$(resolve_repl_bin)"; then
+        echo "ERROR: qbrain-ai-repl or mcpserver-repl not found on PATH" >&2
         return 1
     fi
 
-    _repl_run_repl_with_timeout "$timeout_seconds" mcpserver-repl --agent-stdio --agent "$AGENT_NAME"
+    _repl_run_repl_with_timeout "$timeout_seconds" "$repl_bin" --agent-stdio --agent "$AGENT_NAME"
 }
 
 _repl_failsafe_plugin_name() {
@@ -1187,7 +1190,7 @@ _repl_invoke_raw() {
         return 0
     fi
 
-    echo "ERROR: mcpserver-repl invocation failed for method ${method}" >&2
+    echo "ERROR: qbrain-ai-repl invocation failed for method ${method}" >&2
     if [ -s "$stderr_file" ]; then
         sed 's/^/stderr: /' "$stderr_file" >&2
     fi
@@ -1324,17 +1327,17 @@ _repl_create_compat_marker() {
     swagger="$(_repl_compat_marker_endpoint_field "$marker_file" "swagger" "/swagger/v1/swagger.json")"
     swagger_ui="$(_repl_compat_marker_endpoint_field "$marker_file" "swaggerUi" "/swagger")"
     mcp_transport="$(_repl_compat_marker_endpoint_field "$marker_file" "mcpTransport" "/mcp-transport")"
-    session_log="$(_repl_compat_marker_endpoint_field "$marker_file" "sessionLog" "/mcpserver/sessionlog")"
-    session_log_dialog="$(_repl_compat_marker_endpoint_field "$marker_file" "sessionLogDialog" "/mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog")"
-    context_search="$(_repl_compat_marker_endpoint_field "$marker_file" "contextSearch" "/mcpserver/context/search")"
-    context_pack="$(_repl_compat_marker_endpoint_field "$marker_file" "contextPack" "/mcpserver/context/pack")"
-    context_sources="$(_repl_compat_marker_endpoint_field "$marker_file" "contextSources" "/mcpserver/context/sources")"
-    todo="$(_repl_compat_marker_endpoint_field "$marker_file" "todo" "/mcpserver/todo")"
-    repo="$(_repl_compat_marker_endpoint_field "$marker_file" "repo" "/mcpserver/repo")"
-    desktop="$(_repl_compat_marker_endpoint_field "$marker_file" "desktop" "/mcpserver/desktop")"
-    github="$(_repl_compat_marker_endpoint_field "$marker_file" "gitHub" "/mcpserver/gh")"
-    tools="$(_repl_compat_marker_endpoint_field "$marker_file" "tools" "/mcpserver/tools")"
-    workspace_endpoint="$(_repl_compat_marker_endpoint_field "$marker_file" "workspace" "/mcpserver/workspace")"
+    session_log="$(_repl_compat_marker_endpoint_field "$marker_file" "sessionLog" "/qbrainai/sessionlog")"
+    session_log_dialog="$(_repl_compat_marker_endpoint_field "$marker_file" "sessionLogDialog" "/qbrainai/sessionlog/{agent}/{sessionId}/{requestId}/dialog")"
+    context_search="$(_repl_compat_marker_endpoint_field "$marker_file" "contextSearch" "/qbrainai/context/search")"
+    context_pack="$(_repl_compat_marker_endpoint_field "$marker_file" "contextPack" "/qbrainai/context/pack")"
+    context_sources="$(_repl_compat_marker_endpoint_field "$marker_file" "contextSources" "/qbrainai/context/sources")"
+    todo="$(_repl_compat_marker_endpoint_field "$marker_file" "todo" "/qbrainai/todo")"
+    repo="$(_repl_compat_marker_endpoint_field "$marker_file" "repo" "/qbrainai/repo")"
+    desktop="$(_repl_compat_marker_endpoint_field "$marker_file" "desktop" "/qbrainai/desktop")"
+    github="$(_repl_compat_marker_endpoint_field "$marker_file" "gitHub" "/qbrainai/gh")"
+    tools="$(_repl_compat_marker_endpoint_field "$marker_file" "tools" "/qbrainai/tools")"
+    workspace_endpoint="$(_repl_compat_marker_endpoint_field "$marker_file" "workspace" "/qbrainai/workspace")"
     server_startup="$(_repl_compat_marker_endpoint_field "$marker_file" "serverStartupUtc" "/server-startup-utc")"
     marker_timestamp="$(_repl_compat_marker_endpoint_field "$marker_file" "markerFileTimestamp" "/marker-file-timestamp?repoPath={workspacePath}")"
 
@@ -1544,9 +1547,9 @@ _repl_invoke_raw_in_workspace() {
     fi
 
     if [ $exit_code -eq 124 ]; then
-        echo "ERROR: mcpserver-repl timed out after ${timeout}s for method ${method}" >&2
+        echo "ERROR: qbrain-ai-repl timed out after ${timeout}s for method ${method}" >&2
     else
-        echo "ERROR: mcpserver-repl invocation failed for method ${method} (exit ${exit_code})" >&2
+        echo "ERROR: qbrain-ai-repl invocation failed for method ${method} (exit ${exit_code})" >&2
     fi
     if [ -s "$stderr_file" ]; then
         sed 's/^/stderr: /' "$stderr_file" >&2
@@ -2423,7 +2426,7 @@ _repl_requirements_generate_http_fallback() {
     mkdir -p "$REPL_INVOKE_CACHE_DIR"
     tmp_body="${REPL_INVOKE_CACHE_DIR}/requirements-generate.$$.$RANDOM.body"
     tmp_headers="${REPL_INVOKE_CACHE_DIR}/requirements-generate.$$.$RANDOM.headers"
-    url="${base_url%/}/mcpserver/requirements/generate?doc=${doc_type}&format=${format}"
+    url="${base_url%/}/qbrainai/requirements/generate?doc=${doc_type}&format=${format}"
 
     curl -sSL \
         -D "$tmp_headers" \
@@ -2548,7 +2551,7 @@ _repl_sessionlog_query_http_fallback() {
         ${to:+--data-urlencode "to=${to}"} \
         ${limit:+--data-urlencode "limit=${limit}"} \
         ${offset:+--data-urlencode "offset=${offset}"} \
-        "${base_url%/}/mcpserver/sessionlog" >/dev/null 2>&1
+        "${base_url%/}/qbrainai/sessionlog" >/dev/null 2>&1
     curl_status=$?
     if [ $curl_status -ne 0 ]; then
         rm -f "$tmp_body" "$tmp_headers"
@@ -2630,7 +2633,7 @@ _repl_sessionlog_submit_http_fallback() {
         --get \
         --data-urlencode "agent=${source_type}" \
         --data-urlencode "limit=1000" \
-        "${base_url%/}/mcpserver/sessionlog" >/dev/null 2>&1 || {
+        "${base_url%/}/qbrainai/sessionlog" >/dev/null 2>&1 || {
             rm -f "$tmp_existing" "$tmp_incoming" "$tmp_merged" "$tmp_body" "$tmp_headers"
             return 1
         }
@@ -2673,7 +2676,7 @@ _repl_sessionlog_submit_http_fallback() {
         -H "X-Workspace-Path: ${workspace_path}" \
         -H "Content-Type: application/json" \
         --data-binary "@${tmp_merged}" \
-        "${base_url%/}/mcpserver/sessionlog" >/dev/null 2>&1
+        "${base_url%/}/qbrainai/sessionlog" >/dev/null 2>&1
     local curl_status=$?
     if [ $curl_status -ne 0 ]; then
         if [ -s "$tmp_body" ]; then
@@ -2741,10 +2744,10 @@ _repl_requirements_list_http_fallback() {
     [ -z "$base_url" ] && return 1
 
     case "$operation" in
-        listFr) route="mcpserver/requirements/fr" ;;
-        listTr) route="mcpserver/requirements/tr" ;;
-        listTest) route="mcpserver/requirements/test" ;;
-        listMappings) route="mcpserver/requirements/mapping" ;;
+        listFr) route="qbrainai/requirements/fr" ;;
+        listTr) route="qbrainai/requirements/tr" ;;
+        listTest) route="qbrainai/requirements/test" ;;
+        listMappings) route="qbrainai/requirements/mapping" ;;
         *) return 1 ;;
     esac
 
@@ -2819,7 +2822,7 @@ _repl_requirements_copy_acceptance_http_fallback() {
         *) return 1 ;;
     esac
 
-    route="mcpserver/requirements/${kind}/$(_repl_url_path_segment "$id")/acceptance-criteria/copy-from-todo"
+    route="qbrainai/requirements/${kind}/$(_repl_url_path_segment "$id")/acceptance-criteria/copy-from-todo"
     body="$(printf '{"todoId":"%s"}' "$(_repl_json_escape "$todo_id")")"
 
     local tmp_body tmp_headers curl_status content_type
@@ -3126,7 +3129,7 @@ _repl_todo_http_fallback() {
             [ -n "$section" ] && curl_args+=(--data-urlencode "section=${section}")
             [ -n "$todo_id" ] && curl_args+=(--data-urlencode "id=${todo_id}")
             [ -n "$done" ] && curl_args+=(--data-urlencode "done=${done}")
-            curl_args+=("${base_url%/}/mcpserver/todo")
+            curl_args+=("${base_url%/}/qbrainai/todo")
             ;;
         get|delete|update|analyzeRequirements)
             todo_id="$(_repl_yaml_get "$params_yaml" "id" 2>/dev/null || true)"
@@ -3138,27 +3141,27 @@ _repl_todo_http_fallback() {
             todo_id_path="$(_repl_url_path_segment "$todo_id")"
             case "$operation" in
                 get)
-                    curl_args+=("${base_url%/}/mcpserver/todo/${todo_id_path}")
+                    curl_args+=("${base_url%/}/qbrainai/todo/${todo_id_path}")
                     ;;
                 delete)
-                    curl_args+=(-X DELETE "${base_url%/}/mcpserver/todo/${todo_id_path}")
+                    curl_args+=(-X DELETE "${base_url%/}/qbrainai/todo/${todo_id_path}")
                     ;;
                 update)
                     tmp_request="${REPL_INVOKE_CACHE_DIR}/todo-${operation}.$$.$RANDOM.json"
                     _repl_todo_json_body "$operation" "$params_yaml" > "$tmp_request"
-                    curl_args+=(-H "Content-Type: application/json" -X PUT --data-binary "@${tmp_request}" "${base_url%/}/mcpserver/todo/${todo_id_path}")
+                    curl_args+=(-H "Content-Type: application/json" -X PUT --data-binary "@${tmp_request}" "${base_url%/}/qbrainai/todo/${todo_id_path}")
                     ;;
                 analyzeRequirements)
                     tmp_request="${REPL_INVOKE_CACHE_DIR}/todo-${operation}.$$.$RANDOM.json"
                     _repl_todo_json_body "$operation" "$params_yaml" > "$tmp_request"
-                    curl_args+=(-H "Content-Type: application/json" -X POST --data-binary "@${tmp_request}" "${base_url%/}/mcpserver/todo/${todo_id_path}/requirements")
+                    curl_args+=(-H "Content-Type: application/json" -X POST --data-binary "@${tmp_request}" "${base_url%/}/qbrainai/todo/${todo_id_path}/requirements")
                     ;;
             esac
             ;;
         create)
             tmp_request="${REPL_INVOKE_CACHE_DIR}/todo-${operation}.$$.$RANDOM.json"
             _repl_todo_json_body "$operation" "$params_yaml" > "$tmp_request"
-            curl_args+=(-H "Content-Type: application/json" -X POST --data-binary "@${tmp_request}" "${base_url%/}/mcpserver/todo")
+            curl_args+=(-H "Content-Type: application/json" -X POST --data-binary "@${tmp_request}" "${base_url%/}/qbrainai/todo")
             ;;
         *)
             rm -f "$tmp_body" "$tmp_headers" "$tmp_request"
@@ -3774,9 +3777,9 @@ NODEEOF
     fi
 
     if [ $persist_status -eq 124 ]; then
-        echo "ERROR: mcpserver-repl timed out after ${timeout_seconds}s while persisting session turn ${req_id}" >&2
+        echo "ERROR: qbrain-ai-repl timed out after ${timeout_seconds}s while persisting session turn ${req_id}" >&2
     else
-        echo "ERROR: mcpserver-repl failed while persisting session turn ${req_id} (exit ${persist_status})" >&2
+        echo "ERROR: qbrain-ai-repl failed while persisting session turn ${req_id} (exit ${persist_status})" >&2
     fi
     if [ -s "$stderr_file" ]; then
         sed 's/^/stderr: /' "$stderr_file" >&2
@@ -4300,7 +4303,7 @@ _repl_sessionlog_import_recovery_http_fallback() {
         -H "X-Workspace-Path: ${workspace_path}" \
         -H "Content-Type: application/json" \
         --data-binary "@${tmp_request}" \
-        "${base_url%/}/mcpserver/sessionlog" >/dev/null 2>&1
+        "${base_url%/}/qbrainai/sessionlog" >/dev/null 2>&1
     local curl_status=$?
     if [ $curl_status -ne 0 ]; then
         if [ -s "$tmp_body" ]; then

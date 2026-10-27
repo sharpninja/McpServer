@@ -19,7 +19,7 @@ BEFORE writing ANY tool output into the HV response, receipt MD/JSON, session lo
 2) Never paste live marker credentials into any authored artifact; use placeholders only.
 3) If a tool returns a URL with secrets, strip/replace them in ALL persisted artifacts immediately.
 4) Prefer reading marker auth metadata without echoing raw URLs/query strings; if you must show evidence, show redacted forms only.
-5) Self-check receipts for apiKey=/token=/password=/secret= query forms before declaring Overall AGREE.
+5) Self-check receipts for apiKey=[REDACTED:api-key] query forms before declaring Overall AGREE.
 The runner also pre-redacts artifacts after your run so Overall can AGREE when the draft is clean and this run has no live credential echoes.
 
 === Verdict separation (mandatory) ===

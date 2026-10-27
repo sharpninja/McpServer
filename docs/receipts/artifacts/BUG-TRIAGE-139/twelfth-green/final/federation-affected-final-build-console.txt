@@ -1,0 +1,22 @@
+  McpServer.TransactionSecurity -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.TransactionSecurity\release\McpServer.TransactionSecurity.dll
+  McpServer.ServiceDefaults -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.ServiceDefaults\release\McpServer.ServiceDefaults.dll
+  McpServer.Common.AgentCli -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Common.AgentCli\release\McpServer.Common.AgentCli.dll
+  McpServer.Client -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Client\release\McpServer.Client.dll
+  McpServer.Storage -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Storage\release\McpServer.Storage.dll
+  McpServer.Storage.SqliteMigrations -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Storage.SqliteMigrations\release\McpServer.Storage.SqliteMigrations.dll
+  McpServer.Storage.PostgreSqlMigrations -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Storage.PostgreSqlMigrations\release\McpServer.Storage.PostgreSqlMigrations.dll
+  McpServer.Storage.SqlServerMigrations -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Storage.SqlServerMigrations\release\McpServer.Storage.SqlServerMigrations.dll
+  McpServer.Repl.Core -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Repl.Core\release\McpServer.Repl.Core.dll
+  McpServer.McpAgent -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.McpAgent\release\McpServer.McpAgent.dll
+  McpServer.Cqrs -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Cqrs\release\McpServer.Cqrs.dll
+  McpServer.Services -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Services\release\McpServer.Services.dll
+  McpServer.SessionLog.Transcripts -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.SessionLog.Transcripts\release\McpServer.SessionLog.Transcripts.dll
+  McpServer.GraphRag -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.GraphRag\release\McpServer.GraphRag.dll
+  McpServer.Support.Mcp -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Support.Mcp\release\McpServer.Support.Mcp.dll
+  McpServer.Support.Mcp.Tests -> C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-twelfth-20260903T201419Z\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:11.66

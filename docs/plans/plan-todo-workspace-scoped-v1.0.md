@@ -11,7 +11,7 @@ TR-MCP-TODO-005 made TODO storage provider-agnostic via `McpDbContext` + `McpDat
 Empirical confirmation:
 - `TodoItemEntity` / `TodoAuditHistoryEntity` / `TodoDocumentMetadataEntity` have no `WorkspaceId`.
 - `McpDbContext.OnModelCreating` lines 276-310 install query filters for 12 entities; skips the three Todo entities.
-- `REST /mcpserver/todo` with `X-Workspace: <name>` for each of 9 workspaces returns the same 1-item result.
+- `REST /qbrainai/todo` with `X-Workspace: <name>` for each of 9 workspaces returns the same 1-item result.
 - `TodoServiceFactory.CreateForWorkspace` comment (line 71-73): "Database provider is process-wide; workspace path is preserved for future projection hooks".
 
 ## New TR text (to paste into Technical-Requirements.md)
@@ -43,7 +43,7 @@ by `TodoService`. After bootstrap, YAML projection SHALL write to the
 workspace-specific `TodoFilePath`; no other workspace's YAML SHALL be touched.
 
 The `LegacyTodoSqliteMigrator` (TR-MCP-TODO-007) SHALL stamp imported rows
-with the active workspace's `WorkspacePath`. REST routes `/mcpserver/todo/*`
+with the active workspace's `WorkspacePath`. REST routes `/qbrainai/todo/*`
 and MCP STDIO `todo_*` tools SHALL honor the workspace resolved by the
 existing `WorkspaceAuthMiddleware` / `X-Workspace` header path without
 additional caller changes beyond what TR-MCP-MT-003 already mandates.
@@ -65,10 +65,10 @@ Every phase gate: entire test suite green before moving forward.
 - Cut `feat/todo-workspace-scoped` from `develop` (after #15 merges).
 - Add `docs/Project/Technical-Requirements.md` TR-MCP-TODO-008 block.
 - Add failing test stubs (xUnit `Skip` or `throw new NotImplementedException`):
-  - `tests/McpServer.Support.Mcp.Tests/Storage/TodoItemEntity_WorkspaceScopingTests.cs`
-  - `tests/McpServer.Support.Mcp.Tests/Storage/TodoDocumentMetadata_CompositePkTests.cs`
-  - `tests/McpServer.Support.Mcp.Tests/Services/EfTodoService_WorkspaceIsolationTests.cs`
-  - `tests/McpServer.Support.Mcp.Tests/Services/TodoBootstrapImporterTests.cs`
+  - `tests/QBrainAi.Support.Mcp.Tests/Storage/TodoItemEntity_WorkspaceScopingTests.cs`
+  - `tests/QBrainAi.Support.Mcp.Tests/Storage/TodoDocumentMetadata_CompositePkTests.cs`
+  - `tests/QBrainAi.Support.Mcp.Tests/Services/EfTodoService_WorkspaceIsolationTests.cs`
+  - `tests/QBrainAi.Support.Mcp.Tests/Services/TodoBootstrapImporterTests.cs`
 - Commit 0: "test(todo): failing stubs for workspace-scoped TODO (TR-MCP-TODO-008)".
 
 ### Phase 1 — Entity + DbContext changes
@@ -84,15 +84,15 @@ Every phase gate: entire test suite green before moving forward.
 ### Phase 2 — Generate migrations (4 provider assemblies)
 
 - `dotnet ef migrations add AddTodoWorkspaceScoping --context McpDbContext` against:
-  - default `McpServer.Storage`
-  - `McpServer.Storage.SqliteMigrations` (env `MCP_EF_PROVIDER=sqlite`)
-  - `McpServer.Storage.SqlServerMigrations` (env `MCP_EF_PROVIDER=sqlserver`)
-  - `McpServer.Storage.PostgreSqlMigrations` (env `MCP_EF_PROVIDER=postgresql`)
-- Hand-edit each migration's `Up()` body to backfill existing rows before the PK change (all existing Todo rows → the McpServer workspace path `F:\GitHub\McpServer`). Example:
+  - default `QBrainAi.Storage`
+  - `QBrainAi.Storage.SqliteMigrations` (env `MCP_EF_PROVIDER=sqlite`)
+  - `QBrainAi.Storage.SqlServerMigrations` (env `MCP_EF_PROVIDER=sqlserver`)
+  - `QBrainAi.Storage.PostgreSqlMigrations` (env `MCP_EF_PROVIDER=postgresql`)
+- Hand-edit each migration's `Up()` body to backfill existing rows before the PK change (all existing Todo rows → the QBrainAi workspace path `F:\GitHub\QBrainAi`). Example:
   ```sql
-  UPDATE TodoItems SET WorkspaceId = 'F:\GitHub\McpServer' WHERE WorkspaceId = '';
-  UPDATE TodoAuditHistory SET WorkspaceId = 'F:\GitHub\McpServer' WHERE WorkspaceId = '';
-  UPDATE TodoDocumentMetadata SET WorkspaceId = 'F:\GitHub\McpServer' WHERE WorkspaceId = '';
+  UPDATE TodoItems SET WorkspaceId = 'F:\GitHub\QBrainAi' WHERE WorkspaceId = '';
+  UPDATE TodoAuditHistory SET WorkspaceId = 'F:\GitHub\QBrainAi' WHERE WorkspaceId = '';
+  UPDATE TodoDocumentMetadata SET WorkspaceId = 'F:\GitHub\QBrainAi' WHERE WorkspaceId = '';
   ```
 - SQLite composite PK change: EF emits rebuild-table migration automatically; verify it preserves data.
 - SQL Server composite PK change: drop-and-add key; rename check constraint for new composite scope.
@@ -101,12 +101,12 @@ Every phase gate: entire test suite green before moving forward.
 ### Phase 3 — EfTodoService + legacy migrator updates
 
 - `EfTodoService`: no query changes expected (global query filter handles it); verify audit queries also pick up the filter. Adjust `CreateAsync` duplicate-id check — it currently queries by `Id` alone; scope to current workspace.
-- `LegacyTodoSqliteMigrator`: populate `WorkspaceId` on imported rows from resolved workspace context. For the current service deployment this stamps the existing `PLAN-CLAUDEPLUGIN-001` with the McpServer workspace path (no behavior change post-migration).
+- `LegacyTodoSqliteMigrator`: populate `WorkspaceId` on imported rows from resolved workspace context. For the current service deployment this stamps the existing `PLAN-CLAUDEPLUGIN-001` with the QBrainAi workspace path (no behavior change post-migration).
 - Phase 3 tests: `EfTodoService_WorkspaceIsolationTests` — two workspaces, same `PLAN-BITNETINTEGRATION-001`, both survive; GET from workspace A returns only A's rows; DELETE in A does not affect B.
 
 ### Phase 4 — TodoBootstrapImporter (new)
 
-- New class `McpServer.Services.Services.TodoBootstrapImporter` (hosted service or on-demand).
+- New class `QBrainAi.Services.Services.TodoBootstrapImporter` (hosted service or on-demand).
 - On `EfTodoService.EnsureWorkspaceBootstrappedAsync(workspacePath)`: if workspace has zero TODO rows AND per-workspace marker file absent, parse the workspace's `TodoFilePath` YAML via existing `TodoYamlFileSerializer`, insert each item with `WorkspaceId = workspacePath`, write marker to `{workspaceDataFolder}/todo-bootstrap.marker`.
 - Invoked once per workspace on first REST / MCP touch (cheap per-workspace check in `EfTodoService` constructor or request pipeline).
 - Phase 4 tests: `TodoBootstrapImporterTests` — bootstrap runs once, is idempotent, preserves ordered sections, stamps WorkspaceId correctly, no-ops when marker present.
@@ -114,13 +114,13 @@ Every phase gate: entire test suite green before moving forward.
 ### Phase 5 — Live deploy + import verification
 
 - Redeploy via `Update-McpService.ps1`.
-- For each of the 8 workspaces with a TODO YAML, hit `GET /mcpserver/todo?limit=200` with appropriate workspace routing to trigger bootstrap.
+- For each of the 8 workspaces with a TODO YAML, hit `GET /qbrainai/todo?limit=200` with appropriate workspace routing to trigger bootstrap.
 - Expected post-bootstrap counts:
   - AspNetServices: 9
   - bitnet-b1.58-sharp: 10
   - CBM-Command: 0
   - FunWasHad: 20
-  - McpServer: 36 (migrates in place — existing 1 item retained + 35 new)
+  - QBrainAi: 36 (migrates in place — existing 1 item retained + 35 new)
   - McpServerManager: 17
   - TruckMate: 14
   - VICE-Sharp: 1
@@ -149,20 +149,20 @@ Every phase gate: entire test suite green before moving forward.
 ## Critical files
 
 **New:**
-- `tests/McpServer.Support.Mcp.Tests/Storage/TodoItemEntity_WorkspaceScopingTests.cs`
-- `tests/McpServer.Support.Mcp.Tests/Storage/TodoDocumentMetadata_CompositePkTests.cs`
-- `tests/McpServer.Support.Mcp.Tests/Services/EfTodoService_WorkspaceIsolationTests.cs`
-- `tests/McpServer.Support.Mcp.Tests/Services/TodoBootstrapImporterTests.cs`
-- `src/McpServer.Services/Services/TodoBootstrapImporter.cs`
+- `tests/QBrainAi.Support.Mcp.Tests/Storage/TodoItemEntity_WorkspaceScopingTests.cs`
+- `tests/QBrainAi.Support.Mcp.Tests/Storage/TodoDocumentMetadata_CompositePkTests.cs`
+- `tests/QBrainAi.Support.Mcp.Tests/Services/EfTodoService_WorkspaceIsolationTests.cs`
+- `tests/QBrainAi.Support.Mcp.Tests/Services/TodoBootstrapImporterTests.cs`
+- `src/QBrainAi.Services/Services/TodoBootstrapImporter.cs`
 - 4 new migrations `<timestamp>_AddTodoWorkspaceScoping`
 
 **Edited:**
-- `src/McpServer.Storage/Entities/TodoItemEntity.cs`
-- `src/McpServer.Storage/Entities/TodoAuditHistoryEntity.cs`
-- `src/McpServer.Storage/Entities/TodoDocumentMetadataEntity.cs`
-- `src/McpServer.Storage/McpDbContext.cs` (PK Fluent config + query filters + indexes + StampWorkspaceId)
-- `src/McpServer.Services/Services/EfTodoService.cs` (duplicate-id check scoping + bootstrap trigger)
-- `src/McpServer.Support.Mcp/Services/LegacyTodoSqliteMigrator.cs` (stamp WorkspaceId)
+- `src/QBrainAi.Storage/Entities/TodoItemEntity.cs`
+- `src/QBrainAi.Storage/Entities/TodoAuditHistoryEntity.cs`
+- `src/QBrainAi.Storage/Entities/TodoDocumentMetadataEntity.cs`
+- `src/QBrainAi.Storage/McpDbContext.cs` (PK Fluent config + query filters + indexes + StampWorkspaceId)
+- `src/QBrainAi.Services/Services/EfTodoService.cs` (duplicate-id check scoping + bootstrap trigger)
+- `src/QBrainAi.Support.Mcp/Services/LegacyTodoSqliteMigrator.cs` (stamp WorkspaceId)
 - `docs/Project/Technical-Requirements.md` (add TR-MCP-TODO-008)
 
 ## Verification checklist
@@ -173,5 +173,5 @@ Every phase gate: entire test suite green before moving forward.
 - [ ] Each workspace's REST GET returns only that workspace's items
 - [ ] Bootstrap marker written per workspace, no re-bootstrap on restart
 - [ ] Legacy migrator still passes existing `LegacyTodoSqliteMigratorTests`
-- [ ] `PLAN-CLAUDEPLUGIN-001` retained as McpServer-workspace TODO post-migration
+- [ ] `PLAN-CLAUDEPLUGIN-001` retained as QBrainAi-workspace TODO post-migration
 - [ ] Full 107-TODO live count matches per-workspace YAML source counts

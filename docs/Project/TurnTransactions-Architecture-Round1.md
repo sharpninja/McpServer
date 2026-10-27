@@ -6,18 +6,18 @@ Requirements: FR-MCP-118 through FR-MCP-128, TR-MCP-TXNARCH-001
 
 ## Component Boundaries
 
-- `McpServer.Support.Mcp` remains the main MCP Server host. It owns user-turn lifecycle, mutation gating, diffgram generation, degraded-mode enforcement, session-log/audit actions, and typed-client configuration.
-- `McpServer.KeyServer` is a new service. It owns keyserver signing keys, party public-key registry, manifest signing, manifest verification, replay detection, sequence validation, expiry validation, and keyserver audit rows.
-- `McpServer.Subscriber` is a new service. It owns subscriber private decrypt/signing material, durable commit state, idempotency/conflict checks, abort state, rejection reasons, and subscriber audit rows.
-- `McpServer.Client` owns public DTOs and typed clients for keyserver, subscriber, and transaction status surfaces.
+- `QBrainAi.Support.Mcp` remains the main QBrain.AI host. It owns user-turn lifecycle, mutation gating, diffgram generation, degraded-mode enforcement, session-log/audit actions, and typed-client configuration.
+- `QBrainAi.KeyServer` is a new service. It owns keyserver signing keys, party public-key registry, manifest signing, manifest verification, replay detection, sequence validation, expiry validation, and keyserver audit rows.
+- `QBrainAi.Subscriber` is a new service. It owns subscriber private decrypt/signing material, durable commit state, idempotency/conflict checks, abort state, rejection reasons, and subscriber audit rows.
+- `QBrainAi.Client` owns public DTOs and typed clients for keyserver, subscriber, and transaction status surfaces.
 - Quad-model execution now has explicit authorization boundaries: individual external brain-slot invocation, Curiosity committed-result admission, full Quad-Brain orchestration, AoT reconciliation, and safety-gated weight updates execute only through FR-MCP-129 through FR-MCP-135 gates. Autonomous Curiosity research, implicit fallback behavior, quarantine workflows, and automated model fine-tuning remain deferred.
 
 ## Key And Crypto Ownership
 
 - Keyserver owns only the private key used to sign transaction manifests.
 - Keyserver stores registered party public keys and public key metadata.
-- Publisher/MCP Server owns publisher private signing/encryption material when publisher-origin signatures are added.
-- Subscriber owns subscriber private ECDH material and never sends it to keyserver or MCP Server.
+- Publisher/QBrain.AI owns publisher private signing/encryption material when publisher-origin signatures are added.
+- Subscriber owns subscriber private ECDH material and never sends it to keyserver or QBrain.AI.
 - Manifests bind party IDs, key IDs, hashes, algorithms, nonce, sequence, issued UTC, and expiry UTC.
 - Existing `Mcp:Federation` HMAC signing remains unchanged and separate.
 
@@ -25,14 +25,14 @@ Requirements: FR-MCP-118 through FR-MCP-128, TR-MCP-TXNARCH-001
 
 - Keyserver uses service-local durable EF Core SQLite storage for parties, keys, manifests, replay nonces, sequence cursors, and audit events.
 - Subscriber uses service-local durable EF Core SQLite storage for commits, aborts, rejection records, manifest hashes, sequence cursors, and audit events.
-- MCP Server stores only transaction coordination state and audit/session-log references required for the user turn.
+- QBrain.AI stores only transaction coordination state and audit/session-log references required for the user turn.
 - Rollback never deletes audit rows for sign, verify, commit, reject, abort, degraded, or rollback actions.
 
 ## Trust Boundaries
 
-- MCP Server calls keyserver to sign manifests before publishing mutating diffgrams.
+- QBrain.AI calls keyserver to sign manifests before publishing mutating diffgrams.
 - Subscriber verifies keyserver-signed manifests before commit.
-- Subscriber commits must complete before MCP Server returns committed success.
+- Subscriber commits must complete before QBrain.AI returns committed success.
 - All cross-service calls have bounded timeouts. Signing failures and verification failures do not retry automatically because retries can mask stale sequence/replay defects. Health probes may retry outside mutation flow.
 - Degraded mode is explicit and only permits health, status, and context reads.
 

@@ -60,12 +60,12 @@ describe('parseMarkerField', () => {
       [
         'baseUrl: http://127.0.0.1:8765',
         "apiKey: 'secret-key-123'",
-        'workspace: McpServer',
-        'workspacePath: F:\\GitHub\\McpServer',
+        'workspace: QBrainAi',
+        'workspacePath: F:\\GitHub\\QBrainAi',
         'port: 8765',
         'endpoints:',
-        '  todo: /mcpserver/todo',
-        '  sessionlog: /mcpserver/sessionlog',
+        '  todo: /qbrainai/todo',
+        '  sessionlog: /qbrainai/sessionlog',
         'signature:',
         '  value: ABC123',
         '',
@@ -80,14 +80,14 @@ describe('parseMarkerField', () => {
   test('reads top-level fields and strips surrounding quotes', () => {
     expect(parseMarkerField(marker, 'baseUrl')).toBe('http://127.0.0.1:8765');
     expect(parseMarkerField(marker, 'apiKey')).toBe('secret-key-123');
-    expect(parseMarkerField(marker, 'workspace')).toBe('McpServer');
-    expect(parseMarkerField(marker, 'workspacePath')).toBe('F:\\GitHub\\McpServer');
+    expect(parseMarkerField(marker, 'workspace')).toBe('QBrainAi');
+    expect(parseMarkerField(marker, 'workspacePath')).toBe('F:\\GitHub\\QBrainAi');
     expect(parseMarkerField(marker, 'port')).toBe('8765');
   });
 
   test('reads fields nested under endpoints:', () => {
-    expect(parseMarkerField(marker, 'todo')).toBe('/mcpserver/todo');
-    expect(parseMarkerField(marker, 'sessionlog')).toBe('/mcpserver/sessionlog');
+    expect(parseMarkerField(marker, 'todo')).toBe('/qbrainai/todo');
+    expect(parseMarkerField(marker, 'sessionlog')).toBe('/qbrainai/sessionlog');
   });
 
   test('returns null for fields that are not present', () => {

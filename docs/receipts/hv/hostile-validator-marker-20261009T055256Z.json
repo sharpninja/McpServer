@@ -1,0 +1,197 @@
+{
+  "TimestampUtc": "2026-10-09T06:01:36Z",
+  "ValidatorIdentity": {
+    "Agent": "Codex",
+    "CliVersion": "0.160.1",
+    "Model": "gpt-6-sol",
+    "Effort": "xhigh",
+    "SessionMetadataPath": "/home/sharpninja/.codex/sessions/2026/10/09/rollout-2026-10-09T00-52-57-01a11f38-c657-79d2-89ce-0917c9af3b2e.jsonl",
+    "SessionMetaId": "01a11f38-c657-79d2-89ce-0917c9af3b2e",
+    "TurnContextId": "01a11f38-c8f2-7712-abd8-5bbb45b29802"
+  },
+  "AddProfile": {
+    "SkillRead": true,
+    "NonSkillMarkdownCount": 19,
+    "ReadInFull": true
+  },
+  "Marker": {
+    "Path": "/home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml",
+    "Lines": 397,
+    "Bytes": 34259,
+    "ReadInFull": true,
+    "SignatureVerified": true,
+    "HealthNonceVerified": true
+  },
+  "WorkClass": 2,
+  "SurfaceC": "N/A",
+  "SurfaceD": "NOT APPROVED; unexecuted",
+  "Findings": [
+    {
+      "Item": "G1",
+      "Status": "FAIL",
+      "Evidence": ".Transcript line 1876 invokes `Read` on the marker; line 1882 contains numbered lines 1-398, with marker content ending at source line 397. Thus the entire 397-line file was read. The completed-read action was patched on `62e0` at 05:43:38 via `log20.ps1` (transcript lines 1906-1910), after the 05:43:04-05:43:09 MCP memory queries (lines 1891-1895). The claim that the full read was logged before other work is false. The decision to read the file was logged at 05:42:36 before the read, which does not cure the later completed-action timing. **Disposition: operator decision** for accepting the historical ordering; the implementer can add an accurate chronology now but cannot make the original persistence immediate."
+    },
+    {
+      "Item": "G2",
+      "Status": "FAIL",
+      "Evidence": ".The enumerated violations name several real omissions, but are neither accurate nor complete. `triage-batch.ps1` submitted **nine** MCP/plugin reports without failsafe YAML; the tenth report, in `triage.ps1`, concerned dangling `CODEX-HANDOFF.md` citations, so marker lines 220-225 do not apply to that tenth report. Live `62e0` and `226f` turns have null `contextList` despite the marker, HV receipt, source, and triage context (marker rule 6 at line 300; session schema lines 117-121). Their actions include `type=read`, and `62e0` also `type=memory`, absent from `docs/context/action-types.md`; multiple action orders repeat, so the sequence is ambiguous. `MEMORY-FACT-002` lacks `updatedBy` although marker line 242 asks for real-agent attribution when supported and `MemoryRememberRequest.UpdatedBy` exists at `src/QBrainAi.Client/Models/MemoryModels.cs:175`. These omissions defeat the claimed line-by-line exhaustive audit. The YAML object-mutation rule has no observed YAML edit in this result; request/session IDs match the naming patterns; `62e0` is one turn for its prompt. The `226f` cancellation is a plugin supersede, as G7 notes. **Disposition: curable now** by correcting the audit and current turn fields/actions, with an honest account of historical startup and pre-submission breaches."
+    },
+    {
+      "Item": "G3",
+      "Status": "PASS",
+      "Evidence": ".`workflow.memory.list` before the new memory returned FACT-001, PREFERENCE-001, REQ-001, DEVPROCESS-001, PROCESS-001 (transcript 1892-1895; live list confirms). FACT-001 covers PR comments; no scoped PR comment was sent. PREFERENCE-001 covers elevated actions; none in this result. REQ-001 requires source checkouts under `/home/sharpninja/github`; the worktree is there, and the plugin cache is a package cache outside the worktree. DEVPROCESS-001/PROCESS-001 bind BDPv4 for project planning/implementation; this class-2 correction did not claim an approved product implementation slice. The narrow claim of no observed violation of those five stands."
+    },
+    {
+      "Item": "G4",
+      "Status": "FAIL",
+      "Evidence": ".Live memory list shows `MEMORY-FACT-002`, scope Global, exact quoted operator rule, created 05:43:36Z; `62e0` actions 6 and 8 record it. `read-entire-marker.md` exists and `MEMORY.md:6` indexes it. Global scope is reasonable for an instruction about full marker reads in all workspaces. Deferring import of earlier local memories follows marker line 241. But the new memory has no `updatedBy`; the `workflow.memory.remember` call in `log20.ps1` supplied only `content` and `scope`, although the client DTO supports `updatedBy`. The marker's real-agent attribution rule was violated. `type=memory` on action 8 is also nonstandard. **Disposition: curable now** by an attributed MCP memory update and a corrected own-turn action record."
+    },
+    {
+      "Item": "G5",
+      "Status": "PASS",
+      "Evidence": ".Live `client.SessionLog.QueryAsync` for the ClaudeCode session shows dedc completed with one commit `2a2c0baa...`, one `filesChanged` handoff path, and 226f canceled with one commit `2908d22a...`, four `filesChanged` receipt paths. SHA, branch, message, author, timestamp, and one-commit cardinality match the pre-replacement `log18.ps1` data and prior review. `fix-commits.ps1` uses `ReplaceTurnSectionAsync('commits')` and read-back; no other commit entry was lost."
+    },
+    {
+      "Item": "G6",
+      "Status": "FAIL",
+      "Evidence": ".`src/QBrainAi.Client/TriageClient.cs:18-109` exposes report submit/read, group read/delete/consolidation/merge, but no report update. Live `GetReportAsync(53dc)` still says “A transaction rollback or restore resets both fields to None.” `TransactionGatedSessionLogService.cs:475-486` reuses an existing target turn; `RestoreTurnGraph` at 513-523 calls `CopyTurnScalars`, whose 645-663 assignments omit those fields. Existing target values therefore persist; newly created/cloned targets take defaults. Live group `triage-group-a4a7056facd89a3b` is failed and contains exactly that one report. Withholding correction leaves a known false report. The no-duplicates order permits soft-deleting this one-report group and filing one corrected report, with provenance and references updated; `TriageService.cs:483-518` confirms group deletion is a soft delete of its reports. **Disposition: curable now** through the required failsafe YAML/triage flow, followed by live read-back and reference updates. A follow-up report alongside the false one would violate the operator's no-duplicates direction."
+    },
+    {
+      "Item": "G7",
+      "Status": "PASS",
+      "Evidence": ".Live 226f status is `canceled`, response says superseded by 62e0, and its final decision records the hook supersede and explicitly avoids re-completion. Transcript lines 1853, 1861-1865 show the queued prompt being absorbed during the earlier turn; no later completion call appears."
+    },
+    {
+      "Item": "G8",
+      "Status": "PASS",
+      "Evidence": ".Git commit `8f256a791d116adedbeee2e82738cb4adf64a8cb` contains exactly four duplicate-review receipt files. Its message has `Signed: claude-opus-5-5-high@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%`, the marker's textual model/effort/agent and three-confidence convention. HEAD equals `origin/worktree-session-20261009`; live 62e0 has a matching commit object with four `filesChanged` paths. The 97% self-rated completeness is not hostile approval."
+    },
+    {
+      "Item": "G9",
+      "Status": "PASS",
+      "Evidence": ".`log19.ps1` logs the full-read and memory-cache decisions before their governed acts; `log20.ps1` logs the Global-memory decision before `workflow.memory.remember`, then appends its success action. `fix-commits.ps1` logs the replacement decision before replacement; `commit-dupes.ps1` logs its decision before git commit/push and patches the commit action after success. Live 62e0 has six decisions, six decision dialogs, and six design-decision actions; 226f has eleven each. The invalid nondecision action types and duplicate order values are scored under G2/B11, not an observed premature completed action."
+    },
+    {
+      "Item": "G10",
+      "Status": "FAIL",
+      "Evidence": ".Transcript line 1935 is user-facing assistant text: “It's still running (11 minutes in) ...”. It lacks a UTC timestamp prefix. **Disposition: operator decision** for historical acceptance; future messages can comply, but that message cannot be rewritten."
+    },
+    {
+      "Item": "B1",
+      "Status": "FAIL",
+      "Evidence": ", honesty and receipts.The implementer frankly admitted the partial read and withdrew the merge recommendation, but its exhaustive-audit claim has the G2 gaps and the known false 53dc report remains live. **Curable now:** correct the audit and replace the report."
+    },
+    {
+      "Item": "B2",
+      "Status": "FAIL",
+      "Evidence": ", observation versus inference.It properly labels the slash-route theory as inference, yet calls all ten reports failsafe violations when one is documentation triage, and left the 53dc runtime effect described as source-verified. **Curable now:** separate nine applicable failures from the docs report; correct 53dc with the existing-target/new-target distinction."
+    },
+    {
+      "Item": "B3",
+      "Status": "PASS",
+      "Evidence": ", look before change.The full marker was read before memory creation; five existing memories were listed before `MEMORY-FACT-002`; the prior HV receipt and triage API/source were inspected before correction planning; no triage mutation occurred in this result."
+    },
+    {
+      "Item": "B4",
+      "Status": "PASS",
+      "Evidence": ", no Python.Scoped transcript lines 1862-1995 contain no Python invocation."
+    },
+    {
+      "Item": "B5",
+      "Status": "PASS",
+      "Evidence": ", native objects and YAML mutation.`log19.ps1`, `log20.ps1`, `fix-commits.ps1`, and `commit-dupes.ps1` build PowerShell objects and pass them through `ConvertTo-Yaml`; no YAML file edit is observed. `MEMORY.md` is Markdown."
+    },
+    {
+      "Item": "B6",
+      "Status": "PASS",
+      "Evidence": ", MCP storage.Session changes use the Claude plugin client through its wrapper, and the memory uses `workflow.memory.remember`; local memory is an indexed cache. No raw session/TODO/requirements storage write is observed in this result."
+    },
+    {
+      "Item": "B7",
+      "Status": "PASS",
+      "Evidence": ", one turn per request.Live server has one exact 62e0 prompt turn and one 226f prompt turn. The latter's cancellation is disclosed, not silently completed."
+    },
+    {
+      "Item": "B8",
+      "Status": "PASS",
+      "Evidence": ", decision timing.The transcript scripts and live decision/dialog/action counts support G9. No completed action is shown before its underlying act."
+    },
+    {
+      "Item": "B9",
+      "Status": "FAIL",
+      "Evidence": ", chat format.The line-1935 user-facing message lacks the required UTC prefix. **Operator decision** for accepting this historical message."
+    },
+    {
+      "Item": "B10",
+      "Status": "PASS",
+      "Evidence": ", Bash ruling.Scoped Bash calls either launch `pwsh` or perform read-only inspection/polling; `git add/commit/push` and the Markdown cache write occur inside `pwsh`. No scoped Bash mutation or Python call is shown."
+    },
+    {
+      "Item": "B11",
+      "Status": "FAIL",
+      "Evidence": ", marker rules.The memory actor is absent, context lists are null, actions use nonstandard types and repeated order values, and nine MCP/plugin reports had no pre-submission failsafe YAML. The marker also required tool-registry acquisition, bootstrap hook validation, full plugin-identity logging, and PowerShell.MCP routing, which the implementer conceded were missed earlier this session. The latter historical ordering cannot be made true retroactively. **Operator decision** is needed to accept the historical gate breaches; current metadata/action defects are curable by the implementer now."
+    },
+    {
+      "Item": "D1",
+      "Status": "PASS",
+      "Evidence": ".Live `workflow.todo.get` shows `PLAN-SESSIONTURNREVIEW-001` `done=false`, note `NOT APPROVED`, all implementation tasks false. Git shows this result's commit changed only four HV receipts."
+    },
+    {
+      "Item": "C",
+      "Status": "N/A",
+      "Evidence": ".This is class-2 operator-directed review and record repair; no product requirement slice was claimed complete."
+    }
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 88,
+  "Completeness": 84,
+  "Confidence": 97,
+  "PassCount": 13,
+  "FailCount": 9,
+  "UnknownCount": 0,
+  "FailList": [
+    "G1",
+    "G2",
+    "G4",
+    "G6",
+    "G10",
+    "B1",
+    "B2",
+    "B9",
+    "B11"
+  ],
+  "UnknownList": [],
+  "CurableFails": [
+    "G2",
+    "G4",
+    "G6",
+    "B1",
+    "B2"
+  ],
+  "OperatorDecisionFails": [
+    "G1",
+    "G10",
+    "B9",
+    "B11"
+  ],
+  "HeadSha": "8f256a791d116adedbeee2e82738cb4adf64a8cb",
+  "ReceiptPaths": [
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-marker-20261009T055256Z.md",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-marker-20261009T055256Z.json",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261009T055256Z-marker-20261009.request.jsonl",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261009T055256Z-marker-20261009.response.jsonl"
+  ],
+  "ReviewerSessionId": "Codex-20261009T055452Z-plugin-session",
+  "ReviewerRequestId": "req-20261009T055501Z-hostile-marker",
+  "ReviewerPersistence": {
+    "Method": "client.SessionLog.QueryAsync",
+    "Status": "completed",
+    "ResponseLength": 13703,
+    "ExactMatchBeforeProofAppend": true,
+    "ResponseSha256BeforeProofAppend": "DA62D7C5E2A96FCE489B9276FA259C411EDCC546BD14926DC15A7775AD2F970E",
+    "ActionCount": 3,
+    "DecisionCount": 1,
+    "DialogCount": 2,
+    "FilesModifiedCount": 2
+  }
+}

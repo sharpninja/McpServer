@@ -1,0 +1,36 @@
+{
+  "TimestampUtc": "2026-10-01T02:56:53.0773215Z",
+  "files": [
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\hostile-validator-sessionlife-p2-20261001T023513Z.md",
+      "bytes": 29122,
+      "sha256": "90EF7FE027C99F002D08DDBF7FA85566A38D194D006ADDF7A4913F389EBDD3F0"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\hostile-validator-sessionlife-p2-20261001T023513Z.json",
+      "bytes": 135556,
+      "sha256": "E043423EDE2C5A28954832D46DAA7CFA30370B0904CE906F52A45B7F5C2E7B3E"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T023513Z-sessionlife-p2-contracts-hv.request.jsonl",
+      "bytes": 30325,
+      "sha256": "08E08C1A2AFD6BBBA918196A6AC7832566E97F528826445B888BB71E2AC18485"
+    },
+    {
+      "path": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261001T023513Z-sessionlife-p2-contracts-hv.response.jsonl",
+      "bytes": 859047,
+      "sha256": "C308702CEE5F581C1A81D7540615870CB5095E7234FA9429C2EE93472CFD7934"
+    }
+  ],
+  "jsonlParseErrors": [],
+  "receiptPathCount": 4,
+  "claimCount": 21,
+  "passCount": 13,
+  "failCount": 6,
+  "unknownCount": 2,
+  "coreAcCount": 35,
+  "model": "gpt-6-astra",
+  "effort": "xhigh",
+  "tipSha": "5e6b236c958505b5e202e2fb86604b7dec1eb968",
+  "scope": "Receipt-only review; native artifacts and product untouched; stream hashes describe snapshot before runner trailing output."
+}

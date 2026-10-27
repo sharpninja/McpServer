@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="50933629-b764-4e7d-adbc-14611db6582c" name="SYSTEM@PAYTON-LEGION2 2026-10-11 06:48:39" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-11T06:48:39.9088555-05:00" queuing="2026-10-11T06:48:39.9088558-05:00" start="2026-10-11T06:48:37.4334323-05:00" finish="2026-10-11T06:48:39.9141327-05:00" />
+  <TestSettings name="default" id="44f4115d-5939-47ad-ba59-a0802ec3284c">
+    <Deployment runDeploymentRoot="SYSTEM_PAYTON-LEGION2_2026-10-11_06_48_39" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="dbee8a87-7a9a-419e-b37e-b3bfcca1d582" testId="ef0c198c-ba9c-810d-23ae-efb6612f21bd" testName="QBrainAi.Support.Mcp.Tests.Services.UseCaseComponentUpdateWorkspaceResolutionContractTests.MockGate_RawWorkspaceFlowFailure_IsRejected" computerName="PAYTON-LEGION2" duration="00:00:00.0007085" startTime="2026-10-11T06:48:39.8108351-05:00" endTime="2026-10-11T06:48:39.8115652-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dbee8a87-7a9a-419e-b37e-b3bfcca1d582" />
+    <UnitTestResult executionId="7c4d749b-632e-4766-93aa-0ff25db5f2d8" testId="6c334d41-a1da-169a-56d3-4d6d094dd852" testName="QBrainAi.Support.Mcp.Tests.Services.UseCaseComponentUpdateWorkspaceResolutionContractTests.MockGate_CanonicalComponentUpdates_PassContract" computerName="PAYTON-LEGION2" duration="00:00:00.0253521" startTime="2026-10-11T06:48:39.7670089-05:00" endTime="2026-10-11T06:48:39.8009073-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7c4d749b-632e-4766-93aa-0ff25db5f2d8" />
+    <UnitTestResult executionId="8393372c-bfab-4813-ab1d-e32bb2a5921a" testId="5a4323a4-6cda-9a62-4f33-ea3164fca49a" testName="QBrainAi.Support.Mcp.Tests.Services.UseCaseComponentUpdateWorkspaceResolutionContractTests.MockGate_RawWorkspaceStepFailure_IsRejected" computerName="PAYTON-LEGION2" duration="00:00:00.0007773" startTime="2026-10-11T06:48:39.8097806-05:00" endTime="2026-10-11T06:48:39.8105800-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8393372c-bfab-4813-ab1d-e32bb2a5921a" />
+    <UnitTestResult executionId="0f1428a2-b690-49ed-98e2-1bc131c0093f" testId="3df33ab2-8a37-7c48-2680-3282c05b7939" testName="QBrainAi.Support.Mcp.Tests.Services.UseCaseComponentUpdateWorkspaceResolutionContractTests.MockGate_RawWorkspaceActorFailure_IsRejected" computerName="PAYTON-LEGION2" duration="00:00:00.0028966" startTime="2026-10-11T06:48:39.8065845-05:00" endTime="2026-10-11T06:48:39.8095345-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0f1428a2-b690-49ed-98e2-1bc131c0093f" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Services.UseCaseComponentUpdateWorkspaceResolutionContractTests.MockGate_RawWorkspaceFlowFailure_IsRejected" storage="f:\github\mcpserver\.worktrees\usecase-edit-api-fix-20261011\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="ef0c198c-ba9c-810d-23ae-efb6612f21bd">
+      <Execution id="dbee8a87-7a9a-419e-b37e-b3bfcca1d582" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\usecase-edit-api-fix-20261011\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Services.UseCaseComponentUpdateWorkspaceResolutionContractTests" name="MockGate_RawWorkspaceFlowFailure_IsRejected" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Services.UseCaseComponentUpdateWorkspaceResolutionContractTests.MockGate_CanonicalComponentUpdates_PassContract" storage="f:\github\mcpserver\.worktrees\usecase-edit-api-fix-20261011\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="6c334d41-a1da-169a-56d3-4d6d094dd852">
+      <Execution id="7c4d749b-632e-4766-93aa-0ff25db5f2d8" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\usecase-edit-api-fix-20261011\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Services.UseCaseComponentUpdateWorkspaceResolutionContractTests" name="MockGate_CanonicalComponentUpdates_PassContract" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Services.UseCaseComponentUpdateWorkspaceResolutionContractTests.MockGate_RawWorkspaceStepFailure_IsRejected" storage="f:\github\mcpserver\.worktrees\usecase-edit-api-fix-20261011\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="5a4323a4-6cda-9a62-4f33-ea3164fca49a">
+      <Execution id="8393372c-bfab-4813-ab1d-e32bb2a5921a" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\usecase-edit-api-fix-20261011\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Services.UseCaseComponentUpdateWorkspaceResolutionContractTests" name="MockGate_RawWorkspaceStepFailure_IsRejected" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Services.UseCaseComponentUpdateWorkspaceResolutionContractTests.MockGate_RawWorkspaceActorFailure_IsRejected" storage="f:\github\mcpserver\.worktrees\usecase-edit-api-fix-20261011\tests\qbrainai.support.mcp.tests\bin\debug\net10.0\qbrainai.support.mcp.tests.dll" id="3df33ab2-8a37-7c48-2680-3282c05b7939">
+      <Execution id="0f1428a2-b690-49ed-98e2-1bc131c0093f" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\usecase-edit-api-fix-20261011\tests\QBrainAi.Support.Mcp.Tests\bin\Debug\net10.0\QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Services.UseCaseComponentUpdateWorkspaceResolutionContractTests" name="MockGate_RawWorkspaceActorFailure_IsRejected" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="ef0c198c-ba9c-810d-23ae-efb6612f21bd" executionId="dbee8a87-7a9a-419e-b37e-b3bfcca1d582" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6c334d41-a1da-169a-56d3-4d6d094dd852" executionId="7c4d749b-632e-4766-93aa-0ff25db5f2d8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5a4323a4-6cda-9a62-4f33-ea3164fca49a" executionId="8393372c-bfab-4813-ab1d-e32bb2a5921a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3df33ab2-8a37-7c48-2680-3282c05b7939" executionId="0f1428a2-b690-49ed-98e2-1bc131c0093f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="4" executed="4" passed="4" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.12)&#xD;
+[xUnit.net 00:00:00.32]   Discovering: QBrainAi.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.60]   Discovered:  QBrainAi.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.81]   Starting:    QBrainAi.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.93]   Finished:    QBrainAi.Support.Mcp.Tests (ID = '429485cf5356d9f6654a04c7476677310cb076e7a0c25070d5930e1af04cbb3d')&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

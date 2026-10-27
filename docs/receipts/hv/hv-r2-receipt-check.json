@@ -1,0 +1,31 @@
+{
+  "TimestampUtc": "2026-10-18T04:04:26.4185056+00:00",
+  "JsonProseEqualsMarkdown": true,
+  "Claims": 13,
+  "Findings": 12,
+  "Closures": 23,
+  "ModelContexts": [
+    {
+      "Timestamp": "2026-10-18T03:17:20.316Z",
+      "Model": "gpt-6-astra",
+      "Effort": "max"
+    },
+    {
+      "Timestamp": "2026-10-18T03:27:30.245Z",
+      "Model": "gpt-6-astra",
+      "Effort": "max"
+    },
+    {
+      "Timestamp": "2026-10-18T03:39:37.086Z",
+      "Model": "gpt-6-astra",
+      "Effort": "max"
+    }
+  ],
+  "AllModelContextsCorrect": true,
+  "TestNameOccurrences": 138,
+  "DistinctTestNames": 137,
+  "ForbiddenDashes": 0,
+  "TableRows": 0,
+  "Head": "6c848a4e56f8dee101672dcca1435d600c21eb41",
+  "GitExitCode": 0
+}

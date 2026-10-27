@@ -1,8 +1,8 @@
 # Director Requirements
 
-This document tracks functional and technical requirements for the `McpServer.Director` CLI and TUI application.
+This document tracks functional and technical requirements for the `QBrainAi.Director` CLI and TUI application.
 
-Ownership note: `McpServer.Director` and `McpServer.UI.Core` were moved to the separate
+Ownership note: `QBrainAi.Director` and `QBrainAi.UI.Core` were moved to the separate
 `McpServerManager` repository. This document remains in this repository for historical
 requirements traceability; new Director and Core UI implementation work belongs in
 `McpServerManager`.
@@ -11,13 +11,13 @@ requirements traceability; new Director and Core UI implementation work belongs 
 
 ### FR-MCP-030 Director CLI
 
-A console application (`McpServer.Director`) shall provide agent orchestration commands (init, add, launch, ban, unban, delete, merge, login, list, agents, validate, interactive) dispatched through the CQRS framework. Authentication uses OIDC Device Authorization Flow with the configured provider. Interactive mode uses Terminal.Gui v2 with ViewModel-bound screens.
+A console application (`QBrainAi.Director`) shall provide agent orchestration commands (init, add, launch, ban, unban, delete, merge, login, list, agents, validate, interactive) dispatched through the CQRS framework. Authentication uses OIDC Device Authorization Flow with the configured provider. Interactive mode uses Terminal.Gui v2 with ViewModel-bound screens.
 
 **Status:** Complete
 
 **Covered by:** moved `McpServerManager` Director project - historical source files include `Program.cs`, `McpHttpClient.cs`, `Auth/DirectorAuthOptions.cs`, `Auth/OidcAuthService.cs`, `Auth/TokenCache.cs`, `Commands/AuthCommands.cs`, `Commands/CommandHelpers.cs`, `Commands/DirectorCommands.cs`, `Commands/InteractiveCommand.cs`, `Screens/MainScreen.cs`, `Screens/HealthScreen.cs`, `Screens/AgentScreen.cs`, `Screens/TodoScreen.cs`, `Screens/SessionLogScreen.cs`, `Screens/WorkspaceListScreen.cs`, `Screens/WorkspacePolicyScreen.cs`, `Screens/LoginDialog.cs`, `Screens/ViewModelBinder.cs`
 
-**Implementation:** 17 CLI commands registered via System.CommandLine. All commands communicate with the MCP server via `McpHttpClient` (reads connection details from `AGENTS-README-FIRST.yaml`). Auth uses OIDC Device Authorization Flow with token caching to `~/.mcpserver/tokens.json`. Interactive mode (`director interactive|tui|ui`) launches Terminal.Gui v2 with 6 tabs (Health, Workspaces, Agents, TODO, Sessions, Policy) plus a Login dialog, menu bar, auth status indicator, and keyboard shortcuts (F2 Login, F5 Refresh, Ctrl+Q Quit). ViewModels from the moved Core UI layer are bound to Terminal.Gui controls via `ViewModelBinder` (`INotifyPropertyChanged` to `Application.Invoke`).
+**Implementation:** 17 CLI commands registered via System.CommandLine. All commands communicate with the MCP server via `McpHttpClient` (reads connection details from `AGENTS-README-FIRST.yaml`). Auth uses OIDC Device Authorization Flow with token caching to `~/.qbrainai/tokens.json`. Interactive mode (`director interactive|tui|ui`) launches Terminal.Gui v2 with 6 tabs (Health, Workspaces, Agents, TODO, Sessions, Policy) plus a Login dialog, menu bar, auth status indicator, and keyboard shortcuts (F2 Login, F5 Refresh, Ctrl+Q Quit). ViewModels from the moved Core UI layer are bound to Terminal.Gui controls via `ViewModelBinder` (`INotifyPropertyChanged` to `Application.Invoke`).
 
 ### FR-MCP-037 Director CLI Exec Command
 
@@ -45,7 +45,7 @@ Tab composition SHALL be role-aware and declarative, with registration metadata 
 
 ### TR-MCP-DIR-001
 
-**Director Console App with CQRS** - `McpServer.Director` console application using `System.CommandLine` for CLI parsing and `McpServer.Cqrs` for all action dispatch. CLI commands: `health`, `list`, `agents` (defs/ws/events), `add`, `ban`, `unban`, `delete`, `validate`, `init`, `sync` (status/run), `todo`, `session-log`, `login`, `logout`, `whoami`, `interactive` (aliases: `tui`, `ui`), `exec`, `list-viewmodels`. Interactive mode uses Terminal.Gui v2 with 7 tabbed screens (Health, Workspaces, Agents, TODO, Sessions, Sync, Policy) plus LoginDialog, menu bar, auth status indicator, and keyboard shortcuts (F2 Login, F5 Refresh, Ctrl+Q Quit).
+**Director Console App with CQRS** - `QBrainAi.Director` console application using `System.CommandLine` for CLI parsing and `QBrainAi.Cqrs` for all action dispatch. CLI commands: `health`, `list`, `agents` (defs/ws/events), `add`, `ban`, `unban`, `delete`, `validate`, `init`, `sync` (status/run), `todo`, `session-log`, `login`, `logout`, `whoami`, `interactive` (aliases: `tui`, `ui`), `exec`, `list-viewmodels`. Interactive mode uses Terminal.Gui v2 with 7 tabbed screens (Health, Workspaces, Agents, TODO, Sessions, Sync, Policy) plus LoginDialog, menu bar, auth status indicator, and keyboard shortcuts (F2 Login, F5 Refresh, Ctrl+Q Quit).
 
 **Status:** Complete - 18 CLI commands, 9 Terminal.Gui screens, solution builds with 0 warnings
 
@@ -53,7 +53,7 @@ Tab composition SHALL be role-aware and declarative, with registration metadata 
 
 ### TR-MCP-DIR-002
 
-**Director OIDC Authentication** - `OidcAuthService` implements OIDC Device Authorization Flow against the configured provider. Initiates device flow, displays user code and verification URI, polls for token. Tokens cached to `~/.mcpserver/tokens.json` via `TokenCache`. `McpHttpClient.TrySetCachedBearerToken()` loads cached tokens on startup. CLI commands: `login`, `logout`, `whoami`. TUI: `LoginDialog` with Device Flow UI, authority/client-id fields, user code display, polling status, and whoami frame. Token includes `sub`, `preferred_username`, `email`, `realm_roles` claims.
+**Director OIDC Authentication** - `OidcAuthService` implements OIDC Device Authorization Flow against the configured provider. Initiates device flow, displays user code and verification URI, polls for token. Tokens cached to `~/.qbrainai/tokens.json` via `TokenCache`. `McpHttpClient.TrySetCachedBearerToken()` loads cached tokens on startup. CLI commands: `login`, `logout`, `whoami`. TUI: `LoginDialog` with Device Flow UI, authority/client-id fields, user code display, polling status, and whoami frame. Token includes `sub`, `preferred_username`, `email`, `realm_roles` claims.
 
 **Status:** Complete
 

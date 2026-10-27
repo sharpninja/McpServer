@@ -1,0 +1,17 @@
+BUG-BUILD-007 experiment 2 2026-10-10T23:17:27Z on LAB-OMARCHY, dotnet 10.0.201
+=== probe: dotnet test --no-build (Build.Tests, ConfigValidatorTests) exit 0
+pid 3002761 [MSBUILDENSURESTDOUTFORTASKPROCESSES unset] (an unrelated dotnet test process outside this worktree; command line omitted)
+pid 3002882 [MSBUILDENSURESTDOUTFORTASKPROCESSES unset] /home/sharpninja/.dotnet/dotnet test tests/Build.Te...
+pid 3002918 [MSBUILDENSURESTDOUTFORTASKPROCESSES=1] dotnet exec /home/sharpninja/.dotnet/sdk/10.0.201/vstest.console.dll --testAdapterPath:/home/sharpninja/.nuget/packages/...
+pid 3002932 [MSBUILDENSURESTDOUTFORTASKPROCESSES=1] /home/sharpninja/.dotnet/dotnet exec --runtimeconfig /home/sharpninja/github/McpServer/.claude/worktrees/session-2026100...
+pid 3002998 [MSBUILDENSURESTDOUTFORTASKPROCESSES=1] tests/Build.Tests/bin/Debug/net10.0/Build.Tests @@ ...
+=== case ensure (salt bugbuild007ecfbe66a55f02, env: MSBUILDENSURESTDOUTFORTASKPROCESSES=1)
+child pid 3003099 exit code 0; output closed within 30 s of exit: False (waited 30 s)
+node 3003170: parent while the child ran = 3003099 (child 3003099, match True); fd0 /dev/null; fd1 pipe:[18566062]; fd2 pipe:[18566063]; fd1 and fd2 are pipes this shell reads: True
+summary ensure: nodes spawned by the child: 1; nodes holding this shell's pipes: 1; output closed within 30 s: False
+=== case plain (salt bugbuild007p797e2c516c44, env: )
+child pid 3006330 exit code 0; output closed within 30 s of exit: True (waited 0 s)
+node 3006381: parent while the child ran = 3006330 (child 3006330, match True); fd0 pipe:[18598454]; fd1 pipe:[18598455]; fd2 pipe:[18598456]; fd1 and fd2 are pipes this shell reads: False
+summary plain: nodes spawned by the child: 1; nodes holding this shell's pipes: 0; output closed within 30 s: True
+cleanup: stopped salted node 3003170
+cleanup: stopped salted node 3006381

@@ -1,0 +1,998 @@
+{
+  "functional": [
+    {
+      "Id": "FR-MCP-170",
+      "Title": "Incremental session-log dialog persist",
+      "Body": "Plugin workflow.sessionlog.appendDialog SHALL persist dialog items through SessionLogClient.AppendDialogAsync (POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog) without a full-session SubmitAsync upsert when the turn already exists.\n\nAcceptance Criteria:\n- After a successful beginTurn, appendDialog returns success while TODO/requirements queries succeed in the same process.\n- Server turn GET then contains the appended dialog items.\n- Test double or recorded call: method is AppendDialogAsync or POST dialog, not SubmitAsync of the full session DTO.\n- A missing turn on a never-degraded appendDialog path is classified not-found, retryable false; no failsafe is created for that 404. This does not override degraded MCP/service recovery and failsafe retention governed by FR-MCP-SESSIONLIFE-001-AC004.",
+      "WorkspaceId": "F:\\GitHub\\McpServer",
+      "Priority": "medium",
+      "Status": "pending",
+      "Notes": "Structured from the existing FR prose for BUG-TRIAGE-165. This scoped dialog proof does not complete FR-MCP-170 without accepted evidence.",
+      "AcceptanceCriteria": [
+        {
+          "id": "FR-MCP-170-AC001",
+          "text": "After a successful beginTurn, appendDialog persists valid dialog items and exact server readback shows the appended items while TODO and requirements operations remain usable in the same process.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-170-AC002",
+          "text": "The incremental dialog path invokes SessionLogClient.AppendDialogAsync or the dialog POST and does not submit the complete session DTO through SubmitAsync.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-170-AC003",
+          "text": "On a never-degraded appendDialog path, a missing turn is classified not_found with retryable false, does not create a failsafe for that 404, and does not increment the local auditDialog count; this criterion does not override degraded MCP/service recovery and failsafe retention governed by FR-MCP-SESSIONLIFE-001-AC004.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-170-AC004",
+          "text": "A classified storage failure leaves local auditDialog unchanged; a later successful complete reconciles the local counter to the exact persisted server turn.",
+          "isSatisfied": false,
+          "evidence": null
+        }
+      ],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null,
+      "LinkedUseCases": []
+    },
+    {
+      "Id": "FR-MCP-REPL-009",
+      "Title": "Degraded session-log persistence isolation",
+      "Body": "The MCP REPL SHALL isolate plugins from MCP Session Log service degradation during session and in-progress turn operations. When a turn closes while the primary service is degraded, the REPL SHALL durably persist the complete turn through an independent failsafe strategy and SHALL notify the caller with the failsafe path.",
+      "WorkspaceId": "F:\\GitHub\\McpServer",
+      "Priority": "critical",
+      "Status": "completed",
+      "Notes": "Reconciled after HV DISAGREE 01a08e3f. Evidence: plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6 PLAN-SESSIONLIFE-001 revision 4 clarification: a confirmed queued/degraded result remains workflow success but is not primary durability and cannot by itself satisfy TODO or requirement acceptance. Existing satisfied AC and completed status are preserved.",
+      "AcceptanceCriteria": [
+        {
+          "id": "FR-MCP-REPL-009-AC001",
+          "text": "Open, begin, update, appendDialog, and appendActions remain successful when primary MCP Session Log persistence fails but failsafe persistence succeeds.",
+          "isSatisfied": true,
+          "evidence": "plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6"
+        },
+        {
+          "id": "FR-MCP-REPL-009-AC002",
+          "text": "The failsafe artifact contains a replayable session-log persistence envelope including the attempted turn data and status.",
+          "isSatisfied": true,
+          "evidence": "plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6"
+        },
+        {
+          "id": "FR-MCP-REPL-009-AC003",
+          "text": "completeTurn and failTurn report degraded persistence, the independent strategy name, and the absolute failsafe path without claiming primary MCP persistence succeeded.",
+          "isSatisfied": true,
+          "evidence": "plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6"
+        },
+        {
+          "id": "FR-MCP-REPL-009-AC004",
+          "text": "Primary persistence success produces no pending failsafe artifact and reports normal MCP persistence.",
+          "isSatisfied": true,
+          "evidence": "plugins/core test-fixtures; tests/McpServer.Repl.Core.Tests; overlay G0/G8 Codex extra-high AGREE SHA-256 B652C283B446F2B82832665499811741B71F3C63D29F56E30181158829C596A6"
+        }
+      ],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null,
+      "LinkedUseCases": []
+    },
+    {
+      "Id": "FR-MCP-SESSIONLIFE-001",
+      "Title": "Degraded begin keeps the full turn and does not advertise a stored open",
+      "Body": "A degraded beginTurn keeps queryText, queryTitle, planFile, todoId, turnRequestId, sessionId, openedAt, build state, and audit counters. Hook status is turn-opened-degraded until the store has the turn. Complete recovery order is cached queryText, then cached queryTitle, then Recovered session-log turn, without forcing queryTitle. Update and append omit an empty QueryText. Supersede persists canceled. appendDialog on a degraded missing turn resubmits once or queues a dialog failsafe. A genuine 404 that was never degraded does not.",
+      "WorkspaceId": "F:\\GitHub\\McpServer",
+      "Priority": "high",
+      "Status": "pending",
+      "Notes": "Structured for approved PLAN-SESSIONLIFE-001 revision 4, SHA-256 40BC4942EDC1D0652EE3AA1F06C922B05177897082F07A40391ADAE0B88CDD12. Keep pending until accepted evidence and required independent review exist.",
+      "AcceptanceCriteria": [
+        {
+          "id": "FR-MCP-SESSIONLIFE-001-AC001",
+          "text": "A degraded begin retains every cached turn field, including prompt, context, metadata, identity, status, timestamps, title, and counters; it never replaces the turn with a reduced three-field object.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-SESSIONLIFE-001-AC002",
+          "text": "Prompt-hook status reports durable opened only after confirmed primary persistence; otherwise it reports opened-degraded and identifies the retained recovery artifact without representing the turn as server-persisted.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-SESSIONLIFE-001-AC003",
+          "text": "Complete recovers required query text from the cached query text, then a valid cached title, then the approved placeholder, without replacing a valid title; update omits empty query text so stored query text and title are preserved.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-SESSIONLIFE-001-AC004",
+          "text": "A missing-turn appendDialog on an already degraded local turn performs at most one bounded recovery submit and then retains a session_dialog failsafe; an unrelated never-degraded not-found remains a classified nonretryable error.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-SESSIONLIFE-001-AC005",
+          "text": "A same-request retry supplies preserved creation metadata, normalizes canceled and cancelled supersession consistently, and never silently converts locally active state into proof of server persistence.",
+          "isSatisfied": false,
+          "evidence": null
+        }
+      ],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null,
+      "LinkedUseCases": []
+    },
+    {
+      "Id": "FR-MCP-SESSIONLIFE-002",
+      "Title": "Durability before verb mode for plan and todo metadata",
+      "Body": "Resolve durability first. A matching requestId is omit-unbound only when the turn is already durable. Otherwise beginTurn, update, append, and complete use explicit values, then cached values, then exact None. Ordinary raw first persist rejects an omitted pair. canceled and cancelled supersede first persists may omit either field and receive exact None. Durable reopen omits unbound fields. Assert-ReplCurrentTurnFresh does not rewrite a cached session id. Wrong-workspace marker paths and marker drift are rejected. Get-ReplCompleteTurnPersistSessionId stays unchanged.",
+      "WorkspaceId": "F:\\GitHub\\McpServer",
+      "Priority": "high",
+      "Status": "pending",
+      "Notes": "Structured for approved PLAN-SESSIONLIFE-001 revision 4, SHA-256 40BC4942EDC1D0652EE3AA1F06C922B05177897082F07A40391ADAE0B88CDD12. Keep pending until accepted evidence and required independent review exist.",
+      "AcceptanceCriteria": [
+        {
+          "id": "FR-MCP-SESSIONLIFE-002-AC001",
+          "text": "First persistence resolves planFile and todoId using explicit request values, then verified cache values, then the exact sentinel None, and stores a non-null pair.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-SESSIONLIFE-002-AC002",
+          "text": "Ordinary raw first persistence rejects omitted, null, empty, or whitespace metadata; canceled or cancelled supersession may omit it and stores None, and a durable reopen preserves that omission contract.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-SESSIONLIFE-002-AC003",
+          "text": "Explicit metadata updates both cache and outgoing persistence. Omission after binding is allowed only after durable identity is proven for the exact workspace, agent, session, and request.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-SESSIONLIFE-002-AC004",
+          "text": "Freshness validation rejects workspace, agent, session, or request drift and never rewrites or rebinds an already cached session identifier from a marker or inherited process value.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-SESSIONLIFE-002-AC005",
+          "text": "The three governing contract documents consistently describe explicit/cache/None precedence, ordinary first-persist rejection, canceled/cancelled supersession, and durable-reopen omission.",
+          "isSatisfied": false,
+          "evidence": null
+        }
+      ],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null,
+      "LinkedUseCases": []
+    },
+    {
+      "Id": "FR-MCP-SESSIONLIFE-003",
+      "Title": "Three session-log persist outcomes",
+      "Body": "Primary success, or a confirmed retained failsafe as classified queued success that does not claim primary persistence, or neither destination which is a nonzero failure. appendActions refuses a request-id mismatch. A title that reached neither the server nor a failsafe exits nonzero. Primary success for response, interpretation, tags, and contextList requires a query. Repeated unchanged updateTurn does not write a second session_submit. The wrapper object carries code, retryable, persisted, degraded, queued, method, requestId, failsafePath, message, and child stderr.",
+      "WorkspaceId": "F:\\GitHub\\McpServer",
+      "Priority": "high",
+      "Status": "pending",
+      "Notes": "Structured for approved PLAN-SESSIONLIFE-001 revision 4, SHA-256 40BC4942EDC1D0652EE3AA1F06C922B05177897082F07A40391ADAE0B88CDD12. Keep pending until accepted evidence and required independent review exist. Reopened 2026-09-28 for dense-session timeout and SQL Server deadlock remediation.",
+      "AcceptanceCriteria": [
+        {
+          "id": "FR-MCP-SESSIONLIFE-003-AC001",
+          "text": "Every session-log mutation returns exactly one truthful outcome: primary persisted, degraded queued with a confirmed retained failsafe, or failed/lost with a nonzero process result.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-SESSIONLIFE-003-AC002",
+          "text": "The result includes code, retryable, persisted, degraded, queued, method, requestId, failsafePath, message, and diagnostic stderr fields appropriate to the observed outcome.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-SESSIONLIFE-003-AC003",
+          "text": "Caller requestId is honored only when it matches the active turn; mismatches are rejected without mutating cache, server state, or recovery artifacts.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-SESSIONLIFE-003-AC004",
+          "text": "A primary-success result is accepted only with exact server readback of the intended response, interpretation, tags, contextList, actions or dialog, and identity.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-SESSIONLIFE-003-AC005",
+          "text": "Repeated unchanged updates and sequential append/complete calls are idempotent: no duplicate recovery work, child rows, or outcome ambiguity is introduced.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-SESSIONLIFE-003-AC006",
+          "text": "Write-ahead recovery is retained before backend submission and deleted only after durable confirmation; a queued result is never represented as primary persistence or accepted TODO completion evidence.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-SESSIONLIFE-003-AC007",
+          "text": "A dense existing session containing representative turns and every supported child collection accepts a session update inside the five-second storage command budget, or returns one classified retryable outcome inside that budget. A successful retry has exact durable readback and introduces no duplicate or partial child rows.",
+          "isSatisfied": false,
+          "evidence": null
+        }
+      ],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null,
+      "LinkedUseCases": []
+    },
+    {
+      "Id": "FR-MCP-SESSIONLIFE-004",
+      "Title": "Failsafe replay, child deadline, and contention classification",
+      "Body": "One child deadline covers asynchronous stdin and stdout and process-tree cleanup. Hook default bound is 30 seconds. Codex failsafe identity stays Codex when PLUGIN_AGENT_NAME or MCP_AGENT_NAME is inherited as Grok. Quarantine files 3358, d5f9, and 9ad7 are repaired, replayed even when drainAttempts is exhausted, and deleted only after durable success. Import recovery scans pending importRecovery yaml, persists a mapped DTO, and deletes only that envelope after persisted true and degraded false. Busy, locked, budget expiry, and wrapped contention are retryable. Connection outage is backend_unavailable. Automatic and explicit drain do not latch completion on contention.",
+      "WorkspaceId": "F:\\GitHub\\McpServer",
+      "Priority": "high",
+      "Status": "pending",
+      "Notes": "Structured for approved PLAN-SESSIONLIFE-001 revision 4, SHA-256 40BC4942EDC1D0652EE3AA1F06C922B05177897082F07A40391ADAE0B88CDD12. Keep pending until accepted evidence and required independent review exist.",
+      "AcceptanceCriteria": [
+        {
+          "id": "FR-MCP-SESSIONLIFE-004-AC001",
+          "text": "One bounded child-process deadline, default 30 seconds for the hook operation, covers stdin writes, stdout and stderr reads, wait, cancellation, and process-tree cleanup without a stranded child or premature disposal race.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-SESSIONLIFE-004-AC002",
+          "text": "Codex child execution preserves Codex agent identity and workspace-scoped cache ownership even when inherited environment variables identify Grok or another agent.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-SESSIONLIFE-004-AC003",
+          "text": "Quarantine repair accepts historical supported shapes through object-first parsing, fills only missing values with None, preserves valid values, and never fabricates identity.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-SESSIONLIFE-004-AC004",
+          "text": "Contention and service outage remain distinct classified outcomes; both drain entry points retain retryable work without consuming attempts or latching completion and later replay exactly once. When storage is actually unavailable, health.storage reports unreachable; contention is not mislabeled as storage-down.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-SESSIONLIFE-004-AC005",
+          "text": "Import-recovery ingestion accepts a validated canonical session bundle or reconstructs the complete bundle from verified sources, never submits the importRecovery envelope as a session, and preserves all files on failure.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-SESSIONLIFE-004-AC006",
+          "text": "Path containment, reparse-point containment, size and count bounds, source identity, and canonical schema are verified before any source or recovery artifact is read or persisted.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-SESSIONLIFE-004-AC007",
+          "text": "Partial and canceled replay remains retryable and idempotent; concurrent replay cannot duplicate work; only the exact unchanged recovery artifact is deleted after verified durable persistence.",
+          "isSatisfied": false,
+          "evidence": null
+        }
+      ],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null,
+      "LinkedUseCases": []
+    },
+    {
+      "Id": "FR-MCP-SESSIONLIFE-005",
+      "Title": "Stop hook stale pin and session-log uniqueness",
+      "Body": "Stop hook runs failed-build and incomplete-audit gates first. It allows a stale pin only when authoritative server completion shows the local request id is not the active turn. A genuinely active different request id is not cleared. Both timestamp and lastUpdated stale is the age case. A fresh lastUpdated alone must not pass a stale pin. BUG-TRIAGE-229 is predecessor-schema detection before save, classified provider text in details.inner, and one bounded uniqueness retry.",
+      "WorkspaceId": "F:\\GitHub\\McpServer",
+      "Priority": "high",
+      "Status": "pending",
+      "Notes": "Structured for approved PLAN-SESSIONLIFE-001 revision 4, SHA-256 40BC4942EDC1D0652EE3AA1F06C922B05177897082F07A40391ADAE0B88CDD12. Keep pending until accepted evidence and required independent review exist.",
+      "AcceptanceCriteria": [
+        {
+          "id": "FR-MCP-SESSIONLIFE-005-AC001",
+          "text": "Failed-build and incomplete-audit enforcement executes before any stale-pin allow, timestamp refresh, auto-close, or recovery that could bypass those gates.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-SESSIONLIFE-005-AC002",
+          "text": "A stale local in_progress turn is reconciled only by authoritative Completed proof for the exact workspace, agent, session, and request; active, missing, ambiguous, or unavailable proof fails closed and retains state.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-SESSIONLIFE-005-AC003",
+          "text": "Old, fresh, missing, and invalid timestamp and lastUpdated combinations, completed or missing local files, and mismatched request IDs are covered; recency alone never proves completion.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-SESSIONLIFE-005-AC004",
+          "text": "Schema-predecessor failures are detected before mutation and provider errors retain a classified details.inner diagnostic without leaking credentials.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "FR-MCP-SESSIONLIFE-005-AC005",
+          "text": "One bounded retry applies only to the known unique same-session/request race; the winner is reread and merged without duplicate children or loss of unrelated state, while unrelated failures and cancellation propagate.",
+          "isSatisfied": false,
+          "evidence": null
+        }
+      ],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null,
+      "LinkedUseCases": []
+    },
+    {
+      "Id": "FR-MCP-SESSIONLOGCTX-001",
+      "Title": "Session turns record current plan file and MCP TODO id",
+      "Body": "Every session-log turn SHALL store planFile and todoId. After persist, query/get SHALL return both fields. They are never null in API output. When no plan or TODO is active, the stored value SHALL be the exact sentinel None (case-sensitive). The first persist of a turn SHALL reject omitted, null, empty, or whitespace planFile or todoId. planFile SHALL accept a workspace-relative path, an exact absolute path, or a ~/ home-relative path. .. is rejected. Query SHALL support exact filters on planFile and todoId, and text search SHALL match those fields. Existing rows SHALL be backfilled from turn contents and agent history under ~. Import, transcript ingest, and federation apply SHALL persist a validated pair (None if extraction finds nothing). Children: AC-FR-MCP-SESSIONLOGCTX-001-001, AC-FR-MCP-SESSIONLOGCTX-001-002, AC-FR-MCP-SESSIONLOGCTX-001-003, AC-FR-MCP-SESSIONLOGCTX-001-004, AC-FR-MCP-SESSIONLOGCTX-001-005, AC-FR-MCP-SESSIONLOGCTX-001-006, AC-FR-MCP-SESSIONLOGCTX-001-007.",
+      "WorkspaceId": "F:\\GitHub\\McpServer",
+      "Priority": "medium",
+      "Status": "pending",
+      "Notes": "PLAN-SESSIONLIFE-001 revision 4 narrows only ordinary first persistence: canceled/cancelled supersession may omit metadata and stores None. All other FR-MCP-SESSIONLOGCTX-001 obligations remain pending.",
+      "AcceptanceCriteria": [
+        {
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-001",
+          "text": "Every session-log turn SHALL store planFile and todoId. After persist, query/get SHALL return both fields. They are never null in API output.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-002",
+          "text": "When no plan or TODO is active, the stored value SHALL be the exact sentinel None (case-sensitive).",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-003",
+          "text": "The first ordinary persist of a turn SHALL reject omitted, null, empty, or whitespace planFile or todoId and insert no turn row. A canceled or cancelled supersession may omit the pair, stores the exact sentinel None for each missing value, and a durable reopen preserves that bounded exception.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-004",
+          "text": "planFile SHALL accept a workspace-relative path, an exact absolute path, or a ~/ home-relative path. .. is rejected.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-005",
+          "text": "Query SHALL support exact filters on planFile and todoId, and text search SHALL match those fields.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-006",
+          "text": "Existing rows SHALL be backfilled from turn contents and agent history under ~. Uncertain results stay None. Invented ids/paths are forbidden.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-007",
+          "text": "Import, transcript ingest, and federation apply SHALL persist a validated planFile and todoId (None if extraction finds nothing). Null is never stored.",
+          "isSatisfied": false,
+          "evidence": null
+        }
+      ],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null,
+      "LinkedUseCases": []
+    }
+  ],
+  "technical": [
+    {
+      "Id": "TR-MCP-SESSIONLIFE-001",
+      "Title": "Plugin keeps degraded turn cache and honest hook status",
+      "Body": "Complete-ReplBeginTurnAfterPersist must not replace the turn file. Open-PluginTurn emits turn-opened-degraded while degraded. appendDialog 404 on a degraded local turn resubmits or queues session_dialog.",
+      "WorkspaceId": "F:\\GitHub\\McpServer",
+      "Priority": "high",
+      "Status": "pending",
+      "Notes": "Structured for approved PLAN-SESSIONLIFE-001 revision 4, SHA-256 40BC4942EDC1D0652EE3AA1F06C922B05177897082F07A40391ADAE0B88CDD12. Keep pending until accepted evidence and required independent review exist.",
+      "AcceptanceCriteria": [
+        {
+          "id": "TR-MCP-SESSIONLIFE-001-AC001",
+          "text": "One real begin-turn builder or shim preserves the complete cached turn on degraded persistence and exposes a shared, truthful degraded transition used by all hooks.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TR-MCP-SESSIONLIFE-001-AC002",
+          "text": "Prompt, complete, update, and dialog hooks consume the shared transition without reduced-object replacement, empty-query overwrite, or false server-persisted status.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TR-MCP-SESSIONLIFE-001-AC003",
+          "text": "Degraded missing-turn dialog recovery is bounded to one submit attempt and one retained dialog failsafe, while unrelated not-found remains nonretryable.",
+          "isSatisfied": false,
+          "evidence": null
+        }
+      ],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null
+    },
+    {
+      "Id": "TR-MCP-SESSIONLIFE-002",
+      "Title": "Metadata durability and freshness rebind",
+      "Body": "Snapshot cached metadata before replacing turn state. Same-request beginTurn is omit-unbound only when durable. Assert-ReplCurrentTurnFresh must not rewrite a cached session id. Three documentation files state ordinary rejection, supersede None, and durable reopen omission.",
+      "WorkspaceId": "F:\\GitHub\\McpServer",
+      "Priority": "high",
+      "Status": "pending",
+      "Notes": "Structured for approved PLAN-SESSIONLIFE-001 revision 4, SHA-256 40BC4942EDC1D0652EE3AA1F06C922B05177897082F07A40391ADAE0B88CDD12. Keep pending until accepted evidence and required independent review exist.",
+      "AcceptanceCriteria": [
+        {
+          "id": "TR-MCP-SESSIONLIFE-002-AC001",
+          "text": "A single durability-first metadata resolver implements explicit, verified-cache, and None precedence for planFile and todoId.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TR-MCP-SESSIONLIFE-002-AC002",
+          "text": "Workspace, agent, session, and request identity are immutable after binding; freshness checks diagnose drift and never rebind from markers or inherited variables.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TR-MCP-SESSIONLIFE-002-AC003",
+          "text": "Ordinary first persistence, canceled/cancelled supersession, durable reopen, and all three contract documents use the same resolver semantics.",
+          "isSatisfied": false,
+          "evidence": null
+        }
+      ],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null
+    },
+    {
+      "Id": "TR-MCP-SESSIONLIFE-003",
+      "Title": "Wrapper three-outcome exit contract",
+      "Body": "Invoke-McpPlugin reports primary success, classified queued success, or nonzero failure. appendActions honors requestId. updateTurn dedupes. Child REPL has one deadline with process-tree cleanup.",
+      "WorkspaceId": "F:\\GitHub\\McpServer",
+      "Priority": "high",
+      "Status": "pending",
+      "Notes": "Structured for approved PLAN-SESSIONLIFE-001 revision 4, SHA-256 40BC4942EDC1D0652EE3AA1F06C922B05177897082F07A40391ADAE0B88CDD12. Keep pending until accepted evidence and required independent review exist. Reopened 2026-09-28 for provider-safe dense-session materialization.",
+      "AcceptanceCriteria": [
+        {
+          "id": "TR-MCP-SESSIONLIFE-003-AC001",
+          "text": "The wrapper exposes a typed primary, queued, or failed outcome contract and no session-log mutation collapses that result to an unclassified boolean.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TR-MCP-SESSIONLIFE-003-AC002",
+          "text": "Result serialization includes identity, method, durability, queue, retryability, diagnostic, and failsafe fields without claiming primary success for queued work.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TR-MCP-SESSIONLIFE-003-AC003",
+          "text": "Child REPL execution uses one operation deadline with deterministic process-tree cleanup, and dedupe preserves sequential method labels and queue counts.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TR-MCP-SESSIONLIFE-003-AC004",
+          "text": "Existing-session graph materialization avoids multiplicative collection joins, remains update-tracked, and bounds transient SQL Server deadlock or timeout handling inside the storage command budget without converting retryable contention into primary success.",
+          "isSatisfied": false,
+          "evidence": null
+        }
+      ],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null
+    },
+    {
+      "Id": "TR-MCP-SESSIONLIFE-004",
+      "Title": "Quarantine repair, import recovery, and contention drain",
+      "Body": "Repair the three named quarantine files. Transcript ingestion scans importRecovery yaml and deletes only the envelope after durable success. McpErrorClassifier and both drain entry points keep contention retryable and unlatched.",
+      "WorkspaceId": "F:\\GitHub\\McpServer",
+      "Priority": "high",
+      "Status": "pending",
+      "Notes": "Structured for approved PLAN-SESSIONLIFE-001 revision 4, SHA-256 40BC4942EDC1D0652EE3AA1F06C922B05177897082F07A40391ADAE0B88CDD12. Keep pending until accepted evidence and required independent review exist.",
+      "AcceptanceCriteria": [
+        {
+          "id": "TR-MCP-SESSIONLIFE-004-AC001",
+          "text": "A shared replay and quarantine repair core parses supported historical object shapes, validates canonical identity and paths, and preserves recovery artifacts on any failure.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TR-MCP-SESSIONLIFE-004-AC002",
+          "text": "Both drain entry points use one contention classifier and identical attempt, latch, ordering, and delete-after-durable-success rules; true storage outage also drives health.storage=unreachable while contention remains retryable.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TR-MCP-SESSIONLIFE-004-AC003",
+          "text": "Import recovery follows the canonical session persistence path, supports validated canonical-only or reconstructed bundles, and never exposes transcript ingestion through agent plugins.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TR-MCP-SESSIONLIFE-004-AC004",
+          "text": "Replay enforces workspace containment, reparse containment, file and record bounds, cancellation, content identity, idempotency, and concurrency safety before destructive cleanup.",
+          "isSatisfied": false,
+          "evidence": null
+        }
+      ],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null
+    },
+    {
+      "Id": "TR-MCP-SESSIONLIFE-005",
+      "Title": "Stop-hook stale pin and upsert uniqueness",
+      "Body": "Close-PluginTurnIfNeeded runs build and audit gates first and allows a stale pin only with authoritative server completion. SessionLogSchemaGuard, SessionLogService.UpsertTurnAsync, and SessionLogController implement predecessor-schema detection, details.inner, and one uniqueness retry.",
+      "WorkspaceId": "F:\\GitHub\\McpServer",
+      "Priority": "high",
+      "Status": "pending",
+      "Notes": "Structured for approved PLAN-SESSIONLIFE-001 revision 4, SHA-256 40BC4942EDC1D0652EE3AA1F06C922B05177897082F07A40391ADAE0B88CDD12. Keep pending until accepted evidence and required independent review exist.",
+      "AcceptanceCriteria": [
+        {
+          "id": "TR-MCP-SESSIONLIFE-005-AC001",
+          "text": "Stop enforcement obtains exact-turn server proof through the supported typed client after build and audit gates and before any state mutation.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TR-MCP-SESSIONLIFE-005-AC002",
+          "text": "A shared cache-state lock snapshots identity and content hashes, releases for bounded network I/O, then conditionally mutates only if the same state remains current.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TR-MCP-SESSIONLIFE-005-AC003",
+          "text": "Schema predecessor detection and provider error classification occur before mutation and preserve useful credential-safe details.inner.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TR-MCP-SESSIONLIFE-005-AC004",
+          "text": "Upsert retries once only for the known same-session/request unique race and merges the winning row without duplicate child collections.",
+          "isSatisfied": false,
+          "evidence": null
+        }
+      ],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null
+    },
+    {
+      "Id": "TR-MCP-SESSIONLOG-006",
+      "Title": "Required planFile and todoId scalars with None sentinel and backfill",
+      "Body": "Session-log turn storage, DTOs, REST, MCP tools, and plugin wrappers SHALL expose required string fields planFile and todoId. New interactive creates/submits/beginTurn/replace-turn reject omitted, null, or empty values. Accepted planFile values are a workspace-relative path, an exact absolute path, a ~/ home-relative path, or the literal sentinel None. Accepted todoId values are a canonical MCP TODO id, ISSUE-N, or None. An EF migration adds both columns, defaults existing rows to None, then a one-time backfill scans turn contents and agent history under ~. Uncertain extractions remain None. Query/get results SHALL return both fields.",
+      "WorkspaceId": "F:\\GitHub\\McpServer",
+      "Priority": "medium",
+      "Status": "pending",
+      "Notes": null,
+      "AcceptanceCriteria": [
+        {
+          "id": "AC-TR-MCP-SESSIONLOG-006-001",
+          "text": "todoId is None, canonical TODO id, or ISSUE-N. FR/TR/TEST ids fail. planFile is None or a normalized relative/exact/~/ path, max 2048, no .. .",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-TR-MCP-SESSIONLOG-006-002",
+          "text": "Additive upsert/complete omits preserve stored values. Supplied values are validated. ReplaceTurnAsync requires both fields.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-TR-MCP-SESSIONLOG-006-003",
+          "text": "Extractor scans turn text, tags, context, files, actions, dialog, and agent history under ~. Tag TODO ids win. Ties and FR/TR/TEST ids yield None.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-TR-MCP-SESSIONLOG-006-004",
+          "text": "SessionLogTurns.PlanFile required string max 2048 default None. TodoId required string max 128 default None. Three provider migrations add both columns.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-TR-MCP-SESSIONLOG-006-005",
+          "text": "Backfill writes extractor hits onto None columns only. Non-None is not overwritten. Rerun is a no-op.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-TR-MCP-SESSIONLOG-006-006",
+          "text": "POST begin and sessionlog_begin_turn require planFile and todoId. Missing is 400/error. None/None succeeds.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-TR-MCP-SESSIONLOG-006-007",
+          "text": "SessionLogClient.BeginTurnAsync, McpAgent BeginTurnAsync, and REPL beginTurn serialize and persist the supplied values.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-TR-MCP-SESSIONLOG-006-008",
+          "text": "Read projection copies planFile and todoId onto a clone. Source is unchanged. None is not rewritten.",
+          "isSatisfied": false,
+          "evidence": null
+        }
+      ],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null
+    }
+  ],
+  "testing": [
+    {
+      "Id": "TEST-MCP-SESSIONLIFE-001",
+      "Condition": "SessionLogLifecycle.Tests.ps1 covers retained fields, hook status, 404 recovery, empty-query verbs, and same-request degraded beginTurn.",
+      "WorkspaceId": "F:\\GitHub\\McpServer",
+      "Title": "Pester degraded cache, hook status, and empty query",
+      "Priority": "high",
+      "Status": "pending",
+      "Notes": "Structured for approved PLAN-SESSIONLIFE-001 revision 4, SHA-256 40BC4942EDC1D0652EE3AA1F06C922B05177897082F07A40391ADAE0B88CDD12. Keep pending until accepted evidence and required independent review exist.",
+      "AcceptanceCriteria": [
+        {
+          "id": "TEST-MCP-SESSIONLIFE-001-AC001",
+          "text": "Mock-backed consumer tests prove degraded complete-turn preservation, truthful hook status, empty-query omission, bounded missing-turn dialog recovery, and same-request cached metadata.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TEST-MCP-SESSIONLIFE-001-AC002",
+          "text": "At least one real builder or shim test runs with MCP_PLUGIN_PERSIST_LOG unset and asserts the complete cached object and serialized persistence payload rather than only fixture echo.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TEST-MCP-SESSIONLIFE-001-AC003",
+          "text": "The accepted test scope exits with zero failures and zero skips and records the concrete test names and evidence paths in the acceptance manifest.",
+          "isSatisfied": false,
+          "evidence": null
+        }
+      ],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null
+    },
+    {
+      "Id": "TEST-MCP-SESSIONLIFE-002",
+      "Condition": "SessionLogLifecycleMetadata, quarantine repair, audit reconcile, child deadline, and stop-hook pin tests.",
+      "WorkspaceId": "F:\\GitHub\\McpServer",
+      "Title": "Pester metadata, exits, deadline, quarantine, and stop hook",
+      "Priority": "high",
+      "Status": "pending",
+      "Notes": "Structured for approved PLAN-SESSIONLIFE-001 revision 4, SHA-256 40BC4942EDC1D0652EE3AA1F06C922B05177897082F07A40391ADAE0B88CDD12. Keep pending until accepted evidence and required independent review exist.",
+      "AcceptanceCriteria": [
+        {
+          "id": "TEST-MCP-SESSIONLIFE-002-AC001",
+          "text": "Named Pester tests cover metadata precedence, immutable identity, ordinary first persist, canceled/cancelled supersession, durable reopen, and all three contract documents.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TEST-MCP-SESSIONLIFE-002-AC002",
+          "text": "Named process tests cover primary, queued, and lost wrapper exits, structured result serialization, single child deadline and cleanup, Stop ordering, quarantine repair, audit reconciliation, and dialog classification.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TEST-MCP-SESSIONLIFE-002-AC003",
+          "text": "Every mock-backed consumer case has a corresponding real implementation assertion and recorded process exit or serialized receipt; unaccepted candidate tests remain explicitly not accepted.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TEST-MCP-SESSIONLIFE-002-AC004",
+          "text": "The accepted cumulative test scope exits with zero failures, zero skips, no missing reports, and no zero-discovery projects.",
+          "isSatisfied": false,
+          "evidence": null
+        }
+      ],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null
+    },
+    {
+      "Id": "TEST-MCP-SESSIONLIFE-003",
+      "Condition": "Reuse TransactionGatedSessionLogServiceTests bypass coverage and add query plus repeated additive complete proofs under FR-MCP-173.",
+      "WorkspaceId": "F:\\GitHub\\McpServer",
+      "Title": "C# durable session-log query and repeated complete",
+      "Priority": "high",
+      "Status": "pending",
+      "Notes": "Structured for approved PLAN-SESSIONLIFE-001 revision 4, SHA-256 40BC4942EDC1D0652EE3AA1F06C922B05177897082F07A40391ADAE0B88CDD12. Keep pending until accepted evidence and required independent review exist.",
+      "AcceptanceCriteria": [
+        {
+          "id": "TEST-MCP-SESSIONLIFE-003-AC001",
+          "text": "Transaction-gated session-log tests prove non-QuadBrain action, dialog, update, and additive complete persistence without coordinator or keyserver invocation.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TEST-MCP-SESSIONLIFE-003-AC002",
+          "text": "Exact durable readback verifies every child collection and repeated additive complete remains duplicate-free.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TEST-MCP-SESSIONLIFE-003-AC003",
+          "text": "The subset proof is linked to FR-MCP-173 but does not mark its broader first-party adapter obligations satisfied.",
+          "isSatisfied": false,
+          "evidence": null
+        }
+      ],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null
+    },
+    {
+      "Id": "TEST-MCP-SESSIONLIFE-004",
+      "Condition": "Schema guard, DbUpdateException details.inner, uniqueness retry, contention versus outage, dialog classification, and ImportRecoveryEnvelopeTests.",
+      "WorkspaceId": "F:\\GitHub\\McpServer",
+      "Title": "C# schema, contention, dialog classification, and import recovery",
+      "Priority": "high",
+      "Status": "pending",
+      "Notes": "Structured for approved PLAN-SESSIONLIFE-001 revision 4, SHA-256 40BC4942EDC1D0652EE3AA1F06C922B05177897082F07A40391ADAE0B88CDD12. Keep pending until accepted evidence and required independent review exist. Reopened 2026-09-28 for dense-session and explicit zero-skip SQLite, SQL Server, and PostgreSQL regression coverage.",
+      "AcceptanceCriteria": [
+        {
+          "id": "TEST-MCP-SESSIONLIFE-004-AC001",
+          "text": "Named C# tests cover schema predecessor detection, credential-safe provider details.inner, the bounded same-turn unique race retry, contention versus outage including health.storage=unreachable only for actual storage outage, and dialog storage classification.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TEST-MCP-SESSIONLIFE-004-AC002",
+          "text": "Import recovery tests start from canonical and reconstructed bundles and cover missing source, traversal, reparse escape, malformed schema, size bounds, cancellation, concurrent replay, content-hash drift, and delete-only-after-verified-persistence.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TEST-MCP-SESSIONLIFE-004-AC003",
+          "text": "Provider-specific uniqueness and schema tests use disposable databases and leave no remnant; an approved prior migration is not reopened solely because infrastructure is degraded.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TEST-MCP-SESSIONLIFE-004-AC004",
+          "text": "The accepted cumulative test scope exits with zero failures, zero skips, no missing reports, and no zero-discovery projects.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TEST-MCP-SESSIONLIFE-004-AC005",
+          "text": "Provider-backed tests seed a dense session graph, update it through SubmitAsync, and prove bounded completion, exact child-collection readback, and no Cartesian query shape. Concurrent same-session submissions prove bounded retry or classified retryable failure with no partial or duplicate rows.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TEST-MCP-SESSIONLIFE-004-AC006",
+          "text": "A zero-skip matrix executes dense SubmitAsync and concurrent same-session updates against SQLite, SQL Server, and PostgreSQL. The SQL Server row covers error 1205 deadlock and five-second command-budget expiry, proves one normalized retryable outcome without false primary success or partial state, then proves exact readback after successful retry.",
+          "isSatisfied": false,
+          "evidence": null
+        }
+      ],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null
+    },
+    {
+      "Id": "TEST-MCP-SESSIONLIFE-005",
+      "Condition": "Existing PluginPowerShellRuntime drain-timeout coverage and session_dialog method dispatch. Not expected red. Governed by FR-MCP-REPL-011.",
+      "WorkspaceId": "F:\\GitHub\\McpServer",
+      "Title": "Pester proof of drain timeout and dialog dispatch",
+      "Priority": "high",
+      "Status": "pending",
+      "Notes": "Structured for approved PLAN-SESSIONLIFE-001 revision 4, SHA-256 40BC4942EDC1D0652EE3AA1F06C922B05177897082F07A40391ADAE0B88CDD12. Keep pending until accepted evidence and required independent review exist.",
+      "AcceptanceCriteria": [
+        {
+          "id": "TEST-MCP-SESSIONLIFE-005-AC001",
+          "text": "Existing PluginPowerShellRuntime coverage proves drain SubmitAsync uses a 120-second default and honors a larger REPL_TIMEOUT instead of the ordinary two-second nested helper budget, automatic nested drain defers while a REPL call is active, and timeout leaves attempt and latch state unchanged.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TEST-MCP-SESSIONLIFE-005-AC002",
+          "text": "Existing dispatch coverage proves retained dialog recovery records use method client.SessionLog.AppendDialogAsync and preserve exact workspace, agent, session, and request identity.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "TEST-MCP-SESSIONLIFE-005-AC003",
+          "text": "This proof-first scope stays green and does not authorize rewriting already-correct timeout behavior without a newly accepted failing real-code test.",
+          "isSatisfied": false,
+          "evidence": null
+        }
+      ],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null
+    },
+    {
+      "Id": "TEST-MCP-SESSIONLOG-006",
+      "Condition": "Validates AC-FR-MCP-SESSIONLOGCTX-001-001 through 007 and AC-TR-MCP-SESSIONLOG-006-001 through 008. Tests: SessionLogTurnContextValidatorTests, SessionLogServiceTurnContextTests, SessionLogTurnContextExtractorTests, SessionLogTurnContextBackfillTests, SessionLogTurnPlanFileTodoIdModelTests, AddSessionLogTurnPlanFileAndTodoIdMigrationTests, SessionLogControllerTests.BeginTurn_MissingFields_Returns400, BeginTurn_NoneNone_Returns201_AndGetReturnsNone, Query_FilterByTodoId_ReturnsOnlyMatches, SessionLogBeginTurn_MissingPlanFile_ReturnsStructuredError, SessionLogBeginTurn_NoneNone_ReturnsSuccess, BeginTurnAsync_SerializesPlanFileAndTodoId, BeginTurnAsync_PersistsPlanFileAndTodoId, BeginTurnAsync_ForwardsPlanFileAndTodoId, SanitizeTurn_CopiesPlanFileAndTodoId, SanitizeTurn_DoesNotMutateSource, SanitizeTurn_LeavesNoneUnchanged, Import_OmittedFields_PersistsExtractorResultOrNone, Ingest_OmittedFields_PersistsExtractorResultOrNone, Apply_OmittedFields_PersistsProperValue, SqliteMigration_UpAddsColumns_DownDropsThem, Invoke-WorkflowBeginTurn_* plugin contract tests.",
+      "WorkspaceId": "F:\\GitHub\\McpServer",
+      "Title": "Required session-turn planFile and todoId persist, query, and backfill",
+      "Priority": "medium",
+      "Status": "pending",
+      "Notes": null,
+      "AcceptanceCriteria": [
+        {
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-001",
+          "text": "Round-trip planFile/todoId on persist and get.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-002",
+          "text": "None sentinel persists and is never rewritten to null.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-003",
+          "text": "New persist without fields is rejected.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-004",
+          "text": "Relative, exact, and ~/ plan paths are accepted; .. is rejected.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-005",
+          "text": "Query filter and text search match planFile and todoId.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-006",
+          "text": "Backfill upgrades None from turn contents and ~ history.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-FR-MCP-SESSIONLOGCTX-001-007",
+          "text": "Import/ingest/federation persist a validated pair, never null.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-TR-MCP-SESSIONLOG-006-001",
+          "text": "Validator rules covered by SessionLogTurnContextValidatorTests.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-TR-MCP-SESSIONLOG-006-002",
+          "text": "Additive omit-preserve and replace-required covered by SessionLogServiceTurnContextTests.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-TR-MCP-SESSIONLOG-006-003",
+          "text": "Extractor ranking covered by SessionLogTurnContextExtractorTests.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-TR-MCP-SESSIONLOG-006-004",
+          "text": "Schema/migration covered by model and provider migration tests.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-TR-MCP-SESSIONLOG-006-005",
+          "text": "Backfill None-only upgrades covered by SessionLogTurnContextBackfillTests.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-TR-MCP-SESSIONLOG-006-006",
+          "text": "REST/MCP begin required fields covered by controller and tool tests.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-TR-MCP-SESSIONLOG-006-007",
+          "text": "Client/agent/REPL carry fields covered by their session-log tests.",
+          "isSatisfied": false,
+          "evidence": null
+        },
+        {
+          "id": "AC-TR-MCP-SESSIONLOG-006-008",
+          "text": "Sanitizer clones new fields covered by SessionLogSanitizerTests.",
+          "isSatisfied": false,
+          "evidence": null
+        }
+      ],
+      "ScopeStartLayerKey": "layer-1",
+      "ScopeEndLayerKey": null
+    }
+  ],
+  "mapping": [
+    {
+      "FrId": "FR-MCP-170",
+      "TrIds": [
+        "TR-MCP-PERSIST-001",
+        "TR-MCP-PERSIST-004"
+      ],
+      "TestIds": [
+        "TEST-MCP-195",
+        "TEST-MCP-196",
+        "TEST-MCP-SESSIONLIFE-002",
+        "TEST-MCP-SESSIONLIFE-004"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-REPL-009",
+      "TrIds": [
+        "TR-MCP-REPL-010",
+        "TR-MCP-REPL-011",
+        "TR-MCP-REPL-012",
+        "TR-MCP-REPL-013"
+      ],
+      "TestIds": [
+        "TEST-MCP-REPL-025",
+        "TEST-MCP-REPL-026",
+        "TEST-MCP-REPL-027",
+        "TEST-MCP-REPL-028"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-SESSIONLIFE-001",
+      "TrIds": [
+        "TR-MCP-SESSIONLIFE-001"
+      ],
+      "TestIds": [
+        "TEST-MCP-SESSIONLIFE-001"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-SESSIONLIFE-002",
+      "TrIds": [
+        "TR-MCP-SESSIONLIFE-002"
+      ],
+      "TestIds": [
+        "TEST-MCP-SESSIONLIFE-002"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-SESSIONLIFE-003",
+      "TrIds": [
+        "TR-MCP-SESSIONLIFE-003"
+      ],
+      "TestIds": [
+        "TEST-MCP-SESSIONLIFE-002",
+        "TEST-MCP-SESSIONLIFE-004"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-SESSIONLIFE-004",
+      "TrIds": [
+        "TR-MCP-SESSIONLIFE-004"
+      ],
+      "TestIds": [
+        "TEST-MCP-SESSIONLIFE-002",
+        "TEST-MCP-SESSIONLIFE-004",
+        "TEST-MCP-SESSIONLIFE-005"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-SESSIONLIFE-005",
+      "TrIds": [
+        "TR-MCP-SESSIONLIFE-005"
+      ],
+      "TestIds": [
+        "TEST-MCP-SESSIONLIFE-002",
+        "TEST-MCP-SESSIONLIFE-004"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    },
+    {
+      "FrId": "FR-MCP-SESSIONLOGCTX-001",
+      "TrIds": [
+        "TR-MCP-SESSIONLOG-006"
+      ],
+      "TestIds": [
+        "TEST-MCP-SESSIONLOG-006"
+      ],
+      "WorkspaceId": "F:\\GitHub\\McpServer"
+    }
+  ],
+  "TimestampUtc": "2026-10-02T20:47:32.2777398+00:00",
+  "Workspace": "F:\\GitHub\\McpServer"
+}

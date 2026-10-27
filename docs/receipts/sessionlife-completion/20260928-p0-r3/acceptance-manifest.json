@@ -259,7 +259,7 @@
       "integrationScenario": "Begin with primary persistence failure, inspect the retained cache and recovery envelope, then query after replay.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
@@ -279,11 +279,16 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogLifecycle.RealBuilder_DegradedBegin_PreservesEveryCachedTurnField"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves degraded creation metadata and sends cached plan on the same request",
+        "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.does not replace queryText queryTitle planFile todoId openedAt or audit counters",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.round-trips hash and space failsafePath through object YAML and clears degraded after primary success"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.RealBuilder_DegradedBegin_PreservesEveryCachedTurnField"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -307,14 +312,15 @@
       "integrationScenario": "Run prompt hook once with primary success and once with a retained failsafe.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
         "plugins/core/lib-ps/plugin-hook.ps1"
       ],
       "testSourcePaths": [
-        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -327,11 +333,13 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogLifecycle.PromptHook_DegradedBegin_ReportsOpenedDegradedWithRetainedPath"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.fresh prompt hook reports turn-opened after primary readback and turn-opened-degraded with the retained artifact"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.PromptHook_DegradedBegin_ReportsOpenedDegradedWithRetainedPath"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -355,7 +363,8 @@
       "integrationScenario": "Complete turns with each fallback state and update a durable turn with empty query.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate.",
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
@@ -375,7 +384,11 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogLifecycle.Complete_QueryFallbackPreservesValidTitle_AndUpdateOmitsEmptyQuery"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.complete recovery uses cached queryText then queryTitle then the placeholder",
+        "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.update omits an empty queryText so the server value can stay",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits an empty query through the real builder and shim"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.Complete_QueryFallbackPreservesValidTitle_AndUpdateOmitsEmptyQuery"
       ],
@@ -403,7 +416,7 @@
       "integrationScenario": "Compare degraded and never-degraded missing-turn paths with submit and queue call counts.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
@@ -424,12 +437,14 @@
         "SessionLogLifecycle.AppendDialog_DegradedMissingTurn_AttemptsOneRecoveryAndRetainsDialog",
         "SessionLogLifecycle.AppendDialog_NeverDegradedMissingTurn_IsNonretryableNoFailsafe"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.degraded 404 queues a session_dialog failsafe and does not say failsafe not used"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.AppendDialog_DegradedMissingTurn_AttemptsOneRecoveryAndRetainsDialog",
         "SessionLogLifecycle.AppendDialog_NeverDegradedMissingTurn_IsNonretryableNoFailsafe"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -453,7 +468,7 @@
       "integrationScenario": "Retry the exact request under both spelling variants and inspect cache plus outcome.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
@@ -473,11 +488,16 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogLifecycle.SameRequestRetry_PreservesCreationMetadata_NormalizesCancelledWithoutFalseDurability"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores canceled with exact None when a new request supersedes an open turn",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits an empty query through the real builder and shim",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves degraded creation metadata and sends cached plan on the same request"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.SameRequestRetry_PreservesCreationMetadata_NormalizesCancelledWithoutFalseDurability"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -498,7 +518,7 @@
       "integrationScenario": "Run first persistence with explicit values, verified cached values, and no active plan/TODO.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
@@ -521,11 +541,18 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogLifecycleMetadata.Resolver_UsesExplicitThenVerifiedCacheThenExactNone"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects whitespace metadata on ordinary first persistence",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.sends exact None on updateTurn when caller clears planFile and todoId",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV11 explicit append metadata updates cache used by later complete"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.Resolver_UsesExplicitThenVerifiedCacheThenExactNone"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -546,14 +573,18 @@
       "integrationScenario": "Exercise four invalid ordinary inputs, two supersession spellings, and a durable reopen.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate.",
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
         "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
       ],
       "testSourcePaths": [
-        "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1"
+        "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1",
+        "tests/McpServer.Support.Mcp.Tests/Services/SessionLogTurnContextValidatorTests.cs",
+        "tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTurnContextTests.cs",
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [
         "docs/context/module-bootstrap.md",
@@ -569,12 +600,39 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogLifecycleMetadata.FirstPersist_RejectsMissingMetadataExceptCancelledSupersession"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects whitespace metadata on ordinary first persistence",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores canceled with exact None when a new request supersedes an open turn",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects explicit empty and null planFile on ordinary first persistence",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_NullPlanFile_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_OmittedTodoIdEmpty_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_WhitespacePlanFile_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_BothNone_Succeeds",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithoutPlanFile_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_NewTurnMissingFields_Throws",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithNoneNone_PersistsNone",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects null empty and whitespace todoId and empty planFile on ordinary first persistence without a server row",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores exact None for canceled supersession when metadata is omitted and normalizes cancelled to canceled",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_EmptyPlanFile_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_NullTodoId_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_EmptyTodoId_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnEmptyPlanFile_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnNullTodoId_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnEmptyTodoId_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWhitespaceTodoId_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_CanceledOmission_StoresExactNone",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_CancelledOmission_StoresExactNone",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_EmptyPlanFileWithValidTodo_ThrowsAndInsertsNoTurn",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_ValidPlanOmittedTodo_ThrowsAndInsertsNoTurn",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_ExistingTurnOmittingFields_PreservesStoredValues"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.FirstPersist_RejectsMissingMetadataExceptCancelledSupersession"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
-      "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
+      "criterionSpecificRelation": "executed-criterion-specific",
+      "existingCandidateTestNameKind": "observed passing TRX names and Pester display labels",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
     {
@@ -594,7 +652,7 @@
       "integrationScenario": "Update metadata, reopen exact identity, then attempt omission under each identity drift.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
@@ -617,11 +675,16 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogLifecycleMetadata.ExplicitUpdate_UpdatesCacheAndPayload_OmissionRequiresExactDurableIdentity"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV11 explicit append metadata updates cache used by later complete",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.sends exact None on updateTurn when caller clears planFile and todoId"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.ExplicitUpdate_UpdatesCacheAndPayload_OmissionRequiresExactDurableIdentity"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -642,7 +705,7 @@
       "integrationScenario": "Mutate one identity dimension at a time, including inherited environment and marker values.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
@@ -665,11 +728,21 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogLifecycleMetadata.FreshnessRejectsWorkspaceAgentSessionRequestDriftWithoutRebinding"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects a request mismatch and a wrong-workspace marker without changing session A or request R",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.keeps Codex cache and audit identity when Grok agent variables are inherited",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves session A and request R from a native turn through a plugin append",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV12 beginTurn rejects missing marker proof and wrong-marker degraded reopen",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV13 request mismatch does not mutate current-turn when markers are missing",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV16 case-different caller requestId is rejected without mutation",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV19 case-different SubmitAsync response identity is not persisted and keeps recovery",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV20 beginTurn case-different request or session does not durable-reopen overwrite"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.FreshnessRejectsWorkspaceAgentSessionRequestDriftWithoutRebinding"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -690,7 +763,8 @@
       "integrationScenario": "Dynamically discover all supported fenced request-example bodies without fixed selectors. The current inventory must report module-bootstrap examples at lines 49 and 65 and REPL user-guide examples at lines 118, 471, and 819; the user-guide inventory bullet at line 173 is non-example prose and must not enter the fenced-example raw count. Require every supported fence to parse, require fenced-body raw and parsed beginTurn counts to match, evaluate every discovered example, and fail on any omitted pair lacking an explicit approved omission context. Then validate the nonbreaking state-aware JSON-schema branch.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Three planned document-contract tests are not accepted until the documents are implemented, reviewed, and executed in a fresh run-scoped gate."
+        "Three planned document-contract tests are not accepted until the documents are implemented, reviewed, and executed in a fresh run-scoped gate.",
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
@@ -715,13 +789,15 @@
         "SessionLogLifecycleMetadata.ReplUserGuide_AllBeginTurnExamples_DeclareMetadataOrApprovedOmission",
         "SessionLogLifecycleMetadata.ReplYamlSchema_DeclaresMetadataAndDocumentsFirstPersistNoneSupersessionAndReopenRules"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.ModuleBootstrap_AllBeginTurnExamples_DeclareMetadataOrApprovedOmission",
         "SessionLogLifecycleMetadata.ReplUserGuide_AllBeginTurnExamples_DeclareMetadataOrApprovedOmission",
         "SessionLogLifecycleMetadata.ReplYamlSchema_DeclaresMetadataAndDocumentsFirstPersistNoneSupersessionAndReopenRules"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -745,7 +821,7 @@
       "integrationScenario": "Drive primary success, confirmed queued recovery, and total loss through the wrapper.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
@@ -762,11 +838,17 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogOutcome.MutationReturnsExactlyOnePrimaryQueuedOrLostOutcome"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV19 case-different SubmitAsync response identity is not persisted and keeps recovery",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV20 beginTurn case-different request or session does not durable-reopen overwrite"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.MutationReturnsExactlyOnePrimaryQueuedOrLostOutcome"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -790,7 +872,7 @@
       "integrationScenario": "Serialize and round-trip each primary, queued, and lost outcome.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
@@ -807,11 +889,17 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogOutcome.SerializationIncludesAllDurabilityIdentityDiagnosticFields"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV19 case-different SubmitAsync response identity is not persisted and keeps recovery",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV20 beginTurn case-different request or session does not durable-reopen overwrite"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.SerializationIncludesAllDurabilityIdentityDiagnosticFields"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -835,7 +923,7 @@
       "integrationScenario": "Attempt every mutation against a different active request and compare pre/post hashes.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
@@ -852,11 +940,18 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogOutcome.RequestIdMismatchRejectsWithoutCacheServerOrRecoveryMutation"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV13 request mismatch does not mutate current-turn when markers are missing",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV16 case-different caller requestId is rejected without mutation",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV19 case-different SubmitAsync response identity is not persisted and keeps recovery",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV20 beginTurn case-different request or session does not durable-reopen overwrite"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.RequestIdMismatchRejectsWithoutCacheServerOrRecoveryMutation"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -880,7 +975,8 @@
       "integrationScenario": "Persist a full turn, query exact request, and inject mismatched readback for each section.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate.",
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
@@ -897,7 +993,11 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogOutcome.PrimarySuccessRequiresExactServerReadbackOfTurnSectionsAndIdentity"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.PrimarySuccessRequiresExactServerReadbackOfTurnSectionsAndIdentity"
       ],
@@ -925,7 +1025,7 @@
       "integrationScenario": "Run duplicate update then sequential append and complete with exact readback.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
@@ -942,11 +1042,13 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogOutcome.RepeatedUpdatesAndSequentialAppendCompleteAreIdempotent"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.does not write a second failsafe for an unchanged queued update and keeps additive methods distinct"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.RepeatedUpdatesAndSequentialAppendCompleteAreIdempotent"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -970,7 +1072,7 @@
       "integrationScenario": "Observe queue state before, during, and after primary success, queued degradation, and rejection.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
@@ -987,11 +1089,15 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogOutcome.WriteAheadRetainedBeforeSubmitAndDeletedOnlyAfterDurableConfirmation"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.WriteAheadRetainedBeforeSubmitAndDeletedOnlyAfterDurableConfirmation"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -1018,7 +1124,7 @@
         "plugins/core/lib-ps/plugin-hook.ps1"
       ],
       "testSourcePaths": [
-        "plugins/core/test-fixtures/pester/SessionLogProcessBoundary.Tests.ps1"
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -1040,7 +1146,11 @@
         "SessionLogProcessBoundary.DefaultDeadline_IsMonotonicThirtySeconds",
         "SessionLogProcessBoundary.PositiveOverride_ExtendsSingleOperationDeadline"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogProcessBoundary.BlockedStdin_UsesOneOperationDeadline",
         "SessionLogProcessBoundary.StalledStdout_UsesOneOperationDeadline",
@@ -1080,7 +1190,7 @@
         "plugins/core/lib-ps/plugin-hook.ps1"
       ],
       "testSourcePaths": [
-        "plugins/core/test-fixtures/pester/SessionLogProcessBoundary.Tests.ps1"
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -1093,7 +1203,11 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogProcessBoundary.CodexChild_InheritedGrokEnvironment_PreservesCodexIdentityAndWorkspaceCache"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogProcessBoundary.CodexChild_InheritedGrokEnvironment_PreservesCodexIdentityAndWorkspaceCache"
       ],
@@ -1136,7 +1250,11 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogQuarantineRepair.HistoricalShapes_FillOnlyMissingValuesAndNeverFabricateIdentity"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogQuarantineRepair.HistoricalShapes_FillOnlyMissingValuesAndNeverFabricateIdentity"
       ],
@@ -1182,7 +1300,11 @@
         "SessionLogReplay.ContentionAndStorageOutage_RetainAttemptsAndClassifyHealth",
         "SessionLogReplay.BothDrainEntrypoints_ReplayRetainedWorkExactlyOnce"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogReplay.ContentionAndStorageOutage_RetainAttemptsAndClassifyHealth",
         "SessionLogReplay.BothDrainEntrypoints_ReplayRetainedWorkExactlyOnce"
@@ -1228,7 +1350,11 @@
         "ImportRecoveryIngestion.CanonicalBundle_PersistsSessionNotEnvelope",
         "ImportRecoveryIngestion.ReconstructedBundle_PreservesSourcesAndFilesOnFailure"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "ImportRecoveryIngestion.CanonicalBundle_PersistsSessionNotEnvelope",
         "ImportRecoveryIngestion.ReconstructedBundle_PreservesSourcesAndFilesOnFailure"
@@ -1273,7 +1399,11 @@
       "requirementLevelProposedTestInventory": [
         "ImportRecoverySecurity.RejectsTraversalReparseEscapeBoundsIdentityAndNoncanonicalSchema"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "ImportRecoverySecurity.RejectsTraversalReparseEscapeBoundsIdentityAndNoncanonicalSchema"
       ],
@@ -1316,7 +1446,11 @@
       "requirementLevelProposedTestInventory": [
         "ImportRecoveryReplayer.PartialCancelledConcurrentReplay_IsRetryableIdempotentAndDeleteAfterVerifiedSuccess"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "ImportRecoveryReplayer.PartialCancelledConcurrentReplay_IsRetryableIdempotentAndDeleteAfterVerifiedSuccess"
       ],
@@ -1355,7 +1489,11 @@
       "requirementLevelProposedTestInventory": [
         "StopGate.FailedBuildAndIncompleteAuditBlockBeforeStalePinRefreshOrRecovery"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "StopGate.FailedBuildAndIncompleteAuditBlockBeforeStalePinRefreshOrRecovery"
       ],
@@ -1394,7 +1532,11 @@
       "requirementLevelProposedTestInventory": [
         "StopGate.ReconcilesOnlyExactAuthoritativeCompletedProofAndFailsClosedOtherwise"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "StopGate.ReconcilesOnlyExactAuthoritativeCompletedProofAndFailsClosedOtherwise"
       ],
@@ -1433,7 +1575,11 @@
       "requirementLevelProposedTestInventory": [
         "StopGate.TimestampMatrix_RecencyNeverSubstitutesForCompletedProof"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "StopGate.TimestampMatrix_RecencyNeverSubstitutesForCompletedProof"
       ],
@@ -1472,7 +1618,11 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogSchema.SchemaPredecessorAndProviderFailure_AreClassifiedBeforeMutationWithSanitizedInner"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogSchema.SchemaPredecessorAndProviderFailure_AreClassifiedBeforeMutationWithSanitizedInner"
       ],
@@ -1511,7 +1661,11 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogUpsert.UniqueSameTurnRace_RetriesOnceRereadsWinnerAndMergesWithoutDuplicateChildren"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogUpsert.UniqueSameTurnRace_RetriesOnceRereadsWinnerAndMergesWithoutDuplicateChildren"
       ],
@@ -1539,14 +1693,16 @@
       "integrationScenario": "Trigger degraded begin through prompt, complete, update, and dialog hooks and compare normalized transition.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate.",
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
         "plugins/core/lib-ps/plugin-hook.ps1"
       ],
       "testSourcePaths": [
-        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -1560,7 +1716,10 @@
         "SessionLogLifecycle.RealBuilder_DegradedBegin_PreservesEveryCachedTurnField",
         "SessionLogLifecycle.SharedDegradedTransition_IsUsedByEveryHook"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.fresh prompt hook reports turn-opened after primary readback and turn-opened-degraded with the retained artifact",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.prompt stop-gate update and dialog consumers keep the full degraded cache omit empty query and do not claim server persistence"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.RealBuilder_DegradedBegin_PreservesEveryCachedTurnField",
         "SessionLogLifecycle.SharedDegradedTransition_IsUsedByEveryHook"
@@ -1589,14 +1748,16 @@
       "integrationScenario": "Run the four hooks against identical cached state under primary and degraded outcomes.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate.",
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
         "plugins/core/lib-ps/plugin-hook.ps1"
       ],
       "testSourcePaths": [
-        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -1609,7 +1770,10 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogLifecycle.AllHooks_AvoidReducedReplacementEmptyQueryAndFalseDurability"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.prompt stop-gate update and dialog consumers keep the full degraded cache omit empty query and do not claim server persistence",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.missing-turn dialog recovery stays bounded and does not claim server persistence"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.AllHooks_AvoidReducedReplacementEmptyQueryAndFalseDurability"
       ],
@@ -1637,7 +1801,8 @@
       "integrationScenario": "Compare degraded and never-degraded 404 paths with exact invocation counts.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate.",
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
@@ -1658,7 +1823,9 @@
         "SessionLogLifecycle.AppendDialog_DegradedMissingTurn_AttemptsOneRecoveryAndRetainsDialog",
         "SessionLogLifecycle.AppendDialog_NeverDegradedMissingTurn_IsNonretryableNoFailsafe"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.degraded 404 queues a session_dialog failsafe and does not say failsafe not used"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.AppendDialog_DegradedMissingTurn_AttemptsOneRecoveryAndRetainsDialog",
         "SessionLogLifecycle.AppendDialog_NeverDegradedMissingTurn_IsNonretryableNoFailsafe"
@@ -1684,7 +1851,8 @@
       "integrationScenario": "Call resolver directly and through first-persist hooks.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate.",
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
@@ -1707,7 +1875,13 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogLifecycleMetadata.Resolver_UsesExplicitThenVerifiedCacheThenExactNone"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects whitespace metadata on ordinary first persistence",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.sends exact None on updateTurn when caller clears planFile and todoId",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV11 explicit append metadata updates cache used by later complete"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.Resolver_UsesExplicitThenVerifiedCacheThenExactNone"
       ],
@@ -1732,7 +1906,8 @@
       "integrationScenario": "Inject marker and inherited-environment drift one dimension at a time.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate.",
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
@@ -1755,7 +1930,17 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogLifecycleMetadata.FreshnessRejectsWorkspaceAgentSessionRequestDriftWithoutRebinding"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects a request mismatch and a wrong-workspace marker without changing session A or request R",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.keeps Codex cache and audit identity when Grok agent variables are inherited",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves session A and request R from a native turn through a plugin append",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV12 beginTurn rejects missing marker proof and wrong-marker degraded reopen",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV13 request mismatch does not mutate current-turn when markers are missing",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV16 case-different caller requestId is rejected without mutation",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV19 case-different SubmitAsync response identity is not persisted and keeps recovery",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV20 beginTurn case-different request or session does not durable-reopen overwrite"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.FreshnessRejectsWorkspaceAgentSessionRequestDriftWithoutRebinding"
       ],
@@ -1780,14 +1965,18 @@
       "integrationScenario": "Execute the unchanged ordinary-first-persist, both-supersession-spelling, and durable-reopen runtime matrix; then dynamically discover all 2 module-bootstrap and all 3 REPL user-guide fenced beginTurn examples, including the multi-document block, while excluding the line 173 inventory bullet. Require every supported fence to parse and fenced-body raw/parsed inventories to match before validating each example and the schema branch.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Runtime and three planned document-contract tests are not accepted until implemented, reviewed, and executed in a fresh run-scoped gate."
+        "Runtime and three planned document-contract tests are not accepted until implemented, reviewed, and executed in a fresh run-scoped gate.",
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
         "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
       ],
       "testSourcePaths": [
-        "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1"
+        "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1",
+        "tests/McpServer.Support.Mcp.Tests/Services/SessionLogTurnContextValidatorTests.cs",
+        "tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTurnContextTests.cs",
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [
         "docs/context/module-bootstrap.md",
@@ -1807,7 +1996,34 @@
         "SessionLogLifecycleMetadata.ReplUserGuide_AllBeginTurnExamples_DeclareMetadataOrApprovedOmission",
         "SessionLogLifecycleMetadata.ReplYamlSchema_DeclaresMetadataAndDocumentsFirstPersistNoneSupersessionAndReopenRules"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores canceled with exact None when a new request supersedes an open turn",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects whitespace metadata on ordinary first persistence",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses durable reopen without sessionId and without workspace marker proof",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_NullPlanFile_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_OmittedTodoIdEmpty_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_WhitespacePlanFile_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_BothNone_Succeeds",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithoutPlanFile_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_NewTurnMissingFields_Throws",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithNoneNone_PersistsNone",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects null empty and whitespace todoId and empty planFile on ordinary first persistence without a server row",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores exact None for canceled supersession when metadata is omitted and normalizes cancelled to canceled",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_EmptyPlanFile_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_NullTodoId_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_EmptyTodoId_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnEmptyPlanFile_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnNullTodoId_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnEmptyTodoId_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWhitespaceTodoId_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_CanceledOmission_StoresExactNone",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_CancelledOmission_StoresExactNone",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_EmptyPlanFileWithValidTodo_ThrowsAndInsertsNoTurn",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_ValidPlanOmittedTodo_ThrowsAndInsertsNoTurn",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_ExistingTurnOmittingFields_PreservesStoredValues"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.FirstPersist_RejectsMissingMetadataExceptCancelledSupersession",
         "SessionLogLifecycleMetadata.DurableReopen_PreservesBoundedOmission",
@@ -1815,8 +2031,8 @@
         "SessionLogLifecycleMetadata.ReplUserGuide_AllBeginTurnExamples_DeclareMetadataOrApprovedOmission",
         "SessionLogLifecycleMetadata.ReplYamlSchema_DeclaresMetadataAndDocumentsFirstPersistNoneSupersessionAndReopenRules"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
-      "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
+      "criterionSpecificRelation": "executed-criterion-specific",
+      "existingCandidateTestNameKind": "observed passing TRX names and Pester display labels",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
     {
@@ -1839,7 +2055,8 @@
       "integrationScenario": "Drive each mutation through all three durability outcomes.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate.",
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
@@ -1856,7 +2073,12 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogOutcome.MutationReturnsExactlyOnePrimaryQueuedOrLostOutcome"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV19 case-different SubmitAsync response identity is not persisted and keeps recovery",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV20 beginTurn case-different request or session does not durable-reopen overwrite"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.MutationReturnsExactlyOnePrimaryQueuedOrLostOutcome"
       ],
@@ -1884,7 +2106,8 @@
       "integrationScenario": "Round-trip typed outcomes and compare to backend/failsafe evidence.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate.",
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
@@ -1901,7 +2124,13 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogOutcome.SerializationIncludesAllDurabilityIdentityDiagnosticFields"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV19 case-different SubmitAsync response identity is not persisted and keeps recovery",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV20 beginTurn case-different request or session does not durable-reopen overwrite"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.SerializationIncludesAllDurabilityIdentityDiagnosticFields"
       ],
@@ -1929,14 +2158,15 @@
       "integrationScenario": "Run process fixture matrix, then sequential append/update/complete dedupe scenario.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate.",
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
         "plugins/core/lib-ps/plugin-hook.ps1"
       ],
       "testSourcePaths": [
-        "plugins/core/test-fixtures/pester/SessionLogProcessBoundary.Tests.ps1",
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1",
         "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
       ],
       "documentationSurfaces": [],
@@ -1956,7 +2186,10 @@
         "SessionLogProcessBoundary.DefaultDeadline_IsMonotonicThirtySeconds",
         "SessionLogProcessBoundary.PositiveOverride_ExtendsSingleOperationDeadline"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.does not write a second failsafe for an unchanged queued update and keeps additive methods distinct",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogProcessBoundary.BlockedStdin_UsesOneOperationDeadline",
         "SessionLogProcessBoundary.StalledStdout_UsesOneOperationDeadline",
@@ -2011,7 +2244,11 @@
         "SessionLogQuarantineRepair.HistoricalShapes_FillOnlyMissingValuesAndNeverFabricateIdentity",
         "ImportRecoverySecurity.RejectsTraversalReparseEscapeBoundsIdentityAndNoncanonicalSchema"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogQuarantineRepair.HistoricalShapes_FillOnlyMissingValuesAndNeverFabricateIdentity",
         "ImportRecoverySecurity.RejectsTraversalReparseEscapeBoundsIdentityAndNoncanonicalSchema"
@@ -2058,7 +2295,11 @@
         "SessionLogReplay.ContentionAndStorageOutage_RetainAttemptsAndClassifyHealth",
         "SessionLogReplay.BothDrainEntrypoints_ReplayRetainedWorkExactlyOnce"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogReplay.ContentionAndStorageOutage_RetainAttemptsAndClassifyHealth",
         "SessionLogReplay.BothDrainEntrypoints_ReplayRetainedWorkExactlyOnce"
@@ -2105,7 +2346,11 @@
         "ImportRecoveryIngestion.CanonicalBundle_PersistsSessionNotEnvelope",
         "ImportRecoveryIngestion.ReconstructedBundle_PreservesSourcesAndFilesOnFailure"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "ImportRecoveryIngestion.CanonicalBundle_PersistsSessionNotEnvelope",
         "ImportRecoveryIngestion.ReconstructedBundle_PreservesSourcesAndFilesOnFailure"
@@ -2152,7 +2397,11 @@
         "ImportRecoverySecurity.RejectsTraversalReparseEscapeBoundsIdentityAndNoncanonicalSchema",
         "ImportRecoveryReplayer.PartialCancelledConcurrentReplay_IsRetryableIdempotentAndDeleteAfterVerifiedSuccess"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "ImportRecoverySecurity.RejectsTraversalReparseEscapeBoundsIdentityAndNoncanonicalSchema",
         "ImportRecoveryReplayer.PartialCancelledConcurrentReplay_IsRetryableIdempotentAndDeleteAfterVerifiedSuccess"
@@ -2193,7 +2442,11 @@
         "StopGate.FailedBuildAndIncompleteAuditBlockBeforeStalePinRefreshOrRecovery",
         "StopGate.ReconcilesOnlyExactAuthoritativeCompletedProofAndFailsClosedOtherwise"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "StopGate.FailedBuildAndIncompleteAuditBlockBeforeStalePinRefreshOrRecovery",
         "StopGate.ReconcilesOnlyExactAuthoritativeCompletedProofAndFailsClosedOtherwise"
@@ -2233,7 +2486,11 @@
       "requirementLevelProposedTestInventory": [
         "StopGate.CacheLock_SnapshotsIdentityAndHashes_RevalidatesAfterBoundedIo"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "StopGate.CacheLock_SnapshotsIdentityAndHashes_RevalidatesAfterBoundedIo"
       ],
@@ -2272,7 +2529,11 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogSchema.SchemaPredecessorAndProviderFailure_AreClassifiedBeforeMutationWithSanitizedInner"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogSchema.SchemaPredecessorAndProviderFailure_AreClassifiedBeforeMutationWithSanitizedInner"
       ],
@@ -2311,7 +2572,11 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogUpsert.UniqueSameTurnRace_RetriesOnceRereadsWinnerAndMergesWithoutDuplicateChildren"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogUpsert.UniqueSameTurnRace_RetriesOnceRereadsWinnerAndMergesWithoutDuplicateChildren"
       ],
@@ -2339,14 +2604,16 @@
       "integrationScenario": "Run the complete lifecycle Pester context and capture each named case separately.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate.",
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
         "plugins/core/lib-ps/plugin-hook.ps1"
       ],
       "testSourcePaths": [
-        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -2364,7 +2631,11 @@
         "SessionLogLifecycle.AppendDialog_NeverDegradedMissingTurn_IsNonretryableNoFailsafe",
         "SessionLogLifecycle.SameRequestRetry_PreservesCreationMetadata_NormalizesCancelledWithoutFalseDurability"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.fresh prompt hook reports turn-opened after primary readback and turn-opened-degraded with the retained artifact",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.prompt stop-gate update and dialog consumers keep the full degraded cache omit empty query and do not claim server persistence",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.missing-turn dialog recovery stays bounded and does not claim server persistence"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.DegradedCompletePreservesFullTurn",
         "SessionLogLifecycle.PromptHook_DegradedBegin_ReportsOpenedDegradedWithRetainedPath",
@@ -2397,14 +2668,16 @@
       "integrationScenario": "Clear the environment variable, force degradation, and inspect both object and payload.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate.",
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
         "plugins/core/lib-ps/plugin-hook.ps1"
       ],
       "testSourcePaths": [
-        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -2417,7 +2690,9 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogLifecycle.RealBuilder_DegradedBegin_PreservesEveryCachedTurnField"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.asserts the complete cached object and the serialized payload with MCP_PLUGIN_PERSIST_LOG unset"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycle.RealBuilder_DegradedBegin_PreservesEveryCachedTurnField"
       ],
@@ -2445,13 +2720,13 @@
       "integrationScenario": "Execute the accepted cumulative gate after review and verify manifest evidence paths.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "tools/validation/Invoke-SessionLifeUnitGate.ps1"
       ],
       "testSourcePaths": [
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -2464,11 +2739,23 @@
       "requirementLevelProposedTestInventory": [
         "SessionLifeUnitGate.Validator_AcceptsFreshRunInventoryAndCompleteReports"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV11 explicit append metadata updates cache used by later complete",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV12 beginTurn rejects missing marker proof and wrong-marker degraded reopen",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV13 request mismatch does not mutate current-turn when markers are missing",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves unit inventory excludes PluginIntegration and keeps SessionLife gate scripts",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV16 case-different caller requestId is rejected without mutation",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV19 case-different SubmitAsync response identity is not persisted and keeps recovery",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV20 beginTurn case-different request or session does not durable-reopen overwrite"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLifeUnitGate.Validator_AcceptsFreshRunInventoryAndCompleteReports"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -2504,14 +2791,18 @@
       "integrationScenario": "Run the unchanged runtime contexts and three document parsers. Any extra, malformed, skipped, unparsed, or contradictory supported fenced beginTurn example fails because fenced-body raw and parsed inventories must match and every parsed example must satisfy explicit-pair-or-approved-omission. Non-example prose such as the line 173 inventory bullet is preserved and excluded. The schema case retains exact None, both supersession spellings, durable reopen, and no discriminator.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Seven separately named planned runtime/document tests remain unaccepted until implemented, reviewed, and executed in a fresh run-scoped gate."
+        "Seven separately named planned runtime/document tests remain unaccepted until implemented, reviewed, and executed in a fresh run-scoped gate.",
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
         "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
       ],
       "testSourcePaths": [
-        "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1"
+        "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1",
+        "tests/McpServer.Support.Mcp.Tests/Services/SessionLogTurnContextValidatorTests.cs",
+        "tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTurnContextTests.cs",
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [
         "docs/context/module-bootstrap.md",
@@ -2533,7 +2824,36 @@
         "SessionLogLifecycleMetadata.ReplUserGuide_AllBeginTurnExamples_DeclareMetadataOrApprovedOmission",
         "SessionLogLifecycleMetadata.ReplYamlSchema_DeclaresMetadataAndDocumentsFirstPersistNoneSupersessionAndReopenRules"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects whitespace metadata on ordinary first persistence",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores canceled with exact None when a new request supersedes an open turn",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects explicit empty and null planFile on ordinary first persistence",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_NullPlanFile_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_OmittedTodoIdEmpty_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_WhitespacePlanFile_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_BothNone_Succeeds",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithoutPlanFile_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_NewTurnMissingFields_Throws",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithNoneNone_PersistsNone",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects null empty and whitespace todoId and empty planFile on ordinary first persistence without a server row",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores exact None for canceled supersession when metadata is omitted and normalizes cancelled to canceled",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_EmptyPlanFile_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_NullTodoId_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_EmptyTodoId_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnEmptyPlanFile_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnNullTodoId_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnEmptyTodoId_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWhitespaceTodoId_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_CanceledOmission_StoresExactNone",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_CancelledOmission_StoresExactNone",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_EmptyPlanFileWithValidTodo_ThrowsAndInsertsNoTurn",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_ValidPlanOmittedTodo_ThrowsAndInsertsNoTurn",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_ExistingTurnOmittingFields_PreservesStoredValues"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.Resolver_UsesExplicitThenVerifiedCacheThenExactNone",
         "SessionLogLifecycleMetadata.FreshnessRejectsWorkspaceAgentSessionRequestDriftWithoutRebinding",
@@ -2543,8 +2863,8 @@
         "SessionLogLifecycleMetadata.ReplUserGuide_AllBeginTurnExamples_DeclareMetadataOrApprovedOmission",
         "SessionLogLifecycleMetadata.ReplYamlSchema_DeclaresMetadataAndDocumentsFirstPersistNoneSupersessionAndReopenRules"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
-      "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
+      "criterionSpecificRelation": "executed-criterion-specific",
+      "existingCandidateTestNameKind": "observed passing TRX names and Pester display labels",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
     {
@@ -2579,7 +2899,8 @@
       "integrationScenario": "Run the complete mixed process/runtime matrix with one isolated fixture per behavior.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate.",
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "plugins/core/lib-ps/repl-invoke.ps1",
@@ -2587,7 +2908,7 @@
         "plugins/core/lib-ps/Invoke-McpPlugin.ps1"
       ],
       "testSourcePaths": [
-        "plugins/core/test-fixtures/pester/SessionLogProcessBoundary.Tests.ps1",
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1",
         "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1",
         "plugins/core/test-fixtures/pester/SessionLogQuarantineRepair.Tests.ps1",
         "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
@@ -2622,7 +2943,10 @@
         "SessionLogAuditReconcile.WriteAheadAndExactReadback_AreTruthful",
         "SessionLogLifecycle.AppendDialog_DegradedMissingTurn_AttemptsOneRecoveryAndRetainsDialog"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogOutcome.MutationReturnsExactlyOnePrimaryQueuedOrLostOutcome",
         "SessionLogOutcome.SerializationIncludesAllDurabilityIdentityDiagnosticFields",
@@ -2677,13 +3001,13 @@
       "integrationScenario": "Validate manifest referential completeness before any production edit.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "docs/receipts/sessionlife-completion/20260928-p0/acceptance-manifest.json"
       ],
       "testSourcePaths": [
-        "tests/Build.Tests/SessionLifeAcceptanceManifestTests.cs"
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [
         "docs/context/module-bootstrap.md",
@@ -2699,11 +3023,18 @@
       "requirementLevelProposedTestInventory": [
         "SessionLifeAcceptanceManifest.EveryMockConsumerCaseLinksOneRealImplementationAssertionAndReceipt"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLifeAcceptanceManifest.EveryMockConsumerCaseLinksOneRealImplementationAssertionAndReceipt"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
+      "criterionSpecificRelation": "executed-criterion-specific",
       "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
@@ -2739,13 +3070,15 @@
       "integrationScenario": "Execute Pester, Nuke Test, and Build.Tests under one run ID.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate.",
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "tools/validation/Invoke-SessionLifeUnitGate.ps1"
       ],
       "testSourcePaths": [
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs",
+        "tests/Build.Tests/SessionLifeUnitGateConsumerTests.cs"
       ],
       "documentationSurfaces": [
         "docs/context/module-bootstrap.md",
@@ -2761,12 +3094,27 @@
       "requirementLevelProposedTestInventory": [
         "SessionLifeUnitGate.Validator_AcceptsFreshRunInventoryAndCompleteReports"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves unit inventory excludes PluginIntegration and keeps SessionLife gate scripts",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: ZeroDiscoveredTests)",
+        "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: FailedTrxTests)",
+        "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_SharedInvalidArtifact_IsRejectedInUnitLane(invalidFixture: MissingProjectReport)",
+        "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: FailedPesterTests)",
+        "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: SkippedPesterTests)",
+        "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: MissingPesterReport)",
+        "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_UnitOnlyInvalidArtifact_IsRejected(invalidFixture: MissingBuildTestsReport)",
+        "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"pester\", defect: NonZero)",
+        "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"nuke-test\", defect: NonZero)",
+        "NukeBuild.Tests.SessionLifeUnitGateValidatorTests.Validate_RequiredCommandDefect_IsRejected(lane: \"unit\", commandName: \"build-tests\", defect: NonZero)",
+        "NukeBuild.Tests.SessionLifeUnitGateConsumerTests.ValidateSessionLifeUnitGate_DelegatesExactRequestExactlyOnce",
+        "NukeBuild.Tests.SessionLifeUnitGateConsumerTests.ValidateSessionLifeUnitGate_RejectsMissingRepeatedCopiedOrWrongTargetCall"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLifeUnitGate.Validator_AcceptsFreshRunInventoryAndCompleteReports"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
-      "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
+      "criterionSpecificRelation": "executed-criterion-specific",
+      "existingCandidateTestNameKind": "observed passing TRX names and Pester display labels",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
     {
@@ -2787,7 +3135,8 @@
       "integrationScenario": "Enable required transactions, invoke each general-agent mutation, and verify durable rows plus zero coordinator calls.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate.",
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "src/McpServer.Support.Mcp/Services/TransactionGatedSessionLogService.cs"
@@ -2803,7 +3152,10 @@
       "requirementLevelProposedTestInventory": [
         "TransactionGatedSessionLogService.GeneralAgentActionDialogUpdateAndComplete_BypassCoordinator"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery"
+      ],
       "criterionSpecificProposedTests": [
         "TransactionGatedSessionLogService.GeneralAgentActionDialogUpdateAndComplete_BypassCoordinator"
       ],
@@ -2829,7 +3181,8 @@
       "integrationScenario": "Persist action/dialog/update/complete twice and compare normalized durable readback.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate.",
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "src/McpServer.Support.Mcp/Services/TransactionGatedSessionLogService.cs"
@@ -2845,7 +3198,10 @@
       "requirementLevelProposedTestInventory": [
         "TransactionGatedSessionLogService.DurableReadbackPreservesEveryChildAndRepeatedCompleteIsDuplicateFree"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.does not write a second failsafe for an unchanged queued update and keeps additive methods distinct"
+      ],
       "criterionSpecificProposedTests": [
         "TransactionGatedSessionLogService.DurableReadbackPreservesEveryChildAndRepeatedCompleteIsDuplicateFree"
       ],
@@ -2871,13 +3227,14 @@
       "integrationScenario": "Validate traceability after subset tests without promoting the broad requirement.",
       "acceptanceState": "not-accepted",
       "unresolvedGaps": [
-        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate."
+        "Planned test is not accepted until reviewed and executed in a fresh run-scoped gate.",
+        "P2 mapped concrete tests; TODO acceptance remains deferred (no bulk close)."
       ],
       "productionSurfaces": [
         "docs/receipts/sessionlife-completion/20260928-p0/acceptance-manifest.json"
       ],
       "testSourcePaths": [
-        "tests/Build.Tests/SessionLifeAcceptanceManifestTests.cs"
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -2887,7 +3244,10 @@
       "requirementLevelProposedTestInventory": [
         "SessionLifeTraceability.TransactionSubsetLinksFR173WithoutSatisfyingBroadAdapterAC"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves unit inventory excludes PluginIntegration and keeps SessionLife gate scripts"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLifeTraceability.TransactionSubsetLinksFR173WithoutSatisfyingBroadAdapterAC"
       ],
@@ -2940,7 +3300,11 @@
         "SessionLogReplay.ContentionAndStorageOutage_RetainAttemptsAndClassifyHealth",
         "SessionLogController.DialogStorageFailure_IsClassifiedAndPreservesLocalCounter"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogSchema.SchemaPredecessorAndProviderFailure_AreClassifiedBeforeMutationWithSanitizedInner",
         "SessionLogUpsert.UniqueSameTurnRace_RetriesOnceRereadsWinnerAndMergesWithoutDuplicateChildren",
@@ -2995,7 +3359,11 @@
         "ImportRecoverySecurity.RejectsTraversalReparseEscapeBoundsIdentityAndNoncanonicalSchema",
         "ImportRecoveryReplayer.PartialCancelledConcurrentReplay_IsRetryableIdempotentAndDeleteAfterVerifiedSuccess"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "ImportRecoveryIngestion.CanonicalBundle_PersistsSessionNotEnvelope",
         "ImportRecoveryIngestion.ReconstructedBundle_PreservesSourcesAndFilesOnFailure",
@@ -3053,7 +3421,11 @@
         "SessionLogProviderRace.AmbientTransaction_CreateSavepointFailureRollbackWinnerReadSingleRetry_OrderIsEnforced",
         "SessionLogProviderRace.NoSafeSavepointAndRollbackFailure_PropagateRetryableWithoutWinnerRead"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogProviderRace.Sqlite_ExactConstraint_RetriesOnceAndPreservesGraph",
         "SessionLogProviderRace.SqlServer_ExactConstraint2601Or2627_RetriesOnceWithSavepointRecovery",
@@ -3090,7 +3462,7 @@
         "tools/validation/Invoke-SessionLifeUnitGate.ps1"
       ],
       "testSourcePaths": [
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -3103,7 +3475,11 @@
       "requirementLevelProposedTestInventory": [
         "SessionLifeUnitGate.Validator_AcceptsFreshRunInventoryAndCompleteReports"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLifeUnitGate.Validator_AcceptsFreshRunInventoryAndCompleteReports"
       ],
@@ -3148,7 +3524,11 @@
         "PluginPowerShellRuntime.AutomaticNestedDrain_DefersDuringActiveReplCall",
         "PluginPowerShellRuntime.DrainTimeout_PreservesAttemptsAndCompletionLatch"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "PluginPowerShellRuntime.DrainSubmit_Uses120SecondDefault",
         "PluginPowerShellRuntime.DrainSubmit_HonorsLargerReplTimeout",
@@ -3193,7 +3573,11 @@
       "requirementLevelProposedTestInventory": [
         "PluginPowerShellRuntime.RetainedDialogRecovery_DispatchesAppendDialogWithExactImmutableIdentity"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "PluginPowerShellRuntime.RetainedDialogRecovery_DispatchesAppendDialogWithExactImmutableIdentity"
       ],
@@ -3224,7 +3608,7 @@
         "docs/receipts/sessionlife-completion/20260928-p0/acceptance-manifest.json"
       ],
       "testSourcePaths": [
-        "tests/Build.Tests/SessionLifeAcceptanceManifestTests.cs"
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -3235,7 +3619,11 @@
       "requirementLevelProposedTestInventory": [
         "SessionLifeProofScope.GreenExistingTimeoutCases_DoNotAuthorizeProductionRewrite"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLifeProofScope.GreenExistingTimeoutCases_DoNotAuthorizeProductionRewrite"
       ],
@@ -3300,7 +3688,8 @@
         "src/McpServer.Support.Mcp/Controllers/SessionLogController.cs"
       ],
       "testSourcePaths": [
-        "tests/McpServer.Support.Mcp.Tests/Controllers/SessionLogControllerErrorTests.cs"
+        "tests/McpServer.Support.Mcp.Tests/Controllers/SessionLogControllerErrorTests.cs",
+        "plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -3310,12 +3699,14 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogController.AppendDialog_UsesIncrementalEndpointWithoutSubmitAsync"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "TEST-MCP-195 session-log incremental persist and failsafe drain.TEST-MCP-195 appendDialog uses AppendDialogAsync not full SubmitAsync when current-turn exists"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogController.AppendDialog_UsesIncrementalEndpointWithoutSubmitAsync"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
-      "existingCandidateTestNameKind": "mixed observed C# FQNs and Pester display labels; inspect source type",
+      "criterionSpecificRelation": "executed-criterion-specific",
+      "existingCandidateTestNameKind": "observed passing TRX names and Pester display labels",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
     {
@@ -3349,12 +3740,15 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogController.AppendDialog_NeverDegradedMissingTurn_IsNonretryableNoFailsafe"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "McpServer.Support.Mcp.Tests.Controllers.SessionLogControllerErrorTests.AppendDialogAsync_MissingTurn_ReturnsNotFoundRetryableFalse",
+        "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.degraded 404 queues a session_dialog failsafe and does not say failsafe not used"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogController.AppendDialog_NeverDegradedMissingTurn_IsNonretryableNoFailsafe"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
-      "existingCandidateTestNameKind": "mixed observed C# FQNs and Pester display labels; inspect source type",
+      "criterionSpecificRelation": "executed-criterion-specific",
+      "existingCandidateTestNameKind": "observed passing TRX names and Pester display labels",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
     {
@@ -3672,7 +4066,11 @@
       ],
       "testSourcePaths": [
         "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1",
-        "tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs"
+        "tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs",
+        "tests/McpServer.Support.Mcp.Tests/Services/SessionLogTurnContextValidatorTests.cs",
+        "tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTurnContextTests.cs",
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1",
+        "plugins/core/test-fixtures/pester/SessionLogTurnContextBeginTurn.Tests.ps1"
       ],
       "documentationSurfaces": [
         "docs/context/session-log-schema.md",
@@ -3688,12 +4086,19 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogContext.NoActivePlanOrTodoStoresExactNoneSentinel"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_BothNone_Succeeds",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_LowercaseNone_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithNoneNone_PersistsNone",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores canceled with exact None when a new request supersedes an open turn",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.sends exact None on updateTurn when caller clears planFile and todoId",
+        "MCP-SESSIONLOG-002 workflow.sessionlog.beginTurn planFile/todoId.Invoke-WorkflowBeginTurn_FirstTurn_SendsNoneWhenNoPlanMap"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogContext.NoActivePlanOrTodoStoresExactNoneSentinel"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
-      "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
+      "criterionSpecificRelation": "executed-criterion-specific",
+      "existingCandidateTestNameKind": "observed passing TRX names and Pester display labels",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
     {
@@ -3720,7 +4125,10 @@
         "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
       ],
       "testSourcePaths": [
-        "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1"
+        "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1",
+        "tests/McpServer.Support.Mcp.Tests/Services/SessionLogTurnContextValidatorTests.cs",
+        "tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTurnContextTests.cs",
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [
         "docs/context/session-log-schema.md",
@@ -3736,12 +4144,34 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogLifecycleMetadata.FirstPersist_RejectsMissingMetadataExceptCancelledSupersession"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_NullPlanFile_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_OmittedTodoIdEmpty_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_WhitespacePlanFile_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_BothNone_Succeeds",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithoutPlanFile_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_NewTurnMissingFields_Throws",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWithNoneNone_PersistsNone",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects null empty and whitespace todoId and empty planFile on ordinary first persistence without a server row",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores exact None for canceled supersession when metadata is omitted and normalizes cancelled to canceled",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_EmptyPlanFile_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_NullTodoId_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogTurnContextValidatorTests.ValidateForNewEntry_EmptyTodoId_ThrowsArgumentException",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnEmptyPlanFile_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnNullTodoId_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnEmptyTodoId_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_NewTurnWhitespaceTodoId_ThrowsAndDoesNotInsert",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_CanceledOmission_StoresExactNone",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_CancelledOmission_StoresExactNone",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_EmptyPlanFileWithValidTodo_ThrowsAndInsertsNoTurn",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_ValidPlanOmittedTodo_ThrowsAndInsertsNoTurn",
+        "McpServer.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.UpsertTurnAsync_ExistingTurnOmittingFields_PreservesStoredValues"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogLifecycleMetadata.FirstPersist_RejectsMissingMetadataExceptCancelledSupersession"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
-      "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
+      "criterionSpecificRelation": "executed-criterion-specific",
+      "existingCandidateTestNameKind": "observed passing TRX names and Pester display labels",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
     {
@@ -3958,7 +4388,9 @@
         "plugins/core/lib-ps/repl-invoke.ps1"
       ],
       "testSourcePaths": [
-        "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
+        "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1",
+        "tests/McpServer.Repl.Core.Tests/SessionLogPersistenceCoordinatorIsolationTests.cs",
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -3968,12 +4400,19 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogFailsafe.OpenBeginUpdateDialogAndActions_ReturnQueuedSuccessWhenPrimaryFailsAndFailsafePersists"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_Open_PrimaryFailFailsafeOk_PluginSeesSuccess",
+        "McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_Begin_PrimaryFailFailsafeOk_PluginSeesSuccess",
+        "McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_Update_PrimaryFailFailsafeOk_PluginSeesSuccess",
+        "McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_AppendDialog_PrimaryFailFailsafeOk_PluginSeesSuccess",
+        "McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_AppendActions_PrimaryFailFailsafeOk_PluginSeesSuccess",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogFailsafe.OpenBeginUpdateDialogAndActions_ReturnQueuedSuccessWhenPrimaryFailsAndFailsafePersists"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
-      "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
+      "criterionSpecificRelation": "executed-criterion-specific",
+      "existingCandidateTestNameKind": "observed passing TRX names and Pester display labels",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
     {
@@ -3998,7 +4437,9 @@
         "plugins/core/lib-ps/repl-invoke.ps1"
       ],
       "testSourcePaths": [
-        "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
+        "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1",
+        "tests/McpServer.Repl.Core.Tests/SessionLogPersistenceStrategyTests.cs",
+        "plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -4008,12 +4449,15 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogFailsafe.EnvelopeContainsReplayableTurnPayloadMethodIdentityAndStatus"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "McpServer.Repl.Core.Tests.SessionLogPersistenceStrategyTests.FilesystemPersistAsync_WritesReplayableV4ScopedEnvelope",
+        "TEST-MCP-REPL-031 failsafe queue drain.TEST-MCP-REPL-031 replays queued records oldest-first and clears each one after a confirmed submit"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogFailsafe.EnvelopeContainsReplayableTurnPayloadMethodIdentityAndStatus"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
-      "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
+      "criterionSpecificRelation": "executed-criterion-specific",
+      "existingCandidateTestNameKind": "observed passing TRX names and Pester display labels",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
     {
@@ -4038,7 +4482,9 @@
         "plugins/core/lib-ps/repl-invoke.ps1"
       ],
       "testSourcePaths": [
-        "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
+        "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1",
+        "tests/McpServer.Repl.Core.Tests/SessionLogPersistenceCoordinatorIsolationTests.cs",
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -4048,12 +4494,15 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogFailsafe.CompleteAndFailReportDegradedStrategyAndAbsolutePathWithoutPrimaryClaim"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_CompleteTurnAndFailTurn_PrimaryFail_ReportsDegradedStrategyNameAndAbsolutePath",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogFailsafe.CompleteAndFailReportDegradedStrategyAndAbsolutePathWithoutPrimaryClaim"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
-      "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
+      "criterionSpecificRelation": "executed-criterion-specific",
+      "existingCandidateTestNameKind": "observed passing TRX names and Pester display labels",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
     {
@@ -4078,7 +4527,10 @@
         "plugins/core/lib-ps/repl-invoke.ps1"
       ],
       "testSourcePaths": [
-        "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
+        "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1",
+        "tests/McpServer.Repl.Core.Tests/SessionLogPersistenceCoordinatorIsolationTests.cs",
+        "plugins/core/test-fixtures/pester/PluginPowerShellRuntime.Tests.ps1",
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [
@@ -4088,12 +4540,16 @@
       "requirementLevelProposedTestInventory": [
         "SessionLogFailsafe.PrimarySuccessLeavesNoPendingArtifactAndReportsPersisted"
       ],
-      "criterionSpecificExistingTests": [],
+      "criterionSpecificExistingTests": [
+        "McpServer.Repl.Core.Tests.SessionLogPersistenceCoordinatorIsolationTests.Coordinator_PrimarySuccess_NoPendingFailsafeArtifact",
+        "TEST-MCP-REPL-025 PowerShell REPL persistence boundary.writes a YAML failsafe before submit and clears it after durable success",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb"
+      ],
       "criterionSpecificProposedTests": [
         "SessionLogFailsafe.PrimarySuccessLeavesNoPendingArtifactAndReportsPersisted"
       ],
-      "criterionSpecificRelation": "planned-criterion-specific",
-      "existingCandidateTestNameKind": "observed Pester display labels, not FQNs",
+      "criterionSpecificRelation": "executed-criterion-specific",
+      "existingCandidateTestNameKind": "observed passing TRX names and Pester display labels",
       "proposedTestNameKind": "planned names, not existing or accepted tests"
     },
     {
@@ -4746,7 +5202,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -4785,7 +5241,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -4822,7 +5278,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -4869,7 +5325,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -4908,7 +5364,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -4947,7 +5403,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -4986,7 +5442,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -5025,7 +5481,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -5064,7 +5520,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -5101,7 +5557,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -5138,7 +5594,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -5191,7 +5647,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -5230,7 +5686,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -5273,7 +5729,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -5312,7 +5768,7 @@
       ],
       "testSourcePaths": [
         "tests/Build.Tests/Build.Tests.csproj",
-        "tests/Build.Tests/SessionLifeUnitGateTests.cs"
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -5358,7 +5814,7 @@
         "docs/receipts/sessionlife-completion/20260928-p0/acceptance-manifest.json"
       ],
       "testSourcePaths": [
-        "tests/Build.Tests/SessionLifeAcceptanceManifestTests.cs"
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
       ],
       "documentationSurfaces": [],
       "requirementLevelCandidateInventory": [],
@@ -7889,5 +8345,10 @@
       "todoRows": 35,
       "mappingEdges": 47
     }
+  },
+  "p2MappingRevision": {
+    "updatedAtUtc": "2026-10-02T21:41:54.8072033Z",
+    "note": "Map executed raw metadata, unit-gate rejection, and legacy failsafe tests. Acceptance stays not-accepted.",
+    "priorDisagree": "20261002T203600Z"
   }
 }

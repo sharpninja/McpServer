@@ -1,0 +1,9 @@
+{
+  "Scope": "git diff bff6a7aa..HEAD, including receipt commits",
+  "Characters": 151547949,
+  "KnownMarkerKeyMatches": 0,
+  "LongKeyAssignmentMatches": 0,
+  "PrivateKeyHeaders": 0,
+  "GitHubCredentialPatterns": 0,
+  "TimestampUtc": "2026-10-13T18:21:54.0598214Z"
+}

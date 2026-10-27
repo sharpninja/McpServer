@@ -1,0 +1,62 @@
+using System.Net;
+using System.Net.Http.Json;
+using QBrainAi.Workspace.Validation.Models;
+using Xunit;
+
+namespace QBrainAi.Workspace.Validation.AtomicTests;
+
+/// <summary>Audit: POST /qbrainai/workspace/{key}/stop — Stop the hosted MCP instance.</summary>
+[Collection("WorkspaceEndpoint")]
+public sealed class StopWorkspaceTests : IAsyncLifetime
+{
+    private readonly WorkspaceEndpointFixture _fixture;
+    private readonly string _testPath;
+    private readonly string _testKey;
+
+    /// <summary>Initializes a new instance.</summary>
+    public StopWorkspaceTests(WorkspaceEndpointFixture fixture)
+    {
+        _fixture = fixture;
+        _testPath = WorkspaceEndpointFixture.GenerateTestWorkspacePath();
+        _testKey = WorkspaceEndpointFixture.EncodeKey(_testPath);
+    }
+
+    /// <summary>Initializes resources asynchronously.</summary>
+    public async ValueTask InitializeAsync()
+    {
+        var body = new { WorkspacePath = _testPath, Name = "AuditStopTest" };
+        var response = await _fixture.Client.PostAsJsonAsync(WorkspaceEndpointFixture.WorkspaceRoute, body);
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+    }
+
+    /// <summary>Disposes resources asynchronously.</summary>
+    public async ValueTask DisposeAsync()
+    {
+        await _fixture.Client.DeleteAsync($"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}");
+    }
+
+    /// <summary>Test method.</summary>
+    [Fact]
+    public async Task Stop_NotRunning_ReturnsStatus()
+    {
+        var response = await _fixture.Client.PostAsync(
+            $"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}/stop", null, cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var status = await response.Content.ReadFromJsonAsync<WorkspaceProcessStatus>(cancellationToken: TestContext.Current.CancellationToken);
+        Assert.NotNull(status);
+        // Stopping a non-running workspace should succeed (idempotent) with IsRunning=false.
+        Assert.False(status.IsRunning);
+    }
+
+    /// <summary>Test method.</summary>
+    [Fact]
+    public async Task Stop_InvalidKey_Returns400()
+    {
+        var response = await _fixture.Client.PostAsync(
+            $"{WorkspaceEndpointFixture.WorkspaceRoute}/!!!invalid!!!/stop", null, cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+}

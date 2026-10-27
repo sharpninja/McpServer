@@ -1,0 +1,14 @@
+{
+  "degraded": false,
+  "requestId": "req-20261013T174659Z-architecture-merged-r2",
+  "failsafePath": "",
+  "method": "workflow.sessionlog.completeTurn",
+  "childStderr": "",
+  "queued": false,
+  "message": "Session log persist confirmed a durable write for request 'req-20261013T174659Z-architecture-merged-r2'.",
+  "agent": "Codex",
+  "retryable": false,
+  "sessionId": "Codex-20261013T175033Z-architecture-merged-r2",
+  "persisted": true,
+  "code": "persisted"
+}

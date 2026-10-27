@@ -1,0 +1,574 @@
+[
+  {
+    "requirementId": "FR-MCP-SESSIONLIFE-001",
+    "acceptanceCriterionId": "FR-MCP-SESSIONLIFE-001-AC001",
+    "text": "A degraded begin retains every cached turn field, including prompt, context, metadata, identity, status, timestamps, title, and counters; it never replaces the turn with a reduced three-field object.",
+    "P2Disposition": "PASS",
+    "scope": "P2",
+    "finding": "Real degraded retry and existing complete-object preservation tests pass. Cache object reuse preserves prompt/context/metadata and counters. Full criterion acceptance is not asserted.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves degraded creation metadata and sends cached plan on the same request",
+      "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.does not replace queryText queryTitle planFile todoId openedAt or audit counters",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.round-trips hash and space failsafePath through object YAML and clears degraded after primary success"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "FR-MCP-SESSIONLIFE-001",
+    "acceptanceCriterionId": "FR-MCP-SESSIONLIFE-001-AC002",
+    "text": "Prompt-hook status reports durable opened only after confirmed primary persistence; otherwise it reports opened-degraded and identifies the retained recovery artifact without representing the turn as server-persisted.",
+    "P2Disposition": "PASS",
+    "scope": "P2",
+    "finding": "Both initial and duplicate real Open-PluginTurn paths report opened-degraded with an existing recovery artifact. Direct hook and retry tests are now mapped.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.round-trips hash and space failsafePath through object YAML and clears degraded after primary success"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "FR-MCP-SESSIONLIFE-001",
+    "acceptanceCriterionId": "FR-MCP-SESSIONLIFE-001-AC003",
+    "text": "Complete recovers required query text from the cached query text, then a valid cached title, then the approved placeholder, without replacing a valid title; update omits empty query text so stored query text and title are preserved.",
+    "P2Disposition": "PASS",
+    "scope": "P2",
+    "finding": "Lifecycle:112 now asserts cached queryText first, title second, placeholder last and no outgoing queryTitle overwrite. Lifecycle:147 and real shim tests assert empty-query omission. Native tests and reviewed code agree.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.complete recovery uses cached queryText then queryTitle then the placeholder",
+      "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.update omits an empty queryText so the server value can stay",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits an empty query through the real builder and shim"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "FR-MCP-SESSIONLIFE-001",
+    "acceptanceCriterionId": "FR-MCP-SESSIONLIFE-001-AC004",
+    "text": "A missing-turn appendDialog on an already degraded local turn performs at most one bounded recovery submit and then retains a session_dialog failsafe; an unrelated never-degraded not-found remains a classified nonretryable error.",
+    "P2Disposition": "PASS",
+    "scope": "P2",
+    "finding": "The actual native Describe.It label replaces the ghost name. Lifecycle:164 asserts one recovery PersistTurn and one session_dialog, then zero recovery/failsafe and nonretryable text for never-degraded 404. Real-function probes independently reproduce both correct branches.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.degraded 404 queues a session_dialog failsafe and does not say failsafe not used"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "FR-MCP-SESSIONLIFE-001",
+    "acceptanceCriterionId": "FR-MCP-SESSIONLIFE-001-AC005",
+    "text": "A same-request retry supplies preserved creation metadata, normalizes canceled and cancelled supersession consistently, and never silently converts locally active state into proof of server persistence.",
+    "P2Disposition": "PASS",
+    "scope": "P2",
+    "finding": "Same-request recovery sends preserved creation metadata, and successful retry clears matching degraded flags. Supersession and cancelled normalization are in mapped tests. Remote durability remains later proof.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores canceled with exact None when a new request supersedes an open turn",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits an empty query through the real builder and shim",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves degraded creation metadata and sends cached plan on the same request"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "FR-MCP-SESSIONLIFE-002",
+    "acceptanceCriterionId": "FR-MCP-SESSIONLIFE-002-AC001",
+    "text": "First persistence resolves planFile and todoId using explicit request values, then verified cache values, then the exact sentinel None, and stores a non-null pair.",
+    "P2Disposition": "PASS",
+    "scope": "P2",
+    "finding": "Ten real first-submit payloads pass the compiled metadata validator. Explicit values beat cache, absent first-persist values resolve to exact None, and durable omissions remain absent. HV10/HV11 are now linked.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects whitespace metadata on ordinary first persistence",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.sends exact None on updateTurn when caller clears planFile and todoId",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV11 explicit append metadata updates cache used by later complete"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "FR-MCP-SESSIONLIFE-002",
+    "acceptanceCriterionId": "FR-MCP-SESSIONLIFE-002-AC002",
+    "text": "Ordinary raw first persistence rejects omitted, null, empty, or whitespace metadata; canceled or cancelled supersession may omit it and stores None, and a durable reopen preserves that omission contract.",
+    "P2Disposition": "FAIL",
+    "scope": "P2",
+    "finding": "Residual mapping gap: linked whitespace-only ordinary begin test does not exercise raw omitted/null/empty cases. Actual passing C# validators and missing-plan tool test are not linked here. Supersede/reopen/HV10 are appropriate but cannot replace those branches.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects whitespace metadata on ordinary first persistence",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores canceled with exact None when a new request supersedes an open turn",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "FR-MCP-SESSIONLIFE-002",
+    "acceptanceCriterionId": "FR-MCP-SESSIONLIFE-002-AC003",
+    "text": "Explicit metadata updates both cache and outgoing persistence. Omission after binding is allowed only after durable identity is proven for the exact workspace, agent, session, and request.",
+    "P2Disposition": "PASS",
+    "scope": "P2",
+    "finding": "HV11 proves cache changes before complete; HV10 proves outgoing durable planFile and todoId stay omitted. Identity preconditions themselves retain the separate exact-case failure.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV11 explicit append metadata updates cache used by later complete",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.sends exact None on updateTurn when caller clears planFile and todoId"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "FR-MCP-SESSIONLIFE-002",
+    "acceptanceCriterionId": "FR-MCP-SESSIONLIFE-002-AC004",
+    "text": "Freshness validation rejects workspace, agent, session, or request drift and never rewrites or rebinds an already cached session identifier from a marker or inherited process value.",
+    "P2Disposition": "FAIL",
+    "scope": "P2",
+    "finding": "Existing normal drift cases pass, but six case-different caller IDs bypass the shared guard and four typed response identity cases falsely persist. See canonical-case-probes and identity-contract-proof.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects a request mismatch and a wrong-workspace marker without changing session A or request R",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.keeps Codex cache and audit identity when Grok agent variables are inherited",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves session A and request R from a native turn through a plugin append",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV12 beginTurn rejects missing marker proof and wrong-marker degraded reopen",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV13 request mismatch does not mutate current-turn when markers are missing"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "FR-MCP-SESSIONLIFE-002",
+    "acceptanceCriterionId": "FR-MCP-SESSIONLIFE-002-AC005",
+    "text": "The three governing contract documents consistently describe explicit/cache/None precedence, ordinary first-persist rejection, canceled/cancelled supersession, and durable-reopen omission.",
+    "P2Disposition": "PASS",
+    "scope": "P2",
+    "finding": "The committed oracle now parses every supported fence and requires raw/parsed beginTurn equality. Independent parsing verifies 15+33 blocks, 2+3 begin examples, zero parse errors, and a valid JSON message schema.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "FR-MCP-SESSIONLIFE-003",
+    "acceptanceCriterionId": "FR-MCP-SESSIONLIFE-003-AC001",
+    "text": "Every session-log mutation returns exactly one truthful outcome: primary persisted, degraded queued with a confirmed retained failsafe, or failed/lost with a nonzero process result.",
+    "P2Disposition": "FAIL",
+    "scope": "P2",
+    "finding": "Eight verbs by three ordinary outcomes pass existing process tests. Typed case-different identity still yields primary success for appendDialog and setTurnTitle, violating truthful success for that branch.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "FR-MCP-SESSIONLIFE-003",
+    "acceptanceCriterionId": "FR-MCP-SESSIONLIFE-003-AC002",
+    "text": "The result includes code, retryable, persisted, degraded, queued, method, requestId, failsafePath, message, and diagnostic stderr fields appropriate to the observed outcome.",
+    "P2Disposition": "FAIL",
+    "scope": "P2",
+    "finding": "Receipt fields exist and ordinary outcomes serialize correctly, but four malformed identity responses receive persisted=true/primary. Typed receipt truth is incomplete.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "FR-MCP-SESSIONLIFE-003",
+    "acceptanceCriterionId": "FR-MCP-SESSIONLIFE-003-AC003",
+    "text": "Caller requestId is honored only when it matches the active turn; mismatches are rejected without mutating cache, server state, or recovery artifacts.",
+    "P2Disposition": "FAIL",
+    "scope": "P2",
+    "finding": "Original mismatch tests and missing-marker mismatch probes pass. Case-different explicit caller IDs nevertheless mutate the canonical cached turn, including removing it on failTurn.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV13 request mismatch does not mutate current-turn when markers are missing"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "FR-MCP-SESSIONLIFE-003",
+    "acceptanceCriterionId": "FR-MCP-SESSIONLIFE-003-AC004",
+    "text": "A primary-success result is accepted only with exact server readback of the intended response, interpretation, tags, contextList, actions or dialog, and identity.",
+    "P2Disposition": "PASS",
+    "scope": "P2 subset; full AC P6",
+    "finding": "Only local wrapper support is proved here. Exact remote response/interpretation/tags/context/actions/dialog readback is explicitly deferred to P6. Mocks are not called durable acceptance.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "FR-MCP-SESSIONLIFE-003",
+    "acceptanceCriterionId": "FR-MCP-SESSIONLIFE-003-AC005",
+    "text": "Repeated unchanged updates and sequential append/complete calls are idempotent: no duplicate recovery work, child rows, or outcome ambiguity is introduced.",
+    "P2Disposition": "PASS",
+    "scope": "P2 subset; remainder P4/P6",
+    "finding": "Repeated unchanged queue updates dedupe, changed dialog is submitted and cross-session queue keys remain distinct. Persisted child-row idempotence and full additive replay remain later obligations.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.does not write a second failsafe for an unchanged queued update and keeps additive methods distinct"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "FR-MCP-SESSIONLIFE-003",
+    "acceptanceCriterionId": "FR-MCP-SESSIONLIFE-003-AC006",
+    "text": "Write-ahead recovery is retained before backend submission and deleted only after durable confirmation; a queued result is never represented as primary persistence or accepted TODO completion evidence.",
+    "P2Disposition": "FAIL",
+    "scope": "P2 subset; remainder P4/P6",
+    "finding": "Ordinary rejection retains recovery and queued is distinguished from primary. A case-different typed title response causes false primary and deletes recovery, so local verification-before-deletion is incomplete.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "TR-MCP-SESSIONLIFE-001",
+    "acceptanceCriterionId": "TR-MCP-SESSIONLIFE-001-AC001",
+    "text": "One real begin-turn builder or shim preserves the complete cached turn on degraded persistence and exposes a shared, truthful degraded transition used by all hooks.",
+    "P2Disposition": "PASS",
+    "scope": "P2",
+    "finding": "Real builder/cache and hook probes pass and direct preservation/hook mappings have been added. Shared transition is used rather than fixture echo.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves degraded creation metadata and sends cached plan on the same request",
+      "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.does not replace queryText queryTitle planFile todoId openedAt or audit counters",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "TR-MCP-SESSIONLIFE-001",
+    "acceptanceCriterionId": "TR-MCP-SESSIONLIFE-001-AC002",
+    "text": "Prompt, complete, update, and dialog hooks consume the shared transition without reduced-object replacement, empty-query overwrite, or false server-persisted status.",
+    "P2Disposition": "PASS",
+    "scope": "P2",
+    "finding": "Mapped complete/query fallback and empty-query tests now name the appropriate bodies. Real degraded prompt hook emits the correct retained recovery path.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.complete recovery uses cached queryText then queryTitle then the placeholder",
+      "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.update omits an empty queryText so the server value can stay",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits an empty query through the real builder and shim"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "TR-MCP-SESSIONLIFE-001",
+    "acceptanceCriterionId": "TR-MCP-SESSIONLIFE-001-AC003",
+    "text": "Degraded missing-turn dialog recovery is bounded to one submit attempt and one retained dialog failsafe, while unrelated not-found remains nonretryable.",
+    "P2Disposition": "PASS",
+    "scope": "P2",
+    "finding": "Repaired Lifecycle test and independent real probes establish one recovery submit and one dialog artifact for degraded 404, no retry/failsafe for never-degraded 404.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.degraded 404 queues a session_dialog failsafe and does not say failsafe not used"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "TR-MCP-SESSIONLIFE-002",
+    "acceptanceCriterionId": "TR-MCP-SESSIONLIFE-002-AC001",
+    "text": "A single durability-first metadata resolver implements explicit, verified-cache, and None precedence for planFile and todoId.",
+    "P2Disposition": "PASS",
+    "scope": "P2",
+    "finding": "Resolve-ReplPersistPlanTodo:1433 and Set-ReplPersistPlanTodoArgs:1470 implement and pass explicit/cache/None versus durable-omission probes. Freshness/identity defects are scored separately.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects whitespace metadata on ordinary first persistence",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.sends exact None on updateTurn when caller clears planFile and todoId",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV11 explicit append metadata updates cache used by later complete"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "TR-MCP-SESSIONLIFE-002",
+    "acceptanceCriterionId": "TR-MCP-SESSIONLIFE-002-AC002",
+    "text": "Workspace, agent, session, and request identity are immutable after binding; freshness checks diagnose drift and never rebind from markers or inherited variables.",
+    "P2Disposition": "FAIL",
+    "scope": "P2",
+    "finding": "Mapped wrong-workspace/inherited-agent/native-transition and HV12/HV13 tests exist, but ordinal request and typed identity comparisons are not enforced.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects a request mismatch and a wrong-workspace marker without changing session A or request R",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.keeps Codex cache and audit identity when Grok agent variables are inherited",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves session A and request R from a native turn through a plugin append",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV12 beginTurn rejects missing marker proof and wrong-marker degraded reopen",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV13 request mismatch does not mutate current-turn when markers are missing"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "TR-MCP-SESSIONLIFE-002",
+    "acceptanceCriterionId": "TR-MCP-SESSIONLIFE-002-AC003",
+    "text": "Ordinary first persistence, canceled/cancelled supersession, durable reopen, and all three contract documents use the same resolver semantics.",
+    "P2Disposition": "FAIL",
+    "scope": "P2",
+    "finding": "The document oracle and supersede/reopen links are repaired. Full ordinary raw invalid-input mapping remains incomplete as in FR002-AC002.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores canceled with exact None when a new request supersedes an open turn",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects whitespace metadata on ordinary first persistence",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses durable reopen without sessionId and without workspace marker proof"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "TR-MCP-SESSIONLIFE-003",
+    "acceptanceCriterionId": "TR-MCP-SESSIONLIFE-003-AC001",
+    "text": "The wrapper exposes a typed primary, queued, or failed outcome contract and no session-log mutation collapses that result to an unclassified boolean.",
+    "P2Disposition": "FAIL",
+    "scope": "P2",
+    "finding": "All-verbs structured outcome test is now linked. Typed malformed-case identity is still accepted as a successful primary result.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "TR-MCP-SESSIONLIFE-003",
+    "acceptanceCriterionId": "TR-MCP-SESSIONLIFE-003-AC002",
+    "text": "Result serialization includes identity, method, durability, queue, retryability, diagnostic, and failsafe fields without claiming primary success for queued work.",
+    "P2Disposition": "FAIL",
+    "scope": "P2",
+    "finding": "All-verbs/HV14 names are linked, but exact-case identity counterexamples produce untruthful persisted receipts.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "TR-MCP-SESSIONLIFE-003",
+    "acceptanceCriterionId": "TR-MCP-SESSIONLIFE-003-AC003",
+    "text": "Child REPL execution uses one operation deadline with deterministic process-tree cleanup, and dedupe preserves sequential method labels and queue counts.",
+    "P2Disposition": "PASS",
+    "scope": "P2 dedupe subset; deadline P3",
+    "finding": "Sequential labels and queue dedupe have real tests. One deadline and process-tree cleanup are P3 obligations; planned SessionLogProcessBoundary.Tests.ps1 is not present and is not claimed accepted.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.does not write a second failsafe for an unchanged queued update and keeps additive methods distinct",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "TEST-MCP-SESSIONLIFE-001",
+    "acceptanceCriterionId": "TEST-MCP-SESSIONLIFE-001-AC001",
+    "text": "Mock-backed consumer tests prove degraded complete-turn preservation, truthful hook status, empty-query omission, bounded missing-turn dialog recovery, and same-request cached metadata.",
+    "P2Disposition": "PASS",
+    "scope": "P2",
+    "finding": "Mapped real-function probes/tests cover degraded preservation, recovery metadata, empty query and bounded 404. Full future durable persistence remains unaccepted.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.sends exact None on updateTurn when caller clears planFile and todoId",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery",
+      "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.degraded 404 queues a session_dialog failsafe and does not say failsafe not used",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "TEST-MCP-SESSIONLIFE-001",
+    "acceptanceCriterionId": "TEST-MCP-SESSIONLIFE-001-AC002",
+    "text": "At least one real builder or shim test runs with MCP_PLUGIN_PERSIST_LOG unset and asserts the complete cached object and serialized persistence payload rather than only fixture echo.",
+    "P2Disposition": "PASS",
+    "scope": "P2",
+    "finding": "Production builders/shim run with MCP_PLUGIN_PERSIST_LOG unset in this review. Only the transport boundary is doubled; serialized request/cache state is inspected.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits an empty query through the real builder and shim",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "TEST-MCP-SESSIONLIFE-001",
+    "acceptanceCriterionId": "TEST-MCP-SESSIONLIFE-001-AC003",
+    "text": "The accepted test scope exits with zero failures and zero skips and records the concrete test names and evidence paths in the acceptance manifest.",
+    "P2Disposition": "FAIL",
+    "scope": "P2",
+    "finding": "Native cumulative counts are green, but the row still names nonexistent SessionLifeUnitGateTests.cs and lacks the actual gate validator test linkage. New adversarial identity cases fail outside that green inventory.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV11 explicit append metadata updates cache used by later complete",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV12 beginTurn rejects missing marker proof and wrong-marker degraded reopen",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV13 request mismatch does not mutate current-turn when markers are missing",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves unit inventory excludes PluginIntegration and keeps SessionLife gate scripts"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "TEST-MCP-SESSIONLIFE-002",
+    "acceptanceCriterionId": "TEST-MCP-SESSIONLIFE-002-AC001",
+    "text": "Named Pester tests cover metadata precedence, immutable identity, ordinary first persist, canceled/cancelled supersession, durable reopen, and all three contract documents.",
+    "P2Disposition": "FAIL",
+    "scope": "P2",
+    "finding": "Native metadata/docs/HV10 names now exist. Raw null/omitted/empty and exact-case guard branches remain missing from the relevant criterion mappings/regressions.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects whitespace metadata on ordinary first persistence",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores canceled with exact None when a new request supersedes an open turn",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "TEST-MCP-SESSIONLIFE-002",
+    "acceptanceCriterionId": "TEST-MCP-SESSIONLIFE-002-AC002",
+    "text": "Named process tests cover primary, queued, and lost wrapper exits, structured result serialization, single child deadline and cleanup, Stop ordering, quarantine repair, audit reconciliation, and dialog classification.",
+    "P2Disposition": "PASS",
+    "scope": "P2 process subset; P3/P4 remainder",
+    "finding": "All-verbs process tests prove local primary/queued/lost exits and serialization. Deadline, Stop, quarantine/replay proof is deferred and not accepted as P2 completion.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "TEST-MCP-SESSIONLIFE-002",
+    "acceptanceCriterionId": "TEST-MCP-SESSIONLIFE-002-AC003",
+    "text": "Every mock-backed consumer case has a corresponding real implementation assertion and recorded process exit or serialized receipt; unaccepted candidate tests remain explicitly not accepted.",
+    "P2Disposition": "FAIL",
+    "scope": "P2",
+    "finding": "Most consumer cases have real probes/receipts and remain unaccepted. Missing canonical identity negative cases expose insufficient real assertions; referenced SessionLifeAcceptanceManifestTests.cs is absent, not executable evidence.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "TEST-MCP-SESSIONLIFE-002",
+    "acceptanceCriterionId": "TEST-MCP-SESSIONLIFE-002-AC004",
+    "text": "The accepted cumulative test scope exits with zero failures, zero skips, no missing reports, and no zero-discovery projects.",
+    "P2Disposition": "FAIL",
+    "scope": "P2",
+    "finding": "Actual gate and 96 inherited checks pass. Mapped textual inventory/wrapper tests do not feed missing/duplicate/zero/failed report fixtures to the validator, and the named gate test source path does not exist.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves unit inventory excludes PluginIntegration and keeps SessionLife gate scripts",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "TEST-MCP-SESSIONLIFE-003",
+    "acceptanceCriterionId": "TEST-MCP-SESSIONLIFE-003-AC001",
+    "text": "Transaction-gated session-log tests prove non-QuadBrain action, dialog, update, and additive complete persistence without coordinator or keyserver invocation.",
+    "P2Disposition": "PASS",
+    "scope": "P2 support; full AC P4/P6",
+    "finding": "P2 fake transport support does not establish transaction-gated server persistence or coordinator bypass. Existing broader tests are part of the native suite; full subset acceptance stays P4/P6.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "TEST-MCP-SESSIONLIFE-003",
+    "acceptanceCriterionId": "TEST-MCP-SESSIONLIFE-003-AC002",
+    "text": "Exact durable readback verifies every child collection and repeated additive complete remains duplicate-free.",
+    "P2Disposition": "PASS",
+    "scope": "P2 local dedupe; full AC P4/P6",
+    "finding": "Only local queue idempotence and serialization are shown. Exact real child-collection readback and duplicate-free additive completion remain explicitly deferred.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.does not write a second failsafe for an unchanged queued update and keeps additive methods distinct"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  },
+  {
+    "requirementId": "TEST-MCP-SESSIONLIFE-003",
+    "acceptanceCriterionId": "TEST-MCP-SESSIONLIFE-003-AC003",
+    "text": "The subset proof is linked to FR-MCP-173 but does not mark its broader first-party adapter obligations satisfied.",
+    "P2Disposition": "PASS",
+    "scope": "P2 boundary only; full AC later",
+    "finding": "FR-MCP-173 mapping edge is preserved and broader obligations remain unaccepted. The missing planned acceptance-manifest test is not treated as executed proof.",
+    "declaredTests": [
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+      "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves unit inventory excludes PluginIntegration and keeps SessionLife gate scripts"
+    ],
+    "missingNativeNames": [],
+    "wholeCriterionAccepted": false,
+    "acceptanceState": "not-accepted"
+  }
+]

@@ -10,7 +10,7 @@ PASTE BELOW THIS LINE
 
 ---
 
-[McpServer](https://github.com/sharpninja/McpServer) is an open-source (Apache 2.0) ASP.NET Core 9 server that gives AI agents a shared backend over the Model Context Protocol: semantic search, TODOs, session logging, requirements traceability, and GitHub sync, over HTTP REST or MCP STDIO. There is a Grok plugin that wires it into a Grok agent through Grok-compatible and Claude-compatible manifests, SKILL.md files, and hooks.
+[QBrainAi](https://github.com/sharpninja/McpServer) is an open-source (Apache 2.0) ASP.NET Core 9 server that gives AI agents a shared backend over the Model Context Protocol: semantic search, TODOs, session logging, requirements traceability, and GitHub sync, over HTTP REST or MCP STDIO. There is a Grok plugin that wires it into a Grok agent through Grok-compatible and Claude-compatible manifests, SKILL.md files, and hooks.
 
 This post is less about the server and more about a build-process question: what do you do with the incidental bugs your agent tooling throws while it is supposed to be doing something else?
 

@@ -31,8 +31,6 @@
     <EmbeddedResource Include="..\..\docs\AGENT-PLUGIN-AVAILABILITY.md" LogicalName="Repository.docs.AGENT-PLUGIN-AVAILABILITY.md" />
     <EmbeddedResource Include="..\..\docs\REPL-AGENT-GUIDE.md" LogicalName="Repository.docs.REPL-AGENT-GUIDE.md" />
     <EmbeddedResource Include="..\..\templates\prompt-templates.yaml" LogicalName="Repository.templates.prompt-templates.yaml" />
-    <EmbeddedResource Include="..\..\azure-pipelines.yml" LogicalName="Repository.azure-pipelines.yml" />
-    <EmbeddedResource Include="..\..\.github\workflows\build.yml" LogicalName="Repository.github.workflows.build.yml" />
     <EmbeddedResource Include="..\..\docs\context\scratch-workspace-integration-tests.md" LogicalName="Repository.docs.context.scratch-workspace-integration-tests.md" />
     <EmbeddedResource Include="..\..\docs\Project\wiki\azure\*">
       <LogicalName>Repository.wiki.azure.%(Filename)%(Extension)</LogicalName>

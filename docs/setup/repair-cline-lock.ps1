@@ -11,7 +11,7 @@ if ($expectedBlob -ne $actualBlob) { throw 'Archive differs from approved Git co
 $path=Join-Path $repo 'package-lock.json'
 $raw=Get-Content $path -Raw
 $lock=$raw | ConvertFrom-Json -AsHashtable
-$entry=$lock.packages['node_modules/@sharpninja/mcpserver-plugin-core']
+$entry=$lock.packages['node_modules/@qbrainai/qbrain-ai-plugin-core']
 $old='sha512-bW5Zurhsm+MxFWw8vA5GCVLcNMGCIPC91aV0+kG3E6I77kSIPe4tyGVeGo9u8oi7lvQyY2JjjWJCAfP7NV6VRw=='
 if ($entry.integrity -cne $old -or $entry.resolved -ne 'file:vendor/sharpninja-mcpserver-plugin-core.tgz') { throw 'Unexpected lock entry.' }
 $bytes=[IO.File]::ReadAllBytes((Join-Path $repo 'vendor/sharpninja-mcpserver-plugin-core.tgz'))

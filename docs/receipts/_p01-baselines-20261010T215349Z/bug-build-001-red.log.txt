@@ -1,0 +1,17 @@
+  Determining projects to restore...
+  Restored tests/Build.Tests/Build.Tests.csproj (in 805 ms).
+  1 of 2 projects are up-to-date for restore.
+  _build -> build/bin/Debug/_build.dll
+  Build.Tests -> tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll
+Test run for tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.93]     NukeBuild.Tests.NukeParametersTests.NukeParameters_Solution_NamesExistingSolutionFile [FAIL]
+  Failed NukeBuild.Tests.NukeParametersTests.NukeParameters_Solution_NamesExistingSolutionFile [19 ms]
+  Error Message:
+   .nuke/parameters.json names Solution 'McpServer.sln', which does not exist at the repository root ..
+  Stack Trace:
+     at NukeBuild.Tests.NukeParametersTests.NukeParameters_Solution_NamesExistingSolutionFile() in tests/Build.Tests/NukeParametersTests.cs:line 26
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: 41 ms - Build.Tests.dll (net10.0)

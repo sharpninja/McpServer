@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="1429b694-ddc5-4035-8343-47fa20720f06" name="SYSTEM@PAYTON-LEGION2 2026-09-04 04:03:10" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-04T04:03:10.5998759-05:00" queuing="2026-09-04T04:03:10.5998763-05:00" start="2026-09-04T04:03:06.9454586-05:00" finish="2026-09-04T04:03:10.6084934-05:00" />
+  <TestSettings name="default" id="205786ed-bb13-4df4-a94d-6c3412b9a8d2">
+    <Deployment runDeploymentRoot="SYSTEM_PAYTON-LEGION2_2026-09-04_04_03_10" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="141fa9d3-3c92-44e3-bfcb-08889b93acda" testId="41a1fa87-796d-fe3d-7338-026195080f39" testName="McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.SaveChangesAsync_GlobalEntityWithEmptyWorkspaceId_PreservesLegacyGlobalScope" computerName="PAYTON-LEGION2" duration="00:00:01.2959756" startTime="2026-09-04T04:03:09.1701512-05:00" endTime="2026-09-04T04:03:10.4678851-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="141fa9d3-3c92-44e3-bfcb-08889b93acda">
+      <Output>
+        <ErrorInfo>
+          <Message>System.ArgumentException : The value cannot be an empty string or composed entirely of whitespace. (Parameter 'workspacePath')</Message>
+          <StackTrace>   at System.ArgumentException.ThrowNullOrWhiteSpaceException(String argument, String paramName)&#xD;
+   at System.ArgumentException.ThrowIfNullOrWhiteSpace(String argument, String paramName)&#xD;
+   at McpServer.Client.WorkspaceIdentityPath.DetectPlatform(String workspacePath) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Client\WorkspaceIdentityPath.cs:line 471&#xD;
+   at McpServer.Support.Mcp.Storage.WorkspaceIdentity.ResolveAsync(String workspacePath, TimeSpan timeout, CancellationToken cancellationToken) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage\WorkspaceIdentity.cs:line 134&#xD;
+   at McpServer.Support.Mcp.Storage.McpDbContext.EnsureWorkspaceRowsAsync(CancellationToken cancellationToken) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage\McpDbContext.cs:line 1498&#xD;
+   at McpServer.Support.Mcp.Storage.McpDbContext.PrepareDbFkChangesAsync(CancellationToken cancellationToken) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage\McpDbContext.cs:line 1429&#xD;
+   at McpServer.Support.Mcp.Storage.McpDbContext.SaveChangesAsync(CancellationToken cancellationToken) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage\McpDbContext.cs:line 1159&#xD;
+   at McpServer.Support.Mcp.Storage.McpDbContext.SaveChangesAsync(CancellationToken cancellationToken) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage\McpDbContext.cs:line 1179&#xD;
+   at McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.SaveChangesAsync_GlobalEntityWithEmptyWorkspaceId_PreservesLegacyGlobalScope() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\WorkspaceIdentityFourteenthNativeTests.cs:line 189&#xD;
+   at McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.SaveChangesAsync_GlobalEntityWithEmptyWorkspaceId_PreservesLegacyGlobalScope() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\WorkspaceIdentityFourteenthNativeTests.cs:line 197&#xD;
+   at McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.SaveChangesAsync_GlobalEntityWithEmptyWorkspaceId_PreservesLegacyGlobalScope() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\WorkspaceIdentityFourteenthNativeTests.cs:line 197&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="50cf87d7-ba0c-4e41-8f58-8e92be27819e" testId="953420ae-ef9a-374d-2b7e-23ac0da2fc92" testName="McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.ResolveAsync_EmptyWorkspaceId_PreservesGlobalIdentityWithoutNativeResolution" computerName="PAYTON-LEGION2" duration="00:00:00.0204767" startTime="2026-09-04T04:03:09.1149629-05:00" endTime="2026-09-04T04:03:09.1636384-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="50cf87d7-ba0c-4e41-8f58-8e92be27819e">
+      <Output>
+        <ErrorInfo>
+          <Message>System.ArgumentException : The value cannot be an empty string or composed entirely of whitespace. (Parameter 'workspacePath')</Message>
+          <StackTrace>   at System.ArgumentException.ThrowNullOrWhiteSpaceException(String argument, String paramName)&#xD;
+   at System.ArgumentException.ThrowIfNullOrWhiteSpace(String argument, String paramName)&#xD;
+   at McpServer.Client.WorkspaceIdentityPath.DetectPlatform(String workspacePath) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Client\WorkspaceIdentityPath.cs:line 471&#xD;
+   at McpServer.Support.Mcp.Storage.WorkspaceIdentity.ResolveAsync(String workspacePath, TimeSpan timeout, CancellationToken cancellationToken) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage\WorkspaceIdentity.cs:line 134&#xD;
+   at McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.ResolveAsync_EmptyWorkspaceId_PreservesGlobalIdentityWithoutNativeResolution() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\WorkspaceIdentityFourteenthNativeTests.cs:line 157&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.ResolveAsync_EmptyWorkspaceId_PreservesGlobalIdentityWithoutNativeResolution" storage="f:\github\mcpserver\.mcpserver\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\mcpserver.support.mcp.tests\debug\mcpserver.support.mcp.tests.dll" id="953420ae-ef9a-374d-2b7e-23ac0da2fc92">
+      <Execution id="50cf87d7-ba0c-4e41-8f58-8e92be27819e" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Support.Mcp.Tests\debug\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests" name="ResolveAsync_EmptyWorkspaceId_PreservesGlobalIdentityWithoutNativeResolution" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.SaveChangesAsync_GlobalEntityWithEmptyWorkspaceId_PreservesLegacyGlobalScope" storage="f:\github\mcpserver\.mcpserver\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\mcpserver.support.mcp.tests\debug\mcpserver.support.mcp.tests.dll" id="41a1fa87-796d-fe3d-7338-026195080f39">
+      <Execution id="141fa9d3-3c92-44e3-bfcb-08889b93acda" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\.bug139-fourteenth\artifacts\bin\McpServer.Support.Mcp.Tests\debug\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests" name="SaveChangesAsync_GlobalEntityWithEmptyWorkspaceId_PreservesLegacyGlobalScope" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="41a1fa87-796d-fe3d-7338-026195080f39" executionId="141fa9d3-3c92-44e3-bfcb-08889b93acda" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="953420ae-ef9a-374d-2b7e-23ac0da2fc92" executionId="50cf87d7-ba0c-4e41-8f58-8e92be27819e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="2" executed="2" passed="0" failed="2" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.32]   Discovering: McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.26]   Discovered:  McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.48]   Starting:    McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.60]       System.ArgumentException : The value cannot be an empty string or composed entirely of whitespace. (Parameter 'workspacePath')&#xD;
+[xUnit.net 00:00:01.60]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.60]            at System.ArgumentException.ThrowNullOrWhiteSpaceException(String argument, String paramName)&#xD;
+[xUnit.net 00:00:01.60]            at System.ArgumentException.ThrowIfNullOrWhiteSpace(String argument, String paramName)&#xD;
+[xUnit.net 00:00:01.60]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Client\WorkspaceIdentityPath.cs(471,0): at McpServer.Client.WorkspaceIdentityPath.DetectPlatform(String workspacePath)&#xD;
+[xUnit.net 00:00:01.60]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage\WorkspaceIdentity.cs(134,0): at McpServer.Support.Mcp.Storage.WorkspaceIdentity.ResolveAsync(String workspacePath, TimeSpan timeout, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:01.60]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\WorkspaceIdentityFourteenthNativeTests.cs(157,0): at McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.ResolveAsync_EmptyWorkspaceId_PreservesGlobalIdentityWithoutNativeResolution()&#xD;
+[xUnit.net 00:00:01.61]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:02.90]       System.ArgumentException : The value cannot be an empty string or composed entirely of whitespace. (Parameter 'workspacePath')&#xD;
+[xUnit.net 00:00:02.90]       Stack Trace:&#xD;
+[xUnit.net 00:00:02.90]            at System.ArgumentException.ThrowNullOrWhiteSpaceException(String argument, String paramName)&#xD;
+[xUnit.net 00:00:02.90]            at System.ArgumentException.ThrowIfNullOrWhiteSpace(String argument, String paramName)&#xD;
+[xUnit.net 00:00:02.90]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Client\WorkspaceIdentityPath.cs(471,0): at McpServer.Client.WorkspaceIdentityPath.DetectPlatform(String workspacePath)&#xD;
+[xUnit.net 00:00:02.90]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage\WorkspaceIdentity.cs(134,0): at McpServer.Support.Mcp.Storage.WorkspaceIdentity.ResolveAsync(String workspacePath, TimeSpan timeout, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:02.90]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage\McpDbContext.cs(1498,0): at McpServer.Support.Mcp.Storage.McpDbContext.EnsureWorkspaceRowsAsync(CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:02.90]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage\McpDbContext.cs(1429,0): at McpServer.Support.Mcp.Storage.McpDbContext.PrepareDbFkChangesAsync(CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:02.90]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage\McpDbContext.cs(1159,0): at McpServer.Support.Mcp.Storage.McpDbContext.SaveChangesAsync(CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:02.90]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\src\McpServer.Storage\McpDbContext.cs(1179,0): at McpServer.Support.Mcp.Storage.McpDbContext.SaveChangesAsync(CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:02.90]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\WorkspaceIdentityFourteenthNativeTests.cs(189,0): at McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.SaveChangesAsync_GlobalEntityWithEmptyWorkspaceId_PreservesLegacyGlobalScope()&#xD;
+[xUnit.net 00:00:02.90]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\WorkspaceIdentityFourteenthNativeTests.cs(197,0): at McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.SaveChangesAsync_GlobalEntityWithEmptyWorkspaceId_PreservesLegacyGlobalScope()&#xD;
+[xUnit.net 00:00:02.90]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\WorkspaceIdentityFourteenthNativeTests.cs(197,0): at McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.SaveChangesAsync_GlobalEntityWithEmptyWorkspaceId_PreservesLegacyGlobalScope()&#xD;
+[xUnit.net 00:00:02.90]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:02.92]   Finished:    McpServer.Support.Mcp.Tests (ID = 'e0b5835d67f02754768e0d37044040213a8002c4afa4e8f13cbfe1fb452a18b3')&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-09-04T04:03:09.1709768-05:00">
+        <Text>[xUnit.net 00:00:01.60]     McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.ResolveAsync_EmptyWorkspaceId_PreservesGlobalIdentityWithoutNativeResolution [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-09-04T04:03:10.4691555-05:00">
+        <Text>[xUnit.net 00:00:02.90]     McpServer.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.SaveChangesAsync_GlobalEntityWithEmptyWorkspaceId_PreservesLegacyGlobalScope [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

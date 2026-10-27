@@ -33,7 +33,7 @@ import type { ToolDescriptor, ToolResult } from '../tools/tool-descriptor.js';
 import {
   getCoreConfig,
   setCoreConfig,
-  type McpServerPluginCoreConfig,
+  type QBrainAiPluginCoreConfig,
 } from './core-config.js';
 
 export const allToolDescriptors: ToolDescriptor[] = [
@@ -186,7 +186,7 @@ function corePlugin(): string {
  * and error codes) across cline-v2 and opencode plugin.ts.
  */
 export class HostContext {
-  private readonly config: McpServerPluginCoreConfig;
+  private readonly config: QBrainAiPluginCoreConfig;
   readonly bridge: ReplBridge;
   private setupWorkspacePath: string | undefined;
   private bootstrappedWorkspace: string | undefined;
@@ -195,7 +195,7 @@ export class HostContext {
   private actionOrder = 0;
   private cacheFlushed = false;
 
-  constructor(config: McpServerPluginCoreConfig = {}) {
+  constructor(config: QBrainAiPluginCoreConfig = {}) {
     this.config = config;
     setCoreConfig(config);
     this.bridge = config.bridge ?? new ReplBridge();

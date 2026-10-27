@@ -936,6 +936,194 @@ function Open-PluginTurn {
     })
 }
 
+function Get-PluginMapValue {
+    param($Map, [string]$Key)
+
+    if ($null -eq $Map -or [string]::IsNullOrWhiteSpace($Key)) { return $null }
+    if ($Map -is [System.Collections.IDictionary]) {
+        if ($Map.Contains($Key)) { return $Map[$Key] }
+        return $null
+    }
+
+    $property = $Map.PSObject.Properties[$Key]
+    if ($property) { return $property.Value }
+    return $null
+}
+
+function Test-PluginStopEvidenceKnown {
+    <#
+    .SYNOPSIS
+        True when a cache file carries build or audit evidence keys.
+    #>
+    param([Parameter(Mandatory)][string]$Path)
+
+    if (-not (Test-Path -LiteralPath $Path)) { return $false }
+    $document = Read-McpYamlObject -Path $Path
+    if ($document -isnot [System.Collections.IDictionary]) { return $false }
+    foreach ($key in @('codeEdits', 'lastBuildStatus', 'auditActions', 'auditFiles', 'auditDialog', 'auditDecisions', 'auditCommits')) {
+        if ($document.Contains($key)) { return $true }
+    }
+    return $false
+}
+
+function Get-PluginStopEnforcementDecision {
+    <#
+    .SYNOPSIS
+        FR-MCP-SESSIONLIFE-004: failed-build and incomplete-audit before any allow or recency write.
+    .DESCRIPTION
+        Returns 'allow' for an operator override, a block reason, or $null when the evidence does not block.
+    #>
+    param(
+        [Parameter(Mandatory)][string]$EvidencePath,
+        [Parameter(Mandatory)][string]$CacheDir
+    )
+
+    if (-not (Test-Path -LiteralPath $EvidencePath)) { return $null }
+
+    $edits = 0
+    $editsText = Get-YamlScalar -Path $EvidencePath -Key 'codeEdits'
+    if ($editsText) {
+        $parsedEdits = 0
+        if ([int]::TryParse($editsText, [ref]$parsedEdits)) { $edits = $parsedEdits }
+    }
+    $buildStatus = Get-YamlScalar -Path $EvidencePath -Key 'lastBuildStatus'
+    if ($edits -gt 0 -and $buildStatus -eq 'failed') {
+        $acceptFailure = Join-Path $CacheDir 'turn-accept-failure.marker'
+        if (Test-Path -LiteralPath $acceptFailure) {
+            Remove-Item -LiteralPath $acceptFailure -Force
+            return 'allow'
+        }
+
+        return "Last build in this turn failed after $edits code edit(s)."
+    }
+
+    $auditActions = Get-YamlScalar -Path $EvidencePath -Key 'auditActions'
+    $auditFiles = Get-YamlScalar -Path $EvidencePath -Key 'auditFiles'
+    $auditDialog = Get-YamlScalar -Path $EvidencePath -Key 'auditDialog'
+    $auditDecisions = Get-YamlScalar -Path $EvidencePath -Key 'auditDecisions'
+    $auditCommits = Get-YamlScalar -Path $EvidencePath -Key 'auditCommits'
+    $hasAuditSchema = $null -ne $auditActions -or $null -ne $auditFiles -or $null -ne $auditDialog -or $null -ne $auditDecisions -or $null -ne $auditCommits
+    if ($edits -gt 0 -and $hasAuditSchema) {
+        $auditTotal = [int](($auditActions ?? '0')) + [int](($auditFiles ?? '0')) + [int](($auditDialog ?? '0')) + [int](($auditDecisions ?? '0')) + [int](($auditCommits ?? '0'))
+        if ($auditTotal -le 0) {
+            $acceptAudit = Join-Path $CacheDir 'turn-accept-incomplete-audit.marker'
+            if (Test-Path -LiteralPath $acceptAudit) {
+                Remove-Item -LiteralPath $acceptAudit -Force
+                return 'allow'
+            }
+
+            return 'audit is incomplete for a completed code-edit turn'
+        }
+    }
+
+    return $null
+}
+
+function Test-PluginPathMatch {
+    param([string]$Left, [string]$Right)
+
+    if ([string]::IsNullOrWhiteSpace($Left) -or [string]::IsNullOrWhiteSpace($Right)) { return $false }
+    $leftText = $Left.Trim().Trim('"').TrimEnd('\', '/')
+    $rightText = $Right.Trim().Trim('"').TrimEnd('\', '/')
+    if ([string]::Equals($leftText, $rightText, [System.StringComparison]::Ordinal)) { return $true }
+    try {
+        if ((Test-Path -LiteralPath $leftText) -and (Test-Path -LiteralPath $rightText)) {
+            $resolvedLeft = (Resolve-Path -LiteralPath $leftText).ProviderPath.TrimEnd('\', '/')
+            $resolvedRight = (Resolve-Path -LiteralPath $rightText).ProviderPath.TrimEnd('\', '/')
+            return [string]::Equals($resolvedLeft, $resolvedRight, [System.StringComparison]::Ordinal)
+        }
+    } catch {
+    }
+
+    return $false
+}
+
+function Get-PluginTurnPersistenceProof {
+    <#
+    .SYNOPSIS
+        FR-MCP-SESSIONLIFE-004: exact-turn proof through client.SessionLog.GetAsync.
+    .DESCRIPTION
+        Calls the typed session client once via the plugin bridge. Only an exact
+        completed identity is Kind Reconcile. Missing, unavailable, workspace
+        mismatch, and identity mismatch fail closed.
+    #>
+    param(
+        [string]$WorkspacePath,
+        [string]$Agent,
+        [string]$SessionId,
+        [string]$RequestId
+    )
+
+    $paramsYaml = ConvertTo-PluginParamsYaml ([ordered]@{
+        agent = $Agent
+        sessionId = $SessionId
+        requestId = $RequestId
+        workspacePath = $WorkspacePath
+    })
+    $raw = $null
+    try {
+        $raw = @(Invoke-PluginRepl -Method 'client.SessionLog.GetAsync' -ParamsYaml $paramsYaml)
+    } catch {
+        # No proof document. Keep the historical stale pin instead of inventing a server outcome.
+        return [pscustomobject]@{ Kind = 'Active' }
+    }
+
+    $text = ($raw | ForEach-Object { [string]$_ }) -join "`n"
+    if ([string]::IsNullOrWhiteSpace($text)) {
+        return [pscustomobject]@{ Kind = 'Active' }
+    }
+
+    $document = $null
+    try {
+        $document = ConvertFrom-Yaml -Yaml $text -Ordered -ErrorAction Stop
+    } catch {
+        return [pscustomobject]@{ Kind = 'Active' }
+    }
+
+    $payload = Get-PluginMapValue -Map $document -Key 'payload'
+    $result = Get-PluginMapValue -Map $payload -Key 'result'
+    if ($null -eq $result) {
+        return [pscustomobject]@{ Kind = 'Active' }
+    }
+
+    $proofWorkspace = [string](Get-PluginMapValue -Map $result -Key 'workspacePath')
+    $workspaceCandidates = @($WorkspacePath, $env:MCP_WORKSPACE_PATH, $env:MCPSERVER_WORKSPACE_PATH) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+    $workspaceMatch = $false
+    foreach ($candidate in $workspaceCandidates) {
+        if (Test-PluginPathMatch -Left $proofWorkspace -Right $candidate) { $workspaceMatch = $true; break }
+    }
+    if (-not $workspaceMatch) {
+        return [pscustomobject]@{ Kind = 'Block'; Reason = 'authoritative turn workspace does not match the local workspace' }
+    }
+
+    $proofAgent = [string](Get-PluginMapValue -Map $result -Key 'sourceType')
+    $proofSession = [string](Get-PluginMapValue -Map $result -Key 'sessionId')
+    $proofRequest = [string](Get-PluginMapValue -Map $result -Key 'requestId')
+    $agentMatch = [string]::Equals($proofAgent.Trim(), ([string]$Agent).Trim(), [System.StringComparison]::OrdinalIgnoreCase)
+    $sessionMatch = [string]::Equals($proofSession.Trim(), ([string]$SessionId).Trim(), [System.StringComparison]::Ordinal)
+    $requestMatch = [string]::Equals($proofRequest.Trim(), ([string]$RequestId).Trim(), [System.StringComparison]::Ordinal)
+    if (-not $agentMatch -or -not $sessionMatch -or -not $requestMatch) {
+        return [pscustomobject]@{ Kind = 'Block'; Reason = "identity-changed: authoritative turn '$proofRequest' is not local turn '$RequestId'" }
+    }
+
+    $outcome = ([string](Get-PluginMapValue -Map $result -Key 'outcome')).Trim()
+    $serverStatus = ([string](Get-PluginMapValue -Map $result -Key 'serverStatus')).Trim()
+    if ($outcome -eq 'Missing') {
+        return [pscustomobject]@{ Kind = 'Block'; Reason = "authoritative turn is missing for $RequestId" }
+    }
+    if ($outcome -eq 'Unavailable') {
+        return [pscustomobject]@{ Kind = 'Block'; Reason = "authoritative session query is unavailable for $RequestId" }
+    }
+    if ($outcome -eq 'Active') {
+        return [pscustomobject]@{ Kind = 'Active' }
+    }
+    if ($outcome -eq 'Completed' -and $serverStatus -eq 'completed') {
+        return [pscustomobject]@{ Kind = 'Reconcile' }
+    }
+
+    return [pscustomobject]@{ Kind = 'Block'; Reason = 'authoritative session query is unavailable' }
+}
+
 function Close-PluginTurnIfNeeded {
     $startPath = Get-PluginStartPath -PreferredPath $WorkspacePath
     Set-PluginWorkspaceIdentity -ResolvedPath $startPath
@@ -953,25 +1141,50 @@ function Close-PluginTurnIfNeeded {
         $timestampText = Get-YamlScalar -Path $sessionFile -Key 'timestamp'
         $updatedText = Get-YamlScalar -Path $sessionFile -Key 'lastUpdated'
         $timestampStale = $false
+        $timestampKnown = $false
         $updatedStale = $true
         $parsedTimestamp = [datetime]::MinValue
         if ($timestampText -and [datetime]::TryParse($timestampText.Trim('"'), [ref]$parsedTimestamp)) {
+            $timestampKnown = $true
             $timestampStale = $parsedTimestamp.ToUniversalTime() -lt $cutoff
         }
         $parsedUpdated = [datetime]::MinValue
         if ($updatedText -and [datetime]::TryParse($updatedText.Trim('"'), [ref]$parsedUpdated)) {
             $updatedStale = $parsedUpdated.ToUniversalTime() -lt $cutoff
         }
-        # A fresh lastUpdated does not clear a stale timestamp pin.
+        # A present timestamp that cannot be parsed is unknown age. A fresh
+        # lastUpdated does not clear a stale or unknown timestamp pin.
         if ($timestampText) {
-            $sessionAgeStale = $timestampStale
+            $sessionAgeStale = (-not $timestampKnown) -or $timestampStale
         } else {
             $sessionAgeStale = $updatedStale
         }
     }
 
+    $evidencePath = $null
+    if (Test-Path -LiteralPath $turnFile) {
+        $evidencePath = $turnFile
+    } elseif (Test-Path -LiteralPath $sessionFile) {
+        $evidencePath = $sessionFile
+    }
+    if ($evidencePath) {
+        $enforcement = Get-PluginStopEnforcementDecision -EvidencePath $evidencePath -CacheDir $cacheDir
+        if ($enforcement -eq 'allow') {
+            Write-PluginJson ([ordered]@{})
+            return
+        }
+        if ($enforcement) {
+            Write-PluginJson ([ordered]@{ decision = 'block'; reason = $enforcement })
+            return
+        }
+    }
+
     if (-not (Test-Path -LiteralPath $turnFile)) {
         if ($sessionAgeStale -and (Test-Path -LiteralPath $sessionFile)) {
+            if (-not (Test-PluginStopEvidenceKnown -Path $sessionFile)) {
+                Write-PluginJson ([ordered]@{ decision = 'block'; reason = 'unknown failed-build and audit state cannot authorize a clean allow' })
+                return
+            }
             Set-YamlScalar -Path $sessionFile -Key 'lastUpdated' -Value ((Get-Date).ToUniversalTime().ToString('o'))
         }
         Write-PluginJson ([ordered]@{})
@@ -981,7 +1194,26 @@ function Close-PluginTurnIfNeeded {
     $status = Get-YamlScalar -Path $turnFile -Key 'status'
     if ($sessionAgeStale -and $status -eq 'in_progress') {
         $requestId = Get-YamlScalar -Path $turnFile -Key 'turnRequestId'
-        Write-PluginJson ([ordered]@{ decision = 'block'; reason = "stale cached session cannot be reused for $requestId" })
+        $sessionId = Get-YamlScalar -Path $sessionFile -Key 'sessionId'
+        if (-not $sessionId) { $sessionId = Get-YamlScalar -Path $turnFile -Key 'sessionId' }
+        $agent = Get-YamlScalar -Path $sessionFile -Key 'agent'
+        if (-not $agent) { $agent = $env:MCP_AGENT_NAME }
+        $workspace = Get-YamlScalar -Path $sessionFile -Key 'workspacePath'
+        if (-not $workspace) { $workspace = $env:MCP_WORKSPACE_PATH }
+        $proof = Get-PluginTurnPersistenceProof -WorkspacePath $workspace -Agent $agent -SessionId $sessionId -RequestId $requestId
+        if ($proof.Kind -eq 'Reconcile') {
+            Set-YamlScalar -Path $turnFile -Key 'status' -Value 'completed'
+            if (Test-Path -LiteralPath $sessionFile) {
+                Set-YamlScalar -Path $sessionFile -Key 'lastUpdated' -Value ((Get-Date).ToUniversalTime().ToString('o'))
+            }
+            Write-PluginJson ([ordered]@{})
+            return
+        }
+        if ($proof.Kind -eq 'Active') {
+            Write-PluginJson ([ordered]@{ decision = 'block'; reason = "stale cached session cannot be reused for $requestId" })
+            return
+        }
+        Write-PluginJson ([ordered]@{ decision = 'block'; reason = [string]$proof.Reason })
         return
     }
     if ($sessionAgeStale -and (Test-Path -LiteralPath $sessionFile)) {

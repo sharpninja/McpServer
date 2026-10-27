@@ -1,0 +1,148 @@
+{
+  "TimestampUtc": "2026-10-09T21:19:48Z",
+  "ValidatorIdentity": {
+    "agent": "Codex",
+    "model": "gpt-6-sol",
+    "reasoningEffort": "xhigh",
+    "proofRollout": "/home/sharpninja/.codex/sessions/2026/10/09/rollout-2026-10-09T16-19-49-01a12289-584f-7a30-b9db-217be3c4567c.jsonl",
+    "threadId": "01a12289-584f-7a30-b9db-217be3c4567c"
+  },
+  "addProfileCount": 19,
+  "markerRead": {
+    "path": "/home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml",
+    "fullLines": 397,
+    "secretValuesExcluded": true
+  },
+  "memoryRead": {
+    "method": "workflow.memory.list",
+    "effectiveCount": 14,
+    "allRead": true,
+    "process006Read": true,
+    "process007Read": true
+  },
+  "headSha": "897071483fad85fa361a3ce03fd5db4f08c27a68",
+  "claims": [
+    {
+      "claim": "P1",
+      "status": "UNKNOWN",
+      "evidence": "Source anchors and plugin heads checked at HEAD; Claude UserPromptSubmit documentation omits prompt_id; runtime existence remains a P0.2 probe."
+    },
+    {
+      "claim": "P2",
+      "status": "PASS",
+      "evidence": "Live store 352 FR/480 TR/512 TEST; proposed 21/23/23 ids collision-free; TEST-008 and mapping rows repaired."
+    },
+    {
+      "claim": "P3",
+      "status": "FAIL",
+      "evidence": "D1/D5/D6 have no deterministic branch when the probed Claude prompt_id is absent; F-R11-02."
+    },
+    {
+      "claim": "P4",
+      "status": "PASS",
+      "evidence": "All named server/client/REPL/MCP/plugin/provider surfaces have assigned tasks, tests, and rollout work."
+    },
+    {
+      "claim": "P5",
+      "status": "FAIL",
+      "evidence": "Missing prompt_id outcome and C2 cross-owner delivery seam deferred to A8; F-R11-02 and F-R11-03."
+    },
+    {
+      "claim": "P6",
+      "status": "FAIL",
+      "evidence": "Phase-wide Complete-to-Blocked instruction rejected by TodoExecutionService.ValidateTransition; F-R11-01."
+    },
+    {
+      "claim": "P7",
+      "status": "FAIL",
+      "evidence": "No missing-prompt_id race RED or all-consumer alias acknowledgement RED; F-R11-02 and F-R11-03."
+    },
+    {
+      "claim": "P8",
+      "status": "FAIL",
+      "evidence": "D10-completed earlier slices cannot perform A9/S11 phase-wide Blocked transition; F-R11-01."
+    },
+    {
+      "claim": "P9",
+      "status": "PASS",
+      "evidence": "645 source lines/525 nonempty; live TODO description exact 525/525, 30 tasks, round-11 technicalDetails; handoff matched."
+    },
+    {
+      "claim": "P10",
+      "status": "PASS",
+      "evidence": "Ordinary triage reports resolve; historically verified worktree group is marked pending and P0.1 schedules a recheck; live lookup did not resolve."
+    }
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 96,
+  "Completeness": 93,
+  "Confidence": 97,
+  "passCount": 4,
+  "failCount": 5,
+  "unknownCount": 1,
+  "failList": [
+    "P3",
+    "P5",
+    "P6",
+    "P7",
+    "P8"
+  ],
+  "unknownList": [
+    "P1"
+  ],
+  "findings": [
+    {
+      "id": "F-R11-01",
+      "claims": [
+        "P6",
+        "P8"
+      ],
+      "planLocation": "TODO transitions line 161; A9 line 587; S11 line 611",
+      "defect": "Phase-wide DISAGREE requires Complete-to-Blocked, an illegal TodoExecutionService transition.",
+      "evidence": "src/QBrainAi.Services/Services/TodoExecutionService.cs:1213-1217",
+      "repair": "Specify legal reopening via Planned/TestDesign then Blocked, or a remediation TODO; align gates and add transition proof.",
+      "classification": "implementer plan edit"
+    },
+    {
+      "id": "F-R11-02",
+      "claims": [
+        "P3",
+        "P5",
+        "P7"
+      ],
+      "planLocation": "Host binding lines 78-83; P0.2 line 170; wire lines 544-548; A3 line 575",
+      "defect": "No deterministic missing-prompt_id branch for hook-first late enqueue.",
+      "evidence": "Claude Code official UserPromptSubmit input omits prompt_id; runtime remains unverified.",
+      "repair": "Specify stable alternate correlation or fail closed as unsupported; add absent-id race RED cases and capability rule.",
+      "classification": "implementer plan edit under D6"
+    },
+    {
+      "id": "F-R11-03",
+      "claims": [
+        "P5",
+        "P7"
+      ],
+      "planLocation": "C2 line 119; P0 contracts line 175; FR-001-AC008 line 200; A8 line 585",
+      "defect": "Cross-owner alias seam is deferred to A8 and all-consumer durable acknowledgement lacks direct RED.",
+      "evidence": "C2 explicitly says seam shape fixed in A8 contract step; A8 RED lacks one-of-two/all-of-two consumer cases.",
+      "repair": "Freeze observable delivery/ack/replay-stop contract in P0, add multi-consumer crash RED, require cross-owner ACK before integration.",
+      "classification": "implementer plan edit and coordination ACK"
+    }
+  ],
+  "implementerFixes": [
+    "F-R11-01",
+    "F-R11-02",
+    "F-R11-03"
+  ],
+  "operatorDecisionFails": [],
+  "reviewerSessionId": "Codex-20261009T212543Z-plugin-session",
+  "reviewerRequestId": "req-20261009T213020Z-turn-0211",
+  "receiptPaths": [
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r11-20261009T211948Z.md",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r11-20261009T211948Z.json"
+  ],
+  "requestJsonlPath": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261009T211948Z-plan-readiness-r11.request.jsonl",
+  "responseJsonlPath": "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261009T211948Z-plan-readiness-r11.response.jsonl",
+  "priorRounds": "R10 F-R10-01..06 repaired as text; r1-r9 areas rechecked without separate regression.",
+  "reviewerTurnPersistence": "completeTurn code persisted, persisted true, degraded false, queued false; sessionId Codex-20261009T212543Z-plugin-session; requestId req-20261009T213020Z-turn-0211"
+}

@@ -3845,20 +3845,20 @@ body,
 <li>Module path: <code>tools/powershell/McpContext.psm1</code></li>
 <li>This matches the existing MCP PowerShell module pattern used by <code>tools/powershell/McpSession.psm1</code> and <code>tools/powershell/McpTodo.psm1</code>.</li>
 </ul>
-<h2 id="getting-the-module-from-mcp-server">Getting The Module From MCP Server</h2>
+<h2 id="getting-the-module-from-qbrain-ai">Getting The Module From QBrain.AI</h2>
 <p>Store the module in your user profile tools path:</p>
 <ul>
-<li><code>$env:UserProfile\McpServer\tools\powershell\McpContext.psm1</code></li>
+<li><code>$env:UserProfile\QBrainAi\tools\powershell\McpContext.psm1</code></li>
 </ul>
 <p>Import directly from server install path:</p>
-<pre><code class="language-powershell"><span class="hljs-built_in">Import-Module</span> (<span class="hljs-built_in">Join-Path</span> <span class="hljs-variable">$env:UserProfile</span> <span class="hljs-string">&quot;McpServer\tools\powershell\McpContext.psm1&quot;</span>) <span class="hljs-literal">-Force</span>
+<pre><code class="language-powershell"><span class="hljs-built_in">Import-Module</span> (<span class="hljs-built_in">Join-Path</span> <span class="hljs-variable">$env:UserProfile</span> <span class="hljs-string">&quot;QBrainAi\tools\powershell\McpContext.psm1&quot;</span>) <span class="hljs-literal">-Force</span>
 <span class="hljs-built_in">Initialize-McpContext</span>
 </code></pre>
-<p>You can also fetch the module over the MCP Server HTTP endpoint.</p>
-<h3 id="load-module-from-mcp-server-url">Load Module From MCP Server URL</h3>
+<p>You can also fetch the module over the QBrain.AI HTTP endpoint.</p>
+<h3 id="load-module-from-qbrain-ai-url">Load Module From QBrain.AI URL</h3>
 <p>Endpoint used:</p>
 <ul>
-<li><code>GET /mcpserver/repo/file?path=tools/powershell/McpContext.psm1</code></li>
+<li><code>GET /qbrainai/repo/file?path=tools/powershell/McpContext.psm1</code></li>
 </ul>
 <p>PowerShell example (download then import):</p>
 <pre><code class="language-powershell"><span class="hljs-comment"># Paste and run this entire block at once.</span>
@@ -3885,7 +3885,7 @@ body,
 }
 
 <span class="hljs-variable">$workspacePath</span> = <span class="hljs-built_in">Split-Path</span> <span class="hljs-variable">$markerPath</span> <span class="hljs-literal">-Parent</span>
-<span class="hljs-variable">$destination</span> = <span class="hljs-built_in">Join-Path</span> <span class="hljs-variable">$env:UserProfile</span> <span class="hljs-string">&quot;McpServer\tools\powershell\McpContext.psm1&quot;</span>
+<span class="hljs-variable">$destination</span> = <span class="hljs-built_in">Join-Path</span> <span class="hljs-variable">$env:UserProfile</span> <span class="hljs-string">&quot;QBrainAi\tools\powershell\McpContext.psm1&quot;</span>
 <span class="hljs-built_in">New-Item</span> <span class="hljs-literal">-ItemType</span> Directory <span class="hljs-literal">-Path</span> (<span class="hljs-built_in">Split-Path</span> <span class="hljs-variable">$destination</span> <span class="hljs-literal">-Parent</span>) <span class="hljs-literal">-Force</span> | <span class="hljs-built_in">Out-Null</span>
 
 <span class="hljs-comment"># Read baseUrl + apiKey from the target workspace marker file.</span>
@@ -3932,7 +3932,7 @@ body,
 }
 
 <span class="hljs-variable">$path</span> = [<span class="hljs-type">System.Uri</span>]::EscapeDataString(<span class="hljs-string">&quot;tools/powershell/McpContext.psm1&quot;</span>)
-<span class="hljs-variable">$uri</span> = <span class="hljs-string">&quot;<span class="hljs-variable">$baseUrl</span>/mcpserver/repo/file?path=<span class="hljs-variable">$path</span>&quot;</span>
+<span class="hljs-variable">$uri</span> = <span class="hljs-string">&quot;<span class="hljs-variable">$baseUrl</span>/qbrainai/repo/file?path=<span class="hljs-variable">$path</span>&quot;</span>
 
 <span class="hljs-comment"># Use Invoke-WebRequest so non-2xx responses still return parseable body text.</span>
 <span class="hljs-variable">$response</span> = <span class="hljs-built_in">Invoke-WebRequest</span> <span class="hljs-literal">-Uri</span> <span class="hljs-variable">$uri</span> <span class="hljs-literal">-Headers</span> <span class="hljs-variable">$headers</span> <span class="hljs-literal">-Method</span> Get <span class="hljs-literal">-SkipHttpErrorCheck</span>
@@ -3998,8 +3998,8 @@ body,
 
 <span class="hljs-keyword">foreach</span> (<span class="hljs-variable">$doc</span> <span class="hljs-keyword">in</span> <span class="hljs-variable">$docs</span>) {
 	<span class="hljs-variable">$encoded</span> = [<span class="hljs-type">System.Uri</span>]::EscapeDataString(<span class="hljs-variable">$doc</span>)
-	<span class="hljs-variable">$response</span> = <span class="hljs-built_in">Invoke-RestMethod</span> <span class="hljs-literal">-Uri</span> <span class="hljs-string">&quot;<span class="hljs-variable">$baseUrl</span>/mcpserver/repo/file?path=<span class="hljs-variable">$encoded</span>&quot;</span> <span class="hljs-literal">-Headers</span> <span class="hljs-variable">$headers</span> <span class="hljs-literal">-Method</span> Get
-	<span class="hljs-variable">$dest</span> = <span class="hljs-built_in">Join-Path</span> (<span class="hljs-built_in">Join-Path</span> <span class="hljs-variable">$env:UserProfile</span> <span class="hljs-string">&quot;McpServer&quot;</span>) (<span class="hljs-variable">$doc</span> <span class="hljs-operator">-replace</span> <span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-string">&#x27;\\&#x27;</span>)
+	<span class="hljs-variable">$response</span> = <span class="hljs-built_in">Invoke-RestMethod</span> <span class="hljs-literal">-Uri</span> <span class="hljs-string">&quot;<span class="hljs-variable">$baseUrl</span>/qbrainai/repo/file?path=<span class="hljs-variable">$encoded</span>&quot;</span> <span class="hljs-literal">-Headers</span> <span class="hljs-variable">$headers</span> <span class="hljs-literal">-Method</span> Get
+	<span class="hljs-variable">$dest</span> = <span class="hljs-built_in">Join-Path</span> (<span class="hljs-built_in">Join-Path</span> <span class="hljs-variable">$env:UserProfile</span> <span class="hljs-string">&quot;QBrainAi&quot;</span>) (<span class="hljs-variable">$doc</span> <span class="hljs-operator">-replace</span> <span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-string">&#x27;\\&#x27;</span>)
 	<span class="hljs-built_in">New-Item</span> <span class="hljs-literal">-ItemType</span> Directory <span class="hljs-literal">-Path</span> (<span class="hljs-built_in">Split-Path</span> <span class="hljs-variable">$dest</span> <span class="hljs-literal">-Parent</span>) <span class="hljs-literal">-Force</span> | <span class="hljs-built_in">Out-Null</span>
 	<span class="hljs-variable">$response</span>.content | <span class="hljs-built_in">Set-Content</span> <span class="hljs-literal">-Path</span> <span class="hljs-variable">$dest</span> <span class="hljs-literal">-Encoding</span> UTF8
 }
@@ -4016,7 +4016,7 @@ body,
 </ul>
 <p>If the file is not present yet in your user profile tools folder, copy it from the repo checkout:</p>
 <pre><code class="language-powershell"><span class="hljs-variable">$sourcePath</span> = <span class="hljs-string">&quot;&lt;path-to-McpContext.psm1&gt;&quot;</span>
-<span class="hljs-built_in">Copy-Item</span> <span class="hljs-variable">$sourcePath</span> (<span class="hljs-built_in">Join-Path</span> <span class="hljs-variable">$env:UserProfile</span> <span class="hljs-string">&quot;McpServer\tools\powershell\McpContext.psm1&quot;</span>) <span class="hljs-literal">-Force</span>
+<span class="hljs-built_in">Copy-Item</span> <span class="hljs-variable">$sourcePath</span> (<span class="hljs-built_in">Join-Path</span> <span class="hljs-variable">$env:UserProfile</span> <span class="hljs-string">&quot;QBrainAi\tools\powershell\McpContext.psm1&quot;</span>) <span class="hljs-literal">-Force</span>
 </code></pre>
 <p>You can do the same for companion docs:</p>
 <ul>
@@ -4075,7 +4075,7 @@ body,
 <li><code>MaxPages</code> lower-bound validation is <code>&gt;= 1</code>.</li>
 <li>Effective maximum pages is capped by <code>Mcp:MaxWebsitePages</code> from server config.</li>
 <li>If <code>MaxPages</code> is greater than configured <code>Mcp:MaxWebsitePages</code>, ingestion uses the configured cap.</li>
-<li><code>Import-McpContextUrl</code> uses SSE (<code>/mcpserver/context/ingest-website/stream</code>) by default and prints progress in real time.</li>
+<li><code>Import-McpContextUrl</code> uses SSE (<code>/qbrainai/context/ingest-website/stream</code>) by default and prints progress in real time.</li>
 </ul>
 <h2 id="querying">Querying</h2>
 <h3 id="context-search">Context search</h3>
@@ -4129,27 +4129,27 @@ body,
 </ul>
 <p>Use the workspace marker file (<code>AGENTS-README-FIRST.yaml</code>) for the same workspace path you pass in <code>X-Workspace-Path</code>.</p>
 <h3 id="initialize-mcpcontext-not-recognized-after-import-module">Initialize-McpContext not recognized after Import-Module</h3>
-<p>If <code>Import-Module (Join-Path $env:UserProfile &quot;McpServer\tools\powershell\McpContext.psm1&quot;)</code> succeeds but <code>Initialize-McpContext</code> is not found, the module file may be empty/corrupt.</p>
+<p>If <code>Import-Module (Join-Path $env:UserProfile &quot;QBrainAi\tools\powershell\McpContext.psm1&quot;)</code> succeeds but <code>Initialize-McpContext</code> is not found, the module file may be empty/corrupt.</p>
 <p>Recover with:</p>
 <pre><code class="language-powershell"><span class="hljs-variable">$sourcePath</span> = <span class="hljs-string">&quot;&lt;path-to-McpContext.psm1&gt;&quot;</span>
-<span class="hljs-built_in">Copy-Item</span> <span class="hljs-variable">$sourcePath</span> (<span class="hljs-built_in">Join-Path</span> <span class="hljs-variable">$env:UserProfile</span> <span class="hljs-string">&quot;McpServer\tools\powershell\McpContext.psm1&quot;</span>) <span class="hljs-literal">-Force</span>
+<span class="hljs-built_in">Copy-Item</span> <span class="hljs-variable">$sourcePath</span> (<span class="hljs-built_in">Join-Path</span> <span class="hljs-variable">$env:UserProfile</span> <span class="hljs-string">&quot;QBrainAi\tools\powershell\McpContext.psm1&quot;</span>) <span class="hljs-literal">-Force</span>
 <span class="hljs-built_in">Remove-Module</span> McpContext <span class="hljs-literal">-ErrorAction</span> SilentlyContinue
-<span class="hljs-built_in">Import-Module</span> (<span class="hljs-built_in">Join-Path</span> <span class="hljs-variable">$env:UserProfile</span> <span class="hljs-string">&quot;McpServer\tools\powershell\McpContext.psm1&quot;</span>) <span class="hljs-literal">-Force</span>
+<span class="hljs-built_in">Import-Module</span> (<span class="hljs-built_in">Join-Path</span> <span class="hljs-variable">$env:UserProfile</span> <span class="hljs-string">&quot;QBrainAi\tools\powershell\McpContext.psm1&quot;</span>) <span class="hljs-literal">-Force</span>
 <span class="hljs-built_in">Initialize-McpContext</span> <span class="hljs-literal">-MarkerPath</span> <span class="hljs-string">&quot;&lt;workspace-path&gt;\AGENTS-README-FIRST.yaml&quot;</span>
 </code></pre>
 <p>If the error body is <code>path not allowed or not found</code>, use one of these fallbacks:</p>
 <ol>
 <li>Import directly from user profile path:</li>
 </ol>
-<pre><code class="language-powershell"><span class="hljs-built_in">Import-Module</span> (<span class="hljs-built_in">Join-Path</span> <span class="hljs-variable">$env:UserProfile</span> <span class="hljs-string">&quot;McpServer\tools\powershell\McpContext.psm1&quot;</span>) <span class="hljs-literal">-Force</span>
+<pre><code class="language-powershell"><span class="hljs-built_in">Import-Module</span> (<span class="hljs-built_in">Join-Path</span> <span class="hljs-variable">$env:UserProfile</span> <span class="hljs-string">&quot;QBrainAi\tools\powershell\McpContext.psm1&quot;</span>) <span class="hljs-literal">-Force</span>
 <span class="hljs-built_in">Initialize-McpContext</span> <span class="hljs-literal">-MarkerPath</span> <span class="hljs-string">&quot;&lt;workspace-path&gt;\AGENTS-README-FIRST.yaml&quot;</span>
 </code></pre>
 <ol start="2">
 <li>Copy from repo checkout into user profile tools path:</li>
 </ol>
 <pre><code class="language-powershell"><span class="hljs-variable">$sourcePath</span> = <span class="hljs-string">&quot;&lt;path-to-McpContext.psm1&gt;&quot;</span>
-<span class="hljs-built_in">Copy-Item</span> <span class="hljs-variable">$sourcePath</span> (<span class="hljs-built_in">Join-Path</span> <span class="hljs-variable">$env:UserProfile</span> <span class="hljs-string">&quot;McpServer\tools\powershell\McpContext.psm1&quot;</span>) <span class="hljs-literal">-Force</span>
-<span class="hljs-built_in">Import-Module</span> (<span class="hljs-built_in">Join-Path</span> <span class="hljs-variable">$env:UserProfile</span> <span class="hljs-string">&quot;McpServer\tools\powershell\McpContext.psm1&quot;</span>) <span class="hljs-literal">-Force</span>
+<span class="hljs-built_in">Copy-Item</span> <span class="hljs-variable">$sourcePath</span> (<span class="hljs-built_in">Join-Path</span> <span class="hljs-variable">$env:UserProfile</span> <span class="hljs-string">&quot;QBrainAi\tools\powershell\McpContext.psm1&quot;</span>) <span class="hljs-literal">-Force</span>
+<span class="hljs-built_in">Import-Module</span> (<span class="hljs-built_in">Join-Path</span> <span class="hljs-variable">$env:UserProfile</span> <span class="hljs-string">&quot;QBrainAi\tools\powershell\McpContext.psm1&quot;</span>) <span class="hljs-literal">-Force</span>
 <span class="hljs-built_in">Initialize-McpContext</span> <span class="hljs-literal">-MarkerPath</span> <span class="hljs-string">&quot;&lt;workspace-path&gt;\AGENTS-README-FIRST.yaml&quot;</span>
 </code></pre>
 <h2 id="discoverability">Discoverability</h2>

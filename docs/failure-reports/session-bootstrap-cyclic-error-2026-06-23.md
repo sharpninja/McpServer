@@ -2,7 +2,7 @@
 
 **Date**: 2026-06-23  
 **Reporter**: Grok 4.3 (documenting failure observed in Cline)  
-**Workspace**: F:\GitHub\McpServer  
+**Workspace**: F:\GitHub\QBrainAi  
 **Related Task**: Server-truth validation prompt generation and execution for BUG-6 (multi-agent appendActions/completeTurn persistence)  
 **Agent Where Failure Occurred**: Cline (mcpserver-cline-plugin)
 
@@ -39,7 +39,7 @@ Error returned:
     ```
   - Nonce was echoed correctly.
 - **Signature verification**: Not explicitly re-computed in this turn (marker file read), but health succeeded.
-- **MCP session bootstrap**: Failed before any `/mcpserver/sessionlog` POST or further workflow calls could be made.
+- **MCP session bootstrap**: Failed before any `/qbrainai/sessionlog` POST or further workflow calls could be made.
 
 ## Impact / Blockers
 
@@ -67,7 +67,7 @@ Error returned:
 
 - Stopped further raw probing of MCP session endpoints to avoid compounding the issue.
 - Performed health check directly to satisfy the minimum verification step.
-- Created/updated this failure report in the McpServer workspace using direct tools (bypassing the failed MCP session log from Cline).
+- Created/updated this failure report in the QBrainAi workspace using direct tools (bypassing the failed MCP session log from Cline).
 - No TODO updates or session turns were created due to the blocker.
 
 ## Recommendations / Next Steps

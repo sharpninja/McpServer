@@ -1,0 +1,12 @@
+type: result
+payload:
+  requestId: req-20261018T035925Z-6918
+  result:
+    turnId: 2252
+    agent: Codex
+    sessionId: Codex-20261018T031720Z-hv-amendment1-r2
+    requestId: req-20261018T031720Z-hv-amendment1-r2
+
+---
+
+

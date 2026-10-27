@@ -2,9 +2,9 @@
 
 ## Getting Started
 
-### What is MCP Server?
+### What is QBrain.AI?
 
-MCP Server is a local AI-agent integration server that exposes project context — TODO items, repository files, GitHub issues, session logs, durable agent memories, and semantic search — to MCP-compatible clients (Claude Desktop, VS Code Copilot, Cursor) via both HTTP REST and MCP Streamable HTTP transports, and optionally over STDIO.
+QBrain.AI is a local AI-agent integration server that exposes project context — TODO items, repository files, GitHub issues, session logs, durable agent memories, and semantic search — to MCP-compatible clients (Claude Desktop, VS Code Copilot, Cursor) via both HTTP REST and MCP Streamable HTTP transports, and optionally over STDIO.
 
 ### How do I run the server?
 
@@ -18,13 +18,13 @@ gsudo pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateServic
 
 ```bash
 ./build.ps1 StartServer --instance default
-# or: dotnet run --project src/McpServer.Support.Mcp -- --instance default
+# or: dotnet run --project src/QBrainAi.Support.Mcp -- --instance default
 ```
 
 **Over STDIO (for MCP clients that prefer stdin/stdout):**
 
 ```bash
-dotnet run --project src/McpServer.Support.Mcp -- --transport stdio
+dotnet run --project src/QBrainAi.Support.Mcp -- --transport stdio
 ```
 
 ### What port does the server use?
@@ -44,7 +44,7 @@ All workspaces share this single host port; target a specific workspace with the
 ```json
 {
   "mcpServers": {
-    "mcp-server": {
+    "qbrain-ai": {
       "url": "<your-mcpserver-base-url>/mcp-transport"
     }
   }
@@ -56,7 +56,7 @@ All workspaces share this single host port; target a specific workspace with the
 ```json
 {
   "servers": {
-    "mcp-server": {
+    "qbrain-ai": {
       "type": "sse",
       "url": "<your-mcpserver-base-url>/mcp-transport"
     }
@@ -92,9 +92,9 @@ issue number, and saves the TODO using the canonical `ISSUE-{number}` id.
 
 Yes. Bidirectional sync is available:
 
-- **GitHub → TODO**: `POST /mcpserver/gh/issues/sync/from-github`
-- **TODO → GitHub**: `POST /mcpserver/gh/issues/sync/to-github`
-- **Single issue**: `POST /mcpserver/gh/issues/{number}/sync`
+- **GitHub → TODO**: `POST /qbrainai/gh/issues/sync/from-github`
+- **TODO → GitHub**: `POST /qbrainai/gh/issues/sync/to-github`
+- **Single issue**: `POST /qbrainai/gh/issues/{number}/sync`
 
 Synced items get `ISSUE-{number}` IDs. Status changes (done ↔ closed) propagate in both directions.
 For existing `ISSUE-*` items, MCP TODO priority is authoritative and syncs to canonical GitHub labels such
@@ -116,7 +116,7 @@ via the REST API.
 ### How do I create a workspace?
 
 ```bash
-curl -X POST http://localhost:7147/mcpserver/workspace \
+curl -X POST http://localhost:7147/qbrainai/workspace \
   -H "Content-Type: application/json" \
   -H "X-Api-Key: YOUR_KEY" \
   -d '{"workspacePath": "E:\\github\\MyProject"}'
@@ -126,7 +126,7 @@ Defaults are applied automatically: name from last path segment, and TodoPath de
 
 ### What does the init endpoint do?
 
-`POST /mcpserver/workspace/{key}/init` scaffolds the workspace directory with:
+`POST /qbrainai/workspace/{key}/init` scaffolds the workspace directory with:
 
 - Creates directories as needed
 - Creates an empty `todo.yaml` at the configured TodoPath
@@ -142,7 +142,7 @@ The `{key}` URL parameter is the Base64URL-encoded `WorkspacePath`. For example,
 
 ### How does tool search work?
 
-`GET /mcpserver/tools/search?keyword=screenshot` searches across:
+`GET /qbrainai/tools/search?keyword=screenshot` searches across:
 
 1. **Tags** — bidirectional contains match (handles singular/plural, e.g., `screenshot` matches `screenshots`)
 2. **Tool name** — case-insensitive contains
@@ -154,10 +154,10 @@ Results include both **global** tools (no workspace scope) and **workspace-speci
 
 Buckets are GitHub repositories that serve as package registries for tool definitions, similar to Scoop buckets. They contain JSON manifest files describing tools. You can:
 
-- **Add a bucket**: `POST /mcpserver/tools/buckets` with `{owner, repo, branch, path}`
-- **Browse tools**: `GET /mcpserver/tools/buckets/{name}/browse`
-- **Install a tool**: `POST /mcpserver/tools/buckets/{name}/install?tool=mytool`
-- **Sync all**: `POST /mcpserver/tools/buckets/{name}/sync`
+- **Add a bucket**: `POST /qbrainai/tools/buckets` with `{owner, repo, branch, path}`
+- **Browse tools**: `GET /qbrainai/tools/buckets/{name}/browse`
+- **Install a tool**: `POST /qbrainai/tools/buckets/{name}/install?tool=mytool`
+- **Sync all**: `POST /qbrainai/tools/buckets/{name}/sync`
 
 Buckets use the `gh` CLI to read repository contents.
 
@@ -167,7 +167,7 @@ Buckets use the `gh` CLI to read repository contents.
 
 ### How does API key authentication work?
 
-Per-workspace auth tokens are generated on each service restart and written into the `AGENTS-README-FIRST.yaml` marker file in each workspace root. All `/mcpserver/*` endpoints require the token via:
+Per-workspace auth tokens are generated on each service restart and written into the `AGENTS-README-FIRST.yaml` marker file in each workspace root. All `/qbrainai/*` endpoints require the token via:
 
 - Header: `X-Api-Key: YOUR_TOKEN`
 - Query parameter: `?api_key=YOUR_TOKEN`
@@ -184,8 +184,8 @@ Passwords are stored as SHA-256 hashes and verified with constant-time compariso
 
 | Controller | Public Endpoints |
 |------------|------------------|
-| Workspace | `GET /mcpserver/workspace`, `GET /mcpserver/workspace/{key}`, `GET /mcpserver/workspace/{key}/status` |
-| Tool Registry | `GET /mcpserver/tools/search`, `GET /mcpserver/tools`, `GET /mcpserver/tools/{id}` |
+| Workspace | `GET /qbrainai/workspace`, `GET /qbrainai/workspace/{key}`, `GET /qbrainai/workspace/{key}/status` |
+| Tool Registry | `GET /qbrainai/tools/search`, `GET /qbrainai/tools`, `GET /qbrainai/tools/{id}` |
 | Health | `GET /health`, `GET /alive` (`/health` is liveness plus `storage` reachable/unreachable; storage outage does not flip liveness) |
 
 ---
@@ -229,7 +229,7 @@ Yes. The auth token is passed via the `NGROK_AUTHTOKEN` environment variable, no
 
 ### How does hybrid search work?
 
-The context search endpoint (`POST /mcpserver/context/search`) combines:
+The context search endpoint (`POST /qbrainai/context/search`) combines:
 
 1. **FTS5 full-text search** — BM25-ranked SQLite FTS5 with snippet extraction
 2. **HNSW vector search** — cosine-similarity nearest-neighbor using all-MiniLM-L6-v2 embeddings (384 dimensions)
@@ -246,11 +246,11 @@ The ingestion pipeline indexes:
 - GitHub issues and PRs (via `gh` CLI)
 - External docs (from cached `docs/external/` path)
 
-Trigger a full re-index with `POST /mcpserver/sync/run`.
+Trigger a full re-index with `POST /qbrainai/sync/run`.
 
 ### What is a context pack?
 
-`POST /mcpserver/context/pack` produces a deterministic collection of ranked context chunks — a curated bundle of relevant content for an AI agent's prompt context.
+`POST /qbrainai/context/pack` produces a deterministic collection of ranked context chunks — a curated bundle of relevant content for an AI agent's prompt context.
 
 ---
 
@@ -258,14 +258,14 @@ Trigger a full re-index with `POST /mcpserver/sync/run`.
 
 ### What is MCP memory?
 
-Durable operator guidance stored by McpServer and scoped `Global` or `Workspace`. `Effective` lists Global memories first (by id), then the current workspace. The MCP store is the shared source of truth; agent-local files are caches. See `docs/context/memory.md`.
+Durable operator guidance stored by QBrainAi and scoped `Global` or `Workspace`. `Effective` lists Global memories first (by id), then the current workspace. The MCP store is the shared source of truth; agent-local files are caches. See `docs/context/memory.md`.
 
 ### How do remember, recall, promote, and consolidate work?
 
-- **remember** (`POST /mcpserver/memory/remember` / `memory_remember`) writes a multi-layer memory. Injection later uses raw `content` (or legacy `text`) only.
-- **recall** (`POST /mcpserver/memory/recall` / `memory_recall`) returns ranked Effective hits by meaning or keyword.
-- **promote** (`POST /mcpserver/memory/promote` / `memory_promote`) copies an operator-selected `sessionlog` or `context` source into memory.
-- **consolidate** (`POST /mcpserver/memory/consolidate` / `memory_consolidate`) plans a sleep/merge. Default is dry-run; set `dryRun: false` to apply.
+- **remember** (`POST /qbrainai/memory/remember` / `memory_remember`) writes a multi-layer memory. Injection later uses raw `content` (or legacy `text`) only.
+- **recall** (`POST /qbrainai/memory/recall` / `memory_recall`) returns ranked Effective hits by meaning or keyword.
+- **promote** (`POST /qbrainai/memory/promote` / `memory_promote`) copies an operator-selected `sessionlog` or `context` source into memory.
+- **consolidate** (`POST /qbrainai/memory/consolidate` / `memory_consolidate`) plans a sleep/merge. Default is dry-run; set `dryRun: false` to apply.
 
 Compat CRUD (`memory_add` / `list` / `update` / `remove`) remains. Writes are not idempotent: a duplicate remember creates a second row.
 
@@ -289,13 +289,13 @@ Summary, confidence, tags, and titles are never injected. Do not paraphrase the 
 
 ### Which plugins support memory?
 
-All eight official plugins now ship `skills/memory/SKILL.md`, root `memory-descriptor.json`, and always-on required-memory injection (or a documented host path): claude-code, claude-cowork, cline, cline-v2, grok, copilot, codex, opencode. Canonical payloads also live in McpServer `plugins/core/hosts/{id}/`.
+All eight official plugins now ship `skills/memory/SKILL.md`, root `memory-descriptor.json`, and always-on required-memory injection (or a documented host path): claude-code, claude-cowork, cline, cline-v2, grok, copilot, codex, opencode. Canonical payloads also live in QBrainAi `plugins/core/hosts/{id}/`.
 
 Grok remains the default CI bench lane (`./build.ps1 BenchMemory`). After H7a `agree:true`, `./build.ps1 BenchMemory -Plugin all` is unblocked (S7b/H7b on develop, PR #50). Primary bench metric is tokens used. The efficiency claim is the multi-turn v2 pack (`docs/benchmarks/memory-prompt-pack-v2-multiturn.yaml` and `docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.md`), not the v1 single-turn smoke pack.
 
 ### Where is the Perplexity research policy?
 
-Each official plugin repo has `docs/research/perplexity-research-policy.md` (and `docs/research/research-to-plan-workflow.md`). Perplexity is the preferred external research provider for planning and substantive documentation. Plugins do not require `PERPLEXITY_API_KEY` for ordinary McpServer tool execution.
+Each official plugin repo has `docs/research/perplexity-research-policy.md` (and `docs/research/research-to-plan-workflow.md`). Perplexity is the preferred external research provider for planning and substantive documentation. Plugins do not require `PERPLEXITY_API_KEY` for ordinary QBrainAi tool execution.
 
 ### Where is the Memory UI?
 
@@ -307,7 +307,7 @@ Each official plugin repo has `docs/research/perplexity-research-policy.md` (and
 
 ### What's the difference between REST and MCP transport?
 
-| Feature | REST API (`/mcpserver/*`) | MCP Transport (`/mcp-transport`) |
+| Feature | REST API (`/qbrainai/*`) | MCP Transport (`/mcp-transport`) |
 |---------|--------------------|---------------------------------|
 | Protocol | Standard HTTP/JSON | MCP Streamable HTTP (JSON-RPC) |
 | Clients | Any HTTP client, curl, Swagger | Claude Desktop, VS Code Copilot, Cursor |
@@ -341,7 +341,7 @@ The Nuke target handles elevation, backup/restore, publish, service registration
 
 ### Where is the service installed?
 
-Published to `C:\ProgramData\McpServer\` as a self-contained single-file executable. Configuration is at `C:\ProgramData\McpServer\appsettings.json`.
+Published to `C:\ProgramData\QBrainAi\` as a self-contained single-file executable. Configuration is at `C:\ProgramData\QBrainAi\appsettings.json`.
 
 ### How do I update the service?
 
@@ -349,7 +349,7 @@ Published to `C:\ProgramData\McpServer\` as a self-contained single-file executa
 gsudo pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateService
 ```
 
-The Nuke target stops the service, creates backups, publishes, restores configuration and data, restarts the service, and verifies health. A timestamped archive is saved to `%USERPROFILE%\McpServer-Backups\` for rollback. Do not update the Windows service by manually copying files or by running lower-level deployment scripts directly.
+The Nuke target stops the service, creates backups, publishes, restores configuration and data, restarts the service, and verifies health. A timestamped archive is saved to `%USERPROFILE%\QBrainAi-Backups\` for rollback. Do not update the Windows service by manually copying files or by running lower-level deployment scripts directly.
 
 Nuke `UpdateService` now detects Windows or Linux. On Linux, run `./build.ps1 UpdateService --skip-version-bump` from an elevated PowerShell session. Defaults are the existing `mcpserver.service` unit and `/opt/mcpserver/app`. Linux retains a private metadata-preserving configuration/data archive under `/var/backups/mcpserver`, including systemd unit and environment files. It does not provision the service, export an external SQL database or automatically roll back binaries. See the [Linux update requirements](USER-GUIDE.md#linux-systemd-service-update).
 
@@ -406,7 +406,7 @@ The `/mcp-transport` endpoint requires the header:
 Accept: application/json, text/event-stream
 ```
 
-Ensure your MCP client sends this header. Standard REST clients should use the `/mcpserver/*` endpoints instead.
+Ensure your MCP client sends this header. Standard REST clients should use the `/qbrainai/*` endpoints instead.
 
 ### The health endpoint returns unhealthy
 

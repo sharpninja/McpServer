@@ -1,0 +1,202 @@
+{
+  "TimestampUtc": "2026-10-10T03:20:05.2781432Z",
+  "ValidatorIdentity": {
+    "Agent": "Codex CLI",
+    "Model": "gpt-6-sol",
+    "ReasoningEffort": "xhigh",
+    "LiveProof": {
+      "RolloutPath": "/home/sharpninja/.codex/sessions/2026/10/09/rollout-2026-10-09T22-01-22-01a123c2-09b0-7040-860f-bbba1362a9cb.jsonl",
+      "TurnContextTimestampUtc": "2026-10-10T03:01:23.166Z",
+      "ThreadId": "01a123c2-09b0-7040-860f-bbba1362a9cb"
+    }
+  },
+  "AddProfileCount": 19,
+  "MarkerReadConfirmation": {
+    "ReadInFull": true,
+    "LineCount": 398,
+    "Sha256": "EB3600F618A95F424FF852DA4D099CF0803F249DFAAA48BAA7BF4929827E9C0F",
+    "SecretOutputFiltered": true
+  },
+  "MemoryReadConfirmation": {
+    "ListedCount": 15,
+    "AllRead": false,
+    "Process008Read": true,
+    "Limitation": "Automatic approval review rejected bulk output of full memory texts because a large memory had unverified sensitivity; no workaround attempted"
+  },
+  "Claims": [
+    {
+      "Id": "P1",
+      "Status": "PASS",
+      "Evidence": "HEAD source anchors and nine plugin repo inventory checked; no false current-source statement found"
+    },
+    {
+      "Id": "P2",
+      "Status": "FAIL",
+      "Evidence": "Four TEST-to-FR edges absent from mapping rows 401, 405, 412",
+      "Findings": [
+        "F-R28-02"
+      ]
+    },
+    {
+      "Id": "P3",
+      "Status": "PASS",
+      "Evidence": "D1-D12, partial clearance, licensing, skipped_duplicate removal, and unsupported-session choice represented"
+    },
+    {
+      "Id": "P4",
+      "Status": "PASS",
+      "Evidence": "Server, client, REPL, MCP agent, both cores, agent hosts, and three storage providers covered"
+    },
+    {
+      "Id": "P5",
+      "Status": "FAIL",
+      "Evidence": "Contradictory TEST AC contracts and A8 outbox dependency",
+      "Findings": [
+        "F-R28-01",
+        "F-R28-05"
+      ]
+    },
+    {
+      "Id": "P6",
+      "Status": "FAIL",
+      "Evidence": "A7, A8, and S9 case placements precede implementation dependencies",
+      "Findings": [
+        "F-R28-03",
+        "F-R28-04",
+        "F-R28-05"
+      ]
+    },
+    {
+      "Id": "P7",
+      "Status": "FAIL",
+      "Evidence": "TEST AC contradiction, baseline-green RED obligation, mapping gaps, misplaced cases",
+      "Findings": [
+        "F-R28-01",
+        "F-R28-02",
+        "F-R28-03",
+        "F-R28-04",
+        "F-R28-05"
+      ]
+    },
+    {
+      "Id": "P8",
+      "Status": "FAIL",
+      "Evidence": "Dependency chain, test allocations, and S8/S10 activation conflict",
+      "Findings": [
+        "F-R28-01",
+        "F-R28-03",
+        "F-R28-04",
+        "F-R28-05",
+        "F-R28-06"
+      ]
+    },
+    {
+      "Id": "P9",
+      "Status": "FAIL",
+      "Evidence": "Description and 30 tasks match, but plan line 371 conflicts with TODO technicalDetails and handoff two-AC contract",
+      "Findings": [
+        "F-R28-01"
+      ]
+    },
+    {
+      "Id": "P10",
+      "Status": "PASS",
+      "Evidence": "Nine main-workspace triage ids verified; exceptional group resolves in worktree as described"
+    }
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 93,
+  "Completeness": 88,
+  "Confidence": 95,
+  "PassCount": 4,
+  "FailCount": 6,
+  "UnknownCount": 0,
+  "FailList": [
+    "F-R28-01",
+    "F-R28-02",
+    "F-R28-03",
+    "F-R28-04",
+    "F-R28-05",
+    "F-R28-06"
+  ],
+  "UnknownList": [],
+  "Findings": [
+    {
+      "Id": "F-R28-01",
+      "PlanLocation": "New testing requirements lines 369,371; P0.4 line 174; AC convention line 500; TEST-SUPPORT-023 line 395",
+      "Defect": "Two versus three TEST ACs; universal RED conflicts with five baseline-green ACs",
+      "Evidence": "Direct line comparison; TODO technicalDetails and handoff state two ACs",
+      "SpecificChange": "Use a single two-AC rule, exempt baseline-green ACs from RED, align TEST-SUPPORT-023, TODO and handoff",
+      "Classification": "implementer edit"
+    },
+    {
+      "Id": "F-R28-02",
+      "PlanLocation": "TEST rows 378,381,383; mapping rows 401,405,412",
+      "Defect": "Four TEST-to-FR mapping edges omitted",
+      "Evidence": "Forward TEST validation versus mapping comparison",
+      "SpecificChange": "Add appropriate TEST/TR pairs to full mapping rows or narrow TEST statements",
+      "Classification": "implementer edit"
+    },
+    {
+      "Id": "F-R28-03",
+      "PlanLocation": "TEST extraction 369; TR 350,366; TEST 378,394; dependency chain 178",
+      "Defect": "A7 TEST names S8/S10 cases; S8/S9 TEST names S11 docs case",
+      "Evidence": "TR brackets and P0.8 ordering",
+      "SpecificChange": "Move later tests to owning slices, update satisfaction and mapping",
+      "Classification": "implementer edit"
+    },
+    {
+      "Id": "F-R28-04",
+      "PlanLocation": "A7 RED 590; TEST row 378; A9 594; dependencies 178",
+      "Defect": "Actual duplicate-hook transition required in A7 before A9 detector adoption",
+      "Evidence": "Host adoption assigned to A9, which depends on A7",
+      "SpecificChange": "Move actual transition to A9 and retain synthetic A7 unsupportedSince handling",
+      "Classification": "implementer edit"
+    },
+    {
+      "Id": "F-R28-05",
+      "PlanLocation": "Coordination 117; TR-008 AC-006 352; A8 RED 592",
+      "Defect": "A8 demands real QB outbox spy before QB P1 integration, which depends on A8",
+      "Evidence": "No named outbox source at HEAD; QB owns integration",
+      "SpecificChange": "Test an outbox port/double at A8; assign real QB spy/collision tests to post-A8 P1 integration gate",
+      "Classification": "implementer edit"
+    },
+    {
+      "Id": "F-R28-06",
+      "PlanLocation": "Stop gate wire contract 551; activation 284,355,616,623",
+      "Defect": "Says completion gate blocks after S8, but only S10 marker activates it",
+      "Evidence": "S10 exclusive marker writer and rollback rule",
+      "SpecificChange": "State verified S10 marker activation and pre-S10/rollback inert behavior everywhere",
+      "Classification": "implementer edit"
+    }
+  ],
+  "ImplementerFixes": [
+    "F-R28-01",
+    "F-R28-02",
+    "F-R28-03",
+    "F-R28-04",
+    "F-R28-05",
+    "F-R28-06"
+  ],
+  "OperatorDecisionFails": [],
+  "HeadSha": "2b2b4fd8ec2e593c8af35c5fbf93869c15141f19",
+  "ReceiptPaths": [
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r28-20261010T030121Z.md",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/hostile-validator-plan-readiness-r28-20261010T030121Z.json",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261010T030121Z-plan-readiness-r28.request.jsonl",
+    "/home/sharpninja/github/McpServer/.claude/worktrees/session-20261009/docs/receipts/hv/20261010T030121Z-plan-readiness-r28.response.jsonl"
+  ],
+  "ReviewerSessionId": "Codex-20261006T202119Z-plugin-session",
+  "ReviewerRequestId": "req-20261010T030449Z-plan-readiness-r28",
+  "PersistenceProof": {
+    "BeginTurnPersisted": true,
+    "FullResultUpdatePersisted": true,
+    "ReadbackVerified": true,
+    "CompleteTurnPersisted": true,
+    "ReadbackMethod": "client.SessionLog.QueryAsync agent Codex limit 10",
+    "ReadbackResult": "Own requestId, receipt filename, F-R28-01 and F-R28-06 present in full turn payload",
+    "TerminalReadbackVerified": true,
+    "TerminalStatus": "completed",
+    "TerminalReadbackResult": "Typed client query contained reviewer requestId, both endpoint findings, receipt filename, and completed status adjacent to the turn"
+  }
+}

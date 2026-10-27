@@ -162,9 +162,9 @@ When `AGENTS-README-FIRST.yaml` contains `agent_plugins.policy: required`, each 
 - Cline uses `mcpserver-cline-plugin`.
 - Grok uses `mcpserver-grok-plugin`.
 
-Acquire the matching plugin through the MCP Server tool registry before relying on local root hints: search `/mcpserver/tools/search?keyword=<plugin_name>` for an exact `name` match, install it from `/mcpserver/tools/buckets/official/install?toolName=<plugin_name>` if it is missing, then execute the returned `commandTemplate` with the target parent directory.
+Acquire the matching plugin through the QBrain.AI tool registry before relying on local root hints: search `/qbrainai/tools/search?keyword=<plugin_name>` for an exact `name` match, install it from `/qbrainai/tools/buckets/official/install?toolName=<plugin_name>` if it is missing, then execute the returned `commandTemplate` with the target parent directory.
 
-The plugin wrapper is required for session log, TODO, requirements, import/export, and traceability workflows. Direct `mcpserver-repl --agent-stdio` use is reserved for plugin implementation, plugin troubleshooting, and fallback diagnosis after plugin verification fails. If the matching plugin is unavailable after registry acquisition, record `MCP_PLUGIN_UNAVAILABLE:<Agent>` when a trusted logging path exists and continue only with non-MCP local diagnosis.
+The plugin wrapper is required for session log, TODO, requirements, import/export, and traceability workflows. Direct `qbrain-ai-repl --agent-stdio` use is reserved for plugin implementation, plugin troubleshooting, and fallback diagnosis after plugin verification fails. If the matching plugin is unavailable after registry acquisition, record `MCP_PLUGIN_UNAVAILABLE:<Agent>` when a trusted logging path exists and continue only with non-MCP local diagnosis.
 
 ### Step 4: Store Connection State
 
@@ -184,7 +184,7 @@ connectionState:
 ### Invocation
 
 ```bash
-mcpserver-repl --agent-stdio
+qbrain-ai-repl --agent-stdio
 ```
 
 ### Handshake
@@ -252,7 +252,7 @@ Do not send formatted YAML or a single `type: batch` envelope; unsupported batch
 4. When complete, call `workflow.sessionlog.completeTurn` with final response
 5. Persist session log immediately after turn completion
 
-Root `UserPromptSubmit` does not open a new root turn, cancel an in-progress root work turn, or rewrite `current-turn.yaml` after a completed root turn when the incoming prompt is a background or hostile-validator brief (FR-MCP-TRIAGEPLUGIN-001). A distinct operator prompt still opens a new root turn. To list stale `in_progress` turns older than N hours without mass-closing them, query `GET /mcpserver/sessionlog?turnStatus=in_progress&staleOlderThanHours=N` (BUG-TRIAGE-121).
+Root `UserPromptSubmit` does not open a new root turn, cancel an in-progress root work turn, or rewrite `current-turn.yaml` after a completed root turn when the incoming prompt is a background or hostile-validator brief (FR-MCP-TRIAGEPLUGIN-001). A distinct operator prompt still opens a new root turn. To list stale `in_progress` turns older than N hours without mass-closing them, query `GET /qbrainai/sessionlog?turnStatus=in_progress&staleOlderThanHours=N` (BUG-TRIAGE-121).
 
 **At regular intervals during long sessions (~10 interactions):**
 
@@ -1172,7 +1172,7 @@ If module download fails, retry with exponential backoff:
 # Retry with exponential backoff
 for i in 1 2 3; do
   if curl -H "X-Api-Key: $API_KEY" \
-          "http://localhost:7147/mcpserver/tools/search?keyword=session" \
+          "http://localhost:7147/qbrainai/tools/search?keyword=session" \
           -o McpSession.psm1; then
     break
   fi

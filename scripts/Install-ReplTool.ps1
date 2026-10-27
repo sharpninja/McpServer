@@ -1,10 +1,10 @@
 #!/usr/bin/env pwsh
 <#
 .SYNOPSIS
-    Installs or updates the mcpserver-repl global tool.
+    Installs or updates the qbrain-ai-repl global tool.
 
 .DESCRIPTION
-    This script installs or updates the SharpNinja.McpServer.Repl package as a dotnet global tool
+    This script installs or updates the QBrainAI.Repl package as a dotnet global tool
     from the local-packages feed.
 
 .PARAMETER Update
@@ -42,8 +42,8 @@ Push-Location $solutionRoot
 
 try {
     if ($Uninstall) {
-        Write-Host "Uninstalling SharpNinja.McpServer.Repl..." -ForegroundColor Yellow
-        & dotnet tool uninstall --global SharpNinja.McpServer.Repl
+        Write-Host "Uninstalling QBrainAI.Repl..." -ForegroundColor Yellow
+        & dotnet tool uninstall --global QBrainAI.Repl
         if ($LASTEXITCODE -ne 0) {
             Write-Warning "Uninstall returned exit code $LASTEXITCODE (may not have been installed)"
         }
@@ -52,16 +52,16 @@ try {
         }
     }
     elseif ($Update) {
-        Write-Host "Updating SharpNinja.McpServer.Repl..." -ForegroundColor Yellow
-        & dotnet tool update --global SharpNinja.McpServer.Repl --add-source $packageSource
+        Write-Host "Updating QBrainAI.Repl..." -ForegroundColor Yellow
+        & dotnet tool update --global QBrainAI.Repl --add-source $packageSource
         if ($LASTEXITCODE -ne 0) {
             throw "Update failed with exit code $LASTEXITCODE"
         }
         Write-Host "Tool updated successfully." -ForegroundColor Green
     }
     else {
-        Write-Host "Installing SharpNinja.McpServer.Repl..." -ForegroundColor Yellow
-        & dotnet tool install --global SharpNinja.McpServer.Repl --add-source $packageSource
+        Write-Host "Installing QBrainAI.Repl..." -ForegroundColor Yellow
+        & dotnet tool install --global QBrainAI.Repl --add-source $packageSource
         if ($LASTEXITCODE -ne 0) {
             throw "Install failed with exit code $LASTEXITCODE"
         }
@@ -70,16 +70,16 @@ try {
 
     Write-Host ""
     Write-Host "Verifying installation..." -ForegroundColor Yellow
-    & mcpserver-repl --version
+    & qbrain-ai-repl --version
     if ($LASTEXITCODE -ne 0) {
         throw "Verification failed with exit code $LASTEXITCODE"
     }
 
     Write-Host ""
     Write-Host "==== Available commands ====" -ForegroundColor Cyan
-    Write-Host "  mcpserver-repl --version              Show version" -ForegroundColor White
-    Write-Host "  mcpserver-repl --interactive          Run in interactive mode" -ForegroundColor White
-    Write-Host "  mcpserver-repl --agent-stdio          Run in agent STDIO mode" -ForegroundColor White
+    Write-Host "  qbrain-ai-repl --version              Show version" -ForegroundColor White
+    Write-Host "  qbrain-ai-repl --interactive          Run in interactive mode" -ForegroundColor White
+    Write-Host "  qbrain-ai-repl --agent-stdio          Run in agent STDIO mode" -ForegroundColor White
     Write-Host ""
 }
 catch {

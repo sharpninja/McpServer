@@ -1,0 +1,16 @@
+BUG-TRIAGE-139 native cleanup probe correction
+Timestamp: 2026-09-04T13:45:55-05:00
+Classification: command-construction failure; cleanup status was not accepted from this attempt.
+
+FAILED COMMAND:
+wsl.exe -d Ubuntu-24.04 -- bash -lc "findmnt -rn -t fuse.bug139 2>/dev/null || true; ps -eo pid=,comm=,args= | awk '$2 == "bug139-fuse" || $2 == "realpath" {print}'"
+
+EXIT: PowerShell.Mcp pipeline error
+ERROR:
+bug139-fuse ||  == realpath {print}': -c: line 1: unexpected EOF while looking for matching `''
+
+REPLACEMENT COMMAND:
+wsl.exe -d Ubuntu-24.04 -- bash -lc "findmnt -rn -t fuse.bug139 2>/dev/null || true; ps -C bug139-fuse -C realpath -o pid=,comm=,args= 2>/dev/null || true"
+
+REPLACEMENT EXIT: 0
+REPLACEMENT OUTPUT: [no matching FUSE mounts or helper processes]

@@ -1,12 +1,12 @@
 <#
 .SYNOPSIS
     Pushes the local NUGET_API_KEY environment variable into the Azure DevOps
-    McpServer pipeline as a secret variable.
+    QBrainAi pipeline as a secret variable.
 
 .DESCRIPTION
     Reads $env:NUGET_API_KEY from the current shell and writes it to the
-    pipeline-level secret variable named NUGET_API_KEY on the McpServer
-    pipeline (id 1) in the McpServer/McpServer org/project.
+    pipeline-level secret variable named NUGET_API_KEY on the QBrainAi
+    pipeline (id 1) in the QBrainAi/McpServer org/project.
 
     If the variable already exists, it is updated. If it does not exist, it is
     created. The variable is marked secret so it is masked in logs and cannot
@@ -16,16 +16,16 @@
     accepted the update.
 
 .PARAMETER PipelineId
-    Optional override for the pipeline id. Defaults to 1 (the McpServer
+    Optional override for the pipeline id. Defaults to 1 (the QBrainAi
     pipeline).
 
 .PARAMETER Organization
     Optional override for the Azure DevOps organization URL. Defaults to the
     `az devops configure -l` default, which is
-    https://dev.azure.com/McpServer.
+    https://dev.azure.com/QBrainAi.
 
 .PARAMETER Project
-    Optional override for the Azure DevOps project name. Defaults to McpServer.
+    Optional override for the Azure DevOps project name. Defaults to QBrainAi.
 
 .EXAMPLE
     $env:NUGET_API_KEY = '<your nuget.org key>'
@@ -34,14 +34,14 @@
 .NOTES
     Requires:
       - Azure CLI logged in with rights to manage pipeline variables in the
-        McpServer project (`az login` then `az devops login` if needed).
+        QBrainAi project (`az login` then `az devops login` if needed).
       - The azure-devops extension installed (`az extension add -n azure-devops`).
 #>
 [CmdletBinding()]
 param(
     [int]$PipelineId = 1,
     [string]$Organization = 'https://dev.azure.com/McpServer',
-    [string]$Project = 'McpServer'
+    [string]$Project = 'QBrainAi'
 )
 
 Set-StrictMode -Version Latest

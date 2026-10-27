@@ -1,0 +1,4 @@
+ExitCode: 2
+DurationSeconds: 21.695
+ExpectedTests: 14
+MCP_REPOSITORY_ROOT: <unset>

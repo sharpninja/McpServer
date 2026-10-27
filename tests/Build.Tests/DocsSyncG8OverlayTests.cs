@@ -1,5 +1,4 @@
 using System.Reflection;
-using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 
 namespace NukeBuild.Tests;
@@ -75,7 +74,7 @@ public sealed class DocsSyncG8OverlayTests
     [Fact]
     public void G8_ValidateConfig_ShippedValidator_PassesOnLiveAppsettings()
     {
-        var configPath = Path.Combine(FindRepositoryRoot(), "src", "McpServer.Support.Mcp", "appsettings.yaml");
+        var configPath = Path.Combine(FindRepositoryRoot(), "src", "QBrainAi.Support.Mcp", "appsettings.yaml");
         Assert.True(File.Exists(configPath), configPath);
         var instances = ConfigValidator.ParseInstances(File.ReadAllLines(configPath));
         Assert.NotNull(instances);
@@ -98,59 +97,17 @@ public sealed class DocsSyncG8OverlayTests
         Assert.Contains("core", source, StringComparison.Ordinal);
     }
 
-    /// <summary>G8 / C5: official plugin lib-ps copies match canonical plugins/core/lib-ps.</summary>
+    /// <summary>
+    /// G8 / C5: the committed sync path generates official plugin lib copies that match
+    /// canonical plugins/core/lib-ps without consuming sibling working-tree state.
+    /// </summary>
     [Fact]
-    public void G8_SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore()
+    public async Task G8_SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore()
     {
         var repoRoot = FindRepositoryRoot();
-        var canonicalDir = Path.Combine(repoRoot, "plugins", "core", "lib-ps");
-        Assert.True(Directory.Exists(canonicalDir), canonicalDir);
-        var githubRoot = Directory.GetParent(repoRoot)?.FullName;
-        Assert.False(string.IsNullOrWhiteSpace(githubRoot));
-        var officialPlugins = new[]
-        {
-            "mcpserver-codex-plugin",
-            "mcpserver-claude-code-plugin",
-            "mcpserver-copilot-plugin",
-            "mcpserver-cline-plugin",
-            "mcpserver-grok-plugin",
-        };
-
-        var mismatches = new List<string>();
-        foreach (var plugin in officialPlugins)
-        {
-            var pluginRoot = Path.Combine(githubRoot!, plugin);
-            if (!Directory.Exists(pluginRoot))
-            {
-                mismatches.Add(plugin + ": plugin root missing");
-                continue;
-            }
-
-            foreach (var canonicalFile in Directory.GetFiles(canonicalDir, "*.ps1", SearchOption.TopDirectoryOnly))
-            {
-                var name = Path.GetFileName(canonicalFile);
-                var candidates = new[]
-                {
-                    Path.Combine(pluginRoot, "lib", name),
-                    Path.Combine(pluginRoot, "lib-ps", name),
-                };
-                var copy = candidates.FirstOrDefault(File.Exists);
-                if (copy is null)
-                {
-                    mismatches.Add(plugin + ": missing " + name);
-                    continue;
-                }
-
-                if (!CryptographicOperations.FixedTimeEquals(
-                    SHA256.HashData(File.ReadAllBytes(canonicalFile)),
-                    SHA256.HashData(File.ReadAllBytes(copy))))
-                {
-                    mismatches.Add(plugin + ": checksum drift " + name);
-                }
-            }
-        }
-
-        Assert.True(mismatches.Count == 0, string.Join("; ", mismatches));
+        await OfficialPluginCoreSyncTestSupport.AssertCanonicalCorePropagatesAsync(
+            repoRoot,
+            TestContext.Current.CancellationToken).ConfigureAwait(true);
     }
 
     private static string FindRepositoryRoot()
@@ -158,11 +115,11 @@ public sealed class DocsSyncG8OverlayTests
         var directory = new DirectoryInfo(AppContext.BaseDirectory);
         while (directory is not null)
         {
-            if (File.Exists(Path.Combine(directory.FullName, "McpServer.sln")))
+            if (File.Exists(Path.Combine(directory.FullName, "QBrainAi.sln")))
                 return directory.FullName;
             directory = directory.Parent;
         }
 
-        throw new InvalidOperationException("McpServer.sln not found.");
+        throw new InvalidOperationException("QBrainAi.sln not found.");
     }
 }

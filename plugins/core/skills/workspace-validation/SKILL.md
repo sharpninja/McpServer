@@ -14,4 +14,4 @@ method: workflow.workspace.validate
 
 Native MCP tool: `workspace_validate`.
 Director: `validate-workspace`.
-REST: `POST /mcpserver/workspace-validation/validate`.
+REST: `POST /qbrainai/workspace-validation/validate`.

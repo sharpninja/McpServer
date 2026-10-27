@@ -15,4 +15,4 @@ Compat CRUD remains available: `memory_add`, `memory_list`, `memory_update`, `me
 
 REPL mirrors: `workflow.memory.remember`, `workflow.memory.recall`, `workflow.memory.explore`, `workflow.memory.consolidate`, `workflow.memory.promote`, `workflow.memory.revert`.
 
-REST mirrors: `POST /mcpserver/memory/remember`, `POST /mcpserver/memory/recall`, `POST /mcpserver/memory/explore`, `POST /mcpserver/memory/consolidate`, `POST /mcpserver/memory/promote`, `GET /mcpserver/memory/{id}/versions`, `POST /mcpserver/memory/{id}/revert`.
+REST mirrors: `POST /qbrainai/memory/remember`, `POST /qbrainai/memory/recall`, `POST /qbrainai/memory/explore`, `POST /qbrainai/memory/consolidate`, `POST /qbrainai/memory/promote`, `GET /qbrainai/memory/{id}/versions`, `POST /qbrainai/memory/{id}/revert`.

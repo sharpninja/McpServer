@@ -1,6 +1,6 @@
 "use strict";
 /**
- * Shared TypeScript types for the McpServer REPL protocol.
+ * Shared TypeScript types for the QBrainAi REPL protocol.
  * Mirrors the JSON schema (schemas/repl-yaml-message.schema.json) and the PowerShell McpRepl entities.
  * Used as the common surface for Cline, Cline V2, OpenCode, and future TS plugins.
  */

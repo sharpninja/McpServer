@@ -1,0 +1,7 @@
+PASS SDK accepted by global.json: global.json sdk 10.0.201 rollForward latestFeature; dotnet --version in repo root = 10.0.201; sdks: 10.0.201 [/home/sharpninja/.dotnet/sdk]
+PASS Pester 5 importable: Import-Module Pester (5.x) -> 5.9.1
+PASS bats on PATH: /usr/bin/bats -> Bats 1.14.0
+PASS node/npm satisfy TypeScript engines: node v26.8.2, npm 11.19.1; mcpserver-cline-plugin engines.node '>=18.0.0' ok=True; mcpserver-cline-v2-plugin engines.node '>=18.0.0' ok=True; mcpserver-opencode-plugin engines.node '>=18.0.0' ok=True
+PASS dotnet ef at the pinned EF Core Design version: Directory.Packages.props Microsoft.EntityFrameworkCore.Design 10.0.0; dotnet tool run dotnet-ef --version -> 10.0.0
+PASS Node 18/20/22/latest runnable via mise: node@18 -> v18.20.8; node@20 -> v20.20.2; node@22 -> v22.23.3; node@latest -> v26.11.1
+OVERALL: PASS

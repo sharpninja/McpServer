@@ -9,15 +9,15 @@ the live Linux box MCP (FR-MCP-173, PLAN-TXNKEYSERVER-001). Keep live
 
 ## Endpoints
 
-- `GET /mcpserver/todo` — list all todos
-- `POST /mcpserver/todo` — create a new todo
-- `GET /mcpserver/todo/{id}` — get a specific todo
-- `PUT /mcpserver/todo/{id}` — update a todo
-- `DELETE /mcpserver/todo/{id}` — delete a todo
-- `GET /mcpserver/todo/{id}/prompt/implement` — get implementation prompt
-- `GET /mcpserver/todo/{id}/prompt/plan` — get planning prompt
-- `GET /mcpserver/todo/{id}/prompt/status` — get status prompt
-- `POST /mcpserver/todo/{id}/requirements` — add requirements to a todo
+- `GET /qbrainai/todo` — list all todos
+- `POST /qbrainai/todo` — create a new todo
+- `GET /qbrainai/todo/{id}` — get a specific todo
+- `PUT /qbrainai/todo/{id}` — update a todo
+- `DELETE /qbrainai/todo/{id}` — delete a todo
+- `GET /qbrainai/todo/{id}/prompt/implement` — get implementation prompt
+- `GET /qbrainai/todo/{id}/prompt/plan` — get planning prompt
+- `GET /qbrainai/todo/{id}/prompt/status` — get status prompt
+- `POST /qbrainai/todo/{id}/requirements` — add requirements to a todo
 
 ## Naming Conventions (Normative)
 

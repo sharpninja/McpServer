@@ -1,0 +1,41 @@
+using System.Net;
+using System.Net.Http.Json;
+using QBrainAi.Workspace.Validation.Models;
+using Xunit;
+
+namespace QBrainAi.Workspace.Validation.AtomicTests;
+
+/// <summary>Audit: GET /qbrainai/workspace — List all registered workspaces (public endpoint).</summary>
+[Collection("WorkspaceEndpoint")]
+public sealed class ListWorkspacesTests
+{
+    private readonly WorkspaceEndpointFixture _fixture;
+
+    /// <summary>Initializes a new instance.</summary>
+    public ListWorkspacesTests(WorkspaceEndpointFixture fixture) => _fixture = fixture;
+
+    /// <summary>Test method.</summary>
+    [Fact]
+    public async Task List_Returns200_WithValidStructure()
+    {
+        var response = await _fixture.Client.GetAsync(WorkspaceEndpointFixture.WorkspaceRoute, cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var result = await response.Content.ReadFromJsonAsync<WorkspaceListResult>(cancellationToken: TestContext.Current.CancellationToken);
+        Assert.NotNull(result);
+        Assert.NotNull(result.Items);
+        Assert.True(result.TotalCount >= 0, "TotalCount should be non-negative.");
+        Assert.Equal(result.Items.Count, result.TotalCount);
+    }
+
+    /// <summary>Test method.</summary>
+    [Fact]
+    public async Task List_ResponseIsJson()
+    {
+        var response = await _fixture.Client.GetAsync(WorkspaceEndpointFixture.WorkspaceRoute, cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
+    }
+}

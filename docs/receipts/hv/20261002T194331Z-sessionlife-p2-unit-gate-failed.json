@@ -1,0 +1,47 @@
+{
+  "timestampUtc": "2026-10-02T19:43:31Z",
+  "runId": "p2-unit-legion-20261002T193045Z",
+  "tipSha": "987cd8f39610c9fa301862e3b1d526d23e049469",
+  "branch": "cursor/sessionlife-p2-contracts-5cb2",
+  "pr": 72,
+  "prUrl": "https://github.com/sharpninja/McpServer/pull/72",
+  "verdict": "FAILED",
+  "gateExit": 1,
+  "astraStarted": false,
+  "pluginIntegrationInUnitInventory": false,
+  "pester": {
+    "total": 242,
+    "passed": 236,
+    "failed": 6,
+    "skipped": 0
+  },
+  "nuke": {
+    "projects": 7,
+    "total": 4297,
+    "passed": 4296,
+    "failed": 1,
+    "pluginIntegrationTestRun": false,
+    "failedTest": "McpServer.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_UsesIsolatedCwdNotConfiguredRepoRoot",
+    "check": "incomplete-trx-outcome on McpServer.Support.Mcp.Tests.trx"
+  },
+  "buildTests": {
+    "total": 321,
+    "passed": 321,
+    "failed": 0,
+    "skipped": 0
+  },
+  "gateLog": {
+    "path": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\p2-unit-legion-20261002T193045Z-gate.log",
+    "bytes": 784962,
+    "sha256": "FA0A7A32FF9B72DF30A5829BA437203305511999B8E93F1508B871B87E33C87B"
+  },
+  "launcherNote": "First attempt p2-unit-legion-20261002T192840Z died in CaptureSessionLifeUnitGate because %USERPROFILE%\\.dotnet\\tools\\pwsh.exe has process image dotnet.exe. The recorded run moved that shim aside so pwsh resolved to PowerShell 7.6.6, then restored the shim.",
+  "pesterFails": [
+    "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb (beginTurn primary expected empty string, actual persisted result length 398)",
+    "Session lifecycle public wrapper processes.codex exposes exactly one primary receipt and the matching process exit (missing F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\Invoke-CodexMcpPlugin.ps1, exit 64)",
+    "Session lifecycle public wrapper processes.codex exposes exactly one queued receipt and the matching process exit (same missing script, exit 64)",
+    "Session lifecycle public wrapper processes.codex exposes exactly one rejected receipt and the matching process exit (same missing script, exit 64)",
+    "Session lifecycle public wrapper processes.codex exposes exactly one lost receipt and the matching process exit (same missing script, exit 64)",
+    "Session lifecycle public wrapper processes.codex exposes exactly one unchanged receipt and the matching process exit (same missing script, exit 64)"
+  ]
+}

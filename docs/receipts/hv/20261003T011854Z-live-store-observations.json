@@ -1,0 +1,493 @@
+{
+  "recordedAtUtc": "2026-10-03T01:32:01.7226494+00:00",
+  "source": "Native MCP requirements_list(type=all) and todo_list during this review; source responses retained in the review tool context, compared to current audit rows",
+  "workspacePath": "F:\\GitHub\\McpServer",
+  "todos": [
+    {
+      "id": "BUG-TRIAGE-170",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-171",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-180",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-181",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-182",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-184",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-185",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-186",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-198",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-199",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-200",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-202",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-204",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-205",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-208",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-210",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-214",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-221",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-226",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-229",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-232",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-234",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-236",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-239",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-245",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-165",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-172",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-173",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-175",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-213",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-240",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-241",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-243",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-244",
+      "done": false
+    },
+    {
+      "id": "BUG-TRIAGE-246",
+      "done": false
+    }
+  ],
+  "criteria": [
+    {
+      "id": "FR-MCP-SESSIONLIFE-001-AC001",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-001-AC002",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-001-AC003",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-001-AC004",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-001-AC005",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-002-AC001",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-002-AC002",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-002-AC003",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-002-AC004",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-002-AC005",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-003-AC001",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-003-AC002",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-003-AC003",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-003-AC004",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-003-AC005",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-003-AC006",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "TR-MCP-SESSIONLIFE-001-AC001",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "TR-MCP-SESSIONLIFE-001-AC002",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "TR-MCP-SESSIONLIFE-001-AC003",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "TR-MCP-SESSIONLIFE-002-AC001",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "TR-MCP-SESSIONLIFE-002-AC002",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "TR-MCP-SESSIONLIFE-002-AC003",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "TR-MCP-SESSIONLIFE-003-AC001",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "TR-MCP-SESSIONLIFE-003-AC002",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "TR-MCP-SESSIONLIFE-003-AC003",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "TEST-MCP-SESSIONLIFE-001-AC001",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "TEST-MCP-SESSIONLIFE-001-AC002",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "TEST-MCP-SESSIONLIFE-001-AC003",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "TEST-MCP-SESSIONLIFE-002-AC001",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "TEST-MCP-SESSIONLIFE-002-AC002",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "TEST-MCP-SESSIONLIFE-002-AC003",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "TEST-MCP-SESSIONLIFE-002-AC004",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "TEST-MCP-SESSIONLIFE-003-AC001",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "TEST-MCP-SESSIONLIFE-003-AC002",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "TEST-MCP-SESSIONLIFE-003-AC003",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "FR-MCP-170-AC002",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "FR-MCP-170-AC003",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "AC-FR-MCP-SESSIONLOGCTX-001-002",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "AC-FR-MCP-SESSIONLOGCTX-001-003",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": false,
+      "manifestStoreSatisfied": false,
+      "status": "pending"
+    },
+    {
+      "id": "FR-MCP-REPL-009-AC001",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": true,
+      "manifestStoreSatisfied": true,
+      "status": "completed"
+    },
+    {
+      "id": "FR-MCP-REPL-009-AC002",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": true,
+      "manifestStoreSatisfied": true,
+      "status": "completed"
+    },
+    {
+      "id": "FR-MCP-REPL-009-AC003",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": true,
+      "manifestStoreSatisfied": true,
+      "status": "completed"
+    },
+    {
+      "id": "FR-MCP-REPL-009-AC004",
+      "found": true,
+      "textMatchesManifest": true,
+      "liveIsSatisfied": true,
+      "manifestStoreSatisfied": true,
+      "status": "completed"
+    }
+  ]
+}

@@ -12,7 +12,7 @@ For `cloudflare` in single-public-port environments, MCP exposes only the primar
 
 Current behavior and scope:
 
-- Publicly exposed: primary MCP host routes on the tunneled port (`/health`, `/auth/*`, primary-host `/mcpserver/*`)
+- Publicly exposed: primary MCP host routes on the tunneled port (`/health`, `/auth/*`, primary-host `/qbrainai/*`)
 - Not publicly exposed: child workspace listeners on `7147+`
 - If you need direct remote access to child workspace ports, use FRP TCP mode or implement a future primary-host workspace proxy/gateway feature
 
@@ -42,7 +42,7 @@ Implementation note:
 
 ## Configure MCP
 
-Update your MCP `appsettings.yaml` (Windows service: `C:\ProgramData\McpServer\appsettings.yaml`) with one of the following.
+Update your MCP `appsettings.yaml` (Windows service: `C:\ProgramData\QBrainAi\appsettings.yaml`) with one of the following.
 
 ### Quick Tunnel (Dev/Ad Hoc)
 
@@ -88,7 +88,7 @@ Use the Cloudflare hostname for:
 
 - `GET /health` (connectivity smoke test)
 - `GET /auth/config`, `POST /auth/device`, `POST /auth/token`, `GET/POST /auth/ui/*` (OIDC device-flow + browser proxy on the same host)
-- Primary-host REST endpoints under `/mcpserver/*` (with `X-Api-Key`)
+- Primary-host REST endpoints under `/qbrainai/*` (with `X-Api-Key`)
 
 Do not assume the Cloudflare hostname exposes child workspaces on `7147+`.
 
@@ -121,7 +121,7 @@ If a remote client needs a non-primary workspace endpoint:
 1. Validate an authenticated MCP endpoint (replace API key):
 
    ```bash
-   curl https://<your-cloudflare-host>/mcpserver/workspace -H "X-Api-Key: <workspace-api-key>"
+   curl https://<your-cloudflare-host>/qbrainai/workspace -H "X-Api-Key: <workspace-api-key>"
    ```
 
 ## Troubleshooting
@@ -165,7 +165,7 @@ Verify `cloudflared tunnel list` and `cloudflared tunnel run <TunnelName>` manua
 - [ ] Public hostname is known (quick tunnel URL or named tunnel DNS hostname)
 - [ ] `GET /health` works through the public Cloudflare hostname
 - [ ] `GET /auth/config` works through the public Cloudflare hostname (when auth enabled)
-- [ ] Authenticated `GET /mcpserver/workspace` works with `X-Api-Key`
+- [ ] Authenticated `GET /qbrainai/workspace` works with `X-Api-Key`
 - [ ] Team understands current scope: primary host only, child workspace ports remain private
 
 ## Provider Hardening Status

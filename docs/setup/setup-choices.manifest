@@ -36,9 +36,9 @@
         "sourceBranch": "main",
         "sourceCommit": "b776df525fc721894ca76e2604a51764d49e1a4d",
         "acquisition": "Operator-specified GitHub repository; clone and pin only after plan acknowledgment",
-        "existingInstalledPluginRoot": "/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.107.0",
+        "existingInstalledPluginRoot": "/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/qbrainai/1.107.0",
         "skillMirrorPolicy": "Use plugin-native installation; inspect existing mirrors before copying; preserve private operator skills",
-        "runtimePluginRoot": "/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.107.0"
+        "runtimePluginRoot": "/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/qbrainai/1.107.0"
       }
     },
     {
@@ -72,7 +72,7 @@
         "sourceCommit": "7d5706636ed3a294937eb8e67f07d6eaea3c460e",
         "acquisition": "Operator-specified GitHub repository; clone and pin only after plan acknowledgment",
         "skillMirrorPolicy": "Use plugin-native installation; inspect existing mirrors before copying; preserve private operator skills",
-        "runtimePluginRoot": "/home/sharpninja/.claude/plugins/cache/mcpserver-local/mcpserver/1.107.0",
+        "runtimePluginRoot": "/home/sharpninja/.claude/plugins/cache/mcpserver-local/qbrainai/1.107.0",
         "authenticated": false,
         "hooks": "validation status valid; native request/PostToolUse/Stop acceptance pending",
         "nativeAcceptance": "skipped by explicit operator request 2026-09-28; not validated"
@@ -147,7 +147,7 @@
     "installPath": "/opt/mcpserver",
     "port": 7147,
     "runAs": "mcpserver",
-    "executable": "/opt/mcpserver/app/McpServer.Support.Mcp",
+    "executable": "/opt/mcpserver/app/QBrainAi.Support.Mcp",
     "runtimeDir": "/opt/mcpserver/app",
     "details": {
       "type": "simple",

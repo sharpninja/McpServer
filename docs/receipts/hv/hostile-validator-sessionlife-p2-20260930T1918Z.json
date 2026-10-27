@@ -1,0 +1,777 @@
+{
+  "TimestampUtc": "2026-09-30T19:13:51.1591083+00:00",
+  "ValidatorIdentity": "Codex/gpt-6-astra/xhigh",
+  "WorkClass": "project implementation: P2 SessionLife contracts",
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 99,
+  "Completeness": 94,
+  "Confidence": 99,
+  "tipSha": "fdd2d83292bdee285589d7d5347b4a0a8c0e214c",
+  "RunId": "p2-unit-legion-20260930T1932Z",
+  "AddProfile": {
+    "fullRead": true,
+    "profileFileCount": 21,
+    "skill": "C:/Users/kingd/.claude/skills/add-profile/SKILL.md",
+    "executed": true
+  },
+  "OperatorOverrides": [
+    "Astra replaces Grok for this pass",
+    "PowerShell 5.1 permitted on PAYTON-LEGION2 if pwsh unavailable; actual pwsh 7.6.5 used",
+    "MCP session-log persistence waived; receipt-only permitted",
+    "Review-only; no remediation/merge/commit/push/TODO or goal completion",
+    "AGREE requires all applicable A-D PASS and accuracy/completeness >=98"
+  ],
+  "ModelEffortProof": {
+    "path": "C:\\Users\\kingd\\.codex\\sessions\\2026\\09\\30\\rollout-2026-09-30T13-49-02-01a0f3a6-12aa-7142-bce0-433e08fa2f03.jsonl",
+    "events": [
+      {
+        "line": 1,
+        "type": "session_meta",
+        "id": "01a0f3a6-12aa-7142-bce0-433e08fa2f03",
+        "originator": "codex_exec",
+        "cli_version": "0.158.0-alpha.2.1",
+        "cwd": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2"
+      },
+      {
+        "line": 8,
+        "type": "turn_context",
+        "model": "gpt-6-astra",
+        "effort": "xhigh",
+        "reasoning_effort": null,
+        "cwd": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2"
+      }
+    ]
+  },
+  "PullRequest": {
+    "baseRefName": "develop",
+    "headRefName": "cursor/sessionlife-p2-contracts-5cb2",
+    "headRefOid": "fdd2d83292bdee285589d7d5347b4a0a8c0e214c",
+    "number": 72,
+    "state": "OPEN",
+    "url": "https://github.com/sharpninja/McpServer/pull/72"
+  },
+  "Claims": [
+    {
+      "id": "A1",
+      "surface": "A",
+      "status": "FAIL",
+      "claim": "All prior F1-F10 contracts are fully remediated without weakening the claims.",
+      "evidence": "F1/F2/F4/F5/F8/F9 original defects pass. F3 exact A-to-B rejection is repaired, but exact identity proof is incomplete. F6 attempts recovery but omits creation metadata. F7 still misreports a valid hash-containing recovery path and duplicate degraded hook state. F10 concrete coverage remains incomplete. See reattack and findings."
+    },
+    {
+      "id": "A2",
+      "surface": "A",
+      "status": "PASS",
+      "claim": "RunId p2-unit-legion-20260930T1932Z is an accepted fresh unit gate at the requested candidate.",
+      "evidence": "Reparsed all 196 NUnit cases and all 4572 TRX outcomes: Pester 196/0/0; seven Nuke projects 4251/0/0; Build.Tests 321/0/0. All command exits 0, no native failed blocks/containers. Direct compiled SessionLifeUnitGateValidator.Validate independently ACCEPTED the existing artifacts. Gate log explicitly names fdd2d832; commit predates execution. This reviewer reparsed, not reran, the full gate."
+    },
+    {
+      "id": "A3",
+      "surface": "A",
+      "status": "PASS",
+      "claim": "PluginIntegration remains excluded from unit inventory and owned by P6.",
+      "evidence": "build/Build.Test.cs:14-25 filters PluginIntegration and IntegrationTests; one selected-project array feeds inventory and execution. Actual inventory has seven projects, no PluginIntegration. Plan:295-327,400 retains PluginSessionLogIntegration. Native exclusion regression passes."
+    },
+    {
+      "id": "A4",
+      "surface": "A",
+      "status": "PASS",
+      "claim": "F9 source binding includes the named P2 runtime, orchestration and contract-document inputs.",
+      "evidence": "All 2228 source hashes match current files. All eight formerly omitted inputs now exist in source-manifest.json. Roots include plugins/core/lib-ps, tools/validation, docs/context, docs/REPL-USER-GUIDE.md. Exact before/after artifact hashes and validator acceptance are in native-audit.json."
+    },
+    {
+      "id": "A5",
+      "surface": "A",
+      "status": "PASS",
+      "claim": "history-r1 remains frozen and the P1 validator regression stack is not silently broken.",
+      "evidence": "history-manifest SHA256 B56354AA46F36AA092AEC7A38E0849353F77A6D34A4C07552FBF5EBC192C6DA4; all five archived hashes match. No diff in frozen history. All 95 inherited gate cases and the PluginIntegration-exclusion case pass (96/0). Remaining P1 fixture diff concerns the temp root; no ignored/skipped case was substituted."
+    },
+    {
+      "id": "A6",
+      "surface": "A",
+      "status": "FAIL",
+      "claim": "P2 completeness reaches 98 through concrete per-AC mappings and covered branches, with acceptance state preserved.",
+      "evidence": "Only 16/35 selected FR/TR/TEST-001..003 rows have criterionSpecificExistingTests, including 13/16 FR rows and 0/9 TR rows. One mapped label is absent from native results. Material P2 branches fail independent probes. All 35 TODO acceptance rows are correctly still not-accepted; preserving them does not establish completeness."
+    },
+    {
+      "id": "B1",
+      "surface": "B",
+      "status": "PASS",
+      "claim": "Required add-profile was executed first and all profile files were read.",
+      "evidence": "First attempted command read C:/Users/kingd/.claude/skills/add-profile/SKILL.md. Sandbox helper failed with OS error 206; approved unsandboxed pwsh read succeeded. All 21 non-skill profile Markdown files were read in full; truncated middle/root output was reread. Profile filenames and hashes are in trace-audit.json."
+    },
+    {
+      "id": "B2",
+      "surface": "B",
+      "status": "PASS",
+      "claim": "This review uses the authorized evidence shell and no Python.",
+      "evidence": "PAYTON-LEGION2; C:/Users/kingd/.cache/codex-runtimes/codex-primary-runtime/dependencies/native/powershell/pwsh.exe 7.6.5. No Python or Bash execution. rg was unavailable, so PowerShell and git grep were used. The Windows PowerShell 5.1 override was recorded but not needed."
+    },
+    {
+      "id": "B3",
+      "surface": "B",
+      "status": "PASS",
+      "claim": "Receipt-only review persistence follows the explicit operator exception.",
+      "evidence": "MCP session-log persistence is expressly waived. Missing AGENTS-README-FIRST.yaml is recorded, not treated as a logging failure. Full current request, visible response/tool stream snapshot, full verdict Markdown and JSON are retained below docs/receipts/hv. Earlier runner request naming 1915Z is preserved; the appended effective request contains the exact current 1932Z brief."
+    },
+    {
+      "id": "B4",
+      "surface": "B",
+      "status": "PASS",
+      "claim": "Live validator is Codex/gpt-6-astra/xhigh.",
+      "evidence": "Exact thread 01a0f3a6-12aa-7142-bce0-433e08fa2f03: session_meta line 1 names codex_exec, CLI 0.158.0-alpha.2.1, correct worktree. turn_context line 8 names model gpt-6-astra and effort xhigh. Separate codex-auto-review/low approval helper is not the validator."
+    },
+    {
+      "id": "B5",
+      "surface": "B",
+      "status": "PASS",
+      "claim": "No historical P2 HV AGREE or future-phase completion is invented.",
+      "evidence": "p2-contracts-verdict.json retains accepted=false, phaseComplete=false, hvAgreeClaimed=false. Old red and prior DISAGREE evidence is preserved. P0/P1 historical acceptances are not recast as P2 acceptance."
+    },
+    {
+      "id": "B6",
+      "surface": "B",
+      "status": "FAIL",
+      "claim": "Remediation respects the object-first YAML mutation rule.",
+      "evidence": "AGENTS.md:28 requires deserialization/mutation/serialization via yaml-object-mutation.ps1. New repl-invoke.ps1:155-159 appends raw failsafePath text. A real hook probe under a valid directory containing space+# produces a truncated, nonexistent recoveryArtifactPath, proving the concrete serialization defect."
+    },
+    {
+      "id": "B7",
+      "surface": "B",
+      "status": "UNKNOWN",
+      "claim": "Historical implementation automation fully complied with no-Python and MCP-only storage rules.",
+      "evidence": "p2-contracts-verdict.json explicitly says structuredSerialization=Python json module serializing native objects, as does historical failure evidence. Original author command trace was not independently established. No inference of compliance or fabricated execution is made from narrative alone."
+    },
+    {
+      "id": "B8",
+      "surface": "B",
+      "status": "UNKNOWN",
+      "claim": "Required P2 red-test inter-phase hostile review is established.",
+      "evidence": "No linked P2 red-test AGREE receipt was located in tracked P2 plans/receipts or the remediation commit scope. Plan:172,259,384 requires it. Existing P1 review does not cover P2; phaseComplete remains false. This is an evidence gap, not an inference from source or FR timestamps."
+    },
+    {
+      "id": "B9",
+      "surface": "B",
+      "status": "PASS",
+      "claim": "This validator preserved review-only scope.",
+      "evidence": "Only receipt scripts, fixture evidence, Markdown/JSON/JSONL under docs/receipts/hv were written. No product remediation, merge, commit, push, deployment, TODO/goal completion, or real MCP storage write. The three pre-existing tracked dirty files remain the only dirty tracked files outside receipts."
+    },
+    {
+      "id": "C1",
+      "surface": "C",
+      "status": "PASS",
+      "claim": "Structured governing requirements, AC and mapping snapshots exist.",
+      "evidence": "Acceptance manifest has 109 AC rows, 47 unique mapping edges, exact 35 unique TODO scope entries; selected FR/TR/TEST-SESSIONLIFE-001..003 comprises 35 rows. The snapshot includes explicit text, real assertion, production paths and integration scenario. This is verified exported content, not fresh MCP store readback."
+    },
+    {
+      "id": "C2",
+      "surface": "C",
+      "status": "FAIL",
+      "claim": "Current P2 AC-to-test traceability and criterion-specific tests are complete.",
+      "evidence": "F10 persists. TR-001/002 P2 rows lack concrete mappings; FR-001-AC003 and FR-002-AC002 are unmapped despite existing related tests. FR-001-AC004 maps a nonexistent shorthand plus an unrelated envelope test. TEST-001-AC003 maps three behavioral facts instead of inventory assertion; TEST-002-AC003 maps outcome facts instead of manifest completeness assertion. Hook-path test builds its expected object rather than invoking hook. Guide test regex-matches text without parsing all YAML documents."
+    },
+    {
+      "id": "C3",
+      "surface": "C",
+      "status": "FAIL",
+      "claim": "Implemented P2 behavior satisfies the applicable AC, independent of suite green.",
+      "evidence": "HV01-HV06 violate first-persist metadata, exact durable identity, no-mutation request mismatch, recoverability and hook-status AC. Captured payloads were also passed to the real compiled server metadata validator. Deferred server readback/provider/security/Stop work is not used as a present P2 failure."
+    },
+    {
+      "id": "D1",
+      "surface": "D",
+      "status": "FAIL",
+      "claim": "P2 definition of done is met holistically.",
+      "evidence": "Plan:254-260,371,392 requires real builder/shim metadata and identity coverage, all verb outcomes, correct docs, red-test review and cumulative gate plus independent acceptance. The gate and current examples pass; metadata/identity/recovery/coverage failures and unresolved red-review evidence prevent P2 exit. No next-slice authorization is provided."
+    },
+    {
+      "id": "D2",
+      "surface": "D",
+      "status": "PASS",
+      "claim": "Future-phase scope and acceptance discipline are preserved.",
+      "evidence": "P3 Stop/deadline, P4 security/storage, P5 synchronization and P6 durable/provider/integration proofs remain deferred. PluginIntegration is not reintroduced. All 35 TODO acceptance rows remain not-accepted; no goal or TODO was changed."
+    }
+  ],
+  "SurfaceVerdicts": {
+    "B": "FAIL",
+    "A": "FAIL",
+    "D": "FAIL",
+    "C": "FAIL"
+  },
+  "ReattackF1ToF10": [
+    {
+      "status": "PASS",
+      "evidence": "Four real-function bad success envelopes reject, retain one failsafe each and clear none.",
+      "originalProbe": "PASS",
+      "id": "F1"
+    },
+    {
+      "status": "PASS",
+      "evidence": "Cross-session queue keeps A and B with two calls/two records; changed processingDialog produces two calls.",
+      "originalProbe": "PASS",
+      "id": "F2"
+    },
+    {
+      "status": "FAIL",
+      "evidence": "Original A-to-B rebind is refused and absence of persisted no longer qualifies; HV02 still disproves exact identity before omission.",
+      "originalProbe": "PASS",
+      "id": "F3"
+    },
+    {
+      "status": "PASS",
+      "evidence": "updateTurn and appendDialog mismatches reject without backend calls or cache mutation. HV03 records separate remaining verbs.",
+      "originalProbe": "PASS",
+      "id": "F4"
+    },
+    {
+      "status": "PASS",
+      "evidence": "Explicit valid update metadata changes both cache and serialized payload; real server validator accepts that pair.",
+      "originalProbe": "PASS",
+      "id": "F5"
+    },
+    {
+      "status": "FAIL",
+      "evidence": "Original missing recovery attempt is repaired: exactly one Submit now occurs. Real payload lacks required metadata and is rejected; HV01.",
+      "originalProbe": "PASS",
+      "id": "F6"
+    },
+    {
+      "status": "FAIL",
+      "evidence": "Initial simple-path hook now reports retained artifact. Actual hash-containing path and duplicate-degraded branches still fail; HV04.",
+      "originalProbe": "PASS",
+      "id": "F7"
+    },
+    {
+      "status": "PASS",
+      "evidence": "Bootstrap complete JSON fences parse; two beginTurn examples. All three guide beginTurn YAML examples, including indented/multidocument examples, parse with explicit None pair. Schema parses. Nonexhaustive test remains under F10.",
+      "originalProbe": "PASS",
+      "id": "F8"
+    },
+    {
+      "status": "PASS",
+      "evidence": "Eight previously missing critical inputs are included; 2228 current hashes match; compiled validator ACCEPTED the fresh run.",
+      "originalProbe": "PASS",
+      "id": "F9"
+    },
+    {
+      "status": "FAIL",
+      "evidence": "16 rows populated but material P2 mappings/branches remain absent or falsely represented by unrelated/fixture-only tests; HV07.",
+      "originalProbe": "FAIL",
+      "id": "F10"
+    }
+  ],
+  "Findings": [
+    {
+      "id": "HV01",
+      "status": "FAIL",
+      "severity": "high",
+      "title": "First-persist metadata is still omitted across append/complete/recovery and update fallback.",
+      "evidence": "repl-invoke.ps1:2157,2276,2407-2420,2473; McpPluginShim.psm1:476-481. Real builder probes metadata-appendActions-* and metadata-completeTurn-* omit both fields even with explicit or cached valid values; metadata-updateTurn-none omits instead of exact None. Degraded appendDialog performs one Submit but its envelope also omits both fields. Real compiled ValidateForNewEntry rejects all eight defective captured payloads with planFile is omitted; explicit/cache update payloads pass.",
+      "impact": "Ordinary first persistence cannot recover these turns through the specified contract. F5 explicit update is repaired and F6 now makes one attempt, but a green fake transport masked invalid payloads. No live-server persistence is claimed by this probe.",
+      "requirements": "FR-MCP-SESSIONLIFE-001-AC004; FR-MCP-SESSIONLIFE-002-AC001/003; TR-MCP-SESSIONLIFE-001-AC003; TR-MCP-SESSIONLIFE-002-AC001"
+    },
+    {
+      "id": "HV02",
+      "status": "FAIL",
+      "severity": "high",
+      "title": "Durable reopen accepts incomplete or wrong-workspace identity proof.",
+      "evidence": "repl-invoke.ps1:1992-1994 treats empty cached sessionId as matching; beginTurn does not run Assert-ReplCurrentTurnFresh before deciding omission and overwrites marker fields at 2053-2055. begin-without-identity-proof and begin-wrong-workspace-proof both return true, call Submit once, omit metadata, and rewrite local identity/marker state. Original A-to-B same-request probe now rejects correctly.",
+      "impact": "A persisted flag alone can select durable omission for an unproven exact workspace/agent/session/request, contrary to the locked identity contract.",
+      "requirements": "FR-MCP-SESSIONLIFE-002-AC003/004; TR-MCP-SESSIONLIFE-002-AC002"
+    },
+    {
+      "id": "HV03",
+      "status": "FAIL",
+      "severity": "high",
+      "title": "Other mutation verbs still accept mismatched requests or mutate before rejecting.",
+      "evidence": "repl-invoke.ps1:2455 runs title mutation before 2463-2466 rejection; failTurn:2543-2562 never checks caller requestId; setTurnTitle:2630-2647 also ignores it. mismatch-failTurn returns true, submits req-R from a req-OTHER call and deletes current-turn.yaml. mismatch-setTurnTitle returns true, calls backend and changes req-R title. mismatch-completeTurn returns false with zero backend calls but cache SHA changes to the wrong caller title. Repaired update/dialog retain identical cache hashes and make zero calls.",
+      "impact": "A wrong caller can fail, retitle, or modify another turn. Guarding only update/dialog does not satisfy the all-mutation AC.",
+      "requirements": "FR-MCP-SESSIONLIFE-003-AC003; FR-MCP-SESSIONLIFE-002-AC004"
+    },
+    {
+      "id": "HV04",
+      "status": "FAIL",
+      "severity": "medium",
+      "title": "Recovery artifact diagnostics are still false or missing on actual hook paths.",
+      "evidence": "repl-invoke.ps1:155-159 writes failsafePath as unquoted YAML text. real-hook-degraded-hash-path uses a valid Windows folder containing space+#: retained artifact exists but returned path truncates before # and Test-Path is false. plugin-hook.ps1:812-824 duplicate path emits turn-already-open without degraded flag or recoveryArtifactPath for the still-degraded turn. The normal initial degraded hook path now correctly reports its artifact.",
+      "impact": "F7 is only partially repaired: operators still cannot locate the retained artifact for supported paths or duplicate hook delivery. This also substantiates the workspace YAML-rule violation.",
+      "requirements": "FR-MCP-SESSIONLIFE-001-AC002; TR-MCP-SESSIONLIFE-001-AC002; AGENTS.md rule 12"
+    },
+    {
+      "id": "HV05",
+      "status": "FAIL",
+      "severity": "medium",
+      "title": "An identical degraded retry never attempts primary recovery.",
+      "evidence": "repl-invoke.ps1:1501-1504 returns queued before Invoke-ReplRaw when matching failsafe exists. degraded-identical-retry makes one initial failed call; after transport is switched to primary, second begin returns true/queued with zero additional calls and the retained envelope unchanged.",
+      "impact": "A same-request retry can remain queued indefinitely unless another independent drain path runs; the explicit retry itself does not perform the promised recovery.",
+      "requirements": "FR-MCP-SESSIONLIFE-001-AC005; P2 item 1"
+    },
+    {
+      "id": "HV06",
+      "status": "FAIL",
+      "severity": "medium",
+      "title": "A successful changed retry leaves the cached turn degraded.",
+      "evidence": "repl-invoke.ps1:1611-1612 marks persisted=true but does not clear degraded; beginTurn:2085 handles only failed persistence. degraded-changed-retry receives primary confirmation and returns persisted, but current-turn still has degraded=true and the old failsafePath.",
+      "impact": "Cache and primary outcome disagree; subsequent hook/reopen decisions keep using degraded state after confirmation. This is observed state inconsistency, without claiming P6 durable readback.",
+      "requirements": "FR-MCP-SESSIONLIFE-001-AC002/005; TR-MCP-SESSIONLIFE-001-AC001/002"
+    },
+    {
+      "id": "HV07",
+      "status": "FAIL",
+      "severity": "high",
+      "title": "F10 concrete AC coverage remains incomplete and some executed mappings do not test their criterion.",
+      "evidence": "trace-audit.json: 16/35 selected rows populated; 0/9 TR rows; one nonexistent native label. SessionLogP2Contracts.Tests.ps1:620-628 constructs hookOutput locally instead of invoking Open-PluginTurn; :528-533 regex-matches YAML instead of exhaustive parsing; added envelope fact tests only {}. No new concrete recovery-count/payload or fingerprint negative tests cover the independently reproduced branches. Relevant P2 TR rows and FR-001-AC003/FR-002-AC002 still lack concrete mapping.",
+      "impact": "Current test counts cannot establish completeness >=98. Counts include some future-phase criteria and are not presented as a product correctness percentage. The specific current P2 gaps above independently block acceptance.",
+      "requirements": "TEST-MCP-SESSIONLIFE-001-AC001/002/003; TEST-MCP-SESSIONLIFE-002-AC001/003; plan section 7 Baseline and Traceability"
+    },
+    {
+      "id": "HV08",
+      "status": "FAIL",
+      "severity": "medium",
+      "title": "New runtime YAML text mutation violates the explicit workspace rule.",
+      "evidence": "AGENTS.md:28; repl-invoke.ps1:155-159 newly appends a failsafePath line rather than using the YAML object helper. HV04 reproduces path corruption from that exact new branch.",
+      "impact": "The implementation should use the required object serializer; this review does not implement that remediation.",
+      "requirements": "AGENTS.md rule 12; plan:19"
+    },
+    {
+      "id": "HV09",
+      "status": "FAIL",
+      "severity": "gate",
+      "title": "Completeness 94 is below the required 98 threshold.",
+      "evidence": "The incomplete concrete mappings, failing cross-verb and identity/recovery branches, fixture-echo proof, and historical review gaps prevent the requested evidence-completeness score. Accuracy is 99, completeness 94, confidence 99.",
+      "impact": "OverallVerdict must be DISAGREE irrespective of the green gate. Scores are reviewer assessments of supported evidence, not measured percentages of code correctness.",
+      "requirements": "Operator 98/98 gate"
+    }
+  ],
+  "Unknowns": [
+    {
+      "id": "B7",
+      "surface": "B",
+      "status": "UNKNOWN",
+      "claim": "Historical implementation automation fully complied with no-Python and MCP-only storage rules.",
+      "evidence": "p2-contracts-verdict.json explicitly says structuredSerialization=Python json module serializing native objects, as does historical failure evidence. Original author command trace was not independently established. No inference of compliance or fabricated execution is made from narrative alone."
+    },
+    {
+      "id": "B8",
+      "surface": "B",
+      "status": "UNKNOWN",
+      "claim": "Required P2 red-test inter-phase hostile review is established.",
+      "evidence": "No linked P2 red-test AGREE receipt was located in tracked P2 plans/receipts or the remediation commit scope. Plan:172,259,384 requires it. Existing P1 review does not cover P2; phaseComplete remains false. This is an evidence gap, not an inference from source or FR timestamps."
+    }
+  ],
+  "PerAcReview": [
+    {
+      "id": "FR-MCP-SESSIONLIFE-001-AC001",
+      "text": "A degraded begin retains every cached turn field, including prompt, context, metadata, identity, status, timestamps, title, and counters; it never replaces the turn with a reduced three-field object.",
+      "p2Disposition": "PASS",
+      "evidence": "Native degraded-field tests and actual cache probes preserve normal-path creation metadata.",
+      "concreteMappings": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves degraded creation metadata and sends cached plan on the same request"
+      ],
+      "missingNativeNames": []
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-001-AC002",
+      "text": "Prompt-hook status reports durable opened only after confirmed primary persistence; otherwise it reports opened-degraded and identifies the retained recovery artifact without representing the turn as server-persisted.",
+      "p2Disposition": "FAIL",
+      "evidence": "HV04/HV06: actual hook path and state diagnostics.",
+      "concreteMappings": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path"
+      ],
+      "missingNativeNames": []
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-001-AC003",
+      "text": "Complete recovers required query text from the cached query text, then a valid cached title, then the approved placeholder, without replacing a valid title; update omits empty query text so stored query text and title are preserved.",
+      "p2Disposition": "PASS",
+      "evidence": "Native lifecycle fallback and real builder empty-query tests; criterion mapping itself absent.",
+      "concreteMappings": [],
+      "missingNativeNames": []
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-001-AC004",
+      "text": "A missing-turn appendDialog on an already degraded local turn performs at most one bounded recovery submit and then retains a session_dialog failsafe; an unrelated never-degraded not-found remains a classified nonretryable error.",
+      "p2Disposition": "FAIL",
+      "evidence": "HV01: recovery now attempts one Submit but lacks first-persist metadata.",
+      "concreteMappings": [
+        "SessionLogLifecycle: degraded 404 queues session_dialog",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery"
+      ],
+      "missingNativeNames": [
+        "SessionLogLifecycle: degraded 404 queues session_dialog"
+      ]
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-001-AC005",
+      "text": "A same-request retry supplies preserved creation metadata, normalizes canceled and cancelled supersession consistently, and never silently converts locally active state into proof of server persistence.",
+      "p2Disposition": "FAIL",
+      "evidence": "HV05/HV06: identical retry suppressed, changed retry leaves degraded flag.",
+      "concreteMappings": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path"
+      ],
+      "missingNativeNames": []
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-002-AC001",
+      "text": "First persistence resolves planFile and todoId using explicit request values, then verified cache values, then the exact sentinel None, and stores a non-null pair.",
+      "p2Disposition": "FAIL",
+      "evidence": "HV01: append/complete and update None branch.",
+      "concreteMappings": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata"
+      ],
+      "missingNativeNames": []
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-002-AC002",
+      "text": "Ordinary raw first persistence rejects omitted, null, empty, or whitespace metadata; canceled or cancelled supersession may omit it and stores None, and a durable reopen preserves that omission contract.",
+      "p2Disposition": "PASS",
+      "evidence": "Compiled metadata validator and native raw first-persist/supersession tests; durable reopen omission works for properly bound ordinary case. Mapping remains incomplete.",
+      "concreteMappings": [],
+      "missingNativeNames": []
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-002-AC003",
+      "text": "Explicit metadata updates both cache and outgoing persistence. Omission after binding is allowed only after durable identity is proven for the exact workspace, agent, session, and request.",
+      "p2Disposition": "FAIL",
+      "evidence": "HV01/HV02: metadata and exact identity proof.",
+      "concreteMappings": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata"
+      ],
+      "missingNativeNames": []
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-002-AC004",
+      "text": "Freshness validation rejects workspace, agent, session, or request drift and never rewrites or rebinds an already cached session identifier from a marker or inherited process value.",
+      "p2Disposition": "FAIL",
+      "evidence": "HV02/HV03: begin workspace and request-mismatch branches.",
+      "concreteMappings": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects a request mismatch and a wrong-workspace marker without changing session A or request R",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.does not write a second failsafe for an unchanged queued update and keeps additive methods distinct"
+      ],
+      "missingNativeNames": []
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-002-AC005",
+      "text": "The three governing contract documents consistently describe explicit/cache/None precedence, ordinary first-persist rejection, canceled/cancelled supersession, and durable-reopen omission.",
+      "p2Disposition": "PASS",
+      "evidence": "Independent full-fence parser: 2 bootstrap + 3 guide begin examples, all nonempty pairs; schema contracts checked.",
+      "concreteMappings": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema"
+      ],
+      "missingNativeNames": []
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-003-AC001",
+      "text": "Every session-log mutation returns exactly one truthful outcome: primary persisted, degraded queued with a confirmed retained failsafe, or failed/lost with a nonzero process result.",
+      "p2Disposition": "PASS",
+      "evidence": "Native real-process matrix covers eight verbs times primary/queued/lost with exits; other request-rejection branches separately fail AC002/003.",
+      "concreteMappings": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery"
+      ],
+      "missingNativeNames": []
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-003-AC002",
+      "text": "The result includes code, retryable, persisted, degraded, queued, method, requestId, failsafePath, message, and diagnostic stderr fields appropriate to the observed outcome.",
+      "p2Disposition": "FAIL",
+      "evidence": "appendActions/complete mismatch return false without classified receipt; actual probe receipt null.",
+      "concreteMappings": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb"
+      ],
+      "missingNativeNames": []
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-003-AC003",
+      "text": "Caller requestId is honored only when it matches the active turn; mismatches are rejected without mutating cache, server state, or recovery artifacts.",
+      "p2Disposition": "FAIL",
+      "evidence": "HV03: request mismatch mutations.",
+      "concreteMappings": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata"
+      ],
+      "missingNativeNames": []
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-003-AC004",
+      "text": "A primary-success result is accepted only with exact server readback of the intended response, interpretation, tags, contextList, actions or dialog, and identity.",
+      "p2Disposition": "DEFERRED",
+      "evidence": "Exact server readback belongs to P6 per P2 item 4; no present P2 failure for this.",
+      "concreteMappings": [],
+      "missingNativeNames": []
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-003-AC005",
+      "text": "Repeated unchanged updates and sequential append/complete calls are idempotent: no duplicate recovery work, child rows, or outcome ambiguity is introduced.",
+      "p2Disposition": "PASS",
+      "evidence": "P2 unit boundary: native queued dedupe/additive drain and independent identity/dialog fingerprint probes. Durable server idempotence remains P6.",
+      "concreteMappings": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.does not write a second failsafe for an unchanged queued update and keeps additive methods distinct"
+      ],
+      "missingNativeNames": []
+    },
+    {
+      "id": "FR-MCP-SESSIONLIFE-003-AC006",
+      "text": "Write-ahead recovery is retained before backend submission and deleted only after durable confirmation; a queued result is never represented as primary persistence or accepted TODO completion evidence.",
+      "p2Disposition": "PASS",
+      "evidence": "Four ambiguous/contradictory success replies retain recovery; valid confirmation clears current envelope. TODO acceptance unchanged.",
+      "concreteMappings": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery"
+      ],
+      "missingNativeNames": []
+    },
+    {
+      "id": "TR-MCP-SESSIONLIFE-001-AC001",
+      "text": "One real begin-turn builder or shim preserves the complete cached turn on degraded persistence and exposes a shared, truthful degraded transition used by all hooks.",
+      "p2Disposition": "FAIL",
+      "evidence": "HV06 shared degraded-state inconsistency.",
+      "concreteMappings": [],
+      "missingNativeNames": []
+    },
+    {
+      "id": "TR-MCP-SESSIONLIFE-001-AC002",
+      "text": "Prompt, complete, update, and dialog hooks consume the shared transition without reduced-object replacement, empty-query overwrite, or false server-persisted status.",
+      "p2Disposition": "FAIL",
+      "evidence": "HV04/HV06 hook diagnostics and state.",
+      "concreteMappings": [],
+      "missingNativeNames": []
+    },
+    {
+      "id": "TR-MCP-SESSIONLIFE-001-AC003",
+      "text": "Degraded missing-turn dialog recovery is bounded to one submit attempt and one retained dialog failsafe, while unrelated not-found remains nonretryable.",
+      "p2Disposition": "FAIL",
+      "evidence": "HV01 invalid recovery payload despite bounded attempt.",
+      "concreteMappings": [],
+      "missingNativeNames": []
+    },
+    {
+      "id": "TR-MCP-SESSIONLIFE-002-AC001",
+      "text": "A single durability-first metadata resolver implements explicit, verified-cache, and None precedence for planFile and todoId.",
+      "p2Disposition": "FAIL",
+      "evidence": "HV01 no single resolver serving all creation paths.",
+      "concreteMappings": [],
+      "missingNativeNames": []
+    },
+    {
+      "id": "TR-MCP-SESSIONLIFE-002-AC002",
+      "text": "Workspace, agent, session, and request identity are immutable after binding; freshness checks diagnose drift and never rebind from markers or inherited variables.",
+      "p2Disposition": "FAIL",
+      "evidence": "HV02/HV03 identity not uniformly enforced.",
+      "concreteMappings": [],
+      "missingNativeNames": []
+    },
+    {
+      "id": "TR-MCP-SESSIONLIFE-002-AC003",
+      "text": "Ordinary first persistence, canceled/cancelled supersession, durable reopen, and all three contract documents use the same resolver semantics.",
+      "p2Disposition": "FAIL",
+      "evidence": "HV07 no exhaustive committed guide YAML parser or complete mapping; current documents themselves parse.",
+      "concreteMappings": [],
+      "missingNativeNames": []
+    },
+    {
+      "id": "TR-MCP-SESSIONLIFE-003-AC001",
+      "text": "The wrapper exposes a typed primary, queued, or failed outcome contract and no session-log mutation collapses that result to an unclassified boolean.",
+      "p2Disposition": "FAIL",
+      "evidence": "Rejected appendActions/complete branch leaves no classified receipt.",
+      "concreteMappings": [],
+      "missingNativeNames": []
+    },
+    {
+      "id": "TR-MCP-SESSIONLIFE-003-AC002",
+      "text": "Result serialization includes identity, method, durability, queue, retryability, diagnostic, and failsafe fields without claiming primary success for queued work.",
+      "p2Disposition": "FAIL",
+      "evidence": "Rejected appendActions/complete branch lacks required serialized outcome.",
+      "concreteMappings": [],
+      "missingNativeNames": []
+    },
+    {
+      "id": "TR-MCP-SESSIONLIFE-003-AC003",
+      "text": "Child REPL execution uses one operation deadline with deterministic process-tree cleanup, and dedupe preserves sequential method labels and queue counts.",
+      "p2Disposition": "DEFERRED",
+      "evidence": "Child deadline/cleanup is P3. P2 distinct method labels were verified in native matrix/additive test.",
+      "concreteMappings": [],
+      "missingNativeNames": []
+    },
+    {
+      "id": "TEST-MCP-SESSIONLIFE-001-AC001",
+      "text": "Mock-backed consumer tests prove degraded complete-turn preservation, truthful hook status, empty-query omission, bounded missing-turn dialog recovery, and same-request cached metadata.",
+      "p2Disposition": "FAIL",
+      "evidence": "HV07 real branches are missing.",
+      "concreteMappings": [],
+      "missingNativeNames": []
+    },
+    {
+      "id": "TEST-MCP-SESSIONLIFE-001-AC002",
+      "text": "At least one real builder or shim test runs with MCP_PLUGIN_PERSIST_LOG unset and asserts the complete cached object and serialized persistence payload rather than only fixture echo.",
+      "p2Disposition": "FAIL",
+      "evidence": "HV07 hook proof echoes a local object.",
+      "concreteMappings": [],
+      "missingNativeNames": []
+    },
+    {
+      "id": "TEST-MCP-SESSIONLIFE-001-AC003",
+      "text": "The accepted test scope exits with zero failures and zero skips and records the concrete test names and evidence paths in the acceptance manifest.",
+      "p2Disposition": "PASS",
+      "evidence": "All 196 actual Pester cases present and successful; mapped names still need correction under C2.",
+      "concreteMappings": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path"
+      ],
+      "missingNativeNames": []
+    },
+    {
+      "id": "TEST-MCP-SESSIONLIFE-002-AC001",
+      "text": "Named Pester tests cover metadata precedence, immutable identity, ordinary first persist, canceled/cancelled supersession, durable reopen, and all three contract documents.",
+      "p2Disposition": "FAIL",
+      "evidence": "HV07 required separate exhaustive parser and runtime tests not complete.",
+      "concreteMappings": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema"
+      ],
+      "missingNativeNames": []
+    },
+    {
+      "id": "TEST-MCP-SESSIONLIFE-002-AC002",
+      "text": "Named process tests cover primary, queued, and lost wrapper exits, structured result serialization, single child deadline and cleanup, Stop ordering, quarantine repair, audit reconciliation, and dialog classification.",
+      "p2Disposition": "FAIL",
+      "evidence": "Current P2 outcomes/mismatch gaps; future deadline/Stop/security portions remain deferred.",
+      "concreteMappings": [],
+      "missingNativeNames": []
+    },
+    {
+      "id": "TEST-MCP-SESSIONLIFE-002-AC003",
+      "text": "Every mock-backed consumer case has a corresponding real implementation assertion and recorded process exit or serialized receipt; unaccepted candidate tests remain explicitly not accepted.",
+      "p2Disposition": "FAIL",
+      "evidence": "HV07 incorrect mapping to behavior facts instead of manifest completeness proof.",
+      "concreteMappings": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery"
+      ],
+      "missingNativeNames": []
+    },
+    {
+      "id": "TEST-MCP-SESSIONLIFE-002-AC004",
+      "text": "The accepted cumulative test scope exits with zero failures, zero skips, no missing reports, and no zero-discovery projects.",
+      "p2Disposition": "PASS",
+      "evidence": "196 + 4251 + 321 all pass, zero skips; direct validator accepted.",
+      "concreteMappings": [],
+      "missingNativeNames": []
+    },
+    {
+      "id": "TEST-MCP-SESSIONLIFE-003-AC001",
+      "text": "Transaction-gated session-log tests prove non-QuadBrain action, dialog, update, and additive complete persistence without coordinator or keyserver invocation.",
+      "p2Disposition": "DEFERRED",
+      "evidence": "Non-QuadBrain server bypass/storage integration owned by later slices.",
+      "concreteMappings": [],
+      "missingNativeNames": []
+    },
+    {
+      "id": "TEST-MCP-SESSIONLIFE-003-AC002",
+      "text": "Exact durable readback verifies every child collection and repeated additive complete remains duplicate-free.",
+      "p2Disposition": "DEFERRED",
+      "evidence": "Exact durable additive readback is later integration, not asserted here.",
+      "concreteMappings": [],
+      "missingNativeNames": []
+    },
+    {
+      "id": "TEST-MCP-SESSIONLIFE-003-AC003",
+      "text": "The subset proof is linked to FR-MCP-173 but does not mark its broader first-party adapter obligations satisfied.",
+      "p2Disposition": "DEFERRED",
+      "evidence": "Broader FR-173 acceptance not claimed; mapping is retained in snapshot.",
+      "concreteMappings": [],
+      "missingNativeNames": []
+    }
+  ],
+  "NativeGate": {
+    "sourceDrift": [],
+    "nukePassed": 4251,
+    "failed": 0,
+    "pester": 196,
+    "fullSuiteRerunByValidator": false,
+    "skipped": 0,
+    "buildTestsPassed": 321,
+    "artifactDrift": [],
+    "sourceHashes": 2228,
+    "compiledValidator": "ACCEPTED",
+    "nukeUnitProjects": 7
+  },
+  "PreservedState": {
+    "preExistingDirtyFiles": [
+      ".nuke/build.schema.json",
+      "docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+      "docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json"
+    ],
+    "historyFilesMatched": 5,
+    "notAcceptedRows": 35,
+    "historyR1Sha256": "B56354AA46F36AA092AEC7A38E0849353F77A6D34A4C07552FBF5EBC192C6DA4",
+    "todoRows": 35,
+    "currentTrackedDiff": [
+      ".nuke/build.schema.json",
+      "docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+      "docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json"
+    ],
+    "hvAgreeClaimed": false
+  },
+  "EvidenceArtifacts": [
+    {
+      "path": "docs/receipts/hv/20260930T1918Z-sessionlife-p2-native-audit.json",
+      "sha256": "C691CAE97F0010FD5221808357E884F94E838D33B002BE672EF80E827C5D55F6"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T1918Z-sessionlife-p2-probes.json",
+      "sha256": "4B38B6FA47EFF1208F5F2F12B46E9B833903FCAC23A03FFC87E9E915E7F15C2F"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T1918Z-sessionlife-p2-expanded-probes.json",
+      "sha256": "7ACEC7814CB8BDEBED40973D0F2ED44E068363AE5D2EB3EBCB6E055256BE6623"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T1918Z-sessionlife-p2-real-validator.json",
+      "sha256": "CC2F915959BF342FB68CCDC8BFC90C6B330C410FA2B9830307C7813546DAB46D"
+    },
+    {
+      "path": "docs/receipts/hv/20260930T1918Z-sessionlife-p2-trace-audit.json",
+      "sha256": "6CC6F3D5C2317795177EAC11B60C8C6D8D705AF4D83CEE0A7B48E0479EDFE6AE"
+    }
+  ],
+  "ReviewLimitations": [
+    "Raw transport boundaries were doubled for isolated probes. Actual product workflow/cache/builder/shim and compiled metadata validator were executed. No durable server write/readback is claimed.",
+    "No live MCP requirements/TODO query without workspace marker; acceptance snapshots verified as snapshots.",
+    "Historical Python-use provenance and P2 inter-phase red-test review remain UNKNOWN.",
+    "Web PR fetch failed with cache miss; authenticated gh read-only query independently verified PR tip.",
+    "Response stream snapshot contains visible messages/tool calls/results, not private reasoning. Runner also captures the completed CLI stream."
+  ],
+  "Corrections": [
+    "Earlier commentary used prior-run Nuke total 4250; corrected after actual per-project sum to 4251 (Support.Mcp 2878).",
+    "Initial audit regex omitted indented Markdown fences; corrected and reran with Markdown deindentation. Final result: all 2 JSON and 3 YAML beginTurn examples parse, no parse error."
+  ],
+  "VerdictJson": {
+    "overallVerdict": "DISAGREE",
+    "accuracy": 99,
+    "completeness": 94,
+    "confidence": 99,
+    "failList": [
+      "HV01: First-persist metadata is still omitted across append/complete/recovery and update fallback.",
+      "HV02: Durable reopen accepts incomplete or wrong-workspace identity proof.",
+      "HV03: Other mutation verbs still accept mismatched requests or mutate before rejecting.",
+      "HV04: Recovery artifact diagnostics are still false or missing on actual hook paths.",
+      "HV05: An identical degraded retry never attempts primary recovery.",
+      "HV06: A successful changed retry leaves the cached turn degraded.",
+      "HV07: F10 concrete AC coverage remains incomplete and some executed mappings do not test their criterion.",
+      "HV08: New runtime YAML text mutation violates the explicit workspace rule.",
+      "HV09: Completeness 94 is below the required 98 threshold."
+    ],
+    "passCount": 12,
+    "failCount": 6,
+    "unknownCount": 2,
+    "tipSha": "fdd2d83292bdee285589d7d5347b4a0a8c0e214c",
+    "receiptPaths": {
+      "markdown": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv/hostile-validator-sessionlife-p2-20260930T1918Z.md",
+      "json": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv/hostile-validator-sessionlife-p2-20260930T1918Z.json",
+      "requestJsonl": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv/20260930T1918Z-sessionlife-p2-contracts-hv.request.jsonl",
+      "responseJsonl": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv/20260930T1918Z-sessionlife-p2-contracts-hv.response.jsonl",
+      "visibleEvidenceJsonl": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv/20260930T1918Z-sessionlife-p2-contracts-hv.evidence.jsonl"
+    }
+  }
+}

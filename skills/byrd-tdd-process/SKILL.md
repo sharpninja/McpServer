@@ -1,6 +1,6 @@
 ---
 name: byrd-tdd-process
-description: Use this skill when implementing any feature, fix, or change in the McpServer codebase so that work follows the Byrd Development Process v4 (acceptance unit tests first / Red, validate against mocks until green, implement / Green, refactor, keep all prior and current tests passing to exit a phase, integration tests after units pass, requirements drive tests, and every new FR/TR/TEST id is referenced in source doc-comments and validated by ./build.ps1 ValidateTraceability).
+description: Use this skill when implementing any feature, fix, or change in the QBrainAi codebase so that work follows the Byrd Development Process v4 (acceptance unit tests first / Red, validate against mocks until green, implement / Green, refactor, keep all prior and current tests passing to exit a phase, integration tests after units pass, requirements drive tests, and every new FR/TR/TEST id is referenced in source doc-comments and validated by ./build.ps1 ValidateTraceability).
 license: MIT
 ---
 
@@ -26,7 +26,7 @@ The canonical reference is `docs/Development-Process-draft-v4.md`. This process 
 - The Technical Requirement(s): `TR-MCP-*` from `docs/Project/Technical-Requirements.md`.
 - The Testing Requirement(s): `TEST-MCP-*` from `docs/Project/Testing-Requirements.md`.
 - The active iteration / slice scope (which tests must be green to exit) from MCP TODO state.
-- The target test project (for example `tests/McpServer.Support.Mcp.Tests`) and the production project under change.
+- The target test project (for example `tests/QBrainAi.Support.Mcp.Tests`) and the production project under change.
 
 ## Critical Rules
 
@@ -46,13 +46,13 @@ The canonical reference is `docs/Development-Process-draft-v4.md`. This process 
 1. Identify scope and requirements. Confirm the `FR-MCP-*`, `TR-MCP-*`, and `TEST-MCP-*` ids this slice satisfies. If any is missing or wrong, capture or correct it: append entries to `docs/Project/Functional-Requirements.md`, `Technical-Requirements.md`, `Testing-Requirements.md`, plus `TR-per-FR-Mapping.md` and `Requirements-Matrix.md`. Do not edit `docs/Project/TODO.yaml` directly; route TODO operations through the MCP plugin tools (`mcp_todo_*`) and log a session-log turn via the plugin (`workflow.sessionlog.beginTurn`) before starting work.
 2. Write acceptance unit tests first (Red). In the appropriate `tests/*.Tests` project, write tests that cover the acceptance criteria for the next small increment of behavior. Each test class and method needs XML docs stating what is tested, the data/fixtures used, and the requirement ids validated (for example `/// <summary>TEST-MCP-042: ...</summary>`).
 3. Validate against mocks (Byrd gate). Using the stack's mocking tools, make the new tests pass with mocks/stubs only. Run the targeted tests, for example:
-   `dotnet test tests/McpServer.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~YourNewTests"`
+   `dotnet test tests/QBrainAi.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~YourNewTests"`
    Confirm the tests fail without the contract and pass with the mock, proving they assert the right behavior.
 4. Implement real logic (Green). Write the minimum production code that makes the mock-backed tests pass against real implementations. Reference the requirement ids in production doc-comments (for example `/// <summary>TR-MCP-058: ...</summary>`).
 5. Refactor. Clean up both tests and production code while keeping them green. Remove duplication, improve names, and tighten the design (DRY, SOLID, existing conventions).
 6. Run the full unit suite (exit gate). Run `./build.ps1 Test` (Nuke, excludes `*.IntegrationTests`). The current increment plus all prior unit tests must be green with zero failures and zero skips before leaving the slice. If a prior test breaks, fix it now; that is regression detection working as intended.
 7. Integration tests after units pass. Once all unit tests are green across the codebase, add/run integration tests, for example:
-   `dotnet test tests/McpServer.Support.Mcp.IntegrationTests -c Debug`
+   `dotnet test tests/QBrainAi.Support.Mcp.IntegrationTests -c Debug`
 8. Validate config and traceability. Run `./build.ps1 ValidateConfig` and `./build.ps1 ValidateTraceability` to confirm appsettings validity and that every `FR/TR/TEST` id maps correctly across requirements docs and source doc-comments.
 9. Record and close. Update the session-log turn through the plugin (`workflow.sessionlog.appendActions` / `workflow.sessionlog.completeTurn`) with interpretation, status, actions (type/status/filePath), filesModified, designDecisions, and requirementsDiscovered. Commit only when asked; log commits as actions of type `commit`.
 

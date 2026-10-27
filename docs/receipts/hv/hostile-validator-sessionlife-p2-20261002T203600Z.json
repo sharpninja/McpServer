@@ -1,0 +1,2966 @@
+{
+  "TimestampUtc": "2026-10-02T21:02:50.7031288+00:00",
+  "ValidatorIdentity": "Codex/gpt-6-astra/xhigh",
+  "WorkClass": "Project implementation: P2 SessionLife contracts",
+  "Workspace": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2",
+  "tipSha": "e755378cdc5d7d3a73471bcebf6874801ed3be80",
+  "RunId": "p2-unit-legion-20261002T202158Z",
+  "PR": "https://github.com/sharpninja/McpServer/pull/72",
+  "Branch": "cursor/sessionlife-p2-contracts-5cb2",
+  "AddProfile": {
+    "Executed": true,
+    "FirstAction": true,
+    "ProfileFileCount": 21,
+    "Skill": "C:\\Users\\kingd\\.claude\\skills\\add-profile\\SKILL.md",
+    "Directory": "C:\\Users\\kingd\\.claude\\profile",
+    "Excluded": "add-profile*.md",
+    "FullReads": true
+  },
+  "HostileSkill": "C:\\Users\\kingd\\.grok\\skills\\hostile-validator\\SKILL.md",
+  "ModelEffortProof": {
+    "Path": "C:\\Users\\kingd\\.codex\\sessions\\2026\\10\\02\\rollout-2026-10-02T15-35-10-01a0fe53-f1db-7fa0-b5ca-638e18e966aa.jsonl",
+    "Metadata": [
+      {
+        "line": 1,
+        "type": "session_meta",
+        "timestamp": "2026-10-02T20:35:11.197Z",
+        "id": "01a0fe53-f1db-7fa0-b5ca-638e18e966aa",
+        "cwd": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2",
+        "originator": "codex_exec",
+        "cli_version": "0.159.3"
+      },
+      {
+        "line": 8,
+        "type": "turn_context",
+        "timestamp": "2026-10-02T20:35:13.003Z",
+        "turn_id": "01a0fe53-f7f7-7912-9247-9f8b2335d30f",
+        "model": "gpt-6-astra",
+        "effort": "xhigh",
+        "cwd": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2"
+      }
+    ],
+    "Verified": true
+  },
+  "OperatorOverrides": [
+    "Use Codex/Astra gpt-6-astra xhigh instead of Grok.",
+    "On PAYTON-LEGION2 Windows PowerShell 5.1 is approved if pwsh is remapped or unavailable; available pwsh is preferred. This pass used pwsh.",
+    "MCP session-log persistence is waived; receipt JSONL and Markdown/JSON suffice.",
+    "Live turn_context/session_meta model and effort proof required.",
+    "Review only; no remediation, commit, push, merge, TODO/goal done or bulk closure. Writes only under docs/receipts/hv; automatic host diagnostic spills disclosed separately.",
+    "One Astra round; stop after receipt. AGREE only with accuracy and completeness >=98 and all applicable A-D PASS."
+  ],
+  "Claims": [
+    {
+      "Id": "A1",
+      "Surface": "A",
+      "Status": "FAIL",
+      "Claim": "Prior HV07 traceability failures are closed.",
+      "Evidence": [
+        "git diff 9a4d8ad9..HEAD -- docs/receipts/sessionlife-completion/20260928-p0-r3/acceptance-manifest.json returned no changes.",
+        "Four core criteria remain incompletely mapped and eight governing legacy criteria still have empty criterionSpecificExistingTests. See CriterionDispositions and current trace-audit.json. A green gate does not close these failures."
+      ]
+    },
+    {
+      "Id": "A2",
+      "Surface": "A",
+      "Status": "PASS",
+      "Claim": "HV19 and HV20 still hold on the requested tip.",
+      "Evidence": [
+        "Fresh remaining-identity-probes-v2: 18/18 assertions pass. Four exact controls succeed; eight case-only submit responses and four wrong-request controls reject, retain one recovery envelope and keep the current turn. Two case-only begin controls make zero transport calls and preserve the current-turn hash.",
+        "Fresh boundary-probes: nine durable/degraded/unpersisted x exact/case-request/case-session begin cases pass; case-different bindings never overwrite. Ten raw-validator and eight durability-boolean cases also pass. These are real current workflow functions with immediate transport doubles, not remote persistence proof.",
+        "plugins/core/lib-ps/repl-invoke.ps1:1765-1766 uses StringComparison.Ordinal for supplied submit response IDs; :2184/:2188 uses Ordinal reopen/session matching and :2190 rejects case-only request rebinding."
+      ]
+    },
+    {
+      "Id": "A3",
+      "Surface": "A",
+      "Status": "PASS",
+      "Claim": "The specified fresh cumulative unit gate is accepted at the requested source tip.",
+      "Evidence": [
+        "Independently parsed all individual outcomes: Pester 242/242, Nuke seven projects 4298/4298 (Support 2914, Client 304, Repl.Core 868, McpAgent 63, QBAgent 96, Cqrs 33, Launcher 20), Build.Tests 321/321 with outcome Completed. No failures, skips, not-executed or non-passing individual results; recorded command exits are all zero.",
+        "All 2237 source-manifest hashes match current inputs. Direct compiled SessionLifeUnitGateValidator.Validate with real recorded tool probes returns ACCEPTED. Initial diagnostic using the previous collector tool path correctly rejected tool-path-drift; using the recorded installed pwsh resolved that harness difference without changing reports.",
+        "Gate log lines 5367/5372/5380 show accepted run, CheckSessionLifeUnitGate Succeeded, GATE_EXIT=0. SHA256=803C34F0CD9B615E53CF23DD661F2669C59F60FF8BE3F4E51E4C0A77512A507F. No full-suite rerun is claimed."
+      ]
+    },
+    {
+      "Id": "A4",
+      "Surface": "A",
+      "Status": "PASS",
+      "Claim": "e755378c changes test fidelity without weakening the three named product contracts.",
+      "Evidence": [
+        "git diff HEAD^ HEAD --name-only lists only SessionLogP2Contracts.Tests.ps1 and CliBrainSlotStrategyTests.cs; no plugins/core/lib-ps changes.",
+        "P2 primary stdout now parses exactly one YAML document, requires type=result, code=persisted and matching method, and rejects bare True/False. Existing cache receipt assertions still check durability, queue, diagnostics and identity. Invoke-ReplMethod:3081-3128 documents/emits the same typed receipt as cache.",
+        "setSessionTitle explicitly asserts sessionId and empty requestId across primary/queued/lost. Product :3020 requires SessionOnly and RequireRetitled; the fake now supplies retitled. SessionLogReviewRegression.Tests.ps1:236-250 independently checks one typed wrapper envelope, exact session identity, null/empty requestId and no boolean stdout.",
+        "RecordingSpawner.Clone now removes inherited keys absent from the source before copying entries. Fresh ProcessStartInfo probe: source Remove returns true; source lacks GROK_PLUGIN_ROOT; fresh copy reintroduces it; corrected copy lacks it. Product CliBrainSlotChatClient.cs:503/:508-514 already removes GROK_PLUGIN_ROOT and GROK_HOME; the existing test still asserts both absent.",
+        "Historical p2-contracts-plan.md:15 says verbs stay silent; that archived checkpoint predates the current documented typed-output contract. This pass accepts the narrow test repair against current product/wrapper behavior, not a claim that all historical prose was refreshed."
+      ]
+    },
+    {
+      "Id": "A5",
+      "Surface": "A",
+      "Status": "PASS",
+      "Claim": "Official-plugin junctions are machine layout and checksum tests still compare real bytes.",
+      "Evidence": [
+        "Five .worktrees junctions resolve to matching real F:\\GitHub plugin repositories. Independent comparison of all 13 canonical .ps1 files across five plugins gives 65 matches and zero mismatches.",
+        "Build.SyncAgentPlugins.cs:170-200 returns the first parent containing any recognized official sibling, explaining why a codex-only junction stops resolution at .worktrees. No junction creation or deletion was performed.",
+        "SyncAgentPluginsChecksumTests.cs and DocsSyncG8OverlayTests.cs use SHA256.HashData(File.ReadAllBytes(...)) and FixedTimeEquals. Both named checksum tests are Passed in current Build.Tests.trx. Junctions are not attributed to the product commit."
+      ]
+    },
+    {
+      "Id": "A6",
+      "Surface": "A",
+      "Status": "FAIL",
+      "Claim": "P2 acceptance completeness meets the required 98 percent.",
+      "Evidence": [
+        "Completeness=70: 28 adequately mapped P2 criteria / 40 applicable criteria. The denominator is 35 core plus eight governing legacy criteria, minus three wholly deferred integration criteria. Four core and eight legacy mapping failures receive no completeness credit.",
+        "This is explicit AC-evidence completeness, not line/branch coverage or percentage of tests passing. It replaces reliance on the prior subjective 97 score and remains below the 98 acceptance floor."
+      ]
+    },
+    {
+      "Id": "A7",
+      "Surface": "A",
+      "Status": "PASS",
+      "Claim": "PluginIntegration exclusion, frozen history and unaccepted TODO boundaries are preserved.",
+      "Evidence": [
+        "selected-projects.json contains seven unit projects and no PluginIntegration. The outer gate has zero PluginIntegration test-run lines. Build.Test.cs retains the explicit exclusion.",
+        "All five history-r1 files match their frozen hashes. The acceptance manifest has 35 unique TODO rows, all not-accepted/done=false; fresh native MCP todo_list against owning F:\\GitHub\\McpServer finds all 35, zero Done and no missing IDs. No TODO or goal mutation was performed."
+      ]
+    },
+    {
+      "Id": "B1",
+      "Surface": "B",
+      "Status": "PASS",
+      "Claim": "Required profile load and live Astra/xhigh identity are proven.",
+      "Evidence": [
+        "First action read C:\\Users\\kingd\\.claude\\skills\\add-profile\\SKILL.md; all 21 non-skill profile Markdown files were read in full, with truncated tool output recovered by subsequent full reads. Profile hashes are in evidence.jsonl.",
+        "Live rollout line 1 session_meta identifies Codex exec session 01a0fe53-f1db-7fa0-b5ca-638e18e966aa, CLI 0.159.3 and this cwd. Line 8 turn_context identifies turn 01a0fe53-f7f7-7912-9247-9f8b2335d30f, model gpt-6-astra and effort xhigh. Required hostile-validator SKILL.md A-D surfaces were read and applied."
+      ]
+    },
+    {
+      "Id": "B2",
+      "Surface": "B",
+      "Status": "PASS",
+      "Claim": "This pass follows the explicit shell, review-only and single-round overrides.",
+      "Evidence": [
+        "PowerShell evidence only; no Python execution. Current console is PAYTON-LEGION2, pwsh 7.6.6 at C:\\Program Files\\WindowsApps\\Microsoft.PowerShell_7.6.6.0_x64__8wekyb3d8bbwe\\pwsh.exe. Initial profile reads used exec_command with pwsh.exe; subsequent work used PowerShell.Mcp.",
+        "No product/test remediation, commit, push, merge, deployment, second validator round, subagent or done-state change. Intentional authored scripts, probes and receipts are confined to docs/receipts/hv. The connector automatically created oversized-output diagnostic spill files under F:\\GitHub\\vice-sharp\\.mcpServer\\tmp\\PowerShell.MCP.Output; those were incidental host-tool writes, not authored remediation. Zero incidental outside writes is not claimed."
+      ]
+    },
+    {
+      "Id": "B3",
+      "Surface": "B",
+      "Status": "PASS",
+      "Claim": "Current tip, report and review claims match independently read evidence.",
+      "Evidence": [
+        "Git HEAD and branch match the brief. Read-only GitHub fetch of PR 72 confirms open, draft, unmerged, head e755378cdc5d7d3a73471bcebf6874801ed3be80 and base develop. PR evidence is saved in pr72.json.",
+        "Verification finds zero source, report or frozen-history hash mismatches. Native reports and supplied gate.log were not regenerated. Transport-double observations are explicitly distinguished from durable server proof."
+      ]
+    },
+    {
+      "Id": "B4",
+      "Surface": "B",
+      "Status": "PASS",
+      "Claim": "Historical receipts and unrelated work are preserved.",
+      "Evidence": [
+        "history-r1 manifest SHA256 remains B56354AA46F36AA092AEC7A38E0849353F77A6D34A4C07552FBF5EBC192C6DA4; all five governed files match.",
+        "The same pre-existing tracked modifications remain: .nuke/build.schema.json and two memory benchmark result JSON files. Existing .agent-scratch and earlier untracked receipts were not deleted or swept into any commit."
+      ]
+    },
+    {
+      "Id": "B5",
+      "Surface": "B",
+      "Status": "PASS",
+      "Claim": "Authoritative requirements/TODO observations use supported MCP read tools.",
+      "Evidence": [
+        "Used native requirements_list, todo_list and memory_recall, without raw HTTP or direct store editing. Main-workspace memory recall returned no matches.",
+        "The acceptance manifest explicitly owns F:\\GitHub\\McpServer. Initial worktree-scope queries returned empty TODOs and unstructured inherited requirements; those are not misrepresented as the authoritative main-workspace state. Correct-scope queries establish all 35 open TODOs and structured governing requirements.",
+        "MCP session-log persistence for this review is waived by the operator; no audit-write requirement is inferred from older profile defaults."
+      ]
+    },
+    {
+      "Id": "B6",
+      "Surface": "B",
+      "Status": "PASS",
+      "Claim": "The P2 governing metadata documents and probe fixture handling conform.",
+      "Evidence": [
+        "Fresh parse: all 48 JSON/YAML fences in module-bootstrap.md and REPL-USER-GUIDE.md parse; all five beginTurn examples contain nonempty metadata pairs. Schema parses. Module-bootstrap:68, REPL guide:127 and schema:251 agree on explicit/cache/None, ordinary raw rejection, canceled/cancelled and durable omission.",
+        "Probe YAML uses the actual object-first helpers through repl-invoke.ps1 in isolated receipt fixtures; root workspace marker and product files are unchanged. No YAML line patching was used in this review."
+      ]
+    },
+    {
+      "Id": "B7",
+      "Surface": "B",
+      "Status": "UNKNOWN",
+      "Claim": "Historical Python JSON provenance is fully established as compliant.",
+      "Evidence": [
+        "p2-contracts-verdict.json:53 and p2-unit-gate-failures.json:1037 still say Python json module serializing native objects. The originating execution that produced those declarations was not independently established.",
+        "This is an unresolved historical provenance issue. Neither compliant historical execution nor a proven forbidden Python invocation is invented from those strings alone. The current pass itself did not use Python."
+      ]
+    },
+    {
+      "Id": "B8",
+      "Surface": "B",
+      "Status": "UNKNOWN",
+      "Claim": "The original P2 Red-test inter-phase AGREE exists.",
+      "Evidence": [
+        "P2 slice plan:9 links a P1 predecessor AGREE and explicitly does not claim P2 HV AGREE; p2-contracts-verdict.json still has phaseComplete=false. No original P2 Red AGREE was found in the inspected receipt chain.",
+        "20261002-unit-failure-repair.red-gate-accepted-sa-ef70105b.json is AGREE 99/99 but explicitly limited to BUG-UNITFAIL-001 corrected red regression tests. It cannot substitute for the original P2 Red gate.",
+        "Canonical plan:248 forbids reconstructed history; :259/:384 require the inter-phase review. No file-mtime chronology inference is used, and no retrospective Red AGREE is fabricated."
+      ]
+    },
+    {
+      "Id": "B9",
+      "Surface": "B",
+      "Status": "PASS",
+      "Claim": "This single review has durable request, complete verdict and transparent response capture.",
+      "Evidence": [
+        "Markdown and JSON twins contain every claim, scores, failure/unknown lists, model proof, criterion dispositions and evidence paths. The runner request seed was hash-checked and supplemented with its full original brief; prompt SHA256 C51D2A2DE9A5A3AA5EEC183A609A6A1A6BA3941C68EA73BFA6808890D9E88971.",
+        "The response file receives a public-event checkpoint and complete verdict while the runner owns the final native response stream after return. The checkpoint excludes private reasoning and has an explicit time boundary; this receipt does not claim to have inspected later runner bytes. The operator waived MCP review-turn persistence."
+      ]
+    },
+    {
+      "Id": "C1",
+      "Surface": "C",
+      "Status": "PASS",
+      "Claim": "Applicable structured requirements and the traceability projection are identified.",
+      "Evidence": [
+        "Frozen projection contains 109 structured AC, 47 unique mapping edges and 35 unique TODO rows. Reviewed 35 core SESSIONLIFE-001..003 criteria and eight relevant legacy criteria. All 35 core mapped Pester names appear in current native reports, but name existence alone is not semantic coverage.",
+        "Live main-workspace requirements preserve the 35 original core criteria and add FR-MCP-SESSIONLIFE-003-AC007 and TR-MCP-SESSIONLIFE-003-AC004 about dense storage/provider behavior; these are later P4/P6 scope, not credited to P2. Seven legacy SESSIONLOGCTX texts differ from the more detailed projection; differences are preserved in verification.json, not silently equated. No requirement is marked satisfied."
+      ]
+    },
+    {
+      "Id": "C2",
+      "Surface": "C",
+      "Status": "FAIL",
+      "Claim": "Each applicable P2 AC has concrete, sufficient criterion-to-executed-test traceability.",
+      "Evidence": [
+        "FR-MCP-SESSIONLIFE-002-AC002 maps five wrapper/beginTurn tests, not raw metadata/no-row assertions for both planFile and todoId. TR-MCP-SESSIONLIFE-002-AC003 and TEST-MCP-SESSIONLIFE-002-AC001 retain that aggregate traceability gap.",
+        "TEST-MCP-SESSIONLIFE-002-AC004 maps the source-string inventory check and generic outcomes, not SessionLifeUnitGateValidatorTests invalid-artifact/command cases or the consumer tests.",
+        "Eight governing legacy rows remain proposed-only: FR-MCP-170-AC002/003; AC-FR-MCP-SESSIONLOGCTX-001-002/003; FR-MCP-REPL-009-AC001/002/003/004. Concrete code overlap or passing tests elsewhere does not populate those governing links. See all 12 failed CriterionDispositions."
+      ]
+    },
+    {
+      "Id": "C3",
+      "Surface": "C",
+      "Status": "PASS",
+      "Claim": "Relevant implementation assertions exist independently of incomplete manifest mappings.",
+      "Evidence": [
+        "92 relevant raw-validator/service/store and gate-validator/consumer native results were independently extracted; all Passed. SessionLogServiceTurnContextTests asserts no new row after missing metadata; SessionLogTurnContextValidatorTests covers sentinel and rejection branches.",
+        "SessionLifeUnitGateValidatorTests:225/:251/:268 feeds shared invalid, unit-only invalid and required-command defects to real validation and asserts classified rejection. Their presence proves a mapping omission, not absence of all tests. Fresh identity and metadata boundary probes corroborate the current P2 local functions."
+      ]
+    },
+    {
+      "Id": "D1",
+      "Surface": "D",
+      "Status": "FAIL",
+      "Claim": "The holistic P2 DoD permits acceptance and slice exit.",
+      "Evidence": [
+        "Plan P2:250-260 requires cache/identity/metadata/outcome contracts, document proof, Red-test review and the complete cumulative green gate. Plan:371/:377/:383-384 requires concrete AC mapping and independent complete acceptance.",
+        "The fresh unit gate and HV19/HV20 repair proofs pass, but 12 applicable criteria lack sufficient mapped evidence, completeness is 70 below 98, and historical B7/B8 evidence remains unknown. No AGREE or advancement authorization follows from these passing micro-claims."
+      ]
+    },
+    {
+      "Id": "D2",
+      "Surface": "D",
+      "Status": "PASS",
+      "Claim": "Later-phase and whole-batch obligations are not misrepresented as P2 proof.",
+      "Evidence": [
+        "P3 owns Stop/deadline execution, P4 replay/security and server persistence, P5 synchronization/activation, P6 exact durable/provider/integration evidence. Plan P2:257 expressly defers durable query.",
+        "PluginSessionLogIntegration remains outside the unit inventory. Mock transports do not establish provider durability, complete FR173, or close the 35-item batch. The two newer dense-storage AC are recorded as later scope; no bulk closure or plan/TODO/goal completion occurred."
+      ]
+    }
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 99,
+  "Completeness": 70,
+  "Confidence": 99,
+  "AccuracyRationale": "Native individual outcomes, immutable hashes, live model/PR/MCP state and real current function probes are independently checked. Historical uncertainty is explicitly UNKNOWN.",
+  "CompletenessRationale": "Measured criterion-evidence completeness for the selected P2 boundary: 28/40 adequately mapped. 35 core + 8 governing legacy - 3 wholly later-phase criteria = 40; 4 core + 8 legacy failures = 12. This is not code coverage or a claim that only 70 percent of tests pass.",
+  "CompletenessAccounting": {
+    "Core": 35,
+    "Legacy": 8,
+    "WhollyDeferred": 3,
+    "Applicable": 40,
+    "AdequatelyMapped": 28,
+    "Incomplete": 12,
+    "Score": 70,
+    "AdditionalLiveLaterScope": [
+      "FR-MCP-SESSIONLIFE-003-AC007",
+      "TR-MCP-SESSIONLIFE-003-AC004"
+    ]
+  },
+  "FailList": [
+    "A1 / HV07: Core and governing legacy AC mappings remain incomplete at the requested tip.",
+    "A6 / HV09: Concrete P2 AC completeness is 70 percent (28/40), below the required 98.",
+    "C2 / HV07: Raw metadata/no-row and invalid-artifact tests are not adequately mapped; eight relevant legacy rows remain proposed-only.",
+    "D1: Holistic P2 acceptance remains blocked by traceability, sub-98 completeness and unresolved B7/B8 historical evidence."
+  ],
+  "UnknownList": [
+    "B7: Historical Python JSON provenance remains unestablished.",
+    "B8: Original historical P2 Red-test AGREE remains unestablished; a later BUG-UNITFAIL-001 Red AGREE is not that gate."
+  ],
+  "ClaimCounts": {
+    "PASS": 15,
+    "FAIL": 4,
+    "UNKNOWN": 2
+  },
+  "CriterionDispositions": [
+    {
+      "Id": "FR-MCP-SESSIONLIFE-001-AC001",
+      "RequirementId": "FR-MCP-SESSIONLIFE-001",
+      "Text": "A degraded begin retains every cached turn field, including prompt, context, metadata, identity, status, timestamps, title, and counters; it never replaces the turn with a reduced three-field object.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves degraded creation metadata and sends cached plan on the same request",
+        "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.does not replace queryText queryTitle planFile todoId openedAt or audit counters",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.round-trips hash and space failsafePath through object YAML and clears degraded after primary success"
+      ],
+      "ProposedTests": [
+        "SessionLogLifecycle.RealBuilder_DegradedBegin_PreservesEveryCachedTurnField"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/repl-invoke.ps1",
+        "plugins/core/lib-ps/plugin-hook.ps1"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "FR-MCP-SESSIONLIFE-001-AC002",
+      "RequirementId": "FR-MCP-SESSIONLIFE-001",
+      "Text": "Prompt-hook status reports durable opened only after confirmed primary persistence; otherwise it reports opened-degraded and identifies the retained recovery artifact without representing the turn as server-persisted.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.round-trips hash and space failsafePath through object YAML and clears degraded after primary success"
+      ],
+      "ProposedTests": [
+        "SessionLogLifecycle.PromptHook_DegradedBegin_ReportsOpenedDegradedWithRetainedPath"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/repl-invoke.ps1",
+        "plugins/core/lib-ps/plugin-hook.ps1"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "FR-MCP-SESSIONLIFE-001-AC003",
+      "RequirementId": "FR-MCP-SESSIONLIFE-001",
+      "Text": "Complete recovers required query text from the cached query text, then a valid cached title, then the approved placeholder, without replacing a valid title; update omits empty query text so stored query text and title are preserved.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.complete recovery uses cached queryText then queryTitle then the placeholder",
+        "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.update omits an empty queryText so the server value can stay",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits an empty query through the real builder and shim"
+      ],
+      "ProposedTests": [
+        "SessionLogLifecycle.Complete_QueryFallbackPreservesValidTitle_AndUpdateOmitsEmptyQuery"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/repl-invoke.ps1",
+        "plugins/core/lib-ps/plugin-hook.ps1"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "FR-MCP-SESSIONLIFE-001-AC004",
+      "RequirementId": "FR-MCP-SESSIONLIFE-001",
+      "Text": "A missing-turn appendDialog on an already degraded local turn performs at most one bounded recovery submit and then retains a session_dialog failsafe; an unrelated never-degraded not-found remains a classified nonretryable error.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.degraded 404 queues a session_dialog failsafe and does not say failsafe not used"
+      ],
+      "ProposedTests": [
+        "SessionLogLifecycle.AppendDialog_DegradedMissingTurn_AttemptsOneRecoveryAndRetainsDialog",
+        "SessionLogLifecycle.AppendDialog_NeverDegradedMissingTurn_IsNonretryableNoFailsafe"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/repl-invoke.ps1",
+        "plugins/core/lib-ps/plugin-hook.ps1"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "FR-MCP-SESSIONLIFE-001-AC005",
+      "RequirementId": "FR-MCP-SESSIONLIFE-001",
+      "Text": "A same-request retry supplies preserved creation metadata, normalizes canceled and cancelled supersession consistently, and never silently converts locally active state into proof of server persistence.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores canceled with exact None when a new request supersedes an open turn",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits an empty query through the real builder and shim",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.retries primary submit for identical degraded fingerprint instead of only reusing failsafe",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves degraded creation metadata and sends cached plan on the same request"
+      ],
+      "ProposedTests": [
+        "SessionLogLifecycle.SameRequestRetry_PreservesCreationMetadata_NormalizesCancelledWithoutFalseDurability"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/repl-invoke.ps1",
+        "plugins/core/lib-ps/plugin-hook.ps1"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "FR-MCP-SESSIONLIFE-002-AC001",
+      "RequirementId": "FR-MCP-SESSIONLIFE-002",
+      "Text": "First persistence resolves planFile and todoId using explicit request values, then verified cache values, then the exact sentinel None, and stores a non-null pair.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects whitespace metadata on ordinary first persistence",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.sends exact None on updateTurn when caller clears planFile and todoId",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV11 explicit append metadata updates cache used by later complete"
+      ],
+      "ProposedTests": [
+        "SessionLogLifecycleMetadata.Resolver_UsesExplicitThenVerifiedCacheThenExactNone"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/repl-invoke.ps1",
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "FR-MCP-SESSIONLIFE-002-AC002",
+      "RequirementId": "FR-MCP-SESSIONLIFE-002",
+      "Text": "Ordinary raw first persistence rejects omitted, null, empty, or whitespace metadata; canceled or cancelled supersession may omit it and stores None, and a durable reopen preserves that omission contract.",
+      "Disposition": "P2_FAIL_TRACEABILITY",
+      "Reason": "Raw first-persist rejection/no-insert behavior for both metadata fields is not concretely linked. Mapped wrapper/beginTurn tests do not substitute for the raw entry/service boundary. This also leaves the governing aggregate TR/TEST criterion incomplete.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects whitespace metadata on ordinary first persistence",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores canceled with exact None when a new request supersedes an open turn",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects explicit empty and null planFile on ordinary first persistence"
+      ],
+      "ProposedTests": [
+        "SessionLogLifecycleMetadata.FirstPersist_RejectsMissingMetadataExceptCancelledSupersession"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/repl-invoke.ps1",
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "FR-MCP-SESSIONLIFE-002-AC003",
+      "RequirementId": "FR-MCP-SESSIONLIFE-002",
+      "Text": "Explicit metadata updates both cache and outgoing persistence. Omission after binding is allowed only after durable identity is proven for the exact workspace, agent, session, and request.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV11 explicit append metadata updates cache used by later complete",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.sends exact None on updateTurn when caller clears planFile and todoId"
+      ],
+      "ProposedTests": [
+        "SessionLogLifecycleMetadata.ExplicitUpdate_UpdatesCacheAndPayload_OmissionRequiresExactDurableIdentity"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/repl-invoke.ps1",
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "FR-MCP-SESSIONLIFE-002-AC004",
+      "RequirementId": "FR-MCP-SESSIONLIFE-002",
+      "Text": "Freshness validation rejects workspace, agent, session, or request drift and never rewrites or rebinds an already cached session identifier from a marker or inherited process value.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects a request mismatch and a wrong-workspace marker without changing session A or request R",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.keeps Codex cache and audit identity when Grok agent variables are inherited",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves session A and request R from a native turn through a plugin append",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV12 beginTurn rejects missing marker proof and wrong-marker degraded reopen",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV13 request mismatch does not mutate current-turn when markers are missing",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV16 case-different caller requestId is rejected without mutation",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV19 case-different SubmitAsync response identity is not persisted and keeps recovery",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV20 beginTurn case-different request or session does not durable-reopen overwrite"
+      ],
+      "ProposedTests": [
+        "SessionLogLifecycleMetadata.FreshnessRejectsWorkspaceAgentSessionRequestDriftWithoutRebinding"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/repl-invoke.ps1",
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "FR-MCP-SESSIONLIFE-002-AC005",
+      "RequirementId": "FR-MCP-SESSIONLIFE-002",
+      "Text": "The three governing contract documents consistently describe explicit/cache/None precedence, ordinary first-persist rejection, canceled/cancelled supersession, and durable-reopen omission.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema"
+      ],
+      "ProposedTests": [
+        "SessionLogLifecycleMetadata.ModuleBootstrap_AllBeginTurnExamples_DeclareMetadataOrApprovedOmission",
+        "SessionLogLifecycleMetadata.ReplUserGuide_AllBeginTurnExamples_DeclareMetadataOrApprovedOmission",
+        "SessionLogLifecycleMetadata.ReplYamlSchema_DeclaresMetadataAndDocumentsFirstPersistNoneSupersessionAndReopenRules"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/repl-invoke.ps1",
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "FR-MCP-SESSIONLIFE-003-AC001",
+      "RequirementId": "FR-MCP-SESSIONLIFE-003",
+      "Text": "Every session-log mutation returns exactly one truthful outcome: primary persisted, degraded queued with a confirmed retained failsafe, or failed/lost with a nonzero process result.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV19 case-different SubmitAsync response identity is not persisted and keeps recovery",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV20 beginTurn case-different request or session does not durable-reopen overwrite"
+      ],
+      "ProposedTests": [
+        "SessionLogOutcome.MutationReturnsExactlyOnePrimaryQueuedOrLostOutcome"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
+        "plugins/core/lib-ps/repl-invoke.ps1"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "FR-MCP-SESSIONLIFE-003-AC002",
+      "RequirementId": "FR-MCP-SESSIONLIFE-003",
+      "Text": "The result includes code, retryable, persisted, degraded, queued, method, requestId, failsafePath, message, and diagnostic stderr fields appropriate to the observed outcome.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV19 case-different SubmitAsync response identity is not persisted and keeps recovery",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV20 beginTurn case-different request or session does not durable-reopen overwrite"
+      ],
+      "ProposedTests": [
+        "SessionLogOutcome.SerializationIncludesAllDurabilityIdentityDiagnosticFields"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
+        "plugins/core/lib-ps/repl-invoke.ps1"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "FR-MCP-SESSIONLIFE-003-AC003",
+      "RequirementId": "FR-MCP-SESSIONLIFE-003",
+      "Text": "Caller requestId is honored only when it matches the active turn; mismatches are rejected without mutating cache, server state, or recovery artifacts.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects update and appendDialog caller request mismatches and binds explicit update metadata",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV13 request mismatch does not mutate current-turn when markers are missing",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV16 case-different caller requestId is rejected without mutation",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV19 case-different SubmitAsync response identity is not persisted and keeps recovery",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV20 beginTurn case-different request or session does not durable-reopen overwrite"
+      ],
+      "ProposedTests": [
+        "SessionLogOutcome.RequestIdMismatchRejectsWithoutCacheServerOrRecoveryMutation"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
+        "plugins/core/lib-ps/repl-invoke.ps1"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "FR-MCP-SESSIONLIFE-003-AC004",
+      "RequirementId": "FR-MCP-SESSIONLIFE-003",
+      "Text": "A primary-success result is accepted only with exact server readback of the intended response, interpretation, tags, contextList, actions or dialog, and identity.",
+      "Disposition": "DEFERRED_P4_P6",
+      "Reason": "Plan P2 item 4 defers durable query; provider/transaction and exact durable child readback belong to P4/P6.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects failTurn setTurnTitle and completeTurn caller request mismatches without mutation"
+      ],
+      "ProposedTests": [
+        "SessionLogOutcome.PrimarySuccessRequiresExactServerReadbackOfTurnSectionsAndIdentity"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
+        "plugins/core/lib-ps/repl-invoke.ps1"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "FR-MCP-SESSIONLIFE-003-AC005",
+      "RequirementId": "FR-MCP-SESSIONLIFE-003",
+      "Text": "Repeated unchanged updates and sequential append/complete calls are idempotent: no duplicate recovery work, child rows, or outcome ambiguity is introduced.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.does not write a second failsafe for an unchanged queued update and keeps additive methods distinct"
+      ],
+      "ProposedTests": [
+        "SessionLogOutcome.RepeatedUpdatesAndSequentialAppendCompleteAreIdempotent"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
+        "plugins/core/lib-ps/repl-invoke.ps1"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "FR-MCP-SESSIONLIFE-003-AC006",
+      "RequirementId": "FR-MCP-SESSIONLIFE-003",
+      "Text": "Write-ahead recovery is retained before backend submission and deleted only after durable confirmation; a queued result is never represented as primary persistence or accepted TODO completion evidence.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false"
+      ],
+      "ProposedTests": [
+        "SessionLogOutcome.WriteAheadRetainedBeforeSubmitAndDeletedOnlyAfterDurableConfirmation"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
+        "plugins/core/lib-ps/repl-invoke.ps1"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "TR-MCP-SESSIONLIFE-001-AC001",
+      "RequirementId": "TR-MCP-SESSIONLIFE-001",
+      "Text": "One real begin-turn builder or shim preserves the complete cached turn on degraded persistence and exposes a shared, truthful degraded transition used by all hooks.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves degraded creation metadata and sends cached plan on the same request",
+        "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.does not replace queryText queryTitle planFile todoId openedAt or audit counters",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb"
+      ],
+      "ProposedTests": [
+        "SessionLogLifecycle.RealBuilder_DegradedBegin_PreservesEveryCachedTurnField",
+        "SessionLogLifecycle.SharedDegradedTransition_IsUsedByEveryHook"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/repl-invoke.ps1",
+        "plugins/core/lib-ps/plugin-hook.ps1"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "TR-MCP-SESSIONLIFE-001-AC002",
+      "RequirementId": "TR-MCP-SESSIONLIFE-001",
+      "Text": "Prompt, complete, update, and dialog hooks consume the shared transition without reduced-object replacement, empty-query overwrite, or false server-persisted status.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.complete recovery uses cached queryText then queryTitle then the placeholder",
+        "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.update omits an empty queryText so the server value can stay",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits an empty query through the real builder and shim"
+      ],
+      "ProposedTests": [
+        "SessionLogLifecycle.AllHooks_AvoidReducedReplacementEmptyQueryAndFalseDurability"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/repl-invoke.ps1",
+        "plugins/core/lib-ps/plugin-hook.ps1"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "TR-MCP-SESSIONLIFE-001-AC003",
+      "RequirementId": "TR-MCP-SESSIONLIFE-001",
+      "Text": "Degraded missing-turn dialog recovery is bounded to one submit attempt and one retained dialog failsafe, while unrelated not-found remains nonretryable.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.degraded 404 queues a session_dialog failsafe and does not say failsafe not used"
+      ],
+      "ProposedTests": [
+        "SessionLogLifecycle.AppendDialog_DegradedMissingTurn_AttemptsOneRecoveryAndRetainsDialog",
+        "SessionLogLifecycle.AppendDialog_NeverDegradedMissingTurn_IsNonretryableNoFailsafe"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/repl-invoke.ps1",
+        "plugins/core/lib-ps/plugin-hook.ps1"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "TR-MCP-SESSIONLIFE-002-AC001",
+      "RequirementId": "TR-MCP-SESSIONLIFE-002",
+      "Text": "A single durability-first metadata resolver implements explicit, verified-cache, and None precedence for planFile and todoId.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects whitespace metadata on ordinary first persistence",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.sends exact None on updateTurn when caller clears planFile and todoId",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV11 explicit append metadata updates cache used by later complete"
+      ],
+      "ProposedTests": [
+        "SessionLogLifecycleMetadata.Resolver_UsesExplicitThenVerifiedCacheThenExactNone"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/repl-invoke.ps1",
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "TR-MCP-SESSIONLIFE-002-AC002",
+      "RequirementId": "TR-MCP-SESSIONLIFE-002",
+      "Text": "Workspace, agent, session, and request identity are immutable after binding; freshness checks diagnose drift and never rebind from markers or inherited variables.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects a request mismatch and a wrong-workspace marker without changing session A or request R",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.keeps Codex cache and audit identity when Grok agent variables are inherited",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.preserves session A and request R from a native turn through a plugin append",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV12 beginTurn rejects missing marker proof and wrong-marker degraded reopen",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV13 request mismatch does not mutate current-turn when markers are missing",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV16 case-different caller requestId is rejected without mutation",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV19 case-different SubmitAsync response identity is not persisted and keeps recovery",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV20 beginTurn case-different request or session does not durable-reopen overwrite"
+      ],
+      "ProposedTests": [
+        "SessionLogLifecycleMetadata.FreshnessRejectsWorkspaceAgentSessionRequestDriftWithoutRebinding"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/repl-invoke.ps1",
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "TR-MCP-SESSIONLIFE-002-AC003",
+      "RequirementId": "TR-MCP-SESSIONLIFE-002",
+      "Text": "Ordinary first persistence, canceled/cancelled supersession, durable reopen, and all three contract documents use the same resolver semantics.",
+      "Disposition": "P2_FAIL_TRACEABILITY",
+      "Reason": "Raw first-persist rejection/no-insert behavior for both metadata fields is not concretely linked. Mapped wrapper/beginTurn tests do not substitute for the raw entry/service boundary. This also leaves the governing aggregate TR/TEST criterion incomplete.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores canceled with exact None when a new request supersedes an open turn",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects whitespace metadata on ordinary first persistence",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses durable reopen without sessionId and without workspace marker proof"
+      ],
+      "ProposedTests": [
+        "SessionLogLifecycleMetadata.FirstPersist_RejectsMissingMetadataExceptCancelledSupersession",
+        "SessionLogLifecycleMetadata.DurableReopen_PreservesBoundedOmission",
+        "SessionLogLifecycleMetadata.ModuleBootstrap_AllBeginTurnExamples_DeclareMetadataOrApprovedOmission",
+        "SessionLogLifecycleMetadata.ReplUserGuide_AllBeginTurnExamples_DeclareMetadataOrApprovedOmission",
+        "SessionLogLifecycleMetadata.ReplYamlSchema_DeclaresMetadataAndDocumentsFirstPersistNoneSupersessionAndReopenRules"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/repl-invoke.ps1",
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "TR-MCP-SESSIONLIFE-003-AC001",
+      "RequirementId": "TR-MCP-SESSIONLIFE-003",
+      "Text": "The wrapper exposes a typed primary, queued, or failed outcome contract and no session-log mutation collapses that result to an unclassified boolean.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV19 case-different SubmitAsync response identity is not persisted and keeps recovery",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV20 beginTurn case-different request or session does not durable-reopen overwrite"
+      ],
+      "ProposedTests": [
+        "SessionLogOutcome.MutationReturnsExactlyOnePrimaryQueuedOrLostOutcome"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
+        "plugins/core/lib-ps/repl-invoke.ps1"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "TR-MCP-SESSIONLIFE-003-AC002",
+      "RequirementId": "TR-MCP-SESSIONLIFE-003",
+      "Text": "Result serialization includes identity, method, durability, queue, retryability, diagnostic, and failsafe fields without claiming primary success for queued work.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV19 case-different SubmitAsync response identity is not persisted and keeps recovery",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV20 beginTurn case-different request or session does not durable-reopen overwrite"
+      ],
+      "ProposedTests": [
+        "SessionLogOutcome.SerializationIncludesAllDurabilityIdentityDiagnosticFields"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
+        "plugins/core/lib-ps/repl-invoke.ps1"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "TR-MCP-SESSIONLIFE-003-AC003",
+      "RequirementId": "TR-MCP-SESSIONLIFE-003",
+      "Text": "Child REPL execution uses one operation deadline with deterministic process-tree cleanup, and dedupe preserves sequential method labels and queue counts.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.does not write a second failsafe for an unchanged queued update and keeps additive methods distinct",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb"
+      ],
+      "ProposedTests": [
+        "SessionLogProcessBoundary.BlockedStdin_UsesOneOperationDeadline",
+        "SessionLogProcessBoundary.StalledStdout_UsesOneOperationDeadline",
+        "SessionLogProcessBoundary.SaturatedStderr_DrainsWithoutDeadlock",
+        "SessionLogProcessBoundary.NeverExit_TerminatesProcessTree",
+        "SessionLogProcessBoundary.Cancellation_TerminatesProcessTreeAndReturnsCancelled",
+        "SessionLogProcessBoundary.DescendantCleanup_RemovesChildTree",
+        "SessionLogProcessBoundary.ImmediateExit_DoesNotRaceStreamReaders",
+        "SessionLogProcessBoundary.Disposal_WaitsForReadersBeforeDispose",
+        "SessionLogProcessBoundary.DefaultDeadline_IsMonotonicThirtySeconds",
+        "SessionLogProcessBoundary.PositiveOverride_ExtendsSingleOperationDeadline"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/repl-invoke.ps1",
+        "plugins/core/lib-ps/plugin-hook.ps1"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1",
+        "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "TEST-MCP-SESSIONLIFE-001-AC001",
+      "RequirementId": "TEST-MCP-SESSIONLIFE-001",
+      "Text": "Mock-backed consumer tests prove degraded complete-turn preservation, truthful hook status, empty-query omission, bounded missing-turn dialog recovery, and same-request cached metadata.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.binds cached planFile and todoId on appendActions completeTurn and recovery submit",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.sends exact None on updateTurn when caller clears planFile and todoId",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery",
+        "FR-MCP-SESSIONLIFE-001 degraded begin keeps the turn cache.degraded 404 queues a session_dialog failsafe and does not say failsafe not used",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.refuses beginTurn session rebind without durable proof and reports degraded recovery path",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path"
+      ],
+      "ProposedTests": [
+        "SessionLogLifecycle.DegradedCompletePreservesFullTurn",
+        "SessionLogLifecycle.PromptHook_DegradedBegin_ReportsOpenedDegradedWithRetainedPath",
+        "SessionLogLifecycle.Complete_QueryFallbackPreservesValidTitle_AndUpdateOmitsEmptyQuery",
+        "SessionLogLifecycle.AppendDialog_DegradedMissingTurn_AttemptsOneRecoveryAndRetainsDialog",
+        "SessionLogLifecycle.AppendDialog_NeverDegradedMissingTurn_IsNonretryableNoFailsafe",
+        "SessionLogLifecycle.SameRequestRetry_PreservesCreationMetadata_NormalizesCancelledWithoutFalseDurability"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/repl-invoke.ps1",
+        "plugins/core/lib-ps/plugin-hook.ps1"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "TEST-MCP-SESSIONLIFE-001-AC002",
+      "RequirementId": "TEST-MCP-SESSIONLIFE-001",
+      "Text": "At least one real builder or shim test runs with MCP_PLUGIN_PERSIST_LOG unset and asserts the complete cached object and serialized persistence payload rather than only fixture echo.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits an empty query through the real builder and shim",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery"
+      ],
+      "ProposedTests": [
+        "SessionLogLifecycle.RealBuilder_DegradedBegin_PreservesEveryCachedTurnField"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/repl-invoke.ps1",
+        "plugins/core/lib-ps/plugin-hook.ps1"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "TEST-MCP-SESSIONLIFE-001-AC003",
+      "RequirementId": "TEST-MCP-SESSIONLIFE-001",
+      "Text": "The accepted test scope exits with zero failures and zero skips and records the concrete test names and evidence paths in the acceptance manifest.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV11 explicit append metadata updates cache used by later complete",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV12 beginTurn rejects missing marker proof and wrong-marker degraded reopen",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV13 request mismatch does not mutate current-turn when markers are missing",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves unit inventory excludes PluginIntegration and keeps SessionLife gate scripts",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV16 case-different caller requestId is rejected without mutation",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV17 case-different typed sessionId or requestId is not primary",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV19 case-different SubmitAsync response identity is not persisted and keeps recovery",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV20 beginTurn case-different request or session does not durable-reopen overwrite"
+      ],
+      "ProposedTests": [
+        "SessionLifeUnitGate.Validator_AcceptsFreshRunInventoryAndCompleteReports"
+      ],
+      "ProductionSurfaces": [
+        "tools/validation/Invoke-SessionLifeUnitGate.ps1"
+      ],
+      "TestSourcePaths": [
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "TEST-MCP-SESSIONLIFE-002-AC001",
+      "RequirementId": "TEST-MCP-SESSIONLIFE-002",
+      "Text": "Named Pester tests cover metadata precedence, immutable identity, ordinary first persist, canceled/cancelled supersession, durable reopen, and all three contract documents.",
+      "Disposition": "P2_FAIL_TRACEABILITY",
+      "Reason": "Raw first-persist rejection/no-insert behavior for both metadata fields is not concretely linked. Mapped wrapper/beginTurn tests do not substitute for the raw entry/service boundary. This also leaves the governing aggregate TR/TEST criterion incomplete.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects whitespace metadata on ordinary first persistence",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.stores canceled with exact None when a new request supersedes an open turn",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.omits metadata on durable reopen unless the caller sends an explicit value",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects explicit empty and null planFile on ordinary first persistence"
+      ],
+      "ProposedTests": [
+        "SessionLogLifecycleMetadata.Resolver_UsesExplicitThenVerifiedCacheThenExactNone",
+        "SessionLogLifecycleMetadata.FreshnessRejectsWorkspaceAgentSessionRequestDriftWithoutRebinding",
+        "SessionLogLifecycleMetadata.FirstPersist_RejectsMissingMetadataExceptCancelledSupersession",
+        "SessionLogLifecycleMetadata.DurableReopen_PreservesBoundedOmission",
+        "SessionLogLifecycleMetadata.ModuleBootstrap_AllBeginTurnExamples_DeclareMetadataOrApprovedOmission",
+        "SessionLogLifecycleMetadata.ReplUserGuide_AllBeginTurnExamples_DeclareMetadataOrApprovedOmission",
+        "SessionLogLifecycleMetadata.ReplYamlSchema_DeclaresMetadataAndDocumentsFirstPersistNoneSupersessionAndReopenRules"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/repl-invoke.ps1",
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "TEST-MCP-SESSIONLIFE-002-AC002",
+      "RequirementId": "TEST-MCP-SESSIONLIFE-002",
+      "Text": "Named process tests cover primary, queued, and lost wrapper exits, structured result serialization, single child deadline and cleanup, Stop ordering, quarantine repair, audit reconciliation, and dialog classification.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path"
+      ],
+      "ProposedTests": [
+        "SessionLogOutcome.MutationReturnsExactlyOnePrimaryQueuedOrLostOutcome",
+        "SessionLogOutcome.SerializationIncludesAllDurabilityIdentityDiagnosticFields",
+        "SessionLogProcessBoundary.BlockedStdin_UsesOneOperationDeadline",
+        "SessionLogProcessBoundary.StalledStdout_UsesOneOperationDeadline",
+        "SessionLogProcessBoundary.SaturatedStderr_DrainsWithoutDeadlock",
+        "SessionLogProcessBoundary.NeverExit_TerminatesProcessTree",
+        "SessionLogProcessBoundary.Cancellation_TerminatesProcessTreeAndReturnsCancelled",
+        "SessionLogProcessBoundary.DescendantCleanup_RemovesChildTree",
+        "SessionLogProcessBoundary.ImmediateExit_DoesNotRaceStreamReaders",
+        "SessionLogProcessBoundary.Disposal_WaitsForReadersBeforeDispose",
+        "SessionLogProcessBoundary.DefaultDeadline_IsMonotonicThirtySeconds",
+        "SessionLogProcessBoundary.PositiveOverride_ExtendsSingleOperationDeadline",
+        "StopGate.FailedBuildAndIncompleteAuditBlockBeforeStalePinRefreshOrRecovery",
+        "SessionLogQuarantineRepair.HistoricalShapes_FillOnlyMissingValuesAndNeverFabricateIdentity",
+        "SessionLogAuditReconcile.WriteAheadAndExactReadback_AreTruthful",
+        "SessionLogLifecycle.AppendDialog_DegradedMissingTurn_AttemptsOneRecoveryAndRetainsDialog"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/repl-invoke.ps1",
+        "plugins/core/lib-ps/plugin-hook.ps1",
+        "plugins/core/lib-ps/Invoke-McpPlugin.ps1"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1",
+        "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1",
+        "plugins/core/test-fixtures/pester/SessionLogQuarantineRepair.Tests.ps1",
+        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1",
+        "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "TEST-MCP-SESSIONLIFE-002-AC003",
+      "RequirementId": "TEST-MCP-SESSIONLIFE-002",
+      "Text": "Every mock-backed consumer case has a corresponding real implementation assertion and recorded process exit or serialized receipt; unaccepted candidate tests remain explicitly not accepted.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves BUG-TRIAGE-246 module bootstrap user guide and message schema",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.emits recoveryArtifactPath for degraded duplicate Open-PluginTurn path",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV10 durable update/append/complete omit planFile and todoId when caller omits them",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.HV14 appendDialog and setTurnTitle reject wrong typed identity or retitled=false"
+      ],
+      "ProposedTests": [
+        "SessionLifeAcceptanceManifest.EveryMockConsumerCaseLinksOneRealImplementationAssertionAndReceipt"
+      ],
+      "ProductionSurfaces": [
+        "docs/receipts/sessionlife-completion/20260928-p0/acceptance-manifest.json"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "TEST-MCP-SESSIONLIFE-002-AC004",
+      "RequirementId": "TEST-MCP-SESSIONLIFE-002",
+      "Text": "The accepted cumulative test scope exits with zero failures, zero skips, no missing reports, and no zero-discovery projects.",
+      "Disposition": "P2_FAIL_TRACEABILITY",
+      "Reason": "Mapped source-text inventory and generic verb outcome tests do not exercise malformed artifacts against the actual gate validator. Real validator/consumer tests exist and passed but are absent from this criterion mapping.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves unit inventory excludes PluginIntegration and keeps SessionLife gate scripts",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb"
+      ],
+      "ProposedTests": [
+        "SessionLifeUnitGate.Validator_AcceptsFreshRunInventoryAndCompleteReports"
+      ],
+      "ProductionSurfaces": [
+        "tools/validation/Invoke-SessionLifeUnitGate.ps1"
+      ],
+      "TestSourcePaths": [
+        "tests/Build.Tests/SessionLifeUnitGateValidatorTests.cs"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "TEST-MCP-SESSIONLIFE-003-AC001",
+      "RequirementId": "TEST-MCP-SESSIONLIFE-003",
+      "Text": "Transaction-gated session-log tests prove non-QuadBrain action, dialog, update, and additive complete persistence without coordinator or keyserver invocation.",
+      "Disposition": "DEFERRED_P4_P6",
+      "Reason": "Plan P2 item 4 defers durable query; provider/transaction and exact durable child readback belong to P4/P6.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.rejects unproven persistence envelopes without clearing failsafe recovery"
+      ],
+      "ProposedTests": [
+        "TransactionGatedSessionLogService.GeneralAgentActionDialogUpdateAndComplete_BypassCoordinator"
+      ],
+      "ProductionSurfaces": [
+        "src/McpServer.Support.Mcp/Services/TransactionGatedSessionLogService.cs"
+      ],
+      "TestSourcePaths": [
+        "tests/McpServer.Support.Mcp.Tests/Services/TransactionGatedSessionLogServiceTests.cs"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "TEST-MCP-SESSIONLIFE-003-AC002",
+      "RequirementId": "TEST-MCP-SESSIONLIFE-003",
+      "Text": "Exact durable readback verifies every child collection and repeated additive complete remains duplicate-free.",
+      "Disposition": "DEFERRED_P4_P6",
+      "Reason": "Plan P2 item 4 defers durable query; provider/transaction and exact durable child readback belong to P4/P6.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.does not write a second failsafe for an unchanged queued update and keeps additive methods distinct"
+      ],
+      "ProposedTests": [
+        "TransactionGatedSessionLogService.DurableReadbackPreservesEveryChildAndRepeatedCompleteIsDuplicateFree"
+      ],
+      "ProductionSurfaces": [
+        "src/McpServer.Support.Mcp/Services/TransactionGatedSessionLogService.cs"
+      ],
+      "TestSourcePaths": [
+        "tests/McpServer.Support.Mcp.Tests/Services/TransactionGatedSessionLogServiceTests.cs"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "TEST-MCP-SESSIONLIFE-003-AC003",
+      "RequirementId": "TEST-MCP-SESSIONLIFE-003",
+      "Text": "The subset proof is linked to FR-MCP-173 but does not mark its broader first-party adapter obligations satisfied.",
+      "Disposition": "P2_PASS",
+      "Reason": "Concrete mapped names exist in current passing native reports; assessed only for the P2 local contract portion. Later provider/server guarantees are not inferred.",
+      "ExistingTests": [
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.covers primary queued and lost outcomes for every session verb",
+        "FR-MCP-SESSIONLIFE P2 cache identity metadata and outcomes.proves unit inventory excludes PluginIntegration and keeps SessionLife gate scripts"
+      ],
+      "ProposedTests": [
+        "SessionLifeTraceability.TransactionSubsetLinksFR173WithoutSatisfyingBroadAdapterAC"
+      ],
+      "ProductionSurfaces": [
+        "docs/receipts/sessionlife-completion/20260928-p0/acceptance-manifest.json"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogP2Contracts.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "FR-MCP-170-AC002",
+      "RequirementId": "FR-MCP-170",
+      "Text": "The incremental dialog path invokes SessionLogClient.AppendDialogAsync or the dialog POST and does not submit the complete session DTO through SubmitAsync.",
+      "Disposition": "P2_FAIL_TRACEABILITY",
+      "Reason": "criterionSpecificExistingTests is empty; proposed labels are not executed criterion mappings.",
+      "ExistingTests": [],
+      "ProposedTests": [
+        "SessionLogController.AppendDialog_UsesIncrementalEndpointWithoutSubmitAsync"
+      ],
+      "ProductionSurfaces": [
+        "src/McpServer.Support.Mcp/Controllers/SessionLogController.cs"
+      ],
+      "TestSourcePaths": [
+        "tests/McpServer.Support.Mcp.Tests/Controllers/SessionLogControllerErrorTests.cs"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "FR-MCP-170-AC003",
+      "RequirementId": "FR-MCP-170",
+      "Text": "On a never-degraded appendDialog path, a missing turn is classified not_found with retryable false, does not create a failsafe for that 404, and does not increment the local auditDialog count; this criterion does not override degraded MCP/service recovery and failsafe retention governed by FR-MCP-SESSIONLIFE-001-AC004.",
+      "Disposition": "P2_FAIL_TRACEABILITY",
+      "Reason": "criterionSpecificExistingTests is empty; proposed labels are not executed criterion mappings.",
+      "ExistingTests": [],
+      "ProposedTests": [
+        "SessionLogController.AppendDialog_NeverDegradedMissingTurn_IsNonretryableNoFailsafe"
+      ],
+      "ProductionSurfaces": [
+        "src/McpServer.Support.Mcp/Controllers/SessionLogController.cs",
+        "plugins/core/lib-ps/repl-invoke.ps1"
+      ],
+      "TestSourcePaths": [
+        "tests/McpServer.Support.Mcp.Tests/Controllers/SessionLogControllerErrorTests.cs",
+        "plugins/core/test-fixtures/pester/SessionLogLifecycle.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "AC-FR-MCP-SESSIONLOGCTX-001-002",
+      "RequirementId": "FR-MCP-SESSIONLOGCTX-001",
+      "Text": "When no plan or TODO is active, the stored value SHALL be the exact sentinel None (case-sensitive).",
+      "Disposition": "P2_FAIL_TRACEABILITY",
+      "Reason": "criterionSpecificExistingTests is empty; proposed labels are not executed criterion mappings.",
+      "ExistingTests": [],
+      "ProposedTests": [
+        "SessionLogContext.NoActivePlanOrTodoStoresExactNoneSentinel"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/repl-invoke.ps1",
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1",
+        "tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "AC-FR-MCP-SESSIONLOGCTX-001-003",
+      "RequirementId": "FR-MCP-SESSIONLOGCTX-001",
+      "Text": "The first ordinary persist of a turn SHALL reject omitted, null, empty, or whitespace planFile or todoId and insert no turn row. A canceled or cancelled supersession may omit the pair, stores the exact sentinel None for each missing value, and a durable reopen preserves that bounded exception.",
+      "Disposition": "P2_FAIL_TRACEABILITY",
+      "Reason": "criterionSpecificExistingTests is empty; proposed labels are not executed criterion mappings.",
+      "ExistingTests": [],
+      "ProposedTests": [
+        "SessionLogLifecycleMetadata.FirstPersist_RejectsMissingMetadataExceptCancelledSupersession"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/repl-invoke.ps1",
+        "src/McpServer.Services/Services/SessionLogTurnContextValidator.cs"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogLifecycleMetadata.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "FR-MCP-REPL-009-AC001",
+      "RequirementId": "FR-MCP-REPL-009",
+      "Text": "Open, begin, update, appendDialog, and appendActions remain successful when primary MCP Session Log persistence fails but failsafe persistence succeeds.",
+      "Disposition": "P2_FAIL_TRACEABILITY",
+      "Reason": "criterionSpecificExistingTests is empty; proposed labels are not executed criterion mappings.",
+      "ExistingTests": [],
+      "ProposedTests": [
+        "SessionLogFailsafe.OpenBeginUpdateDialogAndActions_ReturnQueuedSuccessWhenPrimaryFailsAndFailsafePersists"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
+        "plugins/core/lib-ps/repl-invoke.ps1"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "FR-MCP-REPL-009-AC002",
+      "RequirementId": "FR-MCP-REPL-009",
+      "Text": "The failsafe artifact contains a replayable session-log persistence envelope including the attempted turn data and status.",
+      "Disposition": "P2_FAIL_TRACEABILITY",
+      "Reason": "criterionSpecificExistingTests is empty; proposed labels are not executed criterion mappings.",
+      "ExistingTests": [],
+      "ProposedTests": [
+        "SessionLogFailsafe.EnvelopeContainsReplayableTurnPayloadMethodIdentityAndStatus"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
+        "plugins/core/lib-ps/repl-invoke.ps1"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "FR-MCP-REPL-009-AC003",
+      "RequirementId": "FR-MCP-REPL-009",
+      "Text": "completeTurn and failTurn report degraded persistence, the independent strategy name, and the absolute failsafe path without claiming primary MCP persistence succeeded.",
+      "Disposition": "P2_FAIL_TRACEABILITY",
+      "Reason": "criterionSpecificExistingTests is empty; proposed labels are not executed criterion mappings.",
+      "ExistingTests": [],
+      "ProposedTests": [
+        "SessionLogFailsafe.CompleteAndFailReportDegradedStrategyAndAbsolutePathWithoutPrimaryClaim"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
+        "plugins/core/lib-ps/repl-invoke.ps1"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    },
+    {
+      "Id": "FR-MCP-REPL-009-AC004",
+      "RequirementId": "FR-MCP-REPL-009",
+      "Text": "Primary persistence success produces no pending failsafe artifact and reports normal MCP persistence.",
+      "Disposition": "P2_FAIL_TRACEABILITY",
+      "Reason": "criterionSpecificExistingTests is empty; proposed labels are not executed criterion mappings.",
+      "ExistingTests": [],
+      "ProposedTests": [
+        "SessionLogFailsafe.PrimarySuccessLeavesNoPendingArtifactAndReportsPersisted"
+      ],
+      "ProductionSurfaces": [
+        "plugins/core/lib-ps/Invoke-McpPlugin.ps1",
+        "plugins/core/lib-ps/repl-invoke.ps1"
+      ],
+      "TestSourcePaths": [
+        "plugins/core/test-fixtures/pester/SessionLogAuditReconcile.Tests.ps1"
+      ],
+      "AcceptanceState": "not-accepted"
+    }
+  ],
+  "NativeReports": [
+    {
+      "path": "TestResults\\p2-unit-legion-20261002T202158Z\\build-tests\\Build.Tests.trx",
+      "sha256": "FD12E1DCEB5C74E34D332C30129DBF9E829D4B176574BEE61C6A1332EFA7A31A",
+      "outcome": "Completed",
+      "total": 321,
+      "executed": 321,
+      "passed": 321,
+      "failed": 0,
+      "notExecuted": 0,
+      "actualResults": 321,
+      "actualNonPassed": 0,
+      "start": "2026-10-02T15:30:57.7830111-05:00",
+      "finish": "2026-10-02T15:33:03.8520276-05:00"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Client.Tests\\McpServer.Client.Tests.trx",
+      "sha256": "24DAD40560995B40C0230B506B929511CEACF86B19BCFE50A9BA5A1D234BD8AC",
+      "outcome": "Completed",
+      "total": 304,
+      "executed": 304,
+      "passed": 304,
+      "failed": 0,
+      "notExecuted": 0,
+      "actualResults": 304,
+      "actualNonPassed": 0,
+      "start": "2026-10-02T15:30:38.2122142-05:00",
+      "finish": "2026-10-02T15:30:40.373451-05:00"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Cqrs.Tests\\McpServer.Cqrs.Tests.trx",
+      "sha256": "4252496D2177929C97791908F9A90BA4C811510802BCA870ECC05B2B726A05E7",
+      "outcome": "Completed",
+      "total": 33,
+      "executed": 33,
+      "passed": 33,
+      "failed": 0,
+      "notExecuted": 0,
+      "actualResults": 33,
+      "actualNonPassed": 0,
+      "start": "2026-10-02T15:30:41.2989673-05:00",
+      "finish": "2026-10-02T15:30:42.7324885-05:00"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Launcher.Tests\\McpServer.Launcher.Tests.trx",
+      "sha256": "3C87D5031BE7D02B789266021F26F99726CD0C8E8AB55718BF48531029C4C920",
+      "outcome": "Completed",
+      "total": 20,
+      "executed": 20,
+      "passed": 20,
+      "failed": 0,
+      "notExecuted": 0,
+      "actualResults": 20,
+      "actualNonPassed": 0,
+      "start": "2026-10-02T15:30:43.6133283-05:00",
+      "finish": "2026-10-02T15:30:44.8963475-05:00"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.McpAgent.Tests\\McpServer.McpAgent.Tests.trx",
+      "sha256": "C1B80CF09BBCD16B9CC98E77C6A2F5C30D7CE076A585A1CCEC8DDBC9805265A2",
+      "outcome": "Completed",
+      "total": 63,
+      "executed": 63,
+      "passed": 63,
+      "failed": 0,
+      "notExecuted": 0,
+      "actualResults": 63,
+      "actualNonPassed": 0,
+      "start": "2026-10-02T15:30:45.7676591-05:00",
+      "finish": "2026-10-02T15:30:49.4830414-05:00"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.QBAgent.Tests\\McpServer.QBAgent.Tests.trx",
+      "sha256": "2EFB462336F88240DE649D8FE48E1F264623786632D052E78E46DE598F88155C",
+      "outcome": "Completed",
+      "total": 96,
+      "executed": 96,
+      "passed": 96,
+      "failed": 0,
+      "notExecuted": 0,
+      "actualResults": 96,
+      "actualNonPassed": 0,
+      "start": "2026-10-02T15:30:53.7825819-05:00",
+      "finish": "2026-10-02T15:30:55.3169359-05:00"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Repl.Core.Tests\\McpServer.Repl.Core.Tests.trx",
+      "sha256": "B0595A956D5EE43C255B707F88776B86678E9591E9392B9CA8954B7ED10B3488",
+      "outcome": "Completed",
+      "total": 868,
+      "executed": 868,
+      "passed": 868,
+      "failed": 0,
+      "notExecuted": 0,
+      "actualResults": 868,
+      "actualNonPassed": 0,
+      "start": "2026-10-02T15:30:50.3919716-05:00",
+      "finish": "2026-10-02T15:30:52.749558-05:00"
+    },
+    {
+      "path": "TestResults\\p2-unit-legion-20261002T202158Z\\unit\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.trx",
+      "sha256": "BBC628419EF04434CC324047A8E36FF61CF76464282807118E5BD5620C7E89F6",
+      "outcome": "Completed",
+      "total": 2914,
+      "executed": 2914,
+      "passed": 2914,
+      "failed": 0,
+      "notExecuted": 0,
+      "actualResults": 2914,
+      "actualNonPassed": 0,
+      "start": "2026-10-02T15:28:12.0303456-05:00",
+      "finish": "2026-10-02T15:30:36.8490206-05:00"
+    }
+  ],
+  "Pester": {
+    "RunId": "p2-unit-legion-20261002T202158Z",
+    "ExecutedAt": "2026-10-02T15:22:04.5102716-05:00",
+    "Total": 242,
+    "Passed": 242,
+    "Failed": 0,
+    "Skipped": 0,
+    "Inconclusive": 0,
+    "NotRun": 0,
+    "FailedBlocks": 0,
+    "FailedContainers": 0
+  },
+  "CommandResults": {
+    "schemaVersion": 1,
+    "runId": "p2-unit-legion-20261002T202158Z",
+    "scope": "unit",
+    "commands": [
+      {
+        "name": "pester",
+        "exitCode": 0,
+        "startedAtUtc": "2026-10-02T15:22:04.5102716-05:00",
+        "finishedAtUtc": "2026-10-02T15:26:38.4788828-05:00"
+      },
+      {
+        "name": "nuke-test",
+        "exitCode": 0,
+        "startedAtUtc": "2026-10-02T15:26:38.4982882-05:00",
+        "finishedAtUtc": "2026-10-02T15:30:56.0788202-05:00"
+      },
+      {
+        "name": "build-tests",
+        "exitCode": 0,
+        "startedAtUtc": "2026-10-02T15:30:56.0799151-05:00",
+        "finishedAtUtc": "2026-10-02T15:33:03.9488956-05:00"
+      }
+    ]
+  },
+  "CompiledValidator": {
+    "status": "ACCEPTED",
+    "method": "SessionLifeUnitGateValidator.Validate",
+    "artifactMutation": false,
+    "note": "Direct compiled-validator invocation on existing normalized reports; not a fresh test-suite run."
+  },
+  "ModelVerified": true,
+  "SourceFileCount": 2237,
+  "SourceMismatches": [],
+  "GateLogSha256": "803C34F0CD9B615E53CF23DD661F2669C59F60FF8BE3F4E51E4C0A77512A507F",
+  "FreshProbes": {
+    "IdentityAssertions": [
+      {
+        "name": "updateTurn-exact",
+        "pass": true,
+        "calls": 1,
+        "queueCount": 0,
+        "receipt": {
+          "code": "persisted",
+          "retryable": false,
+          "persisted": true,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.updateTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "",
+          "message": "Session log persist confirmed a durable write for request 'req-20261001T000000Z-casea'.",
+          "childStderr": ""
+        }
+      },
+      {
+        "name": "updateTurn-case-session",
+        "pass": true,
+        "calls": 1,
+        "queueCount": 1,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.updateTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-case-session\\failsafe\\20261002T204226Z-session_submit-6798.yaml",
+          "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-case-session\\failsafe\\20261002T204226Z-session_submit-6798.yaml'.",
+          "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-case-session\\failsafe\\20261002T204226Z-session_submit-6798.yaml'."
+        }
+      },
+      {
+        "name": "updateTurn-case-request",
+        "pass": true,
+        "calls": 1,
+        "queueCount": 1,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.updateTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-case-request\\failsafe\\20261002T204226Z-session_submit-fe3e.yaml",
+          "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-case-request\\failsafe\\20261002T204226Z-session_submit-fe3e.yaml'.",
+          "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-case-request\\failsafe\\20261002T204226Z-session_submit-fe3e.yaml'."
+        }
+      },
+      {
+        "name": "updateTurn-wrong-request",
+        "pass": true,
+        "calls": 1,
+        "queueCount": 1,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.updateTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-wrong-request\\failsafe\\20261002T204226Z-session_submit-d844.yaml",
+          "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-wrong-request\\failsafe\\20261002T204226Z-session_submit-d844.yaml'.",
+          "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\updateTurn-wrong-request\\failsafe\\20261002T204226Z-session_submit-d844.yaml'."
+        }
+      },
+      {
+        "name": "appendActions-exact",
+        "pass": true,
+        "calls": 1,
+        "queueCount": 0,
+        "receipt": {
+          "code": "persisted",
+          "retryable": false,
+          "persisted": true,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.appendActions",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "",
+          "message": "Session log persist confirmed a durable write for request 'req-20261001T000000Z-casea'.",
+          "childStderr": ""
+        }
+      },
+      {
+        "name": "appendActions-case-session",
+        "pass": true,
+        "calls": 1,
+        "queueCount": 1,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.appendActions",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-case-session\\failsafe\\20261002T204227Z-session_submit-705e.yaml",
+          "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-case-session\\failsafe\\20261002T204227Z-session_submit-705e.yaml'.",
+          "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-case-session\\failsafe\\20261002T204227Z-session_submit-705e.yaml'."
+        }
+      },
+      {
+        "name": "appendActions-case-request",
+        "pass": true,
+        "calls": 1,
+        "queueCount": 1,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.appendActions",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-case-request\\failsafe\\20261002T204227Z-session_submit-66fb.yaml",
+          "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-case-request\\failsafe\\20261002T204227Z-session_submit-66fb.yaml'.",
+          "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-case-request\\failsafe\\20261002T204227Z-session_submit-66fb.yaml'."
+        }
+      },
+      {
+        "name": "appendActions-wrong-request",
+        "pass": true,
+        "calls": 1,
+        "queueCount": 1,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.appendActions",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-wrong-request\\failsafe\\20261002T204228Z-session_submit-6d68.yaml",
+          "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-wrong-request\\failsafe\\20261002T204228Z-session_submit-6d68.yaml'.",
+          "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\appendActions-wrong-request\\failsafe\\20261002T204228Z-session_submit-6d68.yaml'."
+        }
+      },
+      {
+        "name": "completeTurn-exact",
+        "pass": true,
+        "calls": 2,
+        "queueCount": 0,
+        "receipt": {
+          "code": "persisted",
+          "retryable": false,
+          "persisted": true,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.completeTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "",
+          "message": "Session log persist confirmed a durable write for request 'req-20261001T000000Z-casea'.",
+          "childStderr": ""
+        }
+      },
+      {
+        "name": "completeTurn-case-session",
+        "pass": true,
+        "calls": 1,
+        "queueCount": 1,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.completeTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-case-session\\failsafe\\20261002T204228Z-session_submit-8316.yaml",
+          "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-case-session\\failsafe\\20261002T204228Z-session_submit-8316.yaml'.",
+          "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-case-session\\failsafe\\20261002T204228Z-session_submit-8316.yaml'."
+        }
+      },
+      {
+        "name": "completeTurn-case-request",
+        "pass": true,
+        "calls": 1,
+        "queueCount": 1,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.completeTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-case-request\\failsafe\\20261002T204229Z-session_submit-a8a2.yaml",
+          "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-case-request\\failsafe\\20261002T204229Z-session_submit-a8a2.yaml'.",
+          "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-case-request\\failsafe\\20261002T204229Z-session_submit-a8a2.yaml'."
+        }
+      },
+      {
+        "name": "completeTurn-wrong-request",
+        "pass": true,
+        "calls": 1,
+        "queueCount": 1,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.completeTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-wrong-request\\failsafe\\20261002T204229Z-session_submit-72b4.yaml",
+          "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-wrong-request\\failsafe\\20261002T204229Z-session_submit-72b4.yaml'.",
+          "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\completeTurn-wrong-request\\failsafe\\20261002T204229Z-session_submit-72b4.yaml'."
+        }
+      },
+      {
+        "name": "failTurn-exact",
+        "pass": true,
+        "calls": 1,
+        "queueCount": 0,
+        "receipt": {
+          "code": "persisted",
+          "retryable": false,
+          "persisted": true,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.failTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "",
+          "message": "Session log persist confirmed a durable write for request 'req-20261001T000000Z-casea'.",
+          "childStderr": ""
+        }
+      },
+      {
+        "name": "failTurn-case-session",
+        "pass": true,
+        "calls": 1,
+        "queueCount": 1,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.failTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-case-session\\failsafe\\20261002T204229Z-session_submit-0795.yaml",
+          "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-case-session\\failsafe\\20261002T204229Z-session_submit-0795.yaml'.",
+          "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-case-session\\failsafe\\20261002T204229Z-session_submit-0795.yaml'."
+        }
+      },
+      {
+        "name": "failTurn-case-request",
+        "pass": true,
+        "calls": 1,
+        "queueCount": 1,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.failTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-case-request\\failsafe\\20261002T204230Z-session_submit-e03f.yaml",
+          "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-case-request\\failsafe\\20261002T204230Z-session_submit-e03f.yaml'.",
+          "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-case-request\\failsafe\\20261002T204230Z-session_submit-e03f.yaml'."
+        }
+      },
+      {
+        "name": "failTurn-wrong-request",
+        "pass": true,
+        "calls": 1,
+        "queueCount": 1,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.failTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-wrong-request\\failsafe\\20261002T204230Z-session_submit-8999.yaml",
+          "message": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-wrong-request\\failsafe\\20261002T204230Z-session_submit-8999.yaml'.",
+          "childStderr": "Session log persistence returned mismatched identity for request 'req-20261001T000000Z-casea'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-remaining-identity-fixtures-0ea222b44fcb45f79c973fa3762219a2\\failTurn-wrong-request\\failsafe\\20261002T204230Z-session_submit-8999.yaml'."
+        }
+      },
+      {
+        "name": "begin-case-request-server-reject",
+        "pass": true,
+        "calls": 0,
+        "queueCount": 0,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.beginTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "",
+          "message": "workflow.sessionlog.beginTurn refused case-different requestId 'req-20261001T000000Z-caseA' because the current turn is 'req-20261001T000000Z-casea'.",
+          "childStderr": "workflow.sessionlog.beginTurn refused case-different requestId 'req-20261001T000000Z-caseA' because the current turn is 'req-20261001T000000Z-casea'."
+        }
+      },
+      {
+        "name": "begin-case-session-server-reject",
+        "pass": true,
+        "calls": 0,
+        "queueCount": 0,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.beginTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "",
+          "message": "workflow.sessionlog.beginTurn refused to rebind session 'Codex-20260930T000000Z-sessiona' to 'Codex-20260930T000000Z-sessionA' for requestId=req-20261001T000000Z-casea",
+          "childStderr": "workflow.sessionlog.beginTurn refused to rebind session 'Codex-20260930T000000Z-sessiona' to 'Codex-20260930T000000Z-sessionA' for requestId=req-20261001T000000Z-casea"
+        }
+      }
+    ],
+    "RawValidator": [
+      {
+        "variant": "null",
+        "accepted": false,
+        "field": "planFile",
+        "pass": true,
+        "exception": "System.ArgumentException"
+      },
+      {
+        "variant": "empty",
+        "accepted": false,
+        "field": "planFile",
+        "pass": true,
+        "exception": "System.ArgumentException"
+      },
+      {
+        "variant": "space",
+        "accepted": false,
+        "field": "planFile",
+        "pass": true,
+        "exception": "System.ArgumentException"
+      },
+      {
+        "variant": "tab",
+        "accepted": false,
+        "field": "planFile",
+        "pass": true,
+        "exception": "System.ArgumentException"
+      },
+      {
+        "variant": "valid",
+        "accepted": true,
+        "field": "planFile",
+        "pass": true,
+        "exception": null
+      },
+      {
+        "variant": "null",
+        "accepted": false,
+        "field": "todoId",
+        "pass": true,
+        "exception": "System.ArgumentException"
+      },
+      {
+        "variant": "empty",
+        "accepted": false,
+        "field": "todoId",
+        "pass": true,
+        "exception": "System.ArgumentException"
+      },
+      {
+        "variant": "space",
+        "accepted": false,
+        "field": "todoId",
+        "pass": true,
+        "exception": "System.ArgumentException"
+      },
+      {
+        "variant": "tab",
+        "accepted": false,
+        "field": "todoId",
+        "pass": true,
+        "exception": "System.ArgumentException"
+      },
+      {
+        "variant": "valid",
+        "accepted": true,
+        "field": "todoId",
+        "pass": true,
+        "exception": null
+      }
+    ],
+    "BeginIdentity": [
+      {
+        "state": "durable",
+        "pass": true,
+        "afterHash": "0A1DD2146F244949A2D6DB0CBBA67944E35E1C615256283E1BADA3766231817A",
+        "receipt": {
+          "code": "persisted",
+          "retryable": false,
+          "persisted": true,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.beginTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "",
+          "message": "Session log persist confirmed a durable write for request 'req-20261001T000000Z-casea'.",
+          "childStderr": ""
+        },
+        "payloads": [
+          {
+            "method": "client.SessionLog.SubmitAsync",
+            "params": {
+              "sessionLog": {
+                "status": "in_progress",
+                "sourceType": "Codex",
+                "turnCount": 1,
+                "turns": [
+                  {
+                    "requestId": "req-20261001T000000Z-casea",
+                    "response": "(turn opened)",
+                    "status": "in_progress",
+                    "timestamp": "2026-10-02T15:42:31.7775834-05:00",
+                    "tokenCount": 0,
+                    "model": "codex",
+                    "queryTitle": "boundary title",
+                    "queryText": "boundary query"
+                  }
+                ],
+                "model": "codex",
+                "lastUpdated": "2026-10-02T20:42:32Z",
+                "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+                "sessionId": "Codex-20260930T000000Z-sessiona",
+                "started": "2026-10-02T15:42:31.7775834-05:00",
+                "agentExecutableVersion": "codex-cli 0.159.3"
+              }
+            }
+          }
+        ],
+        "calls": 1,
+        "beforeHash": "9E0008D3D69E1E5C5C902DF59A9C169A3C246F674F92BDFD9A51E6C94AB41E57",
+        "identity": "exact",
+        "error": null,
+        "result": true
+      },
+      {
+        "state": "durable",
+        "pass": true,
+        "afterHash": "71B78C84B4BB4CF9D0CA0242F5D69415F86CF99617964B60B612F0957DA95400",
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.beginTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "",
+          "message": "workflow.sessionlog.beginTurn refused case-different requestId 'req-20261001T000000Z-caseA' because the current turn is 'req-20261001T000000Z-casea'.",
+          "childStderr": "workflow.sessionlog.beginTurn refused case-different requestId 'req-20261001T000000Z-caseA' because the current turn is 'req-20261001T000000Z-casea'."
+        },
+        "payloads": [],
+        "calls": 0,
+        "beforeHash": "71B78C84B4BB4CF9D0CA0242F5D69415F86CF99617964B60B612F0957DA95400",
+        "identity": "case-request",
+        "error": null,
+        "result": false
+      },
+      {
+        "state": "durable",
+        "pass": true,
+        "afterHash": "C1602DF7DF41EBB731D6116AFDF3C7CB35CFE644F6048D56CAE3234BDB78934B",
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.beginTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "",
+          "message": "workflow.sessionlog.beginTurn refused to rebind session 'Codex-20260930T000000Z-sessiona' to 'Codex-20260930T000000Z-sessionA' for requestId=req-20261001T000000Z-casea",
+          "childStderr": "workflow.sessionlog.beginTurn refused to rebind session 'Codex-20260930T000000Z-sessiona' to 'Codex-20260930T000000Z-sessionA' for requestId=req-20261001T000000Z-casea"
+        },
+        "payloads": [],
+        "calls": 0,
+        "beforeHash": "C1602DF7DF41EBB731D6116AFDF3C7CB35CFE644F6048D56CAE3234BDB78934B",
+        "identity": "case-session",
+        "error": null,
+        "result": false
+      },
+      {
+        "state": "degraded",
+        "pass": true,
+        "afterHash": "6E0AC6934D62D257C719C47E6D3FA786B5D07CA55D2CF3049FA4CBA2F6211449",
+        "receipt": {
+          "code": "persisted",
+          "retryable": false,
+          "persisted": true,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.beginTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "",
+          "message": "Session log persist confirmed a durable write for request 'req-20261001T000000Z-casea'.",
+          "childStderr": ""
+        },
+        "payloads": [
+          {
+            "method": "client.SessionLog.SubmitAsync",
+            "params": {
+              "sessionLog": {
+                "status": "in_progress",
+                "sourceType": "Codex",
+                "turnCount": 1,
+                "turns": [
+                  {
+                    "requestId": "req-20261001T000000Z-casea",
+                    "response": "(turn opened)",
+                    "status": "in_progress",
+                    "timestamp": "2026-10-02T15:42:32.7593377-05:00",
+                    "tokenCount": 0,
+                    "model": "codex",
+                    "queryTitle": "boundary title",
+                    "planFile": "docs/plans/p2.md",
+                    "queryText": "original query",
+                    "todoId": "BUG-TRIAGE-246"
+                  }
+                ],
+                "model": "codex",
+                "lastUpdated": "2026-10-02T20:42:32Z",
+                "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+                "sessionId": "Codex-20260930T000000Z-sessiona",
+                "started": "2026-10-02T15:42:32.7593377-05:00",
+                "agentExecutableVersion": "codex-cli 0.159.3"
+              }
+            }
+          }
+        ],
+        "calls": 1,
+        "beforeHash": "B2C7256EBFFC40864DA357799C977D12F28F97289792FECF1714C1686EB81F2C",
+        "identity": "exact",
+        "error": null,
+        "result": true
+      },
+      {
+        "state": "degraded",
+        "pass": true,
+        "afterHash": "7E4F43DAB297C25910F910AB09DDA56AAEA974021A5996DE8C9AE82F7AA68AEF",
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.beginTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "",
+          "message": "workflow.sessionlog.beginTurn refused case-different requestId 'req-20261001T000000Z-caseA' because the current turn is 'req-20261001T000000Z-casea'.",
+          "childStderr": "workflow.sessionlog.beginTurn refused case-different requestId 'req-20261001T000000Z-caseA' because the current turn is 'req-20261001T000000Z-casea'."
+        },
+        "payloads": [],
+        "calls": 0,
+        "beforeHash": "7E4F43DAB297C25910F910AB09DDA56AAEA974021A5996DE8C9AE82F7AA68AEF",
+        "identity": "case-request",
+        "error": null,
+        "result": false
+      },
+      {
+        "state": "degraded",
+        "pass": true,
+        "afterHash": "53426B0D72777A530C0102989058F3E7135B6D00D6B576EF3AF5133F2482DDFB",
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.beginTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "",
+          "message": "workflow.sessionlog.beginTurn refused to rebind session 'Codex-20260930T000000Z-sessiona' to 'Codex-20260930T000000Z-sessionA' for requestId=req-20261001T000000Z-casea",
+          "childStderr": "workflow.sessionlog.beginTurn refused to rebind session 'Codex-20260930T000000Z-sessiona' to 'Codex-20260930T000000Z-sessionA' for requestId=req-20261001T000000Z-casea"
+        },
+        "payloads": [],
+        "calls": 0,
+        "beforeHash": "53426B0D72777A530C0102989058F3E7135B6D00D6B576EF3AF5133F2482DDFB",
+        "identity": "case-session",
+        "error": null,
+        "result": false
+      },
+      {
+        "state": "unpersisted",
+        "pass": true,
+        "afterHash": "ACBF203525DAED846F4162E6CAAE98ED56F175B1CF3FB6D86E4B9428A9D803C6",
+        "receipt": {
+          "code": "persisted",
+          "retryable": false,
+          "persisted": true,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.beginTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "",
+          "message": "Session log persist confirmed a durable write for request 'req-20261001T000000Z-casea'.",
+          "childStderr": ""
+        },
+        "payloads": [
+          {
+            "method": "client.SessionLog.SubmitAsync",
+            "params": {
+              "sessionLog": {
+                "status": "in_progress",
+                "sourceType": "Codex",
+                "turnCount": 1,
+                "turns": [
+                  {
+                    "requestId": "req-20261001T000000Z-casea",
+                    "response": "(turn opened)",
+                    "status": "in_progress",
+                    "timestamp": "2026-10-02T20:42:33Z",
+                    "tokenCount": 0,
+                    "model": "codex",
+                    "queryTitle": "boundary title",
+                    "planFile": "docs/plans/p2.md",
+                    "queryText": "boundary query",
+                    "todoId": "BUG-TRIAGE-246"
+                  }
+                ],
+                "model": "codex",
+                "lastUpdated": "2026-10-02T20:42:33Z",
+                "agentExecutablePath": "C:\\Users\\kingd\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+                "sessionId": "Codex-20260930T000000Z-sessiona",
+                "started": "2026-10-02T20:42:33Z",
+                "agentExecutableVersion": "codex-cli 0.159.3"
+              }
+            }
+          }
+        ],
+        "calls": 1,
+        "beforeHash": "437512727C6ED627C3C97738DB720B634D8C92F8F87768983AF35C3DCC3E1217",
+        "identity": "exact",
+        "error": null,
+        "result": true
+      },
+      {
+        "state": "unpersisted",
+        "pass": true,
+        "afterHash": "9BDA290A55B4490F1EDBF37BE8A251A5E6017A551A3AA933CE043C58FD6B59D8",
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.beginTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "",
+          "message": "workflow.sessionlog.beginTurn refused case-different requestId 'req-20261001T000000Z-caseA' because the current turn is 'req-20261001T000000Z-casea'.",
+          "childStderr": "workflow.sessionlog.beginTurn refused case-different requestId 'req-20261001T000000Z-caseA' because the current turn is 'req-20261001T000000Z-casea'."
+        },
+        "payloads": [],
+        "calls": 0,
+        "beforeHash": "9BDA290A55B4490F1EDBF37BE8A251A5E6017A551A3AA933CE043C58FD6B59D8",
+        "identity": "case-request",
+        "error": null,
+        "result": false
+      },
+      {
+        "state": "unpersisted",
+        "pass": true,
+        "afterHash": "832ACBAFEFA495633FF3A96E9B47913144A9D8E47340A160DCCDA8456470ACFC",
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.beginTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-20261001T000000Z-casea",
+          "failsafePath": "",
+          "message": "workflow.sessionlog.beginTurn refused to rebind session 'Codex-20260930T000000Z-sessiona' to 'Codex-20260930T000000Z-sessionA' for requestId=req-20261001T000000Z-casea",
+          "childStderr": "workflow.sessionlog.beginTurn refused to rebind session 'Codex-20260930T000000Z-sessiona' to 'Codex-20260930T000000Z-sessionA' for requestId=req-20261001T000000Z-casea"
+        },
+        "payloads": [],
+        "calls": 0,
+        "beforeHash": "832ACBAFEFA495633FF3A96E9B47913144A9D8E47340A160DCCDA8456470ACFC",
+        "identity": "case-session",
+        "error": null,
+        "result": false
+      }
+    ],
+    "SubmitBooleans": [
+      {
+        "variant": "false-bool",
+        "queueCount": 1,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.updateTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-R",
+          "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-false-bool\\failsafe\\20261002T204234Z-session_submit-b395.yaml",
+          "message": "Session log persistence did not confirm a durable write for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-false-bool\\failsafe\\20261002T204234Z-session_submit-b395.yaml'.",
+          "childStderr": "Session log persistence did not confirm a durable write for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-false-bool\\failsafe\\20261002T204234Z-session_submit-b395.yaml'."
+        },
+        "pass": true,
+        "result": false
+      },
+      {
+        "variant": "false-string",
+        "queueCount": 1,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.updateTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-R",
+          "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-false-string\\failsafe\\20261002T204234Z-session_submit-9e9d.yaml",
+          "message": "Session log persistence did not confirm a durable write for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-false-string\\failsafe\\20261002T204234Z-session_submit-9e9d.yaml'.",
+          "childStderr": "Session log persistence did not confirm a durable write for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-false-string\\failsafe\\20261002T204234Z-session_submit-9e9d.yaml'."
+        },
+        "pass": true,
+        "result": false
+      },
+      {
+        "variant": "missing-persisted",
+        "queueCount": 1,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.updateTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-R",
+          "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-missing-persisted\\failsafe\\20261002T204234Z-session_submit-3f28.yaml",
+          "message": "Session log persistence did not confirm a durable write for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-missing-persisted\\failsafe\\20261002T204234Z-session_submit-3f28.yaml'.",
+          "childStderr": "Session log persistence did not confirm a durable write for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-missing-persisted\\failsafe\\20261002T204234Z-session_submit-3f28.yaml'."
+        },
+        "pass": true,
+        "result": false
+      },
+      {
+        "variant": "null-persisted",
+        "queueCount": 1,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.updateTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-R",
+          "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-null-persisted\\failsafe\\20261002T204234Z-session_submit-0dfc.yaml",
+          "message": "Session log persistence did not confirm a durable write for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-null-persisted\\failsafe\\20261002T204234Z-session_submit-0dfc.yaml'.",
+          "childStderr": "Session log persistence did not confirm a durable write for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-null-persisted\\failsafe\\20261002T204234Z-session_submit-0dfc.yaml'."
+        },
+        "pass": true,
+        "result": false
+      },
+      {
+        "variant": "degraded-bool",
+        "queueCount": 1,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.updateTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-R",
+          "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-degraded-bool\\failsafe\\20261002T204235Z-session_submit-eab5.yaml",
+          "message": "Session log persistence returned contradictory persisted+degraded for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-degraded-bool\\failsafe\\20261002T204235Z-session_submit-eab5.yaml'.",
+          "childStderr": "Session log persistence returned contradictory persisted+degraded for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-degraded-bool\\failsafe\\20261002T204235Z-session_submit-eab5.yaml'."
+        },
+        "pass": true,
+        "result": false
+      },
+      {
+        "variant": "degraded-string",
+        "queueCount": 1,
+        "receipt": {
+          "code": "rejected",
+          "retryable": false,
+          "persisted": false,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.updateTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-R",
+          "failsafePath": "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-degraded-string\\failsafe\\20261002T204235Z-session_submit-fe9c.yaml",
+          "message": "Session log persistence returned contradictory persisted+degraded for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-degraded-string\\failsafe\\20261002T204235Z-session_submit-fe9c.yaml'.",
+          "childStderr": "Session log persistence returned contradictory persisted+degraded for request 'req-R'. FailsafePath='F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-boundary-fixtures-02910f564e30429782ab52ea9aa395de\\bool-degraded-string\\failsafe\\20261002T204235Z-session_submit-fe9c.yaml'."
+        },
+        "pass": true,
+        "result": false
+      },
+      {
+        "variant": "valid-string",
+        "queueCount": 0,
+        "receipt": {
+          "code": "persisted",
+          "retryable": false,
+          "persisted": true,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.updateTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-R",
+          "failsafePath": "",
+          "message": "Session log persist confirmed a durable write for request 'req-R'.",
+          "childStderr": ""
+        },
+        "pass": true,
+        "result": true
+      },
+      {
+        "variant": "valid-bool",
+        "queueCount": 0,
+        "receipt": {
+          "code": "persisted",
+          "retryable": false,
+          "persisted": true,
+          "degraded": false,
+          "queued": false,
+          "method": "workflow.sessionlog.updateTurn",
+          "agent": "Codex",
+          "sessionId": "Codex-20260930T000000Z-sessiona",
+          "requestId": "req-R",
+          "failsafePath": "",
+          "message": "Session log persist confirmed a durable write for request 'req-R'.",
+          "childStderr": ""
+        },
+        "pass": true,
+        "result": true
+      }
+    ],
+    "Boundary": "Real product functions with immediate transport doubles and isolated receipt fixtures. No remote durability claim."
+  },
+  "Layout": {
+    "TimestampUtc": "2026-10-02T15:50:56.6638973-05:00",
+    "junctions": [
+      {
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin",
+        "type": "Junction",
+        "target": "F:\\GitHub\\mcpserver-codex-plugin",
+        "resolved": "F:\\GitHub\\mcpserver-codex-plugin"
+      },
+      {
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin",
+        "type": "Junction",
+        "target": "F:\\GitHub\\mcpserver-claude-code-plugin",
+        "resolved": "F:\\GitHub\\mcpserver-claude-code-plugin"
+      },
+      {
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin",
+        "type": "Junction",
+        "target": "F:\\GitHub\\mcpserver-copilot-plugin",
+        "resolved": "F:\\GitHub\\mcpserver-copilot-plugin"
+      },
+      {
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin",
+        "type": "Junction",
+        "target": "F:\\GitHub\\mcpserver-cline-plugin",
+        "resolved": "F:\\GitHub\\mcpserver-cline-plugin"
+      },
+      {
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin",
+        "type": "Junction",
+        "target": "F:\\GitHub\\mcpserver-grok-plugin",
+        "resolved": "F:\\GitHub\\mcpserver-grok-plugin"
+      }
+    ],
+    "checksums": [
+      {
+        "plugin": "mcpserver-codex-plugin",
+        "name": "agent-runtime-header.ps1",
+        "canonicalHash": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3",
+        "copyHash": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\lib\\agent-runtime-header.ps1"
+      },
+      {
+        "plugin": "mcpserver-codex-plugin",
+        "name": "cache-manager.ps1",
+        "canonicalHash": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E",
+        "copyHash": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\lib\\cache-manager.ps1"
+      },
+      {
+        "plugin": "mcpserver-codex-plugin",
+        "name": "classified-error.ps1",
+        "canonicalHash": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495",
+        "copyHash": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\lib\\classified-error.ps1"
+      },
+      {
+        "plugin": "mcpserver-codex-plugin",
+        "name": "ensure-repl.ps1",
+        "canonicalHash": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894",
+        "copyHash": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\lib\\ensure-repl.ps1"
+      },
+      {
+        "plugin": "mcpserver-codex-plugin",
+        "name": "final-response.ps1",
+        "canonicalHash": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998",
+        "copyHash": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\lib\\final-response.ps1"
+      },
+      {
+        "plugin": "mcpserver-codex-plugin",
+        "name": "Invoke-McpPlugin.ps1",
+        "canonicalHash": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160",
+        "copyHash": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\lib\\Invoke-McpPlugin.ps1"
+      },
+      {
+        "plugin": "mcpserver-codex-plugin",
+        "name": "marker-resolver.ps1",
+        "canonicalHash": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24",
+        "copyHash": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\lib\\marker-resolver.ps1"
+      },
+      {
+        "plugin": "mcpserver-codex-plugin",
+        "name": "mcp-status.ps1",
+        "canonicalHash": "A43705C70D4D079EF78A5A19F5E1C192FD47910B781525F0BECCF129DF37AC52",
+        "copyHash": "A43705C70D4D079EF78A5A19F5E1C192FD47910B781525F0BECCF129DF37AC52",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\lib\\mcp-status.ps1"
+      },
+      {
+        "plugin": "mcpserver-codex-plugin",
+        "name": "plugin-env.ps1",
+        "canonicalHash": "F10D87095328C10AE003ABA3AD4EA8C6ED825DA53A788E22D4AAC8C058E2FC2B",
+        "copyHash": "F10D87095328C10AE003ABA3AD4EA8C6ED825DA53A788E22D4AAC8C058E2FC2B",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\lib\\plugin-env.ps1"
+      },
+      {
+        "plugin": "mcpserver-codex-plugin",
+        "name": "plugin-hook.ps1",
+        "canonicalHash": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B",
+        "copyHash": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\lib\\plugin-hook.ps1"
+      },
+      {
+        "plugin": "mcpserver-codex-plugin",
+        "name": "repl-invoke.ps1",
+        "canonicalHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B",
+        "copyHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\lib\\repl-invoke.ps1"
+      },
+      {
+        "plugin": "mcpserver-codex-plugin",
+        "name": "resolve-cache-dir.ps1",
+        "canonicalHash": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405",
+        "copyHash": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\lib\\resolve-cache-dir.ps1"
+      },
+      {
+        "plugin": "mcpserver-codex-plugin",
+        "name": "yaml-object-mutation.ps1",
+        "canonicalHash": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A",
+        "copyHash": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-codex-plugin\\lib\\yaml-object-mutation.ps1"
+      },
+      {
+        "plugin": "mcpserver-claude-code-plugin",
+        "name": "agent-runtime-header.ps1",
+        "canonicalHash": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3",
+        "copyHash": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin\\lib\\agent-runtime-header.ps1"
+      },
+      {
+        "plugin": "mcpserver-claude-code-plugin",
+        "name": "cache-manager.ps1",
+        "canonicalHash": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E",
+        "copyHash": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin\\lib\\cache-manager.ps1"
+      },
+      {
+        "plugin": "mcpserver-claude-code-plugin",
+        "name": "classified-error.ps1",
+        "canonicalHash": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495",
+        "copyHash": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin\\lib\\classified-error.ps1"
+      },
+      {
+        "plugin": "mcpserver-claude-code-plugin",
+        "name": "ensure-repl.ps1",
+        "canonicalHash": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894",
+        "copyHash": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin\\lib\\ensure-repl.ps1"
+      },
+      {
+        "plugin": "mcpserver-claude-code-plugin",
+        "name": "final-response.ps1",
+        "canonicalHash": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998",
+        "copyHash": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin\\lib\\final-response.ps1"
+      },
+      {
+        "plugin": "mcpserver-claude-code-plugin",
+        "name": "Invoke-McpPlugin.ps1",
+        "canonicalHash": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160",
+        "copyHash": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin\\lib\\Invoke-McpPlugin.ps1"
+      },
+      {
+        "plugin": "mcpserver-claude-code-plugin",
+        "name": "marker-resolver.ps1",
+        "canonicalHash": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24",
+        "copyHash": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin\\lib\\marker-resolver.ps1"
+      },
+      {
+        "plugin": "mcpserver-claude-code-plugin",
+        "name": "mcp-status.ps1",
+        "canonicalHash": "A43705C70D4D079EF78A5A19F5E1C192FD47910B781525F0BECCF129DF37AC52",
+        "copyHash": "A43705C70D4D079EF78A5A19F5E1C192FD47910B781525F0BECCF129DF37AC52",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin\\lib\\mcp-status.ps1"
+      },
+      {
+        "plugin": "mcpserver-claude-code-plugin",
+        "name": "plugin-env.ps1",
+        "canonicalHash": "F10D87095328C10AE003ABA3AD4EA8C6ED825DA53A788E22D4AAC8C058E2FC2B",
+        "copyHash": "F10D87095328C10AE003ABA3AD4EA8C6ED825DA53A788E22D4AAC8C058E2FC2B",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin\\lib\\plugin-env.ps1"
+      },
+      {
+        "plugin": "mcpserver-claude-code-plugin",
+        "name": "plugin-hook.ps1",
+        "canonicalHash": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B",
+        "copyHash": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin\\lib\\plugin-hook.ps1"
+      },
+      {
+        "plugin": "mcpserver-claude-code-plugin",
+        "name": "repl-invoke.ps1",
+        "canonicalHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B",
+        "copyHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin\\lib\\repl-invoke.ps1"
+      },
+      {
+        "plugin": "mcpserver-claude-code-plugin",
+        "name": "resolve-cache-dir.ps1",
+        "canonicalHash": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405",
+        "copyHash": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin\\lib\\resolve-cache-dir.ps1"
+      },
+      {
+        "plugin": "mcpserver-claude-code-plugin",
+        "name": "yaml-object-mutation.ps1",
+        "canonicalHash": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A",
+        "copyHash": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-claude-code-plugin\\lib\\yaml-object-mutation.ps1"
+      },
+      {
+        "plugin": "mcpserver-copilot-plugin",
+        "name": "agent-runtime-header.ps1",
+        "canonicalHash": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3",
+        "copyHash": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin\\lib\\agent-runtime-header.ps1"
+      },
+      {
+        "plugin": "mcpserver-copilot-plugin",
+        "name": "cache-manager.ps1",
+        "canonicalHash": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E",
+        "copyHash": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin\\lib\\cache-manager.ps1"
+      },
+      {
+        "plugin": "mcpserver-copilot-plugin",
+        "name": "classified-error.ps1",
+        "canonicalHash": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495",
+        "copyHash": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin\\lib\\classified-error.ps1"
+      },
+      {
+        "plugin": "mcpserver-copilot-plugin",
+        "name": "ensure-repl.ps1",
+        "canonicalHash": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894",
+        "copyHash": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin\\lib\\ensure-repl.ps1"
+      },
+      {
+        "plugin": "mcpserver-copilot-plugin",
+        "name": "final-response.ps1",
+        "canonicalHash": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998",
+        "copyHash": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin\\lib\\final-response.ps1"
+      },
+      {
+        "plugin": "mcpserver-copilot-plugin",
+        "name": "Invoke-McpPlugin.ps1",
+        "canonicalHash": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160",
+        "copyHash": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin\\lib\\Invoke-McpPlugin.ps1"
+      },
+      {
+        "plugin": "mcpserver-copilot-plugin",
+        "name": "marker-resolver.ps1",
+        "canonicalHash": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24",
+        "copyHash": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin\\lib\\marker-resolver.ps1"
+      },
+      {
+        "plugin": "mcpserver-copilot-plugin",
+        "name": "mcp-status.ps1",
+        "canonicalHash": "A43705C70D4D079EF78A5A19F5E1C192FD47910B781525F0BECCF129DF37AC52",
+        "copyHash": "A43705C70D4D079EF78A5A19F5E1C192FD47910B781525F0BECCF129DF37AC52",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin\\lib\\mcp-status.ps1"
+      },
+      {
+        "plugin": "mcpserver-copilot-plugin",
+        "name": "plugin-env.ps1",
+        "canonicalHash": "F10D87095328C10AE003ABA3AD4EA8C6ED825DA53A788E22D4AAC8C058E2FC2B",
+        "copyHash": "F10D87095328C10AE003ABA3AD4EA8C6ED825DA53A788E22D4AAC8C058E2FC2B",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin\\lib\\plugin-env.ps1"
+      },
+      {
+        "plugin": "mcpserver-copilot-plugin",
+        "name": "plugin-hook.ps1",
+        "canonicalHash": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B",
+        "copyHash": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin\\lib\\plugin-hook.ps1"
+      },
+      {
+        "plugin": "mcpserver-copilot-plugin",
+        "name": "repl-invoke.ps1",
+        "canonicalHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B",
+        "copyHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin\\lib\\repl-invoke.ps1"
+      },
+      {
+        "plugin": "mcpserver-copilot-plugin",
+        "name": "resolve-cache-dir.ps1",
+        "canonicalHash": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405",
+        "copyHash": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin\\lib\\resolve-cache-dir.ps1"
+      },
+      {
+        "plugin": "mcpserver-copilot-plugin",
+        "name": "yaml-object-mutation.ps1",
+        "canonicalHash": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A",
+        "copyHash": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-copilot-plugin\\lib\\yaml-object-mutation.ps1"
+      },
+      {
+        "plugin": "mcpserver-cline-plugin",
+        "name": "agent-runtime-header.ps1",
+        "canonicalHash": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3",
+        "copyHash": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin\\lib\\agent-runtime-header.ps1"
+      },
+      {
+        "plugin": "mcpserver-cline-plugin",
+        "name": "cache-manager.ps1",
+        "canonicalHash": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E",
+        "copyHash": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin\\lib\\cache-manager.ps1"
+      },
+      {
+        "plugin": "mcpserver-cline-plugin",
+        "name": "classified-error.ps1",
+        "canonicalHash": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495",
+        "copyHash": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin\\lib\\classified-error.ps1"
+      },
+      {
+        "plugin": "mcpserver-cline-plugin",
+        "name": "ensure-repl.ps1",
+        "canonicalHash": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894",
+        "copyHash": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin\\lib\\ensure-repl.ps1"
+      },
+      {
+        "plugin": "mcpserver-cline-plugin",
+        "name": "final-response.ps1",
+        "canonicalHash": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998",
+        "copyHash": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin\\lib\\final-response.ps1"
+      },
+      {
+        "plugin": "mcpserver-cline-plugin",
+        "name": "Invoke-McpPlugin.ps1",
+        "canonicalHash": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160",
+        "copyHash": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin\\lib\\Invoke-McpPlugin.ps1"
+      },
+      {
+        "plugin": "mcpserver-cline-plugin",
+        "name": "marker-resolver.ps1",
+        "canonicalHash": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24",
+        "copyHash": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin\\lib\\marker-resolver.ps1"
+      },
+      {
+        "plugin": "mcpserver-cline-plugin",
+        "name": "mcp-status.ps1",
+        "canonicalHash": "A43705C70D4D079EF78A5A19F5E1C192FD47910B781525F0BECCF129DF37AC52",
+        "copyHash": "A43705C70D4D079EF78A5A19F5E1C192FD47910B781525F0BECCF129DF37AC52",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin\\lib\\mcp-status.ps1"
+      },
+      {
+        "plugin": "mcpserver-cline-plugin",
+        "name": "plugin-env.ps1",
+        "canonicalHash": "F10D87095328C10AE003ABA3AD4EA8C6ED825DA53A788E22D4AAC8C058E2FC2B",
+        "copyHash": "F10D87095328C10AE003ABA3AD4EA8C6ED825DA53A788E22D4AAC8C058E2FC2B",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin\\lib\\plugin-env.ps1"
+      },
+      {
+        "plugin": "mcpserver-cline-plugin",
+        "name": "plugin-hook.ps1",
+        "canonicalHash": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B",
+        "copyHash": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin\\lib\\plugin-hook.ps1"
+      },
+      {
+        "plugin": "mcpserver-cline-plugin",
+        "name": "repl-invoke.ps1",
+        "canonicalHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B",
+        "copyHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin\\lib\\repl-invoke.ps1"
+      },
+      {
+        "plugin": "mcpserver-cline-plugin",
+        "name": "resolve-cache-dir.ps1",
+        "canonicalHash": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405",
+        "copyHash": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin\\lib\\resolve-cache-dir.ps1"
+      },
+      {
+        "plugin": "mcpserver-cline-plugin",
+        "name": "yaml-object-mutation.ps1",
+        "canonicalHash": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A",
+        "copyHash": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-cline-plugin\\lib\\yaml-object-mutation.ps1"
+      },
+      {
+        "plugin": "mcpserver-grok-plugin",
+        "name": "agent-runtime-header.ps1",
+        "canonicalHash": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3",
+        "copyHash": "9AB9F1483E8650AAF65372EA26A5CC9C610B4A7A3C5903912017755EBBBCE5D3",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin\\lib\\agent-runtime-header.ps1"
+      },
+      {
+        "plugin": "mcpserver-grok-plugin",
+        "name": "cache-manager.ps1",
+        "canonicalHash": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E",
+        "copyHash": "96FFE0638C7445868BF10E338BA739BC5C8D5F5344092AB9BDE1C9D6DD9E762E",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin\\lib\\cache-manager.ps1"
+      },
+      {
+        "plugin": "mcpserver-grok-plugin",
+        "name": "classified-error.ps1",
+        "canonicalHash": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495",
+        "copyHash": "70014EFDE9AB87431B85A86180E8E2FC36EB2F97E9C74901E7381BD2F8B4C495",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin\\lib\\classified-error.ps1"
+      },
+      {
+        "plugin": "mcpserver-grok-plugin",
+        "name": "ensure-repl.ps1",
+        "canonicalHash": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894",
+        "copyHash": "2D618985FD8FD40F184E3FE2582B475DB19241A16A1C55153DAE42C9CA12E894",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin\\lib\\ensure-repl.ps1"
+      },
+      {
+        "plugin": "mcpserver-grok-plugin",
+        "name": "final-response.ps1",
+        "canonicalHash": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998",
+        "copyHash": "A8574560AECE09B89A208B0D4CDEA36314B71AED8AA4620A937704AE9134E998",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin\\lib\\final-response.ps1"
+      },
+      {
+        "plugin": "mcpserver-grok-plugin",
+        "name": "Invoke-McpPlugin.ps1",
+        "canonicalHash": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160",
+        "copyHash": "70EA9B5C1F7DB3ECA1036E732A5366CBFAABD3DB967DFB268F6EEA49E89D6160",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin\\lib\\Invoke-McpPlugin.ps1"
+      },
+      {
+        "plugin": "mcpserver-grok-plugin",
+        "name": "marker-resolver.ps1",
+        "canonicalHash": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24",
+        "copyHash": "78DEB0DF7E8BCC9832F3ACFAD7FEF9EAE41235F82E082F9A1A029F624A1BFB24",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin\\lib\\marker-resolver.ps1"
+      },
+      {
+        "plugin": "mcpserver-grok-plugin",
+        "name": "mcp-status.ps1",
+        "canonicalHash": "A43705C70D4D079EF78A5A19F5E1C192FD47910B781525F0BECCF129DF37AC52",
+        "copyHash": "A43705C70D4D079EF78A5A19F5E1C192FD47910B781525F0BECCF129DF37AC52",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin\\lib\\mcp-status.ps1"
+      },
+      {
+        "plugin": "mcpserver-grok-plugin",
+        "name": "plugin-env.ps1",
+        "canonicalHash": "F10D87095328C10AE003ABA3AD4EA8C6ED825DA53A788E22D4AAC8C058E2FC2B",
+        "copyHash": "F10D87095328C10AE003ABA3AD4EA8C6ED825DA53A788E22D4AAC8C058E2FC2B",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin\\lib\\plugin-env.ps1"
+      },
+      {
+        "plugin": "mcpserver-grok-plugin",
+        "name": "plugin-hook.ps1",
+        "canonicalHash": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B",
+        "copyHash": "E4CD6116198A46E3C9DED3DE4D142992C03576D31A16CA234CBBBA7956AA2B2B",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin\\lib\\plugin-hook.ps1"
+      },
+      {
+        "plugin": "mcpserver-grok-plugin",
+        "name": "repl-invoke.ps1",
+        "canonicalHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B",
+        "copyHash": "EA5A70657D7EF4A25ADAE36AB1E1AB1831ABAD6DD2F0413033B6B273FFDC7F8B",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin\\lib\\repl-invoke.ps1"
+      },
+      {
+        "plugin": "mcpserver-grok-plugin",
+        "name": "resolve-cache-dir.ps1",
+        "canonicalHash": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405",
+        "copyHash": "8072032B17A95B8AC9E69C54CFCA41BCB15A3A87D8494AD58825F178419DE405",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin\\lib\\resolve-cache-dir.ps1"
+      },
+      {
+        "plugin": "mcpserver-grok-plugin",
+        "name": "yaml-object-mutation.ps1",
+        "canonicalHash": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A",
+        "copyHash": "39247DA737C8696232B8DD14A96F7A69C5CF1839BEDE213AF0E624972C15AD0A",
+        "path": "F:\\GitHub\\McpServer\\.worktrees\\mcpserver-grok-plugin\\lib\\yaml-object-mutation.ps1"
+      }
+    ],
+    "environmentProbe": {
+      "removeReturned": true,
+      "sourceHasRoot": false,
+      "freshCopyHasRoot": true,
+      "correctedCopyHasRoot": false
+    }
+  },
+  "MainWorkspaceOpenTodos": {
+    "Owner": "F:\\GitHub\\McpServer",
+    "Count": 35,
+    "Done": 0
+  },
+  "EvidenceFiles": [
+    "20261002T203600Z-evidence.jsonl 20261002T203600Z-native-audit.json 20261002T203600Z-native-audit-recorded-tools.json 20261002T203600Z-remaining-identity-probes-v2.json 20261002T203600Z-boundary-probes.json 20261002T203600Z-trace-audit.json 20261002T203600Z-layout-environment.json 20261002T203600Z-live-requirements.json 20261002T203600Z-live-todos.json 20261002T203600Z-pr72.json 20261002T203600Z-verification.json"
+  ],
+  "Limitations": [
+    "No complete unit-suite rerun; current supplied native artifacts were reparsed, hashed and accepted by the real compiled validator.",
+    "No provider/server durable integration proof is inferred from local transport doubles.",
+    "The runner owns final native response JSONL delivery after return. Current public checkpoint and complete verdict are preserved before return; later runner bytes are not claimed inspected.",
+    "Automatic connector output spill files outside the workspace were created by the host while reading large output; authored review writes remain under docs/receipts/hv.",
+    "Historical Python and original Red-gate chronology remain unknown; neither is backfilled or fabricated.",
+    "Live main-workspace legacy criterion descriptions differ from the frozen detailed projection; the original 35 core criteria retain their texts, while two newer storage criteria are later scope."
+  ],
+  "VerdictJson": {
+    "overallVerdict": "DISAGREE",
+    "accuracy": 99,
+    "completeness": 70,
+    "confidence": 99,
+    "failList": [
+      "A1 / HV07: Core and governing legacy AC mappings remain incomplete at the requested tip.",
+      "A6 / HV09: Concrete P2 AC completeness is 70 percent (28/40), below the required 98.",
+      "C2 / HV07: Raw metadata/no-row and invalid-artifact tests are not adequately mapped; eight relevant legacy rows remain proposed-only.",
+      "D1: Holistic P2 acceptance remains blocked by traceability, sub-98 completeness and unresolved B7/B8 historical evidence."
+    ],
+    "passCount": 15,
+    "failCount": 4,
+    "unknownCount": 2,
+    "tipSha": "e755378cdc5d7d3a73471bcebf6874801ed3be80",
+    "receiptPaths": [
+      "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\hostile-validator-sessionlife-p2-20261002T203600Z.md",
+      "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\hostile-validator-sessionlife-p2-20261002T203600Z.json",
+      "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-sessionlife-p2-contracts-hv.request.jsonl",
+      "F:\\GitHub\\McpServer\\.worktrees\\sessionlife-p2-contracts-5cb2\\docs\\receipts\\hv\\20261002T203600Z-sessionlife-p2-contracts-hv.response.jsonl"
+    ]
+  }
+}

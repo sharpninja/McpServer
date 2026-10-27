@@ -1,4 +1,4 @@
-# McpServer UML Use-Case Diagram Mermaid Schema v1
+# QBrainAi UML Use-Case Diagram Mermaid Schema v1
 
 **Status:** Stub for S0; goldens in TEST-MCP-USECASE-012 own the contract.  
 **Header required in every export:** `%% mcp-usecase-diagram-schema:1`

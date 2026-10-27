@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="c66f102a-d371-42d8-9ff2-fd7ba10f8506" name="SYSTEM@PAYTON-LEGION2 2026-09-04 01:48:59" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-09-04T01:48:59.7725015-05:00" queuing="2026-09-04T01:48:59.7725019-05:00" start="2026-09-04T01:48:53.5134302-05:00" finish="2026-09-04T01:49:03.5403871-05:00" />
+  <TestSettings name="default" id="efd9e180-76bf-40f8-9383-c8c8d7fcc3d1">
+    <Deployment runDeploymentRoot="SYSTEM_PAYTON-LEGION2_2026-09-04_01_48_59" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="3a046dff-48f7-4694-86e6-5e9742352380" testId="ac083b97-62a5-ebc0-759f-2c1916735714" testName="McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.AggregateTransaction_PreservesIndependentManagedAndNativeTimeoutState" computerName="PAYTON-LEGION2" duration="00:00:04.2005364" startTime="2026-09-04T01:48:55.5049719-05:00" endTime="2026-09-04T01:48:59.7283312-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3a046dff-48f7-4694-86e6-5e9742352380">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: 7777&#xD;
+Actual:   1000</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.AggregateTransaction_PreservesIndependentManagedAndNativeTimeoutState() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs:line 169&#xD;
+   at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.AggregateTransaction_PreservesIndependentManagedAndNativeTimeoutState() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs:line 169&#xD;
+   at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.AggregateTransaction_PreservesIndependentManagedAndNativeTimeoutState() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs:line 169&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="99d8afce-a822-4e86-a46b-eea8bb2c80ee" testId="3e002c4c-a86a-1ab5-439d-e6aa07e166dd" testName="McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.AggregateTransaction_PreservesCustomBusyHandlerAfterDisposal" computerName="PAYTON-LEGION2" duration="00:00:03.7018585" startTime="2026-09-04T01:48:59.7366116-05:00" endTime="2026-09-04T01:49:03.4397129-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="99d8afce-a822-4e86-a46b-eea8bb2c80ee">
+      <Output>
+        <ErrorInfo>
+          <Message>The custom SQLite busy handler was replaced.</Message>
+          <StackTrace>   at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.AssertBusyHandlerStillInstalledAsync(SqliteConnection connection, String blockerConnectionString, BusyProbe probe, CancellationToken cancellationToken) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs:line 328&#xD;
+   at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.AssertBusyHandlerStillInstalledAsync(SqliteConnection connection, String blockerConnectionString, BusyProbe probe, CancellationToken cancellationToken) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs:line 328&#xD;
+   at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.AssertBusyHandlerStillInstalledAsync(SqliteConnection connection, String blockerConnectionString, BusyProbe probe, CancellationToken cancellationToken) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs:line 337&#xD;
+   at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.AssertBusyHandlerStillInstalledAsync(SqliteConnection connection, String blockerConnectionString, BusyProbe probe, CancellationToken cancellationToken) in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs:line 337&#xD;
+   at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.AggregateTransaction_PreservesCustomBusyHandlerAfterDisposal() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs:line 201&#xD;
+   at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.AggregateTransaction_PreservesCustomBusyHandlerAfterDisposal() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs:line 211&#xD;
+   at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.AggregateTransaction_PreservesCustomBusyHandlerAfterDisposal() in F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs:line 211&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.AggregateTransaction_PreservesIndependentManagedAndNativeTimeoutState" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-fourteenth-20260904t050327z\red\slice-4-sqlite-aggregate-state\artifacts\bin\mcpserver.support.mcp.tests\release\mcpserver.support.mcp.tests.dll" id="ac083b97-62a5-ebc0-759f-2c1916735714">
+      <Execution id="3a046dff-48f7-4694-86e6-5e9742352380" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-4-sqlite-aggregate-state\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests" name="AggregateTransaction_PreservesIndependentManagedAndNativeTimeoutState" />
+    </UnitTest>
+    <UnitTest name="McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.AggregateTransaction_PreservesCustomBusyHandlerAfterDisposal" storage="c:\users\kingd\appdata\local\temp\bug-triage-139-fourteenth-20260904t050327z\red\slice-4-sqlite-aggregate-state\artifacts\bin\mcpserver.support.mcp.tests\release\mcpserver.support.mcp.tests.dll" id="3e002c4c-a86a-1ab5-439d-e6aa07e166dd">
+      <Execution id="99d8afce-a822-4e86-a46b-eea8bb2c80ee" />
+      <TestMethod codeBase="C:\Users\kingd\AppData\Local\Temp\BUG-TRIAGE-139-fourteenth-20260904T050327Z\red\slice-4-sqlite-aggregate-state\artifacts\bin\McpServer.Support.Mcp.Tests\release\McpServer.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests" name="AggregateTransaction_PreservesCustomBusyHandlerAfterDisposal" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="ac083b97-62a5-ebc0-759f-2c1916735714" executionId="3a046dff-48f7-4694-86e6-5e9742352380" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3e002c4c-a86a-1ab5-439d-e6aa07e166dd" executionId="99d8afce-a822-4e86-a46b-eea8bb2c80ee" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="2" executed="2" passed="0" failed="2" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.33]   Discovering: McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.27]   Discovered:  McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:01.49]   Starting:    McpServer.Support.Mcp.Tests&#xD;
+[xUnit.net 00:00:05.78]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:05.78]       Expected: 7777&#xD;
+[xUnit.net 00:00:05.78]       Actual:   1000&#xD;
+[xUnit.net 00:00:05.78]       Stack Trace:&#xD;
+[xUnit.net 00:00:05.78]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs(169,0): at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.AggregateTransaction_PreservesIndependentManagedAndNativeTimeoutState()&#xD;
+[xUnit.net 00:00:05.78]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs(169,0): at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.AggregateTransaction_PreservesIndependentManagedAndNativeTimeoutState()&#xD;
+[xUnit.net 00:00:05.78]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs(169,0): at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.AggregateTransaction_PreservesIndependentManagedAndNativeTimeoutState()&#xD;
+[xUnit.net 00:00:05.78]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:09.48]       The custom SQLite busy handler was replaced.&#xD;
+[xUnit.net 00:00:09.48]       Stack Trace:&#xD;
+[xUnit.net 00:00:09.48]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs(328,0): at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.AssertBusyHandlerStillInstalledAsync(SqliteConnection connection, String blockerConnectionString, BusyProbe probe, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:09.48]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs(328,0): at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.AssertBusyHandlerStillInstalledAsync(SqliteConnection connection, String blockerConnectionString, BusyProbe probe, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:09.48]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs(337,0): at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.AssertBusyHandlerStillInstalledAsync(SqliteConnection connection, String blockerConnectionString, BusyProbe probe, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:09.48]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs(337,0): at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.AssertBusyHandlerStillInstalledAsync(SqliteConnection connection, String blockerConnectionString, BusyProbe probe, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:09.48]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs(201,0): at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.AggregateTransaction_PreservesCustomBusyHandlerAfterDisposal()&#xD;
+[xUnit.net 00:00:09.48]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs(211,0): at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.AggregateTransaction_PreservesCustomBusyHandlerAfterDisposal()&#xD;
+[xUnit.net 00:00:09.48]         F:\GitHub\McpServer\.mcpServer\worktrees\bug-triage-139-review\tests\McpServer.Support.Mcp.Tests\Storage\SqliteStateFourteenthTests.cs(211,0): at McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.AggregateTransaction_PreservesCustomBusyHandlerAfterDisposal()&#xD;
+[xUnit.net 00:00:09.48]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:09.50]   Finished:    McpServer.Support.Mcp.Tests (ID = '36b7e8334e265cb67ae1c056df2697e65c522859d296f4d2ba98c40a78e09f3f')&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-09-04T01:48:59.7365252-05:00">
+        <Text>[xUnit.net 00:00:05.78]     McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.AggregateTransaction_PreservesIndependentManagedAndNativeTimeoutState [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="PAYTON-LEGION2" outcome="Error" timestamp="2026-09-04T01:49:03.4407161-05:00">
+        <Text>[xUnit.net 00:00:09.48]     McpServer.Support.Mcp.Tests.Storage.SqliteStateFourteenthTests.AggregateTransaction_PreservesCustomBusyHandlerAfterDisposal [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

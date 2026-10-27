@@ -1,0 +1,49 @@
+{
+  "planUnchanged": true,
+  "files": [
+    {
+      "file": "/home/sharpninja/github/McpServer/docs/receipts/runas-remediation/PLAN-LINUX-RUNAS-REMEDIATION-001/runas-plan-r6.md",
+      "sha256": "60F4EF7EDD9A4836C59E0AD966625D9333BC26D1B2278CD68EA6097249AA5ACD",
+      "length": 105859,
+      "source": "/tmp/runas-plan-r6.md"
+    },
+    {
+      "file": "/home/sharpninja/github/McpServer/docs/receipts/runas-remediation/PLAN-LINUX-RUNAS-REMEDIATION-001/runas-plan-r6-catalog.json",
+      "sha256": "AF74137FA5BD985B579C66D0CF6867C44A79EC83E453C3E1B7ECFCA128FB5C90",
+      "length": 51256,
+      "source": "/tmp/runas-plan-r6-catalog.json"
+    },
+    {
+      "file": "/home/sharpninja/github/McpServer/docs/receipts/runas-remediation/PLAN-LINUX-RUNAS-REMEDIATION-001/runas-plan-r6-usecases.json",
+      "sha256": "944FE0EC96C5E36D7F526D509D6ED26ABB3BDA18129633C9DCED37F281BD5CE1",
+      "length": 10563,
+      "source": "/tmp/runas-plan-r6-usecases.json"
+    },
+    {
+      "file": "/home/sharpninja/github/McpServer/docs/receipts/runas-remediation/PLAN-LINUX-RUNAS-REMEDIATION-001/runas-plan-hv-r6.request.jsonl",
+      "sha256": "70FD483FA01A9B36467A0599B1AAADB222693E008C948D882223424ECE5163D6",
+      "length": 108485,
+      "source": "/tmp/runas-plan-hv-r6.request.jsonl"
+    },
+    {
+      "file": "/home/sharpninja/github/McpServer/docs/receipts/runas-remediation/PLAN-LINUX-RUNAS-REMEDIATION-001/runas-plan-hv-r6.direct.response.jsonl",
+      "sha256": "B4A0FAF33AF0C018F4EE1BB560894AE5E32BF77D983D43CDF1CE02A45715316E",
+      "length": 608466,
+      "source": "/tmp/runas-plan-hv-r6.direct.response.jsonl"
+    },
+    {
+      "file": "/home/sharpninja/github/McpServer/docs/receipts/runas-remediation/PLAN-LINUX-RUNAS-REMEDIATION-001/runas-plan-hv-r6.verdict.md",
+      "sha256": "20813A92F619DEF82FF696E2E9F0885910B1D5F150C8EB0C08182B9AB521DAC2",
+      "length": 16230,
+      "source": "/tmp/runas-plan-hv-r6.verdict.md"
+    },
+    {
+      "file": "/home/sharpninja/github/McpServer/docs/receipts/runas-remediation/PLAN-LINUX-RUNAS-REMEDIATION-001/runas-canonical-effective-r6.json",
+      "sha256": "E4FDBC8C451F027812FF0972E904A3DAB675A9C614F95DF2E77A9983F7333264",
+      "length": 998647,
+      "source": "/tmp/runas-canonical-effective-r6.json"
+    }
+  ],
+  "todoId": "PLAN-LINUX-RUNAS-REMEDIATION-001",
+  "utc": "2026-10-09T02:28:22.1304333Z"
+}

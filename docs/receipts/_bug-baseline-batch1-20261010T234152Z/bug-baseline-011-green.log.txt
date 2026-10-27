@@ -1,0 +1,231 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  QBrainAi.Common.AgentCli -> src/QBrainAi.Common.AgentCli/bin/Debug/net10.0/QBrainAi.Common.AgentCli.dll
+  QBrainAi.Client -> src/QBrainAi.Client/bin/Debug/net10.0/QBrainAi.Client.dll
+  QBrainAi.Repl.Core -> src/QBrainAi.Repl.Core/bin/Debug/net10.0/QBrainAi.Repl.Core.dll
+  QBrainAi.McpAgent -> src/QBrainAi.McpAgent/bin/Debug/net10.0/QBrainAi.McpAgent.dll
+  QBrainAi.McpAgent.Tests -> tests/QBrainAi.McpAgent.Tests/bin/Debug/net10.0/QBrainAi.McpAgent.Tests.dll
+Test run for tests/QBrainAi.McpAgent.Tests/bin/Debug/net10.0/QBrainAi.McpAgent.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:01.03]     QBrainAi.McpAgent.Tests.McpSessionIdentifierFactoryTests.AddQBrainAiMcpAgent_RegistersIdentifierFactory [FAIL]
+  Failed QBrainAi.McpAgent.Tests.McpSessionIdentifierFactoryTests.AddQBrainAiMcpAgent_RegistersIdentifierFactory [18 ms]
+  Error Message:
+   Microsoft.Extensions.Options.OptionsValidationException : WorkspacePath must be fully qualified when provided.
+  Stack Trace:
+     at Microsoft.Extensions.Options.OptionsFactory`1.Create(String name)
+   at Microsoft.Extensions.Options.UnnamedOptionsManager`1.get_Value()
+   at QBrainAi.McpAgent.McpSessionIdentifierFactory..ctor(IOptions`1 options, TimeProvider timeProvider) in src/QBrainAi.McpAgent/McpSessionIdentifierFactory.cs:line 23
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Constructor(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.RuntimeConstructorInfo.Invoke(BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateServiceAccessor(ServiceIdentifier serviceIdentifier)
+   at System.Collections.Concurrent.ConcurrentDictionary`2.GetOrAdd(TKey key, Func`2 valueFactory)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+   at QBrainAi.McpAgent.Tests.McpSessionIdentifierFactoryTests.AddQBrainAiMcpAgent_RegistersIdentifierFactory() in tests/QBrainAi.McpAgent.Tests/McpSessionIdentifierFactoryTests.cs:line 106
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:01.06]     QBrainAi.McpAgent.Tests.ServiceCollectionExtensionsTests.AddQBrainAiMcpAgent_RegistersAcidTightlyCoupledProfile [FAIL]
+[xUnit.net 00:00:01.07]     QBrainAi.McpAgent.Tests.ServiceCollectionExtensionsTests.AddQBrainAiMcpAgent_AllowsBearerTokenAuthentication [FAIL]
+  Failed QBrainAi.McpAgent.Tests.ServiceCollectionExtensionsTests.AddQBrainAiMcpAgent_RegistersAcidTightlyCoupledProfile [105 ms]
+  Error Message:
+   Microsoft.Extensions.Options.OptionsValidationException : WorkspacePath must be fully qualified when provided.
+  Stack Trace:
+     at Microsoft.Extensions.Options.OptionsFactory`1.Create(String name)
+   at Microsoft.Extensions.Options.UnnamedOptionsManager`1.get_Value()
+   at QBrainAi.McpAgent.ServiceCollectionExtensions.<>c.<AddQBrainAiMcpAgent>b__0_1(QBrainAiClientOptions clientOptions, IOptions`1 agentFrameworkOptions) in src/QBrainAi.McpAgent/ServiceCollectionExtensions.cs:line 56
+   at Microsoft.Extensions.Options.ConfigureNamedOptions`2.Configure(String name, TOptions options)
+   at Microsoft.Extensions.Options.OptionsFactory`1.Create(String name)
+   at Microsoft.Extensions.Options.UnnamedOptionsManager`1.get_Value()
+   at QBrainAi.Client.ServiceCollectionExtensions.<>c.<AddQBrainAiClient>b__1_0(IServiceProvider sp, HttpClient client) in src/QBrainAi.Client/ServiceCollectionExtensions.cs:line 61
+   at Microsoft.Extensions.DependencyInjection.HttpClientBuilderExtensions.<>c__DisplayClass1_1.<ConfigureHttpClient>b__2(HttpClient client)
+   at Microsoft.Extensions.Http.DefaultHttpClientFactory.CreateClient(String name)
+   at QBrainAi.Client.ServiceCollectionExtensions.<>c.<AddQBrainAiClient>b__1_1(IServiceProvider sp) in src/QBrainAi.Client/ServiceCollectionExtensions.cs:line 69
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitFactory(FactoryCallSite factoryCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+   at QBrainAi.McpAgent.Tests.ServiceCollectionExtensionsTests.AddQBrainAiMcpAgent_RegistersAcidTightlyCoupledProfile() in tests/QBrainAi.McpAgent.Tests/ServiceCollectionExtensionsTests.cs:line 83
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed QBrainAi.McpAgent.Tests.ServiceCollectionExtensionsTests.AddQBrainAiMcpAgent_AllowsBearerTokenAuthentication [1 ms]
+  Error Message:
+   Microsoft.Extensions.Options.OptionsValidationException : WorkspacePath must be fully qualified when provided.
+  Stack Trace:
+     at Microsoft.Extensions.Options.OptionsFactory`1.Create(String name)
+   at Microsoft.Extensions.Options.UnnamedOptionsManager`1.get_Value()
+   at QBrainAi.McpAgent.ServiceCollectionExtensions.<>c.<AddQBrainAiMcpAgent>b__0_1(QBrainAiClientOptions clientOptions, IOptions`1 agentFrameworkOptions) in src/QBrainAi.McpAgent/ServiceCollectionExtensions.cs:line 56
+   at Microsoft.Extensions.Options.ConfigureNamedOptions`2.Configure(String name, TOptions options)
+   at Microsoft.Extensions.Options.OptionsFactory`1.Create(String name)
+   at Microsoft.Extensions.Options.UnnamedOptionsManager`1.get_Value()
+   at QBrainAi.Client.ServiceCollectionExtensions.<>c.<AddQBrainAiClient>b__1_0(IServiceProvider sp, HttpClient client) in src/QBrainAi.Client/ServiceCollectionExtensions.cs:line 61
+   at Microsoft.Extensions.DependencyInjection.HttpClientBuilderExtensions.<>c__DisplayClass1_1.<ConfigureHttpClient>b__2(HttpClient client)
+   at Microsoft.Extensions.Http.DefaultHttpClientFactory.CreateClient(String name)
+   at QBrainAi.Client.ServiceCollectionExtensions.<>c.<AddQBrainAiClient>b__1_1(IServiceProvider sp) in src/QBrainAi.Client/ServiceCollectionExtensions.cs:line 69
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitFactory(FactoryCallSite factoryCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+   at QBrainAi.McpAgent.Tests.ServiceCollectionExtensionsTests.AddQBrainAiMcpAgent_AllowsBearerTokenAuthentication() in tests/QBrainAi.McpAgent.Tests/ServiceCollectionExtensionsTests.cs:line 179
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:01.10]     QBrainAi.McpAgent.Tests.ServiceCollectionExtensionsTests.AddQBrainAiMcpAgent_UsesPreconfiguredOptions [FAIL]
+[xUnit.net 00:00:01.10]     QBrainAi.McpAgent.Tests.ServiceCollectionExtensionsTests.AddQBrainAiMcpAgent_RegistersScaffoldedHostedAgent [FAIL]
+[xUnit.net 00:00:01.11]     QBrainAi.McpAgent.Tests.ServiceCollectionExtensionsTests.AddQBrainAiMcpAgent_RegistersHostedAgentFactory [FAIL]
+[xUnit.net 00:00:01.11]     QBrainAi.McpAgent.Tests.ServiceCollectionExtensionsTests.AddQBrainAiMcpAgent_AllowsMissingAuthenticationWhenDisabled [FAIL]
+  Failed QBrainAi.McpAgent.Tests.ServiceCollectionExtensionsTests.AddQBrainAiMcpAgent_UsesPreconfiguredOptions [1 ms]
+  Error Message:
+   Microsoft.Extensions.Options.OptionsValidationException : WorkspacePath must be fully qualified when provided.
+  Stack Trace:
+     at Microsoft.Extensions.Options.OptionsFactory`1.Create(String name)
+   at Microsoft.Extensions.Options.UnnamedOptionsManager`1.get_Value()
+   at QBrainAi.McpAgent.ServiceCollectionExtensions.<>c.<AddQBrainAiMcpAgent>b__0_1(QBrainAiClientOptions clientOptions, IOptions`1 agentFrameworkOptions) in src/QBrainAi.McpAgent/ServiceCollectionExtensions.cs:line 56
+   at Microsoft.Extensions.Options.ConfigureNamedOptions`2.Configure(String name, TOptions options)
+   at Microsoft.Extensions.Options.OptionsFactory`1.Create(String name)
+   at Microsoft.Extensions.Options.UnnamedOptionsManager`1.get_Value()
+   at QBrainAi.Client.ServiceCollectionExtensions.<>c.<AddQBrainAiClient>b__1_0(IServiceProvider sp, HttpClient client) in src/QBrainAi.Client/ServiceCollectionExtensions.cs:line 61
+   at Microsoft.Extensions.DependencyInjection.HttpClientBuilderExtensions.<>c__DisplayClass1_1.<ConfigureHttpClient>b__2(HttpClient client)
+   at Microsoft.Extensions.Http.DefaultHttpClientFactory.CreateClient(String name)
+   at QBrainAi.Client.ServiceCollectionExtensions.<>c.<AddQBrainAiClient>b__1_1(IServiceProvider sp) in src/QBrainAi.Client/ServiceCollectionExtensions.cs:line 69
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitFactory(FactoryCallSite factoryCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+   at QBrainAi.McpAgent.Tests.ServiceCollectionExtensionsTests.AddQBrainAiMcpAgent_UsesPreconfiguredOptions() in tests/QBrainAi.McpAgent.Tests/ServiceCollectionExtensionsTests.cs:line 317
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed QBrainAi.McpAgent.Tests.ServiceCollectionExtensionsTests.AddQBrainAiMcpAgent_RegistersScaffoldedHostedAgent [1 ms]
+  Error Message:
+   Microsoft.Extensions.Options.OptionsValidationException : WorkspacePath must be fully qualified when provided.
+  Stack Trace:
+     at Microsoft.Extensions.Options.OptionsFactory`1.Create(String name)
+   at Microsoft.Extensions.Options.UnnamedOptionsManager`1.get_Value()
+   at QBrainAi.McpAgent.ServiceCollectionExtensions.<>c.<AddQBrainAiMcpAgent>b__0_1(QBrainAiClientOptions clientOptions, IOptions`1 agentFrameworkOptions) in src/QBrainAi.McpAgent/ServiceCollectionExtensions.cs:line 56
+   at Microsoft.Extensions.Options.ConfigureNamedOptions`2.Configure(String name, TOptions options)
+   at Microsoft.Extensions.Options.OptionsFactory`1.Create(String name)
+   at Microsoft.Extensions.Options.UnnamedOptionsManager`1.get_Value()
+   at QBrainAi.Client.ServiceCollectionExtensions.<>c.<AddQBrainAiClient>b__1_0(IServiceProvider sp, HttpClient client) in src/QBrainAi.Client/ServiceCollectionExtensions.cs:line 61
+   at Microsoft.Extensions.DependencyInjection.HttpClientBuilderExtensions.<>c__DisplayClass1_1.<ConfigureHttpClient>b__2(HttpClient client)
+   at Microsoft.Extensions.Http.DefaultHttpClientFactory.CreateClient(String name)
+   at QBrainAi.Client.ServiceCollectionExtensions.<>c.<AddQBrainAiClient>b__1_1(IServiceProvider sp) in src/QBrainAi.Client/ServiceCollectionExtensions.cs:line 69
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitFactory(FactoryCallSite factoryCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+   at QBrainAi.McpAgent.Tests.ServiceCollectionExtensionsTests.AddQBrainAiMcpAgent_RegistersScaffoldedHostedAgent() in tests/QBrainAi.McpAgent.Tests/ServiceCollectionExtensionsTests.cs:line 34
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed QBrainAi.McpAgent.Tests.ServiceCollectionExtensionsTests.AddQBrainAiMcpAgent_RegistersHostedAgentFactory [1 ms]
+  Error Message:
+   Microsoft.Extensions.Options.OptionsValidationException : WorkspacePath must be fully qualified when provided.
+  Stack Trace:
+     at Microsoft.Extensions.Options.OptionsFactory`1.Create(String name)
+   at Microsoft.Extensions.Options.UnnamedOptionsManager`1.get_Value()
+   at QBrainAi.McpAgent.ServiceCollectionExtensions.<>c.<AddQBrainAiMcpAgent>b__0_1(QBrainAiClientOptions clientOptions, IOptions`1 agentFrameworkOptions) in src/QBrainAi.McpAgent/ServiceCollectionExtensions.cs:line 56
+   at Microsoft.Extensions.Options.ConfigureNamedOptions`2.Configure(String name, TOptions options)
+   at Microsoft.Extensions.Options.OptionsFactory`1.Create(String name)
+   at Microsoft.Extensions.Options.UnnamedOptionsManager`1.get_Value()
+   at QBrainAi.Client.ServiceCollectionExtensions.<>c.<AddQBrainAiClient>b__1_0(IServiceProvider sp, HttpClient client) in src/QBrainAi.Client/ServiceCollectionExtensions.cs:line 61
+   at Microsoft.Extensions.DependencyInjection.HttpClientBuilderExtensions.<>c__DisplayClass1_1.<ConfigureHttpClient>b__2(HttpClient client)
+   at Microsoft.Extensions.Http.DefaultHttpClientFactory.CreateClient(String name)
+   at QBrainAi.Client.ServiceCollectionExtensions.<>c.<AddQBrainAiClient>b__1_1(IServiceProvider sp) in src/QBrainAi.Client/ServiceCollectionExtensions.cs:line 69
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitFactory(FactoryCallSite factoryCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+   at QBrainAi.McpAgent.Hosting.McpHostedAgentFactory.CreateHostedAgent() in src/QBrainAi.McpAgent/Hosting/McpHostedAgentFactory.cs:line 25
+   at QBrainAi.McpAgent.Tests.ServiceCollectionExtensionsTests.AddQBrainAiMcpAgent_RegistersHostedAgentFactory() in tests/QBrainAi.McpAgent.Tests/ServiceCollectionExtensionsTests.cs:line 133
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed QBrainAi.McpAgent.Tests.ServiceCollectionExtensionsTests.AddQBrainAiMcpAgent_AllowsMissingAuthenticationWhenDisabled [1 ms]
+  Error Message:
+   Microsoft.Extensions.Options.OptionsValidationException : WorkspacePath must be fully qualified when provided.
+  Stack Trace:
+     at Microsoft.Extensions.Options.OptionsFactory`1.Create(String name)
+   at Microsoft.Extensions.Options.UnnamedOptionsManager`1.get_Value()
+   at QBrainAi.McpAgent.ServiceCollectionExtensions.<>c.<AddQBrainAiMcpAgent>b__0_1(QBrainAiClientOptions clientOptions, IOptions`1 agentFrameworkOptions) in src/QBrainAi.McpAgent/ServiceCollectionExtensions.cs:line 56
+   at Microsoft.Extensions.Options.ConfigureNamedOptions`2.Configure(String name, TOptions options)
+   at Microsoft.Extensions.Options.OptionsFactory`1.Create(String name)
+   at Microsoft.Extensions.Options.UnnamedOptionsManager`1.get_Value()
+   at QBrainAi.Client.ServiceCollectionExtensions.<>c.<AddQBrainAiClient>b__1_0(IServiceProvider sp, HttpClient client) in src/QBrainAi.Client/ServiceCollectionExtensions.cs:line 61
+   at Microsoft.Extensions.DependencyInjection.HttpClientBuilderExtensions.<>c__DisplayClass1_1.<ConfigureHttpClient>b__2(HttpClient client)
+   at Microsoft.Extensions.Http.DefaultHttpClientFactory.CreateClient(String name)
+   at QBrainAi.Client.ServiceCollectionExtensions.<>c.<AddQBrainAiClient>b__1_1(IServiceProvider sp) in src/QBrainAi.Client/ServiceCollectionExtensions.cs:line 69
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitFactory(FactoryCallSite factoryCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitDisposeCache(ServiceCallSite transientCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+   at QBrainAi.McpAgent.Tests.ServiceCollectionExtensionsTests.AddQBrainAiMcpAgent_AllowsMissingAuthenticationWhenDisabled() in tests/QBrainAi.McpAgent.Tests/ServiceCollectionExtensionsTests.cs:line 290
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+Data collector 'Blame' message: All tests finished running, Sequence file will not be generated.
+
+Failed!  - Failed:     7, Passed:    58, Skipped:     0, Total:    65, Duration: 1 s - QBrainAi.McpAgent.Tests.dll (net10.0)

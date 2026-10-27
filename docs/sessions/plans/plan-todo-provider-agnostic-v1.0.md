@@ -28,9 +28,9 @@ TR-MCP-CFG-007 mandates factory-pattern DB provider selection for all three engi
 
 ### Preconditions (P0)
 
-- P0.1 Commit or stash 8 dirty files on McpServer `develop`; at minimum commit the SqlServer `AddGraphEntitiesAndRelationships` migration already generated this session.
+- P0.1 Commit or stash 8 dirty files on QBrainAi `develop`; at minimum commit the SqlServer `AddGraphEntitiesAndRelationships` migration already generated this session.
 - P0.2 Create branch `feat/todo-provider-agnostic` off `origin/develop`.
-- P0.3 Generate missing `AddGraphEntitiesAndRelationships` migration in `McpServer.Storage.PostgreSqlMigrations` so all three snapshots match before TODO migration adds.
+- P0.3 Generate missing `AddGraphEntitiesAndRelationships` migration in `QBrainAi.Storage.PostgreSqlMigrations` so all three snapshots match before TODO migration adds.
 
 ### Phase 1: spec + contract + regression guard (~2h)
 
@@ -41,7 +41,7 @@ Byrd: tests first.
     - `CfgComplete_WithCoveredByNamingSqliteTodoService_IsRejected`
     - `CfgComplete_WithProviderAgnosticEfTodoService_IsAccepted`
     - `Ignores_TRs_NotMarkedComplete`
-  - `tests/McpServer.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs` additions:
+  - `tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs` additions:
     - `ValidateTodoStorage_AcceptsDatabaseProvider`
     - `ValidateTodoStorage_AliasesSqliteToDatabase_LogsWarning`
     - `ValidateTodoStorage_RejectsUnknownProvider`
@@ -51,8 +51,8 @@ Byrd: tests first.
   - TR-MCP-TODO-006: drop "SQLite-backed". `Covered by` SqliteTodoService -> EfTodoService.
   - Add TR-MCP-TODO-007.
 - P1.3 Code:
-  - Rewrite `src/McpServer.Services/Options/TodoStorageOptions.cs` (Provider default `"database"`, accept `yaml|database`, alias sqlite->database, `MigrateFromLegacySqlite: bool`, `[Obsolete]` `SqliteDataSource`).
-  - Rewrite `src/McpServer.Services/Options/McpInstanceResolver.cs:129-145`.
+  - Rewrite `src/QBrainAi.Services/Options/TodoStorageOptions.cs` (Provider default `"database"`, accept `yaml|database`, alias sqlite->database, `MigrateFromLegacySqlite: bool`, `[Obsolete]` `SqliteDataSource`).
+  - Rewrite `src/QBrainAi.Services/Options/McpInstanceResolver.cs:129-145`.
   - New `build/TrCoverageConsistency.cs` helper (parses md, yields `{TrId, Status, CoveredBy[]}`).
 - P1.4 Gate: `dotnet build`, full `dotnet test` green.
 - Commit: `feat(todo): amend TR docs + validator for provider-agnostic TODO storage`.
@@ -61,37 +61,37 @@ Byrd: tests first.
 
 Byrd: tests first.
 
-- P2.1 New tests: `tests/McpServer.Storage.Tests/TodoEntityConfigurationTests.cs`:
+- P2.1 New tests: `tests/QBrainAi.Storage.Tests/TodoEntityConfigurationTests.cs`:
   - `TodoItemEntity_Has_IdAsPrimaryKey_And_SectionPriorityDoneIndexes`
   - `TodoAuditHistoryEntity_Has_AuditIdAutoIncrement_And_UniqueTodoIdVersion`
   - `TodoDocumentMetadataEntity_Has_SingletonIdKey_NoQueryFilter`
   - `TodoEntities_HaveNoWorkspaceQueryFilter`
 - P2.2 New files:
-  - `src/McpServer.Storage/Entities/TodoItemEntity.cs` (22 properties)
-  - `src/McpServer.Storage/Entities/TodoAuditHistoryEntity.cs` (8 properties)
-  - `src/McpServer.Storage/Entities/TodoDocumentMetadataEntity.cs` (8 properties)
-- P2.3 Edit `src/McpServer.Storage/McpDbContext.cs`: three DbSets, FluentAPI config, PKs/indexes/unique constraints, ValueGeneratedOnAdd on AuditId. Exclude from `_workspaceId` global filter.
+  - `src/QBrainAi.Storage/Entities/TodoItemEntity.cs` (22 properties)
+  - `src/QBrainAi.Storage/Entities/TodoAuditHistoryEntity.cs` (8 properties)
+  - `src/QBrainAi.Storage/Entities/TodoDocumentMetadataEntity.cs` (8 properties)
+- P2.3 Edit `src/QBrainAi.Storage/McpDbContext.cs`: three DbSets, FluentAPI config, PKs/indexes/unique constraints, ValueGeneratedOnAdd on AuditId. Exclude from `_workspaceId` global filter.
 - P2.4 Migrations (one per provider), each named `AddTodoStorage`:
   ```
   $env:NuGetAudit='false'
-  $env:MCP_EF_PROVIDER='sqlite';     dotnet ef migrations add AddTodoStorage -p src/McpServer.Storage.SqliteMigrations     -s src/McpServer.Support.Mcp -c McpDbContext
-  $env:MCP_EF_PROVIDER='sqlserver';  dotnet ef migrations add AddTodoStorage -p src/McpServer.Storage.SqlServerMigrations  -s src/McpServer.Support.Mcp -c McpDbContext
-  $env:MCP_EF_PROVIDER='postgresql'; dotnet ef migrations add AddTodoStorage -p src/McpServer.Storage.PostgreSqlMigrations -s src/McpServer.Support.Mcp -c McpDbContext
+  $env:MCP_EF_PROVIDER='sqlite';     dotnet ef migrations add AddTodoStorage -p src/QBrainAi.Storage.SqliteMigrations     -s src/QBrainAi.Support.Mcp -c McpDbContext
+  $env:MCP_EF_PROVIDER='sqlserver';  dotnet ef migrations add AddTodoStorage -p src/QBrainAi.Storage.SqlServerMigrations  -s src/QBrainAi.Support.Mcp -c McpDbContext
+  $env:MCP_EF_PROVIDER='postgresql'; dotnet ef migrations add AddTodoStorage -p src/QBrainAi.Storage.PostgreSqlMigrations -s src/QBrainAi.Support.Mcp -c McpDbContext
   ```
-- P2.5 Integration test `tests/McpServer.Storage.IntegrationTests/AddTodoStorageMigrationTests.cs` (sqlite in-memory; sqlserver LocalDB, skippable; postgres skippable).
+- P2.5 Integration test `tests/QBrainAi.Storage.IntegrationTests/AddTodoStorageMigrationTests.cs` (sqlite in-memory; sqlserver LocalDB, skippable; postgres skippable).
 - Commit: `feat(todo): add TodoItem/AuditHistory/DocumentMetadata EF entities + migrations`.
 
 ### Phase 3: EfTodoService (~4h)
 
 Byrd: tests first, heavy.
 
-- P3.1 New `tests/McpServer.Support.Mcp.Tests/Services/EfTodoServiceTests.cs`. Port 12 existing SqliteTodoServiceTests method-for-method. Parameterize via abstract `EfTodoServiceTestBase<TFixture>` with concrete subclasses per provider fixture:
+- P3.1 New `tests/QBrainAi.Support.Mcp.Tests/Services/EfTodoServiceTests.cs`. Port 12 existing SqliteTodoServiceTests method-for-method. Parameterize via abstract `EfTodoServiceTestBase<TFixture>` with concrete subclasses per provider fixture:
   - `SqliteEfFixture` (temp file)
   - `SqlServerEfFixture` (LocalDB per-test DB, Skip if absent)
   - `PostgresEfFixture` (Respawn+TestContainers, Skip if Docker absent)
   Extra: `EfTodoService_MatchesSqliteTodoServiceOrdering_AcrossProviders`, `EfTodoService_AuditVersionsMonotonicPerTodo`, `EfTodoService_ProjectionFailure_DoesNotRollBackMutation`.
-- P3.2 New `src/McpServer.Services/Services/EfTodoService.cs`. Implements ITodoService, ITodoStore, IAsyncDisposable. Semantics identical to SqliteTodoService. Ctor via `IDbContextFactory<McpDbContext>`. In-memory sort after ToListAsync for ordering portability. JSON columns stored as `string`.
-- P3.3 DI wiring in `src/McpServer.Support.Mcp/Program.cs`: `AddDbContextFactory<McpDbContext>()`, `AddScoped<EfTodoService>`.
+- P3.2 New `src/QBrainAi.Services/Services/EfTodoService.cs`. Implements ITodoService, ITodoStore, IAsyncDisposable. Semantics identical to SqliteTodoService. Ctor via `IDbContextFactory<McpDbContext>`. In-memory sort after ToListAsync for ordering portability. JSON columns stored as `string`.
+- P3.3 DI wiring in `src/QBrainAi.Support.Mcp/Program.cs`: `AddDbContextFactory<McpDbContext>()`, `AddScoped<EfTodoService>`.
 - P3.4 Edit `TodoServiceFactory.CreatePrimary()`/`CreateForWorkspace` to branch YAML/DATABASE.
 - P3.5 SqliteTodoService marked `[Obsolete]`, retained for phase-4 migrator use only.
 - Commit: `feat(todo): EfTodoService provider-agnostic implementation`.
@@ -100,13 +100,13 @@ Byrd: tests first, heavy.
 
 Byrd: tests first.
 
-- P4.1 New `tests/McpServer.Support.Mcp.Tests/Services/LegacyTodoSqliteMigratorTests.cs`:
+- P4.1 New `tests/QBrainAi.Support.Mcp.Tests/Services/LegacyTodoSqliteMigratorTests.cs`:
   - `Migrator_CopiesAllRowsPreservingIdsVersionsAndMetadata`
   - `Migrator_IsIdempotent_WhenTargetTableNonempty`
   - `Migrator_IsNoop_WhenLegacyDbMissing`
   - `Migrator_IsNoop_WhenFlagFalse`
   - `Migrator_WritesMarkerFile_ToPreventRerun`
-- P4.2 New `src/McpServer.Services/Services/LegacyTodoSqliteMigrator.cs` (IHostedService). Reads `Mcp:TodoStorage:MigrateFromLegacySqlite`, checks target empty, legacy file present. Copies three tables preserving ids/versions via IDENTITY_INSERT (sqlserver) / OVERRIDING SYSTEM VALUE (postgres) / normal (sqlite). Writes marker to DataFolder.
+- P4.2 New `src/QBrainAi.Services/Services/LegacyTodoSqliteMigrator.cs` (IHostedService). Reads `Mcp:TodoStorage:MigrateFromLegacySqlite`, checks target empty, legacy file present. Copies three tables preserving ids/versions via IDENTITY_INSERT (sqlserver) / OVERRIDING SYSTEM VALUE (postgres) / normal (sqlite). Writes marker to DataFolder.
 - P4.3 `AddHostedService<LegacyTodoSqliteMigrator>()` in Program.cs.
 - Commit: `feat(todo): one-shot legacy sqlite->configured-DB migrator`.
 
@@ -115,15 +115,15 @@ Byrd: tests first.
 - P5.1 Build + publish:
   ```
   $env:NuGetAudit='false'
-  dotnet build McpServer.sln -c Release
-  dotnet test  McpServer.sln -c Release --no-build
-  dotnet publish src/McpServer.Support.Mcp -c Release -o F:/GitHub/McpServer/_publish
-  dotnet publish src/McpServer.Launcher   -c Release -o F:/GitHub/McpServer/_publish-launcher
-  Copy-Item F:/GitHub/McpServer/_publish-launcher/McpServer.Launcher.exe F:/GitHub/McpServer/_publish/
+  dotnet build QBrainAi.sln -c Release
+  dotnet test  QBrainAi.sln -c Release --no-build
+  dotnet publish src/QBrainAi.Support.Mcp -c Release -o F:/GitHub/McpServer/_publish
+  dotnet publish src/QBrainAi.Launcher   -c Release -o F:/GitHub/McpServer/_publish-launcher
+  Copy-Item F:/GitHub/McpServer/_publish-launcher/QBrainAi.Launcher.exe F:/GitHub/McpServer/_publish/
   ```
 - P5.2 Deploy (gsudo, user-confirmed):
   ```
-  gsudo pwsh -ExecutionPolicy Bypass -c "& F:\GitHub\McpServer\scripts\Update-McpService.ps1 -SkipBuild -SkipVersionBump -PublishSource 'F:/GitHub/McpServer/_publish'"
+  gsudo pwsh -ExecutionPolicy Bypass -c "& F:\GitHub\QBrainAi\scripts\Update-McpService.ps1 -SkipBuild -SkipVersionBump -PublishSource 'F:/GitHub/McpServer/_publish'"
   ```
 - P5.3 Verify: sqlcmd lists 3 Todo* tables; legacy migrator report; existing 4446 rows intact (AgentDefinitions=7, SessionLogs=186 spot); /health 200; REST CRUD + audit + projection-status via X-Api-Key.
 - P5.4 Flip TR-MCP-TODO-005 back to ✅ Complete in the verification commit.

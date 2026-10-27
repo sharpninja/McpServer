@@ -1,0 +1,14 @@
+{
+  "agent": "Codex",
+  "sessionId": "Codex-20261018T075458Z-amendment1-r4",
+  "requestId": "req-20261018T075510Z-turn-ca88",
+  "degraded": false,
+  "code": "persisted",
+  "method": "workflow.sessionlog.appendDialog",
+  "persisted": true,
+  "failsafePath": "",
+  "retryable": false,
+  "childStderr": "",
+  "queued": false,
+  "message": "appendDialog persisted requestId=req-20261018T075510Z-turn-ca88"
+}

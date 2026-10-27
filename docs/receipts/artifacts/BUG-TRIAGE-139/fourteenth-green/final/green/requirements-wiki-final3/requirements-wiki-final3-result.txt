@@ -1,0 +1,10 @@
+exit_code=0
+minimum_expected=74
+total=74
+passed=74
+failed=0
+not_executed_or_skipped=0
+aborted=0
+inconclusive=0
+classification=passed
+trx=requirements-wiki-final3.trx

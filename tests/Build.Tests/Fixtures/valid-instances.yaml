@@ -1,12 +1,12 @@
 Mcp:
   Instances:
     default:
-      RepoRoot: Q:\__mcp_unit_test__\McpServer
+      RepoRoot: Q:\__mcp_unit_test__\QBrainAi
       Port: 7147
       TodoStorage:
         Provider: database
     alt-local:
-      RepoRoot: Q:\__mcp_unit_test__\McpServer
+      RepoRoot: Q:\__mcp_unit_test__\QBrainAi
       Port: 7148
       TodoStorage:
         Provider: sqlite

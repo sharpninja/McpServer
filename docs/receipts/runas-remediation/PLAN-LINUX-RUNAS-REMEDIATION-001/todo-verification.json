@@ -1,0 +1,17 @@
+{
+  "utc": "2026-10-09T02:43:50.0503762Z",
+  "todoId": "PLAN-LINUX-RUNAS-REMEDIATION-001",
+  "priority": "high",
+  "done": false,
+  "fullPlanExactReadableReadback": false,
+  "fullPlanExactLosslessReadback": true,
+  "losslessEncoding": "UTF8 gzip Base64",
+  "readableMatchesOnlyKnownServerNormalization": true,
+  "planSha256": "60F4EF7EDD9A4836C59E0AD966625D9333BC26D1B2278CD68EA6097249AA5ACD",
+  "planBytes": 105859,
+  "encodedCharacters": 37336,
+  "preservedArtifacts": 7,
+  "artifactDigestErrors": 0,
+  "handoff": "/home/sharpninja/github/McpServer/HANDOFF-LINUX-RUNAS-REMEDIATION-001.md",
+  "handoffSha256": "895683F609CCF601A1992DC9D52D77EFE22A3FF1B281BD2164E659F19EEB7D12"
+}

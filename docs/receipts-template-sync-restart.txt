@@ -1,5 +1,5 @@
-COPIED F:\GitHub\McpServer\templates\prompt-templates.yaml -> C:\ProgramData\McpServer-Data\templates\prompt-templates.yaml
-COPIED F:\GitHub\McpServer\templates\prompt-templates.yaml -> C:\ProgramData\McpServer\templates\prompt-templates.yaml
+COPIED F:\GitHub\QBrainAi\templates\prompt-templates.yaml -> C:\ProgramData\QBrainAi-Data\templates\prompt-templates.yaml
+COPIED F:\GitHub\QBrainAi\templates\prompt-templates.yaml -> C:\ProgramData\QBrainAi\templates\prompt-templates.yaml
 SERVICE_STATUS=Running
 HEALTH_STATUS=Healthy
 HEALTH_NONCE=tpl-sync-461186633

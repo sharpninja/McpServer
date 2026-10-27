@@ -1,0 +1,109 @@
+{
+  "TimestampUtc": "2026-10-10T05:24:34Z",
+  "ValidatorIdentity": {
+    "agent": "Codex",
+    "model": "gpt-6-sol",
+    "reasoningEffort": "xhigh",
+    "liveProofPath": "/home/sharpninja/.codex/sessions/2026/10/10/rollout-2026-10-10T00-24-35-01a12445-298b-74d2-a7cf-25f6e7b4f402.jsonl",
+    "turnContextUtc": "2026-10-10T05:24:36.544Z",
+    "codexSessionId": "01a12445-298b-74d2-a7cf-25f6e7b4f402"
+  },
+  "AddProfileReadCount": 19,
+  "MarkerReadConfirmation": "Full main-workspace marker read with apiKey line and Authentication block filtered.",
+  "MemoryReadConfirmation": "workflow.memory.list returned 15 effective memories; all read, including MEMORY-PROCESS-007 and MEMORY-PROCESS-008 in full.",
+  "HeadSha": "4c6d4d3e06100f2d247313946b8a3e4f98036d31",
+  "ReviewerSessionId": "Codex-20261010T004320Z-plugin-session",
+  "ReviewerRequestId": "req-20261010T052656Z-plan-r33-hv",
+  "Claims": {
+    "P1": "PASS",
+    "P2": "PASS",
+    "P3": "PASS",
+    "P4": "PASS",
+    "P5": "FAIL",
+    "P6": "FAIL",
+    "P7": "FAIL",
+    "P8": "FAIL",
+    "P9": "PASS",
+    "P10": "PASS"
+  },
+  "Findings": [
+    {
+      "id": "F-R33-01",
+      "claims": [
+        "P5",
+        "P7",
+        "P8"
+      ],
+      "planSection": "A9 Phase A sync and exit",
+      "planLines": [
+        160,
+        594
+      ],
+      "defect": "A9 permits HV-A AGREE when the reviewer own complete MCP turn is missing, contrary to the review protocol and global HV receipt rule.",
+      "evidence": "Plan line 160 requires reviewer own turn; line 594 waives it when Codex hook minting is unsupported; plan line 69 documents manual Codex logging; hv-jsonl-and-session-log.md section 3 requires own turn and readback.",
+      "passFix": "Require manual reviewer turn and full readback through the Codex wrapper before any HV AGREE; otherwise leave A9 open. Sync TODO description.",
+      "classification": "implementer_fix"
+    },
+    {
+      "id": "F-R33-02",
+      "claims": [
+        "P5",
+        "P6",
+        "P7",
+        "P8"
+      ],
+      "planSection": "S10 Server completion gate and origins",
+      "planLines": [
+        147,
+        154,
+        612,
+        614,
+        616,
+        638
+      ],
+      "defect": "S10 first activates the real marker gate across plugin hosts yet its gate list omits G4 and G6, conflicting with the per-slice G1-G6 process contract.",
+      "evidence": "S8/S9 test active branches only against doubles while marker inert; S10 line 616 activates marker but lists G1/G2/G3/G5; S11 and line 638 defer all-host gates and smoke.",
+      "passFix": "At S10 add G4 and G6 across both cores and all nine plugin hosts with named active-marker real-server tests, conditional P0.2 unsupported cases, zero failures/skips before HV-S10; sync TODO.",
+      "classification": "implementer_fix"
+    }
+  ],
+  "OverallVerdict": "DISAGREE",
+  "Accuracy": 97,
+  "Completeness": 95,
+  "Confidence": 94,
+  "PassCount": 6,
+  "FailCount": 4,
+  "UnknownCount": 0,
+  "FAIL": [
+    "F-R33-01",
+    "F-R33-02"
+  ],
+  "UNKNOWN": [],
+  "ImplementerFixes": [
+    "F-R33-01",
+    "F-R33-02"
+  ],
+  "OperatorDecisionFails": [],
+  "Round32Repairs": [
+    "F-R32-01 verified",
+    "F-R32-02 verified",
+    "F-R32-03 verified"
+  ],
+  "ReceiptPaths": [
+    "docs/receipts/hv/hostile-validator-plan-readiness-r33-20261010T052434Z.md",
+    "docs/receipts/hv/hostile-validator-plan-readiness-r33-20261010T052434Z.json",
+    "docs/receipts/hv/20261010T052434Z-plan-readiness-r33.request.jsonl",
+    "docs/receipts/hv/20261010T052434Z-plan-readiness-r33.response.jsonl"
+  ],
+  "PersistenceProof": {
+    "method": "installed Codex plugin wrapper client.SessionLog.QueryAsync",
+    "verifiedUtc": "2026-10-10T05:35:22Z",
+    "sessionId": "Codex-20261010T004320Z-plugin-session",
+    "requestId": "req-20261010T052656Z-plan-r33-hv",
+    "status": "completed",
+    "receiptCharacters": 11075,
+    "readbackCharacters": 11075,
+    "exactCharacterMatch": true,
+    "verdictMarkerPresent": true
+  }
+}

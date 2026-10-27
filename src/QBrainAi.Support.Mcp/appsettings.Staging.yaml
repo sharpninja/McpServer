@@ -1,0 +1,139 @@
+Logging:
+  LogLevel:
+    Default: Information
+    Microsoft.AspNetCore: Warning
+Serilog:
+  MinimumLevel:
+    Default: Information
+    Override:
+      Microsoft.AspNetCore: Warning
+      QBrainAi.Support.Mcp.Logging: Verbose
+DataFolder: .
+QBrainAi:
+  Database:
+    Provider: sqlite
+    MigrationsAssembly: ""
+    Sqlite:
+      DataSource: mcp.db
+    PostgreSql:
+      ConnectionString: ""
+    SqlServer:
+      ConnectionString: ""
+    Encryption:
+      Enabled: false
+      Sqlite:
+        Key: ""
+        SeeToolPath: ""
+      PostgreSql:
+        KeyProvider: ""
+        PrincipalKey: ""
+      SqlServer:
+        CertificateName: ""
+        DatabaseEncryptionKeyName: ""
+  DatabaseProvider: sqlite
+  PostgresConnectionString: ""
+  SqlServerConnectionString: ""
+  DatabaseMigrationsAssembly: ""
+  Port: 7147
+  DataSource: mcp.db
+  DataDirectory: .
+  RepoRoot: .
+  TodoFilePath: docs/Project/TODO.yaml
+  TodoStorage:
+    Provider: sqlite
+    SqliteDataSource: mcp.db
+  Instances:
+    default:
+      Port: 7147
+      DataSource: mcp.db
+      DataDirectory: .
+      RepoRoot: .
+      TodoFilePath: docs/Project/TODO.yaml
+      TodoStorage:
+        Provider: sqlite
+        SqliteDataSource: mcp.db
+    alt-local:
+      Port: 7157
+      DataSource: mcp-alt.db
+      DataDirectory: .
+      RepoRoot: docs
+      TodoFilePath: docs/Project/TODO.yaml
+      TodoStorage:
+        Provider: sqlite
+        SqliteDataSource: mcp-alt.db
+  InteractionLogging:
+    LoggingServiceUrl: ""
+    QueueCapacity: 1000
+    IncludeQueryString: false
+  Federation:
+    Enabled: false
+    Role: Standalone
+    HubBaseUrl: ""
+    HubAccessToken: ""
+    ProxyId: ""
+    EnrollmentToken: ""
+    MaxHops: 3
+    DefaultTarget: ""
+    Targets: []
+    WorkspaceRoutes: []
+    Queue:
+      Enabled: true
+      MaxReplayAttempts: 10
+      MaxBodyBytes: 1048576
+    Sync:
+      HeartbeatSeconds: 30
+      ReplayIntervalSeconds: 15
+      FanoutIntervalSeconds: 15
+    Signing:
+      Enabled: true
+      SharedSecret: ""
+      EnvelopeTtlSeconds: 300
+    LocalExecution:
+      Enabled: false
+      AllowedMethods:
+        - desktop_launch
+  Parseable:
+    Enabled: false
+    Url: ""
+    StreamName: mcp
+Triage:
+  QuietPeriod: 00:15:00
+  SweepInterval: 00:01:00
+  MaxRunTime: 00:30:00
+  PromptTemplateId: triage-research-bug-report
+  # Primary strategy
+  AgentName: triage
+  AgentPath: grok
+  AgentModel: auto
+  ExecutionStrategy: grok-cli
+  AgentParameters: {}
+  # Fallback: advance to Secondary then Tertiary when a tier fails with a retryable API error
+  # (4xx / rate-limit / unavailable) or times out.
+  FallbackOnTimeout: true
+  FallbackTriggerSignals:
+    - "429"
+    - "rate limit"
+    - "too many requests"
+    - "quota"
+    - "insufficient_quota"
+    - "overloaded"
+    - "unavailable"
+    - "503"
+    - "529"
+    - "capacity"
+    - "401"
+    - "403"
+  # Secondary strategy
+  Secondary:
+    AgentName: triage-grok
+    AgentPath: grok
+    AgentModel: auto
+    ExecutionStrategy: grok-cli
+    AgentParameters: {}
+  # Tertiary strategy
+  Tertiary:
+    AgentName: triage-claude
+    AgentPath: claude
+    AgentModel: auto
+    ExecutionStrategy: one-shot-cli
+    AgentParameters: {}

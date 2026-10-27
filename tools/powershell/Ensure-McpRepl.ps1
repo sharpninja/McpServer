@@ -3,10 +3,10 @@
     Canonical bootstrap helper for the McpRepl module.
 
 .DESCRIPTION
-    Used by all PowerShell-based McpServer agent plugins (Grok, Claude, Codex, Copilot, etc.)
+    Used by all PowerShell-based QBrainAi agent plugins (Grok, Claude, Codex, Copilot, etc.)
     to ensure the shared McpRepl module is available.
 
-    Canonical location: tools/powershell/Ensure-McpRepl.ps1 in the main McpServer repository.
+    Canonical location: tools/powershell/Ensure-McpRepl.ps1 in the main QBrainAi repository.
 #>
 <#
 .SYNOPSIS
