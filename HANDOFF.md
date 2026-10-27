@@ -87,7 +87,7 @@ Stop/checkpoint/merge evidence on both hosts:
 - Native final integration proof: `legion-integration-verified.json`; merge logs and normalized conflict originals/resolutions retained there.
 - Omarchy raw operation logs remain under `/tmp/qb-omarchy-*`; copy relevant logs into durable receipts before relying on them after reboot.
 
-The initial parent audit begin for this stop request degraded/queued: req-20261027T205410Z-explain-audit-route in root session Codex-20261009T200426Z-plugin-session. Do not claim it complete without exact server readback. A later filtered query returned no match; that is not proof of absence. One plugin-managed failsafe drain reported replayed=1. Exact original-session inspection and completion/reconciliation are separate audit work; preserve originals and query before any manual replay. No worker or Claude history may be authored by the parent.
+The initial parent audit begin for this stop request degraded/queued: req-20261027T205410Z-explain-audit-route in root session Codex-20261009T200426Z-plugin-session. A filtered query returned no match, which did not prove absence. One plugin-managed failsafe drain reported replayed=1; subsequent supported unfiltered QueryAsync independently found the exact original request once, in_progress, at 16:21:23 Central. The installed client rejected GetAsync as unsupported; that error is retained. Do not replay the accepted begin. Final completion/readback evidence belongs in full-audit-verification.json under this operation receipt directory; consult it rather than infer completion from Git. No worker or Claude history may be authored by the parent.
 
 ## Recovery only after a new operator resume
 
