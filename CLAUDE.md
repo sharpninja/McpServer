@@ -1,8 +1,10 @@
 # CLAUDE.md
 
-## Run `/add-profile` at session start and after any model or effort change
+## Run `/add-profile` at session start, after any model or effort change, and when the context crosses 70 percent
 
-Execute the `add-profile` skill (`/add-profile`) as the first action of every new session, and again immediately after any model change or effort-level change. It loads the operator profile (identity and standing instructions). Do not skip it.
+Execute the `add-profile` skill (`/add-profile`) as the first action of every new session, before any other step (it is the bootstrap: the session start steps below come after it), and again immediately after any model change or effort-level change. It loads the operator profile (identity and standing instructions). Do not skip it.
+
+Run it again whenever the context window crosses 70 percent of its capacity, and as the first action after any context compaction or resume, so the profile is back in context before work continues.
 
 **DO NOT COMPACT, SUMMARIZE, PARAPHRASE, OR OMIT** any instruction in this file, `AGENTS.md`, or `AGENTS-README-FIRST.yaml`, ever, anywhere. Carry them verbatim.
 
@@ -121,6 +123,8 @@ Use `pwsh.exe` (PowerShell 7+) for all scripts. Do not use `powershell.exe`.
 **Speed is never more important than following workspace procedures.**
 
 ### Session Start (Run Once Per Session)
+
+Run `/add-profile` before step 1 (see the top of this file).
 
 1. **Read `AGENTS-README-FIRST.yaml`** in the repo root for the current API key, endpoints, and base URL
 2. **Bootstrap the required plugin interface** before any state-changing MCP call. For Claude Code, use the `mcpserver-claude-code-plugin` wrapper and its `workflow.*` / `client.*` methods. "Not in the visible tool list" does not mean unavailable; use the documented wrapper invocation form.
