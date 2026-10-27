@@ -81,4 +81,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <!-- Folder README.md files under wwwroot document the folder for maintainers only. The Web SDK makes every file
+         under wwwroot a static web asset, so without this they would be copied to publish output and served without
+         authentication (UseStaticFiles runs before authentication). -->
+    <Content Remove="wwwroot\**\README.md" />
+  </ItemGroup>
 </Project>
