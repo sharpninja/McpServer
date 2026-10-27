@@ -1,0 +1,52 @@
+{
+  "TimestampLocal": "2026-10-27T03:47:30",
+  "Method": "workflow.requirements.getFr",
+  "Params": {
+    "id": "FR-MCP-MEMORY-002"
+  },
+  "Response": {
+    "payload": {
+      "requestId": "req-20261027T084731Z-0372",
+      "deprecated": true,
+      "result": {
+        "scopeStartLayerKey": "layer-1",
+        "acceptanceCriteria": [
+          {
+            "text": "Add creates a memory and returns ID, text, scope, category, version, and timestamps.",
+            "isSatisfied": true,
+            "id": ""
+          },
+          {
+            "text": "List returns the effective memory set for the active workspace by default.",
+            "isSatisfied": true,
+            "id": ""
+          },
+          {
+            "text": "Update replaces raw text, increments version, and can change scope under validated rules.",
+            "isSatisfied": true,
+            "id": ""
+          },
+          {
+            "text": "Remove soft-deletes a memory by ID.",
+            "isSatisfied": true,
+            "id": ""
+          },
+          {
+            "text": "Invalid IDs, duplicate active IDs, invalid scopes, empty text, and unauthorized scope changes return clear errors.",
+            "isSatisfied": true,
+            "id": ""
+          }
+        ],
+        "title": "Memory CRUD tools",
+        "status": "pending",
+        "id": "FR-MCP-MEMORY-002",
+        "description": "The QBrain.AI SHALL expose add, list, update, and remove operations for raw-text memories through REST, typed client, MCP stdio, and REPL workflow surfaces.",
+        "area": "MCP",
+        "priority": "medium",
+        "updatedAt": "2026-10-27T08:47:33.2865308+00:00",
+        "createdAt": "2026-10-27T08:47:33.2864163+00:00"
+      }
+    },
+    "type": "result"
+  }
+}

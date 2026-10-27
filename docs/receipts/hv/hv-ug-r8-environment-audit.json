@@ -1,0 +1,2661 @@
+{
+  "timestampLocal": "2026-10-27T04:10:20",
+  "gates": [
+    {
+      "kind": "folder",
+      "head": "ccd9e91f00dae4419b39ae8d37c2ae522e6fc62d",
+      "environmentCount": 151,
+      "folderCount": 28,
+      "numericCount": 28,
+      "numericValues": [
+        {
+          "name": "PORT",
+          "value": "1"
+        },
+        {
+          "name": "Mcp__Port",
+          "value": "1"
+        },
+        {
+          "name": "QBrainAi__Port",
+          "value": "1"
+        },
+        {
+          "name": "MCP_UNTRUSTED",
+          "value": "1"
+        },
+        {
+          "name": "MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS",
+          "value": "1"
+        },
+        {
+          "name": "MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS",
+          "value": "1"
+        },
+        {
+          "name": "QBAGENT_SHOW_INTENT",
+          "value": "1"
+        },
+        {
+          "name": "QBAGENT_HIDE_INTENT",
+          "value": "1"
+        },
+        {
+          "name": "OPENAI_NETWORK_TIMEOUT_SECONDS",
+          "value": "1"
+        },
+        {
+          "name": "OPENAI_MAX_RETRIES",
+          "value": "hostile-not-a-number"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumActiveQueue",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumActiveQueue",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumConcurrentReviews",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumConcurrentReviews",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumAttempts",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumAttempts",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumLinks",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumLinks",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumArtifactBytes",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumArtifactBytes",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumAggregateBytes",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumAggregateBytes",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumOutputBytes",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumOutputBytes",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumJsonDepth",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumJsonDepth",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumSubmitBytes",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumSubmitBytes",
+          "value": "hostile-config-probe"
+        }
+      ],
+      "environmentNames": [
+        "ANTHROPIC_API_KEY",
+        "ASPNETCORE_ENVIRONMENT",
+        "AZURE_OPENAI_API_KEY",
+        "CLAUDE_PLUGIN_ROOT",
+        "CLAUDE_PROJECT_DIR",
+        "CLINE_API_KEY",
+        "CLINE_PLUGIN_ROOT",
+        "CODEX_PLUGIN_ROOT",
+        "COPILOT_GITHUB_TOKEN",
+        "COPILOT_PLUGIN_ROOT",
+        "DATABASE_URL",
+        "DOTNET_CLI_HOME",
+        "DOTNET_ENVIRONMENT",
+        "GH_TOKEN",
+        "GROK_HOME",
+        "GROK_PLUGIN_ROOT",
+        "HOME",
+        "Mcp__Database__Provider",
+        "Mcp__HostileReviewWorker__AgentName",
+        "Mcp__HostileReviewWorker__Enabled",
+        "Mcp__HostileReviewWorker__ExecutionTimeout",
+        "Mcp__HostileReviewWorker__LeaseDuration",
+        "Mcp__HostileReviewWorker__MaximumActiveQueue",
+        "Mcp__HostileReviewWorker__MaximumAggregateBytes",
+        "Mcp__HostileReviewWorker__MaximumArtifactBytes",
+        "Mcp__HostileReviewWorker__MaximumAttempts",
+        "Mcp__HostileReviewWorker__MaximumConcurrentReviews",
+        "Mcp__HostileReviewWorker__MaximumJsonDepth",
+        "Mcp__HostileReviewWorker__MaximumLinks",
+        "Mcp__HostileReviewWorker__MaximumOutputBytes",
+        "Mcp__HostileReviewWorker__MaximumSubmitBytes",
+        "Mcp__HostileReviewWorker__PollInterval",
+        "Mcp__HostileReviewWorker__RenewalInterval",
+        "Mcp__HostileReviewWorker__RequiredEffort",
+        "Mcp__HostileReviewWorker__RequiredModel",
+        "Mcp__HostileReviewWorker__RetryDelay",
+        "Mcp__HostileReviewWorker__RetryDelayCap",
+        "Mcp__Port",
+        "Mcp__ProjectionCliProbe",
+        "Mcp__ProjectionProbe",
+        "MCP_AGENT_DESCRIPTION",
+        "MCP_AGENT_ID",
+        "MCP_AGENT_MODEL",
+        "MCP_AGENT_NAME",
+        "MCP_AGENT_SOURCE_TYPE",
+        "MCP_AGENT_SYSTEM_PROMPT",
+        "MCP_AGENT_VERBOSITY",
+        "MCP_DATABASE_ENCRYPTION_ENABLED",
+        "MCP_DATABASE_MIGRATIONS_ASSEMBLY",
+        "MCP_DATABASE_PROVIDER",
+        "MCP_EF_CONNECTION_STRING",
+        "MCP_EF_MIGRATIONS_ASSEMBLY",
+        "MCP_EF_PROVIDER",
+        "MCP_INSTANCE",
+        "MCP_PLUGIN_HOST",
+        "MCP_POSTGRES_CONNECTION_STRING",
+        "MCP_POSTGRES_TDE_KEY_PROVIDER",
+        "MCP_POSTGRES_TDE_PRINCIPAL_KEY",
+        "MCP_REPOSITORY_ROOT",
+        "MCP_SERVER_API_KEY",
+        "MCP_SERVER_BASE_URL",
+        "MCP_SERVER_BEARER_TOKEN",
+        "MCP_SERVER_DESKTOP_LAUNCH_TOKEN",
+        "MCP_SERVER_URL",
+        "MCP_SERVER_WORKSPACE_PATH",
+        "MCP_SESSION_ID",
+        "MCP_SQLITE_DATA_SOURCE",
+        "MCP_SQLITE_ENCRYPTION_KEY",
+        "MCP_SQLITE_SEE_TOOL_PATH",
+        "MCP_SQLSERVER_CONNECTION_STRING",
+        "MCP_SQLSERVER_TDE_CERTIFICATE",
+        "MCP_SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY",
+        "MCP_TEST_POSTGRES_CONNECTION",
+        "MCP_TEST_SQLSERVER_CONNECTION",
+        "MCP_UNTRUSTED",
+        "MCP_WORKSPACE",
+        "MCP_WORKSPACE_PATH",
+        "MCP_WORKSPACE_START_DIR",
+        "MCPSERVER_CODEX_ONESHOT_TEMP",
+        "MCPSERVER_CODEX_TRIAGE_TEMP",
+        "MCPSERVER_GROK_ONESHOT_TEMP",
+        "MCPSERVER_ONESHOT_TEMP",
+        "MCPSERVER_QUADBRAIN_CLI_TEMP",
+        "MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS",
+        "MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS",
+        "MCPSERVER_WORKSPACE_PATH",
+        "NUGET_PACKAGES",
+        "OPENAI_API_KEY",
+        "OPENAI_MAX_RETRIES",
+        "OPENAI_MODEL",
+        "OPENAI_NETWORK_TIMEOUT_SECONDS",
+        "OPENCODE_API_KEY",
+        "PLUGIN_AGENT_DEFAULT",
+        "PLUGIN_AGENT_NAME",
+        "PORT",
+        "POSTGRES_CONNECTION_STRING",
+        "PUBLIC",
+        "QBAGENT_HIDE_INTENT",
+        "QBAGENT_HOME",
+        "QBAGENT_SHOW_INTENT",
+        "QBrainAi__Database__Provider",
+        "QBrainAi__HostileReviewWorker__AgentName",
+        "QBrainAi__HostileReviewWorker__Enabled",
+        "QBrainAi__HostileReviewWorker__ExecutionTimeout",
+        "QBrainAi__HostileReviewWorker__LeaseDuration",
+        "QBrainAi__HostileReviewWorker__MaximumActiveQueue",
+        "QBrainAi__HostileReviewWorker__MaximumAggregateBytes",
+        "QBrainAi__HostileReviewWorker__MaximumArtifactBytes",
+        "QBrainAi__HostileReviewWorker__MaximumAttempts",
+        "QBrainAi__HostileReviewWorker__MaximumConcurrentReviews",
+        "QBrainAi__HostileReviewWorker__MaximumJsonDepth",
+        "QBrainAi__HostileReviewWorker__MaximumLinks",
+        "QBrainAi__HostileReviewWorker__MaximumOutputBytes",
+        "QBrainAi__HostileReviewWorker__MaximumSubmitBytes",
+        "QBrainAi__HostileReviewWorker__PollInterval",
+        "QBrainAi__HostileReviewWorker__RenewalInterval",
+        "QBrainAi__HostileReviewWorker__RequiredEffort",
+        "QBrainAi__HostileReviewWorker__RequiredModel",
+        "QBrainAi__HostileReviewWorker__RetryDelay",
+        "QBrainAi__HostileReviewWorker__RetryDelayCap",
+        "QBrainAi__Port",
+        "QBrainAi__ProjectionCliProbe",
+        "QBrainAi__ProjectionProbe",
+        "QBRAINAI_AGENT_NAME",
+        "QBRAINAI_DATABASE_ENCRYPTION_ENABLED",
+        "QBRAINAI_DATABASE_MIGRATIONS_ASSEMBLY",
+        "QBRAINAI_DATABASE_PROVIDER",
+        "QBRAINAI_EF_CONNECTION_STRING",
+        "QBRAINAI_EF_MIGRATIONS_ASSEMBLY",
+        "QBRAINAI_EF_PROVIDER",
+        "QBRAINAI_INSTANCE",
+        "QBRAINAI_PLUGIN_HOST",
+        "QBRAINAI_POSTGRES_CONNECTION_STRING",
+        "QBRAINAI_POSTGRES_TDE_KEY_PROVIDER",
+        "QBRAINAI_POSTGRES_TDE_PRINCIPAL_KEY",
+        "QBRAINAI_REPOSITORY_ROOT",
+        "QBRAINAI_SERVER_URL",
+        "QBRAINAI_SESSION_ID",
+        "QBRAINAI_SQLITE_DATA_SOURCE",
+        "QBRAINAI_SQLITE_ENCRYPTION_KEY",
+        "QBRAINAI_SQLITE_SEE_TOOL_PATH",
+        "QBRAINAI_SQLSERVER_CONNECTION_STRING",
+        "QBRAINAI_SQLSERVER_TDE_CERTIFICATE",
+        "QBRAINAI_SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY",
+        "QBRAINAI_WORKSPACE",
+        "QBRAINAI_WORKSPACE_PATH",
+        "QBRAINAI_WORKSPACE_START_DIR",
+        "SystemDrive",
+        "TEMP",
+        "USERPROFILE",
+        "XAI_API_KEY"
+      ],
+      "culture": null,
+      "timeZone": null,
+      "dirtyPaths": []
+    },
+    {
+      "kind": "file",
+      "head": "ccd9e91f00dae4419b39ae8d37c2ae522e6fc62d",
+      "environmentCount": 151,
+      "folderCount": 28,
+      "numericCount": 28,
+      "numericValues": [
+        {
+          "name": "PORT",
+          "value": "1"
+        },
+        {
+          "name": "Mcp__Port",
+          "value": "1"
+        },
+        {
+          "name": "QBrainAi__Port",
+          "value": "1"
+        },
+        {
+          "name": "MCP_UNTRUSTED",
+          "value": "1"
+        },
+        {
+          "name": "MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS",
+          "value": "1"
+        },
+        {
+          "name": "MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS",
+          "value": "1"
+        },
+        {
+          "name": "QBAGENT_SHOW_INTENT",
+          "value": "1"
+        },
+        {
+          "name": "QBAGENT_HIDE_INTENT",
+          "value": "1"
+        },
+        {
+          "name": "OPENAI_NETWORK_TIMEOUT_SECONDS",
+          "value": "1"
+        },
+        {
+          "name": "OPENAI_MAX_RETRIES",
+          "value": "hostile-not-a-number"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumActiveQueue",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumActiveQueue",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumConcurrentReviews",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumConcurrentReviews",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumAttempts",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumAttempts",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumLinks",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumLinks",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumArtifactBytes",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumArtifactBytes",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumAggregateBytes",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumAggregateBytes",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumOutputBytes",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumOutputBytes",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumJsonDepth",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumJsonDepth",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumSubmitBytes",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumSubmitBytes",
+          "value": "hostile-config-probe"
+        }
+      ],
+      "environmentNames": [
+        "ANTHROPIC_API_KEY",
+        "ASPNETCORE_ENVIRONMENT",
+        "AZURE_OPENAI_API_KEY",
+        "CLAUDE_PLUGIN_ROOT",
+        "CLAUDE_PROJECT_DIR",
+        "CLINE_API_KEY",
+        "CLINE_PLUGIN_ROOT",
+        "CODEX_PLUGIN_ROOT",
+        "COPILOT_GITHUB_TOKEN",
+        "COPILOT_PLUGIN_ROOT",
+        "DATABASE_URL",
+        "DOTNET_CLI_HOME",
+        "DOTNET_ENVIRONMENT",
+        "GH_TOKEN",
+        "GROK_HOME",
+        "GROK_PLUGIN_ROOT",
+        "HOME",
+        "Mcp__Database__Provider",
+        "Mcp__HostileReviewWorker__AgentName",
+        "Mcp__HostileReviewWorker__Enabled",
+        "Mcp__HostileReviewWorker__ExecutionTimeout",
+        "Mcp__HostileReviewWorker__LeaseDuration",
+        "Mcp__HostileReviewWorker__MaximumActiveQueue",
+        "Mcp__HostileReviewWorker__MaximumAggregateBytes",
+        "Mcp__HostileReviewWorker__MaximumArtifactBytes",
+        "Mcp__HostileReviewWorker__MaximumAttempts",
+        "Mcp__HostileReviewWorker__MaximumConcurrentReviews",
+        "Mcp__HostileReviewWorker__MaximumJsonDepth",
+        "Mcp__HostileReviewWorker__MaximumLinks",
+        "Mcp__HostileReviewWorker__MaximumOutputBytes",
+        "Mcp__HostileReviewWorker__MaximumSubmitBytes",
+        "Mcp__HostileReviewWorker__PollInterval",
+        "Mcp__HostileReviewWorker__RenewalInterval",
+        "Mcp__HostileReviewWorker__RequiredEffort",
+        "Mcp__HostileReviewWorker__RequiredModel",
+        "Mcp__HostileReviewWorker__RetryDelay",
+        "Mcp__HostileReviewWorker__RetryDelayCap",
+        "Mcp__Port",
+        "Mcp__ProjectionCliProbe",
+        "Mcp__ProjectionProbe",
+        "MCP_AGENT_DESCRIPTION",
+        "MCP_AGENT_ID",
+        "MCP_AGENT_MODEL",
+        "MCP_AGENT_NAME",
+        "MCP_AGENT_SOURCE_TYPE",
+        "MCP_AGENT_SYSTEM_PROMPT",
+        "MCP_AGENT_VERBOSITY",
+        "MCP_DATABASE_ENCRYPTION_ENABLED",
+        "MCP_DATABASE_MIGRATIONS_ASSEMBLY",
+        "MCP_DATABASE_PROVIDER",
+        "MCP_EF_CONNECTION_STRING",
+        "MCP_EF_MIGRATIONS_ASSEMBLY",
+        "MCP_EF_PROVIDER",
+        "MCP_INSTANCE",
+        "MCP_PLUGIN_HOST",
+        "MCP_POSTGRES_CONNECTION_STRING",
+        "MCP_POSTGRES_TDE_KEY_PROVIDER",
+        "MCP_POSTGRES_TDE_PRINCIPAL_KEY",
+        "MCP_REPOSITORY_ROOT",
+        "MCP_SERVER_API_KEY",
+        "MCP_SERVER_BASE_URL",
+        "MCP_SERVER_BEARER_TOKEN",
+        "MCP_SERVER_DESKTOP_LAUNCH_TOKEN",
+        "MCP_SERVER_URL",
+        "MCP_SERVER_WORKSPACE_PATH",
+        "MCP_SESSION_ID",
+        "MCP_SQLITE_DATA_SOURCE",
+        "MCP_SQLITE_ENCRYPTION_KEY",
+        "MCP_SQLITE_SEE_TOOL_PATH",
+        "MCP_SQLSERVER_CONNECTION_STRING",
+        "MCP_SQLSERVER_TDE_CERTIFICATE",
+        "MCP_SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY",
+        "MCP_TEST_POSTGRES_CONNECTION",
+        "MCP_TEST_SQLSERVER_CONNECTION",
+        "MCP_UNTRUSTED",
+        "MCP_WORKSPACE",
+        "MCP_WORKSPACE_PATH",
+        "MCP_WORKSPACE_START_DIR",
+        "MCPSERVER_CODEX_ONESHOT_TEMP",
+        "MCPSERVER_CODEX_TRIAGE_TEMP",
+        "MCPSERVER_GROK_ONESHOT_TEMP",
+        "MCPSERVER_ONESHOT_TEMP",
+        "MCPSERVER_QUADBRAIN_CLI_TEMP",
+        "MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS",
+        "MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS",
+        "MCPSERVER_WORKSPACE_PATH",
+        "NUGET_PACKAGES",
+        "OPENAI_API_KEY",
+        "OPENAI_MAX_RETRIES",
+        "OPENAI_MODEL",
+        "OPENAI_NETWORK_TIMEOUT_SECONDS",
+        "OPENCODE_API_KEY",
+        "PLUGIN_AGENT_DEFAULT",
+        "PLUGIN_AGENT_NAME",
+        "PORT",
+        "POSTGRES_CONNECTION_STRING",
+        "PUBLIC",
+        "QBAGENT_HIDE_INTENT",
+        "QBAGENT_HOME",
+        "QBAGENT_SHOW_INTENT",
+        "QBrainAi__Database__Provider",
+        "QBrainAi__HostileReviewWorker__AgentName",
+        "QBrainAi__HostileReviewWorker__Enabled",
+        "QBrainAi__HostileReviewWorker__ExecutionTimeout",
+        "QBrainAi__HostileReviewWorker__LeaseDuration",
+        "QBrainAi__HostileReviewWorker__MaximumActiveQueue",
+        "QBrainAi__HostileReviewWorker__MaximumAggregateBytes",
+        "QBrainAi__HostileReviewWorker__MaximumArtifactBytes",
+        "QBrainAi__HostileReviewWorker__MaximumAttempts",
+        "QBrainAi__HostileReviewWorker__MaximumConcurrentReviews",
+        "QBrainAi__HostileReviewWorker__MaximumJsonDepth",
+        "QBrainAi__HostileReviewWorker__MaximumLinks",
+        "QBrainAi__HostileReviewWorker__MaximumOutputBytes",
+        "QBrainAi__HostileReviewWorker__MaximumSubmitBytes",
+        "QBrainAi__HostileReviewWorker__PollInterval",
+        "QBrainAi__HostileReviewWorker__RenewalInterval",
+        "QBrainAi__HostileReviewWorker__RequiredEffort",
+        "QBrainAi__HostileReviewWorker__RequiredModel",
+        "QBrainAi__HostileReviewWorker__RetryDelay",
+        "QBrainAi__HostileReviewWorker__RetryDelayCap",
+        "QBrainAi__Port",
+        "QBrainAi__ProjectionCliProbe",
+        "QBrainAi__ProjectionProbe",
+        "QBRAINAI_AGENT_NAME",
+        "QBRAINAI_DATABASE_ENCRYPTION_ENABLED",
+        "QBRAINAI_DATABASE_MIGRATIONS_ASSEMBLY",
+        "QBRAINAI_DATABASE_PROVIDER",
+        "QBRAINAI_EF_CONNECTION_STRING",
+        "QBRAINAI_EF_MIGRATIONS_ASSEMBLY",
+        "QBRAINAI_EF_PROVIDER",
+        "QBRAINAI_INSTANCE",
+        "QBRAINAI_PLUGIN_HOST",
+        "QBRAINAI_POSTGRES_CONNECTION_STRING",
+        "QBRAINAI_POSTGRES_TDE_KEY_PROVIDER",
+        "QBRAINAI_POSTGRES_TDE_PRINCIPAL_KEY",
+        "QBRAINAI_REPOSITORY_ROOT",
+        "QBRAINAI_SERVER_URL",
+        "QBRAINAI_SESSION_ID",
+        "QBRAINAI_SQLITE_DATA_SOURCE",
+        "QBRAINAI_SQLITE_ENCRYPTION_KEY",
+        "QBRAINAI_SQLITE_SEE_TOOL_PATH",
+        "QBRAINAI_SQLSERVER_CONNECTION_STRING",
+        "QBRAINAI_SQLSERVER_TDE_CERTIFICATE",
+        "QBRAINAI_SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY",
+        "QBRAINAI_WORKSPACE",
+        "QBRAINAI_WORKSPACE_PATH",
+        "QBRAINAI_WORKSPACE_START_DIR",
+        "SystemDrive",
+        "TEMP",
+        "USERPROFILE",
+        "XAI_API_KEY"
+      ],
+      "culture": null,
+      "timeZone": null,
+      "dirtyPaths": []
+    },
+    {
+      "kind": "zero",
+      "head": "ccd9e91f00dae4419b39ae8d37c2ae522e6fc62d",
+      "environmentCount": 151,
+      "folderCount": 28,
+      "numericCount": 28,
+      "numericValues": [
+        {
+          "name": "PORT",
+          "value": "0"
+        },
+        {
+          "name": "Mcp__Port",
+          "value": "0"
+        },
+        {
+          "name": "QBrainAi__Port",
+          "value": "0"
+        },
+        {
+          "name": "MCP_UNTRUSTED",
+          "value": "0"
+        },
+        {
+          "name": "MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS",
+          "value": "0"
+        },
+        {
+          "name": "MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS",
+          "value": "0"
+        },
+        {
+          "name": "QBAGENT_SHOW_INTENT",
+          "value": "0"
+        },
+        {
+          "name": "QBAGENT_HIDE_INTENT",
+          "value": "0"
+        },
+        {
+          "name": "OPENAI_NETWORK_TIMEOUT_SECONDS",
+          "value": "0"
+        },
+        {
+          "name": "OPENAI_MAX_RETRIES",
+          "value": "0"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumActiveQueue",
+          "value": "0"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumActiveQueue",
+          "value": "0"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumConcurrentReviews",
+          "value": "0"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumConcurrentReviews",
+          "value": "0"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumAttempts",
+          "value": "0"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumAttempts",
+          "value": "0"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumLinks",
+          "value": "0"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumLinks",
+          "value": "0"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumArtifactBytes",
+          "value": "0"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumArtifactBytes",
+          "value": "0"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumAggregateBytes",
+          "value": "0"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumAggregateBytes",
+          "value": "0"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumOutputBytes",
+          "value": "0"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumOutputBytes",
+          "value": "0"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumJsonDepth",
+          "value": "0"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumJsonDepth",
+          "value": "0"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumSubmitBytes",
+          "value": "0"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumSubmitBytes",
+          "value": "0"
+        }
+      ],
+      "environmentNames": [
+        "ANTHROPIC_API_KEY",
+        "ASPNETCORE_ENVIRONMENT",
+        "AZURE_OPENAI_API_KEY",
+        "CLAUDE_PLUGIN_ROOT",
+        "CLAUDE_PROJECT_DIR",
+        "CLINE_API_KEY",
+        "CLINE_PLUGIN_ROOT",
+        "CODEX_PLUGIN_ROOT",
+        "COPILOT_GITHUB_TOKEN",
+        "COPILOT_PLUGIN_ROOT",
+        "DATABASE_URL",
+        "DOTNET_CLI_HOME",
+        "DOTNET_ENVIRONMENT",
+        "GH_TOKEN",
+        "GROK_HOME",
+        "GROK_PLUGIN_ROOT",
+        "HOME",
+        "Mcp__Database__Provider",
+        "Mcp__HostileReviewWorker__AgentName",
+        "Mcp__HostileReviewWorker__Enabled",
+        "Mcp__HostileReviewWorker__ExecutionTimeout",
+        "Mcp__HostileReviewWorker__LeaseDuration",
+        "Mcp__HostileReviewWorker__MaximumActiveQueue",
+        "Mcp__HostileReviewWorker__MaximumAggregateBytes",
+        "Mcp__HostileReviewWorker__MaximumArtifactBytes",
+        "Mcp__HostileReviewWorker__MaximumAttempts",
+        "Mcp__HostileReviewWorker__MaximumConcurrentReviews",
+        "Mcp__HostileReviewWorker__MaximumJsonDepth",
+        "Mcp__HostileReviewWorker__MaximumLinks",
+        "Mcp__HostileReviewWorker__MaximumOutputBytes",
+        "Mcp__HostileReviewWorker__MaximumSubmitBytes",
+        "Mcp__HostileReviewWorker__PollInterval",
+        "Mcp__HostileReviewWorker__RenewalInterval",
+        "Mcp__HostileReviewWorker__RequiredEffort",
+        "Mcp__HostileReviewWorker__RequiredModel",
+        "Mcp__HostileReviewWorker__RetryDelay",
+        "Mcp__HostileReviewWorker__RetryDelayCap",
+        "Mcp__Port",
+        "Mcp__ProjectionCliProbe",
+        "Mcp__ProjectionProbe",
+        "MCP_AGENT_DESCRIPTION",
+        "MCP_AGENT_ID",
+        "MCP_AGENT_MODEL",
+        "MCP_AGENT_NAME",
+        "MCP_AGENT_SOURCE_TYPE",
+        "MCP_AGENT_SYSTEM_PROMPT",
+        "MCP_AGENT_VERBOSITY",
+        "MCP_DATABASE_ENCRYPTION_ENABLED",
+        "MCP_DATABASE_MIGRATIONS_ASSEMBLY",
+        "MCP_DATABASE_PROVIDER",
+        "MCP_EF_CONNECTION_STRING",
+        "MCP_EF_MIGRATIONS_ASSEMBLY",
+        "MCP_EF_PROVIDER",
+        "MCP_INSTANCE",
+        "MCP_PLUGIN_HOST",
+        "MCP_POSTGRES_CONNECTION_STRING",
+        "MCP_POSTGRES_TDE_KEY_PROVIDER",
+        "MCP_POSTGRES_TDE_PRINCIPAL_KEY",
+        "MCP_REPOSITORY_ROOT",
+        "MCP_SERVER_API_KEY",
+        "MCP_SERVER_BASE_URL",
+        "MCP_SERVER_BEARER_TOKEN",
+        "MCP_SERVER_DESKTOP_LAUNCH_TOKEN",
+        "MCP_SERVER_URL",
+        "MCP_SERVER_WORKSPACE_PATH",
+        "MCP_SESSION_ID",
+        "MCP_SQLITE_DATA_SOURCE",
+        "MCP_SQLITE_ENCRYPTION_KEY",
+        "MCP_SQLITE_SEE_TOOL_PATH",
+        "MCP_SQLSERVER_CONNECTION_STRING",
+        "MCP_SQLSERVER_TDE_CERTIFICATE",
+        "MCP_SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY",
+        "MCP_TEST_POSTGRES_CONNECTION",
+        "MCP_TEST_SQLSERVER_CONNECTION",
+        "MCP_UNTRUSTED",
+        "MCP_WORKSPACE",
+        "MCP_WORKSPACE_PATH",
+        "MCP_WORKSPACE_START_DIR",
+        "MCPSERVER_CODEX_ONESHOT_TEMP",
+        "MCPSERVER_CODEX_TRIAGE_TEMP",
+        "MCPSERVER_GROK_ONESHOT_TEMP",
+        "MCPSERVER_ONESHOT_TEMP",
+        "MCPSERVER_QUADBRAIN_CLI_TEMP",
+        "MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS",
+        "MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS",
+        "MCPSERVER_WORKSPACE_PATH",
+        "NUGET_PACKAGES",
+        "OPENAI_API_KEY",
+        "OPENAI_MAX_RETRIES",
+        "OPENAI_MODEL",
+        "OPENAI_NETWORK_TIMEOUT_SECONDS",
+        "OPENCODE_API_KEY",
+        "PLUGIN_AGENT_DEFAULT",
+        "PLUGIN_AGENT_NAME",
+        "PORT",
+        "POSTGRES_CONNECTION_STRING",
+        "PUBLIC",
+        "QBAGENT_HIDE_INTENT",
+        "QBAGENT_HOME",
+        "QBAGENT_SHOW_INTENT",
+        "QBrainAi__Database__Provider",
+        "QBrainAi__HostileReviewWorker__AgentName",
+        "QBrainAi__HostileReviewWorker__Enabled",
+        "QBrainAi__HostileReviewWorker__ExecutionTimeout",
+        "QBrainAi__HostileReviewWorker__LeaseDuration",
+        "QBrainAi__HostileReviewWorker__MaximumActiveQueue",
+        "QBrainAi__HostileReviewWorker__MaximumAggregateBytes",
+        "QBrainAi__HostileReviewWorker__MaximumArtifactBytes",
+        "QBrainAi__HostileReviewWorker__MaximumAttempts",
+        "QBrainAi__HostileReviewWorker__MaximumConcurrentReviews",
+        "QBrainAi__HostileReviewWorker__MaximumJsonDepth",
+        "QBrainAi__HostileReviewWorker__MaximumLinks",
+        "QBrainAi__HostileReviewWorker__MaximumOutputBytes",
+        "QBrainAi__HostileReviewWorker__MaximumSubmitBytes",
+        "QBrainAi__HostileReviewWorker__PollInterval",
+        "QBrainAi__HostileReviewWorker__RenewalInterval",
+        "QBrainAi__HostileReviewWorker__RequiredEffort",
+        "QBrainAi__HostileReviewWorker__RequiredModel",
+        "QBrainAi__HostileReviewWorker__RetryDelay",
+        "QBrainAi__HostileReviewWorker__RetryDelayCap",
+        "QBrainAi__Port",
+        "QBrainAi__ProjectionCliProbe",
+        "QBrainAi__ProjectionProbe",
+        "QBRAINAI_AGENT_NAME",
+        "QBRAINAI_DATABASE_ENCRYPTION_ENABLED",
+        "QBRAINAI_DATABASE_MIGRATIONS_ASSEMBLY",
+        "QBRAINAI_DATABASE_PROVIDER",
+        "QBRAINAI_EF_CONNECTION_STRING",
+        "QBRAINAI_EF_MIGRATIONS_ASSEMBLY",
+        "QBRAINAI_EF_PROVIDER",
+        "QBRAINAI_INSTANCE",
+        "QBRAINAI_PLUGIN_HOST",
+        "QBRAINAI_POSTGRES_CONNECTION_STRING",
+        "QBRAINAI_POSTGRES_TDE_KEY_PROVIDER",
+        "QBRAINAI_POSTGRES_TDE_PRINCIPAL_KEY",
+        "QBRAINAI_REPOSITORY_ROOT",
+        "QBRAINAI_SERVER_URL",
+        "QBRAINAI_SESSION_ID",
+        "QBRAINAI_SQLITE_DATA_SOURCE",
+        "QBRAINAI_SQLITE_ENCRYPTION_KEY",
+        "QBRAINAI_SQLITE_SEE_TOOL_PATH",
+        "QBRAINAI_SQLSERVER_CONNECTION_STRING",
+        "QBRAINAI_SQLSERVER_TDE_CERTIFICATE",
+        "QBRAINAI_SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY",
+        "QBRAINAI_WORKSPACE",
+        "QBRAINAI_WORKSPACE_PATH",
+        "QBRAINAI_WORKSPACE_START_DIR",
+        "SystemDrive",
+        "TEMP",
+        "USERPROFILE",
+        "XAI_API_KEY"
+      ],
+      "culture": null,
+      "timeZone": null,
+      "dirtyPaths": []
+    },
+    {
+      "kind": "max",
+      "head": "ccd9e91f00dae4419b39ae8d37c2ae522e6fc62d",
+      "environmentCount": 151,
+      "folderCount": 28,
+      "numericCount": 28,
+      "numericValues": [
+        {
+          "name": "PORT",
+          "value": "2147483647"
+        },
+        {
+          "name": "Mcp__Port",
+          "value": "2147483647"
+        },
+        {
+          "name": "QBrainAi__Port",
+          "value": "2147483647"
+        },
+        {
+          "name": "MCP_UNTRUSTED",
+          "value": "2147483647"
+        },
+        {
+          "name": "MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS",
+          "value": "2147483647"
+        },
+        {
+          "name": "MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS",
+          "value": "2147483647"
+        },
+        {
+          "name": "QBAGENT_SHOW_INTENT",
+          "value": "2147483647"
+        },
+        {
+          "name": "QBAGENT_HIDE_INTENT",
+          "value": "2147483647"
+        },
+        {
+          "name": "OPENAI_NETWORK_TIMEOUT_SECONDS",
+          "value": "2147483647"
+        },
+        {
+          "name": "OPENAI_MAX_RETRIES",
+          "value": "2147483647"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumActiveQueue",
+          "value": "2147483647"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumActiveQueue",
+          "value": "2147483647"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumConcurrentReviews",
+          "value": "2147483647"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumConcurrentReviews",
+          "value": "2147483647"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumAttempts",
+          "value": "2147483647"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumAttempts",
+          "value": "2147483647"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumLinks",
+          "value": "2147483647"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumLinks",
+          "value": "2147483647"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumArtifactBytes",
+          "value": "2147483647"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumArtifactBytes",
+          "value": "2147483647"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumAggregateBytes",
+          "value": "2147483647"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumAggregateBytes",
+          "value": "2147483647"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumOutputBytes",
+          "value": "2147483647"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumOutputBytes",
+          "value": "2147483647"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumJsonDepth",
+          "value": "2147483647"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumJsonDepth",
+          "value": "2147483647"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumSubmitBytes",
+          "value": "2147483647"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumSubmitBytes",
+          "value": "2147483647"
+        }
+      ],
+      "environmentNames": [
+        "ANTHROPIC_API_KEY",
+        "ASPNETCORE_ENVIRONMENT",
+        "AZURE_OPENAI_API_KEY",
+        "CLAUDE_PLUGIN_ROOT",
+        "CLAUDE_PROJECT_DIR",
+        "CLINE_API_KEY",
+        "CLINE_PLUGIN_ROOT",
+        "CODEX_PLUGIN_ROOT",
+        "COPILOT_GITHUB_TOKEN",
+        "COPILOT_PLUGIN_ROOT",
+        "DATABASE_URL",
+        "DOTNET_CLI_HOME",
+        "DOTNET_ENVIRONMENT",
+        "GH_TOKEN",
+        "GROK_HOME",
+        "GROK_PLUGIN_ROOT",
+        "HOME",
+        "Mcp__Database__Provider",
+        "Mcp__HostileReviewWorker__AgentName",
+        "Mcp__HostileReviewWorker__Enabled",
+        "Mcp__HostileReviewWorker__ExecutionTimeout",
+        "Mcp__HostileReviewWorker__LeaseDuration",
+        "Mcp__HostileReviewWorker__MaximumActiveQueue",
+        "Mcp__HostileReviewWorker__MaximumAggregateBytes",
+        "Mcp__HostileReviewWorker__MaximumArtifactBytes",
+        "Mcp__HostileReviewWorker__MaximumAttempts",
+        "Mcp__HostileReviewWorker__MaximumConcurrentReviews",
+        "Mcp__HostileReviewWorker__MaximumJsonDepth",
+        "Mcp__HostileReviewWorker__MaximumLinks",
+        "Mcp__HostileReviewWorker__MaximumOutputBytes",
+        "Mcp__HostileReviewWorker__MaximumSubmitBytes",
+        "Mcp__HostileReviewWorker__PollInterval",
+        "Mcp__HostileReviewWorker__RenewalInterval",
+        "Mcp__HostileReviewWorker__RequiredEffort",
+        "Mcp__HostileReviewWorker__RequiredModel",
+        "Mcp__HostileReviewWorker__RetryDelay",
+        "Mcp__HostileReviewWorker__RetryDelayCap",
+        "Mcp__Port",
+        "Mcp__ProjectionCliProbe",
+        "Mcp__ProjectionProbe",
+        "MCP_AGENT_DESCRIPTION",
+        "MCP_AGENT_ID",
+        "MCP_AGENT_MODEL",
+        "MCP_AGENT_NAME",
+        "MCP_AGENT_SOURCE_TYPE",
+        "MCP_AGENT_SYSTEM_PROMPT",
+        "MCP_AGENT_VERBOSITY",
+        "MCP_DATABASE_ENCRYPTION_ENABLED",
+        "MCP_DATABASE_MIGRATIONS_ASSEMBLY",
+        "MCP_DATABASE_PROVIDER",
+        "MCP_EF_CONNECTION_STRING",
+        "MCP_EF_MIGRATIONS_ASSEMBLY",
+        "MCP_EF_PROVIDER",
+        "MCP_INSTANCE",
+        "MCP_PLUGIN_HOST",
+        "MCP_POSTGRES_CONNECTION_STRING",
+        "MCP_POSTGRES_TDE_KEY_PROVIDER",
+        "MCP_POSTGRES_TDE_PRINCIPAL_KEY",
+        "MCP_REPOSITORY_ROOT",
+        "MCP_SERVER_API_KEY",
+        "MCP_SERVER_BASE_URL",
+        "MCP_SERVER_BEARER_TOKEN",
+        "MCP_SERVER_DESKTOP_LAUNCH_TOKEN",
+        "MCP_SERVER_URL",
+        "MCP_SERVER_WORKSPACE_PATH",
+        "MCP_SESSION_ID",
+        "MCP_SQLITE_DATA_SOURCE",
+        "MCP_SQLITE_ENCRYPTION_KEY",
+        "MCP_SQLITE_SEE_TOOL_PATH",
+        "MCP_SQLSERVER_CONNECTION_STRING",
+        "MCP_SQLSERVER_TDE_CERTIFICATE",
+        "MCP_SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY",
+        "MCP_TEST_POSTGRES_CONNECTION",
+        "MCP_TEST_SQLSERVER_CONNECTION",
+        "MCP_UNTRUSTED",
+        "MCP_WORKSPACE",
+        "MCP_WORKSPACE_PATH",
+        "MCP_WORKSPACE_START_DIR",
+        "MCPSERVER_CODEX_ONESHOT_TEMP",
+        "MCPSERVER_CODEX_TRIAGE_TEMP",
+        "MCPSERVER_GROK_ONESHOT_TEMP",
+        "MCPSERVER_ONESHOT_TEMP",
+        "MCPSERVER_QUADBRAIN_CLI_TEMP",
+        "MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS",
+        "MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS",
+        "MCPSERVER_WORKSPACE_PATH",
+        "NUGET_PACKAGES",
+        "OPENAI_API_KEY",
+        "OPENAI_MAX_RETRIES",
+        "OPENAI_MODEL",
+        "OPENAI_NETWORK_TIMEOUT_SECONDS",
+        "OPENCODE_API_KEY",
+        "PLUGIN_AGENT_DEFAULT",
+        "PLUGIN_AGENT_NAME",
+        "PORT",
+        "POSTGRES_CONNECTION_STRING",
+        "PUBLIC",
+        "QBAGENT_HIDE_INTENT",
+        "QBAGENT_HOME",
+        "QBAGENT_SHOW_INTENT",
+        "QBrainAi__Database__Provider",
+        "QBrainAi__HostileReviewWorker__AgentName",
+        "QBrainAi__HostileReviewWorker__Enabled",
+        "QBrainAi__HostileReviewWorker__ExecutionTimeout",
+        "QBrainAi__HostileReviewWorker__LeaseDuration",
+        "QBrainAi__HostileReviewWorker__MaximumActiveQueue",
+        "QBrainAi__HostileReviewWorker__MaximumAggregateBytes",
+        "QBrainAi__HostileReviewWorker__MaximumArtifactBytes",
+        "QBrainAi__HostileReviewWorker__MaximumAttempts",
+        "QBrainAi__HostileReviewWorker__MaximumConcurrentReviews",
+        "QBrainAi__HostileReviewWorker__MaximumJsonDepth",
+        "QBrainAi__HostileReviewWorker__MaximumLinks",
+        "QBrainAi__HostileReviewWorker__MaximumOutputBytes",
+        "QBrainAi__HostileReviewWorker__MaximumSubmitBytes",
+        "QBrainAi__HostileReviewWorker__PollInterval",
+        "QBrainAi__HostileReviewWorker__RenewalInterval",
+        "QBrainAi__HostileReviewWorker__RequiredEffort",
+        "QBrainAi__HostileReviewWorker__RequiredModel",
+        "QBrainAi__HostileReviewWorker__RetryDelay",
+        "QBrainAi__HostileReviewWorker__RetryDelayCap",
+        "QBrainAi__Port",
+        "QBrainAi__ProjectionCliProbe",
+        "QBrainAi__ProjectionProbe",
+        "QBRAINAI_AGENT_NAME",
+        "QBRAINAI_DATABASE_ENCRYPTION_ENABLED",
+        "QBRAINAI_DATABASE_MIGRATIONS_ASSEMBLY",
+        "QBRAINAI_DATABASE_PROVIDER",
+        "QBRAINAI_EF_CONNECTION_STRING",
+        "QBRAINAI_EF_MIGRATIONS_ASSEMBLY",
+        "QBRAINAI_EF_PROVIDER",
+        "QBRAINAI_INSTANCE",
+        "QBRAINAI_PLUGIN_HOST",
+        "QBRAINAI_POSTGRES_CONNECTION_STRING",
+        "QBRAINAI_POSTGRES_TDE_KEY_PROVIDER",
+        "QBRAINAI_POSTGRES_TDE_PRINCIPAL_KEY",
+        "QBRAINAI_REPOSITORY_ROOT",
+        "QBRAINAI_SERVER_URL",
+        "QBRAINAI_SESSION_ID",
+        "QBRAINAI_SQLITE_DATA_SOURCE",
+        "QBRAINAI_SQLITE_ENCRYPTION_KEY",
+        "QBRAINAI_SQLITE_SEE_TOOL_PATH",
+        "QBRAINAI_SQLSERVER_CONNECTION_STRING",
+        "QBRAINAI_SQLSERVER_TDE_CERTIFICATE",
+        "QBRAINAI_SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY",
+        "QBRAINAI_WORKSPACE",
+        "QBRAINAI_WORKSPACE_PATH",
+        "QBRAINAI_WORKSPACE_START_DIR",
+        "SystemDrive",
+        "TEMP",
+        "USERPROFILE",
+        "XAI_API_KEY"
+      ],
+      "culture": null,
+      "timeZone": null,
+      "dirtyPaths": []
+    },
+    {
+      "kind": "min",
+      "head": "ccd9e91f00dae4419b39ae8d37c2ae522e6fc62d",
+      "environmentCount": 151,
+      "folderCount": 28,
+      "numericCount": 28,
+      "numericValues": [
+        {
+          "name": "PORT",
+          "value": "-2147483648"
+        },
+        {
+          "name": "Mcp__Port",
+          "value": "-2147483648"
+        },
+        {
+          "name": "QBrainAi__Port",
+          "value": "-2147483648"
+        },
+        {
+          "name": "MCP_UNTRUSTED",
+          "value": "-2147483648"
+        },
+        {
+          "name": "MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS",
+          "value": "-2147483648"
+        },
+        {
+          "name": "MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS",
+          "value": "-2147483648"
+        },
+        {
+          "name": "QBAGENT_SHOW_INTENT",
+          "value": "-2147483648"
+        },
+        {
+          "name": "QBAGENT_HIDE_INTENT",
+          "value": "-2147483648"
+        },
+        {
+          "name": "OPENAI_NETWORK_TIMEOUT_SECONDS",
+          "value": "-2147483648"
+        },
+        {
+          "name": "OPENAI_MAX_RETRIES",
+          "value": "-2147483648"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumActiveQueue",
+          "value": "-2147483648"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumActiveQueue",
+          "value": "-2147483648"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumConcurrentReviews",
+          "value": "-2147483648"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumConcurrentReviews",
+          "value": "-2147483648"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumAttempts",
+          "value": "-2147483648"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumAttempts",
+          "value": "-2147483648"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumLinks",
+          "value": "-2147483648"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumLinks",
+          "value": "-2147483648"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumArtifactBytes",
+          "value": "-2147483648"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumArtifactBytes",
+          "value": "-2147483648"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumAggregateBytes",
+          "value": "-2147483648"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumAggregateBytes",
+          "value": "-2147483648"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumOutputBytes",
+          "value": "-2147483648"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumOutputBytes",
+          "value": "-2147483648"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumJsonDepth",
+          "value": "-2147483648"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumJsonDepth",
+          "value": "-2147483648"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumSubmitBytes",
+          "value": "-2147483648"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumSubmitBytes",
+          "value": "-2147483648"
+        }
+      ],
+      "environmentNames": [
+        "ANTHROPIC_API_KEY",
+        "ASPNETCORE_ENVIRONMENT",
+        "AZURE_OPENAI_API_KEY",
+        "CLAUDE_PLUGIN_ROOT",
+        "CLAUDE_PROJECT_DIR",
+        "CLINE_API_KEY",
+        "CLINE_PLUGIN_ROOT",
+        "CODEX_PLUGIN_ROOT",
+        "COPILOT_GITHUB_TOKEN",
+        "COPILOT_PLUGIN_ROOT",
+        "DATABASE_URL",
+        "DOTNET_CLI_HOME",
+        "DOTNET_ENVIRONMENT",
+        "GH_TOKEN",
+        "GROK_HOME",
+        "GROK_PLUGIN_ROOT",
+        "HOME",
+        "Mcp__Database__Provider",
+        "Mcp__HostileReviewWorker__AgentName",
+        "Mcp__HostileReviewWorker__Enabled",
+        "Mcp__HostileReviewWorker__ExecutionTimeout",
+        "Mcp__HostileReviewWorker__LeaseDuration",
+        "Mcp__HostileReviewWorker__MaximumActiveQueue",
+        "Mcp__HostileReviewWorker__MaximumAggregateBytes",
+        "Mcp__HostileReviewWorker__MaximumArtifactBytes",
+        "Mcp__HostileReviewWorker__MaximumAttempts",
+        "Mcp__HostileReviewWorker__MaximumConcurrentReviews",
+        "Mcp__HostileReviewWorker__MaximumJsonDepth",
+        "Mcp__HostileReviewWorker__MaximumLinks",
+        "Mcp__HostileReviewWorker__MaximumOutputBytes",
+        "Mcp__HostileReviewWorker__MaximumSubmitBytes",
+        "Mcp__HostileReviewWorker__PollInterval",
+        "Mcp__HostileReviewWorker__RenewalInterval",
+        "Mcp__HostileReviewWorker__RequiredEffort",
+        "Mcp__HostileReviewWorker__RequiredModel",
+        "Mcp__HostileReviewWorker__RetryDelay",
+        "Mcp__HostileReviewWorker__RetryDelayCap",
+        "Mcp__Port",
+        "Mcp__ProjectionCliProbe",
+        "Mcp__ProjectionProbe",
+        "MCP_AGENT_DESCRIPTION",
+        "MCP_AGENT_ID",
+        "MCP_AGENT_MODEL",
+        "MCP_AGENT_NAME",
+        "MCP_AGENT_SOURCE_TYPE",
+        "MCP_AGENT_SYSTEM_PROMPT",
+        "MCP_AGENT_VERBOSITY",
+        "MCP_DATABASE_ENCRYPTION_ENABLED",
+        "MCP_DATABASE_MIGRATIONS_ASSEMBLY",
+        "MCP_DATABASE_PROVIDER",
+        "MCP_EF_CONNECTION_STRING",
+        "MCP_EF_MIGRATIONS_ASSEMBLY",
+        "MCP_EF_PROVIDER",
+        "MCP_INSTANCE",
+        "MCP_PLUGIN_HOST",
+        "MCP_POSTGRES_CONNECTION_STRING",
+        "MCP_POSTGRES_TDE_KEY_PROVIDER",
+        "MCP_POSTGRES_TDE_PRINCIPAL_KEY",
+        "MCP_REPOSITORY_ROOT",
+        "MCP_SERVER_API_KEY",
+        "MCP_SERVER_BASE_URL",
+        "MCP_SERVER_BEARER_TOKEN",
+        "MCP_SERVER_DESKTOP_LAUNCH_TOKEN",
+        "MCP_SERVER_URL",
+        "MCP_SERVER_WORKSPACE_PATH",
+        "MCP_SESSION_ID",
+        "MCP_SQLITE_DATA_SOURCE",
+        "MCP_SQLITE_ENCRYPTION_KEY",
+        "MCP_SQLITE_SEE_TOOL_PATH",
+        "MCP_SQLSERVER_CONNECTION_STRING",
+        "MCP_SQLSERVER_TDE_CERTIFICATE",
+        "MCP_SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY",
+        "MCP_TEST_POSTGRES_CONNECTION",
+        "MCP_TEST_SQLSERVER_CONNECTION",
+        "MCP_UNTRUSTED",
+        "MCP_WORKSPACE",
+        "MCP_WORKSPACE_PATH",
+        "MCP_WORKSPACE_START_DIR",
+        "MCPSERVER_CODEX_ONESHOT_TEMP",
+        "MCPSERVER_CODEX_TRIAGE_TEMP",
+        "MCPSERVER_GROK_ONESHOT_TEMP",
+        "MCPSERVER_ONESHOT_TEMP",
+        "MCPSERVER_QUADBRAIN_CLI_TEMP",
+        "MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS",
+        "MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS",
+        "MCPSERVER_WORKSPACE_PATH",
+        "NUGET_PACKAGES",
+        "OPENAI_API_KEY",
+        "OPENAI_MAX_RETRIES",
+        "OPENAI_MODEL",
+        "OPENAI_NETWORK_TIMEOUT_SECONDS",
+        "OPENCODE_API_KEY",
+        "PLUGIN_AGENT_DEFAULT",
+        "PLUGIN_AGENT_NAME",
+        "PORT",
+        "POSTGRES_CONNECTION_STRING",
+        "PUBLIC",
+        "QBAGENT_HIDE_INTENT",
+        "QBAGENT_HOME",
+        "QBAGENT_SHOW_INTENT",
+        "QBrainAi__Database__Provider",
+        "QBrainAi__HostileReviewWorker__AgentName",
+        "QBrainAi__HostileReviewWorker__Enabled",
+        "QBrainAi__HostileReviewWorker__ExecutionTimeout",
+        "QBrainAi__HostileReviewWorker__LeaseDuration",
+        "QBrainAi__HostileReviewWorker__MaximumActiveQueue",
+        "QBrainAi__HostileReviewWorker__MaximumAggregateBytes",
+        "QBrainAi__HostileReviewWorker__MaximumArtifactBytes",
+        "QBrainAi__HostileReviewWorker__MaximumAttempts",
+        "QBrainAi__HostileReviewWorker__MaximumConcurrentReviews",
+        "QBrainAi__HostileReviewWorker__MaximumJsonDepth",
+        "QBrainAi__HostileReviewWorker__MaximumLinks",
+        "QBrainAi__HostileReviewWorker__MaximumOutputBytes",
+        "QBrainAi__HostileReviewWorker__MaximumSubmitBytes",
+        "QBrainAi__HostileReviewWorker__PollInterval",
+        "QBrainAi__HostileReviewWorker__RenewalInterval",
+        "QBrainAi__HostileReviewWorker__RequiredEffort",
+        "QBrainAi__HostileReviewWorker__RequiredModel",
+        "QBrainAi__HostileReviewWorker__RetryDelay",
+        "QBrainAi__HostileReviewWorker__RetryDelayCap",
+        "QBrainAi__Port",
+        "QBrainAi__ProjectionCliProbe",
+        "QBrainAi__ProjectionProbe",
+        "QBRAINAI_AGENT_NAME",
+        "QBRAINAI_DATABASE_ENCRYPTION_ENABLED",
+        "QBRAINAI_DATABASE_MIGRATIONS_ASSEMBLY",
+        "QBRAINAI_DATABASE_PROVIDER",
+        "QBRAINAI_EF_CONNECTION_STRING",
+        "QBRAINAI_EF_MIGRATIONS_ASSEMBLY",
+        "QBRAINAI_EF_PROVIDER",
+        "QBRAINAI_INSTANCE",
+        "QBRAINAI_PLUGIN_HOST",
+        "QBRAINAI_POSTGRES_CONNECTION_STRING",
+        "QBRAINAI_POSTGRES_TDE_KEY_PROVIDER",
+        "QBRAINAI_POSTGRES_TDE_PRINCIPAL_KEY",
+        "QBRAINAI_REPOSITORY_ROOT",
+        "QBRAINAI_SERVER_URL",
+        "QBRAINAI_SESSION_ID",
+        "QBRAINAI_SQLITE_DATA_SOURCE",
+        "QBRAINAI_SQLITE_ENCRYPTION_KEY",
+        "QBRAINAI_SQLITE_SEE_TOOL_PATH",
+        "QBRAINAI_SQLSERVER_CONNECTION_STRING",
+        "QBRAINAI_SQLSERVER_TDE_CERTIFICATE",
+        "QBRAINAI_SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY",
+        "QBRAINAI_WORKSPACE",
+        "QBRAINAI_WORKSPACE_PATH",
+        "QBRAINAI_WORKSPACE_START_DIR",
+        "SystemDrive",
+        "TEMP",
+        "USERPROFILE",
+        "XAI_API_KEY"
+      ],
+      "culture": null,
+      "timeZone": null,
+      "dirtyPaths": []
+    },
+    {
+      "kind": "locale",
+      "head": "ccd9e91f00dae4419b39ae8d37c2ae522e6fc62d",
+      "environmentCount": 154,
+      "folderCount": 28,
+      "numericCount": 28,
+      "numericValues": [
+        {
+          "name": "PORT",
+          "value": "1"
+        },
+        {
+          "name": "Mcp__Port",
+          "value": "1"
+        },
+        {
+          "name": "QBrainAi__Port",
+          "value": "1"
+        },
+        {
+          "name": "MCP_UNTRUSTED",
+          "value": "1"
+        },
+        {
+          "name": "MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS",
+          "value": "1"
+        },
+        {
+          "name": "MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS",
+          "value": "1"
+        },
+        {
+          "name": "QBAGENT_SHOW_INTENT",
+          "value": "1"
+        },
+        {
+          "name": "QBAGENT_HIDE_INTENT",
+          "value": "1"
+        },
+        {
+          "name": "OPENAI_NETWORK_TIMEOUT_SECONDS",
+          "value": "1"
+        },
+        {
+          "name": "OPENAI_MAX_RETRIES",
+          "value": "hostile-not-a-number"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumActiveQueue",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumActiveQueue",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumConcurrentReviews",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumConcurrentReviews",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumAttempts",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumAttempts",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumLinks",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumLinks",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumArtifactBytes",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumArtifactBytes",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumAggregateBytes",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumAggregateBytes",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumOutputBytes",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumOutputBytes",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumJsonDepth",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumJsonDepth",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "Mcp__HostileReviewWorker__MaximumSubmitBytes",
+          "value": "hostile-config-probe"
+        },
+        {
+          "name": "QBrainAi__HostileReviewWorker__MaximumSubmitBytes",
+          "value": "hostile-config-probe"
+        }
+      ],
+      "environmentNames": [
+        "ANTHROPIC_API_KEY",
+        "ASPNETCORE_ENVIRONMENT",
+        "AZURE_OPENAI_API_KEY",
+        "CLAUDE_PLUGIN_ROOT",
+        "CLAUDE_PROJECT_DIR",
+        "CLINE_API_KEY",
+        "CLINE_PLUGIN_ROOT",
+        "CODEX_PLUGIN_ROOT",
+        "COPILOT_GITHUB_TOKEN",
+        "COPILOT_PLUGIN_ROOT",
+        "DATABASE_URL",
+        "DOTNET_CLI_HOME",
+        "DOTNET_ENVIRONMENT",
+        "GH_TOKEN",
+        "GROK_HOME",
+        "GROK_PLUGIN_ROOT",
+        "HOME",
+        "LANG",
+        "LC_ALL",
+        "Mcp__Database__Provider",
+        "Mcp__HostileReviewWorker__AgentName",
+        "Mcp__HostileReviewWorker__Enabled",
+        "Mcp__HostileReviewWorker__ExecutionTimeout",
+        "Mcp__HostileReviewWorker__LeaseDuration",
+        "Mcp__HostileReviewWorker__MaximumActiveQueue",
+        "Mcp__HostileReviewWorker__MaximumAggregateBytes",
+        "Mcp__HostileReviewWorker__MaximumArtifactBytes",
+        "Mcp__HostileReviewWorker__MaximumAttempts",
+        "Mcp__HostileReviewWorker__MaximumConcurrentReviews",
+        "Mcp__HostileReviewWorker__MaximumJsonDepth",
+        "Mcp__HostileReviewWorker__MaximumLinks",
+        "Mcp__HostileReviewWorker__MaximumOutputBytes",
+        "Mcp__HostileReviewWorker__MaximumSubmitBytes",
+        "Mcp__HostileReviewWorker__PollInterval",
+        "Mcp__HostileReviewWorker__RenewalInterval",
+        "Mcp__HostileReviewWorker__RequiredEffort",
+        "Mcp__HostileReviewWorker__RequiredModel",
+        "Mcp__HostileReviewWorker__RetryDelay",
+        "Mcp__HostileReviewWorker__RetryDelayCap",
+        "Mcp__Port",
+        "Mcp__ProjectionCliProbe",
+        "Mcp__ProjectionProbe",
+        "MCP_AGENT_DESCRIPTION",
+        "MCP_AGENT_ID",
+        "MCP_AGENT_MODEL",
+        "MCP_AGENT_NAME",
+        "MCP_AGENT_SOURCE_TYPE",
+        "MCP_AGENT_SYSTEM_PROMPT",
+        "MCP_AGENT_VERBOSITY",
+        "MCP_DATABASE_ENCRYPTION_ENABLED",
+        "MCP_DATABASE_MIGRATIONS_ASSEMBLY",
+        "MCP_DATABASE_PROVIDER",
+        "MCP_EF_CONNECTION_STRING",
+        "MCP_EF_MIGRATIONS_ASSEMBLY",
+        "MCP_EF_PROVIDER",
+        "MCP_INSTANCE",
+        "MCP_PLUGIN_HOST",
+        "MCP_POSTGRES_CONNECTION_STRING",
+        "MCP_POSTGRES_TDE_KEY_PROVIDER",
+        "MCP_POSTGRES_TDE_PRINCIPAL_KEY",
+        "MCP_REPOSITORY_ROOT",
+        "MCP_SERVER_API_KEY",
+        "MCP_SERVER_BASE_URL",
+        "MCP_SERVER_BEARER_TOKEN",
+        "MCP_SERVER_DESKTOP_LAUNCH_TOKEN",
+        "MCP_SERVER_URL",
+        "MCP_SERVER_WORKSPACE_PATH",
+        "MCP_SESSION_ID",
+        "MCP_SQLITE_DATA_SOURCE",
+        "MCP_SQLITE_ENCRYPTION_KEY",
+        "MCP_SQLITE_SEE_TOOL_PATH",
+        "MCP_SQLSERVER_CONNECTION_STRING",
+        "MCP_SQLSERVER_TDE_CERTIFICATE",
+        "MCP_SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY",
+        "MCP_TEST_POSTGRES_CONNECTION",
+        "MCP_TEST_SQLSERVER_CONNECTION",
+        "MCP_UNTRUSTED",
+        "MCP_WORKSPACE",
+        "MCP_WORKSPACE_PATH",
+        "MCP_WORKSPACE_START_DIR",
+        "MCPSERVER_CODEX_ONESHOT_TEMP",
+        "MCPSERVER_CODEX_TRIAGE_TEMP",
+        "MCPSERVER_GROK_ONESHOT_TEMP",
+        "MCPSERVER_ONESHOT_TEMP",
+        "MCPSERVER_QUADBRAIN_CLI_TEMP",
+        "MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS",
+        "MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS",
+        "MCPSERVER_WORKSPACE_PATH",
+        "NUGET_PACKAGES",
+        "OPENAI_API_KEY",
+        "OPENAI_MAX_RETRIES",
+        "OPENAI_MODEL",
+        "OPENAI_NETWORK_TIMEOUT_SECONDS",
+        "OPENCODE_API_KEY",
+        "PLUGIN_AGENT_DEFAULT",
+        "PLUGIN_AGENT_NAME",
+        "PORT",
+        "POSTGRES_CONNECTION_STRING",
+        "PUBLIC",
+        "QBAGENT_HIDE_INTENT",
+        "QBAGENT_HOME",
+        "QBAGENT_SHOW_INTENT",
+        "QBrainAi__Database__Provider",
+        "QBrainAi__HostileReviewWorker__AgentName",
+        "QBrainAi__HostileReviewWorker__Enabled",
+        "QBrainAi__HostileReviewWorker__ExecutionTimeout",
+        "QBrainAi__HostileReviewWorker__LeaseDuration",
+        "QBrainAi__HostileReviewWorker__MaximumActiveQueue",
+        "QBrainAi__HostileReviewWorker__MaximumAggregateBytes",
+        "QBrainAi__HostileReviewWorker__MaximumArtifactBytes",
+        "QBrainAi__HostileReviewWorker__MaximumAttempts",
+        "QBrainAi__HostileReviewWorker__MaximumConcurrentReviews",
+        "QBrainAi__HostileReviewWorker__MaximumJsonDepth",
+        "QBrainAi__HostileReviewWorker__MaximumLinks",
+        "QBrainAi__HostileReviewWorker__MaximumOutputBytes",
+        "QBrainAi__HostileReviewWorker__MaximumSubmitBytes",
+        "QBrainAi__HostileReviewWorker__PollInterval",
+        "QBrainAi__HostileReviewWorker__RenewalInterval",
+        "QBrainAi__HostileReviewWorker__RequiredEffort",
+        "QBrainAi__HostileReviewWorker__RequiredModel",
+        "QBrainAi__HostileReviewWorker__RetryDelay",
+        "QBrainAi__HostileReviewWorker__RetryDelayCap",
+        "QBrainAi__Port",
+        "QBrainAi__ProjectionCliProbe",
+        "QBrainAi__ProjectionProbe",
+        "QBRAINAI_AGENT_NAME",
+        "QBRAINAI_DATABASE_ENCRYPTION_ENABLED",
+        "QBRAINAI_DATABASE_MIGRATIONS_ASSEMBLY",
+        "QBRAINAI_DATABASE_PROVIDER",
+        "QBRAINAI_EF_CONNECTION_STRING",
+        "QBRAINAI_EF_MIGRATIONS_ASSEMBLY",
+        "QBRAINAI_EF_PROVIDER",
+        "QBRAINAI_INSTANCE",
+        "QBRAINAI_PLUGIN_HOST",
+        "QBRAINAI_POSTGRES_CONNECTION_STRING",
+        "QBRAINAI_POSTGRES_TDE_KEY_PROVIDER",
+        "QBRAINAI_POSTGRES_TDE_PRINCIPAL_KEY",
+        "QBRAINAI_REPOSITORY_ROOT",
+        "QBRAINAI_SERVER_URL",
+        "QBRAINAI_SESSION_ID",
+        "QBRAINAI_SQLITE_DATA_SOURCE",
+        "QBRAINAI_SQLITE_ENCRYPTION_KEY",
+        "QBRAINAI_SQLITE_SEE_TOOL_PATH",
+        "QBRAINAI_SQLSERVER_CONNECTION_STRING",
+        "QBRAINAI_SQLSERVER_TDE_CERTIFICATE",
+        "QBRAINAI_SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY",
+        "QBRAINAI_WORKSPACE",
+        "QBRAINAI_WORKSPACE_PATH",
+        "QBRAINAI_WORKSPACE_START_DIR",
+        "SystemDrive",
+        "TEMP",
+        "TZ",
+        "USERPROFILE",
+        "XAI_API_KEY"
+      ],
+      "culture": "tr_TR.UTF-8",
+      "timeZone": "Pacific/Kiritimati",
+      "dirtyPaths": []
+    }
+  ],
+  "literalReads": [
+    {
+      "path": "tests/Shared/TestRepositoryRoot.cs",
+      "line": 73,
+      "name": "MCP_REPOSITORY_ROOT",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs",
+      "line": 27,
+      "name": "MCP_TEST_POSTGRES_CONNECTION",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs",
+      "line": 218,
+      "name": "MCP_TEST_SQLSERVER_CONNECTION",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs",
+      "line": 24,
+      "name": "MCP_TEST_POSTGRES_CONNECTION",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+      "line": 29,
+      "name": "PATH",
+      "present": false,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+      "line": 32,
+      "name": "TEMP",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "line": 139,
+      "name": "GROK_PLUGIN_ROOT",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "line": 140,
+      "name": "GROK_HOME",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "line": 141,
+      "name": "GROK_PLUGIN_ROOT",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "line": 142,
+      "name": "GROK_HOME",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "line": 149,
+      "name": "GROK_PLUGIN_ROOT",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "line": 150,
+      "name": "GROK_HOME",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+      "line": 26,
+      "name": "PUBLIC",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+      "line": 39,
+      "name": "PUBLIC",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+      "line": 54,
+      "name": "PUBLIC",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Program.cs",
+      "line": 172,
+      "name": "PORT",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "line": 204,
+      "name": "QBRAINAI_INSTANCE",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "line": 205,
+      "name": "MCP_INSTANCE",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "line": 208,
+      "name": "QBRAINAI_INSTANCE",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "line": 209,
+      "name": "MCP_INSTANCE",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "line": 217,
+      "name": "QBRAINAI_INSTANCE",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "line": 218,
+      "name": "MCP_INSTANCE",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "line": 231,
+      "name": "QBRAINAI_INSTANCE",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "line": 232,
+      "name": "MCP_INSTANCE",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "line": 235,
+      "name": "QBRAINAI_INSTANCE",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "line": 236,
+      "name": "MCP_INSTANCE",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "line": 244,
+      "name": "QBRAINAI_INSTANCE",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+      "line": 245,
+      "name": "MCP_INSTANCE",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "line": 75,
+      "name": "MCP_DATABASE_MIGRATIONS_ASSEMBLY",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "line": 75,
+      "name": "QBRAINAI_DATABASE_MIGRATIONS_ASSEMBLY",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "line": 111,
+      "name": "MCP_SQLITE_DATA_SOURCE",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "line": 111,
+      "name": "QBRAINAI_SQLITE_DATA_SOURCE",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "line": 159,
+      "name": "MCP_SQLSERVER_CONNECTION_STRING",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "line": 159,
+      "name": "QBRAINAI_SQLSERVER_CONNECTION_STRING",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "line": 173,
+      "name": "MCP_DATABASE_PROVIDER",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "line": 173,
+      "name": "QBRAINAI_DATABASE_PROVIDER",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "line": 179,
+      "name": "MCP_DATABASE_ENCRYPTION_ENABLED",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "line": 179,
+      "name": "QBRAINAI_DATABASE_ENCRYPTION_ENABLED",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "line": 185,
+      "name": "MCP_SQLITE_ENCRYPTION_KEY",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "line": 185,
+      "name": "QBRAINAI_SQLITE_ENCRYPTION_KEY",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "line": 187,
+      "name": "MCP_SQLITE_SEE_TOOL_PATH",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "line": 187,
+      "name": "QBRAINAI_SQLITE_SEE_TOOL_PATH",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "line": 189,
+      "name": "MCP_POSTGRES_TDE_KEY_PROVIDER",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "line": 189,
+      "name": "QBRAINAI_POSTGRES_TDE_KEY_PROVIDER",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "line": 191,
+      "name": "MCP_POSTGRES_TDE_PRINCIPAL_KEY",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "line": 191,
+      "name": "QBRAINAI_POSTGRES_TDE_PRINCIPAL_KEY",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "line": 193,
+      "name": "MCP_SQLSERVER_TDE_CERTIFICATE",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "line": 193,
+      "name": "QBRAINAI_SQLSERVER_TDE_CERTIFICATE",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "line": 195,
+      "name": "MCP_SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs",
+      "line": 195,
+      "name": "QBRAINAI_SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs",
+      "line": 202,
+      "name": "MCP_INSTANCE",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs",
+      "line": 202,
+      "name": "QBRAINAI_INSTANCE",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs",
+      "line": 292,
+      "name": "ASPNETCORE_ENVIRONMENT",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs",
+      "line": 293,
+      "name": "DOTNET_ENVIRONMENT",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs",
+      "line": 411,
+      "name": "MCPSERVER_QUADBRAIN_CLI_TEMP",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs",
+      "line": 412,
+      "name": "MCPSERVER_ONESHOT_TEMP",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+      "line": 68,
+      "name": "MCP_INSTANCE",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+      "line": 68,
+      "name": "QBRAINAI_INSTANCE",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+      "line": 76,
+      "name": "MCP_INSTANCE",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+      "line": 77,
+      "name": "QBRAINAI_INSTANCE",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+      "line": 80,
+      "name": "QBRAINAI_INSTANCE",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+      "line": 81,
+      "name": "MCP_INSTANCE",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+      "line": 98,
+      "name": "MCP_INSTANCE",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+      "line": 99,
+      "name": "QBRAINAI_INSTANCE",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs",
+      "line": 20,
+      "name": "MCP_REPOSITORY_ROOT",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs",
+      "line": 24,
+      "name": "MCP_REPOSITORY_ROOT",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs",
+      "line": 34,
+      "name": "MCP_REPOSITORY_ROOT",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+      "line": 164,
+      "name": "OPENAI_API_KEY",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+      "line": 165,
+      "name": "AZURE_OPENAI_API_KEY",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+      "line": 168,
+      "name": "OPENAI_API_KEY",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+      "line": 169,
+      "name": "AZURE_OPENAI_API_KEY",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+      "line": 185,
+      "name": "OPENAI_API_KEY",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+      "line": 186,
+      "name": "AZURE_OPENAI_API_KEY",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+      "line": 108,
+      "name": "XAI_API_KEY",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+      "line": 109,
+      "name": "XAI_API_KEY",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+      "line": 118,
+      "name": "XAI_API_KEY",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+      "line": 136,
+      "name": "XAI_API_KEY",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+      "line": 137,
+      "name": "XAI_API_KEY",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+      "line": 151,
+      "name": "XAI_API_KEY",
+      "present": true,
+      "method": "SetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+      "line": 139,
+      "name": "MCP_WORKSPACE_PATH",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+      "line": 139,
+      "name": "QBRAINAI_WORKSPACE_PATH",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+      "line": 140,
+      "name": "MCPSERVER_WORKSPACE_PATH",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+      "line": 141,
+      "name": "MCP_WORKSPACE_START_DIR",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+      "line": 141,
+      "name": "QBRAINAI_WORKSPACE_START_DIR",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+      "line": 142,
+      "name": "CLAUDE_PROJECT_DIR",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+      "line": 158,
+      "name": "MCP_AGENT_NAME",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+      "line": 158,
+      "name": "QBRAINAI_AGENT_NAME",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+      "line": 159,
+      "name": "PLUGIN_AGENT_NAME",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+      "line": 160,
+      "name": "PLUGIN_AGENT_DEFAULT",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+      "line": 161,
+      "name": "MCP_PLUGIN_HOST",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+      "line": 161,
+      "name": "QBRAINAI_PLUGIN_HOST",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+      "line": 201,
+      "name": "MCP_SESSION_ID",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Core/TodoSelectionStore.cs",
+      "line": 201,
+      "name": "QBRAINAI_SESSION_ID",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Common.AgentCli/ProcessEnvironmentService.cs",
+      "line": 23,
+      "name": "GH_TOKEN",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Common.AgentCli/ProcessEnvironmentService.cs",
+      "line": 63,
+      "name": "PATH",
+      "present": false,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Common.AgentCli/ProcessEnvironmentService.cs",
+      "line": 262,
+      "name": "PUBLIC",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.QBAgent/QBAgentSessionLog.cs",
+      "line": 49,
+      "name": "QBAGENT_HOME",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Storage/McpDbContextFactory.cs",
+      "line": 26,
+      "name": "MCP_EF_PROVIDER",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Storage/McpDbContextFactory.cs",
+      "line": 26,
+      "name": "QBRAINAI_EF_PROVIDER",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Storage/McpDbContextFactory.cs",
+      "line": 30,
+      "name": "MCP_EF_MIGRATIONS_ASSEMBLY",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Storage/McpDbContextFactory.cs",
+      "line": 30,
+      "name": "QBRAINAI_EF_MIGRATIONS_ASSEMBLY",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Storage/McpDbContextFactory.cs",
+      "line": 41,
+      "name": "MCP_EF_CONNECTION_STRING",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Storage/McpDbContextFactory.cs",
+      "line": 41,
+      "name": "QBRAINAI_EF_CONNECTION_STRING",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Storage/McpDbContextFactory.cs",
+      "line": 52,
+      "name": "MCP_SQLITE_DATA_SOURCE",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Storage/McpDbContextFactory.cs",
+      "line": 52,
+      "name": "QBRAINAI_SQLITE_DATA_SOURCE",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Storage/McpDbContextFactory.cs",
+      "line": 54,
+      "name": "MCP_POSTGRES_CONNECTION_STRING",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Storage/McpDbContextFactory.cs",
+      "line": 54,
+      "name": "QBRAINAI_POSTGRES_CONNECTION_STRING",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Storage/McpDbContextFactory.cs",
+      "line": 56,
+      "name": "MCP_SQLSERVER_CONNECTION_STRING",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Storage/McpDbContextFactory.cs",
+      "line": 56,
+      "name": "QBRAINAI_SQLSERVER_CONNECTION_STRING",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      "line": 55,
+      "name": "MCP_AGENT_NAME",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      "line": 55,
+      "name": "QBRAINAI_AGENT_NAME",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      "line": 56,
+      "name": "PLUGIN_AGENT_NAME",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      "line": 57,
+      "name": "PLUGIN_AGENT_DEFAULT",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      "line": 58,
+      "name": "MCP_PLUGIN_HOST",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      "line": 58,
+      "name": "QBRAINAI_PLUGIN_HOST",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      "line": 123,
+      "name": "MCP_SERVER_URL",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      "line": 123,
+      "name": "QBRAINAI_SERVER_URL",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      "line": 148,
+      "name": "MCP_WORKSPACE_PATH",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      "line": 148,
+      "name": "QBRAINAI_WORKSPACE_PATH",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      "line": 154,
+      "name": "MCP_WORKSPACE",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      "line": 154,
+      "name": "QBRAINAI_WORKSPACE",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      "line": 289,
+      "name": "MCP_WORKSPACE_PATH",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      "line": 289,
+      "name": "QBRAINAI_WORKSPACE_PATH",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      "line": 290,
+      "name": "MCP_WORKSPACE",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+      "line": 290,
+      "name": "QBRAINAI_WORKSPACE",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Services/Memory/Bench/MemoryBenchGrokMultiTurnAdapter.cs",
+      "line": 25,
+      "name": "XAI_API_KEY",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Services/Memory/Bench/MemoryBenchGrokAdapter.cs",
+      "line": 26,
+      "name": "XAI_API_KEY",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Services/Options/McpInstanceResolver.cs",
+      "line": 20,
+      "name": "MCP_INSTANCE",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Services/Options/McpInstanceResolver.cs",
+      "line": 20,
+      "name": "QBRAINAI_INSTANCE",
+      "present": true,
+      "method": "GetLegacy"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs",
+      "line": 417,
+      "name": "MCPSERVER_CODEX_ONESHOT_TEMP",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs",
+      "line": 418,
+      "name": "MCPSERVER_CODEX_TRIAGE_TEMP",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/GrokCliAgentExecutionStrategy.cs",
+      "line": 477,
+      "name": "MCPSERVER_GROK_ONESHOT_TEMP",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/GrokCliAgentExecutionStrategy.cs",
+      "line": 478,
+      "name": "MCPSERVER_ONESHOT_TEMP",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs",
+      "line": 494,
+      "name": "MCPSERVER_ONESHOT_TEMP",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs",
+      "line": 495,
+      "name": "MCPSERVER_CODEX_ONESHOT_TEMP",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs",
+      "line": 496,
+      "name": "MCPSERVER_CODEX_TRIAGE_TEMP",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/VoiceConversationService.cs",
+      "line": 1322,
+      "name": "SystemDrive",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/SessionLogTurnContextValidator.cs",
+      "line": 144,
+      "name": "HOME",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/SessionLogTurnContextValidator.cs",
+      "line": 145,
+      "name": "USERPROFILE",
+      "present": true,
+      "method": "GetEnvironmentVariable"
+    }
+  ],
+  "omissions": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+      "line": 29,
+      "name": "PATH",
+      "present": false,
+      "method": "GetEnvironmentVariable"
+    },
+    {
+      "path": "src/QBrainAi.Common.AgentCli/ProcessEnvironmentService.cs",
+      "line": 63,
+      "name": "PATH",
+      "present": false,
+      "method": "GetEnvironmentVariable"
+    }
+  ]
+}

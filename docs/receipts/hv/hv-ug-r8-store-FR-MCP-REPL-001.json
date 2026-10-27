@@ -1,0 +1,26 @@
+{
+  "TimestampLocal": "2026-10-27T03:46:37",
+  "Method": "workflow.requirements.getFr",
+  "Params": {
+    "id": "FR-MCP-REPL-001"
+  },
+  "Response": {
+    "payload": {
+      "requestId": "req-20261027T084638Z-af41",
+      "deprecated": true,
+      "result": {
+        "scopeStartLayerKey": "layer-1",
+        "acceptanceCriteria": [],
+        "title": "YAML Protocol STDIO REPL Host",
+        "status": "✅ complete",
+        "id": "FR-MCP-REPL-001",
+        "description": "The server shall provide a YAML-envelope STDIO REPL host that accepts structured commands over standard input, executes operations against workspace services, and returns structured YAML responses over standard output. The REPL host shall support the same trust bootstrap, authentication, and workspace resolution semantics as the HTTP and MCP STDIO transports.\n\n\n**Technical Implementation:** [TR-MCP-REPL-001](./Technical-Requirements.md#tr-mcp-repl-001) | [TR-MCP-REPL-002](./Technical-Requirements.md#tr-mcp-repl-002) | [Mapping](./TR-per-FR-Mapping.md)\n\n**Covered by:** `QBrainAi.Repl.Core` (`IReplProtocol`, `IYamlEnvelope`, `IYamlSerializer`, `IMarkerFileReader`, `ITrustBootstrapService`, `IAuthRotationHandler`, `IWorkspaceSelector`), `QBrainAi.Repl.Host` (`Program.cs`, `AgentStdioHandler`, `InteractiveHandler`, `ServiceCollectionExtensions`)",
+        "area": "MCP",
+        "priority": "medium",
+        "updatedAt": "2026-10-27T08:46:39.9848554+00:00",
+        "createdAt": "2026-10-27T08:46:39.9847124+00:00"
+      }
+    },
+    "type": "result"
+  }
+}

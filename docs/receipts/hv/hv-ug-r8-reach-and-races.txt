@@ -1,0 +1,166 @@
+rg: tests/QBrainAi.Support.Mcp.Tests/Handoff: No such file or directory (os error 2)
+tests/QBrainAi.Support.Mcp.Tests/Services/AuditedAgentCliClientTests.cs:103:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/EfTodoService_WorkspaceIsolationTests.cs:55:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/EfTodoService_WorkspaceIsolationTests.cs:260:            .AddInMemoryCollection(new Dictionary<string, string?>
+tests/QBrainAi.Support.Mcp.Tests/Services/EfTodoServiceTests.cs:50:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/HealthEndpointStoragePayloadTests.cs:52:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/HealthEndpointStoragePayloadTests.cs:81:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/HealthEndpointStoragePayloadTests.cs:110:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/EfTodoServiceRequirementLinkTests.cs:31:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/EfTodoServiceRequirementLinkTests.cs:67:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/DesktopLaunchServiceTests.cs:121:            .AddInMemoryCollection(
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffServiceRegistrationTests.cs:21:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs:620:            var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotStartupSeederTests.cs:150:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementScopeLayerServiceTests.cs:199:            var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentHelp/AgentHelpPinnedPathResolverTestFactory.cs:18:            .AddInMemoryCollection(settings)
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentHelp/AgentHelpPinnedPathResolverTestFactory.cs:20:        var services = new ServiceCollection().BuildServiceProvider();
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagServiceTests.cs:118:            .AddInMemoryCollection(new Dictionary<string, string?> { ["DataFolder"] = dataFolder })
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagServiceTests.cs:137:            .AddInMemoryCollection(new Dictionary<string, string?> { ["DataFolder"] = dataFolder })
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagServiceTests.cs:238:            .AddInMemoryCollection(new Dictionary<string, string?> { ["DataFolder"] = _workspacePath })
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSubmitBudgetTests.cs:51:            .AddInMemoryCollection(new Dictionary<string, string?>
+tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:386:        Assert.Collection(
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagRelationshipCrudTests.cs:230:            .AddInMemoryCollection(new Dictionary<string, string?> { ["DataFolder"] = _tempWorkspacePath })
+tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedMemoryServiceTests.cs:23:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentHelp/AgentHelpConversationServiceTests.cs:427:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/FederationStateAdapterRegistryTests.cs:44:        Assert.Collection(
+tests/QBrainAi.Support.Mcp.Tests/Services/FederationStateAdapterRegistryTests.cs:662:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentHealthMonitorServiceTests.cs:113:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:13:[Collection(nameof(WorkspaceIdentityNativeProcessStateCollection))]
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagIngestTextTests.cs:197:            .AddInMemoryCollection(new Dictionary<string, string?> { ["DataFolder"] = _tempWorkspacePath })
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceReadinessHealthCheckTests.cs:34:        var serviceProvider = new ServiceCollection()
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:14:[Collection(nameof(QBrainAi.Support.Mcp.Tests.Storage.WorkspaceIdentityNativeProcessStateCollection))]
+tests/QBrainAi.Support.Mcp.Tests/Services/FederationQueuedOperationReplayServiceTests.cs:247:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagEntityCrudTests.cs:215:            .AddInMemoryCollection(new Dictionary<string, string?> { ["DataFolder"] = _tempWorkspacePath })
+tests/QBrainAi.Support.Mcp.Tests/Services/FederationLocalProxyEnrollmentServiceTests.cs:182:        var serviceProvider = new ServiceCollection()
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentCliClientShapeTests.cs:23:            new CapturingProcessEnvironmentService(),
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentCliClientShapeTests.cs:53:            new CapturingProcessEnvironmentService(),
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentCliClientShapeTests.cs:96:    private sealed class CapturingProcessEnvironmentService : IProcessEnvironmentService
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagDocumentManagementTests.cs:209:            .AddInMemoryCollection(new Dictionary<string, string?> { ["DataFolder"] = _tempWorkspacePath })
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:15:/// <see cref="ProcessEnvironmentCollection"/> because every test that starts a session writes the process environment:
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:17:/// <see cref="CliTempVariables"/> and are integration tests (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008;
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:20:[Collection(ProcessEnvironmentCollection.Name)]
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:38:        await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async _ =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:41:                new CapturingProcessEnvironmentService(),
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:92:    /// test sets and restores them through <see cref="CliTempVariables"/> and is an integration test
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:100:        await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async _ =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:104:                new CapturingProcessEnvironmentService(),
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:120:    /// CLI temp variables, so the test sets and restores them through <see cref="CliTempVariables"/> and is an
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:128:        await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async _ =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:136:                new CapturingProcessEnvironmentService(),
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:155:    /// the CLI temp variables, so the test sets and restores them through <see cref="CliTempVariables"/> and is an
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:163:        await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async _ =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:172:                new CapturingProcessEnvironmentService(),
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:198:    /// restores them through <see cref="CliTempVariables"/>, so the output path proves the primary name won; it writes
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:206:        await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async tempRoot =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:210:                new CapturingProcessEnvironmentService(),
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:254:    internal sealed class CapturingProcessEnvironmentService : IProcessEnvironmentService
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:397:/// launch sets and restores every CLI temp variable through <see cref="CliTempVariables"/>, so the class runs in the
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:398:/// serialized <see cref="ProcessEnvironmentCollection"/> (TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1).
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:402:[Collection(ProcessEnvironmentCollection.Name)]
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:440:            await CliTempVariables.RunWithTestFolderAsync(CodexCliAgentExecutionStrategyTests.PrimaryTempName, async _ =>
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:443:                    new CodexCliAgentExecutionStrategyTests.CapturingProcessEnvironmentService(),
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:479:/// and restores every CLI temp variable through <see cref="CliTempVariables"/>, so the class runs in the serialized
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:480:/// <see cref="ProcessEnvironmentCollection"/> (TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1).
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:484:[Collection(ProcessEnvironmentCollection.Name)]
+tests/QBrainAi.Support.Mcp.Tests/Services/NgrokTunnelProviderEnvironmentTests.cs:38:    /// Fixture: a hand-written <see cref="StubProcessEnvironmentService"/> standing in for the registry/WTS
+tests/QBrainAi.Support.Mcp.Tests/Services/NgrokTunnelProviderEnvironmentTests.cs:44:        var env = new StubProcessEnvironmentService();
+tests/QBrainAi.Support.Mcp.Tests/Services/NgrokTunnelProviderEnvironmentTests.cs:68:        var env = new StubProcessEnvironmentService();
+tests/QBrainAi.Support.Mcp.Tests/Services/NgrokTunnelProviderEnvironmentTests.cs:82:    /// through <see cref="IProcessEnvironmentService.ResolveExecutable"/> against the enriched PATH instead
+tests/QBrainAi.Support.Mcp.Tests/Services/NgrokTunnelProviderEnvironmentTests.cs:90:        var env = new StubProcessEnvironmentService();
+tests/QBrainAi.Support.Mcp.Tests/Services/NgrokTunnelProviderEnvironmentTests.cs:112:        var env = new StubProcessEnvironmentService();
+tests/QBrainAi.Support.Mcp.Tests/Services/NgrokTunnelProviderEnvironmentTests.cs:135:        var env = new StubProcessEnvironmentService { ResolvedExecutable = "ngrok" };
+tests/QBrainAi.Support.Mcp.Tests/Services/NgrokTunnelProviderEnvironmentTests.cs:167:        var env = new StubProcessEnvironmentService();
+tests/QBrainAi.Support.Mcp.Tests/Services/NgrokTunnelProviderEnvironmentTests.cs:186:    /// Hand-written <see cref="IProcessEnvironmentService"/> double standing in for the Windows
+tests/QBrainAi.Support.Mcp.Tests/Services/NgrokTunnelProviderEnvironmentTests.cs:190:    private sealed class StubProcessEnvironmentService : IProcessEnvironmentService
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessRunnerTests.cs:17:        var processEnvironment = new CapturingProcessEnvironmentService();
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessRunnerTests.cs:34:    private sealed class CapturingProcessEnvironmentService : IProcessEnvironmentService
+tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:14:/// name. The class runs in <see cref="ProcessEnvironmentCollection"/> because every test that starts a session writes
+tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:16:/// restore them through <see cref="CliTempVariables"/> and are integration tests (TR-MCP-USECASE-018 AC-006,
+tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:19:[Collection(ProcessEnvironmentCollection.Name)]
+tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:28:    /// prompt. The test sets and restores every CLI temp variable through <see cref="CliTempVariables"/>, so it is an
+tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:36:        await CliTempVariables.RunWithTestFolderAsync(PrimaryTempName, async _ =>
+tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:60:    /// stdin prompt. The test sets and restores every CLI temp variable through <see cref="CliTempVariables"/>, so it
+tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:68:        await CliTempVariables.RunWithTestFolderAsync(PrimaryTempName, async _ =>
+tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:91:    /// test sets and restores every CLI temp variable through <see cref="CliTempVariables"/>, so it is an integration
+tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:99:        await CliTempVariables.RunWithTestFolderAsync(PrimaryTempName, async _ =>
+tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:124:    /// thinking. The test sets and restores every CLI temp variable through <see cref="CliTempVariables"/>, so it is
+tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:132:        await CliTempVariables.RunWithTestFolderAsync(PrimaryTempName, async _ =>
+tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:163:            new CapturingProcessEnvironmentService(),
+tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:188:    private sealed class CapturingProcessEnvironmentService : IProcessEnvironmentService
+tests/QBrainAi.Support.Mcp.Tests/Services/FederationProxyServiceTests.cs:408:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:122:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:418:            .AddInMemoryCollection(new Dictionary<string, string?> { ["Mcp:Workspaces"] = "[]" })
+tests/QBrainAi.Support.Mcp.Tests/Services/MemoryFederationStateAdapterTests.cs:406:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/LegacyTodoSqliteMigratorTests.cs:40:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/LegacyTodoSqliteMigratorTests.cs:184:            .AddInMemoryCollection(new Dictionary<string, string?>
+tests/QBrainAi.Support.Mcp.Tests/Services/StorageConnectivityHealthCheckTests.cs:22:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/StorageConnectivityHealthCheckTests.cs:69:        var provider = new ServiceCollection().BuildServiceProvider();
+tests/QBrainAi.Support.Mcp.Tests/Services/TodoBootstrapImporterTests.cs:228:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/TodoBootstrapImporterTests.cs:257:        var config = new ConfigurationBuilder().AddInMemoryCollection(dict).Build();
+tests/QBrainAi.Support.Mcp.Tests/Services/TodoBootstrapImporterTests.cs:267:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:16:/// reuse. The class runs in <see cref="ProcessEnvironmentCollection"/> because every test that reaches
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:26:[Collection(ProcessEnvironmentCollection.Name)]
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:160:            new NoopProcessEnvironmentService(),
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:202:                new NoopProcessEnvironmentService(),
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:230:                new NoopProcessEnvironmentService(),
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:258:                new NoopProcessEnvironmentService(),
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:295:                new NoopProcessEnvironmentService(),
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:405:                new NoopProcessEnvironmentService(),
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:443:                new NoopProcessEnvironmentService(),
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:494:                new NoopProcessEnvironmentService(),
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:534:                new NoopProcessEnvironmentService(),
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:573:                new NoopProcessEnvironmentService(),
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:615:                new NoopProcessEnvironmentService(),
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:650:                new NoopProcessEnvironmentService(),
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:710:    // variable at a separate fallback folder while the body runs, then all are restored (the shared CliTempVariables
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:711:    // helper; this class runs in the serialized ProcessEnvironmentCollection).
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:713:        CliTempVariables.RunWithTestFolderAsync("MCPSERVER_QUADBRAIN_CLI_TEMP", body);
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:733:    private sealed class NoopProcessEnvironmentService : IProcessEnvironmentService
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceCrossPlatformContractTests.cs:127:            .AddInMemoryCollection(new Dictionary<string, string?> { ["Mcp:Workspaces"] = "[]" })
+tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseExpandedScopeTests.cs:32:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceDatabaseAuthorityBehaviorTests.cs:137:            .AddInMemoryCollection(new Dictionary<string, string?>
+tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedTodoMutationServiceTests.cs:763:        var services = new ServiceCollection()
+tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs:335:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs:350:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs:473:    /// variable, so it stays outside <c>ProcessEnvironmentCollection</c>.
+tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs:481:        builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
+tests/QBrainAi.Support.Mcp.Tests/Services/TransactionPubSubTests.cs:70:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/TransactionPubSubTests.cs:86:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/TransactionPubSubTests.cs:269:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/TransactionPubSubTests.cs:271:            .AddInMemoryCollection(new Dictionary<string, string?>
+tests/QBrainAi.Support.Mcp.Tests/Services/TransactionPubSubTests.cs:289:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/TransactionPubSubTests.cs:291:            .AddInMemoryCollection(new Dictionary<string, string?>
+tests/QBrainAi.Support.Mcp.Tests/Services/TransactionPubSubTests.cs:308:        var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/TransactionPubSubTests.cs:310:            .AddInMemoryCollection(new Dictionary<string, string?>
+tests/QBrainAi.Support.Mcp.Tests/Services/TunnelProviderTests.cs:17:    private readonly IProcessEnvironmentService _processEnvironment = Substitute.For<IProcessEnvironmentService>();
+tests/QBrainAi.Support.Mcp.Tests/Services/TunnelProviderTests.cs:20:    /// TR-MCP-TUN-004: makes <see cref="IProcessEnvironmentService.ResolveExecutable"/> echo the requested
+tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotCredentialResolverTests.cs:10:/// <see cref="ProcessEnvironmentCollection"/> because one of its tests writes the process environment
+tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotCredentialResolverTests.cs:13:[Collection(ProcessEnvironmentCollection.Name)]
+tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotCredentialResolverTests.cs:46:            .AddInMemoryCollection(new Dictionary<string, string?>
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:15:/// in <see cref="ProcessEnvironmentCollection"/> because one of its tests writes the process environment
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:18:[Collection(ProcessEnvironmentCollection.Name)]
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:21:public sealed class ProcessEnvironmentServiceTests
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:40:            var service = new ProcessEnvironmentService(NullLogger<ProcessEnvironmentService>.Instance);
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:72:            var service = new ProcessEnvironmentService(NullLogger<ProcessEnvironmentService>.Instance);
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:92:    /// TR-MCP-SVC-002: verifies <see cref="ProcessEnvironmentService.ResolveExecutable"/> skips any PATH
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:114:            var service = new ProcessEnvironmentService(NullLogger<ProcessEnvironmentService>.Instance);
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:131:    /// <see cref="ProcessEnvironmentService.ResolveExecutable"/> does NOT match the genuine
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:148:            var service = new ProcessEnvironmentService(NullLogger<ProcessEnvironmentService>.Instance);
+tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:257:    /// Production binding of the scripted reachability cases: <see cref="DirectoryTreeWalker.IsReachable"/> over
+tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:264:        RunReachAndAssert(name, (list, boundary, root) => new DirectoryTreeWalker(list).IsReachable(boundary, root));
+tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:268:    /// error propagates out of <see cref="DirectoryTreeWalker.IsReachable"/> instead of being taken as unreachable.
+tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:277:        Assert.Throws<InvalidOperationException>(() => new DirectoryTreeWalker(tree.List).IsReachable("/p", "/p/.codex/plugins"));
+tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:278:        Assert.Throws<ArgumentNullException>(() => new DirectoryTreeWalker(tree.List).IsReachable(null!, "/p"));
+tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:279:        Assert.Throws<ArgumentNullException>(() => new DirectoryTreeWalker(tree.List).IsReachable("/p", null!));
+tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:310:            Assert.True(DirectoryTreeWalker.FileSystem.IsReachable(boundary, realRoot));
+tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:311:            Assert.False(DirectoryTreeWalker.FileSystem.IsReachable(boundary, rootLink));
+tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:312:            Assert.False(DirectoryTreeWalker.FileSystem.IsReachable(boundary, Path.Combine(ancestorLink, "cache")));
+tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:313:            Assert.True(DirectoryTreeWalker.FileSystem.IsReachable(linkedBoundary, Path.Combine(linkedBoundary, "real", "plugins", "cache")));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:231:            new PassthroughProcessEnvironmentService(),
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:264:    private sealed class PassthroughProcessEnvironmentService : IProcessEnvironmentService
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:529:            var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:420:            var services = new ServiceCollection();
+tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs:198:        var processEnvironment = Substitute.For<IProcessEnvironmentService>();
+tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs:235:        var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>()).Build();
+tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs:248:        var services = new ServiceCollection();

@@ -1,0 +1,4 @@
+tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs
+tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs
+tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs

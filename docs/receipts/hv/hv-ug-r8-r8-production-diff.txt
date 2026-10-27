@@ -1,0 +1,186 @@
+diff --git a/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs b/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs
+index 19644b6e..b2caa31b 100644
+--- a/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs
++++ b/src/QBrainAi.Repl.Core/AgentStdioProtocol.cs
+@@ -34,7 +34,6 @@ public interface IAgentStdioProtocol
+ public sealed class AgentStdioProtocol : IAgentStdioProtocol
+ {
+     private const string CommandTimeoutEnvVar = "MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS";
+-    private static readonly TimeSpan DefaultCommandTimeout = TimeSpan.FromMinutes(2);
+ 
+     private readonly IYamlSerializer _serializer;
+     private readonly IReplCommandDispatcher _dispatcher;
+@@ -50,6 +49,12 @@ public sealed class AgentStdioProtocol : IAgentStdioProtocol
+         _dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
+     }
+ 
++    /// <summary>
++    /// TR-MCP-REPL-001 AC-002: reads one environment variable by name for the command timeout. The default reads the
++    /// process environment; tests give a scripted reader so the call site is bound without the process environment.
++    /// </summary>
++    internal Func<string, string?> ReadVariable { get; init; } = Environment.GetEnvironmentVariable;
++
+     /// <inheritdoc />
+     public async Task RunAsync(TextReader reader, TextWriter writer, CancellationToken cancellationToken)
+     {
+@@ -159,8 +164,11 @@ public sealed class AgentStdioProtocol : IAgentStdioProtocol
+         }
+ 
+         IYamlEnvelope response;
++        // TR-MCP-REPL-001 AC-002: the configured timeout is read once and only a valid value is used, so the
++        // timeout message names the timeout that applied and a misconfigured value never fails the request.
++        var commandTimeout = ReplCommandTimeout.Read(ReadVariable, CommandTimeoutEnvVar);
+         using var commandCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+-        commandCts.CancelAfter(ResolveCommandTimeout());
++        commandCts.CancelAfter(commandTimeout);
+ 
+         try
+         {
+@@ -189,7 +197,7 @@ public sealed class AgentStdioProtocol : IAgentStdioProtocol
+                 {
+                     RequestId = (envelope.Payload as IRequestPayload)?.RequestId ?? "unknown",
+                     Code = "command_timeout",
+-                    Message = $"Command timed out after {ResolveCommandTimeout().TotalSeconds:0} seconds.",
++                    Message = $"Command timed out after {commandTimeout.TotalSeconds:0} seconds.",
+                     Retryable = true,
+                 },
+             };
+@@ -214,17 +222,6 @@ public sealed class AgentStdioProtocol : IAgentStdioProtocol
+         await WriteEnvelopeAsync(response, writer, cancellationToken).ConfigureAwait(false);
+     }
+ 
+-    private static TimeSpan ResolveCommandTimeout()
+-    {
+-        var configured = Environment.GetEnvironmentVariable(CommandTimeoutEnvVar);
+-        if (int.TryParse(configured, out var seconds) && seconds > 0)
+-        {
+-            return TimeSpan.FromSeconds(seconds);
+-        }
+-
+-        return DefaultCommandTimeout;
+-    }
+-
+     private async Task WriteEnvelopeAsync(IYamlEnvelope envelope, TextWriter writer, CancellationToken cancellationToken)
+     {
+         var yaml = _serializer.Serialize(envelope);
+diff --git a/src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs b/src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs
+index 628719d8..3c920399 100644
+--- a/src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs
++++ b/src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs
+@@ -62,7 +62,6 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
+ {
+     private const string StreamCommandTimeoutEnvVar = "MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS";
+     private const string ServerProtocolVersion = "1.0";
+-    private static readonly TimeSpan DefaultStreamCommandTimeout = TimeSpan.FromMinutes(2);
+     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
+     {
+         PropertyNameCaseInsensitive = true,
+@@ -134,6 +133,12 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
+         _clientMutationPolicy = clientMutationPolicy;
+     }
+ 
++    /// <summary>
++    /// TR-MCP-REPL-001 AC-002: reads one environment variable by name for the stream command timeout. The default reads
++    /// the process environment; tests give a scripted reader so the call site is bound without the process environment.
++    /// </summary>
++    internal Func<string, string?> ReadVariable { get; init; } = Environment.GetEnvironmentVariable;
++
+     /// <inheritdoc />
+     public Task<IYamlEnvelope> DispatchAsync(IYamlEnvelope envelope, CancellationToken cancellationToken)
+         => DispatchAsync(envelope, emitEnvelopeAsync: null, cancellationToken);
+@@ -2997,7 +3002,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
+         };
+     }
+ 
+-    private static async Task<IReadOnlyList<IStreamingEvent>> CollectTodoEventsAsync(
++    private async Task<IReadOnlyList<IStreamingEvent>> CollectTodoEventsAsync(
+         string requestId,
+         string method,
+         Func<Func<IStreamingEvent, Task>, CancellationToken, Task> stream,
+@@ -3005,8 +3010,11 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
+         CancellationToken cancellationToken)
+     {
+         var events = new List<IStreamingEvent>();
++        // TR-MCP-REPL-001 AC-002: the configured stream timeout is read once and only a valid value is used, so the
++        // timeout event names the timeout that applied and a misconfigured value never fails the stream.
++        var streamTimeout = ReplCommandTimeout.Read(ReadVariable, StreamCommandTimeoutEnvVar);
+         using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+-        timeoutCts.CancelAfter(ResolveStreamCommandTimeout());
++        timeoutCts.CancelAfter(streamTimeout);
+ 
+         try
+         {
+@@ -3028,7 +3036,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
+                     new Dictionary<string, object?>
+                     {
+                         ["requestId"] = requestId,
+-                        ["message"] = $"Stream command timed out after {ResolveStreamCommandTimeout().TotalSeconds:0} seconds.",
++                        ["message"] = $"Stream command timed out after {streamTimeout.TotalSeconds:0} seconds.",
+                     },
+                     DateTimeOffset.UtcNow,
+                     events.Count + 1);
+@@ -3043,17 +3051,6 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
+         return events;
+     }
+ 
+-    private static TimeSpan ResolveStreamCommandTimeout()
+-    {
+-        var configured = Environment.GetEnvironmentVariable(StreamCommandTimeoutEnvVar);
+-        if (int.TryParse(configured, out var seconds) && seconds > 0)
+-        {
+-            return TimeSpan.FromSeconds(seconds);
+-        }
+-
+-        return DefaultStreamCommandTimeout;
+-    }
+-
+     private static IYamlEnvelope BuildTodoStreamEventEnvelope(string requestId, string method, IStreamingEvent evt)
+         => new YamlEnvelope
+         {
+diff --git a/src/QBrainAi.Repl.Core/ReplCommandTimeout.cs b/src/QBrainAi.Repl.Core/ReplCommandTimeout.cs
+new file mode 100644
+index 00000000..9d687653
+--- /dev/null
++++ b/src/QBrainAi.Repl.Core/ReplCommandTimeout.cs
+@@ -0,0 +1,41 @@
++// TR-MCP-REPL-001 AC-002: one parse rule for the REPL command timeouts configured through
++// MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS (agent stdio requests) and MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS
++// (stream commands), so a misconfigured value never fails a request.
++
++using System.Globalization;
++
++namespace QBrainAi.Repl.Core;
++
++/// <summary>
++/// TR-MCP-REPL-001 AC-002: parses a configured REPL command timeout. A whole number of seconds from 1 to
++/// <see cref="LargestSeconds"/>, the largest delay <see cref="CancellationTokenSource.CancelAfter(TimeSpan)"/> accepts,
++/// is used; any other value (unset, empty, not a number, zero, negative or larger) gives <see cref="Default"/>.
++/// </summary>
++internal static class ReplCommandTimeout
++{
++    /// <summary>The timeout that applies when no valid value is configured.</summary>
++    internal static readonly TimeSpan Default = TimeSpan.FromMinutes(2);
++
++    /// <summary>
++    /// The largest whole number of seconds the cancellation timer accepts: its limit is 4294967294 milliseconds.
++    /// </summary>
++    internal const long LargestSeconds = 4294967;
++
++    /// <summary>Parses a configured value into the timeout that applies.</summary>
++    /// <param name="configured">The configured value, or null when the variable is unset.</param>
++    /// <returns>The configured timeout when it is valid; otherwise <see cref="Default"/>.</returns>
++    internal static TimeSpan Parse(string? configured) =>
++        long.TryParse(configured, NumberStyles.Integer, CultureInfo.InvariantCulture, out var seconds) && seconds is >= 1 and <= LargestSeconds
++            ? TimeSpan.FromSeconds(seconds)
++            : Default;
++
++    /// <summary>Reads the variable that configures a timeout once and parses it; both call sites use this.</summary>
++    /// <param name="readVariable">Reads one environment variable by name; the call sites default to the process environment.</param>
++    /// <param name="variableName">The variable that configures the timeout.</param>
++    /// <returns>The timeout that applies.</returns>
++    internal static TimeSpan Read(Func<string, string?> readVariable, string variableName)
++    {
++        ArgumentNullException.ThrowIfNull(readVariable);
++        return Parse(readVariable(variableName));
++    }
++}

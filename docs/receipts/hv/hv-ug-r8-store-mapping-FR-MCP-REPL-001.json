@@ -1,0 +1,29 @@
+{
+  "TimestampLocal": "2026-10-27T03:52:11",
+  "Method": "workflow.requirements.listMappings",
+  "Params": {
+    "frId": "FR-MCP-REPL-001"
+  },
+  "Response": {
+    "type": "result",
+    "payload": {
+      "deprecated": true,
+      "result": {
+        "totalCount": 2,
+        "items": [
+          {
+            "frId": "FR-MCP-REPL-001",
+            "createdAt": "2026-10-27T08:52:14.3979710+00:00",
+            "trId": "TR-MCP-REPL-001"
+          },
+          {
+            "frId": "FR-MCP-REPL-001",
+            "createdAt": "2026-10-27T08:52:14.3986540+00:00",
+            "trId": "TR-MCP-REPL-002"
+          }
+        ]
+      },
+      "requestId": "req-20261027T085212Z-c515"
+    }
+  }
+}

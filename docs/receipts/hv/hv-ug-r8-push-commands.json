@@ -1,0 +1,232 @@
+[
+  {
+    "line": 18157,
+    "timestamp": "2026-10-20T15:54:30.889Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-Analyzer.ps1 -Path /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1"
+  },
+  {
+    "line": 18163,
+    "timestamp": "2026-10-20T15:54:37.546Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 56d14d7cd7e72975b1cbf0ddcd2cc17c16763249 -WhatIf"
+  },
+  {
+    "line": 18167,
+    "timestamp": "2026-10-20T15:54:55.979Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 56d14d7cd7e72975b1cbf0ddcd2cc17c16763249"
+  },
+  {
+    "line": 18756,
+    "timestamp": "2026-10-20T17:20:06.647Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 6042dbb3551c38a740e13de28f44fe9a814e6f0a"
+  },
+  {
+    "line": 19366,
+    "timestamp": "2026-10-20T18:48:51.099Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 0210244d27bf2b5e731e4ee40350504934e812a4"
+  },
+  {
+    "line": 20028,
+    "timestamp": "2026-10-20T19:39:54.571Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 6ea425ab943ebdd8aad1de1c84896de92d0270d8"
+  },
+  {
+    "line": 21154,
+    "timestamp": "2026-10-20T20:21:00.938Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 68fa7b393d007c0d0c466c29ae4da5738bf54af2 -WhatIf"
+  },
+  {
+    "line": 21163,
+    "timestamp": "2026-10-20T20:21:05.75Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 68fa7b393d007c0d0c466c29ae4da5738bf54af2"
+  },
+  {
+    "line": 22200,
+    "timestamp": "2026-10-20T21:50:41.776Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha e0b078c802d6456d106e6ec681d1aa93d6c4d055 -WhatIf"
+  },
+  {
+    "line": 22211,
+    "timestamp": "2026-10-20T21:50:56.739Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha e0b078c802d6456d106e6ec681d1aa93d6c4d055"
+  },
+  {
+    "line": 24721,
+    "timestamp": "2026-10-20T23:55:52.382Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Search-TextTree.ps1 -Root /home/sharpninja/.claude/scratch/pr82-review-20261019 -Pattern \"Parameter\\(|\\[string\\]|\\[switch\\]\" -Include \"Push-Branch.ps1\""
+  },
+  {
+    "line": 24725,
+    "timestamp": "2026-10-20T23:56:04.725Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 801e6862d49d669808c9315a7ad43d0272b1d1f1 -WhatIf"
+  },
+  {
+    "line": 24734,
+    "timestamp": "2026-10-20T23:56:10.364Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 801e6862d49d669808c9315a7ad43d0272b1d1f1"
+  },
+  {
+    "line": 25630,
+    "timestamp": "2026-10-21T01:04:24.863Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 26fc83486be252e63579cca9d53f3132672555c7 -WhatIf"
+  },
+  {
+    "line": 25634,
+    "timestamp": "2026-10-21T01:04:31.516Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 26fc83486be252e63579cca9d53f3132672555c7"
+  },
+  {
+    "line": 26418,
+    "timestamp": "2026-10-21T02:30:41.478Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 97b7811491ccb3e338804a01d0bf28e4ecfe273a -WhatIf"
+  },
+  {
+    "line": 26422,
+    "timestamp": "2026-10-21T02:30:47.034Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 97b7811491ccb3e338804a01d0bf28e4ecfe273a"
+  },
+  {
+    "line": 26861,
+    "timestamp": "2026-10-21T02:51:16.009Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha b0db5b09b5824b2e49b028ac37b3ee8a3b48ec8a -WhatIf"
+  },
+  {
+    "line": 26865,
+    "timestamp": "2026-10-21T02:51:20.786Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha b0db5b09b5824b2e49b028ac37b3ee8a3b48ec8a"
+  },
+  {
+    "line": 27405,
+    "timestamp": "2026-10-21T10:29:35.364Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 8c254695d886d6ff87d5caaa42b0fa6b421c9c6b -WhatIf"
+  },
+  {
+    "line": 27409,
+    "timestamp": "2026-10-21T10:29:41.252Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 8c254695d886d6ff87d5caaa42b0fa6b421c9c6b"
+  },
+  {
+    "line": 28185,
+    "timestamp": "2026-10-21T10:51:50.942Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Find-TranscriptPath.ps1 -TranscriptPath /home/sharpninja/.claude/projects/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532.jsonl -Pattern \"pwsh -NoProfile -NonInteractive -File /home/sharpninja/\\.claude/scratch/pr82-review-20261019/(Publish-Commit|Push-Branch|Restore-GeneratedPaths)\\.ps1 [^\\x22\\x5C]*(citation|8c254695|b0db5b09)[^\\x22\\x5C]*\""
+  },
+  {
+    "line": 28656,
+    "timestamp": "2026-10-21T11:02:45.822Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha ccc78b7a7624e0367725af585a5fd7c4f38b3661 -WhatIf"
+  },
+  {
+    "line": 28663,
+    "timestamp": "2026-10-21T11:02:52.365Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha ccc78b7a7624e0367725af585a5fd7c4f38b3661"
+  },
+  {
+    "line": 30215,
+    "timestamp": "2026-10-21T12:21:49.745Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 3a9f8ff46690c4e35781bab444deac0d4345bbbd -WhatIf"
+  },
+  {
+    "line": 30224,
+    "timestamp": "2026-10-21T12:22:02.434Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 3a9f8ff46690c4e35781bab444deac0d4345bbbd"
+  },
+  {
+    "line": 30612,
+    "timestamp": "2026-10-21T12:53:21.765Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 810ee8aa0fbdcc6cf64a3d9575693068d261a97c -WhatIf"
+  },
+  {
+    "line": 30614,
+    "timestamp": "2026-10-21T12:53:23.357Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 810ee8aa0fbdcc6cf64a3d9575693068d261a97c"
+  },
+  {
+    "line": 31220,
+    "timestamp": "2026-10-21T13:12:39.85Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 8b7a49eaa3e8d4872b33d66af517acc8ad7e21ea -WhatIf"
+  },
+  {
+    "line": 31222,
+    "timestamp": "2026-10-21T13:12:41.251Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 8b7a49eaa3e8d4872b33d66af517acc8ad7e21ea"
+  },
+  {
+    "line": 31388,
+    "timestamp": "2026-10-21T16:16:58.063Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 780b6513b4004da0b17c2359d9cb65f6a69de67e -WhatIf"
+  },
+  {
+    "line": 31390,
+    "timestamp": "2026-10-21T16:16:59.393Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 780b6513b4004da0b17c2359d9cb65f6a69de67e"
+  },
+  {
+    "line": 32852,
+    "timestamp": "2026-10-21T18:12:42.231Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 9933796c53433a55d11cf14a96be97438a087b0f -WhatIf"
+  },
+  {
+    "line": 32856,
+    "timestamp": "2026-10-21T18:12:47.653Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 9933796c53433a55d11cf14a96be97438a087b0f"
+  },
+  {
+    "line": 33399,
+    "timestamp": "2026-10-21T18:50:35.228Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha c84183016a032bd522f5ae085a90d7c912bef810 -WhatIf"
+  },
+  {
+    "line": 33403,
+    "timestamp": "2026-10-21T18:50:39.926Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha c84183016a032bd522f5ae085a90d7c912bef810"
+  },
+  {
+    "line": 36238,
+    "timestamp": "2026-10-26T15:03:25.726Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 6a87791d9363bb972feb6a4539339fac0c1a1915 -WhatIf"
+  },
+  {
+    "line": 36247,
+    "timestamp": "2026-10-26T15:03:31.982Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha 6a87791d9363bb972feb6a4539339fac0c1a1915"
+  },
+  {
+    "line": 37305,
+    "timestamp": "2026-10-26T16:00:54.198Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha c31f36d81dc87509b605175c5ced0d3b0f08180c -WhatIf"
+  },
+  {
+    "line": 37314,
+    "timestamp": "2026-10-26T16:01:01.195Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha c31f36d81dc87509b605175c5ced0d3b0f08180c"
+  },
+  {
+    "line": 40715,
+    "timestamp": "2026-10-26T18:48:16.995Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -?"
+  },
+  {
+    "line": 40719,
+    "timestamp": "2026-10-26T18:48:22.997Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha f5cda3c15455b8f42f97bb35768c142757323378 -WhatIf"
+  },
+  {
+    "line": 40723,
+    "timestamp": "2026-10-26T18:48:29.104Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha f5cda3c15455b8f42f97bb35768c142757323378"
+  },
+  {
+    "line": 43020,
+    "timestamp": "2026-10-26T20:45:58.067Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Get-TranscriptCommands.ps1 -TranscriptPath /home/sharpninja/.claude/projects/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532.jsonl -Pattern \"(Push-Branch|Publish-Push|Invoke-GitPush|-Push\\b)\" -Last 6"
+  },
+  {
+    "line": 43024,
+    "timestamp": "2026-10-26T20:46:06.182Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha ccd9e91f00dae4419b39ae8d37c2ae522e6fc62d -WhatIf"
+  },
+  {
+    "line": 43028,
+    "timestamp": "2026-10-26T20:46:55.198Z",
+    "command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -ExpectedSha ccd9e91f00dae4419b39ae8d37c2ae522e6fc62d"
+  }
+]

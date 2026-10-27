@@ -1,0 +1,7 @@
+@{
+    interpretation = 'Class 1 independent hostile validation, one round, no time bound. Live rollout turn_context at line 8 proves model gpt-6-astra and effort max; thread 01a17c82-98d8-74f3-90f2-b31b416d7ee1. Read requested add-profile skill and all 1 non-skill profile Markdown file in full. Read root marker in full, 34207 characters, exposing no credential value. Opened own session through installed Codex plugin 1.121.0 with cache /tmp/hv-unitgreen-r8-codex-cache.'
+    response = 'Review started. No implementation validation yet. Reader helper initially had an invalid comment terminator, and an attempted invocation failed in parsing without reading data; corrected it and confirmed zero parser/analyzer findings. Tool discovery printed excessive irrelevant tool metadata initially. These are reviewer process errors, not implementation findings.'
+    tags = @('unitgreen-r8','IMPL-UNITGREEN-001','hostile-validation','gpt-6-astra','effort-max')
+    contextList = @('docs/receipts/hv/20261027T033814-unitgreen-r8.request.jsonl','docs/receipts/hv/20261027T033814-unitgreen-r8.response.jsonl','docs/receipts/hv/hv-ug-r8-identity.json')
+    designDecisions = @('The explicit scanner override is excluded from all scores and claim failures. Everything else in the review brief remains in scope. Alternative rejected: treating the scanner exemption as an exemption of platform and environment independence.')
+}

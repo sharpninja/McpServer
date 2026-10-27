@@ -1,0 +1,2470 @@
+[
+  {
+    "path": "tests/Build.Tests/IntegrationLaneFilterContract.cs",
+    "delta": "+        Assert.Equal(ExpectedFilter(host), actual);"
+  },
+  {
+    "path": "tests/Build.Tests/IntegrationLaneFilterContract.cs",
+    "delta": "+        Assert.True(Selects(filter, category: \"Integration\", platform: null), \"An untagged integration case must run on every host.\");"
+  },
+  {
+    "path": "tests/Build.Tests/IntegrationLaneFilterContract.cs",
+    "delta": "+        Assert.True(Selects(filter, category: \"Integration\", platform: own), $\"A Platform={own} integration case must run on its own host.\");"
+  },
+  {
+    "path": "tests/Build.Tests/IntegrationLaneFilterContract.cs",
+    "delta": "+        Assert.False(Selects(filter, category: \"Integration\", platform: other), $\"A Platform={other} integration case must not run on a {own} host.\");"
+  },
+  {
+    "path": "tests/Build.Tests/IntegrationLaneFilterContract.cs",
+    "delta": "+        Assert.False(Selects(filter, category: null, platform: null), \"A case without Category=Integration must not run in the integration lane.\");"
+  },
+  {
+    "path": "tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+    "delta": "+        => Assert.Equal(2, IntegrationLaneFilterContract.HostNames.Length);"
+  },
+  {
+    "path": "tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+    "delta": "+        => Assert.ThrowsAny<Xunit.Sdk.XunitException>("
+  },
+  {
+    "path": "tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+    "delta": "+        Assert.ThrowsAny<Xunit.Sdk.XunitException>(() => IntegrationLaneFilterContract.AssertSelection(parsed, filter));"
+  },
+  {
+    "path": "tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+    "delta": "+        => Assert.Throws<FormatException>(() => IntegrationLaneFilterContract.Selects(filter, \"Integration\", null));"
+  },
+  {
+    "path": "tests/Build.Tests/IntegrationLaneFilterTests.cs",
+    "delta": "+        => Assert.Equal(2, IntegrationLaneFilterContract.HostNames.Length);"
+  },
+  {
+    "path": "tests/Build.Tests/IntegrationLanePreconditionContract.cs",
+    "delta": "+        Assert.Equal(mayRun, readiness.CanRun);"
+  },
+  {
+    "path": "tests/Build.Tests/IntegrationLanePreconditionContract.cs",
+    "delta": "+            Assert.Null(readiness.FailureMessage);"
+  },
+  {
+    "path": "tests/Build.Tests/IntegrationLanePreconditionContract.cs",
+    "delta": "+        Assert.False(string.IsNullOrWhiteSpace(readiness.FailureMessage), \"A lane that cannot run must say why instead of stopping silently.\");"
+  },
+  {
+    "path": "tests/Build.Tests/IntegrationLanePreconditionContract.cs",
+    "delta": "+        Assert.Contains(\"interactive desktop session\", readiness.FailureMessage, StringComparison.Ordinal);"
+  },
+  {
+    "path": "tests/Build.Tests/IntegrationLanePreconditionContract.cs",
+    "delta": "+        Assert.Contains(\"MigrationIntegrationTests\", readiness.FailureMessage, StringComparison.Ordinal);"
+  },
+  {
+    "path": "tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs",
+    "delta": "+        => Assert.Equal(4, IntegrationLanePreconditionContract.ScenarioNames.Length);"
+  },
+  {
+    "path": "tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs",
+    "delta": "+        => Assert.ThrowsAny<Xunit.Sdk.XunitException>("
+  },
+  {
+    "path": "tests/Build.Tests/IntegrationLanePreconditionTests.cs",
+    "delta": "+        => Assert.Equal(4, IntegrationLanePreconditionContract.ScenarioNames.Length);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+        Assert.DoesNotContain(PostgresSecret, text, StringComparison.Ordinal);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+        Assert.DoesNotContain(SqlServerSecret, text, StringComparison.Ordinal);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+        Assert.All(host.ContainerCalls, name => Assert.StartsWith(\"qbrain-test-\", name, StringComparison.Ordinal));"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.True(result.Succeeded, string.Join(\"; \", result.Errors));"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.Equal(PostgresValue, host.Variables[ProviderTestNames.PostgresVariable]);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.Equal(SqlServerValue, host.Variables[ProviderTestNames.SqlServerVariable]);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.Empty(host.Started);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.Contains(\"localhost:55432\", host.Probes);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.Contains(\"localhost:51433\", host.Probes);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.Contains(\"load \" + ProviderTestNames.PostgresVariable + \" from \" + EnvFile, result.Actions);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.Contains(\"load \" + ProviderTestNames.SqlServerVariable + \" from \" + EnvFile, result.Actions);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.True(result.Succeeded, string.Join(\"; \", result.Errors));"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.Equal(0, host.ReadFileCalls);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.Empty(host.ContainerCalls);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.Empty(host.SetCalls);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.Contains(\"db.example:6543\", host.Probes);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.Contains(\"sql.example:1444\", host.Probes);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.Contains(\"adopt \" + ProviderTestNames.PostgresVariable + \" (already set)\", result.Actions);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.False(result.Succeeded);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.Contains(result.Errors, error => error.Contains(EnvFile, StringComparison.Ordinal));"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.Empty(host.SetCalls);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.Empty(host.Probes);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.False(result.Succeeded);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.Contains(result.Errors, error => error.Contains(ProviderTestNames.SqlServerVariable, StringComparison.Ordinal) && error.Contains(EnvFile, StringComparison.Ordinal));"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.Equal(PostgresValue, host.Variables[ProviderTestNames.PostgresVariable]);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.True(result.Succeeded, string.Join(\"; \", result.Errors));"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.Equal(new[] { ProviderTestNames.PostgresContainer }, host.Started);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.Contains(\"start \" + ProviderTestNames.PostgresContainer, result.Actions);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.False(result.Succeeded);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.Contains(result.Errors, error => error.Contains(ProviderTestNames.SqlServerContainer, StringComparison.Ordinal));"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.DoesNotContain(ProviderTestNames.SqlServerContainer, host.Started);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.False(result.Succeeded);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.Contains(result.Errors, error => error.Contains(\"localhost:51433\", StringComparison.Ordinal));"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.False(result.Succeeded);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "delta": "+                Assert.Contains(result.Errors, error => error.Contains(ProviderTestNames.SqlServerVariable, StringComparison.Ordinal) && error.Contains(\"LocalDB\", StringComparison.Ordinal));"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs",
+    "delta": "+        => Assert.Equal(8, ProviderTestProvisioningContract.ScenarioNames.Length);"
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs",
+    "delta": "+        => Assert.ThrowsAny<Xunit.Sdk.XunitException>("
+  },
+  {
+    "path": "tests/Build.Tests/ProviderTestProvisioningTests.cs",
+    "delta": "+        => Assert.Equal(8, ProviderTestProvisioningContract.ScenarioNames.Length);"
+  },
+  {
+    "path": "tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs",
+    "delta": "-        Assert.Equal(\"legacy-token\", options.ApiKey);"
+  },
+  {
+    "path": "tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs",
+    "delta": "-        Assert.Equal(workspacePath, options.WorkspacePath);"
+  },
+  {
+    "path": "tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs",
+    "delta": "+        Assert.Equal(\"legacy-token\", options.ApiKey);"
+  },
+  {
+    "path": "tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs",
+    "delta": "+        Assert.Equal(workspacePath, options.WorkspacePath);"
+  },
+  {
+    "path": "tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutCallSiteTests.cs",
+    "delta": "+        Assert.Empty(wrong);"
+  },
+  {
+    "path": "tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutCallSiteTests.cs",
+    "delta": "+            Assert.True(failure is not null, $\"The {callSite} contract accepted a wrong call site: {label}.\");"
+  },
+  {
+    "path": "tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutTests.cs",
+    "delta": "+        Assert.Empty(wrong);"
+  },
+  {
+    "path": "tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutTests.cs",
+    "delta": "+        Assert.Throws<ArgumentOutOfRangeException>(() => source.CancelAfter(TimeSpan.FromSeconds(LargestSeconds + 1L)));"
+  },
+  {
+    "path": "tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutTests.cs",
+    "delta": "+        Assert.Equal(DefaultTimeout, ReplCommandTimeout.Default);"
+  },
+  {
+    "path": "tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutTests.cs",
+    "delta": "+        Assert.Equal(LargestSeconds, ReplCommandTimeout.LargestSeconds);"
+  },
+  {
+    "path": "tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertParseContract(Unbounded)));"
+  },
+  {
+    "path": "tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertParseContract(Capping)));"
+  },
+  {
+    "path": "tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertParseContract(configured => Bounded(configured, 1, LargestSeconds - 1))));"
+  },
+  {
+    "path": "tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertParseContract(configured => Bounded(configured, 2, LargestSeconds))));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "delta": "+    public void ScriptedTheory_CoversEveryCase() => Assert.Equal(9, Cases.Count);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertPolicy(_ => { }, unit, allowed: false)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertPolicy(_ => throw new InvalidOperationException(\"refused\"), integration, allowed: true)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertPolicy(_ => throw new InvalidOperationException(\"another reason\"), unit, allowed: false)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "delta": "+        Assert.Null(Record.Exception(() => AssertPolicy(TestRepositoryRoot.EnsureIntegration, unit, allowed: false)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "delta": "+        Assert.Null(Record.Exception(() => AssertPolicy(TestRepositoryRoot.EnsureIntegration, integration, allowed: true)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "delta": "+        var resolve = Assert.Throws<InvalidOperationException>(() => TestRepositoryRoot.Resolve());"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "delta": "+        Assert.Contains(\"may not read the repository checkout\", resolve.Message, StringComparison.Ordinal);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "delta": "+        var combine = Assert.Throws<InvalidOperationException>(() => TestRepositoryRoot.Combine(\"tests\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "delta": "+        Assert.Contains(\"may not read the repository checkout\", combine.Message, StringComparison.Ordinal);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "delta": "+        var metadata = Assert.Throws<InvalidOperationException>(() => TestRepositoryRoot.BuildMetadataRoot);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "delta": "+        Assert.Contains(\"may not read the repository checkout\", metadata.Message, StringComparison.Ordinal);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "delta": "+        Assert.True(File.Exists(Path.Combine(root, \"QBrainAi.sln\")), root);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "delta": "+        Assert.Equal(Path.Combine(root, \"tests\"), TestRepositoryRoot.Combine(\"tests\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "delta": "+        Assert.True(File.Exists(TestRepositoryRoot.Combine(\"tests\", \"Shared\", \"TestRepositoryRoot.cs\")));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "delta": "+        Assert.False(string.IsNullOrWhiteSpace(TestRepositoryRoot.BuildMetadataRoot));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "delta": "+            Assert.Null(Record.Exception(() => policy(traits)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "delta": "+        var refusal = Assert.Throws<InvalidOperationException>(() => policy(traits));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "delta": "+        Assert.Contains(\"may not read the repository checkout\", refusal.Message, StringComparison.Ordinal);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs",
+    "delta": "-        Assert.NotNull(metadata);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs",
+    "delta": "-        Assert.False(string.IsNullOrWhiteSpace(metadata!.Value));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs",
+    "delta": "+        Assert.False(string.IsNullOrWhiteSpace(metadataRoot));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "delta": "+        Assert.False(string.IsNullOrWhiteSpace(profile));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "delta": "+        Assert.StartsWith(Path.GetFullPath(tempRoot), Path.GetFullPath(profile), StringComparison.Ordinal);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "delta": "+        Assert.True(Directory.Exists(profile));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "delta": "+        Assert.Empty(Directory.EnumerateFileSystemEntries(profile));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "delta": "+        Assert.Same(_fixture.Sources, live);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "delta": "+        Assert.Equal(_fixture.Profile, live!.UserProfile);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "delta": "+            Assert.NotNull(Record.Exception(() => AssertHermetic(null, temp)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "delta": "+            Assert.NotNull(Record.Exception(() => AssertHermetic(outside, temp)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "delta": "+            Assert.NotNull(Record.Exception(() => AssertHermetic(populated, temp)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "delta": "+            Assert.Null(Record.Exception(() => AssertHermetic(empty, temp)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "delta": "-        Assert.True(indexed.StatusCode is 200 or 201, indexed.Error);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "delta": "-        Assert.Equal(\"ready\", status);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "delta": "+            Assert.True(indexed.StatusCode is 200 or 201, indexed.Error);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "delta": "+            Assert.Equal(\"ready\", status);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "delta": "+    private static void AssertVersion(string expected, string actual) => Assert.Equal(expected, actual);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "delta": "+        Assert.Equal(5, plugins.Agents.Count);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "delta": "+        Assert.Equal(\"4.0.0\", plugins.Agents[\"Claude\"].PluginVersion);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "delta": "+        Assert.All(plugins.Agents.Where(pair => pair.Key != \"Claude\"), pair => Assert.Equal(\"3.0.0\", pair.Value.PluginVersion));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "delta": "+        Assert.NotNull(live);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => RunAndAssert(\"environment-root-first\", readsMachineEnvironment)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => RunAndAssert(\"profile-cache-next\", computesSibling)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => RunAndAssert(\"nothing-falls-back\", readsMachineProfile)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => RunAndAssert(\"no-profile\", readsMachineProfile)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "delta": "+            Assert.NotNull(Record.Exception(() => RunAndAssert(name, ignoresSources)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "delta": "+        Assert.Null(Record.Exception(() => RunAndAssert(\"environment-root-first\", computesSibling)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "delta": "+        Assert.Null(Record.Exception(() => RunAndAssert(\"environment-root-first\", readsMachineProfile)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "delta": "+            Assert.Null(sources.EnvironmentVariable(name));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "delta": "+        Assert.Null(sources.SiblingRoot(Path.Combine(Path.GetTempPath(), \"workspace\"), \"mcpserver-claude-code-plugin\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "delta": "+        Assert.Null(sources.SiblingRoot(@\"C:\\test\", \"mcpserver-codex-plugin\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "delta": "+        Assert.False(string.IsNullOrWhiteSpace(sources.UserProfile));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "delta": "+        Assert.True(Directory.Exists(sources.UserProfile));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "delta": "+        Assert.Empty(Directory.EnumerateFileSystemEntries(sources.UserProfile!));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "delta": "+        Assert.StartsWith(Path.GetFullPath(Path.GetTempPath()), Path.GetFullPath(sources.UserProfile!), StringComparison.Ordinal);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertHermetic(new AgentPluginVersionSources(Machine.EnvironmentVariable, (_, _) => null, EmptyProfile))));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertHermetic(new AgentPluginVersionSources(_ => null, Machine.SiblingRoot, EmptyProfile))));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertHermetic(new AgentPluginVersionSources(_ => null, (_, _) => null, GivenProfile))));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertHermetic(new AgentPluginVersionSources(_ => null, (_, _) => null, null))));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotLlmStrategyTests.cs",
+    "delta": "-        Assert.NotNull(dir);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+        Assert.False(string.IsNullOrWhiteSpace(cwd));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+        Assert.Contains(\"grok-work\", cwd, StringComparison.OrdinalIgnoreCase);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+        Assert.DoesNotContain(@\"Q:\\__mcp_unit_test__\\QBrainAi\", cwd, StringComparison.OrdinalIgnoreCase);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+        Assert.Equal(cwd, ArgumentAfter(spawner.StartInfos[0], \"--cwd\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+        Assert.Equal(\"0\", spawner.StartInfos[0].Environment[\"GROK_AGENT_DASHBOARD\"]);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+        Assert.Equal(\"0\", spawner.StartInfos[0].Environment[\"GROK_MEMORY\"]);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+        Assert.Equal(\"0\", spawner.StartInfos[0].Environment[\"GROK_SUBAGENTS\"]);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+        Assert.False(spawner.StartInfos[0].Environment.ContainsKey(\"GROK_PLUGIN_ROOT\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+        Assert.False(spawner.StartInfos[0].Environment.ContainsKey(\"GROK_HOME\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-            Assert.False(string.IsNullOrWhiteSpace(cwd));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-            Assert.Contains(\"grok-work\", cwd, StringComparison.OrdinalIgnoreCase);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-            Assert.DoesNotContain(@\"Q:\\__mcp_unit_test__\\QBrainAi\", cwd, StringComparison.OrdinalIgnoreCase);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-            Assert.Equal(cwd, ArgumentAfter(spawner.StartInfos[0], \"--cwd\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-            Assert.Equal(\"0\", spawner.StartInfos[0].Environment[\"GROK_AGENT_DASHBOARD\"]);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-            Assert.Equal(\"0\", spawner.StartInfos[0].Environment[\"GROK_MEMORY\"]);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-            Assert.Equal(\"0\", spawner.StartInfos[0].Environment[\"GROK_SUBAGENTS\"]);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-            Assert.False(spawner.StartInfos[0].Environment.ContainsKey(\"GROK_PLUGIN_ROOT\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-            Assert.False(spawner.StartInfos[0].Environment.ContainsKey(\"GROK_HOME\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"Creativity analysis for ArbiterOfTruth\", output);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"Creativity analysis for ArbiterOfTruth\", output);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.Equal(string.Empty, output);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+            Assert.Equal(string.Empty, output);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        var ex = await Assert.ThrowsAsync<InvalidOperationException>("
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+            var ex = await Assert.ThrowsAsync<InvalidOperationException>("
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.Contains(\"Access is denied\", ex.Message, StringComparison.Ordinal);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+            Assert.Contains(\"Access is denied\", ex.Message, StringComparison.Ordinal);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"first-ok\", first);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"retry-ok\", second);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.Equal(3, spawner.StartInfos.Count);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.Contains(\"--session-id\", spawner.StartInfos[0].ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.Contains(\"--resume\", spawner.StartInfos[1].ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.Contains(\"--session-id\", spawner.StartInfos[2].ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.DoesNotContain(\"--resume\", spawner.StartInfos[2].ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"first-ok\", first);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"retry-ok\", second);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+            Assert.Equal(3, spawner.StartInfos.Count);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+            Assert.Contains(\"--session-id\", spawner.StartInfos[0].ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+            Assert.Contains(\"--resume\", spawner.StartInfos[1].ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+            Assert.Contains(\"--session-id\", spawner.StartInfos[2].ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+            Assert.DoesNotContain(\"--resume\", spawner.StartInfos[2].ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.StartsWith(common, directory, StringComparison.OrdinalIgnoreCase);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.Contains(\"quadbrain-cli\", directory, StringComparison.OrdinalIgnoreCase);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"ok\", first);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"ok\", second);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.Equal(2, spawner.StartInfos.Count);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.Contains(\"--session-id\", spawner.StartInfos[0].ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.Contains(\"--resume\", spawner.StartInfos[1].ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.Equal(firstId, resumeId);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.Contains(\"grok-4.6\", spawner.StartInfos[0].ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"xhigh\", ArgumentAfter(spawner.StartInfos[0], \"--effort\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"ok\", first);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"ok\", second);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+            Assert.Equal(2, spawner.StartInfos.Count);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+            Assert.Contains(\"--session-id\", spawner.StartInfos[0].ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+            Assert.Contains(\"--resume\", spawner.StartInfos[1].ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+            Assert.Equal(firstId, resumeId);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+            Assert.Contains(\"grok-4.6\", spawner.StartInfos[0].ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"xhigh\", ArgumentAfter(spawner.StartInfos[0], \"--effort\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.Equal(2, spawner.StartInfos.Count);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.DoesNotContain(\"resume\", spawner.StartInfos[0].ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.Contains(\"resume\", spawner.StartInfos[1].ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.Contains(\"thr_logic\", spawner.StartInfos[1].ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.Contains(\"gpt-5.6-sol\", spawner.StartInfos[0].ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+            Assert.Equal(2, spawner.StartInfos.Count);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+            Assert.DoesNotContain(\"resume\", spawner.StartInfos[0].ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+            Assert.Contains(\"resume\", spawner.StartInfos[1].ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+            Assert.Contains(\"thr_logic\", spawner.StartInfos[1].ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+            Assert.Contains(\"gpt-5.6-sol\", spawner.StartInfos[0].ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.IsType<CliBrainSlotChatClient>(client);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"ok\", output);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+            Assert.IsType<CliBrainSlotChatClient>(client);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"ok\", output);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+        Assert.StartsWith(common, directory, StringComparison.OrdinalIgnoreCase);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "delta": "+        Assert.Contains(\"quadbrain-cli\", directory, StringComparison.OrdinalIgnoreCase);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(AgentCliResultState.Success, result.State);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"\"\"{\"title\":\"triage result\"}\"\"\", result.Body);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(AgentCliResultState.Success, result.State);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"\"\"{\"title\":\"triage result\"}\"\"\", result.Body);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-            Assert.EndsWith(\"cmd.exe\", spawner.StartInfo.FileName, StringComparison.OrdinalIgnoreCase);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-            Assert.Contains(\"/c\", spawner.StartInfo.ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains(\"codex.cmd\", StringComparison.OrdinalIgnoreCase));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains(\"exec\", StringComparison.Ordinal));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-            Assert.Equal(\"codex.cmd\", spawner.StartInfo.FileName);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+        Assert.NotNull(spawner.StartInfo);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-            Assert.Contains(\"model_reasoning_effort=\\\\\\\"xhigh\\\\\\\"\", serializedArguments, StringComparison.Ordinal);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-            Assert.Contains(\"model_reasoning_effort=\\\"xhigh\\\"\", spawner.StartInfo.ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(AgentCliResultState.Error, result.State);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Contains(\"not authenticated\", result.Stderr, StringComparison.OrdinalIgnoreCase);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(AgentCliResultState.Error, result.State);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Contains(\"analysis started\", result.Stdout, StringComparison.OrdinalIgnoreCase);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Contains(\"loading context\", result.Stderr, StringComparison.OrdinalIgnoreCase);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Contains(\"cancelled or timed out\", result.Stderr, StringComparison.OrdinalIgnoreCase);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(AgentCliResultState.Success, result.State);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Contains(\"stdout:analysis started\", streamed);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Contains(\"stdout:analysis done\", streamed);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Contains(\"stderr:loading context\", streamed);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(AgentCliResultState.Error, result.State);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Contains(\"not authenticated\", result.Stderr, StringComparison.OrdinalIgnoreCase);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(AgentCliResultState.Error, result.State);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Contains(\"analysis started\", result.Stdout, StringComparison.OrdinalIgnoreCase);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Contains(\"loading context\", result.Stderr, StringComparison.OrdinalIgnoreCase);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Contains(\"cancelled or timed out\", result.Stderr, StringComparison.OrdinalIgnoreCase);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-            Assert.Equal(\"codex stdout\", result.Stdout);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-            Assert.Equal(\"codex stderr\", result.Stderr);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-            Assert.Equal(0, result.ExitCode);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-            Assert.NotNull(spawner.StartInfo);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-            Assert.EndsWith(\"cmd.exe\", spawner.StartInfo.FileName, StringComparison.OrdinalIgnoreCase);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-            Assert.Contains(\"/c\", spawner.StartInfo.ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains(cmdPath, StringComparison.OrdinalIgnoreCase));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains(\"exec\", StringComparison.Ordinal));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains(\"-o\", StringComparison.Ordinal));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.EndsWith(\" -\", StringComparison.Ordinal));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-            Assert.True(spawner.StartInfo.RedirectStandardInput);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-            Assert.DoesNotContain(spawner.StartInfo.ArgumentList, argument => argument.Contains(\"rendered prompt\", StringComparison.Ordinal));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "-            Assert.Equal(\"rendered prompt\", spawner.CapturedStandardInput);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Contains(\"stdout:analysis started\", streamed);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Contains(\"stdout:analysis done\", streamed);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Contains(\"stderr:loading context\", streamed);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+        Assert.EndsWith(\"cmd.exe\", spawner.StartInfo!.FileName, StringComparison.OrdinalIgnoreCase);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+        Assert.Contains(\"/c\", spawner.StartInfo.ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+        Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains(\"codex.cmd\", StringComparison.OrdinalIgnoreCase));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+        Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains(\"exec\", StringComparison.Ordinal));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+        Assert.Contains(\"model_reasoning_effort=\\\\\\\"xhigh\\\\\\\"\", string.Join(\" \", spawner.StartInfo.ArgumentList), StringComparison.Ordinal);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+            var result = Assert.IsType<AgentCliResult>(launched);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(AgentCliResultState.Success, result.State);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"codex stdout\", result.Stdout);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"codex stderr\", result.Stderr);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(0, result.ExitCode);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.NotNull(spawner.StartInfo);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.EndsWith(\"cmd.exe\", spawner.StartInfo.FileName, StringComparison.OrdinalIgnoreCase);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Contains(\"/c\", spawner.StartInfo.ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains(cmdPath, StringComparison.OrdinalIgnoreCase));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains(\"exec\", StringComparison.Ordinal));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.Contains(\"-o\", StringComparison.Ordinal));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Contains(spawner.StartInfo.ArgumentList, argument => argument.EndsWith(\" -\", StringComparison.Ordinal));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.True(spawner.StartInfo.RedirectStandardInput);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.DoesNotContain(spawner.StartInfo.ArgumentList, argument => argument.Contains(\"rendered prompt\", StringComparison.Ordinal));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"rendered prompt\", spawner.CapturedStandardInput);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+        Assert.Equal(\"codex.cmd\", spawner.StartInfo!.FileName);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "delta": "+        Assert.Contains(\"model_reasoning_effort=\\\"xhigh\\\"\", spawner.StartInfo.ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+    "delta": "-        Assert.Equal(0, process.ExitCode);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+    "delta": "-        Assert.Contains(\"desktop-spawner-default\", stdout, StringComparison.Ordinal);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+    "delta": "-        Assert.True(string.IsNullOrWhiteSpace(stderr), stderr);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+    "delta": "+        Assert.True("
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+    "delta": "+        Assert.Equal(0, process.ExitCode);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+    "delta": "+        Assert.Contains(\"desktop-spawner-default\", stdout, StringComparison.Ordinal);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+    "delta": "+        Assert.True(string.IsNullOrWhiteSpace(stderr), stderr);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.Equal(expected.Directories.Order(StringComparer.Ordinal), directories.Order(StringComparer.Ordinal));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.Equal(expected.Files.Order(StringComparer.Ordinal), files.Order(StringComparer.Ordinal));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.Equal("
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+    public void ScriptedTheory_CoversEveryCase() => Assert.Equal(7, Cases.Count);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.Equal(new[] { DirEntry(\"/p/a\") }, tree.List(\"/p\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.Equal(UntrustedMountPointMessage, Assert.Throws<IOException>(() => tree.List(\"/p/a\")).Message);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.Throws<InvalidOperationException>(() => tree.List(\"/p/unscripted\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.Equal(new[] { \"/p\", \"/p/a\", \"/p/unscripted\" }, tree.Listed);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+            Assert.NotNull(Record.Exception(() => RunAndAssert(name, LegacyRecursiveWalk)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => RunAndAssert(\"directory-link\", FollowsLinksWalk)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => RunAndAssert(\"untrusted-mount-point\", StopsAtFirstErrorWalk)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => RunAndAssert(\"untrusted-mount-point\", DropsUnlistableDirectoryWalk)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+            Assert.Null(Record.Exception(() => RunAndAssert(\"nested-tree\", walk)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.Throws<InvalidOperationException>(() => LegacyRecursiveWalk(tree.List, \"/p\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.Null(Record.Exception(() => SwallowsEverythingWalk(tree.List, \"/p\")));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.Throws<InvalidOperationException>(() => new DirectoryTreeWalker(tree.List).EnumerateDirectories(\"/p\").ToList());"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.Throws<ArgumentNullException>(() => new DirectoryTreeWalker(null!));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.Throws<InvalidOperationException>(() => new DirectoryTreeWalker(tree.List).IsReachable(\"/p\", \"/p/.codex/plugins\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.Throws<ArgumentNullException>(() => new DirectoryTreeWalker(tree.List).IsReachable(null!, \"/p\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.Throws<ArgumentNullException>(() => new DirectoryTreeWalker(tree.List).IsReachable(\"/p\", null!));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+            Assert.True(Directory.Exists(rootLink));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+            Assert.True(Directory.Exists(Path.Combine(ancestorLink, \"cache\")));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+            Assert.True(DirectoryTreeWalker.FileSystem.IsReachable(boundary, realRoot));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+            Assert.False(DirectoryTreeWalker.FileSystem.IsReachable(boundary, rootLink));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+            Assert.False(DirectoryTreeWalker.FileSystem.IsReachable(boundary, Path.Combine(ancestorLink, \"cache\")));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+            Assert.True(DirectoryTreeWalker.FileSystem.IsReachable(linkedBoundary, Path.Combine(linkedBoundary, \"real\", \"plugins\", \"cache\")));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+            Assert.Contains(new DirectoryListingEntry(directoryLink, IsDirectory: true, IsLink: true), entries);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+            Assert.Contains(new DirectoryListingEntry(fileLink, IsDirectory: false, IsLink: true), entries);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+            Assert.Contains(new DirectoryListingEntry(real, IsDirectory: true, IsLink: false), entries);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+            Assert.Equal(new[] { real }, DirectoryTreeWalker.FileSystem.EnumerateDirectories(root));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+            Assert.Equal("
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.Equal(expected, actual);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.DoesNotContain(tree.Listed, directory => !string.Equals(directory, boundary, StringComparison.Ordinal) && tree.IsLink(directory));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+    public void ScriptedReachTheory_CoversEveryCase() => Assert.Equal(16, ReachCases.Count);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+            Assert.NotNull(Record.Exception(() => RunReachAndAssert(name, UncheckedReach)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => RunReachAndAssert(\"reach-root-link\", FollowsLinksReach)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => RunReachAndAssert(\"reach-middle-ancestor-link\", FollowsLinksReach)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => RunReachAndAssert(\"reach-top-ancestor-link\", RootOnlyReach)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => RunReachAndAssert(\"reach-middle-ancestor-link\", RootOnlyReach)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => RunReachAndAssert(\"reach-boundary-link\", ChecksBoundaryReach)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => RunReachAndAssert(\"reach-prefix-sibling-link\", PrefixMatchReach)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => RunReachAndAssert(\"reach-parent-unlistable\", PropagatesListingErrorsReach)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => RunReachAndAssert(\"reach-root-unlistable\", ListsRootReach)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+            Assert.Null(Record.Exception(() => RunReachAndAssert(\"reach-normal\", reach)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.Throws<InvalidOperationException>(() => PropagatesListingErrorsReach(tree.List, \"/p\", \"/p/.codex/plugins\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "delta": "+        Assert.Null(Record.Exception(() => SwallowsEverythingReach(tree.List, \"/p\", \"/p/.codex/plugins\")));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "delta": "-        Assert.True(response.Accepted);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "delta": "-        Assert.Equal(\"PAYTON-LEGION2\", response.ProxyId);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "delta": "-        Assert.Equal(5, response.HeartbeatSeconds);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "delta": "-        var proxy = Assert.Single(proxies);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "delta": "-        Assert.Equal(\"PAYTON-LEGION2\", proxy.ProxyId);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "delta": "-        Assert.Equal(1, proxy.WorkspaceCount);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "delta": "+            Assert.True(response.Accepted);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "delta": "+            Assert.Equal(\"PAYTON-LEGION2\", response.ProxyId);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "delta": "+            Assert.Equal(5, response.HeartbeatSeconds);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "delta": "-        var workspace = Assert.Single(workspaces);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "delta": "-        Assert.True(string.Equals(ExpectedWorkspaceKey.Of(_workspacePath), workspace.WorkspacePath,"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "delta": "-        Assert.NotEmpty(workspace.GlobalWorkspaceId);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "delta": "+            var proxy = Assert.Single(proxies);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "delta": "+            Assert.Equal(\"PAYTON-LEGION2\", proxy.ProxyId);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "delta": "+            Assert.Equal(1, proxy.WorkspaceCount);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "delta": "+            var workspace = Assert.Single(workspaces);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "delta": "+            Assert.True(string.Equals(ExpectedWorkspaceKey.Of(workspacePath), workspace.WorkspacePath, workspaceComparison));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "delta": "+            Assert.NotEmpty(workspace.GlobalWorkspaceId);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "delta": "-        Assert.True(result.Success);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "delta": "+            Assert.True(result.Success);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "delta": "+            Assert.True(result.Success);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "delta": "+        Assert.True(UsesHostWorkspace(new ProcessRunRequest(\"gh\", \"issue list\", WorkingDirectory: Path.GetFullPath(host)), host));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "delta": "+        Assert.False(UsesHostWorkspace(new ProcessRunRequest(\"gh\", \"issue list\"), host));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "delta": "+        Assert.False(UsesHostWorkspace(new ProcessRunRequest(\"git\", \"status\", WorkingDirectory: Path.GetFullPath(host)), host));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "delta": "+        Assert.True(OpensWorkspaceOnHost(new ProcessRunRequest(\"gh\", \"issue list\", WorkingDirectory: reRooted)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "delta": "+        Assert.True(OpensWorkspaceOnHost(new ProcessRunRequest("
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "delta": "+        Assert.False(OpensWorkspaceOnHost(new ProcessRunRequest(\"gh\", \"issue list\")));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GrokCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(explicitPath, GrokCliAgentExecutionStrategy.ResolveGrokExecutable(explicitPath));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GrokCliAgentExecutionStrategyTests.cs",
+    "delta": "+        Assert.Equal(withExtension, GrokCliAgentExecutionStrategy.ResolveGrokExecutable(withExtension));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GrokCliAgentExecutionStrategyTests.cs",
+    "delta": "+        Assert.Equal(withoutExtension, GrokCliAgentExecutionStrategy.ResolveGrokExecutable(withoutExtension));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs",
+    "delta": "-        Assert.False(HandoffContainedFileReader.TryGetFinalPath(handle, out var path));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs",
+    "delta": "-        Assert.True(string.IsNullOrEmpty(path));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs",
+    "delta": "+        Assert.False(HandoffContainedFileReader.TryGetFinalPath(handle, out var path));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs",
+    "delta": "+        Assert.True(string.IsNullOrEmpty(path));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs",
+    "delta": "+        Assert.NotSame(first.Database.GetDbConnection(), second.Database.GetDbConnection());"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs",
+    "delta": "+        Assert.Equal(1L, Scalar(second.Database.GetDbConnection(), \"SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name = 'harness_probe'\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs",
+    "delta": "+        Assert.True(Scalar(second.Database.GetDbConnection(), \"SELECT count(*) FROM harness_probe\") >= 1);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertOwnConnectionsToOneDatabase(OneSharedInMemoryConnection())));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertOwnConnectionsToOneDatabase(PrivateInMemoryDatabases())));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs",
+    "delta": "-        Assert.Contains(\"HostileReviewWorker\", ex.ToString(), StringComparison.Ordinal);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs",
+    "delta": "+            Assert.Fail(\"Startup failed without naming HostileReviewWorker: \" + text);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "delta": "-            Assert.All("
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "delta": "-                pair => Assert.Equal(\"1.26.0\", pair.Value.PluginVersion));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "delta": "+        Assert.All("
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "delta": "+            pair => Assert.Equal(\"1.26.0\", pair.Value.PluginVersion));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "delta": "-                Assert.Equal(\"9.8.7\", plugins.Agents[\"Claude\"].PluginVersion);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "delta": "-                Assert.Equal(MarkerFileService.SyncedAgentPluginVersion, plugins.Agents[\"Codex\"].PluginVersion);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "delta": "+            Assert.Equal(\"9.8.7\", plugins.Agents[\"Claude\"].PluginVersion);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "delta": "+            Assert.Equal(MarkerFileService.SyncedAgentPluginVersion, plugins.Agents[\"Codex\"].PluginVersion);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "delta": "-                Assert.NotEqual(baselineDigest, updatedDigest);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "delta": "+            Assert.NotEqual(baselineDigest, updatedDigest);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(AgentCliResultState.Success, result.State);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"codex final\", result.Body);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.NotNull(spawner.StartInfo);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"codex\", spawner.StartInfo!.FileName);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Contains(\"exec\", spawner.StartInfo.ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"model_reasoning_effort=\\\"xhigh\\\"\", GetArgumentAfter(spawner.StartInfo, \"-c\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"Q:\\\\__mcp_unit_test__\\\\QBrainAi\", GetArgumentAfter(spawner.StartInfo, \"-C\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.NotNull(GetArgumentAfter(spawner.StartInfo, \"-o\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Contains(\"-\", spawner.StartInfo.ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.DoesNotContain(\"--output-schema\", spawner.StartInfo.ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"rendered prompt\", spawner.Process!.StandardInputText);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(AgentCliResultState.Success, result.State);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"codex final\", result.Body);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.NotNull(spawner.StartInfo);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"codex\", spawner.StartInfo!.FileName);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Contains(\"exec\", spawner.StartInfo.ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"model_reasoning_effort=\\\"xhigh\\\"\", GetArgumentAfter(spawner.StartInfo, \"-c\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"Q:\\\\__mcp_unit_test__\\\\QBrainAi\", GetArgumentAfter(spawner.StartInfo, \"-C\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.NotNull(GetArgumentAfter(spawner.StartInfo, \"-o\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Contains(\"-\", spawner.StartInfo.ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.DoesNotContain(\"--output-schema\", spawner.StartInfo.ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"rendered prompt\", spawner.Process!.StandardInputText);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(AgentCliResultState.Success, result.State);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"claude final\", result.Body);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.NotNull(spawner.StartInfo);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"claude\", spawner.StartInfo!.FileName);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Contains(\"-p\", spawner.StartInfo.ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"plan\", GetArgumentAfter(spawner.StartInfo, \"--permission-mode\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"Q:\\\\__mcp_unit_test__\\\\QBrainAi\", GetArgumentAfter(spawner.StartInfo, \"--add-dir\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"opus\", GetArgumentAfter(spawner.StartInfo, \"--model\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"max\", GetArgumentAfter(spawner.StartInfo, \"--effort\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"rendered prompt\", spawner.Process!.StandardInputText);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(AgentCliResultState.Success, result.State);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"claude final\", result.Body);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.NotNull(spawner.StartInfo);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"claude\", spawner.StartInfo!.FileName);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Contains(\"-p\", spawner.StartInfo.ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"plan\", GetArgumentAfter(spawner.StartInfo, \"--permission-mode\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"Q:\\\\__mcp_unit_test__\\\\QBrainAi\", GetArgumentAfter(spawner.StartInfo, \"--add-dir\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"opus\", GetArgumentAfter(spawner.StartInfo, \"--model\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"max\", GetArgumentAfter(spawner.StartInfo, \"--effort\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"rendered prompt\", spawner.Process!.StandardInputText);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(AgentCliResultState.Success, result.State);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"grok final\", result.Body);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.NotNull(spawner.StartInfo);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"grok\", spawner.StartInfo!.FileName);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"Q:\\\\__mcp_unit_test__\\\\QBrainAi\", GetArgumentAfter(spawner.StartInfo, \"--cwd\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"plan\", GetArgumentAfter(spawner.StartInfo, \"--permission-mode\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"plain\", GetArgumentAfter(spawner.StartInfo, \"--output-format\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"max\", GetArgumentAfter(spawner.StartInfo, \"--effort\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"max\", GetArgumentAfter(spawner.StartInfo, \"--reasoning-effort\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.NotNull(GetArgumentAfter(spawner.StartInfo, \"--prompt-file\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"rendered prompt\", spawner.PromptFileText);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(string.Empty, spawner.Process!.StandardInputText);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(AgentCliResultState.Success, result.State);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"grok final\", result.Body);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.NotNull(spawner.StartInfo);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"grok\", spawner.StartInfo!.FileName);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"Q:\\\\__mcp_unit_test__\\\\QBrainAi\", GetArgumentAfter(spawner.StartInfo, \"--cwd\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"plan\", GetArgumentAfter(spawner.StartInfo, \"--permission-mode\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"plain\", GetArgumentAfter(spawner.StartInfo, \"--output-format\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"max\", GetArgumentAfter(spawner.StartInfo, \"--effort\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"max\", GetArgumentAfter(spawner.StartInfo, \"--reasoning-effort\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.NotNull(GetArgumentAfter(spawner.StartInfo, \"--prompt-file\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"rendered prompt\", spawner.PromptFileText);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(string.Empty, spawner.Process!.StandardInputText);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(AgentCliResultState.Success, result.State);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"cline final\", result.Body);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.NotNull(spawner.StartInfo);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"cline\", spawner.StartInfo!.FileName);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Contains(\"-p\", spawner.StartInfo.ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"Q:\\\\__mcp_unit_test__\\\\QBrainAi\", GetArgumentAfter(spawner.StartInfo, \"-c\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(\"xhigh\", GetArgumentAfter(spawner.StartInfo, \"--thinking\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Contains(\"rendered prompt\", spawner.StartInfo.ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "-        Assert.Equal(string.Empty, spawner.Process!.StandardInputText);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(AgentCliResultState.Success, result.State);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"cline final\", result.Body);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.NotNull(spawner.StartInfo);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"cline\", spawner.StartInfo!.FileName);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Contains(\"-p\", spawner.StartInfo.ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"Q:\\\\__mcp_unit_test__\\\\QBrainAi\", GetArgumentAfter(spawner.StartInfo, \"-c\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(\"xhigh\", GetArgumentAfter(spawner.StartInfo, \"--thinking\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Contains(\"rendered prompt\", spawner.StartInfo.ArgumentList);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "delta": "+            Assert.Equal(string.Empty, spawner.Process!.StandardInputText);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs",
+    "delta": "+    private static void AssertVersion(string? expected, string? actual) => Assert.Equal(expected, actual);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs",
+    "delta": "+    public void ScriptedTheory_CoversEveryCase() => Assert.Equal(8, Cases.Count);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs",
+    "delta": "+        Assert.Equal(\"1.0.0\", files.Read(FileAt(\".version\")));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs",
+    "delta": "+        Assert.Equal(LockedMessage, Assert.Throws<IOException>(() => files.Read(FileAt(\"plugin.json\"))).Message);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs",
+    "delta": "+        Assert.Null(files.Read(FileAt(\"package.json\")));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs",
+    "delta": "+        Assert.Equal(new[] { FileAt(\".version\"), FileAt(\"plugin.json\"), FileAt(\"package.json\") }, files.Reads);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs",
+    "delta": "+            Assert.NotNull(Record.Exception(() => RunAndAssert(name, PreviousRead)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs",
+    "delta": "+            Assert.NotNull(Record.Exception(() => RunAndAssert(name, StopsAtFirstUnreadableRead)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs",
+    "delta": "+                Assert.Null(Record.Exception(() => RunAndAssert(name, read)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs",
+    "delta": "+        Assert.Throws<InvalidOperationException>(() => PreviousRead(Root, files.Read));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs",
+    "delta": "+        Assert.Equal(\"3.6.0\", HidesEveryErrorRead(Root, files.Read));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs",
+    "delta": "+        Assert.Throws<InvalidOperationException>(() => MarkerFileService.TryReadAgentPluginVersion(Root, files.Read));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs",
+    "delta": "-            Assert.True("
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseGetWorkspaceResolutionContractTests.cs",
+    "delta": "+        await Assert.ThrowsAsync<EqualException>("
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "delta": "+        Assert.Equal(\"7.7.7\", Resolve(ScriptedWalker(unlistable, linked)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "delta": "+        Assert.Equal(\"9.9.9\", Resolve(ScriptedWalker(unlistable, link: null)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "delta": "+        Assert.Equal(MarkerFileService.SyncedAgentPluginVersion, Resolve(ScriptedWalker(cacheRoot, link: null)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "delta": "+        Assert.Equal(\"7.7.7\", ResolveWithReader(ScriptedReader(Path.Combine(higher, \".version\"))));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "delta": "+        Assert.Equal(\"9.9.9\", ResolveWithReader(MarkerFileService.ReadExistingFileText));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "delta": "+        Assert.Equal("
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "delta": "+        Assert.Equal(\"PLAN-SCANBINDING-001\", skipped.TodoId);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "delta": "+        Assert.Equal(SessionLogTurnContextValidator.NoneSentinel, followed.TodoId);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "delta": "+        Assert.Equal(MarkerFileService.SyncedAgentPluginVersion, Resolve(ScriptedWalker(NoUnlistableFolder, linked)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "delta": "+        Assert.Equal(\"9.9.9\", Resolve(ScriptedWalker(NoUnlistableFolder, link: null)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "delta": "+        Assert.Equal(\"9.9.9\", Resolve(ScriptedWalker(NoUnlistableFolder, Profile)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "delta": "+        Assert.Equal(SessionLogTurnContextValidator.NoneSentinel, linkedRoot.TodoId);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "delta": "+        Assert.Equal(\"PLAN-LINKEDROOT-001\", plain.TodoId);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "delta": "+        Assert.Equal(\"PLAN-LINKEDROOT-001\", linkedHome.TodoId);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "delta": "+        Assert.Equal(SessionLogTurnContextValidator.NoneSentinel, result.TodoId);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "delta": "+        Assert.Equal(SessionLogTurnContextValidator.NoneSentinel, result.PlanFile);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "delta": "-            Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\first\")), accessor.GetWorkspacePath());"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "delta": "+            Assert.Equal(ExpectedWorkspaceKey.Of(@\"F:\\first\"), accessor.GetWorkspacePath());"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "delta": "-                Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\second\")), accessor.GetWorkspacePath());"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "delta": "+                Assert.Equal(ExpectedWorkspaceKey.Of(@\"F:\\second\"), accessor.GetWorkspacePath());"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "delta": "-            Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\first\")), accessor.GetWorkspacePath());"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "delta": "+            Assert.Equal(ExpectedWorkspaceKey.Of(@\"F:\\first\"), accessor.GetWorkspacePath());"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "delta": "-        Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\outer-default\")), accessor.GetWorkspacePath());"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "delta": "+        Assert.Equal(ExpectedWorkspaceKey.Of(@\"F:\\outer-default\"), accessor.GetWorkspacePath());"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "delta": "-                    Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\alpha\")), accessor.GetWorkspacePath());"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "delta": "+                    Assert.Equal(ExpectedWorkspaceKey.Of(@\"F:\\alpha\"), accessor.GetWorkspacePath());"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "delta": "-                    Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\beta\")), accessor.GetWorkspacePath());"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "delta": "+                    Assert.Equal(ExpectedWorkspaceKey.Of(@\"F:\\beta\"), accessor.GetWorkspacePath());"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "delta": "-        Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\alpha\")), observed[0]);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "delta": "-        Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\beta\")), observed[1]);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "delta": "-        Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\default-ws\")), accessor.GetWorkspacePath());"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "delta": "+        Assert.Equal(ExpectedWorkspaceKey.Of(@\"F:\\alpha\"), observed[0]);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "delta": "+        Assert.Equal(ExpectedWorkspaceKey.Of(@\"F:\\beta\"), observed[1]);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "delta": "+        Assert.Equal(ExpectedWorkspaceKey.Of(@\"F:\\default-ws\"), accessor.GetWorkspacePath());"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceTokenServiceTests.cs",
+    "delta": "-        Assert.Equal(QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(@\"C:\\projects\\test\"), result, ignoreCase: true);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceTokenServiceTests.cs",
+    "delta": "+        Assert.Equal(ExpectedWorkspaceKey.Of(@\"C:\\projects\\test\"), result, ignoreCase: true);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureArgumentsTests.cs",
+    "delta": "+        Assert.StartsWith(action + \" \", arguments, StringComparison.Ordinal);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureArgumentsTests.cs",
+    "delta": "+        Assert.Matches(Silent, arguments);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureArgumentsTests.cs",
+    "delta": "+        Assert.Matches(Wait, arguments);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureArgumentsTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertSilentWaitingCall(\"start -D \\\"C:\\\\data\\\" -w -o \\\"-p 5432 -c listen_addresses=localhost\\\" -l \\\"C:\\\\data\\\\pg.log\\\"\", \"start\")));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureArgumentsTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertSilentWaitingCall(\"stop -D \\\"C:\\\\data\\\" -m immediate -w\", \"stop\")));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureArgumentsTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertSilentWaitingCall(\"stop -D \\\"C:\\\\data\\\" -m immediate -s\", \"stop\")));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureArgumentsTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertSilentWaitingCall(\"stop -D \\\"C:\\\\data\\\" -m immediate -w -s\", \"start\")));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureArgumentsTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertSilentWaitingCall(\"start -D \\\"C:\\\\data\\\" -w -o \\\"-p 5432 -s\\\" -l \\\"C:\\\\data\\\\pg.log\\\"\", \"start\")));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureArgumentsTests.cs",
+    "delta": "+        Assert.Contains(\"-o \\\"-p 5432 -c listen_addresses=localhost\\\"\", start, StringComparison.Ordinal);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureArgumentsTests.cs",
+    "delta": "+        Assert.Contains(\"-l \\\"C:\\\\data\\\\pg.log\\\"\", start, StringComparison.Ordinal);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertions.cs",
+    "delta": "+        Assert.Equal([expectedKey], parentKeys);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertions.cs",
+    "delta": "+        Assert.Equal([expectedKey], childKeys);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs",
+    "delta": "+        Assert.ThrowsAny<Xunit.Sdk.XunitException>("
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/RemoveTodoRecordsMigrationTests.cs",
+    "delta": "+            Assert.Throws<InvalidOperationException>(() => db.TodoItems"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/RemoveTodoRecordsMigrationTests.cs",
+    "delta": "+            Assert.True(db.TodoItems"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertSerializedDefinition(typeof(ScriptedParallelDefinition), ScriptedParallelName)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertSerializedDefinition(typeof(ScriptedExplicitParallelDefinition), ScriptedExplicitParallelName)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertSerializedDefinition(typeof(ScriptedSerializedDefinition), RequiredCollection)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertSerializedDefinition(typeof(ScriptedOutsider), RequiredCollection)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertInCollection(typeof(ScriptedOutsider), RequiredCollection)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertInCollection(typeof(ScriptedOtherMember), RequiredCollection)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs",
+    "delta": "+        Assert.Equal(RequiredCollection, SqlServerLocalDbCollection.Name);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnectionTests.cs",
+    "delta": "+        Assert.Equal(@\"(localdb)\\MSSQLLocalDB\", builder.DataSource);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnectionTests.cs",
+    "delta": "+        Assert.True(builder.IntegratedSecurity);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnectionTests.cs",
+    "delta": "+        Assert.True(builder.TrustServerCertificate);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnectionTests.cs",
+    "delta": "+        Assert.Equal(string.Empty, builder.InitialCatalog);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnectionTests.cs",
+    "delta": "+        Assert.Equal(120, builder.ConnectTimeout);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnectionTests.cs",
+    "delta": "+            Assert.NotNull(Record.Exception(() => AssertLocalDbDefault(wrong)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnectionTests.cs",
+    "delta": "+        Assert.Equal(external, SqlServerTestConnection.Resolve(external));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathContractTests.cs",
+    "delta": "-        Assert.SkipUnless(OperatingSystem.IsWindows(), \"The backslash spelling applies on a Windows host only.\");"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathContractTests.cs",
+    "delta": "-        Assert.Equal(expected, ToNativePath(path, WorkspacePathPlatform.Windows));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathContractTests.cs",
+    "delta": "-        Assert.SkipWhen(OperatingSystem.IsWindows(), \"Applies to non-Windows hosts only.\");"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathContractTests.cs",
+    "delta": "-        Assert.Equal(\"C:/Users/kingd/repo\", ToNativePath(\"C:/Users/kingd/repo\", WorkspacePathPlatform.Windows));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs",
+    "delta": "+    protected static void AssertUnchanged(string path, string actual) => Assert.Equal(path, actual);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs",
+    "delta": "+    protected static void AssertNative(string expected, string actual) => Assert.Equal(expected, actual);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertUnchanged(\"C:/Users/kingd/repo\", @\"C:\\Users\\kingd\\repo\")));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertUnchanged("
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs",
+    "delta": "+        Assert.Null(Record.Exception(() => AssertUnchanged("
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertNative(@\"C:\\Users\\kingd\\repo\", \"C:/Users/kingd/repo\")));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertNative("
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs",
+    "delta": "+        Assert.Null(Record.Exception(() => AssertNative("
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs",
+    "delta": "-        Assert.Equal(foreign, result);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs",
+    "delta": "+        Assert.Equal(ExpectedWorkspaceKey.Of(foreign), result);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceRemotePathContractTests.cs",
+    "delta": "-        Assert.SkipUnless(OperatingSystem.IsWindows(), \"Windows physical resolution only runs on a Windows host.\");"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceRemotePathContractTests.cs",
+    "delta": "-        Assert.SkipUnless(OperatingSystem.IsWindows(), \"Windows physical resolution only runs on a Windows host.\");"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs",
+    "delta": "+        Assert.Contains(primaryName, Names);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs",
+    "delta": "+        Assert.NotEqual(folder, fallbackFolder);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs",
+    "delta": "+            Assert.True(observed.TryGetValue(name, out var value), $\"{name} was not observed.\");"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs",
+    "delta": "+            Assert.Equal(name == primaryName ? folder : fallbackFolder, value);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs",
+    "delta": "+            Assert.True(before.TryGetValue(name, out var expected), $\"{name} was not recorded before the run.\");"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs",
+    "delta": "+            Assert.True(after.TryGetValue(name, out var actual), $\"{name} was not recorded after the run.\");"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs",
+    "delta": "+            Assert.Equal(expected, actual);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "delta": "+        Assert.Equal(expected, Names.Order(StringComparer.Ordinal));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertChainAt(primaryAtFallback, primary, Folder, Fallback)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertChainAt(otherAtFolder, primary, Folder, Fallback)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertChainAt(missing, primary, Folder, Fallback)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertChainAt(unset, primary, Folder, Fallback)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertChainAt(sameFolders, primary, Folder, Folder)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertChainAt(good, \"MCPSERVER_NOT_A_CHAIN_NAME\", Folder, Fallback)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertRestored(before, leftSet)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertRestored(before, newlySet)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertRestored(before, missing)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "delta": "+            Assert.NotNull(seenFolder);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "delta": "+            Assert.NotNull(seenFallback);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "delta": "+            Assert.NotNull(inside);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "delta": "+            Assert.True(existed);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "delta": "+            Assert.StartsWith(temp, Path.GetFullPath(seenFolder), StringComparison.OrdinalIgnoreCase);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "delta": "+            Assert.StartsWith(temp, Path.GetFullPath(seenFallback), StringComparison.OrdinalIgnoreCase);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "delta": "+            Assert.False(Directory.Exists(seenFolder));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "delta": "+            Assert.False(Directory.Exists(seenFallback));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "delta": "+            await Assert.ThrowsAsync<InvalidOperationException>(() => RunWithTestFoldersAsync(\"MCPSERVER_CODEX_ONESHOT_TEMP\", (folder, fallbackFolder) =>"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "delta": "+            Assert.NotNull(seenFolder);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "delta": "+            Assert.NotNull(seenFallback);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "delta": "+            Assert.False(Directory.Exists(seenFolder));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "delta": "+            Assert.False(Directory.Exists(seenFallback));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "delta": "+        await Assert.ThrowsAsync<ArgumentException>(() => RunWithTestFolderAsync(\"MCPSERVER_NOT_A_CHAIN_NAME\", _ =>"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "delta": "+        Assert.False(ran);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CollectionAssertions.cs",
+    "delta": "+        var name = Assert.Single(names);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CollectionAssertions.cs",
+    "delta": "+        Assert.Equal(collection, name);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CollectionAssertions.cs",
+    "delta": "+        var attribute = Assert.Single("
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CollectionAssertions.cs",
+    "delta": "+        var name = Assert.Single(attribute.ConstructorArguments);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CollectionAssertions.cs",
+    "delta": "+        Assert.Equal(collection, name.Value as string);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CollectionAssertions.cs",
+    "delta": "+        var flag = Assert.Single("
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CollectionAssertions.cs",
+    "delta": "+        Assert.True(flag.TypedValue.Value is true);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertInCollection(typeof(ScriptedOutsider), RequiredCollection)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertInCollection(typeof(ScriptedOtherMember), RequiredCollection)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertInCollection(typeof(ScriptedRepositoryRootMember), RequiredCollection)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs",
+    "delta": "+        Assert.Equal(RequiredCollection, ProcessEnvironmentCollection.Name);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+    "delta": "+        Assert.Equal(PinnedBufferForCDriveA, build(@\"C:\\a\"));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+    "delta": "+        Assert.Equal(MountPointTag, BinaryPrimitives.ReadUInt32LittleEndian(buffer.AsSpan(0, 4)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+    "delta": "+        Assert.Equal(buffer.Length - 8, BinaryPrimitives.ReadUInt16LittleEndian(buffer.AsSpan(4, 2)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+    "delta": "+        Assert.Equal(0, BinaryPrimitives.ReadUInt16LittleEndian(buffer.AsSpan(6, 2)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+    "delta": "+        Assert.Equal(0, BinaryPrimitives.ReadUInt16LittleEndian(buffer.AsSpan(8, 2)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+    "delta": "+        Assert.Equal(substitute.Length * 2, BinaryPrimitives.ReadUInt16LittleEndian(buffer.AsSpan(10, 2)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+    "delta": "+        Assert.Equal((substitute.Length * 2) + 2, BinaryPrimitives.ReadUInt16LittleEndian(buffer.AsSpan(12, 2)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+    "delta": "+        Assert.Equal(target.Length * 2, BinaryPrimitives.ReadUInt16LittleEndian(buffer.AsSpan(14, 2)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+    "delta": "+        Assert.Equal(substitute, Encoding.Unicode.GetString(buffer, 16, substitute.Length * 2));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+    "delta": "+        Assert.Equal(0, BinaryPrimitives.ReadUInt16LittleEndian(buffer.AsSpan(16 + (substitute.Length * 2), 2)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+    "delta": "+        Assert.Equal(target, Encoding.Unicode.GetString(buffer, 16 + (substitute.Length * 2) + 2, target.Length * 2));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+    "delta": "+        Assert.Equal(0, BinaryPrimitives.ReadUInt16LittleEndian(buffer.AsSpan(buffer.Length - 2, 2)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+    "delta": "+        Assert.Equal(16 + (substitute.Length * 2) + 2 + (target.Length * 2) + 2, buffer.Length);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+    "delta": "+        Assert.Equal(MountPointTag, WindowsJunction.MountPointTag);"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertBufferContract(target => Scripted(target, 0xA000000C, @\"\\??\\\", nullGap: true, headerInLength: false))));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertBufferContract(target => Scripted(target, MountPointTag, string.Empty, nullGap: true, headerInLength: false))));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertBufferContract(target => Scripted(target, MountPointTag, @\"\\??\\\", nullGap: false, headerInLength: false))));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+    "delta": "+        Assert.NotNull(Record.Exception(() => AssertBufferContract(target => Scripted(target, MountPointTag, @\"\\??\\\", nullGap: true, headerInLength: true))));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+    "delta": "+            Assert.True(info.Attributes.HasFlag(FileAttributes.ReparsePoint));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+    "delta": "+            Assert.Equal(Path.GetFullPath(target), Path.GetFullPath(Assert.IsType<string>(info.LinkTarget)));"
+  },
+  {
+    "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+    "delta": "+            Assert.Equal(\"through the junction\", File.ReadAllText(Path.Combine(alias, \"document.md\")));"
+  }
+]

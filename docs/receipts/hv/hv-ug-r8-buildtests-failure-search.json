@@ -1,0 +1,14 @@
+{
+  "timestampLocal": "2026-10-27T04:38:02",
+  "tool": "rg",
+  "arguments": [
+    "-n",
+    "error|fail|Failed|passed|Total|Exception|denied|read.only",
+    "docs/receipts/hv/hv-ug-r8-build-tests-2.out.txt"
+  ],
+  "exitCode": 0,
+  "output": [
+    "9:  Failed NukeBuild.Tests.ServiceUpdateTests.LinuxArchive_UsesPrivateMetadataPreservingCommands [22 ms]",
+    "21:Failed!  - Failed:     1, Passed:   435, Skipped:     0, Total:   436, Duration: 5 m 31 s - Build.Tests.dll (net10.0)"
+  ]
+}

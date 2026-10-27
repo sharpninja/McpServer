@@ -1,0 +1,37 @@
+{
+  "TimestampLocal": "2026-10-27T04:20:12",
+  "TimestampUtc": "2026-10-27T09:20:12.1256149Z",
+  "threadId": "01a17c82-98d8-74f3-90f2-b31b416d7ee1",
+  "agent": "Codex",
+  "rolloutContexts": [
+    {
+      "path": "/home/sharpninja/.codex/sessions/2026/10/27/rollout-2026-10-27T03-38-16-01a17c82-98d8-74f3-90f2-b31b416d7ee1.jsonl",
+      "line": 8,
+      "timestamp": "2026-10-27T08:38:17.813Z",
+      "model": "gpt-6-astra",
+      "effort": "max",
+      "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019"
+    },
+    {
+      "path": "/home/sharpninja/.codex/sessions/2026/10/27/rollout-2026-10-27T03-38-16-01a17c82-98d8-74f3-90f2-b31b416d7ee1.jsonl",
+      "line": 355,
+      "timestamp": "2026-10-27T08:58:13.283Z",
+      "model": "gpt-6-astra",
+      "effort": "max",
+      "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019"
+    },
+    {
+      "path": "/home/sharpninja/.codex/sessions/2026/10/27/rollout-2026-10-27T03-38-16-01a17c82-98d8-74f3-90f2-b31b416d7ee1.jsonl",
+      "line": 669,
+      "timestamp": "2026-10-27T09:19:21.278Z",
+      "model": "gpt-6-astra",
+      "effort": "max",
+      "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019"
+    }
+  ],
+  "profileFiles": [
+    "/home/sharpninja/.claude/profile/PROFILE-MERGED.md"
+  ],
+  "markerReadInFull": true,
+  "markerCharacters": 34207
+}
