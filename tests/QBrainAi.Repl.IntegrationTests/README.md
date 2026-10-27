@@ -297,9 +297,8 @@ await _replProcess.WaitForStdoutLineCountAsync(1, TimeSpan.FromSeconds(30));
 
 ## Documentation
 
-- See [ITERATION2_TEST_SUMMARY.md](ITERATION2_TEST_SUMMARY.md) for detailed iteration 2 test coverage
-- See [ITERATION3_TEST_SUMMARY.md](ITERATION3_TEST_SUMMARY.md) for detailed iteration 3 test coverage
-- See [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md) for implementation notes
+- See [REPL-USER-GUIDE.md](../../docs/REPL-USER-GUIDE.md) and [REPL-AGENT-GUIDE.md](../../docs/REPL-AGENT-GUIDE.md) for the REPL commands these tests drive
+- The per-iteration summary notes were removed once the iterations were complete; their text remains in git history
 
 ## Known Limitations
 
