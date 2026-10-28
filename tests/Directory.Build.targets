@@ -13,9 +13,10 @@
              Link="TestSupport.Shared\OllamaServerController.cs" />
   </ItemGroup>
 
-  <!-- TR-MCP-NUKE-019 AC-6: the temporary-instance checks, linked into the unit project that proves their contract and
-       the integration project whose cases call them. -->
-  <ItemGroup Condition="'$(MSBuildProjectName)' == 'QBrainAi.Repl.Core.Tests' Or '$(MSBuildProjectName)' == 'QBrainAi.Repl.IntegrationTests'">
+  <!-- TR-MCP-NUKE-019 AC-6 and AC-7: the temporary-instance checks, linked into the unit project that proves their
+       contract, the integration project whose cases call them, and every project that links ScratchQBrainAi, whose
+       start uses the restart check. -->
+  <ItemGroup Condition="'$(MSBuildProjectName)' == 'QBrainAi.Repl.Core.Tests' Or '$(MSBuildProjectName)' == 'QBrainAi.Repl.IntegrationTests' Or '$(MSBuildProjectName)' == 'QBrainAi.Support.Mcp.IntegrationTests'">
     <Compile Include="$(MSBuildThisFileDirectory)TestSupport.Shared\TemporaryInstanceChecks.cs"
              Link="TestSupport.Shared\TemporaryInstanceChecks.cs" />
   </ItemGroup>

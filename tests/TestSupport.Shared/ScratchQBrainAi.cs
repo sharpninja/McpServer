@@ -69,9 +69,15 @@ internal sealed class ScratchQBrainAi : IAsyncDisposable
     /// <summary>Gets the base URL the instance's marker names, set once <see cref="StartAsync"/> returns.</summary>
     public Uri BaseUrl { get; private set; } = new("http://127.0.0.1/", UriKind.Absolute);
 
+    /// <summary>Gets whether the instance process has exited (TR-MCP-NUKE-019 AC-7: a lost port ends the process).</summary>
+    public bool ProcessExited => _process is { HasExited: true };
+
     /// <summary>
     /// Starts a new temporary instance and returns once it wrote its marker for its own port and answers health. On
-    /// any failure the partial instance is disposed and the exception carries the process output.
+    /// any failure the partial instance is disposed. TR-MCP-NUKE-019 AC-7: when the instance exited because its port
+    /// was taken after the probe (address already in use), a new instance starts on a newly picked port, at most
+    /// <see cref="TemporaryInstanceChecks.MaxStarts"/> starts in all; any other failure, or the last lost port, is
+    /// rethrown with the process output.
     /// </summary>
     public static async Task<ScratchQBrainAi> StartAsync()
     {
@@ -83,24 +89,32 @@ internal sealed class ScratchQBrainAi : IAsyncDisposable
         var configuration = outputDirectory.Parent?.Name ?? "Debug";
         var supportAssembly = ResolveAssemblyPath(repoRoot, configuration, targetFramework, "QBrainAi.Support.Mcp");
         var replAssembly = ResolveAssemblyPath(repoRoot, configuration, targetFramework, "QBrainAi.Repl.Host");
-        var root = Path.Combine(Path.GetTempPath(), $"mcp-scratch-instance-{Guid.NewGuid():N}");
-        var server = new ScratchQBrainAi(root, AllocateHighPort(), supportAssembly, replAssembly);
 
-        try
+        for (var starts = 1; ; starts++)
         {
-            await server.InitializeAsync(repoRoot).ConfigureAwait(false);
-            server.StartProcess();
-            var marker = await server.WaitForMarkerAsync().ConfigureAwait(false);
-            Assert.Equal(server.Port, marker.Port);
-            Assert.False(string.IsNullOrWhiteSpace(marker.ApiKey), $"Generated marker did not contain an API key.{Environment.NewLine}{server.Diagnostics}");
-            await server.WaitForHealthAsync(marker.BaseUrl).ConfigureAwait(false);
-            server.BaseUrl = new Uri(marker.BaseUrl + "/", UriKind.Absolute);
-            return server;
-        }
-        catch
-        {
-            await server.DisposeAsync().ConfigureAwait(false);
-            throw;
+            var root = Path.Combine(Path.GetTempPath(), $"mcp-scratch-instance-{Guid.NewGuid():N}");
+            var server = new ScratchQBrainAi(root, AllocateHighPort(), supportAssembly, replAssembly);
+
+            try
+            {
+                await server.InitializeAsync(repoRoot).ConfigureAwait(false);
+                server.StartProcess();
+                var marker = await server.WaitForMarkerAsync().ConfigureAwait(false);
+                Assert.Equal(server.Port, marker.Port);
+                Assert.False(string.IsNullOrWhiteSpace(marker.ApiKey), $"Generated marker did not contain an API key.{Environment.NewLine}{server.Diagnostics}");
+                await server.WaitForHealthAsync(marker.BaseUrl).ConfigureAwait(false);
+                server.BaseUrl = new Uri(marker.BaseUrl + "/", UriKind.Absolute);
+                return server;
+            }
+            catch (Exception) when (TemporaryInstanceChecks.ShouldRestartOnNewPort(starts, server.ProcessExited, server.Diagnostics))
+            {
+                await server.DisposeAsync().ConfigureAwait(false);
+            }
+            catch
+            {
+                await server.DisposeAsync().ConfigureAwait(false);
+                throw;
+            }
         }
     }
 
@@ -307,6 +321,8 @@ internal sealed class ScratchQBrainAi : IAsyncDisposable
 
             if (_process is { HasExited: true })
             {
+                // Drain the redirected output so the message and the AC-7 restart check see all of it.
+                await _process.WaitForExitAsync().ConfigureAwait(false);
                 throw new InvalidOperationException(
                     $"QBrain.AI exited before generating '{MarkerPath}' with code {_process.ExitCode}.{Environment.NewLine}{Diagnostics}");
             }
@@ -388,6 +404,8 @@ internal sealed class ScratchQBrainAi : IAsyncDisposable
         {
             if (_process is { HasExited: true })
             {
+                // Drain the redirected output so the message and the AC-7 restart check see all of it.
+                await _process.WaitForExitAsync().ConfigureAwait(false);
                 throw new InvalidOperationException(
                     $"QBrain.AI exited before health was available with code {_process.ExitCode}.{Environment.NewLine}{Diagnostics}");
             }
@@ -485,6 +503,11 @@ internal sealed class ScratchQBrainAi : IAsyncDisposable
         return value;
     }
 
+    /// <summary>
+    /// TR-MCP-NUKE-019 AC-7: picks a port that is free on every address the instance binds. The instance listens on
+    /// http://[::]:port (IPv6 any in dual mode, so IPv4 too), so the probe binds the same way; a probe on 127.0.0.1
+    /// alone missed ports held on [::] or 0.0.0.0.
+    /// </summary>
     private static int AllocateHighPort()
     {
         for (var attempt = 0; attempt < 50; attempt++)
@@ -492,7 +515,7 @@ internal sealed class ScratchQBrainAi : IAsyncDisposable
             var port = Random.Shared.Next(20_000, 60_000);
             try
             {
-                using var listener = new TcpListener(IPAddress.Loopback, port);
+                using var listener = CreatePortProbe(port);
                 listener.Start();
                 return port;
             }
@@ -501,9 +524,29 @@ internal sealed class ScratchQBrainAi : IAsyncDisposable
             }
         }
 
-        using var fallback = new TcpListener(IPAddress.Loopback, 0);
+        using var fallback = CreatePortProbe(0);
         fallback.Start();
         return ((IPEndPoint)fallback.LocalEndpoint).Port;
+    }
+
+    private static TcpListener CreatePortProbe(int port)
+    {
+        if (!Socket.OSSupportsIPv6)
+        {
+            return new TcpListener(IPAddress.Any, port);
+        }
+
+        var listener = new TcpListener(IPAddress.IPv6Any, port);
+        try
+        {
+            listener.Server.DualMode = true;
+            return listener;
+        }
+        catch
+        {
+            listener.Dispose();
+            throw;
+        }
     }
 
     private static string ResolveAssemblyPath(string repoRoot, string configuration, string targetFramework, string projectName)

@@ -312,6 +312,11 @@ public sealed class Iteration3IntegrationTests : IDisposable
         // TR-MCP-NUKE-019 AC-6: every streamed document is an envelope; a parse or assertion failure fails the case.
         foreach (var line in eventLines)
         {
+            // FR-MCP-REPL-005: '---' document separators are part of the framing
+            // contract between envelopes, not envelope content.
+            if (string.IsNullOrWhiteSpace(line) || line.TrimEnd() == "---")
+                continue;
+
             Assert.NotNull(DeserializeEnvelope(line));
         }
 
@@ -865,6 +870,11 @@ public sealed class Iteration3IntegrationTests : IDisposable
         // TR-MCP-NUKE-019 AC-6: every streamed document is an envelope; a parse or assertion failure fails the case.
         foreach (var line in eventLines)
         {
+            // FR-MCP-REPL-005: '---' document separators are part of the framing
+            // contract between envelopes, not envelope content.
+            if (string.IsNullOrWhiteSpace(line) || line.TrimEnd() == "---")
+                continue;
+
             Assert.NotNull(DeserializeEnvelope(line));
         }
 

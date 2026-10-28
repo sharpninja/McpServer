@@ -89,6 +89,14 @@ public sealed class ReplChildProcessHelper : IDisposable
         ?? throw new InvalidOperationException("The temporary instance has not been started; call EnsureInstanceAsync or StartAsync first.");
 
     /// <summary>
+    /// Gets the workspace path registered on this helper's temporary instance (TR-MCP-NUKE-019 AC-6), the value a
+    /// request's X-Workspace-Path names to reach that workspace; available once <see cref="EnsureInstanceAsync"/> or
+    /// <see cref="StartAsync"/> has run.
+    /// </summary>
+    public string InstanceWorkspacePath => _instance?.WorkspacePath
+        ?? throw new InvalidOperationException("The temporary instance has not been started; call EnsureInstanceAsync or StartAsync first.");
+
+    /// <summary>
     /// Starts this helper's temporary QBrain.AI instance when it is not running yet (TR-MCP-NUKE-019 AC-6): a test-owned
     /// workspace, marker, database and server process on a free port.
     /// </summary>

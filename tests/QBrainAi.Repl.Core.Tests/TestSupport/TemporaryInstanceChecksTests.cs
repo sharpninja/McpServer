@@ -4,9 +4,10 @@ using Xunit;
 namespace QBrainAi.Repl.Core.Tests.TestSupport;
 
 /// <summary>
-/// Tests the two checks an integration case uses to prove it runs on a temporary instance it owns: the REPL host's
-/// start arguments name a workspace and a marker inside the instance's own root, and the instance's health answer is
-/// 200 and echoes the request's nonce.
+/// Tests the checks an integration case uses to prove it runs on a temporary instance it owns: the REPL host's start
+/// arguments name a workspace and a marker inside the instance's own root, and the instance's health answer is 200 and
+/// echoes the request's nonce. Also tests the decision to start a new instance on a new port when the instance lost
+/// its port at start (TR-MCP-NUKE-019 AC-7).
 /// </summary>
 /// <remarks>
 /// Requirement coverage: TR-MCP-NUKE-019 AC-6 (every integration case MigrationIntegrationTests runs uses a temporary
@@ -57,6 +58,72 @@ public sealed class TemporaryInstanceChecksTests
     ];
 
     /// <summary>
+    /// The restart contract rows (TR-MCP-NUKE-019 AC-7): a row name, the starts made so far, whether the instance
+    /// process has exited, its output, and whether the case must start a new instance on a new port. Only an exited
+    /// instance whose output says its address was already in use, within three starts in all, is restarted. The bind
+    /// failure text is the one Kestrel wrote in run ug-r8b-expanded-lane-1 (Iteration5IntegrationTests, port 49974).
+    /// </summary>
+    internal static readonly (string Name, int Starts, bool Exited, string Output, bool Restart)[] RestartRows =
+    [
+        ("first start lost its port", 1, true, BindFailure, true),
+        ("second start lost its port", 2, true, BindFailure, true),
+        ("third start lost its port", 3, true, BindFailure, false),
+        ("only the inner exception line", 1, true, "---> System.Net.Sockets.SocketException (98): Address already in use", true),
+        ("the bind failure in capitals", 1, true, "FAILED TO BIND TO ADDRESS HTTP://[::]:49974: ADDRESS ALREADY IN USE.", true),
+        ("instance still running", 1, false, BindFailure, false),
+        ("another start failure", 1, true, "fail: QBrainAi.Support.Mcp.Services.TodoBootstrapImporter[0] TodoBootstrapImporter failed", false),
+        ("a file in use", 1, true, "The database file is in use by another process.", false),
+        ("no output", 1, true, string.Empty, false),
+    ];
+
+    private const string BindFailure = "Unhandled exception. System.IO.IOException: Failed to bind to address http://[::]:49974: address already in use.";
+
+    /// <summary>Returns the names of the restart rows on which <paramref name="check"/> gives the wrong verdict.</summary>
+    /// <param name="check">The restart decision under test: the starts so far, whether the process exited and its output.</param>
+    internal static List<string> RestartContractFailures(Func<int, bool, string, bool> check)
+    {
+        ArgumentNullException.ThrowIfNull(check);
+        return RestartRows
+            .Where(row => check(row.Starts, row.Exited, row.Output) != row.Restart)
+            .Select(row => row.Name)
+            .ToList();
+    }
+
+    /// <summary>Mock gate positive control (TR-MCP-NUKE-019 AC-7): the scripted restart decision satisfies every row.</summary>
+    [Fact]
+    public void ScriptedRestartDecision_SatisfiesTheContract() =>
+        Assert.Empty(RestartContractFailures(ScriptedRestart));
+
+    /// <summary>
+    /// Mock gate negative controls on the restart contract (TR-MCP-NUKE-019 AC-7), each rejected inside a passing
+    /// harness on the row named: a decision with no bound on starts, one that ignores whether the process exited, one
+    /// that matches any "in use" text, one that matches case-sensitively, and one that never restarts.
+    /// </summary>
+    /// <param name="wrong">The name of the wrong restart decision.</param>
+    /// <param name="failingRow">The contract row that must reject it.</param>
+    [Theory]
+    [InlineData("unbounded", "third start lost its port")]
+    [InlineData("ignores exit", "instance still running")]
+    [InlineData("any in use", "a file in use")]
+    [InlineData("case-sensitive", "the bind failure in capitals")]
+    [InlineData("never restarts", "first start lost its port")]
+    public void WrongRestartDecisions_AreRejectedInsidePassingHarness(string wrong, string failingRow) =>
+        Assert.Contains(failingRow, RestartContractFailures(WrongRestartCheck(wrong)));
+
+    private static bool ScriptedRestart(int starts, bool exited, string output) =>
+        starts < 3 && exited && output.Contains("address already in use", StringComparison.OrdinalIgnoreCase);
+
+    private static Func<int, bool, string, bool> WrongRestartCheck(string wrong) => wrong switch
+    {
+        "unbounded" => (_, exited, output) => exited && output.Contains("address already in use", StringComparison.OrdinalIgnoreCase),
+        "ignores exit" => (starts, _, output) => starts < 3 && output.Contains("address already in use", StringComparison.OrdinalIgnoreCase),
+        "any in use" => (starts, exited, output) => starts < 3 && exited && output.Contains("in use", StringComparison.OrdinalIgnoreCase),
+        "case-sensitive" => (starts, exited, output) => starts < 3 && exited && output.Contains("address already in use", StringComparison.Ordinal),
+        "never restarts" => (_, _, _) => false,
+        _ => throw new ArgumentOutOfRangeException(nameof(wrong), wrong, "Unknown wrong restart decision."),
+    };
+
+    /// <summary>
     /// Returns the names of the start-argument rows on which <paramref name="check"/> gives the wrong verdict (a
     /// violation message for an accepted row, or null for a rejected row).
     /// </summary>
@@ -82,15 +149,17 @@ public sealed class TemporaryInstanceChecksTests
     }
 
     /// <summary>
-    /// Binding: the shared checks, <see cref="TemporaryInstanceChecks.CheckReplStartArguments"/> and
-    /// <see cref="TemporaryInstanceChecks.CheckHealthAnswer"/>, satisfy the same rows the scripted reference passed and
-    /// the wrong checks failed.
+    /// Binding: the shared checks, <see cref="TemporaryInstanceChecks.CheckReplStartArguments"/>,
+    /// <see cref="TemporaryInstanceChecks.CheckHealthAnswer"/> and
+    /// <see cref="TemporaryInstanceChecks.ShouldRestartOnNewPort"/> (TR-MCP-NUKE-019 AC-7), satisfy the same rows the
+    /// scripted references passed and the wrong checks failed.
     /// </summary>
     [Fact]
     public void SharedChecks_SatisfyTheContract()
     {
         Assert.Empty(StartContractFailures(TemporaryInstanceChecks.CheckReplStartArguments));
         Assert.Empty(HealthContractFailures(TemporaryInstanceChecks.CheckHealthAnswer));
+        Assert.Empty(RestartContractFailures(TemporaryInstanceChecks.ShouldRestartOnNewPort));
     }
 
     /// <summary>Mock gate positive control: the scripted reference checks satisfy every row of both contracts.</summary>

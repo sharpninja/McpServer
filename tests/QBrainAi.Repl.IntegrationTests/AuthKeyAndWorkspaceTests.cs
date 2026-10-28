@@ -117,15 +117,18 @@ public sealed class AuthKeyAndWorkspaceTests : IDisposable
             "Should process both auth key and workspace path headers");
     }
 
-    /// <summary>TR-MCP-NUKE-019 AC-6: a protected endpoint of the temporary instance refuses a request without a key.</summary>
+    /// <summary>
+    /// TR-MCP-NUKE-019 AC-6: a protected endpoint of the temporary instance refuses a request without a key. The
+    /// request names the instance's registered workspace, so it reaches the authentication check; an unregistered
+    /// workspace is answered 400 by WorkspaceResolutionMiddleware before authentication runs.
+    /// </summary>
     [Fact]
     public async Task AuthKey_Missing_ReturnsAppropriateError()
     {
         await _replProcess.EnsureInstanceAsync(TestContext.Current.CancellationToken);
-        var testWorkspacePath = "/test/workspace/auth-required";
 
         using var httpClient = new HttpClient { BaseAddress = _replProcess.InstanceBaseUrl };
-        httpClient.DefaultRequestHeaders.Add("X-Workspace-Path", testWorkspacePath);
+        httpClient.DefaultRequestHeaders.Add("X-Workspace-Path", _replProcess.InstanceWorkspacePath);
 
         using var response = await httpClient.GetAsync("/qbrainai/workspace/list", cancellationToken: TestContext.Current.CancellationToken);
 
