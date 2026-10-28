@@ -22,6 +22,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\QBrainAi.Repl.Core\QBrainAi.Repl.Core.csproj" />
     <ProjectReference Include="..\..\src\QBrainAi.Client\QBrainAi.Client.csproj" />
+    <!-- TR-MCP-REPL-008 AC-1 to AC-4: the marker walk cases run here as unit tests over an in-memory file system. -->
+    <ProjectReference Include="..\..\src\QBrainAi.Repl.Host\QBrainAi.Repl.Host.csproj" />
     <ProjectReference Include="..\..\tests\QBrainAi.Todo.Validation\QBrainAi.Todo.Validation.csproj" />
   </ItemGroup>
   <ItemGroup>

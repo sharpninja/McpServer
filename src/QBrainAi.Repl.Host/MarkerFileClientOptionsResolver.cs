@@ -225,6 +225,17 @@ public static class MarkerFileClientOptionsResolver
     /// <param name="searchedPaths">Every directory walked in search order.</param>
     /// <returns>The marker file path when found; otherwise, <see langword="null"/>.</returns>
     public static string? FindMarkerFile(string startPath, out IReadOnlyList<string> searchedPaths)
+        => FindMarkerFile(startPath, out searchedPaths, PhysicalMarkerFileSystem.Instance);
+
+    /// <summary>
+    /// TR-MCP-REPL-008 AC-1 to AC-3: the walk over <paramref name="fileSystem"/>, from the start folder up to the file
+    /// system root; the nearest marker wins and every folder checked is reported in walk order.
+    /// </summary>
+    /// <param name="startPath">The path to begin searching from.</param>
+    /// <param name="searchedPaths">Every directory walked in search order.</param>
+    /// <param name="fileSystem">The file system the walk reads.</param>
+    /// <returns>The marker file path when found; otherwise, <see langword="null"/>.</returns>
+    internal static string? FindMarkerFile(string startPath, out IReadOnlyList<string> searchedPaths, IMarkerFileSystem fileSystem)
     {
         var searched = new List<string>();
         var current = new DirectoryInfo(startPath);
@@ -232,7 +243,7 @@ public static class MarkerFileClientOptionsResolver
         {
             searched.Add(current.FullName);
             var candidate = Path.Combine(current.FullName, MarkerFileName);
-            if (File.Exists(candidate))
+            if (fileSystem.FileExists(candidate))
             {
                 searchedPaths = searched;
                 return candidate;
@@ -263,6 +274,26 @@ public static class MarkerFileClientOptionsResolver
         out QBrainAiClientOptions? options,
         out string error,
         string? agent = null)
+        => TryResolveWithDiagnostics(workspacePathOverride, markerPathOverride, out options, out error, agent, PhysicalMarkerFileSystem.Instance);
+
+    /// <summary>
+    /// TR-MCP-REPL-008 AC-4: the diagnosed resolution over <paramref name="fileSystem"/>; with no marker on the way up
+    /// the error names the marker file and every folder searched.
+    /// </summary>
+    /// <param name="workspacePathOverride">Optional explicit workspace path (CLI <c>--workspace-path</c>).</param>
+    /// <param name="markerPathOverride">Optional explicit marker file path (CLI <c>--marker-file</c>).</param>
+    /// <param name="options">The resolved options on success.</param>
+    /// <param name="error">Diagnostic message on failure.</param>
+    /// <param name="agent">Optional agent identifier, used for per-agent cache isolation.</param>
+    /// <param name="fileSystem">The file system the walk and the marker read use.</param>
+    /// <returns><see langword="true"/> when resolution succeeds; otherwise <see langword="false"/>.</returns>
+    internal static bool TryResolveWithDiagnostics(
+        string? workspacePathOverride,
+        string? markerPathOverride,
+        out QBrainAiClientOptions? options,
+        out string error,
+        string? agent,
+        IMarkerFileSystem fileSystem)
     {
         options = null;
         error = string.Empty;
@@ -276,7 +307,7 @@ public static class MarkerFileClientOptionsResolver
         {
             markerPath = markerPathOverride;
             searchedPaths = new[] { markerPathOverride };
-            if (!File.Exists(markerPath))
+            if (!fileSystem.FileExists(markerPath))
             {
                 error = $"Marker file not found at explicit path '{markerPath}'. Pass --workspace-path <dir> or place AGENTS-README-FIRST.yaml at that path.";
                 return false;
@@ -290,7 +321,7 @@ public static class MarkerFileClientOptionsResolver
                     ?? QBrainAi.Common.AgentCli.ProductEnvironment.GetLegacy("MCP_WORKSPACE")
                     ?? Environment.CurrentDirectory;
 
-            markerPath = FindMarkerFile(searchRoot, out searchedPaths);
+            markerPath = FindMarkerFile(searchRoot, out searchedPaths, fileSystem);
             if (markerPath is null)
             {
                 var pathList = string.Join("; ", searchedPaths);
@@ -299,7 +330,7 @@ public static class MarkerFileClientOptionsResolver
             }
         }
 
-        var parsed = ParseMarker(File.ReadAllLines(markerPath));
+        var parsed = ParseMarker(fileSystem.ReadAllLines(markerPath));
         if (parsed is null)
         {
             error = $"Marker file at '{markerPath}' is malformed: missing required fields (baseUrl/apiKey/workspacePath/signature).";

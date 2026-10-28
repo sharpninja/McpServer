@@ -4,31 +4,14 @@ using QBrainAi.Repl.Host;
 namespace QBrainAi.Repl.IntegrationTests;
 
 /// <summary>
-/// Verifies that the REPL host can bootstrap trusted marker-file client options without cached bearer state.
+/// Verifies that the REPL host can bootstrap trusted marker-file client options without cached bearer state. The
+/// marker walk cases (a parent's marker is found, a missing marker lists every folder searched) are unit tests over an
+/// in-memory file system in QBrainAi.Repl.Core.Tests (MarkerWalkTests, TR-MCP-REPL-008 AC-1 to AC-4), because on a
+/// real host the walk from a temporary folder can reach a parent workspace's marker, which is intended.
 /// </summary>
 [Trait("Category", "Integration")]
 public sealed class MarkerFileClientOptionsResolverTests
 {
-    [Fact]
-    public void ResolveWorkspacePath_FindsMarkerByWalkingParents()
-    {
-        var root = CreateTemporaryWorkspace();
-        try
-        {
-            var nested = Path.Combine(root, "src", "nested");
-            Directory.CreateDirectory(nested);
-            File.WriteAllText(Path.Combine(root, "AGENTS-README-FIRST.yaml"), BuildMarker(root));
-
-            var markerPath = MarkerFileClientOptionsResolver.FindMarkerFile(nested);
-
-            Assert.Equal(Path.Combine(root, "AGENTS-README-FIRST.yaml"), markerPath);
-        }
-        finally
-        {
-            Directory.Delete(root, recursive: true);
-        }
-    }
-
     [Fact]
     public void TryLoadTrustedMarker_ReturnsMarkerSettingsWhenSignatureMatches()
     {
@@ -43,37 +26,6 @@ public sealed class MarkerFileClientOptionsResolverTests
             Assert.Equal("http://localhost:7147", marker.BaseUrl);
             Assert.Equal("test-api-key", marker.ApiKey);
             Assert.Equal(root, marker.WorkspacePath);
-        }
-        finally
-        {
-            Directory.Delete(root, recursive: true);
-        }
-    }
-
-    /// <summary>
-    /// FR-MCP-REPL-007: When the marker file is missing, the diagnostic surface must
-    /// list every directory that was searched so the user can correct the workspace
-    /// path or marker location.
-    /// </summary>
-    [Fact]
-    public void TryResolveWithDiagnostics_WhenMarkerMissing_EnumeratesSearchedPaths()
-    {
-        var root = CreateTemporaryWorkspace();
-        try
-        {
-            var nested = Path.Combine(root, "src", "nested");
-            Directory.CreateDirectory(nested);
-
-            var ok = MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(
-                workspacePathOverride: nested,
-                markerPathOverride: null,
-                out _,
-                out var error);
-
-            Assert.False(ok);
-            Assert.False(string.IsNullOrWhiteSpace(error));
-            Assert.Contains(nested, error, StringComparison.OrdinalIgnoreCase);
-            Assert.Contains(root, error, StringComparison.OrdinalIgnoreCase);
         }
         finally
         {
