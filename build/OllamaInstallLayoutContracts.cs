@@ -1,5 +1,5 @@
 /// <summary>
-/// TR-MCP-NUKE-019 AC-4: where MigrationIntegrationTests finds or places the Ollama executable on a host. An installed
+/// TR-MCP-NUKE-019: where MigrationIntegrationTests finds or places the Ollama executable on a host. An installed
 /// executable is used when one exists, tried in order (one per PATH directory, then the host's usual install, then
 /// the portable executable in the user's QBrainAi test-tools folder); otherwise the host's portable release asset is
 /// placed in that folder and its executable is used.

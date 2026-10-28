@@ -1,13 +1,13 @@
 namespace NukeBuild.Tests;
 
 /// <summary>
-/// TR-MCP-NUKE-019 (AC-5), BDPv4 mock gate: proves the <see cref="IntegrationLanePreconditionContract"/> assertions
+/// TR-MCP-NUKE-019, BDPv4 mock gate: proves the <see cref="IntegrationLanePreconditionContract"/> assertions
 /// accept a scripted precondition that produces the criterion's outcomes, and reject deliberately wrong
 /// preconditions (negative controls), before any production precondition code is written.
 /// </summary>
 public sealed class IntegrationLanePreconditionMockGateTests
 {
-    /// <summary>TR-MCP-NUKE-019 AC-5: every scenario passes against the scripted precondition.</summary>
+    /// <summary>TR-MCP-NUKE-019: every scenario passes against the scripted precondition.</summary>
     /// <param name="scenario">Scenario name from <see cref="IntegrationLanePreconditionContract.ScenarioNames"/>.</param>
     [Theory]
     [InlineData("windows-interactive")]
@@ -17,13 +17,13 @@ public sealed class IntegrationLanePreconditionMockGateTests
     public void ScriptedPrecondition_PassesScenario(string scenario)
         => IntegrationLanePreconditionContract.AssertScenario(scenario, new ScriptedPrecondition(Fault.None));
 
-    /// <summary>TR-MCP-NUKE-019 AC-5: the theory above covers every contract scenario.</summary>
+    /// <summary>TR-MCP-NUKE-019: the theory above covers every contract scenario.</summary>
     [Fact]
     public void ScriptedTheory_CoversEveryScenario()
         => Assert.Equal(4, IntegrationLanePreconditionContract.ScenarioNames.Length);
 
     /// <summary>
-    /// TR-MCP-NUKE-019 AC-5 negative controls: a precondition that runs a non-interactive Windows session, stops
+    /// TR-MCP-NUKE-019 negative controls: a precondition that runs a non-interactive Windows session, stops
     /// without a message (a silent skip), names no session in its message, or blocks a Linux host, is rejected.
     /// </summary>
     /// <param name="scenario">Scenario the fault breaks.</param>

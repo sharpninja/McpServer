@@ -69,12 +69,12 @@ internal sealed class ScratchQBrainAi : IAsyncDisposable
     /// <summary>Gets the base URL the instance's marker names, set once <see cref="StartAsync"/> returns.</summary>
     public Uri BaseUrl { get; private set; } = new("http://127.0.0.1/", UriKind.Absolute);
 
-    /// <summary>Gets whether the instance process has exited (TR-MCP-NUKE-019 AC-7: a lost port ends the process).</summary>
+    /// <summary>Gets whether the instance process has exited (TR-MCP-NUKE-019: a lost port ends the process).</summary>
     public bool ProcessExited => _process is { HasExited: true };
 
     /// <summary>
     /// Starts a new temporary instance and returns once it wrote its marker for its own port and answers health. On
-    /// any failure the partial instance is disposed. TR-MCP-NUKE-019 AC-7: when the instance exited because its port
+    /// any failure the partial instance is disposed. TR-MCP-NUKE-019: when the instance exited because its port
     /// was taken after the probe (address already in use), a new instance starts on a newly picked port, at most
     /// <see cref="TemporaryInstanceChecks.MaxStarts"/> starts in all; any other failure, or the last lost port, is
     /// rethrown with the process output.
@@ -321,7 +321,7 @@ internal sealed class ScratchQBrainAi : IAsyncDisposable
 
             if (_process is { HasExited: true })
             {
-                // Drain the redirected output so the message and the AC-7 restart check see all of it.
+                // Drain the redirected output so the message and the restart check see all of it.
                 await _process.WaitForExitAsync().ConfigureAwait(false);
                 throw new InvalidOperationException(
                     $"QBrain.AI exited before generating '{MarkerPath}' with code {_process.ExitCode}.{Environment.NewLine}{Diagnostics}");
@@ -404,7 +404,7 @@ internal sealed class ScratchQBrainAi : IAsyncDisposable
         {
             if (_process is { HasExited: true })
             {
-                // Drain the redirected output so the message and the AC-7 restart check see all of it.
+                // Drain the redirected output so the message and the restart check see all of it.
                 await _process.WaitForExitAsync().ConfigureAwait(false);
                 throw new InvalidOperationException(
                     $"QBrain.AI exited before health was available with code {_process.ExitCode}.{Environment.NewLine}{Diagnostics}");
@@ -504,7 +504,7 @@ internal sealed class ScratchQBrainAi : IAsyncDisposable
     }
 
     /// <summary>
-    /// TR-MCP-NUKE-019 AC-7: picks a port that is free on every address the instance binds. The instance listens on
+    /// TR-MCP-NUKE-019: picks a port that is free on every address the instance binds. The instance listens on
     /// http://[::]:port (IPv6 any in dual mode, so IPv4 too), so the probe binds the same way; a probe on 127.0.0.1
     /// alone missed ports held on [::] or 0.0.0.0.
     /// </summary>

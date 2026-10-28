@@ -3,7 +3,7 @@ using System.Net;
 namespace NukeBuild.Tests;
 
 /// <summary>
-/// TR-MCP-NUKE-019 (AC-8): Contract cases and assertions for <see cref="IProvisioningDownload"/>. The expected
+/// TR-MCP-NUKE-019: Contract cases and assertions for <see cref="IProvisioningDownload"/>. The expected
 /// behavior comes from the acceptance criterion: the body is written to the destination as it arrives, the download
 /// has no limit on its total duration, and it fails naming the URL on an error status or when no data arrives for the
 /// inactivity limit. Every case runs through a scripted <see cref="HttpMessageHandler"/> in memory (no network) and

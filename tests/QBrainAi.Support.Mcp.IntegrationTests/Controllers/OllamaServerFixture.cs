@@ -71,7 +71,7 @@ public sealed class OllamaServerFixture : IAsyncLifetime
 
         var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         candidates.Add(Path.Combine(localAppData, "Programs", "Ollama", "ollama.exe"));
-        // Matches the portable install locations used by the InstallOllama Nuke target (TR-MCP-NUKE-019 AC-4):
+        // Matches the portable install locations used by the InstallOllama Nuke target (TR-MCP-NUKE-019):
         // the Windows zip puts the executable at the folder root, the Linux tarball under bin/.
         candidates.Add(Path.Combine(localAppData, "QBrainAi", "test-tools", "ollama", "ollama.exe"));
         candidates.Add(Path.Combine(localAppData, "QBrainAi", "test-tools", "ollama", "bin", "ollama"));

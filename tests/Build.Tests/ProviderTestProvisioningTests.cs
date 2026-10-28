@@ -1,7 +1,7 @@
 namespace NukeBuild.Tests;
 
 /// <summary>
-/// TR-MCP-NUKE-018 (AC-1 to AC-4): Binds the <see cref="ProviderTestProvisioningContract"/> scenarios and assertions,
+/// TR-MCP-NUKE-018: Binds the <see cref="ProviderTestProvisioningContract"/> scenarios and assertions,
 /// unchanged from the BDPv4 mock gate, to the production <see cref="LinuxProviderTestProvisioner"/>. The recording fake
 /// host stands in for the process environment, the env file, Docker and TCP; no container or socket is touched.
 /// </summary>

@@ -1,12 +1,12 @@
 /// <summary>
-/// TR-MCP-NUKE-019 AC-8: the provisioning download. The client has no total time limit; the request completes at the
+/// TR-MCP-NUKE-019: the provisioning download. The client has no total time limit; the request completes at the
 /// response headers, the body is written to the destination as each read arrives (an unbuffered file), and the
 /// inactivity limit restarts after every read, so a large release asset that keeps arriving finishes while a stalled
 /// transfer fails. An error status or a stall fails with the URL in the message.
 /// </summary>
 sealed class ProvisioningDownload : IProvisioningDownload
 {
-    /// <summary>The inactivity limit the provisioning targets use (TR-MCP-NUKE-019 AC-8: two minutes).</summary>
+    /// <summary>The inactivity limit the provisioning targets use (TR-MCP-NUKE-019: two minutes).</summary>
     internal static readonly TimeSpan DefaultInactivityLimit = TimeSpan.FromMinutes(2);
 
     /// <inheritdoc />

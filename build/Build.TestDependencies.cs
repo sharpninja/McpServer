@@ -16,7 +16,7 @@ partial class Build
     const string PostgresBinariesZipUrl =
         "https://get.enterprisedb.com/postgresql/postgresql-17.5-1-windows-x64-binaries.zip";
 
-    /// <summary>TR-MCP-NUKE-019 AC-4: the release download folder; the host's asset name comes from <see cref="OllamaInstallLayout"/>.</summary>
+    /// <summary>TR-MCP-NUKE-019: the release download folder; the host's asset name comes from <see cref="OllamaInstallLayout"/>.</summary>
     const string OllamaReleaseBaseUrl =
         "https://github.com/ollama/ollama/releases/latest/download/";
 
@@ -37,7 +37,7 @@ partial class Build
         (AbsolutePath)Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) / "QBrainAi" / "test-tools";
 
     /// <summary>
-    /// TR-MCP-NUKE-018 AC-1: test-database env file read on non-Windows hosts when a provider connection
+    /// TR-MCP-NUKE-018: test-database env file read on non-Windows hosts when a provider connection
     /// variable is not already set; defaults to ~/.config/qbrain-test/test-db.env.
     /// </summary>
     [Parameter("Test-database env file for Linux provider test provisioning (default ~/.config/qbrain-test/test-db.env)")]
@@ -68,7 +68,7 @@ partial class Build
         });
 
     /// <summary>
-    /// TR-MCP-NUKE-018 AC-1 to AC-4: provisions the provider test endpoints through the production
+    /// TR-MCP-NUKE-018: provisions the provider test endpoints through the production
     /// provisioner and the real host boundary, logs each action (names only, never values), and fails
     /// the target with every error when any endpoint is unavailable (no skip).
     /// </summary>
@@ -97,13 +97,13 @@ partial class Build
     /// PostgreSQL tests boot their own ephemeral cluster with generated credentials on a free port
     /// via their xUnit class fixture (or honor <c>MCP_TEST_POSTGRES_CONNECTION</c>); SQL Server
     /// tests use an ad-hoc LocalDB database (auto-started) on Windows. On other hosts both
-    /// providers use the endpoints InstallTestDependencies provisions (TR-MCP-NUKE-018 AC-6), and a
+    /// providers use the endpoints InstallTestDependencies provisions (TR-MCP-NUKE-018), and a
     /// provisioning failure fails this target before any test runs. Integration tests run only through
     /// this target: the default <c>Test</c> target excludes the category. The dedicated
     /// <c>*.IntegrationTests</c> projects remain separate (their classes carry the same trait).
     /// TR-MCP-NUKE-019: the selection is host-scoped through <see cref="IntegrationLaneFilter"/>; cases tagged
     /// <c>Platform=Linux</c> run only on Linux hosts, <c>Platform=Windows</c> only on Windows hosts, untagged on both.
-    /// TR-MCP-NUKE-019 AC-4: the lane also provisions Ollama and the QuadBrain test model on both hosts
+    /// TR-MCP-NUKE-019: the lane also provisions Ollama and the QuadBrain test model on both hosts
     /// (<see cref="InstallOllama"/>) before any test runs.
     /// </summary>
     public Target MigrationIntegrationTests => _ => _
@@ -113,16 +113,16 @@ partial class Build
         {
             // Only projects that contain Category=Integration tests: an empty filter match
             // makes the test runner fail the target.
-            // TR-MCP-NUKE-019 AC-2: the five named lane projects (Repl.Core.Tests and QBAgent.Tests hold the tests that
-            // read the repository checkout through the shared TestRepositoryRoot, TR-MCP-USECASE-018 AC-006) and every
-            // *.IntegrationTests project of the solution, so the two hosts together run every integration case.
+            // TR-MCP-NUKE-019 AC-2: the six lane projects IntegrationLaneProjects names, in run order (Repl.Core.Tests and
+            // QBAgent.Tests hold the tests that read the repository checkout through the shared TestRepositoryRoot,
+            // TR-MCP-USECASE-018 AC-006; QBrainAi.Repl.IntegrationTests is the one *.IntegrationTests lane project).
             var solutionProjects = Solution.GetAllProjects("*").ToArray();
             var laneProjectNames = new IntegrationLaneProjects().Select(solutionProjects.Select(project => project.Name).ToArray());
             var projectsWithIntegrationTests = laneProjectNames
                 .Select(name => (AbsolutePath)solutionProjects.First(project => project.Name == name).Path)
                 .ToArray();
 
-            // TR-MCP-NUKE-019 AC-5: on Windows the lane runs only from an interactive desktop session; refuse
+            // TR-MCP-NUKE-019: on Windows the lane runs only from an interactive desktop session; refuse
             // before any test runs, naming the missing session.
             var readiness = new InteractiveSessionPrecondition().Evaluate(IntegrationLaneFilter.CurrentHost(), Environment.UserInteractive);
             if (!readiness.CanRun)
@@ -192,7 +192,7 @@ partial class Build
 
     /// <summary>
     /// Idempotent installer for the local Ollama service used by the QuadBrain Ollama integration
-    /// tests (TEST-MCP-QBOLLAMA-001), on Windows and Linux (TR-MCP-NUKE-019 AC-4): an installed
+    /// tests (TEST-MCP-QBOLLAMA-001), on Windows and Linux (TR-MCP-NUKE-019): an installed
     /// executable is used when one exists (<see cref="OllamaInstallLayout.Candidates"/>), otherwise the
     /// host's portable release is placed in the user's QBrainAi test-tools folder; the server is started
     /// on localhost:11434 when none answers; the required model (<see cref="RequiredOllamaModel"/>, default
@@ -225,7 +225,7 @@ partial class Build
         });
 
     /// <summary>
-    /// TR-MCP-NUKE-019 AC-4: returns an installed Ollama executable (PATH, then the usual install, then the portable
+    /// TR-MCP-NUKE-019: returns an installed Ollama executable (PATH, then the usual install, then the portable
     /// location; <see cref="OllamaInstallLayout"/>), or places the host's portable release in the test-tools folder and
     /// returns its executable: on Windows the zip is extracted in process, on Linux the zstd tarball is extracted with
     /// tar --zstd (GNU tar and zstd on the host).
@@ -444,7 +444,7 @@ partial class Build
         return stdout;
     }
 
-    // TR-MCP-NUKE-019 AC-8: streams to disk with no total time limit; fails naming the URL on an error status or
+    // TR-MCP-NUKE-019: streams to disk with no total time limit; fails naming the URL on an error status or
     // when no data arrives for two minutes (the default HttpClient timed out the Ollama zip after 100 s).
     static void DownloadFile(string url, string destinationPath)
     {

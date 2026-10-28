@@ -1,20 +1,20 @@
 namespace NukeBuild.Tests;
 
 /// <summary>
-/// TR-MCP-NUKE-019 (AC-8), BDPv4 mock gate: proves the <see cref="ProvisioningDownloadContract"/> assertions accept a
+/// TR-MCP-NUKE-019, BDPv4 mock gate: proves the <see cref="ProvisioningDownloadContract"/> assertions accept a
 /// scripted download that streams to disk with no total limit and an inactivity limit, and reject deliberately wrong
 /// downloads (negative controls), before any production download code is written. Every case runs in memory through
 /// a scripted message handler; no network is used.
 /// </summary>
 public sealed class ProvisioningDownloadMockGateTests
 {
-    /// <summary>TR-MCP-NUKE-019 AC-8: the scripted download passes every contract case.</summary>
+    /// <summary>TR-MCP-NUKE-019: the scripted download passes every contract case.</summary>
     [Fact]
     public async Task ScriptedDownload_PassesContract()
         => await ProvisioningDownloadContract.AssertDownloadAsync(new ScriptedDownload(Fault.None)).ConfigureAwait(true);
 
     /// <summary>
-    /// TR-MCP-NUKE-019 AC-8 negative controls, each rejected inside this passing test: a download that buffers the whole
+    /// TR-MCP-NUKE-019 negative controls, each rejected inside this passing test: a download that buffers the whole
     /// body before writing, a client with HttpClient's default 100 s total limit, an inactivity deadline that is never
     /// reset, no inactivity limit at all, and failures that do not name the URL.
     /// </summary>

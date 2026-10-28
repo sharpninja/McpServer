@@ -1,7 +1,7 @@
 namespace NukeBuild.Tests;
 
 /// <summary>
-/// TR-MCP-NUKE-019 (AC-4): Contract cases and assertions for <see cref="IOllamaInstallLayout"/>. The expected values
+/// TR-MCP-NUKE-019: Contract cases and assertions for <see cref="IOllamaInstallLayout"/>. The expected values
 /// come from the acceptance criterion (an installed executable is used, otherwise the host's portable release is
 /// placed in the user's QBrainAi test-tools folder) and from the release itself: the latest ollama/ollama release,
 /// v0.40.11 (2026-10-24), ships ollama-windows-amd64.zip, whose executable sits at the archive root, and
@@ -21,7 +21,7 @@ internal static class OllamaInstallLayoutContract
     /// <summary>The scripted PATH directories: a plain entry, a blank entry, and an entry with trailing blanks.</summary>
     internal static readonly string[] PathDirectories = ["path-a", "  ", "path-b "];
 
-    /// <summary>The release asset AC-4 and the release require for <paramref name="host"/>.</summary>
+    /// <summary>The release asset the release requires for <paramref name="host"/>.</summary>
     /// <param name="host">Host the lane runs on.</param>
     internal static string ExpectedAsset(IntegrationLaneHost host) => host switch
     {

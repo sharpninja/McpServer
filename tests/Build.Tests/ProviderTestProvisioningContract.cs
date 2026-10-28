@@ -1,7 +1,7 @@
 namespace NukeBuild.Tests;
 
 /// <summary>
-/// TR-MCP-NUKE-018 (AC-1 to AC-4, AC-6): Contract scenarios and assertions for <see cref="IProviderTestProvisioner"/>.
+/// TR-MCP-NUKE-018: Contract scenarios and assertions for <see cref="IProviderTestProvisioner"/>.
 /// A recording fake host stands in for the process environment, the test-database env file, Docker and TCP. The
 /// expectations come from the acceptance criteria; the fixture secrets are fake markers that must never appear in
 /// actions or errors. The same assertions run against the scripted mock (BDPv4 mock gate), wrong mocks (negative

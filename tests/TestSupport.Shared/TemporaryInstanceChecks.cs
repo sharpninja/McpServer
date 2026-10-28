@@ -59,11 +59,11 @@ internal static class TemporaryInstanceChecks
             : $"The temporary instance's health answer did not echo the nonce '{nonce}'.";
     }
 
-    /// <summary>TR-MCP-NUKE-019 AC-7: the most starts a case makes of a temporary instance that keeps losing its port.</summary>
+    /// <summary>TR-MCP-NUKE-019: the most starts a case makes of a temporary instance that keeps losing its port.</summary>
     internal const int MaxStarts = 3;
 
     /// <summary>
-    /// TR-MCP-NUKE-019 AC-7: decides whether a temporary instance that failed to start is started again on a newly
+    /// TR-MCP-NUKE-019: decides whether a temporary instance that failed to start is started again on a newly
     /// picked port. Only an instance whose process exited and whose output says its address was already in use
     /// (ignoring case) is restarted, and only while fewer than <see cref="MaxStarts"/> starts were made; any other start
     /// failure, an instance still running, or a third lost port is not, so the case fails with the instance's output.

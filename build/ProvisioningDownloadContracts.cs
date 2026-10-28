@@ -1,5 +1,5 @@
 /// <summary>
-/// TR-MCP-NUKE-019 AC-8: how a provisioning download (the portable Ollama release, the SQL Server LocalDB installer,
+/// TR-MCP-NUKE-019: how a provisioning download (the portable Ollama release, the SQL Server LocalDB installer,
 /// the PostgreSQL binaries) reaches disk. The body is written to the destination file as it arrives and the download
 /// has no limit on its total duration; it fails, naming the URL, when the server answers an error status or when no
 /// data arrives for the inactivity limit.

@@ -1,5 +1,5 @@
 /// <summary>
-/// TR-MCP-NUKE-019 AC-4: Production <see cref="IOllamaInstallLayout"/>. The portable release assets are those the
+/// TR-MCP-NUKE-019: Production <see cref="IOllamaInstallLayout"/>. The portable release assets are those the
 /// ollama/ollama releases ship (ollama-windows-amd64.zip with the executable at its root, ollama-linux-amd64.tar.zst
 /// with the executable under bin/); an installed executable is looked for on PATH first, then in the per-user Windows
 /// install, then at the portable location.

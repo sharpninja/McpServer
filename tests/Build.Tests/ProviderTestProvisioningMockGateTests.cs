@@ -1,7 +1,7 @@
 namespace NukeBuild.Tests;
 
 /// <summary>
-/// TR-MCP-NUKE-018 (AC-1 to AC-4), BDPv4 mock gate: proves the <see cref="ProviderTestProvisioningContract"/>
+/// TR-MCP-NUKE-018, BDPv4 mock gate: proves the <see cref="ProviderTestProvisioningContract"/>
 /// assertions accept a scripted provisioner that produces the contract-derived effects, and reject deliberately wrong
 /// provisioners (negative controls), before any production provisioning code is written.
 /// </summary>
@@ -28,8 +28,8 @@ public sealed class ProviderTestProvisioningMockGateTests
 
     /// <summary>
     /// TR-MCP-NUKE-018 negative controls: each wrong provisioner is rejected by the scenario it violates
-    /// (AC-4 value leak, AC-2 foreign container, AC-1 file read although set, AC-3 missing file ignored,
-    /// AC-3 probe skipped).
+    /// (a value leak (AC-4), a foreign container, a file read although set, a missing file ignored,
+    /// a probe skipped).
     /// </summary>
     /// <param name="scenario">Scenario the fault violates.</param>
     /// <param name="fault">Injected fault.</param>

@@ -1,13 +1,13 @@
 namespace NukeBuild.Tests;
 
 /// <summary>
-/// TR-MCP-NUKE-019 (AC-4), BDPv4 mock gate: proves the <see cref="OllamaInstallLayoutContract"/> assertions accept a
+/// TR-MCP-NUKE-019, BDPv4 mock gate: proves the <see cref="OllamaInstallLayoutContract"/> assertions accept a
 /// scripted layout that produces the contract-derived values, and reject deliberately wrong layouts (negative
 /// controls), before any production layout code is written.
 /// </summary>
 public sealed class OllamaInstallLayoutMockGateTests
 {
-    /// <summary>TR-MCP-NUKE-019 AC-4: every host passes against the scripted layout.</summary>
+    /// <summary>TR-MCP-NUKE-019: every host passes against the scripted layout.</summary>
     /// <param name="host">Host name from <see cref="OllamaInstallLayoutContract"/>.</param>
     [Theory]
     [InlineData("windows")]
@@ -16,7 +16,7 @@ public sealed class OllamaInstallLayoutMockGateTests
         => OllamaInstallLayoutContract.AssertHost(host, new ScriptedLayout(Fault.None));
 
     /// <summary>
-    /// TR-MCP-NUKE-019 AC-4 negative controls, each rejected on the host it breaks: Windows names on Linux, a Linux
+    /// TR-MCP-NUKE-019 negative controls, each rejected on the host it breaks: Windows names on Linux, a Linux
     /// portable executable without bin/, the Windows asset everywhere, PATH ignored, the portable executable tried
     /// first, and a blank PATH entry kept.
     /// </summary>

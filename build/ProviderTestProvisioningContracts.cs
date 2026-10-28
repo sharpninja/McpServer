@@ -43,7 +43,7 @@ interface IProviderTestHost
 /// container names and host:port endpoints only, never connection-string values (AC-4).
 /// </summary>
 /// <param name="Actions">Ordered actions taken.</param>
-/// <param name="Errors">Problems that fail the provisioning (AC-3, no skip).</param>
+/// <param name="Errors">Problems that fail the provisioning (no skip).</param>
 sealed record ProviderTestProvisioningResult(IReadOnlyList<string> Actions, IReadOnlyList<string> Errors)
 {
     /// <summary>True when provisioning found no problem.</summary>
@@ -52,7 +52,7 @@ sealed record ProviderTestProvisioningResult(IReadOnlyList<string> Actions, IRea
 
 /// <summary>
 /// TR-MCP-NUKE-018: Linux provisioning of the PostgreSQL and SQL Server endpoints used by the Category=Integration
-/// provider tests (AC-1 to AC-4, AC-6).
+/// provider tests.
 /// </summary>
 interface IProviderTestProvisioner
 {

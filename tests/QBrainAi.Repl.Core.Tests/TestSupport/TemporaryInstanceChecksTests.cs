@@ -7,7 +7,7 @@ namespace QBrainAi.Repl.Core.Tests.TestSupport;
 /// Tests the checks an integration case uses to prove it runs on a temporary instance it owns: the REPL host's start
 /// arguments name a workspace and a marker inside the instance's own root, and the instance's health answer is 200 and
 /// echoes the request's nonce. Also tests the decision to start a new instance on a new port when the instance lost
-/// its port at start (TR-MCP-NUKE-019 AC-7).
+/// its port at start (TR-MCP-NUKE-019).
 /// </summary>
 /// <remarks>
 /// Requirement coverage: TR-MCP-NUKE-019 AC-6 (every integration case MigrationIntegrationTests runs uses a temporary
@@ -58,7 +58,7 @@ public sealed class TemporaryInstanceChecksTests
     ];
 
     /// <summary>
-    /// The restart contract rows (TR-MCP-NUKE-019 AC-7): a row name, the starts made so far, whether the instance
+    /// The restart contract rows (TR-MCP-NUKE-019): a row name, the starts made so far, whether the instance
     /// process has exited, its output, and whether the case must start a new instance on a new port. Only an exited
     /// instance whose output says its address was already in use, within three starts in all, is restarted. The bind
     /// failure text is the one Kestrel wrote in run ug-r8b-expanded-lane-1 (Iteration5IntegrationTests, port 49974).
@@ -89,13 +89,13 @@ public sealed class TemporaryInstanceChecksTests
             .ToList();
     }
 
-    /// <summary>Mock gate positive control (TR-MCP-NUKE-019 AC-7): the scripted restart decision satisfies every row.</summary>
+    /// <summary>Mock gate positive control (TR-MCP-NUKE-019): the scripted restart decision satisfies every row.</summary>
     [Fact]
     public void ScriptedRestartDecision_SatisfiesTheContract() =>
         Assert.Empty(RestartContractFailures(ScriptedRestart));
 
     /// <summary>
-    /// Mock gate negative controls on the restart contract (TR-MCP-NUKE-019 AC-7), each rejected inside a passing
+    /// Mock gate negative controls on the restart contract (TR-MCP-NUKE-019), each rejected inside a passing
     /// harness on the row named: a decision with no bound on starts, one that ignores whether the process exited, one
     /// that matches any "in use" text, one that matches case-sensitively, and one that never restarts.
     /// </summary>
@@ -151,7 +151,7 @@ public sealed class TemporaryInstanceChecksTests
     /// <summary>
     /// Binding: the shared checks, <see cref="TemporaryInstanceChecks.CheckReplStartArguments"/>,
     /// <see cref="TemporaryInstanceChecks.CheckHealthAnswer"/> and
-    /// <see cref="TemporaryInstanceChecks.ShouldRestartOnNewPort"/> (TR-MCP-NUKE-019 AC-7), satisfy the same rows the
+    /// <see cref="TemporaryInstanceChecks.ShouldRestartOnNewPort"/> (TR-MCP-NUKE-019), satisfy the same rows the
     /// scripted references passed and the wrong checks failed.
     /// </summary>
     [Fact]
