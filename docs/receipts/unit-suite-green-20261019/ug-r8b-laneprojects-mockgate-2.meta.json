@@ -1,0 +1,33 @@
+{
+  "name": "ug-r8b-laneprojects-mockgate-2",
+  "command": [
+    "dotnet",
+    "test",
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj",
+    "-c",
+    "Debug",
+    "--logger",
+    "trx;LogFileName=ug-r8b-laneprojects-mockgate-2.trx",
+    "--results-directory",
+    "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-laneprojects-mockgate-2",
+    "--filter",
+    "FullyQualifiedName~IntegrationLaneProjectsMockGateTests"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "d5a23364daa20da6e23a89e020ddc65ec810773c",
+  "dirtyPaths": [
+    " M build/Build.TestDependencies.cs",
+    " M docs/benchmarks/results/memory-bench-20260919T091800Z.json",
+    " M docs/benchmarks/results/memory-bench-multiturn-20260919T091800Z.json",
+    "?? build/IntegrationLaneProjects.cs",
+    "?? build/IntegrationLaneProjectsContracts.cs",
+    "?? tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+    "?? tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+    "?? tests/Build.Tests/IntegrationLaneProjectsTests.cs"
+  ],
+  "startedLocal": "2026-10-27T14:34:05",
+  "log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-laneprojects-mockgate-2.out.log",
+  "results": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-laneprojects-mockgate-2",
+  "exitCode": 0,
+  "endedLocal": "2026-10-27T14:34:09"
+}

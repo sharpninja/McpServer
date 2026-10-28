@@ -1,0 +1,2 @@
+RECEIPT ug-r8b-download-mockgate-2 (TRX summary of /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-download-mockgate-2, written 2026-10-27T22:57:33)
+ug-r8b-download-mockgate-2.trx: total=6 executed=6 passed=6 failed=0 notExecuted=0

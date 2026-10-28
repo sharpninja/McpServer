@@ -1,0 +1,20 @@
+{
+  "name": "ug-r8b-checks-mockgate-1",
+  "target": "Test",
+  "extraArgs": [
+    "--test-run-id",
+    "ug-r8b-checks-mockgate-1"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "2175d827fa6bf4bcbca05e23fae75aaf6b889737",
+  "dirtyPaths": [
+    " M docs/plans/2026-10-19-unit-suite-green.md",
+    "?? docs/receipts/hv/unitgreen-r8b-trx/",
+    "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/"
+  ],
+  "startedLocal": "2026-10-27T05:27:21",
+  "startedUtc": "2026-10-27T10:27:21.2888795Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-checks-mockgate-1.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-checks-mockgate-1.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-checks-mockgate-1.exit.txt"
+}
