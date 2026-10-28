@@ -444,14 +444,16 @@ partial class Build
         return stdout;
     }
 
+    // TR-MCP-NUKE-019 AC-8: streams to disk with no total time limit; fails naming the URL on an error status or
+    // when no data arrives for two minutes (the default HttpClient timed out the Ollama zip after 100 s).
     static void DownloadFile(string url, string destinationPath)
     {
-        using var http = new HttpClient();
-        using var response = http.GetAsync(url).GetAwaiter().GetResult();
-        response.EnsureSuccessStatusCode();
-        using var target = File.Create(destinationPath);
-        response.Content.CopyToAsync(target).GetAwaiter().GetResult();
-        Log.Information("Downloaded {Url} -> {Path} ({Bytes:N0} bytes)", url, destinationPath, target.Length);
+        using var handler = new SocketsHttpHandler();
+        new ProvisioningDownload()
+            .DownloadAsync(handler, new Uri(url), destinationPath, ProvisioningDownload.DefaultInactivityLimit, CancellationToken.None)
+            .GetAwaiter()
+            .GetResult();
+        Log.Information("Downloaded {Url} -> {Path} ({Bytes:N0} bytes)", url, destinationPath, new FileInfo(destinationPath).Length);
     }
 
 }
