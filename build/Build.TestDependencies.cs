@@ -113,17 +113,14 @@ partial class Build
         {
             // Only projects that contain Category=Integration tests: an empty filter match
             // makes the test runner fail the target.
-            // TR-MCP-NUKE-019 AC-2: every project that holds Category=Integration cases, so the two hosts
-            // together run every integration case. Repl.Core.Tests and QBAgent.Tests hold the tests that read the
-            // repository checkout through the shared TestRepositoryRoot (TR-MCP-USECASE-018 AC-006).
-            var projectsWithIntegrationTests = new[]
-            {
-                TestsDirectory / "QBrainAi.Support.Mcp.Tests" / "QBrainAi.Support.Mcp.Tests.csproj",
-                TestsDirectory / "QBrainAi.McpAgent.Tests" / "QBrainAi.McpAgent.Tests.csproj",
-                TestsDirectory / "QBrainAi.Repl.Core.Tests" / "QBrainAi.Repl.Core.Tests.csproj",
-                TestsDirectory / "QBrainAi.QBAgent.Tests" / "QBrainAi.QBAgent.Tests.csproj",
-                TestsDirectory / "Build.Tests" / "Build.Tests.csproj",
-            };
+            // TR-MCP-NUKE-019 AC-2: the five named lane projects (Repl.Core.Tests and QBAgent.Tests hold the tests that
+            // read the repository checkout through the shared TestRepositoryRoot, TR-MCP-USECASE-018 AC-006) and every
+            // *.IntegrationTests project of the solution, so the two hosts together run every integration case.
+            var solutionProjects = Solution.GetAllProjects("*").ToArray();
+            var laneProjectNames = new IntegrationLaneProjects().Select(solutionProjects.Select(project => project.Name).ToArray());
+            var projectsWithIntegrationTests = laneProjectNames
+                .Select(name => (AbsolutePath)solutionProjects.First(project => project.Name == name).Path)
+                .ToArray();
 
             // TR-MCP-NUKE-019 AC-5: on Windows the lane runs only from an interactive desktop session; refuse
             // before any test runs, naming the missing session.
