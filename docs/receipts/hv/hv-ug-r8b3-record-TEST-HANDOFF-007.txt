@@ -1,0 +1,28 @@
+type: result
+payload:
+  requestId: req-20261029T033801Z-6be2
+  result:
+    id: TEST-HANDOFF-007
+    title: Test TEST-HANDOFF-007
+    description: Cover normalized run storage, diagnostic persistence, cancellation, and the prohibition on logging credentials or raw source content.
+    status: pending
+    priority: medium
+    area: HANDOFF
+    testType: unit
+    acceptanceCriteria:
+    - id: AC-001
+      text: 'Sqlite_HandoffMigration_DowngradeAndReupgrade, PostgreSql_HandoffMigration_DowngradeAndReupgrade and SqlServer_HandoffMigration_DowngradeAndReupgrade: on a clean database migrated only up to AddHandoffIngestionStorage, a downgrade to the immediately preceding migration removes AddHandoffIngestionStorage from the applied migrations and a re-upgrade restores it; proven first by HandoffCycleAssertion_AcceptsReversibleCycleAndRejectsMissingOrForwardOnlyCrossing over applied-migration lists (negative controls: the handoff migration still applied after the downgrade, absent after the re-upgrade, and a downgrade target older than 20260929140000_VersionedAuditPayloads) (PLAN-SESSIONTRIAGEFIX-001 B12, triage-report-61c2a2b2).'
+      isSatisfied: false
+    - id: AC-002
+      text: The same tests then migrate the database to head, where a handoff ingestion run and its diagnostic persist and read back (PLAN-SESSIONTRIAGEFIX-001 B12).
+      isSatisfied: false
+    - id: AC-003
+      text: "VersionedAuditPayloads_DownIsForwardOnly_OnEveryProvider: 20260929140000_VersionedAuditPayloads' Down raises NotSupportedException on SQLite, PostgreSQL and SQL Server, the forward-only boundary that migration declares, so no downgrade test crosses it (PLAN-SESSIONTRIAGEFIX-001 B12)."
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-29T03:38:03.1033660+00:00
+    updatedAt: 2026-10-29T03:38:03.1034874+00:00
+  deprecated: true
+
+---
+

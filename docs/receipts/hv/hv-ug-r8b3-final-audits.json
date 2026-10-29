@@ -1,0 +1,602 @@
+{
+  "TimestampLocal": "2026-10-28T23:20:58",
+  "MergeTree": [],
+  "MergeTreeExitCode": 0,
+  "CheckpointPaths": [],
+  "LabelChangedPaths": [
+    "tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs"
+  ],
+  "Commits": [
+    {
+      "Sha": "332e0d31dbcb823418c3db30c409bc44df655de8",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "Subject": "docs: round 8b second attempt as received, ended by the service; HV unbounded rule (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "a9d6a8d7e259803e438b7125701a186bae8db26d",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 96%, completeness 96%"
+      ],
+      "Subject": "docs: record the killed round 8b first attempt in plan 25.7 and the brief (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "366238a2dfdbbc65991605db19b9b8b2192c3aa9",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 96%, completeness 96%"
+      ],
+      "Subject": "docs: round 8b first attempt receipts as received, killed with no verdict (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "2b0f65d87f1948afcdcab6b0aa7c7afd3edd42cd",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "Subject": "docs: gates and TRX evidence at a78640ba, plan 25.7, round 8b prelaunch records (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "Subject": "test: label the TEST-MCP-REQSCOPE-REPL-001 citations historical (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "a69edb612a8f9994b2a1108f5096160332afca9e",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "Subject": "docs: round 8b lanes complete by name and plan 25.4 (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "fbc2da860e83c095433c51f8c7bec3c6038bdba6",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "Subject": "docs: round 8b TRX evidence at 433ce191 and plan section 25 (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "d43c1d125cc6129940f21f439b5b3982dc1e61c3",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "Subject": "merge: develop 9b099716 into PR 87, docs only (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "4634c73c4b97f759177df0057c6142f5339e5027",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 94%"
+      ],
+      "Subject": "docs: gates at 433ce191 and plan sections 22.8 to 24 (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "433ce1919d04bb6c5bb3c95a60c6b5df656d59fb",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 93%"
+      ],
+      "Subject": "docs: cite TR-MCP-NUKE-018 and -019 without their removed environment criteria"
+    },
+    {
+      "Sha": "751e34e42151dedddca2ce31b5a12c768f3d2876",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 95%"
+      ],
+      "Subject": "docs: round 8b run receipts through 3e487b6b (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "3e487b6b9e520bd8bd7cba836cdb0bea8716fd48",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ],
+      "Subject": "test: run the marker walk cases as unit tests over an in-memory file system (TR-MCP-REPL-008 AC-1 to AC-4)"
+    },
+    {
+      "Sha": "4fab4424c0ebcd961e5135e393eace47771dd62c",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 96%, completeness 92%"
+      ],
+      "Subject": "fix: stream provisioning downloads with no total time limit (TR-MCP-NUKE-019 AC-8)"
+    },
+    {
+      "Sha": "2f67921357bff28a636fc5824d70422dbb1f168d",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 96%, completeness 92%"
+      ],
+      "Subject": "test: fix the four REPL integration defects (TR-MCP-NUKE-019 AC-6, AC-7)"
+    },
+    {
+      "Sha": "6667c405fe4e38a651773782809f355f087ac935",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 93%"
+      ],
+      "Subject": "build: select the integration lane's six projects (TR-MCP-NUKE-019 AC-2, slice A)"
+    },
+    {
+      "Sha": "d5a23364daa20da6e23a89e020ddc65ec810773c",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 92%, accuracy 97%, completeness 95%"
+      ],
+      "Subject": "build: the integration lane provisions Ollama and its model on Windows and Linux (TR-MCP-NUKE-019 AC-4)"
+    },
+    {
+      "Sha": "8c651f13036db0aa2b90413770377cc66cb419d6",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 97%, completeness 95%"
+      ],
+      "Subject": "test: run the REPL integration tests on a temporary instance they own, never the live marker (TR-MCP-NUKE-019 AC-6)"
+    },
+    {
+      "Sha": "2175d827fa6bf4bcbca05e23fae75aaf6b889737",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "Subject": "docs: hostile validation round 8 receipts as received, stopped by operator decision before a verdict (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "868bbb575052a39e763280a42c4fbca01c9c9fdd",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "Subject": "docs: hostile validation round 8 prelaunch records (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "43cb62a78951ee71d27c8fd49f0fc0c153d42f50",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "Subject": "docs: round 8 run receipts and plan section 21 as built at ccd9e91f (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "ccd9e91f00dae4419b39ae8d37c2ae522e6fc62d",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 96%"
+      ],
+      "Subject": "fix: bind the REPL timeout call sites to TR-MCP-REPL-001 AC-002 through one read seam"
+    },
+    {
+      "Sha": "845f323b6b6ae13bc01b6165d6f987238c631dea",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 96%"
+      ],
+      "Subject": "test: create the eighteenth-review traversal junction in process instead of a cmd.exe mklink helper (TR-MCP-USECASE-019 AC-008)"
+    },
+    {
+      "Sha": "7ab3c1c40bc226056f7c20f1db6963e12311a313",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 96%"
+      ],
+      "Subject": "test: create the Twelfth-review junction in process instead of a pwsh.exe helper on a 5-second budget (TR-MCP-USECASE-019 AC-008)"
+    },
+    {
+      "Sha": "f5cda3c15455b8f42f97bb35768c142757323378",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "Subject": "fix: REPL command timeouts ignore values the cancellation timer rejects (R7-F1, TR-MCP-REPL-001 AC-002)"
+    },
+    {
+      "Sha": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "Subject": "docs: hostile validation round 7 receipts as received (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "8b97aa4bee778273688e53a64a737c3170a41823",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "Subject": "docs: hostile validation round 7 prelaunch records (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "55c1400c58df1e03cb9a0cc2c3926b02534ab75a",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "Subject": "docs: round 7 gates of record at c31f36d8, the script-checking ledger and plan section 20 as built (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "c31f36d81dc87509b605175c5ced0d3b0f08180c",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 95%"
+      ],
+      "Subject": "docs: round 7 run receipts through 04841148 and plan section 20 as of the first round 7 head (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "0484114872c09cf5afab5e019748dfabbda294bc",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 96%"
+      ],
+      "Subject": "test: the CLI temp helper points the primary name at the test folder and the fallbacks elsewhere (IMPL-UNITGREEN-001, R6-F1)"
+    },
+    {
+      "Sha": "6a87791d9363bb972feb6a4539339fac0c1a1915",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 95%"
+      ],
+      "Subject": "test: CLI temp-folder tests become integration tests with every temp variable controlled (IMPL-UNITGREEN-001, R6-F1, R6-F2)"
+    },
+    {
+      "Sha": "3a607fb17dba72c6c7f920a6067b1ca191ec86fb",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "Subject": "docs: hostile validation round 6 receipts as received, DISAGREE (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "3ce97b3e3dd31dbe009a3716d2b15d43ce60bb5b",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "Subject": "docs: hostile validation round 6 prelaunch records and hostile gate v4 (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "44e9d810d88c0e34239ae31eef2683a614d392f7",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "Subject": "docs: round 6 run receipts and plan section 19 (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "c84183016a032bd522f5ae085a90d7c912bef810",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 95%"
+      ],
+      "Subject": "test: environment-touching unit tests become integration tests; env writers run one at a time (R5-F2, IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "9933796c53433a55d11cf14a96be97438a087b0f",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 95%"
+      ],
+      "Subject": "fix: profile scans skip a linked scan root and linked folders above it (R5-F1, IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "c3625a64222c558b16c564e62ec2b5d600801e77",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "Subject": "docs: hostile validation round 5 receipts as received (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "780b6513b4004da0b17c2359d9cb65f6a69de67e",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "Subject": "docs: hostile validation round 5 prelaunch records (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "8b7a49eaa3e8d4872b33d66af517acc8ad7e21ea",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "Subject": "docs: the widened hostile gate, the gates at 810ee8aa and plan section 18 to date (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "810ee8aa0fbdcc6cf64a3d9575693068d261a97c",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 98%, completeness 96%"
+      ],
+      "Subject": "test(maintenance): the environment-instance parse test is an integration test that controls both instance variables (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "5b818847b4e598b4e85ac6567041b847b0385950",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "Subject": "docs: round 5 console logs and the Windows Test dry run as text receipts (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "3a9f8ff46690c4e35781bab444deac0d4345bbbd",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "Subject": "docs: round 5 run receipts at ccc78b7a, plan section 18 and the R4-F2 corrections (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "ccc78b7a7624e0367725af585a5fd7c4f38b3661",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "Subject": "test(scanner): the scanner documentation states the declared alias limit (R4-F1, IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "8c254695d886d6ff87d5caaa42b0fa6b421c9c6b",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "Subject": "test(memory): the harness binding cites the memory CRUD chain present in the store (R4-F3, IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "094e47f4e0e8074c027e68f25d26482ce68b331e",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "Subject": "docs: hostile validation round 4 receipts as received (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "b0db5b09b5824b2e49b028ac37b3ee8a3b48ec8a",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "Subject": "docs: round 4 plan record, final-head receipts and pre-launch records (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "97b7811491ccb3e338804a01d0bf28e4ecfe273a",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 95%"
+      ],
+      "Subject": "test(handoff,memory): own connection per context in HandoffAuditDefectTests and MemoryS1Harness (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "50b58ce515cba89dab9b479b5e3eceb9fbb7c0a8",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "Subject": "docs: round 4 run receipts through code head 26fc8348 (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "26fc83486be252e63579cca9d53f3132672555c7",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 94%"
+      ],
+      "Subject": "test(handoff),fix(marker): own connection per context in the handoff tests; sibling rule back in MarkerFileService (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "c31c2918c15d4085e463e00f6a4977fd67913b76",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "Subject": "docs: correct the round 3 self-review run sentence (R3-F4, IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "801e6862d49d669808c9315a7ad43d0272b1d1f1",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 95%"
+      ],
+      "Subject": "fix(marker,tests): one source seam for plugin-version inputs; scanner aliases in lexical scope (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "0996a1164fa84dd6288403e5161f337581fc21cb",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "Subject": "docs: hostile validation round 3 receipts as received (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "64fc4b1400ac5bc7526c472f8efeacb91980f2a6",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "Subject": "docs: hostile validation round 3 pre-launch records (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "6b89998f4f0257b967bba12e2434135964cf135b",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 95%"
+      ],
+      "Subject": "docs: the R3-P3 record, its gate receipts and the round 3 traceability receipts (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "e0b078c802d6456d106e6ec681d1aa93d6c4d055",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 95%"
+      ],
+      "Subject": "fix(marker): a plugin version file that cannot be read never fails the marker (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "395b4cd89726e921af481d4c8c056bf8fa535ae6",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 94%"
+      ],
+      "Subject": "docs: hostile validation round 2 receipts, the round 3 record and its gate receipts (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "68fa7b393d007c0d0c466c29ae4da5738bf54af2",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 94%"
+      ],
+      "Subject": "test(storage): the SQL Server LocalDB collection runs with parallelization disabled, as the chosen option states (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "6ea425ab943ebdd8aad1de1c84896de92d0270d8",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ],
+      "Subject": "test(storage): the ephemeral PostgreSQL fixture runs pg_ctl silent so it cannot garble xUnit messages (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "0210244d27bf2b5e731e4ee40350504934e812a4",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 96%, completeness 92%"
+      ],
+      "Subject": "test(storage): the SQL Server test classes on LocalDB run one after another (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "6042dbb3551c38a740e13de28f44fe9a814e6f0a",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 96%, completeness 92%"
+      ],
+      "Subject": "test(storage): SQL Server integration tests wait 120 s for LocalDB to accept a connection (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "56d14d7cd7e72975b1cbf0ddcd2cc17c16763249",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 93%"
+      ],
+      "Subject": "test(services): the hermetic-profile check reads the injected fixture, not a parallel test's folder (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "538d0ccf957c041f1e3886864bdf5e4ca693e9ec",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 95%, completeness 90%"
+      ],
+      "Subject": "fix(services): user-profile scans skip directory links and unlistable folders (IMPL-UNITGREEN-001, triage b0e41c36)"
+    },
+    {
+      "Sha": "27c43bccd19a591e4ca30560b52d4c5a9e8b81c9",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 95%, completeness 90%"
+      ],
+      "Subject": "test(guards): one repository-root locator, refused outside Integration; classify by dependency (IMPL-UNITGREEN-001, R2-F1)"
+    },
+    {
+      "Sha": "45a3197c9afda2f7c7d87e7d986908f885c20b02",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 90%"
+      ],
+      "Subject": "test(guards): Roslyn syntax-tree platform scanner, Roslyn pins to 5.9.0 (IMPL-UNITGREEN-001, R2-F2)"
+    },
+    {
+      "Sha": "a94579db927f25a0cbddd07d639f3054f2ee72e8",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 94%"
+      ],
+      "Subject": "docs: hostile validation round 1 receipts, its remediation record and the round 2 gate receipts (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "b4ad42aaa601ed0df7e03b34203dee4f93d316a9",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ],
+      "Subject": "test: unit tests that reach native file-system boundaries or write tracked files move to Integration (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "49cfec920349f17ace1b287b18d1b0fe2d956b03",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 94%"
+      ],
+      "Subject": "test: one skip definition for both guards; multiline, qualified and listed skip attributes; interpolation holes kept as code (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "6b4295b790e0e2cde7113f3be4bb83bc66343016",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 96%, completeness 94%"
+      ],
+      "Subject": "docs: record the 19:41 decisions and the handoff-correction commit in the unit-suite-green plan (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "83417029fa3e0ee8ef2ffc6bdfa29a7c1e9fdb38",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 96%, completeness 93%"
+      ],
+      "Subject": "docs: unit-suite-green plan as built and the code-head gate receipts (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "127468345afcc7a24e6a254f712d6b75a54713e8",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 94%"
+      ],
+      "Subject": "test: the invalid-handle final-path case runs only on Windows, without a silent return (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "69d8f3f5b19b070f9059a096f344c44bbd359d47",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ],
+      "Subject": "build: the Windows integration lane runs only from an interactive desktop session (TR-MCP-NUKE-019 AC-5, amendment H1)"
+    },
+    {
+      "Sha": "5924926051f84720c110ab1421430499fadf918a",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ],
+      "Subject": "test: the interactive desktop-spawner case fails loudly instead of returning silently (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "4f668b76d26b26e7162d8654fb946c484fd42539",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 93%"
+      ],
+      "Subject": "docs: unit-suite-green plan and the PR 82 handoff correction (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "b2bd50b3711c28bdb256e1f4fa56f3d8114fb6c6",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 95%, completeness 90%"
+      ],
+      "Subject": "test: classify platform-dependent tests as integration tests and guard the unit suite (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "8a6173342dcd7683b9d9549005a5af819b8abc90",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 95%"
+      ],
+      "Subject": "Merge origin/develop (PR 86, 3da2db93) into fix/unit-suite-green-20261019"
+    },
+    {
+      "Sha": "8c2b83ab5a442ce7dbc4a5a78f70dfaafbd034a2",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 90%"
+      ],
+      "Subject": "build: host-scoped integration lane filter for MigrationIntegrationTests (TR-MCP-NUKE-019, IMPL-UNITGREEN-001 G)"
+    },
+    {
+      "Sha": "11681680d316bee7c8c184e45b699af7c1bd2188",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 93%"
+      ],
+      "Subject": "test: take over the unit-suite fixes and Linux provider provisioning from PLAN-C4MODEL-001 (IMPL-UNITGREEN-001)"
+    },
+    {
+      "Sha": "b2319488039bbcd1e2014d8f3a1b7a26627b3ba8",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 97%, completeness 93%"
+      ],
+      "Subject": "test: HostileReviewWorker startup test no longer depends on Event Log write access (IMPL-UNITGREEN-001 F)"
+    },
+    {
+      "Sha": "a4c358efd91131e7fb714370726997b5c2d076cb",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 92%"
+      ],
+      "Subject": "test: leave the PLAN-C4MODEL-001 unit fixes to that effort (IMPL-UNITGREEN-001 scope)"
+    },
+    {
+      "Sha": "de5813532adb51b964b222644ae0519bd814f8ef",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 93%"
+      ],
+      "Subject": "feat(client): host-aware WorkspaceIdentityPath.ToNativePath overload (IMPL-UNITGREEN-001 step 4)"
+    },
+    {
+      "Sha": "28bf0b222464c5bdbfb8b6ec0a357e15284e486f",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 92%"
+      ],
+      "Subject": "test: canonical workspace keys, provider traits and a host-aware native-path contract (IMPL-UNITGREEN-001 step 2)"
+    },
+    {
+      "Sha": "cbc74e823e7af96f8df1a1320498998e5de2b328",
+      "Signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 90%"
+      ],
+      "Subject": "fix(deps): pin System.Security.Cryptography.Xml and Pkcs to the advisory-patched 10.0.13 (IMPL-UNITGREEN-001 step A)"
+    }
+  ],
+  "Unsigned": [],
+  "TextHygiene": [
+    {
+      "Path": "docs/plans/2026-10-19-unit-suite-green.md",
+      "Issues": []
+    },
+    {
+      "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r8b3-pr87-body.md",
+      "Issues": []
+    }
+  ],
+  "ResultSchema": {
+    "RunId": "ug-r8b-linux-test-6",
+    "Path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-linux-test-6/QBrainAi.Client.Tests.trx",
+    "Host": "LAB-OMARCHY",
+    "Kind": "unit",
+    "Name": "QBrainAi.Client.Tests.VoiceClientTests.SubmitTurnStreamingAsync_ParsesSseEvents",
+    "Outcome": "Passed",
+    "Class": "QBrainAi.Client.Tests.VoiceClientTests",
+    "Method": "SubmitTurnStreamingAsync_ParsesSseEvents",
+    "Duration": "00:00:00.0074145",
+    "Start": "2026-10-28T20:31:57.6584985-05:00",
+    "End": "2026-10-28T20:31:57.6659566-05:00"
+  }
+}

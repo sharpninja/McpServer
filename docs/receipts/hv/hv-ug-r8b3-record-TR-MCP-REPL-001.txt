@@ -1,0 +1,29 @@
+type: result
+payload:
+  requestId: req-20261029T033722Z-aef9
+  result:
+    id: TR-MCP-REPL-001
+    title: YAML Envelope Protocol
+    description: >-
+      The REPL host SHALL parse incoming STDIO lines as YAML-formatted command envelopes containing `type`, `payload` with method-specific parameters, and optional `correlationId`/`requestId`. Response envelopes SHALL contain `type` (`result`/`error`/`event`), `payload` with result data or error details, and echoed identifiers. Malformed YAML SHALL emit structured error responses rather than crashing the process.
+
+
+      **Covered by:** `McpServer.Repl.Core` (`IYamlEnvelope`, `IYamlSerializer`, `IReplProtocol`)
+    status: pending
+    priority: medium
+    area: MCP
+    subarea: REPL
+    acceptanceCriteria:
+    - id: AC-001
+      text: "The plugin REPL bridge (plugins/core/lib-ps/repl-invoke.ps1 run with -Method, the REPL surface every agent plugin calls) answers a call that fails before any response envelope arrives (marker refresh failure, REPL executable not found, a timeout, or the REPL exiting without output) with one YAML envelope on stdout of type error whose payload carries code, message (the failure text, or the REPL's exit code when it wrote nothing) and retryable, the code and retryable taken from the plugin's error classification (TR-MCP-TRIAGEERR-001), and the script exits 1; a call that succeeds without output writes nothing; the bridge never writes a bare True or False to stdout (triage-report-eb56d4eb; PLAN-SESSIONTRIAGEFIX-001 F1; tests in plugins/core/test-fixtures/pester/ReplBridgeErrorEnvelope.Tests.ps1: ReplBridgeErrorAssertion_AcceptsErrorEnvelopeAndRejectsBareBooleanOrUntypedOutput, ReplBridge_FailureWithoutOutput_WritesErrorEnvelope, ReplBridge_SuccessWithoutOutput_WritesNothing, ReplBridge_Script_MissingRepl_ExitsOneWithErrorEnvelope)."
+      isSatisfied: false
+    - id: AC-002
+      text: "A command timeout configured through MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS (agent stdio requests) or MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS (stream commands) is used only when it is a whole number of seconds from 1 to the largest delay the runtime's cancellation timer accepts (4294967 seconds); any other value (unset, empty, not a number, zero, negative or larger) is ignored and the two-minute default applies, so no request fails and the process does not crash because of the configured value, and the timeout message names the timeout that applied; one parse rule serves both variables (hostile validation round 7: both variables at 2147483647 made 19 REPL unit cases throw ArgumentOutOfRangeException from CancellationTokenSource.CancelAfter; triage-report-c993b9446bb8464ba375f74fabd07dad; operator 2026-10-26: \"if you surface new AC, add them without waiting for approval\")."
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-29T03:37:23.7672172+00:00
+    updatedAt: 2026-10-29T03:37:23.7673292+00:00
+  deprecated: true
+
+---
+

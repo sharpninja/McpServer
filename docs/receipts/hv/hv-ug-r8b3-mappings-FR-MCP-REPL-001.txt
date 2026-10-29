@@ -1,0 +1,16 @@
+type: result
+payload:
+  requestId: req-20261029T033830Z-4c1e
+  result:
+    items:
+    - frId: FR-MCP-REPL-001
+      trId: TR-MCP-REPL-001
+      createdAt: 2026-10-29T03:38:32.0257242+00:00
+    - frId: FR-MCP-REPL-001
+      trId: TR-MCP-REPL-002
+      createdAt: 2026-10-29T03:38:32.0263557+00:00
+    totalCount: 2
+  deprecated: true
+
+---
+

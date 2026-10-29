@@ -1,0 +1,833 @@
+{
+  "TimestampLocal": "2026-10-28T23:26:30",
+  "Takeover": [
+    {
+      "Path": ".nuke/build.schema.json",
+      "ImportedBlob": "342d0757244c252cd7b79ecf18cfac092575f240",
+      "SourceBlob": "d9fad69e8622f9365b3d334338fb6ba439188e9d",
+      "Equal": false
+    },
+    {
+      "Path": "build/Build.TestDependencies.cs",
+      "ImportedBlob": "7206fba621ac3b4e5f636e92c5c7e00c3d04216d",
+      "SourceBlob": "7206fba621ac3b4e5f636e92c5c7e00c3d04216d",
+      "Equal": true
+    },
+    {
+      "Path": "build/LinuxProviderTestProvisioner.cs",
+      "ImportedBlob": "2649ae8c503a46d799c037629b2dd05e5a5c4d1c",
+      "SourceBlob": "2649ae8c503a46d799c037629b2dd05e5a5c4d1c",
+      "Equal": true
+    },
+    {
+      "Path": "build/ProviderTestProvisioningContracts.cs",
+      "ImportedBlob": "c9fe9f5c8683a9d10cdade22919faedbff1e751b",
+      "SourceBlob": "c9fe9f5c8683a9d10cdade22919faedbff1e751b",
+      "Equal": true
+    },
+    {
+      "Path": "src/QBrainAi.Services/Services/GitHubCliService.cs",
+      "ImportedBlob": "0c9ca325e4dd982818392d7b04005af0f07810ba",
+      "SourceBlob": "0c9ca325e4dd982818392d7b04005af0f07810ba",
+      "Equal": true
+    },
+    {
+      "Path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+      "ImportedBlob": "fef74b60b6ccccdc2064d961de4d9054b9acf21b",
+      "SourceBlob": "fef74b60b6ccccdc2064d961de4d9054b9acf21b",
+      "Equal": true
+    },
+    {
+      "Path": "tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs",
+      "ImportedBlob": "281a8b2c77ddbcf2058c3e3a7e97dae3caa51c12",
+      "SourceBlob": "281a8b2c77ddbcf2058c3e3a7e97dae3caa51c12",
+      "Equal": true
+    },
+    {
+      "Path": "tests/Build.Tests/ProviderTestProvisioningTests.cs",
+      "ImportedBlob": "a523887077a2747de826facb16add62e0d2a89a8",
+      "SourceBlob": "a523887077a2747de826facb16add62e0d2a89a8",
+      "Equal": true
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceResolutionMiddlewareTests.cs",
+      "ImportedBlob": "98a15c728af7c1db2ef6bc74395e5484a4009775",
+      "SourceBlob": "98a15c728af7c1db2ef6bc74395e5484a4009775",
+      "Equal": true
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+      "ImportedBlob": "e7350e77a85a05a23d273a8e49d2d33d3711146d",
+      "SourceBlob": "e7350e77a85a05a23d273a8e49d2d33d3711146d",
+      "Equal": true
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+      "ImportedBlob": "a594df1af7170c9bdabb9cad0289c60f68183ce1",
+      "SourceBlob": "a594df1af7170c9bdabb9cad0289c60f68183ce1",
+      "Equal": true
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Storage/Decompose4nfBackfillMigrationTests.cs",
+      "ImportedBlob": "f354ddc970f8243c1b0f36ceb63f4460734bbfe2",
+      "SourceBlob": "f354ddc970f8243c1b0f36ceb63f4460734bbfe2",
+      "Equal": true
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs",
+      "ImportedBlob": "3ad458c9988c2f22ecc8f3694c40c5a339ea401d",
+      "SourceBlob": "3ad458c9988c2f22ecc8f3694c40c5a339ea401d",
+      "Equal": true
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertions.cs",
+      "ImportedBlob": "14d553ebff1e9b244b802ec665f77957f644e27a",
+      "SourceBlob": "14d553ebff1e9b244b802ec665f77957f644e27a",
+      "Equal": true
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs",
+      "ImportedBlob": "364880bdecc87546a46ddb8a99f706c9729e545c",
+      "SourceBlob": "364880bdecc87546a46ddb8a99f706c9729e545c",
+      "Equal": true
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs",
+      "ImportedBlob": "04b803279c573cb5bb57d402b49215de85d487a6",
+      "SourceBlob": "04b803279c573cb5bb57d402b49215de85d487a6",
+      "Equal": true
+    }
+  ],
+  "Comparisons": [
+    {
+      "Before": "/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r8-win-lane-3",
+      "Missing": true
+    },
+    {
+      "Before": "./TestResults/ug-r8-linux-lane-2",
+      "After": "ug-r8b-linux-lane-4",
+      "OldCount": 433,
+      "NewCount": 612,
+      "Removed": [],
+      "Added": [
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.AuthKeyAndWorkspaceTests.AuthKey_InXApiKeyHeader_IsValidated",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.AuthKeyAndWorkspaceTests.AuthKey_Missing_ReturnsAppropriateError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.AuthKeyAndWorkspaceTests.AuthKeyAndWorkspace_BothHeaders_AreProcessedTogether",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.AuthKeyAndWorkspaceTests.WorkspacePath_InXWorkspacePathHeader_IsRecognized",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.AuthKeyAndWorkspaceTests.WorkspaceSelection_InvalidPath_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.AuthKeyAndWorkspaceTests.WorkspaceSelection_MultipleSwitches_HandlesCorrectly",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.AuthKeyAndWorkspaceTests.WorkspaceSelection_ViaYamlRequest_CompletesSuccessfully",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.EndToEndFlowTests.CompleteFlow_AllEnvelopeTypes_InSequence",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.EndToEndFlowTests.CompleteFlow_HelloHandshake_ThenWorkspaceSelection",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.EndToEndFlowTests.CompleteFlow_HttpAndYaml_InterleavedRequests",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.EndToEndFlowTests.CompleteFlow_InvalidThenValidRequest",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.EndToEndFlowTests.CompleteFlow_MultipleWorkspaceSwitch_WithAuth",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.EndToEndFlowTests.CompleteFlow_ProcessCleanShutdown_AfterMultipleRequests",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.EndToEndFlowTests.CompleteFlow_StressTest_MultipleRapidRequests",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.EndToEndFlowTests.CompleteFlow_TrustBootstrapWithHealthCheck",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration1IntegrationTests.AuthKey_InHeader_IsValidated",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration1IntegrationTests.ChildProcess_LaunchesSuccessfully",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration1IntegrationTests.EnvelopeShapes_AllTypes_ParseCorrectly",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration1IntegrationTests.FullTrustBootstrapFlow_EndToEnd_CompletesSuccessfully",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration1IntegrationTests.HelloHandshake_SendsAndReceivesYaml",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration1IntegrationTests.TrustBootstrap_HealthCheck_ReturnsExpectedResponse",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration1IntegrationTests.TrustBootstrap_NonceChallengeFlow_ValidatesCorrectly",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration1IntegrationTests.TrustBootstrap_SignatureValidation_ChallengeResponseFlow",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration1IntegrationTests.WorkspaceSelection_MultipleWorkspaces_SwitchesContext",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration1IntegrationTests.WorkspaceSelection_XWorkspacePathHeader_IsRecognized",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration1IntegrationTests.YamlEnvelope_ParsesCorrectly",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration2IntegrationTests.SessionLog_ActionTypes_AllSupported",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration2IntegrationTests.SessionLog_AppendActions_AddsActionItems",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration2IntegrationTests.SessionLog_AppendDialog_AddsDialogItems",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration2IntegrationTests.SessionLog_BeginTurn_StartsNewTurn",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration2IntegrationTests.SessionLog_Bootstrap_CompletesSuccessfully",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration2IntegrationTests.SessionLog_CompleteTurn_BeginNewTurn_Succeeds",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration2IntegrationTests.SessionLog_CompleteTurn_FinalizesToCompleted",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration2IntegrationTests.SessionLog_CurrentSession_ReturnsActiveSession",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration2IntegrationTests.SessionLog_DialogCategories_AllSupported",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration2IntegrationTests.SessionLog_FailTurn_FinalizesToFailed",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration2IntegrationTests.SessionLog_FullWorkflow_BootstrapToComplete",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration2IntegrationTests.SessionLog_ImmutableTurn_UpdateAttempt_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration2IntegrationTests.SessionLog_InvalidRequestId_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration2IntegrationTests.SessionLog_InvalidSessionId_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration2IntegrationTests.SessionLog_MultipleActionAppends_Accumulate",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration2IntegrationTests.SessionLog_MultipleDialogAppends_Accumulate",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration2IntegrationTests.SessionLog_NoActiveSession_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration2IntegrationTests.SessionLog_NoActiveTurn_AppendDialog_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration2IntegrationTests.SessionLog_OpenSession_CreatesNewSession",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration2IntegrationTests.SessionLog_QueryHistory_ReturnsSessionList",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration2IntegrationTests.SessionLog_ReconnectScenario_SessionPersists",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration2IntegrationTests.SessionLog_StatePersistence_AcrossCommands",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration2IntegrationTests.SessionLog_UpdateTurn_ModifiesTurnMetadata",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_AnalyzeRequirements_ReturnsAnalysis",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_ComplexQuery_WithMultipleFilters",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_Create_Get_Delete_Succeeds",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_CreateWithAllOptionalFields",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_CurrentSelection_NoSelection_ReturnsNull",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_DeleteClearsSelection",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_DeleteSelected_RemovesSelectedTodo",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_FullCrudWorkflow_CompletesSuccessfully",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_GetNonExistentTodo_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_GetProjectionStatus_ReturnsStatus",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_InvalidTodoId_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_MultipleQueryExecutions",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_MultipleStreams_EmitSeparateEvents",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_NoSelection_DeleteSelected_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_NoSelection_UpdateSelected_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_ProjectionStatusAndRepair_WorkTogether",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_ProjectionWorkflow_StatusPlanImplement",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_Query_ReturnsItems",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_QueryFiltering_ReturnsFilteredResults",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_RepairProjection_Succeeds",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_Select_CurrentSelection_Persists",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_SelectionState_PersistsAcrossCommands",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_SelectionStatePersistsAcrossMultipleOperations",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_StreamEvents_ContainSequenceNumbers",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_StreamImplement_EmitsEvents",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_StreamingEvents_AreSeparateYamlEnvelopes",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_StreamPlan_EmitsEvents",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_StreamStatus_EmitsEvents",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_Update_ModifiesTodo",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_UpdateSelected_UsesSelection",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration3IntegrationTests.TodoWorkflow_UpdateWithComplexFields",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_CompleteWorkflow_FrTrTestMappingGenerate",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_CreateDuplicateFr_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_CreateFr_GetFr_DeleteFr_Succeeds",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_CreateMapping_ListMapping_DeleteMapping_Succeeds",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_CreateMappingWithNonExistentRequirements_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_CreateTest_GetTest_DeleteTest_Succeeds",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_CreateTr_GetTr_DeleteTr_Succeeds",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_CurrentSelection_ReturnsSelectionState",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_DeleteNonExistentMapping_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_GenerateAllDocTypes_ValidatesOutput",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_GenerateBothFormats_ValidatesOutput",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_GenerateDocument_Markdown_ReturnsFormattedDocument",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_GenerateDocument_Matrix_ReturnsTraceabilityMatrix",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_GenerateDocument_Yaml_ReturnsYamlDocument",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_GetNonExistentFr_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_GetNonExistentTest_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_GetNonExistentTr_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_IngestDocument_Markdown_ParsesAndCreatesRequirements",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_IngestDocument_Yaml_ParsesAndCreatesRequirements",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_IngestInvalidMarkdown_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_IngestInvalidYaml_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_IngestMergeStrategy_OverwriteExisting",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_InvalidFrId_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_InvalidTestId_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_InvalidTrId_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_ListFr_ReturnsItems",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_ListTest_ReturnsItems",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_ListTr_ReturnsItems",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_ListWithFilters_ReturnsFilteredResults",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_MappingListFilters_ReturnCorrectResults",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_SelectionStatePersistence_VerifyAcrossCommands",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_UpdateFr_ModifiesRequirement",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_UpdateTest_ModifiesRequirement",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration4IntegrationTests.RequirementsWorkflow_UpdateTr_ModifiesRequirement",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration5IntegrationTests.GenericClientPassthrough_ArrayArgument_CoercesCorrectly",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration5IntegrationTests.GenericClientPassthrough_BooleanArguments_CoercesCorrectly",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration5IntegrationTests.GenericClientPassthrough_CaseInsensitiveClientName_Resolves",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration5IntegrationTests.GenericClientPassthrough_CaseInsensitiveParameterName_Matches",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration5IntegrationTests.GenericClientPassthrough_CompleteWorkflow_VariousClientTypes",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration5IntegrationTests.GenericClientPassthrough_ComplexNestedStructure_CoercesCorrectly",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration5IntegrationTests.GenericClientPassthrough_ContextQuery_ReturnsResults",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration5IntegrationTests.GenericClientPassthrough_DesktopOpenFolder_ValidatesArguments",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration5IntegrationTests.GenericClientPassthrough_EmptyArrayArgument_HandlesCorrectly",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration5IntegrationTests.GenericClientPassthrough_ErrorResultShape_HasCorrectFields",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration5IntegrationTests.GenericClientPassthrough_InvalidArgumentType_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration5IntegrationTests.GenericClientPassthrough_MissingRequiredParameter_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration5IntegrationTests.GenericClientPassthrough_MixedTypeArray_CoercesElements",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration5IntegrationTests.GenericClientPassthrough_MultipleClients_Sequential",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration5IntegrationTests.GenericClientPassthrough_MultipleValidRequests_AllSucceed",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration5IntegrationTests.GenericClientPassthrough_NestedObjectArgument_CoercesCorrectly",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration5IntegrationTests.GenericClientPassthrough_NullForNonNullableParameter_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration5IntegrationTests.GenericClientPassthrough_NumericArguments_CoercesCorrectly",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration5IntegrationTests.GenericClientPassthrough_OptionalParameters_UsesDefaults",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration5IntegrationTests.GenericClientPassthrough_RepoGetBranches_ReturnsResults",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration5IntegrationTests.GenericClientPassthrough_ResponseContainsRequestId_Correlation",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration5IntegrationTests.GenericClientPassthrough_SuccessResultShape_HasCorrectFields",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration5IntegrationTests.GenericClientPassthrough_UnknownClient_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration5IntegrationTests.GenericClientPassthrough_UnknownMethod_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.Iteration5IntegrationTests.GenericClientPassthrough_YamlResponseShape_ValidStructure",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.MarkerFileClientOptionsResolverTests.ReplChildProcessHelper_WithNamedAgent_StartsWithExplicitAgentArgument",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.MarkerFileClientOptionsResolverTests.ResolveAgentKey_CanonicalizesSharedAgentInputs(input: \"ClaudeCode\", expected: \"claude\")",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.MarkerFileClientOptionsResolverTests.ResolveAgentKey_CanonicalizesSharedAgentInputs(input: \"Codex\", expected: \"codex\")",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.MarkerFileClientOptionsResolverTests.ResolveAgentKey_CanonicalizesSharedAgentInputs(input: \"GrokCode\", expected: \"grok\")",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.MarkerFileClientOptionsResolverTests.ResolveAgentKey_CanonicalizesSharedAgentInputs(input: \"open-code\", expected: \"opencode\")",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.MarkerFileClientOptionsResolverTests.TryLoadTrustedMarker_ReturnsMarkerSettingsWhenSignatureMatches",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.MarkerFileClientOptionsResolverTests.TryResolveWithDiagnostics_AcceptsExplicitWorkspaceArgument",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.MarkerFileClientOptionsResolverTests.TryResolveWithDiagnostics_InvalidatesCacheOnApiKeyChange",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.MarkerFileClientOptionsResolverTests.TryResolveWithDiagnostics_SucceedsWithManuallyExpiredCacheEntry",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.MarkerFileClientOptionsResolverTests.TryResolveWithDiagnostics_UsesVerifiedCacheOnSubsequentCallWithinTtl",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.MarkerFileClientOptionsResolverTests.TryResolveWithDiagnostics_VerifiesSignatureBuiltWithLfLineEndings",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.MarkerFileClientOptionsResolverTests.TryResolveWithDiagnostics_WhenSignatureFails_ReportsReason",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.MarkerFileClientOptionsResolverTests.TryResolveWithDiagnostics_WritesCanonicalAgentCacheWithoutGlobalOverride",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.TransactionalTodoWorkflowTests.CreateAsync_WhenCommitFailsAfterMutation_DeletesReturnedCanonicalId",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.TransactionalTodoWorkflowTests.CreateAsync_WhenCoordinatorCommits_BuildsTransactionAndReturnsResult",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.TransactionalTodoWorkflowTests.DeleteAsync_WhenCommitFailsAfterMutation_RecreatesSnapshot",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.TransactionalTodoWorkflowTests.DeleteAsync_WhenCoordinatorRejectsBeforeMutation_DoesNotReadOrMutate",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.TransactionalTodoWorkflowTests.DeleteSelectedAsync_WhenCommitFailsAfterMutation_RecreatesAndReselects",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.TransactionalTodoWorkflowTests.RepairProjectionAsync_WhenRequiredTransactionsActive_FailsClosedBeforeInnerWorkflow",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.TransactionalTodoWorkflowTests.RepairProjectionAsync_WhenTransactionsNotRequired_DelegatesToInnerWorkflow",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.TransactionalTodoWorkflowTests.UpdateAsync_WhenCommitFailsAfterMutation_RestoresSnapshot",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.TransactionalTodoWorkflowTests.UpdateAsync_WhenCoordinatorRejectsBeforeMutation_DoesNotReadOrMutate",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.TransactionalTodoWorkflowTests.UpdateSelectedAsync_WhenCommitFailsAfterMutation_RestoresAndReselects",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.TrustBootstrapFlowTests.HealthCheck_WithNonce_ReturnsNonceInResponse",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.TrustBootstrapFlowTests.NonceChallengeFlow_GeneratesUniqueChallenges",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.TrustBootstrapFlowTests.SignatureValidation_InvalidSignature_ReturnsError",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.TrustBootstrapFlowTests.TrustBootstrap_FullFlow_CompletesSuccessfully",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.TrustBootstrapFlowTests.TrustBootstrap_SendsNonceRequest_ReceivesResponse",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.TrustBootstrapFlowTests.TrustBootstrap_SubmitsSignature_ValidatesCorrectly",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.YamlEnvelopeShapeTests.AllEnvelopeTypes_HaveTypeDiscriminator",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.YamlEnvelopeShapeTests.EnvelopePayload_IsProperlyNested",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.YamlEnvelopeShapeTests.ErrorEnvelope_SerializesAndDeserializes_Correctly",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.YamlEnvelopeShapeTests.EventEnvelope_SerializesAndDeserializes_Correctly",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.YamlEnvelopeShapeTests.HelloEnvelope_SerializesAndDeserializes_Correctly",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.YamlEnvelopeShapeTests.NonceRequest_HasCorrectShape",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.YamlEnvelopeShapeTests.RequestEnvelope_SerializesAndDeserializes_Correctly",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.YamlEnvelopeShapeTests.ResultEnvelope_SerializesAndDeserializes_Correctly",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.YamlEnvelopeShapeTests.TrustBootstrapRequest_HasCorrectShape",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.YamlEnvelopeShapeTests.WorkspaceSelectRequest_HasCorrectShape",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Repl.IntegrationTests.YamlEnvelopeShapeTests.YamlSerialization_RoundTrip_PreservesData",
+          "SideIndicator": "=>"
+        }
+      ]
+    }
+  ],
+  "ScannerChangesAfterOverride": []
+}

@@ -1,0 +1,460 @@
+{
+  "TimestampLocal": "2026-10-28T23:38:57",
+  "CommitCount": 81,
+  "AddedLinesScanned": 5282543,
+  "CurrentKeyMatches": 0,
+  "PrCurrentKeyMatch": false,
+  "Indicators": [
+    {
+      "Commit": "2175d827fa6bf4bcbca05e23fae75aaf6b889737",
+      "Path": "docs/receipts/hv/20261027T033814-unitgreen-r8.response.jsonl",
+      "DiffLine": 157,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n92:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n93:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n94:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n95:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n96:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n97:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "2175d827fa6bf4bcbca05e23fae75aaf6b889737",
+      "Path": "docs/receipts/hv/20261027T033814-unitgreen-r8.response.jsonl",
+      "DiffLine": 157,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n92:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n93:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n94:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n95:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n96:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n97:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "2175d827fa6bf4bcbca05e23fae75aaf6b889737",
+      "Path": "docs/receipts/hv/20261027T033814-unitgreen-r8.response.jsonl",
+      "DiffLine": 157,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n92:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n93:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n94:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n95:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n96:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n97:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "2175d827fa6bf4bcbca05e23fae75aaf6b889737",
+      "Path": "docs/receipts/hv/20261027T033814-unitgreen-r8.response.jsonl",
+      "DiffLine": 157,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n92:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n93:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n94:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n95:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n96:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n97:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "2175d827fa6bf4bcbca05e23fae75aaf6b889737",
+      "Path": "docs/receipts/hv/20261027T033814-unitgreen-r8.response.jsonl",
+      "DiffLine": 157,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n92:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n93:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n94:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n95:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n96:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n97:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "2175d827fa6bf4bcbca05e23fae75aaf6b889737",
+      "Path": "docs/receipts/hv/20261027T033814-unitgreen-r8.response.jsonl",
+      "DiffLine": 157,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n92:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n93:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n94:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n95:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n96:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n97:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "2175d827fa6bf4bcbca05e23fae75aaf6b889737",
+      "Path": "docs/receipts/hv/20261027T033814-unitgreen-r8.response.jsonl",
+      "DiffLine": 157,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n92:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n93:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n94:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n95:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n96:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n97:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "2175d827fa6bf4bcbca05e23fae75aaf6b889737",
+      "Path": "docs/receipts/hv/20261027T033814-unitgreen-r8.response.jsonl",
+      "DiffLine": 593,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n92:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n93:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n94:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n95:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n96:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n97:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "2175d827fa6bf4bcbca05e23fae75aaf6b889737",
+      "Path": "docs/receipts/hv/20261027T033814-unitgreen-r8.response.jsonl",
+      "DiffLine": 593,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n92:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n93:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n94:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n95:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n96:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n97:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "2175d827fa6bf4bcbca05e23fae75aaf6b889737",
+      "Path": "docs/receipts/hv/20261027T033814-unitgreen-r8.response.jsonl",
+      "DiffLine": 593,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n92:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n93:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n94:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n95:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n96:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n97:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "2175d827fa6bf4bcbca05e23fae75aaf6b889737",
+      "Path": "docs/receipts/hv/20261027T033814-unitgreen-r8.response.jsonl",
+      "DiffLine": 593,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n92:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n93:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n94:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n95:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n96:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n97:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "2175d827fa6bf4bcbca05e23fae75aaf6b889737",
+      "Path": "docs/receipts/hv/20261027T033814-unitgreen-r8.response.jsonl",
+      "DiffLine": 593,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n92:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n93:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n94:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n95:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n96:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n97:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "2175d827fa6bf4bcbca05e23fae75aaf6b889737",
+      "Path": "docs/receipts/hv/20261027T033814-unitgreen-r8.response.jsonl",
+      "DiffLine": 593,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n92:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n93:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n94:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n95:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n96:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n97:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "2175d827fa6bf4bcbca05e23fae75aaf6b889737",
+      "Path": "docs/receipts/hv/20261027T033814-unitgreen-r8.response.jsonl",
+      "DiffLine": 593,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n92:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n93:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n94:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n95:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n96:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n97:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "Path": "docs/receipts/hv/20261026T120945-unitgreen-r7.response.jsonl",
+      "DiffLine": 140,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n81:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n82:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n83:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n84:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n85:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n86:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "Path": "docs/receipts/hv/20261026T120945-unitgreen-r7.response.jsonl",
+      "DiffLine": 140,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n81:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n82:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n83:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n84:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n85:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n86:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "Path": "docs/receipts/hv/20261026T120945-unitgreen-r7.response.jsonl",
+      "DiffLine": 140,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n81:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n82:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n83:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n84:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n85:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n86:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "Path": "docs/receipts/hv/20261026T120945-unitgreen-r7.response.jsonl",
+      "DiffLine": 140,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n81:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n82:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n83:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n84:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n85:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n86:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "Path": "docs/receipts/hv/20261026T120945-unitgreen-r7.response.jsonl",
+      "DiffLine": 140,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n81:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n82:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n83:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n84:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n85:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n86:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "Path": "docs/receipts/hv/20261026T120945-unitgreen-r7.response.jsonl",
+      "DiffLine": 140,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n81:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n82:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n83:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n84:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n85:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n86:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "Path": "docs/receipts/hv/20261026T120945-unitgreen-r7.response.jsonl",
+      "DiffLine": 140,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n81:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n82:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n83:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n84:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n85:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n86:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "Path": "docs/receipts/hv/20261026T120945-unitgreen-r7.response.jsonl",
+      "DiffLine": 351,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n81:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n82:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n83:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n84:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n85:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n86:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "Path": "docs/receipts/hv/20261026T120945-unitgreen-r7.response.jsonl",
+      "DiffLine": 351,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n81:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n82:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n83:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n84:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n85:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n86:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "Path": "docs/receipts/hv/20261026T120945-unitgreen-r7.response.jsonl",
+      "DiffLine": 351,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n81:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n82:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n83:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n84:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n85:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n86:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "Path": "docs/receipts/hv/20261026T120945-unitgreen-r7.response.jsonl",
+      "DiffLine": 351,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n81:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n82:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n83:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n84:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n85:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n86:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "Path": "docs/receipts/hv/20261026T120945-unitgreen-r7.response.jsonl",
+      "DiffLine": 351,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n81:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n82:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n83:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n84:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n85:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n86:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "Path": "docs/receipts/hv/20261026T120945-unitgreen-r7.response.jsonl",
+      "DiffLine": 351,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n81:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n82:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n83:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n84:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n85:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n86:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "Path": "docs/receipts/hv/20261026T120945-unitgreen-r7.response.jsonl",
+      "DiffLine": 351,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n81:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n82:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n83:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n84:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n85:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n86:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "Path": "docs/receipts/hv/hv-ug-r7-transcript-chronology.json",
+      "DiffLine": 103774,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n78\\t    DATABASE_ENCRYPTION_ENABLED           = 'true'\\n79\\t    SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n80\\t    POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n81\\t    POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n82\\t    SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n83\\t    SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "Path": "docs/receipts/hv/hv-ug-r7-transcript-chronology.json",
+      "DiffLine": 103774,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n78\\t    DATABASE_ENCRYPTION_ENABLED           = 'true'\\n79\\t    SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n80\\t    POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n81\\t    POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n82\\t    SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n83\\t    SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "Path": "docs/receipts/hv/hv-ug-r7-transcript-chronology.json",
+      "DiffLine": 103774,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n78\\t    DATABASE_ENCRYPTION_ENABLED           = 'true'\\n79\\t    SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n80\\t    POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n81\\t    POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n82\\t    SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n83\\t    SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "Path": "docs/receipts/hv/hv-ug-r7-transcript-chronology.json",
+      "DiffLine": 103993,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "R                     = 'HostileProvider'\\n    DATABASE_ENCRYPTION_ENABLED           = 'true'\\n    SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n    POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n    POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n    SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n    SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '[REDACTED:api-key"
+    },
+    {
+      "Commit": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "Path": "docs/receipts/hv/hv-ug-r7-transcript-chronology.json",
+      "DiffLine": 103993,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "R                     = 'HostileProvider'\\n    DATABASE_ENCRYPTION_ENABLED           = 'true'\\n    SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n    POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n    POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n    SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n    SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '[REDACTED:api-key"
+    },
+    {
+      "Commit": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "Path": "docs/receipts/hv/hv-ug-r7-transcript-chronology.json",
+      "DiffLine": 103993,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "R                     = 'HostileProvider'\\n    DATABASE_ENCRYPTION_ENABLED           = 'true'\\n    SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n    POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n    POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n    SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n    SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '[REDACTED:api-key"
+    },
+    {
+      "Commit": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "Path": "docs/receipts/hv/hv-ug-r7-transcript-chronology.json",
+      "DiffLine": 103993,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "R                     = 'HostileProvider'\\n    DATABASE_ENCRYPTION_ENABLED           = 'true'\\n    SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n    POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n    POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n    SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n    SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '[REDACTED:api-key"
+    },
+    {
+      "Commit": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "Path": "docs/receipts/hv/hv-ug-r7-transcript-chronology.json",
+      "DiffLine": 103993,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "R                     = 'HostileProvider'\\n    DATABASE_ENCRYPTION_ENABLED           = 'true'\\n    SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n    POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n    POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n    SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n    SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '[REDACTED:api-key"
+    },
+    {
+      "Commit": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "Path": "docs/receipts/hv/hv-ug-r7-transcript-chronology.json",
+      "DiffLine": 103993,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "R                     = 'HostileProvider'\\n    DATABASE_ENCRYPTION_ENABLED           = 'true'\\n    SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n    POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n    POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n    SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n    SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '[REDACTED:api-key"
+    },
+    {
+      "Commit": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "Path": "docs/receipts/hv/hv-ug-r7-transcript-chronology.json",
+      "DiffLine": 103993,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "R                     = 'HostileProvider'\\n    DATABASE_ENCRYPTION_ENABLED           = 'true'\\n    SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n    POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n    POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n    SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n    SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '[REDACTED:api-key"
+    },
+    {
+      "Commit": "3a607fb17dba72c6c7f920a6067b1ca191ec86fb",
+      "Path": "docs/receipts/hv/20261026T072431-unitgreen-r6.response.jsonl",
+      "DiffLine": 194,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "R                     = 'HostileProvider'\\n    DATABASE_ENCRYPTION_ENABLED           = 'true'\\n    SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n    POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n    POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n    SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n    SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '[REDACTED:api-key"
+    },
+    {
+      "Commit": "3a607fb17dba72c6c7f920a6067b1ca191ec86fb",
+      "Path": "docs/receipts/hv/20261026T072431-unitgreen-r6.response.jsonl",
+      "DiffLine": 194,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "R                     = 'HostileProvider'\\n    DATABASE_ENCRYPTION_ENABLED           = 'true'\\n    SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n    POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n    POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n    SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n    SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '[REDACTED:api-key"
+    },
+    {
+      "Commit": "3a607fb17dba72c6c7f920a6067b1ca191ec86fb",
+      "Path": "docs/receipts/hv/20261026T072431-unitgreen-r6.response.jsonl",
+      "DiffLine": 194,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "R                     = 'HostileProvider'\\n    DATABASE_ENCRYPTION_ENABLED           = 'true'\\n    SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n    POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n    POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n    SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n    SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '[REDACTED:api-key"
+    },
+    {
+      "Commit": "3a607fb17dba72c6c7f920a6067b1ca191ec86fb",
+      "Path": "docs/receipts/hv/20261026T072431-unitgreen-r6.response.jsonl",
+      "DiffLine": 435,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "               = 'HostileAgent'\\n67-    PLUGIN_HOST                           = 'hostile-host'\\n--\\n92-    XAI_API_KEY                   = '[REDACTED:api-key]'\\n93-    OPENAI_API_KEY                = '[REDACTED:api-key]'\\n94-    AZURE_OPENAI_API_KEY          = '[REDACTED:api-key]'\\n95-    GH_TOKEN                      = 'hostile-scripted-not-a-token'\\n96:    MCP_TEST_POSTGRES_CONNECTION  = 'Host=192.0.2.1;Port=1;Data"
+    },
+    {
+      "Commit": "3a607fb17dba72c6c7f920a6067b1ca191ec86fb",
+      "Path": "docs/receipts/hv/20261026T072431-unitgreen-r6.response.jsonl",
+      "DiffLine": 435,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "               = 'HostileAgent'\\n67-    PLUGIN_HOST                           = 'hostile-host'\\n--\\n92-    XAI_API_KEY                   = '[REDACTED:api-key]'\\n93-    OPENAI_API_KEY                = '[REDACTED:api-key]'\\n94-    AZURE_OPENAI_API_KEY          = '[REDACTED:api-key]'\\n95-    GH_TOKEN                      = 'hostile-scripted-not-a-token'\\n96:    MCP_TEST_POSTGRES_CONNECTION  = 'Host=192.0.2.1;Port=1;Data"
+    },
+    {
+      "Commit": "3a607fb17dba72c6c7f920a6067b1ca191ec86fb",
+      "Path": "docs/receipts/hv/20261026T072431-unitgreen-r6.response.jsonl",
+      "DiffLine": 435,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "               = 'HostileAgent'\\n67-    PLUGIN_HOST                           = 'hostile-host'\\n--\\n92-    XAI_API_KEY                   = '[REDACTED:api-key]'\\n93-    OPENAI_API_KEY                = '[REDACTED:api-key]'\\n94-    AZURE_OPENAI_API_KEY          = '[REDACTED:api-key]'\\n95-    GH_TOKEN                      = 'hostile-scripted-not-a-token'\\n96:    MCP_TEST_POSTGRES_CONNECTION  = 'Host=192.0.2.1;Port=1;Data"
+    },
+    {
+      "Commit": "c3625a64222c558b16c564e62ec2b5d600801e77",
+      "Path": "docs/receipts/hv/20261021T111806-unitgreen-r5.response.jsonl",
+      "DiffLine": 94,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n75:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n76:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n77:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n78:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n79:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n80:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "c3625a64222c558b16c564e62ec2b5d600801e77",
+      "Path": "docs/receipts/hv/20261021T111806-unitgreen-r5.response.jsonl",
+      "DiffLine": 94,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n75:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n76:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n77:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n78:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n79:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n80:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "c3625a64222c558b16c564e62ec2b5d600801e77",
+      "Path": "docs/receipts/hv/20261021T111806-unitgreen-r5.response.jsonl",
+      "DiffLine": 94,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n75:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n76:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n77:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n78:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n79:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n80:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "c3625a64222c558b16c564e62ec2b5d600801e77",
+      "Path": "docs/receipts/hv/20261021T111806-unitgreen-r5.response.jsonl",
+      "DiffLine": 224,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n75:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n76:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n77:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n78:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n79:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n80:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "c3625a64222c558b16c564e62ec2b5d600801e77",
+      "Path": "docs/receipts/hv/20261021T111806-unitgreen-r5.response.jsonl",
+      "DiffLine": 224,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n75:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n76:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n77:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n78:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n79:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n80:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    },
+    {
+      "Commit": "c3625a64222c558b16c564e62ec2b5d600801e77",
+      "Path": "docs/receipts/hv/20261021T111806-unitgreen-r5.response.jsonl",
+      "DiffLine": 224,
+      "Kind": "Key-shaped candidate",
+      "Length": 26,
+      "Digest": "E2253E7ED4F0A81E8261344935AE56C2B111F8843B39F970F18E3058125F2E3F",
+      "Context": "              = 'HostileProvider'\\n75:     DATABASE_ENCRYPTION_ENABLED           = 'true'\\n76:     SQLITE_ENCRYPTION_KEY                 = '[REDACTED:api-key]'\\n77:     POSTGRES_TDE_KEY_PROVIDER             = 'hostile-provider'\\n78:     POSTGRES_TDE_PRINCIPAL_KEY            = '[REDACTED:api-key]'\\n79:     SQLSERVER_TDE_CERTIFICATE             = 'hostile-certificate'\\n80:     SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY = '["
+    }
+  ],
+  "Note": "Read-only detection only. Candidate values never emitted. Non-secret fixture matches require source classification."
+}

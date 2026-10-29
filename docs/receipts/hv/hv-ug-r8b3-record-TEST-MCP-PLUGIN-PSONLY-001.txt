@@ -1,0 +1,15 @@
+Plugin command failed with exit code 1.
+type: error
+payload:
+  requestId: req-20261029T033820Z-b3b1
+  code: not_found
+  message: TEST 'TEST-MCP-PLUGIN-PSONLY-001' not found.
+  retryable: false
+  details:
+    methodName: workflow.requirements.getTest
+    exceptionType: McpServer.Client.McpNotFoundException
+    reason: not_found
+
+---
+
+
