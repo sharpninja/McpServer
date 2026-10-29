@@ -1,0 +1,1423 @@
+{
+  "timestampUtc": "2026-10-29T02:50:54.1767875Z",
+  "timestampLocal": "2026-10-28T21:50:54",
+  "head": "a9d6a8d7e259803e438b7125701a186bae8db26d",
+  "manifestPath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/unitgreen-r8b-trx-a78640ba/manifest.json",
+  "manifestSha256": "972BA5518D5C049BFED5A604112366B636FE6FE68E38FEB977B96F57F90492D2",
+  "manifestFiles": 31,
+  "observedTrx": 27,
+  "observedBytes": 16472498.0,
+  "records": [
+    {
+      "runId": "ug-r8b-linux-test-6",
+      "host": "LAB-OMARCHY",
+      "kind": "unit",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-linux-test-6/QBrainAi.Client.Tests.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-linux-test-6.meta.json",
+      "bytes": 434125,
+      "sha256": "28938C440B8098BC22076A9CDD17FA946997593A596E6F0ABA62EB27E1EED49F",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "28938C440B8098BC22076A9CDD17FA946997593A596E6F0ABA62EB27E1EED49F",
+      "committedBlobMatches": true,
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-test-6/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+      "originalExists": true,
+      "originalHash": "28938C440B8098BC22076A9CDD17FA946997593A596E6F0ABA62EB27E1EED49F",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 306,
+      "executed": 306,
+      "passed": 306,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 306,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 306
+        }
+      ],
+      "computerNames": [
+        "LAB-OMARCHY"
+      ],
+      "start": "2026-10-28T20:31:55.4859314-05:00",
+      "finish": "2026-10-28T20:31:58.2893955-05:00",
+      "timesMatch": true,
+      "testDefinitions": 306
+    },
+    {
+      "runId": "ug-r8b-linux-test-6",
+      "host": "LAB-OMARCHY",
+      "kind": "unit",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-linux-test-6/QBrainAi.Cqrs.Tests.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-linux-test-6.meta.json",
+      "bytes": 46236,
+      "sha256": "1EA3C2EF64E003A1F9EE0D25C13FDF51DC9CB0CE64D2CAEFDF350CBD28A57033",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "1EA3C2EF64E003A1F9EE0D25C13FDF51DC9CB0CE64D2CAEFDF350CBD28A57033",
+      "committedBlobMatches": true,
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-test-6/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+      "originalExists": true,
+      "originalHash": "1EA3C2EF64E003A1F9EE0D25C13FDF51DC9CB0CE64D2CAEFDF350CBD28A57033",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 33,
+      "executed": 33,
+      "passed": 33,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 33,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 33
+        }
+      ],
+      "computerNames": [
+        "LAB-OMARCHY"
+      ],
+      "start": "2026-10-28T20:31:59.3859135-05:00",
+      "finish": "2026-10-28T20:32:01.1575502-05:00",
+      "timesMatch": true,
+      "testDefinitions": 33
+    },
+    {
+      "runId": "ug-r8b-linux-test-6",
+      "host": "LAB-OMARCHY",
+      "kind": "unit",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-linux-test-6/QBrainAi.Launcher.Tests.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-linux-test-6.meta.json",
+      "bytes": 30714,
+      "sha256": "B3FAF24C327FA0CCD62060576F4AC9EC35B3D275737C4EDA2635ED183CC76420",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "B3FAF24C327FA0CCD62060576F4AC9EC35B3D275737C4EDA2635ED183CC76420",
+      "committedBlobMatches": true,
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-test-6/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+      "originalExists": true,
+      "originalHash": "B3FAF24C327FA0CCD62060576F4AC9EC35B3D275737C4EDA2635ED183CC76420",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 20,
+      "executed": 20,
+      "passed": 20,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 20,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 20
+        }
+      ],
+      "computerNames": [
+        "LAB-OMARCHY"
+      ],
+      "start": "2026-10-28T20:32:02.2475671-05:00",
+      "finish": "2026-10-28T20:32:03.9317014-05:00",
+      "timesMatch": true,
+      "testDefinitions": 20
+    },
+    {
+      "runId": "ug-r8b-linux-test-6",
+      "host": "LAB-OMARCHY",
+      "kind": "unit",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-linux-test-6/QBrainAi.McpAgent.Tests.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-linux-test-6.meta.json",
+      "bytes": 97696,
+      "sha256": "15070B329B2A476C91736DBF9D490304151F0F4CD28190255D09D497D34F6D5E",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "15070B329B2A476C91736DBF9D490304151F0F4CD28190255D09D497D34F6D5E",
+      "committedBlobMatches": true,
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-test-6/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+      "originalExists": true,
+      "originalHash": "15070B329B2A476C91736DBF9D490304151F0F4CD28190255D09D497D34F6D5E",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 64,
+      "executed": 64,
+      "passed": 64,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 64,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 64
+        }
+      ],
+      "computerNames": [
+        "LAB-OMARCHY"
+      ],
+      "start": "2026-10-28T20:32:04.9443429-05:00",
+      "finish": "2026-10-28T20:32:08.0101782-05:00",
+      "timesMatch": true,
+      "testDefinitions": 64
+    },
+    {
+      "runId": "ug-r8b-linux-test-6",
+      "host": "LAB-OMARCHY",
+      "kind": "unit",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-linux-test-6/QBrainAi.QBAgent.Tests.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-linux-test-6.meta.json",
+      "bytes": 137176,
+      "sha256": "1DC46340D1ED763CE4B980B9B6A6B502ACFB84F9AF1DFE2BDA290BF9CB517D2E",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "1DC46340D1ED763CE4B980B9B6A6B502ACFB84F9AF1DFE2BDA290BF9CB517D2E",
+      "committedBlobMatches": true,
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-test-6/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+      "originalExists": true,
+      "originalHash": "1DC46340D1ED763CE4B980B9B6A6B502ACFB84F9AF1DFE2BDA290BF9CB517D2E",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 94,
+      "executed": 94,
+      "passed": 94,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 94,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 94
+        }
+      ],
+      "computerNames": [
+        "LAB-OMARCHY"
+      ],
+      "start": "2026-10-28T20:32:18.7849049-05:00",
+      "finish": "2026-10-28T20:32:20.6504942-05:00",
+      "timesMatch": true,
+      "testDefinitions": 94
+    },
+    {
+      "runId": "ug-r8b-linux-test-6",
+      "host": "LAB-OMARCHY",
+      "kind": "unit",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-linux-test-6/QBrainAi.Repl.Core.Tests.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-linux-test-6.meta.json",
+      "bytes": 1358475,
+      "sha256": "129634C59E5A0EE919BCEA9DF7AFD9BA41A27625EE995200167C7C6B753BBC57",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "129634C59E5A0EE919BCEA9DF7AFD9BA41A27625EE995200167C7C6B753BBC57",
+      "committedBlobMatches": true,
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-test-6/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+      "originalExists": true,
+      "originalHash": "129634C59E5A0EE919BCEA9DF7AFD9BA41A27625EE995200167C7C6B753BBC57",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 903,
+      "executed": 903,
+      "passed": 903,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 903,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 903
+        }
+      ],
+      "computerNames": [
+        "LAB-OMARCHY"
+      ],
+      "start": "2026-10-28T20:32:09.1009015-05:00",
+      "finish": "2026-10-28T20:32:17.4704105-05:00",
+      "timesMatch": true,
+      "testDefinitions": 871
+    },
+    {
+      "runId": "ug-r8b-linux-test-6",
+      "host": "LAB-OMARCHY",
+      "kind": "unit",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-linux-test-6/QBrainAi.Support.Mcp.Tests.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-linux-test-6.meta.json",
+      "bytes": 4942684,
+      "sha256": "A8C3063349150661A8D5EB0FAB865D5AF739A2DC3FE3F1F34359908BEE3D71C1",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "A8C3063349150661A8D5EB0FAB865D5AF739A2DC3FE3F1F34359908BEE3D71C1",
+      "committedBlobMatches": true,
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-test-6/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "originalExists": true,
+      "originalHash": "A8C3063349150661A8D5EB0FAB865D5AF739A2DC3FE3F1F34359908BEE3D71C1",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 3172,
+      "executed": 3172,
+      "passed": 3172,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 3172,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 3172
+        }
+      ],
+      "computerNames": [
+        "LAB-OMARCHY"
+      ],
+      "start": "2026-10-28T20:29:22.1577637-05:00",
+      "finish": "2026-10-28T20:31:53.6474639-05:00",
+      "timesMatch": true,
+      "testDefinitions": 3153
+    },
+    {
+      "runId": "ug-r8b-linux-test-6",
+      "host": "LAB-OMARCHY",
+      "kind": "unit",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-linux-test-6/selected-projects.json",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-linux-test-6.meta.json",
+      "bytes": 1671,
+      "sha256": "49CC03E3FDCA1E2808DD8A23C0D1F9045CCACB2916EB3B6F537212AD7B5859A9",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "49CC03E3FDCA1E2808DD8A23C0D1F9045CCACB2916EB3B6F537212AD7B5859A9",
+      "committedBlobMatches": true,
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-test-6/unit/selected-projects.json",
+      "originalExists": true,
+      "originalHash": "49CC03E3FDCA1E2808DD8A23C0D1F9045CCACB2916EB3B6F537212AD7B5859A9",
+      "originalMatches": true,
+      "selection": {
+        "schemaVersion": 1,
+        "runId": "ug-r8b-linux-test-6",
+        "scope": "unit",
+        "generatedAtUtc": "2026-10-28T20:29:21.1554493-05:00",
+        "projects": [
+          {
+            "name": "QBrainAi.Support.Mcp.Tests",
+            "projectPath": "tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj",
+            "reportPath": "unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.Client.Tests",
+            "projectPath": "tests/QBrainAi.Client.Tests/QBrainAi.Client.Tests.csproj",
+            "reportPath": "unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.Cqrs.Tests",
+            "projectPath": "tests/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.csproj",
+            "reportPath": "unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.Launcher.Tests",
+            "projectPath": "tests/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.csproj",
+            "reportPath": "unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.McpAgent.Tests",
+            "projectPath": "tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj",
+            "reportPath": "unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.Repl.Core.Tests",
+            "projectPath": "tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj",
+            "reportPath": "unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.QBAgent.Tests",
+            "projectPath": "tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj",
+            "reportPath": "unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx"
+          }
+        ]
+      }
+    },
+    {
+      "runId": "ug-r8b-win-test-ssh-4",
+      "host": "PAYTON-LEGION2",
+      "kind": "unit",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-win-test-ssh-4/QBrainAi.Client.Tests.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-win-test-ssh-4.result.txt",
+      "bytes": 423509,
+      "sha256": "A0446798D8185A16DABA5B0D1C4A02EE23AA2672825751A7C7071AC8212B9F9C",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "A0446798D8185A16DABA5B0D1C4A02EE23AA2672825751A7C7071AC8212B9F9C",
+      "committedBlobMatches": true,
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-green-r3-ssh/TestResults/ug-r8b-win-test-ssh-4/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+      "originalExists": true,
+      "originalHash": "A0446798D8185A16DABA5B0D1C4A02EE23AA2672825751A7C7071AC8212B9F9C",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 306,
+      "executed": 306,
+      "passed": 306,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 306,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 306
+        }
+      ],
+      "computerNames": [
+        "PAYTON-LEGION2"
+      ],
+      "start": "2026-10-28T21:02:48.1943286-05:00",
+      "finish": "2026-10-28T21:02:50.3354220-05:00",
+      "timesMatch": true,
+      "testDefinitions": 306
+    },
+    {
+      "runId": "ug-r8b-win-test-ssh-4",
+      "host": "PAYTON-LEGION2",
+      "kind": "unit",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-win-test-ssh-4/QBrainAi.Cqrs.Tests.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-win-test-ssh-4.result.txt",
+      "bytes": 45175,
+      "sha256": "88B83E2ABA746FE0D90D10A21D2DF55CC4A3C3C2ED0172FE3E849A2641C53096",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "88B83E2ABA746FE0D90D10A21D2DF55CC4A3C3C2ED0172FE3E849A2641C53096",
+      "committedBlobMatches": true,
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-green-r3-ssh/TestResults/ug-r8b-win-test-ssh-4/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+      "originalExists": true,
+      "originalHash": "88B83E2ABA746FE0D90D10A21D2DF55CC4A3C3C2ED0172FE3E849A2641C53096",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 33,
+      "executed": 33,
+      "passed": 33,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 33,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 33
+        }
+      ],
+      "computerNames": [
+        "PAYTON-LEGION2"
+      ],
+      "start": "2026-10-28T21:02:51.3567611-05:00",
+      "finish": "2026-10-28T21:02:52.8995503-05:00",
+      "timesMatch": true,
+      "testDefinitions": 33
+    },
+    {
+      "runId": "ug-r8b-win-test-ssh-4",
+      "host": "PAYTON-LEGION2",
+      "kind": "unit",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-win-test-ssh-4/QBrainAi.Launcher.Tests.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-win-test-ssh-4.result.txt",
+      "bytes": 30108,
+      "sha256": "02BA7FBEC04DDCEE49E5DC664B2798F0EDE2724A78BCBE220BF18367ECB3F966",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "02BA7FBEC04DDCEE49E5DC664B2798F0EDE2724A78BCBE220BF18367ECB3F966",
+      "committedBlobMatches": true,
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-green-r3-ssh/TestResults/ug-r8b-win-test-ssh-4/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+      "originalExists": true,
+      "originalHash": "02BA7FBEC04DDCEE49E5DC664B2798F0EDE2724A78BCBE220BF18367ECB3F966",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 20,
+      "executed": 20,
+      "passed": 20,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 20,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 20
+        }
+      ],
+      "computerNames": [
+        "PAYTON-LEGION2"
+      ],
+      "start": "2026-10-28T21:02:53.9475307-05:00",
+      "finish": "2026-10-28T21:02:55.4752913-05:00",
+      "timesMatch": true,
+      "testDefinitions": 20
+    },
+    {
+      "runId": "ug-r8b-win-test-ssh-4",
+      "host": "PAYTON-LEGION2",
+      "kind": "unit",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-win-test-ssh-4/QBrainAi.McpAgent.Tests.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-win-test-ssh-4.result.txt",
+      "bytes": 95550,
+      "sha256": "2DBB1831DB75C0E701AC792E7890E6127D55828FDE3D3BEA37CE0A56971820EE",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "2DBB1831DB75C0E701AC792E7890E6127D55828FDE3D3BEA37CE0A56971820EE",
+      "committedBlobMatches": true,
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-green-r3-ssh/TestResults/ug-r8b-win-test-ssh-4/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+      "originalExists": true,
+      "originalHash": "2DBB1831DB75C0E701AC792E7890E6127D55828FDE3D3BEA37CE0A56971820EE",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 64,
+      "executed": 64,
+      "passed": 64,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 64,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 64
+        }
+      ],
+      "computerNames": [
+        "PAYTON-LEGION2"
+      ],
+      "start": "2026-10-28T21:02:56.5039936-05:00",
+      "finish": "2026-10-28T21:03:03.6387488-05:00",
+      "timesMatch": true,
+      "testDefinitions": 64
+    },
+    {
+      "runId": "ug-r8b-win-test-ssh-4",
+      "host": "PAYTON-LEGION2",
+      "kind": "unit",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-win-test-ssh-4/QBrainAi.QBAgent.Tests.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-win-test-ssh-4.result.txt",
+      "bytes": 133980,
+      "sha256": "1279A066E12A5BC369B237A295AAC4ED95E5C37AB3DA291892C6E6474B823702",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "1279A066E12A5BC369B237A295AAC4ED95E5C37AB3DA291892C6E6474B823702",
+      "committedBlobMatches": true,
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-green-r3-ssh/TestResults/ug-r8b-win-test-ssh-4/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+      "originalExists": true,
+      "originalHash": "1279A066E12A5BC369B237A295AAC4ED95E5C37AB3DA291892C6E6474B823702",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 94,
+      "executed": 94,
+      "passed": 94,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 94,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 94
+        }
+      ],
+      "computerNames": [
+        "PAYTON-LEGION2"
+      ],
+      "start": "2026-10-28T21:03:13.6684232-05:00",
+      "finish": "2026-10-28T21:03:15.1854662-05:00",
+      "timesMatch": true,
+      "testDefinitions": 94
+    },
+    {
+      "runId": "ug-r8b-win-test-ssh-4",
+      "host": "PAYTON-LEGION2",
+      "kind": "unit",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-win-test-ssh-4/QBrainAi.Repl.Core.Tests.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-win-test-ssh-4.result.txt",
+      "bytes": 1328244,
+      "sha256": "8B4F9854936B8A4954981A29C6602AA46D50FD9C5C4B182637B53B87D9C8BA92",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "8B4F9854936B8A4954981A29C6602AA46D50FD9C5C4B182637B53B87D9C8BA92",
+      "committedBlobMatches": true,
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-green-r3-ssh/TestResults/ug-r8b-win-test-ssh-4/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+      "originalExists": true,
+      "originalHash": "8B4F9854936B8A4954981A29C6602AA46D50FD9C5C4B182637B53B87D9C8BA92",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 903,
+      "executed": 903,
+      "passed": 903,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 903,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 903
+        }
+      ],
+      "computerNames": [
+        "PAYTON-LEGION2"
+      ],
+      "start": "2026-10-28T21:03:04.5868384-05:00",
+      "finish": "2026-10-28T21:03:12.5601983-05:00",
+      "timesMatch": true,
+      "testDefinitions": 871
+    },
+    {
+      "runId": "ug-r8b-win-test-ssh-4",
+      "host": "PAYTON-LEGION2",
+      "kind": "unit",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-win-test-ssh-4/QBrainAi.Support.Mcp.Tests.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-win-test-ssh-4.result.txt",
+      "bytes": 4832523,
+      "sha256": "7CBA8F9AE73D7999F494C7B5C52BEB42CD963B04013D345D11C9DC12CF59F09A",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "7CBA8F9AE73D7999F494C7B5C52BEB42CD963B04013D345D11C9DC12CF59F09A",
+      "committedBlobMatches": true,
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-green-r3-ssh/TestResults/ug-r8b-win-test-ssh-4/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "originalExists": true,
+      "originalHash": "7CBA8F9AE73D7999F494C7B5C52BEB42CD963B04013D345D11C9DC12CF59F09A",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 3172,
+      "executed": 3172,
+      "passed": 3172,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 3172,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 3172
+        }
+      ],
+      "computerNames": [
+        "PAYTON-LEGION2"
+      ],
+      "start": "2026-10-28T21:01:36.9503966-05:00",
+      "finish": "2026-10-28T21:02:46.6970327-05:00",
+      "timesMatch": true,
+      "testDefinitions": 3153
+    },
+    {
+      "runId": "ug-r8b-win-test-ssh-4",
+      "host": "PAYTON-LEGION2",
+      "kind": "unit",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-win-test-ssh-4/selected-projects.json",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-win-test-ssh-4.result.txt",
+      "bytes": 1716,
+      "sha256": "5EBE6E51A06007A15401A7096FF5B71D1882B565C6E48BC52C4C5D46E351A3C7",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "5EBE6E51A06007A15401A7096FF5B71D1882B565C6E48BC52C4C5D46E351A3C7",
+      "committedBlobMatches": true,
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-green-r3-ssh/TestResults/ug-r8b-win-test-ssh-4/unit/selected-projects.json",
+      "originalExists": true,
+      "originalHash": "5EBE6E51A06007A15401A7096FF5B71D1882B565C6E48BC52C4C5D46E351A3C7",
+      "originalMatches": true,
+      "selection": {
+        "schemaVersion": 1,
+        "runId": "ug-r8b-win-test-ssh-4",
+        "scope": "unit",
+        "generatedAtUtc": "2026-10-28T21:01:35.9949466-05:00",
+        "projects": [
+          {
+            "name": "QBrainAi.Support.Mcp.Tests",
+            "projectPath": "tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj",
+            "reportPath": "unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.Client.Tests",
+            "projectPath": "tests/QBrainAi.Client.Tests/QBrainAi.Client.Tests.csproj",
+            "reportPath": "unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.Cqrs.Tests",
+            "projectPath": "tests/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.csproj",
+            "reportPath": "unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.Launcher.Tests",
+            "projectPath": "tests/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.csproj",
+            "reportPath": "unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.McpAgent.Tests",
+            "projectPath": "tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj",
+            "reportPath": "unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.Repl.Core.Tests",
+            "projectPath": "tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj",
+            "reportPath": "unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.QBAgent.Tests",
+            "projectPath": "tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj",
+            "reportPath": "unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx"
+          }
+        ]
+      }
+    },
+    {
+      "runId": "ug-r8b-linux-lane-4",
+      "host": "LAB-OMARCHY",
+      "kind": "integration",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-linux-lane-4/Build.Tests.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-linux-lane-4.meta.json",
+      "bytes": 24333,
+      "sha256": "FF5808707D775BADEA19F51064EE569E1530AA11AFA6D1CC2382165BBEC75518",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "FF5808707D775BADEA19F51064EE569E1530AA11AFA6D1CC2382165BBEC75518",
+      "committedBlobMatches": true,
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-lane-4/provider/Build.Tests/Build.Tests.trx",
+      "originalExists": true,
+      "originalHash": "FF5808707D775BADEA19F51064EE569E1530AA11AFA6D1CC2382165BBEC75518",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 16,
+      "executed": 16,
+      "passed": 16,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 16,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 16
+        }
+      ],
+      "computerNames": [
+        "LAB-OMARCHY"
+      ],
+      "start": "2026-10-28T20:37:33.5148945-05:00",
+      "finish": "2026-10-28T20:37:40.4006676-05:00",
+      "timesMatch": true,
+      "testDefinitions": 16
+    },
+    {
+      "runId": "ug-r8b-linux-lane-4",
+      "host": "LAB-OMARCHY",
+      "kind": "integration",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-linux-lane-4/QBrainAi.McpAgent.Tests.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-linux-lane-4.meta.json",
+      "bytes": 3126,
+      "sha256": "FEB74E6A32D31AB5EE601860887F54D2DFEE5B38AE6A992F6A5684BE92B072F9",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "FEB74E6A32D31AB5EE601860887F54D2DFEE5B38AE6A992F6A5684BE92B072F9",
+      "committedBlobMatches": true,
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-lane-4/provider/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+      "originalExists": true,
+      "originalHash": "FEB74E6A32D31AB5EE601860887F54D2DFEE5B38AE6A992F6A5684BE92B072F9",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 1,
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 1,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 1
+        }
+      ],
+      "computerNames": [
+        "LAB-OMARCHY"
+      ],
+      "start": "2026-10-28T20:37:02.0747730-05:00",
+      "finish": "2026-10-28T20:37:04.7309032-05:00",
+      "timesMatch": true,
+      "testDefinitions": 1
+    },
+    {
+      "runId": "ug-r8b-linux-lane-4",
+      "host": "LAB-OMARCHY",
+      "kind": "integration",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-linux-lane-4/QBrainAi.QBAgent.Tests.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-linux-lane-4.meta.json",
+      "bytes": 4442,
+      "sha256": "E48BA73100572F7D5CE17A31626448C9831CF18BE44C1436678C40CE380F5EBB",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "E48BA73100572F7D5CE17A31626448C9831CF18BE44C1436678C40CE380F5EBB",
+      "committedBlobMatches": true,
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-lane-4/provider/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+      "originalExists": true,
+      "originalHash": "E48BA73100572F7D5CE17A31626448C9831CF18BE44C1436678C40CE380F5EBB",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 2,
+      "executed": 2,
+      "passed": 2,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 2,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 2
+        }
+      ],
+      "computerNames": [
+        "LAB-OMARCHY"
+      ],
+      "start": "2026-10-28T20:37:24.5078755-05:00",
+      "finish": "2026-10-28T20:37:27.6356943-05:00",
+      "timesMatch": true,
+      "testDefinitions": 2
+    },
+    {
+      "runId": "ug-r8b-linux-lane-4",
+      "host": "LAB-OMARCHY",
+      "kind": "integration",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-linux-lane-4/QBrainAi.Repl.Core.Tests.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-linux-lane-4.meta.json",
+      "bytes": 6128,
+      "sha256": "9DB45DDAD08097F579B08A24C27033C0BE342F92D4B4AE197E6F79A98BD0494D",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "9DB45DDAD08097F579B08A24C27033C0BE342F92D4B4AE197E6F79A98BD0494D",
+      "committedBlobMatches": true,
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-lane-4/provider/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+      "originalExists": true,
+      "originalHash": "9DB45DDAD08097F579B08A24C27033C0BE342F92D4B4AE197E6F79A98BD0494D",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 3,
+      "executed": 3,
+      "passed": 3,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 3,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 3
+        }
+      ],
+      "computerNames": [
+        "LAB-OMARCHY"
+      ],
+      "start": "2026-10-28T20:37:13.3650995-05:00",
+      "finish": "2026-10-28T20:37:16.7204711-05:00",
+      "timesMatch": true,
+      "testDefinitions": 3
+    },
+    {
+      "runId": "ug-r8b-linux-lane-4",
+      "host": "LAB-OMARCHY",
+      "kind": "integration",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-linux-lane-4/QBrainAi.Repl.IntegrationTests.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-linux-lane-4.meta.json",
+      "bytes": 276274,
+      "sha256": "EBBB4B4218317E6834C26A881DD70F100C1192AB835BED857FFECE95B01CD004",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "EBBB4B4218317E6834C26A881DD70F100C1192AB835BED857FFECE95B01CD004",
+      "committedBlobMatches": true,
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-lane-4/provider/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.trx",
+      "originalExists": true,
+      "originalHash": "EBBB4B4218317E6834C26A881DD70F100C1192AB835BED857FFECE95B01CD004",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 179,
+      "executed": 179,
+      "passed": 179,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 179,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 179
+        }
+      ],
+      "computerNames": [
+        "LAB-OMARCHY"
+      ],
+      "start": "2026-10-28T20:37:52.1660634-05:00",
+      "finish": "2026-10-28T21:00:46.4936118-05:00",
+      "timesMatch": true,
+      "testDefinitions": 179
+    },
+    {
+      "runId": "ug-r8b-linux-lane-4",
+      "host": "LAB-OMARCHY",
+      "kind": "integration",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-linux-lane-4/QBrainAi.Support.Mcp.Tests.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-linux-lane-4.meta.json",
+      "bytes": 634063,
+      "sha256": "222B8A0206DF1EBA81370E7D7C6BEAF17E3252CDE260EE650F1C01388BAB4C92",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "222B8A0206DF1EBA81370E7D7C6BEAF17E3252CDE260EE650F1C01388BAB4C92",
+      "committedBlobMatches": true,
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-lane-4/provider/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "originalExists": true,
+      "originalHash": "222B8A0206DF1EBA81370E7D7C6BEAF17E3252CDE260EE650F1C01388BAB4C92",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 411,
+      "executed": 411,
+      "passed": 411,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 411,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 411
+        }
+      ],
+      "computerNames": [
+        "LAB-OMARCHY"
+      ],
+      "start": "2026-10-28T20:35:10.8032280-05:00",
+      "finish": "2026-10-28T20:36:55.4923420-05:00",
+      "timesMatch": true,
+      "testDefinitions": 411
+    },
+    {
+      "runId": "ug-r8b-linux-lane-4",
+      "host": "LAB-OMARCHY",
+      "kind": "integration",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-linux-lane-4/selected-projects.json",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-linux-lane-4.meta.json",
+      "bytes": 1486,
+      "sha256": "15A3BF2617EAC53B60AAEB26BA30745401C47D79DD3D0994A40C332AE2486DEC",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "15A3BF2617EAC53B60AAEB26BA30745401C47D79DD3D0994A40C332AE2486DEC",
+      "committedBlobMatches": true,
+      "sourcePath": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r8b-linux-lane-4/provider/selected-projects.json",
+      "originalExists": true,
+      "originalHash": "15A3BF2617EAC53B60AAEB26BA30745401C47D79DD3D0994A40C332AE2486DEC",
+      "originalMatches": true,
+      "selection": {
+        "schemaVersion": 1,
+        "runId": "ug-r8b-linux-lane-4",
+        "scope": "provider",
+        "generatedAtUtc": "2026-10-28T20:34:03.5811053-05:00",
+        "projects": [
+          {
+            "name": "QBrainAi.Support.Mcp.Tests",
+            "projectPath": "tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj",
+            "reportPath": "provider/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.McpAgent.Tests",
+            "projectPath": "tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj",
+            "reportPath": "provider/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.Repl.Core.Tests",
+            "projectPath": "tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj",
+            "reportPath": "provider/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.QBAgent.Tests",
+            "projectPath": "tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj",
+            "reportPath": "provider/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx"
+          },
+          {
+            "name": "Build.Tests",
+            "projectPath": "tests/Build.Tests/Build.Tests.csproj",
+            "reportPath": "provider/Build.Tests/Build.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.Repl.IntegrationTests",
+            "projectPath": "tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj",
+            "reportPath": "provider/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.trx"
+          }
+        ]
+      }
+    },
+    {
+      "runId": "ug-r8b-win-lane-5",
+      "host": "PAYTON-LEGION2",
+      "kind": "integration",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-win-lane-5/Build.Tests.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-win-lane-5.result.txt",
+      "bytes": 10256,
+      "sha256": "0E6A8AB344AFA8243AC39FBEFE82D623026CD2229918ECB7322C0FBDAF8733D1",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "0E6A8AB344AFA8243AC39FBEFE82D623026CD2229918ECB7322C0FBDAF8733D1",
+      "committedBlobMatches": true,
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r8b-win-lane-5/provider/Build.Tests/Build.Tests.trx",
+      "originalExists": true,
+      "originalHash": "0E6A8AB344AFA8243AC39FBEFE82D623026CD2229918ECB7322C0FBDAF8733D1",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 6,
+      "executed": 6,
+      "passed": 6,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 6,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 6
+        }
+      ],
+      "computerNames": [
+        "PAYTON-LEGION2"
+      ],
+      "start": "2026-10-28T20:40:09.7260777-05:00",
+      "finish": "2026-10-28T20:40:13.3249358-05:00",
+      "timesMatch": true,
+      "testDefinitions": 6
+    },
+    {
+      "runId": "ug-r8b-win-lane-5",
+      "host": "PAYTON-LEGION2",
+      "kind": "integration",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-win-lane-5/QBrainAi.McpAgent.Tests.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-win-lane-5.result.txt",
+      "bytes": 3213,
+      "sha256": "AD43E350F0D6BB9EBB598B0E573050E0E4F46B972BA8481B1810DD91391D5AC0",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "AD43E350F0D6BB9EBB598B0E573050E0E4F46B972BA8481B1810DD91391D5AC0",
+      "committedBlobMatches": true,
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r8b-win-lane-5/provider/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+      "originalExists": true,
+      "originalHash": "AD43E350F0D6BB9EBB598B0E573050E0E4F46B972BA8481B1810DD91391D5AC0",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 1,
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 1,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 1
+        }
+      ],
+      "computerNames": [
+        "PAYTON-LEGION2"
+      ],
+      "start": "2026-10-28T20:39:50.8926963-05:00",
+      "finish": "2026-10-28T20:39:52.4028904-05:00",
+      "timesMatch": true,
+      "testDefinitions": 1
+    },
+    {
+      "runId": "ug-r8b-win-lane-5",
+      "host": "PAYTON-LEGION2",
+      "kind": "integration",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-win-lane-5/QBrainAi.QBAgent.Tests.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-win-lane-5.result.txt",
+      "bytes": 4522,
+      "sha256": "1B5546E8A5C6B3D93D3D60672BD32C6DA849E43127B60D7CAABD6E753D6E2172",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "1B5546E8A5C6B3D93D3D60672BD32C6DA849E43127B60D7CAABD6E753D6E2172",
+      "committedBlobMatches": true,
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r8b-win-lane-5/provider/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+      "originalExists": true,
+      "originalHash": "1B5546E8A5C6B3D93D3D60672BD32C6DA849E43127B60D7CAABD6E753D6E2172",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 2,
+      "executed": 2,
+      "passed": 2,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 2,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 2
+        }
+      ],
+      "computerNames": [
+        "PAYTON-LEGION2"
+      ],
+      "start": "2026-10-28T20:40:05.3019532-05:00",
+      "finish": "2026-10-28T20:40:07.0325803-05:00",
+      "timesMatch": true,
+      "testDefinitions": 2
+    },
+    {
+      "runId": "ug-r8b-win-lane-5",
+      "host": "PAYTON-LEGION2",
+      "kind": "integration",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-win-lane-5/QBrainAi.Repl.Core.Tests.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-win-lane-5.result.txt",
+      "bytes": 6201,
+      "sha256": "0587AD234441808D3F534D674BD80C8C4015C5DD6E8F0566054455EE30A71C97",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "0587AD234441808D3F534D674BD80C8C4015C5DD6E8F0566054455EE30A71C97",
+      "committedBlobMatches": true,
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r8b-win-lane-5/provider/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+      "originalExists": true,
+      "originalHash": "0587AD234441808D3F534D674BD80C8C4015C5DD6E8F0566054455EE30A71C97",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 3,
+      "executed": 3,
+      "passed": 3,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 3,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 3
+        }
+      ],
+      "computerNames": [
+        "PAYTON-LEGION2"
+      ],
+      "start": "2026-10-28T20:39:57.3768371-05:00",
+      "finish": "2026-10-28T20:39:59.4054016-05:00",
+      "timesMatch": true,
+      "testDefinitions": 3
+    },
+    {
+      "runId": "ug-r8b-win-lane-5",
+      "host": "PAYTON-LEGION2",
+      "kind": "integration",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-win-lane-5/QBrainAi.Repl.IntegrationTests.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-win-lane-5.result.txt",
+      "bytes": 275115,
+      "sha256": "B94DE9E472F45FF86E9BCE971394EB142B8FBDC729DB5381592EF7774A3DE5C3",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "B94DE9E472F45FF86E9BCE971394EB142B8FBDC729DB5381592EF7774A3DE5C3",
+      "committedBlobMatches": true,
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r8b-win-lane-5/provider/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.trx",
+      "originalExists": true,
+      "originalHash": "B94DE9E472F45FF86E9BCE971394EB142B8FBDC729DB5381592EF7774A3DE5C3",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 179,
+      "executed": 179,
+      "passed": 179,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 179,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 179
+        }
+      ],
+      "computerNames": [
+        "PAYTON-LEGION2"
+      ],
+      "start": "2026-10-28T20:40:24.2567985-05:00",
+      "finish": "2026-10-28T20:58:22.5903886-05:00",
+      "timesMatch": true,
+      "testDefinitions": 179
+    },
+    {
+      "runId": "ug-r8b-win-lane-5",
+      "host": "PAYTON-LEGION2",
+      "kind": "integration",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-win-lane-5/QBrainAi.Support.Mcp.Tests.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-win-lane-5.result.txt",
+      "bytes": 610749,
+      "sha256": "574B445F1D26EC9E510F6C289A2A45E78B639AF7F73BBE8590BD3B7914548450",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "574B445F1D26EC9E510F6C289A2A45E78B639AF7F73BBE8590BD3B7914548450",
+      "committedBlobMatches": true,
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r8b-win-lane-5/provider/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "originalExists": true,
+      "originalHash": "574B445F1D26EC9E510F6C289A2A45E78B639AF7F73BBE8590BD3B7914548450",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 398,
+      "executed": 398,
+      "passed": 398,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 398,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 398
+        }
+      ],
+      "computerNames": [
+        "PAYTON-LEGION2"
+      ],
+      "start": "2026-10-28T20:34:37.8225130-05:00",
+      "finish": "2026-10-28T20:39:46.6133250-05:00",
+      "timesMatch": true,
+      "testDefinitions": 398
+    },
+    {
+      "runId": "ug-r8b-win-lane-5",
+      "host": "PAYTON-LEGION2",
+      "kind": "integration",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-win-lane-5/selected-projects.json",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-win-lane-5.result.txt",
+      "bytes": 1522,
+      "sha256": "EDA04CF8186298E855C4E8763815CE46335235AF3C9FE5C38109FFADE6647725",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "EDA04CF8186298E855C4E8763815CE46335235AF3C9FE5C38109FFADE6647725",
+      "committedBlobMatches": true,
+      "sourcePath": "/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r8b-win-lane-5/provider/selected-projects.json",
+      "originalExists": true,
+      "originalHash": "EDA04CF8186298E855C4E8763815CE46335235AF3C9FE5C38109FFADE6647725",
+      "originalMatches": true,
+      "selection": {
+        "schemaVersion": 1,
+        "runId": "ug-r8b-win-lane-5",
+        "scope": "provider",
+        "generatedAtUtc": "2026-10-28T20:34:01.4084068-05:00",
+        "projects": [
+          {
+            "name": "QBrainAi.Support.Mcp.Tests",
+            "projectPath": "tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj",
+            "reportPath": "provider/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.McpAgent.Tests",
+            "projectPath": "tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj",
+            "reportPath": "provider/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.Repl.Core.Tests",
+            "projectPath": "tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj",
+            "reportPath": "provider/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.QBAgent.Tests",
+            "projectPath": "tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj",
+            "reportPath": "provider/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx"
+          },
+          {
+            "name": "Build.Tests",
+            "projectPath": "tests/Build.Tests/Build.Tests.csproj",
+            "reportPath": "provider/Build.Tests/Build.Tests.trx"
+          },
+          {
+            "name": "QBrainAi.Repl.IntegrationTests",
+            "projectPath": "tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj",
+            "reportPath": "provider/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.trx"
+          }
+        ]
+      }
+    },
+    {
+      "runId": "ug-r8b-build-tests-3",
+      "host": "LAB-OMARCHY",
+      "kind": "infrastructure",
+      "path": "docs/receipts/hv/unitgreen-r8b-trx-a78640ba/ug-r8b-build-tests-3/ug-r8b-build-tests-3.trx",
+      "head": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "receipt": "docs/receipts/unit-suite-green-20261019/ug-r8b-build-tests-3.meta.json",
+      "bytes": 671486,
+      "sha256": "CAFFA2EF7AFB916EA03DA5F397A2311D758C8637C26DB630599B8AD56F725311",
+      "manifestHashMatches": true,
+      "committedBlobSha256": "CAFFA2EF7AFB916EA03DA5F397A2311D758C8637C26DB630599B8AD56F725311",
+      "committedBlobMatches": true,
+      "sourcePath": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-build-tests-3/ug-r8b-build-tests-3.trx",
+      "originalExists": true,
+      "originalHash": "CAFFA2EF7AFB916EA03DA5F397A2311D758C8637C26DB630599B8AD56F725311",
+      "originalMatches": true,
+      "summaryOutcome": "Completed",
+      "total": 470,
+      "executed": 470,
+      "passed": 470,
+      "failed": 0,
+      "notExecuted": 0,
+      "resultCount": 470,
+      "countersMatch": true,
+      "allResultsPassed": true,
+      "outcomes": [
+        {
+          "outcome": "Passed",
+          "count": 470
+        }
+      ],
+      "computerNames": [
+        "LAB-OMARCHY"
+      ],
+      "start": "2026-10-28T21:01:42.5088708-05:00",
+      "finish": "2026-10-28T21:07:50.6234141-05:00",
+      "timesMatch": true,
+      "testDefinitions": 457
+    }
+  ],
+  "runTotals": [
+    {
+      "runId": "ug-r8b-build-tests-3",
+      "trxCount": 1,
+      "total": 470.0,
+      "passed": 470.0,
+      "failed": 0.0,
+      "notExecuted": 0.0
+    },
+    {
+      "runId": "ug-r8b-linux-lane-4",
+      "trxCount": 6,
+      "total": 612.0,
+      "passed": 612.0,
+      "failed": 0.0,
+      "notExecuted": 0.0
+    },
+    {
+      "runId": "ug-r8b-linux-test-6",
+      "trxCount": 7,
+      "total": 4592.0,
+      "passed": 4592.0,
+      "failed": 0.0,
+      "notExecuted": 0.0
+    },
+    {
+      "runId": "ug-r8b-win-lane-5",
+      "trxCount": 6,
+      "total": 589.0,
+      "passed": 589.0,
+      "failed": 0.0,
+      "notExecuted": 0.0
+    },
+    {
+      "runId": "ug-r8b-win-test-ssh-4",
+      "trxCount": 7,
+      "total": 4592.0,
+      "passed": 4592.0,
+      "failed": 0.0,
+      "notExecuted": 0.0
+    }
+  ],
+  "unitNameComparisons": [
+    {
+      "project": "QBrainAi.Client.Tests",
+      "linux": 306,
+      "windows": 306,
+      "nameDifferenceCount": 0,
+      "differences": []
+    },
+    {
+      "project": "QBrainAi.Cqrs.Tests",
+      "linux": 33,
+      "windows": 33,
+      "nameDifferenceCount": 0,
+      "differences": []
+    },
+    {
+      "project": "QBrainAi.Launcher.Tests",
+      "linux": 20,
+      "windows": 20,
+      "nameDifferenceCount": 0,
+      "differences": []
+    },
+    {
+      "project": "QBrainAi.McpAgent.Tests",
+      "linux": 64,
+      "windows": 64,
+      "nameDifferenceCount": 0,
+      "differences": []
+    },
+    {
+      "project": "QBrainAi.QBAgent.Tests",
+      "linux": 94,
+      "windows": 94,
+      "nameDifferenceCount": 0,
+      "differences": []
+    },
+    {
+      "project": "QBrainAi.Repl.Core.Tests",
+      "linux": 903,
+      "windows": 903,
+      "nameDifferenceCount": 0,
+      "differences": []
+    },
+    {
+      "project": "QBrainAi.Support.Mcp.Tests",
+      "linux": 3172,
+      "windows": 3172,
+      "nameDifferenceCount": 2,
+      "differences": [
+        {
+          "InputObject": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"Q:\\\\__mcp_unit_test__\\\\outside\\\\docfx\", ···]]]], expectedMessage: \"outputRoot\")",
+          "SideIndicator": "=>"
+        },
+        {
+          "InputObject": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"/__mcp_unit_test__/outside/docfx\", ···]]]], expectedMessage: \"outputRoot\")",
+          "SideIndicator": "<="
+        }
+      ]
+    }
+  ],
+  "testProjectInventory": [
+    "tests/Build.Tests/Build.Tests.csproj",
+    "tests/QBrainAi.Acid.IntegrationTests/QBrainAi.Acid.IntegrationTests.csproj",
+    "tests/QBrainAi.Client.Tests/QBrainAi.Client.Tests.csproj",
+    "tests/QBrainAi.Context.Validation/QBrainAi.Context.Validation.csproj",
+    "tests/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.csproj",
+    "tests/QBrainAi.GitHub.Validation/QBrainAi.GitHub.Validation.csproj",
+    "tests/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.csproj",
+    "tests/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.csproj",
+    "tests/QBrainAi.PlanReview.Tests/QBrainAi.PlanReview.Tests.csproj",
+    "tests/QBrainAi.PluginIntegration.Tests/QBrainAi.PluginIntegration.Tests.csproj",
+    "tests/QBrainAi.ProcessTree.TestHelper/QBrainAi.ProcessTree.TestHelper.csproj",
+    "tests/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.csproj",
+    "tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj",
+    "tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj",
+    "tests/QBrainAi.Repo.Validation/QBrainAi.Repo.Validation.csproj",
+    "tests/QBrainAi.Review.Tests/QBrainAi.Review.Tests.csproj",
+    "tests/QBrainAi.SessionLog.Validation/QBrainAi.SessionLog.Validation.csproj",
+    "tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj",
+    "tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj",
+    "tests/QBrainAi.Todo.Validation/QBrainAi.Todo.Validation.csproj",
+    "tests/QBrainAi.ToolRegistry.Validation/QBrainAi.ToolRegistry.Validation.csproj",
+    "tests/QBrainAi.TransactionSecurity.IntegrationTests/QBrainAi.TransactionSecurity.IntegrationTests.csproj",
+    "tests/QBrainAi.Workspace.Validation/QBrainAi.Workspace.Validation.csproj"
+  ],
+  "manifestProjectDifference": []
+}

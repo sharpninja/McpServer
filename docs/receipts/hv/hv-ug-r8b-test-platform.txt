@@ -1,0 +1,72 @@
+tests/Build.Tests/TrimAnalysisWarningInventoryTests.cs:187:        if (!OperatingSystem.IsWindows())
+tests/Build.Tests/ServiceUpdateTests.cs:421:    [SupportedOSPlatform("linux")]
+tests/Build.Tests/ServiceUpdateTests.cs:473:    [SupportedOSPlatform("linux")]
+tests/Build.Tests/ServiceUpdateTests.cs:735:            if (!OperatingSystem.IsWindows())
+tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs:51:        var workspacePath = OperatingSystem.IsWindows() ? @"E:\github\McpServer" : "/var/lib/McpServer";
+tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/OllamaServerFixture.cs:64:                candidates.Add(Path.Combine(directory.Trim(), OperatingSystem.IsWindows() ? "ollama.exe" : "ollama"));
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs:44:        var expected = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs:60:            : OperatingSystem.IsLinux()
+tests/QBrainAi.Support.Mcp.Tests/UnitTestPaths.cs:13:    public static string Root { get; } = OperatingSystem.IsWindows() ? @"Q:\__mcp_unit_test__" : "/__mcp_unit_test__";
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:46:            OperatingSystem.IsWindows() || OperatingSystem.IsLinux(),
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:62:        var applicableInventory = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:65:        var unsupportedInventory = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:88:            OperatingSystem.IsWindows() ? 11 : 37,
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:101:        if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:158:            var executable = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:161:            IReadOnlyList<string> arguments = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:172:            if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs:134:        if (!OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:247:    [InlineData("Assert.SkipUnless(OperatingSystem.IsWindows(), \"w\");", "1")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:298:        Assert.DoesNotMatch(original, "Assert.SkipUnless(OperatingSystem.IsWindows(), \"w\");");
+tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunction.cs:58:    [SupportedOSPlatform("windows")]
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:105:        if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:204:        if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:19:[SupportedOSPlatform("linux")]
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:28:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:396:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:456:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:566:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:658:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceWindowsProcess.cs:46:        [SupportedOSPlatform("windows")]
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceWindowsProcess.cs:136:        [SupportedOSPlatform("windows")]
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceWindowsProcess.cs:202:        [SupportedOSPlatform("windows")]
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceWindowsProcess.cs:221:        [SupportedOSPlatform("windows")]
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceWindowsProcess.cs:265:        [SupportedOSPlatform("windows")]
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceWindowsProcess.cs:280:        [SupportedOSPlatform("windows")]
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceWindowsProcess.cs:296:        [SupportedOSPlatform("windows")]
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceWindowsProcess.cs:306:        [SupportedOSPlatform("windows")]
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:30:            if (OperatingSystem.IsLinux())
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:57:            if (OperatingSystem.IsLinux())
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:529:            OperatingSystem.IsLinux() &&
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs:19:        OperatingSystem.IsWindows() ? WorkspacePathPlatform.Windows : WorkspacePathPlatform.CaseSensitive;
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs:22:    protected static string NativeSample => OperatingSystem.IsWindows() ? @"C:\svc\.\repo" : "/srv/./repo";
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs:25:    protected static string NativeSampleExpected => OperatingSystem.IsWindows() ? "C:/svc/repo" : "/srv/repo";
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs:43:        var foreign = OperatingSystem.IsWindows() ? "/home/sharpninja/github/McpServer" : @"C:\Users\kingd";
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:212:        var fileName = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityWindowsTests.cs:22:        Assert.True(OperatingSystem.IsWindows());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityWindowsTests.cs:118:        Assert.True(OperatingSystem.IsWindows());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityWindowsTests.cs:181:        Assert.True(OperatingSystem.IsWindows());
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs:100:        if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs:127:        else if (OperatingSystem.IsLinux())
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs:181:        var minimumInvocationIncrease = OperatingSystem.IsWindows() ? 1 : 9;
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:25:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:63:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:114:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:194:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:245:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:308:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:389:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:500:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:708:        OperatingSystem.IsLinux() &&
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsFourteenthLinuxNativeTests.cs:15:[SupportedOSPlatform("linux")]
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:62:            if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:84:        if (!OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:327:            if (!OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:273:        var expectedNativeError = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:518:            if (!OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs:75:            if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs:66:            Environment.UserInteractive,
+tests/QBrainAi.Support.Mcp.Tests/Services/FileGitHubWorkspaceTokenStoreTests.cs:109:        if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Services/FileGitHubWorkspaceTokenStoreTests.cs:116:        if (OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())
+tests/QBrainAi.Support.Mcp.Tests/Services/FileGitHubWorkspaceTokenStoreTests.cs:127:    [SupportedOSPlatform("windows")]
+tests/QBrainAi.Support.Mcp.Tests/Services/FileGitHubWorkspaceTokenStoreTests.cs:147:    [SupportedOSPlatform("windows")]

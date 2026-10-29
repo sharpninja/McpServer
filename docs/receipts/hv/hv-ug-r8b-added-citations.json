@@ -1,0 +1,2960 @@
+[
+  {
+    "file": "Directory.Packages.props",
+    "line": 91,
+    "id": "TR-MCP-QUALITY-001",
+    "text": "    <!-- TR-MCP-QUALITY-001 ac-21: advisory-patched versions (GHSA-2fmv-rv2c-59x7, GHSA-846f-f764-76mx, GHSA-7hqp-7c5m-4vq6, GHSA-c399-9853-6jmj, GHSA-r955-8q5j-3h83) -->"
+  },
+  {
+    "file": "build/Build.TestDependencies.cs",
+    "line": 19,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>TR-MCP-NUKE-019: the release download folder; the host's asset name comes from <see cref=\"OllamaInstallLayout\"/>.</summary>"
+  },
+  {
+    "file": "build/Build.TestDependencies.cs",
+    "line": 40,
+    "id": "TR-MCP-NUKE-018",
+    "text": "    /// TR-MCP-NUKE-018: test-database env file read on non-Windows hosts when a provider connection"
+  },
+  {
+    "file": "build/Build.TestDependencies.cs",
+    "line": 50,
+    "id": "TR-MCP-NUKE-018",
+    "text": "    /// user-scoped tools directory, no elevation required). On other hosts (TR-MCP-NUKE-018): the"
+  },
+  {
+    "file": "build/Build.TestDependencies.cs",
+    "line": 71,
+    "id": "TR-MCP-NUKE-018",
+    "text": "    /// TR-MCP-NUKE-018: provisions the provider test endpoints through the production"
+  },
+  {
+    "file": "build/Build.TestDependencies.cs",
+    "line": 100,
+    "id": "TR-MCP-NUKE-018",
+    "text": "    /// providers use the endpoints InstallTestDependencies provisions (TR-MCP-NUKE-018), and a"
+  },
+  {
+    "file": "build/Build.TestDependencies.cs",
+    "line": 104,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// TR-MCP-NUKE-019: the selection is host-scoped through <see cref=\"IntegrationLaneFilter\"/>; cases tagged"
+  },
+  {
+    "file": "build/Build.TestDependencies.cs",
+    "line": 106,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// TR-MCP-NUKE-019: the lane also provisions Ollama and the QuadBrain test model on both hosts"
+  },
+  {
+    "file": "build/Build.TestDependencies.cs",
+    "line": 116,
+    "id": "TR-MCP-NUKE-019",
+    "text": "            // TR-MCP-NUKE-019 AC-2: the six lane projects IntegrationLaneProjects names, in run order (Repl.Core.Tests and"
+  },
+  {
+    "file": "build/Build.TestDependencies.cs",
+    "line": 118,
+    "id": "TR-MCP-USECASE-018",
+    "text": "            // TR-MCP-USECASE-018 AC-006; QBrainAi.Repl.IntegrationTests is the one *.IntegrationTests lane project)."
+  },
+  {
+    "file": "build/Build.TestDependencies.cs",
+    "line": 125,
+    "id": "TR-MCP-NUKE-019",
+    "text": "            // TR-MCP-NUKE-019: on Windows the lane runs only from an interactive desktop session; refuse"
+  },
+  {
+    "file": "build/Build.TestDependencies.cs",
+    "line": 134,
+    "id": "TR-MCP-NUKE-019",
+    "text": "            // TR-MCP-NUKE-019 AC-1 and AC-3: select this host's integration cases and name the filter in the log."
+  },
+  {
+    "file": "build/Build.TestDependencies.cs",
+    "line": 195,
+    "id": "TEST-MCP-QBOLLAMA-001",
+    "text": "    /// tests (TEST-MCP-QBOLLAMA-001), on Windows and Linux (TR-MCP-NUKE-019): an installed"
+  },
+  {
+    "file": "build/Build.TestDependencies.cs",
+    "line": 195,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// tests (TEST-MCP-QBOLLAMA-001), on Windows and Linux (TR-MCP-NUKE-019): an installed"
+  },
+  {
+    "file": "build/Build.TestDependencies.cs",
+    "line": 228,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// TR-MCP-NUKE-019: returns an installed Ollama executable (PATH, then the usual install, then the portable"
+  },
+  {
+    "file": "build/Build.TestDependencies.cs",
+    "line": 447,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    // TR-MCP-NUKE-019: streams to disk with no total time limit; fails naming the URL on an error status or"
+  },
+  {
+    "file": "build/IntegrationLaneFilter.cs",
+    "line": 2,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019: Production <see cref=\"IIntegrationLaneFilter\"/>. Selects the Category=Integration cases of one"
+  },
+  {
+    "file": "build/IntegrationLaneFilter.cs",
+    "line": 15,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>TR-MCP-NUKE-019: The host the running build is on.</summary>"
+  },
+  {
+    "file": "build/IntegrationLaneFilterContracts.cs",
+    "line": 2,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019: Host operating system whose Category=Integration cases a MigrationIntegrationTests run selects."
+  },
+  {
+    "file": "build/IntegrationLaneFilterContracts.cs",
+    "line": 14,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019: Composes the dotnet test filter of the host-scoped integration lane. Cases tagged"
+  },
+  {
+    "file": "build/IntegrationLanePreconditionContracts.cs",
+    "line": 2,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019: whether MigrationIntegrationTests may start its test processes, and why not."
+  },
+  {
+    "file": "build/IntegrationLanePreconditionContracts.cs",
+    "line": 9,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019: decides, before any test runs, whether the host session can run the integration lane."
+  },
+  {
+    "file": "build/IntegrationLaneProjects.cs",
+    "line": 2,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019 AC-2: Production <see cref=\"IIntegrationLaneProjects\"/>. The six lane projects in their run order;"
+  },
+  {
+    "file": "build/IntegrationLaneProjectsContracts.cs",
+    "line": 2,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019 AC-2: Selects the projects MigrationIntegrationTests runs from the solution's project names:"
+  },
+  {
+    "file": "build/InteractiveSessionPrecondition.cs",
+    "line": 2,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019: production <see cref=\"IIntegrationLanePrecondition\"/>. On Windows the integration lane runs"
+  },
+  {
+    "file": "build/InteractiveSessionPrecondition.cs",
+    "line": 13,
+    "id": "TR-MCP-NUKE-019",
+    "text": "                \"MigrationIntegrationTests needs an interactive desktop session on Windows (TR-MCP-NUKE-019): this process \""
+  },
+  {
+    "file": "build/LinuxProviderTestProvisioner.cs",
+    "line": 7,
+    "id": "TR-MCP-NUKE-018",
+    "text": "/// TR-MCP-NUKE-018: Production Linux provisioning of the provider test endpoints (operator decision 2026-10-11,"
+  },
+  {
+    "file": "build/LinuxProviderTestProvisioner.cs",
+    "line": 254,
+    "id": "TR-MCP-NUKE-018",
+    "text": "/// TR-MCP-NUKE-018: Real host boundary: process environment, file system, docker CLI (inspect and start only) and TCP."
+  },
+  {
+    "file": "build/OllamaInstallLayout.cs",
+    "line": 2,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019: Production <see cref=\"IOllamaInstallLayout\"/>. The portable release assets are those the"
+  },
+  {
+    "file": "build/OllamaInstallLayoutContracts.cs",
+    "line": 2,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019: where MigrationIntegrationTests finds or places the Ollama executable on a host. An installed"
+  },
+  {
+    "file": "build/ProviderTestProvisioningContracts.cs",
+    "line": 2,
+    "id": "TR-MCP-NUKE-018",
+    "text": "/// TR-MCP-NUKE-018: State of a Docker container as seen by the provider test provisioning."
+  },
+  {
+    "file": "build/ProviderTestProvisioningContracts.cs",
+    "line": 17,
+    "id": "TR-MCP-NUKE-018",
+    "text": "/// TR-MCP-NUKE-018: Host boundary of the Linux provider test provisioning: process environment, the test-database"
+  },
+  {
+    "file": "build/ProviderTestProvisioningContracts.cs",
+    "line": 42,
+    "id": "TR-MCP-NUKE-018",
+    "text": "/// TR-MCP-NUKE-018: Outcome of provider test provisioning. Actions and errors carry variable names, file paths,"
+  },
+  {
+    "file": "build/ProviderTestProvisioningContracts.cs",
+    "line": 54,
+    "id": "TR-MCP-NUKE-018",
+    "text": "/// TR-MCP-NUKE-018: Linux provisioning of the PostgreSQL and SQL Server endpoints used by the Category=Integration"
+  },
+  {
+    "file": "build/ProviderTestProvisioningContracts.cs",
+    "line": 64,
+    "id": "TR-MCP-NUKE-018",
+    "text": "/// TR-MCP-NUKE-018: Names fixed by the operator decision of 2026-10-11 (BUG-BASELINE-005)."
+  },
+  {
+    "file": "build/ProvisioningDownload.cs",
+    "line": 2,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019: the provisioning download. The client has no total time limit; the request completes at the"
+  },
+  {
+    "file": "build/ProvisioningDownload.cs",
+    "line": 9,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>The inactivity limit the provisioning targets use (TR-MCP-NUKE-019: two minutes).</summary>"
+  },
+  {
+    "file": "build/ProvisioningDownloadContracts.cs",
+    "line": 2,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019: how a provisioning download (the portable Ollama release, the SQL Server LocalDB installer,"
+  },
+  {
+    "file": "src/QBrainAi.Client/WorkspaceIdentityPath.cs",
+    "line": 1047,
+    "id": "TR-MCP-PATHNORM-001",
+    "text": "    /// TR-MCP-PATHNORM-001 / TEST-MCP-PATHNORM-001 (criterion unitgreen-native-host): the same native"
+  },
+  {
+    "file": "src/QBrainAi.Client/WorkspaceIdentityPath.cs",
+    "line": 1047,
+    "id": "TEST-MCP-PATHNORM-001",
+    "text": "    /// TR-MCP-PATHNORM-001 / TEST-MCP-PATHNORM-001 (criterion unitgreen-native-host): the same native"
+  },
+  {
+    "file": "src/QBrainAi.Repl.Core/AgentStdioProtocol.cs",
+    "line": 53,
+    "id": "TR-MCP-REPL-001",
+    "text": "    /// TR-MCP-REPL-001 AC-002: reads one environment variable by name for the command timeout. The default reads the"
+  },
+  {
+    "file": "src/QBrainAi.Repl.Core/AgentStdioProtocol.cs",
+    "line": 167,
+    "id": "TR-MCP-REPL-001",
+    "text": "        // TR-MCP-REPL-001 AC-002: the configured timeout is read once and only a valid value is used, so the"
+  },
+  {
+    "file": "src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs",
+    "line": 137,
+    "id": "TR-MCP-REPL-001",
+    "text": "    /// TR-MCP-REPL-001 AC-002: reads one environment variable by name for the stream command timeout. The default reads"
+  },
+  {
+    "file": "src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs",
+    "line": 3013,
+    "id": "TR-MCP-REPL-001",
+    "text": "        // TR-MCP-REPL-001 AC-002: the configured stream timeout is read once and only a valid value is used, so the"
+  },
+  {
+    "file": "src/QBrainAi.Repl.Core/ReplCommandTimeout.cs",
+    "line": 1,
+    "id": "TR-MCP-REPL-001",
+    "text": "// TR-MCP-REPL-001 AC-002: one parse rule for the REPL command timeouts configured through"
+  },
+  {
+    "file": "src/QBrainAi.Repl.Core/ReplCommandTimeout.cs",
+    "line": 10,
+    "id": "TR-MCP-REPL-001",
+    "text": "/// TR-MCP-REPL-001 AC-002: parses a configured REPL command timeout. A whole number of seconds from 1 to"
+  },
+  {
+    "file": "src/QBrainAi.Repl.Host/IMarkerFileSystem.cs",
+    "line": 4,
+    "id": "TR-MCP-REPL-008",
+    "text": "/// TR-MCP-REPL-008: the file system the marker walk and its diagnostics read, that is whether a marker file exists"
+  },
+  {
+    "file": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+    "line": 231,
+    "id": "TR-MCP-REPL-008",
+    "text": "    /// TR-MCP-REPL-008 AC-1 to AC-3: the walk over <paramref name=\"fileSystem\"/>, from the start folder up to the file"
+  },
+  {
+    "file": "src/QBrainAi.Repl.Host/MarkerFileClientOptionsResolver.cs",
+    "line": 280,
+    "id": "TR-MCP-REPL-008",
+    "text": "    /// TR-MCP-REPL-008 AC-4: the diagnosed resolution over <paramref name=\"fileSystem\"/>; with no marker on the way up"
+  },
+  {
+    "file": "src/QBrainAi.Repl.Host/PhysicalMarkerFileSystem.cs",
+    "line": 3,
+    "id": "TR-MCP-REPL-008",
+    "text": "/// <summary>TR-MCP-REPL-008: the host's file system, which the marker walk and its diagnostics read outside the tests.</summary>"
+  },
+  {
+    "file": "src/QBrainAi.Repl.Host/QBrainAi.Repl.Host.csproj",
+    "line": 34,
+    "id": "TR-MCP-REPL-008",
+    "text": "    <!-- TR-MCP-REPL-008 AC-1 to AC-4: the unit tests pass an in-memory IMarkerFileSystem to the marker walk. -->"
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/AgentPluginVersionSources.cs",
+    "line": 4,
+    "id": "TR-MCP-WS-005",
+    "text": "/// TR-MCP-WS-005 / AC-TR-MCP-WS-005-001: every input that agent-plugin version resolution reads, in the order it reads"
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/AgentPluginVersionSources.cs",
+    "line": 4,
+    "id": "TR-MCP-WS-005-001",
+    "text": "/// TR-MCP-WS-005 / AC-TR-MCP-WS-005-001: every input that agent-plugin version resolution reads, in the order it reads"
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/DirectoryListingEntry.cs",
+    "line": 4,
+    "id": "TR-MCP-WS-005",
+    "text": "/// TR-MCP-WS-005 / AC-TR-MCP-WS-005-001, TR-MCP-SESSIONLOG-006 / AC-TR-MCP-SESSIONLOG-006-009:"
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/DirectoryListingEntry.cs",
+    "line": 4,
+    "id": "TR-MCP-WS-005-001",
+    "text": "/// TR-MCP-WS-005 / AC-TR-MCP-WS-005-001, TR-MCP-SESSIONLOG-006 / AC-TR-MCP-SESSIONLOG-006-009:"
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/DirectoryListingEntry.cs",
+    "line": 4,
+    "id": "TR-MCP-SESSIONLOG-006",
+    "text": "/// TR-MCP-WS-005 / AC-TR-MCP-WS-005-001, TR-MCP-SESSIONLOG-006 / AC-TR-MCP-SESSIONLOG-006-009:"
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/DirectoryListingEntry.cs",
+    "line": 4,
+    "id": "TR-MCP-SESSIONLOG-006-009",
+    "text": "/// TR-MCP-WS-005 / AC-TR-MCP-WS-005-001, TR-MCP-SESSIONLOG-006 / AC-TR-MCP-SESSIONLOG-006-009:"
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/DirectoryTreeWalker.cs",
+    "line": 4,
+    "id": "TR-MCP-WS-005",
+    "text": "/// TR-MCP-WS-005 / AC-TR-MCP-WS-005-001, TR-MCP-SESSIONLOG-006 / AC-TR-MCP-SESSIONLOG-006-009:"
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/DirectoryTreeWalker.cs",
+    "line": 4,
+    "id": "TR-MCP-WS-005-001",
+    "text": "/// TR-MCP-WS-005 / AC-TR-MCP-WS-005-001, TR-MCP-SESSIONLOG-006 / AC-TR-MCP-SESSIONLOG-006-009:"
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/DirectoryTreeWalker.cs",
+    "line": 4,
+    "id": "TR-MCP-SESSIONLOG-006",
+    "text": "/// TR-MCP-WS-005 / AC-TR-MCP-WS-005-001, TR-MCP-SESSIONLOG-006 / AC-TR-MCP-SESSIONLOG-006-009:"
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/DirectoryTreeWalker.cs",
+    "line": 4,
+    "id": "TR-MCP-SESSIONLOG-006-009",
+    "text": "/// TR-MCP-WS-005 / AC-TR-MCP-WS-005-001, TR-MCP-SESSIONLOG-006 / AC-TR-MCP-SESSIONLOG-006-009:"
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/DirectoryTreeWalker.cs",
+    "line": 54,
+    "id": "TR-MCP-WS-005-001",
+    "text": "    /// AC-TR-MCP-WS-005-001, AC-TR-MCP-SESSIONLOG-006-009: whether <paramref name=\"root\"/> may be walked from"
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/DirectoryTreeWalker.cs",
+    "line": 54,
+    "id": "TR-MCP-SESSIONLOG-006-009",
+    "text": "    /// AC-TR-MCP-WS-005-001, AC-TR-MCP-SESSIONLOG-006-009: whether <paramref name=\"root\"/> may be walked from"
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/GitHubCliService.cs",
+    "line": 783,
+    "id": "TR-MCP-GH-004",
+    "text": "    /// TR-MCP-GH-004 with FR-MCP-FED-PATH-001 / TR-MCP-FED-PATH-001: the host-native workspace is the gh working"
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/GitHubCliService.cs",
+    "line": 783,
+    "id": "FR-MCP-FED-PATH-001",
+    "text": "    /// TR-MCP-GH-004 with FR-MCP-FED-PATH-001 / TR-MCP-FED-PATH-001: the host-native workspace is the gh working"
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/GitHubCliService.cs",
+    "line": 783,
+    "id": "TR-MCP-FED-PATH-001",
+    "text": "    /// TR-MCP-GH-004 with FR-MCP-FED-PATH-001 / TR-MCP-FED-PATH-001: the host-native workspace is the gh working"
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "line": 93,
+    "id": "TR-MCP-WS-005-001",
+    "text": "    /// AC-TR-MCP-WS-005-001 test seam: when set, marker plugin-version resolution reads every input (the plugin-root"
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "line": 101,
+    "id": "TR-MCP-WS-005-001",
+    "text": "    /// AC-TR-MCP-WS-005-001: the running process's plugin-version sources: its environment variables, the plugin"
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "line": 108,
+    "id": "TR-MCP-WS-005-001",
+    "text": "    /// <summary>AC-TR-MCP-WS-005-001: the plugin folder beside <paramref name=\"workspacePath\"/>; null when the workspace has no parent.</summary>"
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "line": 559,
+    "id": "TR-MCP-WS-005-001",
+    "text": "    /// AC-TR-MCP-WS-005-001: builds the default agent-plugin contract, resolving each plugin version from"
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "line": 647,
+    "id": "TR-MCP-WS-005-001",
+    "text": "    /// AC-TR-MCP-WS-005-001: resolves an agent plugin version from <paramref name=\"sources\"/> only: the plugin root"
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "line": 667,
+    "id": "TR-MCP-WS-005-001",
+    "text": "    /// AC-TR-MCP-WS-005-001: resolves an agent plugin version as the overload above does, reading each candidate's"
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "line": 697,
+    "id": "TR-MCP-WS-005-001",
+    "text": "    /// AC-TR-MCP-WS-005-001: the file read used for version files: a file's text, or null when it does not exist."
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "line": 735,
+    "id": "TR-MCP-WS-005-001",
+    "text": "        // AC-TR-MCP-WS-005-001: a cache root that is a link, or that is reached through a link below the user"
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/MarkerFileService.cs",
+    "line": 787,
+    "id": "TR-MCP-WS-005-001",
+    "text": "    /// AC-TR-MCP-WS-005-001: reads the version of one candidate root from <c>.version</c>, then the plugin manifests"
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs",
+    "line": 26,
+    "id": "TR-MCP-SESSIONLOG-006-009",
+    "text": "    /// Creates an extractor whose agent-history scan walks the real file system (AC-TR-MCP-SESSIONLOG-006-009)."
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs",
+    "line": 34,
+    "id": "TR-MCP-SESSIONLOG-006-009",
+    "text": "    /// AC-TR-MCP-SESSIONLOG-006-009: creates an extractor whose agent-history scan walks through"
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs",
+    "line": 125,
+    "id": "TR-MCP-SESSIONLOG-006-009",
+    "text": "            // AC-TR-MCP-SESSIONLOG-006-009: a history root that is a link contributes no file, the same as a link"
+  },
+  {
+    "file": "src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs",
+    "line": 130,
+    "id": "TR-MCP-SESSIONLOG-006-009",
+    "text": "            // AC-TR-MCP-SESSIONLOG-006-009: the walk skips directory links and any directory it cannot list."
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLaneFilterContract.cs",
+    "line": 4,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019 (AC-1): Contract cases and assertions for <see cref=\"IIntegrationLaneFilter\"/>. The expected filters"
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLaneFilterContract.cs",
+    "line": 25,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>The filter TR-MCP-NUKE-019 AC-1 requires for <paramref name=\"host\"/>.</summary>"
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+    "line": 4,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019 (AC-1), BDPv4 mock gate: proves the <see cref=\"IntegrationLaneFilterContract\"/> assertions accept a"
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+    "line": 10,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>TR-MCP-NUKE-019: every host passes against the scripted filter.</summary>"
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+    "line": 18,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>TR-MCP-NUKE-019: the theory above covers every contract host.</summary>"
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+    "line": 24,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// TR-MCP-NUKE-019 negative controls: each wrong filter is rejected (the other host's cases admitted, untagged"
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+    "line": 43,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// TR-MCP-NUKE-019 negative controls: the selection assertions alone, without the exact-text check, reject each"
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs",
+    "line": 65,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>TR-MCP-NUKE-019: the contract evaluator refuses a term it cannot read instead of guessing.</summary>"
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLaneFilterTests.cs",
+    "line": 4,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019 (AC-1): Binds the <see cref=\"IntegrationLaneFilterContract\"/> cases and assertions, unchanged from"
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLaneFilterTests.cs",
+    "line": 12,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>TR-MCP-NUKE-019: the production filter meets the contract on every host.</summary>"
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLaneFilterTests.cs",
+    "line": 20,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>TR-MCP-NUKE-019: the theory above covers every contract host.</summary>"
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLanePreconditionContract.cs",
+    "line": 4,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019: contract scenarios and assertions for <see cref=\"IIntegrationLanePrecondition\"/>. The"
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs",
+    "line": 4,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019, BDPv4 mock gate: proves the <see cref=\"IntegrationLanePreconditionContract\"/> assertions"
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs",
+    "line": 10,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>TR-MCP-NUKE-019: every scenario passes against the scripted precondition.</summary>"
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs",
+    "line": 20,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>TR-MCP-NUKE-019: the theory above covers every contract scenario.</summary>"
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs",
+    "line": 26,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// TR-MCP-NUKE-019 negative controls: a precondition that runs a non-interactive Windows session, stops"
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLanePreconditionTests.cs",
+    "line": 4,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019: binds the <see cref=\"IntegrationLanePreconditionContract\"/> scenarios and assertions,"
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLanePreconditionTests.cs",
+    "line": 12,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>TR-MCP-NUKE-019: the production precondition meets every contract scenario.</summary>"
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLanePreconditionTests.cs",
+    "line": 22,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>TR-MCP-NUKE-019: the theory above covers every contract scenario.</summary>"
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+    "line": 4,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019 (AC-2): Contract cases and assertions for <see cref=\"IIntegrationLaneProjects\"/>. The expected"
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+    "line": 4,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019 (AC-2), BDPv4 mock gate: proves the <see cref=\"IntegrationLaneProjectsContract\"/> assertions accept a"
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+    "line": 10,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>TR-MCP-NUKE-019 AC-2: the scripted selector satisfies every contract row and both refusals.</summary>"
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+    "line": 16,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// TR-MCP-NUKE-019 AC-2 negative controls, each rejected inside a passing harness:"
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLaneProjectsTests.cs",
+    "line": 6,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019 (AC-2): Binds the <see cref=\"IntegrationLaneProjectsContract\"/> cases and assertions, unchanged"
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLaneProjectsTests.cs",
+    "line": 19,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>TR-MCP-NUKE-019 AC-2: the production selector satisfies every contract row and both refusals.</summary>"
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLaneProjectsTests.cs",
+    "line": 24,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>TR-MCP-NUKE-019 AC-2: the contract's solution row is QBrainAi.sln's project list, in solution order.</summary>"
+  },
+  {
+    "file": "tests/Build.Tests/IntegrationLaneProjectsTests.cs",
+    "line": 30,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// TR-MCP-NUKE-019 AC-2: on QBrainAi.sln the production selector gives the six lane projects in run order"
+  },
+  {
+    "file": "tests/Build.Tests/OllamaInstallLayoutContract.cs",
+    "line": 4,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019: Contract cases and assertions for <see cref=\"IOllamaInstallLayout\"/>. The expected values"
+  },
+  {
+    "file": "tests/Build.Tests/OllamaInstallLayoutMockGateTests.cs",
+    "line": 4,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019, BDPv4 mock gate: proves the <see cref=\"OllamaInstallLayoutContract\"/> assertions accept a"
+  },
+  {
+    "file": "tests/Build.Tests/OllamaInstallLayoutMockGateTests.cs",
+    "line": 10,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>TR-MCP-NUKE-019: every host passes against the scripted layout.</summary>"
+  },
+  {
+    "file": "tests/Build.Tests/OllamaInstallLayoutMockGateTests.cs",
+    "line": 19,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// TR-MCP-NUKE-019 negative controls, each rejected on the host it breaks: Windows names on Linux, a Linux"
+  },
+  {
+    "file": "tests/Build.Tests/OllamaInstallLayoutTests.cs",
+    "line": 4,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019: Binds the <see cref=\"OllamaInstallLayoutContract\"/> cases and assertions, unchanged from the"
+  },
+  {
+    "file": "tests/Build.Tests/OllamaInstallLayoutTests.cs",
+    "line": 12,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>TR-MCP-NUKE-019: the production layout meets the contract on every host.</summary>"
+  },
+  {
+    "file": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "line": 4,
+    "id": "TR-MCP-NUKE-018",
+    "text": "/// TR-MCP-NUKE-018: Contract scenarios and assertions for <see cref=\"IProviderTestProvisioner\"/>."
+  },
+  {
+    "file": "tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs",
+    "line": 4,
+    "id": "TR-MCP-NUKE-018",
+    "text": "/// TR-MCP-NUKE-018, BDPv4 mock gate: proves the <see cref=\"ProviderTestProvisioningContract\"/>"
+  },
+  {
+    "file": "tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs",
+    "line": 10,
+    "id": "TR-MCP-NUKE-018",
+    "text": "    /// <summary>TR-MCP-NUKE-018: every scenario passes against the scripted provisioner.</summary>"
+  },
+  {
+    "file": "tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs",
+    "line": 24,
+    "id": "TR-MCP-NUKE-018",
+    "text": "    /// <summary>TR-MCP-NUKE-018: the theory above covers every contract scenario.</summary>"
+  },
+  {
+    "file": "tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs",
+    "line": 30,
+    "id": "TR-MCP-NUKE-018",
+    "text": "    /// TR-MCP-NUKE-018 negative controls: each wrong provisioner is rejected by the scenario it violates"
+  },
+  {
+    "file": "tests/Build.Tests/ProviderTestProvisioningTests.cs",
+    "line": 4,
+    "id": "TR-MCP-NUKE-018",
+    "text": "/// TR-MCP-NUKE-018: Binds the <see cref=\"ProviderTestProvisioningContract\"/> scenarios and assertions,"
+  },
+  {
+    "file": "tests/Build.Tests/ProviderTestProvisioningTests.cs",
+    "line": 12,
+    "id": "TR-MCP-NUKE-018",
+    "text": "    /// <summary>TR-MCP-NUKE-018: the production provisioner meets every contract scenario.</summary>"
+  },
+  {
+    "file": "tests/Build.Tests/ProviderTestProvisioningTests.cs",
+    "line": 26,
+    "id": "TR-MCP-NUKE-018",
+    "text": "    /// <summary>TR-MCP-NUKE-018: the theory above covers every contract scenario.</summary>"
+  },
+  {
+    "file": "tests/Build.Tests/ProvisioningDownloadContract.cs",
+    "line": 6,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019: Contract cases and assertions for <see cref=\"IProvisioningDownload\"/>. The expected"
+  },
+  {
+    "file": "tests/Build.Tests/ProvisioningDownloadMockGateTests.cs",
+    "line": 4,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019, BDPv4 mock gate: proves the <see cref=\"ProvisioningDownloadContract\"/> assertions accept a"
+  },
+  {
+    "file": "tests/Build.Tests/ProvisioningDownloadMockGateTests.cs",
+    "line": 11,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>TR-MCP-NUKE-019: the scripted download passes every contract case.</summary>"
+  },
+  {
+    "file": "tests/Build.Tests/ProvisioningDownloadMockGateTests.cs",
+    "line": 17,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// TR-MCP-NUKE-019 negative controls, each rejected inside this passing test: a download that buffers the whole"
+  },
+  {
+    "file": "tests/Build.Tests/ProvisioningDownloadTests.cs",
+    "line": 4,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019: Binds the <see cref=\"ProvisioningDownloadContract\"/> cases and assertions, unchanged from the"
+  },
+  {
+    "file": "tests/Build.Tests/ProvisioningDownloadTests.cs",
+    "line": 10,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>TR-MCP-NUKE-019: the production download meets every contract case.</summary>"
+  },
+  {
+    "file": "tests/Build.Tests/ProvisioningDownloadTests.cs",
+    "line": 15,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>TR-MCP-NUKE-019: the provisioning targets use a two-minute inactivity limit.</summary>"
+  },
+  {
+    "file": "tests/Directory.Build.targets",
+    "line": 16,
+    "id": "TR-MCP-NUKE-019",
+    "text": "  <!-- TR-MCP-NUKE-019 AC-6: the temporary-instance checks, linked into the unit project that proves their"
+  },
+  {
+    "file": "tests/Directory.Build.targets",
+    "line": 24,
+    "id": "TR-MCP-NUKE-019",
+    "text": "  <!-- TR-MCP-NUKE-019 AC-6: the one temporary QBrain.AI instance (a Support.Mcp process on a free port in a test-owned"
+  },
+  {
+    "file": "tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs",
+    "line": 36,
+    "id": "TR-MCP-QBRAIN-005",
+    "text": "/// TR-MCP-QBRAIN-005: the legacy McpServer:McpAgent section binds through the options validator, which"
+  },
+  {
+    "file": "tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs",
+    "line": 38,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// by host, so this is an integration test on every host (TR-MCP-USECASE-018 AC-006: no unit test depends"
+  },
+  {
+    "file": "tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs",
+    "line": 45,
+    "id": "TR-MCP-QBRAIN-005",
+    "text": "    /// TR-MCP-QBRAIN-005: McpServer:McpAgent still binds when the canonical section is absent."
+  },
+  {
+    "file": "tests/QBrainAi.QBAgent.Tests/Skills/AuthoredSkillsTests.cs",
+    "line": 8,
+    "id": "FR-MCP-QBSKILLS-003",
+    "text": "/// with valid frontmatter and are discoverable (FR-MCP-QBSKILLS-003 ac-2). The skills are read from the repository"
+  },
+  {
+    "file": "tests/QBrainAi.QBAgent.Tests/Skills/AuthoredSkillsTests.cs",
+    "line": 10,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// (TR-MCP-USECASE-018 AC-006, hostile validation round 2 finding R2-F1)."
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs",
+    "line": 18,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// hosts (TR-MCP-USECASE-018 AC-006, hostile validation round 2 finding R2-F1)."
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkContract.cs",
+    "line": 6,
+    "id": "TR-MCP-REPL-008",
+    "text": "/// TR-MCP-REPL-008 (AC-1 to AC-4): Contract cases and assertions for the marker walk and its diagnostics, one named"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkMockGateTests.cs",
+    "line": 7,
+    "id": "TR-MCP-REPL-008",
+    "text": "/// TR-MCP-REPL-008 (AC-1 to AC-4), BDPv4 mock gate: proves the <see cref=\"MarkerWalkContract\"/> assertions accept a"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkMockGateTests.cs",
+    "line": 14,
+    "id": "TR-MCP-REPL-008",
+    "text": "    /// <summary>TR-MCP-REPL-008 AC-1 to AC-3: the scripted walk passes every walk case.</summary>"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkMockGateTests.cs",
+    "line": 19,
+    "id": "TR-MCP-REPL-008",
+    "text": "    /// <summary>TR-MCP-REPL-008 AC-4: the scripted diagnosis passes the diagnostics case.</summary>"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkMockGateTests.cs",
+    "line": 25,
+    "id": "TR-MCP-REPL-008",
+    "text": "    /// TR-MCP-REPL-008 AC-1 to AC-3 negative controls, each rejected inside this passing test: a walk that never"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkMockGateTests.cs",
+    "line": 40,
+    "id": "TR-MCP-REPL-008",
+    "text": "    /// TR-MCP-REPL-008 AC-4 negative controls, each rejected inside this passing test: an error that omits the"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkTests.cs",
+    "line": 6,
+    "id": "TR-MCP-REPL-008",
+    "text": "/// TR-MCP-REPL-008 (AC-1 to AC-4): Binds the <see cref=\"MarkerWalkContract\"/> cases and assertions, unchanged from the"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkTests.cs",
+    "line": 13,
+    "id": "TR-MCP-REPL-008",
+    "text": "    /// <summary>TR-MCP-REPL-008 AC-1: no marker on the way up; every folder to the root is listed in walk order.</summary>"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkTests.cs",
+    "line": 18,
+    "id": "TR-MCP-REPL-008",
+    "text": "    /// <summary>TR-MCP-REPL-008 AC-2: a marker only in a parent folder is found, as intended.</summary>"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkTests.cs",
+    "line": 23,
+    "id": "TR-MCP-REPL-008",
+    "text": "    /// <summary>TR-MCP-REPL-008 AC-3: with markers in the start folder and a parent, the nearest wins.</summary>"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkTests.cs",
+    "line": 28,
+    "id": "TR-MCP-REPL-008",
+    "text": "    /// <summary>TR-MCP-REPL-008 AC-4: with no marker on the way up, the error names the marker file and every folder.</summary>"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/MemorySchemaContractTests.cs",
+    "line": 9,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// <see cref=\"TestRepositoryRoot\"/>, so this is an integration test on both hosts (TR-MCP-USECASE-018 AC-006,"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.csproj",
+    "line": 25,
+    "id": "TR-MCP-REPL-008",
+    "text": "    <!-- TR-MCP-REPL-008 AC-1 to AC-4: the marker walk cases run here as unit tests over an in-memory file system. -->"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutCallSiteTests.cs",
+    "line": 1,
+    "id": "TR-MCP-REPL-001",
+    "text": "// TR-MCP-REPL-001 AC-002: the two call sites that apply a configured REPL command timeout"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutCallSiteTests.cs",
+    "line": 18,
+    "id": "TR-MCP-REPL-001",
+    "text": "/// Requirement coverage: TR-MCP-REPL-001 AC-002 (round 8 self-evaluation: the parse rule was bound, but neither call"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutCallSiteTests.cs",
+    "line": 20,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008. Test data: contract rows, each a pair of scripted variable"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutCallSiteTests.cs",
+    "line": 20,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008. Test data: contract rows, each a pair of scripted variable"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutTests.cs",
+    "line": 12,
+    "id": "TR-MCP-REPL-001",
+    "text": "/// Requirement coverage: TR-MCP-REPL-001 AC-002 (hostile validation round 7: both variables at 2147483647 made 19 REPL"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutTests.cs",
+    "line": 14,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// triage-report-c993b9446bb8464ba375f74fabd07dad), and through it TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutTests.cs",
+    "line": 14,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// triage-report-c993b9446bb8464ba375f74fabd07dad), and through it TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+    "line": 10,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// its port at start (TR-MCP-NUKE-019)."
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+    "line": 13,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// Requirement coverage: TR-MCP-NUKE-019 AC-6 (every integration case MigrationIntegrationTests runs uses a temporary"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+    "line": 61,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// The restart contract rows (TR-MCP-NUKE-019): a row name, the starts made so far, whether the instance"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+    "line": 92,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>Mock gate positive control (TR-MCP-NUKE-019): the scripted restart decision satisfies every row.</summary>"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+    "line": 98,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// Mock gate negative controls on the restart contract (TR-MCP-NUKE-019), each rejected inside a passing"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+    "line": 154,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <see cref=\"TemporaryInstanceChecks.ShouldRestartOnNewPort\"/> (TR-MCP-NUKE-019), satisfy the same rows the"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.IntegrationTests/AuthKeyAndWorkspaceTests.cs",
+    "line": 24,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>TR-MCP-NUKE-019 AC-6: an X-Api-Key header on the temporary instance's health endpoint is handled.</summary>"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.IntegrationTests/AuthKeyAndWorkspaceTests.cs",
+    "line": 42,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>TR-MCP-NUKE-019 AC-6: an X-Workspace-Path header on the temporary instance's health endpoint is handled.</summary>"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.IntegrationTests/AuthKeyAndWorkspaceTests.cs",
+    "line": 99,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>TR-MCP-NUKE-019 AC-6: X-Api-Key and X-Workspace-Path together on the temporary instance are handled.</summary>"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.IntegrationTests/AuthKeyAndWorkspaceTests.cs",
+    "line": 121,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// TR-MCP-NUKE-019 AC-6: a protected endpoint of the temporary instance refuses a request without a key. The"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.IntegrationTests/EndToEndFlowTests.cs",
+    "line": 57,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>TR-MCP-NUKE-019 AC-6: the temporary instance's health echoes the nonce, then the trust bootstrap runs.</summary>"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.IntegrationTests/EndToEndFlowTests.cs",
+    "line": 90,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// TR-MCP-NUKE-019 AC-6: the temporary instance answers health for two X-Workspace-Path values with an API key, then"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.IntegrationTests/EndToEndFlowTests.cs",
+    "line": 202,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// TR-MCP-NUKE-019 AC-6: an HTTP health call to the temporary instance, interleaved with REPL requests, echoes its"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.IntegrationTests/Iteration1IntegrationTests.cs",
+    "line": 114,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// nonce (TR-MCP-NUKE-019 AC-6)."
+  },
+  {
+    "file": "tests/QBrainAi.Repl.IntegrationTests/Iteration1IntegrationTests.cs",
+    "line": 131,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// (TR-MCP-NUKE-019 AC-6)."
+  },
+  {
+    "file": "tests/QBrainAi.Repl.IntegrationTests/Iteration1IntegrationTests.cs",
+    "line": 154,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// Verifies auth key acceptance in request headers by the temporary instance (TR-MCP-NUKE-019 AC-6)."
+  },
+  {
+    "file": "tests/QBrainAi.Repl.IntegrationTests/Iteration3IntegrationTests.cs",
+    "line": 312,
+    "id": "TR-MCP-NUKE-019",
+    "text": "        // TR-MCP-NUKE-019 AC-6: every streamed document is an envelope; a parse or assertion failure fails the case."
+  },
+  {
+    "file": "tests/QBrainAi.Repl.IntegrationTests/Iteration3IntegrationTests.cs",
+    "line": 315,
+    "id": "FR-MCP-REPL-005",
+    "text": "            // FR-MCP-REPL-005: '---' document separators are part of the framing"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.IntegrationTests/Iteration3IntegrationTests.cs",
+    "line": 870,
+    "id": "TR-MCP-NUKE-019",
+    "text": "        // TR-MCP-NUKE-019 AC-6: every streamed document is an envelope; a parse or assertion failure fails the case."
+  },
+  {
+    "file": "tests/QBrainAi.Repl.IntegrationTests/Iteration3IntegrationTests.cs",
+    "line": 873,
+    "id": "FR-MCP-REPL-005",
+    "text": "            // FR-MCP-REPL-005: '---' document separators are part of the framing"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs",
+    "line": 9,
+    "id": "TR-MCP-REPL-008",
+    "text": "/// in-memory file system in QBrainAi.Repl.Core.Tests (MarkerWalkTests, TR-MCP-REPL-008 AC-1 to AC-4), because on a"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj",
+    "line": 23,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    <!-- TR-MCP-NUKE-019 AC-6: the shared temporary instance stages its SQLite database through EF Core. -->"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.csproj",
+    "line": 31,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    <!-- TR-MCP-NUKE-019 AC-6: the temporary instance runs QBrainAi.Support.Mcp with the SQLite migrations. -->"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs",
+    "line": 10,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// workspace and marker only, never the live server, its marker or its API key (TR-MCP-NUKE-019 AC-6;"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs",
+    "line": 85,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// Gets the base URL of this helper's temporary instance (TR-MCP-NUKE-019 AC-6); available once"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs",
+    "line": 92,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// Gets the workspace path registered on this helper's temporary instance (TR-MCP-NUKE-019 AC-6), the value a"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs",
+    "line": 100,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// Starts this helper's temporary QBrain.AI instance when it is not running yet (TR-MCP-NUKE-019 AC-6): a test-owned"
+  },
+  {
+    "file": "tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs",
+    "line": 114,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// before returning unless its workspace and marker lie inside that instance's root (TR-MCP-NUKE-019 AC-6)."
+  },
+  {
+    "file": "tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs",
+    "line": 569,
+    "id": "TR-MCP-NUKE-019",
+    "text": "            // The temporary instance stops its process tree and removes its root (TR-MCP-NUKE-019 AC-6)."
+  },
+  {
+    "file": "tests/QBrainAi.Repl.IntegrationTests/TrustBootstrapFlowTests.cs",
+    "line": 29,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>TR-MCP-NUKE-019 AC-6: the temporary instance's health is 200 and echoes the request's nonce.</summary>"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/OllamaServerFixture.cs",
+    "line": 74,
+    "id": "TR-MCP-NUKE-019",
+    "text": "        // Matches the portable install locations used by the InstallOllama Nuke target (TR-MCP-NUKE-019):"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs",
+    "line": 8,
+    "id": "TEST-MCP-REQSCOPE-REPL-001",
+    "text": "/// TEST-MCP-REQSCOPE-REPL-001 (historical): REPL-driven integration coverage for requirement scope layers, on the"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs",
+    "line": 9,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// shared temporary instance (<see cref=\"ScratchQBrainAi\"/>, TR-MCP-NUKE-019 AC-6)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs",
+    "line": 12,
+    "id": "TEST-MCP-REQSCOPE-REPL-001",
+    "text": "/// The TEST-MCP-REQSCOPE-REPL-001 citations in this file are historical: that record is not in the requirements store"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs",
+    "line": 14,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// validation finding R6-F2; plan section 25). The active claim is TR-MCP-NUKE-019 AC-6, the temporary instance."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "line": 198,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// Requirement coverage: Byrd Development Process V4 validation discipline; TR-MCP-USECASE-018 (AC-006),"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "line": 199,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// TR-MCP-USECASE-019 (AC-008): platform-specific tests neither skip nor silently return."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "line": 237,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// TR-MCP-USECASE-018 (AC-006), BDPv4 mock gate for <see cref=\"UnitSuitePlatformScanner.FindSkipLines\"/>:"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "line": 283,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// TR-MCP-USECASE-018 (AC-006) negative controls: the single-line patterns this guard used before"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+    "line": 313,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// resolves only for an integration test (TR-MCP-USECASE-018 AC-006)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "line": 6,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008), BDPv4 mock gate for the trait policy of"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs",
+    "line": 6,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008), BDPv4 mock gate for the trait policy of"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "line": 8,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008): finds platform dependence in unit tests by reading"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "line": 8,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008): finds platform dependence in unit tests by reading"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "line": 61,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// TR-MCP-USECASE-018 (AC-006): the one definition of an xUnit skip shared by this scanner and the skip guard."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "line": 83,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008), DRY guard for repository reads: returns the 1-based"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "line": 83,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008), DRY guard for repository reads: returns the 1-based"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs",
+    "line": 388,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// <summary>TR-MCP-USECASE-018 (AC-006): one platform-dependent line in a unit test class.</summary>"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs",
+    "line": 6,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008): the unit-suite platform scanner resolves a using alias"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs",
+    "line": 6,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008): the unit-suite platform scanner resolves a using alias"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "line": 8,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008), BDPv4 mock gate for"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs",
+    "line": 8,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008), BDPv4 mock gate for"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs",
+    "line": 6,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008): binds <see cref=\"UnitSuitePlatformScanner\"/>,"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs",
+    "line": 6,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008): binds <see cref=\"UnitSuitePlatformScanner\"/>,"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+    "line": 15,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// environment (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+    "line": 15,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// environment (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+    "line": 62,
+    "id": "FR-MCP-077",
+    "text": "    /// Requirement coverage: FR-MCP-077, TR-MCP-CFG-007; classification TR-MCP-USECASE-018 (AC-006),"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+    "line": 62,
+    "id": "TR-MCP-CFG-007",
+    "text": "    /// Requirement coverage: FR-MCP-077, TR-MCP-CFG-007; classification TR-MCP-USECASE-018 (AC-006),"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+    "line": 62,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// Requirement coverage: FR-MCP-077, TR-MCP-CFG-007; classification TR-MCP-USECASE-018 (AC-006),"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs",
+    "line": 63,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// TR-MCP-USECASE-019 (AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs",
+    "line": 10,
+    "id": "TR-MCP-WS-005",
+    "text": "/// TR-MCP-WS-005 / AC-TR-MCP-WS-005-001: gives marker agent-plugin version resolution test-owned sources for the whole"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs",
+    "line": 10,
+    "id": "TR-MCP-WS-005-001",
+    "text": "/// TR-MCP-WS-005 / AC-TR-MCP-WS-005-001: gives marker agent-plugin version resolution test-owned sources for the whole"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "line": 12,
+    "id": "TR-MCP-WS-005",
+    "text": "/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 (operator 2026-10-20: \"Fix scans in PR 87"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs",
+    "line": 12,
+    "id": "TR-MCP-WS-005-001",
+    "text": "/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 (operator 2026-10-20: \"Fix scans in PR 87"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "line": 7,
+    "id": "TEST-MCP-MEMORY-018",
+    "text": "/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018 (historical): Harness conditions, metrics, isolation, and modes. The class"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "line": 7,
+    "id": "FR-MCP-MEMORY-018",
+    "text": "/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018 (historical): Harness conditions, metrics, isolation, and modes. The class"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "line": 9,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// environment (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "line": 9,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// environment (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "line": 12,
+    "id": "TEST-MCP-MEMORY-018",
+    "text": "/// The TEST-MCP-MEMORY-018 and FR-MCP-MEMORY-018 citations in this file, its AC-FR-MCP-MEMORY-018 criteria included,"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "line": 12,
+    "id": "FR-MCP-MEMORY-018",
+    "text": "/// The TEST-MCP-MEMORY-018 and FR-MCP-MEMORY-018 citations in this file, its AC-FR-MCP-MEMORY-018 criteria included,"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "line": 12,
+    "id": "FR-MCP-MEMORY-018",
+    "text": "/// The TEST-MCP-MEMORY-018 and FR-MCP-MEMORY-018 citations in this file, its AC-FR-MCP-MEMORY-018 criteria included,"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "line": 14,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// no active coverage claim. The active claims are the TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    "line": 14,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// no active coverage claim. The active claims are the TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "line": 7,
+    "id": "TEST-MCP-MEMORY-011",
+    "text": "/// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011 (historical):"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "line": 7,
+    "id": "TR-MCP-MEMORY-SEARCH-002",
+    "text": "/// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011 (historical):"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "line": 7,
+    "id": "FR-MCP-MEMORY-011",
+    "text": "/// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011 (historical):"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "line": 10,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// tests writes the process environment (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "line": 10,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// tests writes the process environment (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "line": 13,
+    "id": "TEST-MCP-MEMORY-011",
+    "text": "/// The TEST-MCP-MEMORY-011, TR-MCP-MEMORY-SEARCH-002 and FR-MCP-MEMORY-011 citations in this file, its"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "line": 13,
+    "id": "TR-MCP-MEMORY-SEARCH-002",
+    "text": "/// The TEST-MCP-MEMORY-011, TR-MCP-MEMORY-SEARCH-002 and FR-MCP-MEMORY-011 citations in this file, its"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "line": 13,
+    "id": "FR-MCP-MEMORY-011",
+    "text": "/// The TEST-MCP-MEMORY-011, TR-MCP-MEMORY-SEARCH-002 and FR-MCP-MEMORY-011 citations in this file, its"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "line": 14,
+    "id": "TR-MCP-MEMORY-SEARCH-002",
+    "text": "/// AC-TR-MCP-MEMORY-SEARCH-002 criteria included, are historical: those records are not in the requirements store"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "line": 16,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 classification of the integration test."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "line": 16,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 classification of the integration test."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "line": 156,
+    "id": "TR-MCP-MEMORY-SEARCH-002",
+    "text": "    /// AC-TR-MCP-MEMORY-SEARCH-002-09 (historical): Local ONNX path works without cloud credentials in the test host. The test"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "line": 158,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// keys afterwards, which it did not do before (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    "line": 158,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// keys afterwards, which it did not do before (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs",
+    "line": 6,
+    "id": "TEST-MCP-MEMORY-002",
+    "text": "/// TEST-MCP-MEMORY-002 / FR-MCP-MEMORY-002 (test harness): <see cref=\"MemoryS1Harness\"/>, the shared fixture of the"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs",
+    "line": 6,
+    "id": "FR-MCP-MEMORY-002",
+    "text": "/// TEST-MCP-MEMORY-002 / FR-MCP-MEMORY-002 (test harness): <see cref=\"MemoryS1Harness\"/>, the shared fixture of the"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs",
+    "line": 12,
+    "id": "FR-MCP-MEMORY-002",
+    "text": "/// round 4; operator 2026-10-20: \"Extend fix, then round 4 (Recommended)\". Traceability: FR-MCP-MEMORY-002 (Memory"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs",
+    "line": 13,
+    "id": "TR-MCP-MEMORY-002",
+    "text": "/// CRUD tools), TR-MCP-MEMORY-002 and TEST-MCP-MEMORY-002 are present and mapped in the requirements store; the"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs",
+    "line": 13,
+    "id": "TEST-MCP-MEMORY-002",
+    "text": "/// CRUD tools), TR-MCP-MEMORY-002 and TEST-MCP-MEMORY-002 are present and mapped in the requirements store; the"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs",
+    "line": 14,
+    "id": "TEST-MCP-MEMORY-010",
+    "text": "/// TEST-MCP-MEMORY-010 that the concurrency tests cite is absent from it (hostile validation round 4 finding R4-F3)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceResolutionMiddlewareTests.cs",
+    "line": 40,
+    "id": "TR-MCP-FED-PATH-001",
+    "text": "            // TR-MCP-FED-PATH-001 / TEST-MCP-PATHNORM-001: the middleware passes the canonical workspace identity"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceResolutionMiddlewareTests.cs",
+    "line": 40,
+    "id": "TEST-MCP-PATHNORM-001",
+    "text": "            // TR-MCP-FED-PATH-001 / TEST-MCP-PATHNORM-001: the middleware passes the canonical workspace identity"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    "line": 10,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// because two of its tests write the process environment; those two are integration tests (TR-MCP-USECASE-018"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    "line": 11,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// AC-006, TR-MCP-USECASE-019 AC-008; hostile validation round 5 finding R5-F2 and the sweep of plan section 19.3)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    "line": 198,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    "line": 198,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    "line": 225,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs",
+    "line": 225,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs",
+    "line": 15,
+    "id": "TR-MCP-QBRAIN-004",
+    "text": "/// TR-MCP-QBRAIN-004 and TR-MCP-QBRAIN-005: product route and configuration aliases. The class runs in"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs",
+    "line": 15,
+    "id": "TR-MCP-QBRAIN-005",
+    "text": "/// TR-MCP-QBRAIN-004 and TR-MCP-QBRAIN-005: product route and configuration aliases. The class runs in"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs",
+    "line": 17,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs",
+    "line": 17,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs",
+    "line": 72,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation round 5 finding R5-F2, where an ambient"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs",
+    "line": 72,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation round 5 finding R5-F2, where an ambient"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentHelp/AgentHelpTestPaths.cs",
+    "line": 7,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// CopyToOutputDirectory), never a file in the repository checkout (TR-MCP-USECASE-018 AC-006)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "line": 13,
+    "id": "TR-MCP-WS-005",
+    "text": "/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 (unit tests take every plugin-version input from"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs",
+    "line": 13,
+    "id": "TR-MCP-WS-005-001",
+    "text": "/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 (unit tests take every plugin-version input from"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotCredentialResolverTests.cs",
+    "line": 9,
+    "id": "TEST-MCP-177",
+    "text": "/// Tests for safe brain-slot credential reference resolution. TEST-MCP-177. The class runs in"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotCredentialResolverTests.cs",
+    "line": 11,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotCredentialResolverTests.cs",
+    "line": 11,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotCredentialResolverTests.cs",
+    "line": 19,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotCredentialResolverTests.cs",
+    "line": 19,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs",
+    "line": 333,
+    "id": "TR-MCP-USECASE-019",
+    "text": "            // TR-MCP-USECASE-019 AC-008 as replaced 2026-10-26T14:18:23: the junction is created with operating-system"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 15,
+    "id": "TEST-MCP-QBCLI-001",
+    "text": "/// TEST-MCP-QBCLI-001 (historical): QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 18,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// <c>WithIsolatedQuadbrainTemp</c>; those tests are integration tests (TR-MCP-USECASE-018 AC-006,"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 19,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// TR-MCP-USECASE-019 AC-008; plan sections 19.3 and 20)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 22,
+    "id": "TEST-MCP-QBCLI-001",
+    "text": "/// The TEST-MCP-QBCLI-001 citations in this file are historical: no such record is in the requirements store"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 24,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 classification of the integration tests."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 24,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 classification of the integration tests."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 128,
+    "id": "TEST-MCP-QBCLI-001",
+    "text": "    /// TEST-MCP-QBCLI-001 (historical): Grok runs in an isolated working folder with its dashboard, memory and subagents off and"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 131,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 131,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 184,
+    "id": "TEST-MCP-QBCLI-001",
+    "text": "    /// TEST-MCP-QBCLI-001 (historical): Grok output that stops at the turn limit is returned instead of thrown. The"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 186,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 186,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 215,
+    "id": "TEST-MCP-QBCLI-001",
+    "text": "    /// TEST-MCP-QBCLI-001 (historical): Grok stopping at the turn limit with empty output returns empty text. The"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 217,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 217,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 243,
+    "id": "TEST-MCP-QBCLI-001",
+    "text": "    /// TEST-MCP-QBCLI-001 (historical): any other Grok failure still throws with its error text. The client's"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 245,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 245,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 272,
+    "id": "TEST-MCP-QBCLI-001",
+    "text": "    /// TEST-MCP-QBCLI-001 (historical): a Grok resume whose session is missing retries once without resume. The"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 274,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 274,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 388,
+    "id": "TEST-MCP-QBCLI-001",
+    "text": "    /// TEST-MCP-QBCLI-001 (historical): Codex returns the assistant text from the JSONL stream, not the raw events. The test writes"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 390,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 390,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 427,
+    "id": "TEST-MCP-QBCLI-001",
+    "text": "    /// TEST-MCP-QBCLI-001 (historical): Codex prefers the JSONL assistant text over tool-call JSON in the output file. The test"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 429,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 429,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 463,
+    "id": "TEST-MCP-QBCLI-001",
+    "text": "    /// TEST-MCP-QBCLI-001 (historical): the temp folder comes from the configured variable without the Windows service ACL. The"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 465,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 465,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 481,
+    "id": "TEST-MCP-QBCLI-001",
+    "text": "    /// TEST-MCP-QBCLI-001 (historical): Grok writes its prompt file under the configured temp folder and points TEMP and TMP at it."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 483,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 483,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 520,
+    "id": "TEST-MCP-QBCLI-001",
+    "text": "    /// TEST-MCP-QBCLI-001 (historical): Codex writes its output file under the configured temp folder. The test writes the process"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 521,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test (TR-MCP-USECASE-018 AC-006,"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 522,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 557,
+    "id": "TEST-MCP-QBCLI-001",
+    "text": "    /// TEST-MCP-QBCLI-001 (historical): a second Grok call on the same slot resumes the first call's session. The"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 559,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 559,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 599,
+    "id": "TEST-MCP-QBCLI-001",
+    "text": "    /// TEST-MCP-QBCLI-001 (historical): a second Codex call on the same slot resumes the thread the first call"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 601,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// through <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006,"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 602,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 636,
+    "id": "TEST-MCP-QBCLI-001",
+    "text": "    /// TEST-MCP-QBCLI-001 (historical): the factory creates the CLI client for a CLI slot, and the client completes."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 638,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 638,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 856,
+    "id": "TEST-MCP-QBCLI-001",
+    "text": "/// TEST-MCP-QBCLI-001 (historical; no such record in the requirements store): the default shared CLI temp directory on a Windows host lives under the machine's"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 858,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "line": 858,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "line": 17,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// <see cref=\"CliTempVariables\"/> and are integration tests (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008;"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "line": 17,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// <see cref=\"CliTempVariables\"/> and are integration tests (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008;"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "line": 30,
+    "id": "TEST-MCP-TRIAGE-003",
+    "text": "    /// TEST-MCP-TRIAGE-003: launches the strategy against the capturing spawner with the default request, with every"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "line": 32,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// integration classes because the strategy chooses its launcher by the running OS (TR-MCP-USECASE-018 AC-006)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "line": 57,
+    "id": "TEST-MCP-TRIAGE-003",
+    "text": "    /// TEST-MCP-TRIAGE-003: Codex uses reusable one-shot <c>exec -C ... -o ... -</c> invocation and never"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "line": 93,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "line": 93,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "line": 118,
+    "id": "TEST-MCP-TRIAGE-005",
+    "text": "    /// TEST-MCP-TRIAGE-005: Timed-out Codex CLI triage runs preserve partial"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "line": 121,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "line": 121,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "line": 153,
+    "id": "TEST-MCP-TRIAGE-005",
+    "text": "    /// TEST-MCP-TRIAGE-005: Codex CLI triage runs stream stdout and stderr"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "line": 156,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "line": 156,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "line": 199,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// the process environment and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "line": 199,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// the process environment and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "line": 394,
+    "id": "TEST-MCP-TRIAGE-003",
+    "text": "/// TEST-MCP-TRIAGE-003: the Codex CLI strategy on a Windows host launches through <c>cmd.exe /c</c>."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "line": 396,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// (operator 2026-10-19: \"Integration + Platform (Recommended)\"; TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019). Each"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "line": 396,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// (operator 2026-10-19: \"Integration + Platform (Recommended)\"; TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019). Each"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "line": 398,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// serialized <see cref=\"ProcessEnvironmentCollection\"/> (TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "line": 406,
+    "id": "TEST-MCP-TRIAGE-003",
+    "text": "    /// TEST-MCP-TRIAGE-003: the one-shot exec launch goes through cmd.exe, which needs the TOML quotes escaped."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "line": 422,
+    "id": "TEST-MCP-TRIAGE-003",
+    "text": "    /// TEST-MCP-TRIAGE-003: Windows npm command shims are wrapped through"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "line": 476,
+    "id": "TEST-MCP-TRIAGE-003",
+    "text": "/// TEST-MCP-TRIAGE-003: the Codex CLI strategy off Windows launches the agent directly. The strategy"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "line": 478,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// 2026-10-19: \"Integration + Platform (Recommended)\"; TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019). The launch sets"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "line": 478,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// 2026-10-19: \"Integration + Platform (Recommended)\"; TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019). The launch sets"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "line": 480,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// <see cref=\"ProcessEnvironmentCollection\"/> (TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "line": 488,
+    "id": "TEST-MCP-TRIAGE-003",
+    "text": "    /// TEST-MCP-TRIAGE-003, BUG-BASELINE-004: codex is started directly and receives the TOML literal as"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+    "line": 49,
+    "id": "TEST-MCP-TRIAGE-003",
+    "text": "/// TEST-MCP-TRIAGE-003: the default spawner on an interactive Windows host. Windows-only and dependent on an"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+    "line": 52,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+    "line": 52,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+    "line": 59,
+    "id": "TEST-MCP-TRIAGE-003",
+    "text": "    /// TEST-MCP-TRIAGE-003: Interactive local hosts use the default process spawner"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "line": 12,
+    "id": "TR-MCP-WS-005",
+    "text": "/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 and TR-MCP-SESSIONLOG-006 /"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "line": 12,
+    "id": "TR-MCP-WS-005-001",
+    "text": "/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 and TR-MCP-SESSIONLOG-006 /"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "line": 12,
+    "id": "TR-MCP-SESSIONLOG-006",
+    "text": "/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 and TR-MCP-SESSIONLOG-006 /"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "line": 13,
+    "id": "TR-MCP-SESSIONLOG-006-009",
+    "text": "/// AC-TR-MCP-SESSIONLOG-006-009 (operator 2026-10-20: \"Fix scans in PR 87 (Recommended)\"; triage"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "line": 286,
+    "id": "TR-MCP-WS-005-001",
+    "text": "    /// itself a directory symbolic link (AC-TR-MCP-WS-005-001, AC-TR-MCP-SESSIONLOG-006-009; hostile validation"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "line": 286,
+    "id": "TR-MCP-SESSIONLOG-006-009",
+    "text": "    /// itself a directory symbolic link (AC-TR-MCP-WS-005-001, AC-TR-MCP-SESSIONLOG-006-009; hostile validation"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "line": 475,
+    "id": "TR-MCP-WS-005-001",
+    "text": "    /// the root may be walked. Expected values come from the strengthened criteria AC-TR-MCP-WS-005-001 and"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    "line": 476,
+    "id": "TR-MCP-SESSIONLOG-006-009",
+    "text": "    /// AC-TR-MCP-SESSIONLOG-006-009 (operator 2026-10-21: \"Fix both, strengthen ACs\"): the root and every folder"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/DocsSyncG8OverlayTests.cs",
+    "line": 13,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// temporary export root, so the class is an integration test on every host (TR-MCP-USECASE-018 AC-006,"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/DocsSyncG8OverlayTests.cs",
+    "line": 14,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "line": 35,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// TR-MCP-USECASE-018 AC-006)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "line": 399,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// Windows path comparison (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "line": 399,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// Windows path comparison (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "line": 413,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// case-sensitive path comparison (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "line": 413,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// case-sensitive path comparison (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "line": 400,
+    "id": "TR-MCP-GH-003",
+    "text": "    /// TR-MCP-GH-003 with TR-MCP-FED-PATH-001: a stored workspace token is passed as the process-run override, and the"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "line": 400,
+    "id": "TR-MCP-FED-PATH-001",
+    "text": "    /// TR-MCP-GH-003 with TR-MCP-FED-PATH-001: a stored workspace token is passed as the process-run override, and the"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "line": 446,
+    "id": "TR-MCP-GH-004",
+    "text": "    /// TR-MCP-GH-004 with TR-MCP-FED-PATH-001: the host-native workspace from the accessor (a temporary directory, so"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "line": 446,
+    "id": "TR-MCP-FED-PATH-001",
+    "text": "    /// TR-MCP-GH-004 with TR-MCP-FED-PATH-001: the host-native workspace from the accessor (a temporary directory, so"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "line": 475,
+    "id": "FR-MCP-FED-PATH-001",
+    "text": "    /// FR-MCP-FED-PATH-001 / TR-MCP-FED-PATH-001: a foreign-platform workspace (a Windows path on a POSIX host, a"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "line": 475,
+    "id": "TR-MCP-FED-PATH-001",
+    "text": "    /// FR-MCP-FED-PATH-001 / TR-MCP-FED-PATH-001: a foreign-platform workspace (a Windows path on a POSIX host, a"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "line": 479,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// TR-MCP-USECASE-018 AC-006)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "line": 501,
+    "id": "TR-MCP-FED-PATH-001",
+    "text": "    /// TR-MCP-FED-PATH-001, BDPv4 mock gate for the working-directory predicates used above: they accept the"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "line": 614,
+    "id": "FR-MCP-FED-PATH-001",
+    "text": "/// FR-MCP-FED-PATH-001 / TR-MCP-FED-PATH-001 on a Windows host: a POSIX workspace path is foreign there"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "line": 614,
+    "id": "TR-MCP-FED-PATH-001",
+    "text": "/// FR-MCP-FED-PATH-001 / TR-MCP-FED-PATH-001 on a Windows host: a POSIX workspace path is foreign there"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "line": 615,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "line": 615,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "line": 628,
+    "id": "FR-MCP-FED-PATH-001",
+    "text": "/// FR-MCP-FED-PATH-001 / TR-MCP-FED-PATH-001 on a Linux host: a Windows drive workspace path is foreign"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "line": 628,
+    "id": "TR-MCP-FED-PATH-001",
+    "text": "/// FR-MCP-FED-PATH-001 / TR-MCP-FED-PATH-001 on a Linux host: a Windows drive workspace path is foreign"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "line": 629,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// there (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "line": 629,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// there (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/GrokCliAgentExecutionStrategyTests.cs",
+    "line": 42,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// is preserved. Fixed data for both spellings on every host (TR-MCP-USECASE-018 AC-006)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs",
+    "line": 149,
+    "id": "TEST-HANDOFF-002",
+    "text": "/// TEST-HANDOFF-002: Windows final-path resolution of a handle. Windows-only, so an integration test on Windows"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs",
+    "line": 150,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// hosts without a silent return elsewhere (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs",
+    "line": 150,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// hosts without a silent return elsewhere (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs",
+    "line": 11,
+    "id": "TEST-HANDOFF-005",
+    "text": "/// TEST-HANDOFF-005 / TEST-HANDOFF-007 (test harness): the handoff durability tests give each database context its own"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs",
+    "line": 11,
+    "id": "TEST-HANDOFF-007",
+    "text": "/// TEST-HANDOFF-005 / TEST-HANDOFF-007 (test harness): the handoff durability tests give each database context its own"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs",
+    "line": 462,
+    "id": "TR-MCP-HOSTILEREVIEW-003",
+    "text": "    /// TR-MCP-HOSTILEREVIEW-003: invalid worker options fail host startup validation. The failure"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs",
+    "line": 470,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; the sweep of plan section 19.3). Its assertion depends on"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs",
+    "line": 470,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008; the sweep of plan section 19.3). Its assertion depends on"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "line": 30,
+    "id": "TR-MCP-WS-005-001",
+    "text": "    /// Test-owned plugin-version sources for a temporary workspace (AC-TR-MCP-WS-005-001): no plugin-root variable,"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "line": 735,
+    "id": "TEST-MCP-PLUGIN-PSONLY-001",
+    "text": "    /// TEST-MCP-PLUGIN-PSONLY-001 (historical; no such record is in the requirements store, hostile validation finding"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "line": 738,
+    "id": "TR-MCP-WS-005",
+    "text": "    /// installed plugin is seen (TR-MCP-WS-005 AC-TR-MCP-WS-005-001)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    "line": 738,
+    "id": "TR-MCP-WS-005-001",
+    "text": "    /// installed plugin is seen (TR-MCP-WS-005 AC-TR-MCP-WS-005-001)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "line": 16,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// restore them through <see cref=\"CliTempVariables\"/> and are integration tests (TR-MCP-USECASE-018 AC-006,"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "line": 17,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "line": 29,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "line": 29,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "line": 61,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "line": 61,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "line": 92,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "line": 92,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "line": 125,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    "line": 125,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs",
+    "line": 12,
+    "id": "TR-MCP-WS-005",
+    "text": "/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 (operator 2026-10-20: \"Fold R3-P3 in first\", whose"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs",
+    "line": 12,
+    "id": "TR-MCP-WS-005-001",
+    "text": "/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 (operator 2026-10-20: \"Fold R3-P3 in first\", whose"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+    "line": 14,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// Windows hosts only, without a silent return elsewhere (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019). The class runs"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+    "line": 14,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// Windows hosts only, without a silent return elsewhere (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019). The class runs"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+    "line": 16,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+    "line": 16,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs",
+    "line": 524,
+    "id": "TR-MCP-USECASE-019",
+    "text": "            // TR-MCP-USECASE-019 AC-008 as replaced 2026-10-26T14:18:23: the junction is created with operating-system"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseDiagramGraphCqrsTests.cs",
+    "line": 17,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// integration test on every host (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseDiagramGraphCqrsTests.cs",
+    "line": 17,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// integration test on every host (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseGetWorkspaceResolutionContractTests.cs",
+    "line": 23,
+    "id": "FR-MCP-PATHNORM-001",
+    "text": "    /// <summary>FR-MCP-PATHNORM-001: the stored and returned workspace key uses '/' (test-side oracle).</summary>"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/UseCaseGetWorkspaceResolutionContractTests.cs",
+    "line": 52,
+    "id": "TEST-MCP-PATHNORM-001",
+    "text": "    /// TEST-MCP-PATHNORM-001 negative control: a result that returns the caller's backslash spelling"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "line": 13,
+    "id": "TR-MCP-WS-005",
+    "text": "/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 and TR-MCP-SESSIONLOG-006 /"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "line": 13,
+    "id": "TR-MCP-WS-005-001",
+    "text": "/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 and TR-MCP-SESSIONLOG-006 /"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "line": 13,
+    "id": "TR-MCP-SESSIONLOG-006",
+    "text": "/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 and TR-MCP-SESSIONLOG-006 /"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "line": 14,
+    "id": "TR-MCP-SESSIONLOG-006-009",
+    "text": "/// AC-TR-MCP-SESSIONLOG-006-009 (operator 2026-10-20: \"Fix scans in PR 87 (Recommended)\"; triage report"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "line": 97,
+    "id": "TR-MCP-WS-005-001",
+    "text": "    /// AC-TR-MCP-WS-005-001: with an untrusted mount point and a linked higher version in the Claude plugin cache,"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "line": 111,
+    "id": "TR-MCP-WS-005-001",
+    "text": "    /// AC-TR-MCP-WS-005-001: when the plugin cache root itself cannot be listed, resolution does not throw and"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "line": 142,
+    "id": "TR-MCP-WS-005-001",
+    "text": "    /// AC-TR-MCP-WS-005-001: when the higher cached version's <c>.version</c> cannot be read, resolution does not"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "line": 156,
+    "id": "TR-MCP-WS-005-001",
+    "text": "    /// AC-TR-MCP-WS-005-001: when every cached version file cannot be read, resolution does not throw and falls back"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "line": 185,
+    "id": "TR-MCP-SESSIONLOG-006-009",
+    "text": "    /// AC-TR-MCP-SESSIONLOG-006-009: with an untrusted mount point and a linked history folder under ~/.claude, the"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "line": 204,
+    "id": "TR-MCP-WS-005-001",
+    "text": "    /// The cache layouts of AC-TR-MCP-WS-005-001, each with the folder (relative to the profile) a case reports as a"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "line": 239,
+    "id": "TR-MCP-WS-005-001",
+    "text": "    /// AC-TR-MCP-WS-005-001: with the only cached version under a cache root that is a link, or under a folder"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "line": 258,
+    "id": "TR-MCP-WS-005-001",
+    "text": "    /// AC-TR-MCP-WS-005-001: a user profile that is itself a link is still scanned, so the cached version resolves"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "line": 269,
+    "id": "TR-MCP-SESSIONLOG-006-009",
+    "text": "    /// <summary>The four agent-history roots of AC-TR-MCP-SESSIONLOG-006-009.</summary>"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "line": 273,
+    "id": "TR-MCP-SESSIONLOG-006-009",
+    "text": "    /// AC-TR-MCP-SESSIONLOG-006-009: when a history root is a link, the extractor does not throw and the turn keeps"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs",
+    "line": 299,
+    "id": "TR-MCP-SESSIONLOG-006-009",
+    "text": "    /// AC-TR-MCP-SESSIONLOG-006-009: when ~/.claude itself cannot be listed, the extractor does not throw and the"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceTokenServiceTests.cs",
+    "line": 103,
+    "id": "TR-MCP-FED-PATH-001",
+    "text": "        // TR-MCP-FED-PATH-001, FR-MCP-PATHNORM-001: the canonical identity, not host Path.GetFullPath (which"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceTokenServiceTests.cs",
+    "line": 103,
+    "id": "FR-MCP-PATHNORM-001",
+    "text": "        // TR-MCP-FED-PATH-001, FR-MCP-PATHNORM-001: the canonical identity, not host Path.GetFullPath (which"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceTokenServiceTests.cs",
+    "line": 105,
+    "id": "TR-MCP-USECASE-018",
+    "text": "        // the test oracle, not the process host (TR-MCP-USECASE-018 AC-006: no unit test depends on the platform)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+    "line": 293,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// Platform (Recommended)\"; TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+    "line": 337,
+    "id": "TR-MCP-USECASE-019",
+    "text": "    /// classes below (TR-MCP-USECASE-019 AC-008)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+    "line": 380,
+    "id": "TEST-MCP-USECASE-020",
+    "text": "/// TEST-MCP-USECASE-020-AC001: opaque workspace identity on a Windows host keeps the Windows-platform"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+    "line": 381,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// key (TR-MCP-USECASE-019 AC-008, TR-MCP-NUKE-019)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+    "line": 381,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// key (TR-MCP-USECASE-019 AC-008, TR-MCP-NUKE-019)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+    "line": 400,
+    "id": "TEST-MCP-USECASE-020",
+    "text": "/// TEST-MCP-USECASE-020-AC001: opaque workspace identity on a Linux host keeps the case-sensitive key"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+    "line": 401,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// (TR-MCP-USECASE-019 AC-008, TR-MCP-NUKE-019)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+    "line": 401,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// (TR-MCP-USECASE-019 AC-008, TR-MCP-NUKE-019)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/Decompose4nfBackfillMigrationTests.cs",
+    "line": 37,
+    "id": "TR-MCP-DB-001",
+    "text": "    /// Workspace-scoped child rows must carry exactly the parent workspace key (TR-MCP-DB-001),"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs",
+    "line": 91,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// TR-MCP-NUKE-019 AC-2: the pg_ctl start arguments: wait for the server (-w), print only errors (-s), listen on"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs",
+    "line": 102,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// TR-MCP-NUKE-019 AC-2: the pg_ctl stop arguments: immediate mode, wait for the shutdown (-w), print only errors"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureArgumentsTests.cs",
+    "line": 13,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// Requirement coverage: TR-MCP-NUKE-019 AC-2 (every integration case runs and passes in its host's lane at"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertions.cs",
+    "line": 6,
+    "id": "TR-MCP-DB-001",
+    "text": "/// TR-MCP-DB-001: raw-SQL workspace-key assertions for SQLite data-migration tests. A data migration copies the parent"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs",
+    "line": 6,
+    "id": "TR-MCP-DB-001",
+    "text": "/// TR-MCP-DB-001, BDPv4 mock gate for <see cref=\"MigrationKeyAssertions\"/>: scripted SQLite tables (no migrations)"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs",
+    "line": 27,
+    "id": "TR-MCP-DB-001",
+    "text": "    /// <summary>TR-MCP-DB-001: child rows that carry exactly the seeded legacy parent key are accepted.</summary>"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs",
+    "line": 39,
+    "id": "TR-MCP-DB-001",
+    "text": "    /// TR-MCP-DB-001 negative controls: each wrong database state is rejected by the assertion (canonical respelling in"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/RemoveTodoRecordsMigrationTests.cs",
+    "line": 18,
+    "id": "FR-MCP-PATHNORM-001",
+    "text": "    // FR-MCP-PATHNORM-001: seeds hold the canonical stored key form; LINQ predicates are canonicalized"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/RemoveTodoRecordsMigrationTests.cs",
+    "line": 100,
+    "id": "TEST-MCP-TRIAGE-004",
+    "text": "    /// TEST-MCP-TRIAGE-004 negative control: without a triage group naming the TODO, the backfill"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs",
+    "line": 31,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// Its SQL Server case opens LocalDB, so the class runs in <see cref=\"SqlServerLocalDbCollection\"/> (TR-MCP-NUKE-019 AC-2)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollection.cs",
+    "line": 6,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019 AC-2: the test classes that open connections to the shared LocalDB instance run one after another"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs",
+    "line": 12,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// Requirement coverage: TR-MCP-NUKE-019 AC-2 (every integration case runs and passes in its host's lane at"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnection.cs",
+    "line": 6,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019 AC-2: the server connection of the SQL Server integration test classes. The built-in default is"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnectionTests.cs",
+    "line": 12,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// Requirement coverage: TR-MCP-NUKE-019 AC-2 (every integration case runs and passes in its host's lane at"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs",
+    "line": 12,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// (TR-MCP-USECASE-018 AC-006: no unit test depends on the platform)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathContractTests.cs",
+    "line": 10,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// simulated host in <see cref=\"WorkspaceNativePathHostContractTests\"/> (TR-MCP-USECASE-018 AC-006: no"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs",
+    "line": 6,
+    "id": "TEST-MCP-PATHNORM-001",
+    "text": "/// TEST-MCP-PATHNORM-001 (criterion unitgreen-native-host) / TR-MCP-PATHNORM-001 (plan P1.4c): the"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs",
+    "line": 6,
+    "id": "TR-MCP-PATHNORM-001",
+    "text": "/// TEST-MCP-PATHNORM-001 (criterion unitgreen-native-host) / TR-MCP-PATHNORM-001 (plan P1.4c): the"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs",
+    "line": 9,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// (TR-MCP-USECASE-018 AC-006: no unit test depends on the platform). BDP v4: MockData then Real."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs",
+    "line": 90,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// TR-MCP-USECASE-018 (AC-006) negative controls: a native-spelling function that keeps forward slashes"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostRealTests.cs",
+    "line": 6,
+    "id": "TEST-MCP-PATHNORM-001",
+    "text": "/// BDP v4 step 5: the host-aware native-boundary contract (TEST-MCP-PATHNORM-001 criterion"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs",
+    "line": 25,
+    "id": "TEST-MCP-FED-PATH-001",
+    "text": "/// TEST-MCP-FED-PATH-001: the production normalizer bound to the real process host. It depends on the"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs",
+    "line": 26,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// host it runs on, so it is an integration test on every host (TR-MCP-USECASE-018 AC-006)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs",
+    "line": 37,
+    "id": "FR-MCP-PATHNORM-001",
+    "text": "    /// LinuxHost_WindowsDrivePath_IsNotPrefixedWithWorkingDirectory). FR-MCP-PATHNORM-001: the"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceRemotePathContractTests.cs",
+    "line": 11,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// Windows filesystem, so it is an integration test that runs on Windows hosts only (TR-MCP-USECASE-018"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceRemotePathContractTests.cs",
+    "line": 12,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// AC-006, TR-MCP-NUKE-019), without a skip."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceRemotePathContractTests.cs",
+    "line": 63,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// through the Windows filesystem: an integration test on Windows hosts (TR-MCP-USECASE-018 AC-006)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs",
+    "line": 13,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// folder, so an assertion on the test folder proves the primary name won over a set fallback (TR-MCP-USECASE-018"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs",
+    "line": 14,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// AC-006 and TR-MCP-USECASE-019 AC-008 as amended 2026-10-26; operator: \"Strengthen AC, move 14 (Recommended)\" and"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "line": 13,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// Requirement coverage: TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 as amended 2026-10-26 (\"set and"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs",
+    "line": 13,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// Requirement coverage: TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 as amended 2026-10-26 (\"set and"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CollectionAssertions.cs",
+    "line": 8,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// so no test is run. Shared by the collection tests of TR-MCP-NUKE-019 AC-2 (<c>SqlServerLocalDbCollectionTests</c>)"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CollectionAssertions.cs",
+    "line": 9,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// and of TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 (<c>ProcessEnvironmentCollectionTests</c>)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/CollectionAssertions.cs",
+    "line": 9,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// and of TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 (<c>ProcessEnvironmentCollectionTests</c>)."
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollection.cs",
+    "line": 6,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008: the test classes that write the process environment run"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollection.cs",
+    "line": 6,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008: the test classes that write the process environment run"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs",
+    "line": 13,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// Requirement coverage: TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 (\"the tests that write the process"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs",
+    "line": 13,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// Requirement coverage: TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 (\"the tests that write the process"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunction.cs",
+    "line": 14,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// (TR-MCP-USECASE-019 AC-008 as replaced 2026-10-26T14:18:23; operator: \"Fix flake, strengthen AC (Recommended)\";"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+    "line": 12,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// Requirement coverage: TR-MCP-USECASE-019 AC-008 as replaced 2026-10-26T14:18:23 (\"A test fixture that needs a"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+    "line": 120,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// needs the Windows file system, so it is an integration test on Windows hosts (TR-MCP-USECASE-019 AC-008 as replaced"
+  },
+  {
+    "file": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs",
+    "line": 121,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// 2026-10-26T14:18:23; TR-MCP-NUKE-019)."
+  },
+  {
+    "file": "tests/Shared/TestRepositoryRoot.cs",
+    "line": 6,
+    "id": "TR-MCP-USECASE-018",
+    "text": "/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008): the one repository-root locator for the unit-test"
+  },
+  {
+    "file": "tests/Shared/TestRepositoryRoot.cs",
+    "line": 6,
+    "id": "TR-MCP-USECASE-019",
+    "text": "/// TR-MCP-USECASE-018 (AC-006), TR-MCP-USECASE-019 (AC-008): the one repository-root locator for the unit-test"
+  },
+  {
+    "file": "tests/Shared/TestRepositoryRoot.cs",
+    "line": 33,
+    "id": "TR-MCP-USECASE-018",
+    "text": "    /// The <c>McpRepositoryRoot</c> build metadata of the test assembly (TR-MCP-USECASE-018: the deterministic"
+  },
+  {
+    "file": "tests/TestSupport.Shared/ScratchQBrainAi.cs",
+    "line": 16,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019 AC-6: one temporary QBrain.AI instance an integration case owns: a QBrainAi.Support.Mcp process on"
+  },
+  {
+    "file": "tests/TestSupport.Shared/ScratchQBrainAi.cs",
+    "line": 72,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>Gets whether the instance process has exited (TR-MCP-NUKE-019: a lost port ends the process).</summary>"
+  },
+  {
+    "file": "tests/TestSupport.Shared/ScratchQBrainAi.cs",
+    "line": 77,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// any failure the partial instance is disposed. TR-MCP-NUKE-019: when the instance exited because its port"
+  },
+  {
+    "file": "tests/TestSupport.Shared/ScratchQBrainAi.cs",
+    "line": 507,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// TR-MCP-NUKE-019: picks a port that is free on every address the instance binds. The instance listens on"
+  },
+  {
+    "file": "tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+    "line": 4,
+    "id": "TR-MCP-NUKE-019",
+    "text": "/// TR-MCP-NUKE-019 AC-6: the checks an integration case uses to prove it runs on a temporary instance it owns, never"
+  },
+  {
+    "file": "tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+    "line": 62,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// <summary>TR-MCP-NUKE-019: the most starts a case makes of a temporary instance that keeps losing its port.</summary>"
+  },
+  {
+    "file": "tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+    "line": 66,
+    "id": "TR-MCP-NUKE-019",
+    "text": "    /// TR-MCP-NUKE-019: decides whether a temporary instance that failed to start is started again on a newly"
+  }
+]

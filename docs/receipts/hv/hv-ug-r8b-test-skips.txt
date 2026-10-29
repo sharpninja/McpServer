@@ -1,0 +1,28 @@
+tests/Build.Tests/BuildTargetTests.cs:638:                                 AttributesToSkip = 0,
+tests/QBrainAi.Support.Mcp.IntegrationTests/Services/AgentRuntimeScaffoldingTests.cs:244:                         AttributesToSkip = 0
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:247:    [InlineData("Assert.SkipUnless(OperatingSystem.IsWindows(), \"w\");", "1")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:248:    [InlineData("Assert.SkipWhen(true, \"w\");", "1")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:249:    [InlineData("Assert.Skip(\"s\");", "1")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:250:    [InlineData("[Fact(Skip = \"later\")]\npublic void A() { }", "1")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:251:    [InlineData("[Theory(DisplayName = \"x\", Skip = \"later\")]\npublic void A(int x) { }", "1")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:254:    [InlineData("[Fact(\n    Skip = \"later\")]\npublic void A() { }", "1")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:255:    [InlineData("[Fact]\npublic void A() { }\n[Theory(DisplayName = nameof(B),\n    SkipUnless = nameof(Ready),\n    Skip = \"x\")]\npublic void B(int x) { }", "3")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:256:    [InlineData("[Xunit.Fact(Skip = \"later\")]\npublic void A() { }", "1")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:257:    [InlineData("[global::Xunit.FactAttribute(Skip = \"x\")]\npublic void A() { }", "1")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:258:    [InlineData("[Trait(\"a\", \"b\"), Theory(Skip = \"x\")]\npublic void A(int x) { }", "1")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:259:    [InlineData("[Theory]\n[InlineData(1, Skip = \"row\")]\npublic void A(int x) { }", "2")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:261:    [InlineData("[Fact(SkipExceptions = new[] { typeof(InvalidOperationException) })]\npublic void A() { }", "1")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:262:    [InlineData("Skip.If(true);\nSkip.IfNot(false);", "1,2")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:265:    [InlineData("#if WINDOWS\nAssert.Skip(\"w\");\n#endif", "2")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:267:    [InlineData("var text = \"Assert.SkipUnless(true)\";", "")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:268:    [InlineData("// Assert.Skip(\"x\");", "")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:269:    [InlineData("Assert.Skipped(result);", "")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:272:    [InlineData("[Fact(DisplayName = \"Skip = later\")]\npublic void A() { }", "")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:273:    [InlineData("[Fact]\npublic void Skip() { var Skip = 1; }", "")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:285:    /// skip attribute, and the pattern used before 2026-10-19 also missed <c>Assert.SkipUnless</c> and
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:286:    /// <c>Assert.SkipWhen</c>; text matching counts a skip that only appears inside a string, which the
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:298:        Assert.DoesNotMatch(original, "Assert.SkipUnless(OperatingSystem.IsWindows(), \"w\");");
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:299:        Assert.DoesNotMatch(original, "Assert.SkipWhen(true, \"w\");");
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:300:        foreach (var line in "[Fact(\n    Skip = \"later\")]".Split('\n'))
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:305:        Assert.DoesNotMatch(roundOne, "[Xunit.Fact(Skip = \"later\")]");
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:307:        Assert.Matches(roundOne, "var text = \"Assert.SkipUnless(true)\";");

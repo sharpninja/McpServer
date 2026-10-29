@@ -1,0 +1,18 @@
+type: result
+payload:
+  requestId: req-20261029T024659Z-9031
+  result:
+    id: TEST-HANDOFF-004
+    title: Test TEST-HANDOFF-004
+    description: Cover draft validation, field-specific diagnostics, DraftOnly, RequireReview, CreateWhenConfident, low confidence, and ambiguous handoffs.
+    status: pending
+    priority: medium
+    area: HANDOFF
+    testType: unit
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-29T02:47:01.3933092+00:00
+    updatedAt: 2026-10-29T02:47:01.3934259+00:00
+  deprecated: true
+
+---

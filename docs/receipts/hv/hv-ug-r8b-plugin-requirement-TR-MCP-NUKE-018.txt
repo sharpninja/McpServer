@@ -1,0 +1,22 @@
+type: result
+payload:
+  requestId: req-20261029T024539Z-9563
+  result:
+    id: TR-MCP-NUKE-018
+    title: InstallTestDependencies provisions provider test servers on Linux
+    description: On Linux, InstallTestDependencies supplies the PostgreSQL and SQL Server endpoints of the Category=Integration provider tests from the host test-database env file and the dedicated qbrain-test containers (operator decision 2026-10-11, BUG-BASELINE-005), and exports them to the test processes the build starts; Windows provisioning is unchanged.
+    status: pending
+    priority: high
+    area: MCP
+    subarea: NUKE
+    notes: 'PLAN-C4MODEL-001. Operator answers 2026-10-19: "Fix all 14 in this plan", "Fix 10 here; 4 via PR 82/83", "Trait + Linux provisioning (Recommended)". Host facts 2026-10-19: env file /home/sharpninja/.config/qbrain-test/test-db.env (mode 600) defines MCP_TEST_POSTGRES_CONNECTION and MCP_TEST_SQLSERVER_CONNECTION; containers qbrain-test-postgres (55432) and qbrain-test-sqlserver (51433) run on LAB-OMARCHY.'
+    acceptanceCriteria:
+    - id: AC-4
+      text: Connection-string values never appear in logs, exception messages, or committed files; only variable names, file paths, container names and host:port endpoints are reported.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-29T02:45:40.7198740+00:00
+    updatedAt: 2026-10-29T02:45:40.7199918+00:00
+  deprecated: true
+
+---

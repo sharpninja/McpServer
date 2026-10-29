@@ -1,0 +1,8 @@
+type: result
+payload:
+  requestId: req-20261029T024141Z-4174
+  result:
+    initialized: true
+  deprecated: true
+
+---

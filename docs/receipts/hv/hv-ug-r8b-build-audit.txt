@@ -1,0 +1,18 @@
+Directory.Packages.props:40:    <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="5.9.0" />
+Directory.Packages.props:41:    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.9.0" />
+Directory.Packages.props:42:    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="5.9.0" />
+Directory.Packages.props:43:    <PackageVersion Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="5.9.0" />
+Directory.Packages.props:44:    <PackageVersion Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="5.9.0" />
+Directory.Packages.props:92:    <PackageVersion Include="System.Security.Cryptography.Xml" Version="10.0.13" />
+Directory.Packages.props:93:    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
+build/LinuxServiceHelper.cs:2:using System.Security.Cryptography;
+build/_build.csproj:30:    <PackageReference Include="System.Security.Cryptography.Xml" />
+build/WindowsServiceHelper.cs:4:using System.Security.Cryptography;
+build/WarningSuppressionScanner.cs:51:    [GeneratedRegex(@"<(?<name>NoWarn|WarningsNotAsErrors)>\s*(?<value>.*?)\s*</\k<name>>", RegexOptions.IgnoreCase)]
+build/WarningSuppressionScanner.cs:168:            var mechanism = match.Groups["name"].Value.Equals("NoWarn", StringComparison.OrdinalIgnoreCase)
+build/WarningSuppressionScanner.cs:169:                ? WarningSuppressionMechanism.NoWarn
+build/WarningSuppressionScanner.cs:170:                : WarningSuppressionMechanism.WarningsNotAsErrors;
+build/WarningSuppressionScanner.cs:341:    NoWarn,
+build/WarningSuppressionScanner.cs:342:    WarningsNotAsErrors,
+build/SessionLifeUnitGateManifest.cs:3:using System.Security.Cryptography;
+build/SessionLifeUnitGateValidator.cs:3:using System.Security.Cryptography;
