@@ -5,9 +5,14 @@ using QBrainAi.TestSupport.TemporaryInstance;
 namespace QBrainAi.Support.Mcp.IntegrationTests;
 
 /// <summary>
-/// TEST-MCP-REQSCOPE-REPL-001: REPL-driven integration coverage for requirement scope layers, on the shared temporary
-/// instance (<see cref="ScratchQBrainAi"/>, TR-MCP-NUKE-019 AC-6).
+/// TEST-MCP-REQSCOPE-REPL-001 (historical): REPL-driven integration coverage for requirement scope layers, on the
+/// shared temporary instance (<see cref="ScratchQBrainAi"/>, TR-MCP-NUKE-019 AC-6).
 /// </summary>
+/// <remarks>
+/// The TEST-MCP-REQSCOPE-REPL-001 citations in this file are historical: that record is not in the requirements store
+/// (the committed docs/Project exports list it as planned), so they make no active coverage claim (the class of hostile
+/// validation finding R6-F2; plan section 25). The active claim is TR-MCP-NUKE-019 AC-6, the temporary instance.
+/// </remarks>
 [Trait("Category", "Integration")]
 public sealed class RequirementScopeLayerReplIntegrationTests
 {
