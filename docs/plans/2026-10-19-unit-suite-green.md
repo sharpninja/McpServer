@@ -1015,6 +1015,7 @@ All times are local (America/Chicago, UTC-5); the operator's messages and answer
 
 - `Copy-HvTrxEvidence-r8b.ps1` (dry run first) copied the TRX of the section 23 set at `433ce191`: 27 TRX files and 4 lane selection files, 15.71 MB, each copy SHA-256 equal to its original, 0 failed and 0 not executed in every file, and every test project in the repository classified. Manifest `docs/receipts/hv/unitgreen-r8b-trx/manifest.json`.
 - The evidence files are committed byte for byte: they are staged with `core.attributesFile` pointed at an empty file for that add, so `* text=auto` cannot normalize a CRLF TRX, and each staged blob id is checked against `git hash-object --no-filters` of the file (`Commit-DocsByteExact.ps1`). Secret scan before the commit: 32 files, 0 redactions needed (`Test-TreeSecrets.ps1`).
+- By-name completeness, which 22.5 required and I had not produced until writing the round 8b brief (`Compare-TrxSets.ps1`, read only): `ug-r8b-win-lane-4` holds every result of `ug-r8-win-lane-3` plus exactly the 179 QBrainAi.Repl.IntegrationTests cases (`ug-r8b-win-lane-compare-r8l3-r8bl4.txt`), and `ug-r8b-linux-lane-3` every result of `ug-r8-linux-lane-2` plus the same 179 (`ug-r8b-linux-lane-compare-r8l2-r8bl3.txt`); nothing is lost on either host.
 - Then the round 8b projected problems for confirmation, the brief under policy 7.9, the self-review, PR body r10 and round 8b. TODO IMPL-UNITGREEN-001 gains task 28 for this section (plugin route, read back).
 
 ### 25.5 Open, declared for round 8b
