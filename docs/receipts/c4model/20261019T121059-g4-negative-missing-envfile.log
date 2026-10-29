@@ -1,0 +1,44 @@
+LocalStart: 2026-10-19T12:10:59
+Command: ./build.ps1 InstallTestDependencies --test-db-env-file /home/sharpninja/.config/qbrain-test/missing-test-db.env
+​
+███╗   ██╗██╗   ██╗██╗  ██╗███████╗
+████╗  ██║██║   ██║██║ ██╔╝██╔════╝
+██╔██╗ ██║██║   ██║█████╔╝ █████╗  
+██║╚██╗██║██║   ██║██╔═██╗ ██╔══╝  
+██║ ╚████║╚██████╔╝██║  ██╗███████╗
+╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+​
+NUKE Execution Engine version 9.0.4 (Linux,.NETCoreApp,Version=v10.0)
+​
+​
+╬════════════════════════════
+║ InstallTestDependencies
+╬═══════════════════
+​
+12:11:03 [ERR] Provider test provisioning: test-database env file not found: /home/sharpninja/.config/qbrain-test/missing-test-db.env
+12:11:03 [ERR] Target InstallTestDependencies has thrown an exception
+System.InvalidOperationException: Provider test provisioning failed: test-database env file not found: /home/sharpninja/.config/qbrain-test/missing-test-db.env
+   at Build.ProvisionProviderTestServers() in /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/build/Build.TestDependencies.cs:line 87
+   at Build.<get_InstallTestDependencies>b__153_1() in /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/build/Build.TestDependencies.cs:line 60
+   at Nuke.Common.Execution.BuildExecutor.<>c.<Execute>b__4_2(Action x) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+   at System.Collections.Generic.List`1.ForEach(Action`1 action)
+   at Nuke.Common.Execution.BuildExecutor.Execute(NukeBuild build, ExecutableTarget target, IReadOnlyCollection`1 previouslyExecutedTargets, Boolean failureMode) in /_/source/Nuke.Build/Execution/BuildExecutor.cs:line 120
+​
+╬══════════════════════
+║ Errors & Warnings
+╬═════════════
+​
+[ERR] InstallTestDependenc: Provider test provisioning: test-database env file not found: /home/sharpninja/.config/qbrain-test/missing-test-db.env
+[ERR] InstallTestDependenc: Target InstallTestDependencies has thrown an exception
+​
+═══════════════════════════════════════════════
+Target                     Status      Duration
+───────────────────────────────────────────────
+InstallTestDependencies    Failed        < 1sec   // InvalidOperationException: Provider test provisioning failed: test-database env file not found: /home/sharpninja/.config/qbrain-test/missing-test-db.env
+───────────────────────────────────────────────
+Total                                    < 1sec
+═══════════════════════════════════════════════
+​
+Build failed on 10/19/2026 12:11:03 PM. (╯°□°）╯︵ ┻━┻
+LocalEnd: 2026-10-19T12:11:04
+ExitCode: 255

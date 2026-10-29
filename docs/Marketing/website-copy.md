@@ -13,7 +13,33 @@ Each section maps to a Canva website block.
 **CTA Button:** Get Started on GitHub → https://github.com/sharpninja/McpServer
 **Secondary link:** View Documentation
 
-**Visual:** ![Architecture Diagram](diagrams/architecture.png)
+**Visual:** ![Architecture (1 of 7): AI agents and the transport layer](../architecture/c4/rendered/MKT-ARCHITECTURE-01.svg)
+
+View: MKT-ARCHITECTURE-01
+
+![Architecture (2 of 7): transports to tools and controllers](../architecture/c4/rendered/MKT-ARCHITECTURE-01-part2.svg)
+
+View: MKT-ARCHITECTURE-01-part2
+
+![Architecture (3 of 7): multi-workspace routing](../architecture/c4/rendered/MKT-ARCHITECTURE-01-part3.svg)
+
+View: MKT-ARCHITECTURE-01-part3
+
+![Architecture (4 of 7): context search and TODO management](../architecture/c4/rendered/MKT-ARCHITECTURE-01-part4.svg)
+
+View: MKT-ARCHITECTURE-01-part4
+
+![Architecture (5 of 7): session logging and requirements tracking](../architecture/c4/rendered/MKT-ARCHITECTURE-01-part5.svg)
+
+View: MKT-ARCHITECTURE-01-part5
+
+![Architecture (6 of 7): GitHub issue sync](../architecture/c4/rendered/MKT-ARCHITECTURE-01-part6.svg)
+
+View: MKT-ARCHITECTURE-01-part6
+
+![Architecture (7 of 7): GraphRAG and prompt templates](../architecture/c4/rendered/MKT-ARCHITECTURE-01-part7.svg)
+
+View: MKT-ARCHITECTURE-01-part7
 
 ---
 
@@ -35,7 +61,29 @@ Each section maps to a Canva website block.
 **Headline:** One Server. All Agents. One Truth.
 **Body:** QBrainAi runs locally alongside your codebase. It gives every connected agent the same view: your todos, your session history, your code — semantically searchable, always current. Agents coordinate through QBrainAi instead of working in isolation. Every decision is logged. Every action is audited. Context is retrieved, not hallucinated.
 
-**Feature map:** ![Features Overview](diagrams/features.png)
+**Feature map:** ![Features Overview (1 of 6): QBrainAi feature areas](../architecture/c4/rendered/MKT-FEATURES-01.svg)
+
+View: MKT-FEATURES-01
+
+![Features Overview (2 of 6): Context and Search](../architecture/c4/rendered/MKT-FEATURES-01-part2.svg)
+
+View: MKT-FEATURES-01-part2
+
+![Features Overview (3 of 6): Task Management](../architecture/c4/rendered/MKT-FEATURES-01-part3.svg)
+
+View: MKT-FEATURES-01-part3
+
+![Features Overview (4 of 6): Agent Coordination](../architecture/c4/rendered/MKT-FEATURES-01-part4.svg)
+
+View: MKT-FEATURES-01-part4
+
+![Features Overview (5 of 6): Requirements](../architecture/c4/rendered/MKT-FEATURES-01-part5.svg)
+
+View: MKT-FEATURES-01-part5
+
+![Features Overview (6 of 6): Infrastructure](../architecture/c4/rendered/MKT-FEATURES-01-part6.svg)
+
+View: MKT-FEATURES-01-part6
 
 **Column 1 — Persistent Memory:** Session logs capture every decision, action, and design choice. Agents resume with full context.
 **Column 2 — Shared Workspace State:** All agents read from and write to the same TODO store, context index, and session log.
@@ -62,7 +110,13 @@ Each section maps to a Canva website block.
 **Label:** UI TOOLING
 **Headline:** The right interface for every workflow.
 
-**UI Tooling Diagram:** ![UI Tooling](diagrams/ui-tooling.png)
+**UI Tooling Diagram:** ![UI Tooling (1 of 2): web, terminal and command-line clients](../architecture/c4/rendered/MKT-UITOOLING-01.svg)
+
+View: MKT-UITOOLING-01
+
+![UI Tooling (2 of 2): client library and MCP agents](../architecture/c4/rendered/MKT-UITOOLING-01-part2.svg)
+
+View: MKT-UITOOLING-01-part2
 
 **Tool 1 — Blazor Web UI:** Full browser-based dashboard. Todos, sessions, agents, templates, context search. GitHub Primer CSS.
 **Tool 2 — Director CLI:** `dotnet tool install --global SharpNinja.QBrainAi.Director` — https://github.com/sharpninja/McpServer/blob/develop/docs/Marketing/ui-tooling.md
@@ -78,7 +132,34 @@ Each section maps to a Canva website block.
 **Label:** HOW IT WORKS
 **Headline:** Simple by design. Powerful at scale.
 
-**Diagram:** ![Architecture](diagrams/architecture.png)
+**Diagram:** ![Architecture (1 of 7): AI agents and the transport layer](../architecture/c4/rendered/MKT-ARCHITECTURE-01.svg)
+
+View: MKT-ARCHITECTURE-01
+
+![Architecture (2 of 7): transports to tools and controllers](../architecture/c4/rendered/MKT-ARCHITECTURE-01-part2.svg)
+
+View: MKT-ARCHITECTURE-01-part2
+
+![Architecture (3 of 7): multi-workspace routing](../architecture/c4/rendered/MKT-ARCHITECTURE-01-part3.svg)
+
+View: MKT-ARCHITECTURE-01-part3
+
+![Architecture (4 of 7): context search and TODO management](../architecture/c4/rendered/MKT-ARCHITECTURE-01-part4.svg)
+
+View: MKT-ARCHITECTURE-01-part4
+
+![Architecture (5 of 7): session logging and requirements tracking](../architecture/c4/rendered/MKT-ARCHITECTURE-01-part5.svg)
+
+View: MKT-ARCHITECTURE-01-part5
+
+![Architecture (6 of 7): GitHub issue sync](../architecture/c4/rendered/MKT-ARCHITECTURE-01-part6.svg)
+
+View: MKT-ARCHITECTURE-01-part6
+
+![Architecture (7 of 7): GraphRAG and prompt templates](../architecture/c4/rendered/MKT-ARCHITECTURE-01-part7.svg)
+
+View: MKT-ARCHITECTURE-01-part7
+
 **Caption:** QBrainAi sits between your AI agents and your workspace. Agents read from it and write to it. Your workspace stays as the source of truth.
 
 ---

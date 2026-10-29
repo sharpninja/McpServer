@@ -1,0 +1,2 @@
+LocalStart: 2026-10-19T10:18:40
+Command: pwsh -NoLogo -NoProfile -NonInteractive -File /home/sharpninja/github/McpServer/.claude/worktrees/github-pr-comment-84-944644/build.ps1 Test
