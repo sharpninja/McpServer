@@ -1,0 +1,13 @@
+{
+  "exitCode": 1,
+  "finishedAtUtc": "2026-10-20T14:35:49.3901676Z",
+  "sessionId": "ecb63c3b-9b12-4189-988b-716fc6f3cd1d",
+  "planSha256": "54C8F4B71E652A579E7D19472A33F9C3642B1001C5151EB1233A40F175BB24A2",
+  "executable": "C:/Users/kingd/.grok/bin/grok.exe",
+  "round": 1,
+  "requestedEffort": "xhigh",
+  "startedAtUtc": "2026-10-20T14:35:35.9749936Z",
+  "requestedModel": "grok-4.7-xhigh",
+  "commit": "e7ec28f90cdcd5da355c9e2e4ece2accf3dc73c9",
+  "requestedAgent": "grok-build"
+}
