@@ -21,9 +21,8 @@ public abstract class WorkspaceNativePathContractTests
     [InlineData(@"C:\already\native", @"C:\already\native")]
     public void WindowsPath_OnWindowsHost_UsesBackslashes(string path, string expected)
     {
-        Assert.SkipUnless(OperatingSystem.IsWindows(), "The backslash spelling applies on a Windows host only.");
-
-        Assert.Equal(expected, ToNativePath(path, WorkspacePathPlatform.Windows));
+        // Run every literal on either host: the non-Windows result must preserve the supplied spelling.
+        Assert.Equal(OperatingSystem.IsWindows() ? expected : path, ToNativePath(path, WorkspacePathPlatform.Windows));
     }
 
     /// <summary>POSIX-platform paths are never rewritten.</summary>
@@ -35,13 +34,12 @@ public abstract class WorkspaceNativePathContractTests
         Assert.Equal(path, ToNativePath(path, WorkspacePathPlatform.CaseSensitive));
     }
 
-    /// <summary>On a non-Windows host nothing is rewritten, whatever the platform tag.</summary>
+    /// <summary>TEST-MCP-PATHNORM-001: the active native host selects its documented spelling; no platform case is skipped.</summary>
     [Fact]
-    public void NonWindowsHost_IsUnchanged()
+    public void NativeHost_SelectsDocumentedSpelling()
     {
-        Assert.SkipWhen(OperatingSystem.IsWindows(), "Applies to non-Windows hosts only.");
-
-        Assert.Equal("C:/Users/kingd/repo", ToNativePath("C:/Users/kingd/repo", WorkspacePathPlatform.Windows));
+        var expected = OperatingSystem.IsWindows() ? @"C:\Users\kingd\repo" : "C:/Users/kingd/repo";
+        Assert.Equal(expected, ToNativePath("C:/Users/kingd/repo", WorkspacePathPlatform.Windows));
     }
 }
 
