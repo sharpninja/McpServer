@@ -16,6 +16,8 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// alone. Uses <c>(localdb)\MSSQLLocalDB</c> (override with <c>MCP_TEST_SQLSERVER_CONNECTION</c>);
 /// LocalDB is provisioned by the <c>InstallTestDependencies</c> Nuke target, and an unreachable
 /// server fails the gate directly rather than skipping. Validates FR-MCP-129 and FR-MCP-134.
+/// FR-MCP-TESTRESOURCE-001 ac-5: a scoped EF error collector preserves the first failure
+/// and attaches any subsequent migration-lock release error.
 /// </summary>
 [Trait("Category", "Integration")]
 [Collection(SqlServerLocalDbCollection.Name)]
@@ -24,6 +26,7 @@ public sealed class SqlServerRenameQuadBrainRolesMigrationTests : IDisposable
     private const string PrecedingMigration = "20260702193940_Decompose4nfAgentModelLists";
     private readonly string _serverConnectionString;
     private readonly string _databaseName = $"mcp_quadbrain_{Guid.NewGuid():N}";
+    private readonly SqlServerMigrationFailureReporter _failures = new();
     private DbContextOptions<McpDbContext>? _options;
 
     /// <summary>Resolves the server connection (LocalDB by default).</summary>
@@ -46,7 +49,7 @@ public sealed class SqlServerRenameQuadBrainRolesMigrationTests : IDisposable
 
         using (var db = CreateContext())
         {
-            db.GetService<IMigrator>().Migrate(PrecedingMigration);
+            _failures.Run(() => db.GetService<IMigrator>().Migrate(PrecedingMigration));
             SeedSlot(db, "brain-slot-left-hemisphere-claude-code-opus-4-8", "LeftHemisphere", "brain-slot:left-hemisphere", now);
             SeedSlot(db, "brain-slot-right-hemisphere-codex-cli-gpt-5-5", "RightHemisphere", "brain-slot:right-hemisphere", now);
             SeedSlot(db, "brain-slot-curiosity-engine-claude-code-opus-4-8", "CuriosityEngine", "brain-slot:curiosity-engine", now);
@@ -55,7 +58,7 @@ public sealed class SqlServerRenameQuadBrainRolesMigrationTests : IDisposable
 
         using (var db = CreateContext())
         {
-            db.Database.Migrate();
+            _failures.Run(() => db.Database.Migrate());
             AssertRenamedState(db);
         }
     }
@@ -74,7 +77,7 @@ public sealed class SqlServerRenameQuadBrainRolesMigrationTests : IDisposable
 
         using (var db = CreateContext())
         {
-            db.GetService<IMigrator>().Migrate("20260720170000_RenameQuadBrainRolesToCreativityLogic");
+            _failures.Run(() => db.GetService<IMigrator>().Migrate("20260720170000_RenameQuadBrainRolesToCreativityLogic"));
             SeedSlot(db, "brain-slot-creativity-claude-code-opus-4-8", "Creativity", "brain-slot:creativity", now);
             SeedSlot(db, "brain-slot-logic-codex-cli-gpt-5-5", "Logic", "brain-slot:logic", now);
             SeedSlot(db, "brain-slot-curiosity-engine-claude-code-opus-4-8", "CuriosityEngine", "brain-slot:curiosity-engine", now);
@@ -83,7 +86,7 @@ public sealed class SqlServerRenameQuadBrainRolesMigrationTests : IDisposable
 
         using (var db = CreateContext())
         {
-            db.GetService<IMigrator>().Migrate(PrecedingMigration);
+            _failures.Run(() => db.GetService<IMigrator>().Migrate(PrecedingMigration));
         }
 
         using (var db = CreateContext())
@@ -134,6 +137,7 @@ public sealed class SqlServerRenameQuadBrainRolesMigrationTests : IDisposable
         var builder = new SqlConnectionStringBuilder(_serverConnectionString) { InitialCatalog = _databaseName };
         _options = new DbContextOptionsBuilder<McpDbContext>()
             .UseSqlServer(builder.ToString(), sql => { sql.MigrationsAssembly("QBrainAi.Storage.SqlServerMigrations"); sql.CommandTimeout(120); })
+            .LogTo(SqlServerMigrationFailureReporter.ShouldCapture, _failures.Observe)
             .Options;
     }
 

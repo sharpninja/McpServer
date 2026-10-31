@@ -28,7 +28,7 @@ public sealed class SessionLogTurnContextBackfillTests
         });
         await db.SaveChangesAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        var sut = new SessionLogTurnContextBackfill(db, new SessionLogTurnContextExtractor(), NullLogger<SessionLogTurnContextBackfill>.Instance);
+        var sut = new SessionLogTurnContextBackfill(db, PureExtractor(), NullLogger<SessionLogTurnContextBackfill>.Instance);
         var changed = await sut.RunAsync(TestContext.Current.CancellationToken, IsolatedHome()).ConfigureAwait(true);
         Assert.Equal(1, changed);
         Assert.Equal("MCP-BACKFILL-001", (await db.SessionLogTurns.SingleAsync(TestContext.Current.CancellationToken).ConfigureAwait(true)).TodoId);
@@ -42,7 +42,7 @@ public sealed class SessionLogTurnContextBackfillTests
         var session = AddSession(db);
         session.Turns.Add(new SessionLogTurnEntity { RequestId = "req-20260304T113901Z-bf2", QueryText = "nothing", PlanFile = "None", TodoId = "None" });
         await db.SaveChangesAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
-        var sut = new SessionLogTurnContextBackfill(db, new SessionLogTurnContextExtractor(), NullLogger<SessionLogTurnContextBackfill>.Instance);
+        var sut = new SessionLogTurnContextBackfill(db, PureExtractor(), NullLogger<SessionLogTurnContextBackfill>.Instance);
         await sut.RunAsync(TestContext.Current.CancellationToken, IsolatedHome()).ConfigureAwait(true);
         var turn = await db.SessionLogTurns.SingleAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal("None", turn.PlanFile);
@@ -63,7 +63,7 @@ public sealed class SessionLogTurnContextBackfillTests
             TodoId = "MCP-KEEP-001",
         });
         await db.SaveChangesAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
-        var sut = new SessionLogTurnContextBackfill(db, new SessionLogTurnContextExtractor(), NullLogger<SessionLogTurnContextBackfill>.Instance);
+        var sut = new SessionLogTurnContextBackfill(db, PureExtractor(), NullLogger<SessionLogTurnContextBackfill>.Instance);
         await sut.RunAsync(TestContext.Current.CancellationToken, IsolatedHome()).ConfigureAwait(true);
         var turn = await db.SessionLogTurns.SingleAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
         Assert.Equal("docs/plans/kept.md", turn.PlanFile);
@@ -78,12 +78,14 @@ public sealed class SessionLogTurnContextBackfillTests
         var session = AddSession(db);
         session.Turns.Add(new SessionLogTurnEntity { RequestId = "req-20260304T113901Z-bf4", QueryText = "MCP-IDEM-001", PlanFile = "None", TodoId = "None" });
         await db.SaveChangesAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
-        var sut = new SessionLogTurnContextBackfill(db, new SessionLogTurnContextExtractor(), NullLogger<SessionLogTurnContextBackfill>.Instance);
+        var sut = new SessionLogTurnContextBackfill(db, PureExtractor(), NullLogger<SessionLogTurnContextBackfill>.Instance);
         Assert.Equal(1, await sut.RunAsync(TestContext.Current.CancellationToken, IsolatedHome()).ConfigureAwait(true));
         Assert.Equal(0, await sut.RunAsync(TestContext.Current.CancellationToken, IsolatedHome()).ConfigureAwait(true));
     }
 
     /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-006: fake ~ history upgrades an empty turn.</summary>
+    /// <remarks>Integration: writes and reads a test-owned physical agent-history tree (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task RunAsync_UsesAgentHistoryUnderFakeHome_WhenTurnTextHasNoTodo()
     {
@@ -127,7 +129,7 @@ public sealed class SessionLogTurnContextBackfillTests
 
         var changed = await SessionLogTurnContextBackfillStartup.TryRunAsync(
             db,
-            new SessionLogTurnContextExtractor(),
+            PureExtractor(),
             NullLogger<SessionLogTurnContextBackfill>.Instance,
             TestContext.Current.CancellationToken,
             IsolatedHome()).ConfigureAwait(true);
@@ -147,7 +149,7 @@ public sealed class SessionLogTurnContextBackfillTests
 
         var changed = await SessionLogTurnContextBackfillStartup.TryRunAsync(
             db,
-            new SessionLogTurnContextExtractor(),
+            PureExtractor(),
             NullLogger<SessionLogTurnContextBackfill>.Instance,
             TestContext.Current.CancellationToken,
             IsolatedHome()).ConfigureAwait(true);
@@ -155,8 +157,9 @@ public sealed class SessionLogTurnContextBackfillTests
         Assert.Equal(0, changed);
     }
 
-    private static string IsolatedHome() =>
-        Path.Combine(Path.GetTempPath(), "sesslog-isolated-home-missing");
+    private static string IsolatedHome() => "/fixture/no-history";
+
+    private static SessionLogTurnContextExtractor PureExtractor() => new(new DirectoryTreeWalker(_ => []));
 
     private static McpDbContext CreateDb()
     {

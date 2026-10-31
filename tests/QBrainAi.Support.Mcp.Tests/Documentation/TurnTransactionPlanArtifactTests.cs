@@ -25,6 +25,7 @@ public sealed class TurnTransactionPlanArtifactTests
     /// Mermaid diagram IDs, one Mermaid block per ID, source-section text, and
     /// repo annotations.
     /// </summary>
+    /// <remarks>Integration: loads transaction plans, requirements or architecture documents from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void ImportedPlan_PreservesAllSixMermaidDiagramIds()
@@ -49,6 +50,7 @@ public sealed class TurnTransactionPlanArtifactTests
     /// subscriber, client, and focused test surfaces used by the diagram-derived
     /// transaction slice.
     /// </summary>
+    /// <remarks>Integration: loads transaction plans, requirements or architecture documents from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void ImportedPlan_ReferencesImplementedTransactionComponentsAndTests()
@@ -85,6 +87,7 @@ public sealed class TurnTransactionPlanArtifactTests
     /// TEST-MCP-162, TEST-MCP-173, and TEST-MCP-174: Validates transaction-plan requirements
     /// are concrete traceability artifacts rather than placeholder backfills.
     /// </summary>
+    /// <remarks>Integration: loads transaction plans, requirements or architecture documents from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void TransactionPlanRequirements_AreConcreteAndMapped()
@@ -146,6 +149,7 @@ public sealed class TurnTransactionPlanArtifactTests
     /// TEST-MCP-163, TEST-MCP-170, TEST-MCP-171, TEST-MCP-172, TEST-MCP-174, and TEST-MCP-185:
     /// validates the implemented/deferred split and the two architecture/design rounds remain explicit local artifacts.
     /// </summary>
+    /// <remarks>Integration: loads transaction plans, requirements or architecture documents from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void PlanArtifacts_PreserveDeferredScopeAndDesignRounds()

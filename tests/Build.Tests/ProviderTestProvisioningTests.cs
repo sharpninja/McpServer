@@ -26,5 +26,5 @@ public sealed class ProviderTestProvisioningTests
     /// <summary>TR-MCP-NUKE-018: the theory above covers every contract scenario.</summary>
     [Fact]
     public void ProvisionTheory_CoversEveryScenario()
-        => Assert.Equal(8, ProviderTestProvisioningContract.ScenarioNames.Length);
+        => InlineTheoryCoverage.AssertRows<ProviderTestProvisioningTests>(nameof(Provision_MeetsContract), ProviderTestProvisioningContract.ScenarioNames);
 }

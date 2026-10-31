@@ -1,7 +1,7 @@
 namespace NukeBuild.Tests;
 
 /// <summary>
-/// TEST-MCP-QBSURFACE-004: Guards the shared MCP descriptor registry under
+/// TEST-MCP-QBSURFACE-004 (historical): Guards the shared MCP descriptor registry under
 /// <c>mcps/</c> against the return of agent-facing QuadBrain brain-slot tool
 /// descriptors. QuadBrain is reachable only through the OpenAI-compatible
 /// endpoint at <c>POST /v1/chat/completions</c>, so no <c>brain_slot_*.json</c>
@@ -10,12 +10,14 @@ namespace NukeBuild.Tests;
 public sealed class QuadBrainDescriptorAbsenceTests
 {
     /// <summary>
-    /// TEST-MCP-QBSURFACE-004: Verifies that no file matching
+    /// TEST-MCP-QBSURFACE-004 (historical): Verifies that no file matching
     /// <c>brain_slot_*.json</c> exists anywhere beneath the repository
     /// <c>mcps/</c> descriptor registry. Test data is the live repository tree
     /// located from the test assembly base directory. Fails with the offending
     /// repository-relative paths so a reintroduced descriptor is named exactly.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void McpsRegistry_ContainsNoBrainSlotToolDescriptors()
     {

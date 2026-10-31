@@ -88,7 +88,7 @@ public sealed class EphemeralPostgresFixture : IDisposable
     }
 
     /// <summary>
-    /// TR-MCP-NUKE-019 AC-2: the pg_ctl start arguments: wait for the server (-w), print only errors (-s), listen on
+    /// FR-MCP-TESTRESOURCE-001 ac-6: the pg_ctl start arguments: wait for the server (-w), print only errors (-s), listen on
     /// <paramref name="port"/> at localhost, and send the server log to <paramref name="logPath"/>.
     /// </summary>
     /// <param name="dataDir">The cluster data directory.</param>
@@ -99,7 +99,7 @@ public sealed class EphemeralPostgresFixture : IDisposable
         $"start -D \"{dataDir}\" -w -s -o \"-p {port} -c listen_addresses=localhost\" -l \"{logPath}\"";
 
     /// <summary>
-    /// TR-MCP-NUKE-019 AC-2: the pg_ctl stop arguments: immediate mode, wait for the shutdown (-w), print only errors
+    /// FR-MCP-TESTRESOURCE-001 ac-6: the pg_ctl stop arguments: immediate mode, wait for the shutdown (-w), print only errors
     /// (-s).
     /// </summary>
     /// <param name="dataDir">The cluster data directory.</param>

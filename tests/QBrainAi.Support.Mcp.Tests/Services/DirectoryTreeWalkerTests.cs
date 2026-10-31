@@ -9,10 +9,10 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// contents of any directory whose listing fails with an IO or access error, and keeps walking the rest.
 /// </summary>
 /// <remarks>
-/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 and TR-MCP-SESSIONLOG-006 /
-/// AC-TR-MCP-SESSIONLOG-006-009 (operator 2026-10-20: "Fix scans in PR 87 (Recommended)"; triage
+/// Requirement coverage: TR-MCP-WS-005 / FR-MCP-018 ac-1 and TR-MCP-SESSIONLOG-006 /
+/// AC-FR-MCP-SESSIONLOGCTX-001-008 (operator 2026-10-20: "Fix scans in PR 87 (Recommended)"; triage
 /// report b0e41c36). Test data: scripted in-memory directory trees (<see cref="ScriptedDirectoryTree"/>) whose
-/// listings return fixed entries or throw the exceptions observed on PAYTON-LEGION2 as kingd (an untrusted mount
+/// listings return fixed entries or throw the exceptions observed on TEST-NODE-A as fixture-user (an untrusted mount
 /// point), an access-denied folder, and a vanished folder; no file system is read. Expected outputs are derived
 /// from the acceptance criteria: a directory is yielded when its parent lists it unless it is a link, its contents
 /// are walked only when its own listing succeeds, and file links are yielded as files. Negative controls run
@@ -283,7 +283,7 @@ public sealed class DirectoryTreeWalkerTests
     /// Integration: on the real file system, <see cref="DirectoryTreeWalker.FileSystem"/> reaches a real folder below
     /// a boundary, does not reach a scan root that is a directory symbolic link or one reached through a linked
     /// ancestor (each link's target lies outside the boundary), and still reaches a root below a boundary that is
-    /// itself a directory symbolic link (AC-TR-MCP-WS-005-001, AC-TR-MCP-SESSIONLOG-006-009; hostile validation
+    /// itself a directory symbolic link (FR-MCP-018 ac-1, AC-FR-MCP-SESSIONLOGCTX-001-008; hostile validation
     /// round 5 finding R5-F1). Creating symbolic links depends on the host (on Windows, Developer Mode or the
     /// create-symbolic-link privilege), so this is an integration test.
     /// </summary>
@@ -472,8 +472,8 @@ public sealed class DirectoryTreeWalkerTests
 
     /// <summary>
     /// Scripted reachability cases: the tree, the boundary (the user profile or home), the scan root, and whether
-    /// the root may be walked. Expected values come from the strengthened criteria AC-TR-MCP-WS-005-001 and
-    /// AC-TR-MCP-SESSIONLOG-006-009 (operator 2026-10-21: "Fix both, strengthen ACs"): the root and every folder
+    /// the root may be walked. Expected values come from the strengthened criteria FR-MCP-018 ac-1 and
+    /// AC-FR-MCP-SESSIONLOGCTX-001-008 (operator 2026-10-21: "Fix both, strengthen ACs"): the root and every folder
     /// between the boundary and it must each be listed by its parent as a directory that is not a link; a folder
     /// whose listing fails with an IO or access error cannot be traversed; the boundary itself is trusted, so a
     /// linked profile or home is still scanned; a root that is the boundary is reachable without any listing.

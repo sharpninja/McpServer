@@ -1,12 +1,13 @@
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-017 / TR-MCP-MEMORY-UI-002-02:
+/// TEST-MCP-MEMORY-017 (historical) / TR-MCP-MEMORY-UI-002-02 (historical):
 /// Deploy docs name Nuke UpdateService as the ship path for /memory/.
 /// </summary>
 public sealed class MemoryUiDeployDocsTests
 {
     /// <summary>AC-TR-MCP-MEMORY-UI-002-02: Deploy docs name Nuke UpdateService as the ship path.</summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void NamesUpdateService()

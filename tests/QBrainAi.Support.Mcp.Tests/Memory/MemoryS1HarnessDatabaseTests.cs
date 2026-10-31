@@ -11,7 +11,7 @@ namespace QBrainAi.Support.Mcp.Tests.Memory;
 /// The race class of triage-report-9b96ada18d72483dad2a3113e455c01b, found by the sibling sweep of IMPL-UNITGREEN-001
 /// round 4; operator 2026-10-20: "Extend fix, then round 4 (Recommended)". Traceability: FR-MCP-MEMORY-002 (Memory
 /// CRUD tools), TR-MCP-MEMORY-002 and TEST-MCP-MEMORY-002 are present and mapped in the requirements store; the
-/// TEST-MCP-MEMORY-010 that the concurrency tests cite is absent from it (hostile validation round 4 finding R4-F3).
+/// TEST-MCP-MEMORY-010 (historical) that the concurrency tests cite is absent from it (hostile validation round 4 finding R4-F3).
 /// Test data: the harness's own temporary
 /// database file. The assertion, its positive control and its negative controls (one shared in-memory connection,
 /// private in-memory databases) are in <see cref="HandoffTestDatabaseTests"/>; this binds the same assertion to the

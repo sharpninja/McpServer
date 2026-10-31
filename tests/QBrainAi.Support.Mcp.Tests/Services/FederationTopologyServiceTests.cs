@@ -47,9 +47,9 @@ public sealed class FederationTopologyServiceTests : IDisposable
 
             var response = await sut.EnrollAsync(new FederationEnrollmentRequest
             {
-                ProxyId = "PAYTON-LEGION2",
-                DisplayName = "PAYTON-LEGION2",
-                BaseUrl = "http://payton-legion2:7147/",
+                ProxyId = "TEST-NODE-A",
+                DisplayName = "TEST-NODE-A",
+                BaseUrl = "http://test-node-a:7147/",
                 Workspaces =
                 [
                     new FederationWorkspaceRegistrationRequest
@@ -61,15 +61,15 @@ public sealed class FederationTopologyServiceTests : IDisposable
             }, CancellationToken.None).ConfigureAwait(true);
 
             Assert.True(response.Accepted);
-            Assert.Equal("PAYTON-LEGION2", response.ProxyId);
+            Assert.Equal("TEST-NODE-A", response.ProxyId);
             Assert.Equal(5, response.HeartbeatSeconds);
 
             var proxies = await sut.ListProxiesAsync(CancellationToken.None).ConfigureAwait(true);
             var proxy = Assert.Single(proxies);
-            Assert.Equal("PAYTON-LEGION2", proxy.ProxyId);
+            Assert.Equal("TEST-NODE-A", proxy.ProxyId);
             Assert.Equal(1, proxy.WorkspaceCount);
 
-            var workspaces = await sut.ListWorkspacesAsync("PAYTON-LEGION2", CancellationToken.None).ConfigureAwait(true);
+            var workspaces = await sut.ListWorkspacesAsync("TEST-NODE-A", CancellationToken.None).ConfigureAwait(true);
             var workspace = Assert.Single(workspaces);
             Assert.True(string.Equals(ExpectedWorkspaceKey.Of(workspacePath), workspace.WorkspacePath, workspaceComparison));
             Assert.NotEmpty(workspace.GlobalWorkspaceId);
@@ -94,8 +94,8 @@ public sealed class FederationTopologyServiceTests : IDisposable
             var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
             db.FederationProxies.Add(new FederationProxyEntity
             {
-                ProxyId = "PAYTON-LEGION2",
-                DisplayName = "PAYTON-LEGION2",
+                ProxyId = "TEST-NODE-A",
+                DisplayName = "TEST-NODE-A",
                 Role = "LocalProxy",
                 Status = "online",
                 CreatedAtUtc = now,
@@ -104,7 +104,7 @@ public sealed class FederationTopologyServiceTests : IDisposable
             db.FederationOperations.Add(new FederationOperationEntity
             {
                 OperationId = "op-stale-status-1",
-                ProxyId = "PAYTON-LEGION2",
+                ProxyId = "TEST-NODE-A",
                 Domain = "todo",
                 ResourceId = "PLAN-FEDERATION-001",
                 Status = "queued",
@@ -126,15 +126,15 @@ public sealed class FederationTopologyServiceTests : IDisposable
     {
         using var provider = CreateProvider();
         var sut = provider.GetRequiredService<IFederationTopologyService>();
-        await sut.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "PAYTON-LEGION2" }, CancellationToken.None)
+        await sut.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "TEST-NODE-A" }, CancellationToken.None)
             .ConfigureAwait(true);
-        await sut.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "PAYTON-DESKTOP" }, CancellationToken.None)
+        await sut.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "TEST-NODE-B" }, CancellationToken.None)
             .ConfigureAwait(true);
 
         var first = await sut.RecordOperationAsync(new FederationOperationRequest
         {
             OperationId = "op-1",
-            ProxyId = "PAYTON-LEGION2",
+            ProxyId = "TEST-NODE-A",
             Domain = "todo",
             ResourceId = "PLAN-FEDERATION-001",
             HttpMethod = "POST",
@@ -144,7 +144,7 @@ public sealed class FederationTopologyServiceTests : IDisposable
         var second = await sut.RecordOperationAsync(new FederationOperationRequest
         {
             OperationId = "op-1",
-            ProxyId = "PAYTON-LEGION2",
+            ProxyId = "TEST-NODE-A",
             Domain = "todo",
             ResourceId = "PLAN-FEDERATION-001",
         }, CancellationToken.None).ConfigureAwait(true);
@@ -152,22 +152,22 @@ public sealed class FederationTopologyServiceTests : IDisposable
         Assert.True(first.Created);
         Assert.False(second.Created);
 
-        var queued = await sut.GetQueueStatusAsync("PAYTON-LEGION2", CancellationToken.None).ConfigureAwait(true);
+        var queued = await sut.GetQueueStatusAsync("TEST-NODE-A", CancellationToken.None).ConfigureAwait(true);
         Assert.Equal(1, queued.QueueDepth);
         Assert.Equal(0, queued.FanoutDepth);
 
-        var syncItems = await sut.GetSyncItemsAsync("PAYTON-DESKTOP", 0, CancellationToken.None).ConfigureAwait(true);
+        var syncItems = await sut.GetSyncItemsAsync("TEST-NODE-B", 0, CancellationToken.None).ConfigureAwait(true);
         var syncItem = Assert.Single(syncItems);
         Assert.Equal("op-1", syncItem.OperationId);
-        Assert.Equal("PAYTON-LEGION2", syncItem.ProxyId);
+        Assert.Equal("TEST-NODE-A", syncItem.ProxyId);
         Assert.Equal("POST", syncItem.HttpMethod);
         Assert.Equal("/qbrainai/todo", syncItem.Path);
 
-        var ack = await sut.AcknowledgeSyncItemAsync("PAYTON-DESKTOP", syncItem.Sequence, new FederationSyncAckRequest(), CancellationToken.None)
+        var ack = await sut.AcknowledgeSyncItemAsync("TEST-NODE-B", syncItem.Sequence, new FederationSyncAckRequest(), CancellationToken.None)
             .ConfigureAwait(true);
         Assert.Equal("acknowledged", ack.Status);
 
-        var drained = await sut.GetQueueStatusAsync("PAYTON-DESKTOP", CancellationToken.None).ConfigureAwait(true);
+        var drained = await sut.GetQueueStatusAsync("TEST-NODE-B", CancellationToken.None).ConfigureAwait(true);
         Assert.Equal(0, drained.FanoutDepth);
     }
 
@@ -177,17 +177,17 @@ public sealed class FederationTopologyServiceTests : IDisposable
     {
         using var provider = CreateProvider();
         var sut = provider.GetRequiredService<IFederationTopologyService>();
-        await sut.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "PAYTON-LEGION2" }, CancellationToken.None)
+        await sut.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "TEST-NODE-A" }, CancellationToken.None)
             .ConfigureAwait(true);
-        await sut.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "PAYTON-DESKTOP" }, CancellationToken.None)
+        await sut.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "TEST-NODE-B" }, CancellationToken.None)
             .ConfigureAwait(true);
-        await sut.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "PAYTON-LAB" }, CancellationToken.None)
+        await sut.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "TEST-NODE-C" }, CancellationToken.None)
             .ConfigureAwait(true);
 
         await sut.RecordOperationAsync(new FederationOperationRequest
         {
             OperationId = "op-fanout-ack-1",
-            ProxyId = "PAYTON-LEGION2",
+            ProxyId = "TEST-NODE-A",
             Domain = "todo",
             ResourceId = "PLAN-FEDERATION-001",
             HttpMethod = "POST",
@@ -201,8 +201,8 @@ public sealed class FederationTopologyServiceTests : IDisposable
             .ConfigureAwait(true);
 
         Assert.Equal("applied", operationAck.Status);
-        Assert.Single(await sut.GetSyncItemsAsync("PAYTON-DESKTOP", 0, CancellationToken.None).ConfigureAwait(true));
-        Assert.Single(await sut.GetSyncItemsAsync("PAYTON-LAB", 0, CancellationToken.None).ConfigureAwait(true));
+        Assert.Single(await sut.GetSyncItemsAsync("TEST-NODE-B", 0, CancellationToken.None).ConfigureAwait(true));
+        Assert.Single(await sut.GetSyncItemsAsync("TEST-NODE-C", 0, CancellationToken.None).ConfigureAwait(true));
     }
 
     /// <summary>Terminal failed apply acknowledgements clear undeliverable fanout rows for the operation.</summary>
@@ -211,15 +211,15 @@ public sealed class FederationTopologyServiceTests : IDisposable
     {
         using var provider = CreateProvider();
         var sut = provider.GetRequiredService<IFederationTopologyService>();
-        await sut.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "PAYTON-LEGION2" }, CancellationToken.None)
+        await sut.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "TEST-NODE-A" }, CancellationToken.None)
             .ConfigureAwait(true);
-        await sut.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "PAYTON-DESKTOP" }, CancellationToken.None)
+        await sut.EnrollAsync(new FederationEnrollmentRequest { ProxyId = "TEST-NODE-B" }, CancellationToken.None)
             .ConfigureAwait(true);
 
         await sut.RecordOperationAsync(new FederationOperationRequest
         {
             OperationId = "op-fanout-conflict-1",
-            ProxyId = "PAYTON-LEGION2",
+            ProxyId = "TEST-NODE-A",
             Domain = "todo",
             ResourceId = "PLAN-FEDERATION-001",
         }, CancellationToken.None).ConfigureAwait(true);
@@ -231,7 +231,7 @@ public sealed class FederationTopologyServiceTests : IDisposable
             .ConfigureAwait(true);
 
         Assert.Equal("conflict", operationAck.Status);
-        Assert.Empty(await sut.GetSyncItemsAsync("PAYTON-DESKTOP", 0, CancellationToken.None).ConfigureAwait(true));
+        Assert.Empty(await sut.GetSyncItemsAsync("TEST-NODE-B", 0, CancellationToken.None).ConfigureAwait(true));
     }
 
     /// <summary>Local proxy queue rows are durable replay candidates and track failed attempts.</summary>
@@ -244,7 +244,7 @@ public sealed class FederationTopologyServiceTests : IDisposable
         var queued = await sut.QueueLocalOperationAsync(new FederationOperationRequest
         {
             OperationId = "local-op-1",
-            ProxyId = "PAYTON-LEGION2",
+            ProxyId = "TEST-NODE-A",
             Domain = "todo",
             ResourceId = "PLAN-FEDERATION-001",
             HttpMethod = "POST",
@@ -255,7 +255,7 @@ public sealed class FederationTopologyServiceTests : IDisposable
         Assert.True(queued.Created);
         Assert.Equal("queued", queued.Status);
 
-        var pending = await sut.ListPendingOperationsAsync("PAYTON-LEGION2", 10, 3, CancellationToken.None).ConfigureAwait(true);
+        var pending = await sut.ListPendingOperationsAsync("TEST-NODE-A", 10, 3, CancellationToken.None).ConfigureAwait(true);
         var item = Assert.Single(pending);
         Assert.Equal("local-op-1", item.OperationId);
         Assert.Equal("/qbrainai/todo", item.Path);
@@ -263,7 +263,7 @@ public sealed class FederationTopologyServiceTests : IDisposable
         var failed = await sut.MarkReplayFailureAsync("local-op-1", "hub offline", 3, CancellationToken.None).ConfigureAwait(true);
         Assert.Equal("replay_failed", failed.Status);
 
-        var afterFailure = await sut.ListPendingOperationsAsync("PAYTON-LEGION2", 10, 3, CancellationToken.None).ConfigureAwait(true);
+        var afterFailure = await sut.ListPendingOperationsAsync("TEST-NODE-A", 10, 3, CancellationToken.None).ConfigureAwait(true);
         Assert.Single(afterFailure);
         Assert.Equal(1, afterFailure[0].AttemptCount);
     }
@@ -285,7 +285,7 @@ public sealed class FederationTopologyServiceTests : IDisposable
         await sut.QueueLocalOperationAsync(new FederationOperationRequest
         {
             OperationId = "sqlite-op-1",
-            ProxyId = "PAYTON-LEGION2",
+            ProxyId = "TEST-NODE-A",
             Domain = "todo",
             ResourceId = "PLAN-FEDERATION-001",
             HttpMethod = "POST",
@@ -293,7 +293,7 @@ public sealed class FederationTopologyServiceTests : IDisposable
             BodyBase64 = Convert.ToBase64String("{}"u8.ToArray()),
         }, CancellationToken.None).ConfigureAwait(true);
 
-        var pending = await sut.ListPendingOperationsAsync("PAYTON-LEGION2", 10, 3, CancellationToken.None)
+        var pending = await sut.ListPendingOperationsAsync("TEST-NODE-A", 10, 3, CancellationToken.None)
             .ConfigureAwait(true);
 
         var item = Assert.Single(pending);
@@ -311,7 +311,7 @@ public sealed class FederationTopologyServiceTests : IDisposable
         var response = await sut.RecordOperationAsync(new FederationOperationRequest
         {
             OperationId = "stale-op-1",
-            ProxyId = "PAYTON-LEGION2",
+            ProxyId = "TEST-NODE-A",
             Domain = "todo",
             ResourceId = "PLAN-FEDERATION-001",
             BaseVersion = "proxy-v1",
@@ -319,13 +319,13 @@ public sealed class FederationTopologyServiceTests : IDisposable
 
         Assert.Equal("conflict", response.Status);
 
-        var conflicts = await sut.ListConflictsAsync("PAYTON-LEGION2", openOnly: true, CancellationToken.None).ConfigureAwait(true);
+        var conflicts = await sut.ListConflictsAsync("TEST-NODE-A", openOnly: true, CancellationToken.None).ConfigureAwait(true);
         var conflict = Assert.Single(conflicts);
         Assert.Equal("stale-op-1", conflict.OperationId);
         Assert.Equal("proxy-v1", conflict.ProxyVersion);
         Assert.Equal("hub-v2", conflict.HubVersion);
 
-        var queued = await sut.GetQueueStatusAsync("PAYTON-LEGION2", CancellationToken.None).ConfigureAwait(true);
+        var queued = await sut.GetQueueStatusAsync("TEST-NODE-A", CancellationToken.None).ConfigureAwait(true);
         Assert.Equal(0, queued.FanoutDepth);
         Assert.Equal(1, queued.ConflictCount);
     }

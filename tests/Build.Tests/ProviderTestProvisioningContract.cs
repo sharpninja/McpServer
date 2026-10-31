@@ -3,7 +3,7 @@ namespace NukeBuild.Tests;
 /// <summary>
 /// TR-MCP-NUKE-018: Contract scenarios and assertions for <see cref="IProviderTestProvisioner"/>.
 /// A recording fake host stands in for the process environment, the test-database env file, Docker and TCP. The
-/// expectations come from the acceptance criteria; the fixture secrets are fake markers that must never appear in
+/// fixtures pin the retained provisioning design (plan sections 8 and 22); the active AC-4 confidentiality rule is still asserted. Fake secret markers must never appear in
 /// actions or errors. The same assertions run against the scripted mock (BDPv4 mock gate), wrong mocks (negative
 /// controls), and the production provisioner.
 /// </summary>

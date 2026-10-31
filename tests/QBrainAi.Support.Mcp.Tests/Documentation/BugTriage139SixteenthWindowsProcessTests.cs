@@ -22,6 +22,7 @@ public sealed class BugTriage139SixteenthWindowsProcessTests
     /// The compiled harness must expose its suspended native launcher rather than assigning a job
     /// after ordinary process start.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void ProcessRunner_WindowsLaunchContract_UsesSuspendedCreation()
     {
@@ -44,6 +45,7 @@ public sealed class BugTriage139SixteenthWindowsProcessTests
     /// A process-creation boundary pause must leave the immediate-descendant helper unable to run
     /// until containment assignment has completed and the suspended primary thread is resumed.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task ProcessRunner_AssignmentWindow_KeepsImmediateHelperSuspended()
     {
@@ -147,6 +149,7 @@ public sealed class BugTriage139SixteenthWindowsProcessTests
     /// A managed helper that immediately creates a native descendant must be contained and the
     /// recorded descendant must be gone after timeout cleanup.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void ProcessRunner_ImmediateNativeDescendant_IsKilledWithinBound()
     {
@@ -206,6 +209,7 @@ public sealed class BugTriage139SixteenthWindowsProcessTests
     /// TEST-MCP-USECASE-020: raw <c>Arguments</c> must keep multiple tokens. Wrapping the entire
     /// string as one quoted argument makes <c>git rev-parse --is-inside-work-tree</c> fail.
     /// </summary>
+    /// <remarks>Integration: starts the native git process against the actual checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task ProcessRunner_RawArguments_PreservesMultipleTokens()
     {
@@ -232,6 +236,7 @@ public sealed class BugTriage139SixteenthWindowsProcessTests
     /// TEST-MCP-USECASE-020: raw <c>Arguments</c> and <c>ArgumentList</c> must preserve separate
     /// tokens, quoted spaces, empty arguments, embedded quotes, and trailing backslashes.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task ProcessRunner_RawArguments_AndArgumentList_PreserveQuotedBoundaries()
     {

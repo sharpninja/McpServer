@@ -16,6 +16,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 public sealed class RequirementsTwelfthAdversarialReviewTests
 {
     /// <summary>Traversal must reject a file count beyond its explicit limit.</summary>
+    /// <remarks>Integration: exercises physical directory traversal limits or concurrent directory-alias replacement (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void EnumerateFiles_FileCountLimit_Throws()
     {
@@ -32,6 +33,7 @@ public sealed class RequirementsTwelfthAdversarialReviewTests
     }
 
     /// <summary>Traversal must reject a file larger than its explicit per-file byte limit.</summary>
+    /// <remarks>Integration: exercises physical directory traversal limits or concurrent directory-alias replacement (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void EnumerateFiles_PerFileByteLimit_Throws()
     {
@@ -47,6 +49,7 @@ public sealed class RequirementsTwelfthAdversarialReviewTests
     }
 
     /// <summary>Traversal must reject files whose combined size exceeds its aggregate limit.</summary>
+    /// <remarks>Integration: exercises physical directory traversal limits or concurrent directory-alias replacement (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void EnumerateFiles_AggregateByteLimit_Throws()
     {
@@ -63,6 +66,7 @@ public sealed class RequirementsTwelfthAdversarialReviewTests
     }
 
     /// <summary>Traversal must reject recursion beyond its explicit depth limit.</summary>
+    /// <remarks>Integration: exercises physical directory traversal limits or concurrent directory-alias replacement (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void EnumerateFiles_RecursionDepthLimit_Throws()
     {
@@ -80,6 +84,7 @@ public sealed class RequirementsTwelfthAdversarialReviewTests
     /// <summary>
     /// Enumeration must be lazy and observe cancellation after the first yielded file.
     /// </summary>
+    /// <remarks>Integration: exercises physical directory traversal limits or concurrent directory-alias replacement (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void EnumerateFiles_CancelledAfterFirstYield_StopsWithoutMaterializingAllPaths()
     {
@@ -109,6 +114,7 @@ public sealed class RequirementsTwelfthAdversarialReviewTests
     /// contract.
     /// </summary>
 #pragma warning disable xUnit1051 // Explicit deadlines must fail visibly instead of becoming runner-cancelled no-result tests.
+    /// <remarks>Integration: exercises physical directory traversal limits or concurrent directory-alias replacement (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task OpenFileForRead_DirectoryAliasSwap_NeverReadsExternalObject()
     {
@@ -171,6 +177,7 @@ public sealed class RequirementsTwelfthAdversarialReviewTests
     /// <summary>
     /// A swapping directory alias must never permit rollback-style writes to an external object.
     /// </summary>
+    /// <remarks>Integration: exercises physical directory traversal limits or concurrent directory-alias replacement (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task OpenFileForWrite_DirectoryAliasSwap_NeverWritesExternalObject()
     {

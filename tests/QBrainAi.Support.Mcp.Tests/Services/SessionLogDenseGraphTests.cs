@@ -66,6 +66,8 @@ public sealed class SessionLogDenseGraphTests
     /// TEST-MCP-TRIAGESTORE-007: a graph load that exceeds the command budget fails retryable
     /// and does not insert the turn or clear the existing session.
     /// </summary>
+    /// <remarks>Integration: asserts an elapsed wall-clock bound on actual scheduling and timer execution (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task UpsertTurnAsync_SlowGraphLoad_FailsRetryableWithoutPersisting()
     {

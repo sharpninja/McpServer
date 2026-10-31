@@ -9,7 +9,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// or access error) yields no version, so the read goes on to the next file, and any other error propagates.
 /// </summary>
 /// <remarks>
-/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 (operator 2026-10-20: "Fold R3-P3 in first", whose
+/// Requirement coverage: TR-MCP-WS-005 / FR-MCP-018 ac-1 (operator 2026-10-20: "Fold R3-P3 in first", whose
 /// option text adds "a version file that cannot be read never fails the marker" to the criterion with a scripted
 /// test and negative controls, a mock gate, then the fix in MarkerFileService). Test data: scripted version files
 /// (<see cref="ScriptedVersionFiles"/>) under a relative root, whose reads return fixed text, report the file as

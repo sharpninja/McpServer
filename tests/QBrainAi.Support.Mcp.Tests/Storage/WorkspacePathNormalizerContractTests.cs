@@ -30,11 +30,11 @@ public abstract class WorkspacePathNormalizerContractTests
         var host = LinuxHost();
         var normalizer = CreateSut(host);
 
-        var result = normalizer.Normalize(@"C:\Users\kingd");
+        var result = normalizer.Normalize(@"C:\Users\fixture-user");
 
         Assert.DoesNotContain(LinuxWorkingDirectory, result, StringComparison.Ordinal);
-        Assert.Equal("C:/Users/kingd", result);
-        Assert.Equal(WorkspacePathPlatform.Windows, normalizer.DetectPlatform(@"C:\Users\kingd"));
+        Assert.Equal("C:/Users/fixture-user", result);
+        Assert.Equal(WorkspacePathPlatform.Windows, normalizer.DetectPlatform(@"C:\Users\fixture-user"));
         host.DidNotReceive().NormalizeNativePath(Arg.Any<string>());
     }
 
@@ -43,12 +43,12 @@ public abstract class WorkspacePathNormalizerContractTests
     /// resolve to the same identity on a Linux host.
     /// </summary>
     [Theory]
-    [InlineData(@"C:\Users\kingd")]
-    [InlineData("C:/Users/kingd")]
-    [InlineData(@"C:\Users/kingd\")]
+    [InlineData(@"C:\Users\fixture-user")]
+    [InlineData("C:/Users/fixture-user")]
+    [InlineData(@"C:\Users/fixture-user\")]
     public void LinuxHost_WindowsDrivePathSpellings_ResolveToOneIdentity(string input)
     {
-        Assert.Equal("C:/Users/kingd", CreateSut(LinuxHost()).Normalize(input));
+        Assert.Equal("C:/Users/fixture-user", CreateSut(LinuxHost()).Normalize(input));
     }
 
     /// <summary>
@@ -78,8 +78,8 @@ public abstract class WorkspacePathNormalizerContractTests
     public void LinuxHost_MixedSeparatorsAndDotSegments_CollapseLexically()
     {
         Assert.Equal(
-            "C:/Users/kingd/repo/x",
-            CreateSut(LinuxHost()).Normalize(@"C:\Users/kingd\\repo/.\y\..\x"));
+            "C:/Users/fixture-user/repo/x",
+            CreateSut(LinuxHost()).Normalize(@"C:\Users/fixture-user\\repo/.\y\..\x"));
     }
 
     /// <summary>
@@ -91,10 +91,10 @@ public abstract class WorkspacePathNormalizerContractTests
     {
         var host = LinuxHost();
 
-        var result = CreateSut(host).Normalize("/home/sharpninja/github/McpServer");
+        var result = CreateSut(host).Normalize("/fixture/workspaces/McpServer");
 
-        Assert.Equal("/home/sharpninja/github/McpServer", result);
-        host.Received(1).NormalizeNativePath("/home/sharpninja/github/McpServer");
+        Assert.Equal("/fixture/workspaces/McpServer", result);
+        host.Received(1).NormalizeNativePath("/fixture/workspaces/McpServer");
     }
 
     /// <summary>
@@ -124,12 +124,12 @@ public abstract class WorkspacePathNormalizerContractTests
         var host = WindowsHost();
         var normalizer = CreateSut(host);
 
-        var result = normalizer.Normalize("/home/sharpninja/github/McpServer");
+        var result = normalizer.Normalize("/fixture/workspaces/McpServer");
 
-        Assert.Equal("/home/sharpninja/github/McpServer", result);
+        Assert.Equal("/fixture/workspaces/McpServer", result);
         Assert.Equal(
             WorkspacePathPlatform.CaseSensitive,
-            normalizer.DetectPlatform("/home/sharpninja/github/McpServer"));
+            normalizer.DetectPlatform("/fixture/workspaces/McpServer"));
         host.DidNotReceive().NormalizeNativePath(Arg.Any<string>());
     }
 
@@ -139,7 +139,7 @@ public abstract class WorkspacePathNormalizerContractTests
     /// directory (C:\svc).
     /// </summary>
     [Theory]
-    [InlineData(@"C:\Users\kingd", "C:/Users/kingd")]
+    [InlineData(@"C:\Users\fixture-user", "C:/Users/fixture-user")]
     [InlineData(@"\\srv\share\repo", "//srv/share/repo")]
     [InlineData("relative", "C:/svc/relative")]
     public void WindowsHost_NativePaths_UseHostResolution(string input, string expected)
@@ -156,7 +156,7 @@ public abstract class WorkspacePathNormalizerContractTests
     [Fact]
     public void Normalize_TrimsWhitespace()
     {
-        Assert.Equal("C:/Users/kingd", CreateSut(LinuxHost()).Normalize(@"  C:\Users\kingd  "));
+        Assert.Equal("C:/Users/fixture-user", CreateSut(LinuxHost()).Normalize(@"  C:\Users\fixture-user  "));
     }
 
     /// <summary>TR-MCP-FED-PATH-001: Blank input is rejected.</summary>
@@ -176,10 +176,10 @@ public abstract class WorkspacePathNormalizerContractTests
     /// even on a Linux host, and the leaf of a POSIX path is split on '/' even on a Windows host.
     /// </summary>
     [Theory]
-    [InlineData(@"C:\Users\kingd", "kingd")]
-    [InlineData("C:/Users/kingd/", "kingd")]
+    [InlineData(@"C:\Users\fixture-user", "fixture-user")]
+    [InlineData("C:/Users/fixture-user/", "fixture-user")]
     [InlineData(@"\\srv\share\repo", "repo")]
-    [InlineData("/home/sharpninja/github/McpServer", "McpServer")]
+    [InlineData("/fixture/workspaces/McpServer", "McpServer")]
     public void GetLeafName_UsesPathPlatformSeparators_OnEitherHost(string input, string expected)
     {
         Assert.Equal(expected, CreateSut(LinuxHost()).GetLeafName(input));
@@ -200,7 +200,7 @@ public abstract class WorkspacePathNormalizerContractTests
     /// Linux hub treats Windows proxy paths as foreign and a Windows host treats POSIX paths as foreign.
     /// </summary>
     [Theory]
-    [InlineData(@"C:\Users\kingd", false, true)]
+    [InlineData(@"C:\Users\fixture-user", false, true)]
     [InlineData("//srv/share/x", false, true)]
     [InlineData("/home/x", true, false)]
     [InlineData("relative", true, true)]
@@ -216,8 +216,8 @@ public abstract class WorkspacePathNormalizerContractTests
     /// derives /home/x/docs/sessions (not /home/x\docs\sessions).
     /// </summary>
     [Theory]
-    [InlineData(@"C:\Users\kingd", "C:/Users/kingd/docs/sessions")]
-    [InlineData("/home/sharpninja/github/McpServer", "/home/sharpninja/github/McpServer/docs/sessions")]
+    [InlineData(@"C:\Users\fixture-user", "C:/Users/fixture-user/docs/sessions")]
+    [InlineData("/fixture/workspaces/McpServer", "/fixture/workspaces/McpServer/docs/sessions")]
     public void Combine_UsesRootPlatformSyntax_OnEitherHost(string root, string expected)
     {
         Assert.Equal(expected, CreateSut(LinuxHost()).Combine(root, "docs", "sessions"));
@@ -228,14 +228,14 @@ public abstract class WorkspacePathNormalizerContractTests
     [Fact]
     public void Combine_CollapsesDotSegments()
     {
-        Assert.Equal("C:/Users/kingd/b", CreateSut(LinuxHost()).Combine(@"C:\Users\kingd", "a", "..", "b"));
+        Assert.Equal("C:/Users/fixture-user/b", CreateSut(LinuxHost()).Combine(@"C:\Users\fixture-user", "a", "..", "b"));
     }
 
     /// <summary>TR-MCP-FED-PATH-001: A rooted segment replaces the root, as Path.Combine does.</summary>
     [Fact]
     public void Combine_RootedSegment_ReplacesRoot()
     {
-        Assert.Equal("/srv/other", CreateSut(LinuxHost()).Combine(@"C:\Users\kingd", "/srv/other"));
+        Assert.Equal("/srv/other", CreateSut(LinuxHost()).Combine(@"C:\Users\fixture-user", "/srv/other"));
     }
 
     /// <summary>

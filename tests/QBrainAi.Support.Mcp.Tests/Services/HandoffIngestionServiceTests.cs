@@ -464,6 +464,7 @@ public sealed class HandoffIngestionServiceTests : IDisposable
     }
 
     /// <summary>TEST-HANDOFF-002: reparse-point escapes fail closed.</summary>
+    /// <remarks>Integration: creates a real directory link and checks physical containment (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public async Task IngestAsync_ReparseEscape_IsRejected()

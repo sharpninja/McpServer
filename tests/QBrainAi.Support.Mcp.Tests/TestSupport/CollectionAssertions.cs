@@ -5,8 +5,8 @@ namespace QBrainAi.Support.Mcp.Tests.TestSupport;
 
 /// <summary>
 /// Assertions on xUnit collection membership and collection definitions, read through <see cref="CustomAttributeData"/>
-/// so no test is run. Shared by the collection tests of TR-MCP-NUKE-019 AC-2 (<c>SqlServerLocalDbCollectionTests</c>)
-/// and of TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 (<c>ProcessEnvironmentCollectionTests</c>).
+/// so no test is run. Shared by the collection tests of FR-MCP-TESTRESOURCE-001 ac-7 (<c>SqlServerLocalDbCollectionTests</c>)
+/// and of FR-MCP-TESTRESOURCE-001 ac-9 (<c>ProcessEnvironmentCollectionTests</c>).
 /// </summary>
 internal static class CollectionAssertions
 {

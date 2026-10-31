@@ -4,7 +4,7 @@ namespace NukeBuild.Tests;
 
 /// <summary>
 /// TR-MCP-NUKE-019: Contract cases and assertions for <see cref="IProvisioningDownload"/>. The expected
-/// behavior comes from the acceptance criterion: the body is written to the destination as it arrives, the download
+/// behavior pins the retained provisioning design in plan sections 11 and 22, not a removed environment-specific criterion: the body is written as it arrives, the download
 /// has no limit on its total duration, and it fails naming the URL on an error status or when no data arrives for the
 /// inactivity limit. Every case runs through a scripted <see cref="HttpMessageHandler"/> in memory (no network) and
 /// writes under a temporary folder it removes. The same assertions run against the scripted download (BDPv4 mock

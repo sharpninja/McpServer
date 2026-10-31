@@ -1,7 +1,7 @@
 namespace QBrainAi.Support.Mcp.Services;
 
 /// <summary>
-/// TR-MCP-WS-005 / AC-TR-MCP-WS-005-001, TR-MCP-SESSIONLOG-006 / AC-TR-MCP-SESSIONLOG-006-009:
+/// TR-MCP-WS-005 / FR-MCP-018 ac-1, TR-MCP-SESSIONLOG-006 / AC-FR-MCP-SESSIONLOGCTX-001-008:
 /// one entry of a single directory listing, as the user-profile scans read it.
 /// </summary>
 /// <param name="Path">Full path of the entry.</param>

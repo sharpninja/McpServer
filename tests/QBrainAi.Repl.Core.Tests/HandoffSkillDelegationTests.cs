@@ -17,7 +17,7 @@ namespace QBrainAi.Repl.Core.Tests;
 /// repository checkout through the shared <see cref="TestRepositoryRoot"/>, so this is an integration test on both
 /// hosts (TR-MCP-USECASE-018 AC-006, hostile validation round 2 finding R2-F1).
 /// </summary>
-[Trait("Category", "Integration")]
+
 public sealed class HandoffSkillDelegationTests
 {
     /// <summary>
@@ -25,6 +25,8 @@ public sealed class HandoffSkillDelegationTests
     /// through ReplCommandDispatcher plus a real HandoffWorkflow. The mock HTTP handler must
     /// receive ingest, get, and approve calls on /qbrainai/handoff/*.
     /// </summary>
+    /// <remarks>Integration: reads the skill from the physical repository checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task SkillDocumentedMethods_DispatchThroughWorkflowToHandoffClient()
     {

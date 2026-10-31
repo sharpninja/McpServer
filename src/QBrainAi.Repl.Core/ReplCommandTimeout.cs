@@ -1,4 +1,4 @@
-// TR-MCP-REPL-001 AC-002: one parse rule for the REPL command timeouts configured through
+// FR-MCP-REPL-001 ac-1: one parse rule for the REPL command timeouts configured through
 // MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS (agent stdio requests) and MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS
 // (stream commands), so a misconfigured value never fails a request.
 
@@ -7,7 +7,7 @@ using System.Globalization;
 namespace QBrainAi.Repl.Core;
 
 /// <summary>
-/// TR-MCP-REPL-001 AC-002: parses a configured REPL command timeout. A whole number of seconds from 1 to
+/// FR-MCP-REPL-001 ac-1: parses a configured REPL command timeout. A whole number of seconds from 1 to
 /// <see cref="LargestSeconds"/>, the largest delay <see cref="CancellationTokenSource.CancelAfter(TimeSpan)"/> accepts,
 /// is used; any other value (unset, empty, not a number, zero, negative or larger) gives <see cref="Default"/>.
 /// </summary>

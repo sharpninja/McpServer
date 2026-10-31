@@ -40,7 +40,7 @@ public sealed class WorkspacePathNormalizerProcessTests
     [Fact]
     public void ProcessNormalizer_ForeignAbsolutePath_IsNotReRooted()
     {
-        var foreign = OperatingSystem.IsWindows() ? "/home/sharpninja/github/McpServer" : @"C:\Users\kingd";
+        var foreign = OperatingSystem.IsWindows() ? "/fixture/workspaces/McpServer" : @"C:\Users\fixture-user";
 
         var result = WorkspacePathNormalizer.Process.Normalize(foreign);
 

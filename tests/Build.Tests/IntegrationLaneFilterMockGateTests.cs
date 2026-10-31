@@ -18,7 +18,7 @@ public sealed class IntegrationLaneFilterMockGateTests
     /// <summary>TR-MCP-NUKE-019: the theory above covers every contract host.</summary>
     [Fact]
     public void ScriptedFilterTheory_CoversEveryHost()
-        => Assert.Equal(2, IntegrationLaneFilterContract.HostNames.Length);
+        => InlineTheoryCoverage.AssertRows<IntegrationLaneFilterMockGateTests>(nameof(ScriptedFilter_PassesHost), IntegrationLaneFilterContract.HostNames);
 
     /// <summary>
     /// TR-MCP-NUKE-019 negative controls: each wrong filter is rejected (the other host's cases admitted, untagged

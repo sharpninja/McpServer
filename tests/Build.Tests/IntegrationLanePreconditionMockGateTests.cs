@@ -20,7 +20,7 @@ public sealed class IntegrationLanePreconditionMockGateTests
     /// <summary>TR-MCP-NUKE-019: the theory above covers every contract scenario.</summary>
     [Fact]
     public void ScriptedTheory_CoversEveryScenario()
-        => Assert.Equal(4, IntegrationLanePreconditionContract.ScenarioNames.Length);
+        => InlineTheoryCoverage.AssertRows<IntegrationLanePreconditionMockGateTests>(nameof(ScriptedPrecondition_PassesScenario), IntegrationLanePreconditionContract.ScenarioNames);
 
     /// <summary>
     /// TR-MCP-NUKE-019 negative controls: a precondition that runs a non-interactive Windows session, stops

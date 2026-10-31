@@ -47,20 +47,20 @@ public sealed class ProductAliasCompatibilityTests
         using var configuration = new ConfigurationManager();
         configuration.AddInMemoryCollection(new Dictionary<string, string?>
         {
-            ["Mcp:RepoRoot"] = @"E:\github\McpServer",
+            ["Mcp:RepoRoot"] = @"Q:\fixture\McpServer",
             ["Mcp:Port"] = "7000",
             ["Mcp:TodoFilePath"] = "docs/Project/TODO.yaml",
             ["QBrainAi:Port"] = "7147",
-            ["QBrainAi:Workspaces:0:WorkspacePath"] = @"E:\github\McpServer",
+            ["QBrainAi:Workspaces:0:WorkspacePath"] = @"Q:\fixture\McpServer",
             ["QBrainAi:Workspaces:0:Name"] = "McpServer",
         });
 
         McpInstanceResolver.ProjectCanonicalSectionOverLegacy(configuration);
 
         Assert.Equal("7147", configuration["Mcp:Port"]);
-        Assert.Equal(@"E:\github\McpServer", configuration["Mcp:RepoRoot"]);
+        Assert.Equal(@"Q:\fixture\McpServer", configuration["Mcp:RepoRoot"]);
         Assert.Equal("docs/Project/TODO.yaml", configuration["Mcp:TodoFilePath"]);
-        Assert.Equal(@"E:\github\McpServer", configuration["Mcp:Workspaces:0:WorkspacePath"]);
+        Assert.Equal(@"Q:\fixture\McpServer", configuration["Mcp:Workspaces:0:WorkspacePath"]);
         Assert.Equal("McpServer", configuration["Mcp:Workspaces:0:Name"]);
     }
 
@@ -287,9 +287,9 @@ public sealed class ProductAliasCompatibilityTests
     [Theory]
     [InlineData("QBrainAi", @"E:\other", true)]
     [InlineData("McpServer", @"E:\other", true)]
-    [InlineData("notes", @"E:\github\McpServer", true)]
-    [InlineData("notes", @"E:\github\QBrainAi", true)]
-    [InlineData("notes", @"E:\github\Other", false)]
+    [InlineData("notes", @"Q:\fixture\McpServer", true)]
+    [InlineData("notes", @"Q:\fixture\QBrainAi", true)]
+    [InlineData("notes", @"Q:\fixture\Other", false)]
     public void ProductWorkspace_AcceptsCanonicalAndLegacyNames(string name, string path, bool expected)
     {
         Assert.Equal(expected, ProductWorkspaceIdentity.IsProductWorkspace(name, path));

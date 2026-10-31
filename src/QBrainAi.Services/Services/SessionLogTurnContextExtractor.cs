@@ -23,7 +23,7 @@ public sealed class SessionLogTurnContextExtractor
     private readonly DirectoryTreeWalker _walker;
 
     /// <summary>
-    /// Creates an extractor whose agent-history scan walks the real file system (AC-TR-MCP-SESSIONLOG-006-009).
+    /// Creates an extractor whose agent-history scan walks the real file system (AC-FR-MCP-SESSIONLOGCTX-001-008).
     /// </summary>
     public SessionLogTurnContextExtractor()
         : this(DirectoryTreeWalker.FileSystem)
@@ -31,7 +31,7 @@ public sealed class SessionLogTurnContextExtractor
     }
 
     /// <summary>
-    /// AC-TR-MCP-SESSIONLOG-006-009: creates an extractor whose agent-history scan walks through
+    /// AC-FR-MCP-SESSIONLOGCTX-001-008: creates an extractor whose agent-history scan walks through
     /// <paramref name="walker"/>, which skips directory links and any directory it cannot list.
     /// </summary>
     /// <param name="walker">Directory walk used for the history scan.</param>
@@ -122,12 +122,12 @@ public sealed class SessionLogTurnContextExtractor
         foreach (var rootName in new[] { ".grok", ".claude", ".codex", ".cursor" })
         {
             var root = Path.Combine(home, rootName);
-            // AC-TR-MCP-SESSIONLOG-006-009: a history root that is a link contributes no file, the same as a link
+            // AC-FR-MCP-SESSIONLOGCTX-001-008: a history root that is a link contributes no file, the same as a link
             // inside it (hostile validation round 5 finding R5-F1); a home that is itself a link is still scanned.
             if (!Directory.Exists(root) || !walker.IsReachable(home, root))
                 continue;
 
-            // AC-TR-MCP-SESSIONLOG-006-009: the walk skips directory links and any directory it cannot list.
+            // AC-FR-MCP-SESSIONLOGCTX-001-008: the walk skips directory links and any directory it cannot list.
             foreach (var file in walker.EnumerateFiles(root))
             {
                 if (files.Count >= MaxHistoryFiles)

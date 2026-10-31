@@ -1,13 +1,14 @@
 using QBrainAi.Repl.Host;
+using QBrainAi.Client;
 
 namespace QBrainAi.Repl.Core.Tests.Host;
 
 /// <summary>
-/// TR-MCP-REPL-008 (AC-1 to AC-4): Contract cases and assertions for the marker walk and its diagnostics, one named
+/// FR-MCP-REPL-007 (ac-1 to ac-4): Contract cases and assertions for the marker walk and its diagnostics, one named
 /// case per criterion. The expected values come from the criteria: the walk goes from the start folder up to the file
 /// system root, the nearest marker on the way up wins, walking up to a parent workspace is intended, and a walk that
 /// finds nothing lists every folder it searched in walk order. Every case runs over an in-memory file system rooted at
-/// the root of the host's temporary folder path (only the path string is used; no folder is read), so no case depends
+/// its own virtual temporary folder, with explicit parent relationships and no TMPDIR or host path grammar, so no case depends
 /// on what the host holds. The same assertions run against a scripted walk (BDPv4 mock gate), wrong walks (negative
 /// controls), and the production resolver.
 /// </summary>
@@ -17,16 +18,16 @@ internal static class MarkerWalkContract
     internal const string MarkerFileName = "AGENTS-README-FIRST.yaml";
 
     /// <summary>The file system root of the scripted tree.</summary>
-    internal static readonly string Root = Path.GetPathRoot(Path.GetTempPath())!;
+    internal const string Root = "/marker-walk-owned-temporary-root";
 
     /// <summary>The scripted workspace folder under the root.</summary>
-    internal static readonly string Workspace = Path.Combine(Root, "w");
+    internal const string Workspace = Root + "/w";
 
     /// <summary>The scripted source folder under the workspace.</summary>
-    internal static readonly string Source = Path.Combine(Workspace, "src");
+    internal const string Source = Workspace + "/src";
 
     /// <summary>The folder every case starts its walk from.</summary>
-    internal static readonly string Start = Path.Combine(Source, "nested");
+    internal const string Start = Source + "/nested";
 
     /// <summary>A marker walk: the marker found from <paramref name="startPath"/>, or null, and the folders searched.</summary>
     internal delegate string? Walk(string startPath, IMarkerFileSystem fileSystem, out IReadOnlyList<string> searched);
@@ -54,7 +55,7 @@ internal static class MarkerWalkContract
     {
         var marker = walk(Start, new InMemoryMarkerFileSystem(Workspace), out var searched);
 
-        Assert.Equal(Path.Combine(Workspace, MarkerFileName), marker);
+        Assert.Equal(Workspace + "/" + MarkerFileName, marker);
         Assert.Equal([Start, Source, Workspace], searched);
     }
 
@@ -66,7 +67,7 @@ internal static class MarkerWalkContract
     {
         var marker = walk(Start, new InMemoryMarkerFileSystem(Start, Workspace), out var searched);
 
-        Assert.Equal(Path.Combine(Start, MarkerFileName), marker);
+        Assert.Equal(Start + "/" + MarkerFileName, marker);
         Assert.Equal([Start], searched);
     }
 
@@ -97,10 +98,31 @@ internal static class MarkerWalkContract
     {
         /// <inheritdoc />
         public bool FileExists(string path)
-            => markerFolders.Any(folder => string.Equals(Path.Combine(folder, MarkerFileName), path, StringComparison.Ordinal));
+            => markerFolders.Any(folder => string.Equals(GetMarkerPath(folder), path, StringComparison.Ordinal));
 
         /// <inheritdoc />
         public string[] ReadAllLines(string path)
             => throw new FileNotFoundException("The in-memory file system holds marker presence only; no case reads a marker.", path);
+
+        /// <summary>Preserves explicit virtual path spelling without a native path query.</summary>
+        public string GetFullPath(string path) => path;
+
+        /// <summary>Returns an explicit parent, stopping at the owned virtual temporary root.</summary>
+        public string? GetParentPath(string path) => path switch
+        {
+            Start => Source, Source => Workspace, Workspace => Root, Root => null,
+            _ => throw new InvalidOperationException("Unscripted virtual directory: " + path),
+        };
+
+        /// <summary>Combines virtual separator syntax.</summary>
+        public string GetMarkerPath(string directory) => directory + "/" + MarkerFileName;
+
+        /// <summary>No trust-cache operation belongs to a marker-presence-only case.</summary>
+        public bool TryUseCachedVerification(MarkerFileClientOptionsResolver.MarkerSettings marker, string agent,
+            out QBrainAiClientOptions? options) => throw new InvalidOperationException("Presence-only fixture must not read a verification cache.");
+
+        /// <summary>No trust-cache operation belongs to a marker-presence-only case.</summary>
+        public void SaveVerifiedCacheEntry(MarkerFileClientOptionsResolver.MarkerSettings marker, string agent) =>
+            throw new InvalidOperationException("Presence-only fixture must not write a verification cache.");
     }
 }

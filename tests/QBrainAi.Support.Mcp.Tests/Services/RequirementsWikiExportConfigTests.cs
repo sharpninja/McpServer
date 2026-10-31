@@ -7,7 +7,11 @@ using YamlDotNet.Serialization;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
-/// <summary>TEST-MCP-WIKIEXPORT-001: docs/wiki.yaml schema and export behavior coverage.</summary>
+/// <summary>
+/// TEST-MCP-WIKIEXPORT-001: docs/wiki.yaml schema and export behavior coverage. Integration because every case
+/// loads or writes a physical configuration/export tree seeded by the fixture (TR-MCP-USECASE-018 AC-006).
+/// </summary>
+[Trait("Category", "Integration")]
 public sealed class RequirementsWikiExportConfigTests : IDisposable
 {
     private static readonly ISerializer s_yamlSerializer = new SerializerBuilder().DisableAliases().Build();
@@ -62,9 +66,9 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
         yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(timeoutSeconds: 3601)]), "timeout"];
         yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(id: "api-a", targetRoot: "api"), CreateDocFxWorkflow(id: "api-b", targetRoot: "api")]), "duplicate target root"];
         yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(workingDirectory: "../outside")]), "workingDirectory"];
-        yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(outputRoot: UnitTestPaths.Combine("outside", "docfx"))]), "outputRoot"];
+        yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(outputRoot: "/outside/docfx")]), "outputRoot"];
         yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(targetRoot: "../api")]), "targetRoot"];
-        yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(targetRoot: UnitTestPaths.Combine("api"))]), "targetRoot"];
+        yield return [CreateConfigWithDocFx([CreateDocFxWorkflow(targetRoot: "/api")]), "targetRoot"];
     }
 
     public void Dispose()
@@ -79,6 +83,7 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
     }
 
     /// <summary>TEST-MCP-WIKIEXPORT-001-AC2, AC3, AC4, AC5, AC7: valid docs/wiki.yaml drives documents, home, platforms, and navigation.</summary>
+    /// <remarks>Integration: each case loads or writes the fixture-owned physical configuration and export tree (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public async Task GenerateWikiAsync_WithWikiYaml_ExportsConfiguredTreeForGitHubAndAzure()
@@ -132,6 +137,7 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
     }
 
     /// <summary>TEST-MCP-WIKIEXPORT-001-AC5: generated home content falls back to the navigation tree when no home template is configured.</summary>
+    /// <remarks>Integration: each case loads or writes the fixture-owned physical configuration and export tree (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public async Task GenerateWikiAsync_WithWikiYamlWithoutHomeTemplate_UsesDefaultGeneratedHome()
@@ -158,6 +164,7 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
     }
 
     /// <summary>TEST-MCP-WIKIEXPORT-001-AC2: absence of docs/wiki.yaml preserves canonical wiki output.</summary>
+    /// <remarks>Integration: each case loads or writes the fixture-owned physical configuration and export tree (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public async Task GenerateWikiAsync_WithoutWikiYaml_PreservesCanonicalOutput()
@@ -176,6 +183,7 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
     }
 
     /// <summary>TEST-MCP-WIKIEXPORT-001-AC1, AC6: invalid config reports actionable errors and does not modify existing exports.</summary>
+    /// <remarks>Integration: each case loads or writes the fixture-owned physical configuration and export tree (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task GenerateWikiAsync_InvalidWikiYaml_FailsBeforeWriting()
     {
@@ -200,6 +208,7 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
     }
 
     /// <summary>TEST-MCP-WIKIEXPORT-001-AC1: validation covers bad schema, paths, platforms, sources, and navigation.</summary>
+    /// <remarks>Integration: each case loads or writes the fixture-owned physical configuration and export tree (TR-MCP-USECASE-018 AC-006).</remarks>
     [Theory]
     [MemberData(nameof(InvalidWikiYamlCases))]
     public void Load_InvalidWikiYaml_ThrowsActionableValidation(Dictionary<string, object?> document, string expectedMessage)
@@ -212,6 +221,7 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
     }
 
     /// <summary>TEST-MCP-DOCFXWIKI-001: omitted DocFX configuration is backward compatible.</summary>
+    /// <remarks>Integration: each case loads or writes the fixture-owned physical configuration and export tree (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void Load_WithoutDocFxSection_ReturnsEmptyDocFxWorkflows()
     {
@@ -224,6 +234,7 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
     }
 
     /// <summary>TEST-MCP-DOCFXWIKI-001: valid DocFX workflow config is normalized and retained.</summary>
+    /// <remarks>Integration: each case loads or writes the fixture-owned physical configuration and export tree (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void Load_WithValidDocFxWorkflow_ReturnsNormalizedWorkflow()
     {
@@ -246,6 +257,7 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
     }
 
     /// <summary>TEST-MCP-DOCFXWIKI-001: invalid DocFX workflow config reports actionable validation messages.</summary>
+    /// <remarks>Integration: each case loads or writes the fixture-owned physical configuration and export tree (TR-MCP-USECASE-018 AC-006).</remarks>
     [Theory]
     [MemberData(nameof(InvalidDocFxWorkflowCases))]
     public void Load_InvalidDocFxWorkflow_ThrowsActionableValidation(Dictionary<string, object?> document, string expectedMessage)
@@ -258,6 +270,7 @@ public sealed class RequirementsWikiExportConfigTests : IDisposable
     }
 
     /// <summary>TEST-MCP-DOCFXWIKI-001: DocFX workflow paths cannot escape the workspace through reparse points.</summary>
+    /// <remarks>Integration: each case loads or writes the fixture-owned physical configuration and export tree (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void Load_DocFxWorkflowThroughReparsePoint_ThrowsActionableValidation()

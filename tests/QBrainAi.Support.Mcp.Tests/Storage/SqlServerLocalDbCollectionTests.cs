@@ -9,8 +9,7 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// so they run one after another instead of creating and migrating databases on the same instance at once.
 /// </summary>
 /// <remarks>
-/// Requirement coverage: TR-MCP-NUKE-019 AC-2 (every integration case runs and passes in its host's lane at
-/// 0 failed). Found by the Windows interactive lane ug-r3-win-lane-4, where a migration command of
+/// Requirement coverage: FR-MCP-TESTRESOURCE-001 ac-7 (serves TR-MCP-NUKE-019 AC-2). Found by the Windows interactive lane ug-r3-win-lane-4, where a migration command of
 /// SqlServerAuditPayloadMigrationTests waited past its 120 s command timeout while several SQL Server test classes
 /// migrated fresh databases on one LocalDB instance; fix chosen by the operator on 2026-10-20 ("Serialize SQL Server
 /// tests (Recommended)"), whose option text says the classes "join one xUnit collection with parallelization

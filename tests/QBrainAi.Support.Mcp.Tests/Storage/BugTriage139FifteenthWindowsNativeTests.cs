@@ -12,6 +12,7 @@ public sealed class BugTriage139FifteenthWindowsNativeTests
     /// The Windows resolver completes cancellation within its public bound and reports the worker
     /// lifecycle truthfully.
     /// </summary>
+    /// <remarks>Integration: executes the real Windows native-open or kernel-wait fixture and verifies worker cleanup (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public Task WorkspaceIdentity_NativeCancellationWindow_CompletesWithoutWorkerLeak() =>
         BugTriage139FifteenthNativeScenarios
@@ -20,6 +21,7 @@ public sealed class BugTriage139FifteenthWindowsNativeTests
     /// <summary>
     /// A real Windows pre-handle kernel wait remains bounded and leaves no SQLite handle.
     /// </summary>
+    /// <remarks>Integration: executes the real Windows native-open or kernel-wait fixture and verifies worker cleanup (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public Task SqliteOpen_PlatformNativePreHandleWait_IsBoundedWithoutLeaks() =>
         BugTriage139FifteenthNativeScenarios.AssertWindowsSqliteKernelWaitAsync();
@@ -28,6 +30,7 @@ public sealed class BugTriage139FifteenthWindowsNativeTests
     /// A provider lifecycle failure remains exact when cancellation coincides with a Windows
     /// kernel wait.
     /// </summary>
+    /// <remarks>Integration: executes the real Windows native-open or kernel-wait fixture and verifies worker cleanup (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public Task SqliteOpen_KernelWaitThenIndependentDisposalFailure_PreservesExactException() =>
         BugTriage139FifteenthNativeScenarios.AssertWindowsSqliteIndependentFailureAsync();

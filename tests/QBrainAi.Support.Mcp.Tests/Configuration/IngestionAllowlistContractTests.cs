@@ -21,6 +21,7 @@ public sealed class IngestionAllowlistContractTests
     /// Test data: <c>src\QBrainAi.Support.Mcp\appsettings.yaml</c> content with expected glob values.
     /// This data is used to ensure configuration defaults preserve indexing coverage for CQRS source trees.
     /// </remarks>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void AppSettingsYaml_ContainsRequiredRepoAllowlistPatterns()
@@ -40,6 +41,7 @@ public sealed class IngestionAllowlistContractTests
     /// Test data: <c>templates\prompt-templates.yaml</c> and known capability bullet strings for indexed repo-local projects.
     /// This data is used to confirm marker prompt output advertises indexed libraries that still live in this repository.
     /// </remarks>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void MarkerPromptTemplate_ContainsAvailableCapabilitiesSection()
@@ -64,6 +66,7 @@ public sealed class IngestionAllowlistContractTests
     /// iteration cannot advance unless the executed test gate has no failures
     /// and no skips.
     /// </remarks>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void MarkerPromptTemplate_ContainsByrdV4HundredPercentTestGate()
@@ -87,6 +90,7 @@ public sealed class IngestionAllowlistContractTests
     /// agents to produce requirements-backed, TDD-first plans that lower-cost
     /// implementation agents can execute without resolving unstated decisions.
     /// </remarks>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void MarkerPromptTemplate_ContainsDecisionCompletePlanHandoffGuidance()
@@ -110,6 +114,7 @@ public sealed class IngestionAllowlistContractTests
     /// <remarks>
     /// Requirement coverage: FR-MCP-HELP-008, TEST-MCP-HELP-SEC-007.
     /// </remarks>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void MarkerPromptTemplate_ContainsAgentHelpSection()
@@ -129,6 +134,7 @@ public sealed class IngestionAllowlistContractTests
     /// <remarks>
     /// Requirement coverage: FR-MCP-103, PLAN-FEDERATION-001 agent/operator surface.
     /// </remarks>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void MarkerPromptTemplate_ContainsFederationTopologyDiagnostics()
@@ -156,12 +162,13 @@ public sealed class IngestionAllowlistContractTests
     /// Verifies that deployment appsettings carry the hub-and-spoke federation configuration shape.
     /// </summary>
     /// <remarks>
-    /// Requirement coverage: FR-MCP-103, TR-MCP-FEDERATION-001.
+    /// Requirement coverage: FR-MCP-103, TR-MCP-FEDERATION-001 (historical).
     /// Test data: <c>src\QBrainAi.Support.Mcp\appsettings.yaml</c>.
     /// This data is used by service deployment, so the checked-in template must
     /// expose the role, hub, proxy, queue, sync, signing, and local-execution keys
     /// needed to configure Hub and LocalProxy machines without hand-inventing YAML.
     /// </remarks>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void AppSettingsTemplate_ContainsHubSpokeFederationShape()

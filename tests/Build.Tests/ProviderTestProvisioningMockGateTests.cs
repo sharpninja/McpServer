@@ -24,7 +24,7 @@ public sealed class ProviderTestProvisioningMockGateTests
     /// <summary>TR-MCP-NUKE-018: the theory above covers every contract scenario.</summary>
     [Fact]
     public void ScriptedProvisionerTheory_CoversEveryScenario()
-        => Assert.Equal(8, ProviderTestProvisioningContract.ScenarioNames.Length);
+        => InlineTheoryCoverage.AssertRows<ProviderTestProvisioningMockGateTests>(nameof(ScriptedProvisioner_PassesScenario), ProviderTestProvisioningContract.ScenarioNames);
 
     /// <summary>
     /// TR-MCP-NUKE-018 negative controls: each wrong provisioner is rejected by the scenario it violates
@@ -39,6 +39,10 @@ public sealed class ProviderTestProvisioningMockGateTests
     [InlineData("adopt-set", Fault.ReadsFileWhenSet)]
     [InlineData("file-missing", Fault.IgnoresMissingFile)]
     [InlineData("unreachable", Fault.SkipsProbe)]
+    [InlineData("variable-missing-in-file", Fault.IgnoresMissingVariable)]
+    [InlineData("stopped-container", Fault.SkipsContainerStart)]
+    [InlineData("missing-container", Fault.IgnoresMissingContainer)]
+    [InlineData("localdb-on-linux", Fault.IgnoresLocalDb)]
     public void WrongProvisioner_IsRejected(string scenario, Fault fault)
         => Assert.ThrowsAny<Xunit.Sdk.XunitException>(
             () => ProviderTestProvisioningContract.AssertScenario(scenario, new ScriptedProvisioner(fault)));
@@ -63,6 +67,18 @@ public sealed class ProviderTestProvisioningMockGateTests
 
         /// <summary>Reports success without probing the endpoints.</summary>
         SkipsProbe,
+
+        /// <summary>Suppresses the missing SQL Server variable error.</summary>
+        IgnoresMissingVariable,
+
+        /// <summary>Leaves the stopped provider container stopped.</summary>
+        SkipsContainerStart,
+
+        /// <summary>Suppresses the missing provider container error.</summary>
+        IgnoresMissingContainer,
+
+        /// <summary>Accepts a Linux LocalDB connection without a TCP endpoint.</summary>
+        IgnoresLocalDb,
     }
 
     /// <summary>Scripted mock: produces the expected effects of the fake host's scenario, with one optional fault.</summary>
@@ -85,7 +101,7 @@ public sealed class ProviderTestProvisioningMockGateTests
                     host.SetVariable(sql, ProviderTestContractValues.SqlServer);
                     actions.Add("load " + pg + " from " + envFilePath);
                     actions.Add("load " + sql + " from " + envFilePath);
-                    if (fake.Scenario == "stopped-container" && host.GetContainerState(ProviderTestNames.PostgresContainer) == ProviderTestContainerState.Stopped)
+                    if (fake.Scenario == "stopped-container" && fault != Fault.SkipsContainerStart && host.GetContainerState(ProviderTestNames.PostgresContainer) == ProviderTestContainerState.Stopped)
                     {
                         host.StartContainer(ProviderTestNames.PostgresContainer);
                         actions.Add("start " + ProviderTestNames.PostgresContainer);
@@ -157,6 +173,8 @@ public sealed class ProviderTestProvisioningMockGateTests
                     throw new InvalidOperationException("Unknown scenario " + fake.Scenario);
             }
 
+            if (fault is Fault.IgnoresMissingVariable or Fault.IgnoresMissingContainer or Fault.IgnoresLocalDb)
+                errors.Clear();
             return new ProviderTestProvisioningResult(actions, errors);
         }
     }

@@ -10,8 +10,7 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// start.... done", "server started") garbled those messages and lost test results in the Windows integration lane.
 /// </summary>
 /// <remarks>
-/// Requirement coverage: TR-MCP-NUKE-019 AC-2 (every integration case runs and passes in its host's lane at
-/// 0 failed and 0 not executed). Found by the diagnostic lane ug-r3-win-lane-diag-2, whose testhost log shows
+/// Requirement coverage: FR-MCP-TESTRESOURCE-001 ac-6 (serves TR-MCP-NUKE-019 AC-2). Found by the diagnostic lane ug-r3-win-lane-diag-2, whose testhost log shows
 /// "Received unparseable output from test process: waiting for server to start....{"$type":"test-passed",...}";
 /// fix chosen by the operator on 2026-10-20 ("Diagnose the loss in PR 87"). Test data: scripted pg_ctl argument
 /// strings; the start and stop strings the fixture used before are the negative controls. No process is started.

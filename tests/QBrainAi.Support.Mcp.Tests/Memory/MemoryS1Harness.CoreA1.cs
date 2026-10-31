@@ -14,7 +14,7 @@ using Microsoft.Extensions.Logging;
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-010 / TEST-MCP-MEMORY-011 / TEST-MCP-MEMORY-012 / TEST-MCP-MEMORY-014 / TEST-MCP-MEMORY-016:
+/// TEST-MCP-MEMORY-010 (historical) / TEST-MCP-MEMORY-011 (historical) / TEST-MCP-MEMORY-012 (historical) / TEST-MCP-MEMORY-014 (historical) / TEST-MCP-MEMORY-016 (historical):
 /// Shared SQLite fixture and production-surface probes for MCP-MEMORY-002 S1/S2/S3 tests.
 /// </summary>
 /// <remarks>

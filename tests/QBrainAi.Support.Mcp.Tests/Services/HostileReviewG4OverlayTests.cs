@@ -289,6 +289,7 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
     }
 
     /// <summary>TEST-MCP-HOSTILEREVIEW-006: REST, REPL, Director, and plugin expose submit/status/get/query only.</summary>
+    /// <remarks>Integration: reads the live plugin skill to check public surface parity (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public async Task HostileReview_SurfaceParity_RestReplDirectorPlugin()
@@ -462,7 +463,7 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
     /// TR-MCP-HOSTILEREVIEW-003: invalid worker options fail host startup validation. The failure
     /// message carries the whole exception text so a different startup failure is diagnosable.
     /// The default logging providers are cleared: on Windows the host adds the Event Log provider,
-    /// and an account without Event Log write access (PAYTON-LEGION2 lab-wsman) failed startup with
+    /// and an account without Event Log write access (TEST-NODE-A lab-wsman) failed startup with
     /// "Cannot open log for source '.NET Runtime'" before options validation could report.
     /// </summary>
     /// <remarks>

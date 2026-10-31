@@ -162,6 +162,7 @@ public sealed class BugTriage139SixteenthIdentityConsumerTests
     /// Verifies a real local symbolic-link alias remains lexical on the synchronous surface instead
     /// of triggering uncancellable physical traversal.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void SynchronousIdentitySurface_LocalSymbolicLink_RemainsLexical()

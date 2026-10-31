@@ -14,5 +14,10 @@ sealed class IntegrationLaneFilter : IIntegrationLaneFilter
 
     /// <summary>TR-MCP-NUKE-019: The host the running build is on.</summary>
     public static IntegrationLaneHost CurrentHost()
-        => OperatingSystem.IsWindows() ? IntegrationLaneHost.Windows : IntegrationLaneHost.Linux;
+        => IntegrationLaneExecution.HostName(OperatingSystem.IsWindows(), OperatingSystem.IsLinux()) switch
+        {
+            "Windows" => IntegrationLaneHost.Windows,
+            "Linux" => IntegrationLaneHost.Linux,
+            _ => throw new PlatformNotSupportedException($"Integration lanes do not support host '{System.Runtime.InteropServices.RuntimeInformation.OSDescription}'."),
+        };
 }

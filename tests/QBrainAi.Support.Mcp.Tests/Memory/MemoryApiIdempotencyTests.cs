@@ -3,7 +3,7 @@ using QBrainAi.Support.Mcp.Services;
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-016 / TR-MCP-MEMORY-API-002:
+/// TEST-MCP-MEMORY-016 (historical) / TR-MCP-MEMORY-API-002 (historical):
 /// Idempotency-Key is documented as unsupported; duplicate posts create duplicates.
 /// </summary>
 public sealed class MemoryApiIdempotencyTests : IDisposable
@@ -14,6 +14,7 @@ public sealed class MemoryApiIdempotencyTests : IDisposable
     public void Dispose() => _harness.Dispose();
 
     /// <summary>AC-TR-MCP-MEMORY-API-002-10: Idempotency-Key is not supported; duplicates are predictable.</summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public async Task DocumentedBehavior()

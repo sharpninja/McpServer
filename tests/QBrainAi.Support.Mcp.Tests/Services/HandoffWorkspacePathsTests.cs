@@ -16,6 +16,8 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 public sealed class HandoffWorkspacePathsTests
 {
     /// <summary>P1-8: relative and nested paths canonicalize to the same absolute value.</summary>
+    /// <remarks>Integration: binds physical current-directory resolution (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Canonicalize_RelativeAndNested_MatchGetFullPath()
     {
@@ -33,14 +35,12 @@ public sealed class HandoffWorkspacePathsTests
         Assert.False(string.IsNullOrWhiteSpace(error));
     }
 
-    /// <summary>P1-8: two workspaces cannot see each other's handoff runs.</summary>
+    /// <summary>P1-8: explicit virtual workspace identifiers isolate content-only handoff runs in an in-memory database.</summary>
     [Fact]
     public async Task IngestAsync_CrossWorkspace_DoesNotLeakRuns()
     {
-        var leftRoot = Path.Combine(Path.GetTempPath(), "handoff-ws-left", Guid.NewGuid().ToString("N"));
-        var rightRoot = Path.Combine(Path.GetTempPath(), "handoff-ws-right", Guid.NewGuid().ToString("N"));
-        Directory.CreateDirectory(leftRoot);
-        Directory.CreateDirectory(rightRoot);
+        const string leftRoot = "Q:/fixture/handoff-left";
+        const string rightRoot = "Q:/fixture/handoff-right";
         using var connection = new SqliteConnection("Data Source=:memory:");
         connection.Open();
         var options = new DbContextOptionsBuilder<McpDbContext>().UseSqlite(connection).Options;
@@ -73,8 +73,6 @@ public sealed class HandoffWorkspacePathsTests
         Assert.False(missing.Success);
         Assert.Equal(HandoffErrorCodes.RunNotFound, missing.ErrorCode);
 
-        Directory.Delete(leftRoot, recursive: true);
-        Directory.Delete(rightRoot, recursive: true);
     }
 
     private static IHandoffIngestionService CreateService(DbContextOptions<McpDbContext> options, string workspace, IHandoffOneShotExtractor extractor)

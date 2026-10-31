@@ -2,19 +2,25 @@ namespace NukeBuild.Tests;
 
 /// <summary>
 /// TR-MCP-NUKE-019 (AC-2): Contract cases and assertions for <see cref="IIntegrationLaneProjects"/>. The expected
-/// selection comes from the acceptance criterion: QBrainAi.Support.Mcp.Tests, QBrainAi.McpAgent.Tests,
-/// QBrainAi.Repl.Core.Tests, QBrainAi.QBAgent.Tests, Build.Tests and QBrainAi.Repl.IntegrationTests, in that order, and
-/// nothing else; QBrainAi.Support.Mcp.IntegrationTests, QBrainAi.Acid.IntegrationTests and
+/// selection comes from the acceptance criterion as replaced on 2026-10-29 (operator: "Run the 2 classes, AC first
+/// (Recommended)"; hostile validation finding R8B-F2): QBrainAi.Support.Mcp.Tests, QBrainAi.McpAgent.Tests,
+/// QBrainAi.Repl.Core.Tests, QBrainAi.QBAgent.Tests, Build.Tests, QBrainAi.Repl.IntegrationTests and
+/// QBrainAi.Support.Mcp.IntegrationTests, in that order, and nothing else; from QBrainAi.Support.Mcp.IntegrationTests
+/// only the classes RequirementScopeLayerReplIntegrationTests and QuadBrainOllamaEndpointIntegrationTests, by class
+/// name, and every class of the other six; QBrainAi.Acid.IntegrationTests and
 /// QBrainAi.TransactionSecurity.IntegrationTests stay out until PLAN-SESSIONTRIAGEFIX-001 merges (TODO
 /// IMPL-TXNINTEGRATION-001), and the .Validation projects, the AI review projects and QBrainAi.PluginIntegration.Tests
 /// are not lane projects. The solution row is the 48 project names of QBrainAi.sln as of plan section 22, slice A, in
-/// solution order; the binding tests (IntegrationLaneProjectsTests) check that row against the real solution file. The
-/// same assertions run against the scripted selector (BDPv4 mock gate), wrong selectors (negative controls), and the
-/// production selector.
+/// solution order; the binding tests (IntegrationLaneProjectsTests) check that row against the real solution file and
+/// the two class names against the project's sources. The same assertions run against the scripted selector (BDPv4
+/// mock gate), wrong selectors (negative controls), and the production selector.
 /// </summary>
 internal static class IntegrationLaneProjectsContract
 {
-    /// <summary>The six lane projects AC-2 names, in run order.</summary>
+    /// <summary>The project from which AC-2 runs two classes only.</summary>
+    internal const string SupportIntegrationProject = "QBrainAi.Support.Mcp.IntegrationTests";
+
+    /// <summary>The seven lane projects AC-2 names, in run order.</summary>
     internal static readonly string[] LaneProjects =
     [
         "QBrainAi.Support.Mcp.Tests",
@@ -23,12 +29,15 @@ internal static class IntegrationLaneProjectsContract
         "QBrainAi.QBAgent.Tests",
         "Build.Tests",
         "QBrainAi.Repl.IntegrationTests",
+        SupportIntegrationProject,
     ];
+
+    /// <summary>The classes AC-2 runs from <see cref="SupportIntegrationProject"/>, in its order.</summary>
+    internal static readonly string[] SupportIntegrationClasses = ["RequirementScopeLayerReplIntegrationTests", "QuadBrainOllamaEndpointIntegrationTests"];
 
     /// <summary>The integration projects AC-2 keeps out of the lane until PLAN-SESSIONTRIAGEFIX-001 merges.</summary>
     internal static readonly string[] HeldOutProjects =
     [
-        "QBrainAi.Support.Mcp.IntegrationTests",
         "QBrainAi.Acid.IntegrationTests",
         "QBrainAi.TransactionSecurity.IntegrationTests",
     ];
@@ -51,13 +60,13 @@ internal static class IntegrationLaneProjectsContract
         "QBrainAi.SessionLog.Transcripts", "QBrainAi.PluginIntegration.Tests", "QBrainAi.ProcessTree.TestHelper",
     ];
 
-    /// <summary>The selection AC-2 requires for <see cref="Solution"/>: the six lane projects, in run order.</summary>
+    /// <summary>The selection AC-2 requires for <see cref="Solution"/>: the seven lane projects, in run order.</summary>
     internal static readonly string[] SolutionSelection = [.. LaneProjects];
 
     /// <summary>
     /// The contract rows: a row name, the solution's project names, and the selection AC-2 requires: today's solution;
     /// a new .IntegrationTests project, which does not join the lane; a name that holds IntegrationTests without ending
-    /// in it; and today's solution in reverse order. Every row selects the same six projects in the same order.
+    /// in it; and today's solution in reverse order. Every row selects the same seven projects in the same order.
     /// </summary>
     internal static readonly (string Name, string[] Projects, string[] Expected)[] Rows =
     [
@@ -69,7 +78,9 @@ internal static class IntegrationLaneProjectsContract
 
     /// <summary>
     /// Asserts that <paramref name="selector"/> gives the required selection on every row, never selects a held-out
-    /// project, and refuses a solution that lacks Build.Tests or QBrainAi.Repl.IntegrationTests, naming the missing one.
+    /// project, names exactly <see cref="SupportIntegrationClasses"/> for <see cref="SupportIntegrationProject"/> and no
+    /// class for any other lane project, and refuses a solution that lacks any of the seven lane projects,
+    /// naming the missing one.
     /// </summary>
     /// <param name="selector">Selector under test.</param>
     internal static void AssertContract(IIntegrationLaneProjects selector)
@@ -82,7 +93,14 @@ internal static class IntegrationLaneProjectsContract
             Assert.True(heldOut.Length == 0, $"Row '{name}': held-out projects selected: [{string.Join(", ", heldOut)}].");
         }
 
-        foreach (var required in new[] { "Build.Tests", "QBrainAi.Repl.IntegrationTests" })
+        foreach (var project in LaneProjects)
+        {
+            string[] expected = project == SupportIntegrationProject ? SupportIntegrationClasses : [];
+            var actual = selector.ClassesOf(project);
+            Assert.True(expected.SequenceEqual(actual), $"Project '{project}': expected classes [{string.Join(", ", expected)}] but got [{string.Join(", ", actual)}].");
+        }
+
+        foreach (var required in LaneProjects)
         {
             var without = Solution.Where(project => project != required).ToArray();
             var refusal = Assert.Throws<InvalidOperationException>(() => selector.Select(without));

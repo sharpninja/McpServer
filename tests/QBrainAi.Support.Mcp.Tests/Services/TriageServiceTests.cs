@@ -46,14 +46,18 @@ public sealed class TriageServiceTests : IDisposable
     /// TEST-MCP-TRIAGESTORE-002 / BUG-TRIAGE-110: unreachable storage fails fast as
     /// storage-unavailable instead of hanging until the REPL timeout.
     /// </summary>
+    /// <remarks>Integration: asserts an elapsed wall-clock bound on actual scheduling and timer execution (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task SubmitReportAsync_UnreachableSql_FailsFastWithStorageUnavailable()
     {
+        var missingRoot = Path.Combine(Path.GetTempPath(), "triage-missing-owned-" + Guid.NewGuid().ToString("N"));
+        Assert.False(Directory.Exists(missingRoot));
         var clock = System.Diagnostics.Stopwatch.StartNew();
         var unreachableOptions = new DbContextOptionsBuilder<McpDbContext>()
-            .UseSqlite($"Data Source={UnitTestPaths.Combine("mcp-triage-missing", "unreachable.db")}")
+            .UseSqlite(new SqliteConnectionStringBuilder { DataSource = Path.Combine(missingRoot, "unreachable.db"), Pooling = false }.ToString())
             .Options;
-        var db = new McpDbContext(unreachableOptions, new WorkspaceContext { WorkspacePath = PrimaryWorkspace });
+        using var db = new McpDbContext(unreachableOptions, new WorkspaceContext { WorkspacePath = PrimaryWorkspace });
         var workspaceContext = new WorkspaceContext { WorkspacePath = PrimaryWorkspace, WorkspaceName = "IncidentSource" };
         var workspaceService = Substitute.For<IWorkspaceService>();
         workspaceService.ListAsync(Arg.Any<CancellationToken>())
@@ -84,6 +88,7 @@ public sealed class TriageServiceTests : IDisposable
         Assert.Equal(McpErrorClassifier.BackendUnavailable, classified.Code);
         Assert.True(classified.Retryable);
         Assert.True(clock.Elapsed < TimeSpan.FromSeconds(8), $"Intake hung for {clock.Elapsed}.");
+        Assert.False(Directory.Exists(missingRoot), "Unreachable storage must not create its missing parent directory.");
         using var verify = CreateDb(PrimaryWorkspace);
         Assert.Equal(0, await verify.TriageReports.CountAsync(cancellationToken: TestContext.Current.CancellationToken));
     }
@@ -168,7 +173,7 @@ public sealed class TriageServiceTests : IDisposable
     }
 
     /// <summary>
-    /// TEST-MCP-TRIAGE-007: DeleteGroupAsync soft-deletes the group and its reports so they no
+    /// TEST-MCP-TRIAGE-007 (historical): DeleteGroupAsync soft-deletes the group and its reports so they no
     /// longer appear in queries, while the underlying rows remain in storage marked deleted.
     /// </summary>
     [Fact]
@@ -194,7 +199,7 @@ public sealed class TriageServiceTests : IDisposable
         Assert.Equal(1, await db.TriageReports.IgnoreQueryFilters().CountAsync(cancellationToken: TestContext.Current.CancellationToken));
     }
 
-    /// <summary>TEST-MCP-TRIAGE-007: deleting a missing triage group throws KeyNotFoundException.</summary>
+    /// <summary>TEST-MCP-TRIAGE-007 (historical): deleting a missing triage group throws KeyNotFoundException.</summary>
     [Fact]
     public async Task DeleteGroupAsync_MissingGroup_ThrowsKeyNotFound()
     {
@@ -1132,7 +1137,7 @@ public sealed class TriageServiceTests : IDisposable
         Assert.Equal(1, result.TotalCount);
     }
 
-    /// <summary>TEST-TRIAGE-003: selected reports can be moved into a new editable triage group.</summary>
+    /// <summary>TEST-TRIAGE-003 (historical): selected reports can be moved into a new editable triage group.</summary>
     [Fact]
     public async Task CreateGroupFromSelectionAsync_MovesSelectedReportsToNewGroup()
     {
@@ -1171,7 +1176,7 @@ public sealed class TriageServiceTests : IDisposable
         Assert.Equal("queued", queuedGroup.Status);
     }
 
-    /// <summary>TEST-TRIAGE-003: selected groups can be merged into an existing editable target group.</summary>
+    /// <summary>TEST-TRIAGE-003 (historical): selected groups can be merged into an existing editable target group.</summary>
     [Fact]
     public async Task MergeGroupsAsync_MovesSourceGroupReportsIntoTargetGroup()
     {
@@ -1204,7 +1209,7 @@ public sealed class TriageServiceTests : IDisposable
         Assert.Equal("triage-group-target", (await verifyDb.TriageReports.FindAsync(["triage-report-source"], cancellationToken: TestContext.Current.CancellationToken))!.GroupId);
     }
 
-    /// <summary>TEST-TRIAGE-003: groups with run history cannot be regrouped.</summary>
+    /// <summary>TEST-TRIAGE-003 (historical): groups with run history cannot be regrouped.</summary>
     [Fact]
     public async Task MergeGroupsAsync_WhenSourceGroupHasRunHistory_Throws()
     {

@@ -6,7 +6,7 @@ using Nuke.Common.Tools.DotNet;
 using Serilog;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
-#pragma warning disable CA1416 // Platform compatibility - integration-test tooling targets Windows dev machines
+#pragma warning disable CA1416 // Installer APIs are reached through explicit Windows/Linux branches; the lane rejects unsupported hosts.
 
 partial class Build
 {
@@ -43,6 +43,13 @@ partial class Build
     [Parameter("Test-database env file for Linux provider test provisioning (default ~/.config/qbrain-test/test-db.env)")]
     readonly string TestDbEnvFile = string.Empty;
 
+    /// <summary>TR-MCP-NUKE-019, retained plan section 11 design: check the Windows lane session before dependency provisioning; former AC-5 is historical.</summary>
+    public Target IntegrationLanePrecondition => _ => _
+        .Description("Refuse a noninteractive Windows lane before dependency provisioning")
+        .Executes(() => IntegrationLaneExecution.BeforeProvisioning(
+            InvokedTargets.Any(target => string.Equals(target.Name, nameof(MigrationIntegrationTests), StringComparison.OrdinalIgnoreCase)),
+            IntegrationLaneFilter.CurrentHost(), Environment.UserInteractive, () => { }));
+
     /// <summary>
     /// Idempotent installer for the provider integration-test dependencies. On Windows: SQL Server
     /// LocalDB (elevated MSI install when missing) and PostgreSQL server binaries (existing
@@ -53,6 +60,7 @@ partial class Build
     /// present is a no-op.
     /// </summary>
     public Target InstallTestDependencies => _ => _
+        .DependsOn(IntegrationLanePrecondition)
         .Description("Ensure provider integration-test servers: LocalDB and PostgreSQL binaries on Windows; qbrain-test containers and env file elsewhere (idempotent)")
         .Executes(() =>
         {
@@ -111,75 +119,51 @@ partial class Build
         .DependsOn(InstallTestDependencies, InstallOllama)
         .Executes(() =>
         {
-            // Only projects that contain Category=Integration tests: an empty filter match
-            // makes the test runner fail the target.
-            // TR-MCP-NUKE-019 AC-2: the six lane projects IntegrationLaneProjects names, in run order (Repl.Core.Tests and
+            // TR-MCP-NUKE-019 AC-2/AC-3: a tested composition owns identity, path, filter, log and TRX naming;
+            // every project's TRX must prove a nonempty all-passing result, independently of runner exit semantics.
+            // TR-MCP-NUKE-019 AC-2: the seven lane projects IntegrationLaneProjects names, in run order (Repl.Core.Tests and
             // QBAgent.Tests hold the tests that read the repository checkout through the shared TestRepositoryRoot,
-            // TR-MCP-USECASE-018 AC-006; QBrainAi.Repl.IntegrationTests is the one *.IntegrationTests lane project).
+            // TR-MCP-USECASE-018 AC-006; from QBrainAi.Support.Mcp.IntegrationTests only the classes it names run).
             var solutionProjects = Solution.GetAllProjects("*").ToArray();
-            var laneProjectNames = new IntegrationLaneProjects().Select(solutionProjects.Select(project => project.Name).ToArray());
-            var projectsWithIntegrationTests = laneProjectNames
-                .Select(name => (AbsolutePath)solutionProjects.First(project => project.Name == name).Path)
-                .ToArray();
-
-            // TR-MCP-NUKE-019: on Windows the lane runs only from an interactive desktop session; refuse
-            // before any test runs, naming the missing session.
-            var readiness = new InteractiveSessionPrecondition().Evaluate(IntegrationLaneFilter.CurrentHost(), Environment.UserInteractive);
-            if (!readiness.CanRun)
-            {
-                Log.Error("Integration lane precondition: {Message}", readiness.FailureMessage);
-                throw new InvalidOperationException(readiness.FailureMessage);
-            }
+            var projectsWithIntegrationTests = IntegrationLaneExecution.Compose(
+                solutionProjects.Select(project => (project.Name, project.Path.ToString())).ToArray(), IntegrationLaneFilter.CurrentHost());
 
             // TR-MCP-NUKE-019 AC-1 and AC-3: select this host's integration cases and name the filter in the log.
             var laneFilter = new IntegrationLaneFilter().Compose(IntegrationLaneFilter.CurrentHost());
             Log.Information("Integration lane filter: {Filter}", laneFilter);
 
-            var runId = SessionLifeUnitGateReports.NormalizeRunId(TestRunId);
-            if (runId is not null)
-            {
-                SessionLifeUnitGateReports.WriteInventory(
-                    RootDirectory,
-                    runId,
-                    "provider",
-                    projectsWithIntegrationTests.Select(project => (
-                        Path.GetFileNameWithoutExtension(project.ToString()),
-                        Path.GetRelativePath(RootDirectory, project).Replace('\\', '/'))));
-            }
+            // TR-MCP-NUKE-019 AC-2 and AC-3: each project's filter adds the classes the lane runs from it, and the log
+            // names every project's filter.
+            foreach (var project in projectsWithIntegrationTests)
+                Log.Information("{LaneProjectFilter}", project.LogLine);
+
+            var runId = SessionLifeUnitGateReports.NormalizeRunId(TestRunId)
+                ?? $"integration-{DateTime.Now:yyyyMMddTHHmmss}-{Guid.NewGuid():N}";
+            SessionLifeUnitGateReports.WriteInventory(RootDirectory, runId, "provider",
+                projectsWithIntegrationTests.Select(project => (project.Name,
+                    Path.GetRelativePath(RootDirectory, project.Path).Replace('\\', '/'))));
 
             var failures = new List<string>();
             foreach (var project in projectsWithIntegrationTests)
             {
-                var projectName = Path.GetFileNameWithoutExtension(project.ToString());
                 try
                 {
-                    if (runId is null)
-                    {
-                        DotNetTest(_ => _
-                            .SetProjectFile(project)
-                            .SetFilter(laneFilter)
-                            .SetVerbosity(DotNetVerbosity.minimal));
-                    }
-                    else
-                    {
-                        var directory = SessionLifeUnitGateReports.LaneProjectDirectory(RootDirectory, runId, "provider", projectName);
-                        Directory.CreateDirectory(directory);
-                        DotNetTest(_ => _
-                            .SetProjectFile(project)
-                            .SetFilter(laneFilter)
-                            .SetVerbosity(DotNetVerbosity.minimal)
-                            .SetResultsDirectory(directory)
-                            .SetLoggers($"trx;LogFileName={projectName}.trx"));
-                        SessionLifeUnitGateReports.EnsureCanonicalTrx(directory, $"{projectName}.trx");
-                    }
+                    var directory = SessionLifeUnitGateReports.LaneProjectDirectory(RootDirectory, runId, "provider", project.Name);
+                    Directory.CreateDirectory(directory);
+                    DotNetTest(_ => _
+                        .SetProjectFile((AbsolutePath)project.Path)
+                        .SetFilter(project.Filter)
+                        .SetVerbosity(DotNetVerbosity.minimal)
+                        .SetResultsDirectory(directory)
+                        .SetLoggers($"trx;LogFileName={project.TrxName}"));
+                    SessionLifeUnitGateReports.EnsureCanonicalTrx(directory, project.TrxName);
+                    var violation = IntegrationLaneExecution.CheckTrx(project.Name, File.ReadAllText(Path.Combine(directory, project.TrxName)));
+                    if (violation is not null) throw new InvalidOperationException(violation);
                 }
                 catch (Exception ex)
                 {
-                    if (runId is null)
-                        throw;
-
-                    failures.Add(projectName);
-                    Log.Error(ex, "Session-life provider project {Project} failed.", projectName);
+                    failures.Add(project.Name);
+                    Log.Error(ex, "Session-life provider project {Project} failed.", project.Name);
                 }
             }
 
@@ -200,16 +184,18 @@ partial class Build
     /// no-op; a failure fails the target, and the lane that depends on it, before any test runs.
     /// </summary>
     public Target InstallOllama => _ => _
+        .DependsOn(IntegrationLanePrecondition)
         .Description("Ensure Ollama is installed, running on localhost:11434, and has the required model (idempotent; Windows and Linux)")
         .Executes(() =>
         {
+            var host = IntegrationLaneFilter.CurrentHost();
             if (TryGetOllamaTags(out var tags) && tags.Contains($"\"{RequiredOllamaModel}\"", StringComparison.OrdinalIgnoreCase))
             {
                 Log.Information("Ollama is running and model {Model} is installed.", RequiredOllamaModel);
                 return;
             }
 
-            var ollamaExe = EnsureOllamaBinaries(IntegrationLaneFilter.CurrentHost());
+            var ollamaExe = EnsureOllamaBinaries(host);
             EnsureOllamaServerRunning(ollamaExe);
 
             if (!TryGetOllamaTags(out tags))
@@ -243,6 +229,9 @@ partial class Build
             return existing;
         }
 
+        var architectureFailure = IntegrationLaneExecution.PortableArchitectureFailure(
+            System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture.ToString());
+        if (architectureFailure is not null) throw new PlatformNotSupportedException(architectureFailure);
         var asset = layout.ReleaseAsset(host);
         Log.Information("Ollama missing; downloading the portable release {Asset} ...", asset);
         var archivePath = Path.Combine(Path.GetTempPath(), asset);
@@ -261,25 +250,26 @@ partial class Build
         return extracted;
     }
 
-    static void EnsureOllamaServerRunning(string ollamaExe)
+    void EnsureOllamaServerRunning(string ollamaExe)
     {
         if (TryGetOllamaTags(out _))
             return;
 
         Log.Information("Starting Ollama server (detached) ...");
-        // On Windows, UseShellExecute detaches the child from this process's console pipes; with handle
-        // inheritance the long-lived server would keep the build's stdout pipe open and hang any caller
-        // that captures build output. On Linux shell execution cannot start a program directly, so the
-        // server inherits the build's output handles (the lane's runners write them to a log file, not a
-        // pipe). The server intentionally outlives the build.
-        var started = Process.Start(new ProcessStartInfo
+        if (IntegrationLaneFilter.CurrentHost() == IntegrationLaneHost.Linux)
         {
-            FileName = ollamaExe,
-            Arguments = "serve",
-            UseShellExecute = OperatingSystem.IsWindows(),
-            WindowStyle = ProcessWindowStyle.Hidden,
-        }) ?? throw new InvalidOperationException("Failed to start the Ollama server process.");
-        _ = started;
+            var logPath = Path.Combine((string)TestToolsDirectory, "logs", "ollama-server.log");
+            var workerPath = (string)(RootDirectory / "build" / "scripts" / "Start-OllamaServer.ps1");
+            var workerId = OllamaDetachedLaunch.StartLinux(ollamaExe, logPath, workerPath);
+            Log.Information("Detached Ollama logging worker {ProcessId}; output: {LogPath}", workerId, logPath);
+        }
+        else
+        {
+            _ = Process.Start(new ProcessStartInfo
+            {
+                FileName = ollamaExe, Arguments = "serve", UseShellExecute = true, WindowStyle = ProcessWindowStyle.Hidden,
+            }) ?? throw new InvalidOperationException("Failed to start the Ollama server process.");
+        }
 
         for (var attempt = 0; attempt < 30; attempt++)
         {

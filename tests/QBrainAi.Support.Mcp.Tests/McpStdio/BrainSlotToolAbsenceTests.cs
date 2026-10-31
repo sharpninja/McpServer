@@ -49,6 +49,7 @@ public sealed class BrainSlotToolAbsenceTests
     /// Asserts the durable STDIO tool contract artifact advertises no brain-slot tool,
     /// so agent tooling generated from the manifest cannot discover the surface.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void StdioToolContract_ContainsNoBrainSlotTools()

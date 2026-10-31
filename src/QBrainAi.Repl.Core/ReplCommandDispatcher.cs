@@ -134,7 +134,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
     }
 
     /// <summary>
-    /// TR-MCP-REPL-001 AC-002: reads one environment variable by name for the stream command timeout. The default reads
+    /// FR-MCP-REPL-001 ac-1: reads one environment variable by name for the stream command timeout. The default reads
     /// the process environment; tests give a scripted reader so the call site is bound without the process environment.
     /// </summary>
     internal Func<string, string?> ReadVariable { get; init; } = Environment.GetEnvironmentVariable;
@@ -3010,7 +3010,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         CancellationToken cancellationToken)
     {
         var events = new List<IStreamingEvent>();
-        // TR-MCP-REPL-001 AC-002: the configured stream timeout is read once and only a valid value is used, so the
+        // FR-MCP-REPL-001 ac-1: the configured stream timeout is read once and only a valid value is used, so the
         // timeout event names the timeout that applied and a misconfigured value never fails the stream.
         var streamTimeout = ReplCommandTimeout.Read(ReadVariable, StreamCommandTimeoutEnvVar);
         using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);

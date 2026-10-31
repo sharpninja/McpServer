@@ -12,6 +12,8 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 public sealed class StorageCommandBudgetTests
 {
     /// <summary>A hung storage call is canceled within about 5 seconds.</summary>
+    /// <remarks>Integration: asserts an elapsed wall-clock bound on actual scheduling and timer execution (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task ExecuteAsync_HungWork_FailsWithinEightSeconds()
     {
@@ -45,6 +47,8 @@ public sealed class StorageCommandBudgetTests
     /// TEST-MCP-TRIAGESTORE-007: an explicit per-call budget expires at that budget,
     /// and a longer budget does not use the 5 second intake message.
     /// </summary>
+    /// <remarks>Integration: asserts an elapsed wall-clock bound on actual scheduling and timer execution (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task ExecuteAsync_ExplicitBudget_ExpiresAtThatBudget()
     {

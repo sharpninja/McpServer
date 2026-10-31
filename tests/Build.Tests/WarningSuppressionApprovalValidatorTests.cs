@@ -138,6 +138,8 @@ public sealed class WarningSuppressionApprovalValidatorTests
     /// TEST-MCP-AIUNIT-002: Loads the repository approval register to prove current
     /// warning suppression approvals are scoped and match the live scanner inventory.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void ApprovalRegister_ContainsOnlyScopedCurrentApprovalsAndMatchesCurrentOccurrences()
     {

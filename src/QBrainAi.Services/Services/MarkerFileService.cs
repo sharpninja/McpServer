@@ -90,7 +90,7 @@ public static class MarkerFileService
         SignaturePayloadFields[..^ConditionalAgentPluginFieldCount];
 
     /// <summary>
-    /// AC-TR-MCP-WS-005-001 test seam: when set, marker plugin-version resolution reads every input (the plugin-root
+    /// FR-MCP-018 ac-1 test seam: when set, marker plugin-version resolution reads every input (the plugin-root
     /// environment variables, the workspace sibling plugin folder and the user profile caches) from these sources
     /// instead of <see cref="ProcessAgentPluginVersionSources"/>, so unit tests never read the process environment,
     /// the machine or the real profile. Set only by the unit-test assembly fixture.
@@ -98,14 +98,14 @@ public static class MarkerFileService
     internal static AgentPluginVersionSources? AgentPluginVersionSourcesOverride { get; set; }
 
     /// <summary>
-    /// AC-TR-MCP-WS-005-001: the running process's plugin-version sources: its environment variables, the plugin
+    /// FR-MCP-018 ac-1: the running process's plugin-version sources: its environment variables, the plugin
     /// folder beside the workspace (<see cref="SiblingPluginRoot"/>), and the current user's profile, read when each
     /// resolution starts.
     /// </summary>
     internal static AgentPluginVersionSources ProcessAgentPluginVersionSources =>
         new(Environment.GetEnvironmentVariable, SiblingPluginRoot, Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
 
-    /// <summary>AC-TR-MCP-WS-005-001: the plugin folder beside <paramref name="workspacePath"/>; null when the workspace has no parent.</summary>
+    /// <summary>FR-MCP-018 ac-1: the plugin folder beside <paramref name="workspacePath"/>; null when the workspace has no parent.</summary>
     /// <param name="workspacePath">Workspace path; none when empty.</param>
     /// <param name="pluginName">Plugin folder name.</param>
     /// <returns>The sibling plugin folder, or null.</returns>
@@ -556,7 +556,7 @@ public static class MarkerFileService
         BuildDefaultAgentPlugins(workspacePath, AgentPluginVersionSourcesOverride ?? ProcessAgentPluginVersionSources);
 
     /// <summary>
-    /// AC-TR-MCP-WS-005-001: builds the default agent-plugin contract, resolving each plugin version from
+    /// FR-MCP-018 ac-1: builds the default agent-plugin contract, resolving each plugin version from
     /// <paramref name="sources"/> only.
     /// </summary>
     /// <param name="workspacePath">Workspace the marker describes.</param>
@@ -644,7 +644,7 @@ public static class MarkerFileService
     }
 
     /// <summary>
-    /// AC-TR-MCP-WS-005-001: resolves an agent plugin version from <paramref name="sources"/> only: the plugin root
+    /// FR-MCP-018 ac-1: resolves an agent plugin version from <paramref name="sources"/> only: the plugin root
     /// its environment variable names, then the plugin folder beside the workspace, then the plugin caches under its
     /// user profile, scanned through <paramref name="walker"/>, which skips directory links and any directory it
     /// cannot list; falls back to <see cref="SyncedAgentPluginVersion"/>.
@@ -664,7 +664,7 @@ public static class MarkerFileService
         ResolveAgentPluginVersion(workspacePath, pluginName, environmentVariableName, sources, walker, ReadExistingFileText);
 
     /// <summary>
-    /// AC-TR-MCP-WS-005-001: resolves an agent plugin version as the overload above does, reading each candidate's
+    /// FR-MCP-018 ac-1: resolves an agent plugin version as the overload above does, reading each candidate's
     /// version files through <paramref name="readText"/>, so a version file that exists but cannot be read yields no
     /// version and resolution goes on to the next file and candidate.
     /// </summary>
@@ -694,7 +694,7 @@ public static class MarkerFileService
     }
 
     /// <summary>
-    /// AC-TR-MCP-WS-005-001: the file read used for version files: a file's text, or null when it does not exist.
+    /// FR-MCP-018 ac-1: the file read used for version files: a file's text, or null when it does not exist.
     /// A file that exists but cannot be read throws, and the version read treats that as a file without a version.
     /// </summary>
     /// <param name="path">File path.</param>
@@ -732,7 +732,7 @@ public static class MarkerFileService
         DirectoryTreeWalker walker,
         Func<string, string?> readText)
     {
-        // AC-TR-MCP-WS-005-001: a cache root that is a link, or that is reached through a link below the user
+        // FR-MCP-018 ac-1: a cache root that is a link, or that is reached through a link below the user
         // profile, contributes no candidate (hostile validation round 5 finding R5-F1).
         var codexCache = Path.Combine(userProfile, ".codex", "plugins", "cache", pluginName);
         if (Directory.Exists(codexCache) && walker.IsReachable(userProfile, codexCache))
@@ -784,7 +784,7 @@ public static class MarkerFileService
     }
 
     /// <summary>
-    /// AC-TR-MCP-WS-005-001: reads the version of one candidate root from <c>.version</c>, then the plugin manifests
+    /// FR-MCP-018 ac-1: reads the version of one candidate root from <c>.version</c>, then the plugin manifests
     /// and <c>package.json</c>, in that order, through <paramref name="readText"/>; the first non-empty version wins.
     /// A file that exists but cannot be read (an IO or access error) yields no version and the read goes on to the
     /// next file; malformed JSON yields no version; any other error propagates.

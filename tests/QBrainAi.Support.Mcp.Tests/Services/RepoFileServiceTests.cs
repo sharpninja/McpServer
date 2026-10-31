@@ -7,7 +7,8 @@ using Xunit;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
-/// <summary>TR-PLANNED-CORE-013: Unit tests for RepoFileService path security and audit.</summary>
+/// <summary>TR-PLANNED-CORE-013 (historical): Physical bindings for RepoFileService path security and audit; every constructor creates an owned repository tree.</summary>
+[Trait("Category", "Integration")]
 public sealed class RepoFileServiceTests : IDisposable
 {
     private readonly string _tempDir;
@@ -37,6 +38,8 @@ public sealed class RepoFileServiceTests : IDisposable
             Directory.Delete(_tempDir, true);
     }
 
+    /// <summary>Verifies ReadAsync_AllowedPath_ReturnsContent against owned fixture data.</summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task ReadAsync_AllowedPath_ReturnsContent()
     {
@@ -47,6 +50,8 @@ public sealed class RepoFileServiceTests : IDisposable
         Assert.Contains("Hello", result.Content);
     }
 
+    /// <summary>Verifies ReadAsync_PathTraversal_ReturnsNull against owned fixture data.</summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task ReadAsync_PathTraversal_ReturnsNull()
     {
@@ -59,6 +64,7 @@ public sealed class RepoFileServiceTests : IDisposable
     /// TR-MCP-QBTOOLS-000 AC-001 (BUG-BASELINE-003): Rooted paths outside the active workspace are rejected
     /// before any repository read, list, write, edit, or transactional capture.
     /// </summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task RootedExternalPath_AcrossRepoOperations_IsRejected()
     {
@@ -92,6 +98,7 @@ public sealed class RepoFileServiceTests : IDisposable
     /// resolves to the matching repo-relative path for read, list, write, edit, and transactional capture. Fixture: the
     /// temporary repository built by the constructor, addressed through its absolute paths.
     /// </summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task RootedPathInsideRoot_AcrossRepoOperations_ResolvesRepoRelative()
     {
@@ -124,6 +131,7 @@ public sealed class RepoFileServiceTests : IDisposable
     /// repo-relative, so "/src/code.cs" (a path outside the temporary root) is rejected and the repository's src/code.cs is
     /// neither read nor changed. Fixture: the temporary repository built by the constructor.
     /// </summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task LeadingSeparatorPath_IsNotReinterpretedAsRepoRelative()
     {
@@ -141,6 +149,7 @@ public sealed class RepoFileServiceTests : IDisposable
     /// TR-MCP-QBTOOLS-000 AC-001 (BUG-BASELINE-003): an absolute path with a .. segment is rejected like a relative one, even
     /// when lexical normalization would land inside the root. Fixture: the temporary repository built by the constructor.
     /// </summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task RootedPathWithParentSegment_IsRejected()
     {
@@ -152,6 +161,8 @@ public sealed class RepoFileServiceTests : IDisposable
         Assert.Null(read);
     }
 
+    /// <summary>Verifies ReadAsync_DisallowedPath_ReturnsNull against owned fixture data.</summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task ReadAsync_DisallowedPath_ReturnsNull()
     {
@@ -167,6 +178,8 @@ public sealed class RepoFileServiceTests : IDisposable
         Assert.Null(result);
     }
 
+    /// <summary>Verifies ListAsync_ValidDirectory_ReturnsEntries against owned fixture data.</summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task ListAsync_ValidDirectory_ReturnsEntries()
     {
@@ -177,6 +190,8 @@ public sealed class RepoFileServiceTests : IDisposable
         Assert.Contains(result.Entries, e => e.Name == "src" && e.IsDirectory);
     }
 
+    /// <summary>Verifies ListAsync_NonexistentPath_ReturnsEmpty against owned fixture data.</summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task ListAsync_NonexistentPath_ReturnsEmpty()
     {
@@ -185,6 +200,8 @@ public sealed class RepoFileServiceTests : IDisposable
         Assert.Empty(result.Entries);
     }
 
+    /// <summary>Verifies WriteAsync_AllowedPath_WritesAndAudits against owned fixture data.</summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task WriteAsync_AllowedPath_WritesAndAudits()
     {
@@ -201,6 +218,8 @@ public sealed class RepoFileServiceTests : IDisposable
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
+    /// <summary>Verifies WriteAsync_DisallowedPath_ReturnsFailure against owned fixture data.</summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task WriteAsync_DisallowedPath_ReturnsFailure()
     {
@@ -216,6 +235,8 @@ public sealed class RepoFileServiceTests : IDisposable
         Assert.False(result.Written);
     }
 
+    /// <summary>Verifies CaptureForWriteAsync_ExistingPath_ReturnsSnapshot against owned fixture data.</summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task CaptureForWriteAsync_ExistingPath_ReturnsSnapshot()
     {
@@ -228,6 +249,8 @@ public sealed class RepoFileServiceTests : IDisposable
         Assert.False(string.IsNullOrWhiteSpace(result.ContentSha256));
     }
 
+    /// <summary>Verifies RestoreWriteAsync_ExistingSnapshot_RestoresPriorContent against owned fixture data.</summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task RestoreWriteAsync_ExistingSnapshot_RestoresPriorContent()
     {
@@ -241,6 +264,8 @@ public sealed class RepoFileServiceTests : IDisposable
         Assert.Equal("# Hello", File.ReadAllText(Path.Combine(_tempDir, "readme.md")));
     }
 
+    /// <summary>Verifies RestoreWriteAsync_NewFileSnapshot_DeletesCreatedFile against owned fixture data.</summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task RestoreWriteAsync_NewFileSnapshot_DeletesCreatedFile()
     {
@@ -254,6 +279,8 @@ public sealed class RepoFileServiceTests : IDisposable
         Assert.False(File.Exists(Path.Combine(_tempDir, "created.md")));
     }
 
+    /// <summary>Verifies RestoreWriteAsync_WhenFileChangedAfterWrite_RefusesOverwrite against owned fixture data.</summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task RestoreWriteAsync_WhenFileChangedAfterWrite_RefusesOverwrite()
     {
@@ -272,6 +299,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     /// <summary>FR-MCP-QBTOOLS-006: A unique oldString is replaced and the file content updated.</summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task EditAsync_UniqueOccurrence_Replaces()
     {
@@ -283,6 +311,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     /// <summary>FR-MCP-QBTOOLS-006: A missing oldString fails without changing the file.</summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task EditAsync_MissingOldString_Fails()
     {
@@ -294,6 +323,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     /// <summary>FR-MCP-QBTOOLS-006: An ambiguous match fails unless replaceAll is set.</summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task EditAsync_Ambiguous_FailsWithoutReplaceAll()
     {
@@ -307,6 +337,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     /// <summary>FR-MCP-QBTOOLS-006: replaceAll replaces every occurrence and reports the count.</summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task EditAsync_ReplaceAll_ReplacesEvery()
     {
@@ -320,6 +351,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     /// <summary>FR-MCP-QBTOOLS-006: An expectedOccurrences mismatch fails.</summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task EditAsync_ExpectedOccurrencesMismatch_Fails()
     {
@@ -332,6 +364,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     /// <summary>FR-MCP-QBTOOLS-006: An empty oldString is rejected.</summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task EditAsync_EmptyOldString_Fails()
     {
@@ -342,6 +375,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     /// <summary>FR-MCP-QBTOOLS-006: Identical oldString and newString are rejected.</summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task EditAsync_SameOldAndNew_Fails()
     {
@@ -352,6 +386,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     /// <summary>FR-MCP-QBTOOLS-006: Editing a nonexistent file fails.</summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task EditAsync_NonexistentFile_Fails()
     {
@@ -362,6 +397,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     /// <summary>FR-MCP-QBTOOLS-006: A path-traversal edit is rejected.</summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task EditAsync_PathTraversal_Rejected()
     {
@@ -372,6 +408,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     /// <summary>FR-MCP-QBTOOLS-006: A disallowed path is rejected under an allowlist.</summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task EditAsync_DisallowedPath_Rejected()
     {
@@ -388,6 +425,7 @@ public sealed class RepoFileServiceTests : IDisposable
     }
 
     /// <summary>FR-MCP-QBTOOLS-006: A successful edit records an audit entry and publishes an Updated event.</summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task EditAsync_Success_AuditsAndPublishesUpdated()
     {
@@ -403,6 +441,8 @@ public sealed class RepoFileServiceTests : IDisposable
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
+    /// <summary>Verifies ReadAsync_GlobAllowlist_RequiresActualPatternMatch against owned fixture data.</summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task ReadAsync_GlobAllowlist_RequiresActualPatternMatch()
     {
@@ -428,6 +468,8 @@ public sealed class RepoFileServiceTests : IDisposable
         Assert.Null(disallowed);
     }
 
+    /// <summary>Verifies ReadAsync_GlobAllowlist_DeniesExtensionMismatchWithinAllowedTree against owned fixture data.</summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task ReadAsync_GlobAllowlist_DeniesExtensionMismatchWithinAllowedTree()
     {
@@ -445,6 +487,8 @@ public sealed class RepoFileServiceTests : IDisposable
         Assert.Null(disallowed);
     }
 
+    /// <summary>Verifies ListAsync_GlobAllowlist_RootIncludesRelevantAncestorDirectoriesOnly against owned fixture data.</summary>
+    /// <remarks>Integration: each case uses the constructor-owned physical repository tree for real file operations (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task ListAsync_GlobAllowlist_RootIncludesRelevantAncestorDirectoriesOnly()
     {
@@ -465,6 +509,8 @@ public sealed class RepoFileServiceTests : IDisposable
         Assert.DoesNotContain(src.Entries, entry => entry.Name == "notes.txt");
     }
 
+    /// <summary>Repo containment refuses a physical directory link to a separately owned outside folder.</summary>
+    /// <remarks>Integration: creates a native symbolic link; link-creation failure fails visibly (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public async Task ReadAsync_PathThroughSymlinkOutsideRepo_ReturnsNull()
@@ -476,8 +522,7 @@ public sealed class RepoFileServiceTests : IDisposable
         var linkPath = Path.Combine(_tempDir, "linked-outside");
         try
         {
-            if (!TryCreateDirectoryLink(linkPath, outsideDir))
-                return;
+            Directory.CreateSymbolicLink(linkPath, outsideDir);
 
             var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions
             {
@@ -506,24 +551,4 @@ public sealed class RepoFileServiceTests : IDisposable
         }
     }
 
-    private static bool TryCreateDirectoryLink(string linkPath, string targetPath)
-    {
-        try
-        {
-            Directory.CreateSymbolicLink(linkPath, targetPath);
-            return true;
-        }
-        catch (IOException)
-        {
-            return false;
-        }
-        catch (UnauthorizedAccessException)
-        {
-            return false;
-        }
-        catch (PlatformNotSupportedException)
-        {
-            return false;
-        }
-    }
 }

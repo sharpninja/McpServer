@@ -10,7 +10,7 @@ namespace QBrainAi.Support.Mcp.Tests.TestSupport;
 /// mis-set a name.
 /// </summary>
 /// <remarks>
-/// Requirement coverage: TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 as amended 2026-10-26 ("set and
+/// Requirement coverage: FR-MCP-TESTRESOURCE-001 ac-10; TR-MCP-USECASE-018 AC-006 as amended 2026-10-26 ("set and
 /// restore every variable their assertions or the code they call depend on, every name of a fallback chain the code
 /// reads"; operator: "Strengthen AC, move 14 (Recommended)" and "Dependence + proof AC (Recommended)"; hostile
 /// validation finding R6-F1). Test data: scripted snapshots (dictionaries of name to value); these mock gate controls

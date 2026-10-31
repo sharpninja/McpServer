@@ -1,5 +1,6 @@
 using System.Reflection;
 using QBrainAi.Support.Mcp.Tests.Infrastructure;
+using QBrainAi.Tests.Shared;
 
 namespace QBrainAi.Support.Mcp.Tests.Documentation;
 
@@ -12,7 +13,8 @@ public sealed class BugTriage139FourteenthHarnessTests
 {
     /// <summary>
     /// A consumer launched from its true external output directory resolves the checkout without an
-    /// environment override.
+    /// environment override. Integration: changes and restores the process environment/current directory and
+    /// reads the physical checkout through the uncached locator (TR-MCP-USECASE-018 AC-005/AC-006).
     /// </summary>
     [Fact]
     public void RepositoryRoot_ExternalBinaryDirectoryWithoutOverride_ResolvesCheckout()
@@ -24,7 +26,7 @@ public sealed class BugTriage139FourteenthHarnessTests
             Environment.SetEnvironmentVariable("MCP_REPOSITORY_ROOT", null);
             Environment.CurrentDirectory = AppContext.BaseDirectory;
 
-            var actual = RepositoryEvidenceTestSupport.ResolveRepositoryRoot();
+            var actual = TestRepositoryRoot.LocateUncached();
 
             Assert.Equal(SourceRepositoryRoot(), actual);
         }
@@ -39,6 +41,7 @@ public sealed class BugTriage139FourteenthHarnessTests
     /// The built test assembly contains exactly the native cases for its current platform and no
     /// unsupported platform cases, so discovery cannot turn an unsupported source branch into a pass.
     /// </summary>
+    /// <remarks>Integration: compares the compiled native-test inventory with the actual running host (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void PlatformNativeTests_AreCompiledAndDiscoverableOnlyForCurrentPlatform()
     {
@@ -93,6 +96,7 @@ public sealed class BugTriage139FourteenthHarnessTests
     /// A descendant that inherits redirected pipes cannot outlive the bounded process operation
     /// after its direct parent exits.
     /// </summary>
+    /// <remarks>Integration: starts real processes and measures cleanup of inherited pipes against a wall-clock bound (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void ProcessRunner_ExitedParentWithPipeHoldingDescendant_KillsTreeWithinBound()
     {

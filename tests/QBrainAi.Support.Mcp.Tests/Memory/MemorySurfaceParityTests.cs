@@ -5,7 +5,7 @@ using QBrainAi.Tests.Shared;
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-016 / FR-MCP-MEMORY-010: MCP tool and REST remember store equivalent fields.
+/// TEST-MCP-MEMORY-016 (historical) / FR-MCP-MEMORY-010 (historical): MCP tool and REST remember store equivalent fields.
 /// </summary>
 public sealed class MemorySurfaceParityTests : IDisposable
 {
@@ -15,6 +15,7 @@ public sealed class MemorySurfaceParityTests : IDisposable
     public void Dispose() => _harness.Dispose();
 
     /// <summary>AC-FR-MCP-MEMORY-010-48: Remember via MCP tool and REST produce equivalent stored fields.</summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public async Task McpAndRest_EquivalentStore()

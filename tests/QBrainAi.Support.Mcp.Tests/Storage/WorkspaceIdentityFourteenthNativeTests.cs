@@ -12,13 +12,14 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// TEST-MCP-USECASE-018: Fourteenth-review consumer and native coverage for bounded physical identity.
 /// </summary>
 [Collection(nameof(WorkspaceIdentityNativeProcessStateCollection))]
-[Trait("Category", "Integration")]
 public sealed class WorkspaceIdentityFourteenthNativeTests
 {
     /// <summary>
     /// TEST-MCP-USECASE-018-AC003: SaveChangesAsync and federation upsert must await cancellable,
     /// finite physical identity APIs instead of invoking synchronous resolution.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void AsyncConsumers_AwaitBoundedPhysicalIdentityResolution()
     {
@@ -56,6 +57,8 @@ public sealed class WorkspaceIdentityFourteenthNativeTests
     /// TEST-MCP-USECASE-018-AC003: A token cancelled before SaveChangesAsync starts must prevent
     /// even the native physical resolver from starting.
     /// </summary>
+    /// <remarks>Integration: creates the real SQLite provider fixture and observes the native invocation counter (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task SaveChangesAsync_PreCancelled_DoesNotStartNativeResolution()
     {
@@ -89,6 +92,8 @@ public sealed class WorkspaceIdentityFourteenthNativeTests
     /// TEST-MCP-USECASE-018-AC003: The real platform resolver must execute for local aliases and
     /// unavailable Windows UNC syntax, bound repeated calls, and leave no native worker behind.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task NativeResolver_RepeatedPlatformCallsLeaveNoActiveWorkers()
     {
@@ -204,6 +209,7 @@ public sealed class WorkspaceIdentityFourteenthNativeTests
     /// TEST-MCP-USECASE-018-AC003: The bounded resolver must preserve the historical empty identity
     /// used by global rows without dispatching native physical work.
     /// </summary>
+    /// <remarks>Unit: fixed empty input returns before platform detection or native resolution; both empty outputs and the unchanged invocation counter remain asserted (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task ResolveAsync_EmptyWorkspaceId_PreservesGlobalIdentityWithoutNativeResolution()
     {
@@ -225,6 +231,8 @@ public sealed class WorkspaceIdentityFourteenthNativeTests
     /// TEST-MCP-USECASE-018-AC003: A real SQLite save for a global entity must retain the empty
     /// workspace scope and must not start physical identity resolution.
     /// </summary>
+    /// <remarks>Integration: migrates the real SQLite provider fixture and verifies persisted global scope without native-resolution work (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task SaveChangesAsync_GlobalEntityWithEmptyWorkspaceId_PreservesLegacyGlobalScope()
     {

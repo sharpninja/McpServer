@@ -13,7 +13,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// <summary>
 /// Unit tests for <see cref="FederatedSessionLogService"/>. Validates merge semantics,
 /// pass-through when federation is disabled, and graceful degradation on remote failure.
-/// FR-MCP-083, TEST-MCP-FED-002.
+/// FR-MCP-083, TEST-MCP-FED-002 (historical).
 /// </summary>
 public sealed class FederatedSessionLogServiceTests
 {
@@ -196,6 +196,7 @@ public sealed class FederatedSessionLogServiceTests
     /// AC-FR-MCP-SESSIONLOGCTX-001-007: federation apply/submit with omitted fields
     /// persists a validated pair (None if extraction finds nothing).
     /// </summary>
+    /// <remarks>Integration: uses the real import extractor, which can scan the user profile read-only without asserting its contents (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public async Task Apply_OmittedFields_PersistsProperValue()

@@ -10,11 +10,11 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// untrusted mount point (its listing throws) or a link, and neither scan fails.
 /// </summary>
 /// <remarks>
-/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 and TR-MCP-SESSIONLOG-006 /
-/// AC-TR-MCP-SESSIONLOG-006-009 (operator 2026-10-20: "Fix scans in PR 87 (Recommended)"; triage report
+/// Requirement coverage: TR-MCP-WS-005 / FR-MCP-018 ac-1 / AC-TR-MCP-WS-005-002 and TR-MCP-SESSIONLOG-006 /
+/// AC-FR-MCP-SESSIONLOGCTX-001-008 / AC-TR-MCP-SESSIONLOG-006-010 (operator 2026-10-20: "Fix scans in PR 87 (Recommended)"; triage report
 /// b0e41c36). Test data: a temporary profile the test creates, listed through
 /// <see cref="DirectoryTreeWalker.ListFileSystem"/>, with the failure conditions scripted on top: one directory's
-/// listing throws the untrusted-mount-point <see cref="IOException"/> seen on PAYTON-LEGION2 as kingd, and one
+/// listing throws the untrusted-mount-point <see cref="IOException"/> seen on TEST-NODE-A under a restricted Windows account, and one
 /// directory is reported as a link. Seam controls run the same profile with the link flag removed and prove the
 /// result changes, so the expected values come from the link and error handling rather than from the layout. The
 /// version-file cases (operator 2026-10-20: "Fold R3-P3 in first") read the same profile through
@@ -94,7 +94,7 @@ public sealed class UserProfileScanBindingTests : IDisposable
             walker);
 
     /// <summary>
-    /// AC-TR-MCP-WS-005-001: with an untrusted mount point and a linked higher version in the Claude plugin cache,
+    /// FR-MCP-018 ac-1 / AC-TR-MCP-WS-005-002: with an untrusted mount point and a linked higher version in the Claude plugin cache,
     /// resolution does not throw and returns the reachable version; with the link flag removed (seam control) the
     /// higher version wins, so the link is what was skipped.
     /// </summary>
@@ -108,7 +108,7 @@ public sealed class UserProfileScanBindingTests : IDisposable
     }
 
     /// <summary>
-    /// AC-TR-MCP-WS-005-001: when the plugin cache root itself cannot be listed, resolution does not throw and
+    /// FR-MCP-018 ac-1 / AC-TR-MCP-WS-005-002: when the plugin cache root itself cannot be listed, resolution does not throw and
     /// falls back to the synced plugin version.
     /// </summary>
     [Fact]
@@ -139,7 +139,7 @@ public sealed class UserProfileScanBindingTests : IDisposable
             readText);
 
     /// <summary>
-    /// AC-TR-MCP-WS-005-001: when the higher cached version's <c>.version</c> cannot be read, resolution does not
+    /// FR-MCP-018 ac-1 / AC-TR-MCP-WS-005-002: when the higher cached version's <c>.version</c> cannot be read, resolution does not
     /// throw and returns the next readable version; with the plain file read (seam control) the higher version wins,
     /// so the unreadable file is what was passed over.
     /// </summary>
@@ -153,7 +153,7 @@ public sealed class UserProfileScanBindingTests : IDisposable
     }
 
     /// <summary>
-    /// AC-TR-MCP-WS-005-001: when every cached version file cannot be read, resolution does not throw and falls back
+    /// FR-MCP-018 ac-1 / AC-TR-MCP-WS-005-002: when every cached version file cannot be read, resolution does not throw and falls back
     /// to the synced plugin version.
     /// </summary>
     [Fact]
@@ -182,7 +182,7 @@ public sealed class UserProfileScanBindingTests : IDisposable
     }
 
     /// <summary>
-    /// AC-TR-MCP-SESSIONLOG-006-009: with an untrusted mount point and a linked history folder under ~/.claude, the
+    /// AC-FR-MCP-SESSIONLOGCTX-001-008 / AC-TR-MCP-SESSIONLOG-006-010: with an untrusted mount point and a linked history folder under ~/.claude, the
     /// extractor does not throw and takes the TODO id from the reachable history only; with the link flag removed
     /// (seam control) the linked copy is read too and the tied ids yield None.
     /// </summary>
@@ -201,7 +201,7 @@ public sealed class UserProfileScanBindingTests : IDisposable
     }
 
     /// <summary>
-    /// The cache layouts of AC-TR-MCP-WS-005-001, each with the folder (relative to the profile) a case reports as a
+    /// The cache layouts of FR-MCP-018 ac-1 / AC-TR-MCP-WS-005-002, each with the folder (relative to the profile) a case reports as a
     /// link: the cache root itself or one of the folders between the profile and it (hostile validation round 5
     /// finding R5-F1).
     /// </summary>
@@ -236,7 +236,7 @@ public sealed class UserProfileScanBindingTests : IDisposable
     }
 
     /// <summary>
-    /// AC-TR-MCP-WS-005-001: with the only cached version under a cache root that is a link, or under a folder
+    /// FR-MCP-018 ac-1 / AC-TR-MCP-WS-005-002: with the only cached version under a cache root that is a link, or under a folder
     /// between the profile and that root that is a link, resolution does not throw and falls back to the synced
     /// plugin version; with the link flag removed (seam control) the cached version wins, so the link at or above
     /// the root is what was skipped.
@@ -255,7 +255,7 @@ public sealed class UserProfileScanBindingTests : IDisposable
     }
 
     /// <summary>
-    /// AC-TR-MCP-WS-005-001: a user profile that is itself a link is still scanned, so the cached version resolves
+    /// FR-MCP-018 ac-1 / AC-TR-MCP-WS-005-002: a user profile that is itself a link is still scanned, so the cached version resolves
     /// with the profile reported as a link by its parent listing, which the scan never reads.
     /// </summary>
     [Fact]
@@ -266,11 +266,11 @@ public sealed class UserProfileScanBindingTests : IDisposable
         Assert.Equal("9.9.9", Resolve(ScriptedWalker(NoUnlistableFolder, Profile)));
     }
 
-    /// <summary>The four agent-history roots of AC-TR-MCP-SESSIONLOG-006-009.</summary>
+    /// <summary>The four agent-history roots of AC-FR-MCP-SESSIONLOGCTX-001-008 / AC-TR-MCP-SESSIONLOG-006-010.</summary>
     public static TheoryData<string> HistoryRoots => new() { ".grok", ".claude", ".codex", ".cursor" };
 
     /// <summary>
-    /// AC-TR-MCP-SESSIONLOG-006-009: when a history root is a link, the extractor does not throw and the turn keeps
+    /// AC-FR-MCP-SESSIONLOGCTX-001-008 / AC-TR-MCP-SESSIONLOG-006-010: when a history root is a link, the extractor does not throw and the turn keeps
     /// None; with the link flag removed (seam control) the history under it yields the TODO id, and a home that is
     /// itself a link is still scanned (hostile validation round 5 finding R5-F1).
     /// </summary>
@@ -296,7 +296,7 @@ public sealed class UserProfileScanBindingTests : IDisposable
     }
 
     /// <summary>
-    /// AC-TR-MCP-SESSIONLOG-006-009: when ~/.claude itself cannot be listed, the extractor does not throw and the
+    /// AC-FR-MCP-SESSIONLOGCTX-001-008 / AC-TR-MCP-SESSIONLOG-006-010: when ~/.claude itself cannot be listed, the extractor does not throw and the
     /// turn keeps None.
     /// </summary>
     [Fact]

@@ -19,6 +19,7 @@ public sealed class BugTriage139SixteenthLinuxTests
     /// FUSE mount through a symbolic link is rejected by the atomic no-cross-device lookup before
     /// the target mount is traversed.
     /// </summary>
+    /// <remarks>Integration: starts a real Unix resolver helper and measures its lifecycle after the public timeout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact(Timeout = 60_000)]
     public async Task WorkspaceIdentity_SafeSymlinkIntoFuse_IsRejectedByAtomicNoCrossDeviceResolver()
     {
@@ -57,6 +58,7 @@ public sealed class BugTriage139SixteenthLinuxTests
     /// Verifies that replacing a previously safe alias with a delayed FUSE target between lexical
     /// classification and physical lookup is rejected by the atomic no-cross-device resolver.
     /// </summary>
+    /// <remarks>Integration: starts a real Unix resolver helper and measures its lifecycle after the public timeout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact(Timeout = 60_000)]
     public async Task WorkspaceIdentity_AliasReplacement_IsRejectedByAtomicNoCrossDeviceResolver()
     {
@@ -108,6 +110,7 @@ public sealed class BugTriage139SixteenthLinuxTests
     /// Verifies that a local symbolic link into a real delayed FUSE filesystem is rejected before
     /// any SQLite worker or native handle is created.
     /// </summary>
+    /// <remarks>Integration: starts a real Unix resolver helper and measures its lifecycle after the public timeout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact(Timeout = 60_000)]
     public async Task SqliteOpen_SafeSymlinkIntoFuse_IsRejectedBeforeWorker()
     {
@@ -188,6 +191,7 @@ public sealed class BugTriage139SixteenthLinuxTests
     /// link with stat would send the helper a lookup it never answers; only its root is answered, which is why the
     /// root-target cases above cannot catch this.
     /// </summary>
+    /// <remarks>Integration: starts a real Unix resolver helper and measures its lifecycle after the public timeout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact(Timeout = 60_000)]
     public async Task SqliteOpen_SafeSymlinkBelowFuseRoot_IsRejectedWithoutEnteringTheMount()
     {
@@ -239,6 +243,7 @@ public sealed class BugTriage139SixteenthLinuxTests
     /// Verifies replacement of a previously safe SQLite alias at the validation boundary cannot
     /// reach the synchronous open worker.
     /// </summary>
+    /// <remarks>Integration: starts a real Unix resolver helper and measures its lifecycle after the public timeout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact(Timeout = 60_000)]
     public async Task SqliteOpen_AliasReplacementBeforePhysicalResolution_IsRejected()
     {
@@ -302,6 +307,7 @@ public sealed class BugTriage139SixteenthLinuxTests
     /// Verifies that replacing a safe alias after the worker's last validation cannot reach native
     /// SQLite opening: the actual file descriptor is acquired by one atomic no-cross-device open.
     /// </summary>
+    /// <remarks>Integration: starts a real Unix resolver helper and measures its lifecycle after the public timeout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact(Timeout = 60_000)]
     public async Task SqliteOpen_AliasReplacementAtNativeOpen_IsAtomicallyRejected()
     {
@@ -383,6 +389,7 @@ public sealed class BugTriage139SixteenthLinuxTests
     /// Verifies that an intentionally unstoppable Unix helper cannot extend public completion and
     /// remains counted until the actual helper process exits.
     /// </summary>
+    /// <remarks>Integration: starts a real Unix resolver helper and measures its lifecycle after the public timeout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task WorkspaceIdentity_UnstoppableUnixHelper_RemainsObservableAfterPublicTimeout()
     {
@@ -494,6 +501,7 @@ public sealed class BugTriage139SixteenthLinuxTests
     /// Proves the bounded opener can transact through a pinned Linux descriptor, release the pin,
     /// restore the original connection string on close, and reopen the same connection.
     /// </summary>
+    /// <remarks>Integration: starts a real Unix resolver helper and measures its lifecycle after the public timeout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task SqlitePinnedDataSource_SupportsTransactionsAndReopen()
     {

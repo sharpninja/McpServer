@@ -6,9 +6,14 @@ using QBrainAi.McpAgent;
 using QBrainAi.QBAgent;
 using QBrainAi.Support.Mcp.Models;
 using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Storage;
+using QBrainAi.Support.Mcp.Storage.Database;
 using QBrainAi.Support.Mcp.Storage.Entities;
 using QBrainAi.TransactionSecurity.Models;
 using QBrainAi.TransactionSecurity.Services;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -214,6 +219,58 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<Olla
                 chatClientFactory.InvokedOutputs,
                 choice.Message.Content)
             .ConfigureAwait(true);
+    }
+
+    /// <summary>
+    /// TR-MCP-NUKE-019 AC-6 (hostile validation findings R8B-F2 and R8B-F3): this class's temporary instance, the
+    /// in-process <see cref="CustomWebApplicationFactory"/>, refuses to start when its database context selects a
+    /// database outside the instance's owned data folder, before the first open. Test data: a seeded real SQLite
+    /// file in a separate owned temporary folder and a late context override; size, write time and bytes stay unchanged.
+    /// </summary>
+    [Fact]
+    public void TemporaryInstance_RefusesDatabaseOutsideOwnedRoot()
+    {
+        var outsideFolder = Path.Combine(Path.GetTempPath(), $"mcp-outside-owned-root-{Guid.NewGuid():N}");
+        var outsideDatabase = Path.Combine(outsideFolder, "mcp.db");
+        Directory.CreateDirectory(outsideFolder);
+        try
+        {
+            var connectionString = new SqliteConnectionStringBuilder { DataSource = outsideDatabase, Pooling = false }.ConnectionString;
+            using (var seed = new SqliteConnection(connectionString))
+            {
+                seed.Open();
+                using var command = seed.CreateCommand();
+                command.CommandText = "CREATE TABLE guard_sentinel (value TEXT NOT NULL); INSERT INTO guard_sentinel VALUES ('unchanged');";
+                command.ExecuteNonQuery();
+            }
+            var beforeBytes = File.ReadAllBytes(outsideDatabase);
+            var beforeLength = new FileInfo(outsideDatabase).Length;
+            var beforeWrite = File.GetLastWriteTimeUtc(outsideDatabase);
+            var providerOptions = McpDatabaseProviderFactory.CreateOptions("sqlite", connectionString);
+            using var app = new CustomWebApplicationFactory(services =>
+            {
+                services.RemoveAll<DbContextOptions<McpDbContext>>();
+                services.RemoveAll<IDbContextOptionsConfiguration<McpDbContext>>();
+                services.AddDbContext<McpDbContext>(
+                    options => McpDatabaseProviderFactory.Configure(options, providerOptions),
+                    ServiceLifetime.Scoped,
+                    ServiceLifetime.Scoped);
+            });
+            var refusal = Record.Exception(() => app.CreateClient());
+            Assert.NotNull(refusal);
+            var messages = new List<string>();
+            for (var current = refusal; current is not null; current = current.InnerException)
+                messages.Add(current.Message);
+            Assert.Contains(messages, message => message.Contains(outsideDatabase, StringComparison.Ordinal)
+                && message.Contains("is not inside its owned root", StringComparison.Ordinal));
+            Assert.Equal(beforeLength, new FileInfo(outsideDatabase).Length);
+            Assert.Equal(beforeWrite, File.GetLastWriteTimeUtc(outsideDatabase));
+            Assert.Equal(beforeBytes, File.ReadAllBytes(outsideDatabase));
+        }
+        finally
+        {
+            Directory.Delete(outsideFolder, recursive: true);
+        }
     }
 
     private static CustomWebApplicationFactory BuildFactory(IBrainSlotChatClientFactory chatClientFactory)

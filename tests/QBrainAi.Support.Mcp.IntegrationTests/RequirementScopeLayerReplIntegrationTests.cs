@@ -30,7 +30,9 @@ public sealed class RequirementScopeLayerReplIntegrationTests
         await using var repl = await ReplProcess.StartAsync(
             scratch.ReplHostAssemblyPath,
             scratch.WorkspacePath,
-            scratch.MarkerPath).ConfigureAwait(true);
+            scratch.MarkerPath,
+            scratch.RootPath,
+            scratch.BaseUrl.ToString()).ConfigureAwait(true);
 
         await RunReplAsync(repl, "reqscope-int-create-layer-2", """
             type: request
@@ -133,6 +135,9 @@ public sealed class RequirementScopeLayerReplIntegrationTests
         var afterSunsetOutput = await QueryCurrentEffectiveAsync(repl, "reqscope-int-effective-after-sunset").ConfigureAwait(true);
 
         Assert.True(File.Exists(scratch.MarkerPath), $"Expected generated marker at '{scratch.MarkerPath}'.");
+        // FR-MCP-REPL-008 ac-4 / TR-MCP-NUKE-019 AC-6: bind the product override in the real child process.
+        var cachePath = Path.Combine(scratch.RootPath, "repl-cache", "verified-markers.json");
+        Assert.True(File.Exists(cachePath), $"Expected the child REPL's verified-marker cache at '{cachePath}'.");
         Assert.Contains("FR-MCP-REQSCOPE-950", beforeOutput, StringComparison.Ordinal);
         Assert.DoesNotContain("FR-MCP-REQSCOPE-951", beforeOutput, StringComparison.Ordinal);
         Assert.Contains("FR-MCP-REQSCOPE-951", afterOutput, StringComparison.Ordinal);
@@ -214,33 +219,14 @@ public sealed class RequirementScopeLayerReplIntegrationTests
             }
         }
 
-        public static async Task<ReplProcess> StartAsync(string assemblyPath, string workspacePath, string markerPath)
+        /// <summary>
+        /// Starts the REPL host against the temporary instance and fails before the process starts unless its
+        /// workspace and marker lie inside the instance's root and no inherited product setting reaches it
+        /// (TR-MCP-NUKE-019 AC-6; hostile validation findings R8B-F2 and R8B-F3).
+        /// </summary>
+        public static async Task<ReplProcess> StartAsync(string assemblyPath, string workspacePath, string markerPath, string ownedRoot, string serverAddress)
         {
-            var startInfo = new ProcessStartInfo
-            {
-                FileName = "dotnet",
-                WorkingDirectory = workspacePath,
-                UseShellExecute = false,
-                RedirectStandardInput = true,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                CreateNoWindow = true,
-                StandardInputEncoding = Encoding.UTF8,
-                StandardOutputEncoding = Encoding.UTF8,
-                StandardErrorEncoding = Encoding.UTF8,
-            };
-            startInfo.ArgumentList.Add(assemblyPath);
-            startInfo.ArgumentList.Add("--agent-stdio");
-            startInfo.ArgumentList.Add("--workspace-path");
-            startInfo.ArgumentList.Add(workspacePath);
-            startInfo.ArgumentList.Add("--marker-file");
-            startInfo.ArgumentList.Add(markerPath);
-            startInfo.Environment["MCP_WORKSPACE_PATH"] = workspacePath;
-            startInfo.Environment["MCPSERVER_WORKSPACE_PATH"] = workspacePath;
-            startInfo.Environment["MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS"] = "10";
-            startInfo.Environment["MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS"] = "8";
-            startInfo.Environment["DOTNET_CLI_TELEMETRY_OPTOUT"] = "1";
-            startInfo.Environment["DOTNET_NOLOGO"] = "1";
+            var startInfo = OwnedReplStart.CreateStartInfo(assemblyPath, workspacePath, markerPath, ownedRoot, serverAddress);
 
             var process = new Process { StartInfo = startInfo };
             var repl = new ReplProcess(process);

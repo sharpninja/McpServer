@@ -13,6 +13,7 @@ public sealed class ImportRecoveryEnvelopeTests
     /// A pending envelope is replayed from its source file. The canonical artifact and source file stay.
     /// The persister receives the normalized session, not the envelope document.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public async Task IngestPath_ReplaysPendingEnvelopeThroughPersister_DeletesOnlyEnvelope()

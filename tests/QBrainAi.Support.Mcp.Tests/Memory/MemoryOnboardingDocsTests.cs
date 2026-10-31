@@ -1,12 +1,13 @@
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-016 / FR-MCP-MEMORY-017:
+/// TEST-MCP-MEMORY-016 (historical) / FR-MCP-MEMORY-017 (historical):
 /// Onboarding docs, examples, and the marker template document new and old verbs.
 /// </summary>
 public sealed class MemoryOnboardingDocsTests
 {
     /// <summary>AC-FR-MCP-MEMORY-017-02: Committed examples for /mcp-transport and STDIO include the new verbs.</summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void Examples_ListNewVerbs()
@@ -35,6 +36,7 @@ public sealed class MemoryOnboardingDocsTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-017-04: One-prompt give-yourself-memory sample exists with real tool names.</summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void GiveYourselfMemory_SampleExists()
@@ -48,6 +50,7 @@ public sealed class MemoryOnboardingDocsTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-017-07: Marker template documents new verbs without removing old ones.</summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void MarkerTemplate_DocumentsNewAndOld()

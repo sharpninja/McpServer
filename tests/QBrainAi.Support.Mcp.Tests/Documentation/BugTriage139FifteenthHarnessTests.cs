@@ -15,6 +15,7 @@ public sealed class BugTriage139FifteenthHarnessTests
     /// TEST-MCP-USECASE-019-AC005: Deterministic builds must retain an explicit checkout anchor and
     /// copy Agent Help fixtures beside the external test assembly without an environment override.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void DeterministicBuild_EmbedsRepositoryRootAndCopiesAgentHelpFixtures()
     {
@@ -38,6 +39,7 @@ public sealed class BugTriage139FifteenthHarnessTests
     /// TEST-MCP-USECASE-020: The compiled test inventory must contain only the host-applicable
     /// native boundary tests, with an exact count rather than source-text substitutes.
     /// </summary>
+    /// <remarks>Integration: compares the compiled native-test inventory with the actual running host (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void PlatformNativeTests_CompiledInventoryMatchesHost()
     {

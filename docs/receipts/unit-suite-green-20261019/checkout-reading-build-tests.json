@@ -1,0 +1,506 @@
+[
+  {
+    "file": "BoundedProcessTests.cs",
+    "method": "BuildTestsSources_ReadChildOutputOnlyThroughBoundedProcess",
+    "tagged": true,
+    "start": 6878,
+    "length": 1362
+  },
+  {
+    "file": "BuildProjectSetTests.cs",
+    "method": "GetBuildProjectFiles_CoversEverySourceAndTestProject_ExceptBuildTests",
+    "tagged": true,
+    "start": 1005,
+    "length": 1127
+  },
+  {
+    "file": "BuildProjectSetTests.cs",
+    "method": "RestoreAndCompile_UseTheSharedProjectSet",
+    "tagged": true,
+    "start": 2496,
+    "length": 570
+  },
+  {
+    "file": "BuildTargetTests.cs",
+    "method": "SyncAgentPlugins_EnsuresNodeCoreNpmCiBeforeNpmRunBuild",
+    "tagged": true,
+    "start": 2912,
+    "length": 867
+  },
+  {
+    "file": "BuildTargetTests.cs",
+    "method": "SyncAgentPlugins_RefreshesNodeCoreVendorPackageBeforeCaches",
+    "tagged": true,
+    "start": 4778,
+    "length": 896
+  },
+  {
+    "file": "BuildTargetTests.cs",
+    "method": "SyncAgentPlugins_RefreshesWorkspaceStagedPackageBeforeSiblingDiscovery",
+    "tagged": true,
+    "start": 5939,
+    "length": 959
+  },
+  {
+    "file": "BuildTargetTests.cs",
+    "method": "QBAgentProject_IsConfiguredAsDotNetTool",
+    "tagged": true,
+    "start": 12219,
+    "length": 804
+  },
+  {
+    "file": "BuildTargetTests.cs",
+    "method": "PackQBAgentTool_DoesNotDependOnSolutionCompile",
+    "tagged": true,
+    "start": 13354,
+    "length": 490
+  },
+  {
+    "file": "BuildTargetTests.cs",
+    "method": "DeployQBAgentTool_DependsOnPackQBAgentTool_NotCompile",
+    "tagged": true,
+    "start": 14071,
+    "length": 419
+  },
+  {
+    "file": "BuildTargetTests.cs",
+    "method": "ResolveNuGetPackageVersion_ReturnsExplicitParameter",
+    "tagged": true,
+    "start": 16616,
+    "length": 382
+  },
+  {
+    "file": "BuildTargetTests.cs",
+    "method": "Build_SourceProjects_DoNotPinDivergentVersionMetadata",
+    "tagged": true,
+    "start": 17566,
+    "length": 693
+  },
+  {
+    "file": "BuildTargetTests.cs",
+    "method": "BuildTargets_UseGitVersionForCompileAndReplTool",
+    "tagged": true,
+    "start": 18380,
+    "length": 2540
+  },
+  {
+    "file": "BuildTargetTests.cs",
+    "method": "CopyBrainSlotRuntimeConfig_CopiesAssignmentFileToDeploymentConfigPath",
+    "tagged": true,
+    "start": 33966,
+    "length": 960
+  },
+  {
+    "file": "BuildTargetTests.cs",
+    "method": "UpdateService_StagesBaselineConfigurationBeforeStoppingWindowsService",
+    "tagged": true,
+    "start": 35157,
+    "length": 1681
+  },
+  {
+    "file": "DocsSyncG8OverlayTests.cs",
+    "method": "G8_NukeValidateTraceabilityTarget_InvokesShippedValidator",
+    "tagged": true,
+    "start": 717,
+    "length": 629
+  },
+  {
+    "file": "DocsSyncG8OverlayTests.cs",
+    "method": "G8_ValidateTraceability_ShippedValidator_PassesOnLiveDocsProject",
+    "tagged": true,
+    "start": 1562,
+    "length": 1726
+  },
+  {
+    "file": "DocsSyncG8OverlayTests.cs",
+    "method": "G8_NukeValidateConfigTarget_InvokesShippedValidator",
+    "tagged": true,
+    "start": 3505,
+    "length": 640
+  },
+  {
+    "file": "DocsSyncG8OverlayTests.cs",
+    "method": "G8_ValidateConfig_ShippedValidator_PassesOnLiveAppsettings",
+    "tagged": true,
+    "start": 4371,
+    "length": 745
+  },
+  {
+    "file": "DocsSyncG8OverlayTests.cs",
+    "method": "G8_NukeSyncAgentPluginsTarget_InvokesCoreSyncScript",
+    "tagged": true,
+    "start": 5342,
+    "length": 605
+  },
+  {
+    "file": "DocsSyncG8OverlayTests.cs",
+    "method": "G8_SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore",
+    "tagged": true,
+    "start": 6278,
+    "length": 370
+  },
+  {
+    "file": "HandoffD3D5OverlayTests.cs",
+    "method": "D3_NukeValidateTraceabilityTarget_InvokesShippedValidatorOnDocsProject",
+    "tagged": true,
+    "start": 843,
+    "length": 1169
+  },
+  {
+    "file": "HandoffD3D5OverlayTests.cs",
+    "method": "D3_ValidateTraceability_ShippedValidator_PassesOnLiveDocsProject",
+    "tagged": true,
+    "start": 2328,
+    "length": 1604
+  },
+  {
+    "file": "IntegrationLaneDetachedWorkerTests.cs",
+    "method": "LinuxWorker_ClosesParentPipesAndKeepsLogging",
+    "tagged": true,
+    "start": 674,
+    "length": 4191
+  },
+  {
+    "file": "IntegrationLaneProjectsTests.cs",
+    "method": "SolutionRow_IsTheSolutionFile",
+    "tagged": true,
+    "start": 1344,
+    "length": 188
+  },
+  {
+    "file": "IntegrationLaneProjectsTests.cs",
+    "method": "ProductionSelector_OnTheSolutionFile_SelectsTheLaneProjects",
+    "tagged": true,
+    "start": 1916,
+    "length": 244
+  },
+  {
+    "file": "IntegrationLaneProjectsTests.cs",
+    "method": "SupportIntegrationClasses_AreDeclaredOnceAndTaggedIntegration",
+    "tagged": true,
+    "start": 2649,
+    "length": 1240
+  },
+  {
+    "file": "MigrationAssemblyObsoleteWarningTests.cs",
+    "method": "MigrationAssemblies_CompileSuccessfully",
+    "tagged": true,
+    "start": 2101,
+    "length": 637
+  },
+  {
+    "file": "MigrationAssemblyObsoleteWarningTests.cs",
+    "method": "GeneratedMigrationFiles_DoNotContainObsoleteWarningPragmas",
+    "tagged": true,
+    "start": 3075,
+    "length": 564
+  },
+  {
+    "file": "MigrationAssemblyObsoleteWarningTests.cs",
+    "method": "GeneratedMigrationFiles_RecordProviderIdentitySymbols",
+    "tagged": true,
+    "start": 3980,
+    "length": 603
+  },
+  {
+    "file": "NukeParametersTests.cs",
+    "method": "NukeParameters_Solution_NamesExistingSolutionFile",
+    "tagged": true,
+    "start": 1029,
+    "length": 671
+  },
+  {
+    "file": "PluginSessionLogIntegrationTargetTests.cs",
+    "method": "BuildTests_PluginSessionLogIntegrationTarget_ExistsAndTreatsSkipAsFail",
+    "tagged": true,
+    "start": 638,
+    "length": 1030
+  },
+  {
+    "file": "PluginSessionLogIntegrationTargetTests.cs",
+    "method": "TestTarget_ExcludesPluginIntegrationFromUnitInventory",
+    "tagged": true,
+    "start": 2013,
+    "length": 717
+  },
+  {
+    "file": "PluginSessionLogIntegrationTargetTests.cs",
+    "method": "Solution_ContainsQBrainAiPluginIntegrationTestsProject",
+    "tagged": true,
+    "start": 3751,
+    "length": 608
+  },
+  {
+    "file": "PluginSessionLogIntegrationTargetTests.cs",
+    "method": "Catalog_HasExactlyEightEnabledScenarios",
+    "tagged": true,
+    "start": 4599,
+    "length": 1206
+  },
+  {
+    "file": "PluginSessionLogIntegrationTargetTests.cs",
+    "method": "NukeTarget_SkipIsFailure",
+    "tagged": true,
+    "start": 6089,
+    "length": 2453
+  },
+  {
+    "file": "PowerShellInvocationTests.cs",
+    "method": "BuildBootstrap_RelaunchesWithNonInteractivePowerShellFlags",
+    "tagged": true,
+    "start": 555,
+    "length": 651
+  },
+  {
+    "file": "PowerShellInvocationTests.cs",
+    "method": "BuildTests_PwshProcessStartInfo_UsesNonInteractiveFlags",
+    "tagged": true,
+    "start": 1508,
+    "length": 719
+  },
+  {
+    "file": "PowerShellInvocationTests.cs",
+    "method": "DeploymentGuidance_PwshCommandsUseNonInteractiveFlags",
+    "tagged": true,
+    "start": 2531,
+    "length": 1437
+  },
+  {
+    "file": "QBrainAiRebrandPhase1Tests.cs",
+    "method": "Inventory_EveryRowHasClosedAction",
+    "tagged": true,
+    "start": 1030,
+    "length": 749
+  },
+  {
+    "file": "QBrainAiRebrandPhase1Tests.cs",
+    "method": "SolutionAndProjects_UseQBrainAiRoot",
+    "tagged": true,
+    "start": 2032,
+    "length": 1355
+  },
+  {
+    "file": "QBrainAiRebrandPhase1Tests.cs",
+    "method": "Tokens_KeepNamespaceAndPackageSpellingsApart",
+    "tagged": true,
+    "start": 3644,
+    "length": 871
+  },
+  {
+    "file": "QBrainAiRebrandPhase1Tests.cs",
+    "method": "Packages_NewIdsAndLegacyFacades",
+    "tagged": true,
+    "start": 4764,
+    "length": 2119
+  },
+  {
+    "file": "QBrainAiRebrandPhase1Tests.cs",
+    "method": "RepositoryUrl_KeepsLiveGitHubName",
+    "tagged": true,
+    "start": 7124,
+    "length": 368
+  },
+  {
+    "file": "QBrainAiRebrandPhase1Tests.cs",
+    "method": "Routes_KeepProtocolEndpointAndAliasProductPrefix",
+    "tagged": true,
+    "start": 7754,
+    "length": 1475
+  },
+  {
+    "file": "QBrainAiRebrandPhase1Tests.cs",
+    "method": "DisplayDockerAndServiceDefaults_UseQBrainNames",
+    "tagged": true,
+    "start": 9489,
+    "length": 1059
+  },
+  {
+    "file": "QBrainAiRebrandPhase1Tests.cs",
+    "method": "PersistedStateAndHostNames_Stay",
+    "tagged": true,
+    "start": 10791,
+    "length": 879
+  },
+  {
+    "file": "QBrainAiRebrandPhase1Tests.cs",
+    "method": "ReviewAliases_KeepLegacyColumnAndCheckoutPath",
+    "tagged": true,
+    "start": 12005,
+    "length": 2618
+  },
+  {
+    "file": "QBrainAiRebrandPhase1Tests.cs",
+    "method": "ReplNodeCallers_ResolveLegacyCommand",
+    "tagged": true,
+    "start": 14891,
+    "length": 1054
+  },
+  {
+    "file": "QuadBrainDescriptorAbsenceTests.cs",
+    "method": "McpsRegistry_ContainsNoBrainSlotToolDescriptors",
+    "tagged": true,
+    "start": 1021,
+    "length": 767
+  },
+  {
+    "file": "RequirementsWikiPublishScriptTests.cs",
+    "method": "PublishRequirementsWiki_GitHubOutput_AppendsGitHubUserDocumentationLinks",
+    "tagged": true,
+    "start": 652,
+    "length": 1363
+  },
+  {
+    "file": "RequirementsWikiPublishScriptTests.cs",
+    "method": "PublishRequirementsWiki_AzureOutput_AppendsAzureUserDocumentationLinks",
+    "tagged": true,
+    "start": 2213,
+    "length": 1419
+  },
+  {
+    "file": "SyncAgentPluginsChecksumTests.cs",
+    "method": "SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore",
+    "tagged": true,
+    "start": 590,
+    "length": 367
+  },
+  {
+    "file": "SyncAgentPluginsVendorNameTests.cs",
+    "method": "SyncAgentPlugins_VendorStep_UsesStableVersionlessName",
+    "tagged": true,
+    "start": 1164,
+    "length": 269
+  },
+  {
+    "file": "SyncAgentPluginsVendorNameTests.cs",
+    "method": "SyncAgentPlugins_VendorStep_HasNoVersionedTarballLiteral",
+    "tagged": true,
+    "start": 1755,
+    "length": 320
+  },
+  {
+    "file": "SyncAgentPluginsVendorNameTests.cs",
+    "method": "SyncAgentPlugins_VendorStep_AssertsPackedVersionAgainstPackageJson",
+    "tagged": true,
+    "start": 2413,
+    "length": 372
+  },
+  {
+    "file": "TrCoverageConsistencyTests.cs",
+    "method": "CfgProviderFactoryTrExists_AndIsComplete",
+    "tagged": true,
+    "start": 3259,
+    "length": 316
+  },
+  {
+    "file": "TrCoverageConsistencyTests.cs",
+    "method": "CompletedTrs_MustNotNameProviderSpecificTypes_WhenCfg007Complete",
+    "tagged": true,
+    "start": 3696,
+    "length": 1724
+  },
+  {
+    "file": "TrCoverageConsistencyTests.cs",
+    "method": "TrsNotMarkedComplete_AreIgnoredByRegression",
+    "tagged": true,
+    "start": 5541,
+    "length": 766
+  },
+  {
+    "file": "TrimAnalysisWarningInventoryTests.cs",
+    "method": "TrimAnalysis_WithRepositorySuppressionDisabled_MatchesCapturedInventory",
+    "tagged": true,
+    "start": 3171,
+    "length": 532
+  },
+  {
+    "file": "WarningSuppressionApprovalValidatorTests.cs",
+    "method": "ApprovalRegister_ContainsOnlyScopedCurrentApprovalsAndMatchesCurrentOccurrences",
+    "tagged": true,
+    "start": 6409,
+    "length": 1244
+  },
+  {
+    "file": "WarningSuppressionValidationTargetTests.cs",
+    "method": "Scan_CurrentRepository_HasNoCA1031Suppressions",
+    "tagged": true,
+    "start": 10968,
+    "length": 601
+  },
+  {
+    "file": "WarningSuppressionValidationTargetTests.cs",
+    "method": "Scan_CurrentRepository_HasNoCA1054OrCA1056Suppressions",
+    "tagged": true,
+    "start": 11892,
+    "length": 688
+  },
+  {
+    "file": "WarningSuppressionValidationTargetTests.cs",
+    "method": "Scan_CurrentRepository_HasNoCA1515Suppressions",
+    "tagged": true,
+    "start": 12916,
+    "length": 601
+  },
+  {
+    "file": "WarningSuppressionValidationTargetTests.cs",
+    "method": "Scan_CurrentRepository_HasNoCA1849Suppressions",
+    "tagged": true,
+    "start": 13843,
+    "length": 601
+  },
+  {
+    "file": "WarningSuppressionValidationTargetTests.cs",
+    "method": "Scan_CurrentRepository_HasNoCA3003Suppressions",
+    "tagged": true,
+    "start": 14770,
+    "length": 601
+  },
+  {
+    "file": "WarningSuppressionValidationTargetTests.cs",
+    "method": "Scan_CurrentRepository_HasNoCS1591Suppressions",
+    "tagged": true,
+    "start": 15699,
+    "length": 601
+  },
+  {
+    "file": "WarningSuppressionValidationTargetTests.cs",
+    "method": "Scan_CurrentRepository_HasOnlySerializerCompatibilityCA2227Suppressions",
+    "tagged": true,
+    "start": 16639,
+    "length": 949
+  },
+  {
+    "file": "WarningSuppressionValidationTargetTests.cs",
+    "method": "Scan_CurrentRepository_HasNoGeneratedMigrationObsoleteWarningPragmas",
+    "tagged": true,
+    "start": 17898,
+    "length": 998
+  },
+  {
+    "file": "YamlObjectMutationTests.cs",
+    "method": "YamlMutationGuidance_IsPublishedToAgentSurfaces",
+    "tagged": true,
+    "start": 510,
+    "length": 1068
+  },
+  {
+    "file": "YamlObjectMutationTests.cs",
+    "method": "YamlMutationHelper_RoundTripsNestedKeysBySerializer",
+    "tagged": true,
+    "start": 1766,
+    "length": 1838
+  },
+  {
+    "file": "YamlObjectMutationTests.cs",
+    "method": "PluginCoreSyncManifest_UsesYamlSerializerInsteadOfLineAssembly",
+    "tagged": true,
+    "start": 3793,
+    "length": 656
+  },
+  {
+    "file": "YamlObjectMutationTests.cs",
+    "method": "FinalResponse_UsesYamlSerializerForCompleteTurnParams",
+    "tagged": true,
+    "start": 4646,
+    "length": 570
+  }
+]

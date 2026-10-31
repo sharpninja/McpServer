@@ -2,7 +2,7 @@ namespace NukeBuild.Tests;
 
 /// <summary>
 /// TR-MCP-NUKE-019: contract scenarios and assertions for <see cref="IIntegrationLanePrecondition"/>. The
-/// expected outcomes come from the criterion: on Windows the lane runs only from an interactive desktop session
+/// expected outcomes pin the retained build precondition in plan section 11 (the former AC-5 was removed): on Windows the lane runs only from an interactive desktop session
 /// and otherwise fails before any test, naming the missing session; on Linux no session requirement applies. The
 /// same assertions run against the scripted precondition (BDPv4 mock gate), wrong preconditions (negative
 /// controls), and the production precondition.

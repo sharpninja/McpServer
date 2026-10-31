@@ -1,4 +1,4 @@
-// TR-MCP-REPL-001 AC-002: the two call sites that apply a configured REPL command timeout
+// FR-MCP-REPL-001 ac-1: the two call sites that apply a configured REPL command timeout
 
 using System.Globalization;
 using System.Text;
@@ -15,7 +15,7 @@ namespace QBrainAi.Repl.Core.Tests;
 /// request, and the timeout message names the timeout that applied.
 /// </summary>
 /// <remarks>
-/// Requirement coverage: TR-MCP-REPL-001 AC-002 (round 8 self-evaluation: the parse rule was bound, but neither call
+/// Requirement coverage: FR-MCP-REPL-001 ac-1 (round 8 self-evaluation: the parse rule was bound, but neither call
 /// site was, so the message clause and the call-site no-failure clause had no test), and through it
 /// TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008. Test data: contract rows, each a pair of scripted variable
 /// values given through a reader that records every name it is asked for (never the process environment) and a command

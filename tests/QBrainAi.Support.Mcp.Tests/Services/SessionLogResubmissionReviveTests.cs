@@ -52,6 +52,7 @@ public sealed class SessionLogResubmissionReviveTests
     }
 
     /// <summary>Resubmitting an imported session after its rows were tombstoned revives it through the import path.</summary>
+    /// <remarks>Integration: resubmits through the real import path, whose extractor may scan the profile read-only without asserting its contents (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public async Task SubmitAsync_ImportResubmitAfterTombstone_RevivesSession()

@@ -63,6 +63,7 @@ public sealed class WikiDumpG6OverlayTests : IDisposable
     }
 
     /// <summary>TEST-MCP-WIKIEXPORT-003: no dump file without --include-dump on GenerateWikiAsync.</summary>
+    /// <remarks>Integration: writes physical wiki output or reads the shipped service-registration source (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public async Task WikiExport_WithoutDumpFlag_UnchangedBehavior()
@@ -79,6 +80,7 @@ public sealed class WikiDumpG6OverlayTests : IDisposable
     }
 
     /// <summary>TEST-MCP-WIKIEXPORT-003: GenerateWikiAsync includeDump writes versioned JSON keyed by workspace.</summary>
+    /// <remarks>Integration: writes physical wiki output or reads the shipped service-registration source (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public async Task WikiExport_WithDumpFlag_WritesVersionedJsonKeyedByWorkspace()
@@ -112,6 +114,7 @@ public sealed class WikiDumpG6OverlayTests : IDisposable
     }
 
     /// <summary>TEST-MCP-WIKIEXPORT-003: shipped DI resolves the singleton orchestrator without a captive scoped dump.</summary>
+    /// <remarks>Integration: writes physical wiki output or reads the shipped service-registration source (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public async Task WikiExport_ShippedDi_ResolvesOrchestratorWithoutCaptiveScope()

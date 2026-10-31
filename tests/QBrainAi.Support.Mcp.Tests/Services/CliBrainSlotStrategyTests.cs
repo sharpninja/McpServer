@@ -407,7 +407,7 @@ public sealed class CliBrainSlotStrategyTests
                 new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions
                 {
                     CliWorkingDirectory = @"Q:\__mcp_unit_test__\QBrainAi",
-                    CliRunAs = "kingd",
+                    CliRunAs = "fixture-user",
                 }),
                 NullLogger.Instance);
 
@@ -496,7 +496,7 @@ public sealed class CliBrainSlotStrategyTests
                 new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions
                 {
                     CliWorkingDirectory = @"Q:\__mcp_unit_test__\QBrainAi",
-                    CliRunAs = "kingd",
+                    CliRunAs = "fixture-user",
                 }),
                 NullLogger.Instance);
 
@@ -536,7 +536,7 @@ public sealed class CliBrainSlotStrategyTests
                 new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions
                 {
                     CliWorkingDirectory = @"Q:\__mcp_unit_test__\QBrainAi",
-                    CliRunAs = "kingd",
+                    CliRunAs = "fixture-user",
                 }),
                 NullLogger.Instance);
 

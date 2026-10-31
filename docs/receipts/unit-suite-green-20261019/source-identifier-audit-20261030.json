@@ -1,0 +1,116 @@
+{
+  "timestampLocal": "2026-10-30T20:17:50",
+  "base": "9b099716e3f4b773787a1caef44353e112bda556",
+  "pattern": "(?i)sharpninja|payton|\\bkingd\\b|lab-omarchy|sql\\.lab|/home/user/github|[FE]:[\\\\/]github|10\\.42\\.0\\.|192\\.168\\.",
+  "hits": [
+    {
+      "file": "src/QBrainAi.Repl.Host/QBrainAi.Repl.Host.csproj",
+      "line": 14,
+      "text": "    <Authors>SharpNinja</Authors>",
+      "classification": "Published maintainer/repository attribution; preserve actual identity"
+    },
+    {
+      "file": "src/QBrainAi.Repl.Host/QBrainAi.Repl.Host.csproj",
+      "line": 18,
+      "text": "    <RepositoryUrl>https://github.com/SharpNinja/McpServer</RepositoryUrl>",
+      "classification": "Published maintainer/repository attribution; preserve actual identity"
+    },
+    {
+      "file": "src/QBrainAi.Repl.Host/QBrainAi.Repl.Host.csproj",
+      "line": 19,
+      "text": "    <PackageProjectUrl>https://github.com/SharpNinja/McpServer</PackageProjectUrl>",
+      "classification": "Published maintainer/repository attribution; preserve actual identity"
+    },
+    {
+      "file": "tests/Build.Tests/BuildProjectSetTests.cs",
+      "line": 33,
+      "text": "        Assert.Contains(actual, path => path.EndsWith(Path.Combine(\"SharpNinja.McpServer.Client\", \"SharpNinja.McpServer.Client.csproj\"), StringComparison.OrdinalIgnoreCase));",
+      "classification": "Actual published package, tool, project or repository identity under regression test; preserve exact value"
+    },
+    {
+      "file": "tests/Build.Tests/BuildTargetTests.cs",
+      "line": 151,
+      "text": "        Assert.Contains(\"sharpninja-mcpserver-plugin-core.tgz\", source, StringComparison.Ordinal);",
+      "classification": "Actual published package, tool, project or repository identity under regression test; preserve exact value"
+    },
+    {
+      "file": "tests/Build.Tests/BuildTargetTests.cs",
+      "line": 472,
+      "text": "        // 1.x alias SharpNinja.McpServer.Repl (mcpserver-repl, TR-MCP-QBRAIN-003) are different tools.",
+      "classification": "Actual published package, tool, project or repository identity under regression test; preserve exact value"
+    },
+    {
+      "file": "tests/Build.Tests/BuildTargetTests.cs",
+      "line": 477,
+      "text": "            sharpninja.mcpserver.repl     1.4.41       mcpserver-repl",
+      "classification": "Actual published package, tool, project or repository identity under regression test; preserve exact value"
+    },
+    {
+      "file": "tests/Build.Tests/BuildTargetTests.cs",
+      "line": 484,
+      "text": "        Assert.Equal(\"1.4.41\", Build.GetInstalledGlobalToolVersion(output, \"SharpNinja.McpServer.Repl\"));",
+      "classification": "Actual published package, tool, project or repository identity under regression test; preserve exact value"
+    },
+    {
+      "file": "tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs",
+      "line": 11,
+      "text": "    private const string LegacyPackagePrefix = \"SharpNinja.\" + \"Mcp\" + \"Server.\";",
+      "classification": "Actual published package, tool, project or repository identity under regression test; preserve exact value"
+    },
+    {
+      "file": "tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs",
+      "line": 14,
+      "text": "    private const string LegacyRepoUrlSegment = \"SharpNinja/\" + \"Mcp\" + \"Server\";",
+      "classification": "Actual published package, tool, project or repository identity under regression test; preserve exact value"
+    },
+    {
+      "file": "tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs",
+      "line": 123,
+      "text": "            // Folder name is SharpNinja.QBrainAi.<Component>, which still contains the legacy token.",
+      "classification": "Actual published package, tool, project or repository identity under regression test; preserve exact value"
+    },
+    {
+      "file": "tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs",
+      "line": 224,
+      "text": "        Assert.Contains(@\"E:\\github\\McpServer\", appsettings, StringComparison.Ordinal);",
+      "classification": "Actual shipped configuration contract; changing the literal or configuration requires an explicit disposition, not weaker assertions"
+    },
+    {
+      "file": "tests/Build.Tests/QBrainAiRebrandPhase1Tests.cs",
+      "line": 225,
+      "text": "        Assert.DoesNotContain(@\"E:\\github\\QBrainAi\", appsettings, StringComparison.Ordinal);",
+      "classification": "Actual shipped configuration contract; changing the literal or configuration requires an explicit disposition, not weaker assertions"
+    },
+    {
+      "file": "tests/Build.Tests/SyncAgentPluginsVendorNameTests.cs",
+      "line": 14,
+      "text": "/// (sharpninja-mcpserver-plugin-core-0.1.0.tgz) mislabeled 0.2.0 content after a breaking-change bump.",
+      "classification": "Actual published package, tool, project or repository identity under regression test; preserve exact value"
+    },
+    {
+      "file": "tests/Build.Tests/SyncAgentPluginsVendorNameTests.cs",
+      "line": 18,
+      "text": "    private const string StableVendorFileName = \"sharpninja-mcpserver-plugin-core.tgz\";",
+      "classification": "Actual published package, tool, project or repository identity under regression test; preserve exact value"
+    },
+    {
+      "file": "tests/Build.Tests/SyncAgentPluginsVendorNameTests.cs",
+      "line": 45,
+      "text": "        var versioned = Regex.Matches(source, @\"sharpninja-mcpserver-plugin-core-\\d+\\.\\d+\\.\\d+\\.tgz\");",
+      "classification": "Actual published package, tool, project or repository identity under regression test; preserve exact value"
+    },
+    {
+      "file": "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139EighteenthEvidenceTests.cs",
+      "line": 78,
+      "text": "            @\"C:\\Users\\kingd\\AppData\\Local\\Temp\\BUG-TRIAGE-139-eighteenth\\final-verification\\exact-final-head.yaml\",",
+      "classification": "Actual historical receipt path under exact-ledger assertion; preserve evidence identity and report scrub conflict"
+    },
+    {
+      "file": "tests/QBrainAi.Support.Mcp.Tests/Documentation/QuadBrainSlotConfigurationTests.cs",
+      "line": 88,
+      "text": "        Assert.Equal(\"kingd\", GetString(brainSlots, \"CliRunAs\"));",
+      "classification": "Actual shipped configuration contract; changing the literal or configuration requires an explicit disposition, not weaker assertions"
+    }
+  ],
+  "acceptance": "pending operator disposition of historical/configuration conflicts; not a test gate"
+}

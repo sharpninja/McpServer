@@ -13,6 +13,7 @@ public sealed class ConfigurablePathIntegrationTests : IDisposable
 {
     private readonly List<string> _tempDirectories = [];
 
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public async Task RepoIngestor_ResolvesRelativeRepoRoot_AgainstCurrentDirectory()
@@ -29,6 +30,7 @@ public sealed class ConfigurablePathIntegrationTests : IDisposable
         Assert.Contains(results, r => string.Equals(r.Doc.SourceKey, "readme.md", StringComparison.OrdinalIgnoreCase));
     }
 
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public async Task VectorIndexService_SaveAsync_UsesConfiguredRelativeIndexPath()

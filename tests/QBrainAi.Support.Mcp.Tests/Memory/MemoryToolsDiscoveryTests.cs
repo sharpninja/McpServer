@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-016 / FR-MCP-MEMORY-017:
+/// TEST-MCP-MEMORY-016 (historical) / FR-MCP-MEMORY-017 (historical):
 /// New memory verbs appear in tools search, descriptions are agent-oriented,
 /// compat verbs remain, and STDIO equals HTTP.
 /// </summary>
@@ -77,6 +77,7 @@ public sealed class MemoryToolsDiscoveryTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-017-09: STDIO and Streamable HTTP advertise the same memory verb set.</summary>
+    /// <remarks>Integration: loads the committed tool JSON and stdio contracts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void StdioAndHttp_SameVerbSet()

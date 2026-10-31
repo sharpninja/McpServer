@@ -28,7 +28,7 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// SqlServer and Postgres compiled <c>Up()</c> must emit guarded SQL (no unguarded
 /// <see cref="CreateTableOperation"/>). SqlServer captured SQL is executed on disposable LocalDB.
 /// Postgres captured SQL is executed on an ephemeral local cluster (no Skip).
-/// Its SQL Server case opens LocalDB, so the class runs in <see cref="SqlServerLocalDbCollection"/> (TR-MCP-NUKE-019 AC-2).
+/// Its SQL Server case opens LocalDB, so the class runs in <see cref="SqlServerLocalDbCollection"/> (FR-MCP-TESTRESOURCE-001 ac-7).
 /// </summary>
 [Collection(SqlServerLocalDbCollection.Name)]
 public sealed class SessionLogAgentSessionHeaderMigrationTests : IDisposable
@@ -207,6 +207,10 @@ public sealed class SessionLogAgentSessionHeaderMigrationTests : IDisposable
     /// TR-MCP-TRIAGESCHEMA-001: captured SqlServer Up() SQL applies on a disposable LocalDB
     /// SessionLogs table that is missing the four header columns and SessionLogTags, then
     /// reapplies without error (idempotent). Does not run the full migration chain.
+    /// Integration: opens the lane-owned SQL override or serialized LocalDB through the shared connection policy
+    /// (FR-MCP-TESTRESOURCE-001 ac-8, TR-MCP-USECASE-018 AC-006).
+    /// Each captured-SQL batch retains its first failure through the shared operation reporter
+    /// (FR-MCP-TESTRESOURCE-001 ac-5); this path has no EF migration-lock release.
     /// </summary>
     [Fact]
     [Trait("Category", "Integration")]
@@ -214,13 +218,11 @@ public sealed class SessionLogAgentSessionHeaderMigrationTests : IDisposable
     {
         var sql = CaptureUpSql(new SqlServerHeaderMigration(), "Microsoft.EntityFrameworkCore.SqlServer");
         AssertSqlServerGuardedHeaderAndTagsSql(sql);
+        var failures = new SqlServerMigrationFailureReporter();
 
-        var serverCs = Environment.GetEnvironmentVariable("MCP_TEST_SQLSERVER_CONNECTION");
-        if (string.IsNullOrWhiteSpace(serverCs))
-        {
+        if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable(SqlServerTestConnection.OverrideVariable)))
             EnsureLocalDbRunning();
-            serverCs = "Server=(localdb)\\MSSQLLocalDB;Integrated Security=True;TrustServerCertificate=True;Connect Timeout=8";
-        }
+        var serverCs = SqlServerTestConnection.Server;
 
         var databaseName = $"mcp_triageschema_{Guid.NewGuid():N}";
         using var admin = new SqlConnection(serverCs);
@@ -249,7 +251,6 @@ public sealed class SessionLogAgentSessionHeaderMigrationTests : IDisposable
             var dbCs = new SqlConnectionStringBuilder(serverCs)
             {
                 InitialCatalog = databaseName,
-                ConnectTimeout = 8,
             }.ToString();
             using var db = new SqlConnection(dbCs);
             db.Open();
@@ -270,10 +271,10 @@ public sealed class SessionLogAgentSessionHeaderMigrationTests : IDisposable
                 setup.ExecuteNonQuery();
             }
 
-            ExecuteSqlServerBatch(db, sql);
+            failures.Run(() => ExecuteSqlServerBatch(db, sql));
             AssertSqlServerLegacyApply(db);
 
-            ExecuteSqlServerBatch(db, sql);
+            failures.Run(() => ExecuteSqlServerBatch(db, sql));
             AssertSqlServerLegacyApply(db);
         }
         finally
@@ -299,6 +300,7 @@ public sealed class SessionLogAgentSessionHeaderMigrationTests : IDisposable
     /// reapplies without error (idempotent). Uses <see cref="EphemeralPostgresFixture"/>
     /// (Program Files PostgreSQL or MCP_TEST_POSTGRES_CONNECTION). Does not Skip.
     /// </summary>
+    /// <remarks>Integration: applies the captured migration SQL to an actual isolated PostgreSQL database (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     [Trait("Category", "Integration")]
     public void PostgreSqlUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently()

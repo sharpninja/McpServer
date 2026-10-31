@@ -287,6 +287,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
     }
 
     /// <summary>TEST-MCP-HYGIENE-005: REST, REPL, Director, plugin expose the same validation.</summary>
+    /// <remarks>Integration: reads the live API, Director, REPL or service source to verify implementation parity (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public async Task Parity_RestDirectorReplPlugin_SameRuleCodesAndCounts()
@@ -543,6 +544,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
     }
 
     /// <summary>TEST-MCP-HYGIENE-003: triage statuses come from the live triage domain, queries are batched.</summary>
+    /// <remarks>Integration: reads the live API, Director, REPL or service source to verify implementation parity (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void ValidationService_UsesLiveTriageDomainAndBatchedQueries()

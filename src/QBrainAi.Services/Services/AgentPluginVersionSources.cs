@@ -1,7 +1,7 @@
 namespace QBrainAi.Support.Mcp.Services;
 
 /// <summary>
-/// TR-MCP-WS-005 / AC-TR-MCP-WS-005-001: every input that agent-plugin version resolution reads, in the order it reads
+/// TR-MCP-WS-005 / FR-MCP-018 ac-1: every input that agent-plugin version resolution reads, in the order it reads
 /// them: the plugin root an environment variable names, the plugin folder beside the workspace, and the plugin caches
 /// under the user profile. Unit tests give resolution test-owned sources, so no unit test reads the process
 /// environment, the machine or the real profile; the running process's sources are

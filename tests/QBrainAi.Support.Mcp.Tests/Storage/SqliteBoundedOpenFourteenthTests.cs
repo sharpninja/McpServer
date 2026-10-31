@@ -102,6 +102,8 @@ public sealed class SqliteBoundedOpenFourteenthTests
     /// its task at once and fails with TimeoutException at the bound, no open worker starts, and the held preflight
     /// stays counted until it actually returns. Fixture: a file data source in a temporary directory.
     /// </summary>
+    /// <remarks>Integration: asserts an elapsed wall-clock bound on actual scheduling and timer execution (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact(Timeout = 60_000)]
     public async Task OpenAsync_PreflightHeldAtBoundary_TimesOutWithoutBlockingTheCaller()
     {
@@ -188,6 +190,8 @@ public sealed class SqliteBoundedOpenFourteenthTests
     /// A provider-native shared-cache lock encountered during Open must honor the finite deadline,
     /// close the partial handle, and leave no worker behind.
     /// </summary>
+    /// <remarks>Integration: asserts an elapsed wall-clock bound on actual scheduling and timer execution (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task OpenAsync_NativeLockAtOpen_TimesOutAndJoinsWorker()
     {
@@ -324,6 +328,7 @@ public sealed class SqliteBoundedOpenFourteenthTests
     /// Repeated pooled and non-pooled opens preserve the exact connection string, release the outer
     /// handle on close, and dispose cancellation registration before the connection is reused.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Theory]
     [InlineData(true)]

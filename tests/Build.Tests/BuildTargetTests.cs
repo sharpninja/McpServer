@@ -4,7 +4,7 @@ using System.Xml.Linq;
 namespace NukeBuild.Tests;
 
 /// <summary>
-/// TEST-NUKE-001: Verifies that the Nuke _build project compiles and the Build class
+/// TEST-NUKE-001 (historical): Verifies that the Nuke _build project compiles and the Build class
 /// is defined with the expected targets. Since NukeBuild requires specific runtime
 /// initialization (assembly name = "_build"), we verify via reflection rather than
 /// direct instantiation.
@@ -99,6 +99,8 @@ public sealed class BuildTargetTests
     }
 
     /// <summary>Sync restores lib-node with npm ci when typescript/bin/tsc is missing, before npm run build.</summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void SyncAgentPlugins_EnsuresNodeCoreNpmCiBeforeNpmRunBuild()
     {
@@ -134,7 +136,9 @@ public sealed class BuildTargetTests
         }
     }
 
-    /// <summary>TEST-MCP-PLUGIN-PSONLY-001: Plugin sync refreshes Node core vendor packages before installed caches are refreshed.</summary>
+    /// <summary>TEST-MCP-PLUGIN-PSONLY-001 (historical): Plugin sync refreshes Node core vendor packages before installed caches are refreshed.</summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void SyncAgentPlugins_RefreshesNodeCoreVendorPackageBeforeCaches()
     {
@@ -151,6 +155,8 @@ public sealed class BuildTargetTests
     }
 
     /// <summary>MCP-PLUGIN-SYNC-001: Plugin sync refreshes the workspace staged package before optional sibling plugin repositories.</summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void SyncAgentPlugins_RefreshesWorkspaceStagedPackageBeforeSiblingDiscovery()
     {
@@ -166,7 +172,7 @@ public sealed class BuildTargetTests
             "The ignored workspace staged package must be refreshed before optional sibling plugin discovery can return early.");
     }
 
-    /// <summary>TEST-MCP-REQSCOPE-005: Plugin validation fails stale Requirements skills that omit layer method shapes.</summary>
+    /// <summary>TEST-MCP-REQSCOPE-005 (historical): Plugin validation fails stale Requirements skills that omit layer method shapes.</summary>
     [Fact]
     public void ValidateRequirementsSkillLayerGuidance_RequiresLayerMethodDocs()
     {
@@ -270,7 +276,7 @@ public sealed class BuildTargetTests
         }
     }
 
-    /// <summary>TEST-MCP-QBAGENTTOOL-001: QBAgent has dedicated pack and deploy targets.</summary>
+    /// <summary>TEST-MCP-QBAGENTTOOL-001 (historical): QBAgent has dedicated pack and deploy targets.</summary>
     [Fact]
     public void Build_HasQBAgentToolTargets()
     {
@@ -278,7 +284,9 @@ public sealed class BuildTargetTests
         Assert.NotNull(BuildType.GetProperty("DeployQBAgentTool"));
     }
 
-    /// <summary>TEST-MCP-QBAGENTTOOL-001: QBAgent is configured as a .NET global tool package.</summary>
+    /// <summary>TEST-MCP-QBAGENTTOOL-001 (historical): QBAgent is configured as a .NET global tool package.</summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void QBAgentProject_IsConfiguredAsDotNetTool()
     {
@@ -300,6 +308,8 @@ public sealed class BuildTargetTests
     /// PackQBAgentTool must pack QBrainAi.QBAgent.csproj only. Depending on solution Compile
     /// builds every test project and fails when testhosts lock those outputs.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void PackQBAgentTool_DoesNotDependOnSolutionCompile()
     {
@@ -310,6 +320,8 @@ public sealed class BuildTargetTests
     }
 
     /// <summary>DeployQBAgentTool installs the packed tool; it must not pull solution Compile.</summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void DeployQBAgentTool_DependsOnPackQBAgentTool_NotCompile()
     {
@@ -354,16 +366,16 @@ public sealed class BuildTargetTests
         try
         {
             Directory.CreateDirectory(directory);
-            File.WriteAllText(Path.Combine(directory, "SharpNinja.B.1.0.0.nupkg"), "");
-            File.WriteAllText(Path.Combine(directory, "SharpNinja.A.1.0.0.nupkg"), "");
-            File.WriteAllText(Path.Combine(directory, "SharpNinja.A.1.0.0.symbols.nupkg"), "");
+            File.WriteAllText(Path.Combine(directory, "Example.B.1.0.0.nupkg"), "");
+            File.WriteAllText(Path.Combine(directory, "Example.A.1.0.0.nupkg"), "");
+            File.WriteAllText(Path.Combine(directory, "Example.A.1.0.0.symbols.nupkg"), "");
             File.WriteAllText(Path.Combine(directory, "ignored.txt"), "");
 
             var packages = Build.GetNuGetPackagesToPublish((AbsolutePath)directory)
                 .Select(path => path.Name)
                 .ToArray();
 
-            Assert.Equal(["SharpNinja.A.1.0.0.nupkg", "SharpNinja.B.1.0.0.nupkg"], packages);
+            Assert.Equal(["Example.A.1.0.0.nupkg", "Example.B.1.0.0.nupkg"], packages);
         }
         finally
         {
@@ -372,6 +384,8 @@ public sealed class BuildTargetTests
         }
     }
 
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void ResolveNuGetPackageVersion_ReturnsExplicitParameter()
     {
@@ -399,6 +413,8 @@ public sealed class BuildTargetTests
         Assert.Equal("1.0.1", version);
     }
 
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Build_SourceProjects_DoNotPinDivergentVersionMetadata()
     {
@@ -419,6 +435,8 @@ public sealed class BuildTargetTests
         }
     }
 
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void BuildTargets_UseGitVersionForCompileAndReplTool()
     {
@@ -658,15 +676,15 @@ public sealed class BuildTargetTests
             Directory.CreateDirectory(directory);
             var nested = Path.Combine(directory, "nested");
             Directory.CreateDirectory(nested);
-            File.WriteAllText(Path.Combine(directory, "SharpNinja.A.1.0.0.nupkg"), "");
-            File.WriteAllText(Path.Combine(directory, "SharpNinja.A.1.0.0.symbols.nupkg"), "");
+            File.WriteAllText(Path.Combine(directory, "Example.A.1.0.0.nupkg"), "");
+            File.WriteAllText(Path.Combine(directory, "Example.A.1.0.0.symbols.nupkg"), "");
             File.WriteAllText(Path.Combine(directory, "keep.txt"), "");
             File.WriteAllText(Path.Combine(nested, "Nested.1.0.0.nupkg"), "");
 
             Build.CleanNuGetPackageOutput((AbsolutePath)directory);
 
-            Assert.False(File.Exists(Path.Combine(directory, "SharpNinja.A.1.0.0.nupkg")));
-            Assert.False(File.Exists(Path.Combine(directory, "SharpNinja.A.1.0.0.symbols.nupkg")));
+            Assert.False(File.Exists(Path.Combine(directory, "Example.A.1.0.0.nupkg")));
+            Assert.False(File.Exists(Path.Combine(directory, "Example.A.1.0.0.symbols.nupkg")));
             Assert.True(File.Exists(Path.Combine(directory, "keep.txt")));
             Assert.True(File.Exists(Path.Combine(nested, "Nested.1.0.0.nupkg")));
         }
@@ -702,6 +720,8 @@ public sealed class BuildTargetTests
         Assert.NotNull(field);
     }
 
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void CopyBrainSlotRuntimeConfig_CopiesAssignmentFileToDeploymentConfigPath()
     {
@@ -727,6 +747,8 @@ public sealed class BuildTargetTests
     }
 
     /// <summary>Windows UpdateService validates a complete stage before it stops the live service.</summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void UpdateService_StagesBaselineConfigurationBeforeStoppingWindowsService()
     {
@@ -754,7 +776,7 @@ public sealed class BuildTargetTests
 
 
     /// <summary>
-    /// TEST-NUKE-002: BackupPreservedState tolerates a first-time install where the
+    /// TEST-NUKE-002 (historical): BackupPreservedState tolerates a first-time install where the
     /// install root does not yet exist - it creates the root, performs no backup, and
     /// returns an empty result so the deploy can proceed. Regression for the
     /// trusted-third-party first-install DirectoryNotFoundException.

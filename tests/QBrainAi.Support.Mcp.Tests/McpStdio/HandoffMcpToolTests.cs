@@ -76,6 +76,7 @@ public sealed class HandoffMcpToolTests : IDisposable
     }
 
     /// <summary>TEST-HANDOFF-006: native tools, Director aliases, and plugin skill exist.</summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void PublicSurfaces_ExposeIngestGetAndApprove()
@@ -111,6 +112,7 @@ public sealed class HandoffMcpToolTests : IDisposable
     }
 
     /// <summary>P2-6: plugin-sync artifact matches the canonical core handoff skill bytes.</summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void PluginSync_HandoffSkill_MatchesCoreArtifact()

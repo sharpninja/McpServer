@@ -9,8 +9,7 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// still starting when several SQL Server test classes open it at once does not fail the Windows integration lane.
 /// </summary>
 /// <remarks>
-/// Requirement coverage: TR-MCP-NUKE-019 AC-2 (every integration case runs and passes in its host's lane at
-/// 0 failed). Found by the Windows interactive lane ug-r3-win-lane-2, where
+/// Requirement coverage: FR-MCP-TESTRESOURCE-001 ac-8 (serves TR-MCP-NUKE-019 AC-2). Found by the Windows interactive lane ug-r3-win-lane-2, where
 /// SqlServerAuditPayloadMigrationTests failed after the 15 s default connect timeout; fix chosen by the operator on
 /// 2026-10-20 ("Fix the flake in PR 87 (Recommended)"). Test data: scripted connection strings parsed with
 /// <see cref="SqlConnectionStringBuilder"/>; no server is contacted and no environment variable is read. Negative
@@ -75,7 +74,7 @@ public sealed class SqlServerTestConnectionTests
     [Fact]
     public void Resolve_Override_IsReturnedUnchanged()
     {
-        const string external = "Server=sql.lab;Database=master;User Id=tester;Encrypt=False";
+        const string external = "Server=sql.example.invalid;Database=master;User Id=tester;Encrypt=False";
         Assert.Equal(external, SqlServerTestConnection.Resolve(external));
     }
 }

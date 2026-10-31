@@ -18,6 +18,7 @@ namespace QBrainAi.Support.Mcp.Tests.Memory;
 public sealed class MemoryBenchHarnessTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-05: without_memory has no injection and no successful recall tools.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void WithoutMemory_NoEffectiveInjectionOrTools()
@@ -33,6 +34,7 @@ public sealed class MemoryBenchHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-06: with_memory seeds, injects, and exposes recall tools.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void WithMemory_SeededAndToolsAvailable()
@@ -46,6 +48,7 @@ public sealed class MemoryBenchHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-07: Default path is Grok first; others stay opt-in until H7a.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void GrokFirst_OthersOptInUntilValueGate()
@@ -63,6 +66,7 @@ public sealed class MemoryBenchHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-08: Each cell records transcript, tools, injection, tokens, latency, score, pass.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void RecordsPerCellMetrics_IncludingTokens()
@@ -81,6 +85,7 @@ public sealed class MemoryBenchHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-09: Result artifacts include per-cell tokens and a token summary table.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void WritesResultArtifacts_WithTokenSummary()
@@ -101,6 +106,7 @@ public sealed class MemoryBenchHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-25: Stub/recorded mode does not require cloud credentials.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void StubMode_NoCloudRequired()
@@ -120,6 +126,7 @@ public sealed class MemoryBenchHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-26: Live/stub/recorded modes are tagged on the result.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void LiveMode_Tagged()
@@ -153,6 +160,7 @@ public sealed class MemoryBenchHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-27: Seeds are Workspace-scoped in a disposable bench workspace and cleaned up.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void Seeds_WorkspaceScopedCleanup()
@@ -168,6 +176,7 @@ public sealed class MemoryBenchHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-31: Stub re-run on the same pack is byte-stable for scores and tokens.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void Rerun_DeterministicStub()

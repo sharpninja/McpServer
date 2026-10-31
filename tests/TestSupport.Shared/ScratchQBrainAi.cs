@@ -254,14 +254,28 @@ internal sealed class ScratchQBrainAi : IAsyncDisposable
             StandardErrorEncoding = Encoding.UTF8,
         };
         startInfo.ArgumentList.Add(SupportAssemblyPath);
-        startInfo.Environment["ASPNETCORE_ENVIRONMENT"] = "Production";
-        startInfo.Environment["DOTNET_ENVIRONMENT"] = "Production";
-        startInfo.Environment["DOTNET_CLI_TELEMETRY_OPTOUT"] = "1";
-        startInfo.Environment["DOTNET_NOLOGO"] = "1";
-        startInfo.Environment["PORT"] = Port.ToString(CultureInfo.InvariantCulture);
-        startInfo.Environment["MCP_SQLITE_DATA_SOURCE"] = DatabasePath;
-        startInfo.Environment["MCP_WORKSPACE_PATH"] = WorkspacePath;
-        startInfo.Environment["MCPSERVER_WORKSPACE_PATH"] = WorkspacePath;
+
+        // TR-MCP-NUKE-019 AC-6 (hostile validation finding R8B-F3): the instance's database is the one in its owned
+        // root, set in both the canonical and the legacy form besides the YAML; no inherited product setting reaches
+        // the process, and the environment is checked before the process starts.
+        var settings = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            ["ASPNETCORE_ENVIRONMENT"] = "Production",
+            ["DOTNET_ENVIRONMENT"] = "Production",
+            ["DOTNET_CLI_TELEMETRY_OPTOUT"] = "1",
+            ["DOTNET_NOLOGO"] = "1",
+            ["PORT"] = Port.ToString(CultureInfo.InvariantCulture),
+            ["MCP_SQLITE_DATA_SOURCE"] = DatabasePath,
+            ["MCP_WORKSPACE_PATH"] = WorkspacePath,
+            ["MCPSERVER_WORKSPACE_PATH"] = WorkspacePath,
+            ["Mcp__Database__Provider"] = "sqlite",
+            ["Mcp__Database__Sqlite__ConnectionString"] = $"Data Source={DatabasePath}",
+            ["QBrainAi__Database__Provider"] = "sqlite",
+            ["QBrainAi__Database__Sqlite__ConnectionString"] = $"Data Source={DatabasePath}",
+            ["Mcp__Parseable__FallbackLogPath"] = Path.Combine(RootPath, "logs", "qbrainai-.log"),
+            ["QBrainAi__Parseable__FallbackLogPath"] = Path.Combine(RootPath, "logs", "qbrainai-.log"),
+        };
+        OwnedInstanceProcess.ApplyOwnedEnvironment(startInfo, settings, RootPath);
 
         _process = new Process { StartInfo = startInfo };
         _process.OutputDataReceived += (_, e) =>

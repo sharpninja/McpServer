@@ -18,6 +18,7 @@ public sealed class BugTriage139EighteenthTraversalTests
     /// Proves a metadata stall cannot hold the public caller indefinitely and that the root remains
     /// physically pinned until the isolated traversal worker actually exits.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task EnumerateFilesBoundedAsync_BlockingMetadata_TimesOutWithTruthfulWorkerAccounting()
     {
@@ -116,6 +117,7 @@ public sealed class BugTriage139EighteenthTraversalTests
     /// Proves exact caller cancellation is observed while a metadata operation is blocked, without
     /// treating a detached worker as completed.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem traversal, worker cancellation or directory-link replacement (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task EnumerateFilesBoundedAsync_BlockingMetadata_ObservesExactCallerCancellation()
     {
@@ -171,6 +173,7 @@ public sealed class BugTriage139EighteenthTraversalTests
     /// Proves a directory replaced by an external junction after the root is pinned is rejected
     /// before any external file is opened.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem traversal, worker cancellation or directory-link replacement (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task EnumerateFilesBoundedAsync_DirectorySwap_DoesNotTraverseExternalJunction()
     {

@@ -10,6 +10,7 @@ namespace QBrainAi.Support.Mcp.Tests.McpStdio;
 public sealed class MemoryContractArtifactTests
 {
     /// <summary>The STDIO contract manifest includes all memory tools and their scope values.</summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void StdioToolContract_IncludesMemoryToolsAndScopes()
@@ -45,6 +46,7 @@ public sealed class MemoryContractArtifactTests
     }
 
     /// <summary>The default marker prompt documents required memory injection and tool surfaces.</summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void DefaultMarkerPrompt_IncludesMcpMemoryGuidance()
@@ -68,6 +70,7 @@ public sealed class MemoryContractArtifactTests
     }
 
     /// <summary>Memory context documentation includes import safeguards and audit attribution rules.</summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void MemoryContextDocumentation_IncludesImportAndAttributionRules()

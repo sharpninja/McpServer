@@ -1,12 +1,13 @@
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-017 / TR-MCP-MEMORY-UI-002:
+/// TEST-MCP-MEMORY-017 (historical) / TR-MCP-MEMORY-UI-002 (historical):
 /// /memory/ is packaged and hosted like sibling static UIs.
 /// </summary>
 public sealed class MemoryUiHostingTests
 {
     /// <summary>AC-TR-MCP-MEMORY-UI-002-01: UI is served at /memory/ from packaged static assets.</summary>
+    /// <remarks>Integration: reads the shipped memory UI or its registration artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void ServedAtMemoryPath()
@@ -23,6 +24,7 @@ public sealed class MemoryUiHostingTests
     }
 
     /// <summary>AC-TR-MCP-MEMORY-UI-002-04: Static assets are included in publish output / Linux service package.</summary>
+    /// <remarks>Integration: reads the shipped memory UI or its registration artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void Assets_InPublishOutput()
@@ -42,6 +44,7 @@ public sealed class MemoryUiHostingTests
     }
 
     /// <summary>AC-TR-MCP-MEMORY-UI-002-05: Deep link /memory/{id} opens detail or fails closed for unknown id.</summary>
+    /// <remarks>Integration: reads the shipped memory UI or its registration artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void DeepLink_DetailOrFailClosed()
@@ -57,6 +60,7 @@ public sealed class MemoryUiHostingTests
     }
 
     /// <summary>AC-TR-MCP-MEMORY-UI-002-06: UI uses the same API-key auth as other /mcpserver pages.</summary>
+    /// <remarks>Integration: reads the shipped memory UI or its registration artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void Auth_SameAsMcpserver()
@@ -79,6 +83,7 @@ public sealed class MemoryUiHostingTests
     }
 
     /// <summary>AC-TR-MCP-MEMORY-UI-002-07: CSP / no inline-eval matches sibling static UIs.</summary>
+    /// <remarks>Integration: reads the shipped memory UI or its registration artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void Csp_MatchesSiblingUis()
@@ -97,6 +102,7 @@ public sealed class MemoryUiHostingTests
     }
 
     /// <summary>AC-TR-MCP-MEMORY-UI-002-08: Missing hashed bundles are 404, not a false 200 index.</summary>
+    /// <remarks>Integration: reads the shipped memory UI or its registration artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void MissingAsset_NotFalse200()

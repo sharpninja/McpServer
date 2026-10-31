@@ -48,7 +48,7 @@ public sealed class McpAgentOptionsLegacySectionHostTests
     [Fact]
     public void AddQBrainAiMcpAgent_BindsLegacyMcpServerSection()
     {
-        var workspacePath = OperatingSystem.IsWindows() ? @"E:\github\McpServer" : "/var/lib/McpServer";
+        var workspacePath = OperatingSystem.IsWindows() ? @"Q:\fixture\McpServer" : "/var/lib/McpServer";
         var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>
         {
             ["McpServer:McpAgent:ApiKey"] = "legacy-token",

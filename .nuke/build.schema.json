@@ -39,6 +39,7 @@
         "InstallOllama",
         "InstallReplTool",
         "InstallTestDependencies",
+        "IntegrationLanePrecondition",
         "MigrationIntegrationTests",
         "NormalizeGeneratedMigrationObsoletePragmas",
         "PackageMsix",

@@ -133,42 +133,10 @@ public sealed class ReplChildProcessHelper : IDisposable
         var markerPath = instance.MarkerPath;
         var hostAssemblyPath = instance.ReplHostAssemblyPath;
 
-        var startInfo = new ProcessStartInfo
-        {
-            FileName = "dotnet",
-            WorkingDirectory = workspaceRoot,
-            UseShellExecute = false,
-            RedirectStandardInput = true,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            CreateNoWindow = true,
-            StandardOutputEncoding = Encoding.UTF8,
-            StandardInputEncoding = Encoding.UTF8,
-            StandardErrorEncoding = Encoding.UTF8
-        };
-        startInfo.ArgumentList.Add(hostAssemblyPath);
-        startInfo.ArgumentList.Add("--agent-stdio");
-        startInfo.ArgumentList.Add("--agent");
-        startInfo.ArgumentList.Add(_agentName);
-        startInfo.ArgumentList.Add("--workspace-path");
-        startInfo.ArgumentList.Add(workspaceRoot);
-        startInfo.ArgumentList.Add("--marker-file");
-        startInfo.ArgumentList.Add(markerPath);
-
-        startInfo.Environment["MCP_WORKSPACE_PATH"] = workspaceRoot;
-        startInfo.Environment["MCPSERVER_WORKSPACE_PATH"] = workspaceRoot;
-        startInfo.Environment["MCP_AGENT_NAME"] = _agentName;
-        startInfo.Environment["PLUGIN_AGENT_NAME"] = _agentName;
-        startInfo.Environment["MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS"] = "10";
-        startInfo.Environment["MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS"] = "8";
-        startInfo.Environment["DOTNET_CLI_TELEMETRY_OPTOUT"] = "1";
-        startInfo.Environment["DOTNET_NOLOGO"] = "1";
+        // FR-MCP-TESTRESOURCE-001 ac-4: both consumers use the same guarded arguments, server and trust cache.
+        var startInfo = OwnedReplStart.CreateStartInfo(hostAssemblyPath, workspaceRoot, markerPath,
+            instance.RootPath, instance.BaseUrl.ToString(), _agentName);
         LastStartArguments = startInfo.ArgumentList.ToArray();
-        var violation = TemporaryInstanceChecks.CheckReplStartArguments(LastStartArguments, instance.RootPath);
-        if (violation is not null)
-        {
-            throw new InvalidOperationException(violation);
-        }
 
         _process = new Process { StartInfo = startInfo };
         _process.OutputDataReceived += OnStdoutDataReceived;

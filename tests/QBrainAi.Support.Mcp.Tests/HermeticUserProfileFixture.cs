@@ -7,7 +7,7 @@ using Xunit;
 namespace QBrainAi.Support.Mcp.Tests;
 
 /// <summary>
-/// TR-MCP-WS-005 / AC-TR-MCP-WS-005-001: gives marker agent-plugin version resolution test-owned sources for the whole
+/// TR-MCP-WS-005 / FR-MCP-018 ac-1: gives marker agent-plugin version resolution test-owned sources for the whole
 /// test assembly: no plugin-root environment variable, no folder beside the workspace, and an empty temporary profile,
 /// so no test in this assembly reads the environment, the machine or the plugin caches of the user who runs it
 /// (operator 2026-10-20: "Fix scans in PR 87 (Recommended)" and "Structural fix, round 4 (Recommended)"; unit tests

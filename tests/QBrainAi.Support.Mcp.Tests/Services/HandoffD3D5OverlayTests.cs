@@ -43,6 +43,7 @@ public sealed class HandoffD3D5OverlayTests : IDisposable
     /// D3: GenerateDocumentAsync renders every live FR-HANDOFF / TR-HANDOFF / TEST-HANDOFF id
     /// that the shipped parser loaded from docs/Project.
     /// </summary>
+    /// <remarks>Integration: loads the live requirement documents and exercises the physical export writers (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public async Task D3_GenerateDocument_ShippedFileBackedService_RendersLiveHandoffFamily()
@@ -96,6 +97,7 @@ public sealed class HandoffD3D5OverlayTests : IDisposable
     /// D3: GenerateAllAsync and GenerateWikiAsync write Handoff family ids into temp markdown/wiki
     /// exports using the shipped export writers. Does not mutate docs/Project.
     /// </summary>
+    /// <remarks>Integration: loads the live requirement documents and exercises the physical export writers (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public async Task D3_GenerateAllAndWiki_ShippedService_WritesHandoffFamilyToTempExport()

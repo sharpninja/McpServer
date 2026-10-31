@@ -1,0 +1,779 @@
+{
+  "timestampLocal": "2026-10-30T19:38:55",
+  "diagnosticOnly": true,
+  "acceptedGate": false,
+  "totals": {
+    "repeats": 50,
+    "failed": 1,
+    "passed": 299,
+    "skipped": 0
+  },
+  "rootCause": "unresolved",
+  "captures": [
+    {
+      "repeat": "diagnostic-o-01",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-01/sql-events.txt",
+      "retained": 999,
+      "metadata": {
+        "processingTime": "9",
+        "memoryUsed": "1282322",
+        "truncated": "0",
+        "eventCount": "999",
+        "totalEventsProcessed": "4790",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T184145",
+      "retentionComplete": false,
+      "severeErrors": [],
+      "sha256": "A28EE8A3A93CAFF2EA44C62F9F5B05D3C320B34C14B097F66935C0FD5FB01084"
+    },
+    {
+      "repeat": "diagnostic-o-02",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-02/sql-events.txt",
+      "retained": 999,
+      "metadata": {
+        "processingTime": "8",
+        "memoryUsed": "1282322",
+        "truncated": "0",
+        "eventCount": "999",
+        "totalEventsProcessed": "4790",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T184145",
+      "retentionComplete": false,
+      "severeErrors": [],
+      "sha256": "7509A227FDA33655CE6CF045149F34A622865C382898346BCC618FAD07F2B4CD"
+    },
+    {
+      "repeat": "diagnostic-o-03",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-03/sql-events.txt",
+      "retained": 999,
+      "metadata": {
+        "processingTime": "9",
+        "memoryUsed": "1282322",
+        "truncated": "0",
+        "eventCount": "999",
+        "totalEventsProcessed": "4790",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T184145",
+      "retentionComplete": false,
+      "severeErrors": [],
+      "sha256": "00184A4FE55681A98B7A384EB3396F9ECC0AC19CBCC3EC7313CCDC58455FDD99"
+    },
+    {
+      "repeat": "diagnostic-o-04",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-04/sql-events.txt",
+      "retained": 999,
+      "metadata": {
+        "processingTime": "9",
+        "memoryUsed": "1282322",
+        "truncated": "0",
+        "eventCount": "999",
+        "totalEventsProcessed": "4790",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T184145",
+      "retentionComplete": false,
+      "severeErrors": [],
+      "sha256": "5DD777C5036E43AFE0DBEDCB01BA6E2E68D4A752E4E06F23BD6E4F8B6241776B"
+    },
+    {
+      "repeat": "diagnostic-o-05",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-05/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "2",
+        "memoryUsed": "933642",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T184145",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "96E4581126FF2DF54C41592DD0031D49D182FFAA95DCF68A8F0B4074B210C74D"
+    },
+    {
+      "repeat": "diagnostic-o-06",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-06/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "2",
+        "memoryUsed": "933642",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T184145",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "ACA11939CA6AC23856AD0DF4B5FCCF17685F57D5F72838A8B7BC867AD29FFDE1"
+    },
+    {
+      "repeat": "diagnostic-o-07",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-07/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "2",
+        "memoryUsed": "933642",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T184145",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "3E93349EC9D6CDE42625FAE351EE61302CACD4EDB04A5D46CA04D33B010B44CA"
+    },
+    {
+      "repeat": "diagnostic-o-08",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-08/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "2",
+        "memoryUsed": "933642",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T184145",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "11F7996A77DF3D4344F0C5D2B2C324A9AA7D2D57C7977A663AF0F93650F25C81"
+    },
+    {
+      "repeat": "diagnostic-o-09",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-09/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "3",
+        "memoryUsed": "933642",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T184145",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "4F0F789D97F74D8C3873057EE4679085486B376684256EECE06EA123C23E8DA9"
+    },
+    {
+      "repeat": "diagnostic-o-10",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-10/sql-events.txt",
+      "retained": 791,
+      "metadata": {
+        "processingTime": "3",
+        "memoryUsed": "932719",
+        "truncated": "0",
+        "eventCount": "791",
+        "totalEventsProcessed": "791",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T184145",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "091125C1923A341AA091A6222ED5BFDE46AF4A5E9DAD3D2F39E4A1A5CBF5621D"
+    },
+    {
+      "repeat": "diagnostic-o-01",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-01/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "2",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "F89849D6FF6DBE5891E5EB628F17F2D03AF90B332661B9C4EB5831E5DD5CA562"
+    },
+    {
+      "repeat": "diagnostic-o-02",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-02/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "2",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "57A3D25B3769BFD0C4A6A2C6969DA630AA58D1B48F27CA397133403201205F2D"
+    },
+    {
+      "repeat": "diagnostic-o-03",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-03/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "2",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "51EF833F8EB8194A39A7D9FC9CFA6D1663C9A3C9C4106B0431D2DD5F77A4D307"
+    },
+    {
+      "repeat": "diagnostic-o-04",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-04/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "2",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "07869EE245511D5C5499D8FAB5FA51694B51C536FF11FFD6E91231585AFECC29"
+    },
+    {
+      "repeat": "diagnostic-o-05",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-05/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "2",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "32205CAF39EE26D0D22E943A27A71D4C14C5649316DF0B1AA6DA4F7A8011ECD3"
+    },
+    {
+      "repeat": "diagnostic-o-06",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-06/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "2",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "0027DF6717110452DD229D2E44C0D7AC271DBDDE6F601C7E1B0A4BC1E13041BF"
+    },
+    {
+      "repeat": "diagnostic-o-07",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-07/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "3",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "4C630CF396C1BC7C6AA99D2949FAB007D2E9B8234F5BCE45971E47BAE6F1C102"
+    },
+    {
+      "repeat": "diagnostic-o-08",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-08/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "2",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "2315667426ABB9FCC22A8DED95B7CF5782530D522CF49A49848C49BE819B4D4E"
+    },
+    {
+      "repeat": "diagnostic-o-09",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-09/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "3",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "C15360DB6B5F65A8EAF8654729F50F387DDA315BADD777E847015838278F9630"
+    },
+    {
+      "repeat": "diagnostic-o-10",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-10/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "2",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "8B447413F86711E6AAE1903CE6B717E72419D89FA6545FB30198F8D14A0849DC"
+    },
+    {
+      "repeat": "diagnostic-o-11",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-11/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "2",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "F0DA98F716854FD3D832A4E93D9E259C7E813CD74C965772A09DB119EDDC9B36"
+    },
+    {
+      "repeat": "diagnostic-o-12",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-12/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "2",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "4E10BC07CAF7FF5032621271C2C2734FDE5AFAE1E64E5BA764FA9EBF945D5F44"
+    },
+    {
+      "repeat": "diagnostic-o-13",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-13/sql-events.txt",
+      "retained": 791,
+      "metadata": {
+        "processingTime": "3",
+        "memoryUsed": "932719",
+        "truncated": "0",
+        "eventCount": "791",
+        "totalEventsProcessed": "791",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "BB0BF35B75A6C8262E19DD70C4CAA2A926BB921B74FA46E45AF14BB8518246F2"
+    },
+    {
+      "repeat": "diagnostic-o-14",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-14/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "2",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "61EEF98FEBAEA858251B01C4979E509D9C083B9740FDC26F57980993C5D8D6EF"
+    },
+    {
+      "repeat": "diagnostic-o-15",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-15/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "3",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "A36D3DF960DE1AFA2BD0B7796C0FF7E4B0C2E6418F425129CDBFAF8841035B56"
+    },
+    {
+      "repeat": "diagnostic-o-16",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-16/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "3",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "28863D7490B0BF2FC36B8DAE97B997EC56E2FD5B1332DBFF1CCFF2CAE900731C"
+    },
+    {
+      "repeat": "diagnostic-o-17",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-17/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "2",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "34689B42DD50CA7B9C850915957EC95CD3EDAFD78C69C36F57EAE17B98CCFEAF"
+    },
+    {
+      "repeat": "diagnostic-o-18",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-18/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "2",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "54228D3DAA5CE4BB261CF40AA5CD2B8C1F4D387CA23CB17F2D0E37C36E9F1FC9"
+    },
+    {
+      "repeat": "diagnostic-o-19",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-19/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "2",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "0F036593D090FF66BE927AC682B4EB91BFFD87013608BFA3A3D415AA2423C4E8"
+    },
+    {
+      "repeat": "diagnostic-o-20",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-20/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "2",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "9AB64B9E6D4FAE43A439E6073B3E7055DB791C9BB09D568A91E5E9BCD52EE96C"
+    },
+    {
+      "repeat": "diagnostic-o-21",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-21/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "3",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "4DAA6747CBD05BCA318DFB5E76B4D69EEC8EA81F4B382ACC60BDF5A3C695A5D5"
+    },
+    {
+      "repeat": "diagnostic-o-22",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-22/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "3",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "87072635F1A6FD9B6663307294C7E9A7EE2F2B7903BC931BE2461B0B4D5E5324"
+    },
+    {
+      "repeat": "diagnostic-o-23",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-23/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "2",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "9454154EBA63633BD712A31A31C3D4F9D9ADC747E139169CF113D408BEA1AA60"
+    },
+    {
+      "repeat": "diagnostic-o-24",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-24/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "2",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "6D6E682FE428B7DA4EE6EC58B479100E3776534AF4A96F6B16AFE868B982E82E"
+    },
+    {
+      "repeat": "diagnostic-o-25",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-25/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "2",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "A8771C17ED453DAB71A8F678DDDDE71E48E19C3546E59709C0B6BC1E48F5E80F"
+    },
+    {
+      "repeat": "diagnostic-o-26",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-26/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "2",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "80EA2FFECBE21397CB96396AF4B903AC08761B72A2DD55CF7519AF9EE5D0D7E0"
+    },
+    {
+      "repeat": "diagnostic-o-27",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-27/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "3",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "649CE5D2145744911187F10ECC7677B8AC3867CE3BF50A36D65B14593F3A7FAE"
+    },
+    {
+      "repeat": "diagnostic-o-28",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-28/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "2",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "A5594F1CE3B8D1725E9819B6B57397A841DB227077984665328A77422A297BC6"
+    },
+    {
+      "repeat": "diagnostic-o-29",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-29/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "2",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "5808A1E311C526BB3ECD188C9B3AAF90868A937A5D3153886249910249FF9ECF"
+    },
+    {
+      "repeat": "diagnostic-o-30",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-30/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "3",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "EF4C06658BCDED8011564224D10ADFFB4C1F414311D3B1B1F22CE88D4A401063"
+    },
+    {
+      "repeat": "diagnostic-o-31",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-31/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "3",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "DF8EF29FA83FB4412463692D52E92B9DC1DFE2835B20099D7311798C536494B9"
+    },
+    {
+      "repeat": "diagnostic-o-32",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-32/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "3",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "003E4836EEF566880A3651A44871BF412A4C2AE35BCFDFF85D7DAE559FC84DF7"
+    },
+    {
+      "repeat": "diagnostic-o-33",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-33/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "3",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "1968F2315A24805B26FA489B1AE29E31E0EC8A9621994D877FA657F2DAE81A66"
+    },
+    {
+      "repeat": "diagnostic-o-34",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-34/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "3",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "D32B689882ACF77DF0880DD82C4760F17FA9A5A0458D3E6737B79EA8BFE3542C"
+    },
+    {
+      "repeat": "diagnostic-o-35",
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-35/sql-events.txt",
+      "retained": 792,
+      "metadata": {
+        "processingTime": "3",
+        "memoryUsed": "933636",
+        "truncated": "0",
+        "eventCount": "792",
+        "totalEventsProcessed": "792",
+        "droppedCount": "0"
+      },
+      "group": "diagnostic-o-20261030T185441",
+      "retentionComplete": true,
+      "severeErrors": [],
+      "sha256": "5713E68650D4771666BBB875C91C7ABFDBD155C756FD37E8CCDFD811C4A725D3"
+    }
+  ]
+}

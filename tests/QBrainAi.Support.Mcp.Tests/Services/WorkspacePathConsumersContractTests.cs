@@ -34,8 +34,8 @@ public abstract class WorkspacePathConsumersContractTests
     public void Handoff_WindowsHost_PosixPath_IsNotReRooted()
     {
         Assert.Equal(
-            "/home/sharpninja/github/McpServer",
-            HandoffWorkspacePaths.Canonicalize("/home/sharpninja/github/McpServer", Normalizer(WindowsHost)));
+            "/fixture/workspaces/McpServer",
+            HandoffWorkspacePaths.Canonicalize("/fixture/workspaces/McpServer", Normalizer(WindowsHost)));
     }
 
     /// <summary>
@@ -47,7 +47,7 @@ public abstract class WorkspacePathConsumersContractTests
     {
         var linux = Normalizer(LinuxHub);
 
-        Assert.Equal("C:/Users/kingd", HandoffWorkspacePaths.Canonicalize(@"C:\Users\kingd", linux));
+        Assert.Equal("C:/Users/fixture-user", HandoffWorkspacePaths.Canonicalize(@"C:\Users\fixture-user", linux));
         Assert.Equal("/opt/mcpserver/app/ws", HandoffWorkspacePaths.Canonicalize("ws", linux));
     }
 
@@ -61,10 +61,10 @@ public abstract class WorkspacePathConsumersContractTests
     public void Token_WindowsHost_PosixWorkspace_ResolvesUnmangled()
     {
         var sut = new WorkspaceTokenService(Normalizer(WindowsHost));
-        var token = sut.GenerateToken("/home/sharpninja/github/McpServer");
+        var token = sut.GenerateToken("/fixture/workspaces/McpServer");
 
-        Assert.Equal("/home/sharpninja/github/McpServer", sut.ResolveWorkspaceByToken(token));
-        Assert.True(sut.ValidateToken("/home/sharpninja/github/McpServer/", token));
+        Assert.Equal("/fixture/workspaces/McpServer", sut.ResolveWorkspaceByToken(token));
+        Assert.True(sut.ValidateToken("/fixture/workspaces/McpServer/", token));
     }
 
     // ---- SessionLogWorkspaceAttributionValidator ----
@@ -74,8 +74,8 @@ public abstract class WorkspacePathConsumersContractTests
     /// the root is outside the workspace (Windows host: C:\home\...; Linux hub: /opt/.../C:\...).
     /// </summary>
     [Theory]
-    [InlineData(WindowsHost, "/home/sharpninja/github/RideAudit", @"C:\home\sharpninja\github\RideAudit\src\a.cs")]
-    [InlineData(LinuxHub, @"C:\Users\kingd\repo", @"/opt/mcpserver/app/C:\Users\kingd\repo/src/a.cs")]
+    [InlineData(WindowsHost, "/fixture/workspaces/ExampleWorkspace", @"C:\fixture\workspaces\ExampleWorkspace\src\a.cs")]
+    [InlineData(LinuxHub, @"C:\Users\fixture-user\repo", @"/opt/mcpserver/app/C:\Users\fixture-user\repo/src/a.cs")]
     public void Attribution_HostRewriteOfForeignRoot_IsOutside(WorkspacePathPlatform host, string root, string hostRewrite)
     {
         Assert.Throws<ArgumentException>(() =>
@@ -84,8 +84,8 @@ public abstract class WorkspacePathConsumersContractTests
 
     /// <summary>FR-MCP-FED-PATH-001: relative and absolute paths under a foreign root are inside.</summary>
     [Theory]
-    [InlineData(WindowsHost, "/home/sharpninja/github/RideAudit", "/home/sharpninja/github/RideAudit/src/a.cs")]
-    [InlineData(LinuxHub, @"C:\Users\kingd\repo", "C:/Users/kingd/repo/src/a.cs")]
+    [InlineData(WindowsHost, "/fixture/workspaces/ExampleWorkspace", "/fixture/workspaces/ExampleWorkspace/src/a.cs")]
+    [InlineData(LinuxHub, @"C:\Users\fixture-user\repo", "C:/Users/fixture-user/repo/src/a.cs")]
     public void Attribution_PathsUnderForeignRoot_AreInside(WorkspacePathPlatform host, string root, string absolute)
     {
         SessionLogWorkspaceAttributionValidator.ValidatePaths(
@@ -98,8 +98,8 @@ public abstract class WorkspacePathConsumersContractTests
 
     /// <summary>FR-MCP-FED-PATH-001: a sibling of a foreign root is outside.</summary>
     [Theory]
-    [InlineData(WindowsHost, "/home/sharpninja/github/RideAudit", "/home/sharpninja/github/RideAuditOther/a.cs")]
-    [InlineData(LinuxHub, @"C:\Users\kingd\repo", @"C:\Users\kingd\repoOther\a.cs")]
+    [InlineData(WindowsHost, "/fixture/workspaces/ExampleWorkspace", "/fixture/workspaces/ExampleWorkspaceOther/a.cs")]
+    [InlineData(LinuxHub, @"C:\Users\fixture-user\repo", @"C:\Users\fixture-user\repoOther\a.cs")]
     public void Attribution_SiblingOfForeignRoot_IsOutside(WorkspacePathPlatform host, string root, string sibling)
     {
         Assert.Throws<ArgumentException>(() =>
@@ -113,8 +113,8 @@ public abstract class WorkspacePathConsumersContractTests
     /// separators (no "/home/x\docs\sessions", no "C:\x/docs/sessions").
     /// </summary>
     [Theory]
-    [InlineData(WindowsHost, "/home/sharpninja/github/RideAudit", "/home/sharpninja/github/RideAudit/docs/sessions", "/home/sharpninja/github/RideAudit/docs/external")]
-    [InlineData(LinuxHub, @"C:\Users\kingd\repo", "C:/Users/kingd/repo/docs/sessions", "C:/Users/kingd/repo/docs/external")]
+    [InlineData(WindowsHost, "/fixture/workspaces/ExampleWorkspace", "/fixture/workspaces/ExampleWorkspace/docs/sessions", "/fixture/workspaces/ExampleWorkspace/docs/external")]
+    [InlineData(LinuxHub, @"C:\Users\fixture-user\repo", "C:/Users/fixture-user/repo/docs/sessions", "C:/Users/fixture-user/repo/docs/external")]
     public void DerivedPaths_ForeignWorkspace_UseWorkspaceSyntax(WorkspacePathPlatform host, string root, string sessions, string external)
     {
         var ctx = new WorkspaceContext();
@@ -134,12 +134,12 @@ public abstract class WorkspacePathConsumersContractTests
     [Fact]
     public async Task Middleware_ForeignWorkspaceHeader_DerivesPathsInWorkspaceSyntax()
     {
-        const string foreign = "/home/sharpninja/github/RideAudit";
+        const string foreign = "/fixture/workspaces/ExampleWorkspace";
         var workspaceService = Substitute.For<IWorkspaceService>();
         workspaceService.GetAsync(foreign, Arg.Any<CancellationToken>()).Returns(new WorkspaceDto
         {
             WorkspacePath = foreign,
-            Name = "RideAudit",
+            Name = "ExampleWorkspace",
             TodoPath = "docs/todo.yaml",
             StatusPrompt = "",
             ImplementPrompt = "",
@@ -153,8 +153,8 @@ public abstract class WorkspacePathConsumersContractTests
         await middleware.InvokeAsync(http, wsContext, new WorkspaceTokenService(Normalizer(WindowsHost)), workspaceService, null, Normalizer(WindowsHost));
 
         Assert.Equal(foreign, wsContext.WorkspacePath);
-        Assert.Equal("/home/sharpninja/github/RideAudit/docs/sessions", wsContext.SessionsPath);
-        Assert.Equal("/home/sharpninja/github/RideAudit/docs/external", wsContext.ExternalDocsPath);
+        Assert.Equal("/fixture/workspaces/ExampleWorkspace/docs/sessions", wsContext.SessionsPath);
+        Assert.Equal("/fixture/workspaces/ExampleWorkspace/docs/external", wsContext.ExternalDocsPath);
     }
 
     // ---- RepoFileService ----
@@ -162,6 +162,8 @@ public abstract class WorkspacePathConsumersContractTests
     /// <summary>
     /// FR-MCP-FED-PATH-001-AC4: repo writes for a foreign-platform workspace fail and create
     /// nothing at a host re-rooting of the path.
+    /// Integration: observes a physical host-root spelling. A unique name and precondition ensure cleanup can
+    /// remove only a folder this invocation could have caused, never a pre-existing one (slice M SVC-13).
     /// </summary>
     [Trait("Category", "Integration")]
     [Fact]
@@ -169,6 +171,8 @@ public abstract class WorkspacePathConsumersContractTests
     {
         const string leaf = "__mcp_unit_test__repo";
         var hostRewrite = Path.Combine(Path.GetPathRoot(Environment.CurrentDirectory)!, leaf);
+        Assert.False(Directory.Exists(hostRewrite) || File.Exists(hostRewrite),
+            "Refusal-test target already exists; preserving it and refusing to enter the SUT.");
         var sut = new RepoFileService(
             Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = Path.GetTempPath() }),
             new WorkspaceContext { WorkspacePath = "/" + leaf },
@@ -177,20 +181,12 @@ public abstract class WorkspacePathConsumersContractTests
             Substitute.For<IChangeEventBus>(),
             Normalizer(WindowsHost));
 
-        try
-        {
-            var write = await sut.WriteAsync("notes.md", "x", TestContext.Current.CancellationToken);
-            var read = await sut.ReadAsync("notes.md", TestContext.Current.CancellationToken);
+        var write = await sut.WriteAsync("notes.md", "x", TestContext.Current.CancellationToken);
+        var read = await sut.ReadAsync("notes.md", TestContext.Current.CancellationToken);
 
-            Assert.False(write.Written);
-            Assert.Null(read);
-            Assert.False(Directory.Exists(hostRewrite), $"Repo write created {hostRewrite}");
-        }
-        finally
-        {
-            if (Directory.Exists(hostRewrite))
-                Directory.Delete(hostRewrite, recursive: true);
-        }
+        Assert.False(write.Written);
+        Assert.Null(read);
+        Assert.False(Directory.Exists(hostRewrite), $"Repo write created {hostRewrite}; retained as failure evidence.");
     }
 }
 

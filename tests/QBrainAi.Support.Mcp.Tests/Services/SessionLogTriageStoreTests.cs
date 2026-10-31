@@ -130,6 +130,8 @@ public sealed class SessionLogTriageStoreTests : IDisposable
     /// and surfaces backend_unavailable when that budget elapses. This fixture sets 1 second
     /// so the test does not wait for the 30 second default.
     /// </summary>
+    /// <remarks>Integration: asserts an elapsed wall-clock bound on actual scheduling and timer execution (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task SubmitAsync_HungSaveChanges_FailsFastWithStorageUnavailable()
     {

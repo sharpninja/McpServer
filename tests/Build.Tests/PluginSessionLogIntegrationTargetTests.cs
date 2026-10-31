@@ -12,6 +12,8 @@ public sealed class PluginSessionLogIntegrationTargetTests
     /// <summary>
     /// P1 red: Nuke target PluginSessionLogIntegration exists and treats skipped tests as failures.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void BuildTests_PluginSessionLogIntegrationTarget_ExistsAndTreatsSkipAsFail()
     {
@@ -34,6 +36,8 @@ public sealed class PluginSessionLogIntegrationTargetTests
     /// Session-life unit inventory must exclude PluginIntegration (and IntegrationTests).
     /// PI remains on PluginSessionLogIntegration / P6, not Nuke Test / selected-projects.json.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void TestTarget_ExcludesPluginIntegrationFromUnitInventory()
     {
@@ -64,6 +68,8 @@ public sealed class PluginSessionLogIntegrationTargetTests
     /// <summary>
     /// P1 red: the solution includes tests/QBrainAi.PluginIntegration.Tests.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Solution_ContainsQBrainAiPluginIntegrationTestsProject()
     {
@@ -78,6 +84,8 @@ public sealed class PluginSessionLogIntegrationTargetTests
     /// <summary>
     /// P1 red: FR-MCP-PLUGININT-001 catalog has exactly eight enabled scenarios.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Catalog_HasExactlyEightEnabledScenarios()
     {
@@ -104,6 +112,8 @@ public sealed class PluginSessionLogIntegrationTargetTests
     /// <summary>
     /// P18 green: PluginSessionLogIntegration SkipIsFailure throws when TRX reports skipped tests and passes when skipped=0.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void NukeTarget_SkipIsFailure()
     {

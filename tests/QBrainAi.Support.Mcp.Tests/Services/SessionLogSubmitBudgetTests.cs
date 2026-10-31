@@ -75,6 +75,7 @@ public sealed class SessionLogSubmitBudgetTests
     }
 
     /// <summary>The shipped appsettings knob and host registration use the 30 second Submit budget.</summary>
+    /// <remarks>Integration: reads the shipped settings and host registration source from the checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void ShippedAppSettings_AndHosts_RegisterThirtySecondSubmitBudget()
@@ -95,6 +96,8 @@ public sealed class SessionLogSubmitBudgetTests
     /// A Submit SaveChanges that outlasts the 5 second intake default completes when the
     /// service uses the 30 second default budget.
     /// </summary>
+    /// <remarks>Integration: asserts an elapsed wall-clock bound on actual scheduling and timer execution (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task SubmitAsync_SaveLongerThanFiveSeconds_CompletesUnderDefaultBudget()
     {

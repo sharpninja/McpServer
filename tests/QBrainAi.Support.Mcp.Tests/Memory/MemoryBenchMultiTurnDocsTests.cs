@@ -1,11 +1,12 @@
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-019: v2 is the real efficiency bench; v1 remains smoke/regression.
+/// TEST-MCP-MEMORY-019 (historical): v2 is the real efficiency bench; v1 remains smoke/regression.
 /// </summary>
 public sealed class MemoryBenchMultiTurnDocsTests
 {
     /// <summary>AC-FR-MCP-MEMORY-019: README documents the v1/v2 split and success-gated means.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void Readme_DocumentsV2AsRealEfficiencyBench()

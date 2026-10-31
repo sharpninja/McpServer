@@ -9,7 +9,7 @@ namespace QBrainAi.Support.Mcp.Tests;
 /// and point at an existing, empty directory under the system temp folder, never the real user profile.
 /// </summary>
 /// <remarks>
-/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 (operator 2026-10-20: "Fix scans in PR 87
+/// Requirement coverage: TR-MCP-WS-005 / FR-MCP-018 ac-1 (operator 2026-10-20: "Fix scans in PR 87
 /// (Recommended)" and "Structural fix, round 4 (Recommended)"). Test data: the assembly fixture's profile and sources,
 /// injected; negative controls feed the profile assertion an unset override, a directory outside the temp folder, and
 /// a temp directory that holds a plugin cache, and prove the assertion rejects each (the source-level controls are in

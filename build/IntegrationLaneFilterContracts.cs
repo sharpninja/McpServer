@@ -3,10 +3,10 @@
 /// </summary>
 enum IntegrationLaneHost
 {
-    /// <summary>A Windows host (PAYTON-LEGION2).</summary>
+    /// <summary>A Windows host (TEST-NODE-A).</summary>
     Windows,
 
-    /// <summary>A Linux host (LAB-OMARCHY).</summary>
+    /// <summary>A Linux host (TEST-NODE-B).</summary>
     Linux,
 }
 

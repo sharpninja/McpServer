@@ -10,7 +10,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// (no plugin-root variable, no sibling folder, an empty temporary profile).
 /// </summary>
 /// <remarks>
-/// Requirement coverage: TR-MCP-WS-005 / AC-TR-MCP-WS-005-001 (unit tests take every plugin-version input from
+/// Requirement coverage: TR-MCP-WS-005 / FR-MCP-018 ac-1 (unit tests take every plugin-version input from
 /// test-owned data). Found by hostile validation round 3 (finding R3-F1: the assembly fixture replaced only the
 /// profile, so a plugin-root variable reached 19 unit tests); fix chosen by the operator on 2026-10-20 ("Structural
 /// fix, round 4 (Recommended)"). Test data: a temporary root per test holding test-owned plugin folders with fixed

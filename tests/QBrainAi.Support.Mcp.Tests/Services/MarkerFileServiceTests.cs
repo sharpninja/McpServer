@@ -27,7 +27,7 @@ public sealed class MarkerFileServiceTests
         .Build();
 
     /// <summary>
-    /// Test-owned plugin-version sources for a temporary workspace (AC-TR-MCP-WS-005-001): no plugin-root variable,
+    /// Test-owned plugin-version sources for a temporary workspace (FR-MCP-018 ac-1): no plugin-root variable,
     /// the production sibling rule applied to that workspace, and no profile, so resolution sees only the folders the
     /// test creates, without reading or changing the process environment.
     /// </summary>
@@ -735,7 +735,7 @@ public sealed class MarkerFileServiceTests
     /// TEST-MCP-PLUGIN-PSONLY-001 (historical; no such record is in the requirements store, hostile validation finding
     /// R6-F2, so this is not an active coverage claim): marker plugin contracts publish the current synced plugin
     /// version. Resolution reads the assembly's hermetic sources (<see cref="HermeticUserProfileFixture"/>), so no
-    /// installed plugin is seen (TR-MCP-WS-005 AC-TR-MCP-WS-005-001).
+    /// installed plugin is seen (TR-MCP-WS-005 FR-MCP-018 ac-1).
     /// </summary>
     [Fact]
     public void BuildDefaultAgentPlugins_UsesCurrentSyncedPluginVersion()
@@ -1109,6 +1109,7 @@ public sealed class MarkerFileServiceTests
     /// Test data: the canonical key order code fence in <c>docs/REPL-AGENT-GUIDE.md</c>.
     /// This data is used to bind the published verifier contract to the authoritative field array.
     /// </remarks>
+    /// <remarks>Integration: reads the live verifier documentation from the checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void SignaturePayloadFields_MatchesDocumentedCanonicalKeyOrder()

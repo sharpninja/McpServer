@@ -83,6 +83,7 @@ public sealed class UseCaseExpandedScopeTests : IDisposable
     }
 
     /// <summary>FR-MCP-USECASE-008: Approving increments version number.</summary>
+    /// <remarks>Integration: binds real approval handling that resolves physical workspace identity (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public async Task Approval_Approve_IncrementsVersion()

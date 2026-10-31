@@ -71,6 +71,7 @@ public sealed class ProductMigrationApplyTests : IDisposable
     /// TEST-MCP-PRODUCT-005: AddProductsStorage migration sources exist for every provider
     /// and do not alter SessionLogs.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void AddProductsStorageMigration_Source_ExistsForAllProviders_AndHasNoSessionLogsTableOps()

@@ -18,7 +18,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 public sealed class UseCaseGetWorkspaceResolutionContractTests
 {
     /// <summary>The workspace path as a Windows caller spells it.</summary>
-    private const string RawWorkspacePath = @"F:\GitHub\TruckMate";
+    private const string RawWorkspacePath = @"Q:\fixture\workspace";
 
     /// <summary>FR-MCP-PATHNORM-001: the stored and returned workspace key uses '/' (test-side oracle).</summary>
     private static readonly string CanonicalWorkspaceId = ExpectedWorkspaceKey.Of(RawWorkspacePath);
@@ -32,7 +32,7 @@ public sealed class UseCaseGetWorkspaceResolutionContractTests
             {
                 UseCaseId = 125,
                 WorkspaceId = CanonicalWorkspaceId,
-                Title = "Start and certify LAB-OMARCHY TruckMate services",
+                Title = "Certify fixture services",
             }))).ConfigureAwait(true);
     }
 
@@ -61,64 +61,75 @@ public sealed class UseCaseGetWorkspaceResolutionContractTests
                 {
                     UseCaseId = 125,
                     WorkspaceId = RawWorkspacePath,
-                    Title = "Start and certify LAB-OMARCHY TruckMate services",
+                    Title = "Certify fixture services",
                 })))).ConfigureAwait(true);
     }
 
-    /// <summary>Production binding resolves an equivalent raw path to the canonical workspace before get-by-id.</summary>
+    /// <summary>Production binding resolves an equivalent dot-segment spelling of its own temporary workspace.</summary>
+    /// <remarks>Integration: the real handler resolves physical workspace paths (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task ProductionGate_EquivalentRawPath_UsesCanonicalWorkspace()
     {
-        await using var connection = new SqliteConnection("Data Source=:memory:");
-        await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
-        var options = new DbContextOptionsBuilder<McpDbContext>()
-            .UseSqlite(connection)
-            .Options;
-        // Seeded with the caller's spelling on purpose: the store canonicalizes workspace keys on save.
-        var workspaceContext = new WorkspaceContext
+        var workspaceRoot = Path.Combine(Path.GetTempPath(), "usecase-owned-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(workspaceRoot);
+        try
         {
-            WorkspacePath = RawWorkspacePath,
-            WorkspaceName = "TruckMate",
-            DataDirectory = RawWorkspacePath,
-        };
+            await using var connection = new SqliteConnection("Data Source=:memory:");
+            await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var options = new DbContextOptionsBuilder<McpDbContext>()
+                .UseSqlite(connection)
+                .Options;
+            // Seeded with the caller's spelling on purpose: the store canonicalizes workspace keys on save.
+            var workspaceContext = new WorkspaceContext
+            {
+                WorkspacePath = workspaceRoot,
+                WorkspaceName = "Fixture",
+                DataDirectory = workspaceRoot,
+            };
 
-        await using var db = new McpDbContext(options, workspaceContext);
-        await db.Database.EnsureCreatedAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
-        db.OverrideWorkspaceId(RawWorkspacePath);
-        db.Workspaces.Add(new WorkspaceEntity
+            await using var db = new McpDbContext(options, workspaceContext);
+            await db.Database.EnsureCreatedAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
+            db.OverrideWorkspaceId(workspaceRoot);
+            db.Workspaces.Add(new WorkspaceEntity
+            {
+                WorkspaceId = workspaceRoot,
+                WorkspacePath = workspaceRoot,
+                Name = "Fixture",
+            });
+            db.UseCases.Add(new UseCaseEntity
+            {
+                UseCaseId = 125,
+                WorkspaceId = workspaceRoot,
+                Title = "Certify fixture services",
+                CreatedAtUtc = DateTimeOffset.UtcNow,
+                UpdatedAtUtc = DateTimeOffset.UtcNow,
+            });
+            await db.SaveChangesAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
+
+            var equivalentRawPath = workspaceRoot + "/.";
+            var handler = new GetUseCaseQueryHandler(db, workspaceContext);
+
+            await AssertCanonicalWorkspaceContractAsync(
+                () => handler.HandleAsync(
+                    new GetUseCaseQuery(equivalentRawPath, 125),
+                    new CallContext { CancellationToken = TestContext.Current.CancellationToken }), ExpectedWorkspaceKey.Of(workspaceRoot)).ConfigureAwait(true);
+        }
+        finally
         {
-            WorkspaceId = RawWorkspacePath,
-            WorkspacePath = RawWorkspacePath,
-            Name = "TruckMate",
-        });
-        db.UseCases.Add(new UseCaseEntity
-        {
-            UseCaseId = 125,
-            WorkspaceId = RawWorkspacePath,
-            Title = "Start and certify LAB-OMARCHY TruckMate services",
-            CreatedAtUtc = DateTimeOffset.UtcNow,
-            UpdatedAtUtc = DateTimeOffset.UtcNow,
-        });
-        await db.SaveChangesAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
-
-        var equivalentRawPath = RawWorkspacePath + Path.DirectorySeparatorChar + ".";
-        var handler = new GetUseCaseQueryHandler(db, workspaceContext);
-
-        await AssertCanonicalWorkspaceContractAsync(
-            () => handler.HandleAsync(
-                new GetUseCaseQuery(equivalentRawPath, 125),
-                new CallContext { CancellationToken = TestContext.Current.CancellationToken })).ConfigureAwait(true);
+            Directory.Delete(workspaceRoot, recursive: true);
+        }
     }
 
     private static async Task AssertCanonicalWorkspaceContractAsync(
-        Func<Task<Result<UseCaseDetailDto>>> invoke)
+        Func<Task<Result<UseCaseDetailDto>>> invoke, string? expectedWorkspace = null)
     {
         var result = await invoke().ConfigureAwait(true);
 
         Assert.True(result.IsSuccess, result.Error);
         Assert.NotNull(result.Value);
         Assert.Equal(125, result.Value!.UseCaseId);
-        Assert.Equal(CanonicalWorkspaceId, result.Value.WorkspaceId);
-        Assert.Equal("Start and certify LAB-OMARCHY TruckMate services", result.Value.Title);
+        Assert.Equal(expectedWorkspace ?? CanonicalWorkspaceId, result.Value.WorkspaceId);
+        Assert.Equal("Certify fixture services", result.Value.Title);
     }
 }

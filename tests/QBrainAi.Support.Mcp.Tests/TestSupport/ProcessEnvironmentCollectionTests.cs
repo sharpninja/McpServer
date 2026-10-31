@@ -10,7 +10,7 @@ namespace QBrainAi.Support.Mcp.Tests.TestSupport;
 /// variable changed.
 /// </summary>
 /// <remarks>
-/// Requirement coverage: TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 ("the tests that write the process
+/// Requirement coverage: FR-MCP-TESTRESOURCE-001 ac-9; TR-MCP-USECASE-018 AC-006 ("the tests that write the process
 /// environment run one at a time"; operator 2026-10-21: "Fix both, strengthen ACs" and "Approve, strengthen AC-006/008
 /// (Recommended)"; hostile validation round 5 finding R5-F2). Test data: scripted nested types carrying a collection
 /// attribute with the required name, another name, or none; the attributes are read through the shared
@@ -19,7 +19,9 @@ namespace QBrainAi.Support.Mcp.Tests.TestSupport;
 /// <c>SqlServerLocalDbCollectionTests</c>. The binding checks the real definition and the classes that write the
 /// process environment, found by the one-time environment sweep of plan section 19.3 and its extension through
 /// production code in plan section 20 (the one-shot strategy tests, the two Codex platform classes and the
-/// <see cref="CliTempVariables"/> tests, which write the CLI temp variables; hostile validation finding R6-F1). Stated
+/// <see cref="CliTempVariables"/> tests, which write the CLI temp variables; hostile validation finding R6-F1), and the
+/// desktop spawner's environment-delta case, which owns its GH_TOKEN baseline (hostile validation round 8b finding
+/// R8B-F1). Stated
 /// limit: the list is not discovered from source; a new class that writes the process environment must be added to it.
 /// </remarks>
 public sealed class ProcessEnvironmentCollectionTests
@@ -79,6 +81,7 @@ public sealed class ProcessEnvironmentCollectionTests
                      typeof(QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyWindowsTests),
                      typeof(QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyLinuxTests),
                      typeof(CliTempVariablesTests),
+                     typeof(QBrainAi.Support.Mcp.Tests.Services.DesktopProcessSpawnerTests),
                  })
         {
             AssertInCollection(type, RequiredCollection);

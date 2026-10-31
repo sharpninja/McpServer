@@ -35,6 +35,7 @@ public sealed class HandoffDeadContractInventoryTests
     }
 
     /// <summary>P3: source, snapshots, and migrations do not reintroduce the dead contracts.</summary>
+    /// <remarks>Integration: reads live source, schema snapshots and migration files from the checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void SourceAndSchema_DoNotReintroduceReplayOfRunIdOrApproved()

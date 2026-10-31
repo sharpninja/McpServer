@@ -1,4 +1,5 @@
 using System.Reflection;
+using QBrainAi.Support.Mcp.Tests.TestSupport;
 
 namespace QBrainAi.Support.Mcp.Tests.Storage;
 
@@ -6,33 +7,46 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// TR-MCP-QUALITY / G1 provider diagnosis: proves <see cref="EphemeralPostgresFixture"/>
 /// fail-closed initdb evidence captures sanitized invocation, stdout, and stderr.
 /// </summary>
+[Collection(ProcessEnvironmentCollection.Name)]
 public sealed class EphemeralPostgresFixtureTests
 {
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001: explicitly supplied external-server data is adopted without provisioning.
+    /// Integration because the case owns and restores MCP_TEST_POSTGRES_CONNECTION; no server is contacted.
+    /// </summary>
+    [Fact]
+    [Trait("Category", "Integration")]
+    public void EphemeralPostgresFixture_ExplicitOverride_IsAdoptedWithoutLocalProvisioning()
+    {
+        var previous = Environment.GetEnvironmentVariable("MCP_TEST_POSTGRES_CONNECTION");
+        const string external = "Host=database.example;Port=55432;Username=fixture;Password=fixture-data;Database=postgres";
+        try
+        {
+            Environment.SetEnvironmentVariable("MCP_TEST_POSTGRES_CONNECTION", external);
+            using var fixture = new EphemeralPostgresFixture();
+            Assert.True(string.Equals(external, fixture.ServerConnectionString, StringComparison.Ordinal),
+                "The fixture did not adopt its explicitly owned external setting.");
+            Assert.Null(GetPrivateField(fixture, "_pgBin"));
+            Assert.Null(GetPrivateField(fixture, "_dataDir"));
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable("MCP_TEST_POSTGRES_CONNECTION", previous);
+        }
+    }
+
     /// <summary>
     /// Overlay G1 leftover: when initdb exits non-zero, the fixture exception must retain
     /// sanitized executable path, arguments, cwd, exit code, stdout, and stderr. "initdb exited 1"
     /// alone is not sufficient. TEST-MCP-AIUNIT-002 adjacent provider diagnosis. When
-    /// MCP_TEST_POSTGRES_CONNECTION names a server (the container endpoint; operator decision
-    /// 2026-10-11 for BUG-BASELINE-005), the fixture provisions nothing locally and initdb never
-    /// runs, so the test proves that adoption instead: the fixture uses that server and holds no
-    /// local binaries or data directory. The comparison never prints the connection string.
+    /// the host has local PostgreSQL tools, this directly invokes its Windows initdb executable. Integration,
+    /// Platform=Windows because it proves native executable diagnostics; adoption is a separate owned-variable case.
     /// </summary>
     [Fact]
     [Trait("Category", "Integration")]
+    [Trait("Platform", "Windows")]
     public void EphemeralPostgresFixture_InitdbFailure_CapturesSanitizedInvocationStdoutAndStderr()
     {
-        var external = Environment.GetEnvironmentVariable("MCP_TEST_POSTGRES_CONNECTION");
-        if (!string.IsNullOrWhiteSpace(external))
-        {
-            using var fixture = new EphemeralPostgresFixture();
-            Assert.True(
-                string.Equals(external, fixture.ServerConnectionString, StringComparison.Ordinal),
-                "The fixture did not adopt MCP_TEST_POSTGRES_CONNECTION.");
-            Assert.Null(GetPrivateField(fixture, "_pgBin"));
-            Assert.Null(GetPrivateField(fixture, "_dataDir"));
-            return;
-        }
-
         var find = typeof(EphemeralPostgresFixture).GetMethod(
             "FindPostgresBinaries",
             BindingFlags.NonPublic | BindingFlags.Static);

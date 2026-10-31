@@ -4,25 +4,25 @@ using Xunit.Sdk;
 namespace QBrainAi.Repl.Core.Tests.Host;
 
 /// <summary>
-/// TR-MCP-REPL-008 (AC-1 to AC-4), BDPv4 mock gate: proves the <see cref="MarkerWalkContract"/> assertions accept a
+/// FR-MCP-REPL-007 (ac-1 to ac-4), BDPv4 mock gate: proves the <see cref="MarkerWalkContract"/> assertions accept a
 /// scripted walk and a scripted diagnosis that follow the criteria, and reject deliberately wrong ones (negative
 /// controls), before the resolver reads through <see cref="IMarkerFileSystem"/>. Every case runs over an in-memory
 /// file system; no host folder is read.
 /// </summary>
 public sealed class MarkerWalkMockGateTests
 {
-    /// <summary>TR-MCP-REPL-008 AC-1 to AC-3: the scripted walk passes every walk case.</summary>
+    /// <summary>FR-MCP-REPL-007 ac-1 to AC-3: the scripted walk passes every walk case.</summary>
     [Fact]
     public void ScriptedWalk_PassesContract()
         => MarkerWalkContract.AssertWalk(ScriptedWalk(WalkFault.None));
 
-    /// <summary>TR-MCP-REPL-008 AC-4: the scripted diagnosis passes the diagnostics case.</summary>
+    /// <summary>FR-MCP-REPL-007 ac-4: the scripted diagnosis passes the diagnostics case.</summary>
     [Fact]
     public void ScriptedDiagnosis_PassesContract()
         => MarkerWalkContract.AssertDiagnosticsNameEveryFolder(ScriptedDiagnosis(DiagnosisFault.None));
 
     /// <summary>
-    /// TR-MCP-REPL-008 AC-1 to AC-3 negative controls, each rejected inside this passing test: a walk that never
+    /// FR-MCP-REPL-007 ac-1 to AC-3 negative controls, each rejected inside this passing test: a walk that never
     /// leaves the start folder, one that skips the start folder, one where the farthest marker wins, one that stops
     /// before the root, and one that reports the searched folders in reverse.
     /// </summary>
@@ -37,7 +37,7 @@ public sealed class MarkerWalkMockGateTests
         => Assert.ThrowsAny<XunitException>(() => MarkerWalkContract.AssertWalk(ScriptedWalk(fault)));
 
     /// <summary>
-    /// TR-MCP-REPL-008 AC-4 negative controls, each rejected inside this passing test: an error that omits the
+    /// FR-MCP-REPL-007 ac-4 negative controls, each rejected inside this passing test: an error that omits the
     /// searched folders, one that omits the marker file name, and a diagnosis that reports success.
     /// </summary>
     /// <param name="fault">Injected fault.</param>
@@ -92,15 +92,15 @@ public sealed class MarkerWalkMockGateTests
         {
             var folders = new List<string>();
             string? found = null;
-            var current = new DirectoryInfo(startPath);
+            var current = fileSystem.GetFullPath(startPath);
             if (fault == WalkFault.SkipsStart)
-                current = current.Parent;
+                current = fileSystem.GetParentPath(current);
             while (current is not null)
             {
-                if (fault == WalkFault.StopsBeforeRoot && current.Parent is null)
+                if (fault == WalkFault.StopsBeforeRoot && fileSystem.GetParentPath(current) is null)
                     break;
-                folders.Add(current.FullName);
-                var candidate = Path.Combine(current.FullName, MarkerWalkContract.MarkerFileName);
+                folders.Add(current);
+                var candidate = fileSystem.GetMarkerPath(current);
                 if (fileSystem.FileExists(candidate))
                 {
                     found = candidate;
@@ -110,7 +110,7 @@ public sealed class MarkerWalkMockGateTests
 
                 if (fault == WalkFault.StartOnly)
                     break;
-                current = current.Parent;
+                current = fileSystem.GetParentPath(current);
             }
 
             if (fault == WalkFault.ReversedOrder)

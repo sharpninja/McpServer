@@ -26,7 +26,7 @@ internal static class WindowsJunction
     private const uint FlagBackupSemantics = 0x02000000;
 
     /// <summary>
-    /// Builds the mount-point REPARSE_DATA_BUFFER for <paramref name="targetFullPath"/>: the tag, the data length,
+    /// FR-MCP-TESTRESOURCE-001 ac-11: builds the mount-point REPARSE_DATA_BUFFER for <paramref name="targetFullPath"/>: the tag, the data length,
     /// a reserved field, the substitute and print name offsets and lengths, then the UTF-16 substitute name "\??\"
     /// plus the target, a null, the print name (the target) and a null.
     /// </summary>

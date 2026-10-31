@@ -114,7 +114,6 @@ public abstract class WorkspacePathGetFullPathRatchetContractTests
     protected abstract IReadOnlyDictionary<string, int> Counts();
 
     /// <summary>TR-MCP-FED-PATH-001: identity files contain no direct host path resolution.</summary>
-    [Trait("Category", "Integration")]
     [Fact]
     public void IdentityFiles_HaveNoDirectGetFullPath()
     {
@@ -127,7 +126,6 @@ public abstract class WorkspacePathGetFullPathRatchetContractTests
     /// TR-MCP-FED-PATH-001: no file exceeds its reviewed host-native count and no new file starts
     /// calling Path.GetFullPath without review.
     /// </summary>
-    [Trait("Category", "Integration")]
     [Fact]
     public void AllOtherFiles_StayWithinReviewedAllowlist()
     {
@@ -177,6 +175,8 @@ public abstract class WorkspacePathGetFullPathRatchetContractTests
 }
 
 /// <summary>BDP v4 step 3: the ratchet over the repository <c>src/</c> tree.</summary>
+/// <remarks>Integration: this provider enumerates and reads current checkout source; the shared assertions and scripted provider remain unit tests (TR-MCP-USECASE-018 AC-006).</remarks>
+[Trait("Category", "Integration")]
 public sealed class WorkspacePathGetFullPathRatchetRealTests : WorkspacePathGetFullPathRatchetContractTests
 {
     /// <inheritdoc />

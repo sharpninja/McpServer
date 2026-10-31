@@ -15,7 +15,7 @@ public abstract class WorkspaceNativePathHostContractTests
 
     /// <summary>On a Windows host, Windows-platform paths switch to backslashes.</summary>
     [Theory]
-    [InlineData("C:/Users/kingd/repo", @"C:\Users\kingd\repo")]
+    [InlineData("C:/Users/fixture-user/repo", @"C:\Users\fixture-user\repo")]
     [InlineData("C:/", @"C:\")]
     [InlineData("//srv/share/x", @"\\srv\share\x")]
     [InlineData(@"C:\already\native", @"C:\already\native")]
@@ -26,7 +26,7 @@ public abstract class WorkspaceNativePathHostContractTests
 
     /// <summary>On a non-Windows host nothing is rewritten, whatever the platform tag.</summary>
     [Theory]
-    [InlineData("C:/Users/kingd/repo", WorkspacePathPlatform.Windows)]
+    [InlineData("C:/Users/fixture-user/repo", WorkspacePathPlatform.Windows)]
     [InlineData("//srv/share/x", WorkspacePathPlatform.Windows)]
     [InlineData("/home/x/repo", WorkspacePathPlatform.CaseSensitive)]
     public void NonWindowsHost_IsUnchanged(string path, WorkspacePathPlatform platform)
@@ -50,7 +50,7 @@ public sealed class WorkspaceNativePathHostMockDataTests : WorkspaceNativePathHo
 {
     private static readonly Dictionary<(string, WorkspacePathPlatform), string> WindowsHost = new()
     {
-        [("C:/Users/kingd/repo", WorkspacePathPlatform.Windows)] = @"C:\Users\kingd\repo",
+        [("C:/Users/fixture-user/repo", WorkspacePathPlatform.Windows)] = @"C:\Users\fixture-user\repo",
         [("C:/", WorkspacePathPlatform.Windows)] = @"C:\",
         [("//srv/share/x", WorkspacePathPlatform.Windows)] = @"\\srv\share\x",
         [(@"C:\already\native", WorkspacePathPlatform.Windows)] = @"C:\already\native",
@@ -77,7 +77,7 @@ public sealed class WorkspaceNativePathHostMockDataTests : WorkspaceNativePathHo
     [Fact]
     public void NonWindowsHostNegativeControls_AreRejectedInsidePassingHarness()
     {
-        Assert.NotNull(Record.Exception(() => AssertUnchanged("C:/Users/kingd/repo", @"C:\Users\kingd\repo")));
+        Assert.NotNull(Record.Exception(() => AssertUnchanged("C:/Users/fixture-user/repo", @"C:\Users\fixture-user\repo")));
         Assert.NotNull(Record.Exception(() => AssertUnchanged(
             "//srv/share/x",
             ToNativePath("//srv/share/x", WorkspacePathPlatform.Windows, SimulatedWorkspaceHosts.Windows()))));
@@ -94,7 +94,7 @@ public sealed class WorkspaceNativePathHostMockDataTests : WorkspaceNativePathHo
     [Fact]
     public void WindowsHostNegativeControls_AreRejectedInsidePassingHarness()
     {
-        Assert.NotNull(Record.Exception(() => AssertNative(@"C:\Users\kingd\repo", "C:/Users/kingd/repo")));
+        Assert.NotNull(Record.Exception(() => AssertNative(@"C:\Users\fixture-user\repo", "C:/Users/fixture-user/repo")));
         Assert.NotNull(Record.Exception(() => AssertNative(
             @"\\srv\share\x",
             ToNativePath("//srv/share/x", WorkspacePathPlatform.Windows, SimulatedWorkspaceHosts.Linux()))));

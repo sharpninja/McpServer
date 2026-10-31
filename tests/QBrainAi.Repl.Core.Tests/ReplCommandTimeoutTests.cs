@@ -9,7 +9,7 @@ namespace QBrainAi.Repl.Core.Tests;
 /// cancellation timer accepts is used, and any other value gives the two-minute default.
 /// </summary>
 /// <remarks>
-/// Requirement coverage: TR-MCP-REPL-001 AC-002 (hostile validation round 7: both variables at 2147483647 made 19 REPL
+/// Requirement coverage: FR-MCP-REPL-001 ac-1 (hostile validation round 7: both variables at 2147483647 made 19 REPL
 /// unit cases throw ArgumentOutOfRangeException from CancellationTokenSource.CancelAfter;
 /// triage-report-c993b9446bb8464ba375f74fabd07dad), and through it TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019
 /// AC-008 (a unit test may reach code that reads an environment variable only where its outcome does not change).

@@ -20,13 +20,11 @@ internal static class TestRepositoryRoot
         + "test. Tag the test method or its class [Trait(\"Category\", \"Integration\")], or read a fixture copied "
         + "to the test output.";
 
-    private static readonly Lazy<string> Located = new(Locate, LazyThreadSafetyMode.ExecutionAndPublication);
-
     /// <summary>The repository root; resolves only for an integration test or its class fixture.</summary>
     internal static string Resolve()
     {
         EnsureIntegration(TestContext.Current.TestCase?.Traits ?? TestContext.Current.TestClass?.Traits);
-        return Located.Value;
+        return LocateUncached();
     }
 
     /// <summary>
@@ -68,34 +66,41 @@ internal static class TestRepositoryRoot
         throw new InvalidOperationException(RuleMessage);
     }
 
-    private static string Locate()
+    /// <summary>AC-005: performs a fresh native lookup, guarded as a physical integration-test operation.</summary>
+    internal static string LocateUncached()
     {
-        var configured = Environment.GetEnvironmentVariable("MCP_REPOSITORY_ROOT");
-        if (!string.IsNullOrWhiteSpace(configured))
-            return Validate(configured, "Configured");
+        EnsureIntegration(TestContext.Current.TestCase?.Traits ?? TestContext.Current.TestClass?.Traits);
+        return Locate(Environment.GetEnvironmentVariable("MCP_REPOSITORY_ROOT"), ReadBuildMetadata(),
+            [Path.GetDirectoryName(typeof(TestRepositoryRoot).Assembly.Location), AppContext.BaseDirectory, Directory.GetCurrentDirectory()],
+            Path.GetFullPath, IsRepositoryRoot, path => Directory.GetParent(path)?.FullName);
+    }
 
-        var buildRoot = ReadBuildMetadata();
-        if (!string.IsNullOrWhiteSpace(buildRoot))
-            return Validate(buildRoot, "Build-metadata");
-
-        var startingPoints = new[]
+    /// <summary>
+    /// AC-005/AC-006: uncached selection over explicit roots, starting points and path predicates. Invalid explicit
+    /// roots fail closed; only absent overrides fall back. This overload performs no ambient reads itself.
+    /// </summary>
+    /// <param name="configured">Optional configured root.</param>
+    /// <param name="buildRoot">Optional metadata root.</param>
+    /// <param name="startingPoints">Fallback starting points, searched in order.</param>
+    /// <param name="normalize">Normalizes an explicit path.</param>
+    /// <param name="isRepositoryRoot">Tests the repository markers.</param>
+    /// <param name="parent">Returns a parent path or null at the root.</param>
+    internal static string Locate(string? configured, string? buildRoot, IEnumerable<string?> startingPoints,
+        Func<string, string> normalize, Func<string, bool> isRepositoryRoot, Func<string, string?> parent)
+    {
+        string ValidateExplicit(string candidate, string source)
         {
-            Path.GetDirectoryName(typeof(TestRepositoryRoot).Assembly.Location),
-            AppContext.BaseDirectory,
-            Directory.GetCurrentDirectory(),
-        };
-        foreach (var startingPoint in startingPoints.Where(candidate => !string.IsNullOrWhiteSpace(candidate)))
-        {
-            for (var current = new DirectoryInfo(Path.GetFullPath(startingPoint!)); current is not null; current = current.Parent)
-            {
-                if (IsRepositoryRoot(current.FullName))
-                    return current.FullName;
-            }
+            var root = normalize(candidate);
+            return isRepositoryRoot(root) ? root : throw new InvalidOperationException($"{source} repository root is invalid: {root}");
         }
 
+        if (!string.IsNullOrWhiteSpace(configured)) return ValidateExplicit(configured, "Configured");
+        if (!string.IsNullOrWhiteSpace(buildRoot)) return ValidateExplicit(buildRoot, "Build-metadata");
+        foreach (var start in startingPoints.Where(candidate => !string.IsNullOrWhiteSpace(candidate)))
+            for (var current = normalize(start!); current is not null; current = parent(current))
+                if (isRepositoryRoot(current)) return current;
         throw new InvalidOperationException(
-            "Repository root was not found from MCP_REPOSITORY_ROOT, build metadata, the test assembly, the test output, "
-            + "or the current directory.");
+            "Repository root was not found from MCP_REPOSITORY_ROOT, build metadata, the test assembly, the test output, or the current directory.");
     }
 
     private static string? ReadBuildMetadata() =>
@@ -103,16 +108,6 @@ internal static class TestRepositoryRoot
             .GetCustomAttributes<AssemblyMetadataAttribute>()
             .FirstOrDefault(attribute => string.Equals(attribute.Key, "McpRepositoryRoot", StringComparison.Ordinal))
             ?.Value;
-
-    /// <summary>Validates an explicit root without falling back to another checkout.</summary>
-    private static string Validate(string candidate, string source)
-    {
-        var root = Path.GetFullPath(candidate);
-        if (!IsRepositoryRoot(root))
-            throw new InvalidOperationException($"{source} repository root is invalid: {root}");
-
-        return root;
-    }
 
     private static bool IsRepositoryRoot(string root)
     {

@@ -11,7 +11,7 @@ namespace QBrainAi.Support.Mcp.Tests.TestSupport;
 /// MCPSERVER_ONESHOT_TEMP. A test that reaches one of them sets every name of the chain and restores it: the name the
 /// strategy under test reads first points at the test folder and every other name at a separate test-owned fallback
 /// folder, so an assertion on the test folder proves the primary name won over a set fallback (TR-MCP-USECASE-018
-/// AC-006 and TR-MCP-USECASE-019 AC-008 as amended 2026-10-26; operator: "Strengthen AC, move 14 (Recommended)" and
+/// AC-006 as amended 2026-10-26; operator: "Strengthen AC, move 14 (Recommended)" and
 /// "Dependence + proof AC (Recommended)"; hostile validation finding R6-F1). Shared by the three strategy test classes.
 /// </summary>
 internal static class CliTempVariables

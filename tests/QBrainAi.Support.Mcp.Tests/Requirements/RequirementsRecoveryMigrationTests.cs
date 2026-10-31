@@ -14,6 +14,7 @@ namespace QBrainAi.Support.Mcp.Tests.Requirements;
 public sealed class RequirementsRecoveryMigrationTests
 {
     /// <summary>The three provider assemblies discover the same recovery migration id.</summary>
+    /// <remarks>Integration: reads each provider migration source file from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void Discovers_AddRequirementsRecoveryRuns_OnAllProviders()

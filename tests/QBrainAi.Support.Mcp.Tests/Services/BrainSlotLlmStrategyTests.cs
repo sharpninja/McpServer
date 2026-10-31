@@ -83,6 +83,7 @@ public sealed class BrainSlotLlmStrategyTests
         Assert.Equal(0.2f, options.Temperature);
     }
 
+    /// <remarks>Integration: reads the live server project file to check its package and project references (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void Factory_CreateStrategy_ExistsWithoutNewAgentSdk()

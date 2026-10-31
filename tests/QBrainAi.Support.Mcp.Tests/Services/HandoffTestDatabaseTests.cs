@@ -14,7 +14,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// </summary>
 /// <remarks>
 /// Found while gating IMPL-UNITGREEN-001 round 4: <c>HandoffDurabilityTests.ApproveAsync_LeaseExpiresDuringLiveCreate_SecondInstanceWins</c>
-/// failed once on PAYTON-LEGION2 with one in-memory connection shared by every context
+/// failed once on TEST-NODE-A with one in-memory connection shared by every context
 /// (triage-report-9b96ada18d72483dad2a3113e455c01b); fix chosen by the operator on 2026-10-20 ("Fix the race in PR 87
 /// (Recommended)"). Test data: scripted context factories over a temporary database file the test creates and
 /// deletes. The positive control gives each context its own connection to that file. Negative controls, each rejected

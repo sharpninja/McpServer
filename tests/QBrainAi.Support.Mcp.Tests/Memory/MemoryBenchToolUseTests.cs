@@ -1,11 +1,12 @@
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018-15: Recall tools are the with_memory path when injection hosts differ.
+/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-15 (historical): Recall tools are the with_memory path when injection hosts differ.
 /// </summary>
 public sealed class MemoryBenchToolUseTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-15: with_memory uses memory_recall; without_memory does not.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void RecallUsedWhenNoInjection()

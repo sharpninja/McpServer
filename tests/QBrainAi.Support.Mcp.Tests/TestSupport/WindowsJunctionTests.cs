@@ -9,7 +9,7 @@ namespace QBrainAi.Support.Mcp.Tests.TestSupport;
 /// operating-system call in the test process, instead of starting a helper process on a time budget.
 /// </summary>
 /// <remarks>
-/// Requirement coverage: TR-MCP-USECASE-019 AC-008 as replaced 2026-10-26T14:18:23 ("A test fixture that needs a
+/// Requirement coverage: FR-MCP-TESTRESOURCE-001 ac-11 (serves TR-MCP-USECASE-019 AC-008) as replaced 2026-10-26T14:18:23 ("A test fixture that needs a
 /// directory junction or link creates it with an operating-system call made in the test process"; operator: "Fix
 /// flake, strengthen AC (Recommended)"; triage-report-8c2c30ef63d442bdb29fd785ec91e7d7). Test data: the documented
 /// REPARSE_DATA_BUFFER layout for IO_REPARSE_TAG_MOUNT_POINT (tag 0xA0000003; ReparseDataLength; Reserved;

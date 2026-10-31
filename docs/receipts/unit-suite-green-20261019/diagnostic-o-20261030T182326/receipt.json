@@ -1,0 +1,66 @@
+{
+  "timestampLocal": "2026-10-30T18:50:01",
+  "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T182326",
+  "diagnosticOnly": true,
+  "acceptedGate": false,
+  "executedRepeats": 5,
+  "failedRepeats": 1,
+  "observation": "Stopped at observed failure; cause unproven. Inspect retained full TRX.",
+  "files": [
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T182326/manifest.json",
+      "relative": "manifest.json",
+      "sha256": "DB0223FFA9EC6CEC071AB3AA8E7A6452DCF41A1EA3459C472E0FCB29BA74F70B"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T182326/diagnostic-o-01/diagnostic-o-01.trx",
+      "relative": "diagnostic-o-01/diagnostic-o-01.trx",
+      "sha256": "DA09D9271206623ACE85EAFA5F82DF256E3264D290D95CA73E33E8A4BEBD1402"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T182326/diagnostic-o-01/output.log",
+      "relative": "diagnostic-o-01/output.log",
+      "sha256": "2E094B9638ADAB668AE03E1323EB18F7D7DBE47C0AB268C583799A1DC050F145"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T182326/diagnostic-o-02/diagnostic-o-02.trx",
+      "relative": "diagnostic-o-02/diagnostic-o-02.trx",
+      "sha256": "FB98DE06F87C422D6B554AC16AF561441F0F5FFE43215BF076FAD23195B64D9A"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T182326/diagnostic-o-02/output.log",
+      "relative": "diagnostic-o-02/output.log",
+      "sha256": "940A46AC55CC019E6B424DB6953B2E1A2F4035BAA9560963BC99EE1F86E020CA"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T182326/diagnostic-o-03/diagnostic-o-03.trx",
+      "relative": "diagnostic-o-03/diagnostic-o-03.trx",
+      "sha256": "80BB4188C9BC518CB083C335D2A67DFBC34AAED418DC44EA36D7CF2C22BADAF6"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T182326/diagnostic-o-03/output.log",
+      "relative": "diagnostic-o-03/output.log",
+      "sha256": "9848B33BDC754B92272212CBCC1215EAB00C865AA1E30AABEB464074C6F47009"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T182326/diagnostic-o-04/diagnostic-o-04.trx",
+      "relative": "diagnostic-o-04/diagnostic-o-04.trx",
+      "sha256": "64D93A86A109611A601B8F583E5294481F059C19D7DDAD3F867245EE4DAF20ED"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T182326/diagnostic-o-04/output.log",
+      "relative": "diagnostic-o-04/output.log",
+      "sha256": "C831AE7328DD75F4AB2D6A33D4BE704CE916EBB249244446C7EB85419E96E786"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T182326/diagnostic-o-05/diagnostic-o-05.trx",
+      "relative": "diagnostic-o-05/diagnostic-o-05.trx",
+      "sha256": "89CF96F0089D1ECFEBD6374A2ED32EE1CFC9C7F39C5A147812E18CA2860662E4"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T182326/diagnostic-o-05/output.log",
+      "relative": "diagnostic-o-05/output.log",
+      "sha256": "5CB553B580B8FB0329A4D59831BE44F381C66CD329C2C75E47F5A316C8E64F94"
+    }
+  ]
+}

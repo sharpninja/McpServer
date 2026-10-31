@@ -10,10 +10,10 @@ namespace QBrainAi.Repl.Core.Tests.TestSupport;
 /// its port at start (TR-MCP-NUKE-019).
 /// </summary>
 /// <remarks>
-/// Requirement coverage: TR-MCP-NUKE-019 AC-6 (every integration case MigrationIntegrationTests runs uses a temporary
-/// instance it owns, never the live server, its marker or its API key, and asserts on that instance's answers instead
-/// of catching a failure and passing; hostile validation round 8b, policy 7.9; the live-marker defect is
-/// triage-report-81596036a11249d3b79afac1b53d53d9). Test data: scripted argument lists and health answers with the
+/// Requirement coverage: FR-MCP-TESTRESOURCE-001 ac-4 (start arguments) and ac-12 (health answers).
+/// Restart rows implement retained plan design and prove no current criterion. Historical context:
+/// hostile validation round 8b, policy 7.9; the live-marker defect is triage-report-81596036a11249d3b79afac1b53d53d9.
+/// Test data: scripted argument lists and health answers with the
 /// verdict each must get, as literal strings with both separator styles, run against checks passed in, so the
 /// contract is proved on scripted reference checks with negative controls before the shared checks exist; no test
 /// touches the file system, the network or the process environment.
@@ -32,14 +32,14 @@ public sealed class TemporaryInstanceChecksTests
     [
         ("owned layout", Start("/scratch/owned/workspace", "/scratch/owned/workspace/AGENTS-README-FIRST.yaml"), OwnedRoot, true),
         ("owned layout with Windows separators", Start(@"C:\scratch\owned\workspace", @"C:\scratch\owned\workspace\AGENTS-README-FIRST.yaml"), WindowsOwnedRoot, true),
-        ("the root checkout's marker", Start("/scratch/owned/workspace", "/home/user/github/McpServer/AGENTS-README-FIRST.yaml"), OwnedRoot, false),
+        ("the root checkout's marker", Start("/scratch/owned/workspace", "/fixture/workspaces/McpServer/AGENTS-README-FIRST.yaml"), OwnedRoot, false),
         ("a marker in another temporary root", Start("/scratch/owned/workspace", "/scratch/other/workspace/AGENTS-README-FIRST.yaml"), OwnedRoot, false),
         ("a sibling root sharing the prefix", Start("/scratch/owned/workspace", "/scratch/owned2/workspace/AGENTS-README-FIRST.yaml"), OwnedRoot, false),
         ("a parent-segment escape", Start("/scratch/owned/workspace", "/scratch/owned/../live/AGENTS-README-FIRST.yaml"), OwnedRoot, false),
         ("the owned root itself as the marker", Start("/scratch/owned/workspace", "/scratch/owned"), OwnedRoot, false),
         ("no marker argument", ["host.dll", "--agent-stdio", "--workspace-path", "/scratch/owned/workspace"], OwnedRoot, false),
         ("a marker argument without a value", ["host.dll", "--agent-stdio", "--workspace-path", "/scratch/owned/workspace", "--marker-file"], OwnedRoot, false),
-        ("a workspace outside the root", Start("/home/user/github/McpServer", "/scratch/owned/workspace/AGENTS-README-FIRST.yaml"), OwnedRoot, false),
+        ("a workspace outside the root", Start("/fixture/workspaces/McpServer", "/scratch/owned/workspace/AGENTS-README-FIRST.yaml"), OwnedRoot, false),
         ("no workspace argument", ["host.dll", "--agent-stdio", "--marker-file", "/scratch/owned/workspace/AGENTS-README-FIRST.yaml"], OwnedRoot, false),
     ];
 
@@ -152,7 +152,7 @@ public sealed class TemporaryInstanceChecksTests
     /// Binding: the shared checks, <see cref="TemporaryInstanceChecks.CheckReplStartArguments"/>,
     /// <see cref="TemporaryInstanceChecks.CheckHealthAnswer"/> and
     /// <see cref="TemporaryInstanceChecks.ShouldRestartOnNewPort"/> (TR-MCP-NUKE-019), satisfy the same rows the
-    /// scripted references passed and the wrong checks failed.
+    /// scripted references passed and the wrong checks failed. Start and health assertions prove FR-MCP-TESTRESOURCE-001 ac-4 and ac-12; restart assertions prove retained plan design, with no current criterion.
     /// </summary>
     [Fact]
     public void SharedChecks_SatisfyTheContract()
@@ -161,6 +161,15 @@ public sealed class TemporaryInstanceChecksTests
         Assert.Empty(HealthContractFailures(TemporaryInstanceChecks.CheckHealthAnswer));
         Assert.Empty(RestartContractFailures(TemporaryInstanceChecks.ShouldRestartOnNewPort));
     }
+
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 ac-4: runs every original workspace/marker case through the shared REPL consumer
+    /// used by both integration starters. The consumer returns a plan only for accepted rows and propagates the
+    /// shared guard's refusal for the foreign, missing and escaping inputs; this binds a consumer, not the check again.
+    /// </summary>
+    [Fact]
+    public void TemporaryInstanceConsumer_UsesExplicitOwnedWorkspaceAndMarker() =>
+        OwnedInstanceIsolationBindingTests.AssertOriginalConsumerRows();
 
     /// <summary>Mock gate positive control: the scripted reference checks satisfy every row of both contracts.</summary>
     [Fact]

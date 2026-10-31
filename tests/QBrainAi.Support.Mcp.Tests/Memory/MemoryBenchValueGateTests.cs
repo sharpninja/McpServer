@@ -3,11 +3,12 @@ using QBrainAi.Support.Mcp.Services;
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018: H7a value-gate policy.
+/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018 (historical): H7a value-gate policy.
 /// </summary>
 public sealed class MemoryBenchValueGateTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-47: Other plugins stay blocked until H7a AGREE.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void GrokH7a_RequiresAgreeBeforeOtherPlugins()
@@ -26,6 +27,7 @@ public sealed class MemoryBenchValueGateTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-50: H-done defaults to H7a; H7b is follow-on.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void HDone_DefaultRequiresH7a_H7bFollowOn()

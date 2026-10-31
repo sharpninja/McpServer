@@ -10,7 +10,7 @@ using Microsoft.Extensions.Options;
 namespace QBrainAi.Support.Mcp.Services;
 
 /// <summary>
-/// TR-PLANNED-CORE-013, TR-MCP-GH-003, TR-MCP-GH-004: Runs gh CLI for issues, PRs, and workflow runs.
+/// TR-PLANNED-CORE-013 (historical), TR-MCP-GH-003, TR-MCP-GH-004: Runs gh CLI for issues, PRs, and workflow runs.
 /// </summary>
 public sealed class GitHubCliService : IGitHubCliService
 {
@@ -32,15 +32,24 @@ public sealed class GitHubCliService : IGitHubCliService
     private readonly IHttpContextAccessor? _httpContextAccessor;
     private readonly IOptionsMonitor<GitHubIntegrationOptions>? _githubOptions;
     private readonly WorkspaceServiceAccessor? _workspaceAccessor;
+    private readonly QBrainAi.Client.IWorkspacePathNormalizer _pathNormalizer;
 
-    /// <summary>TR-PLANNED-CORE-013: Constructor with IProcessRunner for testability.</summary>
+    /// <summary>TR-PLANNED-CORE-013 (historical): Constructor with IProcessRunner for testability.</summary>
+    /// <param name="processRunner">Runs gh.</param>
+    /// <param name="logger">Logger.</param>
+    /// <param name="tokenStore">Optional stored workspace tokens.</param>
+    /// <param name="httpContextAccessor">Optional request context for the workspace token.</param>
+    /// <param name="githubOptions">Optional GitHub integration options (Mcp:GitHub).</param>
+    /// <param name="workspaceAccessor">Optional active workspace.</param>
+    /// <param name="pathNormalizer">FR-MCP-FED-PATH-001 AC5 (SRC-5): the path normalizer that decides whether the workspace is host-native; the process normalizer when omitted.</param>
     public GitHubCliService(
         IProcessRunner processRunner,
         ILogger<GitHubCliService> logger,
         IGitHubWorkspaceTokenStore? tokenStore = null,
         IHttpContextAccessor? httpContextAccessor = null,
         IOptionsMonitor<GitHubIntegrationOptions>? githubOptions = null,
-        WorkspaceServiceAccessor? workspaceAccessor = null)
+        WorkspaceServiceAccessor? workspaceAccessor = null,
+        QBrainAi.Client.IWorkspacePathNormalizer? pathNormalizer = null)
     {
         _logger = logger;
         _processRunner = processRunner;
@@ -48,6 +57,54 @@ public sealed class GitHubCliService : IGitHubCliService
         _httpContextAccessor = httpContextAccessor;
         _githubOptions = githubOptions;
         _workspaceAccessor = workspaceAccessor;
+        _pathNormalizer = pathNormalizer ?? QBrainAi.Client.WorkspacePathNormalizer.Process;
+    }
+
+    /// <summary>
+    /// FR-MCP-FED-PATH-001 AC5: a planned GitHub CLI invocation, either a refusal with its message (gh is not started) or a run with
+    /// its working directory (null for none) and its repository selector (null for none).
+    /// </summary>
+    /// <param name="Refused">True when gh must not start.</param>
+    /// <param name="Refusal">The failure message of a refusal.</param>
+    /// <param name="WorkingDirectory">The host-native workspace gh runs in, or null.</param>
+    /// <param name="Repository">The repository passed as --repo, or null.</param>
+    internal sealed record GhInvocationPlan(bool Refused, string? Refusal, string? WorkingDirectory, string? Repository);
+
+    /// <summary>
+    /// FR-MCP-FED-PATH-001 AC5 (operator 2026-10-29: "gh foreign-workspace AC (Recommended)"; holistic review findings SRC-1 and SRC-4):
+    /// plans a gh invocation for the active workspace. A workspace whose path belongs to the other platform than the host is an identity
+    /// only: with a configured repository gh runs with --repo and no working directory; without one gh is not started and the refusal
+    /// names the workspace and the Mcp:GitHub:Repository setting. A host-native workspace keeps its working directory and uses the
+    /// configured repository, else the one its git configuration names. No workspace runs with the configured repository only.
+    /// </summary>
+    /// <param name="workspacePath">The active workspace path, or null.</param>
+    /// <param name="configuredRepository">The normalized Mcp:GitHub:Repository value, or null.</param>
+    /// <param name="normalizer">Decides whether the workspace path is host-native.</param>
+    /// <param name="gitConfigRepository">Reads the repository a host-native workspace's git configuration names.</param>
+    /// <returns>The plan.</returns>
+    internal static GhInvocationPlan PlanInvocation(
+        string? workspacePath,
+        string? configuredRepository,
+        QBrainAi.Client.IWorkspacePathNormalizer normalizer,
+        Func<string, string?> gitConfigRepository)
+    {
+        ArgumentNullException.ThrowIfNull(normalizer);
+        ArgumentNullException.ThrowIfNull(gitConfigRepository);
+        if (string.IsNullOrWhiteSpace(workspacePath))
+            return new GhInvocationPlan(false, null, null, configuredRepository);
+
+        if (!normalizer.IsHostNative(workspacePath))
+        {
+            return string.IsNullOrWhiteSpace(configuredRepository)
+                ? new GhInvocationPlan(
+                    true,
+                    $"GitHub CLI operation refused: workspace '{workspacePath}' belongs to another platform than this host and no Mcp:GitHub:Repository is configured.",
+                    null,
+                    null)
+                : new GhInvocationPlan(false, null, null, configuredRepository);
+        }
+
+        return new GhInvocationPlan(false, null, workspacePath, configuredRepository ?? gitConfigRepository(workspacePath));
     }
 
     /// <inheritdoc />
@@ -530,8 +587,19 @@ public sealed class GitHubCliService : IGitHubCliService
     {
         var preferStoredToken = _githubOptions?.CurrentValue.PreferStoredToken ?? true;
         var allowFallback = _githubOptions?.CurrentValue.AllowCliFallback ?? true;
-        var workingDirectory = ResolveWorkingDirectory();
-        var repository = ResolveRepositoryArgument(workingDirectory);
+        var plan = PlanInvocation(
+            _workspaceAccessor?.GetWorkspacePath(),
+            TryNormalizeRepositoryArgument(_githubOptions?.CurrentValue.Repository),
+            _pathNormalizer,
+            static path => TryResolveGitHubRepositoryFromGitConfig(Path.GetFullPath(path)));
+        if (plan.Refused)
+        {
+            _logger.LogWarning("{Refusal}", plan.Refusal);
+            return new ProcessRunResult(-1, null, plan.Refusal);
+        }
+
+        var workingDirectory = plan.WorkingDirectory is null ? null : Path.GetFullPath(plan.WorkingDirectory);
+        var repository = plan.Repository;
         var args = BuildArguments(AddRepositoryOption(arguments, repository));
         var processWorkingDirectory = string.IsNullOrWhiteSpace(repository) ? workingDirectory : null;
         var environmentVariables = string.IsNullOrWhiteSpace(repository)
@@ -563,19 +631,6 @@ public sealed class GitHubCliService : IGitHubCliService
         return await _processRunner.RunAsync(
             new ProcessRunRequest(GhExe, args, WorkingDirectory: processWorkingDirectory, EnvironmentVariables: environmentVariables),
             ct).ConfigureAwait(false);
-    }
-
-    private string? ResolveRepositoryArgument(string? workingDirectory)
-    {
-        var configured = _githubOptions?.CurrentValue.Repository;
-        var configuredRepository = TryNormalizeRepositoryArgument(configured);
-        if (!string.IsNullOrWhiteSpace(configuredRepository))
-            return configuredRepository;
-
-        if (string.IsNullOrWhiteSpace(workingDirectory))
-            return null;
-
-        return TryResolveGitHubRepositoryFromGitConfig(workingDirectory);
     }
 
     private static IReadOnlyDictionary<string, string?>? BuildGitSafeDirectoryEnvironment(string? workingDirectory)
@@ -777,22 +832,6 @@ public sealed class GitHubCliService : IGitHubCliService
         }
 
         return record.AccessToken;
-    }
-
-    /// <summary>
-    /// TR-MCP-GH-004 with FR-MCP-FED-PATH-001 / TR-MCP-FED-PATH-001: the host-native workspace is the gh working
-    /// directory; a foreign-platform workspace (a Windows path on a POSIX host, a POSIX path on Windows) is an
-    /// identity only and is never opened on the host, so gh runs without a working directory and safe.directory.
-    /// </summary>
-    private string? ResolveWorkingDirectory()
-    {
-        var workingDirectory = _workspaceAccessor?.GetWorkspacePath();
-        if (string.IsNullOrWhiteSpace(workingDirectory))
-            return null;
-
-        return QBrainAi.Client.WorkspacePathNormalizer.Process.IsHostNative(workingDirectory)
-            ? Path.GetFullPath(workingDirectory)
-            : null;
     }
 
     private GitHubIssueDetail? ParseIssueDetail(string? json)

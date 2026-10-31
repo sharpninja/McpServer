@@ -49,16 +49,16 @@ public abstract class TriageServiceCrossPlatformContractTests : IDisposable
     [Fact]
     public async Task SubmitReportAsync_LinuxHost_WindowsWorkspace_IsNotPrefixedWithHostWorkingDirectory()
     {
-        const string windowsWorkspace = @"C:\Users\kingd";
+        const string windowsWorkspace = @"C:\Users\fixture-user";
         var sut = CreateService(windowsWorkspace, Normalizer(WorkspacePathPlatform.CaseSensitive));
 
         var result = await sut.SubmitReportAsync(Report("linux-hub-windows-path", windowsWorkspace), TestContext.Current.CancellationToken);
 
-        Assert.Equal("C:/Users/kingd", result.WorkspacePath);
-        using var db = CreateDb("C:/Users/kingd");
+        Assert.Equal("C:/Users/fixture-user", result.WorkspacePath);
+        using var db = CreateDb("C:/Users/fixture-user");
         var report = await db.TriageReports.SingleAsync(TestContext.Current.CancellationToken);
-        Assert.Equal("C:/Users/kingd", report.OriginalWorkspacePath);
-        Assert.Equal("C:/Users/kingd", report.WorkspaceId);
+        Assert.Equal("C:/Users/fixture-user", report.OriginalWorkspacePath);
+        Assert.Equal("C:/Users/fixture-user", report.WorkspaceId);
     }
 
     /// <summary>
@@ -68,15 +68,15 @@ public abstract class TriageServiceCrossPlatformContractTests : IDisposable
     [Fact]
     public async Task SubmitReportAsync_WindowsHost_PosixWorkspace_IsNotReRootedOnDrive()
     {
-        const string posixWorkspace = "/home/sharpninja/github/RideAudit";
+        const string posixWorkspace = "/fixture/workspaces/ExampleWorkspace";
         var sut = CreateService(posixWorkspace, Normalizer(WorkspacePathPlatform.Windows));
 
         var result = await sut.SubmitReportAsync(Report("windows-hub-posix-path", posixWorkspace), TestContext.Current.CancellationToken);
 
-        Assert.Equal("/home/sharpninja/github/RideAudit", result.WorkspacePath);
+        Assert.Equal("/fixture/workspaces/ExampleWorkspace", result.WorkspacePath);
         using var db = CreateDb(posixWorkspace);
         var report = await db.TriageReports.SingleAsync(TestContext.Current.CancellationToken);
-        Assert.Equal("/home/sharpninja/github/RideAudit", report.OriginalWorkspacePath);
+        Assert.Equal("/fixture/workspaces/ExampleWorkspace", report.OriginalWorkspacePath);
     }
 
     /// <summary>
@@ -101,12 +101,12 @@ public abstract class TriageServiceCrossPlatformContractTests : IDisposable
     public async Task SubmitThenLookup_LinuxHost_WindowsWorkspace_RoundTripsByOriginalPath()
     {
         var linux = Normalizer(WorkspacePathPlatform.CaseSensitive);
-        var submitted = await CreateService(@"C:\Users\kingd", linux)
-            .SubmitReportAsync(Report("linux-hub-roundtrip", @"C:\Users\kingd"), TestContext.Current.CancellationToken);
+        var submitted = await CreateService(@"C:\Users\fixture-user", linux)
+            .SubmitReportAsync(Report("linux-hub-roundtrip", @"C:\Users\fixture-user"), TestContext.Current.CancellationToken);
 
-        var report = await CreateService("C:/Users/kingd", linux).GetReportAsync(submitted.ReportId, TestContext.Current.CancellationToken);
-        var groups = await CreateService("C:/Users/kingd", linux).QueryGroupsAsync(
-            workspacePath: "C:/Users/kingd",
+        var report = await CreateService("C:/Users/fixture-user", linux).GetReportAsync(submitted.ReportId, TestContext.Current.CancellationToken);
+        var groups = await CreateService("C:/Users/fixture-user", linux).QueryGroupsAsync(
+            workspacePath: "C:/Users/fixture-user",
             cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(submitted.ReportId, report.ReportId);
@@ -120,25 +120,25 @@ public abstract class TriageServiceCrossPlatformContractTests : IDisposable
     [Fact]
     public async Task SubmitReportAsync_LinuxHost_RoutedReport_PreservesWindowsOriginal()
     {
-        const string hubProduct = "/home/sharpninja/github/QBrainAi";
+        const string hubProduct = "/fixture/workspaces/QBrainAi";
         var sut = CreateService(
-            @"C:\Users\kingd",
+            @"C:\Users\fixture-user",
             Normalizer(WorkspacePathPlatform.CaseSensitive),
-            [Workspace(@"C:\Users\kingd", "kingd"), Workspace(hubProduct, "QBrainAi")]);
+            [Workspace(@"C:\Users\fixture-user", "fixture-user"), Workspace(hubProduct, "QBrainAi")]);
 
         var result = await sut.SubmitReportAsync(new TriageReportRequest
         {
             Title = "mcpserver-codex-plugin masks method_not_found",
             Summary = "The QBrain.AI Codex plugin reports success after a workflow.triage call fails.",
             Component = "mcpserver-codex-plugin",
-            WorkspacePath = @"C:\Users\kingd",
+            WorkspacePath = @"C:\Users\fixture-user",
         }, TestContext.Current.CancellationToken);
 
-        Assert.Equal("/home/sharpninja/github/QBrainAi", result.WorkspacePath);
+        Assert.Equal("/fixture/workspaces/QBrainAi", result.WorkspacePath);
         using var db = CreateDb(hubProduct);
         var report = await db.TriageReports.SingleAsync(TestContext.Current.CancellationToken);
-        Assert.Equal("C:/Users/kingd", report.OriginalWorkspacePath);
-        Assert.Equal("/home/sharpninja/github/QBrainAi", report.EffectiveWorkspacePath);
+        Assert.Equal("C:/Users/fixture-user", report.OriginalWorkspacePath);
+        Assert.Equal("/fixture/workspaces/QBrainAi", report.EffectiveWorkspacePath);
     }
 
     private McpDbContext CreateDb(string workspacePath) =>

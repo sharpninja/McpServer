@@ -5,11 +5,11 @@ using QBrainAi.Tests.Shared;
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-016: Shared S5 verb/route/method names and production-surface probes.
+/// TEST-MCP-MEMORY-016 (historical): Shared S5 verb/route/method names and production-surface probes.
 /// </summary>
 internal static class MemoryS5Catalog
 {
-    /// <summary>Additive MCP verbs introduced by FR-MCP-MEMORY-017 / TR-MCP-MEMORY-API-002.</summary>
+    /// <summary>Additive MCP verbs introduced by FR-MCP-MEMORY-017 (historical) / TR-MCP-MEMORY-API-002 (historical).</summary>
     public static readonly string[] NewVerbs =
     [
         "memory_remember",
