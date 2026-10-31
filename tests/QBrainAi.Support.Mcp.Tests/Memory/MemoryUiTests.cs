@@ -1,13 +1,15 @@
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-017 / FR-MCP-MEMORY-016:
+/// TEST-MCP-MEMORY-017 (historical) / FR-MCP-MEMORY-016 (historical):
 /// First-party /memory/ UI lists, edits, and reverts only through public REST
 /// for the active workspace.
 /// </summary>
 public sealed class MemoryUiTests
 {
     /// <summary>AC-FR-MCP-MEMORY-016-01: Search UI lists only active-workspace Effective memories.</summary>
+    /// <remarks>Integration: reads the shipped memory UI or its registration artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Search_OnlyActiveWorkspace()
     {
@@ -21,6 +23,8 @@ public sealed class MemoryUiTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-016-02: Edit persists via the same CQRS update path as REST.</summary>
+    /// <remarks>Integration: reads the shipped memory UI or its registration artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Edit_UsesSameCqrsPath()
     {
@@ -33,6 +37,8 @@ public sealed class MemoryUiTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-016-03: Version view lists ordered versions; revert completes in ≤3 UI actions.</summary>
+    /// <remarks>Integration: reads the shipped memory UI or its registration artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Revert_WithinThreeActions()
     {
@@ -46,6 +52,8 @@ public sealed class MemoryUiTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-016-04: Opening another workspace's memory id fails closed.</summary>
+    /// <remarks>Integration: reads the shipped memory UI or its registration artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void ForeignMemory_FailClosed()
     {
@@ -58,6 +66,8 @@ public sealed class MemoryUiTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-016-05: Empty state shows a clear no-memories message (not a blank crash).</summary>
+    /// <remarks>Integration: reads the shipped memory UI or its registration artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void EmptyState_Message()
     {
@@ -68,6 +78,8 @@ public sealed class MemoryUiTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-016-06: Search with no hits shows empty results, not a server-failure toast.</summary>
+    /// <remarks>Integration: reads the shipped memory UI or its registration artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void NoHits_EmptyNotError()
     {
@@ -78,6 +90,8 @@ public sealed class MemoryUiTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-016-07: Soft-deleted memories are not listed in the default UI view.</summary>
+    /// <remarks>Integration: reads the shipped memory UI or its registration artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void SoftDeleted_NotListed()
     {
@@ -88,6 +102,8 @@ public sealed class MemoryUiTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-016-08: Creating via UI requires non-empty Content.</summary>
+    /// <remarks>Integration: reads the shipped memory UI or its registration artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void CreateEmpty_Blocked()
     {
@@ -101,6 +117,8 @@ public sealed class MemoryUiTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-016-09: UI does not display raw API keys or workspace secrets.</summary>
+    /// <remarks>Integration: reads the shipped memory UI or its registration artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void NoSecretsInDom()
     {
@@ -115,6 +133,8 @@ public sealed class MemoryUiTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-016-10: Recall/search from UI respects tag chips/filters.</summary>
+    /// <remarks>Integration: reads the shipped memory UI or its registration artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Filters_Respected()
     {
@@ -126,6 +146,8 @@ public sealed class MemoryUiTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-016-11: Escape closes the detail/version panel.</summary>
+    /// <remarks>Integration: reads the shipped memory UI or its registration artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Escape_ClosesPanel()
     {
@@ -137,6 +159,8 @@ public sealed class MemoryUiTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-016-12 / AC-TR-MCP-MEMORY-UI-002-03: UI calls only public REST memory endpoints.</summary>
+    /// <remarks>Integration: reads the shipped memory UI or its registration artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void CallsOnlyPublicRest()
     {

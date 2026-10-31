@@ -1,0 +1,14 @@
+{
+  "TimestampUtc": "2026-10-20T01:29:44.5392242Z",
+  "TimestampLocal": "2026-10-19T20:29:44",
+  "Mode": "Files",
+  "Arguments": [
+    "docs/receipts/hv",
+    "-g",
+    "hv-ug-r1-*.ps1"
+  ],
+  "Offset": 0,
+  "Count": 100,
+  "ExitCode": 0,
+  "Output": "docs/receipts/hv/hv-ug-r1-final-checks.ps1\ndocs/receipts/hv/hv-ug-r1-inspect.ps1\ndocs/receipts/hv/hv-ug-r1-session.ps1\ndocs/receipts/hv/hv-ug-r1-bootstrap.ps1\ndocs/receipts/hv/hv-ug-r1-run.ps1\ndocs/receipts/hv/hv-ug-r1-analyze.ps1\ndocs/receipts/hv/hv-ug-r1-windows-read.ps1\ndocs/receipts/hv/hv-ug-r1-reconcile.ps1\ndocs/receipts/hv/hv-ug-r1-transcript-evidence.ps1\ndocs/receipts/hv/hv-ug-r1-deep.ps1"
+}

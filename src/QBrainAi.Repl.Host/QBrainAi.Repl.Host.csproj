@@ -31,6 +31,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- TR-MCP-REPL-008 AC-1 to AC-4: the unit tests pass an in-memory IMarkerFileSystem to the marker walk. -->
+    <InternalsVisibleTo Include="QBrainAi.Repl.Core.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\QBrainAi.Repl.Core\QBrainAi.Repl.Core.csproj" />
     <ProjectReference Include="..\QBrainAi.Common.AgentCli\QBrainAi.Common.AgentCli.csproj" />
     <ProjectReference Include="..\QBrainAi.Client\QBrainAi.Client.csproj" />

@@ -1,0 +1,276 @@
+{
+  "timestampLocal": "2026-10-30T19:20:13",
+  "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145",
+  "diagnosticOnly": true,
+  "acceptedGate": false,
+  "executedRepeats": 10,
+  "failedRepeats": 0,
+  "observation": "No recurrence in this group; does not prove the cause fixed.",
+  "files": [
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/manifest.json",
+      "relative": "manifest.json",
+      "sha256": "FEE231251E85BC93201AC277D2B50B8B3AF80D28A4A68ECC855152192CA3E3FF"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-01/capture.sql",
+      "relative": "diagnostic-o-01/capture.sql",
+      "sha256": "E6AFD768954114F85B90CC2EDCC322C743A538B96B7BCB4CB7E9FE95996831C7"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-01/diagnostic-o-01.trx",
+      "relative": "diagnostic-o-01/diagnostic-o-01.trx",
+      "sha256": "B7CD5AF6A96D8DCE4880E7431B40D3A64F9DD3DE0903DDBB54B318B007FC8F71"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-01/output.log",
+      "relative": "diagnostic-o-01/output.log",
+      "sha256": "1E4B29BC8F0ABC77A2D1FA1D2AF9E8BE68943FD4C6F7851D0982E174CEC3E56D"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-01/sql-events.txt",
+      "relative": "diagnostic-o-01/sql-events.txt",
+      "sha256": "A28EE8A3A93CAFF2EA44C62F9F5B05D3C320B34C14B097F66935C0FD5FB01084"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-01/sql-events.txt.json",
+      "relative": "diagnostic-o-01/sql-events.txt.json",
+      "sha256": "00700990B8623293A799C361E322ECFA0D9C1FEEF4BE3CEE1583EBC796016C4B"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-01/sql-events.txt.stderr",
+      "relative": "diagnostic-o-01/sql-events.txt.stderr",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-02/capture.sql",
+      "relative": "diagnostic-o-02/capture.sql",
+      "sha256": "E6AFD768954114F85B90CC2EDCC322C743A538B96B7BCB4CB7E9FE95996831C7"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-02/diagnostic-o-02.trx",
+      "relative": "diagnostic-o-02/diagnostic-o-02.trx",
+      "sha256": "68474954877AE33E60072C184F290923BB6C368B690AB01BB100CB2DC85C1EE0"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-02/output.log",
+      "relative": "diagnostic-o-02/output.log",
+      "sha256": "14C0FA3A8E3837728CFDF91CB52AB1A97E42F6F0294C273DB879DA7390059E9D"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-02/sql-events.txt",
+      "relative": "diagnostic-o-02/sql-events.txt",
+      "sha256": "7509A227FDA33655CE6CF045149F34A622865C382898346BCC618FAD07F2B4CD"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-02/sql-events.txt.stderr",
+      "relative": "diagnostic-o-02/sql-events.txt.stderr",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-03/capture.sql",
+      "relative": "diagnostic-o-03/capture.sql",
+      "sha256": "E6AFD768954114F85B90CC2EDCC322C743A538B96B7BCB4CB7E9FE95996831C7"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-03/diagnostic-o-03.trx",
+      "relative": "diagnostic-o-03/diagnostic-o-03.trx",
+      "sha256": "02C20ADA5CA1802E7660DC62A6D67F9C1E2007152CA3970D9B786FBA3AE4B25A"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-03/output.log",
+      "relative": "diagnostic-o-03/output.log",
+      "sha256": "59D6438D3E5B76C58C988B2C720796EF9DC6CF5AF3D291D60C4C1B141157E327"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-03/sql-events.txt",
+      "relative": "diagnostic-o-03/sql-events.txt",
+      "sha256": "00184A4FE55681A98B7A384EB3396F9ECC0AC19CBCC3EC7313CCDC58455FDD99"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-03/sql-events.txt.stderr",
+      "relative": "diagnostic-o-03/sql-events.txt.stderr",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-04/capture.sql",
+      "relative": "diagnostic-o-04/capture.sql",
+      "sha256": "AE9072A5918175440BAEA271295E6AF3F7F0D270766C1D5E3AFAC712BB7E2A9B"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-04/diagnostic-o-04.trx",
+      "relative": "diagnostic-o-04/diagnostic-o-04.trx",
+      "sha256": "5D741083C4C40701ED8E8798B86D67497A673DCD2D4F1DEA2FAE56499EF68B58"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-04/output.log",
+      "relative": "diagnostic-o-04/output.log",
+      "sha256": "9EC118CAF0EFED2A298329D9AE8DA98FBE051C76C138E415857EAFBB379038A9"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-04/sql-events.txt",
+      "relative": "diagnostic-o-04/sql-events.txt",
+      "sha256": "5DD777C5036E43AFE0DBEDCB01BA6E2E68D4A752E4E06F23BD6E4F8B6241776B"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-04/sql-events.txt.stderr",
+      "relative": "diagnostic-o-04/sql-events.txt.stderr",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-05/capture.sql",
+      "relative": "diagnostic-o-05/capture.sql",
+      "sha256": "AE9072A5918175440BAEA271295E6AF3F7F0D270766C1D5E3AFAC712BB7E2A9B"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-05/diagnostic-o-05.trx",
+      "relative": "diagnostic-o-05/diagnostic-o-05.trx",
+      "sha256": "56FCB48D09FB04B1912AB24E6984BCCA02AD15BB22677DA64F714CCD129BB687"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-05/output.log",
+      "relative": "diagnostic-o-05/output.log",
+      "sha256": "17A1FF895521479AD92EA0C16E96EC8C3EBC0EBB14CFEB25269699845DC94110"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-05/sql-events.txt",
+      "relative": "diagnostic-o-05/sql-events.txt",
+      "sha256": "96E4581126FF2DF54C41592DD0031D49D182FFAA95DCF68A8F0B4074B210C74D"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-05/sql-events.txt.stderr",
+      "relative": "diagnostic-o-05/sql-events.txt.stderr",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-06/capture.sql",
+      "relative": "diagnostic-o-06/capture.sql",
+      "sha256": "AE9072A5918175440BAEA271295E6AF3F7F0D270766C1D5E3AFAC712BB7E2A9B"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-06/diagnostic-o-06.trx",
+      "relative": "diagnostic-o-06/diagnostic-o-06.trx",
+      "sha256": "3ECB2FBD44D67F5D4BE37F9AF113DE8A931ED49D7FC638EFA51365856E5C7F2D"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-06/output.log",
+      "relative": "diagnostic-o-06/output.log",
+      "sha256": "10CF138FD108CF7A8E95AAD779D3148BC1958D4EA909A34781B9733E52C899C5"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-06/sql-events.txt",
+      "relative": "diagnostic-o-06/sql-events.txt",
+      "sha256": "ACA11939CA6AC23856AD0DF4B5FCCF17685F57D5F72838A8B7BC867AD29FFDE1"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-06/sql-events.txt.json",
+      "relative": "diagnostic-o-06/sql-events.txt.json",
+      "sha256": "BB90E0C5C5EB300CFA646F77716B34B78BC8F2CEBD384F489F9A8383024E639D"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-06/sql-events.txt.stderr",
+      "relative": "diagnostic-o-06/sql-events.txt.stderr",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-07/capture.sql",
+      "relative": "diagnostic-o-07/capture.sql",
+      "sha256": "AE9072A5918175440BAEA271295E6AF3F7F0D270766C1D5E3AFAC712BB7E2A9B"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-07/diagnostic-o-07.trx",
+      "relative": "diagnostic-o-07/diagnostic-o-07.trx",
+      "sha256": "9A7CA796A3CF23419A23AC0ABF325CE1C1AC05640CFB2F580DFB05F680F21A7D"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-07/output.log",
+      "relative": "diagnostic-o-07/output.log",
+      "sha256": "6FAF4007425EF4FD572169D29E632F1D0DD78BE277D072DB755F96E030711D5C"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-07/sql-events.txt",
+      "relative": "diagnostic-o-07/sql-events.txt",
+      "sha256": "3E93349EC9D6CDE42625FAE351EE61302CACD4EDB04A5D46CA04D33B010B44CA"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-07/sql-events.txt.stderr",
+      "relative": "diagnostic-o-07/sql-events.txt.stderr",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-08/capture.sql",
+      "relative": "diagnostic-o-08/capture.sql",
+      "sha256": "AE9072A5918175440BAEA271295E6AF3F7F0D270766C1D5E3AFAC712BB7E2A9B"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-08/diagnostic-o-08.trx",
+      "relative": "diagnostic-o-08/diagnostic-o-08.trx",
+      "sha256": "59AA136D54180B08A509FD76265A413B39543C8DEA918DD97B7C4D0F32D64081"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-08/output.log",
+      "relative": "diagnostic-o-08/output.log",
+      "sha256": "D78A6B05275ECA7B1E3DD5E1740C35EF7A5C4D8B0A0B8775D0FBEFDB0F423C39"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-08/sql-events.txt",
+      "relative": "diagnostic-o-08/sql-events.txt",
+      "sha256": "11F7996A77DF3D4344F0C5D2B2C324A9AA7D2D57C7977A663AF0F93650F25C81"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-08/sql-events.txt.stderr",
+      "relative": "diagnostic-o-08/sql-events.txt.stderr",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-09/capture.sql",
+      "relative": "diagnostic-o-09/capture.sql",
+      "sha256": "AE9072A5918175440BAEA271295E6AF3F7F0D270766C1D5E3AFAC712BB7E2A9B"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-09/diagnostic-o-09.trx",
+      "relative": "diagnostic-o-09/diagnostic-o-09.trx",
+      "sha256": "38C2D51415BA9616037595B7B9EE56470CA4EB802B1636F3AA6138DF0638A24C"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-09/output.log",
+      "relative": "diagnostic-o-09/output.log",
+      "sha256": "B40B6A54390D69DF6F39C3E380925A815F0599D5B426410C6C7A0C94EC1494A6"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-09/sql-events.txt",
+      "relative": "diagnostic-o-09/sql-events.txt",
+      "sha256": "4F0F789D97F74D8C3873057EE4679085486B376684256EECE06EA123C23E8DA9"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-09/sql-events.txt.stderr",
+      "relative": "diagnostic-o-09/sql-events.txt.stderr",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-10/capture.sql",
+      "relative": "diagnostic-o-10/capture.sql",
+      "sha256": "AE9072A5918175440BAEA271295E6AF3F7F0D270766C1D5E3AFAC712BB7E2A9B"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-10/diagnostic-o-10.trx",
+      "relative": "diagnostic-o-10/diagnostic-o-10.trx",
+      "sha256": "AC1C99D8588D968C3B9A2B66752DB6531B6F18E4669E620FD7E4D8F335FCCDD7"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-10/output.log",
+      "relative": "diagnostic-o-10/output.log",
+      "sha256": "8C3115E93600F819ED6430335E4BD8FFD56C5C79779944500221ABCABE09B963"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-10/sql-events.txt",
+      "relative": "diagnostic-o-10/sql-events.txt",
+      "sha256": "091125C1923A341AA091A6222ED5BFDE46AF4A5E9DAD3D2F39E4A1A5CBF5621D"
+    },
+    {
+      "source": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T184145/diagnostic-o-10/sql-events.txt.stderr",
+      "relative": "diagnostic-o-10/sql-events.txt.stderr",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    }
+  ]
+}

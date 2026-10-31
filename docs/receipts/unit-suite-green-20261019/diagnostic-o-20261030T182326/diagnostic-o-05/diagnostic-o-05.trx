@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="d4062b45-4272-4599-a5fd-dc348b5ff5ad" name="@LAB-OMARCHY 2026-10-30 18:29:43" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-30T18:29:43.6562937-05:00" queuing="2026-10-30T18:29:43.6562938-05:00" start="2026-10-30T18:29:34.7243962-05:00" finish="2026-10-30T18:31:14.2939010-05:00" />
+  <TestSettings name="default" id="32f56456-45ea-4f96-ab1b-ff4e1252e25b">
+    <Deployment runDeploymentRoot="_LAB-OMARCHY_2026-10-30_18_29_43" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="3c51cb3d-63c0-46fd-bc05-00c439251881" testId="71dd2941-68b6-f90a-6452-16a414f489f2" testName="QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows" computerName="LAB-OMARCHY" duration="00:00:19.1401963" startTime="2026-10-30T18:29:43.6151606-05:00" endTime="2026-10-30T18:30:02.7556944-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3c51cb3d-63c0-46fd-bc05-00c439251881" />
+    <UnitTestResult executionId="6d5a9bfe-c8d5-4afa-8ced-23b91bff3426" testId="79978904-9343-50e2-6bb6-f4c77cd276d4" testName="QBrainAi.Support.Mcp.Tests.Storage.SqlServerAuditPayloadMigrationTests.Migration_PersistsCompressedPayloads_AndDeniesAuditMutation" computerName="LAB-OMARCHY" duration="00:00:13.0640291" startTime="2026-10-30T18:30:13.5410068-05:00" endTime="2026-10-30T18:30:26.6075062-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6d5a9bfe-c8d5-4afa-8ced-23b91bff3426" />
+    <UnitTestResult executionId="aac97a23-d347-4ab6-be5c-d5b1e2661d8e" testId="f5eed245-fc02-0195-0f48-5331e9ef145d" testName="QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows" computerName="LAB-OMARCHY" duration="00:00:38.1637663" startTime="2026-10-30T18:30:35.8957908-05:00" endTime="2026-10-30T18:31:14.0790211-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="aac97a23-d347-4ab6-be5c-d5b1e2661d8e">
+      <Output>
+        <ErrorInfo>
+          <Message>System.AggregateException : SQL Server migration: first failure, followed by later failures. (Cannot release the application lock (Database Principal: 'public', Resource: '__EFMigrationsLock') because it is not currently held.)
+---- Microsoft.Data.SqlClient.SqlException : Cannot release the application lock (Database Principal: 'public', Resource: '__EFMigrationsLock') because it is not currently held.</Message>
+          <StackTrace>   at QBrainAi.Support.Mcp.Tests.Storage.SqlServerMigrationFailureReporter.Run(Action operation) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureReporter.cs:line 48
+   at QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerRenameQuadBrainRolesMigrationTests.cs:line 52
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+----- Inner Stack Trace -----
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean&amp; dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at Microsoft.Data.SqlClient.SqlDataReader.get_MetaData()
+   at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task&amp; task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task&amp; task, Boolean&amp; usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at Microsoft.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteScalar(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.SqlServer.Migrations.Internal.SqlServerMigrationDatabaseLock.Dispose()
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateImplementation(DbContext context, String targetMigration, MigrationExecutionState state, Boolean useTransaction)
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.&lt;&gt;c.&lt;Migrate&gt;b__20_1(DbContext c, ValueTuple`4 s)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.Migrate(String targetMigration)
+   at QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.&lt;&gt;c__DisplayClass6_0.&lt;Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows&gt;b__0() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerRenameQuadBrainRolesMigrationTests.cs:line 52
+   at QBrainAi.Support.Mcp.Tests.Storage.SqlServerMigrationFailureReporter.Run(Action operation) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureReporter.cs:line 38</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="5f2add0c-03ed-4910-9ace-f72bc6b1fe18" testId="ee4aa1dd-285c-6636-26c4-daaa30654de9" testName="QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.MigrateDown_RenameQuadBrainRoles_RestoresLegacyHemisphereRows" computerName="LAB-OMARCHY" duration="00:00:09.2762535" startTime="2026-10-30T18:30:26.6146092-05:00" endTime="2026-10-30T18:30:35.8909640-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5f2add0c-03ed-4910-9ace-f72bc6b1fe18" />
+    <UnitTestResult executionId="30bb102e-05c4-4f08-a436-b8a2bc1b88f1" testId="39b7c3ec-eaef-7c51-47b2-1cbfa05d24c0" testName="QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables" computerName="LAB-OMARCHY" duration="00:00:10.7800796" startTime="2026-10-30T18:30:02.7584408-05:00" endTime="2026-10-30T18:30:13.5386353-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="30bb102e-05c4-4f08-a436-b8a2bc1b88f1" />
+    <UnitTestResult executionId="c02edd6d-806c-41fd-a33f-30e7c3f74c01" testId="ff96f75c-47e9-6145-77f9-01c56a049193" testName="QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently" computerName="LAB-OMARCHY" duration="00:00:04.0656605" startTime="2026-10-30T18:29:39.5149688-05:00" endTime="2026-10-30T18:29:43.5935262-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c02edd6d-806c-41fd-a33f-30e7c3f74c01" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows" storage="/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030t182326/output/qbrainai.support.mcp.tests.dll" id="71dd2941-68b6-f90a-6452-16a414f489f2">
+      <Execution id="3c51cb3d-63c0-46fd-bc05-00c439251881" />
+      <TestMethod codeBase="/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T182326/output/QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests" name="Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently" storage="/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030t182326/output/qbrainai.support.mcp.tests.dll" id="ff96f75c-47e9-6145-77f9-01c56a049193">
+      <Execution id="c02edd6d-806c-41fd-a33f-30e7c3f74c01" />
+      <TestMethod codeBase="/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T182326/output/QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests" name="SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Storage.SqlServerAuditPayloadMigrationTests.Migration_PersistsCompressedPayloads_AndDeniesAuditMutation" storage="/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030t182326/output/qbrainai.support.mcp.tests.dll" id="79978904-9343-50e2-6bb6-f4c77cd276d4">
+      <Execution id="6d5a9bfe-c8d5-4afa-8ced-23b91bff3426" />
+      <TestMethod codeBase="/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T182326/output/QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Storage.SqlServerAuditPayloadMigrationTests" name="Migration_PersistsCompressedPayloads_AndDeniesAuditMutation" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables" storage="/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030t182326/output/qbrainai.support.mcp.tests.dll" id="39b7c3ec-eaef-7c51-47b2-1cbfa05d24c0">
+      <Execution id="30bb102e-05c4-4f08-a436-b8a2bc1b88f1" />
+      <TestMethod codeBase="/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T182326/output/QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests" name="Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.MigrateDown_RenameQuadBrainRoles_RestoresLegacyHemisphereRows" storage="/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030t182326/output/qbrainai.support.mcp.tests.dll" id="ee4aa1dd-285c-6636-26c4-daaa30654de9">
+      <Execution id="5f2add0c-03ed-4910-9ace-f72bc6b1fe18" />
+      <TestMethod codeBase="/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T182326/output/QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests" name="MigrateDown_RenameQuadBrainRoles_RestoresLegacyHemisphereRows" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows" storage="/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030t182326/output/qbrainai.support.mcp.tests.dll" id="f5eed245-fc02-0195-0f48-5331e9ef145d">
+      <Execution id="aac97a23-d347-4ab6-be5c-d5b1e2661d8e" />
+      <TestMethod codeBase="/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T182326/output/QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests" name="Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="71dd2941-68b6-f90a-6452-16a414f489f2" executionId="3c51cb3d-63c0-46fd-bc05-00c439251881" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="79978904-9343-50e2-6bb6-f4c77cd276d4" executionId="6d5a9bfe-c8d5-4afa-8ced-23b91bff3426" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f5eed245-fc02-0195-0f48-5331e9ef145d" executionId="aac97a23-d347-4ab6-be5c-d5b1e2661d8e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ee4aa1dd-285c-6636-26c4-daaa30654de9" executionId="5f2add0c-03ed-4910-9ace-f72bc6b1fe18" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="39b7c3ec-eaef-7c51-47b2-1cbfa05d24c0" executionId="30bb102e-05c4-4f08-a436-b8a2bc1b88f1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ff96f75c-47e9-6145-77f9-01c56a049193" executionId="c02edd6d-806c-41fd-a33f-30e7c3f74c01" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="6" executed="6" passed="5" failed="1" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.52]   Discovering: QBrainAi.Support.Mcp.Tests
+[xUnit.net 00:00:03.79]   Discovered:  QBrainAi.Support.Mcp.Tests
+[xUnit.net 00:00:04.09]   Starting:    QBrainAi.Support.Mcp.Tests
+[xUnit.net 00:01:38.80]       System.AggregateException : SQL Server migration: first failure, followed by later failures. (Cannot release the application lock (Database Principal: 'public', Resource: '__EFMigrationsLock') because it is not currently held.)
+[xUnit.net 00:01:38.80]       ---- Microsoft.Data.SqlClient.SqlException : Cannot release the application lock (Database Principal: 'public', Resource: '__EFMigrationsLock') because it is not currently held.
+[xUnit.net 00:01:38.80]       Stack Trace:
+[xUnit.net 00:01:38.80]         /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureReporter.cs(48,0): at QBrainAi.Support.Mcp.Tests.Storage.SqlServerMigrationFailureReporter.Run(Action operation)
+[xUnit.net 00:01:38.80]         /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerRenameQuadBrainRolesMigrationTests.cs(52,0): at QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows()
+[xUnit.net 00:01:38.80]            at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+[xUnit.net 00:01:38.80]            at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+[xUnit.net 00:01:38.80]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+[xUnit.net 00:01:38.80]            at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:01:38.80]         ----- Inner Stack Trace -----
+[xUnit.net 00:01:38.80]            at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+[xUnit.net 00:01:38.80]            at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean&amp; dataReady)
+[xUnit.net 00:01:38.80]            at Microsoft.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+[xUnit.net 00:01:38.80]            at Microsoft.Data.SqlClient.SqlDataReader.get_MetaData()
+[xUnit.net 00:01:38.80]            at Microsoft.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+[xUnit.net 00:01:38.80]            at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean isAsync, Int32 timeout, Task&amp; task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+[xUnit.net 00:01:38.80]            at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task&amp; task, Boolean&amp; usedCache, Boolean asyncWrite, Boolean inRetry, String method)
+[xUnit.net 00:01:38.80]            at Microsoft.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+[xUnit.net 00:01:38.80]            at Microsoft.Data.SqlClient.SqlCommand.ExecuteScalar()
+[xUnit.net 00:01:38.80]            at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteScalar(RelationalCommandParameterObject parameterObject)
+[xUnit.net 00:01:38.80]            at Microsoft.EntityFrameworkCore.SqlServer.Migrations.Internal.SqlServerMigrationDatabaseLock.Dispose()
+[xUnit.net 00:01:38.80]            at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateImplementation(DbContext context, String targetMigration, MigrationExecutionState state, Boolean useTransaction)
+[xUnit.net 00:01:38.80]            at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.&lt;&gt;c.&lt;Migrate&gt;b__20_1(DbContext c, ValueTuple`4 s)
+[xUnit.net 00:01:38.80]            at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+[xUnit.net 00:01:38.80]            at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.Migrate(String targetMigration)
+[xUnit.net 00:01:38.80]         /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerRenameQuadBrainRolesMigrationTests.cs(52,0): at QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.&lt;&gt;c__DisplayClass6_0.&lt;Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows&gt;b__0()
+[xUnit.net 00:01:38.80]         /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureReporter.cs(38,0): at QBrainAi.Support.Mcp.Tests.Storage.SqlServerMigrationFailureReporter.Run(Action operation)
+[xUnit.net 00:01:38.81]   Finished:    QBrainAi.Support.Mcp.Tests (ID = '154f77c98a1ae910e33a3050f5f1d1e168281e04129261b320025ffcdf717b7e')
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="LAB-OMARCHY" outcome="Error" timestamp="2026-10-30T18:31:14.0920217-05:00">
+        <Text>[xUnit.net 00:01:38.79]     QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

@@ -3,11 +3,13 @@ using QBrainAi.Support.Mcp.Services;
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-019: Canonical multi-turn pack existence and schema.
+/// TEST-MCP-MEMORY-019 (historical): Canonical multi-turn pack existence and schema.
 /// </summary>
 public sealed class MemoryBenchMultiTurnPackTests
 {
     /// <summary>AC-FR-MCP-MEMORY-019-01: v2 pack lives at the canonical path and is versioned.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void PackFile_ExistsAndVersioned()
     {
@@ -23,6 +25,8 @@ public sealed class MemoryBenchMultiTurnPackTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019-02: Pack covers preference, decision, fact, multi-fact, and negative/refuse.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void CoversRequiredJobClasses()
     {
@@ -33,6 +37,8 @@ public sealed class MemoryBenchMultiTurnPackTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019-03: Each job has establish then required query turns.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void JobsHaveEstablishThenRequiredQuery()
     {
@@ -46,6 +52,8 @@ public sealed class MemoryBenchMultiTurnPackTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019-04: Query turns do not restate gold facts in the user message.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void QueryTurns_DoNotRestateFacts()
     {
@@ -60,6 +68,8 @@ public sealed class MemoryBenchMultiTurnPackTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019-05: Pack declares paired conditions and token fields.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void PairedConditionsAndTokenFields()
     {

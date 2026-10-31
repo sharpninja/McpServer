@@ -1,0 +1,117 @@
+[
+  {
+    "Before": "ug-r6-win-lane-1",
+    "After": "ug-r7-win-lane-2",
+    "Removed": [],
+    "Added": [
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: \"MCPSERVER_QUADBRAIN_CLI_TEMP\")",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_NonZeroExit_StillThrows",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClaudeAgent_UsesClaudePlanModeCommandShape",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_GrokSecondCall_ResumesSameSession",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFolderAsync_BodyThrows_StillRestoresAndDeletes",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: \"MCPSERVER_GROK_ONESHOT_TEMP\")",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.Factory_Create_CliSlot_ReturnsCliClient",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WhenCodexTimesOut_PreservesPartialStreams",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithCodexAgent_UsesCodexOneShotCommandShape",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_ReturnsStdoutInsteadOfThrowing",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithOutputCallback_StreamsAgentOutput",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: \"MCPSERVER_ONESHOT_TEMP\")",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClineAgent_UsesClineParameterizedPromptCommandShape",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithGrokAgent_UsesGrokPromptFileCommandShape",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_ResumeSessionMissing_RetriesWithoutResume",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WhenCodexFails_ReturnsErrorResult",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_CodexSecondCall_ResumesExtractedThread",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: \"MCPSERVER_CODEX_ONESHOT_TEMP\")",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFolderAsync_UnknownPrimary_IsRefusedWithoutChanges",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: \"MCPSERVER_CODEX_TRIAGE_TEMP\")",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_EmptyStdout_DoesNotThrow"
+    ]
+  },
+  {
+    "Before": "ug-r6-linux-lane-1",
+    "After": "ug-r7-linux-lane-2",
+    "Removed": [],
+    "Added": [
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.Factory_Create_CliSlot_ReturnsCliClient",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClineAgent_UsesClineParameterizedPromptCommandShape",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_NonZeroExit_StillThrows",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WhenCodexTimesOut_PreservesPartialStreams",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: \"MCPSERVER_QUADBRAIN_CLI_TEMP\")",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_ReturnsStdoutInsteadOfThrowing",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: \"MCPSERVER_GROK_ONESHOT_TEMP\")",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithCodexAgent_UsesCodexOneShotCommandShape",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: \"MCPSERVER_ONESHOT_TEMP\")",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: \"MCPSERVER_CODEX_ONESHOT_TEMP\")",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_CodexSecondCall_ResumesExtractedThread",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFolderAsync_UnknownPrimary_IsRefusedWithoutChanges",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithGrokAgent_UsesGrokPromptFileCommandShape",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFolderAsync_BodyThrows_StillRestoresAndDeletes",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_ResumeSessionMissing_RetriesWithoutResume",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClaudeAgent_UsesClaudePlanModeCommandShape",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_EmptyStdout_DoesNotThrow",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WhenCodexFails_ReturnsErrorResult",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithOutputCallback_StreamsAgentOutput",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(primaryName: \"MCPSERVER_CODEX_TRIAGE_TEMP\")",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_GrokSecondCall_ResumesSameSession"
+    ]
+  },
+  {
+    "Before": "ug-r7-clitemp-mockgate-1",
+    "After": "ug-r7-binding-1",
+    "Removed": [
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClineAgent_UsesClineParameterizedPromptCommandShape",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_EmptyStdout_DoesNotThrow",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WhenCodexTimesOut_PreservesPartialStreams",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_NonZeroExit_StillThrows",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithGrokAgent_UsesGrokPromptFileCommandShape",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.Factory_Create_CliSlot_ReturnsCliClient",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_ReturnsStdoutInsteadOfThrowing",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_GrokSecondCall_ResumesSameSession",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_ResumeSessionMissing_RetriesWithoutResume",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithOutputCallback_StreamsAgentOutput",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_CodexSecondCall_ResumesExtractedThread",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClaudeAgent_UsesClaudePlanModeCommandShape",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithCodexAgent_UsesCodexOneShotCommandShape",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WhenCodexFails_ReturnsErrorResult"
+    ],
+    "Added": []
+  },
+  {
+    "Before": "ug-r7-chain-mockgate-1",
+    "After": "ug-r7-chain-binding-1",
+    "Removed": [
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.ScriptedSnapshot_EveryNameAtTheFolder_Passes",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.ScriptedSnapshot_MissingOrWrongName_IsRejectedInsidePassingHarness"
+    ],
+    "Added": []
+  },
+  {
+    "Before": "ug-r6-linux-test-2",
+    "After": "ug-r7-linux-test-2",
+    "Removed": [
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithOutputCallback_StreamsAgentOutput",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithCodexAgent_UsesCodexOneShotCommandShape",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WhenCodexFails_ReturnsErrorResult",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClaudeAgent_UsesClaudePlanModeCommandShape",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_ReturnsStdoutInsteadOfThrowing",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_ResumeSessionMissing_RetriesWithoutResume",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithGrokAgent_UsesGrokPromptFileCommandShape",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClineAgent_UsesClineParameterizedPromptCommandShape",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_CodexSecondCall_ResumesExtractedThread",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_NonZeroExit_StillThrows",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_EmptyStdout_DoesNotThrow",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.Factory_Create_CliSlot_ReturnsCliClient",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_GrokSecondCall_ResumesSameSession",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WhenCodexTimesOut_PreservesPartialStreams"
+    ],
+    "Added": [
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.ScriptedChain_PrimaryAtFolderOthersAtFallback_Passes(primaryName: \"MCPSERVER_QUADBRAIN_CLI_TEMP\")",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.ScriptedChain_WrongSnapshot_IsRejectedInsidePassingHarness",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.ScriptedChain_PrimaryAtFolderOthersAtFallback_Passes(primaryName: \"MCPSERVER_CODEX_ONESHOT_TEMP\")",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.Names_HoldEveryChainNameOnce",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.ScriptedRestore_UnrestoredName_IsRejectedInsidePassingHarness",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.ScriptedChain_PrimaryAtFolderOthersAtFallback_Passes(primaryName: \"MCPSERVER_ONESHOT_TEMP\")",
+      "QBrainAi.Support.Mcp.Tests:QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.ScriptedRestore_EqualSnapshots_Pass"
+    ]
+  }
+]

@@ -1,0 +1,198 @@
+[
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs",
+    "Removed": "Assert.NotNull(metadata);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs",
+    "Removed": "Assert.False(string.IsNullOrWhiteSpace(metadata!.Value));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotLlmStrategyTests.cs",
+    "Removed": "Assert.NotNull(dir);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Removed": "if (!OperatingSystem.IsWindows())"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    "Removed": "return;"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Removed": "if (OperatingSystem.IsWindows())"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Removed": "Assert.Equal(\"codex.cmd\", spawner.StartInfo.FileName);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Removed": "if (OperatingSystem.IsWindows())"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Removed": "Assert.Contains(\"model_reasoning_effort=\\\\\\\"xhigh\\\\\\\"\", serializedArguments, StringComparison.Ordinal);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Removed": "if (!OperatingSystem.IsWindows())"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    "Removed": "return;"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+    "Removed": "if (!OperatingSystem.IsWindows() || !Environment.UserInteractive)"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs",
+    "Removed": "return;"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "Removed": "Assert.True(string.Equals(ExpectedWorkspaceKey.Of(_workspacePath), workspace.WorkspacePath,"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs",
+    "Removed": "OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/GrokCliAgentExecutionStrategyTests.cs",
+    "Removed": "var explicitPath = UnitTestPaths.Combine(\"home\", \".grok\", \"bin\", OperatingSystem.IsWindows() ? \"grok.exe\" : \"grok\");"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/GrokCliAgentExecutionStrategyTests.cs",
+    "Removed": "Assert.Equal(explicitPath, GrokCliAgentExecutionStrategy.ResolveGrokExecutable(explicitPath));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs",
+    "Removed": "if (!OperatingSystem.IsWindows())"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs",
+    "Removed": "return;"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs",
+    "Removed": "Assert.Contains(\"HostileReviewWorker\", ex.ToString(), StringComparison.Ordinal);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+    "Removed": "if (!OperatingSystem.IsWindows())"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+    "Removed": "return;"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+    "Removed": "if (!OperatingSystem.IsWindows())"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+    "Removed": "return;"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+    "Removed": "if (!OperatingSystem.IsWindows())"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+    "Removed": "return;"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+    "Removed": "if (!OperatingSystem.IsWindows())"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs",
+    "Removed": "return;"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "Removed": "Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\first\")), accessor.GetWorkspacePath());"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "Removed": "Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\second\")), accessor.GetWorkspacePath());"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "Removed": "Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\first\")), accessor.GetWorkspacePath());"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "Removed": "Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\outer-default\")), accessor.GetWorkspacePath());"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "Removed": "Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\alpha\")), accessor.GetWorkspacePath());"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "Removed": "Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\beta\")), accessor.GetWorkspacePath());"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "Removed": "Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\alpha\")), observed[0]);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "Removed": "Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\beta\")), observed[1]);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "Removed": "Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(@\"F:\\default-ws\")), accessor.GetWorkspacePath());"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceTokenServiceTests.cs",
+    "Removed": "Assert.Equal(QBrainAi.Client.WorkspacePathNormalizer.Process.Normalize(@\"C:\\projects\\test\"), result, ignoreCase: true);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+    "Removed": "var expectedKey = OperatingSystem.IsWindows()"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+    "Removed": "var expectedPath = OperatingSystem.IsWindows()"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs",
+    "Removed": "var expectedKey = OperatingSystem.IsWindows()"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathContractTests.cs",
+    "Removed": "Assert.SkipUnless(OperatingSystem.IsWindows(), \"The backslash spelling applies on a Windows host only.\");"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathContractTests.cs",
+    "Removed": "Assert.Equal(expected, ToNativePath(path, WorkspacePathPlatform.Windows));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathContractTests.cs",
+    "Removed": "Assert.SkipWhen(OperatingSystem.IsWindows(), \"Applies to non-Windows hosts only.\");"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathContractTests.cs",
+    "Removed": "Assert.Equal(\"C:/Users/kingd/repo\", ToNativePath(\"C:/Users/kingd/repo\", WorkspacePathPlatform.Windows));"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathContractTests.cs",
+    "Removed": "if (!OperatingSystem.IsWindows())"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs",
+    "Removed": "Assert.Equal(foreign, result);"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceRemotePathContractTests.cs",
+    "Removed": "Assert.SkipUnless(OperatingSystem.IsWindows(), \"Windows physical resolution only runs on a Windows host.\");"
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceRemotePathContractTests.cs",
+    "Removed": "Assert.SkipUnless(OperatingSystem.IsWindows(), \"Windows physical resolution only runs on a Windows host.\");"
+  }
+]

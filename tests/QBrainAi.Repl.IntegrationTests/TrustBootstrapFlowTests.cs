@@ -1,4 +1,5 @@
 using System.Net;
+using QBrainAi.TestSupport.TemporaryInstance;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -25,27 +26,18 @@ public sealed class TrustBootstrapFlowTests : IDisposable
             .Build();
     }
 
+    /// <summary>TR-MCP-NUKE-019 AC-6: the temporary instance's health is 200 and echoes the request's nonce.</summary>
     [Fact]
     public async Task HealthCheck_WithNonce_ReturnsNonceInResponse()
     {
-        var serverUrl = "http://localhost:5177";
         var testNonce = "test-nonce-bootstrap-123";
-        
-        using var httpClient = new HttpClient { BaseAddress = new Uri(serverUrl) };
-        
-        try
-        {
-            var response = await httpClient.GetAsync($"/health?nonce={testNonce}", cancellationToken: TestContext.Current.CancellationToken);
-            
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                var content = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
-                Assert.Contains(testNonce, content);
-            }
-        }
-        catch (HttpRequestException)
-        {
-        }
+        await _replProcess.EnsureInstanceAsync(TestContext.Current.CancellationToken);
+
+        using var httpClient = new HttpClient { BaseAddress = _replProcess.InstanceBaseUrl };
+        using var response = await httpClient.GetAsync($"/health?nonce={testNonce}", cancellationToken: TestContext.Current.CancellationToken);
+        var content = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.Null(TemporaryInstanceChecks.CheckHealthAnswer((int)response.StatusCode, content, testNonce));
     }
 
     [Fact]

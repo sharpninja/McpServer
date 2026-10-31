@@ -59,6 +59,8 @@ public sealed class AddSessionLogTurnPlanFileAndTodoIdMigrationTests : IDisposab
     }
 
     /// <summary>AC-TR-MCP-SESSIONLOG-006-004: SQL Server migration source adds both columns with None default.</summary>
+    /// <remarks>Integration: reads the selected provider migration source from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void SqlServerMigration_UpAddsColumns_DownDropsThem()
     {
@@ -66,6 +68,8 @@ public sealed class AddSessionLogTurnPlanFileAndTodoIdMigrationTests : IDisposab
     }
 
     /// <summary>AC-TR-MCP-SESSIONLOG-006-004: PostgreSQL migration source adds both columns with None default.</summary>
+    /// <remarks>Integration: reads the selected provider migration source from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void PostgreSqlMigration_UpAddsColumns_DownDropsThem()
     {
@@ -74,7 +78,7 @@ public sealed class AddSessionLogTurnPlanFileAndTodoIdMigrationTests : IDisposab
 
     private static void AssertProviderMigrationContainsUpAndDown(string project)
     {
-        var repoSrc = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "src"));
+        var repoSrc = QBrainAi.Tests.Shared.TestRepositoryRoot.Combine("src");
         var root = Path.Combine(repoSrc, project, "Migrations");
         var files = Directory.GetFiles(root, "*AddSessionLogTurnPlanFileAndTodoId.cs")
             .Where(f => !f.Contains("Designer", StringComparison.OrdinalIgnoreCase))

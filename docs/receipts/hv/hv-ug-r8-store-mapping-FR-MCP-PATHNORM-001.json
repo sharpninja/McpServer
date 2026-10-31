@@ -1,0 +1,29 @@
+{
+  "TimestampLocal": "2026-10-27T03:52:20",
+  "Method": "workflow.requirements.listMappings",
+  "Params": {
+    "frId": "FR-MCP-PATHNORM-001"
+  },
+  "Response": {
+    "type": "result",
+    "payload": {
+      "deprecated": true,
+      "result": {
+        "totalCount": 2,
+        "items": [
+          {
+            "frId": "FR-MCP-PATHNORM-001",
+            "createdAt": "2026-10-27T08:52:23.1158512+00:00",
+            "trId": "TR-MCP-PATHNORM-001"
+          },
+          {
+            "frId": "FR-MCP-PATHNORM-001",
+            "testId": "TEST-MCP-PATHNORM-001",
+            "createdAt": "2026-10-27T08:52:23.1164950+00:00"
+          }
+        ]
+      },
+      "requestId": "req-20261027T085221Z-f837"
+    }
+  }
+}

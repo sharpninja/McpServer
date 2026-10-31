@@ -204,7 +204,7 @@ public sealed class VoiceConversationServiceTests
             {
                 AgentPath = "copilot",
                 Model = "auto",
-                WorkingDirectory = Environment.CurrentDirectory,
+                WorkingDirectory = AppContext.BaseDirectory,
                 Timeout = Timeout.InfiniteTimeSpan,
             }),
             processEnvironment,
@@ -234,7 +234,7 @@ public sealed class VoiceConversationServiceTests
         var workspaceAccessor = CreateWorkspaceAccessor();
         var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>()).Build();
         var hostEnvironment = Substitute.For<IHostEnvironment>();
-        hostEnvironment.ContentRootPath.Returns(Environment.CurrentDirectory);
+        hostEnvironment.ContentRootPath.Returns(AppContext.BaseDirectory);
         hostEnvironment.EnvironmentName.Returns("Test");
         hostEnvironment.ApplicationName.Returns("QBrainAi.Support.Mcp.Tests");
         var strategyResolver = new AgentExecutionStrategyResolver(
@@ -280,13 +280,13 @@ public sealed class VoiceConversationServiceTests
         todoFactory.CreateForWorkspace(Arg.Any<string>(), Arg.Any<WorkspaceContext>()).Returns(todoService);
         var resolver = new TodoServiceResolver(
             todoService,
-            Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = Environment.CurrentDirectory }),
+            Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = AppContext.BaseDirectory }),
             todoFactory);
 
         return new WorkspaceServiceAccessor(
             resolver,
             new HttpContextAccessor(),
-            Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = Environment.CurrentDirectory }));
+            Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = AppContext.BaseDirectory }));
     }
 
     private static IOptionsMonitor<T> CreateOptionsMonitor<T>(T value) where T : class

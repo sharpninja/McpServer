@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="9314e557-eb42-4941-bac5-fdec03ef80bc" name="kingd@PAYTON-LEGION2 2026-10-28 20:39:59" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-28T20:39:59.4013280-05:00" queuing="2026-10-28T20:39:59.4013283-05:00" start="2026-10-28T20:39:57.3768371-05:00" finish="2026-10-28T20:39:59.4054016-05:00" />
+  <TestSettings name="default" id="952f0bd7-a435-413a-b412-653501caf9e7">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-10-28_20_39_59" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="ab0ff726-755f-4c88-84ed-dc211cc45c67" testId="549af53a-4c70-702a-843d-d3fcd5239e30" testName="QBrainAi.Repl.Core.Tests.MemorySchemaContractTests.CanonicalYamlSchema_ContainsMemoryWorkflowRules" computerName="PAYTON-LEGION2" duration="00:00:00.0310488" startTime="2026-10-28T20:39:58.9857657-05:00" endTime="2026-10-28T20:39:59.0270447-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ab0ff726-755f-4c88-84ed-dc211cc45c67" />
+    <UnitTestResult executionId="dcb1f6a9-ddf2-489f-8f8e-a007db47ff44" testId="c2dc3d02-94e9-ac60-93fe-72316c56f882" testName="QBrainAi.Repl.Core.Tests.HandoffSkillDelegationTests.PluginSkillWorkflow_InvokesTypedClientHandoffEndpoints" computerName="PAYTON-LEGION2" duration="00:00:00.0015643" startTime="2026-10-28T20:39:59.2619689-05:00" endTime="2026-10-28T20:39:59.2635760-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dcb1f6a9-ddf2-489f-8f8e-a007db47ff44" />
+    <UnitTestResult executionId="eac03b24-29d2-465c-b872-2b222b62c88f" testId="5e5f8817-6f2b-e040-90ac-aedf51a46ecc" testName="QBrainAi.Repl.Core.Tests.HandoffSkillDelegationTests.SkillDocumentedMethods_DispatchThroughWorkflowToHandoffClient" computerName="PAYTON-LEGION2" duration="00:00:00.2629579" startTime="2026-10-28T20:39:58.9857683-05:00" endTime="2026-10-28T20:39:59.2571218-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="eac03b24-29d2-465c-b872-2b222b62c88f" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="QBrainAi.Repl.Core.Tests.HandoffSkillDelegationTests.PluginSkillWorkflow_InvokesTypedClientHandoffEndpoints" storage="f:\github\mcpserver\.worktrees\unit-green-interactive-20261019\tests\qbrainai.repl.core.tests\bin\debug\net10.0\qbrainai.repl.core.tests.dll" id="c2dc3d02-94e9-ac60-93fe-72316c56f882">
+      <Execution id="dcb1f6a9-ddf2-489f-8f8e-a007db47ff44" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-interactive-20261019\tests\QBrainAi.Repl.Core.Tests\bin\Debug\net10.0\QBrainAi.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Repl.Core.Tests.HandoffSkillDelegationTests" name="PluginSkillWorkflow_InvokesTypedClientHandoffEndpoints" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Repl.Core.Tests.MemorySchemaContractTests.CanonicalYamlSchema_ContainsMemoryWorkflowRules" storage="f:\github\mcpserver\.worktrees\unit-green-interactive-20261019\tests\qbrainai.repl.core.tests\bin\debug\net10.0\qbrainai.repl.core.tests.dll" id="549af53a-4c70-702a-843d-d3fcd5239e30">
+      <Execution id="ab0ff726-755f-4c88-84ed-dc211cc45c67" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-interactive-20261019\tests\QBrainAi.Repl.Core.Tests\bin\Debug\net10.0\QBrainAi.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Repl.Core.Tests.MemorySchemaContractTests" name="CanonicalYamlSchema_ContainsMemoryWorkflowRules" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Repl.Core.Tests.HandoffSkillDelegationTests.SkillDocumentedMethods_DispatchThroughWorkflowToHandoffClient" storage="f:\github\mcpserver\.worktrees\unit-green-interactive-20261019\tests\qbrainai.repl.core.tests\bin\debug\net10.0\qbrainai.repl.core.tests.dll" id="5e5f8817-6f2b-e040-90ac-aedf51a46ecc">
+      <Execution id="eac03b24-29d2-465c-b872-2b222b62c88f" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-interactive-20261019\tests\QBrainAi.Repl.Core.Tests\bin\Debug\net10.0\QBrainAi.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Repl.Core.Tests.HandoffSkillDelegationTests" name="SkillDocumentedMethods_DispatchThroughWorkflowToHandoffClient" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="549af53a-4c70-702a-843d-d3fcd5239e30" executionId="ab0ff726-755f-4c88-84ed-dc211cc45c67" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c2dc3d02-94e9-ac60-93fe-72316c56f882" executionId="dcb1f6a9-ddf2-489f-8f8e-a007db47ff44" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5e5f8817-6f2b-e040-90ac-aedf51a46ecc" executionId="eac03b24-29d2-465c-b872-2b222b62c88f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="3" executed="3" passed="3" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)&#xD;
+[xUnit.net 00:00:00.28]   Discovering: QBrainAi.Repl.Core.Tests&#xD;
+[xUnit.net 00:00:00.81]   Discovered:  QBrainAi.Repl.Core.Tests&#xD;
+[xUnit.net 00:00:01.04]   Starting:    QBrainAi.Repl.Core.Tests&#xD;
+[xUnit.net 00:00:01.40]   Finished:    QBrainAi.Repl.Core.Tests (ID = '01aa148794d3696c847e9e857250fd5ec76b1b27fc62ca7e1d2aa0ee898b86ae')&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

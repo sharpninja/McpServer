@@ -1,0 +1,69 @@
+{
+  "type": "result",
+  "payload": {
+    "deprecated": true,
+    "requestId": "req-20261027T084404Z-e3e7",
+    "result": [
+      {
+        "status": "in_progress",
+        "sessionId": "Codex-20261027T084202Z-plugin-session",
+        "agent": "Codex",
+        "lastUpdated": {
+          "minute": 43,
+          "millisecond": 0,
+          "month": 10,
+          "microsecond": 0,
+          "hour": 8,
+          "utcTicks": 639286874230000000,
+          "ticks": 639286874230000000,
+          "year": 2026,
+          "day": 27,
+          "second": 43,
+          "dayOfWeek": "Tuesday",
+          "utcDateTime": "2026-10-27T08:43:43.0000000Z",
+          "nanosecond": 0,
+          "dayOfYear": 300,
+          "offset": "00:00:00",
+          "timeOfDay": "08:43:43",
+          "totalOffsetMinutes": 0,
+          "dateTime": "2026-10-27T08:43:43.0000000",
+          "date": "2026-10-27T00:00:00.0000000",
+          "localDateTime": "2026-10-27T03:43:43.0000000-05:00"
+        },
+        "filesModifiedCount": 0,
+        "turnCount": 1,
+        "title": "Hostile validation round 8 IMPL-UNITGREEN-001",
+        "tags": [
+          "unitgreen-r8",
+          "IMPL-UNITGREEN-001",
+          "hostile-validation",
+          "gpt-6-astra",
+          "effort-max"
+        ],
+        "model": "codex",
+        "started": {
+          "minute": 42,
+          "millisecond": 0,
+          "month": 10,
+          "microsecond": 0,
+          "hour": 8,
+          "utcTicks": 639286873250000000,
+          "ticks": 639286873250000000,
+          "year": 2026,
+          "day": 27,
+          "second": 5,
+          "dayOfWeek": "Tuesday",
+          "utcDateTime": "2026-10-27T08:42:05.0000000Z",
+          "nanosecond": 0,
+          "dayOfYear": 300,
+          "offset": "00:00:00",
+          "timeOfDay": "08:42:05",
+          "totalOffsetMinutes": 0,
+          "dateTime": "2026-10-27T08:42:05.0000000",
+          "date": "2026-10-27T00:00:00.0000000",
+          "localDateTime": "2026-10-27T03:42:05.0000000-05:00"
+        }
+      }
+    ]
+  }
+}

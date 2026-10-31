@@ -1,0 +1,113 @@
+type: result
+payload:
+  requestId: req-20261026T123348Z-7cc4
+  result:
+    id: TR-MCP-QUALITY-001
+    title: Warning suppression decision register and aiUnit audit
+    description: >-
+      Warning remediation must distinguish approved suppressions from required fixes through structured acceptance criteria, durable TODO state, suppression inventory validation, and a dedicated aiUnit governance review.
+
+      **Covered by:** FR: FR-MCP-139; TEST: TEST-MCP-AIUNIT-002
+    status: pending
+    priority: medium
+    area: MCP
+    subarea: QUALITY
+    acceptanceCriteria:
+    - id: ac-1
+      text: CA1416 is approved only for Windows only code paths with explicit platform justification and a review condition that removes the suppression if the code becomes cross platform.
+      isSatisfied: true
+      evidence: config/warning-suppression-approvals.json contains scoped CA1416 approvals for Windows-only service/event-log and platform-gated code paths.
+    - id: ac-2
+      text: CA1819 is approved where returning arrays is intentional for DTO or API shape and the suppression includes justification.
+      isSatisfied: true
+      evidence: config/warning-suppression-approvals.json and ContextChunkEntity.Embedding justify byte[] as EF Core BLOB storage contract.
+    - id: ac-3
+      text: Current CA2227 suppressions are approved only for non observable JSON, YAML, options binding DTOs, and EF navigation collections. Observable collections must be repopulated in place and not suppressed.
+      isSatisfied: true
+      evidence: config/warning-suppression-approvals.json and WarningSuppressionValidationTargetTests CA2227 allowed-scope check.
+    - id: ac-4
+      text: CA1308 is not approved. Code must use explicit mapping or invariant case insensitive comparison rather than lower case normalization.
+      isSatisfied: true
+      evidence: src/McpServer.Support.Mcp/Logging/ParseableEventFormatter.cs, src/McpServer.Services/Ingestion/MarkdownSessionLogParser.cs, src/McpServer.Storage/Indexing/EmbeddingService.cs, tests/McpServer.Support.Mcp.Tests/Indexing/EmbeddingServiceTests.cs
+    - id: ac-5
+      text: CS8632 is not approved. Every project must enable nullable annotations and CS8632 NoWarn entries must be removed.
+      isSatisfied: true
+      evidence: Directory.Build.props, build/_build.csproj, lib/NSubstitute/NSubstitute.csproj, tests/Build.Tests/Build.Tests.csproj, solution build on 2026-07-07
+    - id: ac-6
+      text: TreatWarningsAsErrors false is not approved. The build project warning bypass must remain removed after warning clean validation.
+      isSatisfied: true
+      evidence: Directory.Build.props and dotnet build McpServer.sln -c Debug -v minimal passed with zero warnings and zero errors on 2026-07-07
+    - id: ac-7
+      text: Stale ASP0019 suppressions are not approved. ASP0019 NoWarn entries must remain removed when no IHeaderDictionary Add usage remains.
+      isSatisfied: true
+      evidence: tests/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.csproj, tests/McpServer.Support.Mcp.IntegrationTests/McpServer.Support.Mcp.IntegrationTests.csproj, solution build on 2026-07-07
+    - id: ac-8
+      text: Every warning suppression or warning bypass not explicitly approved by this TR must remain open remediation work until fixed and validated.
+      isSatisfied: true
+      evidence: ValidateWarningSuppressions passes after CA1848, CS8602, and Storage migration obsolete pragma removals; approval register contains only scoped approved suppressions.
+    - id: ac-9
+      text: The aiUnit warning suppression governance prompt audits the suppression decisions, TODO state, requirements traceability, generated exports, and source suppression inventory.
+      isSatisfied: true
+      evidence: tests/McpServer.Review.Tests/AiReviewTests.cs and build/Build.AiWarningSuppressionReview.cs
+    - id: ac-10
+      text: xUnit1051 is not approved. Test projects must pass TestContext cancellation tokens to cancellable async APIs instead of suppressing the analyzer.
+      isSatisfied: true
+      evidence: test project NoWarn entries, cancellable async call updates, dotnet build McpServer.sln -c Debug -v minimal, WorkspacePolicyDirectiveParserTests focused run
+    - id: ac-11
+      text: xUnit1041 is not approved. xUnit v3 tests must use supported fixture and output helper patterns instead of suppressing constructor injection diagnostics.
+      isSatisfied: true
+      evidence: tests/McpServer.PlanReview.Tests/McpServer.PlanReview.Tests.csproj and tests/McpServer.PlanReview.Tests/PlanTransactionReviewTests.cs
+    - id: ac-12
+      text: CA1812 is not approved. Middleware and DI activated types must be made visible to analyzers through real construction or removed.
+      isSatisfied: true
+      evidence: src/McpServer.ServiceDefaults/Extensions.cs and src/McpServer.ServiceDefaults/GlobalExceptionHandlerMiddleware.cs
+    - id: ac-13
+      text: CA1848 is not approved. No editorconfig, project, pragma, or attribute suppression may remain for LoggerMessage guidance.
+      isSatisfied: true
+      evidence: .editorconfig CA1848 severity override removed; config/warning-suppression-approvals.json CA1848 approval removed; repository suppression scan for CA1848 returns zero matches.
+    - id: ac-14
+      text: CA2000 is not approved. Disposal warnings must be fixed or proven stale by removing the suppression and building clean.
+      isSatisfied: true
+      evidence: tests/McpServer.Support.Mcp.Tests/Middleware/FederationMiddlewareTests.cs and Support.Mcp.Tests project build
+    - id: ac-15
+      text: CA1861 is not approved. Constant array arguments must be hoisted rather than suppressed.
+      isSatisfied: true
+      evidence: src/McpServer.Storage/Migrations/20260212160034_AddSessionLogTables.cs and Storage project build
+    - id: ac-16
+      text: CA1062 is not approved. Public migration methods must validate migrationBuilder arguments rather than suppressing the rule.
+      isSatisfied: true
+      evidence: session log migration files 20260212160034, 20260212165804, 20260212170806, and 20260212172109 plus Storage project build
+    - id: ac-17
+      text: CS0436 is not approved. Type conflict NoWarn entries must be removed once the conflict is no longer present.
+      isSatisfied: true
+      evidence: src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj and Support.Mcp project build
+    - id: ac-18
+      text: CS0618 is not approved. Obsolete APIs must be replaced with current APIs and covered by focused regression tests.
+      isSatisfied: false
+      evidence: 'REOPENED 2026-09-09T17:07:12Z: generated migration 612/618 pragmas recurred on candidate 808ec049 and current develop. Historical evidence retained. Storage migration designer and snapshot 612/618 pragmas removed; W18 warning-suppression test now scans src/McpServer.Storage/Migrations plus provider migration roots.'
+    - id: ac-19
+      text: CA1055 is not approved. String return APIs must not advertise URI semantics.
+      isSatisfied: true
+      evidence: src/McpServer.ServiceDefaults/RailwayConnectionStringBuilder.cs, src/McpServer.ServiceDefaults/PostgresConnectionStringResolver.cs, ServiceDefaults build, and resolver tests
+    - id: ac-20
+      text: NU5104 is not approved. Stable packages must not depend on prerelease packages or deprecated package metadata.
+      isSatisfied: true
+      evidence: Directory.Packages.props stable Microsoft Agents versions, lib/NSubstitute.6.0.0/nsubstitute.nuspec, src/McpServer.McpAgent/McpServer.McpAgent.csproj, and dotnet pack McpServer.McpAgent
+    - id: ac-21
+      text: NU1901, NU1902, NU1903, and NU1904 are not approved. Vulnerable package advisories must be resolved by updating to the patched versions the advisories name, with a clean NuGet vulnerability audit on every lab host (LAB-OMARCHY and PAYTON-LEGION2), never by suppression, audit settings, or a build override.
+      isSatisfied: false
+      evidence: 'REOPENED 2026-10-19 (operator: "Gotta use the recommended packages."): develop ace70daa pins System.Security.Cryptography.Xml 10.0.10 (Directory.Packages.props:91), which brings System.Security.Cryptography.Pkcs 10.0.10; on PAYTON-LEGION2 the restore of build/_build.csproj fails NU1902 (GHSA-2fmv-rv2c-59x7) and NU1903 (GHSA-846f-f764-76mx, GHSA-7hqp-7c5m-4vq6, GHSA-c399-9853-6jmj, GHSA-r955-8q5j-3h83), run unit-green-win-baseline-20261019T1433. All five advisories name 10.0.13. Text strengthened from "NU1901 and NU1903 are not approved. Vulnerable package advisories must be resolved by dependency updates and a clean vulnerability scan." Historical evidence retained: Directory.Packages.props transitive pins, Directory.Build.props suppression removal, and dotnet list McpServer.sln package --vulnerable --include-transitive.'
+    - id: ac-22
+      text: ErrorOnDuplicatePublishOutputFiles=false is not approved. Duplicate publish output enforcement must remain enabled unless a scoped approval names the exact affected projects and review condition.
+      isSatisfied: true
+      evidence: Directory.Build.props suppression removed; config/warning-suppression-approvals.json stale approval removed; default publish probes passed for McpServer.Support.Mcp, McpServer.Repl.Host, McpServer.QBAgent, McpServer.McpAgent.SampleHost, and McpServer.Launcher on 2026-07-13; ValidateWarningSuppressions passed; WarningSuppression Build.Tests passed 18/0/0; inventory contains zero ErrorOnDuplicatePublishOutputFiles occurrences.
+    - id: ac-23
+      text: Correction of generated migration CS0612/CS0618 pragma pairs uses an explicit opt-in Nuke NormalizeGeneratedMigrationObsoletePragmas target. Compile, Test, and ValidateWarningSuppressions never invoke normalization or mutate source. Validation remains read-only and fails when exact generated-migration pragma pairs are present.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-26T12:33:50.1889206+00:00
+    updatedAt: 2026-10-26T12:33:50.1890340+00:00
+  deprecated: true
+
+---
+

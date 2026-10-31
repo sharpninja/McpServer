@@ -1,0 +1,114 @@
+[
+  {
+    "Path": ".nuke/build.schema.json",
+    "Source": "d9fad69e8622f9365b3d334338fb6ba439188e9d",
+    "Copied": "342d0757244c252cd7b79ecf18cfac092575f240",
+    "Identical": false,
+    "Current": "342d0757244c252cd7b79ecf18cfac092575f240"
+  },
+  {
+    "Path": "build/Build.TestDependencies.cs",
+    "Source": "7206fba621ac3b4e5f636e92c5c7e00c3d04216d",
+    "Copied": "7206fba621ac3b4e5f636e92c5c7e00c3d04216d",
+    "Identical": true,
+    "Current": "0efc64b7af5231c67f2a789b9bb6034a5f909cde"
+  },
+  {
+    "Path": "build/LinuxProviderTestProvisioner.cs",
+    "Source": "2649ae8c503a46d799c037629b2dd05e5a5c4d1c",
+    "Copied": "2649ae8c503a46d799c037629b2dd05e5a5c4d1c",
+    "Identical": true,
+    "Current": "2649ae8c503a46d799c037629b2dd05e5a5c4d1c"
+  },
+  {
+    "Path": "build/ProviderTestProvisioningContracts.cs",
+    "Source": "c9fe9f5c8683a9d10cdade22919faedbff1e751b",
+    "Copied": "c9fe9f5c8683a9d10cdade22919faedbff1e751b",
+    "Identical": true,
+    "Current": "c9fe9f5c8683a9d10cdade22919faedbff1e751b"
+  },
+  {
+    "Path": "src/QBrainAi.Services/Services/GitHubCliService.cs",
+    "Source": "0c9ca325e4dd982818392d7b04005af0f07810ba",
+    "Copied": "0c9ca325e4dd982818392d7b04005af0f07810ba",
+    "Identical": true,
+    "Current": "0c9ca325e4dd982818392d7b04005af0f07810ba"
+  },
+  {
+    "Path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+    "Source": "fef74b60b6ccccdc2064d961de4d9054b9acf21b",
+    "Copied": "fef74b60b6ccccdc2064d961de4d9054b9acf21b",
+    "Identical": true,
+    "Current": "fef74b60b6ccccdc2064d961de4d9054b9acf21b"
+  },
+  {
+    "Path": "tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs",
+    "Source": "281a8b2c77ddbcf2058c3e3a7e97dae3caa51c12",
+    "Copied": "281a8b2c77ddbcf2058c3e3a7e97dae3caa51c12",
+    "Identical": true,
+    "Current": "281a8b2c77ddbcf2058c3e3a7e97dae3caa51c12"
+  },
+  {
+    "Path": "tests/Build.Tests/ProviderTestProvisioningTests.cs",
+    "Source": "a523887077a2747de826facb16add62e0d2a89a8",
+    "Copied": "a523887077a2747de826facb16add62e0d2a89a8",
+    "Identical": true,
+    "Current": "a523887077a2747de826facb16add62e0d2a89a8"
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceResolutionMiddlewareTests.cs",
+    "Source": "98a15c728af7c1db2ef6bc74395e5484a4009775",
+    "Copied": "98a15c728af7c1db2ef6bc74395e5484a4009775",
+    "Identical": true,
+    "Current": "98a15c728af7c1db2ef6bc74395e5484a4009775"
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+    "Source": "e7350e77a85a05a23d273a8e49d2d33d3711146d",
+    "Copied": "e7350e77a85a05a23d273a8e49d2d33d3711146d",
+    "Identical": true,
+    "Current": "6484d4e4f534669ceb48776e3bb467936204cbcb"
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+    "Source": "a594df1af7170c9bdabb9cad0289c60f68183ce1",
+    "Copied": "a594df1af7170c9bdabb9cad0289c60f68183ce1",
+    "Identical": true,
+    "Current": "a594df1af7170c9bdabb9cad0289c60f68183ce1"
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Storage/Decompose4nfBackfillMigrationTests.cs",
+    "Source": "f354ddc970f8243c1b0f36ceb63f4460734bbfe2",
+    "Copied": "f354ddc970f8243c1b0f36ceb63f4460734bbfe2",
+    "Identical": true,
+    "Current": "f354ddc970f8243c1b0f36ceb63f4460734bbfe2"
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs",
+    "Source": "3ad458c9988c2f22ecc8f3694c40c5a339ea401d",
+    "Copied": "3ad458c9988c2f22ecc8f3694c40c5a339ea401d",
+    "Identical": true,
+    "Current": "3ad458c9988c2f22ecc8f3694c40c5a339ea401d"
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertions.cs",
+    "Source": "14d553ebff1e9b244b802ec665f77957f644e27a",
+    "Copied": "14d553ebff1e9b244b802ec665f77957f644e27a",
+    "Identical": true,
+    "Current": "14d553ebff1e9b244b802ec665f77957f644e27a"
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs",
+    "Source": "364880bdecc87546a46ddb8a99f706c9729e545c",
+    "Copied": "364880bdecc87546a46ddb8a99f706c9729e545c",
+    "Identical": true,
+    "Current": "364880bdecc87546a46ddb8a99f706c9729e545c"
+  },
+  {
+    "Path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs",
+    "Source": "04b803279c573cb5bb57d402b49215de85d487a6",
+    "Copied": "04b803279c573cb5bb57d402b49215de85d487a6",
+    "Identical": true,
+    "Current": "aca0d45fda0cc8c6f33c8cffecaf0efca35a590b"
+  }
+]

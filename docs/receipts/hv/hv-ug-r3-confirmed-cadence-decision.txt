@@ -1,0 +1,11 @@
+type: result
+payload:
+  requestId: req-20261020T224951Z-0bd5
+  result:
+    turnId: 2569
+    agent: Codex
+    sessionId: Codex-20261020T221031Z-plugin-session
+    requestId: req-20261020T221024Z-unitgreen-r3
+
+---
+

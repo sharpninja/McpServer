@@ -1,0 +1,80 @@
+{
+  "TimestampLocal": "2026-10-19T21:44:43",
+  "Mode": "Hygiene",
+  "EffortCommitCount": 18,
+  "Unsigned": [],
+  "Format": [
+    {
+      "Name": "Plan",
+      "ForbiddenDashCount": 0,
+      "TableLineCount": 0
+    },
+    {
+      "Name": "PR",
+      "ForbiddenDashCount": 0,
+      "TableLineCount": 0
+    }
+  ],
+  "Takeover": [
+    {
+      "Path": "build/Build.TestDependencies.cs",
+      "Same": true
+    },
+    {
+      "Path": "build/LinuxProviderTestProvisioner.cs",
+      "Same": true
+    },
+    {
+      "Path": "build/ProviderTestProvisioningContracts.cs",
+      "Same": true
+    },
+    {
+      "Path": "src/QBrainAi.Services/Services/GitHubCliService.cs",
+      "Same": true
+    },
+    {
+      "Path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+      "Same": true
+    },
+    {
+      "Path": "tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs",
+      "Same": true
+    },
+    {
+      "Path": "tests/Build.Tests/ProviderTestProvisioningTests.cs",
+      "Same": true
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceResolutionMiddlewareTests.cs",
+      "Same": true
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+      "Same": true
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+      "Same": true
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Storage/Decompose4nfBackfillMigrationTests.cs",
+      "Same": true
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs",
+      "Same": true
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertions.cs",
+      "Same": true
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs",
+      "Same": true
+    },
+    {
+      "Path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs",
+      "Same": true
+    }
+  ]
+}

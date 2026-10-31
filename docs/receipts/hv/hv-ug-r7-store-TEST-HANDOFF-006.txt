@@ -1,0 +1,19 @@
+type: result
+payload:
+  requestId: req-20261026T171742Z-5669
+  result:
+    id: TEST-HANDOFF-006
+    title: Test TEST-HANDOFF-006
+    description: Cover API, client, REPL, Director, MCP-tool, and plugin-skill inventory and invocation parity, including workspace isolation.
+    status: pending
+    priority: medium
+    area: HANDOFF
+    testType: unit
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-26T17:17:43.8285737+00:00
+    updatedAt: 2026-10-26T17:17:43.8286965+00:00
+  deprecated: true
+
+---
+

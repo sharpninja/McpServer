@@ -1,0 +1,19 @@
+type: result
+payload:
+  requestId: req-20261029T033807Z-2e4a
+  result:
+    id: TEST-MCP-TRIAGE-003
+    title: Test TEST-MCP-TRIAGE-003
+    description: Research worker invokes configured direct agent with group JSON and prompt.
+    status: pending
+    priority: medium
+    area: MCP
+    testType: unit
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-29T03:38:08.6162642+00:00
+    updatedAt: 2026-10-29T03:38:08.6163929+00:00
+  deprecated: true
+
+---
+

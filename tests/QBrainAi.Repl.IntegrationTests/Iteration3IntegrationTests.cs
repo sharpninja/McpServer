@@ -309,16 +309,15 @@ public sealed class Iteration3IntegrationTests : IDisposable
 
         var eventLines = _replProcess.StdoutLines.ToList();
 
+        // TR-MCP-NUKE-019 AC-6: every streamed document is an envelope; a parse or assertion failure fails the case.
         foreach (var line in eventLines)
         {
-            try
-            {
-                var evt = _yamlDeserializer.Deserialize<Dictionary<string, object>>(line);
-                Assert.NotNull(evt);
-            }
-            catch
-            {
-            }
+            // FR-MCP-REPL-005: '---' document separators are part of the framing
+            // contract between envelopes, not envelope content.
+            if (string.IsNullOrWhiteSpace(line) || line.TrimEnd() == "---")
+                continue;
+
+            Assert.NotNull(DeserializeEnvelope(line));
         }
 
         await WaitForResponseAsync(streamRequestId, TimeSpan.FromSeconds(30));
@@ -868,16 +867,15 @@ public sealed class Iteration3IntegrationTests : IDisposable
 
         var eventLines = _replProcess.StdoutLines.ToList();
 
+        // TR-MCP-NUKE-019 AC-6: every streamed document is an envelope; a parse or assertion failure fails the case.
         foreach (var line in eventLines)
         {
-            try
-            {
-                var envelope = _yamlDeserializer.Deserialize<Dictionary<string, object>>(line);
-                Assert.NotNull(envelope);
-            }
-            catch
-            {
-            }
+            // FR-MCP-REPL-005: '---' document separators are part of the framing
+            // contract between envelopes, not envelope content.
+            if (string.IsNullOrWhiteSpace(line) || line.TrimEnd() == "---")
+                continue;
+
+            Assert.NotNull(DeserializeEnvelope(line));
         }
 
         await WaitForResponseAsync(streamRequestId, TimeSpan.FromSeconds(30));

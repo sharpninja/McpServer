@@ -1,0 +1,7 @@
+Now: 2026-10-26T10:49:49 before=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-chain-mockgate-1 (4551) after=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r7-chain-binding-1 (4549)
+onlyBefore=2 onlyAfter=0 common=4549
+onlyBefore QBrainAi.Support.Mcp.Tests=2
+--- only in before ---
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.ScriptedSnapshot_EveryNameAtTheFolder_Passes
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.ScriptedSnapshot_MissingOrWrongName_IsRejectedInsidePassingHarness
+--- only in after ---

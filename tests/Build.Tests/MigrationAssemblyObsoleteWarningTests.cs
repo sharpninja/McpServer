@@ -4,7 +4,7 @@ using Xunit;
 namespace NukeBuild.Tests;
 
 /// <summary>
-/// TEST-MCP-WARNREMEDIATION-001: Verifies provider migration assemblies compile and
+/// TEST-MCP-WARNREMEDIATION-001 (historical): Verifies provider migration assemblies compile and
 /// prevents generated obsolete warning suppressions from returning.
 /// </summary>
 public sealed partial class MigrationAssemblyObsoleteWarningTests
@@ -44,6 +44,8 @@ public sealed partial class MigrationAssemblyObsoleteWarningTests
     /// W16/W17 service coverage: every provider migration assembly must compile with
     /// the generated obsolete-warning pragmas removed.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Theory]
     [MemberData(nameof(GetMigrationProjects))]
     public async Task MigrationAssemblies_CompileSuccessfully(MigrationProject project)
@@ -59,6 +61,8 @@ public sealed partial class MigrationAssemblyObsoleteWarningTests
     /// W17 regression coverage: generated EF migration files must not suppress CS0612
     /// or CS0618 now that the current provider APIs compile without those warnings.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Theory]
     [MemberData(nameof(GetMigrationProjects))]
     public void GeneratedMigrationFiles_DoNotContainObsoleteWarningPragmas(MigrationProject project)
@@ -76,6 +80,8 @@ public sealed partial class MigrationAssemblyObsoleteWarningTests
     /// W16/W17 inventory coverage: records the provider identity extension symbols that
     /// remain in generated code and are proven compiler-clean by the provider builds.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Theory]
     [MemberData(nameof(GetMigrationProjects))]
     public void GeneratedMigrationFiles_RecordProviderIdentitySymbols(MigrationProject project)

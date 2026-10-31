@@ -55,9 +55,10 @@ public sealed class EphemeralPostgresFixture : IDisposable
         }
 
         // pg_ctl must run without output redirection: the postgres child inherits redirected
-        // handles and the pipe never closes, hanging the caller even after -w returns.
-        RunTool(Path.Combine(_pgBin, "pg_ctl.exe"),
-            $"start -D \"{_dataDir}\" -w -o \"-p {port} -c listen_addresses=localhost\" -l \"{Path.Combine(_dataDir, "pg.log")}\"");
+        // handles and the pipe never closes, hanging the caller even after -w returns. It therefore
+        // writes to this test process's standard output, which carries the xUnit v3 JSON messages, so it
+        // runs silent (-s); its informational lines garbled those messages and lost test results.
+        RunTool(Path.Combine(_pgBin, "pg_ctl.exe"), PgCtlStartArguments(_dataDir, port, Path.Combine(_dataDir, "pg.log")));
 
         ServerConnectionString = $"Host=localhost;Port={port};Username=mcptest;Password={password};Database=postgres";
     }
@@ -69,7 +70,7 @@ public sealed class EphemeralPostgresFixture : IDisposable
             return;
         try
         {
-            RunTool(Path.Combine(_pgBin, "pg_ctl.exe"), $"stop -D \"{_dataDir}\" -m immediate -w");
+            RunTool(Path.Combine(_pgBin, "pg_ctl.exe"), PgCtlStopArguments(_dataDir));
         }
         catch (InvalidOperationException)
         {
@@ -85,6 +86,26 @@ public sealed class EphemeralPostgresFixture : IDisposable
             // Uniquely named temp directory; leave for OS cleanup if a handle lingers.
         }
     }
+
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 ac-6: the pg_ctl start arguments: wait for the server (-w), print only errors (-s), listen on
+    /// <paramref name="port"/> at localhost, and send the server log to <paramref name="logPath"/>.
+    /// </summary>
+    /// <param name="dataDir">The cluster data directory.</param>
+    /// <param name="port">The server port.</param>
+    /// <param name="logPath">The server log file.</param>
+    /// <returns>The pg_ctl argument string.</returns>
+    internal static string PgCtlStartArguments(string dataDir, int port, string logPath) =>
+        $"start -D \"{dataDir}\" -w -s -o \"-p {port} -c listen_addresses=localhost\" -l \"{logPath}\"";
+
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 ac-6: the pg_ctl stop arguments: immediate mode, wait for the shutdown (-w), print only errors
+    /// (-s).
+    /// </summary>
+    /// <param name="dataDir">The cluster data directory.</param>
+    /// <returns>The pg_ctl argument string.</returns>
+    internal static string PgCtlStopArguments(string dataDir) =>
+        $"stop -D \"{dataDir}\" -m immediate -w -s";
 
     private static string? FindPostgresBinaries()
     {

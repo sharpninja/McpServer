@@ -1,0 +1,12 @@
+{
+  "TimestampUtc": "2026-10-20T01:23:09.6499874Z",
+  "TimestampLocal": "2026-10-19T20:23:09",
+  "Mode": "Read",
+  "Arguments": [
+    "docs/receipts/hv/hv-ug-r1-store-implementer-session.txt"
+  ],
+  "Offset": 0,
+  "Count": 50,
+  "ExitCode": 0,
+  "Output": "FILE: docs/receipts/hv/hv-ug-r1-store-implementer-session.txt; LINES: 14\n1: type: error\n2: payload:\n3:   requestId: req-20261020T012112Z-2c8a\n4:   code: method_invocation_error\n5:   message: 'Unknown method: GetAsync on client: SessionLogClient. Valid methods: AppendDialogAsync, BeginTurnAsync, ClearTurnSectionAsync, CompleteTurnAsync, DeleteSessionAsync, DeleteTurnAsync, DeleteTurnItemAsync, FailTurnAsync, IngestTranscriptPathAsync, IngestTranscriptUploadAsync, OpenSessionAsync, PatchTurnAsync, QueryAsync, RepairWorkspaceStampsAsync, ReplaceTurnAsync, ReplaceTurnSectionAsync, SetSessionTitleAsync, SetTurnTitleAsync, SubmitAsync, UpsertTurnAsync'\n6:   retryable: false\n7:   details:\n8:     clientName: SessionLog\n9:     methodName: GetAsync\n10:     exceptionType: System.InvalidOperationException\n11: \n12: ---\n13: \n14:"
+}

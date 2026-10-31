@@ -3,11 +3,13 @@ using QBrainAi.Support.Mcp.Services;
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-019: Multi-turn harness conditions, tokens, and job success gate.
+/// TEST-MCP-MEMORY-019 (historical): Multi-turn harness conditions, tokens, and job success gate.
 /// </summary>
 public sealed class MemoryBenchMultiTurnHarnessTests
 {
     /// <summary>AC-FR-MCP-MEMORY-019: without_memory has no injection/tools and may replay history.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void WithoutMemory_ReplaysHistory_NoInjectionOrTools()
     {
@@ -29,6 +31,8 @@ public sealed class MemoryBenchMultiTurnHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019: with_memory query turns inject memories and do not replay establish text.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void WithMemory_InjectsCompactRecall_DoesNotReplayEstablishTranscript()
     {
@@ -48,6 +52,8 @@ public sealed class MemoryBenchMultiTurnHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019: Each turn and job records token fields and token_source.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void RecordsPerTurnAndPerJobTokens()
     {
@@ -78,6 +84,8 @@ public sealed class MemoryBenchMultiTurnHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019: A job succeeds only when every required query turn passes.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void JobSuccess_RequiresAllRequiredQueryTurns()
     {
@@ -91,6 +99,8 @@ public sealed class MemoryBenchMultiTurnHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019: Default path is Grok first; others stay opt-in until H7a.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void GrokFirst_OthersOptInUntilValueGate()
     {
@@ -106,6 +116,8 @@ public sealed class MemoryBenchMultiTurnHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019 / H7b: Stub -Plugin all writes success-gated multiturn tokens for eight plugins.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void AllEight_WritesMultiTurnStubArtifacts()
     {
@@ -120,6 +132,8 @@ public sealed class MemoryBenchMultiTurnHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019: Writes multiturn artifacts with token tables first.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void WritesMultiturnArtifacts()
     {
@@ -139,6 +153,8 @@ public sealed class MemoryBenchMultiTurnHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019: Stub re-run is deterministic for scores and tokens.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Rerun_DeterministicStub()
     {
@@ -153,6 +169,8 @@ public sealed class MemoryBenchMultiTurnHarnessTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019: MULTI without_memory query is more expensive than with_memory query.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void MultiFact_WithoutMemoryQuery_CostsMoreThanWithMemoryQuery()
     {

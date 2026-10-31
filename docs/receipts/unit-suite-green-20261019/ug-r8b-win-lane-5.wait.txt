@@ -1,0 +1,12 @@
+RECEIPT 2026-10-28T20:58:26 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Wait-WinLaneExit.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+WAITED 2026-10-28T20:58:26 exitFile=True
+EXIT 0 2026-10-28T20:58:23
+  LOG 20:39:46 [DBG] Passed!  - Failed:     0, Passed:   398, Skipped:     0, Total:   398, Duration: 5 m 3 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+  LOG 20:39:52 [DBG] Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 94 ms - QBrainAi.McpAgent.Tests.dll (net10.0)
+  LOG 20:39:59 [DBG] Passed!  - Failed:     0, Passed:     3, Skipped:     0, Total:     3, Duration: 277 ms - QBrainAi.Repl.Core.Tests.dll (net10.0)
+  LOG 20:40:07 [DBG] Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 47 ms - QBrainAi.QBAgent.Tests.dll (net10.0)
+  LOG 20:40:13 [DBG] Passed!  - Failed:     0, Passed:     6, Skipped:     0, Total:     6, Duration: 2 s - Build.Tests.dll (net10.0)
+  LOG 20:58:22 [DBG] Passed!  - Failed:     0, Passed:   179, Skipped:     0, Total:   179, Duration: 17 m 56 s - QBrainAi.Repl.IntegrationTests.dll (net10.0)

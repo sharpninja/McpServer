@@ -6,14 +6,18 @@ using QBrainAi.Client;
 using QBrainAi.Client.Models;
 using QBrainAi.Repl.Core;
 using NSubstitute;
+using QBrainAi.Tests.Shared;
 using Xunit;
 
 namespace QBrainAi.Repl.Core.Tests;
 
 /// <summary>
 /// TEST-HANDOFF-006: plugin skill methods must dispatch through the supported REPL workflow
-/// and HandoffClient HTTP surface that the server maps onto IHandoffIngestionService.
+/// and HandoffClient HTTP surface that the server maps onto IHandoffIngestionService. The skill is read from the
+/// repository checkout through the shared <see cref="TestRepositoryRoot"/>, so this is an integration test on both
+/// hosts (TR-MCP-USECASE-018 AC-006, hostile validation round 2 finding R2-F1).
 /// </summary>
+
 public sealed class HandoffSkillDelegationTests
 {
     /// <summary>
@@ -21,6 +25,8 @@ public sealed class HandoffSkillDelegationTests
     /// through ReplCommandDispatcher plus a real HandoffWorkflow. The mock HTTP handler must
     /// receive ingest, get, and approve calls on /qbrainai/handoff/*.
     /// </summary>
+    /// <remarks>Integration: reads the skill from the physical repository checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task SkillDocumentedMethods_DispatchThroughWorkflowToHandoffClient()
     {
@@ -125,18 +131,7 @@ public sealed class HandoffSkillDelegationTests
             },
         };
 
-    private static string FindRepoRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            if (File.Exists(Path.Combine(directory.FullName, "QBrainAi.sln")))
-                return directory.FullName;
-            directory = directory.Parent;
-        }
-
-        throw new DirectoryNotFoundException("Could not find repository root containing QBrainAi.sln.");
-    }
+    private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
 
     private sealed class RecordingHandler : HttpMessageHandler
     {

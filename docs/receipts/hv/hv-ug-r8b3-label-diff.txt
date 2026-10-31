@@ -1,0 +1,46 @@
+commit a78640baacb867cdea182f316ef06ee019d489d9
+Author:     Sharp Ninja <ninja@thesharp.ninja>
+AuthorDate: Wed Oct 28 19:39:47 2026 -0500
+Commit:     Sharp Ninja <ninja@thesharp.ninja>
+CommitDate: Wed Oct 28 19:39:47 2026 -0500
+
+    test: label the TEST-MCP-REQSCOPE-REPL-001 citations historical (IMPL-UNITGREEN-001)
+    
+    Pre-HV problem R8b-P18, operator 2026-10-28: "Label it, regate, launch
+    (Recommended)". The citation lint over the test lines this branch adds or
+    changes found TEST-MCP-REQSCOPE-REPL-001 on the summary line of
+    RequirementScopeLayerReplIntegrationTests, which slice C (8c651f13) rewrote.
+    The record is not in the requirements store (the committed docs/Project
+    exports list it as planned), and the line did not say so.
+    
+    The class summary now marks the id historical and a remarks block states that
+    the file's TEST-MCP-REQSCOPE-REPL-001 citations make no active coverage claim,
+    as the R6-F2 labels do; the active claim stays TR-MCP-NUKE-019 AC-6.
+    Documentation comments only, one integration-test file; no test outcome
+    changes. Nuke Compile ug-r8b-label-compile-1 (dry run first) builds it.
+    
+    Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+diff --git a/tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs b/tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs
+index 2bb77499..c04b461d 100644
+--- a/tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs
++++ b/tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs
+@@ -5,9 +5,14 @@ using QBrainAi.TestSupport.TemporaryInstance;
+ namespace QBrainAi.Support.Mcp.IntegrationTests;
+ 
+ /// <summary>
+-/// TEST-MCP-REQSCOPE-REPL-001: REPL-driven integration coverage for requirement scope layers, on the shared temporary
+-/// instance (<see cref="ScratchQBrainAi"/>, TR-MCP-NUKE-019 AC-6).
++/// TEST-MCP-REQSCOPE-REPL-001 (historical): REPL-driven integration coverage for requirement scope layers, on the
++/// shared temporary instance (<see cref="ScratchQBrainAi"/>, TR-MCP-NUKE-019 AC-6).
+ /// </summary>
++/// <remarks>
++/// The TEST-MCP-REQSCOPE-REPL-001 citations in this file are historical: that record is not in the requirements store
++/// (the committed docs/Project exports list it as planned), so they make no active coverage claim (the class of hostile
++/// validation finding R6-F2; plan section 25). The active claim is TR-MCP-NUKE-019 AC-6, the temporary instance.
++/// </remarks>
+ [Trait("Category", "Integration")]
+ public sealed class RequirementScopeLayerReplIntegrationTests
+ {

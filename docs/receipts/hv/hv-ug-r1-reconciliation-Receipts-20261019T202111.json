@@ -1,0 +1,86 @@
+[
+  {
+    "File": "unit-green-final-buildtests-20261019T1918.meta.json",
+    "OriginalPresent": true,
+    "MatchesOriginal": true,
+    "Sha256": "99F191425D1A06F5D341BE288748D2B657B2AB559F312040E7B9073DA67BB9B5"
+  },
+  {
+    "File": "unit-green-final-buildtests-20261019T1918.trx-summary.txt",
+    "OriginalPresent": false,
+    "MatchesOriginal": null,
+    "Sha256": "9D26A525DAAE26FBC91B9FC42FB0EEF456633138987AD8745C8FBEF5C99A43B8"
+  },
+  {
+    "File": "unit-green-final-int-20261019T1915.exit.txt",
+    "OriginalPresent": true,
+    "MatchesOriginal": true,
+    "Sha256": "B7839E652837BDC59B83D60676F868728EA9A6469373C2FEF161D80FBB2B28F7"
+  },
+  {
+    "File": "unit-green-final-int-20261019T1915.meta.json",
+    "OriginalPresent": true,
+    "MatchesOriginal": true,
+    "Sha256": "BB1A06012071792E98B24C0AA0C48190E7B40ACA870420DF5E74518C9049BF6B"
+  },
+  {
+    "File": "unit-green-final-int-20261019T1915.trx-summary.txt",
+    "OriginalPresent": false,
+    "MatchesOriginal": null,
+    "Sha256": "9697D651F0C69E75BCDF558391367FBFBCDF27193694C02D3594881028D01F93"
+  },
+  {
+    "File": "unit-green-final-traceability-20261019T1918.exit.txt",
+    "OriginalPresent": true,
+    "MatchesOriginal": true,
+    "Sha256": "7CEE7013A78DD5820A70DC87A147F62E910692DA6BBDC1A753D01291DB9FA856"
+  },
+  {
+    "File": "unit-green-final-traceability-20261019T1918.meta.json",
+    "OriginalPresent": true,
+    "MatchesOriginal": true,
+    "Sha256": "6E81ABFC6CEF4DE8CFAFAA4B8740CAC5337960FA76AEFBBB149F985ADFC47D2F"
+  },
+  {
+    "File": "unit-green-final-traceability-20261019T1918.out.log",
+    "OriginalPresent": true,
+    "MatchesOriginal": true,
+    "Sha256": "D2BFD44DD33213BB0DF16DC15626D66F78CC6B497AC7CB947A97AA9EE031681D"
+  },
+  {
+    "File": "unit-green-final-traceability-20261019T1918.out.txt",
+    "OriginalPresent": false,
+    "MatchesOriginal": null,
+    "Sha256": "D2BFD44DD33213BB0DF16DC15626D66F78CC6B497AC7CB947A97AA9EE031681D"
+  },
+  {
+    "File": "unit-green-handoff-20261019T1909.exit.txt",
+    "OriginalPresent": true,
+    "MatchesOriginal": true,
+    "Sha256": "C1A7247E0B4C507F66CA7E5298D5A92B3D4DD8B09A95BB17E0D2D4A0FEF3FAF8"
+  },
+  {
+    "File": "unit-green-handoff-20261019T1909.meta.json",
+    "OriginalPresent": true,
+    "MatchesOriginal": true,
+    "Sha256": "C9367E636C4D351B1A9B124E6F7871B4916BCDB479420547E2CFA2F49B05A7A9"
+  },
+  {
+    "File": "unit-green-handoff-20261019T1909.trx-summary.txt",
+    "OriginalPresent": false,
+    "MatchesOriginal": null,
+    "Sha256": "DF8B28EBE72F91FFBB471B8282DF1EA8AAED43BB3BFB7C7821F5750520EDEA7E"
+  },
+  {
+    "File": "unit-green-win-final-20261019T1915.txt",
+    "OriginalPresent": true,
+    "MatchesOriginal": true,
+    "Sha256": "81F359489DA0A23D5C339B5093318F218C2AA49DE4327C57FB38DAF943B917EE"
+  },
+  {
+    "File": "unit-green-win-h-wsman-20261019T1856.txt",
+    "OriginalPresent": true,
+    "MatchesOriginal": true,
+    "Sha256": "C0094B5C29C7828DA6C39906770E554DEDC42B2DB73C765204BE58D116AD8BE2"
+  }
+]

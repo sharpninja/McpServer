@@ -1,0 +1,43 @@
+{
+  "TimestampLocal": "2026-10-27T03:47:28",
+  "Method": "workflow.requirements.getTest",
+  "Params": {
+    "id": "TEST-HANDOFF-007"
+  },
+  "Response": {
+    "payload": {
+      "requestId": "req-20261027T084729Z-4a11",
+      "deprecated": true,
+      "result": {
+        "scopeStartLayerKey": "layer-1",
+        "acceptanceCriteria": [
+          {
+            "text": "Sqlite_HandoffMigration_DowngradeAndReupgrade, PostgreSql_HandoffMigration_DowngradeAndReupgrade and SqlServer_HandoffMigration_DowngradeAndReupgrade: on a clean database migrated only up to AddHandoffIngestionStorage, a downgrade to the immediately preceding migration removes AddHandoffIngestionStorage from the applied migrations and a re-upgrade restores it; proven first by HandoffCycleAssertion_AcceptsReversibleCycleAndRejectsMissingOrForwardOnlyCrossing over applied-migration lists (negative controls: the handoff migration still applied after the downgrade, absent after the re-upgrade, and a downgrade target older than 20260929140000_VersionedAuditPayloads) (PLAN-SESSIONTRIAGEFIX-001 B12, triage-report-61c2a2b2).",
+            "isSatisfied": false,
+            "id": "AC-001"
+          },
+          {
+            "text": "The same tests then migrate the database to head, where a handoff ingestion run and its diagnostic persist and read back (PLAN-SESSIONTRIAGEFIX-001 B12).",
+            "isSatisfied": false,
+            "id": "AC-002"
+          },
+          {
+            "text": "VersionedAuditPayloads_DownIsForwardOnly_OnEveryProvider: 20260929140000_VersionedAuditPayloads' Down raises NotSupportedException on SQLite, PostgreSQL and SQL Server, the forward-only boundary that migration declares, so no downgrade test crosses it (PLAN-SESSIONTRIAGEFIX-001 B12).",
+            "isSatisfied": false,
+            "id": "AC-003"
+          }
+        ],
+        "title": "Test TEST-HANDOFF-007",
+        "status": "pending",
+        "id": "TEST-HANDOFF-007",
+        "testType": "unit",
+        "description": "Cover normalized run storage, diagnostic persistence, cancellation, and the prohibition on logging credentials or raw source content.",
+        "area": "HANDOFF",
+        "priority": "medium",
+        "updatedAt": "2026-10-27T08:47:30.5319103+00:00",
+        "createdAt": "2026-10-27T08:47:30.5317904+00:00"
+      }
+    },
+    "type": "result"
+  }
+}

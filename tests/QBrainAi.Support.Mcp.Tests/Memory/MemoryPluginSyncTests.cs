@@ -4,13 +4,15 @@ using QBrainAi.Support.Mcp.Services;
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-016 / FR-MCP-MEMORY-017:
+/// TEST-MCP-MEMORY-016 (historical) / FR-MCP-MEMORY-017 (historical):
 /// Grok plugin is the S5 pilot; other plugins are required after H7a;
 /// missing required verbs fail the checklist guard.
 /// </summary>
 public sealed class MemoryPluginSyncTests
 {
     /// <summary>AC-FR-MCP-MEMORY-017-03: Plugin sync order is grok first; others after the value gate.</summary>
+    /// <remarks>Integration: loads the committed plugin checklist or value-gate artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void GrokFirst_ThenOthersAfterValueGate()
     {
@@ -23,6 +25,8 @@ public sealed class MemoryPluginSyncTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-017-08: Plugin validation fails when a synced skill omits a required new verb.</summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void MissingVerb_FailsValidation()
     {
@@ -43,6 +47,8 @@ public sealed class MemoryPluginSyncTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-017-12: S5 checklist has an explicit grok pass/fail row before other plugins.</summary>
+    /// <remarks>Integration: loads the committed plugin checklist or value-gate artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void ChecklistReceipt_GrokBeforeOthers()
     {
@@ -62,6 +68,8 @@ public sealed class MemoryPluginSyncTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-017-13: Grok plugin skill/descriptor/shim for new verbs exists before other plugin sync.</summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void ImplementGrokPlugin_BeforeOthers()
     {
@@ -106,6 +114,8 @@ public sealed class MemoryPluginSyncTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-017-14: Non-Grok plugin sync is documented as blocked until H7a.</summary>
+    /// <remarks>Integration: loads the committed plugin checklist or value-gate artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void NonGrok_BlockedUntilH7a()
     {

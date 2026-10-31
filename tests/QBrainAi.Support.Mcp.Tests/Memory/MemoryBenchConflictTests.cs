@@ -1,11 +1,13 @@
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018-13: Conflict prompts prefer the newer seeded memory.
+/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-13 (historical): Conflict prompts prefer the newer seeded memory.
 /// </summary>
 public sealed class MemoryBenchConflictTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-13: with_memory prefers pnpm; without_memory does not assert it.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void PrefersNewerSeeded()
     {

@@ -1,0 +1,22 @@
+type: result
+payload:
+  requestId: req-20261026T171750Z-39b9
+  result:
+    id: TR-MCP-MEMORY-002
+    title: Provider memory migrations
+    description: >-
+      Add provider migrations for SQLite, SQL Server, and PostgreSQL. Each migration creates the memory table, unique ID constraint, scope and workspace indexes, category/update-time indexes, soft-delete metadata, and provider-appropriate constraints or service-level validation for Global rows with null `WorkspaceId` and Workspace rows with required `WorkspaceId`.
+
+      **Covered by:** FR: FR-MCP-MEMORY-002; TEST: TEST-MCP-MEMORY-002
+    status: pending
+    priority: medium
+    area: MCP
+    subarea: MEMORY
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-26T17:17:51.8271224+00:00
+    updatedAt: 2026-10-26T17:17:51.8272568+00:00
+  deprecated: true
+
+---
+

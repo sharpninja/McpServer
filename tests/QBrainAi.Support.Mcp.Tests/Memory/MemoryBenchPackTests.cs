@@ -3,11 +3,13 @@ using QBrainAi.Support.Mcp.Services;
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018: Canonical pack existence and schema.
+/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018 (historical): Canonical pack existence and schema.
 /// </summary>
 public sealed class MemoryBenchPackTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-01: Pack file lives at the canonical path and is versioned.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void PackFile_ExistsAndVersioned()
     {
@@ -20,6 +22,8 @@ public sealed class MemoryBenchPackTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-02: Pack covers the eight required prompt classes.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void CoversEightPromptClasses()
     {
@@ -30,6 +34,8 @@ public sealed class MemoryBenchPackTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-03: Each prompt has the required entry fields.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void EntrySchema_Complete()
     {
@@ -46,6 +52,8 @@ public sealed class MemoryBenchPackTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-04: Pack declares paired without_memory / with_memory conditions.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void PairedConditions()
     {
@@ -56,6 +64,8 @@ public sealed class MemoryBenchPackTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-30: Fixtures use synthetic BENCH-* tokens, not real secrets.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void NoRealSecretsInFixtures()
     {

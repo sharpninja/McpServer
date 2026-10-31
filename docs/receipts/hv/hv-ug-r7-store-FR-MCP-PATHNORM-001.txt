@@ -1,0 +1,18 @@
+type: result
+payload:
+  requestId: req-20261026T171716Z-1a5b
+  result:
+    id: FR-MCP-PATHNORM-001
+    title: Persist workspace paths with forward slashes and platform tag
+    description: "Operator directive (PLAN-PATHNORM-001, decision D1 2026-10-07: delivered in P1). Persisted workspace paths, storage keys and identity hashes use '/' as the separator for all platforms; the windows: (case-insensitive) / case-sensitive: tag is kept; Windows-origin paths are detected by drive letter (C:/) or UNC (//server/share), not by separator; the UNC leading '//' is preserved; paths are converted to '\\' only at OS boundaries that require it (\\\\?\\ long-path prefixes, cmd.exe arguments, native APIs). AC1: C:\\Users\\kingd, C:/Users/kingd and c:/users/KINGD produce one storage key. AC2: \\\\srv\\share\\x and //srv/share/x produce one storage key that still starts with //. AC3: Existing stores are converted by the --workspace-path-rekey maintenance command (decisions D5-D7 2026-10-07): after it runs no Windows-shaped workspace value contains a backslash, per-table and per-workspace row counts are unchanged, and foreign keys validate; the server refuses to start against an unconverted store (no dual-key lookup). AC4: Native file operations on Windows receive backslash paths where the OS requires them."
+    status: pending
+    priority: medium
+    area: MCP
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-26T17:17:18.0434538+00:00
+    updatedAt: 2026-10-26T17:17:18.0435670+00:00
+  deprecated: true
+
+---
+

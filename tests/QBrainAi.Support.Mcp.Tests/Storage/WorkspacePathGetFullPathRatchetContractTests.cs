@@ -175,6 +175,8 @@ public abstract class WorkspacePathGetFullPathRatchetContractTests
 }
 
 /// <summary>BDP v4 step 3: the ratchet over the repository <c>src/</c> tree.</summary>
+/// <remarks>Integration: this provider enumerates and reads current checkout source; the shared assertions and scripted provider remain unit tests (TR-MCP-USECASE-018 AC-006).</remarks>
+[Trait("Category", "Integration")]
 public sealed class WorkspacePathGetFullPathRatchetRealTests : WorkspacePathGetFullPathRatchetContractTests
 {
     /// <inheritdoc />

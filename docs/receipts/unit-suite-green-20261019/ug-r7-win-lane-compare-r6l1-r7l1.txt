@@ -1,0 +1,26 @@
+RECEIPT 2026-10-26T10:16:47 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Compare-WinTrxRuns.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-10-26T10:16:46 project=QBrainAi.Support.Mcp.Tests
+A ug-r6-win-lane-1 results=376 start=2026-10-21T14:00:22.1030549-05:00 finish=2026-10-21T14:06:16.8610074-05:00
+B ug-r7-win-lane-1 results=392 start=2026-10-26T10:10:39.1813979-05:00 finish=2026-10-26T10:15:24.9140157-05:00
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_CodexSecondCall_ResumesExtractedThread outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithOutputCallback_StreamsAgentOutput outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_GrokSecondCall_ResumesSameSession outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFolderAsync_PointsEveryNameAtItsFolderThenRestoresThem outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFolderAsync_BodyThrows_StillRestoresAndDeletes outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_ResumeSessionMissing_RetriesWithoutResume outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_NonZeroExit_StillThrows outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithCodexAgent_UsesCodexOneShotCommandShape outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WhenCodexTimesOut_PreservesPartialStreams outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_ReturnsStdoutInsteadOfThrowing outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithGrokAgent_UsesGrokPromptFileCommandShape outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.Factory_Create_CliSlot_ReturnsCliClient outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClaudeAgent_UsesClaudePlanModeCommandShape outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClineAgent_UsesClineParameterizedPromptCommandShape outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_EmptyStdout_DoesNotThrow outcome=Passed
+ONLY-B QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WhenCodexFails_ReturnsErrorResult outcome=Passed
+NAMED B QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFolderAsync_PointsEveryNameAtItsFolderThenRestoresThem outcome=Passed duration=00:00:00.0062011 start=2026-10-26T10:15:20.7583722-05:00
+NAMED B QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTests.RunWithTestFolderAsync_BodyThrows_StillRestoresAndDeletes outcome=Passed duration=00:00:00.0025477 start=2026-10-26T10:15:20.7653134-05:00
+END 2026-10-26T10:16:46

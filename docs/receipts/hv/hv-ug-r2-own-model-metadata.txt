@@ -1,0 +1,10 @@
+type: result
+payload:
+  requestId: req-20261020T030135Z-bda1
+  result:
+    agent: Codex
+    sessionId: Codex-20261020T023103Z-unitgreen-r2
+    created: false
+
+---
+

@@ -1,0 +1,14 @@
+Plugin command failed with exit code 1.
+type: error
+payload:
+  requestId: req-20261029T024743Z-6bba
+  code: not_found
+  message: TEST 'TEST-MCP-QBCLI-001' not found.
+  retryable: false
+  details:
+    methodName: workflow.requirements.getTest
+    exceptionType: McpServer.Client.McpNotFoundException
+    reason: not_found
+
+---
+

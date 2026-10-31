@@ -1,0 +1,12 @@
+{
+  "TimestampUtc": "2026-10-20T01:16:53.1704053Z",
+  "TimestampLocal": "2026-10-19T20:16:53",
+  "Mode": "Read",
+  "Arguments": [
+    "docs/receipts/hv/hv-ug-r1-store-client-UseCases-GetCoverageAsync.txt"
+  ],
+  "Offset": 0,
+  "Count": 20,
+  "ExitCode": 0,
+  "Output": "FILE: docs/receipts/hv/hv-ug-r1-store-client-UseCases-GetCoverageAsync.txt; LINES: 388\n1: type: result\n2: payload:\n3:   requestId: req-20261020T011604Z-72a3\n4:   result:\n5:     totalUseCases: 0\n6:     totalFunctionalRequirements: 374\n7:     linkedUseCases: 0\n8:     linkedFunctionalRequirements: 0\n9:     useCasesWithoutRealizesLink: []\n10:     functionalRequirementsWithoutRealizesUseCase:\n11:     - FR-HANDOFF-001\n12:     - FR-HANDOFF-002\n13:     - FR-HANDOFF-003\n14:     - FR-HANDOFF-004\n15:     - FR-HANDOFF-005\n16:     - FR-HANDOFF-006\n17:     - FR-HANDOFF-007\n18:     - FR-LOC-001\n19:     - FR-MCP-001\n20:     - FR-MCP-002"
+}

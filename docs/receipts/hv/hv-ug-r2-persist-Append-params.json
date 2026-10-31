@@ -1,0 +1,12 @@
+{
+  "requestId": "req-20261020T023148Z-unitgreen-r2",
+  "dialogItems": [
+    {
+      "order": 10008,
+      "timestamp": "2026-10-20T03:19:34.3141626Z",
+      "role": "model",
+      "category": "observation",
+      "content": "HV_UNITGREEN_R2_RESULT_PART 009/009\nlassification slice and then full final gates.\",\"R2-F3: Correct the self-review and any blanket propagation claim to disclose that the generated runner was not independently analyzed before that historical execution. Retain the original receipts. Analyze the actual emitted script before future execution. A later analyzer result must be described as later, never as retroactive pre-execution evidence.\"],\"operatorDecisionFails\":[],\"closure\":[{\"id\":\"F1\",\"verdict\":\"PASS\"},{\"id\":\"F2\",\"verdict\":\"FAIL\"},{\"id\":\"F3\",\"verdict\":\"FAIL\"},{\"id\":\"F4\",\"verdict\":\"PASS\"},{\"id\":\"F5\",\"verdict\":\"PASS\"},{\"id\":\"F6\",\"verdict\":\"PASS\"},{\"id\":\"F7\",\"verdict\":\"FAIL\"}],\"headSha\":\"a94579db927f25a0cbddd07d639f3054f2ee72e8\",\"receiptPaths\":[\"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r2-20261019T212828.md\",\"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r2-20261019T212828.json\"],\"reviewerSessionId\":\"Codex-20261020T023103Z-unitgreen-r2\",\"reviewerRequestId\":\"req-20261020T023148Z-unitgreen-r2\"}"
+    }
+  ]
+}

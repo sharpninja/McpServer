@@ -1,0 +1,23 @@
+type: result
+payload:
+  requestId: req-20261026T171721Z-d492
+  result:
+    id: TEST-MCP-PATHNORM-001
+    title: Test TEST-MCP-PATHNORM-001
+    description: 'Per BDP v4 (MockData fixture green before production code, then Real fixture). Storage-key equivalence: C:\Users\kingd, C:/Users/kingd, c:/users/KINGD -> one key windows:C:/USERS/KINGD; \\srv\share\x and //srv/share/x -> one key keeping leading //; \\?\C:\x -> C:/x. Remote-path detection treats //srv/share as remote. ToNativePath returns backslash paths on Windows. Rekey: value mapping f(x) touches only Windows-shaped values and is idempotent; planner builds the mapping and statement plan from a scripted snapshot; executors per provider (SQLite in-memory; SQL Server and PostgreSQL provider fixtures) rewrite all workspace columns and recompute hashed values with FK validation; report counts unchanged per table and per workspace; startup guard rejects an unconverted store; rehearsal on a restored copy of McpServer_PAYTON_LEGION2 recorded as receipts. GlobalWorkspaceId for (PAYTON-LEGION2, F:/GitHub/McpServer) is stable across both input separators.'
+    status: pending
+    priority: medium
+    area: MCP
+    testType: unit
+    notes: 'P1.5 2026-10-16: WorkspacePathRekeyTests cover literal Policy A normalization, collision preflight, no-backup/failed-backup refusal, read-only dry-run on explicit separate copies, transaction rollback and FK graph validation, repeat no-op, derived triage/handoff/federation identities, unchanged manual triage hashes, and startup guard. Command parser rejects missing/same copy database. Reports contain only keys/counts and retained-manual-key notice. Disposable fixtures only; no live apply.'
+    acceptanceCriteria:
+    - id: unitgreen-native-host
+      text: The native-boundary (ToNativePath) behavior for a non-Windows host is proven on every test host, Windows included, against a simulated host, without a host-conditional skip; the Windows-host cases keep running on a Windows host.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-26T17:17:23.1959542+00:00
+    updatedAt: 2026-10-26T17:17:23.1960747+00:00
+  deprecated: true
+
+---
+

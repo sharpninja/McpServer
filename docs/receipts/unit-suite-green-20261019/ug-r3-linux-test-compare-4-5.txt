@@ -1,0 +1,8 @@
+Now: 2026-10-20T13:48:41 before=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-linux-test-4 (4446) after=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r3-linux-test-5 (4449)
+onlyBefore=0 onlyAfter=3 common=4446
+onlyAfter QBrainAi.Support.Mcp.Tests=3
+--- only in before ---
+--- only in after ---
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.SqlServerLocalDbCollectionTests.LocalDbClasses_AreInTheSqlServerLocalDbCollection
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.SqlServerLocalDbCollectionTests.MembershipNegativeControls_AreRejectedInsidePassingHarness
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Storage.SqlServerLocalDbCollectionTests.ScriptedMember_PassesTheMembershipAssertion

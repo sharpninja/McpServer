@@ -1,0 +1,10 @@
+{
+  "TimestampLocal": "2026-10-26T13:27:52",
+  "Reason": "The session-log backend redacted a non-secret regular-expression fragment in one reviewer command as [REDACTED:secret-assignment]. This occurred once in the prose command list and once in the native JSON command list. Findings, scores, evidence, verdict and source records are unchanged. Final receipts are canonicalized to the actual persisted text; the pre-normalization copies are retained.",
+  "ChangedMarkdownCharacters": 15,
+  "ChangedJsonCharacters": 15,
+  "RestoredCharacters": 458004,
+  "RestoredSha256": "29C2DE750C0A165EF66ED45C745232905D05D2D447CA091FD21E33D0811C7295",
+  "PreRedactionHeaderSha256": "67B25093678E6A987B0944A3D1353E4815727714DE8DCC3854A1B6C1A1A358C4",
+  "NativeJsonRoundTripEqual": true
+}

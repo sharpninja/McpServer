@@ -1,0 +1,12 @@
+{
+  "TimestampUtc": "2026-10-20T01:38:29.5215755Z",
+  "TimestampLocal": "2026-10-19T20:38:29",
+  "Mode": "Read",
+  "Arguments": [
+    "docs/receipts/hv/hv-ug-r1-buildtests-20261019T202308.meta.json"
+  ],
+  "Offset": 153,
+  "Count": 30,
+  "ExitCode": 0,
+  "Output": "FILE: docs/receipts/hv/hv-ug-r1-buildtests-20261019T202308.meta.json; LINES: 170\n154:   ],\n155:   \"TimestampLocal\": \"2026-10-19T20:23:08\",\n156:   \"TimestampUtc\": \"2026-10-20T01:23:08.2101548Z\",\n157:   \"Executable\": \"/home/sharpninja/.local/bin/dotnet\",\n158:   \"Arguments\": [\n159:     \"test\",\n160:     \"tests/Build.Tests/Build.Tests.csproj\",\n161:     \"--logger\",\n162:     \"trx;LogFileName=hv-ug-r1-buildtests-20261019T202308.trx\",\n163:     \"--results-directory\",\n164:     \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r1-buildtests-20261019T202308\"\n165:   ],\n166:   \"Stdout\": \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r1-buildtests-20261019T202308.out.log\",\n167:   \"Stderr\": \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r1-buildtests-20261019T202308.err.log\",\n168:   \"ExitCode\": 0,\n169:   \"FinishedLocal\": \"2026-10-19T20:28:11\"\n170: }"
+}

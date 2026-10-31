@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="c562a169-5c94-4f65-bdce-71789e13aca1" name="@LAB-OMARCHY 2026-10-27 23:44:12" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-27T23:44:12.0450029-05:00" queuing="2026-10-27T23:44:12.0450030-05:00" start="2026-10-27T23:44:10.1394446-05:00" finish="2026-10-27T23:44:16.0012647-05:00" />
+  <TestSettings name="default" id="92c6759f-63cd-4b18-b264-9502f3194175">
+    <Deployment runDeploymentRoot="_LAB-OMARCHY_2026-10-27_23_44_12" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="9344d2d4-f33c-45e8-9d4f-751b33b4d1fe" testId="93c88eed-7a5f-c299-71c5-aaa2b406b203" testName="NukeBuild.Tests.YamlObjectMutationTests.PluginCoreSyncManifest_UsesYamlSerializerInsteadOfLineAssembly" computerName="LAB-OMARCHY" duration="00:00:00.0244912" startTime="2026-10-27T23:44:11.7195609-05:00" endTime="2026-10-27T23:44:11.7584912-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9344d2d4-f33c-45e8-9d4f-751b33b4d1fe" />
+    <UnitTestResult executionId="3a0ca0b2-f847-403f-bcae-84924cc20a3e" testId="51813a3c-357f-a721-924a-7b031c935f77" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: &quot;apphost&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0842711" startTime="2026-10-27T23:44:11.7195689-05:00" endTime="2026-10-27T23:44:11.8115598-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3a0ca0b2-f847-403f-bcae-84924cc20a3e" />
+    <UnitTestResult executionId="ac6b6fe8-a455-410c-852f-08aecb3aa63d" testId="3578bdcd-dd95-e904-8644-ce6566099b5d" testName="NukeBuild.Tests.RequirementsWikiPublishScriptTests.PublishRequirementsWiki_AzureOutput_AppendsAzureUserDocumentationLinks" computerName="LAB-OMARCHY" duration="00:00:02.2001876" startTime="2026-10-27T23:44:11.7195611-05:00" endTime="2026-10-27T23:44:13.9274961-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ac6b6fe8-a455-410c-852f-08aecb3aa63d" />
+    <UnitTestResult executionId="2ee5ddc8-7ebb-4c5b-a000-d0ee03a2a1a9" testId="028c5190-c396-9901-5bd2-7100febd3ba4" testName="NukeBuild.Tests.YamlObjectMutationTests.YamlMutationHelper_RoundTripsNestedKeysBySerializer" computerName="LAB-OMARCHY" duration="00:00:01.0340419" startTime="2026-10-27T23:44:11.7814112-05:00" endTime="2026-10-27T23:44:12.8155358-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2ee5ddc8-7ebb-4c5b-a000-d0ee03a2a1a9" />
+    <UnitTestResult executionId="68d63818-7b13-4fe5-95f2-2e46b32e6973" testId="daa72167-0c21-56c9-6319-ab816b5736e1" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: &quot;configuration&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0131134" startTime="2026-10-27T23:44:11.8994091-05:00" endTime="2026-10-27T23:44:11.9125781-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="68d63818-7b13-4fe5-95f2-2e46b32e6973" />
+    <UnitTestResult executionId="70f0dc40-8147-417f-99d0-7b47bb1082a8" testId="5c31bcf4-2437-00a3-8556-46e31faabe28" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialStageFiles" computerName="LAB-OMARCHY" duration="00:00:00.0077300" startTime="2026-10-27T23:44:11.9886859-05:00" endTime="2026-10-27T23:44:11.9964747-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="70f0dc40-8147-417f-99d0-7b47bb1082a8" />
+    <UnitTestResult executionId="9feccfef-9984-46d3-abc0-f1ef78cfd9a8" testId="1c8012ab-d2ed-6d3a-b333-9c8098a661ae" testName="NukeBuild.Tests.RequirementsWikiPublishScriptTests.PublishRequirementsWiki_GitHubOutput_AppendsGitHubUserDocumentationLinks" computerName="LAB-OMARCHY" duration="00:00:01.9778879" startTime="2026-10-27T23:44:13.9283510-05:00" endTime="2026-10-27T23:44:15.9063032-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9feccfef-9984-46d3-abc0-f1ef78cfd9a8" />
+    <UnitTestResult executionId="69ece454-832b-4972-ae96-8ded0364b470" testId="fb449566-94f6-7098-120b-aefea1fb1a05" testName="NukeBuild.Tests.YamlObjectMutationTests.YamlMutationGuidance_IsPublishedToAgentSurfaces" computerName="LAB-OMARCHY" duration="00:00:00.0050225" startTime="2026-10-27T23:44:11.7739559-05:00" endTime="2026-10-27T23:44:11.7791233-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="69ece454-832b-4972-ae96-8ded0364b470" />
+    <UnitTestResult executionId="9d7f6592-7276-4a3b-b5ba-d95089126622" testId="1aa12560-0a9e-1270-013b-cd9f3657ad80" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: &quot;unit&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0658620" startTime="2026-10-27T23:44:11.8329411-05:00" endTime="2026-10-27T23:44:11.8988559-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9d7f6592-7276-4a3b-b5ba-d95089126622" />
+    <UnitTestResult executionId="00577678-c02c-4d1a-908b-05e653bc61e8" testId="416a7dd2-8450-ee71-e080-4710215df0bd" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: &quot;environment&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0203291" startTime="2026-10-27T23:44:11.8121397-05:00" endTime="2026-10-27T23:44:11.8325281-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="00577678-c02c-4d1a-908b-05e653bc61e8" />
+    <UnitTestResult executionId="46c1d7f4-e92d-4189-b35c-d9c9492086e3" testId="b2fbd700-a133-20f8-3505-ace1497fdc05" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: False)" computerName="LAB-OMARCHY" duration="00:00:00.0047864" startTime="2026-10-27T23:44:11.9324418-05:00" endTime="2026-10-27T23:44:11.9373130-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="46c1d7f4-e92d-4189-b35c-d9c9492086e3" />
+    <UnitTestResult executionId="8ea2bad4-ab66-4e38-9b3a-d148cdcaa9f4" testId="7683ff75-ef5f-9667-8bdd-3ba639f0e0b8" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxArchive_UsesPrivateMetadataPreservingCommands" computerName="LAB-OMARCHY" duration="00:00:00.0400816" startTime="2026-10-27T23:44:11.9478906-05:00" endTime="2026-10-27T23:44:11.9880324-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8ea2bad4-ab66-4e38-9b3a-d148cdcaa9f4" />
+    <UnitTestResult executionId="da767d30-320f-4d4d-b314-678c57878884" testId="c25b1651-a666-3e72-964a-16eaf4bc0342" testName="NukeBuild.Tests.YamlObjectMutationTests.FinalResponse_UsesYamlSerializerForCompleteTurnParams" computerName="LAB-OMARCHY" duration="00:00:00.0009974" startTime="2026-10-27T23:44:11.7796952-05:00" endTime="2026-10-27T23:44:11.7807407-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="da767d30-320f-4d4d-b314-678c57878884" />
+    <UnitTestResult executionId="c933d988-4645-4fd1-aa09-8ca1fecc9951" testId="c22e2f5a-4ec8-0876-e7ba-488fa043ad6a" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxReplacement_DoesNotFollowSymlinks" computerName="LAB-OMARCHY" duration="00:00:00.0057326" startTime="2026-10-27T23:44:11.9415705-05:00" endTime="2026-10-27T23:44:11.9473604-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c933d988-4645-4fd1-aa09-8ca1fecc9951" />
+    <UnitTestResult executionId="1d954512-2ad8-4d10-976d-e8d32d0df439" testId="097c6e90-4af7-9734-2e8c-cb67c8bfa0f3" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: True)" computerName="LAB-OMARCHY" duration="00:00:00.0017251" startTime="2026-10-27T23:44:11.9387120-05:00" endTime="2026-10-27T23:44:11.9404966-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1d954512-2ad8-4d10-976d-e8d32d0df439" />
+    <UnitTestResult executionId="534ad207-282d-409b-9cc7-bafe573dd196" testId="83ceee27-8f04-01d6-6f89-55de59b8339c" testName="NukeBuild.Tests.ServiceUpdateTests.LinuxReplacement_RejectsLinkedRuntimeConfigurationDestination" computerName="LAB-OMARCHY" duration="00:00:00.0183174" startTime="2026-10-27T23:44:11.9132680-05:00" endTime="2026-10-27T23:44:11.9316527-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="534ad207-282d-409b-9cc7-bafe573dd196" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="NukeBuild.Tests.YamlObjectMutationTests.YamlMutationGuidance_IsPublishedToAgentSurfaces" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="fb449566-94f6-7098-120b-aefea1fb1a05">
+      <Execution id="69ece454-832b-4972-ae96-8ded0364b470" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.YamlObjectMutationTests" name="YamlMutationGuidance_IsPublishedToAgentSurfaces" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: False)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="b2fbd700-a133-20f8-3505-ace1497fdc05">
+      <Execution id="46c1d7f4-e92d-4189-b35c-d9c9492086e3" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: &quot;apphost&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="51813a3c-357f-a721-924a-7b031c935f77">
+      <Execution id="3a0ca0b2-f847-403f-bcae-84924cc20a3e" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsSpecialApphostAndTextInputs" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxArchive_UsesPrivateMetadataPreservingCommands" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="7683ff75-ef5f-9667-8bdd-3ba639f0e0b8">
+      <Execution id="8ea2bad4-ab66-4e38-9b3a-d148cdcaa9f4" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxArchive_UsesPrivateMetadataPreservingCommands" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: &quot;environment&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="416a7dd2-8450-ee71-e080-4710215df0bd">
+      <Execution id="00577678-c02c-4d1a-908b-05e653bc61e8" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsSpecialApphostAndTextInputs" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxReplacement_RejectsLinkedRuntimeConfigurationDestination" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="83ceee27-8f04-01d6-6f89-55de59b8339c">
+      <Execution id="534ad207-282d-409b-9cc7-bafe573dd196" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxReplacement_RejectsLinkedRuntimeConfigurationDestination" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.RequirementsWikiPublishScriptTests.PublishRequirementsWiki_AzureOutput_AppendsAzureUserDocumentationLinks" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="3578bdcd-dd95-e904-8644-ce6566099b5d">
+      <Execution id="ac6b6fe8-a455-410c-852f-08aecb3aa63d" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.RequirementsWikiPublishScriptTests" name="PublishRequirementsWiki_AzureOutput_AppendsAzureUserDocumentationLinks" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.RequirementsWikiPublishScriptTests.PublishRequirementsWiki_GitHubOutput_AppendsGitHubUserDocumentationLinks" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="1c8012ab-d2ed-6d3a-b333-9c8098a661ae">
+      <Execution id="9feccfef-9984-46d3-abc0-f1ef78cfd9a8" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.RequirementsWikiPublishScriptTests" name="PublishRequirementsWiki_GitHubOutput_AppendsGitHubUserDocumentationLinks" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialStageFiles" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="5c31bcf4-2437-00a3-8556-46e31faabe28">
+      <Execution id="70f0dc40-8147-417f-99d0-7b47bb1082a8" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsSpecialStageFiles" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.YamlObjectMutationTests.PluginCoreSyncManifest_UsesYamlSerializerInsteadOfLineAssembly" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="93c88eed-7a5f-c299-71c5-aaa2b406b203">
+      <Execution id="9344d2d4-f33c-45e8-9d4f-751b33b4d1fe" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.YamlObjectMutationTests" name="PluginCoreSyncManifest_UsesYamlSerializerInsteadOfLineAssembly" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: &quot;configuration&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="daa72167-0c21-56c9-6319-ab816b5736e1">
+      <Execution id="68d63818-7b13-4fe5-95f2-2e46b32e6973" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsSpecialApphostAndTextInputs" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage(symlink: True)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="097c6e90-4af7-9734-2e8c-cb67c8bfa0f3">
+      <Execution id="1d954512-2ad8-4d10-976d-e8d32d0df439" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.YamlObjectMutationTests.FinalResponse_UsesYamlSerializerForCompleteTurnParams" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="c25b1651-a666-3e72-964a-16eaf4bc0342">
+      <Execution id="da767d30-320f-4d4d-b314-678c57878884" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.YamlObjectMutationTests" name="FinalResponse_UsesYamlSerializerForCompleteTurnParams" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RejectsSpecialApphostAndTextInputs(input: &quot;unit&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="1aa12560-0a9e-1270-013b-cd9f3657ad80">
+      <Execution id="9d7f6592-7276-4a3b-b5ba-d95089126622" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxPreflight_RejectsSpecialApphostAndTextInputs" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.ServiceUpdateTests.LinuxReplacement_DoesNotFollowSymlinks" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="c22e2f5a-4ec8-0876-e7ba-488fa043ad6a">
+      <Execution id="c933d988-4645-4fd1-aa09-8ca1fecc9951" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.ServiceUpdateTests" name="LinuxReplacement_DoesNotFollowSymlinks" />
+    </UnitTest>
+    <UnitTest name="NukeBuild.Tests.YamlObjectMutationTests.YamlMutationHelper_RoundTripsNestedKeysBySerializer" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/build.tests/bin/debug/net10.0/build.tests.dll" id="028c5190-c396-9901-5bd2-7100febd3ba4">
+      <Execution id="2ee5ddc8-7ebb-4c5b-a000-d0ee03a2a1a9" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/bin/Debug/net10.0/Build.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="NukeBuild.Tests.YamlObjectMutationTests" name="YamlMutationHelper_RoundTripsNestedKeysBySerializer" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="93c88eed-7a5f-c299-71c5-aaa2b406b203" executionId="9344d2d4-f33c-45e8-9d4f-751b33b4d1fe" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="51813a3c-357f-a721-924a-7b031c935f77" executionId="3a0ca0b2-f847-403f-bcae-84924cc20a3e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3578bdcd-dd95-e904-8644-ce6566099b5d" executionId="ac6b6fe8-a455-410c-852f-08aecb3aa63d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="028c5190-c396-9901-5bd2-7100febd3ba4" executionId="2ee5ddc8-7ebb-4c5b-a000-d0ee03a2a1a9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="daa72167-0c21-56c9-6319-ab816b5736e1" executionId="68d63818-7b13-4fe5-95f2-2e46b32e6973" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5c31bcf4-2437-00a3-8556-46e31faabe28" executionId="70f0dc40-8147-417f-99d0-7b47bb1082a8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1c8012ab-d2ed-6d3a-b333-9c8098a661ae" executionId="9feccfef-9984-46d3-abc0-f1ef78cfd9a8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fb449566-94f6-7098-120b-aefea1fb1a05" executionId="69ece454-832b-4972-ae96-8ded0364b470" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1aa12560-0a9e-1270-013b-cd9f3657ad80" executionId="9d7f6592-7276-4a3b-b5ba-d95089126622" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="416a7dd2-8450-ee71-e080-4710215df0bd" executionId="00577678-c02c-4d1a-908b-05e653bc61e8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b2fbd700-a133-20f8-3505-ace1497fdc05" executionId="46c1d7f4-e92d-4189-b35c-d9c9492086e3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7683ff75-ef5f-9667-8bdd-3ba639f0e0b8" executionId="8ea2bad4-ab66-4e38-9b3a-d148cdcaa9f4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c25b1651-a666-3e72-964a-16eaf4bc0342" executionId="da767d30-320f-4d4d-b314-678c57878884" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c22e2f5a-4ec8-0876-e7ba-488fa043ad6a" executionId="c933d988-4645-4fd1-aa09-8ca1fecc9951" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="097c6e90-4af7-9734-2e8c-cb67c8bfa0f3" executionId="1d954512-2ad8-4d10-976d-e8d32d0df439" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="83ceee27-8f04-01d6-6f89-55de59b8339c" executionId="534ad207-282d-409b-9cc7-bafe573dd196" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="16" executed="16" passed="16" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.22]   Discovering: Build.Tests
+[xUnit.net 00:00:00.73]   Discovered:  Build.Tests
+[xUnit.net 00:00:00.98]   Starting:    Build.Tests
+[xUnit.net 00:00:05.26]   Finished:    Build.Tests (ID = 'bc600d8f515939f9633dc43d37b0dea13c118e71e93a0ca456091b1a82b53cff')
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

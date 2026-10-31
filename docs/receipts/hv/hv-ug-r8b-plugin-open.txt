@@ -1,0 +1,17 @@
+Plugin command failed with exit code 1.
+type: result
+payload:
+  result:
+    code: rejected
+    retryable: false
+    persisted: false
+    degraded: false
+    queued: false
+    method: workflow.sessionlog.openSession
+    agent: Codex
+    sessionId: Codex-20261029T024141Z-plugin-session
+    requestId: ""
+    failsafePath: ""
+    message: workflow.sessionlog.openSession completed without a remote persistence receipt.
+    childStderr: ""
+

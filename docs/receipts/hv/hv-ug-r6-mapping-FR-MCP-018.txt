@@ -1,0 +1,13 @@
+type: result
+payload:
+  requestId: req-20261026T123544Z-3351
+  result:
+    items:
+    - frId: FR-MCP-018
+      trId: TR-MCP-WS-005
+      createdAt: 2026-10-26T12:35:45.9198664+00:00
+    totalCount: 1
+  deprecated: true
+
+---
+

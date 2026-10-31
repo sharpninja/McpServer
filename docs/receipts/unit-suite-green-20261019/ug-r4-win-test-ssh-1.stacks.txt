@@ -1,0 +1,12 @@
+RECEIPT 2026-10-20T19:01:01 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinTrxFailureStacks.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-10-20T19:01:01 trx=F:/GitHub/McpServer/.worktrees/unit-green-r3-ssh/TestResults/ug-r4-win-test-ssh-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx
+FAILED 1
+=== 1 x first product frame: (no product frame)
+  sample: QBrainAi.Support.Mcp.Tests.Services.HandoffDurabilityTests.ApproveAsync_LeaseExpiresDuringLiveCreate_SecondInstanceWins
+  message: Assert.False() Failure Expected: False Actual: True
+    at QBrainAi.Support.Mcp.Tests.Services.HandoffDurabilityTests.ApproveAsync_LeaseExpiresDuringLiveCreate_SecondInstanceWins() in F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Support.Mcp.Tests\Services\HandoffDurabilityTests.cs:line 401
+    --- End of stack trace from previous location ---
+END 2026-10-20T19:01:01

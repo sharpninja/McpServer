@@ -17,9 +17,12 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// </summary>
 [Collection(nameof(WorkspaceIdentityNativeProcessStateCollection))]
 [SupportedOSPlatform("linux")]
+[Trait("Category", "Integration")]
+[Trait("Platform", "Linux")]
 public sealed class BugTriage139EighteenthLinuxTests
 {
     /// <summary>Proves the native Linux gate is executing as a non-root effective user.</summary>
+    /// <remarks>Integration: queries the native effective user ID of the actual Linux host (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void NativeLinuxGate_EffectiveUserId_IsNonRoot()
     {
@@ -31,6 +34,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// Renames a pinned parent outside the workspace immediately before file creation and proves
     /// root-relative openat2 containment leaves no file in the external directory.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void OpenFileForWrite_ParentRenamedOutsideRoot_RejectsWithoutExternalArtifact()
     {
@@ -70,6 +74,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// openat2's contained-resolution guarantees, so a missing export directory fails closed before
     /// it can create an externally visible child. Landlock is reported unavailable through the seam.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void EnsureDirectory_MissingNestedDirectory_FailsClosedBeforeMutation()
     {
@@ -89,6 +94,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// BUG-BASELINE-001 (TR-MCP-USECASE-017): with Landlock, a missing nested export folder chain is
     /// created beneath the pinned root and nothing appears outside it.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void EnsureDirectory_MissingNestedDirectory_IsCreatedUnderLandlock()
     {
@@ -127,6 +133,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// BUG-BASELINE-001 (TR-MCP-USECASE-017): with Landlock, a nested stale file is deleted through
     /// its pinned parent.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void DeleteFileIfExists_NestedStaleFile_DeletesUnderLandlock()
     {
@@ -143,6 +150,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// BUG-BASELINE-001 (TR-MCP-USECASE-017): a nested stale file whose parent is moved outside the
     /// root before unlinkat stays intact; the kernel denies the delete through Landlock.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void DeleteFileIfExists_NestedParentMovedOutsideBeforeUnlink_IsDeniedByLandlock()
     {
@@ -162,6 +170,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// BUG-BASELINE-001 (TR-MCP-USECASE-017): with Landlock, a missing export root and its missing
     /// ancestors are created beneath the deepest existing ancestor and then pinned.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void OpenExportRoot_MissingRootAndAncestors_IsCreatedUnderLandlock()
     {
@@ -179,6 +188,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// BUG-BASELINE-001 fallback (TR-MCP-USECASE-017): without Landlock a missing export root still
     /// fails closed before any directory is created.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void OpenExportRoot_MissingRoot_FailsClosedWithoutLandlock()
     {
@@ -197,6 +207,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// create a directory outside its hierarchy even through an absolute path, proving the kernel,
     /// not the caller's path checks, enforces the boundary.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void LandlockConfinement_DeniesDirectoryCreationOutsideItsHierarchy()
     {
@@ -262,6 +273,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// name just before mkdirat is never followed. mkdirat reports EEXIST, the re-open beneath the anchor
     /// refuses the link, the call fails, and nothing is created through the link outside the root.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void EnsureDirectory_SymlinkPlantedAtMissingSegment_IsNeverFollowed()
     {
@@ -283,6 +295,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// Proves a rejected Linux export transaction restores both bytes and the exact Unix permissions
     /// through the retained root authority rather than by reopening an untrusted pathname.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task RestoreFileAsync_RollsBackUnixPermissionsThroughPinnedAuthority()
     {
@@ -329,6 +342,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// Proves a FIFO entry is classified by descriptor metadata and never opened as file content or
     /// allowed to block bounded traversal.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task EnumerateFilesBoundedAsync_Fifo_IsIgnoredWithoutBlocking()
     {
@@ -361,6 +375,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// Proves traversal rejects a real delayed FUSE child mount at the root-descriptor boundary
     /// without entering its blocking metadata implementation.
     /// </summary>
+    /// <remarks>Integration: creates a real delayed FUSE mount and measures traversal rejection against a wall-clock bound (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact(Timeout = 60_000)]
     public async Task EnumerateFilesBoundedAsync_DelayedFuseChildMount_IsRejectedBeforeTraversal()
     {
@@ -388,6 +403,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// FUSE filesystem. Traversal must finish from the original descriptor without opening the
     /// replacement mount or consuming a bounded worker.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact(Timeout = 60_000)]
     public async Task EnumerateFilesBoundedAsync_RootReplacedByDelayedFuseMountAfterPin_UsesPinnedRootOnly()
     {
@@ -448,6 +464,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// Every caller must complete from its already-pinned root descriptor; no blocked replacement
     /// provider may consume an admission slot for a later caller.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact(Timeout = 60_000)]
     public async Task EnumerateFilesBoundedAsync_RepeatedRootReplacement_DoesNotConsumeWorkerAdmission()
     {
@@ -515,6 +532,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// A requirements export rejects a parent that moves outside the workspace after the writer has
     /// resolved it, without creating the generated file in that moved directory.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task RequirementsExport_ParentMovedAfterResolution_RejectsWithoutExternalArtifact()
     {
@@ -558,6 +576,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// descriptor authority capture. Every attempted caller must reject promptly without consuming
     /// a traversal worker, and a later caller of the original retained tree must still succeed.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact(Timeout = 60_000)]
     public async Task EnumerateFilesBoundedAsync_RootReplacedBeforeAuthorityCapture_RejectsWithoutWorkerStranding()
     {
@@ -650,6 +669,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// root-relative validation and immediately before O_CREAT. The atomic openat2 mutation must
     /// write only through the pinned root descriptor, never through the replacement mount.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact(Timeout = 60_000)]
     public async Task RequirementsExport_RootReplacedByDelayedFuseMountBeforeCreate_UsesPinnedRootOnly()
     {
@@ -700,6 +720,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// On a case-sensitive Linux export root, Home.md and home.md are distinct names; cleanup
     /// removes the stale spelling instead of treating it as the expected generated file.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task RequirementsExport_CaseDistinctHomeFiles_RemovesOnlyStaleName()
     {
@@ -732,6 +753,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// BUG-BASELINE-001 (TR-MCP-USECASE-017): with Landlock, export cleanup deletes a nested stale
     /// file and writes the generated file.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task RequirementsExport_NestedStaleCleanup_DeletesStaleUnderLandlock()
     {
@@ -762,6 +784,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// delete for which Linux has no contained atomic primitive, so cleanup rejects the export before
     /// any generated file becomes visible. Landlock is reported unavailable through the seam.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task RequirementsExport_NestedStaleCleanup_IsRejectedBeforeGeneratedWrite()
     {
@@ -796,6 +819,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// Proves physical identity accepts a workspace rooted on an actually separate,
     /// policy-approved local Linux mount instead of rejecting the mount crossing from AT_FDCWD.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task WorkspaceIdentity_SeparateApprovedLocalMount_IsAccepted()
     {
@@ -818,6 +842,7 @@ public sealed class BugTriage139EighteenthLinuxTests
     /// Proves SQLite can create, use, and dispose a database on an actually separate,
     /// policy-approved local Linux mount.
     /// </summary>
+    /// <remarks>Integration: opens a real SQLite database on a separate native local mount (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task SqliteOpen_SeparateApprovedLocalMount_IsAccepted()
     {

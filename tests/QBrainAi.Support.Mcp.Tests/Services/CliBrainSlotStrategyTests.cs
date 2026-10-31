@@ -6,17 +6,26 @@ using QBrainAi.Support.Mcp.Storage.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using QBrainAi.Support.Mcp.Tests.TestSupport;
 using Xunit;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
 /// <summary>
-/// TEST-MCP-QBCLI-001: QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session reuse.
+/// TEST-MCP-QBCLI-001 (historical): QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session
+/// reuse. The class runs in <see cref="ProcessEnvironmentCollection"/> because every test that reaches
+/// <c>CliBrainSlotChatClient.CompleteAsync</c> or its temp-folder lookup writes the process environment through
+/// <c>WithIsolatedQuadbrainTemp</c>; those tests are integration tests (TR-MCP-USECASE-018 AC-006,
+/// TR-MCP-USECASE-019 AC-008; plan sections 19.3 and 20).
 /// </summary>
+/// <remarks>
+/// The TEST-MCP-QBCLI-001 citations in this file are historical: no such record is in the requirements store
+/// (hostile validation finding R6-F2), so they make no active coverage claim. The active claims are the
+/// TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 classification of the integration tests.
+/// </remarks>
+[Collection(ProcessEnvironmentCollection.Name)]
 public sealed class CliBrainSlotStrategyTests
 {
-    private static readonly SemaphoreSlim TempEnvLock = new(1, 1);
-
     [Theory]
     [InlineData("Cli")]
     [InlineData("cli")]
@@ -115,124 +124,192 @@ public sealed class CliBrainSlotStrategyTests
         Assert.DoesNotContain("--session-id", args);
     }
 
+    /// <summary>
+    /// TEST-MCP-QBCLI-001 (historical): Grok runs in an isolated working folder with its dashboard, memory and subagents off and
+    /// without the inherited <c>GROK_PLUGIN_ROOT</c> and <c>GROK_HOME</c>. The test writes the process environment
+    /// (the temp variables, and both Grok variables set to scripted values so their removal is observed), restores it,
+    /// and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+    /// </summary>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task CompleteAsync_Grok_UsesIsolatedCwdNotConfiguredRepoRoot()
+    {
+        await WithIsolatedQuadbrainTemp(async temp =>
+        {
+            var previousPluginRoot = Environment.GetEnvironmentVariable("GROK_PLUGIN_ROOT");
+            var previousGrokHome = Environment.GetEnvironmentVariable("GROK_HOME");
+            Environment.SetEnvironmentVariable("GROK_PLUGIN_ROOT", Path.Combine(temp, "inherited-grok-plugin-root"));
+            Environment.SetEnvironmentVariable("GROK_HOME", Path.Combine(temp, "inherited-grok-home"));
+            try
+            {
+                await AssertGrokRunsIsolatedAsync().ConfigureAwait(true);
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable("GROK_PLUGIN_ROOT", previousPluginRoot);
+                Environment.SetEnvironmentVariable("GROK_HOME", previousGrokHome);
+            }
+        }).ConfigureAwait(true);
+    }
+
+    private static async Task AssertGrokRunsIsolatedAsync()
+    {
+        var spawner = new RecordingSpawner(stdout: "ok");
+        var client = new CliBrainSlotChatClient(
+            spawner,
+            new NoopProcessEnvironmentService(),
+            new CliBrainSlotSessionStore(),
+            new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions
+            {
+                CliWorkingDirectory = @"Q:\__mcp_unit_test__\QBrainAi",
+            }),
+            NullLogger.Instance);
+
+        await client.CompleteAsync(GrokSlot(), "ping", temperature: null, TestContext.Current.CancellationToken)
+            .ConfigureAwait(true);
+
+        var cwd = spawner.StartInfos[0].WorkingDirectory;
+        Assert.False(string.IsNullOrWhiteSpace(cwd));
+        Assert.Contains("grok-work", cwd, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain(@"Q:\__mcp_unit_test__\QBrainAi", cwd, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal(cwd, ArgumentAfter(spawner.StartInfos[0], "--cwd"));
+        Assert.Equal("0", spawner.StartInfos[0].Environment["GROK_AGENT_DASHBOARD"]);
+        Assert.Equal("0", spawner.StartInfos[0].Environment["GROK_MEMORY"]);
+        Assert.Equal("0", spawner.StartInfos[0].Environment["GROK_SUBAGENTS"]);
+        Assert.False(spawner.StartInfos[0].Environment.ContainsKey("GROK_PLUGIN_ROOT"));
+        Assert.False(spawner.StartInfos[0].Environment.ContainsKey("GROK_HOME"));
+    }
+
+    /// <summary>
+    /// TEST-MCP-QBCLI-001 (historical): Grok output that stops at the turn limit is returned instead of thrown. The
+    /// client's temp-folder lookup reads the CLI temp variables, so the test sets and restores them through
+    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019
+    /// AC-008; hostile validation finding R6-F1).
+    /// </summary>
+    /// <returns>A task that completes when the assertions have run.</returns>
+    [Fact]
+    [Trait("Category", "Integration")]
+    public async Task CompleteAsync_Grok_MaxTurnsReached_ReturnsStdoutInsteadOfThrowing()
     {
         await WithIsolatedQuadbrainTemp(async _ =>
         {
-            var spawner = new RecordingSpawner(stdout: "ok");
+            var spawner = new RecordingSpawner(
+                stdout: "Creativity analysis for ArbiterOfTruth",
+                stderr: "Max turns reached",
+                exitCode: 1);
             var client = new CliBrainSlotChatClient(
                 spawner,
                 new NoopProcessEnvironmentService(),
                 new CliBrainSlotSessionStore(),
-                new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions
-                {
-                    CliWorkingDirectory = @"Q:\__mcp_unit_test__\QBrainAi",
-                }),
+                new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions()),
                 NullLogger.Instance);
 
-            await client.CompleteAsync(GrokSlot(), "ping", temperature: null, TestContext.Current.CancellationToken)
+            var output = await client.CompleteAsync(GrokSlot(), "new session", temperature: null, TestContext.Current.CancellationToken)
                 .ConfigureAwait(true);
 
-            var cwd = spawner.StartInfos[0].WorkingDirectory;
-            Assert.False(string.IsNullOrWhiteSpace(cwd));
-            Assert.Contains("grok-work", cwd, StringComparison.OrdinalIgnoreCase);
-            Assert.DoesNotContain(@"Q:\__mcp_unit_test__\QBrainAi", cwd, StringComparison.OrdinalIgnoreCase);
-            Assert.Equal(cwd, ArgumentAfter(spawner.StartInfos[0], "--cwd"));
-            Assert.Equal("0", spawner.StartInfos[0].Environment["GROK_AGENT_DASHBOARD"]);
-            Assert.Equal("0", spawner.StartInfos[0].Environment["GROK_MEMORY"]);
-            Assert.Equal("0", spawner.StartInfos[0].Environment["GROK_SUBAGENTS"]);
-            Assert.False(spawner.StartInfos[0].Environment.ContainsKey("GROK_PLUGIN_ROOT"));
-            Assert.False(spawner.StartInfos[0].Environment.ContainsKey("GROK_HOME"));
+            Assert.Equal("Creativity analysis for ArbiterOfTruth", output);
         }).ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// TEST-MCP-QBCLI-001 (historical): Grok stopping at the turn limit with empty output returns empty text. The
+    /// client's temp-folder lookup reads the CLI temp variables, so the test sets and restores them through
+    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019
+    /// AC-008; hostile validation finding R6-F1).
+    /// </summary>
+    /// <returns>A task that completes when the assertions have run.</returns>
     [Fact]
-    public async Task CompleteAsync_Grok_MaxTurnsReached_ReturnsStdoutInsteadOfThrowing()
-    {
-        var spawner = new RecordingSpawner(
-            stdout: "Creativity analysis for ArbiterOfTruth",
-            stderr: "Max turns reached",
-            exitCode: 1);
-        var client = new CliBrainSlotChatClient(
-            spawner,
-            new NoopProcessEnvironmentService(),
-            new CliBrainSlotSessionStore(),
-            new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions()),
-            NullLogger.Instance);
-
-        var output = await client.CompleteAsync(GrokSlot(), "new session", temperature: null, TestContext.Current.CancellationToken)
-            .ConfigureAwait(true);
-
-        Assert.Equal("Creativity analysis for ArbiterOfTruth", output);
-    }
-
-    [Fact]
+    [Trait("Category", "Integration")]
     public async Task CompleteAsync_Grok_MaxTurnsReached_EmptyStdout_DoesNotThrow()
     {
-        var spawner = new RecordingSpawner(stdout: "", stderr: "Error: Max turns reached", exitCode: 1);
-        var client = new CliBrainSlotChatClient(
-            spawner,
-            new NoopProcessEnvironmentService(),
-            new CliBrainSlotSessionStore(),
-            new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions()),
-            NullLogger.Instance);
+        await WithIsolatedQuadbrainTemp(async _ =>
+        {
+            var spawner = new RecordingSpawner(stdout: "", stderr: "Error: Max turns reached", exitCode: 1);
+            var client = new CliBrainSlotChatClient(
+                spawner,
+                new NoopProcessEnvironmentService(),
+                new CliBrainSlotSessionStore(),
+                new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions()),
+                NullLogger.Instance);
 
-        var output = await client.CompleteAsync(GrokSlot(), "ping", temperature: null, TestContext.Current.CancellationToken)
-            .ConfigureAwait(true);
+            var output = await client.CompleteAsync(GrokSlot(), "ping", temperature: null, TestContext.Current.CancellationToken)
+                .ConfigureAwait(true);
 
-        Assert.Equal(string.Empty, output);
+            Assert.Equal(string.Empty, output);
+        }).ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// TEST-MCP-QBCLI-001 (historical): any other Grok failure still throws with its error text. The client's
+    /// temp-folder lookup reads the CLI temp variables, so the test sets and restores them through
+    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019
+    /// AC-008; hostile validation finding R6-F1).
+    /// </summary>
+    /// <returns>A task that completes when the assertions have run.</returns>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task CompleteAsync_Grok_NonZeroExit_StillThrows()
     {
-        var spawner = new RecordingSpawner(stdout: "", stderr: "Access is denied. (os error 5)", exitCode: 1);
-        var client = new CliBrainSlotChatClient(
-            spawner,
-            new NoopProcessEnvironmentService(),
-            new CliBrainSlotSessionStore(),
-            new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions()),
-            NullLogger.Instance);
+        await WithIsolatedQuadbrainTemp(async _ =>
+        {
+            var spawner = new RecordingSpawner(stdout: "", stderr: "Access is denied. (os error 5)", exitCode: 1);
+            var client = new CliBrainSlotChatClient(
+                spawner,
+                new NoopProcessEnvironmentService(),
+                new CliBrainSlotSessionStore(),
+                new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions()),
+                NullLogger.Instance);
 
-        var ex = await Assert.ThrowsAsync<InvalidOperationException>(
-                () => client.CompleteAsync(GrokSlot(), "ping", temperature: null, TestContext.Current.CancellationToken))
-            .ConfigureAwait(true);
+            var ex = await Assert.ThrowsAsync<InvalidOperationException>(
+                    () => client.CompleteAsync(GrokSlot(), "ping", temperature: null, TestContext.Current.CancellationToken))
+                .ConfigureAwait(true);
 
-        Assert.Contains("Access is denied", ex.Message, StringComparison.Ordinal);
+            Assert.Contains("Access is denied", ex.Message, StringComparison.Ordinal);
+        }).ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// TEST-MCP-QBCLI-001 (historical): a Grok resume whose session is missing retries once without resume. The
+    /// client's temp-folder lookup reads the CLI temp variables, so the test sets and restores them through
+    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019
+    /// AC-008; hostile validation finding R6-F1).
+    /// </summary>
+    /// <returns>A task that completes when the assertions have run.</returns>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task CompleteAsync_Grok_ResumeSessionMissing_RetriesWithoutResume()
     {
-        var spawner = new RecordingSpawner(stdout: "first-ok")
+        await WithIsolatedQuadbrainTemp(async _ =>
         {
-            Script =
-            [
-                (0, "first-ok", ""),
-                (1, "", """Session "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" not found locally, restoring conversation from remote..."""),
-                (0, "retry-ok", ""),
-            ],
-        };
-        var client = new CliBrainSlotChatClient(
-            spawner,
-            new NoopProcessEnvironmentService(),
-            new CliBrainSlotSessionStore(),
-            new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions()),
-            NullLogger.Instance);
+            var spawner = new RecordingSpawner(stdout: "first-ok")
+            {
+                Script =
+                [
+                    (0, "first-ok", ""),
+                    (1, "", """Session "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" not found locally, restoring conversation from remote..."""),
+                    (0, "retry-ok", ""),
+                ],
+            };
+            var client = new CliBrainSlotChatClient(
+                spawner,
+                new NoopProcessEnvironmentService(),
+                new CliBrainSlotSessionStore(),
+                new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions()),
+                NullLogger.Instance);
 
-        var first = await client.CompleteAsync(GrokSlot(), "one", temperature: null, TestContext.Current.CancellationToken)
-            .ConfigureAwait(true);
-        var second = await client.CompleteAsync(GrokSlot(), "two", temperature: null, TestContext.Current.CancellationToken)
-            .ConfigureAwait(true);
+            var first = await client.CompleteAsync(GrokSlot(), "one", temperature: null, TestContext.Current.CancellationToken)
+                .ConfigureAwait(true);
+            var second = await client.CompleteAsync(GrokSlot(), "two", temperature: null, TestContext.Current.CancellationToken)
+                .ConfigureAwait(true);
 
-        Assert.Equal("first-ok", first);
-        Assert.Equal("retry-ok", second);
-        Assert.Equal(3, spawner.StartInfos.Count);
-        Assert.Contains("--session-id", spawner.StartInfos[0].ArgumentList);
-        Assert.Contains("--resume", spawner.StartInfos[1].ArgumentList);
-        Assert.Contains("--session-id", spawner.StartInfos[2].ArgumentList);
-        Assert.DoesNotContain("--resume", spawner.StartInfos[2].ArgumentList);
+            Assert.Equal("first-ok", first);
+            Assert.Equal("retry-ok", second);
+            Assert.Equal(3, spawner.StartInfos.Count);
+            Assert.Contains("--session-id", spawner.StartInfos[0].ArgumentList);
+            Assert.Contains("--resume", spawner.StartInfos[1].ArgumentList);
+            Assert.Contains("--session-id", spawner.StartInfos[2].ArgumentList);
+            Assert.DoesNotContain("--resume", spawner.StartInfos[2].ArgumentList);
+        }).ConfigureAwait(true);
     }
 
     [Fact]
@@ -307,7 +384,13 @@ public sealed class CliBrainSlotStrategyTests
         Assert.Equal("working on it", CliBrainSlotChatClient.ExtractCodexAssistantText(jsonl));
     }
 
+    /// <summary>
+    /// TEST-MCP-QBCLI-001 (historical): Codex returns the assistant text from the JSONL stream, not the raw events. The test writes
+    /// the process environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test
+    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+    /// </summary>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task CompleteAsync_Codex_ReturnsAssistantTextFromJsonlNotRawEvents()
     {
         await WithIsolatedQuadbrainTemp(async temp =>
@@ -324,7 +407,7 @@ public sealed class CliBrainSlotStrategyTests
                 new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions
                 {
                     CliWorkingDirectory = @"Q:\__mcp_unit_test__\QBrainAi",
-                    CliRunAs = "kingd",
+                    CliRunAs = "fixture-user",
                 }),
                 NullLogger.Instance);
 
@@ -340,7 +423,13 @@ public sealed class CliBrainSlotStrategyTests
         }).ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// TEST-MCP-QBCLI-001 (historical): Codex prefers the JSONL assistant text over tool-call JSON in the output file. The test
+    /// writes the process environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test
+    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+    /// </summary>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task CompleteAsync_Codex_PrefersJsonlAssistantTextOverOutputFileToolCallJson()
     {
         await WithIsolatedQuadbrainTemp(async _ =>
@@ -370,19 +459,13 @@ public sealed class CliBrainSlotStrategyTests
         }).ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// TEST-MCP-QBCLI-001 (historical): the temp folder comes from the configured variable without the Windows service ACL. The
+    /// test writes the process environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test
+    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+    /// </summary>
     [Fact]
-    public void DefaultSharedTempDirectory_Windows_IsUnderCommonApplicationData()
-    {
-        if (!OperatingSystem.IsWindows())
-            return;
-
-        var directory = Path.GetFullPath(CliBrainSlotChatClient.DefaultSharedTempDirectory());
-        var common = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
-        Assert.StartsWith(common, directory, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("quadbrain-cli", directory, StringComparison.OrdinalIgnoreCase);
-    }
-
-    [Fact]
+    [Trait("Category", "Integration")]
     public async Task ResolveTempDirectory_HonorsConfiguredEnvVar_WithoutWindowsServiceAcl()
     {
         await WithIsolatedQuadbrainTemp(async temp =>
@@ -394,7 +477,13 @@ public sealed class CliBrainSlotStrategyTests
         }).ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// TEST-MCP-QBCLI-001 (historical): Grok writes its prompt file under the configured temp folder and points TEMP and TMP at it.
+    /// The test writes the process environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test
+    /// (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019 AC-008).
+    /// </summary>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task CompleteAsync_Grok_WritesPromptFileUnderConfiguredTempAndSetsTempEnv()
     {
         await WithIsolatedQuadbrainTemp(async temp =>
@@ -407,7 +496,7 @@ public sealed class CliBrainSlotStrategyTests
                 new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions
                 {
                     CliWorkingDirectory = @"Q:\__mcp_unit_test__\QBrainAi",
-                    CliRunAs = "kingd",
+                    CliRunAs = "fixture-user",
                 }),
                 NullLogger.Instance);
 
@@ -427,7 +516,13 @@ public sealed class CliBrainSlotStrategyTests
         }).ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// TEST-MCP-QBCLI-001 (historical): Codex writes its output file under the configured temp folder. The test writes the process
+    /// environment through <c>WithIsolatedQuadbrainTemp</c>, so it is an integration test (TR-MCP-USECASE-018 AC-006,
+    /// TR-MCP-USECASE-019 AC-008).
+    /// </summary>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task CompleteAsync_Codex_WritesOutputFileUnderConfiguredTemp()
     {
         await WithIsolatedQuadbrainTemp(async temp =>
@@ -441,7 +536,7 @@ public sealed class CliBrainSlotStrategyTests
                 new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions
                 {
                     CliWorkingDirectory = @"Q:\__mcp_unit_test__\QBrainAi",
-                    CliRunAs = "kingd",
+                    CliRunAs = "fixture-user",
                 }),
                 NullLogger.Instance);
 
@@ -458,78 +553,111 @@ public sealed class CliBrainSlotStrategyTests
         }).ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// TEST-MCP-QBCLI-001 (historical): a second Grok call on the same slot resumes the first call's session. The
+    /// client's temp-folder lookup reads the CLI temp variables, so the test sets and restores them through
+    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019
+    /// AC-008; hostile validation finding R6-F1).
+    /// </summary>
+    /// <returns>A task that completes when the assertions have run.</returns>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task CompleteAsync_GrokSecondCall_ResumesSameSession()
     {
-        var spawner = new RecordingSpawner(stdout: "ok");
-        var store = new CliBrainSlotSessionStore();
-        var client = new CliBrainSlotChatClient(
-            spawner,
-            new NoopProcessEnvironmentService(),
-            store,
-            new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions
-            {
-                CliWorkingDirectory = @"Q:\__mcp_unit_test__\QBrainAi",
-            }),
-            NullLogger.Instance);
+        await WithIsolatedQuadbrainTemp(async _ =>
+        {
+            var spawner = new RecordingSpawner(stdout: "ok");
+            var store = new CliBrainSlotSessionStore();
+            var client = new CliBrainSlotChatClient(
+                spawner,
+                new NoopProcessEnvironmentService(),
+                store,
+                new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions
+                {
+                    CliWorkingDirectory = @"Q:\__mcp_unit_test__\QBrainAi",
+                }),
+                NullLogger.Instance);
 
-        var slot = GrokSlot();
-        var first = await client.CompleteAsync(slot, "first", temperature: null, TestContext.Current.CancellationToken).ConfigureAwait(true);
-        var second = await client.CompleteAsync(slot, "second", temperature: null, TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var slot = GrokSlot();
+            var first = await client.CompleteAsync(slot, "first", temperature: null, TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var second = await client.CompleteAsync(slot, "second", temperature: null, TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        Assert.Equal("ok", first);
-        Assert.Equal("ok", second);
-        Assert.Equal(2, spawner.StartInfos.Count);
-        Assert.Contains("--session-id", spawner.StartInfos[0].ArgumentList);
-        Assert.Contains("--resume", spawner.StartInfos[1].ArgumentList);
-        var firstId = ArgumentAfter(spawner.StartInfos[0], "--session-id");
-        var resumeId = ArgumentAfter(spawner.StartInfos[1], "--resume");
-        Assert.Equal(firstId, resumeId);
-        Assert.Contains("grok-4.6", spawner.StartInfos[0].ArgumentList);
-        Assert.Equal("xhigh", ArgumentAfter(spawner.StartInfos[0], "--effort"));
+            Assert.Equal("ok", first);
+            Assert.Equal("ok", second);
+            Assert.Equal(2, spawner.StartInfos.Count);
+            Assert.Contains("--session-id", spawner.StartInfos[0].ArgumentList);
+            Assert.Contains("--resume", spawner.StartInfos[1].ArgumentList);
+            var firstId = ArgumentAfter(spawner.StartInfos[0], "--session-id");
+            var resumeId = ArgumentAfter(spawner.StartInfos[1], "--resume");
+            Assert.Equal(firstId, resumeId);
+            Assert.Contains("grok-4.6", spawner.StartInfos[0].ArgumentList);
+            Assert.Equal("xhigh", ArgumentAfter(spawner.StartInfos[0], "--effort"));
+        }).ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// TEST-MCP-QBCLI-001 (historical): a second Codex call on the same slot resumes the thread the first call
+    /// reported. The client's temp-folder lookup reads the CLI temp variables, so the test sets and restores them
+    /// through <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006,
+    /// TR-MCP-USECASE-019 AC-008; hostile validation finding R6-F1).
+    /// </summary>
+    /// <returns>A task that completes when the assertions have run.</returns>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task CompleteAsync_CodexSecondCall_ResumesExtractedThread()
     {
-        var jsonl = """{"type":"thread.started","thread_id":"thr_logic"}""" + Environment.NewLine;
-        var spawner = new RecordingSpawner(stdout: jsonl, outputBody: "logic-out");
-        var client = new CliBrainSlotChatClient(
-            spawner,
-            new NoopProcessEnvironmentService(),
-            new CliBrainSlotSessionStore(),
-            new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions
-            {
-                CliWorkingDirectory = @"Q:\__mcp_unit_test__\QBrainAi",
-            }),
-            NullLogger.Instance);
+        await WithIsolatedQuadbrainTemp(async _ =>
+        {
+            var jsonl = """{"type":"thread.started","thread_id":"thr_logic"}""" + Environment.NewLine;
+            var spawner = new RecordingSpawner(stdout: jsonl, outputBody: "logic-out");
+            var client = new CliBrainSlotChatClient(
+                spawner,
+                new NoopProcessEnvironmentService(),
+                new CliBrainSlotSessionStore(),
+                new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions
+                {
+                    CliWorkingDirectory = @"Q:\__mcp_unit_test__\QBrainAi",
+                }),
+                NullLogger.Instance);
 
-        var slot = CodexSlot();
-        await client.CompleteAsync(slot, "first", temperature: null, TestContext.Current.CancellationToken).ConfigureAwait(true);
-        await client.CompleteAsync(slot, "second", temperature: null, TestContext.Current.CancellationToken).ConfigureAwait(true);
+            var slot = CodexSlot();
+            await client.CompleteAsync(slot, "first", temperature: null, TestContext.Current.CancellationToken).ConfigureAwait(true);
+            await client.CompleteAsync(slot, "second", temperature: null, TestContext.Current.CancellationToken).ConfigureAwait(true);
 
-        Assert.Equal(2, spawner.StartInfos.Count);
-        Assert.DoesNotContain("resume", spawner.StartInfos[0].ArgumentList);
-        Assert.Contains("resume", spawner.StartInfos[1].ArgumentList);
-        Assert.Contains("thr_logic", spawner.StartInfos[1].ArgumentList);
-        Assert.Contains("gpt-5.6-sol", spawner.StartInfos[0].ArgumentList);
+            Assert.Equal(2, spawner.StartInfos.Count);
+            Assert.DoesNotContain("resume", spawner.StartInfos[0].ArgumentList);
+            Assert.Contains("resume", spawner.StartInfos[1].ArgumentList);
+            Assert.Contains("thr_logic", spawner.StartInfos[1].ArgumentList);
+            Assert.Contains("gpt-5.6-sol", spawner.StartInfos[0].ArgumentList);
+        }).ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// TEST-MCP-QBCLI-001 (historical): the factory creates the CLI client for a CLI slot, and the client completes.
+    /// The client's temp-folder lookup reads the CLI temp variables, so the test sets and restores them through
+    /// <c>WithIsolatedQuadbrainTemp</c> and is an integration test (TR-MCP-USECASE-018 AC-006, TR-MCP-USECASE-019
+    /// AC-008; hostile validation finding R6-F1).
+    /// </summary>
+    /// <returns>A task that completes when the assertions have run.</returns>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task Factory_Create_CliSlot_ReturnsCliClient()
     {
-        var factory = new BrainSlotChatClientFactory(
-            new RecordingSpawner(stdout: "ok"),
-            new NoopProcessEnvironmentService(),
-            new CliBrainSlotSessionStore(),
-            new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions()),
-            NullLogger<BrainSlotChatClientFactory>.Instance);
+        await WithIsolatedQuadbrainTemp(async _ =>
+        {
+            var factory = new BrainSlotChatClientFactory(
+                new RecordingSpawner(stdout: "ok"),
+                new NoopProcessEnvironmentService(),
+                new CliBrainSlotSessionStore(),
+                new StaticOptionsMonitor<BrainSlotOptions>(new BrainSlotOptions()),
+                NullLogger<BrainSlotChatClientFactory>.Instance);
 
-        var client = factory.Create(GrokSlot(), "cli");
+            var client = factory.Create(GrokSlot(), "cli");
 
-        Assert.IsType<CliBrainSlotChatClient>(client);
-        var output = await client.CompleteAsync(GrokSlot(), "ping", null, TestContext.Current.CancellationToken).ConfigureAwait(true);
-        Assert.Equal("ok", output);
+            Assert.IsType<CliBrainSlotChatClient>(client);
+            var output = await client.CompleteAsync(GrokSlot(), "ping", null, TestContext.Current.CancellationToken).ConfigureAwait(true);
+            Assert.Equal("ok", output);
+        }).ConfigureAwait(true);
     }
 
     [Theory]
@@ -578,34 +706,11 @@ public sealed class CliBrainSlotStrategyTests
             TimeoutSeconds = 180,
         };
 
-    private static async Task WithIsolatedQuadbrainTemp(Func<string, Task> body)
-    {
-        await TempEnvLock.WaitAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
-        var previousQuad = Environment.GetEnvironmentVariable("MCPSERVER_QUADBRAIN_CLI_TEMP");
-        var previousOneShot = Environment.GetEnvironmentVariable("MCPSERVER_ONESHOT_TEMP");
-        var temp = Path.Combine(Path.GetTempPath(), "qbt-" + Guid.NewGuid().ToString("N"));
-        Directory.CreateDirectory(temp);
-        try
-        {
-            Environment.SetEnvironmentVariable("MCPSERVER_QUADBRAIN_CLI_TEMP", temp);
-            Environment.SetEnvironmentVariable("MCPSERVER_ONESHOT_TEMP", null);
-            await body(temp).ConfigureAwait(true);
-        }
-        finally
-        {
-            Environment.SetEnvironmentVariable("MCPSERVER_QUADBRAIN_CLI_TEMP", previousQuad);
-            Environment.SetEnvironmentVariable("MCPSERVER_ONESHOT_TEMP", previousOneShot);
-            try
-            {
-                Directory.Delete(temp, recursive: true);
-            }
-            catch (IOException)
-            {
-            }
-
-            TempEnvLock.Release();
-        }
-    }
+    // MCPSERVER_QUADBRAIN_CLI_TEMP, which the client reads first, points at a test-owned folder and every other CLI temp
+    // variable at a separate fallback folder while the body runs, then all are restored (the shared CliTempVariables
+    // helper; this class runs in the serialized ProcessEnvironmentCollection).
+    private static Task WithIsolatedQuadbrainTemp(Func<string, Task> body) =>
+        CliTempVariables.RunWithTestFolderAsync("MCPSERVER_QUADBRAIN_CLI_TEMP", body);
 
     private static string? ArgumentAfter(ProcessStartInfo startInfo, string name)
     {
@@ -744,5 +849,25 @@ public sealed class CliBrainSlotStrategyTests
             StandardError.Dispose();
             _stdin.Dispose();
         }
+    }
+}
+
+/// <summary>
+/// TEST-MCP-QBCLI-001 (historical; no such record in the requirements store): the default shared CLI temp directory on a Windows host lives under the machine's
+/// common application data folder. Windows-only behavior, so an integration test on Windows hosts
+/// (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019).
+/// </summary>
+[Trait("Category", "Integration")]
+[Trait("Platform", "Windows")]
+public sealed class CliBrainSlotWindowsTempDirectoryTests
+{
+    /// <summary>The default shared temp directory is under CommonApplicationData and named for quadbrain-cli.</summary>
+    [Fact]
+    public void DefaultSharedTempDirectory_Windows_IsUnderCommonApplicationData()
+    {
+        var directory = Path.GetFullPath(CliBrainSlotChatClient.DefaultSharedTempDirectory());
+        var common = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
+        Assert.StartsWith(common, directory, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("quadbrain-cli", directory, StringComparison.OrdinalIgnoreCase);
     }
 }

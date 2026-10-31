@@ -1,0 +1,16 @@
+{
+  "TimestampUtc": "2026-10-20T01:15:36.2503816Z",
+  "TimestampLocal": "2026-10-19T20:15:36",
+  "Mode": "Git",
+  "Arguments": [
+    "diff",
+    "c2125c42",
+    "11681680",
+    "--",
+    ".nuke/build.schema.json"
+  ],
+  "Offset": 0,
+  "Count": 120,
+  "ExitCode": 0,
+  "Output": "diff --git a/.nuke/build.schema.json b/.nuke/build.schema.json\nindex d9fad69e..342d0757 100644\n--- a/.nuke/build.schema.json\n+++ b/.nuke/build.schema.json\n@@ -27,7 +27,6 @@\n         \"AiCodeReview\",\n         \"AiProjectReview\",\n         \"AiWarningSuppressionReview\",\n-        \"ArchitectureDiagrams\",\n         \"BenchMemory\",\n         \"BuildAgent\",\n         \"BuildTrustedThirdParty\",\n@@ -156,10 +155,6 @@\n           \"type\": \"string\",\n           \"description\": \"Code signing certificate path\"\n         },\n-        \"ChromiumPath\": {\n-          \"type\": \"string\",\n-          \"description\": \"TR-MCP-NUKE-017: Chromium-family browser used to render Structurizr views (default: autodetect)\"\n-        },\n         \"Configuration\": {\n           \"type\": \"string\",\n           \"description\": \"Configuration to build - Default is 'Debug' (local) or 'Release' (server)\"\n@@ -299,10 +294,6 @@\n           \"type\": \"string\",\n           \"description\": \"Optional path to workspace SQLite DB for UseCaseFrLinks Realizes coverage (FR-MCP-USECASE-010)\"\n         },\n-        \"WhatIf\": {\n-          \"type\": \"boolean\",\n-          \"description\": \"TR-MCP-NUKE-017 AC-6: report what would change and write nothing (honored by ArchitectureDiagrams)\"\n-        },\n         \"WorkspacePath\": {\n           \"type\": \"string\",\n           \"description\": \"Workspace path for GraphRAG smoke test\""
+}

@@ -119,6 +119,8 @@ public sealed class SessionLogReplaceSectionRetryableTests
     /// BUG-TRIAGE-144: replace_section SaveChanges is wrapped in the 5s storage budget
     /// and classifies as backend_unavailable retryable true.
     /// </summary>
+    /// <remarks>Integration: asserts an elapsed wall-clock bound on actual scheduling and timer execution (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task ReplaceTurnSectionAsync_HungSaveChanges_FailsFastWithRetryableUnavailable()
     {

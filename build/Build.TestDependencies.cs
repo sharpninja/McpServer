@@ -6,7 +6,7 @@ using Nuke.Common.Tools.DotNet;
 using Serilog;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
-#pragma warning disable CA1416 // Platform compatibility - integration-test tooling targets Windows dev machines
+#pragma warning disable CA1416 // Installer APIs are reached through explicit Windows/Linux branches; the lane rejects unsupported hosts.
 
 partial class Build
 {
@@ -16,8 +16,9 @@ partial class Build
     const string PostgresBinariesZipUrl =
         "https://get.enterprisedb.com/postgresql/postgresql-17.5-1-windows-x64-binaries.zip";
 
-    const string OllamaBinariesZipUrl =
-        "https://github.com/ollama/ollama/releases/latest/download/ollama-windows-amd64.zip";
+    /// <summary>TR-MCP-NUKE-019: the release download folder; the host's asset name comes from <see cref="OllamaInstallLayout"/>.</summary>
+    const string OllamaReleaseBaseUrl =
+        "https://github.com/ollama/ollama/releases/latest/download/";
 
     const string OllamaTagsEndpoint = "http://localhost:11434/api/tags";
 
@@ -36,88 +37,133 @@ partial class Build
         (AbsolutePath)Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) / "QBrainAi" / "test-tools";
 
     /// <summary>
-    /// Idempotent installer for the provider integration-test dependencies:
-    /// SQL Server LocalDB (elevated MSI install when missing) and PostgreSQL server binaries
-    /// (existing installation preferred; otherwise the portable EDB binaries zip is downloaded
-    /// to a user-scoped tools directory, no elevation required). Re-running when everything is
-    /// already present is a no-op.
+    /// TR-MCP-NUKE-018: test-database env file read on non-Windows hosts when a provider connection
+    /// variable is not already set; defaults to ~/.config/qbrain-test/test-db.env.
+    /// </summary>
+    [Parameter("Test-database env file for Linux provider test provisioning (default ~/.config/qbrain-test/test-db.env)")]
+    readonly string TestDbEnvFile = string.Empty;
+
+    /// <summary>TR-MCP-NUKE-019, retained plan section 11 design: check the Windows lane session before dependency provisioning; former AC-5 is historical.</summary>
+    public Target IntegrationLanePrecondition => _ => _
+        .Description("Refuse a noninteractive Windows lane before dependency provisioning")
+        .Executes(() => IntegrationLaneExecution.BeforeProvisioning(
+            InvokedTargets.Any(target => string.Equals(target.Name, nameof(MigrationIntegrationTests), StringComparison.OrdinalIgnoreCase)),
+            IntegrationLaneFilter.CurrentHost(), Environment.UserInteractive, () => { }));
+
+    /// <summary>
+    /// Idempotent installer for the provider integration-test dependencies. On Windows: SQL Server
+    /// LocalDB (elevated MSI install when missing) and PostgreSQL server binaries (existing
+    /// installation preferred; otherwise the portable EDB binaries zip is downloaded to a
+    /// user-scoped tools directory, no elevation required). On other hosts (TR-MCP-NUKE-018): the
+    /// PostgreSQL and SQL Server endpoints come from the test-database env file and the dedicated
+    /// qbrain-test containers, and must accept connections. Re-running when everything is already
+    /// present is a no-op.
     /// </summary>
     public Target InstallTestDependencies => _ => _
-        .Description("Ensure SQL Server LocalDB and PostgreSQL binaries exist for provider integration tests (idempotent)")
+        .DependsOn(IntegrationLanePrecondition)
+        .Description("Ensure provider integration-test servers: LocalDB and PostgreSQL binaries on Windows; qbrain-test containers and env file elsewhere (idempotent)")
         .Executes(() =>
         {
+            if (!OperatingSystem.IsWindows())
+            {
+                ProvisionProviderTestServers();
+                return;
+            }
+
             EnsureSqlLocalDb();
             var pgBin = EnsurePostgresBinaries();
             Log.Information("Test dependencies ready. LocalDB: OK; PostgreSQL binaries: {PgBin}", pgBin);
         });
 
     /// <summary>
+    /// TR-MCP-NUKE-018: provisions the provider test endpoints through the production
+    /// provisioner and the real host boundary, logs each action (names only, never values), and fails
+    /// the target with every error when any endpoint is unavailable (no skip).
+    /// </summary>
+    void ProvisionProviderTestServers()
+    {
+        var envFile = string.IsNullOrWhiteSpace(TestDbEnvFile)
+            ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ProviderTestNames.DefaultEnvFileRelativeToHome)
+            : Path.GetFullPath(TestDbEnvFile);
+        var result = new LinuxProviderTestProvisioner().Provision(envFile, new SystemProviderTestHost());
+        foreach (var action in result.Actions)
+            Log.Information("Provider test provisioning: {Action}", action);
+
+        if (!result.Succeeded)
+        {
+            foreach (var error in result.Errors)
+                Log.Error("Provider test provisioning: {Error}", error);
+            throw new InvalidOperationException("Provider test provisioning failed: " + string.Join("; ", result.Errors));
+        }
+
+        Log.Information("Test dependencies ready: {Postgres} and {SqlServer} accept connections.", ProviderTestNames.PostgresVariable, ProviderTestNames.SqlServerVariable);
+    }
+
+    /// <summary>
     /// Runs the <c>Category=Integration</c> tests living inside the unit-test projects, including
     /// the provider migration tests (SQLite in-memory, PostgreSQL, SQL Server LocalDB). The
     /// PostgreSQL tests boot their own ephemeral cluster with generated credentials on a free port
     /// via their xUnit class fixture (or honor <c>MCP_TEST_POSTGRES_CONNECTION</c>); SQL Server
-    /// tests use an ad-hoc LocalDB database (auto-started). Integration tests run only through
+    /// tests use an ad-hoc LocalDB database (auto-started) on Windows. On other hosts both
+    /// providers use the endpoints InstallTestDependencies provisions (TR-MCP-NUKE-018), and a
+    /// provisioning failure fails this target before any test runs. Integration tests run only through
     /// this target: the default <c>Test</c> target excludes the category. The dedicated
     /// <c>*.IntegrationTests</c> projects remain separate (their classes carry the same trait).
+    /// TR-MCP-NUKE-019: the selection is host-scoped through <see cref="IntegrationLaneFilter"/>; cases tagged
+    /// <c>Platform=Linux</c> run only on Linux hosts, <c>Platform=Windows</c> only on Windows hosts, untagged on both.
+    /// TR-MCP-NUKE-019: the lane also provisions Ollama and the QuadBrain test model on both hosts
+    /// (<see cref="InstallOllama"/>) before any test runs.
     /// </summary>
     public Target MigrationIntegrationTests => _ => _
         .Description("Run Category=Integration tests (provider migrations, process spawns) with provisioned dependencies")
-        .DependsOn(InstallTestDependencies)
+        .DependsOn(InstallTestDependencies, InstallOllama)
         .Executes(() =>
         {
-            // Only projects that contain Category=Integration tests: an empty filter match
-            // makes the test runner fail the target.
-            var projectsWithIntegrationTests = new[]
-            {
-                TestsDirectory / "QBrainAi.Support.Mcp.Tests" / "QBrainAi.Support.Mcp.Tests.csproj",
-                TestsDirectory / "Build.Tests" / "Build.Tests.csproj",
-            };
+            // TR-MCP-NUKE-019 AC-2/AC-3: a tested composition owns identity, path, filter, log and TRX naming;
+            // every project's TRX must prove a nonempty all-passing result, independently of runner exit semantics.
+            // TR-MCP-NUKE-019 AC-2: the seven lane projects IntegrationLaneProjects names, in run order (Repl.Core.Tests and
+            // QBAgent.Tests hold the tests that read the repository checkout through the shared TestRepositoryRoot,
+            // TR-MCP-USECASE-018 AC-006; from QBrainAi.Support.Mcp.IntegrationTests only the classes it names run).
+            var solutionProjects = Solution.GetAllProjects("*").ToArray();
+            var projectsWithIntegrationTests = IntegrationLaneExecution.Compose(
+                solutionProjects.Select(project => (project.Name, project.Path.ToString())).ToArray(), IntegrationLaneFilter.CurrentHost());
 
-            var runId = SessionLifeUnitGateReports.NormalizeRunId(TestRunId);
-            if (runId is not null)
-            {
-                SessionLifeUnitGateReports.WriteInventory(
-                    RootDirectory,
-                    runId,
-                    "provider",
-                    projectsWithIntegrationTests.Select(project => (
-                        Path.GetFileNameWithoutExtension(project.ToString()),
-                        Path.GetRelativePath(RootDirectory, project).Replace('\\', '/'))));
-            }
+            // TR-MCP-NUKE-019 AC-1 and AC-3: select this host's integration cases and name the filter in the log.
+            var laneFilter = new IntegrationLaneFilter().Compose(IntegrationLaneFilter.CurrentHost());
+            Log.Information("Integration lane filter: {Filter}", laneFilter);
+
+            // TR-MCP-NUKE-019 AC-2 and AC-3: each project's filter adds the classes the lane runs from it, and the log
+            // names every project's filter.
+            foreach (var project in projectsWithIntegrationTests)
+                Log.Information("{LaneProjectFilter}", project.LogLine);
+
+            var runId = SessionLifeUnitGateReports.NormalizeRunId(TestRunId)
+                ?? $"integration-{DateTime.Now:yyyyMMddTHHmmss}-{Guid.NewGuid():N}";
+            SessionLifeUnitGateReports.WriteInventory(RootDirectory, runId, "provider",
+                projectsWithIntegrationTests.Select(project => (project.Name,
+                    Path.GetRelativePath(RootDirectory, project.Path).Replace('\\', '/'))));
 
             var failures = new List<string>();
             foreach (var project in projectsWithIntegrationTests)
             {
-                var projectName = Path.GetFileNameWithoutExtension(project.ToString());
                 try
                 {
-                    if (runId is null)
-                    {
-                        DotNetTest(_ => _
-                            .SetProjectFile(project)
-                            .SetFilter("Category=Integration")
-                            .SetVerbosity(DotNetVerbosity.minimal));
-                    }
-                    else
-                    {
-                        var directory = SessionLifeUnitGateReports.LaneProjectDirectory(RootDirectory, runId, "provider", projectName);
-                        Directory.CreateDirectory(directory);
-                        DotNetTest(_ => _
-                            .SetProjectFile(project)
-                            .SetFilter("Category=Integration")
-                            .SetVerbosity(DotNetVerbosity.minimal)
-                            .SetResultsDirectory(directory)
-                            .SetLoggers($"trx;LogFileName={projectName}.trx"));
-                        SessionLifeUnitGateReports.EnsureCanonicalTrx(directory, $"{projectName}.trx");
-                    }
+                    var directory = SessionLifeUnitGateReports.LaneProjectDirectory(RootDirectory, runId, "provider", project.Name);
+                    Directory.CreateDirectory(directory);
+                    DotNetTest(_ => _
+                        .SetProjectFile((AbsolutePath)project.Path)
+                        .SetFilter(project.Filter)
+                        .SetVerbosity(DotNetVerbosity.minimal)
+                        .SetResultsDirectory(directory)
+                        .SetLoggers($"trx;LogFileName={project.TrxName}"));
+                    SessionLifeUnitGateReports.EnsureCanonicalTrx(directory, project.TrxName);
+                    var violation = IntegrationLaneExecution.CheckTrx(project.Name, File.ReadAllText(Path.Combine(directory, project.TrxName)));
+                    if (violation is not null) throw new InvalidOperationException(violation);
                 }
                 catch (Exception ex)
                 {
-                    if (runId is null)
-                        throw;
-
-                    failures.Add(projectName);
-                    Log.Error(ex, "Session-life provider project {Project} failed.", projectName);
+                    failures.Add(project.Name);
+                    Log.Error(ex, "Session-life provider project {Project} failed.", project.Name);
                 }
             }
 
@@ -130,22 +176,26 @@ partial class Build
 
     /// <summary>
     /// Idempotent installer for the local Ollama service used by the QuadBrain Ollama integration
-    /// tests (TEST-MCP-QBOLLAMA-001): installs the portable Ollama binaries when absent (existing
-    /// installation preferred), starts the server on localhost:11434 when not running, and pulls
-    /// the required model (default llama3.2:1b, override with MCP_QUADBRAIN_OLLAMA_MODEL) when it
-    /// is not present. Re-running when everything is in place is a no-op.
+    /// tests (TEST-MCP-QBOLLAMA-001), on Windows and Linux (TR-MCP-NUKE-019): an installed
+    /// executable is used when one exists (<see cref="OllamaInstallLayout.Candidates"/>), otherwise the
+    /// host's portable release is placed in the user's QBrainAi test-tools folder; the server is started
+    /// on localhost:11434 when none answers; the required model (<see cref="RequiredOllamaModel"/>, default
+    /// gemma4:e4b) is pulled when the server does not list it. Re-running when everything is in place is a
+    /// no-op; a failure fails the target, and the lane that depends on it, before any test runs.
     /// </summary>
     public Target InstallOllama => _ => _
-        .Description("Ensure Ollama is installed, running on localhost:11434, and has the required model (idempotent)")
+        .DependsOn(IntegrationLanePrecondition)
+        .Description("Ensure Ollama is installed, running on localhost:11434, and has the required model (idempotent; Windows and Linux)")
         .Executes(() =>
         {
+            var host = IntegrationLaneFilter.CurrentHost();
             if (TryGetOllamaTags(out var tags) && tags.Contains($"\"{RequiredOllamaModel}\"", StringComparison.OrdinalIgnoreCase))
             {
                 Log.Information("Ollama is running and model {Model} is installed.", RequiredOllamaModel);
                 return;
             }
 
-            var ollamaExe = EnsureOllamaBinaries();
+            var ollamaExe = EnsureOllamaBinaries(host);
             EnsureOllamaServerRunning(ollamaExe);
 
             if (!TryGetOllamaTags(out tags))
@@ -160,50 +210,66 @@ partial class Build
             Log.Information("Ollama ready with model {Model}.", RequiredOllamaModel);
         });
 
-    static string EnsureOllamaBinaries()
+    /// <summary>
+    /// TR-MCP-NUKE-019: returns an installed Ollama executable (PATH, then the usual install, then the portable
+    /// location; <see cref="OllamaInstallLayout"/>), or places the host's portable release in the test-tools folder and
+    /// returns its executable: on Windows the zip is extracted in process, on Linux the zstd tarball is extracted with
+    /// tar --zstd (GNU tar and zstd on the host).
+    /// </summary>
+    static string EnsureOllamaBinaries(IntegrationLaneHost host)
     {
-        var candidates = new[]
-        {
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs", "Ollama", "ollama.exe"),
-            (string)(TestToolsDirectory / "ollama" / "ollama.exe"),
-        };
-        var existing = candidates.FirstOrDefault(File.Exists);
+        var layout = new OllamaInstallLayout();
+        var pathDirectories = (Environment.GetEnvironmentVariable("PATH") ?? string.Empty)
+            .Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries);
+        var localApplicationData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        var existing = layout.Candidates(host, pathDirectories, localApplicationData, (string)TestToolsDirectory).FirstOrDefault(File.Exists);
         if (existing is not null)
         {
             Log.Information("Using existing Ollama binaries: {Path}", existing);
             return existing;
         }
 
-        Log.Information("Ollama missing; downloading portable binaries zip ...");
-        var zipPath = Path.Combine(Path.GetTempPath(), "ollama-windows-amd64.zip");
-        DownloadFile(OllamaBinariesZipUrl, zipPath);
+        var architectureFailure = IntegrationLaneExecution.PortableArchitectureFailure(
+            System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture.ToString());
+        if (architectureFailure is not null) throw new PlatformNotSupportedException(architectureFailure);
+        var asset = layout.ReleaseAsset(host);
+        Log.Information("Ollama missing; downloading the portable release {Asset} ...", asset);
+        var archivePath = Path.Combine(Path.GetTempPath(), asset);
+        DownloadFile(OllamaReleaseBaseUrl + asset, archivePath);
         var targetDirectory = TestToolsDirectory / "ollama";
         targetDirectory.CreateDirectory();
-        System.IO.Compression.ZipFile.ExtractToDirectory(zipPath, targetDirectory, overwriteFiles: true);
-        var extracted = targetDirectory / "ollama.exe";
+        if (host == IntegrationLaneHost.Windows)
+            System.IO.Compression.ZipFile.ExtractToDirectory(archivePath, targetDirectory, overwriteFiles: true);
+        else
+            RunTool("tar", $"--zstd -xf \"{archivePath}\" -C \"{targetDirectory}\"");
+
+        var extracted = layout.PortableExecutable(host, (string)TestToolsDirectory);
         if (!File.Exists(extracted))
-            throw new InvalidOperationException($"ollama.exe not found under {targetDirectory} after extraction.");
+            throw new InvalidOperationException($"The Ollama executable {extracted} was not found after placing {asset} under {targetDirectory}.");
         Log.Information("Portable Ollama binaries ready: {Path}", extracted);
         return extracted;
     }
 
-    static void EnsureOllamaServerRunning(string ollamaExe)
+    void EnsureOllamaServerRunning(string ollamaExe)
     {
         if (TryGetOllamaTags(out _))
             return;
 
         Log.Information("Starting Ollama server (detached) ...");
-        // UseShellExecute detaches the child from this process's console pipes; with handle
-        // inheritance the long-lived server would keep the build's stdout pipe open and hang
-        // any caller that captures build output. The server intentionally outlives the build.
-        var started = Process.Start(new ProcessStartInfo
+        if (IntegrationLaneFilter.CurrentHost() == IntegrationLaneHost.Linux)
         {
-            FileName = ollamaExe,
-            Arguments = "serve",
-            UseShellExecute = true,
-            WindowStyle = ProcessWindowStyle.Hidden,
-        }) ?? throw new InvalidOperationException("Failed to start the Ollama server process.");
-        _ = started;
+            var logPath = Path.Combine((string)TestToolsDirectory, "logs", "ollama-server.log");
+            var workerPath = (string)(RootDirectory / "build" / "scripts" / "Start-OllamaServer.ps1");
+            var workerId = OllamaDetachedLaunch.StartLinux(ollamaExe, logPath, workerPath);
+            Log.Information("Detached Ollama logging worker {ProcessId}; output: {LogPath}", workerId, logPath);
+        }
+        else
+        {
+            _ = Process.Start(new ProcessStartInfo
+            {
+                FileName = ollamaExe, Arguments = "serve", UseShellExecute = true, WindowStyle = ProcessWindowStyle.Hidden,
+            }) ?? throw new InvalidOperationException("Failed to start the Ollama server process.");
+        }
 
         for (var attempt = 0; attempt < 30; attempt++)
         {
@@ -368,14 +434,16 @@ partial class Build
         return stdout;
     }
 
+    // TR-MCP-NUKE-019: streams to disk with no total time limit; fails naming the URL on an error status or
+    // when no data arrives for two minutes (the default HttpClient timed out the Ollama zip after 100 s).
     static void DownloadFile(string url, string destinationPath)
     {
-        using var http = new HttpClient();
-        using var response = http.GetAsync(url).GetAwaiter().GetResult();
-        response.EnsureSuccessStatusCode();
-        using var target = File.Create(destinationPath);
-        response.Content.CopyToAsync(target).GetAwaiter().GetResult();
-        Log.Information("Downloaded {Url} -> {Path} ({Bytes:N0} bytes)", url, destinationPath, target.Length);
+        using var handler = new SocketsHttpHandler();
+        new ProvisioningDownload()
+            .DownloadAsync(handler, new Uri(url), destinationPath, ProvisioningDownload.DefaultInactivityLimit, CancellationToken.None)
+            .GetAwaiter()
+            .GetResult();
+        Log.Information("Downloaded {Url} -> {Path} ({Bytes:N0} bytes)", url, destinationPath, new FileInfo(destinationPath).Length);
     }
 
 }

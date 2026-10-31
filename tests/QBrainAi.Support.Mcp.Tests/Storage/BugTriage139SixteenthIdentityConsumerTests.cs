@@ -162,6 +162,8 @@ public sealed class BugTriage139SixteenthIdentityConsumerTests
     /// Verifies a real local symbolic-link alias remains lexical on the synchronous surface instead
     /// of triggering uncancellable physical traversal.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void SynchronousIdentitySurface_LocalSymbolicLink_RemainsLexical()
     {
@@ -287,10 +289,12 @@ public sealed class BugTriage139SixteenthIdentityConsumerTests
 
     /// <summary>
     /// Verifies persisted opaque workspace identifiers retain a deterministic lexical key and never
-    /// enter the physical filesystem resolver.
+    /// enter the physical filesystem resolver. The key carries the running host's platform, so the cases
+    /// live in the Windows and Linux integration classes below (operator 2026-10-19: "Integration +
+    /// Platform (Recommended)"; TR-MCP-USECASE-019 AC-008).
     /// </summary>
-    [Fact]
-    public async Task PersistedOpaqueWorkspaceId_UsesLexicalIdentityWithoutPhysicalResolver()
+    /// <param name="expectedKey">Storage key the requirement defines for the running host.</param>
+    internal static async Task AssertPersistedOpaqueWorkspaceIdAsync(string expectedKey)
     {
         const string workspaceId = "ws:test";
         var resolverField = typeof(WorkspaceIdentityPath).GetField(
@@ -323,19 +327,19 @@ public sealed class BugTriage139SixteenthIdentityConsumerTests
             resolverField.SetValue(null, null);
         }
 
-        var expectedKey = OperatingSystem.IsWindows()
-            ? "windows:WS:TEST"
-            : "case-sensitive:ws:test";
         Assert.Equal(expectedKey, storageKey);
         Assert.Equal(0, Volatile.Read(ref invocations));
     }
 
     /// <summary>
     /// Verifies a logical identifier containing Windows separators cannot reach the native-open
-    /// boundary while a genuinely rooted path still uses the asynchronous physical resolver.
+    /// boundary while a genuinely rooted path still uses the asynchronous physical resolver. The result
+    /// carries the running host's platform, so the cases live in the Windows and Linux integration
+    /// classes below (TR-MCP-USECASE-019 AC-008).
     /// </summary>
-    [Fact]
-    public async Task OpaqueWorkspaceIdentity_DoesNotEnterNativeBoundary()
+    /// <param name="expectedPath">Normalized path the requirement defines for the running host.</param>
+    /// <param name="expectedKey">Storage key the requirement defines for the running host.</param>
+    internal static async Task AssertOpaqueIdentityOutsideNativeBoundaryAsync(string expectedPath, string expectedKey)
     {
         const string logicalIdentity = @"ws:\test";
         var resolverField = typeof(WorkspaceIdentityPath).GetField(
@@ -367,14 +371,48 @@ public sealed class BugTriage139SixteenthIdentityConsumerTests
             resolverField.SetValue(null, null);
         }
 
-        var expectedPath = OperatingSystem.IsWindows()
-            ? @"ws:\test"
-            : logicalIdentity;
-        var expectedKey = OperatingSystem.IsWindows()
-            ? @"windows:WS:\TEST"
-            : $"case-sensitive:{logicalIdentity}";
         Assert.Equal(expectedPath, resolution.NormalizedPath);
         Assert.Equal(expectedKey, resolution.StorageKey);
         Assert.Equal(0, Volatile.Read(ref invocations));
     }
+}
+
+/// <summary>
+/// TEST-MCP-USECASE-020-AC001: opaque workspace identity on a Windows host keeps the Windows-platform
+/// key (TR-MCP-USECASE-019 AC-008, TR-MCP-NUKE-019).
+/// </summary>
+[Collection(nameof(WorkspaceIdentityNativeProcessStateCollection))]
+[Trait("Category", "Integration")]
+[Trait("Platform", "Windows")]
+public sealed class BugTriage139SixteenthIdentityConsumerWindowsTests
+{
+    /// <summary>A persisted opaque identifier keeps its lexical Windows-platform key without the physical resolver.</summary>
+    [Fact]
+    public Task PersistedOpaqueWorkspaceId_UsesLexicalIdentityWithoutPhysicalResolver() =>
+        BugTriage139SixteenthIdentityConsumerTests.AssertPersistedOpaqueWorkspaceIdAsync("windows:WS:TEST");
+
+    /// <summary>A logical identifier with Windows separators stays outside the native-open boundary.</summary>
+    [Fact]
+    public Task OpaqueWorkspaceIdentity_DoesNotEnterNativeBoundary() =>
+        BugTriage139SixteenthIdentityConsumerTests.AssertOpaqueIdentityOutsideNativeBoundaryAsync(@"ws:\test", @"windows:WS:\TEST");
+}
+
+/// <summary>
+/// TEST-MCP-USECASE-020-AC001: opaque workspace identity on a Linux host keeps the case-sensitive key
+/// (TR-MCP-USECASE-019 AC-008, TR-MCP-NUKE-019).
+/// </summary>
+[Collection(nameof(WorkspaceIdentityNativeProcessStateCollection))]
+[Trait("Category", "Integration")]
+[Trait("Platform", "Linux")]
+public sealed class BugTriage139SixteenthIdentityConsumerLinuxTests
+{
+    /// <summary>A persisted opaque identifier keeps its lexical case-sensitive key without the physical resolver.</summary>
+    [Fact]
+    public Task PersistedOpaqueWorkspaceId_UsesLexicalIdentityWithoutPhysicalResolver() =>
+        BugTriage139SixteenthIdentityConsumerTests.AssertPersistedOpaqueWorkspaceIdAsync("case-sensitive:ws:test");
+
+    /// <summary>A logical identifier with Windows separators stays outside the native-open boundary.</summary>
+    [Fact]
+    public Task OpaqueWorkspaceIdentity_DoesNotEnterNativeBoundary() =>
+        BugTriage139SixteenthIdentityConsumerTests.AssertOpaqueIdentityOutsideNativeBoundaryAsync(@"ws:\test", @"case-sensitive:ws:\test");
 }

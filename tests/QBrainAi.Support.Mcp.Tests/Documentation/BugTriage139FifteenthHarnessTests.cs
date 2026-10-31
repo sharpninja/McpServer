@@ -7,6 +7,7 @@ namespace QBrainAi.Support.Mcp.Tests.Documentation;
 /// TEST-MCP-USECASE-019: Fifteenth-review consumer and deterministic-build contract tests.
 /// </summary>
 [Collection(RepositoryRootProcessStateCollection.Name)]
+[Trait("Category", "Integration")]
 public sealed class BugTriage139FifteenthHarnessTests
 {
 
@@ -14,21 +15,16 @@ public sealed class BugTriage139FifteenthHarnessTests
     /// TEST-MCP-USECASE-019-AC005: Deterministic builds must retain an explicit checkout anchor and
     /// copy Agent Help fixtures beside the external test assembly without an environment override.
     /// </summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void DeterministicBuild_EmbedsRepositoryRootAndCopiesAgentHelpFixtures()
     {
-        var metadata = typeof(BugTriage139FifteenthHarnessTests).Assembly
-            .GetCustomAttributes<AssemblyMetadataAttribute>()
-            .SingleOrDefault(attribute =>
-                string.Equals(
-                    attribute.Key,
-                    "McpRepositoryRoot",
-                    StringComparison.Ordinal));
-        Assert.NotNull(metadata);
-        Assert.False(string.IsNullOrWhiteSpace(metadata!.Value));
+        // The build metadata is read once, in the shared locator (DRY).
+        var metadataRoot = QBrainAi.Tests.Shared.TestRepositoryRoot.BuildMetadataRoot;
+        Assert.False(string.IsNullOrWhiteSpace(metadataRoot));
         Assert.True(
-            File.Exists(Path.Combine(metadata.Value!, "QBrainAi.sln")),
-            metadata.Value);
+            File.Exists(Path.Combine(metadataRoot!, "QBrainAi.sln")),
+            metadataRoot);
 
         var fixture = Path.Combine(
             AppContext.BaseDirectory,
@@ -43,6 +39,7 @@ public sealed class BugTriage139FifteenthHarnessTests
     /// TEST-MCP-USECASE-020: The compiled test inventory must contain only the host-applicable
     /// native boundary tests, with an exact count rather than source-text substitutes.
     /// </summary>
+    /// <remarks>Integration: compares the compiled native-test inventory with the actual running host (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public void PlatformNativeTests_CompiledInventoryMatchesHost()
     {

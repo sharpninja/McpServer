@@ -1,0 +1,267 @@
+[
+  {
+    "Run": "hv-ug-r5-sandbox-test-1",
+    "Projects": [
+      {
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r5-sandbox-test-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+        "Sha256": "5FC82DBEA3FC2A9691BAFD92DD7D79C9DDCA1E02B2CEE6FD385ADD66C9F558D4",
+        "Total": 3135,
+        "Executed": 3135,
+        "Passed": 3135,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "NonPassResults": []
+      },
+      {
+        "Project": "QBrainAi.Client.Tests",
+        "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r5-sandbox-test-1/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+        "Sha256": "489D84B2B4C422175BF1DB411A16111AF6C5B8F941A2D46C2DCC2DB0250CC50B",
+        "Total": 306,
+        "Executed": 306,
+        "Passed": 306,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "NonPassResults": []
+      },
+      {
+        "Project": "QBrainAi.Cqrs.Tests",
+        "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r5-sandbox-test-1/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+        "Sha256": "3C35AC026637C5E87CB002E50DF57F4AFC6D07862DC84A50238EA6E003389135",
+        "Total": 33,
+        "Executed": 33,
+        "Passed": 33,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "NonPassResults": []
+      },
+      {
+        "Project": "QBrainAi.Launcher.Tests",
+        "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r5-sandbox-test-1/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+        "Sha256": "02D97CFD188DB8A1EB9CE7C3A543599DF495D8A8CCEA862DFE4373DF22266432",
+        "Total": 20,
+        "Executed": 20,
+        "Passed": 20,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "NonPassResults": []
+      },
+      {
+        "Project": "QBrainAi.McpAgent.Tests",
+        "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r5-sandbox-test-1/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+        "Sha256": "6FB1D042F1E24051E28E9800FD76E7998D15A81545DD0E898C30905CE0B31478",
+        "Total": 64,
+        "Executed": 64,
+        "Passed": 64,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "NonPassResults": []
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r5-sandbox-test-1/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+        "Sha256": "136F33E00B5846CC10F0BA8995867598E90B1F34F4210FA8EC334EAFC69BD592",
+        "Total": 865,
+        "Executed": 865,
+        "Passed": 865,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "NonPassResults": []
+      },
+      {
+        "Project": "QBrainAi.QBAgent.Tests",
+        "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r5-sandbox-test-1/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+        "Sha256": "5E26B907106035A41185A5361A083075580D37AD18C652021752DFDAD0C79F8E",
+        "Total": 94,
+        "Executed": 94,
+        "Passed": 94,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "NonPassResults": []
+      }
+    ],
+    "Total": 4517.0,
+    "Passed": 4517.0,
+    "Failed": 0.0,
+    "NotExecuted": 0.0
+  },
+  {
+    "Run": "hv-ug-r5-hostile-test-1",
+    "Projects": [
+      {
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r5-hostile-test-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+        "Sha256": "BDE91DB0D45BC9E50E7AC922570F1DE79CEA3D4F029F09DCB712B42C768BE3EA",
+        "Total": 3135,
+        "Executed": 3135,
+        "Passed": 3135,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "NonPassResults": []
+      },
+      {
+        "Project": "QBrainAi.Client.Tests",
+        "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r5-hostile-test-1/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+        "Sha256": "C2E6ED00C910E0C0DE6F6F5825449FC06D165771725B0FE51D65FF694688B90C",
+        "Total": 306,
+        "Executed": 306,
+        "Passed": 306,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "NonPassResults": []
+      },
+      {
+        "Project": "QBrainAi.Cqrs.Tests",
+        "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r5-hostile-test-1/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+        "Sha256": "80130557C1B0EAB4754330CE6CD74DAC2AAD7B5072B7F891E08A9C0083A36369",
+        "Total": 33,
+        "Executed": 33,
+        "Passed": 33,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "NonPassResults": []
+      },
+      {
+        "Project": "QBrainAi.Launcher.Tests",
+        "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r5-hostile-test-1/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+        "Sha256": "BED42CF4DA53D65E82E3FB39EB9E3F922ED502CB8D33FC28AAE0F63C1B91C8B0",
+        "Total": 20,
+        "Executed": 20,
+        "Passed": 20,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "NonPassResults": []
+      },
+      {
+        "Project": "QBrainAi.McpAgent.Tests",
+        "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r5-hostile-test-1/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+        "Sha256": "D53930B5628F54EC9EECCDF76890774B822E3E682944DAD973CDD9F6BEDD3DE0",
+        "Total": 64,
+        "Executed": 64,
+        "Passed": 64,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "NonPassResults": []
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r5-hostile-test-1/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+        "Sha256": "72EBF3ECAA2B591F09B2E600812785D8BE20EEC0733704C04F6689165D9CA6A7",
+        "Total": 865,
+        "Executed": 865,
+        "Passed": 865,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "NonPassResults": []
+      },
+      {
+        "Project": "QBrainAi.QBAgent.Tests",
+        "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r5-hostile-test-1/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+        "Sha256": "3DEA29ECE5D3ADD78A8FE658AE0C03695F10A8BE19BE11E97AD500A0F7CCC1B5",
+        "Total": 94,
+        "Executed": 94,
+        "Passed": 94,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "NonPassResults": []
+      }
+    ],
+    "Total": 4517.0,
+    "Passed": 4517.0,
+    "Failed": 0.0,
+    "NotExecuted": 0.0
+  },
+  {
+    "Run": "hv-ug-r5-hostileprojection-test-1",
+    "Projects": [
+      {
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r5-hostileprojection-test-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+        "Sha256": "E5DEEC58FE1D2C8E8733672222377021B9C75ABDB59255ED75D67D95B2049F33",
+        "Total": 3135,
+        "Executed": 3135,
+        "Passed": 3134,
+        "Failed": 1,
+        "NotExecuted": 0,
+        "NonPassResults": [
+          {
+            "Name": "QBrainAi.Support.Mcp.Tests.Options.ProductAliasCompatibilityTests.ProjectCanonicalSection_EnvironmentAndCommandLineBeatFileQBrainAi",
+            "Outcome": "Failed",
+            "Message": "Assert.Equal() Failure: Strings differ\n            ↓ (pos 1)\nExpected: \"/myrepo\"\nActual:   \"/hostile-config-probe\"\n            ↑ (pos 1)",
+            "StackTrace": "   at QBrainAi.Support.Mcp.Tests.Options.ProductAliasCompatibilityTests.ProjectCanonicalSection_EnvironmentAndCommandLineBeatFileQBrainAi() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs:line 90\n   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)\n   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)"
+          }
+        ]
+      },
+      {
+        "Project": "QBrainAi.Client.Tests",
+        "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r5-hostileprojection-test-1/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+        "Sha256": "E9E9A1C8B8A99CD4F25BB2D3E5FD37D4EE2BC54F16BC7A26D4B524D1944B1B8E",
+        "Total": 306,
+        "Executed": 306,
+        "Passed": 306,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "NonPassResults": []
+      },
+      {
+        "Project": "QBrainAi.Cqrs.Tests",
+        "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r5-hostileprojection-test-1/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+        "Sha256": "B06EEFC6538F232DC671A9446915FAAD9C096014666CB625C5E47D461B71EFD0",
+        "Total": 33,
+        "Executed": 33,
+        "Passed": 33,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "NonPassResults": []
+      },
+      {
+        "Project": "QBrainAi.Launcher.Tests",
+        "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r5-hostileprojection-test-1/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+        "Sha256": "A956E22EF8D46712E13A4552CEACF7D7A5CF5FD55F5971B5520B5DCEF1A44E83",
+        "Total": 20,
+        "Executed": 20,
+        "Passed": 20,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "NonPassResults": []
+      },
+      {
+        "Project": "QBrainAi.McpAgent.Tests",
+        "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r5-hostileprojection-test-1/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+        "Sha256": "208F1DC94336204318178D87BB97BF946ACF349B8ABE3F930710C00EE7505AF9",
+        "Total": 64,
+        "Executed": 64,
+        "Passed": 64,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "NonPassResults": []
+      },
+      {
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r5-hostileprojection-test-1/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+        "Sha256": "ECE54C3C83F05315F24F5B10BAADF3D74156EEBD9E2F5765B9FF36D4BBA8E3ED",
+        "Total": 865,
+        "Executed": 865,
+        "Passed": 865,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "NonPassResults": []
+      },
+      {
+        "Project": "QBrainAi.QBAgent.Tests",
+        "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r5-hostileprojection-test-1/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+        "Sha256": "902C6FC0028ABDD87D85711304BCEF05DFD9E34FAA1AA3777664E21AD2D6DEB3",
+        "Total": 94,
+        "Executed": 94,
+        "Passed": 94,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "NonPassResults": []
+      }
+    ],
+    "Total": 4517.0,
+    "Passed": 4516.0,
+    "Failed": 1.0,
+    "NotExecuted": 0.0
+  }
+]

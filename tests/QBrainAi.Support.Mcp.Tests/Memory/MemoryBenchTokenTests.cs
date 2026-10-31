@@ -3,11 +3,13 @@ using QBrainAi.Support.Mcp.Services;
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018: Token accounting is the primary bench metric.
+/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018 (historical): Token accounting is the primary bench metric.
 /// </summary>
 public sealed class MemoryBenchTokenTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-11: Mean/median tokens are reported per plugin × condition.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void ReportsMeanMedianTokens_ByPluginAndCondition()
     {
@@ -17,6 +19,8 @@ public sealed class MemoryBenchTokenTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-34: Token source is host-reported or a named estimator.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Source_HostReportedOrDocumentedEstimator()
     {
@@ -32,6 +36,8 @@ public sealed class MemoryBenchTokenTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-35: tokens_total equals tokens_in + tokens_out.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Defines_InOutTotal()
     {
@@ -47,6 +53,8 @@ public sealed class MemoryBenchTokenTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-36: Injection tokens are charged only on with_memory cells.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Injection_CountedOnlyWithMemory()
     {
@@ -59,6 +67,8 @@ public sealed class MemoryBenchTokenTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-37: Tool payloads are counted with the same rule on both conditions.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void ToolPayloads_CountedConsistently()
     {
@@ -71,6 +81,8 @@ public sealed class MemoryBenchTokenTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-39: Per-prompt token delta is with_memory minus without_memory.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void PerPrompt_TokenDelta()
     {
@@ -83,6 +95,8 @@ public sealed class MemoryBenchTokenTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-41: Failed correctness still records tokens and drops efficiency use.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void CorrectnessGate_TokensStillRecorded()
     {
@@ -108,6 +122,8 @@ public sealed class MemoryBenchTokenTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-42: Efficiency ratio is labeled secondary and does not replace tokens.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void EfficiencyRatio_SecondaryOnly()
     {
@@ -121,6 +137,8 @@ public sealed class MemoryBenchTokenTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-43: Stub/recorded cells still emit token fields.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void StubMode_RequiresTokenFields()
     {
@@ -134,6 +152,8 @@ public sealed class MemoryBenchTokenTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-018-44: NEG/SAFE record tokens and mandatory pass/fail under both conditions.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void SafetyPrompts_TokensAndPassFail()
     {

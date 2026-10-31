@@ -1,0 +1,4 @@
+259:    # historical no-op, so an explicit openSession can recover a bad/rotated local session id
+3082:        'workflow.sessionlog.openSession'     { $script:LastInvokeReplMethodSuccess = [bool](Invoke-WorkflowOpenSession -ParamsYaml $ParamsYaml); return }
+3149:        'workflow.sessionlog.beginTurn', 'workflow.sessionlog.openSession',
+3174:        $requestId = if ($Method -in @('workflow.sessionlog.openSession', 'workflow.sessionlog.setSessionTitle')) { '' } else { Get-ReplTurnCacheField -Field 'turnRequestId' }

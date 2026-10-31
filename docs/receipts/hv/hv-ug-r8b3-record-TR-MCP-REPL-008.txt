@@ -1,0 +1,34 @@
+type: result
+payload:
+  requestId: req-20261029T033719Z-d675
+  result:
+    id: TR-MCP-REPL-008
+    title: ''
+    description: >-
+      `MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(workspacePathOverride, markerPathOverride, out options, out error)` returns success/failure plus a human-readable diagnostic. The diagnostic enumerates every directory walked, names the marker file when found, and distinguishes "not found" from "malformed" and "signature mismatch". `FindMarkerFile(startPath, out searchedPaths)` exposes the same path list for callers that want raw enumeration. The legacy parameterless `Resolve()` remains for back-compat.
+
+      **Covered by:** FR: FR-MCP-REPL-007; TEST: TEST-MCP-REPL-007-1, TEST-MCP-REPL-007-2, TEST-MCP-REPL-007-3
+    status: pending
+    priority: medium
+    area: MCP
+    subarea: REPL
+    acceptanceCriteria:
+    - id: AC-1
+      text: 'FindMarkerFile_NoMarkerOnTheWayUp_ListsEveryFolderToTheRoot (unit test, in-memory file system): with no marker in the start folder or any folder above it, FindMarkerFile returns no marker and its searched paths are every folder from the start to the file system root, in walk order (start, its parent, and so on to the root).'
+      isSatisfied: false
+    - id: AC-2
+      text: "FindMarkerFile_MarkerInParent_IsFound (unit test, in-memory file system): with a marker only in a parent folder, FindMarkerFile returns that parent's marker, as intended (walking up to a parent workspace is the designed behavior), and its searched paths end at that parent."
+      isSatisfied: false
+    - id: AC-3
+      text: "FindMarkerFile_MarkersInStartAndParent_NearestWins (unit test, in-memory file system): with markers in the start folder and in a parent folder, FindMarkerFile returns the start folder's marker and searches only the start folder."
+      isSatisfied: false
+    - id: AC-4
+      text: 'TryResolveWithDiagnostics_NoMarkerOnTheWayUp_NamesEveryFolderSearched (unit test, in-memory file system): with no marker in the start folder or any folder above it, TryResolveWithDiagnostics returns false and its error names the marker file and every folder searched, from the start to the file system root.'
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-29T03:37:21.1145658+00:00
+    updatedAt: 2026-10-29T03:37:21.1146785+00:00
+  deprecated: true
+
+---
+

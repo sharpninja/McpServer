@@ -1,0 +1,26 @@
+{
+  "name": "ug-r7-binding-1",
+  "target": "Test",
+  "extraArgs": [
+    "--test-run-id",
+    "ug-r7-binding-1"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "3a607fb17dba72c6c7f920a6067b1ca191ec86fb",
+  "dirtyPaths": [
+    " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariables.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs"
+  ],
+  "startedLocal": "2026-10-26T09:47:46",
+  "startedUtc": "2026-10-26T14:47:46.5378965Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r7/ug-r7-binding-1.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r7/ug-r7-binding-1.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r7/ug-r7-binding-1.exit.txt"
+}

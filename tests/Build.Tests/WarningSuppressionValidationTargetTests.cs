@@ -261,6 +261,8 @@ public sealed class WarningSuppressionValidationTargetTests
     /// TEST-MCP-AIUNIT-002: W9 regression coverage proves CA1031 broad-catch
     /// suppressions are removed from the live repository suppression inventory.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Scan_CurrentRepository_HasNoCA1031Suppressions()
     {
@@ -278,6 +280,8 @@ public sealed class WarningSuppressionValidationTargetTests
     /// TEST-MCP-AIUNIT-002: W10 regression coverage proves stale URI-design
     /// suppressions are removed from the live repository suppression inventory.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Scan_CurrentRepository_HasNoCA1054OrCA1056Suppressions()
     {
@@ -296,6 +300,8 @@ public sealed class WarningSuppressionValidationTargetTests
     /// TEST-MCP-AIUNIT-002: W11 regression coverage proves stale externally-visible
     /// type suppressions are removed from the live repository suppression inventory.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Scan_CurrentRepository_HasNoCA1515Suppressions()
     {
@@ -313,6 +319,8 @@ public sealed class WarningSuppressionValidationTargetTests
     /// TEST-MCP-AIUNIT-002: W12 regression coverage proves stale sync-in-async
     /// suppressions are removed from the live repository suppression inventory.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Scan_CurrentRepository_HasNoCA1849Suppressions()
     {
@@ -330,6 +338,8 @@ public sealed class WarningSuppressionValidationTargetTests
     /// TEST-MCP-AIUNIT-002: W13 regression coverage proves stale external-path
     /// suppressions are removed from the live repository suppression inventory.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Scan_CurrentRepository_HasNoCA3003Suppressions()
     {
@@ -347,6 +357,8 @@ public sealed class WarningSuppressionValidationTargetTests
     /// TEST-MCP-AIUNIT-002: W14 regression coverage proves stale missing-XML-doc
     /// suppressions are removed from the live repository suppression inventory.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Scan_CurrentRepository_HasNoCS1591Suppressions()
     {
@@ -364,6 +376,8 @@ public sealed class WarningSuppressionValidationTargetTests
     /// TEST-MCP-AIUNIT-002: W15 regression coverage proves CA2227 suppressions remain
     /// only on serializer DTO compatibility files that still require mutable setters.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Scan_CurrentRepository_HasOnlySerializerCompatibilityCA2227Suppressions()
     {
@@ -387,6 +401,8 @@ public sealed class WarningSuppressionValidationTargetTests
     /// TEST-MCP-AIUNIT-002: W18 regression coverage proves generated provider
     /// migrations do not reintroduce CS0612/CS0618 pragma pairs.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Scan_CurrentRepository_HasNoGeneratedMigrationObsoleteWarningPragmas()
     {

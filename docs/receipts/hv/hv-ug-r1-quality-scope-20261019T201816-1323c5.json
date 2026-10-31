@@ -1,0 +1,16 @@
+{
+  "TimestampUtc": "2026-10-20T01:18:16.8873630Z",
+  "TimestampLocal": "2026-10-19T20:18:16",
+  "Mode": "Search",
+  "Arguments": [
+    "-n",
+    "AC-1|ac-21|NU190",
+    "docs/receipts/hv/hv-ug-r1-store-TR-MCP-QUALITY-001.txt",
+    "Directory.Build.props",
+    "Directory.Packages.props"
+  ],
+  "Offset": 0,
+  "Count": 50,
+  "ExitCode": 0,
+  "Output": "Directory.Packages.props:91:    <!-- TR-MCP-QUALITY-001 ac-21: advisory-patched versions (GHSA-2fmv-rv2c-59x7, GHSA-846f-f764-76mx, GHSA-7hqp-7c5m-4vq6, GHSA-c399-9853-6jmj, GHSA-r955-8q5j-3h83) -->\ndocs/receipts/hv/hv-ug-r1-store-TR-MCP-QUALITY-001.txt:96:    - id: ac-21\ndocs/receipts/hv/hv-ug-r1-store-TR-MCP-QUALITY-001.txt:97:      text: NU1901, NU1902, NU1903, and NU1904 are not approved. Vulnerable package advisories must be resolved by updating to the patched versions the advisories name, with a clean NuGet vulnerability audit on every lab host (LAB-OMARCHY and PAYTON-LEGION2), never by suppression, audit settings, or a build override.\ndocs/receipts/hv/hv-ug-r1-store-TR-MCP-QUALITY-001.txt:99:      evidence: 'REOPENED 2026-10-19 (operator: \"Gotta use the recommended packages.\"): develop ace70daa pins System.Security.Cryptography.Xml 10.0.10 (Directory.Packages.props:91), which brings System.Security.Cryptography.Pkcs 10.0.10; on PAYTON-LEGION2 the restore of build/_build.csproj fails NU1902 (GHSA-2fmv-rv2c-59x7) and NU1903 (GHSA-846f-f764-76mx, GHSA-7hqp-7c5m-4vq6, GHSA-c399-9853-6jmj, GHSA-r955-8q5j-3h83), run unit-green-win-baseline-20261019T1433. All five advisories name 10.0.13. Text strengthened from \"NU1901 and NU1903 are not approved. Vulnerable package advisories must be resolved by dependency updates and a clean vulnerability scan.\" Historical evidence retained: Directory.Packages.props transitive pins, Directory.Build.props suppression removal, and dotnet list McpServer.sln package --vulnerable --include-transitive.'"
+}

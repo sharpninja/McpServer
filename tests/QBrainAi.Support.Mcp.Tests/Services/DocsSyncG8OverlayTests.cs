@@ -9,8 +9,11 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 
 /// <summary>
 /// Overlay G8: wiki export through shipped <see cref="RequirementsDocumentService.GenerateWikiAsync"/>
-/// without --include-dump. TEST-MCP-WIKIEXPORT default no-flag behavior.
+/// without --include-dump. TEST-MCP-WIKIEXPORT default no-flag behavior. The export captures a real
+/// temporary export root, so the class is an integration test on every host (TR-MCP-USECASE-018 AC-006,
+/// TR-MCP-NUKE-019).
 /// </summary>
+[Trait("Category", "Integration")]
 public sealed class DocsSyncG8OverlayTests : IDisposable
 {
     private readonly string _tempRoot = Path.Combine(Path.GetTempPath(), "g8-wiki-" + Guid.NewGuid().ToString("N"));
@@ -44,6 +47,7 @@ public sealed class DocsSyncG8OverlayTests : IDisposable
     }
 
     /// <summary>G8: default GenerateWikiAsync writes Azure and GitHub wiki folders and does not write mcp-wiki-dump.json.</summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
     [Fact]
     public async Task G8_GenerateWikiAsync_Default_WritesWikiFoldersWithoutDump()
     {

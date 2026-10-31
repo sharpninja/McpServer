@@ -10,6 +10,8 @@ public sealed class SyncAgentPluginsChecksumTests
     /// The official-plugin inventory uses the committed sync path, whose generated lib copies
     /// share SHA256 with plugins/core/lib-ps.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore()
     {

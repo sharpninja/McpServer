@@ -1,0 +1,5 @@
+{
+  "Id": "FR-MCP-USECASE-016-recheck",
+  "Result": "not_found",
+  "Evidence": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261020T223150Z-4665\n  code: not_found\n  message: FR 'FR-MCP-USECASE-016' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getFr\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n"
+}

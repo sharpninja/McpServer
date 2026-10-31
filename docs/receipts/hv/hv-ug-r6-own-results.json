@@ -1,0 +1,388 @@
+[
+  {
+    "runId": "hv-ug-r6-sandbox-hostile-1",
+    "total": 4558.0,
+    "passed": 4558.0,
+    "failed": 0.0,
+    "notExecuted": 0.0,
+    "projects": [
+      {
+        "project": "QBrainAi.Support.Mcp.Tests",
+        "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-sandbox-hostile-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+        "sha256": "6E89511FFDF6F39F5BF0CD95543F062CDAE26AAE3DF4BA9D27A10705A5B61A3E",
+        "total": 3176,
+        "passed": 3176,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualCount": 3176,
+        "failures": []
+      },
+      {
+        "project": "QBrainAi.Client.Tests",
+        "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-sandbox-hostile-1/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+        "sha256": "A9DF10DDCA8A1972F6E418FA2E08ECF06F441A3637BDE874EB477013BF45882F",
+        "total": 306,
+        "passed": 306,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualCount": 306,
+        "failures": []
+      },
+      {
+        "project": "QBrainAi.Cqrs.Tests",
+        "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-sandbox-hostile-1/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+        "sha256": "32256DCA97D37BE57553B942B2FB17BD6320CE370C4AC8A84244CBCD7FB5D646",
+        "total": 33,
+        "passed": 33,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualCount": 33,
+        "failures": []
+      },
+      {
+        "project": "QBrainAi.Launcher.Tests",
+        "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-sandbox-hostile-1/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+        "sha256": "54FF5D7510D9B1ED971506AA36C1A8910B84BB3DF2A55D14C58F39AF89BFE37D",
+        "total": 20,
+        "passed": 20,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualCount": 20,
+        "failures": []
+      },
+      {
+        "project": "QBrainAi.McpAgent.Tests",
+        "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-sandbox-hostile-1/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+        "sha256": "6137FEC0C686796307A9E88DDBE1121D0FDB37A4993BE294287087C55048C9E0",
+        "total": 64,
+        "passed": 64,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualCount": 64,
+        "failures": []
+      },
+      {
+        "project": "QBrainAi.Repl.Core.Tests",
+        "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-sandbox-hostile-1/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+        "sha256": "ABFA37113BBDED69BB14CBC5B58E39EB83790D09BD64749C0587FBCB61454AD8",
+        "total": 865,
+        "passed": 865,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualCount": 865,
+        "failures": []
+      },
+      {
+        "project": "QBrainAi.QBAgent.Tests",
+        "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-sandbox-hostile-1/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+        "sha256": "B1DD80FCE83B0A99ED7139F09C22393F0942849BECF03EAC8E5A351C0974FE33",
+        "total": 94,
+        "passed": 94,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualCount": 94,
+        "failures": []
+      }
+    ]
+  },
+  {
+    "runId": "hv-ug-r6-hostile-blocked-temp-1",
+    "total": 4558.0,
+    "passed": 4551.0,
+    "failed": 7.0,
+    "notExecuted": 0.0,
+    "projects": [
+      {
+        "project": "QBrainAi.Support.Mcp.Tests",
+        "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-blocked-temp-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+        "sha256": "DFEAFCBF5D0F8FD2468AF819F1B338E2F5A66DA91A8883D4F6922312AD606F98",
+        "total": 3176,
+        "passed": 3169,
+        "failed": 7,
+        "notExecuted": 0,
+        "actualCount": 3176,
+        "failures": [
+          {
+            "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_ReturnsStdoutInsteadOfThrowing",
+            "outcome": "Failed",
+            "message": "System.IO.IOException : The file '/tmp/hv-ug-r6-hostile-blocked-temp-1/temp-path-is-a-file' already exists.",
+            "stack": "   at System.IO.Directory.CreateDirectory(String path)\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.EnsureSharedTempDirectory(String path) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 452\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.ResolveTempDirectory() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 420\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.CompleteAsync(BrainSlotDefinitionEntity slot, String input, Nullable`1 temperature, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 41\n   at QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_ReturnsStdoutInsteadOfThrowing() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:line 193\n--- End of stack trace from previous location ---"
+          },
+          {
+            "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_EmptyStdout_DoesNotThrow",
+            "outcome": "Failed",
+            "message": "System.IO.IOException : The file '/tmp/hv-ug-r6-hostile-blocked-temp-1/temp-path-is-a-file' already exists.",
+            "stack": "   at System.IO.Directory.CreateDirectory(String path)\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.EnsureSharedTempDirectory(String path) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 452\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.ResolveTempDirectory() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 420\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.CompleteAsync(BrainSlotDefinitionEntity slot, String input, Nullable`1 temperature, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 41\n   at QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_EmptyStdout_DoesNotThrow() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:line 210\n--- End of stack trace from previous location ---"
+          },
+          {
+            "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_CodexSecondCall_ResumesExtractedThread",
+            "outcome": "Failed",
+            "message": "System.IO.IOException : The file '/tmp/hv-ug-r6-hostile-blocked-temp-1/temp-path-is-a-file' already exists.",
+            "stack": "   at System.IO.Directory.CreateDirectory(String path)\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.EnsureSharedTempDirectory(String path) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 452\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.ResolveTempDirectory() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 420\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.CompleteAsync(BrainSlotDefinitionEntity slot, String input, Nullable`1 temperature, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 41\n   at QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_CodexSecondCall_ResumesExtractedThread() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:line 555\n--- End of stack trace from previous location ---"
+          },
+          {
+            "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_GrokSecondCall_ResumesSameSession",
+            "outcome": "Failed",
+            "message": "System.IO.IOException : The file '/tmp/hv-ug-r6-hostile-blocked-temp-1/temp-path-is-a-file' already exists.",
+            "stack": "   at System.IO.Directory.CreateDirectory(String path)\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.EnsureSharedTempDirectory(String path) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 452\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.ResolveTempDirectory() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 420\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.CompleteAsync(BrainSlotDefinitionEntity slot, String input, Nullable`1 temperature, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 41\n   at QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_GrokSecondCall_ResumesSameSession() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:line 524\n--- End of stack trace from previous location ---"
+          },
+          {
+            "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.Factory_Create_CliSlot_ReturnsCliClient",
+            "outcome": "Failed",
+            "message": "System.IO.IOException : The file '/tmp/hv-ug-r6-hostile-blocked-temp-1/temp-path-is-a-file' already exists.",
+            "stack": "   at System.IO.Directory.CreateDirectory(String path)\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.EnsureSharedTempDirectory(String path) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 452\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.ResolveTempDirectory() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 420\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.CompleteAsync(BrainSlotDefinitionEntity slot, String input, Nullable`1 temperature, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 41\n   at QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.Factory_Create_CliSlot_ReturnsCliClient() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:line 578\n--- End of stack trace from previous location ---"
+          },
+          {
+            "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_NonZeroExit_StillThrows",
+            "outcome": "Failed",
+            "message": "Assert.Throws() Failure: Exception type was not an exact match\nExpected: typeof(System.InvalidOperationException)\nActual:   typeof(System.IO.IOException)\n---- System.IO.IOException : The file '/tmp/hv-ug-r6-hostile-blocked-temp-1/temp-path-is-a-file' already exists.",
+            "stack": "   at QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_NonZeroExit_StillThrows() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:line 227\n--- End of stack trace from previous location ---\n----- Inner Stack Trace -----\n   at System.IO.Directory.CreateDirectory(String path)\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.EnsureSharedTempDirectory(String path) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 452\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.ResolveTempDirectory() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 420\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.CompleteAsync(BrainSlotDefinitionEntity slot, String input, Nullable`1 temperature, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 41"
+          },
+          {
+            "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_ResumeSessionMissing_RetriesWithoutResume",
+            "outcome": "Failed",
+            "message": "System.IO.IOException : The file '/tmp/hv-ug-r6-hostile-blocked-temp-1/temp-path-is-a-file' already exists.",
+            "stack": "   at System.IO.Directory.CreateDirectory(String path)\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.EnsureSharedTempDirectory(String path) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 452\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.ResolveTempDirectory() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 420\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.CompleteAsync(BrainSlotDefinitionEntity slot, String input, Nullable`1 temperature, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 41\n   at QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_ResumeSessionMissing_RetriesWithoutResume() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:line 253\n--- End of stack trace from previous location ---"
+          }
+        ]
+      },
+      {
+        "project": "QBrainAi.Client.Tests",
+        "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-blocked-temp-1/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+        "sha256": "60C5EFCE981711E90254FEE4FCD02793EE539D4C0475A18DCFF977A36E033060",
+        "total": 306,
+        "passed": 306,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualCount": 306,
+        "failures": []
+      },
+      {
+        "project": "QBrainAi.Cqrs.Tests",
+        "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-blocked-temp-1/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+        "sha256": "90D6E1A2F8CBF3CE89303A4E5269BD211838B5BDB15CCB296A16371D39F4BEAA",
+        "total": 33,
+        "passed": 33,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualCount": 33,
+        "failures": []
+      },
+      {
+        "project": "QBrainAi.Launcher.Tests",
+        "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-blocked-temp-1/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+        "sha256": "E7FD08A801439EE74CBA0D345F5E81959B1DB18897DBAF0E4F70258924A0BCF3",
+        "total": 20,
+        "passed": 20,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualCount": 20,
+        "failures": []
+      },
+      {
+        "project": "QBrainAi.McpAgent.Tests",
+        "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-blocked-temp-1/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+        "sha256": "37205000880DF32E4F6B46ACB521782EA4868FD555F93A37E0D042D0A7A401A2",
+        "total": 64,
+        "passed": 64,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualCount": 64,
+        "failures": []
+      },
+      {
+        "project": "QBrainAi.Repl.Core.Tests",
+        "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-blocked-temp-1/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+        "sha256": "EBC54CDE96DDE3FED28E20BC544B067968441228B4130BB07B731A40F0262EBD",
+        "total": 865,
+        "passed": 865,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualCount": 865,
+        "failures": []
+      },
+      {
+        "project": "QBrainAi.QBAgent.Tests",
+        "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-blocked-temp-1/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+        "sha256": "A245450CA9D9B4BBD9E5EBC8630AA4E192351394995149562A482B62C6731CE5",
+        "total": 94,
+        "passed": 94,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualCount": 94,
+        "failures": []
+      }
+    ]
+  },
+  {
+    "runId": "hv-ug-r6-hostile-cli-temp-2",
+    "total": 4558.0,
+    "passed": 4544.0,
+    "failed": 14.0,
+    "notExecuted": 0.0,
+    "projects": [
+      {
+        "project": "QBrainAi.Support.Mcp.Tests",
+        "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-cli-temp-2/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+        "sha256": "749EF76B2F6CFDBB3819FEF3F09DF7F76E4CDBE217C56DA1CBF97B07DD29EA27",
+        "total": 3176,
+        "passed": 3162,
+        "failed": 14,
+        "notExecuted": 0,
+        "actualCount": 3176,
+        "failures": [
+          {
+            "name": "QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClaudeAgent_UsesClaudePlanModeCommandShape",
+            "outcome": "Failed",
+            "message": "System.IO.IOException : The file '/tmp/hv-ug-r6-hostile-cli-temp-2/temp-path-is-a-file' already exists.",
+            "stack": "   at System.IO.FileSystem.CreateDirectory(String fullPath, UnixFileMode unixCreateMode)\n   at System.IO.Directory.CreateDirectory(String path)\n   at QBrainAi.Support.Mcp.Services.OneShotCliAgentExecutionStrategy.OneShotCliAgentExecutionSession.EnsureSharedTempDirectory(String path) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:line 532\n   at QBrainAi.Support.Mcp.Services.OneShotCliAgentExecutionStrategy.OneShotCliAgentExecutionSession.ResolveSharedTempDirectory() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:line 504\n   at QBrainAi.Support.Mcp.Services.OneShotCliAgentExecutionStrategy.OneShotCliAgentExecutionSession.RunPromptAsync(String prompt, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:line 102\n   at QBrainAi.Support.Mcp.Services.OneShotCliAgentExecutionStrategy.OneShotCliAgentExecutionSession.ReadInitialResponseAsync(CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:line 55\n   at QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClaudeAgent_UsesClaudePlanModeCommandShape() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:line 42\n   at QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClaudeAgent_UsesClaudePlanModeCommandShape() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:line 53\n--- End of stack trace from previous location ---"
+          },
+          {
+            "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.Factory_Create_CliSlot_ReturnsCliClient",
+            "outcome": "Failed",
+            "message": "System.IO.IOException : The file '/tmp/hv-ug-r6-hostile-cli-temp-2/temp-path-is-a-file' already exists.",
+            "stack": "   at System.IO.Directory.CreateDirectory(String path)\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.EnsureSharedTempDirectory(String path) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 452\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.ResolveTempDirectory() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 420\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.CompleteAsync(BrainSlotDefinitionEntity slot, String input, Nullable`1 temperature, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 41\n   at QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.Factory_Create_CliSlot_ReturnsCliClient() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:line 578\n--- End of stack trace from previous location ---"
+          },
+          {
+            "name": "QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClineAgent_UsesClineParameterizedPromptCommandShape",
+            "outcome": "Failed",
+            "message": "System.IO.IOException : The file '/tmp/hv-ug-r6-hostile-cli-temp-2/temp-path-is-a-file' already exists.",
+            "stack": "   at System.IO.FileSystem.CreateDirectory(String fullPath, UnixFileMode unixCreateMode)\n   at System.IO.Directory.CreateDirectory(String path)\n   at QBrainAi.Support.Mcp.Services.OneShotCliAgentExecutionStrategy.OneShotCliAgentExecutionSession.EnsureSharedTempDirectory(String path) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:line 532\n   at QBrainAi.Support.Mcp.Services.OneShotCliAgentExecutionStrategy.OneShotCliAgentExecutionSession.ResolveSharedTempDirectory() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:line 504\n   at QBrainAi.Support.Mcp.Services.OneShotCliAgentExecutionStrategy.OneShotCliAgentExecutionSession.RunPromptAsync(String prompt, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:line 102\n   at QBrainAi.Support.Mcp.Services.OneShotCliAgentExecutionStrategy.OneShotCliAgentExecutionSession.ReadInitialResponseAsync(CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:line 55\n   at QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClineAgent_UsesClineParameterizedPromptCommandShape() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:line 86\n   at QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClineAgent_UsesClineParameterizedPromptCommandShape() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:line 96\n--- End of stack trace from previous location ---"
+          },
+          {
+            "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_EmptyStdout_DoesNotThrow",
+            "outcome": "Failed",
+            "message": "System.IO.IOException : The file '/tmp/hv-ug-r6-hostile-cli-temp-2/temp-path-is-a-file' already exists.",
+            "stack": "   at System.IO.Directory.CreateDirectory(String path)\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.EnsureSharedTempDirectory(String path) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 452\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.ResolveTempDirectory() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 420\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.CompleteAsync(BrainSlotDefinitionEntity slot, String input, Nullable`1 temperature, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 41\n   at QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_EmptyStdout_DoesNotThrow() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:line 210\n--- End of stack trace from previous location ---"
+          },
+          {
+            "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_NonZeroExit_StillThrows",
+            "outcome": "Failed",
+            "message": "Assert.Throws() Failure: Exception type was not an exact match\nExpected: typeof(System.InvalidOperationException)\nActual:   typeof(System.IO.IOException)\n---- System.IO.IOException : The file '/tmp/hv-ug-r6-hostile-cli-temp-2/temp-path-is-a-file' already exists.",
+            "stack": "   at QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_NonZeroExit_StillThrows() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:line 227\n--- End of stack trace from previous location ---\n----- Inner Stack Trace -----\n   at System.IO.Directory.CreateDirectory(String path)\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.EnsureSharedTempDirectory(String path) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 452\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.ResolveTempDirectory() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 420\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.CompleteAsync(BrainSlotDefinitionEntity slot, String input, Nullable`1 temperature, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 41"
+          },
+          {
+            "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_CodexSecondCall_ResumesExtractedThread",
+            "outcome": "Failed",
+            "message": "System.IO.IOException : The file '/tmp/hv-ug-r6-hostile-cli-temp-2/temp-path-is-a-file' already exists.",
+            "stack": "   at System.IO.Directory.CreateDirectory(String path)\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.EnsureSharedTempDirectory(String path) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 452\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.ResolveTempDirectory() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 420\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.CompleteAsync(BrainSlotDefinitionEntity slot, String input, Nullable`1 temperature, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 41\n   at QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_CodexSecondCall_ResumesExtractedThread() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:line 555\n--- End of stack trace from previous location ---"
+          },
+          {
+            "name": "QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithCodexAgent_UsesCodexOneShotCommandShape",
+            "outcome": "Failed",
+            "message": "System.IO.IOException : The file '/tmp/hv-ug-r6-hostile-cli-temp-2/temp-path-is-a-file' already exists.",
+            "stack": "   at System.IO.FileSystem.CreateDirectory(String fullPath, UnixFileMode unixCreateMode)\n   at System.IO.Directory.CreateDirectory(String path)\n   at QBrainAi.Support.Mcp.Services.OneShotCliAgentExecutionStrategy.OneShotCliAgentExecutionSession.EnsureSharedTempDirectory(String path) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:line 532\n   at QBrainAi.Support.Mcp.Services.OneShotCliAgentExecutionStrategy.OneShotCliAgentExecutionSession.ResolveSharedTempDirectory() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:line 504\n   at QBrainAi.Support.Mcp.Services.OneShotCliAgentExecutionStrategy.OneShotCliAgentExecutionSession.RunPromptAsync(String prompt, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:line 102\n   at QBrainAi.Support.Mcp.Services.OneShotCliAgentExecutionStrategy.OneShotCliAgentExecutionSession.ReadInitialResponseAsync(CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:line 55\n   at QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithCodexAgent_UsesCodexOneShotCommandShape() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:line 20\n   at QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithCodexAgent_UsesCodexOneShotCommandShape() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:line 32\n--- End of stack trace from previous location ---"
+          },
+          {
+            "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_ReturnsStdoutInsteadOfThrowing",
+            "outcome": "Failed",
+            "message": "System.IO.IOException : The file '/tmp/hv-ug-r6-hostile-cli-temp-2/temp-path-is-a-file' already exists.",
+            "stack": "   at System.IO.Directory.CreateDirectory(String path)\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.EnsureSharedTempDirectory(String path) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 452\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.ResolveTempDirectory() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 420\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.CompleteAsync(BrainSlotDefinitionEntity slot, String input, Nullable`1 temperature, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 41\n   at QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_ReturnsStdoutInsteadOfThrowing() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:line 193\n--- End of stack trace from previous location ---"
+          },
+          {
+            "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_ResumeSessionMissing_RetriesWithoutResume",
+            "outcome": "Failed",
+            "message": "System.IO.IOException : The file '/tmp/hv-ug-r6-hostile-cli-temp-2/temp-path-is-a-file' already exists.",
+            "stack": "   at System.IO.Directory.CreateDirectory(String path)\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.EnsureSharedTempDirectory(String path) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 452\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.ResolveTempDirectory() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 420\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.CompleteAsync(BrainSlotDefinitionEntity slot, String input, Nullable`1 temperature, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 41\n   at QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_ResumeSessionMissing_RetriesWithoutResume() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:line 253\n--- End of stack trace from previous location ---"
+          },
+          {
+            "name": "QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithGrokAgent_UsesGrokPromptFileCommandShape",
+            "outcome": "Failed",
+            "message": "System.IO.IOException : The file '/tmp/hv-ug-r6-hostile-cli-temp-2/temp-path-is-a-file' already exists.",
+            "stack": "   at System.IO.FileSystem.CreateDirectory(String fullPath, UnixFileMode unixCreateMode)\n   at System.IO.Directory.CreateDirectory(String path)\n   at QBrainAi.Support.Mcp.Services.OneShotCliAgentExecutionStrategy.OneShotCliAgentExecutionSession.EnsureSharedTempDirectory(String path) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:line 532\n   at QBrainAi.Support.Mcp.Services.OneShotCliAgentExecutionStrategy.OneShotCliAgentExecutionSession.ResolveSharedTempDirectory() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:line 504\n   at QBrainAi.Support.Mcp.Services.OneShotCliAgentExecutionStrategy.OneShotCliAgentExecutionSession.RunPromptAsync(String prompt, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:line 102\n   at QBrainAi.Support.Mcp.Services.OneShotCliAgentExecutionStrategy.OneShotCliAgentExecutionSession.ReadInitialResponseAsync(CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:line 55\n   at QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithGrokAgent_UsesGrokPromptFileCommandShape() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:line 63\n   at QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithGrokAgent_UsesGrokPromptFileCommandShape() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:line 76\n--- End of stack trace from previous location ---"
+          },
+          {
+            "name": "QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithOutputCallback_StreamsAgentOutput",
+            "outcome": "Failed",
+            "message": "System.IO.IOException : The file '/tmp/hv-ug-r6-hostile-cli-temp-2/temp-path-is-a-file' already exists.",
+            "stack": "   at System.IO.Directory.CreateDirectory(String path)\n   at QBrainAi.Support.Mcp.Services.CodexCliAgentExecutionStrategy.CodexCliAgentExecutionSession.EnsureSharedTempDirectory(String path) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs:line 454\n   at QBrainAi.Support.Mcp.Services.CodexCliAgentExecutionStrategy.CodexCliAgentExecutionSession.ResolveSharedTempDirectory() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs:line 426\n   at QBrainAi.Support.Mcp.Services.CodexCliAgentExecutionStrategy.CodexCliAgentExecutionSession.RunPromptAsync(String prompt, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs:line 140\n   at QBrainAi.Support.Mcp.Services.CodexCliAgentExecutionStrategy.CodexCliAgentExecutionSession.ReadInitialResponseAsync(CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs:line 93\n   at QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithOutputCallback_StreamsAgentOutput() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:line 152\n   at QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithOutputCallback_StreamsAgentOutput() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:line 157\n--- End of stack trace from previous location ---"
+          },
+          {
+            "name": "QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WhenCodexFails_ReturnsErrorResult",
+            "outcome": "Failed",
+            "message": "System.IO.IOException : The file '/tmp/hv-ug-r6-hostile-cli-temp-2/temp-path-is-a-file' already exists.",
+            "stack": "   at System.IO.Directory.CreateDirectory(String path)\n   at QBrainAi.Support.Mcp.Services.CodexCliAgentExecutionStrategy.CodexCliAgentExecutionSession.EnsureSharedTempDirectory(String path) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs:line 454\n   at QBrainAi.Support.Mcp.Services.CodexCliAgentExecutionStrategy.CodexCliAgentExecutionSession.ResolveSharedTempDirectory() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs:line 426\n   at QBrainAi.Support.Mcp.Services.CodexCliAgentExecutionStrategy.CodexCliAgentExecutionSession.RunPromptAsync(String prompt, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs:line 140\n   at QBrainAi.Support.Mcp.Services.CodexCliAgentExecutionStrategy.CodexCliAgentExecutionSession.ReadInitialResponseAsync(CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs:line 93\n   at QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WhenCodexFails_ReturnsErrorResult() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:line 93\n   at QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WhenCodexFails_ReturnsErrorResult() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:line 96\n--- End of stack trace from previous location ---"
+          },
+          {
+            "name": "QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_GrokSecondCall_ResumesSameSession",
+            "outcome": "Failed",
+            "message": "System.IO.IOException : The file '/tmp/hv-ug-r6-hostile-cli-temp-2/temp-path-is-a-file' already exists.",
+            "stack": "   at System.IO.Directory.CreateDirectory(String path)\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.EnsureSharedTempDirectory(String path) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 452\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.ResolveTempDirectory() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 420\n   at QBrainAi.Support.Mcp.Services.CliBrainSlotChatClient.CompleteAsync(BrainSlotDefinitionEntity slot, String input, Nullable`1 temperature, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:line 41\n   at QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_GrokSecondCall_ResumesSameSession() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:line 524\n--- End of stack trace from previous location ---"
+          },
+          {
+            "name": "QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WhenCodexTimesOut_PreservesPartialStreams",
+            "outcome": "Failed",
+            "message": "System.IO.IOException : The file '/tmp/hv-ug-r6-hostile-cli-temp-2/temp-path-is-a-file' already exists.",
+            "stack": "   at System.IO.Directory.CreateDirectory(String path)\n   at QBrainAi.Support.Mcp.Services.CodexCliAgentExecutionStrategy.CodexCliAgentExecutionSession.EnsureSharedTempDirectory(String path) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs:line 454\n   at QBrainAi.Support.Mcp.Services.CodexCliAgentExecutionStrategy.CodexCliAgentExecutionSession.ResolveSharedTempDirectory() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs:line 426\n   at QBrainAi.Support.Mcp.Services.CodexCliAgentExecutionStrategy.CodexCliAgentExecutionSession.RunPromptAsync(String prompt, CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs:line 140\n   at QBrainAi.Support.Mcp.Services.CodexCliAgentExecutionStrategy.CodexCliAgentExecutionSession.ReadInitialResponseAsync(CancellationToken cancellationToken) in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs:line 93\n   at QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WhenCodexTimesOut_PreservesPartialStreams() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:line 119\n   at QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WhenCodexTimesOut_PreservesPartialStreams() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:line 124\n--- End of stack trace from previous location ---"
+          }
+        ]
+      },
+      {
+        "project": "QBrainAi.Client.Tests",
+        "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-cli-temp-2/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+        "sha256": "FD4D8480FFEA052D8602A1E10DEB6A91B03AC1214DD91FF0153F1B85101E45DF",
+        "total": 306,
+        "passed": 306,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualCount": 306,
+        "failures": []
+      },
+      {
+        "project": "QBrainAi.Cqrs.Tests",
+        "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-cli-temp-2/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+        "sha256": "55FF51A380F490D996A05A7885703FD8CE8448A5F4A72CBCBC48246006A0F51F",
+        "total": 33,
+        "passed": 33,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualCount": 33,
+        "failures": []
+      },
+      {
+        "project": "QBrainAi.Launcher.Tests",
+        "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-cli-temp-2/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+        "sha256": "5379902CFB64E43EBDFCA72A004C1E6B75EB1A093D26BDB740045680A6E3EE46",
+        "total": 20,
+        "passed": 20,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualCount": 20,
+        "failures": []
+      },
+      {
+        "project": "QBrainAi.McpAgent.Tests",
+        "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-cli-temp-2/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+        "sha256": "F32EC667FDC3A8BC4DF2928BAE4D96C33B3B5CF7821D83EBA31BDA955576C74F",
+        "total": 64,
+        "passed": 64,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualCount": 64,
+        "failures": []
+      },
+      {
+        "project": "QBrainAi.Repl.Core.Tests",
+        "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-cli-temp-2/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+        "sha256": "6D8C8CA17F43B3570B013D182A40292CCF0E70D36EBF8796C313FF161493BB07",
+        "total": 865,
+        "passed": 865,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualCount": 865,
+        "failures": []
+      },
+      {
+        "project": "QBrainAi.QBAgent.Tests",
+        "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-cli-temp-2/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+        "sha256": "F0602ACD74FF6108C11B57BF5BAC1B623C7DBBA561EA43F7953D43310A33AEAF",
+        "total": 94,
+        "passed": 94,
+        "failed": 0,
+        "notExecuted": 0,
+        "actualCount": 94,
+        "failures": []
+      }
+    ]
+  }
+]

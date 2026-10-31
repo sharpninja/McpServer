@@ -1,0 +1,118 @@
+[
+  {
+    "type": "result",
+    "payload": {
+      "result": {
+        "implementationTasks": [
+          {
+            "task": "Step 1 requirements: PATHNORM records and TR-MCP-QUALITY-001 criteria copied from PAYTON-LEGION2; ac-21 reopened and strengthened; TEST-MCP-PATHNORM-001 unitgreen-native-host added. Awaiting hostile validation",
+            "done": false
+          },
+          {
+            "task": "A: Xml and Pkcs 10.0.13 central pins (cbc74e82); Restore and Compile clean on Linux (unit-green-linux-a-compile-20261019T1514) and Windows with no override (unit-green-win-a-20261019T1518). Awaiting hostile validation",
+            "done": false
+          },
+          {
+            "task": "Step 2 tests and scripted data (28bf0b22): B1 ProductionGate, B2 RemoveTodoRecords x2, B3 ProcessNormalizer, D host contract and MockData, F assertion text, negative controls. Awaiting hostile validation",
+            "done": false
+          },
+          {
+            "task": "Linux mock gate unit-green-mock-20261019T1528: 4666 total, 0 failed, the 16 named Windows-only not executed (since reclassified). Awaiting hostile validation",
+            "done": false
+          },
+          {
+            "task": "D production overload and Real binding (de581353); Linux run unit-green-real-20261019T1535: 4669 total, 0 failed, 16 not executed (since reclassified). Awaiting hostile validation",
+            "done": false
+          },
+          {
+            "task": "F (b2319488): HostileReviewWorker startup test clears the Event Log provider; Windows Test unit-green-win-f-20261019T1553 4644 total, 0 failed, 0 not executed. Awaiting hostile validation",
+            "done": false
+          },
+          {
+            "task": "Takeover of PLAN-C4MODEL-001 unit-suite code by operator decision (11681680, blob-identical to c2125c42; C4 reverted PR 84 copies in b7618423)",
+            "done": false
+          },
+          {
+            "task": "G (TR-MCP-NUKE-019, 8c2b83ab): host-scoped MigrationIntegrationTests filter; mock gate 21/21, production 24/24; Linux lane logs Platform!=Windows, Windows lane Platform!=Linux. Awaiting hostile validation",
+            "done": false
+          },
+          {
+            "task": "FR-MCP-USECASE-016/017 converted into TR-MCP-USECASE-018/019 under FR-MCP-USECASE-001 and deleted (operator 17:03); the requirements wiki export is blocked on Linux (triage-report-a6927fca10364155ab9992506e1abc9c; retried 19:19:13 and 21:18:51), so under goal item 4 the stale docs/Project exports are declared in the PR and the HV brief instead of refreshed",
+            "done": false
+          },
+          {
+            "task": "Platform- and environment-dependent tests classified as integration tests: b2bd50b3 (UnitSuitePlatformScanner guard and strengthened skip guard; its first guard run unit-green-guard-mock-20261019T1720 was red: 4692 results, 1 failed, 16 not executed); hostile validation round 1 remediation 49cfec92 (one skip definition, interpolation holes; mock gate unit-green-r2-guard-mockgate-20261019T2103 4624/0/0) and b4ad42aa (36 native-boundary and tracked-file cases moved); Linux and Windows Test 4588/0/0 at b4ad42aa",
+            "done": false
+          },
+          {
+            "task": "Exit gates at the PR head: Linux and Windows Test 0 failed 0 not executed; MigrationIntegrationTests on both hosts 0 failed 0 not executed; ValidateTraceability; full Build.Tests 0 failed",
+            "done": false
+          },
+          {
+            "task": "Pre-HV holistic review presented to the operator; hostile validation (Codex gpt-6-astra max) AGREE at 98/98 with jsonl receipts and the full verdict in its session-log turn",
+            "done": false
+          },
+          {
+            "task": "One PR into develop with the plan (docs/plans/2026-10-19-unit-suite-green.md) and the PR 82 handoff correction",
+            "done": false
+          },
+          {
+            "task": "Hostile validation round 2 structural fix (operator 2026-10-20 \"Structural fix, round 3 (Recommended)\"): R2-F2 UnitSuitePlatformScanner reads Roslyn syntax trees and the central Roslyn pins are 5.9.0 (45a3197c; mock gates ug-r3-mockgate-1 and -2 4602/0/0); R2-F1 one repository-root locator refused outside Category=Integration and classification by dependency (27c43bcc; mock gates ug-r3-dry-mockgate-1 and -2, binding ug-r3-dry-binding-2 4431/0/0); R2-F3 the Windows lane runner is static, analyzed and verified by SHA-256. Awaiting hostile validation",
+            "done": false
+          },
+          {
+            "task": "User-profile scan fix (operator 2026-10-20 \"Fix scans in PR 87 (Recommended)\"; triage-report-b0e41c36f93c4c91b1bf2524eb579ef8): AC-TR-MCP-WS-005-001 and AC-TR-MCP-SESSIONLOG-006-009; DirectoryTreeWalker shared by the marker plugin-cache scan and the session-log history scan; hermetic marker tests; 12 import-path tests tagged Integration; mock gate ug-r3-scan-mockgate-1 4432/0/0, binding ug-r3-scan-binding-1 4444/0/0 (538d0ccf), Windows Test as kingd ug-r3-win-test-ssh-2 4444/0/0. Awaiting hostile validation",
+            "done": false
+          },
+          {
+            "task": "Windows integration lane fixes (TR-MCP-NUKE-019 AC-2): the pre-existing LocalDB cold-start flake (operator 2026-10-20 \"Fix the flake in PR 87 (Recommended)\"; 6042dbb3, one SQL Server test default with a 120 s connect timeout; mock gate ug-r3-localdb-mockgate-1 4446/0/0) and its command timeout under parallel load (operator \"Serialize SQL Server tests (Recommended)\"; 0210244d, the four LocalDB classes in one xUnit collection, mock gate ug-r3-sqlcollection-mockgate-1 4450/0/0; 68fa7b39, the collection defined with DisableParallelization = true as the option text says, mock gate ug-r3-sqlserial-mockgate-1 4456/0/0); the lost results (operator \"Diagnose the loss in PR 87\"; triage 9be3ac08 and 5c6063f5, follow-up 0f7839ef): pg_ctl wrote into the xUnit v3 message stream, fixed by pg_ctl -s (6ea425ab; mock gate ug-r3-pgctl-mockgate-1 4453/0/0; diagnostic lane ug-r3-win-lane-diag-3 with 0 unparseable lines). Gates at the last code head 68fa7b39: Linux Test ug-r3-linux-test-7 4456/0/0, Windows Test ug-r3-win-test-ssh-5 4456/0/0, Windows lane ug-r3-win-lane-7 373/0/0 complete by name, Linux lane ug-r3-linux-lane-7 397/0/0, Build.Tests ug-r3-build-tests-7 436/0/0, ValidateTraceability ug-r3-traceability-6 passed. Awaiting hostile validation",
+            "done": false
+          },
+          {
+            "task": "Pre-HV problem R3-P3 folded in (operator 2026-10-20 \"Fold R3-P3 in first\"; AC-TR-MCP-WS-005-001 replaced and read back at 16:32): a plugin version file (.version or a manifest) that exists but cannot be read yields no version, so resolution goes on and falls back to the synced version, and any other error propagates; PluginVersionFileReadTests (8 scripted cases, negative controls) green in mock gate ug-r3-versionread-mockgate-1 4468/0/0 before the fix; TryReadAgentPluginVersion takes a read delegate (e0b078c8); binding ug-r3-versionread-binding-1 4479/0/0. Gates at the last code head e0b078c8: Linux Test ug-r3-linux-test-8 4479/0/0, Windows Test ug-r3-win-test-ssh-6 4479/0/0, Windows lane ug-r3-win-lane-8 373/0/0 complete by name, Linux lane ug-r3-linux-lane-8 397/0/0, Build.Tests ug-r3-build-tests-8 436/0/0, ValidateTraceability ug-r3-traceability-7 passed. Awaiting hostile validation",
+            "done": false
+          }
+        ],
+        "dependsOn": [],
+        "technicalDetails": [
+          "Branch fix/unit-suite-green-20261019 from origin/develop (ace70daa). Nuke targets only; no override in any gate.",
+          "HV reviewer: Codex gpt-6-astra max (operator 2026-10-19).",
+          "Windows evidence route since 2026-10-20: SSH as kingd (operator \"Please use ssh with the kingd key for execution on Legion2\"), by IP 10.42.0.143 (operator \"Use IP addresses, not hostnames\"); the integration lane runs in kingd's interactive desktop session through a one-shot Interactive-logon task."
+        ],
+        "priority": "high",
+        "technicalRequirements": [
+          "TR-MCP-QUALITY-001",
+          "TR-MCP-PATHNORM-001",
+          "TR-MCP-NUKE-018",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019",
+          "TR-MCP-WS-005",
+          "TR-MCP-SESSIONLOG-006"
+        ],
+        "description": [
+          "Operator 2026-10-19: \"BDPv4 requires all unit tests be green.\" and \"Gotta use the recommended packages.\"",
+          "Operator 2026-10-19 (day-one rule, plan section 9): \"There should be ZERO platform specific UNIT tests.  If it depends on the environment, it's an integration test.\"",
+          "Approved plan (operator \"Yes, I approve the change\", 2026-10-19 14:50): groups A to F of docs/plans/2026-10-19-unit-suite-green.md; amendment G (host-scoped MigrationIntegrationTests lane, TR-MCP-NUKE-019 AC-1 to AC-4) approved 16:22 and built as 8c2b83ab; amendment H1 (Windows lane needs an interactive desktop session, TR-MCP-NUKE-019 AC-5) approved 18:47 and built as 69d8f3f5.",
+          "Measured at develop ace70daa: Linux 14 failed and 16 skipped; Windows restore fails NU1902/NU1903; Windows diagnosis-only run 4702 results, 19 failed, 2 not executed."
+        ],
+        "functionalRequirements": [
+          "FR-MCP-PATHNORM-001",
+          "FR-MCP-139",
+          "FR-MCP-BUILD-001",
+          "FR-MCP-USECASE-001",
+          "FR-MCP-018",
+          "FR-MCP-SESSIONLOGCTX-001"
+        ],
+        "done": false,
+        "title": "Make the unit suite green on both lab hosts (BDPv4: 0 failed, 0 skipped)",
+        "section": "Build",
+        "id": "IMPL-UNITGREEN-001",
+        "note": "Session ClaudeCode-20261019T134748Z-plugin-session, turn req-20261019T190714Z-bdpv4-green-correction. Operator 2026-10-19: this effort owns every unit-suite code change (\"I don't want you and the C4 agent working on the same thing.  C4 should not be changing code, only docs.\"); PLAN-C4MODEL-001 keeps docs and TR-MCP-NUKE-017. Branch fix/unit-suite-green-20261019. Five tasks were checked before any hostile review; unchecked 2026-10-19 by operator decision (\"Uncheck them now (Recommended)\"); every task is checked only after hostile AGREE. Draft PR https://github.com/sharpninja/McpServer/pull/87."
+      },
+      "deprecated": true,
+      "requestId": "req-20261020T221313Z-1d00"
+    }
+  },
+  null
+]

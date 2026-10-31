@@ -1,0 +1,1 @@
+tests/Build.Tests/ServiceUpdateTests.cs:422:    public void LinuxArchive_UsesPrivateMetadataPreservingCommands()

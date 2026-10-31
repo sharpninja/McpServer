@@ -11,7 +11,7 @@ using Xunit;
 
 namespace QBrainAi.Support.Mcp.Tests.Ingestion;
 
-/// <summary>TR-PLANNED-CORE-013: Tests for SessionLogIngestor.ImportToSessionLogTablesAsync (MVP-SUPPORT-011).</summary>
+/// <summary>TR-PLANNED-CORE-013 (historical): Tests for SessionLogIngestor.ImportToSessionLogTablesAsync (MVP-SUPPORT-011).</summary>
 public sealed class SessionLogIngestorImportTests : IDisposable
 {
     private readonly McpDbContext _db;
@@ -37,6 +37,8 @@ public sealed class SessionLogIngestorImportTests : IDisposable
         try { Directory.Delete(_tempDir, true); } catch { /* best-effort cleanup */ }
     }
 
+    /// <remarks>Integration: imports physical session files through the real extractor, whose profile scan is read-only and not asserted for content (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task WhenImportingJsonSessionLogThenSessionIsPersisted()
     {
@@ -83,7 +85,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
             "sourceType": "Cursor",
             "sessionId": "ws-string",
             "title": "String Workspace",
-            "workspace": "E:\\github\\FunWasHad",
+            "workspace": "Q:\\fixture\\ExampleApp",
             "turnCount": 0
         }
         """;
@@ -94,7 +96,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
 
         Assert.Equal(1, result.Imported);
         var stored = await _db.SessionLogs.FirstAsync(s => s.SessionId == "ws-string", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        Assert.Equal(@"E:\github\FunWasHad", stored.Repository);
+        Assert.Equal(@"Q:\fixture\ExampleApp", stored.Repository);
     }
 
     [Fact]
@@ -106,9 +108,9 @@ public sealed class SessionLogIngestorImportTests : IDisposable
             "sessionId": "ws-object",
             "title": "Object Workspace",
             "workspace": {
-                "project": "FunWasHad",
+                "project": "ExampleApp",
                 "targetFramework": ".NET 9",
-                "repository": "sharpninja/FunWasHad",
+                "repository": "example-org/ExampleApp",
                 "branch": "develop"
             },
             "turnCount": 0
@@ -120,9 +122,9 @@ public sealed class SessionLogIngestorImportTests : IDisposable
         await ingestor.ImportToSessionLogTablesAsync(cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
 
         var stored = await _db.SessionLogs.FirstAsync(s => s.SessionId == "ws-object", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        Assert.Equal("FunWasHad", stored.Project);
+        Assert.Equal("ExampleApp", stored.Project);
         Assert.Equal(".NET 9", stored.TargetFramework);
-        Assert.Equal("sharpninja/FunWasHad", stored.Repository);
+        Assert.Equal("example-org/ExampleApp", stored.Repository);
         Assert.Equal("develop", stored.Branch);
     }
 
@@ -219,6 +221,8 @@ public sealed class SessionLogIngestorImportTests : IDisposable
     /// AC-FR-MCP-SESSIONLOGCTX-001-007 / TEST-MCP-SESSIONLOG-006:
     /// ingest of omitted planFile/todoId persists extractor result or None, never null.
     /// </summary>
+    /// <remarks>Integration: imports physical session files through the real extractor, whose profile scan is read-only and not asserted for content (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task Ingest_OmittedFields_PersistsExtractorResultOrNone()
     {
@@ -336,6 +340,8 @@ public sealed class SessionLogIngestorImportTests : IDisposable
 
     // --- Phase 4a: Markdown import tests ---
 
+    /// <remarks>Integration: imports physical session files through the real extractor, whose profile scan is read-only and not asserted for content (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task WhenImportingValidMarkdownThenSessionIsPersisted()
     {
@@ -381,6 +387,8 @@ public sealed class SessionLogIngestorImportTests : IDisposable
         Assert.Equal(0, result.Imported);
     }
 
+    /// <remarks>Integration: imports physical session files through the real extractor, whose profile scan is read-only and not asserted for content (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task WhenUpsertingMarkdownThenSessionIsUpdated()
     {
@@ -420,6 +428,8 @@ public sealed class SessionLogIngestorImportTests : IDisposable
         Assert.Contains("V2", stored!.Title, StringComparison.Ordinal);
     }
 
+    /// <remarks>Integration: imports physical session files through the real extractor, whose profile scan is read-only and not asserted for content (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task WhenImportingJsonAndMarkdownThenBothAreProcessed()
     {

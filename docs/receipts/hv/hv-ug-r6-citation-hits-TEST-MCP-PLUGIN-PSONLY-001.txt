@@ -1,0 +1,1 @@
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:735:    /// TEST-MCP-PLUGIN-PSONLY-001: marker plugin contracts publish the current synced plugin version. Resolution reads

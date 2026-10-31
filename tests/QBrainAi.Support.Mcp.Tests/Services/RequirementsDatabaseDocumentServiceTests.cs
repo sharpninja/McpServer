@@ -19,6 +19,8 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 public sealed class RequirementsDatabaseDocumentServiceTests
 {
     /// <summary>Overlapping requirement ids do not leak between workspaces.</summary>
+    /// <remarks>Integration: creates physical workspace documents and exercises bootstrap or export against them (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task ListsAndExports_AreScopedToActiveWorkspace()
     {
@@ -464,6 +466,8 @@ public sealed class RequirementsDatabaseDocumentServiceTests
     }
 
     /// <summary>Bootstrap accepts bold legacy headings and does not treat notes columns as TEST links.</summary>
+    /// <remarks>Integration: creates physical workspace documents and exercises bootstrap or export against them (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task Bootstrap_LegacyBoldHeadingsAndNotesMapping_GeneratesWikiWithoutDbErrors()
     {
@@ -514,6 +518,8 @@ public sealed class RequirementsDatabaseDocumentServiceTests
     }
 
     /// <summary>Bootstrap rebuilds traceability when orphan links were left by a failed import.</summary>
+    /// <remarks>Integration: creates physical workspace documents and exercises bootstrap or export against them (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task Bootstrap_StaleTraceabilityLinks_RebuildsWithoutUniqueConstraintFailure()
     {

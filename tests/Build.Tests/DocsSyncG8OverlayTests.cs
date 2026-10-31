@@ -14,6 +14,8 @@ public sealed class DocsSyncG8OverlayTests
         RegexOptions.Compiled);
 
     /// <summary>G8 / C3: Nuke ValidateTraceability invokes TraceabilityValidator on docs/Project.</summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void G8_NukeValidateTraceabilityTarget_InvokesShippedValidator()
     {
@@ -26,6 +28,8 @@ public sealed class DocsSyncG8OverlayTests
     }
 
     /// <summary>G8 / C3: shipped TraceabilityValidator passes on live docs/Project.</summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void G8_ValidateTraceability_ShippedValidator_PassesOnLiveDocsProject()
     {
@@ -59,6 +63,8 @@ public sealed class DocsSyncG8OverlayTests
     }
 
     /// <summary>G8 / C2: Nuke ValidateConfig invokes ConfigValidator on appsettings.</summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void G8_NukeValidateConfigTarget_InvokesShippedValidator()
     {
@@ -71,6 +77,8 @@ public sealed class DocsSyncG8OverlayTests
     }
 
     /// <summary>G8 / C2: shipped ConfigValidator passes on live Support.Mcp appsettings.yaml.</summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void G8_ValidateConfig_ShippedValidator_PassesOnLiveAppsettings()
     {
@@ -86,6 +94,8 @@ public sealed class DocsSyncG8OverlayTests
     }
 
     /// <summary>G8 / C5: Nuke SyncAgentPlugins invokes the canonical plugin-core sync script.</summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void G8_NukeSyncAgentPluginsTarget_InvokesCoreSyncScript()
     {
@@ -101,6 +111,8 @@ public sealed class DocsSyncG8OverlayTests
     /// G8 / C5: the committed sync path generates official plugin lib copies that match
     /// canonical plugins/core/lib-ps without consuming sibling working-tree state.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task G8_SyncAgentPlugins_OfficialPluginLibChecksumsMatchCanonicalCore()
     {

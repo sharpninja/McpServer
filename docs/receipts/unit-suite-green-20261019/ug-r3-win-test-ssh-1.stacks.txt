@@ -1,0 +1,71 @@
+RECEIPT 2026-10-20T09:48:54 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinTrxFailureStacks.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-10-20T09:48:56 trx=F:/GitHub/McpServer/.worktrees/unit-green-r3-ssh/TestResults/ug-r3-win-test-ssh-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx
+FAILED 32
+=== 19 x first product frame: at QBrainAi.Support.Mcp.Services.MarkerFileService.EnumerateUserPluginCacheRoots(String userProfile, String pluginName)+MoveNext() in F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\src\QBrainAi.Services\Services\MarkerFileService.cs:line 668
+  sample: QBrainAi.Support.Mcp.Tests.Services.TriagePromptTemplateTests.DefaultMarkerPromptTemplate_RendersSessionLogWrapperRecoveryGuidance
+  message: System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\cache\caveman\caveman\63e797cd753b\compress\scripts'.
+    at System.IO.Enumeration.FileSystemEnumerator`1.CreateRelativeDirectoryHandle(ReadOnlySpan`1 relativePath, String fullPath)
+    at System.IO.Enumeration.FileSystemEnumerator`1.MoveNext()
+    at System.Linq.Enumerable.IEnumerableWhereSelectIterator`2.ToArray()
+    at System.Linq.Enumerable.OrderedIterator`2.MoveNext()
+    at System.Linq.Enumerable.IteratorSelectIterator`2.MoveNext()
+    at QBrainAi.Support.Mcp.Services.MarkerFileService.EnumerateUserPluginCacheRoots(String userProfile, String pluginName)+MoveNext() in F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\src\QBrainAi.Services\Services\MarkerFileService.cs:line 668
+    at QBrainAi.Support.Mcp.Services.MarkerFileService.EnumerateAgentPluginVersionRoots(String workspacePath, String pluginName, String environmentVariableName)+MoveNext() in F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\src\QBrainAi.Services\Services\MarkerFileService.cs:line 648
+    at QBrainAi.Support.Mcp.Services.MarkerFileService.ResolveAgentPluginVersion(String workspacePath, String pluginName, String environmentVariableName) in F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\src\QBrainAi.Services\Services\MarkerFileService.cs:line 618
+    at QBrainAi.Support.Mcp.Services.MarkerFileService.<BuildDefaultAgentPlugins>g__Version|29_1(String pluginName, String environmentVariableName, <>c__DisplayClass29_0&) in F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\src\QBrainAi.Services\Services\MarkerFileService.cs:line 537
+    at QBrainAi.Support.Mcp.Services.MarkerFileService.BuildDefaultAgentPlugins(String workspacePath) in F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\src\QBrainAi.Services\Services\MarkerFileService.cs:line 539
+    at QBrainAi.Support.Mcp.Services.MarkerFileService.BuildTemplateContext(String baseUrl, String apiKey, WorkspaceDto workspace, String workspacePath, String workspaceName, IReadOnlyList`1 agentAdditions) in F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\src\QBrainAi.Services\Services\MarkerFileService.cs:line 404
+    at QBrainAi.Support.Mcp.Tests.Services.TriagePromptTemplateTests.DefaultMarkerPromptTemplate_RendersSessionLogWrapperRecoveryGuidance() in F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Support.Mcp.Tests\Services\TriagePromptTemplateTests.cs:line 99
+    --- End of stack trace from previous location ---
+  also: QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.BuildTemplateContext_NullWorkspace_UsesFallbacks
+  also: QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.ComputeAgentPluginsDigest_ChangesWhenResolvedPluginVersionChanges
+  also: QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.ResolvePrompt_CustomGlobal_ReplacesDefault
+  also: QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.ResolvePrompt_EmptyWorkspace_NotAppended
+  also: QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.WriteMarkerAsync_EmitsSelfDescribingSignatureFieldsAndFormat
+  also: QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.WriteMarkerAsync_CreatesDefaultWikiYamlWhenMissing
+  also: QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.WriteMarkerAsync_EmitsUtcTimestampsAndDiagnosticsEndpoints
+  also: QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.WriteMarkerAsync_AddsMarkerQBrainAiAndCacheEntriesToGitIgnoreWithoutDuplicates
+  also: QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.ResolvePrompt_BothCustom_CombinesWithNewlines
+  also: QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.ResolvePrompt_WorkspaceAppends
+  also: QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.WriteMarkerAsync_PreservesExistingWikiYaml
+  also: QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.BuildSignaturePayload_IncludesAgentPluginDigestWhenContractIsPresent
+  also: QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.ResolvePrompt_EmptyGlobal_Throws
+  also: QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.ResolvePrompt_HandlebarsRendersWorkspaceProperties
+  also: QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.ResolvePrompt_NullGlobal_Throws
+  also: QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.ResolvePrompt_WorkspaceBaseUrlSubstitution
+  also: QBrainAi.Support.Mcp.Tests.Services.MarkerFileServiceTests.BuildTemplateContext_WithWorkspaceDto_IncludesAllProperties
+  also: QBrainAi.Support.Mcp.Tests.Services.TriagePromptTemplateTests.DefaultMarkerPromptTemplate_RendersMcpAndPluginFailureTriageGuidance
+=== 7 x first product frame: at QBrainAi.Support.Mcp.Services.SessionLogTurnContextExtractor.AppendHistory(List`1 parts, String workspacePath, String userProfilePath, String agentSessionId, String agentSessionTranscriptFile) in F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\src\QBrainAi.Services\Services\SessionLogTurnContextExtractor.cs:line 119
+  sample: QBrainAi.Support.Mcp.Tests.Services.SessionLogImportedSessionDeleteTests.DeleteTurnAsync_ImportedProviderNativeIds_DeletesTurn
+  message: System.IO.IOException : The path cannot be traversed because it contains an untrusted mount point. : 'C:\Users\kingd\.claude\plugins\marketplaces\caveman\compress\scripts'.
+    at System.IO.Enumeration.FileSystemEnumerator`1.CreateRelativeDirectoryHandle(ReadOnlySpan`1 relativePath, String fullPath)
+    at System.IO.Enumeration.FileSystemEnumerator`1.MoveNext()
+    at QBrainAi.Support.Mcp.Services.SessionLogTurnContextExtractor.AppendHistory(List`1 parts, String workspacePath, String userProfilePath, String agentSessionId, String agentSessionTranscriptFile) in F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\src\QBrainAi.Services\Services\SessionLogTurnContextExtractor.cs:line 119
+    at QBrainAi.Support.Mcp.Services.SessionLogTurnContextExtractor.CollectSources(SessionLogTurnEntity turn, String workspacePath, String userProfilePath, String agentSessionId, String agentSessionTranscriptFile) in F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\src\QBrainAi.Services\Services\SessionLogTurnContextExtractor.cs:line 75
+    at QBrainAi.Support.Mcp.Services.SessionLogTurnContextExtractor.Extract(SessionLogTurnEntity turn, String workspacePath, String userProfilePath, String agentSessionId, String agentSessionTranscriptFile) in F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\src\QBrainAi.Services\Services\SessionLogTurnContextExtractor.cs:line 42
+    at QBrainAi.Support.Mcp.Services.SessionLogService.ApplyTurnContext(UnifiedRequestEntryDto turn, Boolean isImport, UnifiedSessionLogDto sessionDto, SessionLogEntity session) in F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\src\QBrainAi.Services\Services\SessionLogService.cs:line 1435
+    at QBrainAi.Support.Mcp.Services.SessionLogService.SubmitAsync(UnifiedSessionLogDto dto, String sourceFilePath, String contentHash, CancellationToken cancellationToken) in F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\src\QBrainAi.Services\Services\SessionLogService.cs:line 182
+    at QBrainAi.Support.Mcp.Services.SessionLogService.SubmitAsync(UnifiedSessionLogDto dto, String sourceFilePath, String contentHash, CancellationToken cancellationToken) in F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\src\QBrainAi.Services\Services\SessionLogService.cs:line 266
+    at QBrainAi.Support.Mcp.Tests.Services.SessionLogImportedSessionDeleteTests.SeedImportedSession(SqliteConnection connection) in F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Support.Mcp.Tests\Services\SessionLogImportedSessionDeleteTests.cs:line 138
+    at QBrainAi.Support.Mcp.Tests.Services.SessionLogImportedSessionDeleteTests.DeleteTurnAsync_ImportedProviderNativeIds_DeletesTurn() in F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Support.Mcp.Tests\Services\SessionLogImportedSessionDeleteTests.cs:line 50
+    --- End of stack trace from previous location ---
+  also: QBrainAi.Support.Mcp.Tests.Services.TranscriptSessionLogPersisterTests.Import_OmittedFields_PersistsExtractorResultOrNone
+  also: QBrainAi.Support.Mcp.Tests.Services.SessionLogImportedSessionDeleteTests.ReplaceTurnSectionAsync_ImportedProviderNativeIds_ReplacesSection
+  also: QBrainAi.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.SubmitAsync_ImportMissingFields_ExtractsFromTurnText
+  also: QBrainAi.Support.Mcp.Tests.Services.SessionLogImportedSessionDeleteTests.DeleteSessionAsync_ImportedProviderNativeIds_IsRejected
+  also: QBrainAi.Support.Mcp.Tests.Services.SessionLogResubmissionReviveTests.SubmitAsync_ImportResubmitAfterTombstone_RevivesSession
+  also: QBrainAi.Support.Mcp.Tests.Services.FederatedSessionLogServiceTests.Apply_OmittedFields_PersistsProperValue
+=== 6 x first product frame: (no product frame)
+  sample: QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogIngestorImportTests.WhenUpsertingMarkdownThenSessionIsUpdated
+  message: Assert.True() Failure Expected: True Actual: False
+    at QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogIngestorImportTests.WhenUpsertingMarkdownThenSessionIsUpdated() in F:\GitHub\McpServer\.worktrees\unit-green-r3-ssh\tests\QBrainAi.Support.Mcp.Tests\Ingestion\SessionLogIngestorImportTests.cs:line 414
+    --- End of stack trace from previous location ---
+  also: QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogIngestorImportTests.WhenImportingValidMarkdownThenSessionIsPersisted
+  also: QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogIngestorImportTests.WhenImportingJsonSessionLogThenSessionIsPersisted
+  also: QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogIngestorImportTests.Ingest_OmittedFields_PersistsExtractorResultOrNone
+  also: QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogIngestorImportTests.WhenImportingJsonAndMarkdownThenBothAreProcessed
+  also: QBrainAi.Support.Mcp.Tests.Services.WorkspaceProcessManagerStartupTests.StartAsync_EmptyWorkspacePathInMiddle_SkipsItAndRegistersSubsequentWorkspaces
+END 2026-10-20T09:48:56

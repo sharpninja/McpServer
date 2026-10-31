@@ -3,11 +3,13 @@ using QBrainAi.Support.Mcp.Services;
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-019: Multi-turn scoring uses the same gold for both conditions.
+/// TEST-MCP-MEMORY-019 (historical): Multi-turn scoring uses the same gold for both conditions.
 /// </summary>
 public sealed class MemoryBenchMultiTurnScoringTests
 {
     /// <summary>AC-FR-MCP-MEMORY-019: without_memory query turns can pass from conversation history.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void QueryScoring_SameGoldForBothConditions()
     {
@@ -23,6 +25,8 @@ public sealed class MemoryBenchMultiTurnScoringTests
     }
 
     /// <summary>AC-FR-MCP-MEMORY-019: Negative/refuse turns fail if the model invents.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void NegativeRefuse_FailsOnInvention()
     {

@@ -1,0 +1,150 @@
+[
+  {
+    "id": "FR-MCP-077",
+    "exists": true
+  },
+  {
+    "id": "FR-MCP-FED-PATH-001",
+    "exists": true
+  },
+  {
+    "id": "FR-MCP-MEMORY-002",
+    "exists": true
+  },
+  {
+    "id": "FR-MCP-MEMORY-018",
+    "exists": false
+  },
+  {
+    "id": "FR-MCP-PATHNORM-001",
+    "exists": true
+  },
+  {
+    "id": "FR-MCP-QBSKILLS-003",
+    "exists": true
+  },
+  {
+    "id": "TEST-HANDOFF-002",
+    "exists": true
+  },
+  {
+    "id": "TEST-HANDOFF-005",
+    "exists": true
+  },
+  {
+    "id": "TEST-HANDOFF-007",
+    "exists": true
+  },
+  {
+    "id": "TEST-MCP-177",
+    "exists": true
+  },
+  {
+    "id": "TEST-MCP-FED-PATH-001",
+    "exists": true
+  },
+  {
+    "id": "TEST-MCP-MEMORY-002",
+    "exists": true
+  },
+  {
+    "id": "TEST-MCP-MEMORY-010",
+    "exists": false
+  },
+  {
+    "id": "TEST-MCP-MEMORY-018",
+    "exists": false
+  },
+  {
+    "id": "TEST-MCP-PATHNORM-001",
+    "exists": true
+  },
+  {
+    "id": "TEST-MCP-PLUGIN-PSONLY-001",
+    "exists": false
+  },
+  {
+    "id": "TEST-MCP-QBCLI-001",
+    "exists": false
+  },
+  {
+    "id": "TEST-MCP-TRIAGE-003",
+    "exists": true
+  },
+  {
+    "id": "TEST-MCP-TRIAGE-004",
+    "exists": true
+  },
+  {
+    "id": "TEST-MCP-USECASE-020",
+    "exists": true
+  },
+  {
+    "id": "TR-MCP-CFG-007",
+    "exists": true
+  },
+  {
+    "id": "TR-MCP-DB-001",
+    "exists": true
+  },
+  {
+    "id": "TR-MCP-FED-PATH-001",
+    "exists": true
+  },
+  {
+    "id": "TR-MCP-GH-003",
+    "exists": true
+  },
+  {
+    "id": "TR-MCP-GH-004",
+    "exists": true
+  },
+  {
+    "id": "TR-MCP-HOSTILEREVIEW-003",
+    "exists": true
+  },
+  {
+    "id": "TR-MCP-MEMORY-002",
+    "exists": true
+  },
+  {
+    "id": "TR-MCP-MEMORY-SEARCH-002",
+    "exists": false
+  },
+  {
+    "id": "TR-MCP-NUKE-018",
+    "exists": true
+  },
+  {
+    "id": "TR-MCP-NUKE-019",
+    "exists": true
+  },
+  {
+    "id": "TR-MCP-PATHNORM-001",
+    "exists": true
+  },
+  {
+    "id": "TR-MCP-QBRAIN-004",
+    "exists": true
+  },
+  {
+    "id": "TR-MCP-QBRAIN-005",
+    "exists": true
+  },
+  {
+    "id": "TR-MCP-SESSIONLOG-006",
+    "exists": true
+  },
+  {
+    "id": "TR-MCP-USECASE-018",
+    "exists": true
+  },
+  {
+    "id": "TR-MCP-USECASE-019",
+    "exists": true
+  },
+  {
+    "id": "TR-MCP-WS-005",
+    "exists": true
+  }
+]

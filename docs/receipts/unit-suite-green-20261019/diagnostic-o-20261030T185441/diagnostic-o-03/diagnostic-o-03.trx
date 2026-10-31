@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="53d7afc1-e58b-41fd-be79-ebd6ac52388f" name="@LAB-OMARCHY 2026-10-30 18:57:17" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-30T18:57:17.3107070-05:00" queuing="2026-10-30T18:57:17.3107071-05:00" start="2026-10-30T18:56:50.8859812-05:00" finish="2026-10-30T18:58:06.0711710-05:00" />
+  <TestSettings name="default" id="31441049-afb8-4784-b65c-8d66da2cb63a">
+    <Deployment runDeploymentRoot="_LAB-OMARCHY_2026-10-30_18_57_17" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="2902a6fc-3a4b-48dd-9f25-9d74a11865fb" testId="2993c510-a90f-b670-708d-9f353a272b19" testName="QBrainAi.Support.Mcp.Tests.Storage.SqlServerAuditPayloadMigrationTests.Migration_PersistsCompressedPayloads_AndDeniesAuditMutation" computerName="LAB-OMARCHY" duration="00:00:21.4160429" startTime="2026-10-30T18:56:55.8084299-05:00" endTime="2026-10-30T18:57:17.2378973-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2902a6fc-3a4b-48dd-9f25-9d74a11865fb" />
+    <UnitTestResult executionId="65ce8c65-4180-4c9f-9186-41e302f9fa2f" testId="af41c3a7-bd17-ae6b-7957-45cd547c0cd8" testName="QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables" computerName="LAB-OMARCHY" duration="00:00:09.2695484" startTime="2026-10-30T18:57:38.4108627-05:00" endTime="2026-10-30T18:57:47.6804979-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="65ce8c65-4180-4c9f-9186-41e302f9fa2f" />
+    <UnitTestResult executionId="f28ccb06-89eb-4795-9bf6-8e6b6ee6e9de" testId="1765fb61-32e8-d4af-62b4-1bcc315db732" testName="QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently" computerName="LAB-OMARCHY" duration="00:00:09.1173267" startTime="2026-10-30T18:57:17.2683577-05:00" endTime="2026-10-30T18:57:26.3859889-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f28ccb06-89eb-4795-9bf6-8e6b6ee6e9de" />
+    <UnitTestResult executionId="bedc690d-874c-4c02-a8a5-c5937a09f495" testId="8550fe8a-ed6a-aa88-91ef-596805fa9781" testName="QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.MigrateDown_RenameQuadBrainRoles_RestoresLegacyHemisphereRows" computerName="LAB-OMARCHY" duration="00:00:07.9879486" startTime="2026-10-30T18:57:57.6396239-05:00" endTime="2026-10-30T18:58:05.6276667-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bedc690d-874c-4c02-a8a5-c5937a09f495" />
+    <UnitTestResult executionId="ca775c34-7aed-4a08-a67a-1908f124b2ff" testId="6201f7a8-be77-9fd2-2c2e-e238c945c5a0" testName="QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows" computerName="LAB-OMARCHY" duration="00:00:12.0060592" startTime="2026-10-30T18:57:26.3875615-05:00" endTime="2026-10-30T18:57:38.3937048-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ca775c34-7aed-4a08-a67a-1908f124b2ff" />
+    <UnitTestResult executionId="b86bccf8-7a0e-43c2-a8ae-7e6960f46e2c" testId="2c4ecf51-1b3e-786f-791e-01c6a1192391" testName="QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows" computerName="LAB-OMARCHY" duration="00:00:09.9548929" startTime="2026-10-30T18:57:47.6829947-05:00" endTime="2026-10-30T18:57:57.6379764-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b86bccf8-7a0e-43c2-a8ae-7e6960f46e2c" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows" storage="/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030t185441/output/qbrainai.support.mcp.tests.dll" id="2c4ecf51-1b3e-786f-791e-01c6a1192391">
+      <Execution id="b86bccf8-7a0e-43c2-a8ae-7e6960f46e2c" />
+      <TestMethod codeBase="/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests" name="Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows" storage="/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030t185441/output/qbrainai.support.mcp.tests.dll" id="6201f7a8-be77-9fd2-2c2e-e238c945c5a0">
+      <Execution id="ca775c34-7aed-4a08-a67a-1908f124b2ff" />
+      <TestMethod codeBase="/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests" name="Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.MigrateDown_RenameQuadBrainRoles_RestoresLegacyHemisphereRows" storage="/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030t185441/output/qbrainai.support.mcp.tests.dll" id="8550fe8a-ed6a-aa88-91ef-596805fa9781">
+      <Execution id="bedc690d-874c-4c02-a8a5-c5937a09f495" />
+      <TestMethod codeBase="/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests" name="MigrateDown_RenameQuadBrainRoles_RestoresLegacyHemisphereRows" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently" storage="/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030t185441/output/qbrainai.support.mcp.tests.dll" id="1765fb61-32e8-d4af-62b4-1bcc315db732">
+      <Execution id="f28ccb06-89eb-4795-9bf6-8e6b6ee6e9de" />
+      <TestMethod codeBase="/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests" name="SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Storage.SqlServerAuditPayloadMigrationTests.Migration_PersistsCompressedPayloads_AndDeniesAuditMutation" storage="/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030t185441/output/qbrainai.support.mcp.tests.dll" id="2993c510-a90f-b670-708d-9f353a272b19">
+      <Execution id="2902a6fc-3a4b-48dd-9f25-9d74a11865fb" />
+      <TestMethod codeBase="/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Storage.SqlServerAuditPayloadMigrationTests" name="Migration_PersistsCompressedPayloads_AndDeniesAuditMutation" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables" storage="/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030t185441/output/qbrainai.support.mcp.tests.dll" id="af41c3a7-bd17-ae6b-7957-45cd547c0cd8">
+      <Execution id="65ce8c65-4180-4c9f-9186-41e302f9fa2f" />
+      <TestMethod codeBase="/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests" name="Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="2993c510-a90f-b670-708d-9f353a272b19" executionId="2902a6fc-3a4b-48dd-9f25-9d74a11865fb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="af41c3a7-bd17-ae6b-7957-45cd547c0cd8" executionId="65ce8c65-4180-4c9f-9186-41e302f9fa2f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1765fb61-32e8-d4af-62b4-1bcc315db732" executionId="f28ccb06-89eb-4795-9bf6-8e6b6ee6e9de" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8550fe8a-ed6a-aa88-91ef-596805fa9781" executionId="bedc690d-874c-4c02-a8a5-c5937a09f495" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6201f7a8-be77-9fd2-2c2e-e238c945c5a0" executionId="ca775c34-7aed-4a08-a67a-1908f124b2ff" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2c4ecf51-1b3e-786f-791e-01c6a1192391" executionId="b86bccf8-7a0e-43c2-a8ae-7e6960f46e2c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="6" executed="6" passed="6" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.40]   Discovering: QBrainAi.Support.Mcp.Tests
+[xUnit.net 00:00:03.99]   Discovered:  QBrainAi.Support.Mcp.Tests
+[xUnit.net 00:00:04.25]   Starting:    QBrainAi.Support.Mcp.Tests
+[xUnit.net 00:01:14.28]   Finished:    QBrainAi.Support.Mcp.Tests (ID = '6b3bd1a9a10ffc3a6e9bf3f988d600819b450884dc13b3cd4a87864abef49ba5')
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

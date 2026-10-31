@@ -1,0 +1,4073 @@
+{
+  "timestampLocal": "2026-10-30T18:54:45",
+  "diagnosticOnly": true,
+  "acceptedGate": false,
+  "operatorAuthorization": "2026-10-30 Diagnostic repeats (Recommended), approximately 50 raw dotnet test runs of four SQL Server migration classes",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "fb19eeab6a1533274b2092962bbef5df8c964eab",
+  "filter": "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+  "sources": [
+    {
+      "sha256": "322CFA8EE55EBF07EE3138234BEB441E737B86E1E22BEF503B19EBA2DD89DAE8",
+      "path": "AddSessionLogTurnPlanFileAndTodoIdMigrationTests.cs"
+    },
+    {
+      "sha256": "A24CF662901AA7344E272D8AF3CF93B6D70CD8BBC9E1C16C8BFC7214513EF95A",
+      "path": "AuditPayloadMigrationTests.cs"
+    },
+    {
+      "sha256": "113BF1FA46D0C67337E79F24631BA0E0E7064BEAAEC7FC3CC2B718BF614E3914",
+      "path": "AuditPayloadProviderMigrationTests.cs"
+    },
+    {
+      "sha256": "8A5076A9A8E8C60417116AC5C836EC7D28FA3BC75B2D171F8438A1AF0EA46EE5",
+      "path": "CanonicalToolBucketMigrationTests.cs"
+    },
+    {
+      "sha256": "D55BBAFFD76C57917CBE3F15C4D80F8B95B438FB0D9AFA1C0C2DCB2B9EBA1CA7",
+      "path": "Decompose4nfBackfillMigrationTests.cs"
+    },
+    {
+      "sha256": "6768EB38573D1E134D287E113A2A55A07F3727EEC94E6F3D441130058389DA70",
+      "path": "MigrationKeyAssertions.cs"
+    },
+    {
+      "sha256": "3C4770F33FCD95F437E359F478CC6A1C1F085AEDB26A278B0F521A7F17CC2706",
+      "path": "MigrationKeyAssertionsMockGateTests.cs"
+    },
+    {
+      "sha256": "B685AEAA5F161C8A70026D4B9E501C5B83A403F7FE7CBA3960B7EBB883EBF454",
+      "path": "PostgresDecompose4nfBackfillMigrationTests.cs"
+    },
+    {
+      "sha256": "C86259837E69AEA24C357EA596D1ACC917521C4B866511FE3174036C75A339A0",
+      "path": "PostgresRenameQuadBrainRolesMigrationTests.cs"
+    },
+    {
+      "sha256": "8F503BAE0EC6B223374970FD672A5510006E4AD388E1F80BD5C4B2A3FC65B73C",
+      "path": "ProductMigrationApplyTests.cs"
+    },
+    {
+      "sha256": "3BDA1AA6E36080AD0402BD60F295C4D60970F1D1FD1F90FB533FF28E16F9A7ED",
+      "path": "RemoveTodoRecordsMigrationTests.cs"
+    },
+    {
+      "sha256": "1A2CF7FFE13A42A668581914D10B4A1A0B7B356BF417B4B33A6FAF03CFB8ADFF",
+      "path": "RenameQuadBrainRolesMigrationTests.cs"
+    },
+    {
+      "sha256": "5909ECA29D63E3D68A962C0C9E5E2C6B63B40DFBC095F1B629EE022B43A4CDE1",
+      "path": "SessionLogAgentSessionHeaderMigrationTests.cs"
+    },
+    {
+      "sha256": "93BD4E19F358D6D555971268F1481110C346606211558BB745C8CE82EBAD006B",
+      "path": "SessionLogTurnPlanFileTodoIdMigrationApplyTests.cs"
+    },
+    {
+      "sha256": "D36A790AF1CA47F3C97C76D7CA3573DBCA6AB1D5D5E339062D8D79DCBA95326E",
+      "path": "SqlServerDecompose4nfBackfillMigrationTests.cs"
+    },
+    {
+      "sha256": "531651AC0D78729E46DE06A58ADA296026A4ABB398423D7DA671F1CF7307CBC3",
+      "path": "SqlServerMigrationFailureBindingTests.cs"
+    },
+    {
+      "sha256": "4010355D8366642964AFC3A75899B580A1AEF5EAC3318C04B0BE5C42141691E7",
+      "path": "SqlServerMigrationFailureContractTests.cs"
+    },
+    {
+      "sha256": "EED3A9738DB33B7FDE6042FA1CF1D61D0C7786F4922F8B21F4CBD8B10F5DC345",
+      "path": "SqlServerMigrationFailureReporter.cs"
+    },
+    {
+      "sha256": "660567D1696BB2BDEAEA03BDC1E76555F1CAFDDC8378D5AFBA28651131E0C936",
+      "path": "SqlServerRenameQuadBrainRolesMigrationTests.cs"
+    },
+    {
+      "sha256": "92AC84B6AEC9EF2AD6C37FA3714E5E5529B2F54C4E53DCA64E700F7E1E29EC3C",
+      "path": "UseCaseMigrationApplyTests.cs"
+    }
+  ],
+  "snapshot": [
+    {
+      "relative": "Azure.Core.dll",
+      "sha256": "224D09CB39EAE4D8C30272A0C49BEB19D873C87347EAE9487F0DDD859D752B56"
+    },
+    {
+      "relative": "Azure.Identity.dll",
+      "sha256": "AF18F20BE25B2895C912F3BA0A9F2901A82DDA823EDCAD76E6A19EAC9886A40F"
+    },
+    {
+      "relative": "Castle.Core.dll",
+      "sha256": "7BC5DCD9BC87A516BFB98BD24B3D51E594D051DE520D608B12F9DAA73C85431B"
+    },
+    {
+      "relative": "CommunityToolkit.Mvvm.dll",
+      "sha256": "7D7EB5C066CFE883B439B1200BF5DCB387B1E5319DD2EDBDAA9E23ADFE416452"
+    },
+    {
+      "relative": "CoverletSourceRootsMapping_QBrainAi.Support.Mcp.Tests",
+      "sha256": "3990A2133C5ACAD41389C699DD8E33E1D7B386E15AD4834621284BC3FC1F893F"
+    },
+    {
+      "relative": "Duende.IdentityModel.dll",
+      "sha256": "6F1F6FE49D6157B635CECF8C9B376EE608A02A837412F02293545D422F3D93C4"
+    },
+    {
+      "relative": "Duende.IdentityServer.AspNetIdentity.dll",
+      "sha256": "DD98023F1F396A4224934525F5E56D9BE16D306C3395A9B4CD54A8E4D26671A1"
+    },
+    {
+      "relative": "Duende.IdentityServer.dll",
+      "sha256": "205C022E78FD5D986D36FD620902E6E53C2E830C9EC45DE55D75B671A2C11996"
+    },
+    {
+      "relative": "Duende.IdentityServer.EntityFramework.dll",
+      "sha256": "127062D04918D4D865E30260B4D627D8DDBF8E303AEB9C82F9CC27F52BFE6885"
+    },
+    {
+      "relative": "Duende.IdentityServer.EntityFramework.Storage.dll",
+      "sha256": "F8308B09EC4941C00CBAEAD7FE85867BA6E8197C5DC47B2E0739DA33C3615A4E"
+    },
+    {
+      "relative": "Duende.IdentityServer.Storage.dll",
+      "sha256": "DE6DE9BB00B80F25B683F042085CB2C8646A9C10177E0939DA1DBF08887D4FD7"
+    },
+    {
+      "relative": "Google.Protobuf.dll",
+      "sha256": "B71BE7A4E721D1B79456A0B52602A01A4414EB09BAB4A04400F6F9D8A3895157"
+    },
+    {
+      "relative": "Handlebars.dll",
+      "sha256": "1A4C53785C56E86EFC131ED7C28658157C74017F3D9701B0BC559D8CA5E37DF9"
+    },
+    {
+      "relative": "HNSWIndex.dll",
+      "sha256": "BED00E91D8B4D6775AF915F47DC453B44EBF711F9FD6D0333467BB766CDA9DDF"
+    },
+    {
+      "relative": "Humanizer.dll",
+      "sha256": "D6853075547D7E303EFD60354D911A2FF18EDBA582CDA2FA59D91A2E5DCF9E98"
+    },
+    {
+      "relative": "Json.More.dll",
+      "sha256": "67FEA7F0915E721C5E563D4B19387F73C47B947A9829D0442ECA248664BF5D15"
+    },
+    {
+      "relative": "JsonPointer.Net.dll",
+      "sha256": "2176FEEABC691DD2136241738C2E8EDF496AA867C97F0067BA63CE1485CC762C"
+    },
+    {
+      "relative": "JsonSchema.Net.dll",
+      "sha256": "8D439AEE99C0421888FBDA861367275BD4FAA2C8996350EDA1C0E31770A49DC6"
+    },
+    {
+      "relative": "Markdig.Signed.dll",
+      "sha256": "234F7A20F0F072C35C1F2ABCD89FFFF267D1DF6586A42A6851C88DC329A577FF"
+    },
+    {
+      "relative": "Microsoft.Agents.AI.Abstractions.dll",
+      "sha256": "FEB8F2B8D8DBF42BB7358693278B4775D7DD57DD01C8A882C56F4BB153C3C291"
+    },
+    {
+      "relative": "Microsoft.Agents.AI.dll",
+      "sha256": "0CBD391FEECA90DAC5D8F67AB1911F81EA053040597711B3DD688257FA847456"
+    },
+    {
+      "relative": "Microsoft.ApplicationInsights.dll",
+      "sha256": "BF9A4B88C7F94267E1CC7ED0700C575D3EB3266FF25BCB76E4F40F1B0FBA022D"
+    },
+    {
+      "relative": "Microsoft.AspNetCore.Authentication.JwtBearer.dll",
+      "sha256": "05494DEF3C48B22A43367DFC1BCB1FE03AC560CD140763023844A84012ADB215"
+    },
+    {
+      "relative": "Microsoft.AspNetCore.Authentication.OpenIdConnect.dll",
+      "sha256": "4F8B041DE2F835351DED7BD2EE61D0F14832E6D748728D4C29E9F048DEB65092"
+    },
+    {
+      "relative": "Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll",
+      "sha256": "59E24542F629473E924D27A71CF68AA6C155A6776218E59EEA952E4BD84F7F40"
+    },
+    {
+      "relative": "Microsoft.Bcl.AsyncInterfaces.dll",
+      "sha256": "1A606D942836D8BB72115892A598FA5872BF4152EB42903AF7097F35474F581F"
+    },
+    {
+      "relative": "Microsoft.Bcl.Cryptography.dll",
+      "sha256": "009A27B8E3093FDD2960BBA63E4ACD48EAB05C4F8F8A6D9FE8C24B4657F44C4F"
+    },
+    {
+      "relative": "Microsoft.CodeAnalysis.CSharp.dll",
+      "sha256": "FC571A6647AC45B0B0DC1866B795529BB2EEB93ADF9BE97FCD5903CF482F700A"
+    },
+    {
+      "relative": "Microsoft.CodeAnalysis.dll",
+      "sha256": "55618D457128EEC582017545B8929EBF195669003B6EC737110F9519E1711D28"
+    },
+    {
+      "relative": "Microsoft.Data.SqlClient.dll",
+      "sha256": "5A34E2FA3479B1508DBC20FBEB2C9172F18C3868BDB147A185213A446645B400"
+    },
+    {
+      "relative": "Microsoft.Data.Sqlite.dll",
+      "sha256": "1DFBF0E7BC0ACE8F9D411ABDBC64362D5225BDF53AD68444B792AF35AC611E29"
+    },
+    {
+      "relative": "Microsoft.EntityFrameworkCore.Abstractions.dll",
+      "sha256": "CE76BCE9DCC06FC6E22D6C4ABEBB4EA816A0079B10485C5C080D6EA9F0FD818E"
+    },
+    {
+      "relative": "Microsoft.EntityFrameworkCore.dll",
+      "sha256": "785AAEBFF28ACDAFC80F4FD2A7521392BB67AFD8069B89B3AA8D7C5627F49C60"
+    },
+    {
+      "relative": "Microsoft.EntityFrameworkCore.InMemory.dll",
+      "sha256": "11CA43387F3E120E1C3F9B5D30B5769A891275BB86786F7332658687F284580B"
+    },
+    {
+      "relative": "Microsoft.EntityFrameworkCore.Relational.dll",
+      "sha256": "68803FA0A71D4A9D58325DDDE1D1709451094A20B01CBDB3B73D69F42D115197"
+    },
+    {
+      "relative": "Microsoft.EntityFrameworkCore.Sqlite.dll",
+      "sha256": "6586082031570843C829CE6260B04965A94751007BE5A61B5B47C0460AA7400A"
+    },
+    {
+      "relative": "Microsoft.EntityFrameworkCore.SqlServer.dll",
+      "sha256": "9DD2284C567FF2B7BCCC0248BB6155B47559E1338114C9F62A0BFCEFCA68E2DD"
+    },
+    {
+      "relative": "Microsoft.Extensions.AI.Abstractions.dll",
+      "sha256": "9BE438464B011AA325C93307EADB72DB2998F72287BCAB5875AE9F67327E631F"
+    },
+    {
+      "relative": "Microsoft.Extensions.AI.dll",
+      "sha256": "EAAB9CF14BE28057EB2DFEADD31A5CF8D10E41DD46BF35337FB9C664290B9BA9"
+    },
+    {
+      "relative": "Microsoft.Extensions.AI.Evaluation.dll",
+      "sha256": "663A352E9F883AA229DF0AD38A81CCB13512F0DECCD6172D4A7C2C19C6AECCAD"
+    },
+    {
+      "relative": "Microsoft.Extensions.AI.OpenAI.dll",
+      "sha256": "FFF08930338F7D31D548A5463D52E18375DAD1E44064B57EEE1EFDB5FBBBFEA1"
+    },
+    {
+      "relative": "Microsoft.Extensions.AmbientMetadata.Application.dll",
+      "sha256": "E67F6C097F6CA06A22B8DDBB57E0B74C4F3D961AABDA82D8F0E15F9023213A19"
+    },
+    {
+      "relative": "Microsoft.Extensions.Compliance.Abstractions.dll",
+      "sha256": "A6EAE4C69AAF0F427CCCC6AF173F25536C9E046083D5E3CEC5489754DCBC60AC"
+    },
+    {
+      "relative": "Microsoft.Extensions.DependencyInjection.AutoActivation.dll",
+      "sha256": "A7E6DE8C4273C8FA90193D5162E3DB73611B6676315C29C31006FDF1857D45E2"
+    },
+    {
+      "relative": "Microsoft.Extensions.DependencyModel.dll",
+      "sha256": "0D7FAE30684654FA9173AD248AB41B713A48D81DF0EF446EE4E40C8D380893E8"
+    },
+    {
+      "relative": "Microsoft.Extensions.Diagnostics.ExceptionSummarization.dll",
+      "sha256": "D1C2CBC8750E8E7C8B8C7F060270B0840BC188C2E720E38FE7EA3F2683F39C8A"
+    },
+    {
+      "relative": "Microsoft.Extensions.Hosting.WindowsServices.dll",
+      "sha256": "C80165C5E7A02BAFAE3B5067E7A78072EC8AE939AE703AEA083280A13B84E3DE"
+    },
+    {
+      "relative": "Microsoft.Extensions.Http.Diagnostics.dll",
+      "sha256": "5544EC51304A875C4016662E6AE17E2D14A7424EDE365DA198D399BEA365C617"
+    },
+    {
+      "relative": "Microsoft.Extensions.Http.Resilience.dll",
+      "sha256": "9DB0C6E6EECE59EE3B59E991928934E0FBA40EE31B77F2960865BEB44E21833A"
+    },
+    {
+      "relative": "Microsoft.Extensions.Resilience.dll",
+      "sha256": "47555A2DE05604897C849D92110506A5165E5C09F389D18546CDD7AD6D829AE9"
+    },
+    {
+      "relative": "Microsoft.Extensions.ServiceDiscovery.Abstractions.dll",
+      "sha256": "6B811BA22715F8B17485FA8C6DDD7951981705EA3B99AF6F689665C7F49A1C5C"
+    },
+    {
+      "relative": "Microsoft.Extensions.ServiceDiscovery.dll",
+      "sha256": "6342308B7511604E85C27948ABCDA74DE1DD40FBF0BDBF315ED6E5E5EC4A22B0"
+    },
+    {
+      "relative": "Microsoft.Extensions.Telemetry.Abstractions.dll",
+      "sha256": "29905406CA18CA8CCE31D60F32D8134DBDADF7A823E77925410B31C78C96F2D1"
+    },
+    {
+      "relative": "Microsoft.Extensions.Telemetry.dll",
+      "sha256": "C4E517FF1CBEC403C8BF57C051399C371875E180CC43C484D12F687FF0AC8024"
+    },
+    {
+      "relative": "Microsoft.Extensions.VectorData.Abstractions.dll",
+      "sha256": "8984CE9B95A23A3BA8B06676F4E574EFADC6D45C91420359668358E06557F175"
+    },
+    {
+      "relative": "Microsoft.Identity.Client.dll",
+      "sha256": "10D59DF4170053EA9597E3C20ADC9607AD17318AD5D8747EDA3D930A5A4B463A"
+    },
+    {
+      "relative": "Microsoft.Identity.Client.Extensions.Msal.dll",
+      "sha256": "9C1F736B16CACD318AFE07D3B9D707A4B4B56DEF5E403B0AFF471C1AF413AAF0"
+    },
+    {
+      "relative": "Microsoft.IdentityModel.Abstractions.dll",
+      "sha256": "3364741E4000A80590BA9D40608D328822D55DA6D7505BEA911C7A954C290D52"
+    },
+    {
+      "relative": "Microsoft.IdentityModel.JsonWebTokens.dll",
+      "sha256": "94ADDEBE2F491B2F8905F2CD1A2D432DF96B980D2370CA26C29B9B7B1F07BAF7"
+    },
+    {
+      "relative": "Microsoft.IdentityModel.Logging.dll",
+      "sha256": "011E68E9BF0C12FA04F669184F7F8FEF5E5F73795F7C594D5A21868B43E7DA0E"
+    },
+    {
+      "relative": "Microsoft.IdentityModel.Protocols.dll",
+      "sha256": "7C8702A7F6C019D962FAF4B8AF2DA751DC32AF9B6BE998688E774394FB5F8730"
+    },
+    {
+      "relative": "Microsoft.IdentityModel.Protocols.OpenIdConnect.dll",
+      "sha256": "D1F7DBBB71CBF69F5242A74E43B632610FF5DCA913F164D1DCF53B2F6E0046AC"
+    },
+    {
+      "relative": "Microsoft.IdentityModel.Tokens.dll",
+      "sha256": "FC4D56DA03D2BBF4D7E6B5ED70200CB15C8035BEBD51CB3A97392246A5AF35BA"
+    },
+    {
+      "relative": "Microsoft.IO.RecyclableMemoryStream.dll",
+      "sha256": "AF24FA342B7F9F08627EB1B2F9410F2F64970B1E135C5FE4837878F8AB3ECB68"
+    },
+    {
+      "relative": "Microsoft.ML.OnnxRuntime.dll",
+      "sha256": "1B8148DC23E6C814E509E9A3530DB4E3829835E959AA93CC15B7C3F7854CE57F"
+    },
+    {
+      "relative": "Microsoft.ML.Tokenizers.dll",
+      "sha256": "04B9CB9A6BCE333071E071C6735A8914BB55E1EA1F197707ED71BF4CABF6CA77"
+    },
+    {
+      "relative": "Microsoft.OpenApi.dll",
+      "sha256": "C82595ADDEE20D3F65E5AF2CBC5D51BEE9E437F7369232FA3C9D26AA238A25FF"
+    },
+    {
+      "relative": "Microsoft.PowerShell.MarkdownRender.dll",
+      "sha256": "E6B409570B35E7F469B3E3941CF5D9870B7924085196400DE4D79C569DE0AB59"
+    },
+    {
+      "relative": "Microsoft.SqlServer.Server.dll",
+      "sha256": "A9DCA1B42BC875F966B78B2C0880E62B838F0ED6567166D7F1F07AE4B76EC4BF"
+    },
+    {
+      "relative": "Microsoft.Testing.Extensions.MSBuild.dll",
+      "sha256": "F6EF5EF03B5C22F7900FB67FE741847E75CF3CE26F652106A27D8CFCC834BB7F"
+    },
+    {
+      "relative": "Microsoft.Testing.Extensions.Telemetry.dll",
+      "sha256": "548751AE749BCA1E823F1BC3698AC751A0DC0CA47C396A9D32B432BD828848DF"
+    },
+    {
+      "relative": "Microsoft.Testing.Extensions.TrxReport.Abstractions.dll",
+      "sha256": "ACAE6C525EAD26F77CEAB1B1D640FE7E8C07FEC2ACDFC78BF753B220A49EF3E6"
+    },
+    {
+      "relative": "Microsoft.Testing.Platform.dll",
+      "sha256": "519744D3B6321320E366495FBED0D8C37F9B0E11207667EB89EB5C0C425A7462"
+    },
+    {
+      "relative": "Microsoft.TestPlatform.CommunicationUtilities.dll",
+      "sha256": "2EBA928C1770209F1FD9F515603A0B4FFBFCADF816681AB36D02B9B36417AB33"
+    },
+    {
+      "relative": "Microsoft.TestPlatform.CoreUtilities.dll",
+      "sha256": "7837F9DF4B11A9844143FC9419E5752BDD50305436ADCBF84F82B8A52D5909D7"
+    },
+    {
+      "relative": "Microsoft.TestPlatform.CrossPlatEngine.dll",
+      "sha256": "2F3B463A227B8F30171F8720164B3C0B90451248E0B2F3E8C3DA82C23A3FDFCD"
+    },
+    {
+      "relative": "Microsoft.TestPlatform.PlatformAbstractions.dll",
+      "sha256": "668C7F0DF2C30FEAC9CEA9DCE808CCABB72FF575C1E820404124212B4EAE1773"
+    },
+    {
+      "relative": "Microsoft.TestPlatform.Utilities.dll",
+      "sha256": "886EF3AB15251E57CA9C124E41DE3C43BA0520A036B876BB709ED325438501FE"
+    },
+    {
+      "relative": "Microsoft.VisualStudio.CodeCoverage.Shim.dll",
+      "sha256": "E590F0095B103C635C7FD45AD5FF537DD221B0BC2DB214717940F59FAF4767F0"
+    },
+    {
+      "relative": "Microsoft.VisualStudio.TestPlatform.Common.dll",
+      "sha256": "96D7B2A7E3F79133E17196FDAD189486B59852379385198B5CD857E9947164FB"
+    },
+    {
+      "relative": "Microsoft.VisualStudio.TestPlatform.ObjectModel.dll",
+      "sha256": "F6D6BC01A85FD68A0599533FCC0DE7357922051BAD90012B8AD15DE31A4EF5E9"
+    },
+    {
+      "relative": "Microsoft.Win32.Registry.AccessControl.dll",
+      "sha256": "13C07A8053C85D3BD0A22DAADC8BFB4B77B6937EE38B9B5ED3BA769357596F52"
+    },
+    {
+      "relative": "Microsoft.Win32.SystemEvents.dll",
+      "sha256": "6AC2A65435ED5FEBC89DD41E36B38340BD9D7994D46035E3D48B93994893D7B1"
+    },
+    {
+      "relative": "ModelContextProtocol.AspNetCore.dll",
+      "sha256": "194717F87FBFD43C791C3CF97A8B55A68C476998545695FD3697B107A69C0668"
+    },
+    {
+      "relative": "ModelContextProtocol.Core.dll",
+      "sha256": "E3886A29F06F837220E24EAF71364DBCBEEC515CDDF34C3A1C603B222F509269"
+    },
+    {
+      "relative": "ModelContextProtocol.dll",
+      "sha256": "FF40B8BBB64D99DA95F734C960B74B37C11C8C4E8722BB58D66802913ABF053C"
+    },
+    {
+      "relative": "NetEscapades.Configuration.Yaml.dll",
+      "sha256": "C7F2C6408E2B2087314E4E0BE9236597715090A0A1322D764F130E7CFD67C52C"
+    },
+    {
+      "relative": "Newtonsoft.Json.dll",
+      "sha256": "A28C251DFE36D881E9E2462E171441B8B0EC156FE3F452602C9149B1B9EFE05B"
+    },
+    {
+      "relative": "Npgsql.dll",
+      "sha256": "9D8DB086E9EDA5FF20C4A7F83FA3EAE7689198F57277FF9CEEA1EE3526F5FCF8"
+    },
+    {
+      "relative": "Npgsql.EntityFrameworkCore.PostgreSQL.dll",
+      "sha256": "0B8CA4484E12F1CD119FC6B4711015BA6CE2364F9890504F6F4F13036C2075BF"
+    },
+    {
+      "relative": "NSubstitute.dll",
+      "sha256": "08A03280FB214723919F238C6FDD25FD276FB433FE5B851DD6FEA0952A583EC9"
+    },
+    {
+      "relative": "NSubstitute.xml",
+      "sha256": "887C931B19AD01BB01B8739AFB3F39AC13FC0D350F6C7B2903DE44EB6B1364D4"
+    },
+    {
+      "relative": "OpenAI.dll",
+      "sha256": "892487E134D803ABB58E8F4202B73E4D9A4EEB1EDFCAC31C54D120579CB0AEBC"
+    },
+    {
+      "relative": "OpenTelemetry.Api.dll",
+      "sha256": "CA5DDB7A51BCBB1AB8BCC6484603C70A4077142A8745D521C4BD2363F9E7C217"
+    },
+    {
+      "relative": "OpenTelemetry.Api.ProviderBuilderExtensions.dll",
+      "sha256": "5C5727DE149A0232825774A8EE75B60581CE19CE8B944D422BD545E2E3D7F915"
+    },
+    {
+      "relative": "OpenTelemetry.dll",
+      "sha256": "EDC9799EFD614CB083193D90EAFCD99ABF70496738C3065933093CF99D162CAE"
+    },
+    {
+      "relative": "OpenTelemetry.Exporter.OpenTelemetryProtocol.dll",
+      "sha256": "20BF20B94E2E92A73D20D97B81D9CD3B26EF0967FF29F80D84B421C4317AC77E"
+    },
+    {
+      "relative": "OpenTelemetry.Extensions.Hosting.dll",
+      "sha256": "A627EBF2A7D14E0F0B3C2568E6EE37773397DE25C90EE89D4560422C42D8B945"
+    },
+    {
+      "relative": "OpenTelemetry.Instrumentation.AspNetCore.dll",
+      "sha256": "247771E79186A704722510E03AEFB2F09C10286FF3FC658DCD4BB81BA347F6C3"
+    },
+    {
+      "relative": "OpenTelemetry.Instrumentation.Http.dll",
+      "sha256": "154C41BC484085A74A0B1886478FFB4AEAF850686D173D0C93A11AD0283AEA2E"
+    },
+    {
+      "relative": "OpenTelemetry.Instrumentation.Runtime.dll",
+      "sha256": "08B62837D801DB4AFE0AC77D27FE66FFF99493CBB6B9C49A5876627C2AABD7A8"
+    },
+    {
+      "relative": "Polly.Core.dll",
+      "sha256": "37762EA6FCF05154685B0A616461705C837C2F07D98E4037DC3A0E4B4C186EA5"
+    },
+    {
+      "relative": "Polly.Extensions.dll",
+      "sha256": "8ADAC7A20CD056B9A8623EFB6E6F9B99A82E18D3C7B7F6C788F7FC4B20CE5F18"
+    },
+    {
+      "relative": "Polly.RateLimiting.dll",
+      "sha256": "AFE3042CD4062438857D42880623845F32575375F460FD1AC07F705EA0211804"
+    },
+    {
+      "relative": "protobuf-net.Core.dll",
+      "sha256": "D8B333EC409D0CC23954A1DA07028E54CDACA7D1061A52E4AE265BAEF63D8BD1"
+    },
+    {
+      "relative": "protobuf-net.dll",
+      "sha256": "C482090BF4002B2B65A576A0E44FFA860B63086FF8C3DB122F7EA480AEB6F2D7"
+    },
+    {
+      "relative": "QBrainAi.Client.dll",
+      "sha256": "4AE66CA8CBA3D33D522F5B12ED1A387AEAA3B388AE4B04092F538E0EC3822B97"
+    },
+    {
+      "relative": "QBrainAi.Client.pdb",
+      "sha256": "BD87A6B6CCEB782BEAAA72A0ADCD24BF7C9DE93FC4DF435022D8163CD23EB009"
+    },
+    {
+      "relative": "QBrainAi.Client.xml",
+      "sha256": "971392E5925C8E70E0346FA2509F2B85C9160407EB4034FF639AA7FE5CC249E2"
+    },
+    {
+      "relative": "QBrainAi.Common.AgentCli.dll",
+      "sha256": "E97A2F58CCEAC5EB3E4FB1F649787BF90B308B468995B4A7573D7B6608FB1A0F"
+    },
+    {
+      "relative": "QBrainAi.Common.AgentCli.pdb",
+      "sha256": "00C944913BEAB065746711A0B370C1F828EF21ACB2F344E356450C4466CAC696"
+    },
+    {
+      "relative": "QBrainAi.Common.AgentCli.xml",
+      "sha256": "8B19CAF2B1B48FF5E08D18F71C699AB7561491106DE52DC82AE39347F0F9002C"
+    },
+    {
+      "relative": "QBrainAi.Cqrs.dll",
+      "sha256": "9DC1736297AEA5A0761570DE160E164158DDB15565BC0C50FCD3DC8375CA94F5"
+    },
+    {
+      "relative": "QBrainAi.Cqrs.Mvvm.dll",
+      "sha256": "38F693652649228B2C7265387D196B7437B9217CFD5C7CAB5060CCF7B2D26FA8"
+    },
+    {
+      "relative": "QBrainAi.Cqrs.Mvvm.pdb",
+      "sha256": "8F4EC9F0F2A217FE9376EB132BE5B5AD9AA7732E3D241D3C1357CFE8512F99EF"
+    },
+    {
+      "relative": "QBrainAi.Cqrs.Mvvm.xml",
+      "sha256": "52000F535EDA3DB23CD25E10086FD3D4B1F2FA809EB77BE5D834F365113B5B0F"
+    },
+    {
+      "relative": "QBrainAi.Cqrs.pdb",
+      "sha256": "59B358233A3050D1B61D4AD8D23CD27E09BC4CFDEF885657DE32B39097198228"
+    },
+    {
+      "relative": "QBrainAi.Cqrs.xml",
+      "sha256": "E5D285FFA2AA7B78B0714F43B06962234F844E678A7B2493D94164B4D39344B6"
+    },
+    {
+      "relative": "QBrainAi.GraphRag.dll",
+      "sha256": "BD9B4A8F19D0E761A575C43E269B28467BD285FE62B8A7AF2ACB611E2A115724"
+    },
+    {
+      "relative": "QBrainAi.GraphRag.pdb",
+      "sha256": "0B5219AFFD45F63E02C5D355A5B356220D25017AD92C8CDFF56222E34C83B686"
+    },
+    {
+      "relative": "QBrainAi.GraphRag.xml",
+      "sha256": "2294B3BE9D2B909BBD0AC288A8F314636BE9DD8849EBCF0F26D9BE078DB81540"
+    },
+    {
+      "relative": "QBrainAi.McpAgent.dll",
+      "sha256": "1519E4982033FEC29FF5822D265C0393AF02421FDC1D3E6A1A8A95CB435E037D"
+    },
+    {
+      "relative": "QBrainAi.McpAgent.pdb",
+      "sha256": "F5203FE2B3FC7AFD7CB60E06A4162AFF89526DE40A219B987CFFC29B97074993"
+    },
+    {
+      "relative": "QBrainAi.McpAgent.xml",
+      "sha256": "12F8E0A0352AB96D679DCABA6CCC5F070A8F9962C31A3506DE9C9E09C7E81435"
+    },
+    {
+      "relative": "QBrainAi.ProcessTree.TestHelper",
+      "sha256": "A08A0B48F40E8A527C1FC6720D18A1F9694DC505A4D2D1B8B4FBC7CCC2422F1E"
+    },
+    {
+      "relative": "QBrainAi.ProcessTree.TestHelper.deps.json",
+      "sha256": "8B274058CD1C7BCCEC980CCBE7FEC1FD0E37A32C2DCFDFF498E696477EDFD5FC"
+    },
+    {
+      "relative": "QBrainAi.ProcessTree.TestHelper.dll",
+      "sha256": "BBD1F8FD315319623B66DC501B07267B5151C027C591E8D77F4D0F98713F3448"
+    },
+    {
+      "relative": "QBrainAi.ProcessTree.TestHelper.pdb",
+      "sha256": "97664CDAA0C8198F40EDBFB3A942DBF2421C804C8321C77F2D9ADE428C0823EA"
+    },
+    {
+      "relative": "QBrainAi.ProcessTree.TestHelper.runtimeconfig.json",
+      "sha256": "F9BC8E9F0C46247078ED47309F19A7576B4B94E4300E9DE0003917D6BD2D667A"
+    },
+    {
+      "relative": "QBrainAi.ProcessTree.TestHelper.xml",
+      "sha256": "A997D40D388B4EBF96215EB063F673693EE8ABF1507824817ACB4E70F70F3205"
+    },
+    {
+      "relative": "QBrainAi.Repl.Core.dll",
+      "sha256": "9BF5B80B01AE73A8BE72AAFDD93349528366F1D1F21D98AB4DBE2FAAD05E5178"
+    },
+    {
+      "relative": "QBrainAi.Repl.Core.pdb",
+      "sha256": "61EAECF1E770AF9C10B6A3BAA27D89A1AF89BDEF3079B1405FB660173A1A915A"
+    },
+    {
+      "relative": "QBrainAi.Repl.Core.xml",
+      "sha256": "145BBEFFDFA6D3C7A9515F1EC658ED12BC7291D6190255B630E5721A2C006E26"
+    },
+    {
+      "relative": "QBrainAi.ServiceDefaults.dll",
+      "sha256": "7B26D201E1C570FA40EF84F822F8A86CF025D76FE2A6484E32EC261EF799E051"
+    },
+    {
+      "relative": "QBrainAi.ServiceDefaults.pdb",
+      "sha256": "2A30C9130E223F57D70AFBF4F187AC8362FEA4E6D37C9BBAD1A0F660787B54E1"
+    },
+    {
+      "relative": "QBrainAi.ServiceDefaults.xml",
+      "sha256": "864EA72E3D4027EF28FAE78AE241B3ED5B77553CF546FD91D83D6616A89369F9"
+    },
+    {
+      "relative": "QBrainAi.Services.dll",
+      "sha256": "4AAD76ACA11D9F74D8F506C411AB6B533FD897A479B7BBF272BAA78569502363"
+    },
+    {
+      "relative": "QBrainAi.Services.pdb",
+      "sha256": "674C94BC44638B54461F643D0DB3AD2A744526863AD688F7076EDEB1CDC05968"
+    },
+    {
+      "relative": "QBrainAi.Services.xml",
+      "sha256": "686182CE0DDB4D2D82082BB66F9215444641EB081BFF8F338ACC6704DC6FB7DD"
+    },
+    {
+      "relative": "QBrainAi.SessionLog.Transcripts.dll",
+      "sha256": "9322EA934BE827BF42E73829E818FA6446D3656D4C3A37FAEF61B663C56F42E3"
+    },
+    {
+      "relative": "QBrainAi.SessionLog.Transcripts.pdb",
+      "sha256": "CE4CCA44B14673CEBEA3A037ADCB01A32F797469AAA2E1C7A71C631930DF0CE1"
+    },
+    {
+      "relative": "QBrainAi.SessionLog.Transcripts.xml",
+      "sha256": "BFB7B03EF5725C64A40898B93FA30915EDEEA70A1ECBAA3330B340273EB250BF"
+    },
+    {
+      "relative": "QBrainAi.Storage.dll",
+      "sha256": "CCDAF293F1CC483CD66FC62B6E06A615DDF7BA06D5CE2CDC2778047FD0E48931"
+    },
+    {
+      "relative": "QBrainAi.Storage.pdb",
+      "sha256": "E2E3BDBFA8DDD679C30C533B13F658C717B0A888CBFCE0828466FB6EDCC6BD3B"
+    },
+    {
+      "relative": "QBrainAi.Storage.PostgreSqlMigrations.dll",
+      "sha256": "CD0D61455265BDA3CBD1DFFC63AF7B8DFA8CC731C1123D671A25ADB6B68AF261"
+    },
+    {
+      "relative": "QBrainAi.Storage.PostgreSqlMigrations.pdb",
+      "sha256": "2D5BD45424BC1093641BF29CBB650C24D203464E71CE942EEE5B4896814F4DBD"
+    },
+    {
+      "relative": "QBrainAi.Storage.PostgreSqlMigrations.xml",
+      "sha256": "D64281B9769BEC1D9E8189F51AEF4A06920BE2939A09CA471E94A62554190ED0"
+    },
+    {
+      "relative": "QBrainAi.Storage.SqliteMigrations.dll",
+      "sha256": "E7712CF635D2C663CFE69EB696C764B35BB21058BB5B39AA87A532ECF87FEA4B"
+    },
+    {
+      "relative": "QBrainAi.Storage.SqliteMigrations.pdb",
+      "sha256": "E77293E887C93E30333634CA17BB5A9CF251875F113D4FE5E527FEEFC1E7E90F"
+    },
+    {
+      "relative": "QBrainAi.Storage.SqliteMigrations.xml",
+      "sha256": "1EBAAA89720257768F75483D4F62753A67F9B90321E7AF2B96645F6EECC562A7"
+    },
+    {
+      "relative": "QBrainAi.Storage.SqlServerMigrations.dll",
+      "sha256": "BC0794E6B8F659D6C7CFB2B838D1668324CB99238C677F326A2C7D70A4637A41"
+    },
+    {
+      "relative": "QBrainAi.Storage.SqlServerMigrations.pdb",
+      "sha256": "ACE41D12D479675F57988EFEB08FA431A1B8247F626958C57FECA47538045833"
+    },
+    {
+      "relative": "QBrainAi.Storage.SqlServerMigrations.xml",
+      "sha256": "EC21FB04FF5A9E38DEE46385155DE4AA26AA83246A6905CCD20E15FDBB1B7AA7"
+    },
+    {
+      "relative": "QBrainAi.Storage.xml",
+      "sha256": "FEF30A10276DDB2AF7B155C57B2F77EB8FFA8CB3D73CDF7FA009FBFD15E1EA1C"
+    },
+    {
+      "relative": "QBrainAi.Support.Mcp",
+      "sha256": "F01760A5B723A4D21DB1D502B1D63FB09AAA2ABE7780E93A23A0325916E9681F"
+    },
+    {
+      "relative": "QBrainAi.Support.Mcp.deps.json",
+      "sha256": "D1EEECE1EE1E16ED2407393FC0015D6E2A608336A9D026A6AE273DA1C8AB7F27"
+    },
+    {
+      "relative": "QBrainAi.Support.Mcp.dll",
+      "sha256": "C880FFA53B5343CD97167F0E8B911A17D9CC3E022D14691CCE89F6EAF3CDF850"
+    },
+    {
+      "relative": "QBrainAi.Support.Mcp.pdb",
+      "sha256": "9C2036055FB5CAD302264EF56080D2F428E386B83BDE8247DCCA526497F263C5"
+    },
+    {
+      "relative": "QBrainAi.Support.Mcp.runtimeconfig.json",
+      "sha256": "2586CFE1E4F199A9EE1793D137DC9A4697FC31DBF5D0C61C299472975D6D5868"
+    },
+    {
+      "relative": "QBrainAi.Support.Mcp.staticwebassets.endpoints.json",
+      "sha256": "64F8B7FE50F1A557371A3ECD235A06784F7258CCFF50CD81483EC00D369BC0CC"
+    },
+    {
+      "relative": "QBrainAi.Support.Mcp.staticwebassets.runtime.json",
+      "sha256": "EEC8D01551385CA4C4094A476C5657B44F2800ACA7F4F8F272B1E938096C5499"
+    },
+    {
+      "relative": "QBrainAi.Support.Mcp.Tests",
+      "sha256": "093E516F646045C9BBC4BC05D5E63BCD704A3AE6CF515CE06B72744AD6471358"
+    },
+    {
+      "relative": "QBrainAi.Support.Mcp.Tests.deps.json",
+      "sha256": "AA33DC46A0F2C11F2D48D4E09C1F47972F65F52FB333C1A13F4C6B142E3FD61B"
+    },
+    {
+      "relative": "QBrainAi.Support.Mcp.Tests.dll",
+      "sha256": "05FA42E8B3D0640DD16719979AE56E5DAD48293D2876881F29545D6323862905"
+    },
+    {
+      "relative": "QBrainAi.Support.Mcp.Tests.pdb",
+      "sha256": "C085F88E08489E2752CD2F738CCBC90F04DE773E44F518B8CB7D2ED01CC2E60F"
+    },
+    {
+      "relative": "QBrainAi.Support.Mcp.Tests.runtimeconfig.json",
+      "sha256": "6A69B29BA1362A9D97E42B09236A7D334F78C1A5B2A99AC24C209D2FF7A13DA1"
+    },
+    {
+      "relative": "QBrainAi.Support.Mcp.xml",
+      "sha256": "F85E397E68AB64B33A2BD98325DA83193C2EADD056D61F81E9443429F00E2B44"
+    },
+    {
+      "relative": "QBrainAi.TransactionSecurity.dll",
+      "sha256": "E0036ACAD57C4CDF6C6F375763E764A524BBCEC0B5AFD2325FECB542837F0874"
+    },
+    {
+      "relative": "QBrainAi.TransactionSecurity.pdb",
+      "sha256": "98D02D7E25B3CC874E82CCE94E9E2D1EB2F15ABFFCC09EF5A56294982614FF88"
+    },
+    {
+      "relative": "QBrainAi.TransactionSecurity.xml",
+      "sha256": "4C165BB2D6592E1C4B87DD935F2DD35607BE4F686E3BB9B025A5F5F8308B0E6E"
+    },
+    {
+      "relative": "QRCoder.dll",
+      "sha256": "3C5674F67A97FD9ED38DD537D892EE9EFD328AFAD4D6C1D67F99FDE2C108DD57"
+    },
+    {
+      "relative": "Serilog.AspNetCore.dll",
+      "sha256": "A550C57DF7A04EDBED00DA036FC14BE12ACD0D425B7401855975FB628E3DBADA"
+    },
+    {
+      "relative": "Serilog.dll",
+      "sha256": "9FBF7441A9BDC9459652DC66E18F008040651F14CB8D7A7BB806AC4A8B722D10"
+    },
+    {
+      "relative": "Serilog.Extensions.Hosting.dll",
+      "sha256": "3E6D0284179EE0E1C197568FD79B58F869D15298FFF8ECB8447322FE87D44F47"
+    },
+    {
+      "relative": "Serilog.Extensions.Logging.dll",
+      "sha256": "80D3EDBE3E3AC0B4C5BC764474220E7DA11DF8D285E0098F3DC1B65A734C8507"
+    },
+    {
+      "relative": "Serilog.Formatting.Compact.dll",
+      "sha256": "319FBCEFC2161DD50CCDD8D60B30EDEE48A09F794AEDB28421A23F35DDD670D9"
+    },
+    {
+      "relative": "Serilog.Settings.Configuration.dll",
+      "sha256": "EC8CFD1F8970A44E2AA3F7BCC71116CA2691B196564BFF83E3E3EAD0C1143B67"
+    },
+    {
+      "relative": "Serilog.Sinks.Console.dll",
+      "sha256": "DC88002DDD9F5FD0FFEC9A6568EF89954671F60F2C9161593EE78932538C1E3E"
+    },
+    {
+      "relative": "Serilog.Sinks.Debug.dll",
+      "sha256": "DF543D3DF8BD00D72E5EB2B9B2A15E67A6E4D10C13834DE4CEDBF500B8793E01"
+    },
+    {
+      "relative": "Serilog.Sinks.File.dll",
+      "sha256": "4F4282671C2AC68284B4DC99F7A76EAC9CBD4E659978CEF642CFF9E6C01B676D"
+    },
+    {
+      "relative": "Serilog.Sinks.Http.dll",
+      "sha256": "DB402F6646E636E2DEEFE6A000B16A64561CFA9149114B197B2BC1EB6EAEDEC6"
+    },
+    {
+      "relative": "SQLitePCLRaw.batteries_v2.dll",
+      "sha256": "94AC800C6B93AE50A025F247547781DEBE18391110667C5E242F51D8AC188FFB"
+    },
+    {
+      "relative": "SQLitePCLRaw.core.dll",
+      "sha256": "3D2ED8E186F124F988EBDB45D0354185B424357BE2433BBA0033AB9EC31BD25B"
+    },
+    {
+      "relative": "SQLitePCLRaw.provider.e_sqlite3.dll",
+      "sha256": "232990C8372AFF30574EEF9CC280B486EE6F39F8A66F83EA495DD0DBAE98740C"
+    },
+    {
+      "relative": "Swashbuckle.AspNetCore.Swagger.dll",
+      "sha256": "C827F22700CB6BE25508FA009DEF6760ADAE955061B3AECD99F8180A362A7A7A"
+    },
+    {
+      "relative": "Swashbuckle.AspNetCore.SwaggerGen.dll",
+      "sha256": "D9D0F7DBD1E061B1A5ADC8F2CD30B491957696D2A8FADE23557C9C3347BF9E35"
+    },
+    {
+      "relative": "Swashbuckle.AspNetCore.SwaggerUI.dll",
+      "sha256": "B3FDDD2D2421F4D982882441AECC9ACCEF6C473F7DC79B880F4278FB9D7F6B32"
+    },
+    {
+      "relative": "System.ClientModel.dll",
+      "sha256": "DEC5E22B71A1685C5E6E97CD28B629F0AA6703FB87B6950DF28E79FC1804290C"
+    },
+    {
+      "relative": "System.CodeDom.dll",
+      "sha256": "F9A0E21D39D2D1DC930D29973E5E91EE312EBD38F1EC4C44A9EE969392E6D8A7"
+    },
+    {
+      "relative": "System.ComponentModel.Composition.dll",
+      "sha256": "784BB00555A12C415ACFCEAE649030276D2B533271A1C95DF1849945EE0AC93A"
+    },
+    {
+      "relative": "System.ComponentModel.Composition.Registration.dll",
+      "sha256": "CE2BC3B4AF0A40347C95E93E63A38791F010648D10BD38276977343292159610"
+    },
+    {
+      "relative": "System.Configuration.ConfigurationManager.dll",
+      "sha256": "00E4919DAF63DD15240E24D565CAFFE7065C048D714792BBC671918FD66E9410"
+    },
+    {
+      "relative": "System.Data.Odbc.dll",
+      "sha256": "47BADBD108E5FA6F2F457F693D564429A8BA05C38364BDAE0BB362A739378D65"
+    },
+    {
+      "relative": "System.Data.OleDb.dll",
+      "sha256": "7E65FA2D8E13303D2A5738C89ADD10B54E50E1272F17A1D9D11C0F268E73CB6F"
+    },
+    {
+      "relative": "System.Data.SqlClient.dll",
+      "sha256": "55D57C3F439A3AAB7BAFE6F915266EA43208BBD130628727494C69D7AC47DD16"
+    },
+    {
+      "relative": "System.Diagnostics.PerformanceCounter.dll",
+      "sha256": "D15BEAF49B48BAD1AA5C0087B1CFB0FE933086CBC069259A9869DFA1589AAA5D"
+    },
+    {
+      "relative": "System.DirectoryServices.AccountManagement.dll",
+      "sha256": "3C1472D7E7282186D4FA02D3804453B20DE40CC49F781A195C9A44AE7BE295C8"
+    },
+    {
+      "relative": "System.DirectoryServices.dll",
+      "sha256": "01207952CE5A5D2994C0A577BC3622FB49FBC5D61C238F87BC8E3B5469A34CFC"
+    },
+    {
+      "relative": "System.DirectoryServices.Protocols.dll",
+      "sha256": "0D2CF34858D0EE18E04F785C57252D4390E793C5E1B3EC2623A357DE870C6027"
+    },
+    {
+      "relative": "System.Drawing.Common.dll",
+      "sha256": "ADD3166D813F960268107A0FEA11EADD1B21F0DD29585960991AC6D015853D29"
+    },
+    {
+      "relative": "System.IdentityModel.Tokens.Jwt.dll",
+      "sha256": "3DE663673F8B5262B12C1DB1041602E6B660DB26342CEF580F2290809AC1B14A"
+    },
+    {
+      "relative": "System.IO.Packaging.dll",
+      "sha256": "07E0FEC4199D6A6AE30B128DCE7808183870CE1A2C84802610A4F58395B7BF09"
+    },
+    {
+      "relative": "System.IO.Ports.dll",
+      "sha256": "67655721CA7B06B4391CF0B117029CC8D45D1359A422982179DF9BAF6DF42BAD"
+    },
+    {
+      "relative": "System.Management.dll",
+      "sha256": "06909C5CEB37A07D0578B636DA7E98A595C49682F9BA65BB9B02B3F0897BC091"
+    },
+    {
+      "relative": "System.Memory.Data.dll",
+      "sha256": "2C1035B0106DBB2DE7913D151E06071ED617BB58BBB3D6CD46A2DD0F6A03617B"
+    },
+    {
+      "relative": "System.Net.Http.WinHttpHandler.dll",
+      "sha256": "02842D66C2ED46FEA6F03135162DE1F50AA830FD563A23FF2210C74177C30A46"
+    },
+    {
+      "relative": "System.Numerics.Tensors.dll",
+      "sha256": "BCF16D3D886829CD731BCF9F26D685CFF04D819C23BDE4F1EECE5A0FB2284041"
+    },
+    {
+      "relative": "System.Private.ServiceModel.dll",
+      "sha256": "DB8DE1773F2A08DD456E481702629A6A8A49CE73D9C023D27E893C4547EDF5D6"
+    },
+    {
+      "relative": "System.Private.Windows.Core.dll",
+      "sha256": "A0AEB30CF70DEB116DD8EFE4CD86C1D45AD4F249B82C6ACAEB9D268584CF4B71"
+    },
+    {
+      "relative": "System.Reflection.Context.dll",
+      "sha256": "D31EDF51DCF9CA8937B7D50ECDB283D913B5F47945DE3DA2E4457DDA203EF6F1"
+    },
+    {
+      "relative": "System.Runtime.Caching.dll",
+      "sha256": "41EC6F287CEA063748FC857E8EA2010E119236210336734E3A3C0609F3B30D4B"
+    },
+    {
+      "relative": "System.Security.Cryptography.ProtectedData.dll",
+      "sha256": "267DB355F0A592376B4DBB931CDED52806504E279567B21AAED86C89C496E747"
+    },
+    {
+      "relative": "System.Security.Permissions.dll",
+      "sha256": "98D3F97CA1E23BEBF716CD1ED354A5AD85C8227A5715D7DEB333E35805896499"
+    },
+    {
+      "relative": "System.ServiceModel.dll",
+      "sha256": "49624A49E5E93BB9E0F67D53B5F800DF1639A96B6C499B4702CA2400036E1017"
+    },
+    {
+      "relative": "System.ServiceModel.Duplex.dll",
+      "sha256": "47DF412F4314DD8167B98C00B07EE72D8CBA519D9157746A434CFC14F35F9157"
+    },
+    {
+      "relative": "System.ServiceModel.Http.dll",
+      "sha256": "4B42F2D27AEE9FDC2063709B485D052BF46C387E6A6E13CE92ADEBD5A5FAD2D4"
+    },
+    {
+      "relative": "System.ServiceModel.NetTcp.dll",
+      "sha256": "9176AB9D413A02065EAF3CBC2CC8F3B9A7828BB42EEB60F0E94F4C62E90C37CC"
+    },
+    {
+      "relative": "System.ServiceModel.Primitives.dll",
+      "sha256": "9BA3A0E63C793CD63910882F6458E6E23FBB35D7A424F02FA8659EB8515B0B7E"
+    },
+    {
+      "relative": "System.ServiceModel.Security.dll",
+      "sha256": "D557F54112DB1B908BB0F15CAE688204420C8A76413085E33DD8A18FD8CE097B"
+    },
+    {
+      "relative": "System.ServiceModel.Syndication.dll",
+      "sha256": "E433BE2A9C65800A5DAAF270356A8DA84F53885D24DC0140EED9AB66D96E1AB4"
+    },
+    {
+      "relative": "System.ServiceProcess.ServiceController.dll",
+      "sha256": "5E8279944F0AC14FE4FEB4059D9972C20C29B0ACDA5839685ABA2882C40F9188"
+    },
+    {
+      "relative": "System.Speech.dll",
+      "sha256": "FB423302793B0D05E3653D3C2DC2F930E559F85065986CD08F9AAAF487FD63F1"
+    },
+    {
+      "relative": "System.Web.Services.Description.dll",
+      "sha256": "206D36DA41795211ABA33A68BA4220D38368D030717EFF4BA95BBE4ABFBEB4EA"
+    },
+    {
+      "relative": "System.Windows.Extensions.dll",
+      "sha256": "95D8EC6B11D1A930D33F9AFF8F0A40C5A3A87CCD54942C0380636B5C76D14CFB"
+    },
+    {
+      "relative": "testhost.dll",
+      "sha256": "F9F95F20F7A99215B50CFD511085B31549B26F87AFAEB02C0A3C21F6875817E8"
+    },
+    {
+      "relative": "xunit.abstractions.dll",
+      "sha256": "3166DC70323FB30CCF1CEDB0FE86F2AD122C46D254542342D90386EFC4C9285C"
+    },
+    {
+      "relative": "xunit.runner.visualstudio.testadapter.dll",
+      "sha256": "384ABA4BAD96399A7FD2205A5A3517B643A16F4D7E843BD0B92E1E42F81FCE2A"
+    },
+    {
+      "relative": "xunit.v3.assert.dll",
+      "sha256": "483AEC8A5B7FAEA0A92D0AE4F11A3479045F8F5E3F551DFC4DAC6BEDEAAFA9CE"
+    },
+    {
+      "relative": "xunit.v3.common.dll",
+      "sha256": "E4175BC165D01B9828ACDC996776370ADF4F8D0A5865E75EC9DED17FB70258A9"
+    },
+    {
+      "relative": "xunit.v3.core.dll",
+      "sha256": "B3641E9E80CD8175E2D9995D6FA9750B8FB31740C87BA121E56CFE515F7F06CC"
+    },
+    {
+      "relative": "xunit.v3.mtp-v1.dll",
+      "sha256": "69903F4E48E5794350154D97BC911909974469780CD1931E23DA3AF419A1F2E7"
+    },
+    {
+      "relative": "xunit.v3.runner.common.dll",
+      "sha256": "8D9B157EBD8D9240D292ED922F5F26BA4011DE5FD07812CEAAC7BACCFC5E6BC4"
+    },
+    {
+      "relative": "xunit.v3.runner.inproc.console.dll",
+      "sha256": "360EF1613C7D4148A715B8495D9F7AD95E4126F75ED86DDA6CF81139C28B1431"
+    },
+    {
+      "relative": "xunit.v3.runner.utility.netcore.dll",
+      "sha256": "ABCE062185B0D72B665AAE07D76C681AFF1CD794525A34CFA1B3B0137AF76AFF"
+    },
+    {
+      "relative": "YamlDotNet.dll",
+      "sha256": "86F873F682C619A0C24E263DCDD15FE027104666641C92F503516671D61EDDA6"
+    },
+    {
+      "relative": "de/Microsoft.CodeAnalysis.CSharp.resources.dll",
+      "sha256": "15DA511C4181EBA5070DE3F8A4AD08314A2BEF72318752C8345D81A0E1622DF1"
+    },
+    {
+      "relative": "de/Microsoft.CodeAnalysis.resources.dll",
+      "sha256": "1FA68ED5FA632888B6CD38E47437D882A8CD08196A93E5B6B457DC2EE54A6BB2"
+    },
+    {
+      "relative": "de/Microsoft.Data.SqlClient.resources.dll",
+      "sha256": "30E111759EB091735455F8A7E3CB2A5AFF16287149CF3D4E7A67624F00320FC3"
+    },
+    {
+      "relative": "de/Microsoft.Testing.Extensions.MSBuild.resources.dll",
+      "sha256": "AE4E229395D2C2BB6AB386F5EA7CCA93BD77E5FA572762C49CE9F995890715F4"
+    },
+    {
+      "relative": "de/Microsoft.Testing.Extensions.Telemetry.resources.dll",
+      "sha256": "C318A674B024C8E5CAC7189468AB9784D60B28DF1B3699A07A6E66B1E3A5CBC1"
+    },
+    {
+      "relative": "de/Microsoft.Testing.Platform.resources.dll",
+      "sha256": "CBCF59EFF451D2674F436F0BB194813E28CC137006912EFA13147B5B558B0397"
+    },
+    {
+      "relative": "de/Microsoft.TestPlatform.CommunicationUtilities.resources.dll",
+      "sha256": "413FC39528636AA78640CF1052E2267FFB527F822B367A61C5E7E46BD1DD0A29"
+    },
+    {
+      "relative": "de/Microsoft.TestPlatform.CoreUtilities.resources.dll",
+      "sha256": "AD8C9259E56B5DC2023F59934678E41656C03F899C93B4E00999884529488CF4"
+    },
+    {
+      "relative": "de/Microsoft.TestPlatform.CrossPlatEngine.resources.dll",
+      "sha256": "6FE68132BD88BB7D68515E76D3BF64331C0F71E31495084D7E17BF67BF8CB760"
+    },
+    {
+      "relative": "de/Microsoft.VisualStudio.TestPlatform.Common.resources.dll",
+      "sha256": "CF403E0E615344F9AE3F721804568CD7C7C37B1232C1D10779E6CA0700CCC27F"
+    },
+    {
+      "relative": "de/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
+      "sha256": "F5CA7F6CC54E69AC8C3035E048F7EE8220F9384FFD7F39B7BDCD3B4C09F32C73"
+    },
+    {
+      "relative": "de/System.Private.ServiceModel.resources.dll",
+      "sha256": "67B5B3ABDE2B6DD89142B4A88E33D0F00B17D7231C5523FF8973A2C85028D476"
+    },
+    {
+      "relative": "de/System.Web.Services.Description.resources.dll",
+      "sha256": "CABBC0F58260ED973E85AB4CE413D9B6094D4B518F64E741045348A54FD669E1"
+    },
+    {
+      "relative": "cs/Microsoft.CodeAnalysis.CSharp.resources.dll",
+      "sha256": "2B6A9D8D2374C8EAEC5870A8C0D667FD368ECDFE79BE515F362BCEDA18C01E61"
+    },
+    {
+      "relative": "cs/Microsoft.CodeAnalysis.resources.dll",
+      "sha256": "FE911689358538E1E7699F09C9D6D7FBEC3D9BEB6D6CEA1C0C95BF3FEE357205"
+    },
+    {
+      "relative": "cs/Microsoft.Data.SqlClient.resources.dll",
+      "sha256": "6E9B997F45393346CF2F96DA99F7FA868F2286964A49CE66A59988DEFDAF84B6"
+    },
+    {
+      "relative": "cs/Microsoft.Testing.Extensions.MSBuild.resources.dll",
+      "sha256": "432616A8BC337212194BB303EBA3C1FAE2F46C81557AA546B49BD1318875F0B3"
+    },
+    {
+      "relative": "cs/Microsoft.Testing.Extensions.Telemetry.resources.dll",
+      "sha256": "8E628F9C38B27C325E3644794933DCA945A5236EE51BA5D41AD14619A2C3FA92"
+    },
+    {
+      "relative": "cs/Microsoft.Testing.Platform.resources.dll",
+      "sha256": "94B25646DA3BDF581CEB21A04099F1A775E5D02EB3C8CDC893C1DDE30CC995BE"
+    },
+    {
+      "relative": "cs/Microsoft.TestPlatform.CommunicationUtilities.resources.dll",
+      "sha256": "0B2801C627BED88A606321D10596EB669CFEB88B57BFC5C0B6B7A907B9BB733B"
+    },
+    {
+      "relative": "cs/Microsoft.TestPlatform.CoreUtilities.resources.dll",
+      "sha256": "C9D447F731108933FB04C6C590CBC67DA8B216798F59DD58FBF59DBE5D4BAD12"
+    },
+    {
+      "relative": "cs/Microsoft.TestPlatform.CrossPlatEngine.resources.dll",
+      "sha256": "0B0DA78325C153C961A6C909A1A7F76B5351D378183AC97750962B422BC42FED"
+    },
+    {
+      "relative": "cs/Microsoft.VisualStudio.TestPlatform.Common.resources.dll",
+      "sha256": "DDBA6018CAC9353A31A4BB74EE2E415D18EDB847F3963B15A9761FFF43F46F8A"
+    },
+    {
+      "relative": "cs/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
+      "sha256": "392D2886733F9F5FB876A6B5A3EB163A121DBC6E85C48E38AD3715B8F8B93DC0"
+    },
+    {
+      "relative": "cs/System.Private.ServiceModel.resources.dll",
+      "sha256": "E62D0A64305BDF6F866320AF5C0A9B76F04E324CCACC48B8A7FD74DC15C35E8B"
+    },
+    {
+      "relative": "cs/System.Web.Services.Description.resources.dll",
+      "sha256": "4CD953BB04F56D222D985156A1469038F3A0DE8EE48B958E46066D1E26082202"
+    },
+    {
+      "relative": "fr/Microsoft.CodeAnalysis.CSharp.resources.dll",
+      "sha256": "DF600ED35161397628EE2509C38BE48D2557E5D7DF4ED7F1FF40B5468BAF5C7F"
+    },
+    {
+      "relative": "fr/Microsoft.CodeAnalysis.resources.dll",
+      "sha256": "761AC4C13A78BC802BB766BA90C7EE505FCB4E1D3FDCA13B93DCB59319A5CB57"
+    },
+    {
+      "relative": "fr/Microsoft.Data.SqlClient.resources.dll",
+      "sha256": "2EAC255E2A16495D0BB89AEAFA5AA668F74E12358E76EB1756DE271B8B91E1DE"
+    },
+    {
+      "relative": "fr/Microsoft.Testing.Extensions.MSBuild.resources.dll",
+      "sha256": "2C5383C57739A629A35243E1D2079911CB224D08DB41DC53056EDDB809DA89C4"
+    },
+    {
+      "relative": "fr/Microsoft.Testing.Extensions.Telemetry.resources.dll",
+      "sha256": "7C622561AA254FE1CE028EDB3438110DB7C1D896E2B669475EF3F143D6C6E047"
+    },
+    {
+      "relative": "fr/Microsoft.Testing.Platform.resources.dll",
+      "sha256": "A85A866A300682481295C53CBD07D26A9F91B60D6194C26B3A257969619D82A1"
+    },
+    {
+      "relative": "fr/Microsoft.TestPlatform.CommunicationUtilities.resources.dll",
+      "sha256": "901BBB04F87EDD283279C7B1B34445DF9D3B81A6723D9C43D7AEC063FAC4E8B1"
+    },
+    {
+      "relative": "fr/Microsoft.TestPlatform.CoreUtilities.resources.dll",
+      "sha256": "7550CF5A25CCA79F93C730F6CEC1BBA68D5B163F5EC8518483E4E0CECECD65E5"
+    },
+    {
+      "relative": "fr/Microsoft.TestPlatform.CrossPlatEngine.resources.dll",
+      "sha256": "A2A5CEABEB48E076C56472312EF023A4FC1340A719EED296EAE5F8047195947E"
+    },
+    {
+      "relative": "fr/Microsoft.VisualStudio.TestPlatform.Common.resources.dll",
+      "sha256": "60FDC87D0FF56EADE63C4992106E7FCFCB1CC4C5E3FE9518EA485C4607FABDB9"
+    },
+    {
+      "relative": "fr/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
+      "sha256": "E2B88446B34C929A7D243D21A49E9AE310D6600E91625BAD0899A1D43CA7D68B"
+    },
+    {
+      "relative": "fr/System.Private.ServiceModel.resources.dll",
+      "sha256": "928AE7CA6C605F3A5238156287F24BECB6FDB60D677F4A16D81F8F7022C6BC8D"
+    },
+    {
+      "relative": "fr/System.Web.Services.Description.resources.dll",
+      "sha256": "C117837ABEF35CDBA0A42C5D2193A2F3A9C24DC63CDFDA3188B77E88DC33E7B8"
+    },
+    {
+      "relative": "it/Microsoft.CodeAnalysis.CSharp.resources.dll",
+      "sha256": "A0C40B0C1CD7C222FE7E9C841622F4F52168B6A46BC1D495BE3173086FEFEA8F"
+    },
+    {
+      "relative": "it/Microsoft.CodeAnalysis.resources.dll",
+      "sha256": "BE3842CB9E846C7AFFF2D621CC5A789F968D55BAE4D9C9DF223023830EFB2602"
+    },
+    {
+      "relative": "it/Microsoft.Data.SqlClient.resources.dll",
+      "sha256": "5A50867EA6C62B3BE1FE4429360FE8018F3002B95C4C7B2D306DAF19B4A50053"
+    },
+    {
+      "relative": "it/Microsoft.Testing.Extensions.MSBuild.resources.dll",
+      "sha256": "C8A89E64FD225A202676E35A957017D68F60798498392D33A72CD4451EE433C2"
+    },
+    {
+      "relative": "it/Microsoft.Testing.Extensions.Telemetry.resources.dll",
+      "sha256": "14C82FC8FE02CF8D8E68D1A51517135F25CC5D40D7C19FA96E319722F8A005C4"
+    },
+    {
+      "relative": "it/Microsoft.Testing.Platform.resources.dll",
+      "sha256": "35902A80B43B2CCF2D3D5B554AD237AB731E6D48E60C4E94C7B2A0BA1314AD84"
+    },
+    {
+      "relative": "it/Microsoft.TestPlatform.CommunicationUtilities.resources.dll",
+      "sha256": "D1F4935B0D01D3E85B21151434270B81884D5A9C6CDF65350765B6D014CD6F87"
+    },
+    {
+      "relative": "it/Microsoft.TestPlatform.CoreUtilities.resources.dll",
+      "sha256": "84E55E5D1F1D880021F4CA597BC44D29198747CE7F090C07CA4828F1B20023E5"
+    },
+    {
+      "relative": "it/Microsoft.TestPlatform.CrossPlatEngine.resources.dll",
+      "sha256": "B91B69C1D9DFB355A499CD2F94EC96FF1777100660F3601652C0F4C354269CBD"
+    },
+    {
+      "relative": "it/Microsoft.VisualStudio.TestPlatform.Common.resources.dll",
+      "sha256": "500741D16D4828EF905D98D50D31BDFDA76D487EA5A59DCF05BF659796013FBD"
+    },
+    {
+      "relative": "it/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
+      "sha256": "AFF962C1784C544BF50C8351D22520B80E323871990135AF6F4C50AE86B9E5E2"
+    },
+    {
+      "relative": "it/System.Private.ServiceModel.resources.dll",
+      "sha256": "812B1AD7D49FE847F5960493F6609B234C84326C4AA7248AC031C849C5B58098"
+    },
+    {
+      "relative": "it/System.Web.Services.Description.resources.dll",
+      "sha256": "FCA1622E31EE6CD0178E19992E8A09424EF0829B5D6ED60FA2586D32C3D32E98"
+    },
+    {
+      "relative": "ja/Microsoft.CodeAnalysis.CSharp.resources.dll",
+      "sha256": "EB9081BF4ADFA9934265506E524690B0CD15F2200E4375A9F6C5FBAFF6CA779B"
+    },
+    {
+      "relative": "ja/Microsoft.CodeAnalysis.resources.dll",
+      "sha256": "0072F5C6CDF9F6763046A0262B979D74238E9458A67E3587E5BCE15581331E69"
+    },
+    {
+      "relative": "ja/Microsoft.Data.SqlClient.resources.dll",
+      "sha256": "75539952A99301EBA174BCAEEADED6DA4D758C6F12565BED4208DC50B0344ABE"
+    },
+    {
+      "relative": "ja/Microsoft.Testing.Extensions.MSBuild.resources.dll",
+      "sha256": "306D37F56B0A51857EA9C7156882355B6C2E6C1E2772C7ED113F344B2C01D444"
+    },
+    {
+      "relative": "ja/Microsoft.Testing.Extensions.Telemetry.resources.dll",
+      "sha256": "3D8892431C2AE98205A5273FEAB1445BBD66945EAD9FEE81F92739BFF23F3E93"
+    },
+    {
+      "relative": "ja/Microsoft.Testing.Platform.resources.dll",
+      "sha256": "4D7574C67430BDAAD9644FDA6C47F26DCA9FCAB9018F66D6B3743F48A09305AA"
+    },
+    {
+      "relative": "ja/Microsoft.TestPlatform.CommunicationUtilities.resources.dll",
+      "sha256": "FE06DEEB2530A2D01CAC68B1AB56AC2F35967079E67E1B8F413C5FF4D71BEF3E"
+    },
+    {
+      "relative": "ja/Microsoft.TestPlatform.CoreUtilities.resources.dll",
+      "sha256": "6E8108A72F199F048118A995C1B3EFC77B9F6386D22EE6E38815823E148F26EE"
+    },
+    {
+      "relative": "ja/Microsoft.TestPlatform.CrossPlatEngine.resources.dll",
+      "sha256": "604898B056D06BE29E17D1C92163BB173AB7CDE1BDE888ABDAC7FC07AA6FED49"
+    },
+    {
+      "relative": "ja/Microsoft.VisualStudio.TestPlatform.Common.resources.dll",
+      "sha256": "EA7BA6E180911843B828E9AC8C1BCAAA49153C2FB7D84B18C61E837E696E8B44"
+    },
+    {
+      "relative": "ja/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
+      "sha256": "325F99198381A68B6921CED2C2CD1ADC5193BAA9DD93BF001BD42A534CC1D148"
+    },
+    {
+      "relative": "ja/System.Private.ServiceModel.resources.dll",
+      "sha256": "B9605FAC42BDAA7606D817D8A5BAAEAF605957098DD5D0F42838D791295A9ECB"
+    },
+    {
+      "relative": "ja/System.Web.Services.Description.resources.dll",
+      "sha256": "3AEAF51C4741452B3B683AB3D7E1BC8978CFDB29A454D92A8853A2E1F54BA51A"
+    },
+    {
+      "relative": "es/Microsoft.CodeAnalysis.CSharp.resources.dll",
+      "sha256": "C2D9064272C8CCEF23A9B6EF6F5B07460BD13C261DFB002CFD32B1CD1F59AD97"
+    },
+    {
+      "relative": "es/Microsoft.CodeAnalysis.resources.dll",
+      "sha256": "109AD6666A834B1CDB2DE9EE3EDDC6E1B4CC817D8116D3F16A3CB41B64484011"
+    },
+    {
+      "relative": "es/Microsoft.Data.SqlClient.resources.dll",
+      "sha256": "6BB867E62E3AEF301CECC99311603339301A086BDCFC8683C2C21F9F99850B34"
+    },
+    {
+      "relative": "es/Microsoft.Testing.Extensions.MSBuild.resources.dll",
+      "sha256": "59CBD727F3E15DB0B97ACFFB34F515838BCF9892C9526BACF11DF0E0C174D7AB"
+    },
+    {
+      "relative": "es/Microsoft.Testing.Extensions.Telemetry.resources.dll",
+      "sha256": "218F130E73C6BE505D873B4642E3958D9F43EF1AD9AA5819DAD94A88FB747D44"
+    },
+    {
+      "relative": "es/Microsoft.Testing.Platform.resources.dll",
+      "sha256": "B9D564360F59AB6F556FE79CC6145440952426D674BC57A695B1BB563AD65CC1"
+    },
+    {
+      "relative": "es/Microsoft.TestPlatform.CommunicationUtilities.resources.dll",
+      "sha256": "16C20A97A4CE2B3A5BD8CDA2281C63F0933FB7D38E85A27EECFD12E64FC553CB"
+    },
+    {
+      "relative": "es/Microsoft.TestPlatform.CoreUtilities.resources.dll",
+      "sha256": "6477BCC21641285682E54FDC350D8BA425FACEA0657E2E46C67E6E09742ED4F1"
+    },
+    {
+      "relative": "es/Microsoft.TestPlatform.CrossPlatEngine.resources.dll",
+      "sha256": "A7809082F9672EEAB7FF15788E046C0B73B0892E1E93994792A75076A3EB84EE"
+    },
+    {
+      "relative": "es/Microsoft.VisualStudio.TestPlatform.Common.resources.dll",
+      "sha256": "3F2CA95475448AECB4A7A3BD61CFB54F65EE49E3B0C1718D494D55890DE45FC9"
+    },
+    {
+      "relative": "es/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
+      "sha256": "C9FA4F31D16631F8B151B320BDDE332879CB736124AAF7790F608149E42B30D9"
+    },
+    {
+      "relative": "es/System.Private.ServiceModel.resources.dll",
+      "sha256": "E75221C1DCCF33E30F8134CF908E3C493AE0BAE812D94A065EFA188EFFE252F7"
+    },
+    {
+      "relative": "es/System.Web.Services.Description.resources.dll",
+      "sha256": "523DA60D66F0941F35373723E853AC046876F1437C9A580816255D22D3F7FDF8"
+    },
+    {
+      "relative": "pt-BR/Microsoft.CodeAnalysis.CSharp.resources.dll",
+      "sha256": "9D54ABE93B9855913241105C083684CA8A70726E0650C30954717C199D87342F"
+    },
+    {
+      "relative": "pt-BR/Microsoft.CodeAnalysis.resources.dll",
+      "sha256": "0F7CA6291A6D7F5EFAEC60C47EE901E6F6389F95C3DCCD396B1E724CF8345FAC"
+    },
+    {
+      "relative": "pt-BR/Microsoft.Data.SqlClient.resources.dll",
+      "sha256": "2A295A383E9076B24F47C1759E1C43176DFD876BC6444A661DEE21170CDE6B52"
+    },
+    {
+      "relative": "pt-BR/Microsoft.Testing.Extensions.MSBuild.resources.dll",
+      "sha256": "2FD4B7A879856F505E6795289BD26024B6DC99CBBFB2AF0AB82B31DA7787D13C"
+    },
+    {
+      "relative": "pt-BR/Microsoft.Testing.Extensions.Telemetry.resources.dll",
+      "sha256": "668112CCD5AA6412CB71C90DD2778075E2DB5912ECD57555C92D641A1D757101"
+    },
+    {
+      "relative": "pt-BR/Microsoft.Testing.Platform.resources.dll",
+      "sha256": "11D7950CC285D27709644AFBD90CD2B4D97111FF2989F16E9BDF56BD869AFBA6"
+    },
+    {
+      "relative": "pt-BR/Microsoft.TestPlatform.CommunicationUtilities.resources.dll",
+      "sha256": "CCA07EAEF212436CA343FE9D4B53C2BDCF73E24926E7A118A0CDF98C50193B42"
+    },
+    {
+      "relative": "pt-BR/Microsoft.TestPlatform.CoreUtilities.resources.dll",
+      "sha256": "053A2C820DB1744751B8001BE8CA058F75766F56E31E43975295D82B57E298C6"
+    },
+    {
+      "relative": "pt-BR/Microsoft.TestPlatform.CrossPlatEngine.resources.dll",
+      "sha256": "3B7B2BB3466B979AC567B43671C709BF271B449F8768674A5BC4BDFAB2FB6209"
+    },
+    {
+      "relative": "pt-BR/Microsoft.VisualStudio.TestPlatform.Common.resources.dll",
+      "sha256": "E37AD4CF66D94539F0BD9C64145E82D071F2DC0D5EEA507C37AB9399D848083E"
+    },
+    {
+      "relative": "pt-BR/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
+      "sha256": "57372F171D7CB53D55BCFF1AF4FFC9AAE81AC328BBEA3E05FDE239363F975D23"
+    },
+    {
+      "relative": "pt-BR/System.Private.ServiceModel.resources.dll",
+      "sha256": "7D79FD74DAFA8557C463D828A99B86E2E5251DB8DD8B40E1421C7B11B8341A40"
+    },
+    {
+      "relative": "pt-BR/System.Web.Services.Description.resources.dll",
+      "sha256": "C50612B162F226C0A8F3C77429A56C2422F7C6F9D78D53B69F6A305624D7D56E"
+    },
+    {
+      "relative": "ko/Microsoft.CodeAnalysis.CSharp.resources.dll",
+      "sha256": "2A499820100E833B75AC6C5DFF31C78B2CCCFAF29078D02013A9869970C1B2D4"
+    },
+    {
+      "relative": "ko/Microsoft.CodeAnalysis.resources.dll",
+      "sha256": "456C1483C7F7EE409638BE382E21A0BBC0926036F9A7A5E2587D13627ED96E51"
+    },
+    {
+      "relative": "ko/Microsoft.Data.SqlClient.resources.dll",
+      "sha256": "A5EAC865982205CE0D1B94AE4CAE4EC003B514829542140C91E67CF86312D5FC"
+    },
+    {
+      "relative": "ko/Microsoft.Testing.Extensions.MSBuild.resources.dll",
+      "sha256": "F32A1B25F467BA931882ABAE3B5834E1609DE3058EB9EAB558501BC21C9C9ED0"
+    },
+    {
+      "relative": "ko/Microsoft.Testing.Extensions.Telemetry.resources.dll",
+      "sha256": "7FC908F63BC470F2A339D1B28AF7F796E212CA307C9FAEF96D7CC35514FB1765"
+    },
+    {
+      "relative": "ko/Microsoft.Testing.Platform.resources.dll",
+      "sha256": "6051A28356EA6F62519407464F06B7D92E183935B2254777D32B04C6EC911C91"
+    },
+    {
+      "relative": "ko/Microsoft.TestPlatform.CommunicationUtilities.resources.dll",
+      "sha256": "A44E3AC8D0B7A97DF0CFB2D58E5749EA37EBD5552218060453A4FF3E5D503E45"
+    },
+    {
+      "relative": "ko/Microsoft.TestPlatform.CoreUtilities.resources.dll",
+      "sha256": "AC3244D43758AE27D170A9E48CD7D4A2D886BFE05A8D10ACD42FC6E876BCA862"
+    },
+    {
+      "relative": "ko/Microsoft.TestPlatform.CrossPlatEngine.resources.dll",
+      "sha256": "DF3682794D0873B9C1C2FCFBA4C2A6800F1A969606AD5D8E65E595837676CB8F"
+    },
+    {
+      "relative": "ko/Microsoft.VisualStudio.TestPlatform.Common.resources.dll",
+      "sha256": "A8DFD14CDFB95568B76F18023198D0059C1A76D574260BFB29A424B6E04EFE9B"
+    },
+    {
+      "relative": "ko/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
+      "sha256": "45A3FFB5106B9C0F6DB6541F210511F6E12BB61F564F5131B455617542AB83C5"
+    },
+    {
+      "relative": "ko/System.Private.ServiceModel.resources.dll",
+      "sha256": "14AAEE6B3E709CC2C49B56811B0584E11FCA10A8972CA200ECADD52B3F1E9A36"
+    },
+    {
+      "relative": "ko/System.Web.Services.Description.resources.dll",
+      "sha256": "56A1C85DBC1E40DD28FF9845A78F664612153F78A0C5B450507EECE93DF3DAD9"
+    },
+    {
+      "relative": "ru/Microsoft.CodeAnalysis.CSharp.resources.dll",
+      "sha256": "458150A2D277A61F51AA2C21DB287F58AD94D92493D559837E383F8A7A7E8207"
+    },
+    {
+      "relative": "ru/Microsoft.CodeAnalysis.resources.dll",
+      "sha256": "268D9FED2818E00F6D9DAC47C328B2A0B26FE9069D215BB5F04CFF3F3804EE7C"
+    },
+    {
+      "relative": "ru/Microsoft.Data.SqlClient.resources.dll",
+      "sha256": "F7D51F47B1EBA12021161EE39A7D08D24DF1DCD52C131D1D94EE2C7E432F4CB4"
+    },
+    {
+      "relative": "ru/Microsoft.Testing.Extensions.MSBuild.resources.dll",
+      "sha256": "1649078DC25B1C5842DCAE41490741E3AEB617FD10DC2792502C2A2C8E40417D"
+    },
+    {
+      "relative": "ru/Microsoft.Testing.Extensions.Telemetry.resources.dll",
+      "sha256": "DF60D7E0A5158DBA5CE8404B0E15E157308605DD665A718EF606AE1A4D1ACEAA"
+    },
+    {
+      "relative": "ru/Microsoft.Testing.Platform.resources.dll",
+      "sha256": "BC3192B9D70D197C0F3A5C63119A1E1599DC6BFDC723197C5A1254840C5CDD39"
+    },
+    {
+      "relative": "ru/Microsoft.TestPlatform.CommunicationUtilities.resources.dll",
+      "sha256": "037459ED48716C8626D9DA8B331645701083F4681F7A9B7AFB90604883010663"
+    },
+    {
+      "relative": "ru/Microsoft.TestPlatform.CoreUtilities.resources.dll",
+      "sha256": "F284BD8310A0F9837F32698199BAE39BBB349D87825F742E1B517E0E1F11A9A8"
+    },
+    {
+      "relative": "ru/Microsoft.TestPlatform.CrossPlatEngine.resources.dll",
+      "sha256": "8EE295AEEFC29A6EB3837691B0A86A5B968466EB854D5180A630D427094577E2"
+    },
+    {
+      "relative": "ru/Microsoft.VisualStudio.TestPlatform.Common.resources.dll",
+      "sha256": "3E0BAEB2BFEBC03A03D516BCE710D4FCDFAF2B172D26D7703B410BBAA7904ABB"
+    },
+    {
+      "relative": "ru/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
+      "sha256": "DFA234200AE134E02F8418F5BAB367D867164F09D6296D3E60CCA667539D9A92"
+    },
+    {
+      "relative": "ru/System.Private.ServiceModel.resources.dll",
+      "sha256": "CB57D30C901E7750F8B740C865E11E82350A83187B6EE50A11048486EB14222D"
+    },
+    {
+      "relative": "ru/System.Web.Services.Description.resources.dll",
+      "sha256": "A761DEAFC5058E4D8EF743497104E7EB6CD8EFE70A99302E4E2C49EB05895776"
+    },
+    {
+      "relative": "pl/Microsoft.CodeAnalysis.CSharp.resources.dll",
+      "sha256": "E29E1A79C78F4532C89AC6E39FBAB02328F99931938E7CF04896CE73BC2FFE79"
+    },
+    {
+      "relative": "pl/Microsoft.CodeAnalysis.resources.dll",
+      "sha256": "85474560EF444C138974D43AF09516F33505D4AF4BBB53C2002264011F120B6D"
+    },
+    {
+      "relative": "pl/Microsoft.Data.SqlClient.resources.dll",
+      "sha256": "CA9D25B7405908146F988C7FAD48DED63E7F02DF0E43BD1406803010428338BE"
+    },
+    {
+      "relative": "pl/Microsoft.Testing.Extensions.MSBuild.resources.dll",
+      "sha256": "89B774C63B15BCE2461CD0587C6E896EAAE00B66EF7071AAF402F47093B8753D"
+    },
+    {
+      "relative": "pl/Microsoft.Testing.Extensions.Telemetry.resources.dll",
+      "sha256": "09CC73035AC9610603066F8929F60131B40308653CA69E247D0608D01B8843CE"
+    },
+    {
+      "relative": "pl/Microsoft.Testing.Platform.resources.dll",
+      "sha256": "349B6ADB43A21E28E75CB6528A1CD785CBC36EF127E64F023181067655DF7B9F"
+    },
+    {
+      "relative": "pl/Microsoft.TestPlatform.CommunicationUtilities.resources.dll",
+      "sha256": "B1F9D2BDDF7A43C89165F11079F2A3FFCFBCE10D555DA280504C6F775DE278B2"
+    },
+    {
+      "relative": "pl/Microsoft.TestPlatform.CoreUtilities.resources.dll",
+      "sha256": "D8540E14B28DEAC5EC59FC8424059DD4718B4D961823EBAD87F5630A97CC8940"
+    },
+    {
+      "relative": "pl/Microsoft.TestPlatform.CrossPlatEngine.resources.dll",
+      "sha256": "C063D3985BE04E7AEE6CE8B7A81CD519D3473985104049F6951D61686E2BF728"
+    },
+    {
+      "relative": "pl/Microsoft.VisualStudio.TestPlatform.Common.resources.dll",
+      "sha256": "7E47DEB26946608B7D3330A1ADEAF79C9322BB2ED658DEBFF7E32713AE471D86"
+    },
+    {
+      "relative": "pl/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
+      "sha256": "61D74C9DC8C975D3121A53F7DD0C51E3F0441E567FDCBA19E223FFEAC8F5EE80"
+    },
+    {
+      "relative": "pl/System.Private.ServiceModel.resources.dll",
+      "sha256": "D244D6441177BB7DC055AA366F74B84D575DBE23959E313DEA7ED347926A84EF"
+    },
+    {
+      "relative": "pl/System.Web.Services.Description.resources.dll",
+      "sha256": "FBB404F3CF912C3D8663D11155DA513BC53811D10C695CFDC48D4E4628EF3A0E"
+    },
+    {
+      "relative": "tr/Microsoft.CodeAnalysis.CSharp.resources.dll",
+      "sha256": "5697B626C4BF3A6691B2ABB93C21F13471B29AB0E27EECDA929DFA9A64C962DE"
+    },
+    {
+      "relative": "tr/Microsoft.CodeAnalysis.resources.dll",
+      "sha256": "8E495D4633316997235AB8988F4D760B34FBEE3016AD9D1628B2A40082157B6F"
+    },
+    {
+      "relative": "tr/Microsoft.Data.SqlClient.resources.dll",
+      "sha256": "FC8DF599A964558FC9587AEAA6C956E1D375944283907193660FA3E96EE38980"
+    },
+    {
+      "relative": "tr/Microsoft.Testing.Extensions.MSBuild.resources.dll",
+      "sha256": "5A2922823961FADF6A316C046B3F7BE521892FC2EFBA134DCFD187655F829A9E"
+    },
+    {
+      "relative": "tr/Microsoft.Testing.Extensions.Telemetry.resources.dll",
+      "sha256": "E7A0F2F4033AB551940529D6D751BC74C84ED18FAEC4C143902AF64AF0AAB38F"
+    },
+    {
+      "relative": "tr/Microsoft.Testing.Platform.resources.dll",
+      "sha256": "9A3A6705878158356C310A28D94A6829E51DC30384CDD209FF6CA894C41BB6CC"
+    },
+    {
+      "relative": "tr/Microsoft.TestPlatform.CommunicationUtilities.resources.dll",
+      "sha256": "24BC4B4E801DA4DF13C82AF08D256E8FBA272977D36A87E302828DC3456A48BE"
+    },
+    {
+      "relative": "tr/Microsoft.TestPlatform.CoreUtilities.resources.dll",
+      "sha256": "465553C7A46F6B6DBDE162B53A8E9F3248C46B870D837D3A071845F6DF7508ED"
+    },
+    {
+      "relative": "tr/Microsoft.TestPlatform.CrossPlatEngine.resources.dll",
+      "sha256": "5FF24567924E8A229F01A00CFF3364CF67EBF80D5C68D74BA57A81345EC38582"
+    },
+    {
+      "relative": "tr/Microsoft.VisualStudio.TestPlatform.Common.resources.dll",
+      "sha256": "A437BC3672E02156DD975F4882549F9B0E6D45C90CBF841E9D10C0225A37A866"
+    },
+    {
+      "relative": "tr/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
+      "sha256": "57778F509A17906886F8F24BE6EB551817138EFEFE90F97907AA29EC8CD8FBF9"
+    },
+    {
+      "relative": "tr/System.Private.ServiceModel.resources.dll",
+      "sha256": "E00F6367EF050FB22F429ABBC9D60A7A691FCBD32A87A421CCA4D47DD62E405F"
+    },
+    {
+      "relative": "tr/System.Web.Services.Description.resources.dll",
+      "sha256": "63BE4BB2E6A700E28F162AF28D42FB568B08D62E7093712DA4EE19BCCC8492EA"
+    },
+    {
+      "relative": "zh-Hant/Microsoft.CodeAnalysis.CSharp.resources.dll",
+      "sha256": "DB3E642E4057A6F9FD8F10C18D3AF158FEE2FBDAA5E593DB0C00F441F0E4BCD7"
+    },
+    {
+      "relative": "zh-Hant/Microsoft.CodeAnalysis.resources.dll",
+      "sha256": "DA5183E34FCB9F1051EB6113125C7D4B740E903E41F3DE7653C54F3F8119511D"
+    },
+    {
+      "relative": "zh-Hant/Microsoft.Data.SqlClient.resources.dll",
+      "sha256": "6A045428A176C4A42518EF6918B93BA0EE4A126DD15B523CC123BB14CAD55E21"
+    },
+    {
+      "relative": "zh-Hant/Microsoft.Testing.Extensions.MSBuild.resources.dll",
+      "sha256": "C6098E6F26144B9C2EAE4ACAEB030999CD5217B3C6A88F88B459A2F55DBB4C8B"
+    },
+    {
+      "relative": "zh-Hant/Microsoft.Testing.Extensions.Telemetry.resources.dll",
+      "sha256": "D6A10A760246E1DDA95135291FC82DA069C5903F6064EBF632F7F84B207CF952"
+    },
+    {
+      "relative": "zh-Hant/Microsoft.Testing.Platform.resources.dll",
+      "sha256": "F5836C3A8C3B6739908A635F2F1D3D25B24E27035CD09359D47B65094106327B"
+    },
+    {
+      "relative": "zh-Hant/Microsoft.TestPlatform.CommunicationUtilities.resources.dll",
+      "sha256": "9A0A1974ECCB4BF75075CB820D926DC03BE7F430E9B66E531C192DA1988D2412"
+    },
+    {
+      "relative": "zh-Hant/Microsoft.TestPlatform.CoreUtilities.resources.dll",
+      "sha256": "D5B3EC84AD3138D20BEC9A0BE41AE67593A15CD907574A076BC2419E121E53E5"
+    },
+    {
+      "relative": "zh-Hant/Microsoft.TestPlatform.CrossPlatEngine.resources.dll",
+      "sha256": "ED31C2B989F0A507B22799E94A039BDE65EC3440BD71B8754C4E98FEFE0A7982"
+    },
+    {
+      "relative": "zh-Hant/Microsoft.VisualStudio.TestPlatform.Common.resources.dll",
+      "sha256": "FB048074A499BF65450ABC45FB6313BC05E9058C8483D6C8A82FB0E1DCB3657A"
+    },
+    {
+      "relative": "zh-Hant/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
+      "sha256": "72A34A8ED254DA478A928B6192919DA0C40BA43CCF7C60B0F1F2F65A2C6AE051"
+    },
+    {
+      "relative": "zh-Hant/System.Private.ServiceModel.resources.dll",
+      "sha256": "3151DF36DBFECEDC5D1E9D1B738D878F8354AF2404B7BC40E04FABE5F3001222"
+    },
+    {
+      "relative": "zh-Hant/System.Web.Services.Description.resources.dll",
+      "sha256": "6E8BCC1CFD8C1E81C3914710F3411D7B11ADC3F625911BAEB16CBE7639597ADD"
+    },
+    {
+      "relative": "zh-Hans/Microsoft.CodeAnalysis.CSharp.resources.dll",
+      "sha256": "8A56F20086E26C9CC600749E47CB1AD6968CB6FBEF84A3B3EDD82D973C43B929"
+    },
+    {
+      "relative": "zh-Hans/Microsoft.CodeAnalysis.resources.dll",
+      "sha256": "1BD8BA7F33C2AF85D421FAB0E451B57D175D0596FA771BB7E8F2473483ECFF87"
+    },
+    {
+      "relative": "zh-Hans/Microsoft.Data.SqlClient.resources.dll",
+      "sha256": "D12450A0C88FEAAFBF3DB907BA9E66E0735ECF43F9089A1B6B583675E561A571"
+    },
+    {
+      "relative": "zh-Hans/Microsoft.Testing.Extensions.MSBuild.resources.dll",
+      "sha256": "1EA489A0E392CEB549EE437F945D0337DD92319C0D7AB3A13593C45D933B1AE0"
+    },
+    {
+      "relative": "zh-Hans/Microsoft.Testing.Extensions.Telemetry.resources.dll",
+      "sha256": "614C7DA03740845B26427803F4607D524741547480A598E495C307F60CB7B283"
+    },
+    {
+      "relative": "zh-Hans/Microsoft.Testing.Platform.resources.dll",
+      "sha256": "7B9C952B4A99143C55EA2298E369F577DC6996585F21850AC2C54205274755FA"
+    },
+    {
+      "relative": "zh-Hans/Microsoft.TestPlatform.CommunicationUtilities.resources.dll",
+      "sha256": "D98CD509290B3F7C620844D71FDDDFE6CF03D56C42C2E11CEBFEF206110B3E74"
+    },
+    {
+      "relative": "zh-Hans/Microsoft.TestPlatform.CoreUtilities.resources.dll",
+      "sha256": "8F67AE23BF4707F5EAD7E70937B87D6C3C591FC36DF37EADCE2FEB76F85F3090"
+    },
+    {
+      "relative": "zh-Hans/Microsoft.TestPlatform.CrossPlatEngine.resources.dll",
+      "sha256": "0E5096A6CEE9B20A071DCED74687041061F3C3D63000278E506F6C0151286944"
+    },
+    {
+      "relative": "zh-Hans/Microsoft.VisualStudio.TestPlatform.Common.resources.dll",
+      "sha256": "9AB7E21A7FCFECBA5BFCFA529E84508007E5FE00990186D990A60828B1C330C9"
+    },
+    {
+      "relative": "zh-Hans/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll",
+      "sha256": "2CC8D6DCEF5C3AD1AF683BCCBCB7E47C59EC4198290856B7C9DECB4AB228A1A1"
+    },
+    {
+      "relative": "zh-Hans/System.Private.ServiceModel.resources.dll",
+      "sha256": "59048B72505417CA18885E69F432D59197AFA3D076282235A3F8EF6E0B3295A3"
+    },
+    {
+      "relative": "zh-Hans/System.Web.Services.Description.resources.dll",
+      "sha256": "317988A711FB12EFEE020231FCCA3EFA3B41E891471D3145989356BBE64B2717"
+    },
+    {
+      "relative": "runtimes/unix/lib/net9.0/Microsoft.Data.SqlClient.dll",
+      "sha256": "4A95C42D14D8A83CA1007793648B6DAE59CEE957EA12470578F10C918F91D225"
+    },
+    {
+      "relative": "runtimes/unix/lib/net9.0/Microsoft.PowerShell.Commands.Management.dll",
+      "sha256": "8024BAD890B9074B2B849BF94504ADDDBA5BF20A928BDEEDA62F89EC5F9505CC"
+    },
+    {
+      "relative": "runtimes/unix/lib/net9.0/Microsoft.PowerShell.Commands.Utility.dll",
+      "sha256": "3624E97F077A894542530ED7E7AE85EA6207016B649A45B61CD9F0275EFE54E4"
+    },
+    {
+      "relative": "runtimes/unix/lib/net9.0/Microsoft.PowerShell.ConsoleHost.dll",
+      "sha256": "A99195536C73C9035E7322427138050E70164C529E79268825D23764CD82F264"
+    },
+    {
+      "relative": "runtimes/unix/lib/net9.0/Microsoft.PowerShell.SDK.dll",
+      "sha256": "B88983DF7F2DD0BC6FC327FF7BD7340FFCD90F3DFA66BFC6271D6C1095542B42"
+    },
+    {
+      "relative": "runtimes/unix/lib/net9.0/Microsoft.PowerShell.Security.dll",
+      "sha256": "E08896103D2B5DB81FC6B04C40A02774CF2C251C04ECFA94CF41F27A9DE110EB"
+    },
+    {
+      "relative": "runtimes/unix/lib/net9.0/System.Data.Odbc.dll",
+      "sha256": "CE2C05F9F7345933F8302B2E9C0743E9B5E443D27F7AC7F4F7BF10922D3032D1"
+    },
+    {
+      "relative": "runtimes/unix/lib/net9.0/System.IO.Ports.dll",
+      "sha256": "DD8044DB44125051005A6533C1B532B746AE695E438205CF257CF73A013F8A3E"
+    },
+    {
+      "relative": "runtimes/unix/lib/net9.0/System.Management.Automation.dll",
+      "sha256": "22A7BECBC32AB41294E399F5D0F13C0205B3C7A331FB6025B8C6F6920E5CD1C5"
+    },
+    {
+      "relative": "runtimes/unix/lib/net9.0/Modules/Microsoft.PowerShell.Security/Microsoft.PowerShell.Security.psd1",
+      "sha256": "190F5BEDAF42E91831674B767BB053CAADCEFC2E2E5F16CBA129D1769F6F854D"
+    },
+    {
+      "relative": "runtimes/unix/lib/net9.0/Modules/Microsoft.PowerShell.Host/Microsoft.PowerShell.Host.psd1",
+      "sha256": "4B98C6EAD15329D4780451F9016B7ECBE768F8087392694EC486E57CCD3DE0B3"
+    },
+    {
+      "relative": "runtimes/unix/lib/net9.0/Modules/Microsoft.PowerShell.Management/Microsoft.PowerShell.Management.psd1",
+      "sha256": "36BA46C4515D569D3A33217FA9EA2D3CC81B91561B044CA160D9C89EC9F781F9"
+    },
+    {
+      "relative": "runtimes/unix/lib/net9.0/Modules/Microsoft.PowerShell.Utility/Microsoft.PowerShell.Utility.psd1",
+      "sha256": "E1DC177995BCFFC4260E9CEF08F2567EB1347E9427D5D0470A54D6630532E3D2"
+    },
+    {
+      "relative": "runtimes/unix/lib/netstandard1.6/Microsoft.Management.Infrastructure.dll",
+      "sha256": "E600E2473E2404859789C76529671C5EA12B66DCA552CB3F43E960BDA13B9434"
+    },
+    {
+      "relative": "runtimes/unix/lib/net8.0/System.Data.SqlClient.dll",
+      "sha256": "5762E96B60B3F4613EE57AFFD80A217478ED630CFDF9E7D6144112255173192B"
+    },
+    {
+      "relative": "runtimes/win-arm64/native/e_sqlite3.dll",
+      "sha256": "4177542756BD94F75B55FB74367E0CF34E66A88FFAF95755489AF14C6CA2F792"
+    },
+    {
+      "relative": "runtimes/win-arm64/native/getfilesiginforedist.dll",
+      "sha256": "C90B649DB04C4B52184C14A91E5AC87F30B9D35F41F2704B081ADD4F79B827D1"
+    },
+    {
+      "relative": "runtimes/win-arm64/native/Microsoft.Data.SqlClient.SNI.dll",
+      "sha256": "73B61C3381E32613F59BBE3AF7F58871C8CD486E04A9C0E71409F6A1972D6F84"
+    },
+    {
+      "relative": "runtimes/win-arm64/native/microsoft.management.infrastructure.native.unmanaged.dll",
+      "sha256": "02672D11CEDFB7B1B91581C7CABC76B6CDEC1646E2C9CBEDA04F54A244999A2B"
+    },
+    {
+      "relative": "runtimes/win-arm64/native/onnxruntime_providers_shared.dll",
+      "sha256": "308D7F01C50142013DB28C03866A86E2FF090F1151579E142409F295F10F0C81"
+    },
+    {
+      "relative": "runtimes/win-arm64/native/onnxruntime_providers_shared.lib",
+      "sha256": "F3EECA972F50F0F8E62F97EC44BC4D9116459D5D6CB98C35ADF8C9DDEB45FFD8"
+    },
+    {
+      "relative": "runtimes/win-arm64/native/onnxruntime.dll",
+      "sha256": "BF6766520D62AC4D0590E020E10016700988F933A300FF3C1D79B1772A8A2FC4"
+    },
+    {
+      "relative": "runtimes/win-arm64/native/onnxruntime.lib",
+      "sha256": "9F13435D5F7BF7CEC33BB238A3BDD087AC04A6E0FE9798BD6B28932A332A8AF7"
+    },
+    {
+      "relative": "runtimes/win-arm64/native/PowerShell.Core.Instrumentation.dll",
+      "sha256": "8B369202A35156FDFC30C0694A353DB9AE04C117B04046157568415DC5AE2E58"
+    },
+    {
+      "relative": "runtimes/win-arm64/native/pwrshplugin.dll",
+      "sha256": "CC92D8FEF5229E174EB4DCB71BEA84D773462FA0BE6B11AA1CBD83C5E98A7577"
+    },
+    {
+      "relative": "runtimes/win-arm64/native/sni.dll",
+      "sha256": "EF18458C4DCB93F6B4EAC07E1589CF3450BF878F2DD623F5D34F6A0F1B16E57A"
+    },
+    {
+      "relative": "runtimes/win-arm64/lib/netstandard1.6/microsoft.management.infrastructure.dll",
+      "sha256": "07A7688BBECC1F4C8787B0FA51F1D31573DF73B45FE49BC3536103EC51B55FDA"
+    },
+    {
+      "relative": "runtimes/win-arm64/lib/netstandard1.6/microsoft.management.infrastructure.native.dll",
+      "sha256": "53198434C0133B36E6EB6B2FF4EE30B700B1C960E2B1AF94545846C1732D7C25"
+    },
+    {
+      "relative": "runtimes/win-arm64/lib/net5.0/getfilesiginforedistwrapper.dll",
+      "sha256": "2C70FBE0D92E17B3696239821383EBF210CB7F9B1F72DC88C544FF1CC0DC44E5"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Microsoft.Data.SqlClient.dll",
+      "sha256": "13011951EE100B419E0B494BAECDBE1402BE5CB487D72056014A83253AFC1D6E"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Microsoft.Management.Infrastructure.CimCmdlets.dll",
+      "sha256": "C7C2E5364B5485FAC584E943C1AC7D6E331D18BEADBA7ADE6C23A380B714192A"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Microsoft.PowerShell.Commands.Diagnostics.dll",
+      "sha256": "24BE5B5FC580B3FB1FCA36869D6E3758E33BFA99594C2756325E6B22E5DC4453"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Microsoft.PowerShell.Commands.Management.dll",
+      "sha256": "376C3B262813EEBE8A34DE19E1CF66DCE646649BA777F7C662DE86B15AF90E17"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Microsoft.PowerShell.Commands.Utility.dll",
+      "sha256": "B6493E17F145BB97D14BC040D56A912B285D65AFEE4CD9FE50A7903FA410C8FC"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Microsoft.PowerShell.ConsoleHost.dll",
+      "sha256": "2B9A304ACC6A7CA178542853510964F26C9D22219F16171622EE6664CB3D0DCE"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Microsoft.PowerShell.CoreCLR.Eventing.dll",
+      "sha256": "92663246F0C5CE5F179C8ED996003D7C40D832D03DE05447979A6E554C18BB75"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Microsoft.PowerShell.SDK.dll",
+      "sha256": "9CE2C271BFA1D0ABDA4CC64849685258A20E0A27A62254ADF07B046E67B6BB40"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Microsoft.PowerShell.Security.dll",
+      "sha256": "EE02FCA9EADA1DDBBE0BD0243DE6C37058FE3546E6E1BDC41887E719864480D5"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Microsoft.Win32.Registry.AccessControl.dll",
+      "sha256": "A70D39E1B1A936CB165D737E7521CD1EDCC99F55B97884DB402C8252E36142D0"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Microsoft.Win32.SystemEvents.dll",
+      "sha256": "F4117352B3D086777A6B343005CF83A6F3CE10233576A4CC1EE3A9F7C857A6B8"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Microsoft.WSMan.Management.dll",
+      "sha256": "62CE0DBA0E35E8D4E5444F1F51DCE4BF805770179C161DD7CA85B680A6ECEC9C"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Microsoft.WSMan.Runtime.dll",
+      "sha256": "06983D5079CF0D08E20FF8CA67F7CB64DE7243EDC1C87B8E05031295ADA39144"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/System.Data.Odbc.dll",
+      "sha256": "66DCA00C3ECBF5829E9A035EF7F1FCDEEA308A777482527D2E40FE454DA04252"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/System.Data.OleDb.dll",
+      "sha256": "ED0551D265743542DF890A83FAB6EDC4436007C1107019B7DDDD87A70D223882"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/System.Diagnostics.PerformanceCounter.dll",
+      "sha256": "73BD11D84965C466F63700A7D0E48FE92448DF0D60B94064E8D68AE258A4FF88"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/System.DirectoryServices.AccountManagement.dll",
+      "sha256": "15AFDCAF3536867DEB236406A3859D960B398656577BA9E5694CD39D06FCB701"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/System.DirectoryServices.dll",
+      "sha256": "3A119E7F91B6E0D0335D172515693D7225EEDA518B109DB6A79649A0A6A89320"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/System.DirectoryServices.Protocols.dll",
+      "sha256": "E89A1F9B43E80B0B3A8FCE92AD2A430192555656C7D92696CB77A7673731280B"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/System.IO.Ports.dll",
+      "sha256": "ED467E5C74732E90CF5190F543BB1D5DF29402DF4E0DAB90E616A9D8BCC7C854"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/System.Management.Automation.dll",
+      "sha256": "35BC48F2C2592BAB5E685AA74E9A3868860846E07F391721E2D99B7FBAD7FE3E"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/System.Management.dll",
+      "sha256": "6C1587D56BAAD806D8897730D3015A831DA7970637625EBC0AAB76C6CFECD63C"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/System.Net.Http.WinHttpHandler.dll",
+      "sha256": "5E3ACA4478571BD6BA1E72AE44D76CF231B67C91D0C281AFF04F9CCB7E8442BA"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/System.Runtime.Caching.dll",
+      "sha256": "02989C09A9A58F598EDD1875CA28DEBFC21B248279251FB86DCB1E41C8D129C4"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/System.Speech.dll",
+      "sha256": "9904E8C92830EE216B2F07CCBE8F72CED101C956205F3967B5F30541B0B5DD9B"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/System.Windows.Extensions.dll",
+      "sha256": "595A01429A8560CFE87276CDC20325B0EECA06887B4E080970F3A2EFE2C672DF"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Modules/CimCmdlets/CimCmdlets.psd1",
+      "sha256": "96FCC562F7DE678EE755A9319AA76EF3301AD0CE9DF23C942F8D7A2AD06B0412"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Modules/Microsoft.PowerShell.Diagnostics/Diagnostics.format.ps1xml",
+      "sha256": "F8451CF574E96A97CE4A9A9C30EEDD11A65EB599EB4AC72C9B46B5AADF862530"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Modules/Microsoft.PowerShell.Diagnostics/Event.format.ps1xml",
+      "sha256": "853E13BCE156C71BAB3AD2892DEA570D6E191452B2526C3C9EBE70E9634E0484"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Modules/Microsoft.PowerShell.Diagnostics/GetEvent.types.ps1xml",
+      "sha256": "544159A096AB17998BC01BCACB78BDCAFCDA066FBD34A9D46D7F72A93F41115A"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Modules/Microsoft.PowerShell.Diagnostics/Microsoft.PowerShell.Diagnostics.psd1",
+      "sha256": "B46ECCEFF26A49BAE1B1E69B1E009510552B8620131C97A5E02F5DB0610FE554"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Modules/Microsoft.PowerShell.Host/Microsoft.PowerShell.Host.psd1",
+      "sha256": "A2CFA0D3F28E51C077960D76BB6BB4BF0DCEAA46B0E20C4C02878F95797F1F24"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Modules/Microsoft.PowerShell.Management/Microsoft.PowerShell.Management.psd1",
+      "sha256": "D0A09E85AF9AB7EE2D05D1B1F201A1CE506F26F1E2EE8866025282877917B76A"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Modules/Microsoft.PowerShell.Security/Microsoft.PowerShell.Security.psd1",
+      "sha256": "BA00B1E18EA8408183091013197BA269235138B1E1A084FCB41FA921D5CF2C06"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Modules/Microsoft.PowerShell.Security/Security.types.ps1xml",
+      "sha256": "D3D293C048E9C18AB77D9E74D96C7FE48D04BC300092D91BB2FA19F0A20F8CEE"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Modules/Microsoft.PowerShell.Utility/Microsoft.PowerShell.Utility.psd1",
+      "sha256": "F2D0B53E2EDAFC43F0CD3C97483A051016C0F836F51A054B56E30F45B068B97C"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Modules/Microsoft.WSMan.Management/Microsoft.WSMan.Management.psd1",
+      "sha256": "B5D2AC62D57AF5766F6E49DA22830BF1B7FF26354658AA99ED757B3220E14686"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Modules/Microsoft.WSMan.Management/WSMan.format.ps1xml",
+      "sha256": "38532E6542B63C0DE27243D14D664ECB8D830E0A6B34D31E91D83293AD120BF6"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Modules/PSDiagnostics/PSDiagnostics.psd1",
+      "sha256": "7BEC5C4C2EA18CEE4331FB2B39EEF5CEB0873FE30F56A862D8705FFDB5C45512"
+    },
+    {
+      "relative": "runtimes/win/lib/net9.0/Modules/PSDiagnostics/PSDiagnostics.psm1",
+      "sha256": "65BD8C555C5077228C0EF4113C013790CC860C7577CDCFA70EC538257680D733"
+    },
+    {
+      "relative": "runtimes/win/lib/net8.0/System.Data.SqlClient.dll",
+      "sha256": "DAB04FE7C33E598B9A16194F73FFFC87BC56586C25E8ED048F3A856DD972D74D"
+    },
+    {
+      "relative": "runtimes/win/lib/net10.0/System.Diagnostics.EventLog.Messages.dll",
+      "sha256": "AAB4074E21C0EE7FABF8D1ADECA5D39B9AF5049B3820A6F617402BF372BB2CBC"
+    },
+    {
+      "relative": "runtimes/win/lib/net10.0/System.ServiceProcess.ServiceController.dll",
+      "sha256": "76D769F5A3C91C077ECE4669C1F3DB8AD5DAD1BB87154F85E3E5533B8DC02595"
+    },
+    {
+      "relative": "runtimes/win-x86/native/e_sqlite3.dll",
+      "sha256": "D13EB819D1353D98C684C88672868BBFCC6A52EB5987BDF2557EC02FABCE4EA7"
+    },
+    {
+      "relative": "runtimes/win-x86/native/getfilesiginforedist.dll",
+      "sha256": "63456844F43A10892CB7E18EC9F319D0D2962A9D2E768C03C80B9C6C3916B969"
+    },
+    {
+      "relative": "runtimes/win-x86/native/Microsoft.Data.SqlClient.SNI.dll",
+      "sha256": "16EFA76F220E23166A95873BAAED43899191470C13848C944A679FF2BF5AC941"
+    },
+    {
+      "relative": "runtimes/win-x86/native/microsoft.management.infrastructure.native.unmanaged.dll",
+      "sha256": "8FEF324494E8CB23D6F428525B307FA68F6BDFABE49EC15F28FC766E2FC40E7E"
+    },
+    {
+      "relative": "runtimes/win-x86/native/PowerShell.Core.Instrumentation.dll",
+      "sha256": "068ABA676F7152DC25E9A805131B7F12B214BDCD69A29FC2FFB1A19351F90040"
+    },
+    {
+      "relative": "runtimes/win-x86/native/pwrshplugin.dll",
+      "sha256": "D61D92D28745A2D14331C58C6D54D06B48AD9F511DFA4145C669D0190FEFF67E"
+    },
+    {
+      "relative": "runtimes/win-x86/native/sni.dll",
+      "sha256": "1446D6B26DA49A5A9F366972F89F4E236F916955F31DDC38EBB96217C1CACE9C"
+    },
+    {
+      "relative": "runtimes/win-x86/lib/netstandard1.6/microsoft.management.infrastructure.dll",
+      "sha256": "8A0DFFA7FEF0A09F49AFD46EEE3D0F1007E08E07CE300E58F6A73730DE14B1D2"
+    },
+    {
+      "relative": "runtimes/win-x86/lib/netstandard1.6/microsoft.management.infrastructure.native.dll",
+      "sha256": "E086F284FA886680761612C5D1E017F56C4D8227F69EF52CD6EEDE1C5D96523B"
+    },
+    {
+      "relative": "runtimes/win-x86/lib/net5.0/getfilesiginforedistwrapper.dll",
+      "sha256": "3CE1D677A1D139DFC4219626D8D8D9B2249E52E0451065D0883276A377F290B2"
+    },
+    {
+      "relative": "runtimes/win-x64/native/e_sqlite3.dll",
+      "sha256": "B7385D722C83FB52142A00477A726723745916D22A555711EE89834C1111FB2E"
+    },
+    {
+      "relative": "runtimes/win-x64/native/getfilesiginforedist.dll",
+      "sha256": "153EEFB2EAFA8B2B909854CC1F941350EFB1170E179A299DE8836B8EC5CE6A7A"
+    },
+    {
+      "relative": "runtimes/win-x64/native/Microsoft.Data.SqlClient.SNI.dll",
+      "sha256": "7E37C5BBA3DA06A955C122E3515B2980E2F1B8732EC0297F0A7E77E79B4DE331"
+    },
+    {
+      "relative": "runtimes/win-x64/native/microsoft.management.infrastructure.native.unmanaged.dll",
+      "sha256": "9BEE4E35576355156F00E2E47EF57AA2C8CA64390C112F083A772F2219026293"
+    },
+    {
+      "relative": "runtimes/win-x64/native/onnxruntime_providers_shared.dll",
+      "sha256": "0F5C775B4AEF13B2EF1679B4313B25E65061E58EF7AA95A318E340BE8725CF86"
+    },
+    {
+      "relative": "runtimes/win-x64/native/onnxruntime_providers_shared.lib",
+      "sha256": "A72EEE5B85CCE67F1943B2EA64DD0348A104444E28CEAFB42875F9C768C7C835"
+    },
+    {
+      "relative": "runtimes/win-x64/native/onnxruntime.dll",
+      "sha256": "8A1AAD8D59D02A5337D4E3F5BBD1158C3F7BF84FE3B3F0052F957DD3E75A91CB"
+    },
+    {
+      "relative": "runtimes/win-x64/native/onnxruntime.lib",
+      "sha256": "7E990FCCDB35D109465B44DC20EB2A729B0CC9CC2DDC00F5E30022C8DAA282A1"
+    },
+    {
+      "relative": "runtimes/win-x64/native/PowerShell.Core.Instrumentation.dll",
+      "sha256": "55F15C6843F883522FAC922D949D08C04270BE5F0E30AA2DE33C730B5874F55B"
+    },
+    {
+      "relative": "runtimes/win-x64/native/pwrshplugin.dll",
+      "sha256": "66D33F8070456D0A04C2A7A4A711A1DF2F036BAEDD2305A37BE5835091FF4C5D"
+    },
+    {
+      "relative": "runtimes/win-x64/native/sni.dll",
+      "sha256": "68705C4EF9AB818F2956A78E05F3FEFCE501A1448793B073B46110BEB49B47D6"
+    },
+    {
+      "relative": "runtimes/win-x64/lib/netstandard1.6/microsoft.management.infrastructure.dll",
+      "sha256": "50557F6674BC1570308B3F326AE7B6B72839CC9BBAC8934AB16FF563178D28F9"
+    },
+    {
+      "relative": "runtimes/win-x64/lib/netstandard1.6/microsoft.management.infrastructure.native.dll",
+      "sha256": "EF675CF5C7E0E4BA6291E4644D3CEBA378CE9685EB179C6AFA8F0BF8F9CADC32"
+    },
+    {
+      "relative": "runtimes/win-x64/lib/net5.0/getfilesiginforedistwrapper.dll",
+      "sha256": "EB772C8740C77E5C5996B5FA8F034BBFB777B6D2BD4889D3B35023255B899CAB"
+    },
+    {
+      "relative": "runtimes/ios/native/onnxruntime.xcframework.zip",
+      "sha256": "004BD6E52264965C2F6F003699DA2D4178124E51625C51F286B50E20096696CF"
+    },
+    {
+      "relative": "runtimes/android/native/onnxruntime.aar",
+      "sha256": "133134E2B01FFB91F8F66D46A3149F7FE402AC2E3E2D1DF4F8FC679E999689F6"
+    },
+    {
+      "relative": "runtimes/linux-arm64/native/libe_sqlite3.a",
+      "sha256": "74B399E6B7EBC3050A254B6D7F27DB74C8FE21E4FA702AF817FC1969FAF0295A"
+    },
+    {
+      "relative": "runtimes/linux-arm64/native/libe_sqlite3.so",
+      "sha256": "707FFF6B18C1F083158E7A543C8D2545D5485F547FFD96DB29679A95F52878D5"
+    },
+    {
+      "relative": "runtimes/linux-arm64/native/libonnxruntime_providers_shared.so",
+      "sha256": "3B6BE288FBFB7DFF8770D08A23DEFDDE18E8F7E0F5A2B344A0E5E238C999EA88"
+    },
+    {
+      "relative": "runtimes/linux-arm64/native/libonnxruntime.so",
+      "sha256": "7954E8BDEDB497F830C6A679E818D98399B7F4D81ADE1126C3E0BE74D28111AB"
+    },
+    {
+      "relative": "runtimes/linux-arm64/native/libpsl-native.so",
+      "sha256": "F9DCED191966145FFBA62D6125ECE2400152DCC883984123519534147BACEB5D"
+    },
+    {
+      "relative": "runtimes/linux-arm64/native/libSystem.IO.Ports.Native.so",
+      "sha256": "F31FF6A2222AEDC671754855BB9CD27A77C9B88540D5EA95D899E8C3DD4375D6"
+    },
+    {
+      "relative": "runtimes/linux-x64/native/libe_sqlite3.a",
+      "sha256": "75A5E562FB311C8850D0206239FA0007C7A25579AEAF15A708ACC0AD553A60DB"
+    },
+    {
+      "relative": "runtimes/linux-x64/native/libe_sqlite3.so",
+      "sha256": "B0F5C48026FEDCF9F05CF31C6FADF9E1E001CA59CD85AA68B8B6814E52C18A07"
+    },
+    {
+      "relative": "runtimes/linux-x64/native/libonnxruntime_providers_shared.so",
+      "sha256": "086EC1D5388F64153D9C63470D126693DB9A182C8CE236D3A1119068471B8A0D"
+    },
+    {
+      "relative": "runtimes/linux-x64/native/libonnxruntime.so",
+      "sha256": "E5A7E3646718D8F1F8F52C8FCB770FE229AB44305CAF3EA702D558E6E426C9AA"
+    },
+    {
+      "relative": "runtimes/linux-x64/native/libpsl-native.so",
+      "sha256": "75A01481C693F778B27C5FD2527D0134D51C46B08F95A5BCD01CA2D3EDAAE5DC"
+    },
+    {
+      "relative": "runtimes/linux-x64/native/libSystem.IO.Ports.Native.so",
+      "sha256": "30151FEFC18EA6C195E0661F90ECA22DE0621097EA0E0FCA076257E72D1E704B"
+    },
+    {
+      "relative": "runtimes/osx-arm64/native/libe_sqlite3.dylib",
+      "sha256": "09FE20A6C050912A7944B2F2F2981DEBE31679F7919F523C87251AE8CF0F2DAA"
+    },
+    {
+      "relative": "runtimes/osx-arm64/native/libonnxruntime.dylib",
+      "sha256": "4116DCE780D7BAB2BE1A44EDD2AFF4C1C9D64BABF37DF8DA47F4836F4A90AC86"
+    },
+    {
+      "relative": "runtimes/osx-arm64/native/libSystem.IO.Ports.Native.dylib",
+      "sha256": "CBAF7C64F877A9B54BD81E28F104590262B394D7B8FA710C8496F4BD91636CD9"
+    },
+    {
+      "relative": "runtimes/linux-arm/native/libe_sqlite3.a",
+      "sha256": "9030AA218568DA7AC16E9DEACA5FAE3457697517EDE9ACB64F8F07188C988DB8"
+    },
+    {
+      "relative": "runtimes/linux-arm/native/libe_sqlite3.so",
+      "sha256": "43556C2F5075857BF57BE1136D556733BDC27195884FBDDE127CD976D1C25AD5"
+    },
+    {
+      "relative": "runtimes/linux-arm/native/libpsl-native.so",
+      "sha256": "4CC08A9F03E5B33ABC00AB208C7BB3CC5780DD1060081FB6F319138CC7B67A1D"
+    },
+    {
+      "relative": "runtimes/linux-arm/native/libSystem.IO.Ports.Native.so",
+      "sha256": "60B5B690FCB0E295D148253D5EC6E10BEB9BBED75FD97C134502EFCB44FF8384"
+    },
+    {
+      "relative": "runtimes/linux-musl-x64/native/libe_sqlite3.a",
+      "sha256": "593AE82ADAF90DECC35E90D687EC5D6A86663DE922B6EC7E74F442A85DD0AC22"
+    },
+    {
+      "relative": "runtimes/linux-musl-x64/native/libe_sqlite3.so",
+      "sha256": "647B7B5886526691AED58E0FCBB56DC1E6DEA8B1F9F5390782F0C95269250DB1"
+    },
+    {
+      "relative": "runtimes/linux-musl-x64/native/libpsl-native.so",
+      "sha256": "08E7FEBB920A857083607BBA3C884B49169AC9B3BF3D3792D66481C7D4514DE2"
+    },
+    {
+      "relative": "runtimes/linux-musl-x64/native/libSystem.IO.Ports.Native.so",
+      "sha256": "ABA8861EDD37B9DA16EA04CCAE786845E5262F2700746A2AA93209E2E5F48C7C"
+    },
+    {
+      "relative": "runtimes/osx/native/libpsl-native.dylib",
+      "sha256": "128C0D7B08324709740E4D49F5C0639FB994A1AE216873C7B3A8F6050E9FE461"
+    },
+    {
+      "relative": "runtimes/osx/lib/net9.0/System.DirectoryServices.Protocols.dll",
+      "sha256": "400BA1EDE0A04F27697465E842BFF0996A3A73068D4CE9088862B13C23F516A5"
+    },
+    {
+      "relative": "runtimes/win-arm/native/PowerShell.Core.Instrumentation.dll",
+      "sha256": "FA065D99CF351F56D992FD06CC6D4B9D17ED674F877A138D329BA0D11B6EA782"
+    },
+    {
+      "relative": "runtimes/win-arm/native/pwrshplugin.dll",
+      "sha256": "E992F99BBE9CEEF5308430618B7B6CB5A20B1721FE49993DF0FC47E412FED831"
+    },
+    {
+      "relative": "runtimes/android-arm64/native/libe_sqlite3.so",
+      "sha256": "F6672612CEB79D6F5681773BA8343776BC34FDC963F4D5882BED774C890AAABD"
+    },
+    {
+      "relative": "runtimes/android-arm64/native/libSystem.IO.Ports.Native.so",
+      "sha256": "DD8B740D15ED9D42A3068E373C1E43EBB8E6DD9A47BDA6D663A886EADCD2807C"
+    },
+    {
+      "relative": "runtimes/android-arm/native/libe_sqlite3.so",
+      "sha256": "54D5326235F0BBE5199D441941885C1F34C9FBA5578B0285AB20EA2B5B70E606"
+    },
+    {
+      "relative": "runtimes/android-arm/native/libSystem.IO.Ports.Native.so",
+      "sha256": "1CB3C26FB72AC090B35726C281D91C9F49489F4CB34DFDCEEF0CDF2143351367"
+    },
+    {
+      "relative": "runtimes/android-x64/native/libe_sqlite3.so",
+      "sha256": "B7B9FE877A96F1A8E161F91E497DA666D95BE5723043A0DC3FFFED30109BB65C"
+    },
+    {
+      "relative": "runtimes/android-x64/native/libSystem.IO.Ports.Native.so",
+      "sha256": "22C0A819039670A6EFD8459D961628EF8F4A7A6E0A04B6C6765C7E438DB40C73"
+    },
+    {
+      "relative": "runtimes/android-x86/native/libe_sqlite3.so",
+      "sha256": "E7FF0B19A6DB1D2ABB654CDD1FEA66979596BF2549964006B27F24AC8CA99B47"
+    },
+    {
+      "relative": "runtimes/android-x86/native/libSystem.IO.Ports.Native.so",
+      "sha256": "AAC027B2B2D23037A67D59C6F0409A3A06CC9CAD5D85A05DACF2C265C4EF30BD"
+    },
+    {
+      "relative": "runtimes/linux-bionic-arm64/native/libSystem.IO.Ports.Native.so",
+      "sha256": "044094AA1717A94C67C061D4D0D19AE6BC82D2620DFD49586CB8CD04EEC8D7CE"
+    },
+    {
+      "relative": "runtimes/linux-bionic-x64/native/libSystem.IO.Ports.Native.so",
+      "sha256": "8DB4B1C0E439A21B6093B4A747D178F5F850E8AFC22DB0CD006848D7D8572D63"
+    },
+    {
+      "relative": "runtimes/linux-musl-arm/native/libe_sqlite3.a",
+      "sha256": "BDEF9815BD9D0276E4839765FF2B320F53204D71BCEB35E52F49C963783A80F8"
+    },
+    {
+      "relative": "runtimes/linux-musl-arm/native/libe_sqlite3.so",
+      "sha256": "7FEC7057D16E8B5AE54FED0C42A0E6B85E40DF0D57092EF20CD647A4E1C1E0ED"
+    },
+    {
+      "relative": "runtimes/linux-musl-arm/native/libSystem.IO.Ports.Native.so",
+      "sha256": "98BA09C787DCE8A859E549EB59F05665F8535634AA3B3EC532938C6EA1108AB4"
+    },
+    {
+      "relative": "runtimes/linux-musl-arm64/native/libe_sqlite3.a",
+      "sha256": "F646D6EC137D233E8671B81C411F2FB0EBFA096DEA845AE44F9879A25EBBA868"
+    },
+    {
+      "relative": "runtimes/linux-musl-arm64/native/libe_sqlite3.so",
+      "sha256": "530E2F74F259FE04FAA4B595336E671FAB5EEDBB6F4E94DAD59494EFB7B00C2A"
+    },
+    {
+      "relative": "runtimes/linux-musl-arm64/native/libSystem.IO.Ports.Native.so",
+      "sha256": "79F2C436532F30C93E63AAC3CB77B12A0DD15A7A1C82109F3951F97F7EB44D43"
+    },
+    {
+      "relative": "runtimes/maccatalyst-arm64/native/libe_sqlite3.dylib",
+      "sha256": "8D63D80BC6CAA754679D6FC89FD741A32C156F136C34759CC8FFF8CD51468A93"
+    },
+    {
+      "relative": "runtimes/maccatalyst-arm64/native/libSystem.IO.Ports.Native.dylib",
+      "sha256": "FCFC098F7230796A2CAC987BF34075617A03B44A0EAA23A1AA62D158C1C6EF4E"
+    },
+    {
+      "relative": "runtimes/maccatalyst-x64/native/libe_sqlite3.dylib",
+      "sha256": "43D27ADBC5BA40850BAC42A12AEA08314A22A43D3CE77CDC7A6CC47ECFFB5746"
+    },
+    {
+      "relative": "runtimes/maccatalyst-x64/native/libSystem.IO.Ports.Native.dylib",
+      "sha256": "78761DEF8C1CD9E9721F672B77318CD15AC90D771C07B94A8F46B41836035664"
+    },
+    {
+      "relative": "runtimes/osx-x64/native/libe_sqlite3.dylib",
+      "sha256": "02344E1D0BCB5ED447AD9B79ED19E37A590FB1ECE3EBA1E63EFBC35E36E47BDF"
+    },
+    {
+      "relative": "runtimes/osx-x64/native/libSystem.IO.Ports.Native.dylib",
+      "sha256": "05757269911E5754254E0DEEEF1EC90C8910A35B7E05731D1DD51954B1DBDB42"
+    },
+    {
+      "relative": "runtimes/ios-arm/native/e_sqlite3.a",
+      "sha256": "EC9C290BFD1FA6DE2E36D40AD0FCAB572BA63D175CA8BA20A2226AB5ADEF598C"
+    },
+    {
+      "relative": "runtimes/browser-wasm/nativeassets/net9.0/e_sqlite3.a",
+      "sha256": "C64AE8D44DC3E1AA03ACA4E79CCC501CBC3A3C490E8E2EA9E369367F68CF0F21"
+    },
+    {
+      "relative": "runtimes/ios-arm64/native/e_sqlite3.a",
+      "sha256": "EC9C290BFD1FA6DE2E36D40AD0FCAB572BA63D175CA8BA20A2226AB5ADEF598C"
+    },
+    {
+      "relative": "runtimes/iossimulator-arm64/native/e_sqlite3.a",
+      "sha256": "F2561B76CF8EC98E70DABD956AD12D79E1DF65ACA86936902E7675C7D43D508A"
+    },
+    {
+      "relative": "runtimes/iossimulator-x64/native/e_sqlite3.a",
+      "sha256": "F2561B76CF8EC98E70DABD956AD12D79E1DF65ACA86936902E7675C7D43D508A"
+    },
+    {
+      "relative": "runtimes/linux-armel/native/libe_sqlite3.a",
+      "sha256": "2AE37D6440CD7FB8028DD8C99995CBB21C97348AECBE904A791ED98347114FC7"
+    },
+    {
+      "relative": "runtimes/linux-armel/native/libe_sqlite3.so",
+      "sha256": "3F4D9B9CA49BB3F100882E78BA85807398CEE19B481BFD4C301A8F5F58D48540"
+    },
+    {
+      "relative": "runtimes/linux-mips64/native/libe_sqlite3.a",
+      "sha256": "003A556E9005F0F05783E7D5E2D6F43D7A92D6DD0D93D7432B59D919DFA052DD"
+    },
+    {
+      "relative": "runtimes/linux-mips64/native/libe_sqlite3.so",
+      "sha256": "985884523E512414F3E50AA359F08DAD3CE635E99405E7823DE9B26A7DB38D09"
+    },
+    {
+      "relative": "runtimes/linux-musl-riscv64/native/libe_sqlite3.a",
+      "sha256": "F55323689C063DF048E808D223945A9CD4D55D94C78A76EDAEFFF85752EB4B05"
+    },
+    {
+      "relative": "runtimes/linux-musl-riscv64/native/libe_sqlite3.so",
+      "sha256": "D8E54EB7DC52EA0A7DF9B78AC6FEB85AF429E7264613099DF478825DEA5805D4"
+    },
+    {
+      "relative": "runtimes/linux-musl-s390x/native/libe_sqlite3.a",
+      "sha256": "77EF7A3FC5B7DB45ADEAC9F7CB9642EA6A3AC6589C94F06B70B07D8E376B73AA"
+    },
+    {
+      "relative": "runtimes/linux-musl-s390x/native/libe_sqlite3.so",
+      "sha256": "64260C0460AD6EFA7DCE9263BFF7A4B64AD66172CCC580CB09181C845E1A3407"
+    },
+    {
+      "relative": "runtimes/linux-ppc64le/native/libe_sqlite3.a",
+      "sha256": "DF68B9E401F1884C8DFAE83678F33652B4E3D3E50A22176E1CFF43E7A45F795D"
+    },
+    {
+      "relative": "runtimes/linux-ppc64le/native/libe_sqlite3.so",
+      "sha256": "1EF00B5E3AC63E491F59ECF587680FC52AD844CEA62E0A879A1315EF6BD10FC6"
+    },
+    {
+      "relative": "runtimes/linux-riscv64/native/libe_sqlite3.a",
+      "sha256": "891DBE55938323A2E5D092F19EAB2930E6C698AC727B1D127691EBB8C49C62ED"
+    },
+    {
+      "relative": "runtimes/linux-riscv64/native/libe_sqlite3.so",
+      "sha256": "6B390EECBC6F55C44D9AB8A774F1FE4283DFB33A72E6F29F4E0B173065E7E105"
+    },
+    {
+      "relative": "runtimes/linux-s390x/native/libe_sqlite3.a",
+      "sha256": "BB15EA2F63A83B14B69C2FFD85248E3B8C2AC250EE30FE73203C05FE4CAEED11"
+    },
+    {
+      "relative": "runtimes/linux-s390x/native/libe_sqlite3.so",
+      "sha256": "DFD5AB35F6D61155A3C629D0BCEFF4D6E0F0F190983F3FB8F681FB34EC08C67E"
+    },
+    {
+      "relative": "runtimes/linux-x86/native/libe_sqlite3.a",
+      "sha256": "3C267476FC4B7377F4E663B3C39FE7A6D70B32A9F7DF664856CE7FA25802F009"
+    },
+    {
+      "relative": "runtimes/linux-x86/native/libe_sqlite3.so",
+      "sha256": "FE8229E5BAEAF21E721CF65626A6B07EC22D9B17D07BD624E7A77927174277F1"
+    },
+    {
+      "relative": "runtimes/linux/lib/net9.0/System.DirectoryServices.Protocols.dll",
+      "sha256": "7EDB532AC50ECB5C7CD815137F3B9B1EEA21C879D87053D0F1A7922550D84D44"
+    },
+    {
+      "relative": "ref/Microsoft.CSharp.dll",
+      "sha256": "5975F5B2F8DB389482AE3A0235BBF2247B221EE29596EF1CB9A001BA7F49032D"
+    },
+    {
+      "relative": "ref/Microsoft.VisualBasic.Core.dll",
+      "sha256": "47C65217CBE1DC39A1D396A6DCD0A9926D00A37453FB17AD17E8E1123872E086"
+    },
+    {
+      "relative": "ref/Microsoft.VisualBasic.dll",
+      "sha256": "2CCAD016EE5528CBD30EFD4592855CE76DCD7A9394F612F2A645F55EA5581B6A"
+    },
+    {
+      "relative": "ref/Microsoft.Win32.Primitives.dll",
+      "sha256": "F5127480FBD779C0F7C987318EF6E9BCC4A12FF46D9428828B62B11E3DA9E903"
+    },
+    {
+      "relative": "ref/Microsoft.Win32.Registry.dll",
+      "sha256": "5ACC4DCC7371ABD652E0A6E7BCD2DB9F6D2807BE53ACE3D343FCCBC741B91DE7"
+    },
+    {
+      "relative": "ref/mscorlib.dll",
+      "sha256": "CBE631CC9834B1F5C77DF6407FA53593D50F2CCB92ADA8152CD1263EB1A02356"
+    },
+    {
+      "relative": "ref/netstandard.dll",
+      "sha256": "63F9BCB0F9AFF8119DA2E332DE07D2D432A920959C4A12D24B3167C30FC296CA"
+    },
+    {
+      "relative": "ref/System.AppContext.dll",
+      "sha256": "9FBFC9E8F654AF8FC00F3A890E27154678AD46BFB4F42FF0CC45133704C14B1D"
+    },
+    {
+      "relative": "ref/System.Buffers.dll",
+      "sha256": "1DCEB1A041B0338F3A9A97F165AE6488D4AC8A430D0FDDE9409AADB2129936A7"
+    },
+    {
+      "relative": "ref/System.Collections.Concurrent.dll",
+      "sha256": "9DE1BB39F79EF11D828CC2C3B3F37D76D7B7180908551CA14824B5B946F82DAB"
+    },
+    {
+      "relative": "ref/System.Collections.dll",
+      "sha256": "A5B9E4C1DB3784F1260350FD43231CA089A25BEC5F63F0DF86E4B7909E0A2AA7"
+    },
+    {
+      "relative": "ref/System.Collections.Immutable.dll",
+      "sha256": "9E03E0D261C833523BBDDFEBC4706F8518D842424507A8E2718113B0A8ACBF07"
+    },
+    {
+      "relative": "ref/System.Collections.NonGeneric.dll",
+      "sha256": "0B427047F3996B92ABEF3DC0D8E4C653FCBC635164591980FD7FEBA3B5104769"
+    },
+    {
+      "relative": "ref/System.Collections.Specialized.dll",
+      "sha256": "C2883606A3F09E8DC85D055C2149A6CF23466E3ECBD3ABFE1B4069A193B514A6"
+    },
+    {
+      "relative": "ref/System.ComponentModel.Annotations.dll",
+      "sha256": "528361BF093E8BCBE9BC43C0A6078C8D501CF3C9FD40413FD58D28CA799B0D4F"
+    },
+    {
+      "relative": "ref/System.ComponentModel.DataAnnotations.dll",
+      "sha256": "B135F6F9CC29B9E1229FA84E9967C4542A9BF2225885A3282A663ED247470AC4"
+    },
+    {
+      "relative": "ref/System.ComponentModel.dll",
+      "sha256": "7A59E5978B0C03CFEE1CED2252C22D922255DB326A9A706C814A6A11645372D5"
+    },
+    {
+      "relative": "ref/System.ComponentModel.EventBasedAsync.dll",
+      "sha256": "37D363E77F2BE60D09282873C4D1BD1EE3FF85DC89FA92E77DEC5A7EC1A40074"
+    },
+    {
+      "relative": "ref/System.ComponentModel.Primitives.dll",
+      "sha256": "88D720147971A2B72BC8DAA470B4CDD0CDC6687B84DDE78331F712AFCC4BA61D"
+    },
+    {
+      "relative": "ref/System.ComponentModel.TypeConverter.dll",
+      "sha256": "B370D35F6A723E49DE674F06E89AE051E707ED9D5E71A985F962A426BA6391D5"
+    },
+    {
+      "relative": "ref/System.Configuration.dll",
+      "sha256": "B8150FCCD9E853118AF5A21BBD561B7E41EAE738EF8A7125C72471BEBB6608E8"
+    },
+    {
+      "relative": "ref/System.Console.dll",
+      "sha256": "EA2E8F32619D06919E50AE2888AB78DAEE920442DAAB26D7AF0C3920FA6CDB9E"
+    },
+    {
+      "relative": "ref/System.Core.dll",
+      "sha256": "106B46C18F134B82E34EB8D0A448699EAB9F194B6D58201075F3AD04F4BD521E"
+    },
+    {
+      "relative": "ref/System.Data.Common.dll",
+      "sha256": "51116083A4456928651938167863F12D5A24CA5A27F9979BC1C1D5B22D2698F2"
+    },
+    {
+      "relative": "ref/System.Data.DataSetExtensions.dll",
+      "sha256": "5AA3E789A9D57D1D9B818B14644452F2080E2F62C71DAAC5F4C94C863232A5D6"
+    },
+    {
+      "relative": "ref/System.Data.dll",
+      "sha256": "8CEFFC9A8075AD72AC123F3C856CC4BEA09ED229B4F2A7D0AF4CBE69DA93E6B8"
+    },
+    {
+      "relative": "ref/System.Diagnostics.Contracts.dll",
+      "sha256": "F5E2949D297FF21F1C679B3DBFC26FD3117D7E8F097890A247EBB7C6D4B60460"
+    },
+    {
+      "relative": "ref/System.Diagnostics.Debug.dll",
+      "sha256": "0691ADE1ADD75A3AC1E5FC96FA1FDF2E5699A888B93C4765A3CE336AAC035791"
+    },
+    {
+      "relative": "ref/System.Diagnostics.DiagnosticSource.dll",
+      "sha256": "3A8703101ADFF2A8FF573C96E0C60FA59F70325EC8D3FF0FA248DE3DF402B15C"
+    },
+    {
+      "relative": "ref/System.Diagnostics.FileVersionInfo.dll",
+      "sha256": "9B8232EE7804736FE74586438F9271BEA97C16E9063794FE13C1FDFD76A6DB0F"
+    },
+    {
+      "relative": "ref/System.Diagnostics.Process.dll",
+      "sha256": "9F00AFA4DA93BEAF62438732F642A91B7370561E609D4F6E98412CE2FC21F8A5"
+    },
+    {
+      "relative": "ref/System.Diagnostics.StackTrace.dll",
+      "sha256": "D7FB1B4C4A303D70E1762337B5FA3251C868E8095EE2A36C2DC41FC32F30D8AE"
+    },
+    {
+      "relative": "ref/System.Diagnostics.TextWriterTraceListener.dll",
+      "sha256": "7F72CDD7189A3613A020381E4B3ACAAE9E152C9BDA03C498B1AC43247ED447C9"
+    },
+    {
+      "relative": "ref/System.Diagnostics.Tools.dll",
+      "sha256": "F221A60960B8F8C8F3DCBB8EEEF022680FF0CB759F7C5035D7F7922BCE55863F"
+    },
+    {
+      "relative": "ref/System.Diagnostics.TraceSource.dll",
+      "sha256": "48B1137DD073F22A5BE8413E6B16BC1244BE671418A09A4E70C07FFD123875EE"
+    },
+    {
+      "relative": "ref/System.Diagnostics.Tracing.dll",
+      "sha256": "6E01D659452C8D116D1360818254C03023D9D27C89C4CF2E8D682966098D0C05"
+    },
+    {
+      "relative": "ref/System.dll",
+      "sha256": "E6F41AF528045BF49B2F3E49AE7DE067AB7848B1FB2EC6BF180F2BCC45B84D60"
+    },
+    {
+      "relative": "ref/System.Drawing.dll",
+      "sha256": "68087C64E0446743910AB1946402FE00BC3BBCCA56757FD801FBB1AC6C2AB59B"
+    },
+    {
+      "relative": "ref/System.Drawing.Primitives.dll",
+      "sha256": "3B990EB23AF370C0CF8E8798472F3AD331000EB655246ADE526E20738F6B8781"
+    },
+    {
+      "relative": "ref/System.Dynamic.Runtime.dll",
+      "sha256": "4825C12BCF835749CBB607547BED86394F8726FD465966AF7FD686654081EF45"
+    },
+    {
+      "relative": "ref/System.Formats.Asn1.dll",
+      "sha256": "D3ED51AA2D4E8FE4CA54621E21EA1C104B32E867F15F6AF82D917EF3A3525C7A"
+    },
+    {
+      "relative": "ref/System.Formats.Tar.dll",
+      "sha256": "7D9AF457E07BCB2A034CD4824DDFBBF9EA81AE0DB1A7A02D2240D8E7DE5E3052"
+    },
+    {
+      "relative": "ref/System.Globalization.Calendars.dll",
+      "sha256": "561E2154C6F9756431BD1DB7F9E739567DA02A2E2F97B0782ACC9989CC3733A8"
+    },
+    {
+      "relative": "ref/System.Globalization.dll",
+      "sha256": "AEEB33DB0700D2A711FF98CAEDA1C1A996B09312845A5906366295331F469473"
+    },
+    {
+      "relative": "ref/System.Globalization.Extensions.dll",
+      "sha256": "2869810AF0DFB00C31E320DFF1CF0FDA44137FFBCF744D52636E072BA33DF99B"
+    },
+    {
+      "relative": "ref/System.IO.Compression.Brotli.dll",
+      "sha256": "4EDADBBB94EB6F88EB943E03CCDF6D60EF34FBFA5F9EB53B2627EBADB616B623"
+    },
+    {
+      "relative": "ref/System.IO.Compression.dll",
+      "sha256": "F19B077F1238188CD393BD4D6F0B37291AC9D671A5F78EBE161938F8DB0DC86C"
+    },
+    {
+      "relative": "ref/System.IO.Compression.FileSystem.dll",
+      "sha256": "01174DCFAC3882B1FA722882FF5F292E771F8AA7141A40A59062E21A0E297BB4"
+    },
+    {
+      "relative": "ref/System.IO.Compression.ZipFile.dll",
+      "sha256": "84127623E318FCA1B9AE8849EBB93CD4CB1E8A9861B323D0541E584607B82C7D"
+    },
+    {
+      "relative": "ref/System.IO.dll",
+      "sha256": "DB0E3A1498353310D1AAC605D0E6EBDAEFA5E0C20C7BBA37DDF61123F543224C"
+    },
+    {
+      "relative": "ref/System.IO.FileSystem.AccessControl.dll",
+      "sha256": "D02655085C01F8BE16FA3C19E5AA83BB7D2DB29E1BE7DCF6E80CEBA3050A7129"
+    },
+    {
+      "relative": "ref/System.IO.FileSystem.dll",
+      "sha256": "38FDBB404DFDD4F625295DACA9D36CAAFCE96762775F3B58841C51D5FEDBA0E7"
+    },
+    {
+      "relative": "ref/System.IO.FileSystem.DriveInfo.dll",
+      "sha256": "D5CCA362456B64439FB49E3EEAF098F8F2477AD68F358DE4D76303014F5CBD44"
+    },
+    {
+      "relative": "ref/System.IO.FileSystem.Primitives.dll",
+      "sha256": "58C2AFCF4A726C74A7F626EAE7182E94D5D01FB78A42CDC63A428061D41F5B6E"
+    },
+    {
+      "relative": "ref/System.IO.FileSystem.Watcher.dll",
+      "sha256": "BE633442E9448CA36A4BAA2EDF0695121B17DADA885F29A9C302A1114D7282F3"
+    },
+    {
+      "relative": "ref/System.IO.IsolatedStorage.dll",
+      "sha256": "8D4B0D5D6C3A9F43B68B98A11435E6B9835EBA67BB92922EFA38A65A68306902"
+    },
+    {
+      "relative": "ref/System.IO.MemoryMappedFiles.dll",
+      "sha256": "5813ED0076EA6432954058154C245ABF0C125326BA6A663406C055CABA407C63"
+    },
+    {
+      "relative": "ref/System.IO.Pipelines.dll",
+      "sha256": "8215EAAACE4A9BB2B04B3A8ECA6030FB289B5F6BF5DD593721FB918D772695BA"
+    },
+    {
+      "relative": "ref/System.IO.Pipes.AccessControl.dll",
+      "sha256": "3E1D0FDD074602B456B1BC83EB81B896E0CEF117B13D21CD0C1B8DF65FEE0232"
+    },
+    {
+      "relative": "ref/System.IO.Pipes.dll",
+      "sha256": "75998C9CF7C361D8C42C18CC9457CFBA221B22B21FF9F793EC6609EF1CE0A497"
+    },
+    {
+      "relative": "ref/System.IO.UnmanagedMemoryStream.dll",
+      "sha256": "435385A17E52CE5C72BEDCA883C730FC7244227E9B0A56CF11E44AB001323F25"
+    },
+    {
+      "relative": "ref/System.Linq.dll",
+      "sha256": "B066BF4E6EBE750B73AD71CEEB63461F8270DEACAEA284CEA34E06C9BED922CF"
+    },
+    {
+      "relative": "ref/System.Linq.Expressions.dll",
+      "sha256": "57082BFC1B44341E8C558742831FF27E22B4D65FA0D31FB34CFB7DDAD2A1E9BC"
+    },
+    {
+      "relative": "ref/System.Linq.Parallel.dll",
+      "sha256": "6D4CD09B84BFD21494D75A4C46499B35082F22AF697399E948A262B847C71B3F"
+    },
+    {
+      "relative": "ref/System.Linq.Queryable.dll",
+      "sha256": "89E9FA9A441BE7B8669C87FC0D4EBA6BD2CB6CE146E0753265C89BAF51E0F788"
+    },
+    {
+      "relative": "ref/System.Memory.dll",
+      "sha256": "B3F4E034D4DDC098D33501DCF2087F674304EDE86B935BB718A5EF0A18539DBF"
+    },
+    {
+      "relative": "ref/System.Net.dll",
+      "sha256": "AF4F9654F72FC332AFE4FD337444D7DECFDAC6B830F767A656D24EEBDF676936"
+    },
+    {
+      "relative": "ref/System.Net.Http.dll",
+      "sha256": "2F32723100565777AC7F01EBC7D842E0D0D90AB5A1DD24E286E8C646827DE771"
+    },
+    {
+      "relative": "ref/System.Net.Http.Json.dll",
+      "sha256": "41E669235AA367FAFC0AF3809C9CD75A792EF943A8D10AF4BDEDABD1E2E4D244"
+    },
+    {
+      "relative": "ref/System.Net.HttpListener.dll",
+      "sha256": "F4E07763CC4917691B78EF720DB51DFECA3ACBA6C4A17C84123290D72B4D3561"
+    },
+    {
+      "relative": "ref/System.Net.Mail.dll",
+      "sha256": "C7D97A60B662DFAE326F5131537BCA7305FD82105BE3D3E18C54EE4A9025FAA2"
+    },
+    {
+      "relative": "ref/System.Net.NameResolution.dll",
+      "sha256": "C31562950E671673CBFEBE3878C9DC703A2430CD4AD545C52E68390196506CCE"
+    },
+    {
+      "relative": "ref/System.Net.NetworkInformation.dll",
+      "sha256": "2FCAF8BBDE25EA84BD24717DA937FECD2E20BBCD05412D31A5F73AA588D0AA6D"
+    },
+    {
+      "relative": "ref/System.Net.Ping.dll",
+      "sha256": "867D667418DD4BC19794B590F63B118675129DD003FBC38499BB66B61AA1EAC5"
+    },
+    {
+      "relative": "ref/System.Net.Primitives.dll",
+      "sha256": "F0E4E350E2F3D60A026484B46AEB9D9A4C353432FC92AFE77C8734F6AB2218B2"
+    },
+    {
+      "relative": "ref/System.Net.Quic.dll",
+      "sha256": "78C9DFFEF762440D9B7BFE58F9FD8AA87857EE4AF4CAE504124CD4D3B98F3ED9"
+    },
+    {
+      "relative": "ref/System.Net.Requests.dll",
+      "sha256": "5AB2B4A16A265FF882C8B0573A2026336E1518DB0B4420508D539A1237E78147"
+    },
+    {
+      "relative": "ref/System.Net.Security.dll",
+      "sha256": "9DE3F0BED29DBF0290C684144A33C6CA6634522EDB5C65905FDBADFBEEE00262"
+    },
+    {
+      "relative": "ref/System.Net.ServicePoint.dll",
+      "sha256": "9A56B39C8BCFE96C06D40145531F455E2E411EBE9C09611426CDB6D472BD36B1"
+    },
+    {
+      "relative": "ref/System.Net.Sockets.dll",
+      "sha256": "8327086348674FE6E3663E1C62F1F879ED3F0A51CFC4E23E927EDB90CE714DC7"
+    },
+    {
+      "relative": "ref/System.Net.WebClient.dll",
+      "sha256": "61D82FB6F209E4E2C701A004BE9B5DFEF4180D955F8FDCFFA0FD5551C801F30C"
+    },
+    {
+      "relative": "ref/System.Net.WebHeaderCollection.dll",
+      "sha256": "1C836333C92CD0F50CBC4F6BB74D19A24BB658B610CD0BD769EE8288020ED132"
+    },
+    {
+      "relative": "ref/System.Net.WebProxy.dll",
+      "sha256": "C10EF6D7D0DF5E0BA2D3229626B58DD87DA3801825F6EC7B7ACF17226700425E"
+    },
+    {
+      "relative": "ref/System.Net.WebSockets.Client.dll",
+      "sha256": "314B3365BBC58BA3DF45F2F57DF5537AE7E5A0B3A3BD96173A377C982A423ED7"
+    },
+    {
+      "relative": "ref/System.Net.WebSockets.dll",
+      "sha256": "4E068F6DFB57F9D6B44DB0E7E2DB11CAA4BF6652DF1F79BBFF5797CC63C7DB82"
+    },
+    {
+      "relative": "ref/System.Numerics.dll",
+      "sha256": "AFB50791891BF6289750F8516B89CDE971A9DAF085408826C36DE9C7162B4859"
+    },
+    {
+      "relative": "ref/System.Numerics.Vectors.dll",
+      "sha256": "781E75E2EC92A6A30CC783A580C0BA0297B2525CD62A489D0A639F27A88542AF"
+    },
+    {
+      "relative": "ref/System.ObjectModel.dll",
+      "sha256": "2C67596AAA044EFBCF9AF4392EC3F70DFC4AB7FB572F2FCC28D733E7D9C2E7A1"
+    },
+    {
+      "relative": "ref/System.Reflection.DispatchProxy.dll",
+      "sha256": "2FD4FAD5C49585559C43D49BC1F725DB5A1C525A22D6CC274A1F7CAA396D686A"
+    },
+    {
+      "relative": "ref/System.Reflection.dll",
+      "sha256": "3D98E80D38CB6A5ABFE65AB5EA97C3B90550177FB2201CC46BA43D37F93BF376"
+    },
+    {
+      "relative": "ref/System.Reflection.Emit.dll",
+      "sha256": "D8F54D3C8F570DBDC817263D1896113022E68B7D062B1127FD1029B810847F90"
+    },
+    {
+      "relative": "ref/System.Reflection.Emit.ILGeneration.dll",
+      "sha256": "2A29ACB596D450380F39EC9DC89B5025D5FBF53AA9226A9BF819057BF180E42F"
+    },
+    {
+      "relative": "ref/System.Reflection.Emit.Lightweight.dll",
+      "sha256": "0F55FC93294916E628A65183B604CFCB21A402AAD41F39E1C6454CAEBC63BC3D"
+    },
+    {
+      "relative": "ref/System.Reflection.Extensions.dll",
+      "sha256": "111480F790A0B69AF0BFB1B315687C5F271B0B64CE34BFB7459F37FAA0085DC9"
+    },
+    {
+      "relative": "ref/System.Reflection.Metadata.dll",
+      "sha256": "FF48C5088DBA5EAC2B4A2E260AC15D7EE75BEA8A0F15C7EAA42D00C1D3C23895"
+    },
+    {
+      "relative": "ref/System.Reflection.Primitives.dll",
+      "sha256": "912712BC88318CC6DB6766DA8B2D1A3C5675D9DE742194A6FEAB62D6239439BB"
+    },
+    {
+      "relative": "ref/System.Reflection.TypeExtensions.dll",
+      "sha256": "B14E1D06863CA1FB2208380C63313E894ACC58255F09BFF0FD978C9B28B46A8D"
+    },
+    {
+      "relative": "ref/System.Resources.Reader.dll",
+      "sha256": "D971211409DE9858FFCE6C8FB2477D61BF119BDF8878D5A809144F41F9EF1AFA"
+    },
+    {
+      "relative": "ref/System.Resources.ResourceManager.dll",
+      "sha256": "EB1DD5E84B7C502A6507588E2F052CFEA2F4C01DB9AE404641FDC8C77889DC04"
+    },
+    {
+      "relative": "ref/System.Resources.Writer.dll",
+      "sha256": "16E18FF8A72241D2198E52D57FDD8BD07335DCC88AA4E17D4E1ACB7670A181A3"
+    },
+    {
+      "relative": "ref/System.Runtime.CompilerServices.Unsafe.dll",
+      "sha256": "928901FB7C8D853B9891F2C7D161A0916BE8698F6F6211BB68BC7CA5941F9740"
+    },
+    {
+      "relative": "ref/System.Runtime.CompilerServices.VisualC.dll",
+      "sha256": "EF0B072A5ABD22B162616737BA7ACDCA83A9651BF3517FA8AC7C1707ECD93704"
+    },
+    {
+      "relative": "ref/System.Runtime.dll",
+      "sha256": "AFAB950F2591410331EC95230757D1860FD7931231E885D38CA74F1A95F83CDD"
+    },
+    {
+      "relative": "ref/System.Runtime.Extensions.dll",
+      "sha256": "5250F575BD51F81AD3361730B6D9E77582DCEB351F0490BB8963C6B8AA6E9DE1"
+    },
+    {
+      "relative": "ref/System.Runtime.Handles.dll",
+      "sha256": "6D5C33506A907D67BE3C9189BF1EF0D4B0137F831AB7818253ACCCD17EBBC55F"
+    },
+    {
+      "relative": "ref/System.Runtime.InteropServices.dll",
+      "sha256": "6B783A196F32C8729706F5B929C2C5856FA9CD8EA4A7A11D6EB57EA288014E36"
+    },
+    {
+      "relative": "ref/System.Runtime.InteropServices.JavaScript.dll",
+      "sha256": "EAD8544D622B86E7E443F0AE3D1016820B5A7F8DECE6A185F21762A7428863DB"
+    },
+    {
+      "relative": "ref/System.Runtime.InteropServices.RuntimeInformation.dll",
+      "sha256": "5B0D5E07FF3396418936AE93EEEB382D5D9B9A9AA6D70424483DD4B04CBEDF79"
+    },
+    {
+      "relative": "ref/System.Runtime.Intrinsics.dll",
+      "sha256": "0CBF1CDD299558404313939623B89AA0972177821ED05D40F75B8EDBC36ABF07"
+    },
+    {
+      "relative": "ref/System.Runtime.Loader.dll",
+      "sha256": "3C23FB640FAAF313D05733146035A5FD68174B5D4AC695746CF018255C1CA1A5"
+    },
+    {
+      "relative": "ref/System.Runtime.Numerics.dll",
+      "sha256": "073B0D97DD31D4DB36CC55532BF6CF494FEDBE0085C26F9F41FF9745BAE00D64"
+    },
+    {
+      "relative": "ref/System.Runtime.Serialization.dll",
+      "sha256": "9CD391169E172FC87980D5BC930F4E220FA45A468FBAA0412E98AAAEC9886F5C"
+    },
+    {
+      "relative": "ref/System.Runtime.Serialization.Formatters.dll",
+      "sha256": "BA488CB83CE0ED2BF62E6EF60E829551CFB8908B4D9B093E446F6199765EE282"
+    },
+    {
+      "relative": "ref/System.Runtime.Serialization.Json.dll",
+      "sha256": "A77E76496A17C2389299579C3E288C3B82F1E6029CB215CEBCE8B896B16A4AB3"
+    },
+    {
+      "relative": "ref/System.Runtime.Serialization.Primitives.dll",
+      "sha256": "A84309A9D578E0E607B6EDDE477FB21117BCA996B903C3CC25405494CBAE60BA"
+    },
+    {
+      "relative": "ref/System.Runtime.Serialization.Xml.dll",
+      "sha256": "2EAEBE4AD957302A35BF2668BAD293BAD5BC2FE0BBD83BD7B5D73F33C51ED69A"
+    },
+    {
+      "relative": "ref/System.Security.AccessControl.dll",
+      "sha256": "DBE1A937B9EE691B55289EBE7825CD7D314135F8C68D982F5EF5CC387E769C42"
+    },
+    {
+      "relative": "ref/System.Security.Claims.dll",
+      "sha256": "F939C5EC69977E960201565EEBABC6FD0D80E2E450350FC53852DC9D6524F055"
+    },
+    {
+      "relative": "ref/System.Security.Cryptography.Algorithms.dll",
+      "sha256": "BB8C2404F119C661E3D31B5D854315E0DDE089E2918D0FEB3CBB174474058C7C"
+    },
+    {
+      "relative": "ref/System.Security.Cryptography.Cng.dll",
+      "sha256": "D84C7EBFA969634ED97DFFDFD69BC3E7208670952486124A7C3ACFCA62547D4B"
+    },
+    {
+      "relative": "ref/System.Security.Cryptography.Csp.dll",
+      "sha256": "FF983C2542D275EA1D95B5D8C30982514F0F11E7EBD76D1CE17D808A8243BF6F"
+    },
+    {
+      "relative": "ref/System.Security.Cryptography.dll",
+      "sha256": "B7A58CBE36230A0371AC1749ECDB7F254E497A2E81E38EC9A0206EADBFBB06ED"
+    },
+    {
+      "relative": "ref/System.Security.Cryptography.Encoding.dll",
+      "sha256": "FBA90B20F017E9650A49A8F55E2C4231CFB55AE60B809B72DEFEA182F5989500"
+    },
+    {
+      "relative": "ref/System.Security.Cryptography.OpenSsl.dll",
+      "sha256": "9435B91991D3360AA21A52AE87DB2A2F04285315B7E5A86E9BC26BE51A760C0E"
+    },
+    {
+      "relative": "ref/System.Security.Cryptography.Primitives.dll",
+      "sha256": "B141743C61296F061D0C094A401D407F37F6C54E43F5E1FE621D4DF7B5834274"
+    },
+    {
+      "relative": "ref/System.Security.Cryptography.X509Certificates.dll",
+      "sha256": "2B8D789F2044B6774B7C28247BC5E11AB2DBDF1E83A404DE896CBF67B6E4F9EB"
+    },
+    {
+      "relative": "ref/System.Security.dll",
+      "sha256": "DF1B4AFEAF88A5EAF087095DD0BE5CE159481389B6BE8B1FAADB0870553B9AE5"
+    },
+    {
+      "relative": "ref/System.Security.Principal.dll",
+      "sha256": "82366B98834BD4D53A4FD018BBD71ECA720092B0C9FE54943CBA10F4DA9F76F8"
+    },
+    {
+      "relative": "ref/System.Security.Principal.Windows.dll",
+      "sha256": "DDAF1DDA6E73546C3DEEF92DD5B7480E6C4869E2D6432B681CAE673B47D4B40D"
+    },
+    {
+      "relative": "ref/System.Security.SecureString.dll",
+      "sha256": "6798614F397D52518B8B640A683AA7453F1B143F0467A2E61A0DD9714D72B0C2"
+    },
+    {
+      "relative": "ref/System.ServiceModel.Web.dll",
+      "sha256": "3DBC1C4FD4B0412BCF3DEA4D8BE12C64A41EE3B4168F2217A00DC11E2B97D6B7"
+    },
+    {
+      "relative": "ref/System.ServiceProcess.dll",
+      "sha256": "CBCCE558D1F3D64424E62BC4FFFC227851A35578D329BA64101D2BC28FEAAECA"
+    },
+    {
+      "relative": "ref/System.Text.Encoding.CodePages.dll",
+      "sha256": "8973D439CF67DF6F00EC82318FFFF32B7EF63CA8739C96A49841CD48B6AC4F70"
+    },
+    {
+      "relative": "ref/System.Text.Encoding.dll",
+      "sha256": "114B8397C64029D54F307D579BFE207E79B0ADEB053E5565437ECD3F0E9CDA5D"
+    },
+    {
+      "relative": "ref/System.Text.Encoding.Extensions.dll",
+      "sha256": "FD7210CAAF2CEB3E329B3444D6D0630BD4A81395624B89F50812B598A30FAD3A"
+    },
+    {
+      "relative": "ref/System.Text.Encodings.Web.dll",
+      "sha256": "1E74EDD8C4EE380CCFE237B806D28528903CC5913DB2CFD3CDB39E488B10EE89"
+    },
+    {
+      "relative": "ref/System.Text.Json.dll",
+      "sha256": "C7F41C16F12A097835FE7AF583269190A3C08ED6A6795C6C34D1AB9F1502A6CD"
+    },
+    {
+      "relative": "ref/System.Text.RegularExpressions.dll",
+      "sha256": "66557F796E70B38B00334630F5344716AD7AD017050041BF392A98136D14B121"
+    },
+    {
+      "relative": "ref/System.Threading.Channels.dll",
+      "sha256": "12D107D90859BDC4E65976E11148E78D7F088585AE2CF07A717D3DAAD5A7D7E8"
+    },
+    {
+      "relative": "ref/System.Threading.dll",
+      "sha256": "38F1E9690A233470391F69DE3F8806AB7C46C5C69AC3C7A66CC9162CBB758202"
+    },
+    {
+      "relative": "ref/System.Threading.Overlapped.dll",
+      "sha256": "685D2E50A544201BD3D3EF01A3C58DB86889B9404EBBF1AD590FB24257C2379E"
+    },
+    {
+      "relative": "ref/System.Threading.Tasks.Dataflow.dll",
+      "sha256": "9B4B14F89E8650DD404E9D2EC8B6B33F7ACF040ED66D65D35A48AB4384374EC1"
+    },
+    {
+      "relative": "ref/System.Threading.Tasks.dll",
+      "sha256": "66A0ADFF2BBABF6ADDAA166386A74C6196BAC8496F1366FB0383214E1423CF66"
+    },
+    {
+      "relative": "ref/System.Threading.Tasks.Extensions.dll",
+      "sha256": "F400D60F1351B3400A2F88AC676BCCFC1061F43DD0159E4E7ACC2AE42C6EB3E9"
+    },
+    {
+      "relative": "ref/System.Threading.Tasks.Parallel.dll",
+      "sha256": "02C03567BC90F1F84AE755BD73A891D30D0AAAE7D2E5927169399660D943F4AA"
+    },
+    {
+      "relative": "ref/System.Threading.Thread.dll",
+      "sha256": "280B61D9D93FBCD45F414F1EF69DBD6DDBF245C38D3E848E711049891A26A0A0"
+    },
+    {
+      "relative": "ref/System.Threading.ThreadPool.dll",
+      "sha256": "596CCC83C35EF7070DAA9F0626F18E92E309247ECE22B714DAC42A9345283F35"
+    },
+    {
+      "relative": "ref/System.Threading.Timer.dll",
+      "sha256": "7A6FE0946236B936AF216BF33B8F8583E949C34E517B483BF74C74E169026180"
+    },
+    {
+      "relative": "ref/System.Transactions.dll",
+      "sha256": "CE4B44B5CF12FAD0937E33FE39FB3CB51EF17100B7B935FB691C07496AEB014F"
+    },
+    {
+      "relative": "ref/System.Transactions.Local.dll",
+      "sha256": "F0558A323612489B45BAA15C281369483A33678E8BB9F9F4A1BB7A3180681D60"
+    },
+    {
+      "relative": "ref/System.ValueTuple.dll",
+      "sha256": "ED84C0BB390D54C16ED2F577A55974F6318790BDC76AA8AB7A37384B88FBCCC9"
+    },
+    {
+      "relative": "ref/System.Web.dll",
+      "sha256": "1F8F1D85EC6E30BC211F875977ED6055F41F05E92944848629BB955B27065F18"
+    },
+    {
+      "relative": "ref/System.Web.HttpUtility.dll",
+      "sha256": "2B3E22363C3C3053CEAE9BA41623A0EB77EA4A6583F87EA528E0D1402A412518"
+    },
+    {
+      "relative": "ref/System.Windows.dll",
+      "sha256": "8F45AFF6381A6DFC62438772093F10E14249E5F58FE205F80F298C559E3F3D3E"
+    },
+    {
+      "relative": "ref/System.Xml.dll",
+      "sha256": "3AC7411BB23795D0A5550239E06ACFFC4C50E501E347159617533745D2593274"
+    },
+    {
+      "relative": "ref/System.Xml.Linq.dll",
+      "sha256": "E712603D5E332A2C92B8C1EDA46D4844341C961AE339E3B20B3F1212337B0EF5"
+    },
+    {
+      "relative": "ref/System.Xml.ReaderWriter.dll",
+      "sha256": "AA81068B2829548E916326BB415E30BD27CC79699DA0AA297379C28C602D8CF7"
+    },
+    {
+      "relative": "ref/System.Xml.Serialization.dll",
+      "sha256": "A7DC28910CC0079E0380BCA1D851314DA287DB1B5B2E1649477284D190D8719A"
+    },
+    {
+      "relative": "ref/System.Xml.XDocument.dll",
+      "sha256": "1A38C3F599A7A85EB8E3BD6F393BB0E406FE7DA586E2D71CD9846CFA5923AF47"
+    },
+    {
+      "relative": "ref/System.Xml.XmlDocument.dll",
+      "sha256": "1D783F8FE48F8D3F67FA2C0F1BC2EFB3E7A078B2E460007D6170E637948039F7"
+    },
+    {
+      "relative": "ref/System.Xml.XmlSerializer.dll",
+      "sha256": "A2D19953EAEA008141354F839A66046726D930E02C629943269067C7020B8512"
+    },
+    {
+      "relative": "ref/System.Xml.XPath.dll",
+      "sha256": "BEFFD714DFE4AFB23521C59AAB12EDC17A22DFE8969CD47143FAD8444696BA10"
+    },
+    {
+      "relative": "ref/System.Xml.XPath.XDocument.dll",
+      "sha256": "17F1F5C675DD501761E7CC8D788FC02AA684B54191DEB587FDAF1B543A520388"
+    },
+    {
+      "relative": "ref/WindowsBase.dll",
+      "sha256": "3BFE96B26EB2868E8AD25FCF9F8016F7B4E90C24DB1F5BFAA95E02DADE83A734"
+    },
+    {
+      "relative": "BuildHost-net472/Microsoft.Bcl.AsyncInterfaces.dll",
+      "sha256": "B0E3846B989CE190D3472567054187669B648B962DAB20472F54A3BFDA1FB207"
+    },
+    {
+      "relative": "BuildHost-net472/Microsoft.Build.Locator.dll",
+      "sha256": "286DB396B2B8500AAD8BC188E41A11CBBBCB3BFFC5598B464C683C1C04C9BF60"
+    },
+    {
+      "relative": "BuildHost-net472/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.exe",
+      "sha256": "1944447B4A10EF1850D584F7220CC7861788A369F646028CF975F3B9D8D10A60"
+    },
+    {
+      "relative": "BuildHost-net472/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.exe.config",
+      "sha256": "4E965107A20E90506F235A71F36BA983113DC22594A2F21FF56A202ED834E05D"
+    },
+    {
+      "relative": "BuildHost-net472/Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts.dll",
+      "sha256": "C16B673AAE409875A20CCBD605DF27D922EE087C816635E4D785DFD83044E62C"
+    },
+    {
+      "relative": "BuildHost-net472/Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts.pdb",
+      "sha256": "642ADB43364E4F17A893AAC6951FEF63111044A5B3370402EB14CDB31DDB8FFB"
+    },
+    {
+      "relative": "BuildHost-net472/Microsoft.IO.Redist.dll",
+      "sha256": "2ABBA74A23E680BA613BAAD9D510428EDD913E09F90509D248B85665A03F5014"
+    },
+    {
+      "relative": "BuildHost-net472/System.Buffers.dll",
+      "sha256": "2D78D770C9CB997199154AE8C018B9F1D1EFBC86729F7264DDE6DBAD2A12CAC3"
+    },
+    {
+      "relative": "BuildHost-net472/System.IO.Pipelines.dll",
+      "sha256": "22ACB89394F4A557EE5B462E6581E752748F62B783BF6BCB118D33DED2EBA3CC"
+    },
+    {
+      "relative": "BuildHost-net472/System.Memory.dll",
+      "sha256": "D5E8E4866F9CFA66F7765660F84B210198893E55335487AFE5EBDA342C0E913D"
+    },
+    {
+      "relative": "BuildHost-net472/System.Numerics.Vectors.dll",
+      "sha256": "20C2FA81B8C70D651099D762954F285FD4F942E63B2D7217C145DAB8D4B2F4C9"
+    },
+    {
+      "relative": "BuildHost-net472/System.Runtime.CompilerServices.Unsafe.dll",
+      "sha256": "08CBD7278B66F1E68425A82D4B97181A4130D93E3DD91831407ABA7212CCDACF"
+    },
+    {
+      "relative": "BuildHost-net472/System.Text.Encodings.Web.dll",
+      "sha256": "C82DE7B478FF911EAEB4748A06003B8782E6F007BDC03D48073C24EDDA9A7A09"
+    },
+    {
+      "relative": "BuildHost-net472/System.Text.Json.dll",
+      "sha256": "CBEC3D4F0EE7C8D488F402C676EC076A8E50859194D100B6EBA85215586B4A68"
+    },
+    {
+      "relative": "BuildHost-net472/System.Threading.Tasks.Extensions.dll",
+      "sha256": "AF4E13EF418FD89B432DE20CD1DFB7FA10A7179C8DD049C9856316E50C5949CA"
+    },
+    {
+      "relative": "BuildHost-netcore/Microsoft.Build.Locator.dll",
+      "sha256": "FCC85336217BE226F90A5DDFA55151DC84FCB2A76FE242F5274535C6B878AA30"
+    },
+    {
+      "relative": "BuildHost-netcore/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.deps.json",
+      "sha256": "CCFAE7C6C7A5E154A52624096E436AB59534B2F76C6DDA78ECC77D74C1086B20"
+    },
+    {
+      "relative": "BuildHost-netcore/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.dll",
+      "sha256": "C0B3250CDA498F1533FDE4D46A9E01169CE7D35E4060AD598E4488A8E84803C2"
+    },
+    {
+      "relative": "BuildHost-netcore/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.runtimeconfig.json",
+      "sha256": "7F19D83A3F514EEBE09A06EC35E45613715B2430B1EB3C35F904740A9C6086B3"
+    },
+    {
+      "relative": "BuildHost-netcore/Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts.dll",
+      "sha256": "AAB9F64E81C15885C7D9E8872A632E246B5581AEB6874684F23FB8D1A5A26229"
+    },
+    {
+      "relative": "BuildHost-netcore/Microsoft.CodeAnalysis.Workspaces.MSBuild.Contracts.pdb",
+      "sha256": "C92EAA9D6795819D1F94CC6CEA2F48F99472B8903F1B965295FD42D2A9E3EAA7"
+    },
+    {
+      "relative": "graphrag-global/graphrag-status.json",
+      "sha256": "6F9D346432497064C638F1B25BC00D99AB28647C3AEB2F3A53FD630F00314348"
+    },
+    {
+      "relative": "graphrag-global/output/graphrag-index-ready.json",
+      "sha256": "80DF48E0B7065EFB271E84623E176CB6C26BEECB571ED222C6AE7A6A4C3D5253"
+    },
+    {
+      "relative": "templates/prompt-templates.yaml",
+      "sha256": "1EF9B7ACDED70F2DED5ABFA2936422CEDAAEB16ECE32B00C280B2DF74E2F619B"
+    },
+    {
+      "relative": "config/brain-slots/quad-brain-slot-assignments.yaml",
+      "sha256": "FBB151B639115F0797F2FBC73CA96A1AC6D59BC24C5E84D8F42901A2C65AB974"
+    },
+    {
+      "relative": "Fixtures/AgentHelp/bypass/benign-todo-yaml-question.txt",
+      "sha256": "B5BED57A9404A28CDAED3388620D2705F9D69BE424576267C383DF8EFCC427FD"
+    },
+    {
+      "relative": "Fixtures/AgentHelp/bypass/mcp-tool-failure-description.txt",
+      "sha256": "188C661A9BFEBB9240C82B2E5F8E0DFC3CC66ADAF3A8BC6AF06EB156BABCC954"
+    },
+    {
+      "relative": "Fixtures/AgentHelp/bypass/normal-help-request.txt",
+      "sha256": "EE33A081F718B31383D8375FA462E8F76302A4C5B2119C0F1DC0C28FB0375F8A"
+    },
+    {
+      "relative": "Fixtures/AgentHelp/injection/api-key-exfiltration.txt",
+      "sha256": "D8FF8778AC0A5355AFE6881D8BC0174E2BA04B5B100D32313C32BF3BABBD9D04"
+    },
+    {
+      "relative": "Fixtures/AgentHelp/injection/disable-guardrails.txt",
+      "sha256": "7EA4C8BACE60A044FBCEBC7FFCF9C19BCA23A8240F6A40025A2978F7ADE1736B"
+    },
+    {
+      "relative": "Fixtures/AgentHelp/injection/ignore-previous-instructions.txt",
+      "sha256": "6BB05B89333D74C8AAD5DFE19DC99F928C6A3B25E547DF7F149BD86171277BFE"
+    },
+    {
+      "relative": "Fixtures/AgentHelp/injection/write-todo-yaml.txt",
+      "sha256": "B1008D3DA9989BB14AD33A33587046574CC340602BBE7FD8A7B43A88827581CD"
+    },
+    {
+      "relative": "Fixtures/Transcripts/README.md",
+      "sha256": "5EA9D966FB5D1ED5EFB5BEA90DF2F0E444ED9C6175E94BF47399D6140A12FEEE"
+    },
+    {
+      "relative": "Fixtures/Transcripts/cline/export.jsonl",
+      "sha256": "7290096BB835677264ECBBC46A81565F2352A56F4A24A87857A372498997B502"
+    },
+    {
+      "relative": "Fixtures/Transcripts/cline/messages.json",
+      "sha256": "18F7CC29C18AD7F1D1543B6DBA70113F0AD00D9BB2DF4C010BC62993FA670FEC"
+    },
+    {
+      "relative": "Fixtures/Transcripts/cline/session.json",
+      "sha256": "A19DF15E62ECC235DA9D9259156DF2E66321123AEE629233DB2642087BD654D2"
+    },
+    {
+      "relative": "Fixtures/Transcripts/claude/basic.jsonl",
+      "sha256": "D72627910C9826901B29205015E042A1542CFDABECD552A5E62CD3C84B7504F1"
+    },
+    {
+      "relative": "Fixtures/Transcripts/codex/basic.jsonl",
+      "sha256": "FC54A1A2D2BBBF45C4D30E9820560E91F177D5FB4E1B50D13FCF31E154997144"
+    },
+    {
+      "relative": "Fixtures/Transcripts/copilot/session-001/events.jsonl",
+      "sha256": "F7420AFD09F0D75A8C553A868F1C733DF8E381D1A747B56618FF2D44315E15D9"
+    },
+    {
+      "relative": "Fixtures/Transcripts/copilot/session-001/metadata.json",
+      "sha256": "4B160D971EA00B6E7CB4A09E0AE7014A3626D58EFB58C473ACEAB4B04D0366DF"
+    },
+    {
+      "relative": "Fixtures/Transcripts/grok/basic.jsonl",
+      "sha256": "E7A93AC2C1E573B0B15B5DD2187A41AE8CE6F1FD5C3DCE5C6A45E11D02DA6369"
+    },
+    {
+      "relative": "Fixtures/Transcripts/opencode/export.jsonl",
+      "sha256": "57575D3DCB56A02C11EC07602303E3706EFA5588764EA05AF323E22E8398DE96"
+    },
+    {
+      "relative": "Fixtures/Transcripts/opencode/store-schema.sql",
+      "sha256": "8E7E1203E684E82E60E5BF2511B3C15DB4834D260A2B5D7485A64478DD8B83BC"
+    },
+    {
+      "relative": "Fixtures/Transcripts/real/manifest.json",
+      "sha256": "54C24D6E1AEDB935572D96A916421563978434AE77E9175E5A9A70542641F6A3"
+    },
+    {
+      "relative": "Fixtures/Transcripts/real/README.md",
+      "sha256": "FC1416CDBF26458D32313509DA15D2E85D362A3C8AF17365B05F8DED6DBD6719"
+    },
+    {
+      "relative": "Fixtures/Transcripts/real/claude/session.jsonl",
+      "sha256": "F99A8E38B0A3564ECA1498BED2B62E790E1485DB0C806F20C46E5B300EB11B4E"
+    },
+    {
+      "relative": "Fixtures/Transcripts/real/cline/messages.json",
+      "sha256": "5ECC2FA5490EAB8BCBE50AA54A0C5161B4F5455798420B89CF19D565A9E19D85"
+    },
+    {
+      "relative": "Fixtures/Transcripts/real/cline/session.json",
+      "sha256": "C08D30C99B5EC0754D2A01D57757896E090083DA8020BDCD590E55B4FBCFFA54"
+    },
+    {
+      "relative": "Fixtures/Transcripts/real/codex/session.jsonl",
+      "sha256": "17DF7E47ACE1B6B6D974E0ACA90E00FC1A5E0749BDCBB580F6588772599A2EB5"
+    },
+    {
+      "relative": "Fixtures/Transcripts/real/copilot/events.jsonl",
+      "sha256": "48223ABE4752585BA03EF60D223BD9986ACF161BAC403B341B0402DF29114FEB"
+    },
+    {
+      "relative": "Fixtures/Transcripts/real/grok/chat_history.jsonl",
+      "sha256": "3F64CE5F4ED415DAB4DE5C4ECE2743876E1DA2A6D6470720AC065C21E65B20FA"
+    },
+    {
+      "relative": "Fixtures/Transcripts/real/grok/events.jsonl",
+      "sha256": "69800DDD60611B709632F046264DF1D7CDE5B1C8F380B72BF9D41051C0838BDF"
+    },
+    {
+      "relative": "Fixtures/Transcripts/real/opencode/events.jsonl",
+      "sha256": "E88FAC1BC2B16D9965EBC5BAE27931293E38DB6B189EF80B5A97BAE58DD6A987"
+    },
+    {
+      "relative": "Fixtures/Transcripts/real/opencode/export.json",
+      "sha256": "5F8095C1692986E83E63E0821269145651970E486ED2F89C0A621CBDF8CB6458"
+    },
+    {
+      "relative": "Fixtures/Transcripts/real/opencode/store-schema.sql",
+      "sha256": "BC5E681581B1C05B8B5D2460B58DD3C672A8896FCAFBDB4C99070B8F6EB0DAB9"
+    },
+    {
+      "relative": "docs/Project/TODO.yaml",
+      "sha256": "8DBCF4ECC2D4E98C0921EDA1CFF017216C8ABE2C960F798E2B6332E1146D154F"
+    }
+  ],
+  "repeatCount": 35,
+  "results": [
+    {
+      "iteration": 1,
+      "startedLocal": "2026-10-30T18:54:45",
+      "endedLocal": "2026-10-30T18:55:44",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-01.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-01"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-01/diagnostic-o-01.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "B3833AF17A9D266546138EBAC8FD6CC2F4879BCA54E3F9737B08581D3ED1AB94"
+    },
+    {
+      "iteration": 2,
+      "startedLocal": "2026-10-30T18:55:46",
+      "endedLocal": "2026-10-30T18:56:49",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-02.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-02"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-02/diagnostic-o-02.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "8B9056FF2B0117ECA815C0ED0F26E53CFC6D57792A5790AF1592484DBAF8396F"
+    },
+    {
+      "iteration": 3,
+      "startedLocal": "2026-10-30T18:56:50",
+      "endedLocal": "2026-10-30T18:58:06",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-03.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-03"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-03/diagnostic-o-03.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "EE9BE4FFC438DA3C38FA8D662066341FB17E093DE13D0A6AE1A96BB827C32967"
+    },
+    {
+      "iteration": 4,
+      "startedLocal": "2026-10-30T18:58:07",
+      "endedLocal": "2026-10-30T18:59:06",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-04.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-04"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-04/diagnostic-o-04.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "75F4D0F14A5352E4CD1FAECD77B303C8A1B7A463D59F3B4C255F99F54148C460"
+    },
+    {
+      "iteration": 5,
+      "startedLocal": "2026-10-30T18:59:08",
+      "endedLocal": "2026-10-30T19:00:09",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-05.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-05"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-05/diagnostic-o-05.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "0CD8B3A4C2E2FCAF9AC98A325450BB2FAF13F648B281566C577DA54958D8EF32"
+    },
+    {
+      "iteration": 6,
+      "startedLocal": "2026-10-30T19:00:10",
+      "endedLocal": "2026-10-30T19:01:24",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-06.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-06"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-06/diagnostic-o-06.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "8C21D74995E4B90A64795288EC78CADFB5487EEE3D66BFABA59518D5634C0D27"
+    },
+    {
+      "iteration": 7,
+      "startedLocal": "2026-10-30T19:01:25",
+      "endedLocal": "2026-10-30T19:02:34",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-07.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-07"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-07/diagnostic-o-07.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "7877E5C9612EF51D6B2CE833A50CEC61769BA3FD2A3EBFDB3ADC7FF21162F6D4"
+    },
+    {
+      "iteration": 8,
+      "startedLocal": "2026-10-30T19:02:35",
+      "endedLocal": "2026-10-30T19:03:46",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-08.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-08"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-08/diagnostic-o-08.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "C2480FDBE9A6D82AFE86F8A25858955454BF23A996EEB415E7BFE1131364375F"
+    },
+    {
+      "iteration": 9,
+      "startedLocal": "2026-10-30T19:03:48",
+      "endedLocal": "2026-10-30T19:05:08",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-09.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-09"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-09/diagnostic-o-09.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "F9F93146ABF6112F84AA0FADD5D4A3C98FE3BDD56606B74D121822BE564828C3"
+    },
+    {
+      "iteration": 10,
+      "startedLocal": "2026-10-30T19:05:09",
+      "endedLocal": "2026-10-30T19:06:17",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-10.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-10"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-10/diagnostic-o-10.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "D7D96229198136CEC33DA7A7F416C032AC5764AC134487984B5D93CF43AD685F"
+    },
+    {
+      "iteration": 11,
+      "startedLocal": "2026-10-30T19:06:18",
+      "endedLocal": "2026-10-30T19:07:39",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-11.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-11"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-11/diagnostic-o-11.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "28CD01F28FF6804560FFB541A5F3318211E117AC118B74C80DA26ABBBC10BDF1"
+    },
+    {
+      "iteration": 12,
+      "startedLocal": "2026-10-30T19:07:41",
+      "endedLocal": "2026-10-30T19:08:46",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-12.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-12"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-12/diagnostic-o-12.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "5E7508D93930D27E17E6DA19A02C053F383895CE897F20D9F95DDDD8D2E4FA28"
+    },
+    {
+      "iteration": 13,
+      "startedLocal": "2026-10-30T19:08:48",
+      "endedLocal": "2026-10-30T19:10:01",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-13.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-13"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-13/diagnostic-o-13.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "CED2FE15D49B7C12C04A6BAA0885EECA344FE78A1C69D46D87CE4275F7D62468"
+    },
+    {
+      "iteration": 14,
+      "startedLocal": "2026-10-30T19:10:02",
+      "endedLocal": "2026-10-30T19:11:11",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-14.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-14"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-14/diagnostic-o-14.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "4C3E2376007E989E0040A5ADCD1F4E8DFB42C130C0BE23420E8CE0114C26FBF7"
+    },
+    {
+      "iteration": 15,
+      "startedLocal": "2026-10-30T19:11:12",
+      "endedLocal": "2026-10-30T19:12:32",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-15.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-15"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-15/diagnostic-o-15.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "850EE5DDF0CE5E3AE41E286B1578C17654FCA98BED161F6D13F949CC305690F6"
+    },
+    {
+      "iteration": 16,
+      "startedLocal": "2026-10-30T19:12:33",
+      "endedLocal": "2026-10-30T19:13:49",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-16.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-16"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-16/diagnostic-o-16.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "AE9C05059C9423721CC160E779AABC1E1BEBAF72B7D276E6E1DE23B4FC8B4A97"
+    },
+    {
+      "iteration": 17,
+      "startedLocal": "2026-10-30T19:13:50",
+      "endedLocal": "2026-10-30T19:14:55",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-17.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-17"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-17/diagnostic-o-17.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "5B9306A3A737D0D78CD4C851316D71B064457E0CC2102EA1A122B514C3351E76"
+    },
+    {
+      "iteration": 18,
+      "startedLocal": "2026-10-30T19:14:57",
+      "endedLocal": "2026-10-30T19:16:03",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-18.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-18"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-18/diagnostic-o-18.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "59941CA795DE49EA08E44BF6C386B70A86B1AB2E66D946CAE2B42A813DCFD2A8"
+    },
+    {
+      "iteration": 19,
+      "startedLocal": "2026-10-30T19:16:05",
+      "endedLocal": "2026-10-30T19:17:17",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-19.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-19"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-19/diagnostic-o-19.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "E16C86A91FA956FA8C45359229914E7D93CA7CC90E9FA4D63566EE75310B7E70"
+    },
+    {
+      "iteration": 20,
+      "startedLocal": "2026-10-30T19:17:18",
+      "endedLocal": "2026-10-30T19:18:22",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-20.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-20"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-20/diagnostic-o-20.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "5167528C1053868C890E81D45CD6D3556A974F5473BA76BFCC0555E07174B117"
+    },
+    {
+      "iteration": 21,
+      "startedLocal": "2026-10-30T19:18:23",
+      "endedLocal": "2026-10-30T19:19:30",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-21.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-21"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-21/diagnostic-o-21.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "932B0A0045243F4F732FDECDD46F5B352B41E456F619F5F9B92360DE8CBAED46"
+    },
+    {
+      "iteration": 22,
+      "startedLocal": "2026-10-30T19:19:31",
+      "endedLocal": "2026-10-30T19:20:51",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-22.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-22"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-22/diagnostic-o-22.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "FCA534A9CBB846FD73A56737082CB7737DD1C74DFD079FDE491DF85DE14EE7CA"
+    },
+    {
+      "iteration": 23,
+      "startedLocal": "2026-10-30T19:20:53",
+      "endedLocal": "2026-10-30T19:21:56",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-23.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-23"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-23/diagnostic-o-23.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "45210AAFB66500DB343780708B876C230ACC25E0F0AC159867ED16FE1B3B7E92"
+    },
+    {
+      "iteration": 24,
+      "startedLocal": "2026-10-30T19:21:57",
+      "endedLocal": "2026-10-30T19:23:07",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-24.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-24"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-24/diagnostic-o-24.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "43523830B330F9C0E7DDE900B3AB140176D74369E2FA77E4C61F9D631A0D2A4A"
+    },
+    {
+      "iteration": 25,
+      "startedLocal": "2026-10-30T19:23:08",
+      "endedLocal": "2026-10-30T19:24:25",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-25.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-25"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-25/diagnostic-o-25.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "4A5781EADCD4EB13B0C9B1916344D67F5B1EB5AC55A4092F958A79152C7366EA"
+    },
+    {
+      "iteration": 26,
+      "startedLocal": "2026-10-30T19:24:27",
+      "endedLocal": "2026-10-30T19:25:28",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-26.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-26"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-26/diagnostic-o-26.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "7961F83A76BF4895528A916622A914074C967DE15CF63180CC20F43383093AFF"
+    },
+    {
+      "iteration": 27,
+      "startedLocal": "2026-10-30T19:25:29",
+      "endedLocal": "2026-10-30T19:26:38",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-27.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-27"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-27/diagnostic-o-27.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "F0DDAF2788A559721F7F11C10EBBB0092D04CBAF61A431FF6EBF16AAC667A128"
+    },
+    {
+      "iteration": 28,
+      "startedLocal": "2026-10-30T19:26:40",
+      "endedLocal": "2026-10-30T19:27:38",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-28.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-28"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-28/diagnostic-o-28.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "205931428761C33C662699121F9DD32C9A7C64872D5518F6568EDC85C6CC432C"
+    },
+    {
+      "iteration": 29,
+      "startedLocal": "2026-10-30T19:27:39",
+      "endedLocal": "2026-10-30T19:28:36",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-29.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-29"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-29/diagnostic-o-29.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "94FFD9D2D7086FD64E7BA6429E813695ABD6142859E8CE4B1790444A09BDE6C3"
+    },
+    {
+      "iteration": 30,
+      "startedLocal": "2026-10-30T19:28:37",
+      "endedLocal": "2026-10-30T19:29:48",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-30.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-30"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-30/diagnostic-o-30.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "D1B09BD798A206EA5DE4895C8D956799C8849874F9B7455F649EB7C2B8781162"
+    },
+    {
+      "iteration": 31,
+      "startedLocal": "2026-10-30T19:29:49",
+      "endedLocal": "2026-10-30T19:31:03",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-31.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-31"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-31/diagnostic-o-31.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "CC090F41AD086AF92C08EDD63C4C8F14C5FB4E607B61EE68031F90629FA3E188"
+    },
+    {
+      "iteration": 32,
+      "startedLocal": "2026-10-30T19:31:04",
+      "endedLocal": "2026-10-30T19:32:10",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-32.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-32"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-32/diagnostic-o-32.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "BC51E56B9D6307F4949CE0D08EE53FCBE575CA6D06994D89AB2C53137B1896AD"
+    },
+    {
+      "iteration": 33,
+      "startedLocal": "2026-10-30T19:32:11",
+      "endedLocal": "2026-10-30T19:33:36",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-33.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-33"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-33/diagnostic-o-33.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "A302D659F8FFEBEBE16D5BA88F530114C74321D6D7484BBB70FC5A2F28867A8F"
+    },
+    {
+      "iteration": 34,
+      "startedLocal": "2026-10-30T19:33:38",
+      "endedLocal": "2026-10-30T19:34:49",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-34.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-34"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-34/diagnostic-o-34.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "7CFA7B69C20894003F571E7353CA68E733618B82193F003E4B5EA6BCCD38844A"
+    },
+    {
+      "iteration": 35,
+      "startedLocal": "2026-10-30T19:34:50",
+      "endedLocal": "2026-10-30T19:36:28",
+      "command": [
+        "dotnet",
+        "test",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/output/QBrainAi.Support.Mcp.Tests.dll",
+        "--filter",
+        "(FullyQualifiedName~.SqlServerAuditPayloadMigrationTests.|FullyQualifiedName~.SqlServerDecompose4nfBackfillMigrationTests.|FullyQualifiedName~.SqlServerRenameQuadBrainRolesMigrationTests.|FullyQualifiedName~.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_)&Category=Integration",
+        "--logger",
+        "trx;LogFileName=diagnostic-o-35.trx",
+        "--results-directory",
+        "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-35"
+      ],
+      "exitCode": 0,
+      "trx": "/home/sharpninja/.claude/scratch/pr82-review-20261019/diagnostic-o-20261030T185441/diagnostic-o-35/diagnostic-o-35.trx",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "73AD6C8370EC761CE0C812A32FE407E72C4242B71289E959A3CA6B8E1518E446"
+    }
+  ]
+}

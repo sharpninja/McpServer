@@ -31,11 +31,11 @@ public abstract class WorkspacePathDomainSitesContractTests
         var factory = Substitute.For<ITodoServiceFactory>();
         using var sut = new TodoServiceResolver(
             primary,
-            Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = "/home/sharpninja/github/McpServer" }),
+            Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = "/fixture/workspaces/McpServer" }),
             factory,
             Normalizer(LinuxHub));
 
-        var resolved = sut.Resolve(new WorkspaceContext { WorkspacePath = "/home/sharpninja/github/McpServer/" });
+        var resolved = sut.Resolve(new WorkspaceContext { WorkspacePath = "/fixture/workspaces/McpServer/" });
 
         Assert.Same(primary, resolved);
         factory.DidNotReceiveWithAnyArgs().CreateForWorkspace(default!, default!);
@@ -51,14 +51,14 @@ public abstract class WorkspacePathDomainSitesContractTests
         var factory = Substitute.For<ITodoServiceFactory>();
         using var sut = new TodoServiceResolver(
             Substitute.For<ITodoService>(),
-            Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = "/home/sharpninja/github/McpServer" }),
+            Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = "/fixture/workspaces/McpServer" }),
             factory,
             Normalizer(LinuxHub));
-        var context = new WorkspaceContext { WorkspacePath = "C:/Users/kingd/repo" };
+        var context = new WorkspaceContext { WorkspacePath = "C:/Users/fixture-user/repo" };
 
         sut.Resolve(context);
 
-        factory.Received(1).CreateForWorkspace("C:/Users/kingd/repo", context);
+        factory.Received(1).CreateForWorkspace("C:/Users/fixture-user/repo", context);
     }
 
     /// <summary><see cref="TodoServiceFactory"/>: workspace and default roots by path syntax.</summary>
@@ -67,7 +67,7 @@ public abstract class WorkspacePathDomainSitesContractTests
     {
         var windows = Normalizer(WindowsHost);
 
-        Assert.Equal("/home/sharpninja/github/RideAudit", TodoServiceFactory.NormalizeWorkspaceRoot("/home/sharpninja/github/RideAudit/", windows));
+        Assert.Equal("/fixture/workspaces/ExampleWorkspace", TodoServiceFactory.NormalizeWorkspaceRoot("/fixture/workspaces/ExampleWorkspace/", windows));
         Assert.Equal("C:/svc", TodoServiceFactory.NormalizeWorkspaceRoot(null, windows));
     }
 
@@ -77,7 +77,7 @@ public abstract class WorkspacePathDomainSitesContractTests
     {
         var linux = Normalizer(LinuxHub);
 
-        Assert.Equal("C:/Users/kingd/repo", EfTodoService.NormalizeFixedWorkspacePath("C:/Users/kingd/repo", linux));
+        Assert.Equal("C:/Users/fixture-user/repo", EfTodoService.NormalizeFixedWorkspacePath("C:/Users/fixture-user/repo", linux));
         Assert.Null(EfTodoService.NormalizeFixedWorkspacePath("  ", linux));
     }
 
@@ -87,7 +87,7 @@ public abstract class WorkspacePathDomainSitesContractTests
     {
         var linux = Normalizer(LinuxHub);
 
-        Assert.Equal("C:/Users/kingd/repo", TodoExecutionService.NormalizeWorkspacePath("C:/Users/kingd/repo", linux));
+        Assert.Equal("C:/Users/fixture-user/repo", TodoExecutionService.NormalizeWorkspacePath("C:/Users/fixture-user/repo", linux));
         Assert.Throws<ArgumentException>(() => TodoExecutionService.NormalizeWorkspacePath(" ", linux));
     }
 
@@ -98,8 +98,8 @@ public abstract class WorkspacePathDomainSitesContractTests
         var windows = Normalizer(WindowsHost);
 
         Assert.Equal(
-            "/home/sharpninja/github/RideAudit",
-            RequirementsDatabaseDocumentService.NormalizeRequestWorkspacePath("/home/sharpninja/github/RideAudit/", windows));
+            "/fixture/workspaces/ExampleWorkspace",
+            RequirementsDatabaseDocumentService.NormalizeRequestWorkspacePath("/fixture/workspaces/ExampleWorkspace/", windows));
         Assert.Null(RequirementsDatabaseDocumentService.NormalizeRequestWorkspacePath(null, windows));
     }
 
@@ -109,8 +109,8 @@ public abstract class WorkspacePathDomainSitesContractTests
     {
         var windows = Normalizer(WindowsHost);
 
-        Assert.True(HostileReviewService.IsSameWorkspace("/home/sharpninja/github/RideAudit/", "/home/sharpninja/github/RideAudit", windows));
-        Assert.False(HostileReviewService.IsSameWorkspace("/home/sharpninja/github/RideAuditOther", "/home/sharpninja/github/RideAudit", windows));
+        Assert.True(HostileReviewService.IsSameWorkspace("/fixture/workspaces/ExampleWorkspace/", "/fixture/workspaces/ExampleWorkspace", windows));
+        Assert.False(HostileReviewService.IsSameWorkspace("/fixture/workspaces/ExampleWorkspaceOther", "/fixture/workspaces/ExampleWorkspace", windows));
     }
 
     /// <summary>
@@ -120,9 +120,9 @@ public abstract class WorkspacePathDomainSitesContractTests
     [Fact]
     public void AgentPool_DeviceId_HashesCanonicalWorkspace()
     {
-        Assert.Equal("agent-pool-codex@19080a7b3c66", AgentPoolService.BuildPooledDeviceId("codex", "C:/Users/kingd/repo", Normalizer(LinuxHub)));
-        Assert.Equal("agent-pool-codex@19080a7b3c66", AgentPoolService.BuildPooledDeviceId("codex", @"C:\Users\kingd\repo", Normalizer(LinuxHub)));
-        Assert.Equal("agent-pool-codex@d5731a58e39a", AgentPoolService.BuildPooledDeviceId("codex", "/home/sharpninja/github/RideAudit/", Normalizer(WindowsHost)));
+        Assert.Equal("agent-pool-codex@f0e75d9e17fa", AgentPoolService.BuildPooledDeviceId("codex", "C:/Users/fixture-user/repo", Normalizer(LinuxHub)));
+        Assert.Equal("agent-pool-codex@f0e75d9e17fa", AgentPoolService.BuildPooledDeviceId("codex", @"C:\Users\fixture-user\repo", Normalizer(LinuxHub)));
+        Assert.Equal("agent-pool-codex@68b5017a3bb9", AgentPoolService.BuildPooledDeviceId("codex", "/fixture/workspaces/ExampleWorkspace/", Normalizer(WindowsHost)));
     }
 
     /// <summary><see cref="FileGitHubWorkspaceTokenStore"/>: token key by path syntax; blank rejected.</summary>
@@ -131,7 +131,7 @@ public abstract class WorkspacePathDomainSitesContractTests
     {
         var windows = Normalizer(WindowsHost);
 
-        Assert.Equal("/home/sharpninja/github/RideAudit", FileGitHubWorkspaceTokenStore.NormalizeWorkspacePath("/home/sharpninja/github/RideAudit/", windows));
+        Assert.Equal("/fixture/workspaces/ExampleWorkspace", FileGitHubWorkspaceTokenStore.NormalizeWorkspacePath("/fixture/workspaces/ExampleWorkspace/", windows));
         Assert.Throws<ArgumentException>(() => FileGitHubWorkspaceTokenStore.NormalizeWorkspacePath("", windows));
     }
 
@@ -144,7 +144,7 @@ public abstract class WorkspacePathDomainSitesContractTests
     {
         var linux = Normalizer(LinuxHub);
 
-        Assert.Equal("C:/Users/kingd/repo", ToolRegistryService.NormalizeWorkspacePath(@"C:\Users\kingd\repo\", linux));
+        Assert.Equal("C:/Users/fixture-user/repo", ToolRegistryService.NormalizeWorkspacePath(@"C:\Users\fixture-user\repo\", linux));
         Assert.Null(ToolRegistryService.NormalizeWorkspacePath("  ", linux));
     }
 
@@ -152,7 +152,7 @@ public abstract class WorkspacePathDomainSitesContractTests
     [Fact]
     public void AgentWorkspace_LinuxHub_WindowsWorkspacePath()
     {
-        Assert.Equal("C:/Users/kingd/repo", AgentService.NormalizeWorkspacePath(@"C:\Users\kingd\repo\", Normalizer(LinuxHub)));
+        Assert.Equal("C:/Users/fixture-user/repo", AgentService.NormalizeWorkspacePath(@"C:\Users\fixture-user\repo\", Normalizer(LinuxHub)));
     }
 
     /// <summary>
@@ -164,7 +164,7 @@ public abstract class WorkspacePathDomainSitesContractTests
     {
         var windows = Normalizer(WindowsHost);
 
-        Assert.Equal("C:/Users/kingd/repo", WorkspaceService.ResolveRepoRootWorkspacePath(@"C:\Users\kingd\repo\", @"C:\svc", windows));
+        Assert.Equal("C:/Users/fixture-user/repo", WorkspaceService.ResolveRepoRootWorkspacePath(@"C:\Users\fixture-user\repo\", @"C:\svc", windows));
         Assert.Equal("C:/svc/repo", WorkspaceService.ResolveRepoRootWorkspacePath("repo", @"C:\svc", windows));
     }
 }

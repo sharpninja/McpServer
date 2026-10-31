@@ -18,7 +18,7 @@ using Microsoft.Extensions.Options;
 namespace QBrainAi.Support.Mcp.Services;
 
 /// <summary>
-/// TR-PLANNED-CORE-013: Implements session log submit (upsert) and query with pagination (MVP-SUPPORT-011).
+/// TR-PLANNED-CORE-013 (historical): Implements session log submit (upsert) and query with pagination (MVP-SUPPORT-011).
 /// FR-SUPPORT-010: Persists session logs in 4NF-normalized SQLite tables via <see cref="McpDbContext"/>.
 /// </summary>
 public sealed class SessionLogService : ISessionLogService
@@ -33,8 +33,9 @@ public sealed class SessionLogService : ISessionLogService
     private readonly WorkspaceContext? _workspaceContext;
     private readonly SessionLogTurnContextExtractor _turnContextExtractor;
     private readonly TimeSpan _submitCommandBudget;
+    private readonly Func<string, string> _normalizePlanFilter = static path => SessionLogTurnContextValidator.NormalizePlanFile(path);
 
-    /// <summary>TR-PLANNED-CORE-013: Constructor.</summary>
+    /// <summary>TR-PLANNED-CORE-013 (historical): Constructor.</summary>
     /// <remarks>
     /// TR-MCP-MT-004: <paramref name="workspaceContext"/> is optional so the
     /// ingestion / batch import paths (which run without an HTTP scope) keep
@@ -56,6 +57,23 @@ public sealed class SessionLogService : ISessionLogService
         _workspaceContext = workspaceContext;
         _turnContextExtractor = new SessionLogTurnContextExtractor();
         _submitCommandBudget = (submitOptions?.Value ?? new SessionLogSubmitOptions()).GetSubmitCommandBudget();
+    }
+
+    /// <summary>
+    /// AC-FR-MCP-SESSIONLOGCTX-001-005, TR-MCP-USECASE-018 AC-006: binds plan filtering to an explicit normalizer,
+    /// allowing owned profile data without changing the public constructor's native normalization behavior.
+    /// </summary>
+    /// <param name="db">Session storage.</param>
+    /// <param name="logger">Service logger.</param>
+    /// <param name="eventBus">Optional change publisher.</param>
+    /// <param name="workspaceContext">Active workspace.</param>
+    /// <param name="submitOptions">Optional submit budget.</param>
+    /// <param name="normalizePlanFilter">Normalizes the query's explicit plan filter.</param>
+    internal SessionLogService(McpDbContext db, ILogger<SessionLogService> logger, IChangeEventBus? eventBus,
+        WorkspaceContext? workspaceContext, IOptions<SessionLogSubmitOptions>? submitOptions, Func<string, string> normalizePlanFilter)
+        : this(db, logger, eventBus, workspaceContext, submitOptions)
+    {
+        _normalizePlanFilter = normalizePlanFilter ?? throw new ArgumentNullException(nameof(normalizePlanFilter));
     }
 
     private string ResolveWorkspaceId() => WorkspaceIdentity.CanonicalizeWorkspaceId(_workspaceContext?.WorkspacePath);
@@ -535,7 +553,7 @@ public sealed class SessionLogService : ISessionLogService
 
         if (!string.IsNullOrWhiteSpace(request.PlanFile))
         {
-            var planFilter = SessionLogTurnContextValidator.NormalizePlanFile(request.PlanFile);
+            var planFilter = _normalizePlanFilter(request.PlanFile);
             filtered = filtered.Where(s => s.Turns.Any(e => string.Equals(e.PlanFile, planFilter, StringComparison.Ordinal)));
         }
 

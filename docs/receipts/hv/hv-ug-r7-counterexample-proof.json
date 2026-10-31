@@ -1,0 +1,45 @@
+{
+  "TimestampLocal": "2026-10-26T13:21:08",
+  "FirstFailedCount": 19,
+  "SecondFailedCount": 19,
+  "MatchedFailedNames": true,
+  "ControlNonPassingCount": 0,
+  "FailedCases": [
+    "QBrainAi.Repl.Core.Tests.AgentStdioFramingTests.RunAsync_BackToBackSingleLineJsonEnvelopes_EachDispatched",
+    "QBrainAi.Repl.Core.Tests.AgentStdioFramingTests.RunAsync_DashSeparatedYamlEnvelopes_EachDispatched",
+    "QBrainAi.Repl.Core.Tests.AgentStdioFramingTests.RunAsync_MixedJsonAndYamlEnvelopes_EachDispatched",
+    "QBrainAi.Repl.Core.Tests.AgentStdioFramingTests.RunAsync_Responses_TerminatedByBlankLineAndDocumentSeparator",
+    "QBrainAi.Repl.Core.Tests.GenericClientPassthroughYamlBindingTests.ClientCreateFrAsync_NestedYamlAcceptanceCriteria_SendsCriteriaToRestClient",
+    "QBrainAi.Repl.Core.Tests.GenericClientPassthroughYamlBindingTests.ClientSessionLogSubmitAsync_PreservesPersistenceReceipt(persisted: False, degraded: True, queued: True)",
+    "QBrainAi.Repl.Core.Tests.GenericClientPassthroughYamlBindingTests.ClientSessionLogSubmitAsync_PreservesPersistenceReceipt(persisted: True, degraded: False, queued: False)",
+    "QBrainAi.Repl.Core.Tests.GenericClientPassthroughYamlBindingTests.ClientSessionLogSubmitAsync_StructuredTurnWithYamlNumbers_SendsCompleteDto",
+    "QBrainAi.Repl.Core.Tests.GenericClientPassthroughYamlBindingTests.ClientTriageQueryRunsAsync_AsyncTaskSubclass_EmitsResultPayload",
+    "QBrainAi.Repl.Core.Tests.ReplMcpErrorClassifierTests.AgentStdioProtocol_DispatchThrowsArgumentException_WritesValidationEnvelope",
+    "QBrainAi.Repl.Core.Tests.ReplMcpErrorClassifierTests.AgentStdioProtocol_DispatchThrowsDbUpdateException_WritesClassifiedEnvelope",
+    "QBrainAi.Repl.Core.Tests.ReplMcpErrorClassifierTests.AgentStdioProtocol_DispatchThrowsKeyNotFound_WritesNotFoundEnvelope",
+    "QBrainAi.Repl.Core.Tests.ReplMcpErrorClassifierTests.AgentStdioProtocol_DispatchThrowsStorageBudget_WritesBackendUnavailableEnvelope",
+    "QBrainAi.Repl.Core.Tests.RequirementScopeLayerWorkflowTests.RequirementScopeLayer_ReplYamlWorkflow_ExercisesBeforeAndAfterEffectiveQueries",
+    "QBrainAi.Repl.Core.Tests.YamlPipeExecutionTests.AgentStdioProtocol_DocumentSeparators_DispatchedIndependently",
+    "QBrainAi.Repl.Core.Tests.YamlPipeExecutionTests.AgentStdioProtocol_MalformedYaml_WritesErrorAndContinues",
+    "QBrainAi.Repl.Core.Tests.YamlPipeExecutionTests.AgentStdioProtocol_MultiLineRequestTerminatedByBlankLine_DispatchedOnce",
+    "QBrainAi.Repl.Core.Tests.YamlPipeExecutionTests.AgentStdioProtocol_TwoEnvelopes_DispatchedIndependently",
+    "QBrainAi.Repl.Core.Tests.YamlPipeExecutionTests.AgentStdioProtocol_UpdateFrBatchYaml_PreservesAcceptanceCriteriaBoolean"
+  ],
+  "Difference": [],
+  "Streams": [
+    {
+      "File": "20261026T120945-unitgreen-r7.request.jsonl",
+      "Lines": 2,
+      "InvalidLines": [],
+      "Bytes": 37476,
+      "SnapshotOnly": false
+    },
+    {
+      "File": "20261026T120945-unitgreen-r7.response.jsonl",
+      "Lines": 569,
+      "InvalidLines": [],
+      "Bytes": 4258551,
+      "SnapshotOnly": true
+    }
+  ]
+}

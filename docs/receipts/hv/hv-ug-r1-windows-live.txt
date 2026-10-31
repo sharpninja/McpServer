@@ -1,0 +1,240 @@
+RECEIPT 2026-10-19T20:11:04 host=PAYTON-LEGION2 script=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r1-windows-read.ps1
+{
+  "Runs": [
+    {
+      "TimestampLocal": "2026-10-19T20:11:05",
+      "Computer": "PAYTON-LEGION2",
+      "ProbeUser": "lab-wsman",
+      "Worktree": "F:/GitHub/McpServer/.worktrees/unit-suite-green-20261019",
+      "Exists": true,
+      "Head": "83417029fa3e0ee8ef2ffc6bdfa29a7c1e9fdb38",
+      "GatedDiff": null,
+      "ResultsExist": true,
+      "Trx": [
+        {
+          "Path": "F:\\GitHub\\McpServer\\.worktrees\\unit-suite-green-20261019\\TestResults\\unit-green-win-d1-20261019T1927\\unit\\QBrainAi.Client.Tests\\QBrainAi.Client.Tests.trx",
+          "Sha256": "A7C02D46B9E2179102A1D438D74B198672BCF1840CFDCB6F6CA28F515BF56063",
+          "Start": "2026-10-19T19:30:48.3830313-05:00",
+          "Finish": "2026-10-19T19:30:50.6779555-05:00",
+          "Total": 306,
+          "Outcomes": [
+            {
+              "Outcome": "Passed",
+              "Count": 306
+            }
+          ],
+          "NativeHostCases": [],
+          "NonPassing": []
+        },
+        {
+          "Path": "F:\\GitHub\\McpServer\\.worktrees\\unit-suite-green-20261019\\TestResults\\unit-green-win-d1-20261019T1927\\unit\\QBrainAi.Cqrs.Tests\\QBrainAi.Cqrs.Tests.trx",
+          "Sha256": "F2BE09C96BE67614E53950E58BA2223374DB1389CC1793B854110B1D1591350C",
+          "Start": "2026-10-19T19:30:51.6820529-05:00",
+          "Finish": "2026-10-19T19:30:53.2528661-05:00",
+          "Total": 33,
+          "Outcomes": [
+            {
+              "Outcome": "Passed",
+              "Count": 33
+            }
+          ],
+          "NativeHostCases": [],
+          "NonPassing": []
+        },
+        {
+          "Path": "F:\\GitHub\\McpServer\\.worktrees\\unit-suite-green-20261019\\TestResults\\unit-green-win-d1-20261019T1927\\unit\\QBrainAi.Launcher.Tests\\QBrainAi.Launcher.Tests.trx",
+          "Sha256": "DD67EE4AB7F65F280B1538F94D8C6DBD50515D300A1E1E2EF99B2367159F4F7D",
+          "Start": "2026-10-19T19:30:54.1525433-05:00",
+          "Finish": "2026-10-19T19:30:55.4150590-05:00",
+          "Total": 20,
+          "Outcomes": [
+            {
+              "Outcome": "Passed",
+              "Count": 20
+            }
+          ],
+          "NativeHostCases": [],
+          "NonPassing": []
+        },
+        {
+          "Path": "F:\\GitHub\\McpServer\\.worktrees\\unit-suite-green-20261019\\TestResults\\unit-green-win-d1-20261019T1927\\unit\\QBrainAi.McpAgent.Tests\\QBrainAi.McpAgent.Tests.trx",
+          "Sha256": "DB3C02B07D11CD635FF8989023E80400D021E31F06DE1AD825A33BFFF104D520",
+          "Start": "2026-10-19T19:30:56.3351495-05:00",
+          "Finish": "2026-10-19T19:30:59.1838649-05:00",
+          "Total": 64,
+          "Outcomes": [
+            {
+              "Outcome": "Passed",
+              "Count": 64
+            }
+          ],
+          "NativeHostCases": [],
+          "NonPassing": []
+        },
+        {
+          "Path": "F:\\GitHub\\McpServer\\.worktrees\\unit-suite-green-20261019\\TestResults\\unit-green-win-d1-20261019T1927\\unit\\QBrainAi.QBAgent.Tests\\QBrainAi.QBAgent.Tests.trx",
+          "Sha256": "A1E0DA586BC3041D3DD1CFF9B7926ADD9A3600E5A983450452E0C79580D748B8",
+          "Start": "2026-10-19T19:31:03.7783583-05:00",
+          "Finish": "2026-10-19T19:31:05.2926904-05:00",
+          "Total": 96,
+          "Outcomes": [
+            {
+              "Outcome": "Passed",
+              "Count": 96
+            }
+          ],
+          "NativeHostCases": [],
+          "NonPassing": []
+        },
+        {
+          "Path": "F:\\GitHub\\McpServer\\.worktrees\\unit-suite-green-20261019\\TestResults\\unit-green-win-d1-20261019T1927\\unit\\QBrainAi.Repl.Core.Tests\\QBrainAi.Repl.Core.Tests.trx",
+          "Sha256": "58D25E4CB1FAA3BF7B1B8107283BECF0037EAA8D31DBEE46C0780E9278B605C1",
+          "Start": "2026-10-19T19:31:00.2413232-05:00",
+          "Finish": "2026-10-19T19:31:02.7321007-05:00",
+          "Total": 868,
+          "Outcomes": [
+            {
+              "Outcome": "Passed",
+              "Count": 868
+            }
+          ],
+          "NativeHostCases": [],
+          "NonPassing": []
+        },
+        {
+          "Path": "F:\\GitHub\\McpServer\\.worktrees\\unit-suite-green-20261019\\TestResults\\unit-green-win-d1-20261019T1927\\unit\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.trx",
+          "Sha256": "CCE789ED81F43390A0B42745950408C6FDB136CAEA95BBBC597884250C644326",
+          "Start": "2026-10-19T19:29:37.8600582-05:00",
+          "Finish": "2026-10-19T19:30:47.0683139-05:00",
+          "Total": 3224,
+          "Outcomes": [
+            {
+              "Outcome": "Passed",
+              "Count": 3224
+            }
+          ],
+          "NativeHostCases": [
+            {
+              "testName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathHostRealTests.WindowsHost_WindowsPath_UsesBackslashes(path: \"//srv/share/x\", expected: \"\\\\\\\\srv\\\\share\\\\x\")",
+              "outcome": "Passed"
+            },
+            {
+              "testName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathHostRealTests.NonWindowsHost_IsUnchanged(path: \"C:/Users/kingd/repo\", platform: Windows)",
+              "outcome": "Passed"
+            },
+            {
+              "testName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathHostRealTests.NonWindowsHost_IsUnchanged(path: \"/home/x/repo\", platform: CaseSensitive)",
+              "outcome": "Passed"
+            },
+            {
+              "testName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathHostRealTests.WindowsHost_WindowsPath_UsesBackslashes(path: \"C:\\\\already\\\\native\", expected: \"C:\\\\already\\\\native\")",
+              "outcome": "Passed"
+            },
+            {
+              "testName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathHostRealTests.NonWindowsHost_IsUnchanged(path: \"//srv/share/x\", platform: Windows)",
+              "outcome": "Passed"
+            },
+            {
+              "testName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathHostRealTests.WindowsHost_WindowsPath_UsesBackslashes(path: \"C:/Users/kingd/repo\", expected: \"C:\\\\Users\\\\kingd\\\\repo\")",
+              "outcome": "Passed"
+            },
+            {
+              "testName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceNativePathHostRealTests.WindowsHost_WindowsPath_UsesBackslashes(path: \"C:/\", expected: \"C:\\\\\")",
+              "outcome": "Passed"
+            }
+          ],
+          "NonPassing": []
+        }
+      ]
+    },
+    {
+      "TimestampLocal": "2026-10-19T20:11:05",
+      "Computer": "PAYTON-LEGION2",
+      "ProbeUser": "lab-wsman",
+      "Worktree": "F:/GitHub/McpServer/.worktrees/unit-green-interactive-20261019",
+      "Exists": false,
+      "Head": null,
+      "GatedDiff": null,
+      "ResultsExist": false,
+      "Trx": null
+    }
+  ],
+  "Logs": [
+    {
+      "Path": "C:/Users/LAB-WS~1/AppData/Local/Temp/unit-suite-green-20261019/Test-unit-green-win-d1-20261019T1927.log",
+      "Sha256": "98CFE58F826E07474CC76A5AB9A0EEA3B6CE67F4F64B865A593D13C0AF205637",
+      "EvidenceLines": [
+        "19:27:54 [DBG] Build succeeded.",
+        "19:27:56 [DBG] Build succeeded.",
+        "19:27:57 [DBG] Build succeeded.",
+        "19:28:00 [DBG] Build succeeded.",
+        "19:28:03 [DBG] Build succeeded.",
+        "19:28:04 [DBG] Build succeeded.",
+        "19:28:06 [DBG] Build succeeded.",
+        "19:28:07 [DBG] Build succeeded.",
+        "19:28:08 [DBG] Build succeeded.",
+        "19:28:09 [DBG] Build succeeded.",
+        "19:28:10 [DBG] Build succeeded.",
+        "19:28:19 [DBG] Build succeeded.",
+        "19:28:21 [DBG] Build succeeded.",
+        "19:28:22 [DBG] Build succeeded.",
+        "19:28:24 [DBG] Build succeeded.",
+        "19:28:26 [DBG] Build succeeded.",
+        "19:28:27 [DBG] Build succeeded.",
+        "19:28:28 [DBG] Build succeeded.",
+        "19:28:30 [DBG] Build succeeded.",
+        "19:28:31 [DBG] Build succeeded.",
+        "19:28:33 [DBG] Build succeeded.",
+        "19:28:34 [DBG] Build succeeded.",
+        "19:28:35 [DBG] Build succeeded.",
+        "19:28:37 [DBG] Build succeeded.",
+        "19:28:40 [DBG] Build succeeded.",
+        "19:28:43 [DBG] Build succeeded.",
+        "19:28:46 [DBG] Build succeeded.",
+        "19:28:47 [DBG] Build succeeded.",
+        "19:28:49 [DBG] Build succeeded.",
+        "19:28:55 [DBG] Build succeeded.",
+        "19:28:55 [DBG] Build succeeded.",
+        "19:28:58 [DBG] Build succeeded.",
+        "19:28:59 [DBG] Build succeeded.",
+        "19:29:00 [DBG] Build succeeded.",
+        "19:29:02 [DBG] Build succeeded.",
+        "19:29:03 [DBG] Build succeeded.",
+        "19:29:04 [DBG] Build succeeded.",
+        "19:29:06 [DBG] Build succeeded.",
+        "19:29:07 [DBG] Build succeeded.",
+        "19:29:11 [DBG] Build succeeded.",
+        "19:29:12 [DBG] Build succeeded.",
+        "19:29:14 [DBG] Build succeeded.",
+        "19:29:16 [DBG] Build succeeded.",
+        "19:29:18 [DBG] Build succeeded.",
+        "19:29:19 [DBG] Build succeeded.",
+        "19:29:20 [DBG] Build succeeded.",
+        "19:29:21 [DBG] Build succeeded.",
+        "19:29:25 [DBG] Build succeeded.",
+        "19:29:32 [DBG] Build succeeded.",
+        "19:29:33 [DBG] Build succeeded.",
+        "19:29:34 [DBG] Build succeeded.",
+        "19:29:35 [DBG] Build succeeded.",
+        "19:29:36 [DBG] Build succeeded.",
+        "19:29:37 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-suite-green-20261019\\tests\\QBrainAi.Support.Mcp.Tests\\QBrainAi.Support.Mcp.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-suite-green-20261019\\TestResults\\unit-green-win-d1-20261019T1927\\unit\\QBrainAi.Support.Mcp.Tests --logger trx;LogFileName=QBrainAi.Support.Mcp.Tests.trx --logger console;verbosity=detailed",
+        "19:30:47 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-suite-green-20261019\\tests\\QBrainAi.Client.Tests\\QBrainAi.Client.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-suite-green-20261019\\TestResults\\unit-green-win-d1-20261019T1927\\unit\\QBrainAi.Client.Tests --logger trx;LogFileName=QBrainAi.Client.Tests.trx --logger console;verbosity=detailed",
+        "19:30:50 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-suite-green-20261019\\tests\\QBrainAi.Cqrs.Tests\\QBrainAi.Cqrs.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-suite-green-20261019\\TestResults\\unit-green-win-d1-20261019T1927\\unit\\QBrainAi.Cqrs.Tests --logger trx;LogFileName=QBrainAi.Cqrs.Tests.trx --logger console;verbosity=detailed",
+        "19:30:53 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-suite-green-20261019\\tests\\QBrainAi.Launcher.Tests\\QBrainAi.Launcher.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-suite-green-20261019\\TestResults\\unit-green-win-d1-20261019T1927\\unit\\QBrainAi.Launcher.Tests --logger trx;LogFileName=QBrainAi.Launcher.Tests.trx --logger console;verbosity=detailed",
+        "19:30:55 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-suite-green-20261019\\tests\\QBrainAi.McpAgent.Tests\\QBrainAi.McpAgent.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-suite-green-20261019\\TestResults\\unit-green-win-d1-20261019T1927\\unit\\QBrainAi.McpAgent.Tests --logger trx;LogFileName=QBrainAi.McpAgent.Tests.trx --logger console;verbosity=detailed",
+        "19:30:59 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-suite-green-20261019\\tests\\QBrainAi.Repl.Core.Tests\\QBrainAi.Repl.Core.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-suite-green-20261019\\TestResults\\unit-green-win-d1-20261019T1927\\unit\\QBrainAi.Repl.Core.Tests --logger trx;LogFileName=QBrainAi.Repl.Core.Tests.trx --logger console;verbosity=detailed",
+        "19:31:03 [INF] > \"C:\\Program Files\\dotnet\\dotnet.exe\" test F:\\GitHub\\McpServer\\.worktrees\\unit-suite-green-20261019\\tests\\QBrainAi.QBAgent.Tests\\QBrainAi.QBAgent.Tests.csproj --configuration Debug --no-build --filter Category!=AiReview&Category!=Integration --results-directory F:\\GitHub\\McpServer\\.worktrees\\unit-suite-green-20261019\\TestResults\\unit-green-win-d1-20261019T1927\\unit\\QBrainAi.QBAgent.Tests --logger trx;LogFileName=QBrainAi.QBAgent.Tests.trx --logger console;verbosity=detailed",
+        "Build succeeded on 10/19/2026 7:31:05 PM. ∩╝╝∩╝ê∩╝╛ß┤ù∩╝╛∩╝ë∩╝Å"
+      ]
+    },
+    {
+      "Path": "C:/Users/LAB-WS~1/AppData/Local/Temp/unit-suite-green-20261019/MigrationIntegrationTests-unit-green-win-d1-20261019T1927.log",
+      "Sha256": "F8AAFBFF878E649889325D8744D79B7B8080D8AAD154820C542AD5F8E4FB1B38",
+      "EvidenceLines": [
+        "19:31:08 [ERR] Integration lane precondition: MigrationIntegrationTests needs an interactive desktop session on Windows (TR-MCP-NUKE-019 AC-5): this process is not interactive (for example a WSMan, SSH or service session). Run the target from a console in the logged-on user's interactive desktop session.",
+        "[ERR] MigrationIntegration: Integration lane precondition: MigrationIntegrationTests needs an interactive desktop session on Windows (TR-MCP-NUKE-019 AC-5): this process is not interactive (for example a WSMan, SSH or service session). Run the target from a console in the logged-on user's interactive desktop session.",
+        "Build failed on 10/19/2026 7:31:08 PM. (Γò»┬░Γûí┬░∩╝ëΓò»∩╕╡ Γö╗ΓöüΓö╗"
+      ]
+    }
+  ]
+}

@@ -473,6 +473,8 @@ WHERE Id = 'FR-MCP-REQRECOVERY-001'");
     }
 
     /// <summary>A hung SaveChanges is retryable HTTP 503 and persists nothing.</summary>
+    /// <remarks>Integration: asserts an elapsed wall-clock bound on actual scheduling and timer execution (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task ApplyAsync_HungSave_IsRetryable503()
     {

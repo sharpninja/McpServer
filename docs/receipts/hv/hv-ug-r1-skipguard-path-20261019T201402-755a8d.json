@@ -1,0 +1,14 @@
+{
+  "TimestampUtc": "2026-10-20T01:14:02.8599488Z",
+  "TimestampLocal": "2026-10-19T20:14:02",
+  "Mode": "Files",
+  "Arguments": [
+    "tests",
+    "-g",
+    "*IngestionAllowlist*"
+  ],
+  "Offset": 0,
+  "Count": 20,
+  "ExitCode": 0,
+  "Output": "tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs"
+}

@@ -1,0 +1,561 @@
+Now: 2026-10-26T11:46:09 since=2026-10-19T15:00:00 transcript=/home/sharpninja/.claude/projects/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532.jsonl
+edits=386 checks=310 runs=3124
+ISSUE /home/sharpninja/.claude/hooks/timestamp-guard/Get-LocalNow.ps1 runs=313 whatIfRuns=0 shouldProcess=False
+    NOT-ANALYZED run at 2026-10-19T17:00:28 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T17:03:44 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T17:05:24 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T17:08:52 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T17:12:14 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T17:13:44 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T17:17:01 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T17:25:56 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T17:32:17 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T17:39:19 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T17:42:30 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T17:45:48 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T17:50:55 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T17:51:10 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T17:53:18 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T17:54:33 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T17:55:15 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T17:55:39 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T17:56:27 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T17:57:24 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T17:58:17 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T17:58:48 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T18:00:24 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T18:01:46 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T18:23:35 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T18:30:10 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T18:32:04 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T18:36:39 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T18:37:05 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T18:38:35 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T18:45:42 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T18:46:59 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T18:56:09 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T18:58:26 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T18:59:04 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T19:03:13 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T19:04:13 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T19:06:13 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T19:07:06 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T19:07:58 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T19:09:03 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T19:13:34 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T19:14:25 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T19:14:46 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T19:15:08 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T19:15:57 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T19:18:24 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T19:18:53 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T19:19:22 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T19:19:55 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T19:20:23 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T19:53:44 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T20:47:11 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T20:48:00 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T21:05:43 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T21:10:00 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T21:23:31 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T21:28:16 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T21:28:39 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T21:28:57 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T22:28:32 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T22:30:28 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-19T22:31:19 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T07:33:14 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T07:33:51 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T07:35:00 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T07:39:13 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T07:41:46 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T07:44:24 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T08:06:11 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T08:23:42 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T08:25:42 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T08:26:00 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T08:26:15 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T08:26:39 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T08:27:05 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T08:28:09 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T08:29:34 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T08:31:38 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T09:08:45 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T09:28:01 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T09:35:09 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T09:51:22 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T09:58:10 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T10:02:58 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T11:13:02 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T12:08:09 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T12:09:47 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T12:29:20 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T12:34:40 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T13:11:21 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T13:17:51 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T13:18:32 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T13:34:56 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T13:58:02 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T14:05:07 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T14:50:34 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T14:51:11 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T14:51:23 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T14:52:06 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T14:53:57 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T14:54:37 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T14:57:44 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T14:59:36 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T15:02:19 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T15:03:06 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T15:04:38 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T15:12:25 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T15:16:36 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T15:25:10 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T15:27:57 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T15:29:14 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T15:31:24 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T15:32:26 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T15:34:03 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T15:35:13 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T15:35:48 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T15:36:59 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T15:40:02 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T16:29:49 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T16:30:34 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T16:34:18 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T16:38:55 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T16:41:45 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T16:46:30 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T16:50:57 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T16:52:56 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T16:54:35 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T16:56:43 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T16:58:22 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:00:12 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:01:20 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:02:08 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:02:58 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:03:58 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:04:43 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:05:21 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:06:08 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:07:29 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:08:04 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:08:24 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:09:11 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:10:59 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:13:22 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:15:20 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:18:26 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:19:38 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:20:28 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:22:49 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:23:51 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:26:53 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:30:03 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:31:21 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:37:26 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:38:49 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:39:37 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:40:25 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:41:15 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:43:18 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:45:48 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:49:49 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:50:37 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:52:50 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T17:55:53 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T18:01:51 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T18:03:49 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T18:05:43 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T18:08:16 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T18:08:58 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T18:09:21 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T18:10:47 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T18:11:43 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T18:14:44 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T18:20:56 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T18:22:32 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T18:23:07 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T18:23:55 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T18:26:49 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T18:27:44 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T18:32:17 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T18:35:30 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T19:05:50 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T20:25:59 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T21:25:46 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-20T23:08:10 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T05:12:16 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T05:34:29 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T05:35:13 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T05:36:10 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T05:38:40 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T05:41:56 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T05:44:34 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T05:45:24 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T05:46:45 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T05:48:10 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T05:48:44 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T05:54:07 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T05:57:06 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T05:58:18 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T05:59:02 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T06:01:03 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T06:03:25 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T06:03:54 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T06:05:52 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T06:08:20 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T06:09:02 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T06:10:40 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T06:26:40 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T06:34:00 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T06:34:41 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T06:36:03 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T06:40:22 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T06:41:15 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T06:41:42 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T06:52:07 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T06:53:44 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T06:59:12 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T07:01:27 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T07:04:39 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T07:06:16 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T07:14:03 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T07:16:20 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T07:17:31 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T07:21:02 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T07:22:03 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T07:25:02 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T07:26:29 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T07:33:24 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T07:38:41 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T07:45:06 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T07:48:44 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T07:53:43 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T07:54:46 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T07:58:55 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T08:02:07 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T08:02:50 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T08:04:29 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T08:05:06 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T08:05:57 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T08:07:37 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T08:09:15 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T08:10:37 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T08:11:40 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T08:12:32 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T08:13:02 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T11:15:28 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T11:16:13 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T11:17:00 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T11:17:57 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T11:19:55 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T11:20:11 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T11:33:00 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T12:03:16 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T12:06:16 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T12:14:26 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T14:10:22 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T07:19:10 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T07:28:31 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T08:36:02 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T08:38:51 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T08:39:44 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T08:40:31 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T08:55:58 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T08:57:00 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T09:02:18 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T09:16:10 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T09:17:12 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T09:22:08 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T09:38:14 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T09:46:08 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T09:48:55 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T09:53:00 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T09:53:44 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T09:54:15 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T09:54:58 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T09:55:13 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T09:58:06 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T09:58:50 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T10:04:38 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T10:10:26 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T10:11:02 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T10:15:38 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T10:16:52 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T10:17:15 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T10:19:32 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T10:25:01 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T10:27:05 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T10:29:26 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T10:29:52 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T10:31:57 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T10:32:11 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T10:34:42 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T10:36:56 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T10:37:37 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T10:38:08 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T10:44:27 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T10:50:09 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T10:50:39 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T10:55:46 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T10:56:36 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T11:01:41 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T11:07:19 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T11:10:18 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T11:10:56 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T11:12:54 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T11:17:21 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T11:17:40 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T11:18:37 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T11:23:09 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T11:24:30 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T11:26:06 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T11:28:15 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T11:30:17 (last edit none in transcript)
+ISSUE /home/sharpninja/.claude/scratch/Get-LocalNow.ps1 runs=1 whatIfRuns=0 shouldProcess=False
+    NOT-ANALYZED run at 2026-10-21T05:33:37 (last edit none in transcript)
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Add-CompletedTurns.ps1 runs=37 whatIfRuns=15 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Add-FileText.ps1 runs=13 whatIfRuns=6 shouldProcess=True
+ISSUE /home/sharpninja/.claude/scratch/pr82-review-20261019/Add-GlobalMemory.ps1 runs=4 whatIfRuns=2 shouldProcess=True
+    NOT-ANALYZED run at 2026-10-21T06:57:22 (last edit 2026-10-21T06:57:00)
+    NOT-ANALYZED run at 2026-10-21T06:58:26 (last edit 2026-10-21T06:58:16)
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Add-IntegrationTraits.ps1 runs=10 whatIfRuns=6 shouldProcess=True
+ISSUE /home/sharpninja/.claude/scratch/pr82-review-20261019/Add-NukeLaneFilterRequirement.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+    NOT-ANALYZED run at 2026-10-19T16:26:42 (last edit 2026-10-19T16:26:17)
+ISSUE /home/sharpninja/.claude/scratch/pr82-review-20261019/Add-ScannerAliasTodo.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+    NOT-ANALYZED run at 2026-10-21T05:47:33 (last edit 2026-10-21T05:47:26)
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Add-UnitGreenTodo.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Begin-Turn.ps1 runs=42 whatIfRuns=0 shouldProcess=False
+ISSUE /home/sharpninja/.claude/scratch/pr82-review-20261019/Compare-FileHashes.ps1 runs=5 whatIfRuns=1 shouldProcess=True
+    NO-WHATIF-BEFORE run at 2026-10-20T15:09:10 (last edit 2026-10-20T15:09:00)
+    NO-WHATIF-BEFORE run at 2026-10-20T18:45:39 (last edit 2026-10-20T15:09:00)
+    NO-WHATIF-BEFORE run at 2026-10-20T18:49:33 (last edit 2026-10-20T15:09:00)
+    NO-WHATIF-BEFORE run at 2026-10-20T19:00:29 (last edit 2026-10-20T15:09:00)
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Compare-ToRef.ps1 runs=3 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Compare-TrxSets.ps1 runs=35 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Complete-Turn.ps1 runs=31 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Convert-FrToTr.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Copy-FileSet.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Copy-FileTo.ps1 runs=31 whatIfRuns=14 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Copy-LegionRequirements.ps1 runs=1 whatIfRuns=0 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Copy-Receipt.ps1 runs=12 whatIfRuns=5 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Copy-RenamedReceipts.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-EffectiveMention.ps1 runs=2 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-PlatformTraitUse.ps1 runs=2 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-ProfileLinks.ps1 runs=1 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-Requirements.ps1 runs=9 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-SilentPlatformReturns.ps1 runs=1 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-TestDependencyReach.ps1 runs=8 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-TrxTests.ps1 runs=8 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-TurnSession.ps1 runs=3 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-UnitDependencyInventory.ps1 runs=1 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-UseCaseFrLinks.ps1 runs=2 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-AddedLineCitations.ps1 runs=2 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-AssetsAudit.ps1 runs=2 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-BranchCommits.ps1 runs=1 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-BranchOverlap.ps1 runs=2 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-BranchState.ps1 runs=3 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-C4TakeoverDiff.ps1 runs=1 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-CitationPresence.ps1 runs=1 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-CodexSandboxHelp.ps1 runs=1 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-CommitFileCounts.ps1 runs=5 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-DevelopDelta.ps1 runs=5 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-DirectoryListing.ps1 runs=12 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-DirListing.ps1 runs=36 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-DockerContainers.ps1 runs=1 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-EnvVarInventory.ps1 runs=2 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-FileHistory.ps1 runs=4 whatIfRuns=0 shouldProcess=False
+ISSUE /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-GlobalMemories.ps1 runs=3 whatIfRuns=0 shouldProcess=False
+    NOT-ANALYZED run at 2026-10-21T06:56:34 (last edit 2026-10-21T06:56:28)
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-InventoryCauses.ps1 runs=3 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-Listing.ps1 runs=2 whatIfRuns=0 shouldProcess=False
+ISSUE /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-LocalNow.ps1 runs=2 whatIfRuns=0 shouldProcess=False
+    NOT-ANALYZED run at 2026-10-21T05:33:30 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-21T05:34:24 (last edit none in transcript)
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-LocalStamp.ps1 runs=93 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-McpMemory.ps1 runs=1 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-NukeRunStatus.ps1 runs=70 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-PlatformTestInventory.ps1 runs=2 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-ProfileFiles.ps1 runs=5 whatIfRuns=2 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-PrReviewState.ps1 runs=2 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-ReceiptSizes.ps1 runs=7 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-RefusedTests.ps1 runs=1 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-Requirement.ps1 runs=22 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-RequirementIds.ps1 runs=8 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-ReviewerTurn.ps1 runs=6 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-RoslynVersions.ps1 runs=1 whatIfRuns=0 shouldProcess=False
+ISSUE /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-RunTail.ps1 runs=1 whatIfRuns=0 shouldProcess=False
+    NOT-ANALYZED run at 2026-10-20T14:51:32 (last edit none in transcript)
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-ScratchListing.ps1 runs=24 whatIfRuns=15 shouldProcess=True
+ISSUE /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-ScriptAnalysisLedger.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+    NOT-ANALYZED run at 2026-10-26T11:45:25 (last edit none in transcript)
+    NOT-ANALYZED run at 2026-10-26T11:46:08 (last edit none in transcript)
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-TestClassFixtures.ps1 runs=1 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-Todo.ps1 runs=4 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-TranscriptExchange.ps1 runs=14 whatIfRuns=0 shouldProcess=False
+ISSUE /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-TranscriptFileWrites.ps1 runs=6 whatIfRuns=4 shouldProcess=True
+    NOT-ANALYZED run at 2026-10-20T15:07:54 (last edit 2026-10-20T15:07:45)
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-TriageReport.ps1 runs=1 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-TrxSummary.ps1 runs=54 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-Turn.ps1 runs=7 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-UntrackedPaths.ps1 runs=5 whatIfRuns=3 shouldProcess=True
+ISSUE /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-WorktreeStatus.ps1 runs=23 whatIfRuns=0 shouldProcess=False
+    NOT-ANALYZED run at 2026-10-20T18:49:39 (last edit 2026-10-20T18:49:32)
+    NOT-ANALYZED run at 2026-10-20T18:49:46 (last edit 2026-10-20T18:49:32)
+    NOT-ANALYZED run at 2026-10-20T23:04:56 (last edit 2026-10-20T18:49:32)
+    NOT-ANALYZED run at 2026-10-21T05:13:44 (last edit 2026-10-20T18:49:32)
+    NOT-ANALYZED run at 2026-10-21T05:14:08 (last edit 2026-10-20T18:49:32)
+    NOT-ANALYZED run at 2026-10-21T05:52:30 (last edit 2026-10-20T18:49:32)
+    NOT-ANALYZED run at 2026-10-21T07:20:56 (last edit 2026-10-20T18:49:32)
+    NOT-ANALYZED run at 2026-10-21T12:14:43 (last edit 2026-10-20T18:49:32)
+    NOT-ANALYZED run at 2026-10-21T13:07:24 (last edit 2026-10-20T18:49:32)
+    NOT-ANALYZED run at 2026-10-26T09:54:23 (last edit 2026-10-20T18:49:32)
+    NOT-ANALYZED run at 2026-10-26T10:10:29 (last edit 2026-10-20T18:49:32)
+    NOT-ANALYZED run at 2026-10-26T10:15:19 (last edit 2026-10-20T18:49:32)
+    NOT-ANALYZED run at 2026-10-26T11:01:27 (last edit 2026-10-20T18:49:32)
+    NOT-ANALYZED run at 2026-10-26T11:06:44 (last edit 2026-10-20T18:49:32)
+    NOT-ANALYZED run at 2026-10-26T11:12:04 (last edit 2026-10-20T18:49:32)
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-BuildTestsRun.ps1 runs=33 whatIfRuns=11 shouldProcess=True
+ISSUE /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-BuildTestsRunOnDiskTemp.ps1 runs=11 whatIfRuns=6 shouldProcess=True
+    NOT-ANALYZED run at 2026-10-21T06:37:17 (last edit 2026-10-21T06:37:14)
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-HvRound.ps1 runs=12 whatIfRuns=6 shouldProcess=True
+ISSUE /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionScript.ps1 runs=9 whatIfRuns=0 shouldProcess=True
+    NO-WHATIF-BEFORE run at 2026-10-19T16:54:46 (last edit 2026-10-19T14:58:53)
+    NO-WHATIF-BEFORE run at 2026-10-19T16:55:10 (last edit 2026-10-19T14:58:53)
+    NO-WHATIF-BEFORE run at 2026-10-19T16:58:14 (last edit 2026-10-19T14:58:53)
+    NO-WHATIF-BEFORE run at 2026-10-19T18:35:39 (last edit 2026-10-19T14:58:53)
+    NO-WHATIF-BEFORE run at 2026-10-19T18:36:21 (last edit 2026-10-19T14:58:53)
+    NO-WHATIF-BEFORE run at 2026-10-19T19:46:09 (last edit 2026-10-19T14:58:53)
+    NO-WHATIF-BEFORE run at 2026-10-19T19:48:09 (last edit 2026-10-19T14:58:53)
+    NO-WHATIF-BEFORE run at 2026-10-19T19:49:14 (last edit 2026-10-19T14:58:53)
+    NO-WHATIF-BEFORE run at 2026-10-19T21:06:34 (last edit 2026-10-19T14:58:53)
+ISSUE /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-LegionSsh.ps1 runs=184 whatIfRuns=44 shouldProcess=True
+    NO-WHATIF-BEFORE run at 2026-10-19T21:10:26 (last edit 2026-10-19T21:10:13)
+    NOT-ANALYZED run at 2026-10-19T21:12:31 (last edit 2026-10-19T21:12:28)
+    NO-WHATIF-BEFORE run at 2026-10-19T21:12:31 (last edit 2026-10-19T21:12:28)
+    NO-WHATIF-BEFORE run at 2026-10-19T21:12:45 (last edit 2026-10-19T21:12:28)
+    NO-WHATIF-BEFORE run at 2026-10-20T09:36:22 (last edit 2026-10-20T09:30:03)
+    NO-WHATIF-BEFORE run at 2026-10-20T09:36:51 (last edit 2026-10-20T09:36:41)
+    NO-WHATIF-BEFORE run at 2026-10-20T09:38:10 (last edit 2026-10-20T09:36:41)
+    NO-WHATIF-BEFORE run at 2026-10-20T09:39:13 (last edit 2026-10-20T09:36:41)
+    NO-WHATIF-BEFORE run at 2026-10-20T09:43:31 (last edit 2026-10-20T09:42:57)
+    NO-WHATIF-BEFORE run at 2026-10-20T10:16:01 (last edit 2026-10-20T10:15:35)
+ISSUE /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-SandboxedNukeRun.ps1 runs=6 whatIfRuns=3 shouldProcess=True
+    NOT-ANALYZED run at 2026-10-19T21:16:05 (last edit 2026-10-19T21:16:02)
+    NOT-ANALYZED run at 2026-10-19T21:17:05 (last edit 2026-10-19T21:17:02)
+ISSUE /home/sharpninja/.claude/scratch/pr82-review-20261019/Invoke-WikiExport.ps1 runs=8 whatIfRuns=3 shouldProcess=True
+    NO-WHATIF-BEFORE run at 2026-10-19T17:58:38 (last edit 2026-10-19T10:46:43)
+    NO-WHATIF-BEFORE run at 2026-10-19T19:19:12 (last edit 2026-10-19T10:46:43)
+    NOT-ANALYZED run at 2026-10-19T21:18:40 (last edit 2026-10-19T21:18:38)
+ISSUE /home/sharpninja/.claude/scratch/pr82-review-20261019/List-Dir.ps1 runs=1 whatIfRuns=0 shouldProcess=False
+    NOT-ANALYZED run at 2026-10-19T19:23:12 (last edit none in transcript)
+ISSUE /home/sharpninja/.claude/scratch/pr82-review-20261019/List-ProfileFiles.ps1 runs=1 whatIfRuns=0 shouldProcess=False
+    NOT-ANALYZED run at 2026-10-20T14:50:45 (last edit none in transcript)
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Merge-BaseIntoBranch.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/New-BaselineWorktree.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/New-DraftPr.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/New-EffortWorktree.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Protect-HvReceipts.ps1 runs=35 whatIfRuns=28 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 runs=106 whatIfRuns=53 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Push-Branch.ps1 runs=37 whatIfRuns=17 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Remove-SilentPlatformReturns.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Remove-StaleFr.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Restore-FromRef.ps1 runs=9 whatIfRuns=5 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Restore-GeneratedPaths.ps1 runs=31 whatIfRuns=14 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Restore-RoslynLatest.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Save-RunReceipts.ps1 runs=37 whatIfRuns=20 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Save-SearchReceipts.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Search-GitRef.ps1 runs=7 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Search-Text.ps1 runs=220 whatIfRuns=3 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Search-TextTree.ps1 runs=155 whatIfRuns=6 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-PrDescription.ps1 runs=16 whatIfRuns=8 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-RequirementCriterion.ps1 runs=32 whatIfRuns=17 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-TestDescription.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Set-TextBlock.ps1 runs=6 whatIfRuns=4 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Show-CommitSummary.ps1 runs=3 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Show-GitFile.ps1 runs=1 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Show-HookCache.ps1 runs=4 whatIfRuns=0 shouldProcess=False
+ISSUE /home/sharpninja/.claude/scratch/pr82-review-20261019/Show-TodoTasks.ps1 runs=2 whatIfRuns=0 shouldProcess=False
+    NOT-ANALYZED run at 2026-10-21T06:00:10 (last edit 2026-10-21T06:00:00)
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-HostileNukeRun.ps1 runs=12 whatIfRuns=6 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-HostileNukeRunWide.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-HostileNukeRunWide2.ps1 runs=6 whatIfRuns=3 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-HostileNukeRunWide3.ps1 runs=4 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-HostileNukeRunWide4.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+ISSUE /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-HostileNukeRunWide5.ps1 runs=12 whatIfRuns=6 shouldProcess=True
+    NOT-ANALYZED run at 2026-10-26T09:25:17 (last edit 2026-10-26T09:24:58)
+ISSUE /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-LegionBaseline.ps1 runs=21 whatIfRuns=8 shouldProcess=True
+    NO-WHATIF-BEFORE run at 2026-10-19T15:18:59 (last edit 2026-10-19T15:18:50)
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Start-NukeRun.ps1 runs=200 whatIfRuns=78 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Submit-Triage.ps1 runs=10 whatIfRuns=1 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Test-BlobMatch.ps1 runs=2 whatIfRuns=0 shouldProcess=False
+ISSUE /home/sharpninja/.claude/scratch/pr82-review-20261019/Test-CodexPermissionProfiles.ps1 runs=2 whatIfRuns=0 shouldProcess=False
+    NOT-ANALYZED run at 2026-10-19T21:15:51 (last edit 2026-10-19T21:15:49)
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Test-DeclarationRegex.ps1 runs=1 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Test-GitIgnored.ps1 runs=2 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Test-RoslynPackageVersions.ps1 runs=1 whatIfRuns=0 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-TrackedCopy.ps1 runs=36 whatIfRuns=20 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-Turn.ps1 runs=84 whatIfRuns=1 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-10.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-11.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-12.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+ISSUE /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-13.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+    NOT-ANALYZED run at 2026-10-21T07:15:04 (last edit 2026-10-21T07:15:02)
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-14.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-15.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-16.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-17.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-18.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-2.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+ISSUE /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-3.ps1 runs=1 whatIfRuns=0 shouldProcess=True
+    NO-WHATIF-BEFORE run at 2026-10-19T18:22:18 (last edit 2026-10-19T18:22:03)
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-4.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-5.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-6.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-7.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-8.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo-9.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Update-UnitGreenTodo.ps1 runs=2 whatIfRuns=1 shouldProcess=True
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Wait-NukeRun.ps1 runs=91 whatIfRuns=1 shouldProcess=False
+OK /home/sharpninja/.claude/scratch/pr82-review-20261019/Watch-HvRun.ps1 runs=5 whatIfRuns=0 shouldProcess=False
+OK /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/check-script.ps1 runs=43 whatIfRuns=0 shouldProcess=False
+OK /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Compare-TextLines.ps1 runs=2 whatIfRuns=0 shouldProcess=False
+OK /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Find-InFile.ps1 runs=47 whatIfRuns=1 shouldProcess=False
+OK /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Find-TranscriptEntryTime.ps1 runs=8 whatIfRuns=0 shouldProcess=False
+OK /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Find-TranscriptPath.ps1 runs=30 whatIfRuns=1 shouldProcess=False
+OK /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Get-FileHeads.ps1 runs=2 whatIfRuns=0 shouldProcess=False
+OK /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Get-FileNames.ps1 runs=5 whatIfRuns=0 shouldProcess=False
+OK /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Get-HvAgentMessages.ps1 runs=3 whatIfRuns=0 shouldProcess=False
+OK /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Get-HvProgressEntries.ps1 runs=2 whatIfRuns=0 shouldProcess=False
+OK /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Get-IgnoredReceipts.ps1 runs=1 whatIfRuns=0 shouldProcess=False
+OK /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Get-ProcessSurvival.ps1 runs=1 whatIfRuns=0 shouldProcess=False
+OK /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Get-ReceiptGitState.ps1 runs=2 whatIfRuns=0 shouldProcess=False
+OK /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Get-ScopeKillPolicy.ps1 runs=1 whatIfRuns=0 shouldProcess=False
+ISSUE /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Get-ScriptAnalysisLedger.ps1 runs=5 whatIfRuns=1 shouldProcess=True
+    NO-WHATIF-BEFORE run at 2026-10-26T11:35:43 (last edit 2026-10-26T11:35:31)
+    NO-WHATIF-BEFORE run at 2026-10-26T11:36:46 (last edit 2026-10-26T11:36:30)
+    NO-WHATIF-BEFORE run at 2026-10-26T11:37:32 (last edit 2026-10-26T11:36:30)
+OK /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Get-Stamps.ps1 runs=12 whatIfRuns=0 shouldProcess=False
+OK /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Get-TestLaneTags.ps1 runs=2 whatIfRuns=0 shouldProcess=False
+OK /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Get-TmpDu.ps1 runs=2 whatIfRuns=0 shouldProcess=False
+OK /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Get-TmpUsage.ps1 runs=1 whatIfRuns=0 shouldProcess=False
+OK /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Search-UnitProjects.ps1 runs=2 whatIfRuns=0 shouldProcess=False
+OK /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Show-Diff.ps1 runs=2 whatIfRuns=0 shouldProcess=False
+OK /tmp/claude-1000/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532/scratchpad/Show-RangeDiff.ps1 runs=1 whatIfRuns=0 shouldProcess=False
+scripts=164 issues=380
+WINDOW r1 (2026-10-19T15:00:00 to 2026-10-19T19:51:31) NOT-ANALYZED runs=53 scripts=3: Add-NukeLaneFilterRequirement.ps1, Get-LocalNow.ps1, List-Dir.ps1
+WINDOW r1 (2026-10-19T15:00:00 to 2026-10-19T19:51:31) NO-WHATIF-BEFORE runs=12 scripts=4: Invoke-LegionScript.ps1, Invoke-WikiExport.ps1, Start-LegionBaseline.ps1, Update-UnitGreenTodo-3.ps1
+WINDOW r2 (2026-10-19T19:51:31 to 2026-10-19T21:28:28) NOT-ANALYZED runs=12 scripts=5: Get-LocalNow.ps1, Invoke-LegionSsh.ps1, Invoke-SandboxedNukeRun.ps1, Invoke-WikiExport.ps1, Test-CodexPermissionProfiles.ps1
+WINDOW r2 (2026-10-19T19:51:31 to 2026-10-19T21:28:28) NO-WHATIF-BEFORE runs=4 scripts=2: Invoke-LegionScript.ps1, Invoke-LegionSsh.ps1
+WINDOW r3 (2026-10-19T21:28:28 to 2026-10-20T17:08:24) NOT-ANALYZED runs=85 scripts=4: Get-LocalNow.ps1, Get-RunTail.ps1, Get-TranscriptFileWrites.ps1, List-ProfileFiles.ps1
+WINDOW r3 (2026-10-19T21:28:28 to 2026-10-20T17:08:24) NO-WHATIF-BEFORE runs=7 scripts=2: Compare-FileHashes.ps1, Invoke-LegionSsh.ps1
+WINDOW r4 (2026-10-20T17:08:24 to 2026-10-20T21:52:17) NOT-ANALYZED runs=46 scripts=2: Get-LocalNow.ps1, Get-WorktreeStatus.ps1
+WINDOW r4 (2026-10-20T17:08:24 to 2026-10-20T21:52:17) NO-WHATIF-BEFORE runs=3 scripts=1: Compare-FileHashes.ps1
+WINDOW r5 (2026-10-20T21:52:17 to 2026-10-21T11:18:06) NOT-ANALYZED runs=80 scripts=8: Add-GlobalMemory.ps1, Add-ScannerAliasTodo.ps1, Get-GlobalMemories.ps1, Get-LocalNow.ps1, Get-WorktreeStatus.ps1, Invoke-BuildTestsRunOnDiskTemp.ps1, Show-TodoTasks.ps1, Update-UnitGreenTodo-13.ps1
+WINDOW r5 (2026-10-20T21:52:17 to 2026-10-21T11:18:06) NO-WHATIF-BEFORE runs=0 scripts=0: 
+WINDOW r6 (2026-10-21T11:18:06 to 2026-10-26T07:24:31) NOT-ANALYZED runs=10 scripts=2: Get-LocalNow.ps1, Get-WorktreeStatus.ps1
+WINDOW r6 (2026-10-21T11:18:06 to 2026-10-26T07:24:31) NO-WHATIF-BEFORE runs=0 scripts=0: 
+WINDOW r7 (2026-10-26T07:24:31 to 2026-10-26T23:59:59) NOT-ANALYZED runs=65 scripts=4: Get-LocalNow.ps1, Get-ScriptAnalysisLedger.ps1, Get-WorktreeStatus.ps1, Start-HostileNukeRunWide5.ps1
+WINDOW r7 (2026-10-26T07:24:31 to 2026-10-26T23:59:59) NO-WHATIF-BEFORE runs=3 scripts=1: Get-ScriptAnalysisLedger.ps1

@@ -1,0 +1,94 @@
+[
+  {
+    "id": "TR-MCP-WS-005",
+    "beforeCount": 1,
+    "afterCount": 1,
+    "satisfied": 0,
+    "changes": [
+      {
+        "id": "AC-TR-MCP-WS-005-001",
+        "before": [
+          {
+            "id": "AC-TR-MCP-WS-005-001",
+            "text": "Agent-plugin version resolution never fails the marker: the scan of the plugin caches under the user profile (.codex/plugins/cache, .claude/plugins/cache, .grok/installed-plugins) skips any directory it cannot traverse (a link or other reparse point, an untrusted mount point, an inaccessible folder); a version file (.version or a plugin manifest) that exists but cannot be read (an IO or access error) yields no version, so resolution goes on to the next file and the next candidate; and resolution falls back to the synced plugin version when nothing yields one. Any other error still propagates. Unit tests take every plugin-version input (the agent plugin-root environment variables, the workspace sibling plugin folder and the user profile caches) from test-owned data, never from the process environment, the machine or the real profile, and a full unit run under a hostile environment (every plugin-root variable and HOME pointed at scripted bad data) stays 0 failed (operator 2026-10-20: \"Fix scans in PR 87 (Recommended)\", \"Fold R3-P3 in first\" and \"Structural fix, round 4 (Recommended)\"; IMPL-UNITGREEN-001, triage-report-b0e41c36f93c4c91b1bf2524eb579ef8).",
+            "isSatisfied": false
+          }
+        ],
+        "after": {
+          "id": "AC-TR-MCP-WS-005-001",
+          "text": "Agent-plugin version resolution never fails the marker: the scan of the plugin caches under the user profile (.codex/plugins/cache, .claude/plugins/cache, .grok/installed-plugins) skips any directory it cannot traverse (a link or other reparse point, an untrusted mount point, an inaccessible folder), and that covers each cache root itself and every folder between the user profile and it: a cache root that is a link, or that is reached through a link below the user profile (for example a linked .codex, .codex/plugins, .claude/plugins/cache or .grok), contributes no candidate, the same as a link inside the cache, while a user profile that is itself a link is still scanned; a version file (.version or a plugin manifest) that exists but cannot be read (an IO or access error) yields no version, so resolution goes on to the next file and the next candidate; and resolution falls back to the synced plugin version when nothing yields one. Any other error still propagates. Unit tests take every plugin-version input (the agent plugin-root environment variables, the workspace sibling plugin folder and the user profile caches) from test-owned data, never from the process environment, the machine or the real profile, and a full unit run under a hostile environment (every plugin-root variable and HOME pointed at scripted bad data) stays 0 failed (operator 2026-10-20: \"Fix scans in PR 87 (Recommended)\", \"Fold R3-P3 in first\" and \"Structural fix, round 4 (Recommended)\"; operator 2026-10-21: \"Fix both, strengthen ACs\", hostile validation round 5 finding R5-F1; IMPL-UNITGREEN-001, triage-report-b0e41c36f93c4c91b1bf2524eb579ef8).",
+          "isSatisfied": false
+        }
+      }
+    ]
+  },
+  {
+    "id": "TR-MCP-SESSIONLOG-006",
+    "beforeCount": 1,
+    "afterCount": 1,
+    "satisfied": 0,
+    "changes": [
+      {
+        "id": "AC-TR-MCP-SESSIONLOG-006-009",
+        "before": [
+          {
+            "id": "AC-TR-MCP-SESSIONLOG-006-009",
+            "text": "The agent-history scan under ~ (.grok, .claude, .codex, .cursor) skips any directory it cannot traverse (a link or other reparse point, an untrusted mount point, an inaccessible folder) and never fails a submit or an import; when nothing usable is found the turn keeps None. Tests that submit imports read the real home, so they are integration tests (operator 2026-10-20: \"Fix scans in PR 87 (Recommended)\"; IMPL-UNITGREEN-001, triage-report-b0e41c36f93c4c91b1bf2524eb579ef8).",
+            "isSatisfied": false
+          }
+        ],
+        "after": {
+          "id": "AC-TR-MCP-SESSIONLOG-006-009",
+          "text": "The agent-history scan under ~ (.grok, .claude, .codex, .cursor) skips any directory it cannot traverse (a link or other reparse point, an untrusted mount point, an inaccessible folder), and that covers each history root itself: a history root that is a link contributes no file, the same as a link inside it, while a home folder that is itself a link is still scanned; the scan never fails a submit or an import; when nothing usable is found the turn keeps None. Tests that submit imports read the real home, so they are integration tests (operator 2026-10-20: \"Fix scans in PR 87 (Recommended)\"; operator 2026-10-21: \"Fix both, strengthen ACs\", hostile validation round 5 finding R5-F1; IMPL-UNITGREEN-001, triage-report-b0e41c36f93c4c91b1bf2524eb579ef8).",
+          "isSatisfied": false
+        }
+      }
+    ]
+  },
+  {
+    "id": "TR-MCP-USECASE-018",
+    "beforeCount": 7,
+    "afterCount": 7,
+    "satisfied": 0,
+    "changes": [
+      {
+        "id": "AC-006",
+        "before": [
+          {
+            "id": "AC-006",
+            "text": "Every supported platform executes an applicable native contract assertion in the integration lane: platform-specific tests are Category=Integration tests, tagged Platform=Linux or Platform=Windows when they apply to one host, that run in their host's MigrationIntegrationTests (TR-MCP-NUKE-019) and neither skip nor silently return; no unit test depends on the platform.",
+            "isSatisfied": false
+          }
+        ],
+        "after": {
+          "id": "AC-006",
+          "text": "Every supported platform executes an applicable native contract assertion in the integration lane: platform-specific tests are Category=Integration tests, tagged Platform=Linux or Platform=Windows when they apply to one host, that run in their host's MigrationIntegrationTests (TR-MCP-NUKE-019) and neither skip nor silently return; no unit test depends on the platform or on the process environment: a test that reads or writes an environment variable, directly or through a test helper, imports the process environment into configuration (AddEnvironmentVariables or a default host builder), or asserts on an environment value a child process inherits, is a Category=Integration test that sets and restores every variable its assertions depend on, both forms where a variable has a canonical (QBrainAi, QBRAINAI_) and a legacy (Mcp, MCP_) form, and the tests that write the process environment run one at a time; the full unit suite stays 0 failed and 0 not executed under the hostile-environment gate (operator 2026-10-21: \"Fix both, strengthen ACs\", \"Strengthening Acceptance Criteria should always be the recommended option\" and \"Approve, strengthen AC-006/008 (Recommended)\"; hostile validation round 5 finding R5-F2).",
+          "isSatisfied": false
+        }
+      }
+    ]
+  },
+  {
+    "id": "TR-MCP-USECASE-019",
+    "beforeCount": 12,
+    "afterCount": 12,
+    "satisfied": 0,
+    "changes": [
+      {
+        "id": "AC-008",
+        "before": [
+          {
+            "id": "AC-008",
+            "text": "Platform-specific tests are Category=Integration tests, tagged with the Platform trait of the host they apply to, that run only in that host's MigrationIntegrationTests (TR-MCP-NUKE-019), prove real execution and inventory counts, and never pass through source inspection, skip, silent return, abort, inconclusive outcome, or a below-minimum count; no unit test depends on the platform.",
+            "isSatisfied": false
+          }
+        ],
+        "after": {
+          "id": "AC-008",
+          "text": "Platform-specific tests are Category=Integration tests, tagged with the Platform trait of the host they apply to, that run only in that host's MigrationIntegrationTests (TR-MCP-NUKE-019), prove real execution and inventory counts, and never pass through source inspection, skip, silent return, abort, inconclusive outcome, or a below-minimum count; no unit test depends on the platform or on the process environment: a test that reads or writes an environment variable, directly or through a test helper, imports the process environment into configuration (AddEnvironmentVariables or a default host builder), or asserts on an environment value a child process inherits, is a Category=Integration test that sets and restores every variable its assertions depend on, both forms where a variable has a canonical (QBrainAi, QBRAINAI_) and a legacy (Mcp, MCP_) form, and the tests that write the process environment run one at a time; the full unit suite stays 0 failed and 0 not executed under the hostile-environment gate (operator 2026-10-21: \"Fix both, strengthen ACs\", \"Strengthening Acceptance Criteria should always be the recommended option\" and \"Approve, strengthen AC-006/008 (Recommended)\"; hostile validation round 5 finding R5-F2).",
+          "isSatisfied": false
+        }
+      }
+    ]
+  }
+]

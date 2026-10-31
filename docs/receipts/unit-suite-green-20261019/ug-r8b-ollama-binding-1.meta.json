@@ -1,0 +1,30 @@
+{
+  "name": "ug-r8b-ollama-binding-1",
+  "command": [
+    "dotnet",
+    "test",
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj",
+    "-c",
+    "Debug",
+    "--logger",
+    "trx;LogFileName=ug-r8b-ollama-binding-1.trx",
+    "--results-directory",
+    "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-ollama-binding-1"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "8c651f13036db0aa2b90413770377cc66cb419d6",
+  "dirtyPaths": [
+    " M build/Build.TestDependencies.cs",
+    " M tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/OllamaServerFixture.cs",
+    "?? build/OllamaInstallLayout.cs",
+    "?? build/OllamaInstallLayoutContracts.cs",
+    "?? tests/Build.Tests/OllamaInstallLayoutContract.cs",
+    "?? tests/Build.Tests/OllamaInstallLayoutMockGateTests.cs",
+    "?? tests/Build.Tests/OllamaInstallLayoutTests.cs"
+  ],
+  "startedLocal": "2026-10-27T06:06:10",
+  "log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-ollama-binding-1.out.log",
+  "results": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-ollama-binding-1",
+  "exitCode": 0,
+  "endedLocal": "2026-10-27T06:10:59"
+}

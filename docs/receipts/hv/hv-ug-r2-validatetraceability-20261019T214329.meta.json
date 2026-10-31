@@ -1,0 +1,23 @@
+{
+  "Gate": "ValidateTraceability",
+  "RunId": "hv-ug-r2-validatetraceability-20261019T214329",
+  "HeadSha": "a94579db927f25a0cbddd07d639f3054f2ee72e8",
+  "DirtyTrackedPathsBefore": [],
+  "TimestampLocal": "2026-10-19T21:43:30",
+  "TimestampUtc": "2026-10-20T02:43:30.0172702Z",
+  "Executable": "/home/sharpninja/.local/bin/pwsh.exe",
+  "Arguments": [
+    "-NoProfile",
+    "-NonInteractive",
+    "-File",
+    "./build.ps1",
+    "ValidateTraceability",
+    "--test-run-id",
+    "hv-ug-r2-validatetraceability-20261019T214329"
+  ],
+  "Stdout": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-validatetraceability-20261019T214329.out.log",
+  "Stderr": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r2-validatetraceability-20261019T214329.err.log",
+  "Sandbox": "workspace-write, no escalation",
+  "ExitCode": 0,
+  "FinishedLocal": "2026-10-19T21:43:34"
+}

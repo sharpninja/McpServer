@@ -1,0 +1,20 @@
+{
+  "name": "ug-r8-precommit-lane-2",
+  "target": "MigrationIntegrationTests",
+  "extraArgs": [
+    "--test-run-id",
+    "ug-r8-precommit-lane-2"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "f5cda3c15455b8f42f97bb35768c142757323378",
+  "dirtyPaths": [
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunction.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs"
+  ],
+  "startedLocal": "2026-10-26T14:33:49",
+  "startedUtc": "2026-10-26T19:33:49.6257417Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8/ug-r8-precommit-lane-2.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8/ug-r8-precommit-lane-2.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8/ug-r8-precommit-lane-2.exit.txt"
+}

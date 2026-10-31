@@ -1,0 +1,7 @@
+12:  LOG 11:09:55 [DBG] Failed!  - Failed:     1, Passed:   360, Skipped:     0, Total:   361, Duration: 6 m 11 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+13:  LOG 11:10:02 [DBG] Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 107 ms - QBrainAi.McpAgent.Tests.dll (net10.0)
+14:  LOG 11:10:08 [DBG] Passed!  - Failed:     0, Passed:     3, Skipped:     0, Total:     3, Duration: 360 ms - QBrainAi.Repl.Core.Tests.dll (net10.0)
+15:  LOG 11:10:16 [DBG] Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 52 ms - QBrainAi.QBAgent.Tests.dll (net10.0)
+16:  LOG 11:10:23 [DBG] Passed!  - Failed:     0, Passed:     6, Skipped:     0, Total:     6, Duration: 2 s - Build.Tests.dll (net10.0)
+25:  Failed QBrainAi.Support.Mcp.Tests.Storage.SqlServerAuditPayloadMigrationTests.Migration_PersistsCompressedPayloads_AndDeniesAuditMutation :: System.InvalidOperationException : Timeout expired. The timeout period elapsed prior to obtaining a connection from the pool. This may have occurred because all pooled connections were in use and max pool size was reached.
+

@@ -62,7 +62,6 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
 {
     private const string StreamCommandTimeoutEnvVar = "MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS";
     private const string ServerProtocolVersion = "1.0";
-    private static readonly TimeSpan DefaultStreamCommandTimeout = TimeSpan.FromMinutes(2);
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
     {
         PropertyNameCaseInsensitive = true,
@@ -133,6 +132,12 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         _workspaceValidationWorkflow = workspaceValidationWorkflow;
         _clientMutationPolicy = clientMutationPolicy;
     }
+
+    /// <summary>
+    /// FR-MCP-REPL-001 ac-1: reads one environment variable by name for the stream command timeout. The default reads
+    /// the process environment; tests give a scripted reader so the call site is bound without the process environment.
+    /// </summary>
+    internal Func<string, string?> ReadVariable { get; init; } = Environment.GetEnvironmentVariable;
 
     /// <inheritdoc />
     public Task<IYamlEnvelope> DispatchAsync(IYamlEnvelope envelope, CancellationToken cancellationToken)
@@ -2997,7 +3002,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         };
     }
 
-    private static async Task<IReadOnlyList<IStreamingEvent>> CollectTodoEventsAsync(
+    private async Task<IReadOnlyList<IStreamingEvent>> CollectTodoEventsAsync(
         string requestId,
         string method,
         Func<Func<IStreamingEvent, Task>, CancellationToken, Task> stream,
@@ -3005,8 +3010,11 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         CancellationToken cancellationToken)
     {
         var events = new List<IStreamingEvent>();
+        // FR-MCP-REPL-001 ac-1: the configured stream timeout is read once and only a valid value is used, so the
+        // timeout event names the timeout that applied and a misconfigured value never fails the stream.
+        var streamTimeout = ReplCommandTimeout.Read(ReadVariable, StreamCommandTimeoutEnvVar);
         using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        timeoutCts.CancelAfter(ResolveStreamCommandTimeout());
+        timeoutCts.CancelAfter(streamTimeout);
 
         try
         {
@@ -3028,7 +3036,7 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                     new Dictionary<string, object?>
                     {
                         ["requestId"] = requestId,
-                        ["message"] = $"Stream command timed out after {ResolveStreamCommandTimeout().TotalSeconds:0} seconds.",
+                        ["message"] = $"Stream command timed out after {streamTimeout.TotalSeconds:0} seconds.",
                     },
                     DateTimeOffset.UtcNow,
                     events.Count + 1);
@@ -3041,17 +3049,6 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         }
 
         return events;
-    }
-
-    private static TimeSpan ResolveStreamCommandTimeout()
-    {
-        var configured = Environment.GetEnvironmentVariable(StreamCommandTimeoutEnvVar);
-        if (int.TryParse(configured, out var seconds) && seconds > 0)
-        {
-            return TimeSpan.FromSeconds(seconds);
-        }
-
-        return DefaultStreamCommandTimeout;
     }
 
     private static IYamlEnvelope BuildTodoStreamEventEnvelope(string requestId, string method, IStreamingEvent evt)

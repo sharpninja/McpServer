@@ -94,6 +94,8 @@ public sealed class RequirementsDocFxWorkflowRunnerTests
     }
 
     /// <summary>Runner rejects reparse points in staged output before they can escape the workspace.</summary>
+    /// <remarks>Integration: creates a real reparse point in staged filesystem output (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task RunAsync_WhenOutputContainsReparsePointEscape_Throws()
     {

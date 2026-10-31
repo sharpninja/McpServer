@@ -1,0 +1,150 @@
+{
+  "TimestampLocal": "2026-10-27T03:50:49",
+  "Method": "workflow.todo.get",
+  "Params": {
+    "id": "IMPL-UNITGREEN-001"
+  },
+  "Response": {
+    "type": "result",
+    "payload": {
+      "deprecated": true,
+      "result": {
+        "priority": "high",
+        "note": "Session ClaudeCode-20261019T134748Z-plugin-session, turn req-20261019T190714Z-bdpv4-green-correction. Operator 2026-10-19: this effort owns every unit-suite code change (\"I don't want you and the C4 agent working on the same thing.  C4 should not be changing code, only docs.\"); PLAN-C4MODEL-001 keeps docs and TR-MCP-NUKE-017. Branch fix/unit-suite-green-20261019. Five tasks were checked before any hostile review; unchecked 2026-10-19 by operator decision (\"Uncheck them now (Recommended)\"); every task is checked only after hostile AGREE. Draft PR https://github.com/sharpninja/McpServer/pull/87.",
+        "functionalRequirements": [
+          "FR-MCP-PATHNORM-001",
+          "FR-MCP-139",
+          "FR-MCP-BUILD-001",
+          "FR-MCP-USECASE-001",
+          "FR-MCP-018",
+          "FR-MCP-SESSIONLOGCTX-001"
+        ],
+        "description": [
+          "Operator 2026-10-19: \"BDPv4 requires all unit tests be green.\" and \"Gotta use the recommended packages.\"",
+          "Operator 2026-10-19 (day-one rule, plan section 9): \"There should be ZERO platform specific UNIT tests.  If it depends on the environment, it's an integration test.\"",
+          "Approved plan (operator \"Yes, I approve the change\", 2026-10-19 14:50): groups A to F of docs/plans/2026-10-19-unit-suite-green.md; amendment G (host-scoped MigrationIntegrationTests lane, TR-MCP-NUKE-019 AC-1 to AC-4) approved 16:22 and built as 8c2b83ab; amendment H1 (Windows lane needs an interactive desktop session, TR-MCP-NUKE-019 AC-5) approved 18:47 and built as 69d8f3f5.",
+          "Measured at develop ace70daa: Linux 14 failed and 16 skipped; Windows restore fails NU1902/NU1903; Windows diagnosis-only run 4702 results, 19 failed, 2 not executed."
+        ],
+        "implementationTasks": [
+          {
+            "done": false,
+            "task": "Step 1 requirements: PATHNORM records and TR-MCP-QUALITY-001 criteria copied from PAYTON-LEGION2; ac-21 reopened and strengthened; TEST-MCP-PATHNORM-001 unitgreen-native-host added. Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "A: Xml and Pkcs 10.0.13 central pins (cbc74e82); Restore and Compile clean on Linux (unit-green-linux-a-compile-20261019T1514) and Windows with no override (unit-green-win-a-20261019T1518). Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "Step 2 tests and scripted data (28bf0b22): B1 ProductionGate, B2 RemoveTodoRecords x2, B3 ProcessNormalizer, D host contract and MockData, F assertion text, negative controls. Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "Linux mock gate unit-green-mock-20261019T1528: 4666 total, 0 failed, the 16 named Windows-only not executed (since reclassified). Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "D production overload and Real binding (de581353); Linux run unit-green-real-20261019T1535: 4669 total, 0 failed, 16 not executed (since reclassified). Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "F (b2319488): HostileReviewWorker startup test clears the Event Log provider; Windows Test unit-green-win-f-20261019T1553 4644 total, 0 failed, 0 not executed. Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "Takeover of PLAN-C4MODEL-001 unit-suite code by operator decision (11681680, blob-identical to c2125c42; C4 reverted PR 84 copies in b7618423)"
+          },
+          {
+            "done": false,
+            "task": "G (TR-MCP-NUKE-019, 8c2b83ab): host-scoped MigrationIntegrationTests filter; mock gate 21/21, production 24/24; Linux lane logs Platform!=Windows, Windows lane Platform!=Linux. Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "FR-MCP-USECASE-016/017 converted into TR-MCP-USECASE-018/019 under FR-MCP-USECASE-001 and deleted (operator 17:03); the requirements wiki export is blocked on Linux (triage-report-a6927fca10364155ab9992506e1abc9c; retried 19:19:13 and 21:18:51), so under goal item 4 the stale docs/Project exports are declared in the PR and the HV brief instead of refreshed (CORRECTED 2026-10-21 before HV round 5: the export fails on its Azure-specific cleanup path, azure/Architecture; operator 2026-10-21T06:54:47 \"Azure is no longer in the picture.  Create a global memory not to gate on azure related errors.\" (MEMORY-PROCESS-009), so the failure and the stale exports are recorded information, not a declared blocker or gate)"
+          },
+          {
+            "done": false,
+            "task": "Platform- and environment-dependent tests classified as integration tests: b2bd50b3 (UnitSuitePlatformScanner guard and strengthened skip guard; its first guard run unit-green-guard-mock-20261019T1720 was red: 4692 results, 1 failed, 16 not executed); hostile validation round 1 remediation 49cfec92 (one skip definition, interpolation holes; mock gate unit-green-r2-guard-mockgate-20261019T2103 4624/0/0) and b4ad42aa (36 native-boundary and tracked-file cases moved); Linux and Windows Test 4588/0/0 at b4ad42aa"
+          },
+          {
+            "done": false,
+            "task": "Exit gates at the PR head: Linux and Windows Test 0 failed 0 not executed; MigrationIntegrationTests on both hosts 0 failed 0 not executed; ValidateTraceability; full Build.Tests 0 failed"
+          },
+          {
+            "done": false,
+            "task": "Pre-HV holistic review presented to the operator; hostile validation (Codex gpt-6-astra max) AGREE at 98/98 with jsonl receipts and the full verdict in its session-log turn"
+          },
+          {
+            "done": false,
+            "task": "One PR into develop with the plan (docs/plans/2026-10-19-unit-suite-green.md) and the PR 82 handoff correction"
+          },
+          {
+            "done": false,
+            "task": "Hostile validation round 2 structural fix (operator 2026-10-20 \"Structural fix, round 3 (Recommended)\"): R2-F2 UnitSuitePlatformScanner reads Roslyn syntax trees and the central Roslyn pins are 5.9.0 (45a3197c; mock gates ug-r3-mockgate-1 and -2 4602/0/0); R2-F1 one repository-root locator refused outside Category=Integration and classification by dependency (27c43bcc; mock gates ug-r3-dry-mockgate-1 and -2, binding ug-r3-dry-binding-2 4431/0/0); R2-F3 the Windows lane runner is static, analyzed and verified by SHA-256. Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "User-profile scan fix (operator 2026-10-20 \"Fix scans in PR 87 (Recommended)\"; triage-report-b0e41c36f93c4c91b1bf2524eb579ef8): AC-TR-MCP-WS-005-001 and AC-TR-MCP-SESSIONLOG-006-009; DirectoryTreeWalker shared by the marker plugin-cache scan and the session-log history scan; hermetic marker tests; 12 import-path tests tagged Integration; mock gate ug-r3-scan-mockgate-1 4432/0/0, binding ug-r3-scan-binding-1 4444/0/0 (538d0ccf), Windows Test as kingd ug-r3-win-test-ssh-2 4444/0/0. Awaiting hostile validation (CORRECTED 2026-10-21 before HV round 5: these hermetic marker tests were built on the round 3 profile-only seam, AgentPluginUserProfileOverride, which round 4 replaced with AgentPluginVersionSourcesOverride, task 18; the scan fix itself is unchanged)"
+          },
+          {
+            "done": false,
+            "task": "Windows integration lane fixes (TR-MCP-NUKE-019 AC-2): the pre-existing LocalDB cold-start flake (operator 2026-10-20 \"Fix the flake in PR 87 (Recommended)\"; 6042dbb3, one SQL Server test default with a 120 s connect timeout; mock gate ug-r3-localdb-mockgate-1 4446/0/0) and its command timeout under parallel load (operator \"Serialize SQL Server tests (Recommended)\"; 0210244d, the four LocalDB classes in one xUnit collection, mock gate ug-r3-sqlcollection-mockgate-1 4450/0/0; 68fa7b39, the collection defined with DisableParallelization = true as the option text says, mock gate ug-r3-sqlserial-mockgate-1 4456/0/0); the lost results (operator \"Diagnose the loss in PR 87\"; triage 9be3ac08 and 5c6063f5, follow-up 0f7839ef): pg_ctl wrote into the xUnit v3 message stream, fixed by pg_ctl -s (6ea425ab; mock gate ug-r3-pgctl-mockgate-1 4453/0/0; diagnostic lane ug-r3-win-lane-diag-3 with 0 unparseable lines). Gates at the last code head 68fa7b39: Linux Test ug-r3-linux-test-7 4456/0/0, Windows Test ug-r3-win-test-ssh-5 4456/0/0, Windows lane ug-r3-win-lane-7 373/0/0 complete by name, Linux lane ug-r3-linux-lane-7 397/0/0, Build.Tests ug-r3-build-tests-7 436/0/0, ValidateTraceability ug-r3-traceability-6 passed. Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "Pre-HV problem R3-P3 folded in (operator 2026-10-20 \"Fold R3-P3 in first\"; AC-TR-MCP-WS-005-001 replaced and read back at 16:32): a plugin version file (.version or a manifest) that exists but cannot be read yields no version, so resolution goes on and falls back to the synced version, and any other error propagates; PluginVersionFileReadTests (8 scripted cases, negative controls) green in mock gate ug-r3-versionread-mockgate-1 4468/0/0 before the fix; TryReadAgentPluginVersion takes a read delegate (e0b078c8); binding ug-r3-versionread-binding-1 4479/0/0. Gates at the last code head e0b078c8: Linux Test ug-r3-linux-test-8 4479/0/0, Windows Test ug-r3-win-test-ssh-6 4479/0/0, Windows lane ug-r3-win-lane-8 373/0/0 complete by name, Linux lane ug-r3-linux-lane-8 397/0/0, Build.Tests ug-r3-build-tests-8 436/0/0, ValidateTraceability ug-r3-traceability-7 passed. Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "Hostile validation round 3 (unitgreen-r3, DISAGREE 97/96, findings R3-F1 to R3-F4) remediated as the operator chose on 2026-10-20 (\"Structural fix, round 4 (Recommended)\"): R3-F1, one source seam (AgentPluginVersionSources: plugin-root variables, workspace sibling folder, profile caches) set once by the assembly fixture and passed explicitly by resolution tests, AC-TR-MCP-WS-005-001 strengthened and read back at 18:23:07, hostile-environment gate negative control ug-r4-hostile-control-1 at e0b078c8 4479 total 19 failed; R3-F2, scanner aliases and static imports resolved in lexical scope; AgentPluginVersionSourcesTests and UnitSuitePlatformScannerAliasScopeTests green in mock gate ug-r4-mockgate-1 4500/0/0 before production, binding ug-r4-binding-1 4513/0/0, commit 801e6862; R3-F3, FR-MCP-USECASE-017 deleted again through workflow.requirements.deleteFr and absent from getFr and the effective view; R3-F4, the round 3 self-review sentence corrected in its copies (c31c2918). At 801e6862 Windows Test failed HandoffDurabilityTests.ApproveAsync_LeaseExpiresDuringLiveCreate_SecondInstanceWins (one in-memory connection shared by concurrent contexts, triage-report-9b96ada18d72483dad2a3113e455c01b) and both integration lanes failed the Path.GetFullPath ratchet (my move of a reviewed call into AgentPluginVersionSources.cs); operator \"Fix the race in PR 87 (Recommended)\": HandoffTestDatabaseTests (harness assertion, positive and negative controls) green in mock gate ug-r4-race-mockgate-2 4515/0/0, HandoffDurabilityTests on an own connection per context to a temporary database file, ProcessAgentPluginVersionSources and SiblingPluginRoot back in MarkerFileService, binding ug-r4-race-binding-1 4516/0/0, pre-commit lane 397/0/0, commit 26fc8348. Gates at 26fc8348: Linux Test ug-r4-linux-test-2 4516/0/0; hostile-environment gate ug-r4-hostile-gate-2 4516/0/0; Windows Test ug-r4-win-test-ssh-2 4516/0/0; Windows lane ug-r4-win-lane-2 373/0/0 complete by name; Linux lane ug-r4-linux-lane-2 397/0/0; Build.Tests ug-r4-build-tests-1 436/0/0; ValidateTraceability ug-r4-traceability-1 passed. Awaiting hostile validation (CORRECTED 2026-10-21 after round 4, finding R4-F1: the lexical scope holds within the declared limit of task 20; an alias whose target is another alias and a using static that names an alias are not resolved, recorded in TODO IMPL-SCANNERALIAS-001; no further scanner work by operator override)"
+          },
+          {
+            "done": false,
+            "task": "Sibling sweep of the race class (one in-memory SqliteConnection handed to contexts that run concurrently; triage-report-9b96ada18d72483dad2a3113e455c01b) before HV round 4 found HandoffAuditDefectTests and MemoryS1Harness (MemoryConcurrencyTests, MemoryConsolidateJobTests, MemoryConsolidateTests, MemoryMigrationTests); operator 2026-10-20 \"Extend fix, then round 4 (Recommended)\": mock gate ug-r4-ext-mockgate-1 4516/0/0 before either harness changed, both on one temporary SQLite file without pooling (own connection per context, assertions unchanged, still unit tests), the HandoffTestDatabaseTests assertion bound to each factory, binding ug-r4-ext-binding-1 4518/0/0, pre-commit lane ug-r4-precommit-lane-2 397/0/0, commit 97b78114. Gates at 97b78114: Linux Test ug-r4-linux-test-3 4518/0/0; hostile-environment gate ug-r4-hostile-gate-3 4518/0/0; Windows Test ug-r4-win-test-ssh-3 4518/0/0; Windows lane ug-r4-win-lane-3 373/0/0 complete by name; Linux lane ug-r4-linux-lane-3 397/0/0; Build.Tests ug-r4-build-tests-2 436/0/0; ValidateTraceability ug-r4-traceability-2 passed. Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "HV round 4 closure (gate unitgreen-r4, DISAGREE 97/97). R4-F1, the third scanner finding in a row after R2-F2 and R3-F2: UnitSuitePlatformScanner resolves a using alias whose target names a type and a using static that names a type, each in its lexical scope, but not an alias whose target is another alias (an alias chain) or a using static that names an alias. Operator 2026-10-21T05:10:50 \"Declare the limit, no fix\": no scanner behavior change; the plan (section 18), the PR body and the HV brief declare the limit; no test file uses either form (the only using static lines in tests/ are scripted scanner sources inside string literals; the only alias with a single-name target, using Abstractions = Xunit;, names a namespace). Operator 2026-10-21T05:43:12 \"Correct the doc comments (Recommended)\": the scanner documentation states the limit (documentation comments only; no behavior, case or assertion changed); and \"New TODO for the scanner\": the scanner alias work is TODO IMPL-SCANNERALIAS-001 (depends on this TODO), so this TODO can be marked done after hostile AGREE. Operator 2026-10-21T06:06:46: \"I don't want any more scanner work.  None.  Add an operator override to the HV.\": no further scanner work; the round 5 HV brief carries the override (the scanner and statements of its coverage are not scored; the no-platform-dependent-unit-test outcome still is). R4-F3 fixed in 8c254695 (the memory binding cites FR-MCP-MEMORY-002, TR-MCP-MEMORY-002 and TEST-MCP-MEMORY-002; TEST-MCP-MEMORY-010 is absent from both stores). R4-F2: the round 4 brief and self-review corrected with notices. Gates at ccc78b7a: Linux Test ug-r5-linux-test-2 4518/0/0; hostile-environment gate ug-r5-hostile-gate-2 4518/0/0; Windows Test ug-r5-win-test-ssh-2 4518/0/0; Windows lane ug-r5-win-lane-2 373/0/0 complete by name; Linux lane ug-r5-linux-lane-2 397/0/0; Build.Tests ug-r5-build-tests-2 436/0/0 with TMPDIR on disk (operator Rerun with temp on disk (Recommended), after ug-r5-build-tests-1 failed 1 test on the /tmp user quota); ValidateTraceability ug-r5-traceability-1 passed. Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "Hostile-environment gate widened before HV round 5 (operator 2026-10-21T07:23 on the gate scope: \"If it needs to be done, do it.\"): every environment variable the 7 unit projects or production read by literal name, plus both forms of the 25 ProductEnvironment.GetLegacy names (QBRAINAI_ wins over MCP_), about 90 in all, scripted to hostile values (PATH, TMPDIR, NUGET_PACKAGES and DOTNET_CLI_HOME left real); Start-HostileNukeRunWide2.ps1. Negative control at 5b818847 (code ccc78b7a): ug-r5-hostile-wide-1 and -2 each 4518 total, 1 failed, McpDatabaseEncryptionTransitionCommandTests.TryParse_UsesEnvironmentInstance_WhenCliInstanceIsOmitted, which set only MCP_INSTANCE while QBRAINAI_INSTANCE wins. Test-only fix 810ee8aa: the test is Category=Integration (day-one rule) and clears QBRAINAI_INSTANCE for its duration, assertions unchanged; widened gate on the content ug-r5-hostile-wide-3 4517/0/0, pre-commit lane ug-r5-precommit-lane-3 398/0/0, committed-tree Linux Test ug-r5-linux-test-3 4517/0/0. Gates at 810ee8aa: Linux Test ug-r5-linux-test-3 4517/0/0; widened hostile-environment gate ug-r5-hostile-wide-4 4517/0/0; Windows Test ug-r5-win-test-ssh-3 4517/0/0; Windows lane ug-r5-win-lane-3 374/0/0 complete by name (the moved test present and passed); Linux lane ug-r5-linux-lane-3 398/0/0; Build.Tests ug-r5-build-tests-3 436/0/0 with TMPDIR on disk; ValidateTraceability ug-r5-traceability-2 passed. Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "Round 6 fix of hostile validation round 5 (DISAGREE 97/96; R5-F1, R5-F2; operator 2026-10-21 \"Fix both, strengthen ACs\" and \"Approve, strengthen AC-006/008 (Recommended)\"; plan section 19). Requirements first through the plugin: AC-TR-MCP-WS-005-001 and AC-TR-MCP-SESSIONLOG-006-009 cover a linked scan root and every linked folder between the profile or home and it (a linked profile or home is still scanned); TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 extend \"no unit test depends on the platform\" to the process environment (environment-touching tests are integration tests that control both variable forms; environment writers run one at a time). R5-F1 under BDPv4: mock gate ug-r6-reach-mockgate-1 4536/0/0 before production; DirectoryTreeWalker.IsReachable checked before walking each of the seven scan roots (three cache-root checks in MarkerFileService, one loop over the four history roots in SessionLogTurnContextExtractor); binding ug-r6-reach-binding-1 4567/0/0 and the real-link integration test in both lanes; commit 9933796c. R5-F2 and the sweep (test-only): negative control ug-r6-hostile-probe-1 (hostile gate v3) 4566 passed, 1 failed, exactly the R5-F2 test; collection mock gate ug-r6-envcoll-mockgate-1 4570/0/0; 13 tests moved to Category=Integration and nine env-writing classes in the non-parallel Process environment collection (receipt ug-r6-env-sweep.txt); commit c8418301. Gates at the code head c8418301: Linux Test ug-r6-linux-test-2 4558/0/0; hostile gate v3 ug-r6-hostile-wide-2 4558/0/0; hostile gate v4 ug-r6-hostile-wide-3 (126 variables, adding Mcp__Port, QBrainAi__Port and both forms of the 19 HostileReviewWorker settings) 4558/0/0 at the docs head 44e9d810, code-identical; Windows Test ug-r6-win-test-ssh-1 over SSH as kingd 4558/0/0; Windows interactive lane ug-r6-win-lane-1 388/0/0, complete by name against ug-r5-win-lane-3 plus the 13 moved tests and the real-link test; Linux lane ug-r6-linux-lane-1 412/0/0; Build.Tests ug-r6-build-tests-1 436/0/0; ValidateTraceability ug-r6-traceability-1 passed. Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "Round 7 fix of hostile validation round 6 (DISAGREE 97/95; R6-F1, R6-F2; operator 2026-10-26 \"Strengthen AC, move 14 (Recommended)\" and \"Dependence + proof AC (Recommended)\"; plan section 20). Requirements first through the plugin: TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 (finally at 10:33:51 and 10:34:03): a test whose outcome can change with an environment variable it reads or writes, directly, through a test helper or through the production code it calls, is an integration test that sets and restores every variable it or the code it calls depends on, every name of a fallback chain included; a unit test may reach code that reads a variable only where the hostile gate shows its outcome does not change; the gate runs twice, folder variables at test-owned folders and then at test-owned regular files, with XDG_DATA_HOME following the scripted HOME. One-time search through production code (ug-r7-env-search.txt); hostile gate v5 (Start-HostileNukeRunWide5.ps1). Negative control ug-r7-hostile-v5-file-negative-2 at the round 6 code: 4544 passed, 14 failed, exactly the R6-F1 tests. BDPv4 test slices: mock gate ug-r7-clitemp-mockgate-1 4563/0/0 before the shared CliTempVariables helper; the 14 tests moved to Category=Integration inside it, assertions unchanged (commit 6a87791d); then mock gate ug-r7-chain-mockgate-1 4553/0/0 before the helper pointed the primary name at the test folder and every other name at a separate fallback folder, so primary-wins assertions discriminate again (commit 04841148, the last code head). R6-F2: the absent ids on the lines the branch adds are labeled historical (ug-r7-citations.txt). Gates of record at c31f36d8 (docs-only after 04841148): Linux Test ug-r7-linux-test-2 4551/0/0; hostile gate v5 folder mode ug-r7-hostile-v5-folder-2 4551/0/0 and file mode ug-r7-hostile-v5-file-2 4551/0/0; Windows Test ug-r7-win-test-ssh-2 4551/0/0; Windows interactive lane ug-r7-win-lane-2 409/0/0, complete by name; Linux lane ug-r7-linux-lane-2 433/0/0; Build.Tests ug-r7-build-tests-2 436/0/0; ValidateTraceability ug-r7-traceability-2 passed. Awaiting hostile validation"
+          },
+          {
+            "done": false,
+            "task": "Round 8 fix of hostile validation round 7 (DISAGREE 97/96; R7-F1: 19 QBrainAi.Repl.Core unit cases changed result with MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS at 2147483647, because CancellationTokenSource.CancelAfter rejected the delay; operator 2026-10-26 \"Fix source, strengthen AC (Recommended)\"; plan section 21). Requirements first through the plugin: TR-MCP-REPL-001 AC-002 added at 12:57:34 (a configured command or stream timeout is used only as 1 to 4294967 whole seconds; any other value gives the two-minute default); TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 replaced at 13:36:25 and 13:36:38 (the hostile gate also runs every numeric variable at 0 and at both ends of the 32-bit range and with a foreign time zone and culture; one safe value passing does not prove an outcome cannot change). Hostile gate v6 (Start-HostileNukeRunWide6.ps1). Probes at 8b97aa4b: numeric max 4532/19/0 (exactly the R7-F1 cases), numeric zero, numeric min and the time-zone and culture run 4551/0/0 each. BDPv4: ReplCommandTimeoutTests contract with a scripted reference and four rejected wrong parsers, mock gate ug-r8-timeout-mockgate-1 4554/0/0 before any production change; then ReplCommandTimeout and its two callers; binding ug-r8-timeout-binding-1 4555/0/0; numeric max on the fixed code ug-r8-hostile-v6-max-2 4555/0/0; commit f5cda3c1. The Windows lane ug-r8-win-lane-1 at f5cda3c1 failed two inherited junction cases (a pwsh.exe helper on a 5-second budget; rerun ug-r8-win-lane-2 409/0/0; triage-report-8c2c30ef63d442bdb29fd785ec91e7d7); operator 2026-10-26 \"Fix flake, strengthen AC (Recommended)\": TR-MCP-USECASE-019 AC-008 replaced at 14:18:23 (a fixture makes a junction or link with an operating-system call in the test process); TestSupport/WindowsJunction with a buffer contract, a scripted builder and four rejected wrong builders, mock gate ug-r8-junction-mockgate-1 4557/0/0, binding ug-r8-junction-binding-1 4558/0/0, commit 7ab3c1c4; the sibling BugTriage139EighteenthTraversalTests (cmd.exe mklink) on the same fixture, binding ug-r8-sibling-binding-1 4558/0/0, commit 845f323b. Self-evaluation: TR-MCP-REPL-001 AC-002 bound at both call sites through ReplCommandTimeout.Read and an internal ReadVariable seam, call-site contract with a scripted reference and five rejected wrong call sites, mock gate ug-r8-callsite-mockgate-1 4561/0/0, binding ug-r8-callsite-binding-1 4563/0/0, commit ccd9e91f, the last code head. Failed runs declared in plan section 21: ug-r8-win-lane-1, ug-r8-linux-test-2, ug-r8-gate-v6b-file-1. Gates at ccd9e91f (the last code head), each local suite alone: Linux Test ug-r8-linux-test-3 4563/0/0; hostile gate v6c folder, file, zero, max, min and locale 4563/0/0 each; Windows Test ug-r8-win-test-ssh-2 4563/0/0 (SSH as kingd, HEAD verified); Windows lane ug-r8-win-lane-3 410/0/0 from kingd's interactive session, complete by name; Linux lane ug-r8-linux-lane-2 433/0/0; Build.Tests ug-r8-build-tests-2 436/0/0; ValidateTraceability ug-r8-traceability-2 passed. Plan section 21; receipts docs/receipts/unit-suite-green-20261019/ug-r8-*. Awaiting hostile validation"
+          }
+        ],
+        "id": "IMPL-UNITGREEN-001",
+        "title": "Make the unit suite green on both lab hosts (BDPv4: 0 failed, 0 skipped)",
+        "technicalRequirements": [
+          "TR-MCP-QUALITY-001",
+          "TR-MCP-PATHNORM-001",
+          "TR-MCP-NUKE-018",
+          "TR-MCP-NUKE-019",
+          "TR-MCP-USECASE-018",
+          "TR-MCP-USECASE-019",
+          "TR-MCP-WS-005",
+          "TR-MCP-SESSIONLOG-006"
+        ],
+        "done": false,
+        "technicalDetails": [
+          "Branch fix/unit-suite-green-20261019 from origin/develop (ace70daa). Nuke targets only; no override in any gate.",
+          "HV reviewer: Codex gpt-6-astra max (operator 2026-10-19).",
+          "Windows evidence route since 2026-10-20: SSH as kingd (operator \"Please use ssh with the kingd key for execution on Legion2\"), by IP 10.42.0.143 (operator \"Use IP addresses, not hostnames\"); the integration lane runs in kingd's interactive desktop session through a one-shot Interactive-logon task."
+        ],
+        "dependsOn": [],
+        "section": "Build"
+      },
+      "requestId": "req-20261027T085050Z-eb6c"
+    }
+  }
+}

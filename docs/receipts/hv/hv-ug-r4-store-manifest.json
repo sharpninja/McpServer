@@ -1,0 +1,198 @@
+[
+  {
+    "Name": "todo",
+    "Method": "workflow.todo.get",
+    "StartedLocal": "2026-10-20T21:57:43",
+    "Success": true,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-todo.txt"
+  },
+  {
+    "Name": "effective",
+    "Method": "workflow.requirements.effective",
+    "StartedLocal": "2026-10-20T21:57:45",
+    "Success": true,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-effective.txt"
+  },
+  {
+    "Name": "FR-MCP-USECASE-016",
+    "Method": "workflow.requirements.getFr",
+    "StartedLocal": "2026-10-20T21:57:49",
+    "Success": false,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-FR-MCP-USECASE-016.txt"
+  },
+  {
+    "Name": "FR-MCP-USECASE-017",
+    "Method": "workflow.requirements.getFr",
+    "StartedLocal": "2026-10-20T21:57:50",
+    "Success": false,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-FR-MCP-USECASE-017.txt"
+  },
+  {
+    "Name": "FR-MCP-PATHNORM-001",
+    "Method": "workflow.requirements.getFr",
+    "StartedLocal": "2026-10-20T21:57:52",
+    "Success": true,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-FR-MCP-PATHNORM-001.txt"
+  },
+  {
+    "Name": "FR-MCP-BUILD-001",
+    "Method": "workflow.requirements.getFr",
+    "StartedLocal": "2026-10-20T21:57:53",
+    "Success": true,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-FR-MCP-BUILD-001.txt"
+  },
+  {
+    "Name": "FR-MCP-USECASE-001",
+    "Method": "workflow.requirements.getFr",
+    "StartedLocal": "2026-10-20T21:57:54",
+    "Success": true,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-FR-MCP-USECASE-001.txt"
+  },
+  {
+    "Name": "FR-MCP-018",
+    "Method": "workflow.requirements.getFr",
+    "StartedLocal": "2026-10-20T21:57:56",
+    "Success": true,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-FR-MCP-018.txt"
+  },
+  {
+    "Name": "FR-MCP-SESSIONLOGCTX-001",
+    "Method": "workflow.requirements.getFr",
+    "StartedLocal": "2026-10-20T21:57:57",
+    "Success": true,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-FR-MCP-SESSIONLOGCTX-001.txt"
+  },
+  {
+    "Name": "TR-MCP-NUKE-019",
+    "Method": "workflow.requirements.getTr",
+    "StartedLocal": "2026-10-20T21:57:58",
+    "Success": true,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-TR-MCP-NUKE-019.txt"
+  },
+  {
+    "Name": "TR-MCP-USECASE-018",
+    "Method": "workflow.requirements.getTr",
+    "StartedLocal": "2026-10-20T21:58:00",
+    "Success": true,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-TR-MCP-USECASE-018.txt"
+  },
+  {
+    "Name": "TR-MCP-USECASE-019",
+    "Method": "workflow.requirements.getTr",
+    "StartedLocal": "2026-10-20T21:58:01",
+    "Success": true,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-TR-MCP-USECASE-019.txt"
+  },
+  {
+    "Name": "TR-MCP-QUALITY-001",
+    "Method": "workflow.requirements.getTr",
+    "StartedLocal": "2026-10-20T21:58:03",
+    "Success": true,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-TR-MCP-QUALITY-001.txt"
+  },
+  {
+    "Name": "TR-MCP-PATHNORM-001",
+    "Method": "workflow.requirements.getTr",
+    "StartedLocal": "2026-10-20T21:58:04",
+    "Success": true,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-TR-MCP-PATHNORM-001.txt"
+  },
+  {
+    "Name": "TR-MCP-NUKE-018",
+    "Method": "workflow.requirements.getTr",
+    "StartedLocal": "2026-10-20T21:58:05",
+    "Success": true,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-TR-MCP-NUKE-018.txt"
+  },
+  {
+    "Name": "TR-MCP-WS-005",
+    "Method": "workflow.requirements.getTr",
+    "StartedLocal": "2026-10-20T21:58:07",
+    "Success": true,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-TR-MCP-WS-005.txt"
+  },
+  {
+    "Name": "TR-MCP-SESSIONLOG-006",
+    "Method": "workflow.requirements.getTr",
+    "StartedLocal": "2026-10-20T21:58:08",
+    "Success": true,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-TR-MCP-SESSIONLOG-006.txt"
+  },
+  {
+    "Name": "TEST-MCP-USECASE-019",
+    "Method": "workflow.requirements.getTest",
+    "StartedLocal": "2026-10-20T21:58:09",
+    "Success": true,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-TEST-MCP-USECASE-019.txt"
+  },
+  {
+    "Name": "TEST-MCP-USECASE-020",
+    "Method": "workflow.requirements.getTest",
+    "StartedLocal": "2026-10-20T21:58:11",
+    "Success": true,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-TEST-MCP-USECASE-020.txt"
+  },
+  {
+    "Name": "TEST-MCP-PATHNORM-001",
+    "Method": "workflow.requirements.getTest",
+    "StartedLocal": "2026-10-20T21:58:12",
+    "Success": true,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-TEST-MCP-PATHNORM-001.txt"
+  },
+  {
+    "Name": "mapping-FR-MCP-BUILD-001",
+    "Method": "workflow.requirements.listMappings",
+    "StartedLocal": "2026-10-20T21:58:13",
+    "Success": true,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-mapping-FR-MCP-BUILD-001.txt"
+  },
+  {
+    "Name": "mapping-FR-MCP-USECASE-001",
+    "Method": "workflow.requirements.listMappings",
+    "StartedLocal": "2026-10-20T21:58:15",
+    "Success": true,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-mapping-FR-MCP-USECASE-001.txt"
+  },
+  {
+    "Name": "mapping-FR-MCP-PATHNORM-001",
+    "Method": "workflow.requirements.listMappings",
+    "StartedLocal": "2026-10-20T21:58:16",
+    "Success": true,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-mapping-FR-MCP-PATHNORM-001.txt"
+  },
+  {
+    "Name": "mapping-FR-MCP-018",
+    "Method": "workflow.requirements.listMappings",
+    "StartedLocal": "2026-10-20T21:58:17",
+    "Success": true,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-mapping-FR-MCP-018.txt"
+  },
+  {
+    "Name": "mapping-FR-MCP-SESSIONLOGCTX-001",
+    "Method": "workflow.requirements.listMappings",
+    "StartedLocal": "2026-10-20T21:58:19",
+    "Success": true,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-mapping-FR-MCP-SESSIONLOGCTX-001.txt"
+  },
+  {
+    "Name": "mapping-FR-MCP-USECASE-016",
+    "Method": "workflow.requirements.listMappings",
+    "StartedLocal": "2026-10-20T21:58:20",
+    "Success": true,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-mapping-FR-MCP-USECASE-016.txt"
+  },
+  {
+    "Name": "mapping-FR-MCP-USECASE-017",
+    "Method": "workflow.requirements.listMappings",
+    "StartedLocal": "2026-10-20T21:58:21",
+    "Success": true,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-mapping-FR-MCP-USECASE-017.txt"
+  },
+  {
+    "Name": "history",
+    "Method": "workflow.sessionlog.queryHistory",
+    "StartedLocal": "2026-10-20T21:58:23",
+    "Success": true,
+    "Path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-store-history.txt"
+  }
+]

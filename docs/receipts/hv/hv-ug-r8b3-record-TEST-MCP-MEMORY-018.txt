@@ -1,0 +1,15 @@
+Plugin command failed with exit code 1.
+type: error
+payload:
+  requestId: req-20261029T033817Z-103f
+  code: not_found
+  message: TEST 'TEST-MCP-MEMORY-018' not found.
+  retryable: false
+  details:
+    methodName: workflow.requirements.getTest
+    exceptionType: McpServer.Client.McpNotFoundException
+    reason: not_found
+
+---
+
+

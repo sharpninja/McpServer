@@ -59,6 +59,8 @@ public sealed class SessionLogServiceTurnContextTests : IDisposable
     }
 
     /// <summary>AC-TR-MCP-SESSIONLOG-006-003: import with omitted fields extracts then persists.</summary>
+    /// <remarks>Integration: uses the real import extractor and its read-only profile scan without asserting profile contents (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task SubmitAsync_ImportMissingFields_ExtractsFromTurnText()
     {
@@ -343,17 +345,22 @@ public sealed class SessionLogServiceTurnContextTests : IDisposable
         Assert.Equal(1, result.TotalCount);
     }
 
-    /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-005: ~/ query expands then exact-matches.</summary>
+    /// <summary>
+    /// AC-FR-MCP-SESSIONLOGCTX-001-005: the same mock-gated exact/tilde filter assertions bind the real service with
+    /// an explicit owned home and in-memory storage; no process profile or environment supplies expected data.
+    /// </summary>
     [Fact]
     public async Task QueryAsync_HomeRelativeFilter_ExpandsThenExactMatches()
     {
         var sessionId = "Cursor-20260304T113901Z-ctx-home";
         var dto = CreateSession(sessionId);
-        var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-        dto.Turns!.First().PlanFile = Path.Combine(home, "plans", "live.md").Replace('\\', '/');
-        await _sut.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        var result = await _sut.QueryAsync(new SessionLogQueryRequest { PlanFile = "~/plans/live.md" }, TestContext.Current.CancellationToken).ConfigureAwait(true);
-        Assert.Equal(1, result.TotalCount);
+        dto.Turns!.First().PlanFile = "/fixture/home/plans/live.md";
+        var owned = new SessionLogService(_db, NullLogger<SessionLogService>.Instance, Substitute.For<IChangeEventBus>(),
+            new WorkspaceContext { WorkspacePath = WorkspacePath }, submitOptions: null,
+            normalizePlanFilter: path => SessionLogTurnContextValidator.NormalizePlanFile(path, "/fixture/home"));
+        await owned.SubmitAsync(dto, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        await SessionLogOwnedHomeFilterContractTests.AssertOwnedHomeFilterAsync(async path =>
+            (await owned.QueryAsync(new SessionLogQueryRequest { PlanFile = path }, TestContext.Current.CancellationToken).ConfigureAwait(true)).TotalCount).ConfigureAwait(true);
     }
 
     private static UnifiedSessionLogDto CreateSession(string sessionId)

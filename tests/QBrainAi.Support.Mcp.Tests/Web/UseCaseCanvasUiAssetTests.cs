@@ -9,6 +9,8 @@ namespace QBrainAi.Support.Mcp.Tests.Web;
 public sealed class UseCaseCanvasUiAssetTests
 {
     /// <summary>AC-011-1 / AC-T15-1: Palette offers Actor, UseCase, SystemBoundary, Association, Include, Extend.</summary>
+    /// <remarks>Integration: loads the shipped use-case HTML or JavaScript from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Canvas_Palette_OffersRequiredTools()
     {
@@ -18,6 +20,8 @@ public sealed class UseCaseCanvasUiAssetTests
     }
 
     /// <summary>AC-011-2 / AC-011-8: Free canvas element is primary diagram surface.</summary>
+    /// <remarks>Integration: loads the shipped use-case HTML or JavaScript from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Canvas_HasUmlCanvasElement()
     {
@@ -27,6 +31,8 @@ public sealed class UseCaseCanvasUiAssetTests
     }
 
     /// <summary>AC-011-3..7: Editor module exposes place, connect, rename, move, boundary APIs.</summary>
+    /// <remarks>Integration: loads the shipped use-case HTML or JavaScript from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Canvas_EditorScript_ExposesInteractionApis()
     {
@@ -43,6 +49,8 @@ public sealed class UseCaseCanvasUiAssetTests
     }
 
     /// <summary>AC-011-6 / AC-012: Graph layout coordinates serialize to REST body.</summary>
+    /// <remarks>Integration: loads the shipped use-case HTML or JavaScript from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Canvas_Editor_SerializesGraphWithCoordinates()
     {
@@ -54,6 +62,8 @@ public sealed class UseCaseCanvasUiAssetTests
     }
 
     /// <summary>AC-011-9 / AC-T15-2: Save/load via diagram-graph REST only.</summary>
+    /// <remarks>Integration: loads the shipped use-case HTML or JavaScript from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Canvas_AppJs_WiresDiagramGraphRest()
     {
@@ -67,6 +77,8 @@ public sealed class UseCaseCanvasUiAssetTests
     }
 
     /// <summary>AC-T15-1: Canvas editor script is referenced from index.</summary>
+    /// <remarks>Integration: loads the shipped use-case HTML or JavaScript from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Canvas_Index_ReferencesCanvasEditorScript()
     {
@@ -83,14 +95,6 @@ public sealed class UseCaseCanvasUiAssetTests
         return File.ReadAllText(path);
     }
 
-    private static string FindWwwrootFile(string folder, string file)
-    {
-        var candidates = new[]
-        {
-            Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "src", "QBrainAi.Support.Mcp", "wwwroot", folder, file)),
-            Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "wwwroot", folder, file)),
-            Path.Combine("F:", "GitHub", "QBrainAi", "src", "QBrainAi.Support.Mcp", "wwwroot", folder, file),
-        };
-        return candidates.FirstOrDefault(File.Exists) ?? candidates[0];
-    }
+    private static string FindWwwrootFile(string folder, string file) =>
+        QBrainAi.Tests.Shared.TestRepositoryRoot.Combine("src", "QBrainAi.Support.Mcp", "wwwroot", folder, file);
 }

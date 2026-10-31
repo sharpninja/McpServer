@@ -1,0 +1,11 @@
+RECEIPT 2026-10-20T14:53:48 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinUnparseableOutput.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-10-20T14:53:48 directory=C:\Users\kingd\AppData\Local\Temp\vstest-diag-ug-r3-win-lane-diag-3
+FILE log.host.26-10-20_14-48-40_35449_5.txt unparseable=0
+FILE log.host.26-10-20_14-53-08_61913_5.txt unparseable=0
+FILE log.host.26-10-20_14-53-12_94569_5.txt unparseable=0
+FILE log.host.26-10-20_14-53-19_56705_5.txt unparseable=0
+FILE log.host.26-10-20_14-53-23_09605_5.txt unparseable=0
+END 2026-10-20T14:53:48

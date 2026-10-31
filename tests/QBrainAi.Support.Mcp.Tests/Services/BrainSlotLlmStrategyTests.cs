@@ -83,6 +83,8 @@ public sealed class BrainSlotLlmStrategyTests
         Assert.Equal(0.2f, options.Temperature);
     }
 
+    /// <remarks>Integration: reads the live server project file to check its package and project references (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Factory_CreateStrategy_ExistsWithoutNewAgentSdk()
     {
@@ -126,14 +128,7 @@ public sealed class BrainSlotLlmStrategyTests
         Assert.Equal(expectedProjects, projects);
     }
 
-    private static string RepoRoot()
-    {
-        var dir = new DirectoryInfo(AppContext.BaseDirectory);
-        while (dir is not null && !File.Exists(Path.Combine(dir.FullName, "QBrainAi.sln")))
-            dir = dir.Parent;
-        Assert.NotNull(dir);
-        return dir!.FullName;
-    }
+    private static string RepoRoot() => QBrainAi.Tests.Shared.TestRepositoryRoot.Resolve();
 
     private static BrainSlotDefinitionEntity Slot(string role, string providerKind, string endpoint)
         => new()

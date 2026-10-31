@@ -1,0 +1,219 @@
+tests/Shared/TestRepositoryRoot.cs:89:            for (var current = new DirectoryInfo(Path.GetFullPath(startingPoint!)); current is not null; current = current.Parent)
+tests/Shared/TestRepositoryRoot.cs:110:        var root = Path.GetFullPath(candidate);
+tests/Validation.Shared/ValidationAuth.cs:188:                .Select(candidate => Path.GetFullPath(candidate.WorkspacePath))
+tests/Validation.Shared/ValidationAuth.cs:235:            var workspacePath = Path.GetFullPath(workspace.WorkspacePath);
+tests/Validation.Shared/ValidationAuth.cs:407:            return Path.GetFullPath(gitDir);
+tests/Validation.Shared/ValidationAuth.cs:410:        return Path.GetFullPath(Path.Combine(Path.GetDirectoryName(gitFile)!, gitDir));
+tests/Validation.Shared/ValidationAuth.cs:462:        var ancestor = Path.TrimEndingDirectorySeparator(Path.GetFullPath(candidateAncestor));
+tests/Validation.Shared/ValidationAuth.cs:463:        var descendant = Path.TrimEndingDirectorySeparator(Path.GetFullPath(path));
+tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs:51:        var workspacePath = OperatingSystem.IsWindows() ? @"E:\github\McpServer" : "/var/lib/McpServer";
+tests/QBrainAi.TransactionSecurity.IntegrationTests/DurableTransactionSecurityStorageTests.cs:1408:            .UseSqlite($"Data Source={Path.GetFullPath(databasePath)}")
+tests/QBrainAi.PluginIntegration.Tests/PluginIntegrationServerFixtureTests.cs:32:        Assert.StartsWith(Path.GetFullPath(Path.GetTempPath()), Path.GetFullPath(fixture.WorkspacePath), StringComparison.OrdinalIgnoreCase);
+tests/QBrainAi.PluginIntegration.Tests/PluginHostProcessAdapterTests.cs:35:        var pluginRoot = Path.GetFullPath(Path.Combine(parent, scenario.RepositoryName));
+tests/QBrainAi.PluginIntegration.Tests/PluginHostProcessAdapterTests.cs:157:        var pluginRoot = Path.GetFullPath(Path.Combine(parent, scenario.RepositoryName));
+tests/QBrainAi.PluginIntegration.Tests/PluginHostProcessAdapter.cs:191:        var pluginRoot = Path.GetFullPath(Path.Combine(parent, repositoryName));
+tests/QBrainAi.PluginIntegration.Tests/PluginSessionLogWorkflowAdapter.cs:603:                var pluginRoot = Path.GetFullPath(Path.Combine(parent, repositoryName));
+tests/QBrainAi.PluginIntegration.Tests/PluginSessionLogWorkflowAdapter.cs:715:        return Path.Combine(Path.GetFullPath(workspacePath), ".mcpServer", "failsafe");
+tests/QBrainAi.PluginIntegration.Tests/PluginSessionLogWorkflowAdapter.cs:823:        var full = Path.GetFullPath(workspacePath);
+tests/QBrainAi.PluginIntegration.Tests/PluginSessionLogWorkflowAdapterTests.cs:319:        var full = Path.GetFullPath(workspacePath);
+tests/QBrainAi.PluginIntegration.Tests/PluginSessionLogCatalog.cs:48:                    gitDir = Path.GetFullPath(Path.Combine(repositoryRoot, gitDir));
+tests/QBrainAi.Repl.Core.Tests/SessionLogPersistenceStrategyTests.cs:53:        var path = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "turn-failsafe.yaml"));
+tests/QBrainAi.Repl.Core.Tests/SessionLogPersistenceDispatcherTests.cs:20:        var path = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "degraded-turn.yaml"));
+tests/QBrainAi.Repl.Core.Tests/SessionLogPersistenceCoordinatorIsolationTests.cs:54:        var path = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "coord-complete-failsafe.yaml"));
+tests/QBrainAi.Repl.Core.Tests/SessionLogPersistenceCoordinatorIsolationTests.cs:76:        var path = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "coord-should-not-write.yaml"));
+tests/QBrainAi.Repl.Core.Tests/SessionLogPersistenceCoordinatorIsolationTests.cs:93:        var path = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "coord-nonterminal.yaml"));
+tests/Build.Tests/TrimAnalysisWarningInventoryTests.cs:187:        if (!OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.IntegrationTests/TestAuthHelper.cs:24:            ? Path.GetFullPath(repoRoot)
+tests/QBrainAi.Support.Mcp.IntegrationTests/TestAuthHelper.cs:25:            : Path.GetFullPath(Path.Combine(env.ContentRootPath, repoRoot));
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs:346:        Path.GetFullPath(
+tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs:284:                .Select(candidate => Path.GetFullPath(candidate.WorkspacePath))
+tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs:331:            var workspacePath = Path.GetFullPath(workspace.WorkspacePath);
+tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs:455:            ? Path.GetFullPath(gitDir)
+tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs:456:            : Path.GetFullPath(Path.Combine(repoRoot, gitDir));
+tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs:492:        var ancestor = Path.TrimEndingDirectorySeparator(Path.GetFullPath(candidateAncestor));
+tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs:493:        var descendant = Path.TrimEndingDirectorySeparator(Path.GetFullPath(path));
+tests/QBrainAi.Support.Mcp.IntegrationTests/Services/AgentRuntimeScaffoldingTests.cs:27:        var workspacePath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "mcp-agent-runtime-none"));
+tests/QBrainAi.Support.Mcp.IntegrationTests/Services/AgentRuntimeScaffoldingTests.cs:62:                    && request.WorkingDirectory == Path.GetFullPath(workspacePath)
+tests/QBrainAi.Support.Mcp.IntegrationTests/Services/AgentRuntimeScaffoldingTests.cs:101:                    && request.WorkingDirectory == Path.GetFullPath(workspacePath)
+tests/QBrainAi.Support.Mcp.IntegrationTests/Services/AgentRuntimeScaffoldingTests.cs:157:        var workDirectory = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "mcp-branch-direct"));
+tests/QBrainAi.Support.Mcp.IntegrationTests/Services/AgentRuntimeScaffoldingTests.cs:193:        var workDirectory = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "mcp-branch-feature"));
+tests/QBrainAi.Support.Mcp.IntegrationTests/Services/AgentRuntimeScaffoldingTests.cs:244:                         AttributesToSkip = 0
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:46:            OperatingSystem.IsWindows() || OperatingSystem.IsLinux(),
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:62:        var applicableInventory = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:65:        var unsupportedInventory = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:88:            OperatingSystem.IsWindows() ? 11 : 37,
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:101:        if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:158:            var executable = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:161:            IReadOnlyList<string> arguments = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:172:            if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:186:        Path.GetFullPath(
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs:44:        var expected = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs:60:            : OperatingSystem.IsLinux()
+tests/Build.Tests/ServiceUpdateTests.cs:735:            if (!OperatingSystem.IsWindows())
+tests/Build.Tests/ServiceUpdateTests.cs:794:                        var path = Path.GetFullPath(relative, Path.GetPathRoot(Root)!);
+tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs:958:        => Path.TrimEndingDirectorySeparator(Path.GetFullPath(path));
+tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs:34:        Assert.StartsWith(Path.GetFullPath(tempRoot), Path.GetFullPath(profile), StringComparison.Ordinal);
+tests/Build.Tests/PluginParentResolutionTests.cs:37:        Assert.Equal(Path.GetFullPath(_parent), resolved);
+tests/Build.Tests/DocsSyncG8OverlayTests.cs:84:            path => Directory.Exists(Path.IsPathRooted(path) ? path : Path.GetFullPath(Path.Combine(configDir, path))));
+tests/QBrainAi.Support.Mcp.Tests/UnitTestPaths.cs:13:    public static string Root { get; } = OperatingSystem.IsWindows() ? @"Q:\__mcp_unit_test__" : "/__mcp_unit_test__";
+tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/WorkspaceControllerTests.cs:25:        var key = EncodeKey(Path.GetFullPath(path));
+tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/WorkspaceControllerTests.cs:122:        var key = EncodeKey(Path.GetFullPath(path));
+tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/WorkspaceControllerTests.cs:143:        var key = EncodeKey(Path.GetFullPath(path));
+tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/WorkspaceControllerTests.cs:160:        var key = EncodeKey(Path.GetFullPath(path));
+tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/WorkspaceControllerTests.cs:180:        var key = EncodeKey(Path.GetFullPath(path));
+tests/Build.Tests/BuildTargetTests.cs:231:                Path.GetFullPath(pluginRoot),
+tests/Build.Tests/BuildTargetTests.cs:232:                Path.GetFullPath(roots[0].ToString()),
+tests/Build.Tests/BuildTargetTests.cs:259:                .Select(path => Path.GetFullPath(path.ToString()))
+tests/Build.Tests/BuildTargetTests.cs:263:            Assert.Contains(Path.GetFullPath(claudeRoot), roots, StringComparer.OrdinalIgnoreCase);
+tests/Build.Tests/BuildTargetTests.cs:264:            Assert.Contains(Path.GetFullPath(codexRoot), roots, StringComparer.OrdinalIgnoreCase);
+tests/Build.Tests/BuildTargetTests.cs:638:                                 AttributesToSkip = 0,
+tests/QBrainAi.Support.Mcp.Tests/Configuration/ConfigurablePathIntegrationTests.cs:39:        var expectedPath = Path.GetFullPath(relativePath);
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:247:    [InlineData("Assert.SkipUnless(OperatingSystem.IsWindows(), \"w\");", "1")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:248:    [InlineData("Assert.SkipWhen(true, \"w\");", "1")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:249:    [InlineData("Assert.Skip(\"s\");", "1")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:250:    [InlineData("[Fact(Skip = \"later\")]\npublic void A() { }", "1")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:251:    [InlineData("[Theory(DisplayName = \"x\", Skip = \"later\")]\npublic void A(int x) { }", "1")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:252:    [InlineData("throw new SkipException(\"x\");", "1")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:254:    [InlineData("[Fact(\n    Skip = \"later\")]\npublic void A() { }", "1")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:255:    [InlineData("[Fact]\npublic void A() { }\n[Theory(DisplayName = nameof(B),\n    SkipUnless = nameof(Ready),\n    Skip = \"x\")]\npublic void B(int x) { }", "3")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:256:    [InlineData("[Xunit.Fact(Skip = \"later\")]\npublic void A() { }", "1")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:257:    [InlineData("[global::Xunit.FactAttribute(Skip = \"x\")]\npublic void A() { }", "1")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:258:    [InlineData("[Trait(\"a\", \"b\"), Theory(Skip = \"x\")]\npublic void A(int x) { }", "1")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:259:    [InlineData("[Theory]\n[InlineData(1, Skip = \"row\")]\npublic void A(int x) { }", "2")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:261:    [InlineData("[Fact(SkipExceptions = new[] { typeof(InvalidOperationException) })]\npublic void A() { }", "1")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:263:    [InlineData("throw new Xunit.Sdk.SkipException(\"x\");", "1")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:265:    [InlineData("#if WINDOWS\nAssert.Skip(\"w\");\n#endif", "2")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:267:    [InlineData("var text = \"Assert.SkipUnless(true)\";", "")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:268:    [InlineData("// Assert.Skip(\"x\");", "")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:269:    [InlineData("Assert.Skipped(result);", "")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:270:    [InlineData("var name = nameof(SkipException);", "")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:272:    [InlineData("[Fact(DisplayName = \"Skip = later\")]\npublic void A() { }", "")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:273:    [InlineData("[Fact]\npublic void Skip() { var Skip = 1; }", "")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:285:    /// skip attribute, and the pattern used before 2026-10-19 also missed <c>Assert.SkipUnless</c> and
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:286:    /// <c>Assert.SkipWhen</c>; text matching counts a skip that only appears inside a string, which the
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:293:            @"\[(?:Fact|Theory)\s*\([^\]]*\bSkip\s*=|\bSkipException\b|\bAssert\.Skip\b|\bSkippable(?:Fact|Theory)\b",
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:296:            @"\[(?:Fact|Theory)\s*\([^\]]*\bSkip\s*=|\bSkipException\b|\bAssert\s*\.\s*Skip(?:When|Unless)?\b|\bSkippable(?:Fact|Theory)\b",
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:298:        Assert.DoesNotMatch(original, "Assert.SkipUnless(OperatingSystem.IsWindows(), \"w\");");
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:299:        Assert.DoesNotMatch(original, "Assert.SkipWhen(true, \"w\");");
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:300:        foreach (var line in "[Fact(\n    Skip = \"later\")]".Split('\n'))
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:305:        Assert.DoesNotMatch(roundOne, "[Xunit.Fact(Skip = \"later\")]");
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:306:        Assert.Equal(new[] { 1 }, UnitSuitePlatformScanner.FindSkipLines("[Xunit.Fact(Skip = \"later\")]\npublic void A() { }"));
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:307:        Assert.Matches(roundOne, "var text = \"Assert.SkipUnless(true)\";");
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:308:        Assert.Empty(UnitSuitePlatformScanner.FindSkipLines("var text = \"Assert.SkipUnless(true)\";"));
+tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/MultiTenantIntegrationTests.cs:61:        var pathA = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "ws-priority-a"));
+tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/OllamaServerFixture.cs:64:                candidates.Add(Path.Combine(directory.Trim(), OperatingSystem.IsWindows() ? "ollama.exe" : "ollama"));
+tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs:134:        if (!OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs:147:            Assert.Equal(Path.GetFullPath(target), Path.GetFullPath(Assert.IsType<string>(info.LinkTarget)));
+tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunction.cs:63:        var buffer = BuildMountPointBuffer(Path.GetFullPath(targetPath));
+tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs:148:            var temp = Path.GetFullPath(Path.GetTempPath());
+tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs:149:            Assert.StartsWith(temp, Path.GetFullPath(seenFolder), StringComparison.OrdinalIgnoreCase);
+tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs:150:            Assert.StartsWith(temp, Path.GetFullPath(seenFallback), StringComparison.OrdinalIgnoreCase);
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs:226:            gitDir = Path.GetFullPath(Path.Combine(repoRoot, gitDir));
+tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/MarkerRegenerationIntegrationTests.cs:125:        var key = EncodeKey(Path.GetFullPath(_workspacePath));
+tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/MarkerRegenerationIntegrationTests.cs:160:        var key = EncodeKey(Path.GetFullPath(_workspacePath));
+tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/MarkerRegenerationIntegrationTests.cs:186:        var key = EncodeKey(Path.GetFullPath(_workspacePath));
+tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/MarkerRegenerationIntegrationTests.cs:211:        var key = EncodeKey(Path.GetFullPath(_workspacePath));
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:212:        var fileName = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TransactionGatedStdioRoutingTests.cs:58:        var allowedRoot = Path.GetFullPath(
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TransactionGatedStdioRoutingTests.cs:61:        var target = Path.GetFullPath(_workspacePath);
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TransactionGatedStdioRoutingTests.cs:473:        var workspace = Path.GetFullPath(WorkspacePath);
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TransactionGatedStdioRoutingTests.cs:474:        var temporaryRoot = Path.GetFullPath(Path.GetTempPath());
+tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceResolutionMiddlewareTests.cs:42:            // Path.GetFullPath, which re-roots a Windows path under the working directory on a POSIX host.
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:30:            if (OperatingSystem.IsLinux())
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:57:            if (OperatingSystem.IsLinux())
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:529:            OperatingSystem.IsLinux() &&
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs:144:                Path.GetFullPath(candidate),
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs:180:                Path.GetFullPath(alias),
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs:183:                Path.GetFullPath(target),
+tests/QBrainAi.Support.Mcp.Tests/Options/TemplateStorageOptionsPostConfigureTests.cs:49:        var expected = Path.GetFullPath(Path.Combine(dataFolder, "templates", "prompt-templates.yaml"));
+tests/QBrainAi.Support.Mcp.Tests/Options/TemplateStorageOptionsPostConfigureTests.cs:79:        var expected = Path.GetFullPath(Path.Combine(dataFolder, "templates", "instance.yaml"));
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:105:        if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:182:            WorkingDirectory = Path.GetFullPath(workingDirectory),
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:204:        if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs:100:        if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs:127:        else if (OperatingSystem.IsLinux())
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs:181:        var minimumInvocationIncrease = OperatingSystem.IsWindows() ? 1 : 9;
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceWindowsProcess.cs:89:                    Path.GetFullPath(workingDirectory),
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptFixtureInventoryTests.cs:14:        Assert.StartsWith(Path.GetFullPath(AppContext.BaseDirectory), Path.GetFullPath(root), StringComparison.OrdinalIgnoreCase);
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathGetFullPathRatchetContractTests.cs:8:/// <c>IWorkspacePathNormalizer</c> and contain no direct <c>Path.GetFullPath(</c>. Every other file
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathGetFullPathRatchetContractTests.cs:11:/// BDP v4 (plan section 2a): <see cref="WorkspacePathGetFullPathRatchetMockDataTests"/> proves the
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathGetFullPathRatchetContractTests.cs:12:/// evaluation against scripted sources; <see cref="WorkspacePathGetFullPathRatchetRealTests"/> scans
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathGetFullPathRatchetContractTests.cs:15:public abstract class WorkspacePathGetFullPathRatchetContractTests
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathGetFullPathRatchetContractTests.cs:17:    internal const string Marker = "Path.GetFullPath(";
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathGetFullPathRatchetContractTests.cs:113:    /// <summary>Per-file <c>Path.GetFullPath(</c> counts for the sources under test.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathGetFullPathRatchetContractTests.cs:119:    public void IdentityFiles_HaveNoDirectGetFullPath()
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathGetFullPathRatchetContractTests.cs:123:        Assert.True(offenders.Count == 0, "Direct Path.GetFullPath in workspace-identity files:\n" + string.Join('\n', offenders));
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathGetFullPathRatchetContractTests.cs:128:    /// calling Path.GetFullPath without review.
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathGetFullPathRatchetContractTests.cs:138:            "New or increased Path.GetFullPath use. If it resolves a request-supplied workspace path, route it through IWorkspacePathNormalizer; if it is host-native file access, review and update the allowlist:\n" +
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathGetFullPathRatchetContractTests.cs:180:public sealed class WorkspacePathGetFullPathRatchetRealTests : WorkspacePathGetFullPathRatchetContractTests
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathGetFullPathRatchetContractTests.cs:197:public sealed class WorkspacePathGetFullPathRatchetMockDataTests : WorkspacePathGetFullPathRatchetContractTests
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathGetFullPathRatchetContractTests.cs:199:    private const string Call = "var x = Path.GetFullPath(p);\n";
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathGetFullPathRatchetContractTests.cs:226:    /// <summary>A file not on the allowlist that starts calling Path.GetFullPath is reported.</summary>
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityWindowsTests.cs:22:        Assert.True(OperatingSystem.IsWindows());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityWindowsTests.cs:118:        Assert.True(OperatingSystem.IsWindows());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityWindowsTests.cs:181:        Assert.True(OperatingSystem.IsWindows());
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs:19:        OperatingSystem.IsWindows() ? WorkspacePathPlatform.Windows : WorkspacePathPlatform.CaseSensitive;
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs:22:    protected static string NativeSample => OperatingSystem.IsWindows() ? @"C:\svc\.\repo" : "/srv/./repo";
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs:25:    protected static string NativeSampleExpected => OperatingSystem.IsWindows() ? "C:/svc/repo" : "/srv/repo";
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:25:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:63:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:114:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:194:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:245:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:308:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:389:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:500:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:708:        OperatingSystem.IsLinux() &&
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs:43:        var foreign = OperatingSystem.IsWindows() ? "/home/sharpninja/github/McpServer" : @"C:\Users\kingd";
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:28:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:396:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:456:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:566:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:658:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentServiceRuntimeTests.cs:63:        var workspacePath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "agent-service-launch"));
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentServiceRuntimeTests.cs:89:        var workspacePath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "agent-service-banned"));
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentServiceRuntimeTests.cs:100:        _db.OverrideWorkspaceId(Path.GetFullPath("C:/missing-ws"));
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentServiceRuntimeTests.cs:121:        var workspacePath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "agent-service-stop"));
+tests/QBrainAi.Support.Mcp.Tests/Services/AuditedAgentCliClientTests.cs:24:        var workspacePath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), $"audit-ws-{Guid.NewGuid():N}"));
+tests/QBrainAi.Support.Mcp.Tests/Services/AuditedAgentCliClientTests.cs:61:        var workspacePath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), $"audit-stream-ws-{Guid.NewGuid():N}"));
+tests/QBrainAi.Support.Mcp.Tests/Services/EventPublishingServiceTests.cs:95:                e.EntityId == ExpectedWorkspaceKey.Of(Path.GetFullPath(workspacePath))),
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffWorkspacePathsTests.cs:20:    public void Canonicalize_RelativeAndNested_MatchGetFullPath()
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffWorkspacePathsTests.cs:24:        Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(relative)), canonical);
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:62:            if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:84:        if (!OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:98:        var wanted = Path.GetFullPath(directory).TrimEnd(Path.DirectorySeparatorChar);
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:327:            if (!OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:207:            WorkingDirectoryPath = Path.GetFullPath(Path.Combine(workspaceRoot, workingDirectory)),
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:209:            OutputRootPath = Path.GetFullPath(Path.Combine(workspaceRoot, outputRoot)),
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:91:        Assert.Equal(Path.GetFullPath(outputRoot), result.OutputRoot);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:240:        Assert.Equal(Path.GetFullPath(Path.Combine(_workspaceRoot, "docs", "docfx")), workflow.WorkingDirectoryPath);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:241:        Assert.Equal(Path.GetFullPath(Path.Combine(_workspaceRoot, "docs", "docfx", "_site")), workflow.OutputRootPath);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:273:        var expectedNativeError = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:518:            if (!OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:39:        Assert.Equal(Path.GetFullPath(outputRoot), Path.GetFullPath(request.OutputRootPath));
+tests/QBrainAi.Support.Mcp.Tests/Services/TodoBootstrapImporterTests.cs:215:        // GetFullPath so the workspace id stamped by the importer matches the
+tests/QBrainAi.Support.Mcp.Tests/Services/TodoBootstrapImporterTests.cs:217:        // can surface short 8.3 names on Windows; GetFullPath normalizes them.
+tests/QBrainAi.Support.Mcp.Tests/Services/TodoBootstrapImporterTests.cs:218:        var dir = Path.GetFullPath(Path.Combine(_root, name));
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:473:            var directory = Path.GetFullPath(CliBrainSlotChatClient.ResolveTempDirectory());
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:474:            Assert.Equal(Path.GetFullPath(temp), directory);
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:512:            var root = Path.GetFullPath(temp);
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:513:            Assert.StartsWith(root, Path.GetFullPath(promptPath!), StringComparison.OrdinalIgnoreCase);
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:552:            Assert.StartsWith(Path.GetFullPath(temp), Path.GetFullPath(outputPath!), StringComparison.OrdinalIgnoreCase);
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:868:        var directory = Path.GetFullPath(CliBrainSlotChatClient.DefaultSharedTempDirectory());
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:869:        var common = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:75:        (workspace, plugin) => Path.Combine(Path.GetDirectoryName(Path.GetFullPath(workspace))!, plugin),
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:236:        Assert.StartsWith(Path.GetFullPath(Path.GetTempPath()), Path.GetFullPath(sources.UserProfile!), StringComparison.Ordinal);
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceProcessManagerStartupTests.cs:38:    /// caused Path.GetFullPath("") to throw, stopping all registrations that followed it.
+tests/QBrainAi.Support.Mcp.Tests/Services/FileGitHubWorkspaceTokenStoreTests.cs:109:        if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Services/FileGitHubWorkspaceTokenStoreTests.cs:116:        if (OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePolicyServiceTests.cs:41:        var workspacePath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), $"policy-ws-{Guid.NewGuid():N}"));
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePolicyServiceTests.cs:63:                var key = Path.GetFullPath((string)ci[0]!);
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePolicyServiceTests.cs:74:                var key = Path.GetFullPath((string)ci[0]!);
+tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:510:        Assert.True(UsesHostWorkspace(new ProcessRunRequest("gh", "issue list", WorkingDirectory: Path.GetFullPath(host)), host));
+tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:512:        Assert.False(UsesHostWorkspace(new ProcessRunRequest("git", "status", WorkingDirectory: Path.GetFullPath(host)), host));
+tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:526:           && request.WorkingDirectory == Path.GetFullPath(workspacePath);
+tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:603:           && request.WorkingDirectory == Path.GetFullPath(workspacePath)
+tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:610:           && value == Path.GetFullPath(workspacePath);
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceTokenServiceTests.cs:103:        // TR-MCP-FED-PATH-001, FR-MCP-PATHNORM-001: the canonical identity, not host Path.GetFullPath (which
+tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:51:        string.Equals(Path.GetFullPath(left), Path.GetFullPath(right), StringComparison.Ordinal);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs:75:            if (OperatingSystem.IsWindows())

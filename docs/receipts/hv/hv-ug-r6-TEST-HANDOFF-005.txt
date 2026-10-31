@@ -1,0 +1,19 @@
+type: result
+payload:
+  requestId: req-20261026T123532Z-024e
+  result:
+    id: TEST-HANDOFF-005
+    title: Test TEST-HANDOFF-005
+    description: Cover exclusive TODO-service persistence, exact-one creation, deterministic replay, ID collisions, approval races, and TODO-service failure.
+    status: pending
+    priority: medium
+    area: HANDOFF
+    testType: unit
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-26T12:35:33.4175582+00:00
+    updatedAt: 2026-10-26T12:35:33.4176673+00:00
+  deprecated: true
+
+---
+

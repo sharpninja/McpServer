@@ -1,0 +1,14 @@
+{
+  "TimestampUtc": "2026-10-20T01:13:16.6164747Z",
+  "TimestampLocal": "2026-10-19T20:13:16",
+  "Mode": "Search",
+  "Arguments": [
+    "-n",
+    "UseCases\\.|getSession|queryHistory|requirements\\.",
+    "/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-core.ps1"
+  ],
+  "Offset": 0,
+  "Count": 100,
+  "ExitCode": 2,
+  "Output": "rg: /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-core.ps1: IO error for operation on /home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0/lib/repl-core.ps1: No such file or directory (os error 2)"
+}

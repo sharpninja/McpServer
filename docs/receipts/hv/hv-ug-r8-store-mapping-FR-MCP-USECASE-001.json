@@ -1,0 +1,74 @@
+{
+  "TimestampLocal": "2026-10-27T03:52:17",
+  "Method": "workflow.requirements.listMappings",
+  "Params": {
+    "frId": "FR-MCP-USECASE-001"
+  },
+  "Response": {
+    "type": "result",
+    "payload": {
+      "deprecated": true,
+      "result": {
+        "totalCount": 11,
+        "items": [
+          {
+            "frId": "FR-MCP-USECASE-001",
+            "createdAt": "2026-10-27T08:52:20.3673749+00:00",
+            "trId": "TR-MCP-USECASE-001"
+          },
+          {
+            "frId": "FR-MCP-USECASE-001",
+            "createdAt": "2026-10-27T08:52:20.3681828+00:00",
+            "trId": "TR-MCP-USECASE-002"
+          },
+          {
+            "frId": "FR-MCP-USECASE-001",
+            "createdAt": "2026-10-27T08:52:20.3683418+00:00",
+            "trId": "TR-MCP-USECASE-003"
+          },
+          {
+            "frId": "FR-MCP-USECASE-001",
+            "createdAt": "2026-10-27T08:52:20.3684389+00:00",
+            "trId": "TR-MCP-USECASE-005"
+          },
+          {
+            "frId": "FR-MCP-USECASE-001",
+            "createdAt": "2026-10-27T08:52:20.3685183+00:00",
+            "trId": "TR-MCP-USECASE-018"
+          },
+          {
+            "frId": "FR-MCP-USECASE-001",
+            "createdAt": "2026-10-27T08:52:20.3685933+00:00",
+            "trId": "TR-MCP-USECASE-019"
+          },
+          {
+            "frId": "FR-MCP-USECASE-001",
+            "testId": "TEST-MCP-USECASE-001",
+            "createdAt": "2026-10-27T08:52:20.3686700+00:00"
+          },
+          {
+            "frId": "FR-MCP-USECASE-001",
+            "testId": "TEST-MCP-USECASE-002",
+            "createdAt": "2026-10-27T08:52:20.3687525+00:00"
+          },
+          {
+            "frId": "FR-MCP-USECASE-001",
+            "testId": "TEST-MCP-USECASE-004",
+            "createdAt": "2026-10-27T08:52:20.3688560+00:00"
+          },
+          {
+            "frId": "FR-MCP-USECASE-001",
+            "testId": "TEST-MCP-USECASE-019",
+            "createdAt": "2026-10-27T08:52:20.3689423+00:00"
+          },
+          {
+            "frId": "FR-MCP-USECASE-001",
+            "testId": "TEST-MCP-USECASE-020",
+            "createdAt": "2026-10-27T08:52:20.3690218+00:00"
+          }
+        ]
+      },
+      "requestId": "req-20261027T085218Z-38d9"
+    }
+  }
+}

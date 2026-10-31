@@ -1,11 +1,13 @@
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018-12: Negative prompts must not hallucinate memory.
+/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-12 (historical): Negative prompts must not hallucinate memory.
 /// </summary>
 public sealed class MemoryBenchSafetyTests
 {
     /// <summary>AC-FR-MCP-MEMORY-018-12: NEG-001 forbids invented favorites in both conditions.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void NegativePrompts_NoHallucinatedMemory()
     {

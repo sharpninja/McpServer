@@ -1,14 +1,15 @@
 using System.Reflection;
 using QBrainAi.Support.Mcp.McpStdio;
+using QBrainAi.Tests.Shared;
 
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-016: Shared S5 verb/route/method names and production-surface probes.
+/// TEST-MCP-MEMORY-016 (historical): Shared S5 verb/route/method names and production-surface probes.
 /// </summary>
 internal static class MemoryS5Catalog
 {
-    /// <summary>Additive MCP verbs introduced by FR-MCP-MEMORY-017 / TR-MCP-MEMORY-API-002.</summary>
+    /// <summary>Additive MCP verbs introduced by FR-MCP-MEMORY-017 (historical) / TR-MCP-MEMORY-API-002 (historical).</summary>
     public static readonly string[] NewVerbs =
     [
         "memory_remember",
@@ -82,20 +83,8 @@ internal static class MemoryS5Catalog
         .. DeferredPlugins,
     ];
 
-    /// <summary>Locates the repository root from the test output directory.</summary>
-    public static string FindRepoRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            if (File.Exists(Path.Combine(directory.FullName, "docs", "stdio-tool-contract.json")))
-                return directory.FullName;
-
-            directory = directory.Parent;
-        }
-
-        throw new InvalidOperationException("Repository root could not be located.");
-    }
+    /// <summary>The repository root through the shared <see cref="TestRepositoryRoot"/> (integration tests only).</summary>
+    public static string FindRepoRoot() => TestRepositoryRoot.Resolve();
 
     /// <summary>Discovers MCP tool names from <see cref="FwhMcpTools"/> <c>McpServerTool</c> attributes.</summary>
     public static IReadOnlyList<string> DiscoverMcpToolNames()

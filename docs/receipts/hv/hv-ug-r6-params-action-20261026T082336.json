@@ -1,0 +1,11 @@
+{
+  "actions": [
+    {
+      "status": "completed",
+      "description": "R6-F1 sibling sweep completed: third full Nuke Test hv-ug-r6-hostile-cli-temp-2 used the same 126-variable gate, with the five CLI temp-root variable values set to a test-owned regular file. Total 4558, passed 4544, failed 14, not executed 0; Nuke exit 255. Failures comprise 7 CliBrainSlotStrategyTests, 3 CodexCliAgentExecutionStrategyTests, and 4 OneShotCliAgentExecutionStrategyTests, all untagged units. Stacks prove real environment-dependent temp-directory resolution before assertions. This is one dependency-class finding; do not weaken production error behavior or assertions. Final outcome will be DISAGREE. Earlier R5-F1 and the specific ProductAlias R5-F2 are closed PASS, with this new sibling finding separate. No scanner observation affects scores.",
+      "filePath": "docs/receipts/hv/",
+      "order": 5,
+      "type": "design_decision"
+    }
+  ]
+}

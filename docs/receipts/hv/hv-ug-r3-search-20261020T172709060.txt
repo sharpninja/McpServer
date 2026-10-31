@@ -1,0 +1,9 @@
+rg: src/QBrainAi.Repl.Core/ReplCommandRouter.cs: No such file or directory (os error 2)
+docs/REPL-MIGRATION-GUIDE.md:80:| `mcp_client_invoke` | Dynamically invoke any QBrainAiClient sub-client method |
+docs/REPL-MIGRATION-GUIDE.md:82:Hosted McpAgent does not expose dedicated `mcp_memory_*` function tools. Memory work uses STDIO/MCP `memory_*` tools, REPL `workflow.memory.*`, or `mcp_client_invoke` against `MemoryClient` (`client.Memory.*`). Official plugins also inject `REQUIRED MEMORIES` at host request boundaries. See `docs/context/memory.md`.
+docs/REPL-MIGRATION-GUIDE.md:97:| `mcp_client_invoke` (`client.Memory.*`) | any `/qbrainai/memory` verb | Typed client passthrough |
+docs/REPL-MIGRATION-GUIDE.md:226:mcp_client_invoke({
+docs/REPL-MIGRATION-GUIDE.md:233:mcp_client_invoke({
+docs/REPL-MIGRATION-GUIDE.md:240:mcp_client_invoke({
+docs/REPL-MIGRATION-GUIDE.md:266:5. **Use `mcp_client_invoke`** as an escape hatch for any sub-client method not covered by dedicated tools (context search, GitHub, workspace management, voice, tunnels, etc.).
+

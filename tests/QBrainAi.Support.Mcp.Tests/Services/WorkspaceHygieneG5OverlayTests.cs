@@ -287,6 +287,8 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
     }
 
     /// <summary>TEST-MCP-HYGIENE-005: REST, REPL, Director, plugin expose the same validation.</summary>
+    /// <remarks>Integration: reads the live API, Director, REPL or service source to verify implementation parity (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task Parity_RestDirectorReplPlugin_SameRuleCodesAndCounts()
     {
@@ -542,6 +544,8 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
     }
 
     /// <summary>TEST-MCP-HYGIENE-003: triage statuses come from the live triage domain, queries are batched.</summary>
+    /// <remarks>Integration: reads the live API, Director, REPL or service source to verify implementation parity (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void ValidationService_UsesLiveTriageDomainAndBatchedQueries()
     {
@@ -588,22 +592,7 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
         }));
     }
 
-    private static string FindRepoRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            if (File.Exists(Path.Combine(directory.FullName, "AGENTS.md"))
-                && Directory.Exists(Path.Combine(directory.FullName, "docs", "Project")))
-            {
-                return directory.FullName;
-            }
-
-            directory = directory.Parent;
-        }
-
-        throw new InvalidOperationException("Repository root could not be located.");
-    }
+    private static string FindRepoRoot() => QBrainAi.Tests.Shared.TestRepositoryRoot.Resolve();
 
     private async Task<string> InvokePluginValidateAsync(IWorkspaceValidationService service, CancellationToken cancellationToken)
     {

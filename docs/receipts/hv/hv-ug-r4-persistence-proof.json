@@ -1,0 +1,26 @@
+{
+  "TimestampUtc": "2026-10-21T04:01:13.6960666Z",
+  "TimestampLocal": "2026-10-20T23:01:13",
+  "SessionId": "Codex-20261021T025530Z-plugin-session",
+  "RequestId": "req-20261021T025534Z-unitgreen-r4",
+  "ThreadId": "01a15c5f-b6f1-7f50-b4e5-fa36f363f939",
+  "Revision": 2,
+  "Model": "gpt-6-astra",
+  "TurnModel": "gpt-6-astra",
+  "TurnStatus": "completed",
+  "PartCount": 17,
+  "ExpectedCharacterCount": 202617,
+  "RestoredCharacterCount": 202617,
+  "ExpectedSha256": "B378E1856222B3FF03F5832B758CF35C3E13FABB42D6FDF5AFA9F7D450045647",
+  "RestoredSha256": "B378E1856222B3FF03F5832B758CF35C3E13FABB42D6FDF5AFA9F7D450045647",
+  "ExactTextMatch": true,
+  "ResponseExactMatch": true,
+  "MarkdownSha256": "A33A6FC7C483D94EFC4F59B35AA78A1C9D1E8DBF67CCF6BABD0A76B0756A4B00",
+  "JsonSha256": "4075E752147339BEB989B5D7656D23A9C6D6ADBD47D89568ED415959EC27AF17",
+  "HistoryMethod": "client.SessionLog.QueryAsync through installed Codex plugin",
+  "HistoryReceipt": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r4-history-final.json",
+  "DesignDecisionCount": 6,
+  "Blockers": [
+    "Merge-readiness DISAGREE: R4-F1, R4-F2, R4-F3"
+  ]
+}

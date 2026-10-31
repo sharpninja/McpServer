@@ -16,6 +16,8 @@ public sealed class BugTriage139EighteenthSqliteTests
     /// Proves timeout returns without leaving a worker able to mutate the caller connection: the
     /// caller is inspected, reused, and disposed before the deliberately blocked worker is released.
     /// </summary>
+    /// <remarks>Integration: asserts an elapsed wall-clock bound on actual scheduling and timer execution (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task OpenAsync_Timeout_CallerIsRestoredReusableAndDisposableBeforeWorkerRelease()
     {

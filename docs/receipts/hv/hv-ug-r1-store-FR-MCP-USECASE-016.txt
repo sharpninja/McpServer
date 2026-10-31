@@ -1,0 +1,14 @@
+type: error
+payload:
+  requestId: req-20261020T005708Z-cc43
+  code: not_found
+  message: FR 'FR-MCP-USECASE-016' not found.
+  retryable: false
+  details:
+    methodName: workflow.requirements.getFr
+    exceptionType: McpServer.Client.McpNotFoundException
+    reason: not_found
+
+---
+
+

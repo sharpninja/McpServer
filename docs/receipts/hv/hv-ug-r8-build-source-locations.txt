@@ -1,0 +1,25 @@
+build/Build.TestDependencies.cs:106:    public Target MigrationIntegrationTests => _ => _
+build/Build.TestDependencies.cs:127:            var readiness = new InteractiveSessionPrecondition().Evaluate(IntegrationLaneFilter.CurrentHost(), Environment.UserInteractive);
+tests/Build.Tests/IntegrationLanePreconditionTests.cs:5:/// unchanged from the BDPv4 mock gate, to the production <see cref="InteractiveSessionPrecondition"/>. Pure
+tests/Build.Tests/IntegrationLanePreconditionTests.cs:10:    private readonly InteractiveSessionPrecondition precondition = new();
+tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs:32:    [InlineData("windows-noninteractive", Fault.RunsWhenNonInteractive)]
+tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs:47:        RunsWhenNonInteractive,
+tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs:62:        private const string Message = "MigrationIntegrationTests needs an interactive desktop session on Windows.";
+tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs:65:        public IntegrationLaneReadiness Evaluate(IntegrationLaneHost host, bool userInteractive)
+tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs:67:            if (fault == Fault.BlocksLinux && !userInteractive)
+tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs:69:            if (host != IntegrationLaneHost.Windows || userInteractive)
+tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs:74:                Fault.RunsWhenNonInteractive => new IntegrationLaneReadiness(true, null),
+tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs:76:                Fault.MessageOmitsSession => new IntegrationLaneReadiness(false, "MigrationIntegrationTests cannot run here."),
+tests/Build.Tests/IntegrationLanePreconditionContract.cs:46:        Assert.Contains("MigrationIntegrationTests", readiness.FailureMessage, StringComparison.Ordinal);
+tests/Build.Tests/PowerShellInvocationTests.cs:14:    public async Task BuildBootstrap_RelaunchesWithNonInteractivePowerShellFlags()
+tests/Build.Tests/PowerShellInvocationTests.cs:21:        Assert.Contains("-NonInteractive", script, StringComparison.OrdinalIgnoreCase);
+tests/Build.Tests/PowerShellInvocationTests.cs:30:    public async Task BuildTests_PwshProcessStartInfo_UsesNonInteractiveFlags()
+tests/Build.Tests/PowerShellInvocationTests.cs:38:        Assert.Contains("psi.ArgumentList.Add(\"-NonInteractive\")", testSource, StringComparison.Ordinal);
+tests/Build.Tests/PowerShellInvocationTests.cs:46:    public async Task DeploymentGuidance_PwshCommandsUseNonInteractiveFlags()
+tests/Build.Tests/PowerShellInvocationTests.cs:66:                    || !ContainsFlag(entry.Line, "-NonInteractive"))
+tests/Build.Tests/PowerShellInvocationTests.cs:72:                "PowerShell command lines must include -NoLogo, -NoProfile, and -NonInteractive:"
+tests/Build.Tests/RequirementsWikiPublishScriptTests.cs:123:        psi.ArgumentList.Add("-NonInteractive");
+tests/Build.Tests/YamlObjectMutationTests.cs:118:        startInfo.ArgumentList.Add("-NonInteractive");
+tests/Build.Tests/BoundedProcessTests.cs:24:            + "'-NonInteractive','-Command','Start-Sleep -Seconds 30' -NoNewWindow -PassThru; "
+tests/Build.Tests/BoundedProcessTests.cs:159:        startInfo.ArgumentList.Add("-NonInteractive");
+tests/Build.Tests/OfficialPluginCoreSyncTestSupport.cs:60:            startInfo.ArgumentList.Add("-NonInteractive");

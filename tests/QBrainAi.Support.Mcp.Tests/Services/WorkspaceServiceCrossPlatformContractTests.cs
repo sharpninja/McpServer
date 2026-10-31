@@ -33,13 +33,13 @@ public abstract class WorkspaceServiceCrossPlatformContractTests
         var sut = CreateSut(db, Normalizer(WorkspacePathPlatform.Windows));
 
         var result = await sut.CreateAsync(
-            new WorkspaceCreateRequest { WorkspacePath = "/home/sharpninja/github/RideAudit", Name = "RideAudit" },
+            new WorkspaceCreateRequest { WorkspacePath = "/fixture/workspaces/ExampleWorkspace", Name = "ExampleWorkspace" },
             ct: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success, result.Error);
-        var stored = await db.Workspaces.SingleAsync(w => w.Name == "RideAudit", TestContext.Current.CancellationToken);
-        Assert.Equal("/home/sharpninja/github/RideAudit", stored.WorkspaceId);
-        Assert.Equal("/home/sharpninja/github/RideAudit", stored.WorkspacePath);
+        var stored = await db.Workspaces.SingleAsync(w => w.Name == "ExampleWorkspace", TestContext.Current.CancellationToken);
+        Assert.Equal("/fixture/workspaces/ExampleWorkspace", stored.WorkspaceId);
+        Assert.Equal("/fixture/workspaces/ExampleWorkspace", stored.WorkspacePath);
     }
 
     /// <summary>
@@ -53,12 +53,12 @@ public abstract class WorkspaceServiceCrossPlatformContractTests
         var sut = CreateSut(db, Normalizer(WorkspacePathPlatform.CaseSensitive));
 
         var result = await sut.CreateAsync(
-            new WorkspaceCreateRequest { WorkspacePath = @"C:\Users\kingd\repo", Name = "repo" },
+            new WorkspaceCreateRequest { WorkspacePath = @"C:\Users\fixture-user\repo", Name = "repo" },
             ct: TestContext.Current.CancellationToken);
 
         Assert.True(result.Success, result.Error);
         var stored = await db.Workspaces.SingleAsync(w => w.Name == "repo", TestContext.Current.CancellationToken);
-        Assert.Equal("C:/Users/kingd/repo", stored.WorkspaceId);
+        Assert.Equal("C:/Users/fixture-user/repo", stored.WorkspaceId);
     }
 
     /// <summary>
@@ -66,32 +66,36 @@ public abstract class WorkspaceServiceCrossPlatformContractTests
     /// equivalent spelling of its path.
     /// </summary>
     [Theory]
-    [InlineData("/home/sharpninja/github/RideAudit/")]
-    [InlineData("/home/sharpninja/github/./RideAudit")]
+    [InlineData("/fixture/workspaces/ExampleWorkspace/")]
+    [InlineData("/fixture/workspaces/./ExampleWorkspace")]
     public async Task Get_WindowsHost_PosixWorkspace_FoundByEquivalentSpelling(string lookup)
     {
         await using var db = new McpDbContext(CreateOptions());
         var sut = CreateSut(db, Normalizer(WorkspacePathPlatform.Windows));
         var created = await sut.CreateAsync(
-            new WorkspaceCreateRequest { WorkspacePath = "/home/sharpninja/github/RideAudit", Name = "RideAudit" },
+            new WorkspaceCreateRequest { WorkspacePath = "/fixture/workspaces/ExampleWorkspace", Name = "ExampleWorkspace" },
             ct: TestContext.Current.CancellationToken);
         Assert.True(created.Success, created.Error);
 
         var found = await sut.GetAsync(lookup, TestContext.Current.CancellationToken);
 
         Assert.NotNull(found);
-        Assert.Equal("/home/sharpninja/github/RideAudit", found.WorkspacePath);
+        Assert.Equal("/fixture/workspaces/ExampleWorkspace", found.WorkspacePath);
     }
 
     /// <summary>
     /// FR-MCP-FED-PATH-001-AC4: initializing a foreign-platform workspace fails without creating
     /// any directory on the host.
     /// </summary>
+    /// <remarks>Integration: uses the actual host boundary to reject a foreign-platform workspace without filesystem creation (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task Init_ForeignPlatformWorkspace_CreatesNothingOnHost()
     {
         const string leaf = "__mcp_unit_test__fed_init";
         var hostRewrite = Path.Combine(Path.GetPathRoot(Environment.CurrentDirectory)!, leaf);
+        Assert.False(Directory.Exists(hostRewrite) || File.Exists(hostRewrite),
+            "Refusal-test target already exists; preserving it and refusing to enter the SUT.");
         await using var db = new McpDbContext(CreateOptions());
         var sut = CreateSut(db, Normalizer(WorkspacePathPlatform.Windows));
         var created = await sut.CreateAsync(
@@ -99,19 +103,11 @@ public abstract class WorkspaceServiceCrossPlatformContractTests
             ct: TestContext.Current.CancellationToken);
         Assert.True(created.Success, created.Error);
 
-        try
-        {
-            var init = await sut.InitAsync("/" + leaf, TestContext.Current.CancellationToken);
+        var init = await sut.InitAsync("/" + leaf, TestContext.Current.CancellationToken);
 
-            Assert.False(init.Success);
-            Assert.Contains("not accessible on this host", init.Error, StringComparison.OrdinalIgnoreCase);
-            Assert.False(Directory.Exists(hostRewrite), $"Init created {hostRewrite}");
-        }
-        finally
-        {
-            if (Directory.Exists(hostRewrite))
-                Directory.Delete(hostRewrite, recursive: true);
-        }
+        Assert.False(init.Success);
+        Assert.Contains("not accessible on this host", init.Error, StringComparison.OrdinalIgnoreCase);
+        Assert.False(Directory.Exists(hostRewrite), $"Init created {hostRewrite}; retained as failure evidence.");
     }
 
     private static DbContextOptions<McpDbContext> CreateOptions() =>

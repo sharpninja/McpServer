@@ -1,0 +1,22 @@
+{
+  "name": "ug-r8-build-tests-2",
+  "command": [
+    "dotnet",
+    "test",
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj",
+    "-c",
+    "Debug",
+    "--logger",
+    "trx;LogFileName=ug-r8-build-tests-2.trx",
+    "--results-directory",
+    "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8/ug-r8-build-tests-2"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "ccd9e91f00dae4419b39ae8d37c2ae522e6fc62d",
+  "dirtyPaths": [],
+  "startedLocal": "2026-10-26T16:19:19",
+  "log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8/ug-r8-build-tests-2.out.log",
+  "results": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8/ug-r8-build-tests-2",
+  "exitCode": 0,
+  "endedLocal": "2026-10-26T16:24:19"
+}

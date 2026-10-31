@@ -1,0 +1,2 @@
+RECEIPT ug-r8b-build-tests-1 (TRX summary of /home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r8b/ug-r8b-build-tests-1, written 2026-10-27T22:57:34)
+ug-r8b-build-tests-1.trx: total=470 executed=470 passed=470 failed=0 notExecuted=0

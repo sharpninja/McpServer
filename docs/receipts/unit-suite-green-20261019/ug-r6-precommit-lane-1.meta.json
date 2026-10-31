@@ -1,0 +1,22 @@
+{
+  "name": "ug-r6-precommit-lane-1",
+  "target": "MigrationIntegrationTests",
+  "extraArgs": [
+    "--test-run-id",
+    "ug-r6-precommit-lane-1"
+  ],
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "c3625a64222c558b16c564e62ec2b5d600801e77",
+  "dirtyPaths": [
+    " M src/QBrainAi.Services/Services/DirectoryTreeWalker.cs",
+    " M src/QBrainAi.Services/Services/MarkerFileService.cs",
+    " M src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs"
+  ],
+  "startedLocal": "2026-10-21T13:04:08",
+  "startedUtc": "2026-10-21T18:04:08.1199619Z",
+  "stdout": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r6-precommit-lane-1.out.log",
+  "stderr": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r6-precommit-lane-1.err.log",
+  "exitFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs/ug-r6-precommit-lane-1.exit.txt"
+}

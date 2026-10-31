@@ -39,6 +39,7 @@
         "InstallOllama",
         "InstallReplTool",
         "InstallTestDependencies",
+        "IntegrationLanePrecondition",
         "MigrationIntegrationTests",
         "NormalizeGeneratedMigrationObsoletePragmas",
         "PackageMsix",
@@ -251,6 +252,10 @@
         "StrictUseCaseFrCoverage": {
           "type": "boolean",
           "description": "Fail when UseCaseFrLinks Realizes coverage findings are non-empty (default false)"
+        },
+        "TestDbEnvFile": {
+          "type": "string",
+          "description": "Test-database env file for Linux provider test provisioning (default ~/.config/qbrain-test/test-db.env)"
         },
         "TestRunId": {
           "type": "string",

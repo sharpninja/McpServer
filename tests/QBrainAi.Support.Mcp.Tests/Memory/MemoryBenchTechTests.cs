@@ -3,11 +3,13 @@ using QBrainAi.Support.Mcp.Services;
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-018 / TR-MCP-MEMORY-BENCH-002: Harness technology contracts.
+/// TEST-MCP-MEMORY-018 (historical) / TR-MCP-MEMORY-BENCH-002 (historical): Harness technology contracts.
 /// </summary>
 public sealed class MemoryBenchTechTests
 {
     /// <summary>AC-TR-MCP-MEMORY-BENCH-002-01: Harness is pwsh/dotnet/plugin runners; no Python product path.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void NoPythonProductPath()
     {
@@ -20,6 +22,8 @@ public sealed class MemoryBenchTechTests
     }
 
     /// <summary>AC-TR-MCP-MEMORY-BENCH-002-02: Plugins are invoked through a documented adapter interface.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void PluginAdapterInterface()
     {
@@ -32,6 +36,8 @@ public sealed class MemoryBenchTechTests
     }
 
     /// <summary>AC-TR-MCP-MEMORY-BENCH-002-03: Result JSON is schema-validated before write.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void ResultSchema_Validated()
     {
@@ -43,6 +49,8 @@ public sealed class MemoryBenchTechTests
     }
 
     /// <summary>AC-TR-MCP-MEMORY-BENCH-002-04: Pack schema is validated in CI via the loader.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void PackSchema_Validated()
     {
@@ -51,6 +59,8 @@ public sealed class MemoryBenchTechTests
     }
 
     /// <summary>AC-TR-MCP-MEMORY-BENCH-002-05: Injection and tools can be suppressed independently.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void IndependentSuppressionFlags()
     {
@@ -76,6 +86,8 @@ public sealed class MemoryBenchTechTests
     }
 
     /// <summary>AC-TR-MCP-MEMORY-BENCH-002-06: Latency is captured but is not the sole pass/fail.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Latency_OptionalBudget()
     {
@@ -89,6 +101,8 @@ public sealed class MemoryBenchTechTests
     }
 
     /// <summary>AC-TR-MCP-MEMORY-BENCH-002-07: Nuke target BenchMemory exists and defaults to Grok stub.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void CiTarget_BenchMemory()
     {
@@ -99,6 +113,8 @@ public sealed class MemoryBenchTechTests
     }
 
     /// <summary>AC-TR-MCP-MEMORY-BENCH-002-08: results/* is gitignored except baselines.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Results_GitignorePolicy()
     {
@@ -109,6 +125,8 @@ public sealed class MemoryBenchTechTests
     }
 
     /// <summary>AC-TR-MCP-MEMORY-BENCH-002-09: Schema requires tokens_* integers and token_source enum.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void ResultSchema_RequiresTokenFields()
     {
@@ -155,6 +173,8 @@ public sealed class MemoryBenchTechTests
     }
 
     /// <summary>AC-TR-MCP-MEMORY-BENCH-002-12: CI summary prints token means first.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void CiSummary_TokensFirst()
     {
@@ -165,6 +185,8 @@ public sealed class MemoryBenchTechTests
     }
 
     /// <summary>AC-TR-MCP-MEMORY-BENCH-002-13: Default plugin is grok; all is explicit and post-H7a.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void DefaultPlugin_IsGrok()
     {

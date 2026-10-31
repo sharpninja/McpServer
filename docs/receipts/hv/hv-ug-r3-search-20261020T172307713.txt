@@ -1,0 +1,12 @@
+tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs:43:    public void AgentPluginUserProfileOverride_IsAnEmptyTemporaryProfile()
+tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs:48:        var live = MarkerFileService.AgentPluginUserProfileOverride;
+tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs:16:/// it ends. Tests that need a populated profile set <see cref="MarkerFileService.AgentPluginUserProfileOverride"/>
+tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs:26:        MarkerFileService.AgentPluginUserProfileOverride = Profile;
+tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs:35:        if (string.Equals(MarkerFileService.AgentPluginUserProfileOverride, Profile, StringComparison.Ordinal))
+tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixture.cs:36:            MarkerFileService.AgentPluginUserProfileOverride = null;
+tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:24:public sealed class UserProfileScanBindingTests : IDisposable
+tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:34:    public UserProfileScanBindingTests() => Directory.CreateDirectory(_root);
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:70:        var previous = MarkerFileService.AgentPluginUserProfileOverride;
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:73:            MarkerFileService.AgentPluginUserProfileOverride = emptyProfile;
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:78:            MarkerFileService.AgentPluginUserProfileOverride = previous;
+

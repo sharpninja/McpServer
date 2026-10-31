@@ -1,0 +1,344 @@
+RECORD FR-MCP-PATHNORM-001
+type: result
+payload:
+  requestId: req-20261021T025752Z-58b3
+  result:
+    id: FR-MCP-PATHNORM-001
+    title: Persist workspace paths with forward slashes and platform tag
+    description: "Operator directive (PLAN-PATHNORM-001, decision D1 2026-10-07: delivered in P1). Persisted workspace paths, storage keys and identity hashes use '/' as the separator for all platforms; the windows: (case-insensitive) / case-sensitive: tag is kept; Windows-origin paths are detected by drive letter (C:/) or UNC (//server/share), not by separator; the UNC leading '//' is preserved; paths are converted to '\\' only at OS boundaries that require it (\\\\?\\ long-path prefixes, cmd.exe arguments, native APIs). AC1: C:\\Users\\kingd, C:/Users/kingd and c:/users/KINGD produce one storage key. AC2: \\\\srv\\share\\x and //srv/share/x produce one storage key that still starts with //. AC3: Existing stores are converted by the --workspace-path-rekey maintenance command (decisions D5-D7 2026-10-07): after it runs no Windows-shaped workspace value contains a backslash, per-table and per-workspace row counts are unchanged, and foreign keys validate; the server refuses to start against an unconverted store (no dual-key lookup). AC4: Native file operations on Windows receive backslash paths where the OS requires them."
+    status: pending
+    priority: medium
+    area: MCP
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-21T02:57:53.4685866+00:00
+    updatedAt: 2026-10-21T02:57:53.4686978+00:00
+  deprecated: true
+
+---
+
+
+RECORD TR-MCP-PATHNORM-001
+type: result
+payload:
+  requestId: req-20261021T025804Z-cae3
+  result:
+    id: TR-MCP-PATHNORM-001
+    title: Forward-slash storage keys, rekey maintenance command and startup guard
+    description: "WorkspaceIdentityPath.NormalizeLexicalPath emits '/' for Windows paths (UNC keeps leading '//'; \\\\?\\ device prefixes stripped to drive or // form); BuildStorageKey becomes windows:C:/USERS/KINGD style. IsRemoteWindowsPath, IsNormalizedPathWithinRoot and NormalizeLocalAdministrativeShareAlias accept both separators. A ToNativePath helper produces backslash paths only for Win32 CreateFile/GetFinalPathNameByHandle, \\\\?\\ long-path prefixes and cmd.exe arguments. Persisted data is rewritten by an explicit maintenance command --workspace-path-rekey (decision D5, 2026-10-07) modelled on McpDatabaseEncryptionTransitionCommand: required backup unless --dry-run, report with old->new mapping and before/after counts; one transaction per database with foreign keys deferred or suspended and fully re-validated (decision D6: SQLite defer_foreign_keys, SQL Server NOCHECK then WITH CHECK CHECK, PostgreSQL DEFERRABLE + SET CONSTRAINTS ALL DEFERRED); set-based UPDATE per workspace column from a mapping table limited to Windows-shaped values; C# recomputation of hashed values (federation GlobalWorkspaceId/CanonicalWorkspaceId and hub hash-keyed Workspaces rows, TriageGroups GroupKey/GroupId with repointed children, HandoffIngestionRuns ReplayIdentity); FileGitHubWorkspaceTokenStore keys rewritten. No legacy dual-key lookup (decision D7): a startup guard refuses to start while any Windows-shaped workspace id still contains a backslash. Enrolled proxies are re-enrolled once after deploy (only PAYTON-LEGION2 today). Plan: docs/plans/2026-10-07-federation-fixes.md section 4c."
+    status: pending
+    priority: medium
+    area: MCP
+    subarea: PATHNORM
+    notes: 'P1.5 operator decisions 2026-10-16: Policy A uses existing Windows lexical normalizer including device-prefix stripping and case preservation. Distinct old keys converging abort before mutation. Manual triage keys are SHA-256(workspacePath|manual|random GUID); retain their GroupKey/GroupId because GUID is not stored. Only recompute derived identities verified from persisted inputs. Worktree-only implementation and disposable fixture/copy tests; no live apply, service operations, deploy, or merge. Current task explicitly requests requirements/tests first (red), then implementation.'
+    acceptanceCriteria:
+    - id: p15-policy-a
+      text: Reuse P1.4 Windows lexical normalization, preserve case, and reject distinct old keys converging before any database mutation.
+      isSatisfied: false
+    - id: p15-safety
+      text: Apply requires successful verified backup; all database changes and FK validation occur in one transaction; repeat apply is a no-op.
+      isSatisfied: false
+    - id: p15-preview
+      text: Dry-run inventory and planning run only on a database copy; report mappings, table and workspace counts, and retained manual triage hashes without secrets.
+      isSatisfied: false
+    - id: p15-guard
+      text: HTTP and STDIO startup refuse legacy Windows workspace ids and point to --workspace-path-rekey.
+      isSatisfied: false
+    - id: p15-derived
+      text: Recompute only derivable triage, handoff, and federation identities; repoint children; preserve manual triage hashes and rewrite token-store keys with file backup.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-21T02:58:05.7774302+00:00
+    updatedAt: 2026-10-21T02:58:05.7775426+00:00
+  deprecated: true
+
+---
+
+
+RECORD TEST-MCP-PATHNORM-001
+type: result
+payload:
+  requestId: req-20261021T025812Z-a527
+  result:
+    id: TEST-MCP-PATHNORM-001
+    title: Test TEST-MCP-PATHNORM-001
+    description: 'Per BDP v4 (MockData fixture green before production code, then Real fixture). Storage-key equivalence: C:\Users\kingd, C:/Users/kingd, c:/users/KINGD -> one key windows:C:/USERS/KINGD; \\srv\share\x and //srv/share/x -> one key keeping leading //; \\?\C:\x -> C:/x. Remote-path detection treats //srv/share as remote. ToNativePath returns backslash paths on Windows. Rekey: value mapping f(x) touches only Windows-shaped values and is idempotent; planner builds the mapping and statement plan from a scripted snapshot; executors per provider (SQLite in-memory; SQL Server and PostgreSQL provider fixtures) rewrite all workspace columns and recompute hashed values with FK validation; report counts unchanged per table and per workspace; startup guard rejects an unconverted store; rehearsal on a restored copy of McpServer_PAYTON_LEGION2 recorded as receipts. GlobalWorkspaceId for (PAYTON-LEGION2, F:/GitHub/McpServer) is stable across both input separators.'
+    status: pending
+    priority: medium
+    area: MCP
+    testType: unit
+    notes: 'P1.5 2026-10-16: WorkspacePathRekeyTests cover literal Policy A normalization, collision preflight, no-backup/failed-backup refusal, read-only dry-run on explicit separate copies, transaction rollback and FK graph validation, repeat no-op, derived triage/handoff/federation identities, unchanged manual triage hashes, and startup guard. Command parser rejects missing/same copy database. Reports contain only keys/counts and retained-manual-key notice. Disposable fixtures only; no live apply.'
+    acceptanceCriteria:
+    - id: unitgreen-native-host
+      text: The native-boundary (ToNativePath) behavior for a non-Windows host is proven on every test host, Windows included, against a simulated host, without a host-conditional skip; the Windows-host cases keep running on a Windows host.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-21T02:58:13.8553110+00:00
+    updatedAt: 2026-10-21T02:58:13.8554388+00:00
+  deprecated: true
+
+---
+
+
+RECORD TR-MCP-NUKE-018
+type: result
+payload:
+  requestId: req-20261021T025805Z-fc7c
+  result:
+    id: TR-MCP-NUKE-018
+    title: InstallTestDependencies provisions provider test servers on Linux
+    description: On Linux, InstallTestDependencies supplies the PostgreSQL and SQL Server endpoints of the Category=Integration provider tests from the host test-database env file and the dedicated qbrain-test containers (operator decision 2026-10-11, BUG-BASELINE-005), and exports them to the test processes the build starts; Windows provisioning is unchanged.
+    status: pending
+    priority: high
+    area: MCP
+    subarea: NUKE
+    notes: 'PLAN-C4MODEL-001. Operator answers 2026-10-19: "Fix all 14 in this plan", "Fix 10 here; 4 via PR 82/83", "Trait + Linux provisioning (Recommended)". Host facts 2026-10-19: env file /home/sharpninja/.config/qbrain-test/test-db.env (mode 600) defines MCP_TEST_POSTGRES_CONNECTION and MCP_TEST_SQLSERVER_CONNECTION; containers qbrain-test-postgres (55432) and qbrain-test-sqlserver (51433) run on LAB-OMARCHY.'
+    acceptanceCriteria:
+    - id: AC-1
+      text: On Linux, when MCP_TEST_POSTGRES_CONNECTION or MCP_TEST_SQLSERVER_CONNECTION is not already set, InstallTestDependencies loads it from the test-database env file (default ~/.config/qbrain-test/test-db.env, overridable by the --test-db-env-file parameter) and exports it to the test processes the build starts; a variable already set is adopted unchanged.
+      isSatisfied: false
+    - id: AC-2
+      text: It starts the containers qbrain-test-postgres and qbrain-test-sqlserver when they exist but are stopped, and never creates, stops, removes, or reconfigures any other container.
+      isSatisfied: false
+    - id: AC-3
+      text: Before tests run it verifies that each endpoint named by a connection string accepts TCP connections, and fails with a clear message (no skip) when the env file, a variable, a container, or an endpoint is missing or unreachable.
+      isSatisfied: false
+    - id: AC-4
+      text: Connection-string values never appear in logs, exception messages, or committed files; only variable names, file paths, container names and host:port endpoints are reported.
+      isSatisfied: false
+    - id: AC-5
+      text: On Windows, the existing LocalDB and PostgreSQL binaries provisioning is unchanged.
+      isSatisfied: false
+    - id: AC-6
+      text: MigrationIntegrationTests on Linux runs the Category=Integration provider tests against those endpoints and fails, never skips, when provisioning fails.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-21T02:58:07.0950722+00:00
+    updatedAt: 2026-10-21T02:58:07.0951841+00:00
+  deprecated: true
+
+---
+
+
+RECORD TR-MCP-SESSIONLOG-006
+type: result
+payload:
+  requestId: req-20261021T025808Z-5531
+  result:
+    id: TR-MCP-SESSIONLOG-006
+    title: Required planFile and todoId scalars with None sentinel and backfill
+    description: >-
+      Session-log turn storage, DTOs, REST, MCP tools, and plugin wrappers SHALL expose required string fields planFile and todoId. New interactive creates/submits/beginTurn/replace-turn reject omitted, null, or empty values. Accepted planFile values are a workspace-relative path, an exact absolute path, a ~/ home-relative path, or the literal sentinel None. Accepted todoId values are a canonical MCP TODO id, ISSUE-N, or None. An EF migration adds both columns, defaults existing rows to None, then a one-time backfill scans turn contents and agent history under ~. Uncertain extractions remain None. Query/get results SHALL return both fields.
+
+      **Covered by:** FR: FR-MCP-SESSIONLOGCTX-001; TEST: TEST-MCP-SESSIONLOG-006
+    status: pending
+    priority: medium
+    area: MCP
+    subarea: SESSIONLOG
+    acceptanceCriteria:
+    - id: AC-TR-MCP-SESSIONLOG-006-009
+      text: 'The agent-history scan under ~ (.grok, .claude, .codex, .cursor) skips any directory it cannot traverse (a link or other reparse point, an untrusted mount point, an inaccessible folder) and never fails a submit or an import; when nothing usable is found the turn keeps None. Tests that submit imports read the real home, so they are integration tests (operator 2026-10-20: "Fix scans in PR 87 (Recommended)"; IMPL-UNITGREEN-001, triage-report-b0e41c36f93c4c91b1bf2524eb579ef8).'
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-21T02:58:09.7548438+00:00
+    updatedAt: 2026-10-21T02:58:09.7549599+00:00
+  deprecated: true
+
+---
+
+
+RECORD TEST-MCP-USECASE-019
+type: result
+payload:
+  requestId: req-20261021T025809Z-4c5c
+  result:
+    id: TEST-MCP-USECASE-019
+    title: Test TEST-MCP-USECASE-019
+    description: "For every fifteenth-review behavior (TR-MCP-USECASE-018), write the consumer test and the real-service, kernel, provider, or adversarial test with scripted data first and prove them against that data in a green mock gate with negative controls before production changes (BDPv4: no red tests); then bind the same cases to production and prove focused and cumulative GREEN with exact zero-failure, zero-skip, zero-abort, and zero-inconclusive accounting from C:-physical artifacts. Platform-specific cases are integration tests that run in their host's lane (TR-MCP-NUKE-019)."
+    status: pending
+    priority: medium
+    area: MCP
+    testType: unit
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-21T02:58:11.0782841+00:00
+    updatedAt: 2026-10-21T02:58:11.0783981+00:00
+  deprecated: true
+
+---
+
+
+RECORD TEST-MCP-USECASE-020
+type: result
+payload:
+  requestId: req-20261021T025811Z-c4ff
+  result:
+    id: TEST-MCP-USECASE-020
+    title: Test TEST-MCP-USECASE-020
+    description: "For each sixteenth-review finding (TR-MCP-USECASE-019), write the consumer-facing test and the real operating-system, mount, provider, process, or evidence-boundary test with scripted data first and prove them against that data in a green mock gate with negative controls before production changes (BDPv4: no red tests); then bind the same cases to production and prove focused and cumulative GREEN from C:-physical artifacts with exact zero-failure, zero-skip, zero-abort, zero-inconclusive, and expected-minimum accounting. Platform-specific cases are integration tests that run in their host's lane (TR-MCP-NUKE-019)."
+    status: pending
+    priority: medium
+    area: MCP
+    testType: unit
+    acceptanceCriteria: []
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-10-21T02:58:12.4340093+00:00
+    updatedAt: 2026-10-21T02:58:12.4341328+00:00
+  deprecated: true
+
+---
+
+
+RECORD mapping-FR-MCP-BUILD-001
+type: result
+payload:
+  requestId: req-20261021T025813Z-62be
+  result:
+    items:
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-001
+      createdAt: 2026-10-21T02:58:15.2251081+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-002
+      createdAt: 2026-10-21T02:58:15.2257191+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-005
+      createdAt: 2026-10-21T02:58:15.2258353+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-006
+      createdAt: 2026-10-21T02:58:15.2259416+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-007
+      createdAt: 2026-10-21T02:58:15.2260386+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-008
+      createdAt: 2026-10-21T02:58:15.2261201+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-009
+      createdAt: 2026-10-21T02:58:15.2261950+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-010
+      createdAt: 2026-10-21T02:58:15.2262932+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-011
+      createdAt: 2026-10-21T02:58:15.2263534+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-012
+      createdAt: 2026-10-21T02:58:15.2264227+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-015
+      createdAt: 2026-10-21T02:58:15.2264821+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-016
+      createdAt: 2026-10-21T02:58:15.2265890+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-017
+      createdAt: 2026-10-21T02:58:15.2266975+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-018
+      createdAt: 2026-10-21T02:58:15.2267991+00:00
+    - frId: FR-MCP-BUILD-001
+      trId: TR-MCP-NUKE-019
+      createdAt: 2026-10-21T02:58:15.2269106+00:00
+    totalCount: 15
+  deprecated: true
+
+---
+
+
+RECORD mapping-FR-MCP-USECASE-001
+type: result
+payload:
+  requestId: req-20261021T025815Z-40d7
+  result:
+    items:
+    - frId: FR-MCP-USECASE-001
+      trId: TR-MCP-USECASE-001
+      createdAt: 2026-10-21T02:58:16.6015754+00:00
+    - frId: FR-MCP-USECASE-001
+      trId: TR-MCP-USECASE-002
+      createdAt: 2026-10-21T02:58:16.6021206+00:00
+    - frId: FR-MCP-USECASE-001
+      trId: TR-MCP-USECASE-003
+      createdAt: 2026-10-21T02:58:16.6022248+00:00
+    - frId: FR-MCP-USECASE-001
+      trId: TR-MCP-USECASE-005
+      createdAt: 2026-10-21T02:58:16.6022941+00:00
+    - frId: FR-MCP-USECASE-001
+      trId: TR-MCP-USECASE-018
+      createdAt: 2026-10-21T02:58:16.6023558+00:00
+    - frId: FR-MCP-USECASE-001
+      trId: TR-MCP-USECASE-019
+      createdAt: 2026-10-21T02:58:16.6024156+00:00
+    - frId: FR-MCP-USECASE-001
+      testId: TEST-MCP-USECASE-001
+      createdAt: 2026-10-21T02:58:16.6024774+00:00
+    - frId: FR-MCP-USECASE-001
+      testId: TEST-MCP-USECASE-002
+      createdAt: 2026-10-21T02:58:16.6025422+00:00
+    - frId: FR-MCP-USECASE-001
+      testId: TEST-MCP-USECASE-004
+      createdAt: 2026-10-21T02:58:16.6026079+00:00
+    - frId: FR-MCP-USECASE-001
+      testId: TEST-MCP-USECASE-019
+      createdAt: 2026-10-21T02:58:16.6026748+00:00
+    - frId: FR-MCP-USECASE-001
+      testId: TEST-MCP-USECASE-020
+      createdAt: 2026-10-21T02:58:16.6027376+00:00
+    totalCount: 11
+  deprecated: true
+
+---
+
+
+RECORD mapping-FR-MCP-PATHNORM-001
+type: result
+payload:
+  requestId: req-20261021T025816Z-cdf6
+  result:
+    items:
+    - frId: FR-MCP-PATHNORM-001
+      trId: TR-MCP-PATHNORM-001
+      createdAt: 2026-10-21T02:58:17.9640750+00:00
+    - frId: FR-MCP-PATHNORM-001
+      testId: TEST-MCP-PATHNORM-001
+      createdAt: 2026-10-21T02:58:17.9647197+00:00
+    totalCount: 2
+  deprecated: true
+
+---
+
+
+RECORD mapping-FR-MCP-018
+type: result
+payload:
+  requestId: req-20261021T025818Z-046f
+  result:
+    items:
+    - frId: FR-MCP-018
+      trId: TR-MCP-WS-005
+      createdAt: 2026-10-21T02:58:19.3081355+00:00
+    totalCount: 1
+  deprecated: true
+
+---
+
+
+RECORD mapping-FR-MCP-SESSIONLOGCTX-001
+type: result
+payload:
+  requestId: req-20261021T025819Z-388b
+  result:
+    items:
+    - frId: FR-MCP-SESSIONLOGCTX-001
+      trId: TR-MCP-SESSIONLOG-006
+      createdAt: 2026-10-21T02:58:20.6130995+00:00
+    - frId: FR-MCP-SESSIONLOGCTX-001
+      testId: TEST-MCP-SESSIONLOG-006
+      createdAt: 2026-10-21T02:58:20.6136497+00:00
+    totalCount: 2
+  deprecated: true
+
+---
+
+

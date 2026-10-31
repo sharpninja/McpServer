@@ -1,0 +1,33 @@
+{
+  "TimestampLocal": "2026-10-27T03:46:42",
+  "Method": "workflow.requirements.getFr",
+  "Params": {
+    "id": "FR-MCP-BUILD-001"
+  },
+  "Response": {
+    "payload": {
+      "requestId": "req-20261027T084643Z-1849",
+      "deprecated": true,
+      "result": {
+        "scopeStartLayerKey": "layer-1",
+        "acceptanceCriteria": [
+          {
+            "text": "The same sources build the same way on every supported host through the project's build tooling, with the behavior each TR-MCP-NUKE-* requirement specifies; verified by running ./build.ps1 -WhatIf (TR-MCP-NUKE-005), which exits zero on a conforming tree.",
+            "isSatisfied": false,
+            "id": "ac-1"
+          }
+        ],
+        "title": "Tooling for repeatable builds",
+        "status": "pending",
+        "id": "FR-MCP-BUILD-001",
+        "description": "The project SHALL provide tooling for repeatable builds.",
+        "notes": "Operator, 2026-10-10T20:08:04Z, verbatim: \"FR: Project will provide tooling for repeatable builds.\" and \"Now, the TR are implementation detail of the FR.\" The Nuke build (build/, ./build.ps1) is that tooling; its behavior is specified only in TRs under this FR (TR-MCP-NUKE-*), consistent with \"NUKE is only accountable through TR.\" Build.Tests is the infrastructure suite that verifies those TRs, not application unit tests; no TEST record.",
+        "area": "MCP",
+        "priority": "high",
+        "updatedAt": "2026-10-27T08:46:45.0887467+00:00",
+        "createdAt": "2026-10-27T08:46:45.0886180+00:00"
+      }
+    },
+    "type": "result"
+  }
+}

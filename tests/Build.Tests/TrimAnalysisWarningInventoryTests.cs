@@ -79,6 +79,8 @@ public sealed partial class TrimAnalysisWarningInventoryTests
     /// W19 coverage: source packable libraries and executables must run the trim
     /// analyzer with suppression disabled and match the captured warning inventory.
     /// </summary>
+    /// <remarks>TR-MCP-NUKE-019: integration because this case resolves or reads the physical checkout.</remarks>
+    [Trait("Category", "Integration")]
     [Theory]
     [MemberData(nameof(GetTrimTargets))]
     public async Task TrimAnalysis_WithRepositorySuppressionDisabled_MatchesCapturedInventory(TrimTarget target)

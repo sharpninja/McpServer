@@ -3,12 +3,14 @@ using System.Text.Json;
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-016 / TR-MCP-MEMORY-API-002:
+/// TEST-MCP-MEMORY-016 (historical) / TR-MCP-MEMORY-API-002 (historical):
 /// MCP tool input schemas document additionalProperties policy for new verbs.
 /// </summary>
 public sealed class MemoryMcpSchemaTests
 {
     /// <summary>AC-TR-MCP-MEMORY-API-002-06: Unknown required-breaking fields follow the documented additionalProperties policy.</summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void UnknownFields_Policy()
     {

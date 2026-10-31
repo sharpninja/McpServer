@@ -1,0 +1,9 @@
+{
+  "name": "ug-r7-build-tests-1",
+  "tmpdir": "/home/sharpninja/.claude/scratch/pr82-review-20261019/tmp/ug-r7-build-tests-1",
+  "mount": "/home btrfs",
+  "freeGB": 161.52,
+  "reason": "/tmp is a tmpfs with usrquota; ug-r5-build-tests-1 failed one trim-analysis publish with Disk quota exceeded",
+  "operator": "Rerun with temp on disk (Recommended), 2026-10-21",
+  "startedLocal": "2026-10-26T10:19:00"
+}

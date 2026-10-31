@@ -1,0 +1,10 @@
+[
+  {
+    "InputObject": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests|QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"Q:\\\\__mcp_unit_test__\\\\outside\\\\docfx\", ···]]]], expectedMessage: \"outputRoot\")",
+    "SideIndicator": "=>"
+  },
+  {
+    "InputObject": "QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests|QBrainAi.Support.Mcp.Tests.Services.RequirementsWikiExportConfigTests.Load_InvalidDocFxWorkflow_ThrowsActionableValidation(document: [[\"schema\"] = \"mcp-wiki-export/v1\", [\"documents\"] = [[[\"id\"] = \"home\", [\"title\"] = \"Home\", [\"source\"] = \"generated:home\", [\"target\"] = \"Home.md\"]], [\"navigation\"] = [[[\"document\"] = \"home\"]], [\"docfx\"] = [[\"workflows\"] = [[[\"id\"] = \"docs\", [\"executable\"] = \"dotnet\", [\"arguments\"] = [\"docfx\", \"docfx.json\"], [\"workingDirectory\"] = \"docs/docfx\", [\"outputRoot\"] = \"/__mcp_unit_test__/outside/docfx\", ···]]]], expectedMessage: \"outputRoot\")",
+    "SideIndicator": "<="
+  }
+]

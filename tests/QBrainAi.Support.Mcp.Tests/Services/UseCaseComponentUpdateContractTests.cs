@@ -21,8 +21,8 @@ public sealed class UseCaseComponentUpdateContractTests
     private static readonly ActorUpdateInput ActorInput = new(
         UseCaseId: 125,
         ActorId: 20,
-        Name: "LAB-OMARCHY TruckMate Tentacle",
-        Description: "Octopus Tentacle on LAB-OMARCHY deploys commit-pinned TruckMate services.",
+        Name: "TEST-NODE-B ExampleProject Tentacle",
+        Description: "Octopus Tentacle on TEST-NODE-B deploys commit-pinned ExampleProject services.",
         Type: "System",
         IsPrimary: true);
 
@@ -30,7 +30,7 @@ public sealed class UseCaseComponentUpdateContractTests
         UseCaseId: 125,
         FlowId: 314,
         FlowType: "Basic",
-        Name: "Octopus-owned TruckMate deployment",
+        Name: "Octopus-owned ExampleProject deployment",
         SequenceNumber: 1);
 
     private static readonly StepUpdateInput StepInput = new(
@@ -40,7 +40,7 @@ public sealed class UseCaseComponentUpdateContractTests
         StepNumber: 1,
         ActorId: 20,
         Action: "Octopus dispatches the commit-pinned Nuke deployment.",
-        SystemResponse: "The LAB-OMARCHY Tentacle runs the requested Nuke target.",
+        SystemResponse: "The TEST-NODE-B Tentacle runs the requested Nuke target.",
         DataEntities: "Commit SHA, Octopus release, Nuke target");
 
     /// <summary>
@@ -67,6 +67,8 @@ public sealed class UseCaseComponentUpdateContractTests
     /// TEST-MCP-USECASE-021 AC2: the production CQRS handlers satisfy the same identity and field
     /// assertions used by the independent fake while preserving aggregate state and row counts.
     /// </summary>
+    /// <remarks>Integration: binds real CQRS handlers that resolve physical workspace identity (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task CorrectRealHandlers_SatisfyIdentityPreservingContract()
     {
@@ -86,6 +88,8 @@ public sealed class UseCaseComponentUpdateContractTests
     /// TEST-MCP-USECASE-021 AC3-AC5: invalid values, missing associations, parent mismatches,
     /// soft-deleted records, and cross-workspace lookups fail without mutating durable rows.
     /// </summary>
+    /// <remarks>Integration: binds real CQRS handlers that resolve physical workspace identity (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task RealHandlers_RejectInvalidAndOutOfScopeTargetsWithoutMutation()
     {
@@ -328,7 +332,7 @@ public sealed class UseCaseComponentUpdateContractTests
             {
                 UseCaseId = ActorInput.UseCaseId,
                 WorkspaceId = workspace,
-                Title = "Deploy TruckMate services",
+                Title = "Deploy ExampleProject services",
                 ApprovalStatus = "Draft",
                 VersionNumber = 1,
                 CreatedAtUtc = initialUpdatedAt,

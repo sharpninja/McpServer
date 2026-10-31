@@ -1,0 +1,900 @@
+tests/QBrainAi.QBAgent.Tests/QBAgentBootstrapperTests.cs:83:            Directory.CreateDirectory(Path);
+tests/QBrainAi.QBAgent.Tests/QBAgentBootstrapperTests.cs:89:            => File.WriteAllLines(System.IO.Path.Combine(Path, QBAgentBootstrapper.MarkerFileName), lines);
+tests/QBrainAi.QBAgent.Tests/ProcessRunnerDependencyTests.cs:29:        using var dependencies = JsonDocument.Parse(File.ReadAllText(
+tests/QBrainAi.QBAgent.Tests/QBAgentSessionLogTests.cs:19:        var first = File.ReadLines(log.FilePath).First();
+tests/QBrainAi.QBAgent.Tests/QBAgentSessionLogTests.cs:34:        var lines = File.ReadAllLines(log.FilePath);
+tests/QBrainAi.QBAgent.Tests/QBAgentSessionLogTests.cs:84:        Directory.CreateDirectory(root);
+tests/QBrainAi.QBAgent.Tests/Skills/SkillRegistryTests.cs:21:        Directory.CreateDirectory(Path.Combine(_root, "skills", "broken"));
+tests/QBrainAi.QBAgent.Tests/Skills/SkillRegistryTests.cs:22:        File.WriteAllText(Path.Combine(_root, "skills", "broken", "SKILL.md"), "---\ndescription: no name\n---\nx");
+tests/QBrainAi.QBAgent.Tests/Skills/SkillRegistryTests.cs:33:        Directory.CreateDirectory(dir);
+tests/QBrainAi.QBAgent.Tests/Skills/SkillRegistryTests.cs:34:        File.WriteAllText(Path.Combine(dir, "SKILL.md"), $"---\nname: {name}\ndescription: {description}\n---\n\n{body}\n");
+tests/QBrainAi.McpAgent.Tests/McpAgentOptionsSectionTests.cs:51:        var workspacePath = OperatingSystem.IsWindows() ? @"E:\github\McpServer" : "/var/lib/McpServer";
+tests/QBrainAi.Repl.Core.Tests/TranscriptIngestionWorkflowTests.cs:27:            await File.WriteAllTextAsync(transcriptPath, "{\"session_meta\":{\"id\":\"local-file\"}}", TestContext.Current.CancellationToken);
+tests/QBrainAi.Repl.Core.Tests/TranscriptIngestionWorkflowTests.cs:70:            await File.WriteAllTextAsync(Path.Combine(tempRoot, "root.jsonl"), "{\"session_meta\":{\"id\":\"root\"}}", TestContext.Current.CancellationToken);
+tests/QBrainAi.Repl.Core.Tests/TranscriptIngestionWorkflowTests.cs:71:            Directory.CreateDirectory(Path.Combine(tempRoot, "nested"));
+tests/QBrainAi.Repl.Core.Tests/TranscriptIngestionWorkflowTests.cs:72:            await File.WriteAllTextAsync(Path.Combine(tempRoot, "nested", "child.jsonl"), "{\"session_meta\":{\"id\":\"child\"}}", TestContext.Current.CancellationToken);
+tests/QBrainAi.Repl.Core.Tests/TranscriptIngestionWorkflowTests.cs:104:        Directory.CreateDirectory(path);
+tests/QBrainAi.Repl.Core.Tests/SessionLogPersistenceStrategyTests.cs:131:        Directory.CreateDirectory(workspace);
+tests/QBrainAi.Repl.Core.Tests/SessionLogPersistenceStrategyTests.cs:155:            var envelope = serializer.Deserialize(await File.ReadAllTextAsync(path, TestContext.Current.CancellationToken));
+tests/QBrainAi.Repl.Core.Tests/SessionLogPersistenceStrategyTests.cs:166:            Assert.Empty(Directory.GetFiles(Path.GetDirectoryName(path)!, "*.tmp"));
+tests/QBrainAi.Repl.Core.Tests/MemorySchemaContractTests.cs:16:        using var document = JsonDocument.Parse(File.ReadAllText(schemaPath));
+tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs:29:        var skillText = await File.ReadAllTextAsync(skillPath, TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs:50:        var expected = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FifteenthHarnessTests.cs:66:            : OperatingSystem.IsLinux()
+tests/QBrainAi.Support.Mcp.Tests/Documentation/QuadBrainSlotConfigurationTests.cs:63:        var script = File.ReadAllText(scriptPath);
+tests/QBrainAi.Support.Mcp.Tests/Documentation/QuadBrainSlotConfigurationTests.cs:129:        return deserializer.Deserialize<Dictionary<object, object?>>(File.ReadAllText(path));
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:20:        var previousRoot = Environment.GetEnvironmentVariable("MCP_REPOSITORY_ROOT");
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:21:        var previousDirectory = Environment.CurrentDirectory;
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:24:            Environment.SetEnvironmentVariable("MCP_REPOSITORY_ROOT", null);
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:25:            Environment.CurrentDirectory = AppContext.BaseDirectory;
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:33:            Environment.CurrentDirectory = previousDirectory;
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:34:            Environment.SetEnvironmentVariable("MCP_REPOSITORY_ROOT", previousRoot);
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:46:            OperatingSystem.IsWindows() || OperatingSystem.IsLinux(),
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:62:        var applicableInventory = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:65:        var unsupportedInventory = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:88:            OperatingSystem.IsWindows() ? 11 : 37,
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:101:        if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:150:    /// Short-lived real processes may exit between <see cref="System.Diagnostics.Process.Start()"/>
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:158:            var executable = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:161:            IReadOnlyList<string> arguments = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:172:            if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:37:        var configured = Environment.GetEnvironmentVariable("MCP_REPOSITORY_ROOT");
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:48:            Directory.GetCurrentDirectory(),
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:186:        if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Infrastructure/RepositoryEvidenceTestSupport.cs:285:        if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139EighteenthEvidenceTests.cs:49:        var bytes = File.ReadAllBytes(path);
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139EighteenthEvidenceTests.cs:66:        var index = File.ReadAllText(path);
+tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs:65:        var previous = Environment.GetEnvironmentVariable("MCP_INSTANCE");
+tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs:68:            Environment.SetEnvironmentVariable("MCP_INSTANCE", "env-instance");
+tests/QBrainAi.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs:85:            Environment.SetEnvironmentVariable("MCP_INSTANCE", previous);
+tests/QBrainAi.Support.Mcp.Tests/Documentation/TurnTransactionPlanArtifactTests.cs:179:        => File.ReadAllText(Path.Combine(FindRepoRoot(), "docs", "Project", "Quad-Model-Transactional-Diffgram-Plan.md"));
+tests/QBrainAi.Support.Mcp.Tests/Documentation/TurnTransactionPlanArtifactTests.cs:182:        => File.ReadAllText(Path.Combine(FindRepoRoot(), "docs", "Project", fileName));
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs:37:        var source = File.ReadAllText(LocateWindowsProcessRunnerSource());
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs:114:                File.ReadAllText(pidFile),
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs:184:                File.ReadAllText(pidFile),
+tests/QBrainAi.Support.Mcp.Tests/Indexing/EmbeddingServiceTests.cs:64:        File.WriteAllLines(vocabPath, ["[PAD]", "[UNK]", "[CLS]", "[SEP]", "hello", "world"]);
+tests/QBrainAi.Support.Mcp.Tests/Controllers/TranscriptIngestionControllerTests.cs:175:        Directory.CreateDirectory(workspacePath);
+tests/QBrainAi.Support.Mcp.Tests/Controllers/TranscriptIngestionControllerTests.cs:238:        Directory.CreateDirectory(workspacePath);
+tests/QBrainAi.Support.Mcp.Tests/Controllers/TranscriptIngestionControllerTests.cs:291:        Directory.CreateDirectory(workspacePath);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptFixtureInventoryTests.cs:41:        foreach (var jsonPath in Directory.EnumerateFiles(root, "*.json", SearchOption.AllDirectories))
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptFixtureInventoryTests.cs:43:            using var document = JsonDocument.Parse(File.ReadAllText(jsonPath));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptFixtureInventoryTests.cs:47:        foreach (var jsonlPath in Directory.EnumerateFiles(root, "*.jsonl", SearchOption.AllDirectories))
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptFixtureInventoryTests.cs:49:            var lines = File.ReadAllLines(jsonlPath).Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptFixtureInventoryTests.cs:63:        var schema = File.ReadAllText(Path.Combine(ResolveFixtureRoot(), "opencode", "store-schema.sql"));
+tests/QBrainAi.Support.Mcp.Tests/Indexing/VectorIndexServiceTests.cs:85:        Directory.CreateDirectory(tempDir);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogFileWatcherTests.cs:26:        Directory.CreateDirectory(Path.Combine(_tempDir, "docs", "sessions"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogFileWatcherTests.cs:84:        File.WriteAllText(filePath, json);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/RealTranscriptFixtureIntegrationTests.cs:13:        using var manifest = JsonDocument.Parse(File.ReadAllText(Path.Combine(ResolveRealFixtureRoot(), "manifest.json")));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/RealTranscriptFixtureIntegrationTests.cs:55:        using var clineSession = JsonDocument.Parse(File.ReadAllText(Path.Combine(root, "cline", "session.json")));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/RealTranscriptFixtureIntegrationTests.cs:61:        using var clineMessages = JsonDocument.Parse(File.ReadAllText(Path.Combine(root, "cline", "messages.json")));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/RealTranscriptFixtureIntegrationTests.cs:65:        using var openCodeExport = JsonDocument.Parse(File.ReadAllText(Path.Combine(root, "opencode", "export.json")));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/RealTranscriptFixtureIntegrationTests.cs:89:        foreach (var path in Directory.EnumerateFiles(root, "*", SearchOption.AllDirectories))
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/RealTranscriptFixtureIntegrationTests.cs:91:            var text = File.ReadAllText(path);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/RealTranscriptFixtureIntegrationTests.cs:105:        foreach (var line in File.ReadAllLines(path).Where(line => !string.IsNullOrWhiteSpace(line)))
+tests/QBrainAi.Support.Mcp.Tests/Web/UseCaseUiAssetTests.cs:17:        var html = File.ReadAllText(path);
+tests/QBrainAi.Support.Mcp.Tests/Web/UseCaseUiAssetTests.cs:28:        var js = File.ReadAllText(path);
+tests/QBrainAi.Support.Mcp.Tests/Web/UseCaseUiAssetTests.cs:47:        var html = File.ReadAllText(htmlPath);
+tests/QBrainAi.Support.Mcp.Tests/Web/UseCaseUiAssetTests.cs:48:        var js = File.ReadAllText(jsPath);
+tests/QBrainAi.Support.Mcp.Tests/Web/UseCaseUiAssetTests.cs:79:        var html = File.ReadAllText(FindWwwrootFile("usecases", "index.html"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:106:        Directory.CreateDirectory(tempWorkspace);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:110:            Directory.CreateDirectory(transcriptDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:135:            Assert.Contains("codex-real-fixture-session", await File.ReadAllTextAsync(receipt.YamlArtifactPath, TestContext.Current.CancellationToken).ConfigureAwait(true), StringComparison.Ordinal);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:149:        Directory.CreateDirectory(tempDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:153:            await File.WriteAllLinesAsync(transcriptPath, [
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:185:        Directory.CreateDirectory(tempDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:189:            await File.WriteAllLinesAsync(transcriptPath, [
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:220:        Directory.CreateDirectory(tempDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:224:            await File.WriteAllLinesAsync(transcriptPath, [
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:254:        Directory.CreateDirectory(tempDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:258:            await File.WriteAllLinesAsync(transcriptPath, [
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:288:        Directory.CreateDirectory(tempDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:293:            await File.WriteAllTextAsync(sessionPath, "{\"session_id\":\"cline-diagnostic-fixture\",\"model\":\"cline-test\",\"workspace_root\":\"Q:/__mcp_unit_test__/Sample\"}", TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:294:            await File.WriteAllTextAsync(messagesPath, "{\"sessionId\":\"cline-diagnostic-fixture\",\"messages\":{\"invalid\":true}}", TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:319:        Directory.CreateDirectory(tempDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:323:            await File.WriteAllLinesAsync(transcriptPath, [
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:353:        Directory.CreateDirectory(tempDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:357:            await File.WriteAllLinesAsync(transcriptPath, [
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:403:        Directory.CreateDirectory(tempWorkspace);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:407:            Directory.CreateDirectory(transcriptDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:440:            Assert.Contains("sourceType: Codex", await File.ReadAllTextAsync(receipt.YamlArtifactPath, TestContext.Current.CancellationToken).ConfigureAwait(true), StringComparison.Ordinal);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:441:            Assert.Contains("session_meta", await File.ReadAllTextAsync(receipt.CompatibilityArtifactPath!, TestContext.Current.CancellationToken).ConfigureAwait(true), StringComparison.Ordinal);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:442:            Assert.Contains("importRecovery", await File.ReadAllTextAsync(receipt.ImportRecoveryPath, TestContext.Current.CancellationToken).ConfigureAwait(true), StringComparison.Ordinal);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:456:        Directory.CreateDirectory(tempWorkspace);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:492:        Directory.CreateDirectory(tempWorkspace);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:522:        Directory.CreateDirectory(tempWorkspace);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:526:            Directory.CreateDirectory(transcriptDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:555:        Directory.CreateDirectory(tempWorkspace);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:556:        Directory.CreateDirectory(providerRoot);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:591:        Directory.CreateDirectory(tempWorkspace);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:592:        Directory.CreateDirectory(externalRoot);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:629:        Directory.CreateDirectory(tempDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:634:            await File.WriteAllTextAsync(path, "{\"type\":\"response_item\",\"payload\":{\"role\":\"assistant\",\"content\":[{\"type\":\"output_text\",\"text\":\"" + largeText + "\"}]}}", TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:665:        Directory.CreateDirectory(tempDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/TranscriptCorePipelineTests.cs:679:            await File.WriteAllTextAsync(path, builder.ToString(), TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorChunkingTests.cs:28:        Directory.CreateDirectory(Path.Combine(_tempDir, "docs", "sessions"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorChunkingTests.cs:58:        File.WriteAllText(Path.Combine(_tempDir, "docs", "sessions", "copilot-SESSION-LOG-2026-02-16.md"), md);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorChunkingTests.cs:95:        File.WriteAllText(Path.Combine(_tempDir, "docs", "sessions", "cursor-SESSION-LOG-2026-02-16.md"), md);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorChunkingTests.cs:119:        File.WriteAllText(Path.Combine(_tempDir, "docs", "sessions", "copilot-SESSION-LOG-2026-02-16-diff.md"), md);
+tests/QBrainAi.Support.Mcp.Tests/Controllers/RequirementsControllerGenerateTests.cs:59:        Directory.CreateDirectory(tempRoot);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/OpenCodeSqliteTranscriptTests.cs:15:        Directory.CreateDirectory(tempDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/OpenCodeSqliteTranscriptTests.cs:41:        Directory.CreateDirectory(tempDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/OpenCodeSqliteTranscriptTests.cs:91:        Directory.CreateDirectory(tempDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/OpenCodeSqliteTranscriptTests.cs:132:        Directory.CreateDirectory(tempDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorImportTests.cs:30:        Directory.CreateDirectory(Path.Combine(_tempDir, "docs", "sessions"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorImportTests.cs:90:        File.WriteAllText(Path.Combine(_tempDir, "docs", "sessions", "cursor-ws.json"), json);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorImportTests.cs:117:        File.WriteAllText(Path.Combine(_tempDir, "docs", "sessions", "copilot-ws.json"), json);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorImportTests.cs:133:        File.WriteAllText(Path.Combine(_tempDir, "docs", "sessions", "bad.json"), json);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorImportTests.cs:331:        File.WriteAllText(Path.Combine(_tempDir, "docs", "sessions", filename), json);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorImportTests.cs:335:        File.WriteAllText(Path.Combine(_tempDir, "docs", "sessions", filename), content);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/RepoIngestorTests.cs:17:        Directory.CreateDirectory(_tempDir);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/RepoIngestorTests.cs:29:        File.WriteAllText(Path.Combine(_tempDir, "readme.md"), "# Hello World\nThis is a test.");
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/RepoIngestorTests.cs:30:        File.WriteAllText(Path.Combine(_tempDir, "code.cs"), "class Foo { }");
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/RepoIngestorTests.cs:49:        Directory.CreateDirectory(Path.Combine(_tempDir, "bin"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/RepoIngestorTests.cs:50:        File.WriteAllText(Path.Combine(_tempDir, "bin", "app.dll"), "binary");
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/RepoIngestorTests.cs:51:        Directory.CreateDirectory(Path.Combine(_tempDir, "obj"));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/RepoIngestorTests.cs:52:        File.WriteAllText(Path.Combine(_tempDir, "obj", "project.assets.json"), "{}");
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/RepoIngestorTests.cs:53:        File.WriteAllText(Path.Combine(_tempDir, ".gitignore"), "*.dll");
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/RepoIngestorTests.cs:54:        File.WriteAllText(Path.Combine(_tempDir, "keep.md"), "# Keep");
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/RepoIngestorTests.cs:70:        Directory.CreateDirectory(emptyDir);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/RepoIngestorTests.cs:83:        File.WriteAllText(Path.Combine(_tempDir, "file.txt"), "deterministic content");
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/RepoIngestorTests.cs:100:        File.WriteAllText(Path.Combine(_tempDir, "large.txt"), largeContent);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/RepoIngestorTests.cs:101:        File.WriteAllText(Path.Combine(_tempDir, "small.txt"), "small");
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/RepoIngestorTests.cs:116:        Directory.CreateDirectory(folderWithSubstring);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/RepoIngestorTests.cs:117:        File.WriteAllText(Path.Combine(folderWithSubstring, "keep.md"), "# keep");
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs:29:            .SelectMany(project => Directory.EnumerateFiles(project, "*.cs", SearchOption.AllDirectories))
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs:34:                File.ReadAllText(path)))
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs:59:        Directory.EnumerateDirectories(testsRoot)
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs:68:                    && Directory.EnumerateFiles(directory, "*.csproj").Any();
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:29:        Directory.CreateDirectory(dataRoot);
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:34:        Directory.CreateDirectory(Path.GetDirectoryName(workspaceFixture)!);
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:149:        return Process.Start(startInfo) ?? throw new InvalidOperationException("Failed to start stdio host.");
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TranscriptMcpStdioHostTests.cs:212:        var fileName = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Controllers/ConfigurationControllerTests.cs:28:        Directory.CreateDirectory(_tempDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Controllers/ConfigurationControllerTests.cs:65:        await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Controllers/ConfigurationControllerTests.cs:85:        var yamlText = await File.ReadAllTextAsync(yamlPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Controllers/ConfigurationControllerTests.cs:120:        File.WriteAllText(yamlPath, yamlContent);
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:27:        var yaml = File.ReadAllText(path);
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:45:        var content = File.ReadAllText(path);
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:68:        var content = File.ReadAllText(path);
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:90:        var content = File.ReadAllText(path);
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:112:        var content = File.ReadAllText(path);
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:130:        var content = File.ReadAllText(path);
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:162:        var content = File.ReadAllText(path);
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:204:        foreach (var path in Directory.EnumerateFiles(testsRoot, "*.cs", SearchOption.AllDirectories))
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:212:            var code = UnitSuitePlatformScanner.StripCommentsAndStrings(File.ReadAllText(path));
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:235:    [InlineData("Assert.SkipUnless(OperatingSystem.IsWindows(), \"w\");", "1")]
+tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:278:        Assert.DoesNotMatch(original, "Assert.SkipUnless(OperatingSystem.IsWindows(), \"w\");");
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/MemoryContractArtifactTests.cs:16:        using var document = JsonDocument.Parse(File.ReadAllText(contractPath));
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/MemoryContractArtifactTests.cs:50:        var text = File.ReadAllText(templatePath);
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/MemoryContractArtifactTests.cs:72:        var text = File.ReadAllText(docPath);
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs:107:        var skillText = File.ReadAllText(skill);
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs:118:        var grok = Path.Combine(Directory.GetParent(primary)!.FullName, "mcpserver-grok-plugin", "skills", "handoff", "SKILL.md");
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs:122:            Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(core))),
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs:123:            Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(grok))));
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs:228:        var gitDirLine = File.ReadLines(gitFile).FirstOrDefault(line => line.StartsWith("gitdir:", StringComparison.OrdinalIgnoreCase));
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs:236:        var main = Directory.GetParent(gitDir)?.Parent?.Parent;
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ExternalDocsIngestorTests.cs:19:        Directory.CreateDirectory(_externalDir);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ExternalDocsIngestorTests.cs:31:        File.WriteAllText(Path.Combine(_externalDir, "api-guide.md"), "# API Guide\nSome content here.");
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ExternalDocsIngestorTests.cs:32:        File.WriteAllText(Path.Combine(_externalDir, "tutorial.txt"), "Step 1: do something");
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ExternalDocsIngestorTests.cs:50:        File.WriteAllText(Path.Combine(_externalDir, "huge.txt"), new string('x', 2 * 1024 * 1024));
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ExternalDocsIngestorTests.cs:51:        File.WriteAllText(Path.Combine(_externalDir, "normal.txt"), "normal content");
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ExternalDocsIngestorTests.cs:71:        Directory.CreateDirectory(emptyDir);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/CodexTranscriptAdapterCoverageTests.cs:262:        Directory.CreateDirectory(tempWorkspace);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/CodexTranscriptAdapterCoverageTests.cs:345:        Directory.CreateDirectory(tempDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/CodexTranscriptAdapterCoverageTests.cs:355:            await File.WriteAllLinesAsync(transcriptPath, lines, TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/BrainSlotToolAbsenceTests.cs:55:        using var document = JsonDocument.Parse(File.ReadAllText(contractPath));
+tests/QBrainAi.Support.Mcp.Tests/Web/UseCaseCanvasUiAssetTests.cs:83:        return File.ReadAllText(path);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionTests.cs:21:        Directory.CreateDirectory(input);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionTests.cs:22:        Directory.CreateDirectory(pending);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionTests.cs:27:            await File.WriteAllTextAsync(source, "{\"type\":\"session_meta\"}\n", TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionTests.cs:28:            await File.WriteAllTextAsync(artifact, "session: keep\n", TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionTests.cs:40:            await File.WriteAllTextAsync(envelope, envelopeYaml, TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryIngestionTests.cs:42:            await File.WriteAllTextAsync(kept, "importRecovery:\n  sourceKind: Codex\n  persisted: false\n  degraded: true\n  yamlArtifactPath: " + YamlQuote(artifact) + "\n", TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs:21:        Directory.CreateDirectory(input);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs:22:        Directory.CreateDirectory(pending);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs:27:            await File.WriteAllTextAsync(source, "{\"type\":\"session_meta\"}\n", TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs:28:            await File.WriteAllTextAsync(artifact, "session: keep\n", TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs:30:            var template = await File.ReadAllTextAsync(fixture, TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs:35:            await File.WriteAllTextAsync(envelope, envelopeYaml, TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs:37:            await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiHostingTests.cs:15:        var html = File.ReadAllText(htmlPath);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiHostingTests.cs:33:        var docs = File.ReadAllText(Path.Combine(MemoryS6Catalog.FindRepoRoot(), "docs", "USER-GUIDE.md"))
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiHostingTests.cs:34:            + File.ReadAllText(Path.Combine(MemoryS6Catalog.FindRepoRoot(), "docs", "MCP-SERVER.md"));
+tests/QBrainAi.Support.Mcp.Tests/Configuration/ConfigurablePathIntegrationTests.cs:20:        var relativeRepoRoot = Path.GetRelativePath(Directory.GetCurrentDirectory(), repoFolder);
+tests/QBrainAi.Support.Mcp.Tests/Configuration/ConfigurablePathIntegrationTests.cs:21:        Directory.CreateDirectory(repoFolder);
+tests/QBrainAi.Support.Mcp.Tests/Configuration/ConfigurablePathIntegrationTests.cs:22:        await File.WriteAllTextAsync(Path.Combine(repoFolder, "readme.md"), "# relative root", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Configuration/ConfigurablePathIntegrationTests.cs:35:        var relativeRoot = Path.GetRelativePath(Directory.GetCurrentDirectory(), tempRoot);
+tests/QBrainAi.Support.Mcp.Tests/Configuration/ConfigurablePathIntegrationTests.cs:61:        Directory.CreateDirectory(alphaRoot);
+tests/QBrainAi.Support.Mcp.Tests/Configuration/ConfigurablePathIntegrationTests.cs:62:        Directory.CreateDirectory(betaRoot);
+tests/QBrainAi.Support.Mcp.Tests/Configuration/ConfigurablePathIntegrationTests.cs:110:        Directory.CreateDirectory(dir);
+tests/QBrainAi.Support.Mcp.Tests/UnitTestPaths.cs:13:    public static string Root { get; } = OperatingSystem.IsWindows() ? @"Q:\__mcp_unit_test__" : "/__mcp_unit_test__";
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:21:                    if (OperatingSystem.IsWindows()) return;
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:33:                    if (OperatingSystem.IsWindows()) return;
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:44:                    var s = "OperatingSystem.IsWindows()"; // RuntimeInformation.IsOSPlatform(x)
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:78:                public static string Root { get; } = OperatingSystem.IsWindows() ? "a" : "b";
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:90:                    public bool On => OperatingSystem.IsLinux();
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:100:                public void A() { _ = OperatingSystem.IsLinux(); }
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:105:                public void B() { _ = OperatingSystem.IsLinux(); }
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:125:                public void A() => Assert.True(RuntimeInformation.IsOSPlatform(OSPlatform.Linux));
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:144:                    var v = @"OperatingSystem.IsLinux() "" still inside";
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:145:                    var r = """OperatingSystem.IsMacOS()""";
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:147:                    _ = OperatingSystem.IsLinux();
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:158:                    Assert.SkipUnless(OperatingSystem.IsWindows(), "w");
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:170:                public void A() => Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:209:                    var a = $"host {OperatingSystem.IsWindows()} end";
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:210:                    var b = $"text OperatingSystem.IsLinux() {{OperatingSystem.IsMacOS()}}";
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:211:                    var c = $@"{(RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? "l" : "w")}";
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:212:                    var d = $$"""{{OperatingSystem.IsFreeBSD()}} {OperatingSystem.IsAndroid()}""";
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:213:                    var e = $"{value:OperatingSystem.IsIOS()}";
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:303:        Assert.Contains("_ = OperatingSystem.IsLinux();", stripped, StringComparison.Ordinal);
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:317:        Assert.Contains("{OperatingSystem.IsWindows()}", stripped, StringComparison.Ordinal);
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:318:        Assert.Contains("RuntimeInformation.IsOSPlatform(OSPlatform.Linux)", stripped, StringComparison.Ordinal);
+tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:319:        Assert.Contains("{{OperatingSystem.IsFreeBSD()}}", stripped, StringComparison.Ordinal);
+tests/QBrainAi.Support.Mcp.Tests/Configuration/TriageConfigurationContractTests.cs:16:        var primaryTriage = ExtractPrimaryTriageSection(File.ReadAllText(path));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiDeployDocsTests.cs:14:        var userGuide = File.ReadAllText(Path.Combine(root, "docs", "USER-GUIDE.md"));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiDeployDocsTests.cs:15:        var mcpServer = File.ReadAllText(Path.Combine(root, "docs", "MCP-SERVER.md"));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiDeployDocsTests.cs:16:        var memory = File.ReadAllText(Path.Combine(root, "docs", "context", "memory.md"));
+tests/QBrainAi.Support.Mcp.Tests/Options/TemplateStorageOptionsPostConfigureTests.cs:97:        Directory.CreateDirectory(templatesDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Options/TemplateStorageOptionsPostConfigureTests.cs:100:        await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Options/TemplateStorageOptionsPostConfigureTests.cs:160:        Directory.CreateDirectory(path);
+tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs:71:        var previousEnv = Environment.GetEnvironmentVariable(envName);
+tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs:72:        var previousCli = Environment.GetEnvironmentVariable(cliName);
+tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs:75:            Environment.SetEnvironmentVariable(envName, "/myrepo");
+tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs:76:            Environment.SetEnvironmentVariable(cliName, "/fromenv");
+tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs:97:            Environment.SetEnvironmentVariable(envName, previousEnv);
+tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs:98:            Environment.SetEnvironmentVariable(cliName, previousCli);
+tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs:186:        Directory.CreateDirectory(root);
+tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs:188:        await File.WriteAllTextAsync(yamlPath, """
+tests/QBrainAi.Support.Mcp.Tests/Options/ProductAliasCompatibilityTests.cs:213:            var written = await File.ReadAllTextAsync(yamlPath, TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:195:        var previousModern = Environment.GetEnvironmentVariable("QBRAINAI_INSTANCE");
+tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:196:        var previousLegacy = Environment.GetEnvironmentVariable("MCP_INSTANCE");
+tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:199:            Environment.SetEnvironmentVariable("QBRAINAI_INSTANCE", "from-new");
+tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:200:            Environment.SetEnvironmentVariable("MCP_INSTANCE", "from-old");
+tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:208:            Environment.SetEnvironmentVariable("QBRAINAI_INSTANCE", previousModern);
+tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:209:            Environment.SetEnvironmentVariable("MCP_INSTANCE", previousLegacy);
+tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:220:        var previousModern = Environment.GetEnvironmentVariable("QBRAINAI_INSTANCE");
+tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:221:        var previousLegacy = Environment.GetEnvironmentVariable("MCP_INSTANCE");
+tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:224:            Environment.SetEnvironmentVariable("QBRAINAI_INSTANCE", null);
+tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:225:            Environment.SetEnvironmentVariable("MCP_INSTANCE", "from-old");
+tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:233:            Environment.SetEnvironmentVariable("QBRAINAI_INSTANCE", previousModern);
+tests/QBrainAi.Support.Mcp.Tests/Options/McpInstanceResolverTests.cs:234:            Environment.SetEnvironmentVariable("MCP_INSTANCE", previousLegacy);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryReplayerTests.cs:15:        Directory.CreateDirectory(dir);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryReplayerTests.cs:19:            await File.WriteAllTextAsync(artifact, "session: keep\n", TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryReplayerTests.cs:22:            await File.WriteAllTextAsync(success, "importRecovery:\n  yamlArtifactPath: session.yaml\n  persisted: false\n  degraded: true\n", TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryReplayerTests.cs:23:            await File.WriteAllTextAsync(failure, "importRecovery:\n  yamlArtifactPath: session.yaml\n  persisted: false\n  degraded: true\n", TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffWorkspacePathsTests.cs:42:        Directory.CreateDirectory(leftRoot);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffWorkspacePathsTests.cs:43:        Directory.CreateDirectory(rightRoot);
+tests/QBrainAi.Support.Mcp.Tests/Services/EventPublishingServiceTests.cs:22:        Directory.CreateDirectory(_tempRoot);
+tests/QBrainAi.Support.Mcp.Tests/Services/EventPublishingServiceTests.cs:64:        await File.WriteAllTextAsync(appsettingsPath, """
+tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotLlmStrategyTests.cs:93:        var csproj = File.ReadAllText(Path.Combine(RepoRoot(), "src", "QBrainAi.Support.Mcp", "QBrainAi.Support.Mcp.csproj"));
+tests/QBrainAi.Support.Mcp.Tests/Services/EfTodoService_WorkspaceIsolationTests.cs:49:        Directory.CreateDirectory(Path.Combine(_workspaceA, "docs", "Project"));
+tests/QBrainAi.Support.Mcp.Tests/Services/EfTodoService_WorkspaceIsolationTests.cs:50:        Directory.CreateDirectory(Path.Combine(_workspaceB, "docs", "Project"));
+tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementsRecoveryMigrationTests.cs:31:        return File.ReadAllText(path);
+tests/QBrainAi.Support.Mcp.Tests/Services/EfTodoServiceTests.cs:42:        Directory.CreateDirectory(Path.Combine(_tempRoot, "docs", "Project"));
+tests/QBrainAi.Support.Mcp.Tests/Services/EfTodoServiceTests.cs:318:        Assert.Contains("EF-PROJ-001", File.ReadAllText(_tempYamlPath));
+tests/QBrainAi.Support.Mcp.Tests/Services/EfTodoServiceTests.cs:330:        Assert.Contains("After projection", File.ReadAllText(_tempYamlPath));
+tests/QBrainAi.Support.Mcp.Tests/Services/EfTodoServiceTests.cs:334:        Assert.DoesNotContain("EF-PROJ-001", File.ReadAllText(_tempYamlPath));
+tests/QBrainAi.Support.Mcp.Tests/Services/EfTodoServiceTests.cs:380:        File.WriteAllText(_tempYamlPath, "mvp-support:\n  high-priority: []\n");
+tests/QBrainAi.Support.Mcp.Tests/Services/EfTodoServiceTests.cs:390:        Assert.Contains("EF-REPAIR-001", File.ReadAllText(_tempYamlPath));
+tests/QBrainAi.Support.Mcp.Tests/Services/EfTodoServiceTests.cs:400:        Directory.CreateDirectory(_tempYamlPath);
+tests/QBrainAi.Support.Mcp.Tests/Services/EfTodoServiceTests.cs:423:        Assert.Contains("EF-FAIL-001", File.ReadAllText(_tempYamlPath));
+tests/QBrainAi.Support.Mcp.Tests/Services/EfTodoServiceTests.cs:449:        var yaml = File.ReadAllText(_tempYamlPath);
+tests/QBrainAi.Support.Mcp.Tests/Services/AppSettingsFileServiceTests.cs:23:        Directory.CreateDirectory(_tempDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Services/AppSettingsFileServiceTests.cs:36:        File.WriteAllText(
+tests/QBrainAi.Support.Mcp.Tests/Services/AppSettingsFileServiceTests.cs:63:        await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Services/AppSettingsFileServiceTests.cs:81:        var yamlText = await File.ReadAllTextAsync(yamlPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/AppSettingsFileServiceTests.cs:106:        await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Services/AppSettingsFileServiceTests.cs:121:        var yamlText = await File.ReadAllTextAsync(yamlPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/AppSettingsFileServiceTests.cs:141:        Directory.CreateDirectory(loadedDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Services/AppSettingsFileServiceTests.cs:142:        Directory.CreateDirectory(contentRootDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Services/AppSettingsFileServiceTests.cs:147:        await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Services/AppSettingsFileServiceTests.cs:153:        await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Services/AppSettingsFileServiceTests.cs:171:        var loadedYamlText = await File.ReadAllTextAsync(loadedYamlPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/AppSettingsFileServiceTests.cs:172:        var contentRootYamlText = await File.ReadAllTextAsync(contentRootYamlPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/AppSettingsFileServiceTests.cs:192:        await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Services/AppSettingsFileServiceTests.cs:215:                await File.WriteAllTextAsync(path, content, ct).ConfigureAwait(false);
+tests/QBrainAi.Support.Mcp.Tests/Services/AppSettingsFileServiceTests.cs:231:        var yamlText = await File.ReadAllTextAsync(yamlPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/AppSettingsFileServiceTests.cs:246:        await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Services/AppSettingsFileServiceTests.cs:261:                await File.WriteAllTextAsync(path, "partial", ct).ConfigureAwait(false);
+tests/QBrainAi.Support.Mcp.Tests/Services/AppSettingsFileServiceTests.cs:269:        var yamlText = await File.ReadAllTextAsync(yamlPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/AppSettingsFileServiceTests.cs:284:        await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Services/AppSettingsFileServiceTests.cs:299:        var jsonText = await File.ReadAllTextAsync(jsonPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/AppSettingsFileServiceTests.cs:311:        await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Services/AppSettingsFileServiceTests.cs:325:        var yamlText = await File.ReadAllTextAsync(yamlPath, TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotCredentialResolverTests.cs:15:        Environment.SetEnvironmentVariable(variableName, "  test-secret  ");
+tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotCredentialResolverTests.cs:26:            Environment.SetEnvironmentVariable(variableName, null);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffIngestionServiceTests.cs:33:        Directory.CreateDirectory(_workspace);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffIngestionServiceTests.cs:59:        File.WriteAllText(Path.Combine(_workspace, fileName), body);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffIngestionServiceTests.cs:85:        File.WriteAllText(Path.Combine(_workspace, "notes.bin"), "x");
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffIngestionServiceTests.cs:471:        Directory.CreateDirectory(outsideRoot);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffIngestionServiceTests.cs:473:        File.WriteAllText(outsideFile, "secret-outside");
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffIngestionServiceTests.cs:477:            File.CreateSymbolicLink(linkPath, outsideFile);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffIngestionServiceTests.cs:504:        Directory.CreateDirectory(otherWorkspace);
+tests/QBrainAi.Support.Mcp.Tests/Services/DocsSyncG8OverlayTests.cs:24:        Directory.CreateDirectory(Path.Combine(_tempRoot, "docs", "Project"));
+tests/QBrainAi.Support.Mcp.Tests/Services/DocsSyncG8OverlayTests.cs:26:        File.WriteAllText(Path.Combine(project, "Functional-Requirements.md"), "# Functional Requirements (QBrain.AI)\n\n## FR-MCP-G8-001 Overlay wiki\n\nBody.\n");
+tests/QBrainAi.Support.Mcp.Tests/Services/DocsSyncG8OverlayTests.cs:27:        File.WriteAllText(Path.Combine(project, "Technical-Requirements.md"), "# Technical Requirements (QBrain.AI)\n\n## TR-MCP-G8-001\n\nBody.\n");
+tests/QBrainAi.Support.Mcp.Tests/Services/DocsSyncG8OverlayTests.cs:28:        File.WriteAllText(Path.Combine(project, "Testing-Requirements.md"), "# Testing Requirements (QBrain.AI)\n\n- TEST-MCP-G8-001: wiki export.\n");
+tests/QBrainAi.Support.Mcp.Tests/Services/DocsSyncG8OverlayTests.cs:29:        File.WriteAllText(Path.Combine(project, "TR-per-FR-Mapping.md"), "# TR per FR Mapping (QBrain.AI)\n\n| FR | Primary TRs | Tests |\n| --- | --- | --- |\n| FR-MCP-G8-001 | TR-MCP-G8-001 | TEST-MCP-G8-001 |\n");
+tests/QBrainAi.Support.Mcp.Tests/Services/DocsSyncG8OverlayTests.cs:30:        File.WriteAllText(Path.Combine(project, "Requirements-Matrix.md"), "# Requirements Matrix (QBrain.AI)\n");
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TransactionGatedStdioRoutingTests.cs:71:        Directory.CreateDirectory(workspace);
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TransactionGatedStdioRoutingTests.cs:75:        using var output = File.Create(Path.Combine(workspace, "route.md"));
+tests/QBrainAi.Support.Mcp.Tests/McpStdio/TransactionGatedStdioRoutingTests.cs:476:        Assert.Equal("Routing fixture.", File.ReadAllText(Path.Combine(workspace, "route.md")).Trim());
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDurabilityTests.cs:34:        Directory.CreateDirectory(_workspace);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDeadContractInventoryTests.cs:50:            foreach (var file in Directory.EnumerateFiles(scanRoot, "*.cs", SearchOption.AllDirectories))
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDeadContractInventoryTests.cs:55:                var text = File.ReadAllText(file);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs:59:        var functional = await File.ReadAllTextAsync(Path.Combine(outputRoot, "Functional-Requirements.md"), cancellationToken: TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs:475:        await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs:484:        await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs:493:        await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs:526:        await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs:535:        await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs:544:        await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs:640:            Directory.CreateDirectory(Path.Combine(path, "docs", "Project"));
+tests/QBrainAi.Support.Mcp.Tests/Services/StorageConnectivityHealthCheckTests.cs:47:        await using (File.Create(path))
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentPoolServiceTests.cs:435:            Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = Environment.CurrentDirectory }),
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentPoolServiceTests.cs:441:            Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = Environment.CurrentDirectory }));
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs:28:                foreach (var path in Directory.GetFiles(_exportRoot, "*", SearchOption.AllDirectories))
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs:122:        var markdownFunctional = await File.ReadAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs:125:        var azureFunctional = await File.ReadAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs:128:        var githubFunctional = await File.ReadAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementScopeLayerServiceTests.cs:220:            Directory.CreateDirectory(Path.Combine(path, "docs", "Project"));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemorySurfaceParityTests.cs:34:        using var document = JsonDocument.Parse(await File.ReadAllTextAsync(contractPath, TestContext.Current.CancellationToken).ConfigureAwait(true));
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffBoundedSourceTests.cs:22:        Directory.CreateDirectory(_workspace);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffBoundedSourceTests.cs:43:        await File.WriteAllTextAsync(path, new string('x', HandoffPromptDefaults.MaxDecodedBytes + 1), TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs:29:        Directory.CreateDirectory(_workspace);
+tests/QBrainAi.Support.Mcp.Tests/Services/FrpTunnelProviderTests.cs:241:        File.WriteAllText(tempConfigPath, "test");
+tests/QBrainAi.Support.Mcp.Tests/Services/FrpTunnelProviderTests.cs:300:        var process = Process.Start(startInfo)
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentHelp/HelpTranscriptWriterTests.cs:36:        var lines = await File.ReadAllLinesAsync(filePath, TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagServiceTests.cs:24:        Directory.CreateDirectory(_workspacePath);
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagServiceTests.cs:79:        Directory.CreateDirectory(Path.GetDirectoryName(localDocPath)!);
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagServiceTests.cs:80:        await File.WriteAllTextAsync(localDocPath, "Video Bank Selection", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagServiceTests.cs:116:        Directory.CreateDirectory(dataFolder);
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagServiceTests.cs:135:        Directory.CreateDirectory(dataFolder);
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagServiceTests.cs:144:        Directory.CreateDirectory(Path.GetDirectoryName(docPath)!);
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagServiceTests.cs:145:        await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagServiceTests.cs:172:        Directory.CreateDirectory(sharedRoot);
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagServiceTests.cs:176:        Directory.CreateDirectory(workspaceA);
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagServiceTests.cs:177:        Directory.CreateDirectory(workspaceB);
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagServiceTests.cs:197:        await File.WriteAllTextAsync(stale, "stale", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagRelationshipCrudTests.cs:38:        Directory.CreateDirectory(_tempWorkspacePath);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs:69:        Directory.CreateDirectory(root);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs:71:        await File.WriteAllTextAsync(path, "handoff", TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs:75:            if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs:102:        Directory.CreateDirectory(current);
+tests/QBrainAi.Support.Mcp.Tests/Services/HandoffContainedFileReaderTests.cs:106:            await File.WriteAllTextAsync(path, "long-path-handoff", TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs:173:        Directory.CreateDirectory(target);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityConsumerTests.cs:176:            Directory.CreateSymbolicLink(alias, target);
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentHelp/AgentHelpTestPaths.cs:23:        Directory.CreateDirectory(path);
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagEntityCrudTests.cs:38:        Directory.CreateDirectory(_tempWorkspacePath);
+tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs:29:            : Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
+tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs:32:            : Environment.GetEnvironmentVariable("TEMP");
+tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs:66:            Environment.UserInteractive,
+tests/QBrainAi.Support.Mcp.Tests/Services/DesktopProcessSpawnerTests.cs:72:            FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "cmd.exe"),
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS6Catalog.cs:54:        return File.ReadAllText(path);
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagIngestTextTests.cs:47:        Directory.CreateDirectory(_tempWorkspacePath);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextExtractorTests.cs:61:        Directory.CreateDirectory(histDir);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextExtractorTests.cs:64:            File.WriteAllText(Path.Combine(histDir, "chat.jsonl"), "working MCP-HISTORY-001 on docs/plans/from-home.md");
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextExtractorTests.cs:81:        Directory.CreateDirectory(home);
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentHelp/AgentHelpInboundGuardTests.cs:60:        => File.ReadAllText(AgentHelpTestPaths.ResolveFixturePath(relativePath)).Trim();
+tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:165:                File.WriteAllText(outputPath, outputBody);
+tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:171:                PromptFileText = File.ReadAllText(promptFilePath);
+tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagDocumentManagementTests.cs:43:        Directory.CreateDirectory(_tempWorkspacePath);
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentHelp/AgentHelpPinnedPathResolverTests.cs:16:        Directory.CreateDirectory(Path.Combine(dataRoot, "templates"));
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentHelp/AgentHelpPinnedPathResolverTests.cs:17:        File.WriteAllText(Path.Combine(workspaceRoot, "AGENTS.md"), "workspace marker");
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentHelp/AgentHelpPinnedPathResolverTests.cs:18:        File.WriteAllText(Path.Combine(dataRoot, "templates", "prompt-templates.yaml"), "data template");
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:21:        Directory.CreateDirectory(_tempDir);
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:22:        File.WriteAllText(Path.Combine(_tempDir, "readme.md"), "# Hello");
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:23:        Directory.CreateDirectory(Path.Combine(_tempDir, "src"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:24:        File.WriteAllText(Path.Combine(_tempDir, "src", "code.cs"), "class Foo {}");
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:25:        File.WriteAllText(Path.Combine(_tempDir, "src", "notes.txt"), "notes");
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:26:        Directory.CreateDirectory(Path.Combine(_tempDir, "src", "nested"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:27:        File.WriteAllText(Path.Combine(_tempDir, "src", "nested", "deep.cs"), "class Deep {}");
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:66:        Directory.CreateDirectory(outsideDir);
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:68:        await File.WriteAllTextAsync(outsideFile, "outside", TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:82:            Assert.Equal("outside", await File.ReadAllTextAsync(outsideFile, TestContext.Current.CancellationToken).ConfigureAwait(true));
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:115:        Assert.Equal("created", await File.ReadAllTextAsync(created, ct).ConfigureAwait(true));
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:117:        Assert.Equal("edited", await File.ReadAllTextAsync(notes, ct).ConfigureAwait(true));
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:137:        Assert.Equal("class Foo {}", await File.ReadAllTextAsync(Path.Combine(_tempDir, "src", "code.cs"), ct).ConfigureAwait(true));
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:241:        Assert.Equal("# Hello", File.ReadAllText(Path.Combine(_tempDir, "readme.md")));
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:264:        File.WriteAllText(Path.Combine(_tempDir, "readme.md"), "human edit");
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:271:        Assert.Equal("human edit", File.ReadAllText(Path.Combine(_tempDir, "readme.md")));
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:282:        Assert.Equal("# World", File.ReadAllText(Path.Combine(_tempDir, "readme.md")));
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:293:        Assert.Equal("# Hello", File.ReadAllText(Path.Combine(_tempDir, "readme.md")));
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:306:        Assert.Equal("a a a", File.ReadAllText(Path.Combine(_tempDir, "multi.txt")));
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:319:        Assert.Equal("b b b", File.ReadAllText(Path.Combine(_tempDir, "multi.txt")));
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:410:        Directory.CreateDirectory(allowedRoot);
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:411:        File.WriteAllText(Path.Combine(allowedRoot, "inside.cs"), "class Inside {}");
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:414:        Directory.CreateDirectory(prefixLookalikeRoot);
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:415:        File.WriteAllText(Path.Combine(prefixLookalikeRoot, "escape.cs"), "class Escape {}");
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:472:        Directory.CreateDirectory(outsideDir);
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:473:        File.WriteAllText(Path.Combine(outsideDir, "outside.cs"), "class Outside {}");
+tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs:512:            Directory.CreateSymbolicLink(linkPath, targetPath);
+tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:514:        var reRooted = Path.Combine(Directory.GetCurrentDirectory(), "C:/foreign/workspace");
+tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:536:        Directory.CreateDirectory(workspacePath);
+tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:552:        Directory.CreateDirectory(workspacePath);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:138:        var githubManifest = await File.ReadAllTextAsync(Path.Combine(outputRoot, "github", RequirementsWikiDocumentRenderer.ManifestFileName), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:139:        var azureManifest = await File.ReadAllTextAsync(Path.Combine(outputRoot, "azure", RequirementsWikiDocumentRenderer.ManifestFileName), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:152:        Directory.CreateDirectory(Path.Combine(outputRoot, "github"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:154:        await File.WriteAllTextAsync(existingHome, "prior home", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:168:        Assert.Equal("prior home", await File.ReadAllTextAsync(existingHome, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:180:        Directory.CreateDirectory(Path.Combine(outputRoot, "github", "api"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:182:        await File.WriteAllTextAsync(staleArtifact, "old", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:206:        Directory.CreateDirectory(Path.Combine(outputRoot, "github"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:208:        await File.WriteAllTextAsync(existingHome, "prior home", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:216:        Assert.Equal("prior home", await File.ReadAllTextAsync(existingHome, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:259:        Assert.Contains("Scratch DocFX Home", File.ReadAllText(indexPath), StringComparison.Ordinal);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:260:        Assert.Contains("Scratch DocFX Guide", File.ReadAllText(guidePath), StringComparison.Ordinal);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:261:        Assert.Contains("Raw copied markdown", File.ReadAllText(rawMarkdownPath), StringComparison.Ordinal);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:323:            Directory.CreateDirectory(System.IO.Path.Combine(Path, "docs", "Project"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:324:            Directory.CreateDirectory(System.IO.Path.Combine(Path, "docs"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:341:            File.WriteAllText(System.IO.Path.Combine(Path, "docs", "Project", RequirementsDocumentRenderer.FunctionalFileName), """
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:348:            File.WriteAllText(System.IO.Path.Combine(Path, "docs", "Project", RequirementsDocumentRenderer.TechnicalFileName), """
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:355:            File.WriteAllText(System.IO.Path.Combine(Path, "docs", "Project", RequirementsDocumentRenderer.TestingFileName), """
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:362:            File.WriteAllText(System.IO.Path.Combine(Path, "docs", "Project", RequirementsDocumentRenderer.MappingFileName), """
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:369:            File.WriteAllText(System.IO.Path.Combine(Path, "docs", "Project", RequirementsDocumentRenderer.MatrixFileName), """
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:380:            File.WriteAllText(System.IO.Path.Combine(Path, "docs", "wiki.yaml"), """
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:406:            Directory.CreateDirectory(System.IO.Path.Combine(Path, ".config"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:407:            Directory.CreateDirectory(System.IO.Path.Combine(Path, "docs", "docfx", "resources"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:408:            File.WriteAllText(System.IO.Path.Combine(Path, ".config", "dotnet-tools.json"), """
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:422:            File.WriteAllText(System.IO.Path.Combine(Path, "docs", "docfx", "docfx.json"), """
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:447:            File.WriteAllText(System.IO.Path.Combine(Path, "docs", "docfx", "index.md"), """
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:452:            File.WriteAllText(System.IO.Path.Combine(Path, "docs", "docfx", "guide.md"), """
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:457:            File.WriteAllText(System.IO.Path.Combine(Path, "docs", "docfx", "resources", "raw-note.md"), """
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:468:            Directory.CreateDirectory(System.IO.Path.Combine(Path, "docs", "docfx"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:471:            File.WriteAllText(System.IO.Path.Combine(Path, "docs", "wiki.yaml"), $$"""
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:510:            foreach (var file in Directory.EnumerateFiles(root, "*", SearchOption.AllDirectories))
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportOrchestratorTests.cs:548:            Directory.CreateDirectory(System.IO.Path.Combine(path, "docs", "Project"));
+tests/QBrainAi.Support.Mcp.Tests/Services/LegacyTodoSqliteMigratorTests.cs:34:        Directory.CreateDirectory(_tempRoot);
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentHelp/AgentHelpGlobalGraphRagCorpusTests.cs:21:        File.WriteAllText(Path.Combine(workspaceRoot, "AGENTS.md"), "# Agents\nLocal workspace guidance only.");
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs:27:        var contextSource = File.ReadAllText(
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs:29:        var federationSource = File.ReadAllText(
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs:100:        if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs:127:        else if (OperatingSystem.IsLinux())
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs:134:            Directory.CreateDirectory(target);
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs:135:            Directory.CreateSymbolicLink(alias, target);
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs:181:        var minimumInvocationIncrease = OperatingSystem.IsWindows() ? 1 : 9;
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs:189:        var source = File.ReadAllText(
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentHelp/AgentHelpIncidentLoggerTests.cs:35:        var files = Directory.GetFiles(incidentDir, "*.json");
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentHelp/AgentHelpIncidentLoggerTests.cs:38:        var json = await File.ReadAllTextAsync(files[0], TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:18:        Directory.CreateDirectory(Path.Combine(_workspaceRoot, "docs", "Project"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:19:        Directory.CreateDirectory(Path.Combine(_workspaceRoot, "docs", "wiki"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:74:            foreach (var file in Directory.EnumerateFiles(_workspaceRoot, "*", SearchOption.AllDirectories))
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:86:        File.WriteAllText(Path.Combine(_workspaceRoot, "docs", "Architecture.md"), "# Architecture\n\nSystem overview.\n");
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:87:        File.WriteAllText(Path.Combine(_workspaceRoot, "docs", "wiki", "Home.template.md"), "# Custom Home\n\n{{navigation}}\n\n{{documents}}\n\n{{generatedAtUtc}}\n");
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:111:        Assert.Equal("# Architecture\n\nSystem overview.\n", File.ReadAllText(Path.Combine(exportRoot, "github", "Architecture.md")));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:113:        var home = File.ReadAllText(Path.Combine(exportRoot, "github", "Home.md"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:118:        var sidebar = File.ReadAllText(Path.Combine(exportRoot, "github", "_Sidebar.md"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:123:        Assert.Equal("Home\nRequirements\nArchitecture\n", File.ReadAllText(Path.Combine(exportRoot, "azure", ".order")));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:124:        Assert.Equal("Functional-Requirements\n", File.ReadAllText(Path.Combine(exportRoot, "azure", "Requirements", ".order")));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:126:        var githubManifest = File.ReadAllText(Path.Combine(exportRoot, "github", RequirementsWikiDocumentRenderer.ManifestFileName));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:129:        var azureManifest = File.ReadAllText(Path.Combine(exportRoot, "azure", RequirementsWikiDocumentRenderer.ManifestFileName));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:155:        var home = File.ReadAllText(Path.Combine(exportRoot, "github", "Home.md"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:184:        Directory.CreateDirectory(Path.Combine(exportRoot, "github"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:186:        File.WriteAllText(existing, "existing");
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:198:        Assert.Equal("existing", File.ReadAllText(existing));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:230:        Directory.CreateDirectory(Path.Combine(_workspaceRoot, "docs", "docfx"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:266:        Directory.CreateDirectory(outsideRoot);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:269:            Directory.CreateSymbolicLink(linkPath, outsideRoot);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:298:        File.WriteAllText(Path.Combine(_workspaceRoot, "docs", "wiki.yaml"), s_yamlSerializer.Serialize(document));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:384:        File.WriteAllText(Path.Combine(projectDir, "Functional-Requirements.md"), "# Functional Requirements (QBrain.AI)\n\n## FR-MCP-001 Existing FR\n\nFunctional text.\n");
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:385:        File.WriteAllText(Path.Combine(projectDir, "Technical-Requirements.md"), "# Technical Requirements (QBrain.AI)\n\n## TR-MCP-001\n\nTechnical text.\n");
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:386:        File.WriteAllText(Path.Combine(projectDir, "Testing-Requirements.md"), "# Testing Requirements (QBrain.AI)\n\n## TEST-MCP\n\n### TEST-MCP-001\n\nTest text.\n");
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:387:        File.WriteAllText(Path.Combine(projectDir, "TR-per-FR-Mapping.md"), "# TR per FR Mapping (QBrain.AI)\n\n| FR | Primary TRs | Tests |\n| --- | --- | --- |\n| FR-MCP-001 | TR-MCP-001 | TEST-MCP-001 |\n");
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsWikiExportConfigTests.cs:388:        File.WriteAllText(Path.Combine(projectDir, "Requirements-Matrix.md"), "# Requirements Matrix\n\n");
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentHelp/AgentHelpCorpusServiceTests.cs:20:        Directory.CreateDirectory(Path.Combine(workspaceRoot, "docs", "context"));
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentHelp/AgentHelpCorpusServiceTests.cs:21:        File.WriteAllText(
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentHelp/AgentHelpCorpusServiceTests.cs:24:        File.WriteAllText(
+tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs:22:        Directory.CreateDirectory(_workspacePath);
+tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs:42:        Directory.CreateDirectory(workspacePath);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityWindowsTests.cs:22:        Assert.True(OperatingSystem.IsWindows());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityWindowsTests.cs:118:        Assert.True(OperatingSystem.IsWindows());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthIdentityWindowsTests.cs:181:        Assert.True(OperatingSystem.IsWindows());
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSanitizerRegistrationTests.cs:55:        return File.ReadAllText(Path.Combine(repoRoot, relativePath));
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentHelp/AgentHelpConversationServiceTests.cs:29:        var injection = File.ReadAllText(
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentHelp/AgentHelpConversationServiceTests.cs:58:        var transcriptJson = await File.ReadAllTextAsync(transcriptPath, TestContext.Current.CancellationToken)
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentHelp/AgentHelpConversationServiceTests.cs:64:        Assert.NotEmpty(Directory.GetFiles(incidentDir, "*.json"));
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentHelp/AgentHelpConversationServiceTests.cs:76:        var injection = File.ReadAllText(
+tests/QBrainAi.Support.Mcp.Tests/Services/AgentHelp/AgentHelpConversationServiceTests.cs:116:        var benign = File.ReadAllText(
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:21:            Directory.CreateDirectory(workflow.OutputRootPath);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:22:            File.WriteAllText(Path.Combine(workflow.OutputRootPath, "index.html"), "<html>ok</html>");
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:83:            Directory.CreateDirectory(workflow.OutputRootPath);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:84:            File.WriteAllBytes(Path.Combine(workflow.OutputRootPath, "logo.png"), [1, 2, 3]);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:106:            Directory.CreateDirectory(workflow.OutputRootPath);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:107:            Directory.CreateSymbolicLink(Path.Combine(workflow.OutputRootPath, "external"), external.Path);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:128:            Directory.CreateDirectory(Path.Combine(workflow.OutputRootPath, "nested"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:129:            File.WriteAllText(Path.Combine(workflow.OutputRootPath, "b.html"), "b");
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:130:            File.WriteAllText(Path.Combine(workflow.OutputRootPath, "a.md"), "a");
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:131:            File.WriteAllText(Path.Combine(workflow.OutputRootPath, "nested", "c.css"), "c");
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:161:            Directory.CreateDirectory(first.OutputRootPath);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:162:            File.WriteAllText(Path.Combine(first.OutputRootPath, "index.html"), "first");
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:167:            Directory.CreateDirectory(second.OutputRootPath);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:168:            File.WriteAllText(Path.Combine(second.OutputRootPath, "index.html"), "second");
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:244:            Directory.CreateDirectory(Path);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocFxWorkflowRunnerTests.cs:245:            Directory.CreateDirectory(System.IO.Path.Combine(Path, "docs", "docfx"));
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:165:        Directory.CreateDirectory(tempRoot);
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:166:        var previous = Environment.GetEnvironmentVariable("MCPSERVER_CODEX_ONESHOT_TEMP");
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:167:        Environment.SetEnvironmentVariable("MCPSERVER_CODEX_ONESHOT_TEMP", tempRoot);
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:188:            Environment.SetEnvironmentVariable("MCPSERVER_CODEX_ONESHOT_TEMP", previous);
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:264:                OutputSchemaJson = File.ReadAllText(OutputSchemaPath, Encoding.UTF8);
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:269:                File.WriteAllText(OutputLastMessagePath, outputBody, Encoding.UTF8);
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:393:        Directory.CreateDirectory(shimDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:395:        File.WriteAllText(cmdPath, "@echo off", Encoding.UTF8);
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:42:            name => Environment.GetEnvironmentVariable(name));
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:47:                Environment.SetEnvironmentVariable(name, null);
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:54:                Environment.SetEnvironmentVariable(name, value);
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:67:        Directory.CreateDirectory(emptyProfile);
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:326:        Directory.CreateDirectory(tempDir);
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:341:            var yaml = await File.ReadAllTextAsync(markerPath, cancellationToken: TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:394:        Directory.CreateDirectory(tempDir);
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:399:            await File.WriteAllTextAsync(gitignorePath, "bin/" + Environment.NewLine, cancellationToken: TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:413:            var gitignoreLines = await File.ReadAllLinesAsync(gitignorePath, cancellationToken: TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:441:        Directory.CreateDirectory(tempDir);
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:457:            var config = s_yamlDeserializer.Deserialize<MarkerDefaultWikiConfig>(await File.ReadAllTextAsync(wikiPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:499:        Directory.CreateDirectory(Path.Combine(tempDir, "docs"));
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:524:            await File.WriteAllTextAsync(wikiPath, existingYaml, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:532:            Assert.Equal(existingYaml, await File.ReadAllTextAsync(wikiPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true));
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:562:        Directory.CreateDirectory(tempDir);
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:567:            await File.WriteAllTextAsync(markerPath, "sentinel marker content", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:572:            Assert.Empty(Directory.GetFiles(tempDir, MarkerFileService.MarkerFileName + ".deleted-*"));
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:573:            Assert.Empty(Directory.GetFiles(tempDir));
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:601:        Directory.CreateDirectory(tempDir);
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:607:                await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:615:            Assert.Empty(Directory.GetFiles(tempDir));
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:642:        Directory.CreateDirectory(tempDir);
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:648:            Assert.Empty(Directory.GetFiles(tempDir));
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:802:        Directory.CreateDirectory(workspace);
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:803:        Directory.CreateDirectory(claudePlugin);
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:804:        File.WriteAllText(Path.Combine(claudePlugin, ".version"), "9.8.7");
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:831:        Directory.CreateDirectory(workspace);
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:832:        Directory.CreateDirectory(claudePlugin);
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:841:                File.WriteAllText(Path.Combine(claudePlugin, ".version"), "9.8.7");
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:1010:        var text = File.ReadAllText(path).ReplaceLineEndings("\n");
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:1195:        Directory.CreateDirectory(tempDir);
+tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:1208:            var yaml = await File.ReadAllTextAsync(markerPath, cancellationToken: TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogServiceTurnContextTests.cs:352:        var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:17:        Directory.CreateDirectory(Path.Combine(_tempRoot, "docs", "Project"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:92:        Assert.Contains("FR-MCP-001", File.ReadAllText(Path.Combine(outputRoot, RequirementsDocumentRenderer.FunctionalFileName)));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:93:        Assert.Contains("TEST-MCP-001", File.ReadAllText(Path.Combine(outputRoot, RequirementsDocumentRenderer.MatrixFileName)));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:126:        await File.WriteAllTextAsync(projectMatrixPath, """
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:139:        var matrix = await File.ReadAllTextAsync(Path.Combine(outputRoot, RequirementsDocumentRenderer.MatrixFileName), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:153:        Directory.CreateDirectory(Path.Combine(outputRoot, "azure"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:154:        File.WriteAllText(Path.Combine(outputRoot, "azure", "Old.md"), "stale");
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:183:        var manifest = File.ReadAllText(Path.Combine(outputRoot, "azure", ".mcp-requirements-manifest.json"));
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:205:        Directory.CreateDirectory(Path.GetDirectoryName(existingExport)!);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:206:        Directory.CreateDirectory(Path.GetDirectoryName(staleExport)!);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:207:        await File.WriteAllTextAsync(existingExport, "stale generated export", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:208:        await File.WriteAllTextAsync(staleExport, "stale export", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:214:        var rewritten = await File.ReadAllTextAsync(existingExport, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:233:        var githubTesting = await File.ReadAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:235:        var azureTesting = await File.ReadAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:268:        var content = await File.ReadAllTextAsync(testingPath, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:272:        Assert.DoesNotContain(Directory.GetFiles(Path.GetDirectoryName(testingPath)!, "*.tmp"), _ => true);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:404:        File.WriteAllText(Path.Combine(projectDir, "Functional-Requirements.md"), "# Functional Requirements (QBrain.AI)\n\n");
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:405:        File.WriteAllText(Path.Combine(projectDir, "Technical-Requirements.md"), "# Technical Requirements (QBrain.AI)\n\n");
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:406:        File.WriteAllText(Path.Combine(projectDir, "Testing-Requirements.md"), "# Testing Requirements (QBrain.AI)\n\n");
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:407:        File.WriteAllText(Path.Combine(projectDir, "TR-per-FR-Mapping.md"), "# TR per FR Mapping (QBrain.AI)\n\n| FR | Primary TRs | Tests |\n| --- | --- | --- |\n");
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:413:        File.WriteAllText(Path.Combine(projectDir, "Functional-Requirements.md"), """
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:429:        File.WriteAllText(Path.Combine(projectDir, "Technical-Requirements.md"), """
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:445:        File.WriteAllText(Path.Combine(projectDir, "Testing-Requirements.md"), """
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:452:        File.WriteAllText(Path.Combine(projectDir, "TR-per-FR-Mapping.md"), """
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:464:        File.WriteAllText(Path.Combine(projectDir, "Functional-Requirements.md"), """
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:472:        File.WriteAllText(Path.Combine(projectDir, "Technical-Requirements.md"), """
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:480:        File.WriteAllText(Path.Combine(projectDir, "Testing-Requirements.md"), """
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDocumentServiceTests.cs:491:        File.WriteAllText(Path.Combine(projectDir, "TR-per-FR-Mapping.md"), """
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:572:        var previousQuad = Environment.GetEnvironmentVariable("MCPSERVER_QUADBRAIN_CLI_TEMP");
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:573:        var previousOneShot = Environment.GetEnvironmentVariable("MCPSERVER_ONESHOT_TEMP");
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:575:        Directory.CreateDirectory(temp);
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:578:            Environment.SetEnvironmentVariable("MCPSERVER_QUADBRAIN_CLI_TEMP", temp);
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:579:            Environment.SetEnvironmentVariable("MCPSERVER_ONESHOT_TEMP", null);
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:584:            Environment.SetEnvironmentVariable("MCPSERVER_QUADBRAIN_CLI_TEMP", previousQuad);
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:585:            Environment.SetEnvironmentVariable("MCPSERVER_ONESHOT_TEMP", previousOneShot);
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:650:                File.WriteAllText(outputPath, outputBody, Encoding.UTF8);
+tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:752:        var common = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSubmitBudgetTests.cs:82:        var appSettings = File.ReadAllText(Path.Combine(root, "src", "QBrainAi.Support.Mcp", "appsettings.yaml"));
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSubmitBudgetTests.cs:83:        var program = File.ReadAllText(Path.Combine(root, "src", "QBrainAi.Support.Mcp", "Program.cs"));
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSubmitBudgetTests.cs:84:        var stdio = File.ReadAllText(Path.Combine(root, "src", "QBrainAi.Support.Mcp", "McpStdio", "McpStdioHost.cs"));
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:25:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:31:        Directory.CreateDirectory(safeRoot);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:32:        Directory.CreateSymbolicLink(alias, fixture.MountPath);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:63:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:70:        Directory.CreateDirectory(safeRoot);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:71:        Directory.CreateDirectory(safeTarget);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:72:        Directory.CreateSymbolicLink(alias, safeTarget);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:85:                Directory.CreateSymbolicLink(alias, fixture.MountPath);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:114:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:120:        Directory.CreateDirectory(safeRoot);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:121:        Directory.CreateSymbolicLink(alias, fixture.MountPath);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:194:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:200:        Directory.CreateDirectory(safeRoot);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:201:        Directory.CreateSymbolicLink(alias, Path.Combine(fixture.MountPath, "inside"));
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:245:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:252:        Directory.CreateDirectory(safeRoot);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:253:        Directory.CreateDirectory(safeTarget);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:254:        Directory.CreateSymbolicLink(alias, safeTarget);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:270:                Directory.CreateSymbolicLink(alias, fixture.MountPath);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:308:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:316:        Directory.CreateDirectory(safeRoot);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:317:        Directory.CreateDirectory(safeTarget);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:318:        Directory.CreateSymbolicLink(alias, safeTarget);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:334:                Directory.CreateSymbolicLink(safeTarget, fixture.MountPath);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:389:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:408:                helper = Process.Start(startInfo)
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:500:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:505:        Directory.CreateDirectory(root);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:708:        OperatingSystem.IsLinux() &&
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:727:        Directory.CreateDirectory(mountPath);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:728:        await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:763:        Directory.CreateDirectory(destination);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:789:        var process = Process.Start(startInfo)
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:902:            var mountInfo = await File.ReadAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:951:        using var process = Process.Start(startInfo)
+tests/QBrainAi.Support.Mcp.Tests/Services/TodoExecutionServiceSqliteTests.cs:40:        Directory.CreateDirectory(_workspacePath);
+tests/QBrainAi.Support.Mcp.Tests/Services/WindowsServiceDeploymentGuardTests.cs:15:        Directory.CreateDirectory(_tempDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Services/WindowsServiceDeploymentGuardTests.cs:35:        File.WriteAllText(Path.Combine(_tempDirectory, "appsettings.yaml"), "Logging:\n  LogLevel:\n    Default: Information\n");
+tests/QBrainAi.Support.Mcp.Tests/Services/WindowsServiceDeploymentGuardTests.cs:36:        File.WriteAllText(Path.Combine(_tempDirectory, "QBrainAi.Support.Mcp.exe"), "fake exe");
+tests/QBrainAi.Support.Mcp.Tests/Services/WindowsServiceDeploymentGuardTests.cs:52:        File.WriteAllText(Path.Combine(_tempDirectory, "appsettings.yaml"), "Logging:\n  LogLevel:\n    Default: Information\n");
+tests/QBrainAi.Support.Mcp.Tests/Services/WindowsServiceDeploymentGuardTests.cs:53:        File.WriteAllText(exePath, "fake exe");
+tests/QBrainAi.Support.Mcp.Tests/Services/WindowsServiceDeploymentGuardTests.cs:75:        File.WriteAllText(Path.Combine(_tempDirectory, "appsettings.yaml"), "Logging:\n  LogLevel:\n    Default: Information\n");
+tests/QBrainAi.Support.Mcp.Tests/Services/WindowsServiceDeploymentGuardTests.cs:76:        File.WriteAllText(exePath, "fake exe");
+tests/QBrainAi.Support.Mcp.Tests/Services/WindowsServiceDeploymentGuardTests.cs:77:        File.WriteAllText(launcherPath, "fake launcher");
+tests/QBrainAi.Support.Mcp.Tests/Services/WindowsServiceDeploymentGuardTests.cs:112:        File.WriteAllText(manifestPath, JsonSerializer.Serialize(manifest));
+tests/QBrainAi.Support.Mcp.Tests/Services/WindowsServiceDeploymentGuardTests.cs:116:        Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(path))).ToLowerInvariant();
+tests/QBrainAi.Support.Mcp.Tests/Services/TodoBootstrapImporterTests.cs:28:        Directory.CreateDirectory(_root);
+tests/QBrainAi.Support.Mcp.Tests/Services/TodoBootstrapImporterTests.cs:219:        Directory.CreateDirectory(Path.Combine(dir, "docs"));
+tests/QBrainAi.Support.Mcp.Tests/Services/TodoBootstrapImporterTests.cs:224:        => File.WriteAllText(Path.Combine(wsRoot, "docs", "todo.yaml"), yaml);
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:21:        var originalPublic = Environment.GetEnvironmentVariable("PUBLIC");
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:28:        Directory.CreateDirectory(publicPath);
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:29:        Directory.CreateDirectory(grokBin);
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:30:        Directory.CreateDirectory(Path.Combine(userProfile, "AppData", "Local"));
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:34:            Environment.SetEnvironmentVariable("PUBLIC", publicPath);
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:49:            Environment.SetEnvironmentVariable("PUBLIC", originalPublic);
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:62:        Directory.CreateDirectory(grokBin);
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:63:        File.WriteAllText(grokExe, string.Empty);
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:102:        Directory.CreateDirectory(aliasDir);
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:103:        Directory.CreateDirectory(portableDir);
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:104:        File.WriteAllBytes(aliasStub, []);
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:105:        File.WriteAllText(portableExe, "real");
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:138:        Directory.CreateDirectory(msixDir);
+tests/QBrainAi.Support.Mcp.Tests/Services/ProcessEnvironmentServiceTests.cs:139:        File.WriteAllText(msixExe, "real");
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG7OverlayTests.cs:30:        Directory.CreateDirectory(_workspace);
+tests/QBrainAi.Support.Mcp.Tests/Services/TodoExecutionServiceTests.cs:37:        Directory.CreateDirectory(_workspacePath);
+tests/QBrainAi.Support.Mcp.Tests/Services/PromptTemplateServiceTests.cs:18:        File.WriteAllText(
+tests/QBrainAi.Support.Mcp.Tests/Services/PromptTemplateServiceTests.cs:119:        File.WriteAllText(_tempFilePath, "human edit");
+tests/QBrainAi.Support.Mcp.Tests/Services/PromptTemplateServiceTests.cs:126:        Assert.Equal("human edit", File.ReadAllText(_tempFilePath));
+tests/QBrainAi.Support.Mcp.Tests/Services/FileGitHubWorkspaceTokenStoreTests.cs:24:        Directory.CreateDirectory(_tempRoot);
+tests/QBrainAi.Support.Mcp.Tests/Services/FileGitHubWorkspaceTokenStoreTests.cs:109:        if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Services/FileGitHubWorkspaceTokenStoreTests.cs:116:        if (OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:28:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:137:        File.WriteAllText(stale, "stale");
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:153:        File.WriteAllText(stale, "stale");
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:160:        Assert.Equal("stale", File.ReadAllText(Path.Combine(fixture.ExternalParent, "stale.md")));
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:206:        Directory.CreateDirectory(fixture.ExternalParent);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:221:                    Directory.CreateDirectory(outside);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:239:        File.WriteAllText(regularFile, "file");
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:271:        Directory.CreateDirectory(fixture.ExternalParent);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:274:            () => Directory.CreateSymbolicLink(planted, fixture.ExternalParent));
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:281:        Assert.Empty(Directory.EnumerateFileSystemEntries(fixture.ExternalParent));
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:297:        await File.WriteAllTextAsync(path, originalContent, TestContext.Current.CancellationToken)
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:325:            await File.ReadAllTextAsync(path, TestContext.Current.CancellationToken).ConfigureAwait(true));
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:340:        await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:396:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:402:        Directory.CreateDirectory(root);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:403:        await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:418:                Directory.CreateDirectory(root);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:456:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:467:            Directory.CreateDirectory(root);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:468:            await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:484:                Directory.CreateDirectory(roots[index]);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:566:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:571:        Directory.CreateDirectory(root);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:572:        await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:590:                        Directory.CreateDirectory(root);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:658:        Assert.True(OperatingSystem.IsLinux());
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:663:        Directory.CreateDirectory(root);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:673:                Directory.CreateDirectory(root);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:711:        await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:730:            await File.ReadAllTextAsync(generated, TestContext.Current.CancellationToken).ConfigureAwait(true));
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:743:        await File.WriteAllTextAsync(stale, "stale", TestContext.Current.CancellationToken)
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:759:            await File.ReadAllTextAsync(generated, TestContext.Current.CancellationToken).ConfigureAwait(true));
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:774:        await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:806:        Directory.CreateDirectory(workspace);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:930:            Directory.CreateDirectory(LiveParent);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:988:                    Directory.CreateDirectory(testRoot);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:1015:            foreach (var line in File.ReadLines("/proc/self/mountinfo"))
+tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedSessionLogServiceTests.cs:184:        var source = File.ReadAllText(sourcePath);
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:40:        Directory.CreateDirectory(_workspace);
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:92:        var dump = JsonSerializer.Deserialize<WikiDumpDocument>(await File.ReadAllTextAsync(dumpPath, TestContext.Current.CancellationToken), Camel())!;
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:166:        var dump = JsonSerializer.Deserialize<WikiDumpDocument>(await File.ReadAllTextAsync(dumpPath, TestContext.Current.CancellationToken), Camel())!;
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:210:        File.WriteAllText(Path.Combine(dumpRoot, "todo.yaml"), "id: TODO-FROM-YAML\n");
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:213:        Directory.CreateDirectory(dest);
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:236:        Directory.CreateDirectory(dest);
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:256:        Directory.CreateDirectory(dest);
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:259:        await File.WriteAllTextAsync(malformed, "{not-json", TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:265:        await File.WriteAllTextAsync(version, """{"schemaVersion":"v0","tables":[{"name":"TodoItems"}]}""", TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:271:        await File.WriteAllTextAsync(missing, """{"schemaVersion":"mcp-wiki-dump/v1","tables":[]}""", TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:283:        Directory.CreateDirectory(createDest);
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:305:        Directory.CreateDirectory(dest);
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:324:        await File.WriteAllTextAsync(yaml, "id: TODO-YAML-ONLY\n", TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:326:        Directory.CreateDirectory(dest);
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:348:        await File.WriteAllTextAsync(yaml, "id: leftover\n", TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:350:        Directory.CreateDirectory(dest);
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:374:        await File.WriteAllTextAsync(yaml, "id: conflict\n", TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:376:        Directory.CreateDirectory(dest);
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:396:        Directory.CreateDirectory(docs);
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:397:        File.WriteAllText(Path.Combine(docs, "Functional-Requirements.md"), "# Functional Requirements (QBrain.AI)\n");
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:398:        File.WriteAllText(Path.Combine(docs, "Technical-Requirements.md"), "# Technical Requirements (QBrain.AI)\n");
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:399:        File.WriteAllText(Path.Combine(docs, "Testing-Requirements.md"), "# Testing Requirements (QBrain.AI)\n");
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:400:        File.WriteAllText(Path.Combine(docs, "TR-per-FR-Mapping.md"), "# TR per FR Mapping\n");
+tests/QBrainAi.Support.Mcp.Tests/Services/WikiDumpG6OverlayTests.cs:401:        File.WriteAllText(Path.Combine(docs, "Requirements-Matrix.md"), "# Requirements Matrix (QBrain.AI)\n");
+tests/QBrainAi.Support.Mcp.Tests/Services/TriagePromptTemplateTests.cs:25:        Directory.CreateDirectory(_tempDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Services/TriagePromptTemplateTests.cs:30:        using var output = File.Create(_templatePath);
+tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedRequirementsDocumentServiceTests.cs:160:        Directory.CreateDirectory(Path.GetDirectoryName(functionalPath)!);
+tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedRequirementsDocumentServiceTests.cs:161:        await File.WriteAllTextAsync(functionalPath, "old functional", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedRequirementsDocumentServiceTests.cs:162:        await File.WriteAllTextAsync(stalePath, "stale content", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedRequirementsDocumentServiceTests.cs:186:        await File.WriteAllTextAsync(functionalPath, "old functional", cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedRequirementsDocumentServiceTests.cs:194:            BeforeRollbackAsync = () => File.WriteAllTextAsync(functionalPath, "human edit"),
+tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedRequirementsDocumentServiceTests.cs:487:            Directory.CreateDirectory(outputRootPath);
+tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedRequirementsDocumentServiceTests.cs:489:            await File.WriteAllTextAsync(fullPath, "generated requirements", ct).ConfigureAwait(false);
+tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedRequirementsDocumentServiceTests.cs:517:            Directory.CreateDirectory(azure);
+tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedRequirementsDocumentServiceTests.cs:520:            await File.WriteAllTextAsync(functionalPath, "new functional", ct).ConfigureAwait(false);
+tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedRequirementsDocumentServiceTests.cs:521:            await File.WriteAllTextAsync(matrixPath, "new matrix", ct).ConfigureAwait(false);
+tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedRequirementsDocumentServiceTests.cs:522:            foreach (var file in Directory.EnumerateFiles(azure, "*", SearchOption.AllDirectories)
+tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedRequirementsDocumentServiceTests.cs:645:            Directory.CreateDirectory(Path);
+tests/QBrainAi.Support.Mcp.Tests/Services/TodoYamlContractTests.cs:49:        Directory.CreateDirectory(root);
+tests/QBrainAi.Support.Mcp.Tests/Services/TodoYamlContractTests.cs:53:            await File.WriteAllTextAsync(path, """
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:273:        var expectedNativeError = OperatingSystem.IsWindows()
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:370:            Directory.CreateDirectory(Root);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:378:            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:379:            File.WriteAllText(path, content);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:411:            Directory.CreateDirectory(LiveDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:412:            Directory.CreateDirectory(ExternalRoot);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:413:            File.WriteAllText(LiveFile, InsideText);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:414:            File.WriteAllText(ExternalFile, OutsideText);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:518:            if (!OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:520:                Directory.CreateSymbolicLink(aliasPath, targetPath);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsTwelfthAdversarialReviewTests.cs:538:            using var process = Process.Start(startInfo)
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextBackfillTests.cs:92:        Directory.CreateDirectory(hist);
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextBackfillTests.cs:93:        File.WriteAllText(Path.Combine(hist, "t.jsonl"), "TODO MCP-HOMEBF-001");
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs:43:        var foreign = OperatingSystem.IsWindows() ? "/home/sharpninja/github/McpServer" : @"C:\Users\kingd";
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerRealTests.cs:48:        Assert.DoesNotContain(Environment.CurrentDirectory, result, StringComparison.OrdinalIgnoreCase);
+tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs:207:                WorkingDirectory = Environment.CurrentDirectory,
+tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs:237:        hostEnvironment.ContentRootPath.Returns(Environment.CurrentDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs:283:            Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = Environment.CurrentDirectory }),
+tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs:289:            Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = Environment.CurrentDirectory }));
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceGitRemoteTests.cs:29:        Directory.CreateDirectory(_tempRoot);
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceGitRemoteTests.cs:31:        File.WriteAllText(
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceGitRemoteTests.cs:75:        Directory.CreateDirectory(workspacePath);
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceGitRemoteTests.cs:110:        Directory.CreateDirectory(workspacePath);
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs:19:        OperatingSystem.IsWindows() ? WorkspacePathPlatform.Windows : WorkspacePathPlatform.CaseSensitive;
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs:22:    protected static string NativeSample => OperatingSystem.IsWindows() ? @"C:\svc\.\repo" : "/srv/./repo";
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs:25:    protected static string NativeSampleExpected => OperatingSystem.IsWindows() ? "C:/svc/repo" : "/srv/repo";
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs:41:        Assert.Equal(Environment.CurrentDirectory, CreateHost().CurrentDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceHostEnvironmentContractTests.cs:61:        host.CurrentDirectory.Returns(Environment.CurrentDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsFourteenthLinuxNativeTests.cs:29:        Directory.CreateDirectory(root);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS5Catalog.cs:123:        using var document = System.Text.Json.JsonDocument.Parse(File.ReadAllText(path));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS5Catalog.cs:138:        return Directory.GetFiles(directory, "memory_*.json")
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathConsumersContractTests.cs:170:        var hostRewrite = Path.Combine(Path.GetPathRoot(Environment.CurrentDirectory)!, leaf);
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceCrossPlatformContractTests.cs:94:        var hostRewrite = Path.Combine(Path.GetPathRoot(Environment.CurrentDirectory)!, leaf);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryOnboardingDocsTests.cs:14:        var stdio = File.ReadAllText(Path.Combine(root, "docs", "stdio-tool-contract.json"));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryOnboardingDocsTests.cs:23:            .Select(File.ReadAllText));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryOnboardingDocsTests.cs:42:        var text = File.ReadAllText(path);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryOnboardingDocsTests.cs:53:        var text = File.ReadAllText(path);
+tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogTurnPlanFileTodoIdMigrationApplyTests.cs:81:            var files = Directory.GetFiles(root, "*AddSessionLogTurnPlanFileAndTodoId.cs")
+tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogTurnPlanFileTodoIdMigrationApplyTests.cs:87:                var text = File.ReadAllText(file);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchValueGateTests.cs:35:        var plan = File.ReadAllText(Path.Combine(MemoryBenchCatalog.FindRepoRoot(), "docs", "plans", "mcp-memory-002.md"));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnHarnessTests.cs:114:        Directory.CreateDirectory(directory);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnHarnessTests.cs:129:        var json = Directory.GetFiles(directory, "memory-bench-multiturn-*.json").Single();
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnHarnessTests.cs:130:        var md = Directory.GetFiles(directory, "memory-bench-multiturn-*.md").Single();
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnHarnessTests.cs:131:        var jsonText = File.ReadAllText(json);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnHarnessTests.cs:134:        var markdown = File.ReadAllText(md);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMigrationTests.cs:22:        var sqlite = Directory.GetFiles(Path.Combine(root, "src", "QBrainAi.Storage.SqliteMigrations"), "*MemoryVersion*", SearchOption.AllDirectories);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMigrationTests.cs:23:        var postgres = Directory.GetFiles(Path.Combine(root, "src", "QBrainAi.Storage.PostgreSqlMigrations"), "*MemoryVersion*", SearchOption.AllDirectories);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMigrationTests.cs:24:        var sqlserver = Directory.GetFiles(Path.Combine(root, "src", "QBrainAi.Storage.SqlServerMigrations"), "*MemoryVersion*", SearchOption.AllDirectories);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMigrationTests.cs:86:        var docs = File.ReadAllText(Path.Combine(FindRepoRoot(), "docs", "plans", "mcp-memory-002.md"));
+tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs:216:        var serverCs = Environment.GetEnvironmentVariable("MCP_TEST_SQLSERVER_CONNECTION");
+tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs:480:        using var process = Process.Start(new ProcessStartInfo
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTokenTests.cs:117:        var readme = File.ReadAllText(Path.Combine(MemoryBenchCatalog.FindRepoRoot(), "docs", "benchmarks", "README.md"));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnDocsTests.cs:12:        var readme = File.ReadAllText(Path.Combine(MemoryBenchMultiTurnCatalog.FindRepoRoot(), "docs", "benchmarks", "README.md"));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs:56:        Directory.CreateDirectory(directory);
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs:38:        Directory.CreateDirectory(_workspace);
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs:301:        var skill = File.ReadAllText(Path.Combine(FindRepoRoot(), "plugins", "core", "skills", "workspace-validation", "SKILL.md"));
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs:548:        var source = File.ReadAllText(Path.Combine(FindRepoRoot(), "src", "QBrainAi.Services", "Services", "WorkspaceValidationService.cs"));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTechTests.cs:15:        var harness = File.ReadAllText(Path.Combine(root, "src", "QBrainAi.Services", "Memory", "Bench", "MemoryBenchHarness.cs"));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTechTests.cs:16:        var nuke = File.ReadAllText(Path.Combine(root, "build", "Build.BenchMemory.cs"));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTechTests.cs:29:        var readme = File.ReadAllText(Path.Combine(MemoryBenchCatalog.FindRepoRoot(), "docs", "benchmarks", "README.md"));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTechTests.cs:40:        var json = File.ReadAllText(Directory.GetFiles(directory, "memory-bench-*.json").Single());
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTechTests.cs:49:        MemoryBenchPackLoader.Validate(MemoryBenchCatalog.LoadPack(), File.ReadAllText(MemoryBenchCatalog.PackPath()));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTechTests.cs:95:        var source = File.ReadAllText(Path.Combine(MemoryBenchCatalog.FindRepoRoot(), "build", "Build.BenchMemory.cs"));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTechTests.cs:98:        Assert.Contains("stub", File.ReadAllText(Path.Combine(MemoryBenchCatalog.FindRepoRoot(), "docs", "benchmarks", "README.md")), StringComparison.OrdinalIgnoreCase);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTechTests.cs:105:        var gitignore = File.ReadAllText(Path.Combine(MemoryBenchCatalog.FindRepoRoot(), ".gitignore"));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTechTests.cs:115:        var schema = File.ReadAllText(Path.Combine(MemoryBenchCatalog.FindRepoRoot(), MemoryBenchResultSchema.RelativePath));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTechTests.cs:161:        var source = File.ReadAllText(Path.Combine(MemoryBenchCatalog.FindRepoRoot(), "build", "Build.BenchMemory.cs"));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTechTests.cs:171:        var source = File.ReadAllText(Path.Combine(MemoryBenchCatalog.FindRepoRoot(), "build", "Build.BenchMemory.cs"));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPackTests.cs:19:        Assert.Contains("version", File.ReadAllText(path), StringComparison.OrdinalIgnoreCase);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPackTests.cs:62:        var raw = File.ReadAllText(MemoryBenchCatalog.PackPath());
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMcpSchemaTests.cs:23:        var contract = File.ReadAllText(Path.Combine(root, "docs", "stdio-tool-contract.json"));
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthSqliteConsumerTests.cs:190:        Directory.CreateDirectory(root);
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceProcessManagerStartupTests.cs:24:        Directory.CreateDirectory(_tempRoot);
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceProcessManagerStartupTests.cs:47:        Directory.CreateDirectory(workspaceA);
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceProcessManagerStartupTests.cs:48:        Directory.CreateDirectory(workspaceB);
+tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceProcessManagerStartupTests.cs:74:        Directory.CreateDirectory(workspaceA);
+tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs:27:        var external = Environment.GetEnvironmentVariable("MCP_TEST_POSTGRES_CONNECTION");
+tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs:44:        File.WriteAllText(passwordFile, password);
+tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs:91:        var installedRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "PostgreSQL");
+tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs:104:            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs:114:            cwd = Environment.CurrentDirectory;
+tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs:128:        var process = Process.Start(startInfo)
+tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs:151:        var profile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs:157:        var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs:43:        Directory.CreateDirectory(_workspace);
+tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs:282:        await File.WriteAllTextAsync(marker, "unchanged", TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs:283:        var before = await File.ReadAllTextAsync(marker, TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs:287:        var after = await File.ReadAllTextAsync(marker, TestContext.Current.CancellationToken);
+tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs:326:        var skill = File.ReadAllText(Path.Combine(FindRepoRoot(), "plugins", "core", "skills", "hostile-review", "SKILL.md"));
+tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs:24:        var external = Environment.GetEnvironmentVariable("MCP_TEST_POSTGRES_CONNECTION");
+tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs:63:        Assert.DoesNotContain(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), message, StringComparison.OrdinalIgnoreCase);
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:61:            if (OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:83:        if (!OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:98:        foreach (var descriptor in Directory.EnumerateFileSystemEntries("/proc/self/fd"))
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:201:            Assert.Equal("do-not-read", File.ReadAllText(fixture.ExternalFile));
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:276:            Directory.CreateDirectory(LiveDirectory);
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:277:            Directory.CreateDirectory(ExternalRoot);
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:278:            File.WriteAllText(Path.Combine(LiveDirectory, "inside.md"), "inside");
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:279:            File.WriteAllText(ExternalFile, "do-not-read");
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:326:            if (!OperatingSystem.IsWindows())
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:328:                Directory.CreateSymbolicLink(aliasPath, targetPath);
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:345:            using var process = Process.Start(start)
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:24:        Directory.CreateDirectory(root);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:25:        Directory.CreateDirectory(external);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:30:            if (OperatingSystem.IsLinux())
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:35:                Directory.CreateDirectory(nested);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:57:            if (OperatingSystem.IsLinux())
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:65:                Directory.CreateSymbolicLink(alias, external);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:529:            OperatingSystem.IsLinux() &&
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:546:            Directory.CreateDirectory(mountPath);
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:547:            await File.WriteAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:569:            var process = Process.Start(startInfo)
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:627:                var mountInfo = await File.ReadAllTextAsync(
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:668:            using var process = Process.Start(startInfo)
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryApiIdempotencyTests.cs:20:        var docs = File.ReadAllText(Path.Combine(MemoryS5Catalog.FindRepoRoot(), "docs", "context", "memory.md"));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIntegrationTests.cs:24:        var readme = File.ReadAllText(Path.Combine(MemoryBenchCatalog.FindRepoRoot(), "docs", "benchmarks", "README.md"));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs:150:        Environment.SetEnvironmentVariable("OPENAI_API_KEY", null);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs:151:        Environment.SetEnvironmentVariable("AZURE_OPENAI_API_KEY", null);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryPluginSyncTests.cs:39:        var grokSkill = File.ReadAllText(GrokSkillPath());
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryPluginSyncTests.cs:76:        var skillText = File.ReadAllText(skill);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryPluginSyncTests.cs:77:        var descriptorText = File.ReadAllText(descriptor);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryPluginSyncTests.cs:78:        var shimText = File.ReadAllText(shim);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryPluginSyncTests.cs:95:            var hostDescriptorText = File.ReadAllText(hostDescriptor);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryPluginSyncTests.cs:96:            var hostSkillText = File.ReadAllText(hostSkill);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryPluginSyncTests.cs:136:            File.ReadAllText(path),
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchCiTests.cs:39:        var source = File.ReadAllText(Path.Combine(MemoryBenchCatalog.FindRepoRoot(), "build", "Build.BenchMemory.cs"));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchCiTests.cs:41:        Assert.Contains("Memory:Bench:Gate", File.ReadAllText(Path.Combine(MemoryBenchCatalog.FindRepoRoot(), "docs", "benchmarks", "README.md")), StringComparison.Ordinal);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchCiTests.cs:51:        var source = File.ReadAllText(Path.Combine(MemoryBenchCatalog.FindRepoRoot(), "build", "Build.BenchMemory.cs"));
+tests/QBrainAi.Support.Mcp.Tests/Storage/UseCaseMigrationApplyTests.cs:94:            var files = Directory.GetFiles(root, "*AddUseCaseSupport.cs")
+tests/QBrainAi.Support.Mcp.Tests/Storage/UseCaseMigrationApplyTests.cs:100:                var text = File.ReadAllText(file);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchDocsTests.cs:25:        var docs = File.ReadAllText(Path.Combine(root, "docs", "USER-GUIDE.md"))
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchDocsTests.cs:26:            + File.ReadAllText(Path.Combine(root, "docs", "MCP-SERVER.md"));
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchDocsTests.cs:52:        => File.ReadAllText(Path.Combine(MemoryBenchCatalog.FindRepoRoot(), "docs", "benchmarks", "README.md"));
+tests/QBrainAi.Support.Mcp.Tests/Storage/AddSessionLogTurnPlanFileAndTodoIdMigrationTests.cs:79:        var files = Directory.GetFiles(root, "*AddSessionLogTurnPlanFileAndTodoId.cs")
+tests/QBrainAi.Support.Mcp.Tests/Storage/AddSessionLogTurnPlanFileAndTodoIdMigrationTests.cs:83:        var text = File.ReadAllText(files[0]);
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathGetFullPathRatchetContractTests.cs:185:        return Count(Directory.EnumerateFiles(Path.Combine(root, "src"), "*.cs", SearchOption.AllDirectories)
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathGetFullPathRatchetContractTests.cs:187:            .Select(file => KeyValuePair.Create(Path.GetRelativePath(root, file).Replace('\\', '/'), File.ReadAllText(file))));
+tests/QBrainAi.Support.Mcp.Tests/Storage/ProductMigrationApplyTests.cs:88:            var files = Directory.GetFiles(root, "*AddProductsStorage.cs")
+tests/QBrainAi.Support.Mcp.Tests/Storage/ProductMigrationApplyTests.cs:94:                var text = File.ReadAllText(file);
+tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerRenameQuadBrainRolesMigrationTests.cs:31:        _serverConnectionString = Environment.GetEnvironmentVariable("MCP_TEST_SQLSERVER_CONNECTION")
+tests/QBrainAi.Support.Mcp.Tests/Storage/SqliteBoundedOpenFourteenthTests.cs:109:        Directory.CreateDirectory(root);
+tests/QBrainAi.Support.Mcp.Tests/Services/TunnelProviderTests.cs:256:        var process = Process.Start(startInfo)
+tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerDecompose4nfBackfillMigrationTests.cs:32:        _serverConnectionString = Environment.GetEnvironmentVariable("MCP_TEST_SQLSERVER_CONNECTION")
+tests/QBrainAi.Support.Mcp.Tests/Storage/AuditPayloadProviderMigrationTests.cs:14:        Environment.GetEnvironmentVariable("MCP_TEST_SQLSERVER_CONNECTION")
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:75:        var json = Directory.GetFiles(directory, "memory-bench-*.json").Single();
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:76:        var md = Directory.GetFiles(directory, "memory-bench-*.md").Single();
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:78:        var jsonText = File.ReadAllText(json);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:83:        var markdown = File.ReadAllText(md);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:92:        var previous = Environment.GetEnvironmentVariable("XAI_API_KEY");
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:93:        Environment.SetEnvironmentVariable("XAI_API_KEY", null);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:102:            Environment.SetEnvironmentVariable("XAI_API_KEY", previous);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:119:        var previous = Environment.GetEnvironmentVariable("XAI_API_KEY");
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:120:        Environment.SetEnvironmentVariable("XAI_API_KEY", null);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:134:            Environment.SetEnvironmentVariable("XAI_API_KEY", previous);
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:148:        Assert.Contains("Workspace scope", File.ReadAllText(Path.Combine(MemoryBenchCatalog.FindRepoRoot(), "docs", "benchmarks", "README.md"))
+tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs:149:            + File.ReadAllText(MemoryBenchCatalog.PackPath()), StringComparison.OrdinalIgnoreCase);

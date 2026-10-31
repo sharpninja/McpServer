@@ -1,11 +1,12 @@
 using QBrainAi.Support.Mcp.Services;
 using QBrainAi.Support.Mcp.Storage.Entities;
 using Microsoft.EntityFrameworkCore;
+using QBrainAi.Tests.Shared;
 
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
-/// TEST-MCP-MEMORY-010 / TR-MCP-MEMORY-MODEL-002: S1 Red acceptance for model/migrations.
+/// TEST-MCP-MEMORY-010 (historical) / TR-MCP-MEMORY-MODEL-002 (historical): S1 Red acceptance for model/migrations.
 /// </summary>
 public sealed class MemoryMigrationTests : IDisposable
 {
@@ -15,6 +16,8 @@ public sealed class MemoryMigrationTests : IDisposable
     public void Dispose() => _harness.Dispose();
 
     /// <summary>AC-TR-MCP-MEMORY-MODEL-002-01: Migrations apply cleanly on SQLite, PostgreSQL, and SQL Server test hosts.</summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void Applies_OnAllProviders()
     {
@@ -77,6 +80,8 @@ public sealed class MemoryMigrationTests : IDisposable
     }
 
     /// <summary>AC-TR-MCP-MEMORY-MODEL-002-06: Down migration or forward-only policy is documented; test host can recreate schema.</summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public void SchemaRecreate_Works()
     {
@@ -170,16 +175,5 @@ public sealed class MemoryMigrationTests : IDisposable
         Assert.Equal(numbers.Distinct().Count(), numbers.Length);
     }
 
-    private static string FindRepoRoot()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-        while (directory is not null)
-        {
-            if (Directory.Exists(Path.Combine(directory.FullName, "src", "QBrainAi.Storage.SqliteMigrations")))
-                return directory.FullName;
-            directory = directory.Parent;
-        }
-
-        throw new InvalidOperationException("Repository root could not be located.");
-    }
+    private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
 }

@@ -1,0 +1,585 @@
+2026-10-26T08:50:33 - Hostile validation round 6, unitgreen-r6: DISAGREE.
+
+Accuracy 97, completeness 95, confidence 99. Claim results: 13 PASS, 8 FAIL, 0 UNKNOWN, 1 OVERRIDDEN. Two implementer findings; no operator-decision failure. The 98/98 acceptance threshold is unchanged and is not met. No completion or satisfaction change is authorized by this result.
+
+Observed: the original gates ran with the stated green counts, the named R5-F1 and R5-F2 repairs are effective, and all later paths after c8418301 are documentation. Observed: my broader full Nuke Test passes 4544 cases and fails 14 with zero not executed when existing CLI-temp variables point to a test-owned file. Five active test requirement citations are absent from the authoritative store. These facts defeat readiness to merge under the settled criteria.
+
+Scope: class 1 project implementation, tests, build and plan; PR sharpninja/McpServer#87 at 3ce97b3e3dd31dbe009a3716d2b15d43ce60bb5b, last code head c84183016a032bd522f5ae085a90d7c912bef810, merge base 3da2db93b3912b6301509f11aedcd59cb004274b. One review only. Scanner-wide override and Azure/stale-export exclusions were honored; excluded C4 work, federation rekey and PRs 82/86 themselves were not scored.
+
+Validator: Codex CLI gpt-6-astra, effort max. Own rollout /home/sharpninja/.codex/sessions/2026/10/26/rollout-2026-10-26T07-24-33-01a1782b-67b5-7ac0-b313-b48aa91fbca2.jsonl has session_meta line 1 and turn_context lines 8, 401, 839, each model=gpt-6-astra and effort=max. Thread 01a1782b-67b5-7ac0-b313-b48aa91fbca2; session Codex-20261026T122926Z-unitgreen-r6; request req-20261026T123039Z-unitgreen-r6. TimestampUtc 2026-10-26T13:50:33.5626675Z; TimestampLocal 2026-10-26T08:50:33.
+
+Mandatory first actions: read /home/sharpninja/.claude/skills/add-profile/SKILL.md in full, enumerated and fully read 1 non-skill profile markdown file (PROFILE-MERGED.md); read the root marker in full with all secret values suppressed; opened my own session and turn through the installed Codex mcpserver 1.121.0 wrapper. Plugin cache is outside this worktree under /tmp/hv-ug-r6-codex-01a1782b-67b5-7ac0-b313-b48aa91fbca2. No Claude plugin wrapper or raw REST was used. Live proof and full first-action confirmations are in hv-ug-r6-identity.json and the initial own-session dialog.
+
+R6-F1 - Fourteen unit tests still depend on ambient CLI temporary-directory variables (implementer edit).
+
+Seven CliBrainSlotStrategyTests, three CodexCliAgentExecutionStrategyTests and four OneShotCliAgentExecutionStrategyTests remain untagged unit tests. Their mocked process spawners and process-environment services do not intercept production temp-root resolution. The production code reads ambient MCPSERVER_QUADBRAIN_CLI_TEMP, MCPSERVER_CODEX_ONESHOT_TEMP, MCPSERVER_CODEX_TRIAGE_TEMP, MCPSERVER_GROK_ONESHOT_TEMP and/or MCPSERVER_ONESHOT_TEMP, then tries to create that directory. A test-owned regular file at the configured path changes the results. This contradicts the settled day-one outcome and the strengthened criteria, and disproves the claimed complete one-time sweep. It is a test-classification/isolation defect; this review does not allege that product failure on an invalid configured path is wrong.
+
+- Location: tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:193 (also 210, 227, 253, 524, 555, 578)
+- Location: tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:93 (also 119 and 152)
+- Location: tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:14 (also 36, 57, 81)
+- Location: src/QBrainAi.Support.Mcp/Services/CliBrainSlotChatClient.cs:411 (environment reads), 452 (Directory.CreateDirectory)
+- Location: src/QBrainAi.Services/Services/CodexCliAgentExecutionStrategy.cs:417 (environment reads), 454 (Directory.CreateDirectory)
+- Location: src/QBrainAi.Services/Services/OneShotCliAgentExecutionStrategy.cs:494 (environment reads), 532 (Directory.CreateDirectory)
+- Location: TR-MCP-USECASE-018 AC-006; TR-MCP-USECASE-019 AC-008; IMPL-UNITGREEN-001 task 22
+- Location: docs/plans/2026-10-19-unit-suite-green.md:483 (sweep), 489 (coverage), 194 (D-B)
+- Evidence: hv-ug-r6-sandbox-hostile-1: full Nuke Test, the same 126 variable names as v4 with writable scripted directories, 4558 passed, 0 failed, 0 not executed; exit 0.
+- Evidence: hv-ug-r6-hostile-blocked-temp-1: full Nuke Test, MCPSERVER_QUADBRAIN_CLI_TEMP points to a test-owned regular file, 4551 passed, 7 failed, 0 not executed; exit 255.
+- Evidence: hv-ug-r6-hostile-cli-temp-2: full Nuke Test, all five CLI temp variables point to a test-owned regular file, 4544 passed, 14 failed, 0 not executed; exit 255. All seven projects executed; restore and compilation succeeded.
+- Evidence: hv-ug-r6-own-results.json contains all raw TRX paths, SHA-256 values, counters, fourteen names, exception messages and source stacks. Run .meta.json, .out.txt, .err.txt and .result.json files preserve the exact environment and child command.
+- Evidence: The five names already occur in v4. A complete name set with permissive directory values did not establish environment independence. No platform scanner behavior is used as evidence.
+
+Specific change for PASS: Apply the existing classification rule to these fourteen cases: Category=Integration on both hosts, every relevant primary/fallback temp variable set and restored, writers serialized, existing assertions preserved. Extend the one-time dependency search through helpers and production calls, and exercise hostile values rather than only writable paths. Update the collection binding if another writer class joins. Reconcile the sweep receipt, plan, PR and TODO; rerun the required gates at the resulting code head. Any new seam/helper implementation follows BDPv4 mock-before-production order. Do not weaken assertions, suppress path errors, add scanner work or mark AC-006/AC-008 or the parent TODO complete on the present evidence.
+
+R6-F2 - The active requirement-citation presence claim is false for five retained citations (implementer edit).
+
+The brief claims every requirement ID cited by new or changed tests is present and mapped. Five actively retained citations in changed tests are absent from both their dedicated plugin getter and the effective requirements view. The current criteria added to those tests do exist, but they do not make these earlier citations present. The issue is the effect on this PR: its active coverage annotations and complete-presence claim cannot be reconciled with the authoritative store. The historical store drift itself, stale Azure exports and unrelated records are not scored.
+
+- Location: tests/QBrainAi.Support.Mcp.Tests/Services/MemoryBenchHarnessTests.cs:7: FR-MCP-MEMORY-018 and TEST-MCP-MEMORY-018
+- Location: tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs:735: TEST-MCP-PLUGIN-PSONLY-001
+- Location: tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:15 (also 124, 340, 379, 415, 433, 472): TEST-MCP-QBCLI-001
+- Location: tests/QBrainAi.Support.Mcp.Tests/Services/MemoryIndexerTests.cs:7 and 150: TR-MCP-MEMORY-SEARCH-002 / AC-09
+- Location: UG7 requirement-presence claim; round 6 self-review MAPPING-LINT
+- Evidence: Dedicated workflow.requirements.getFr/getTr/getTest responses for FR-MCP-MEMORY-018, TEST-MCP-MEMORY-018, TEST-MCP-PLUGIN-PSONLY-001, TEST-MCP-QBCLI-001 and TR-MCP-MEMORY-SEARCH-002 are not_found; read-only calls were repeated.
+- Evidence: hv-ug-r6-effective.txt and hv-ug-r6-citation-audit.json show no effective record for the same five IDs. hv-ug-r6-citation-hits-* records the actual citations in the changed files.
+- Evidence: The absent TEST-MCP-MEMORY-010 is explicitly historical in the corrected memory binding and is not part of this finding. FR/TR/TEST-MCP-MEMORY-002 are present and mapped, so R4-F3 remains closed.
+
+Specific change for PASS: Reconcile this PR active test-coverage citations and the complete-presence assertion with authoritative records. Cite a present mapped record only where its actual text covers the behavior; otherwise explicitly identify an unavailable inherited citation as historical and exclude it from an active coverage claim. Preserve behavioral assertions. No broad store repair, invented mapping, new scanner work or Azure remediation is required by this finding.
+
+All fourteen failed cases in the widest own full-suite run:
+
+- QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_CodexSecondCall_ResumesExtractedThread
+- QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_EmptyStdout_DoesNotThrow
+- QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_MaxTurnsReached_ReturnsStdoutInsteadOfThrowing
+- QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_NonZeroExit_StillThrows
+- QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_Grok_ResumeSessionMissing_RetriesWithoutResume
+- QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.CompleteAsync_GrokSecondCall_ResumesSameSession
+- QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests.Factory_Create_CliSlot_ReturnsCliClient
+- QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WhenCodexFails_ReturnsErrorResult
+- QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WhenCodexTimesOut_PreservesPartialStreams
+- QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithOutputCallback_StreamsAgentOutput
+- QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClaudeAgent_UsesClaudePlanModeCommandShape
+- QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithClineAgent_UsesClineParameterizedPromptCommandShape
+- QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithCodexAgent_UsesCodexOneShotCommandShape
+- QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests.ReadInitialResponseAsync_WithGrokAgent_UsesGrokPromptFileCommandShape
+
+Every claim, scored separately:
+
+UG1 PASS: The original gates are accurately reported. Their positive results are facts, not proof of the stronger environment-independence outcome. D-A holds.
+
+- hv-ug-r6-trx-audit.json: raw TRX counters and actual result elements agree for Linux Test 4558/0/0, hostile v3 and v4 4558/0/0, Windows Test 4558/0/0, Windows lane 388/0/0, Linux lane 412/0/0, Build.Tests 436/0/0. ValidateTraceability original output exits 0.
+- hv-ug-r6-gate-provenance.json: all 17 round 6 metadata copies match retained originals after only the three scripted API-key redactions. Final runs identify c8418301; v4 identifies 44e9d810. Committed-tree Linux Test and hostile v3/v4 dirtyPaths are empty.
+- hv-ug-r6-hygiene.json and git first-parent history: c8418301..44e9d810 and c8418301..3ce97b3e are docs-only.
+- Windows raw files read through the read-only mount: all seven unit project counts match; the interactive lane records session 1, interactive True, c8418301 and Category=Integration&Platform!=Linux. Name comparison finds the prior 374 names plus exactly 14, with no loss. Original commands use normal Nuke targets and filters; Build.Tests uses the permitted raw dotnet test infrastructure command. No audit bypass, added warning suppression or skipped result found.
+
+UG2 PASS: The current slices have chronological green mock gates before production/binding. The historical exceptions remain explicitly failed history and are not relabeled as acceptable green evidence.
+
+- Read canonical BDPv4, plan sections 14 through 19, prior hostile results and first-parent changes. hv-ug-r6-edit-chronology.json ties approved options, requirement writes, test edits and implementation edits to the read-only implementer transcript.
+- Four AC writes/readbacks at 12:33:54, 12:34:05, 12:39:00 and 12:39:12 precede test edits. Reach mock gate 4536/0/0 ended 12:56:16 before first IsReachable production edit at 12:56:33; same cases/controls bind in 4567/0/0; precommit lane 399/0/0.
+- At 9933796c hostile negative control has exactly ProductAlias failure, 4566 passed/1 failed. Collection mock gate 4570/0/0 ended 13:24:21 before collection definition 13:24:52; binding 4558/0/0 and lane 412/0/0 follow. Failed initial compile and two historical no-receipt runs remain failed history. hv-ug-r6-trx-audit.json verifies original files.
+
+UG3 FAIL: Fourteen untagged units execute real environment-dependent temp-root resolution. The original thirteen moved cases have Integration classification and controlled inputs, but they are not the complete dependent set.
+
+- R6-F1: exact locations, full three-run comparison, fourteen TRX failures and required fix below.
+- hv-ug-r6-own-results.json; hv-ug-r6-env-coverage.json; live source at c8418301. No scanner result is scored.
+- Defect location, evidence, classification and required change: R6-F1, detailed above. No new operator decision is needed.
+
+UG4 PASS: TR-MCP-NUKE-019 AC-1 through AC-5 build/lane behavior is implemented and evidenced. AC-4 provisioning is unchanged. No satisfaction state is changed in this review.
+
+- Plugin TR-MCP-NUKE-019 getter and mapping to FR-MCP-BUILD-001; build/Build.Test.cs, Build.TestDependencies.cs and relevant Build.Tests cases.
+- Linux lane Category=Integration&Platform!=Windows, Windows interactive lane Category=Integration&Platform!=Linux, and seven-project units all observed in originals; explicit interactive precondition is tested. Windows runner SHA-256 D04A018AFDDB198C0F113DC23EE86C7E059B3B3B1F9420F246EB10225A7002AE matches.
+- Fifteen takeover blobs match their source; infrastructure provisioner behavior unchanged. Full Build.Tests 436/0/0 and both lane outcomes verify the applicable target behavior. D-B additionally ties satisfaction of AC-2/3/5 to unit independence, which is rejected under UG12.
+
+UG5 PASS: The package changes meet the stated advisory and Roslyn-pin criterion, with no new NU190x evidence in either host gate.
+
+- Plugin TR-MCP-QUALITY-001 ac-21; Directory.Packages.props five Roslyn packages at 5.9.0, Xml and Pkcs at 10.0.13.
+- Original restore/test outputs, Windows native outputs and reviewer full Nuke builds have no new NU190x. Official GitHub advisories GHSA-2fmv-rv2c-59x7, GHSA-846f-f764-76mx, GHSA-7hqp-7c5m-4vq6, GHSA-c399-9853-6jmj and GHSA-r955-8q5j-3h83 confirm the cited 10.0.13 fixes; read through gh, retained hv-ug-r6-advisory-*.json.
+
+UG6 PASS: The path-normalization requirement chain, host-native behavior and integration classification have not regressed.
+
+- Live plugin FR/TR/TEST-MCP-PATHNORM-001 and their mapping; unitgreen-native-host remains unsatisfied pending review.
+- Native overload and scripted host-neutral cases examined against base and current sources. Raw Windows and Linux unit/lane results include the relevant cases, without failures or skips; ratchet history is disclosed and repaired rather than weakened.
+
+UG7 FAIL: The four strengthened criteria, expected retirements, mappings and TODO state match the claim, but five other active requirement citations in changed tests are absent.
+
+- hv-ug-r6-criterion-changes.json: only AC-001 changes in WS-005, AC-009 in SESSIONLOG-006, AC-006 in seven-criterion USECASE-018, and AC-008 in twelve-criterion USECASE-019; all remain unsatisfied.
+- Dedicated getter and effective view both lack FR-MCP-USECASE-016/017 and TEST-MCP-MEMORY-010. Replacement TR/TEST mappings exist. Plugin TODO has 22 unchecked tasks, corrections at 9/15/18 and task 22; scanner TODO has three open tasks and depends on parent.
+- R6-F2: five additional active IDs are not_found in dedicated getters and absent from effective view; locations, scope limit and fix below.
+- Defect location, evidence, classification and required change: R6-F2, detailed above. No new operator decision is needed.
+
+UG8 FAIL: The plan preserves its amendments and superseded history, but section 19 reports an environment sweep as complete while fourteen dependent units remain. Its completion/evidence conclusions are therefore incomplete.
+
+- R6-F1; plan sections 13 D-B and 19.3/19.6; raw reviewer full-suite negative results.
+- All nineteen sections were read; historical failed or unreceipted runs and scanner override remain explicitly labeled. No style or scanner-coverage defect is scored.
+- Defect location, evidence, classification and required change: R6-F1, detailed above. No new operator decision is needed.
+
+UG9 PASS: The authorized takeover is source-consistent and separate from excluded C4 work.
+
+- First-parent history, plan takeover source and current diff: fifteen transferred files match source blobs from 11681680 to c2125c42. The disclosed .nuke/C4 schema distinction is preserved. hv-ug-r6-hygiene.json records comparison.
+- Pinned base is 3da2db93; current develop adds PR 88 documentation that the branch does not touch. GitHub PR remains draft/open with matching head and mergeable clean state.
+
+UG10 PASS: Signed author trailers, ordinary push history, receipt hygiene and disclosed historical process exceptions match available evidence. No unreported hygiene defect that changes a substantive claim was found.
+
+- Fifty first-parent commits inspected; each has the required actual-agent signature trailer. Read-only PR timeline has no force-push event; no force-push command found in examined effort transcript.
+- hv-ug-r6-secret-audit.json: 1354 changed current files, incremental round 6 commit patches and PR body scanned for the actual marker secret and API-key-shaped values; zero findings. Marker values are not reproduced. Plan and PR body have no table syntax or en/em dash.
+- PowerShell script design and runner receipts inspected. Self-review accurately discloses the historical Bash commands, first-action compaction lapse, large R5 evidence file, one copy without WhatIf and parallel commit/bench restore ordering. These do not falsify the current counts/SHAs; implementer conduct alone is outside scope. No user-secret or Windows write was made by this reviewer.
+
+UG11 FAIL: The self-review and PR accurately disclose their known history, but omit the material remaining environment dependence and overstate the sweep outcome.
+
+- R6-F1; self-review WHAT-IF and MAPPING-LINT/holistic evidence descriptions; PR r7 open-item list; plan 19.3.
+- Launch self-review and committed prelaunch self-review have identical SHA-256 7339545CAB318CECD95A41BF717AAEDACC7DD7824F630E0F8B4CD8870F4887E0. The omission is tested behavior, not wording polish.
+- Defect location, evidence, classification and required change: R6-F1, detailed above. No new operator decision is needed.
+
+UG12 FAIL: The proposed post-AGREE completion is not supported now. In particular AC-006/AC-008 and the D-B-dependent full-platform evidence conditions cannot be declared satisfied, and task 22/all-task closure cannot be checked on this sweep.
+
+- R6-F1; plan line 194 D-B; TODO IMPL-UNITGREEN-001 task 22; live strengthened criteria remain unsatisfied.
+- Moving scanner work to its separate open TODO is authorized and is not the blocker. The other seventeen USECASE criteria properly stay unsatisfied. Root-link criteria have evidence, but the present overall DISAGREE authorizes no completion changes.
+- Defect location, evidence, classification and required change: R6-F1, detailed above. No new operator decision is needed.
+
+UG13 PASS: Both specifically named round 5 defects are fixed. Earlier named corrections have not regressed; overridden scanner closures stay overridden. The new sibling unit-dependence defect is separately R6-F1.
+
+- Own compiled production root/ancestor probe: 15/15 pass, including the seven formerly failing roots/ancestors; hv-ug-r6-root-links.json.
+- ProductAlias case moved to Integration, all six relevant probe/port variables saved and restored, original precedence assertions preserved, both lanes pass. Complete nineteen-item closure list follows.
+- Current diff and prior R5 closure evidence checked for source changes; no earlier specific failure was silently reintroduced.
+
+UG14 PASS: The user-profile scan reachability and version fallback implementation meets the strengthened root/ancestor contract under its approved seam and named-input scope.
+
+- DirectoryTreeWalker.IsReachable, three MarkerFileService cache checks and four history roots in one SessionLogTurnContextExtractor loop reviewed; separator boundary prevents prefix-sibling matches, trusted boundary is never traversed above, IO/access failure closes and other exceptions propagate.
+- Scripted link/root/ancestor and error cases, resolve-level seam controls and real-link integration case pass. Both native lane TRX contain FileSystemReach_RealRootAndAncestorLinks_AreNotReachable; own compiled 15-case probe passes.
+- Existing scripted version-read IO/access fallback controls and unexpected-error behavior unchanged; explicit plugin roots remain named inputs by approved design. No scanner evidence used.
+
+UG15 PASS: LocalDB timeout and nonparallel collection corrections are intact; all required Windows SQL Server test results are present.
+
+- Source default connection timeout 120 seconds, four classes in SqlServerLocalDbCollection with DisableParallelization, shared assertion refactor preserves checks.
+- Windows lane c8418301 raw TRX and per-name comparison retain all prior SQL cases and report 0 failed/0 not executed. Historical cause/diagnostic limits are disclosed.
+
+UG16 PASS: The pg_ctl quiet-output fix is unchanged and the current Windows lane has no lost result.
+
+- Current source retains pg_ctl -s for start/stop; earlier pinned mock/binding receipts and R5 closure inspected.
+- hv-ug-r6-trx-audit.json: actual result elements equal counters; R5 lane has 374 names, R6 388, exactly fourteen additions, no deleted name. Support.Mcp 376, McpAgent 1, Repl.Core 3, QBAgent 2, Build.Tests 6. No result-count-only inference.
+
+UG17 FAIL: Chosen options were recorded and executed in the correct order, but the promised complete real-environment sweep missed the fourteen cases in R6-F1.
+
+- hv-ug-r6-operator-decisions.json and hv-ug-r6-edit-chronology.json reconstruct question option text, answers and direct user corrections from the read-only transcript; four AC changes precede tests.
+- R6-F1 conflicts with Fix both, strengthen ACs and Approve, strengthen AC-006/008. No scanner work occurred after the 06:06:46 override; scanner remains unchanged since ccc78b7a. Other disclosed departures retain their sources and corrections.
+- Defect location, evidence, classification and required change: R6-F1, detailed above. No new operator decision is needed.
+
+UG18 OVERRIDDEN: The operator excludes UnitSuitePlatformScanner, its tests/documentation and every coverage statement from scoring.
+
+- Operator override 2026-10-21T06:06:46 is applied without point deduction or requested scanner change. Observations are separate below.
+
+UG19 PASS: Handoff and memory sibling database isolation and the corrected memory binding have not regressed.
+
+- HandoffDurabilityTests, HandoffAuditDefectTests and MemoryS1Harness each use a test-owned temporary SQLite database with separate context connections and no pooling; binding assertions and negative controls retained.
+- Current native units pass the specific handoff and memory cases on both hosts. Race causality remains explicitly an inference, not a claimed deterministic reproduction.
+- FR-MCP-MEMORY-002, TR-MCP-MEMORY-002 and TEST-MCP-MEMORY-002 exist and map through the plugin; TEST-MCP-MEMORY-010 is explicitly absent. TEST-HANDOFF-004 through -007 and owning mappings are present.
+
+UG20 FAIL: The v3/v4 name-set and negative-control records check out, but the claim that no unit depends on a scripted variable is disproved by the five temp-root inputs already in the gate.
+
+- v3 contains 86 names; v4 126, adding port and 38 HostileReviewWorker forms. Original metadata copies agree with retained originals after disclosed redaction. Random credential-test name and four preserved runtime/tool variables are declared.
+- One-time literal/GetLegacy coverage audit found no additional unstated name omission in its searched scope. The 9933796c negative control is exactly ProductAlias, 4566/1/0.
+- R6-F1: same-variable-set run with hostile path values yields fourteen failures. Complete literal-name coverage and a green permissive-value run do not prove independence.
+- Defect location, evidence, classification and required change: R6-F1, detailed above. No new operator decision is needed.
+
+UG21 PASS: R5-F1 is a correctly ordered requirement slice and the D-B reachability evidence exists for both strengthened criteria.
+
+- Live WS-005 AC-001 and SESSIONLOG-006 AC-009 text includes roots and intervening folders while trusting linked boundary/home. Only those criteria changed and remain unsatisfied.
+- 16 scripted cases, seven deliberately wrong checks and unexpected-error control run in green full mock gate before production; same cases bind. All seven scan roots guarded at four call sites; source and 15-case compiled probe agree.
+- Full binding, both real-link lanes and required version-read/source-seam historical evidence are retained. No new stronger traversal/race requirement is invented.
+
+UG22 FAIL: The thirteen recorded moves and collection binding are real and correctly counted, but the slice does not achieve its promised exhaustive independence outcome.
+
+- Exactly thirteen old unit result names leave and exactly thirteen lane names enter; one production collection binding is added after the mock gate. Original assertions and save/restore controls of the moved cases are preserved.
+- ProcessEnvironmentCollection uses DisableParallelization; shared CollectionAssertions validates named classes, with already serialized writers retained in their other serialized collections. The writer list is explicitly not discovered mechanically.
+- R6-F1: fourteen other unit tests read actual ambient variables through product code. The sweep receipt and current collection binding cannot establish absence of those dependencies.
+- Defect location, evidence, classification and required change: R6-F1, detailed above. No new operator decision is needed.
+
+Closure of every earlier finding:
+
+- R5-F1 PASS: All seven roots are checked before traversal. Own compiled root/ancestor probe 15/15; scripted mock/binding and both real-link lanes pass.
+- R5-F2 PASS: The specifically named ProductAlias case is Integration, controls/restores all six relevant probe/port values, preserves assertions and passes both lanes. Fourteen sibling dependencies are new R6-F1.
+- R4-F1 OVERRIDDEN: Scanner alias/static-import coverage is excluded by the explicit operator override.
+- R4-F2 PASS: Current plan and TODO preserve correction notices for the old round 4 head, task count and profile-only seam. Original historical request remains evidence rather than current instruction.
+- R4-F3 PASS: MemoryS1Harness binding cites present mapped FR/TR/TEST-MCP-MEMORY-002 and explicitly says TEST-MCP-MEMORY-010 is absent.
+- R3-F1 PASS: Approved source seam isolates explicit plugin roots, workspace sibling input and profile; resolve tests use scripted sources. Current root fix preserves it and own sandbox run passes.
+- R3-F2 OVERRIDDEN: Scanner lexical alias coverage is excluded from scores and required fixes.
+- R3-F3 PASS: FR-MCP-USECASE-017 is absent through dedicated getter and effective view; replacement TR/TEST mapping remains.
+- R3-F4 PASS: Historical round 3 self-review correction remains explicitly carried in plan and later receipts; no regression in current claim.
+- R2-F1 PASS: The named repository/native-environment tests remain Integration; shared TestRepositoryRoot rejects unit-context access. The new temp-root cases are separately R6-F1.
+- R2-F2 OVERRIDDEN: Scanner coverage portion remains overridden, never treated as repaired coverage.
+- R2-F3 PASS: Prior mock/binding/source chronology and Windows runner-analysis correction remain accurately recorded; round 6 uses the pinned PowerShell runner and dry-run receipts.
+- F1 PASS: Historical red runs and missing-receipt steps are not credited as green. Current requirements/mock/production ordering has raw receipts.
+- F2 PASS: The original named platform-dependent cases retain integration classification and assertions. Present original gates include them in applicable lanes. New sibling failures are not misrepresented as those old cases.
+- F3 OVERRIDDEN: Scanner-enforcement scope is overridden; independently inspected skip policy and executed TRX remain zero skips.
+- F4 PASS: Current Windows lane is demonstrably interactive, at c8418301, 388/0/0 and complete by name.
+- F5 PASS: All seven Test projects actually execute in original and own runs; project totals agree. Scanner assertions are excluded.
+- F6 PASS: Historical Bash deviations are disclosed; current designed scripts and pinned Windows runner are PowerShell. No new false all-history-compliant claim found.
+- F7 PASS: D-B retains the corrected narrow list and leaves the other seventeen USECASE criteria unsatisfied. New evidence still blocks present completion under UG12.
+
+operatorOverriddenObservations (outside findings and scores):
+
+- UnitSuitePlatformScanner and its tests/documentation have no change since ccc78b7a. IMPL-SCANNERALIAS-001 remains open with three tasks. Its coverage statements, alias/static-import limits and earlier scanner-linked findings are not evaluated for failure or score deduction. No scanner change is requested. Authority: Operator 2026-10-21T06:06:46: no more scanner work; explicit review override.
+
+Mandatory attack surfaces:
+
+- 1. Requested claims FAIL: Actual historical gate counts pass; the universal independence and active-citation assertions do not.
+- 2. Workspace rules FAIL: The day-one no-environment-dependent-unit-test rule remains violated. Independent review operating evidence is recorded separately.
+- 3. Requirements and order FAIL: Four strengthened criteria and BDPv4 order are verified. AC-006/AC-008 outcome remains incomplete; active-citation presence is false.
+- 4. Plan holistically FAIL: The sweep and post-AGREE closure claims exceed the evidence. Scanner and Azure exceptions are binding and not scored.
+
+Original gate facts independently reconciled against raw files:
+
+- ug-r6-linux-test-2 at c8418301: Nuke Test; passed 4558, failed 0, not executed 0, exit 0.
+- ug-r6-hostile-wide-2 at c8418301: Nuke Test, v3, 86 variables; passed 4558, failed 0, not executed 0, exit 0.
+- ug-r6-hostile-wide-3 at 44e9d810 (docs-only after c8418301): Nuke Test, v4, 126 variables; passed 4558, failed 0, not executed 0, exit 0.
+- ug-r6-win-test-ssh-1 at c8418301: Nuke Test, SSH as kingd; passed 4558, failed 0, not executed 0, exit 0.
+- ug-r6-win-lane-1 at c8418301: Nuke MigrationIntegrationTests, interactive session 1; passed 388, failed 0, not executed 0, exit 0.
+- ug-r6-linux-lane-1 at c8418301: Nuke MigrationIntegrationTests; passed 412, failed 0, not executed 0, exit 0.
+- ug-r6-build-tests-1 at c8418301: raw dotnet test Build.Tests with TMPDIR on disk; passed 436, failed 0, not executed 0, exit 0.
+- ug-r6-traceability-1 at c8418301: Nuke ValidateTraceability; successful non-test target; no TRX denominator applies, exit 0.
+
+Own full-suite runs at the review head (same code as c8418301):
+
+- hv-ug-r6-sandbox-hostile-1: total 4558, passed 4558, failed 0, not executed 0.
+  - QBrainAi.Support.Mcp.Tests: 3176 passed, 0 failed, 0 not executed; TRX /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-sandbox-hostile-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx; SHA-256 6E89511FFDF6F39F5BF0CD95543F062CDAE26AAE3DF4BA9D27A10705A5B61A3E.
+  - QBrainAi.Client.Tests: 306 passed, 0 failed, 0 not executed; TRX /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-sandbox-hostile-1/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx; SHA-256 A9DF10DDCA8A1972F6E418FA2E08ECF06F441A3637BDE874EB477013BF45882F.
+  - QBrainAi.Cqrs.Tests: 33 passed, 0 failed, 0 not executed; TRX /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-sandbox-hostile-1/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx; SHA-256 32256DCA97D37BE57553B942B2FB17BD6320CE370C4AC8A84244CBCD7FB5D646.
+  - QBrainAi.Launcher.Tests: 20 passed, 0 failed, 0 not executed; TRX /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-sandbox-hostile-1/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx; SHA-256 54FF5D7510D9B1ED971506AA36C1A8910B84BB3DF2A55D14C58F39AF89BFE37D.
+  - QBrainAi.McpAgent.Tests: 64 passed, 0 failed, 0 not executed; TRX /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-sandbox-hostile-1/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx; SHA-256 6137FEC0C686796307A9E88DDBE1121D0FDB37A4993BE294287087C55048C9E0.
+  - QBrainAi.Repl.Core.Tests: 865 passed, 0 failed, 0 not executed; TRX /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-sandbox-hostile-1/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx; SHA-256 ABFA37113BBDED69BB14CBC5B58E39EB83790D09BD64749C0587FBCB61454AD8.
+  - QBrainAi.QBAgent.Tests: 94 passed, 0 failed, 0 not executed; TRX /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-sandbox-hostile-1/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx; SHA-256 B1DD80FCE83B0A99ED7139F09C22393F0942849BECF03EAC8E5A351C0974FE33.
+- hv-ug-r6-hostile-blocked-temp-1: total 4558, passed 4551, failed 7, not executed 0.
+  - QBrainAi.Support.Mcp.Tests: 3169 passed, 7 failed, 0 not executed; TRX /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-blocked-temp-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx; SHA-256 DFEAFCBF5D0F8FD2468AF819F1B338E2F5A66DA91A8883D4F6922312AD606F98.
+  - QBrainAi.Client.Tests: 306 passed, 0 failed, 0 not executed; TRX /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-blocked-temp-1/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx; SHA-256 60C5EFCE981711E90254FEE4FCD02793EE539D4C0475A18DCFF977A36E033060.
+  - QBrainAi.Cqrs.Tests: 33 passed, 0 failed, 0 not executed; TRX /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-blocked-temp-1/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx; SHA-256 90D6E1A2F8CBF3CE89303A4E5269BD211838B5BDB15CCB296A16371D39F4BEAA.
+  - QBrainAi.Launcher.Tests: 20 passed, 0 failed, 0 not executed; TRX /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-blocked-temp-1/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx; SHA-256 E7FD08A801439EE74CBA0D345F5E81959B1DB18897DBAF0E4F70258924A0BCF3.
+  - QBrainAi.McpAgent.Tests: 64 passed, 0 failed, 0 not executed; TRX /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-blocked-temp-1/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx; SHA-256 37205000880DF32E4F6B46ACB521782EA4868FD555F93A37E0D042D0A7A401A2.
+  - QBrainAi.Repl.Core.Tests: 865 passed, 0 failed, 0 not executed; TRX /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-blocked-temp-1/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx; SHA-256 EBC54CDE96DDE3FED28E20BC544B067968441228B4130BB07B731A40F0262EBD.
+  - QBrainAi.QBAgent.Tests: 94 passed, 0 failed, 0 not executed; TRX /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-blocked-temp-1/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx; SHA-256 A245450CA9D9B4BBD9E5EBC8630AA4E192351394995149562A482B62C6731CE5.
+- hv-ug-r6-hostile-cli-temp-2: total 4558, passed 4544, failed 14, not executed 0.
+  - QBrainAi.Support.Mcp.Tests: 3162 passed, 14 failed, 0 not executed; TRX /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-cli-temp-2/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx; SHA-256 749EF76B2F6CFDBB3819FEF3F09DF7F76E4CDBE217C56DA1CBF97B07DD29EA27.
+  - QBrainAi.Client.Tests: 306 passed, 0 failed, 0 not executed; TRX /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-cli-temp-2/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx; SHA-256 FD4D8480FFEA052D8602A1E10DEB6A91B03AC1214DD91FF0153F1B85101E45DF.
+  - QBrainAi.Cqrs.Tests: 33 passed, 0 failed, 0 not executed; TRX /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-cli-temp-2/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx; SHA-256 55FF51A380F490D996A05A7885703FD8CE8448A5F4A72CBCBC48246006A0F51F.
+  - QBrainAi.Launcher.Tests: 20 passed, 0 failed, 0 not executed; TRX /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-cli-temp-2/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx; SHA-256 5379902CFB64E43EBDFCA72A004C1E6B75EB1A093D26BDB740045680A6E3EE46.
+  - QBrainAi.McpAgent.Tests: 64 passed, 0 failed, 0 not executed; TRX /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-cli-temp-2/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx; SHA-256 F32EC667FDC3A8BC4DF2928BAE4D96C33B3B5CF7821D83EBA31BDA955576C74F.
+  - QBrainAi.Repl.Core.Tests: 865 passed, 0 failed, 0 not executed; TRX /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-cli-temp-2/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx; SHA-256 6D8C8CA17F43B3570B013D182A40292CCF0E70D36EBF8796C313FF161493BB07.
+  - QBrainAi.QBAgent.Tests: 94 passed, 0 failed, 0 not executed; TRX /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/hv-ug-r6-hostile-cli-temp-2/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx; SHA-256 F0602ACD74FF6108C11B57BF5BAC1B623C7DBBA561EA43F7953D43310A33AEAF.
+
+Review execution and limits:
+
+- Review only, one round. No tracked implementation edit, commit, push, deletion, TODO/requirement/triage/memory change, or Windows write. Final tracked status is clean. Own receipts and test-owned temporary files are the only new review artifacts.
+- Initial mandatory order was add-profile skill and every non-skill profile markdown in full (one file), root marker in full with secret values suppressed, then own installed Codex plugin session/turn with cache outside the worktree. Profile was reread after both context compactions; live model/effort proof remained gpt-6-astra/max.
+- PowerShell-only authored scripts were parsed and analyzed at Warning/Error before execution. The hostile runner and root-probe fixture operations had WhatIf before mutation. No Python, Node or Bash script was used by this reviewer. Tool runtime JavaScript only orchestrates provided tools.
+- Read-only Windows evidence came from /mnt/legion2-github. Both Windows worktree refs were c8418301 and 189 relevant source/test/build files per worktree matched local code after newline normalization. No SSH command or Windows process was launched by this reviewer; no credential/key/password file was read.
+- Reviewer diagnostic errors are not hidden: first session-open call lacked the required sessionId and was corrected; initial gh shim tried an unavailable install, then the existing gh 2.102.0 binary succeeded. DateTime rendering mistakes in metadata/chronology scripts, guessed read arguments/paths, and one analyzer automatic-variable warning in final-audit were corrected. Failed attempts are in the response stream. They provide no product evidence.
+- Direct shell reads used pwsh.exe. Profile inventory and a few existing output objects were rendered by PowerShell formatting, including inventory columns; these are reviewer tool-output presentation exceptions, not a claim of tabular-free raw machine output. Authored verdict prose has no tables or en/em dash.
+- Displayed timestamps are measured local sortable time. Plugin-created session/request identifiers use its UTC contract; this discrepancy was recorded in the initial own-session decision. Numeric ETA progress entries were emitted during the review, not backfilled; final-audit found fifteen at its snapshot and all had numeric nonnegative etaSeconds. Response JSONL remains live until the CLI emits completion.
+
+Commands and exit codes:
+
+The structured command ledger records material git, gh, plugin and child build/test commands and their exit codes, plus successful audit scripts. The byte-complete response JSONL also records each file-read and parser/analyzer invocation, failed diagnostic attempt, tool command and output. Individual not_found getter exit 1 is expected absence evidence; child Nuke exit 255 is an actual failed test gate, even though the receipt wrapper returns 0.
+
+- Exit 0: git status --short
+- Exit 0: git rev-parse HEAD
+- Exit 0: git merge-base 3ce97b3e3dd31dbe009a3716d2b15d43ce60bb5b origin/develop
+- Exit 0: git log --first-parent --format=fuller 3da2db93..3ce97b3e3dd31dbe009a3716d2b15d43ce60bb5b
+- Exit 0: git diff --name-only 3da2db93...3ce97b3e3dd31dbe009a3716d2b15d43ce60bb5b
+- Exit 0: git diff --name-only c8418301..3ce97b3e3dd31dbe009a3716d2b15d43ce60bb5b
+- Exit 0: git diff 810ee8aa..c8418301 -- src tests build Directory.Packages.props
+- Exit 1: gh pr view 87 --repo sharpninja/McpServer --json title,body,state,isDraft,headRefName,headRefOid,baseRefName,mergeable,mergeStateStatus,url,commits
+- Exit 1: Codex lib/repl-invoke.ps1 -Method workflow.requirements.getFr
+- Exit 1: Codex lib/repl-invoke.ps1 -Method workflow.requirements.getFr
+- Exit 0: Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest
+- Exit 0: Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest
+- Exit 0: Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest
+- Exit 0: Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest
+- Exit 0: Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest
+- Exit 0: Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest
+- Exit 0: Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest
+- Exit 0: Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest
+- Exit 1: Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest
+- Exit 0: Codex lib/repl-invoke.ps1 -Method workflow.requirements.listMappings
+- Exit 0: Codex lib/repl-invoke.ps1 -Method workflow.requirements.listMappings
+- Exit 0: Codex lib/repl-invoke.ps1 -Method workflow.requirements.listMappings
+- Exit 0: Codex lib/repl-invoke.ps1 -Method workflow.requirements.listMappings
+- Exit 0: Codex lib/repl-invoke.ps1 -Method workflow.requirements.listMappings
+- Exit 0: Codex lib/repl-invoke.ps1 -Method workflow.requirements.listMappings
+- Exit 0: /home/sharpninja/.local/share/mise/installs/gh/2.102.0/gh_2.102.0_linux_amd64/bin/gh pr view 87 --repo sharpninja/McpServer --json title,body,state,isDraft,headRefName,headRefOid,baseRefName,mergeable,mergeStateStatus,url,commits
+- Exit 0: pwsh.exe -NoProfile -NonInteractive -File ./build.ps1 Test --test-run-id hv-ug-r6-sandbox-hostile-1
+- Exit 0: Codex lib/repl-invoke.ps1 -Method workflow.sessionlog.appendDialog
+- Exit 0: Codex lib/repl-invoke.ps1 -Method workflow.sessionlog.appendActions
+- Exit 255: pwsh.exe -NoProfile -NonInteractive -File ./build.ps1 Test --test-run-id hv-ug-r6-hostile-blocked-temp-1
+- Exit 1: Codex lib/repl-invoke.ps1 -Method workflow.requirements.getFr
+- Exit 1: Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest
+- Exit 1: Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest
+- Exit 1: Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest
+- Exit 1: Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTr
+- Exit 0: Codex lib/repl-invoke.ps1 -Method workflow.sessionlog.appendDialog
+- Exit 0: Codex lib/repl-invoke.ps1 -Method workflow.sessionlog.appendActions
+- Exit 0: gh api --paginate repos/sharpninja/McpServer/issues/87/timeline?per_page=100
+- Exit 1: Codex lib/repl-invoke.ps1 -Method workflow.requirements.getFr
+- Exit 1: Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest
+- Exit 1: Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest
+- Exit 1: Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTest
+- Exit 1: Codex lib/repl-invoke.ps1 -Method workflow.requirements.getTr
+- Exit 255: pwsh.exe -NoProfile -NonInteractive -File ./build.ps1 Test --test-run-id hv-ug-r6-hostile-cli-temp-2
+- Exit 0: Codex lib/repl-invoke.ps1 -Method workflow.sessionlog.appendDialog
+- Exit 0: Codex lib/repl-invoke.ps1 -Method workflow.sessionlog.appendActions
+- Exit 0: gh api advisories/GHSA-846f-f764-76mx
+- Exit 0: gh api advisories/GHSA-r955-8q5j-3h83
+- Exit 0: gh api advisories/GHSA-2fmv-rv2c-59x7
+- Exit 0: gh api advisories/GHSA-c399-9853-6jmj
+- Exit 0: gh api advisories/GHSA-7hqp-7c5m-4vq6
+- Exit 0: Codex lib/repl-invoke.ps1 -Method workflow.sessionlog.appendDialog
+- Exit 0: Codex lib/repl-invoke.ps1 -Method workflow.sessionlog.appendActions
+- Exit 0: pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r6-root-links.ps1
+- Exit 0: pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r6-trx-audit.ps1
+- Exit 0: pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r6-own-results.ps1
+- Exit 0: pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r6-gates.ps1
+- Exit 0: pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r6-claims-audit.ps1 -Mode Git
+- Exit 0: pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r6-claims-audit.ps1 -Mode Store
+- Exit 0: pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r6-claims-audit.ps1 -Mode Citations
+- Exit 0: pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r6-secret-audit.ps1
+- Exit 0: pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r6-env-coverage.ps1
+- Exit 0: pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r6-windows-state.ps1
+- Exit 0: pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r6-final-audit.ps1
+- Exit 0: pwsh.exe -NoProfile -NonInteractive -File docs/receipts/hv/hv-ug-r6-identity.ps1
+
+Evidence manifest (SHA-256 of snapshots taken when this receipt was created):
+
+- /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-identity.json; 2144 bytes; SHA-256 85336B7BBDED81DC2B87C44DD44D5EFBD0971FB9AEAEF4CDA370420AFCA8DA43.
+- /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-trx-audit.json; 84924 bytes; SHA-256 59FB509C59215528E3613D05B143D70CB826F8DB63DCD8FAA064CAFA8A8C8D34.
+- /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-gate-provenance.json; 61591 bytes; SHA-256 8966103B13C1756816E24EE6E2E7904ADF9F03FDD3773A5BCA8BB7BFCC2F93E4.
+- /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-own-results.json; 48789 bytes; SHA-256 D1FC54FA0CFFA0F160F9FE49003E8D7D468679C8DA86463CDC9555C8098AE790.
+- /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-root-links.json; 4844 bytes; SHA-256 BB1AB825059375B62443C9849140F3C18CBBC08864B7D3A7ADAD1853C5BD776E.
+- /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-criterion-changes.json; 9060 bytes; SHA-256 14077F50A681510373DDA970F8582D4444CA780B2A3444B35927BEC55047761A.
+- /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-effective.txt; 1694670 bytes; SHA-256 D85B1DDA248A2EDF89972CCF00E44FD8434CDE8E0AC6E771A7E91DAA1024F0BF.
+- /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-citation-audit.json; 2215 bytes; SHA-256 0FC369FB77DC0FDE265883339DB77EFE8AB9292433B610CECBAB7A7C30D245AD.
+- /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-hygiene.json; 14044 bytes; SHA-256 AB149AE7419CC1C8336AB0D1CC956B0075677965D65B6B3C2C598258FDF4B169.
+- /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-secret-audit.json; 224 bytes; SHA-256 73D1172D53DB86C29B9A73C1D4C6BD3AB6B2F0AA4DD2ABB9B31F9DC38FFBBFA1.
+- /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-env-coverage.json; 9091 bytes; SHA-256 18FEB88AECA12086091F3D51CF686B81DCD44291A43478D08D0D3ACD32E83D39.
+- /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-windows-state.json; 583 bytes; SHA-256 B9EAE741CED4866137F6632E6DF78364878AEA1756448ABD32675807BECD976A.
+- /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-edit-chronology.json; 354240 bytes; SHA-256 A0B0981D2CE1977C154C3E12FEB1088F26E797C9BE48BAA26496DAC0D63A6338.
+- /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-operator-decisions.json; 343232 bytes; SHA-256 CB50B11CDB260391CAF1D59B19FAA84E28B87D3BCF85827864E8D0733E0176EF.
+- /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-final-audit.json; 20654 bytes; SHA-256 FDDA3730ABB37965E4D785F8700D3127E49FAA599E7CD17EC30BB903EA7F28B6.
+- /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-pr87.json; 128260 bytes; SHA-256 8C215E7BB7A9A4640F9EC063E455DBCA6351F965AF31AA73A2999BF69FD228CB.
+- /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-pr-body.txt; 17310 bytes; SHA-256 08ED2D3DFE8B03237BB60E7B88F7CA9481547725DF51DD9535C3B0B88D6CBE30.
+- /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-commands.jsonl; 7155 bytes; SHA-256 A114F2F57CA7C931A5CB3794C66075FBBE9DDCDF480441422CB0BF04A44FA326.
+- /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-IMPL-UNITGREEN-001.txt; 19261 bytes; SHA-256 67DCD6854B5FD77338C74C4077ED1D7BBFFB006093FF5696F31B57F4C3BD5941.
+- /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-IMPL-SCANNERALIAS-001.txt; 2825 bytes; SHA-256 F71998284355203E2F42CAF03CE3C193104D3494E352C8B37534E56BF9E1C6DC.
+
+Score rationale: accuracy 97: actual gates, commits and main remediations are accurate, but the universal sweep/independence statement and active requirement-citation presence claim are false. Completeness 95: fourteen remaining dependent units in three strategy classes leave a settled outcome incomplete despite the successful named R5 fixes. This is functional correctness, not polish. Confidence 99: three full Nuke runs provide a positive control and two negative runs, with source stacks and raw TRX; dedicated getters and effective view independently establish the citation defect.
+
+Complete-result persistence: this entire Markdown and JSON are stored verbatim in ordered dialog parts on Codex-20261026T122926Z-unitgreen-r6/req-20261026T123039Z-unitgreen-r6, with rich own-turn metadata and the full Markdown response. The companion /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-persistence-proof.json records the actual supported history-query reconstruction, matching hashes, completed turn status and identical response; /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-history-final.json retains only this own session. No summary substitutes for the full result. The response JSONL stays live until the runner emits completion, so its earlier snapshot hash is not represented as a final-stream hash.
+
+- requestJsonl: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261026T072431-unitgreen-r6.request.jsonl
+- responseJsonl: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261026T072431-unitgreen-r6.response.jsonl
+- markdown: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r6-20261026T072431.md
+- json: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r6-20261026T072431.json
+- persistenceProof: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-persistence-proof.json
+- history: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-history-final.json
+
+=== VERDICT JSON ===
+{
+  "overallVerdict": "DISAGREE",
+  "accuracy": 97,
+  "completeness": 95,
+  "confidence": 99,
+  "passCount": 13,
+  "failCount": 8,
+  "unknownCount": 0,
+  "failList": [
+    {
+      "id": "UG3",
+      "findingIds": [
+        "R6-F1"
+      ],
+      "defect": "Fourteen untagged units execute real environment-dependent temp-root resolution. The original thirteen moved cases have Integration classification and controlled inputs, but they are not the complete dependent set.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "UG7",
+      "findingIds": [
+        "R6-F2"
+      ],
+      "defect": "The four strengthened criteria, expected retirements, mappings and TODO state match the claim, but five other active requirement citations in changed tests are absent.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "UG8",
+      "findingIds": [
+        "R6-F1"
+      ],
+      "defect": "The plan preserves its amendments and superseded history, but section 19 reports an environment sweep as complete while fourteen dependent units remain. Its completion/evidence conclusions are therefore incomplete.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "UG11",
+      "findingIds": [
+        "R6-F1"
+      ],
+      "defect": "The self-review and PR accurately disclose their known history, but omit the material remaining environment dependence and overstate the sweep outcome.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "UG12",
+      "findingIds": [
+        "R6-F1"
+      ],
+      "defect": "The proposed post-AGREE completion is not supported now. In particular AC-006/AC-008 and the D-B-dependent full-platform evidence conditions cannot be declared satisfied, and task 22/all-task closure cannot be checked on this sweep.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "UG17",
+      "findingIds": [
+        "R6-F1"
+      ],
+      "defect": "Chosen options were recorded and executed in the correct order, but the promised complete real-environment sweep missed the fourteen cases in R6-F1.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "UG20",
+      "findingIds": [
+        "R6-F1"
+      ],
+      "defect": "The v3/v4 name-set and negative-control records check out, but the claim that no unit depends on a scripted variable is disproved by the five temp-root inputs already in the gate.",
+      "classification": "implementer edit"
+    },
+    {
+      "id": "UG22",
+      "findingIds": [
+        "R6-F1"
+      ],
+      "defect": "The thirteen recorded moves and collection binding are real and correctly counted, but the slice does not achieve its promised exhaustive independence outcome.",
+      "classification": "implementer edit"
+    }
+  ],
+  "unknownList": [],
+  "implementerFixes": [
+    {
+      "id": "R6-F1",
+      "title": "Fourteen unit tests still depend on ambient CLI temporary-directory variables",
+      "change": "Apply the existing classification rule to these fourteen cases: Category=Integration on both hosts, every relevant primary/fallback temp variable set and restored, writers serialized, existing assertions preserved. Extend the one-time dependency search through helpers and production calls, and exercise hostile values rather than only writable paths. Update the collection binding if another writer class joins. Reconcile the sweep receipt, plan, PR and TODO; rerun the required gates at the resulting code head. Any new seam/helper implementation follows BDPv4 mock-before-production order. Do not weaken assertions, suppress path errors, add scanner work or mark AC-006/AC-008 or the parent TODO complete on the present evidence."
+    },
+    {
+      "id": "R6-F2",
+      "title": "The active requirement-citation presence claim is false for five retained citations",
+      "change": "Reconcile this PR active test-coverage citations and the complete-presence assertion with authoritative records. Cite a present mapped record only where its actual text covers the behavior; otherwise explicitly identify an unavailable inherited citation as historical and exclude it from an active coverage claim. Preserve behavioral assertions. No broad store repair, invented mapping, new scanner work or Azure remediation is required by this finding."
+    }
+  ],
+  "operatorDecisionFails": [],
+  "operatorOverriddenObservations": [
+    {
+      "id": "UG18",
+      "observation": "UnitSuitePlatformScanner and its tests/documentation have no change since ccc78b7a. IMPL-SCANNERALIAS-001 remains open with three tasks. Its coverage statements, alias/static-import limits and earlier scanner-linked findings are not evaluated for failure or score deduction. No scanner change is requested.",
+      "authority": "Operator 2026-10-21T06:06:46: no more scanner work; explicit review override."
+    }
+  ],
+  "closure": [
+    {
+      "id": "R5-F1",
+      "verdict": "PASS",
+      "evidence": "All seven roots are checked before traversal. Own compiled root/ancestor probe 15/15; scripted mock/binding and both real-link lanes pass."
+    },
+    {
+      "id": "R5-F2",
+      "verdict": "PASS",
+      "evidence": "The specifically named ProductAlias case is Integration, controls/restores all six relevant probe/port values, preserves assertions and passes both lanes. Fourteen sibling dependencies are new R6-F1."
+    },
+    {
+      "id": "R4-F1",
+      "verdict": "OVERRIDDEN",
+      "evidence": "Scanner alias/static-import coverage is excluded by the explicit operator override."
+    },
+    {
+      "id": "R4-F2",
+      "verdict": "PASS",
+      "evidence": "Current plan and TODO preserve correction notices for the old round 4 head, task count and profile-only seam. Original historical request remains evidence rather than current instruction."
+    },
+    {
+      "id": "R4-F3",
+      "verdict": "PASS",
+      "evidence": "MemoryS1Harness binding cites present mapped FR/TR/TEST-MCP-MEMORY-002 and explicitly says TEST-MCP-MEMORY-010 is absent."
+    },
+    {
+      "id": "R3-F1",
+      "verdict": "PASS",
+      "evidence": "Approved source seam isolates explicit plugin roots, workspace sibling input and profile; resolve tests use scripted sources. Current root fix preserves it and own sandbox run passes."
+    },
+    {
+      "id": "R3-F2",
+      "verdict": "OVERRIDDEN",
+      "evidence": "Scanner lexical alias coverage is excluded from scores and required fixes."
+    },
+    {
+      "id": "R3-F3",
+      "verdict": "PASS",
+      "evidence": "FR-MCP-USECASE-017 is absent through dedicated getter and effective view; replacement TR/TEST mapping remains."
+    },
+    {
+      "id": "R3-F4",
+      "verdict": "PASS",
+      "evidence": "Historical round 3 self-review correction remains explicitly carried in plan and later receipts; no regression in current claim."
+    },
+    {
+      "id": "R2-F1",
+      "verdict": "PASS",
+      "evidence": "The named repository/native-environment tests remain Integration; shared TestRepositoryRoot rejects unit-context access. The new temp-root cases are separately R6-F1."
+    },
+    {
+      "id": "R2-F2",
+      "verdict": "OVERRIDDEN",
+      "evidence": "Scanner coverage portion remains overridden, never treated as repaired coverage."
+    },
+    {
+      "id": "R2-F3",
+      "verdict": "PASS",
+      "evidence": "Prior mock/binding/source chronology and Windows runner-analysis correction remain accurately recorded; round 6 uses the pinned PowerShell runner and dry-run receipts."
+    },
+    {
+      "id": "F1",
+      "verdict": "PASS",
+      "evidence": "Historical red runs and missing-receipt steps are not credited as green. Current requirements/mock/production ordering has raw receipts."
+    },
+    {
+      "id": "F2",
+      "verdict": "PASS",
+      "evidence": "The original named platform-dependent cases retain integration classification and assertions. Present original gates include them in applicable lanes. New sibling failures are not misrepresented as those old cases."
+    },
+    {
+      "id": "F3",
+      "verdict": "OVERRIDDEN",
+      "evidence": "Scanner-enforcement scope is overridden; independently inspected skip policy and executed TRX remain zero skips."
+    },
+    {
+      "id": "F4",
+      "verdict": "PASS",
+      "evidence": "Current Windows lane is demonstrably interactive, at c8418301, 388/0/0 and complete by name."
+    },
+    {
+      "id": "F5",
+      "verdict": "PASS",
+      "evidence": "All seven Test projects actually execute in original and own runs; project totals agree. Scanner assertions are excluded."
+    },
+    {
+      "id": "F6",
+      "verdict": "PASS",
+      "evidence": "Historical Bash deviations are disclosed; current designed scripts and pinned Windows runner are PowerShell. No new false all-history-compliant claim found."
+    },
+    {
+      "id": "F7",
+      "verdict": "PASS",
+      "evidence": "D-B retains the corrected narrow list and leaves the other seventeen USECASE criteria unsatisfied. New evidence still blocks present completion under UG12."
+    }
+  ],
+  "headSha": "3ce97b3e3dd31dbe009a3716d2b15d43ce60bb5b",
+  "receiptPaths": {
+    "requestJsonl": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261026T072431-unitgreen-r6.request.jsonl",
+    "responseJsonl": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/20261026T072431-unitgreen-r6.response.jsonl",
+    "markdown": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r6-20261026T072431.md",
+    "json": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r6-20261026T072431.json",
+    "persistenceProof": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-persistence-proof.json",
+    "history": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hv-ug-r6-history-final.json"
+  },
+  "reviewerSessionId": "Codex-20261026T122926Z-unitgreen-r6",
+  "reviewerRequestId": "req-20261026T123039Z-unitgreen-r6"
+}

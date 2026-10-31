@@ -16,6 +16,8 @@ public sealed class BugTriage139SixteenthSqliteConsumerTests
     /// Verifies that a synchronous open which ignores managed interruption cannot extend public
     /// timeout completion and remains counted until the actual worker exits.
     /// </summary>
+    /// <remarks>Integration: asserts an elapsed wall-clock bound on actual scheduling and timer execution (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
     [Fact]
     public async Task OpenAsync_UnstoppablePreHandleWorker_IsBoundedAndTruthfullyCounted()
     {
