@@ -1,0 +1,50 @@
+{
+  "name": "ug-r9-final4-linux-buildtests-1",
+  "kind": "gate",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "878c366faadc955d79d7e8e3f6b39f063107bb5b",
+  "dirtyPaths": [
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-final4-linux-lane-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-final4-linux-lane-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-final4-linux-unit-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r9-final4-linux-unit-1/"
+  ],
+  "command": [
+    "dotnet",
+    "test",
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/Build.Tests/Build.Tests.csproj",
+    "-c",
+    "Debug",
+    "--logger",
+    "trx;LogFileName=ug-r9-final4-linux-buildtests-1.trx",
+    "--results-directory",
+    "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-linux-buildtests-1",
+    "--filter",
+    "Platform!=Windows"
+  ],
+  "startedLocal": "2026-11-02T15:25:33",
+  "endedLocal": "2026-11-02T15:30:06",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 522,
+  "passed": 522,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "ug-r9-final4-linux-buildtests-1",
+      "original": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-linux-buildtests-1/ug-r9-final4-linux-buildtests-1.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r9-final4-linux-buildtests-1/ug-r9-final4-linux-buildtests-1.trx",
+      "sha256": "6313095043076DBD3BE7280F77F2BAB4776C0A87987807446AAE25E9802059FC",
+      "total": 522,
+      "passed": 522,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [],
+  "writtenLocal": "2026-11-02T15:30:29",
+  "writtenBy": "ClaudeCode"
+}
