@@ -5,10 +5,18 @@
 sealed class IntegrationLaneFilter : IIntegrationLaneFilter
 {
     /// <inheritdoc />
-    public string Compose(IntegrationLaneHost host) => host switch
+    public string Compose(IntegrationLaneHost host) => "Category=Integration&" + PlatformClause(host);
+
+    /// <summary>
+    /// TR-MCP-NUKE-019 AC-1 and TR-MCP-NUKE-020 AC-4: the host platform clause the lane and TestGroups share. It excludes
+    /// the other host's Platform trait, so untagged cases run on both hosts.
+    /// </summary>
+    /// <param name="host">The supported host.</param>
+    /// <returns>The clause without a category.</returns>
+    internal static string PlatformClause(IntegrationLaneHost host) => host switch
     {
-        IntegrationLaneHost.Windows => "Category=Integration&Platform!=Linux",
-        IntegrationLaneHost.Linux => "Category=Integration&Platform!=Windows",
+        IntegrationLaneHost.Windows => "Platform!=Linux",
+        IntegrationLaneHost.Linux => "Platform!=Windows",
         _ => throw new ArgumentOutOfRangeException(nameof(host), host, "Unknown integration lane host."),
     };
 

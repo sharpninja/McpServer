@@ -630,14 +630,16 @@ public interface IFrItem
     string? ScopeEndLayerKey { get; }
 
     /// <summary>
-    /// Gets the creation timestamp (ISO 8601).
+    /// FR-MCP-040 ac-1: gets the creation time stored with the record (ISO 8601 round-trip), or null when none is stored;
+    /// never the time of the read.
     /// </summary>
-    string CreatedAt { get; }
+    string? CreatedAt { get; }
 
     /// <summary>
-    /// Gets the last update timestamp (ISO 8601).
+    /// FR-MCP-040 ac-1: gets the update time stored with the record (ISO 8601 round-trip), or null when none is stored;
+    /// never the time of the read.
     /// </summary>
-    string UpdatedAt { get; }
+    string? UpdatedAt { get; }
 }
 
 /// <summary>
@@ -823,14 +825,16 @@ public interface ITrItem
     string? ScopeEndLayerKey { get; }
 
     /// <summary>
-    /// Gets the creation timestamp (ISO 8601).
+    /// FR-MCP-040 ac-1: gets the creation time stored with the record (ISO 8601 round-trip), or null when none is stored;
+    /// never the time of the read.
     /// </summary>
-    string CreatedAt { get; }
+    string? CreatedAt { get; }
 
     /// <summary>
-    /// Gets the last update timestamp (ISO 8601).
+    /// FR-MCP-040 ac-1: gets the update time stored with the record (ISO 8601 round-trip), or null when none is stored;
+    /// never the time of the read.
     /// </summary>
-    string UpdatedAt { get; }
+    string? UpdatedAt { get; }
 }
 
 /// <summary>
@@ -1021,14 +1025,16 @@ public interface ITestItem
     string? ScopeEndLayerKey { get; }
 
     /// <summary>
-    /// Gets the creation timestamp (ISO 8601).
+    /// FR-MCP-040 ac-1: gets the creation time stored with the record (ISO 8601 round-trip), or null when none is stored;
+    /// never the time of the read.
     /// </summary>
-    string CreatedAt { get; }
+    string? CreatedAt { get; }
 
     /// <summary>
-    /// Gets the last update timestamp (ISO 8601).
+    /// FR-MCP-040 ac-1: gets the update time stored with the record (ISO 8601 round-trip), or null when none is stored;
+    /// never the time of the read.
     /// </summary>
-    string UpdatedAt { get; }
+    string? UpdatedAt { get; }
 }
 
 /// <summary>
@@ -1184,9 +1190,10 @@ public interface IMappingItem
     string? TestId { get; }
 
     /// <summary>
-    /// Gets the creation timestamp (ISO 8601).
+    /// FR-MCP-040 ac-1: gets the creation time stored with the record (ISO 8601 round-trip), or null when none is stored;
+    /// never the time of the read.
     /// </summary>
-    string CreatedAt { get; }
+    string? CreatedAt { get; }
 
     /// <summary>
     /// Gets optional notes about this mapping.

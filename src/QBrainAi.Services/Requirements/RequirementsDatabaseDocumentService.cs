@@ -133,9 +133,13 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             })
             .ToList();
 
-    /// <summary>Maps a stored requirement row to an <see cref="FrEntry"/> including acceptance criteria.</summary>
-    private static FrEntry MapFr(RequirementEntity x) =>
-        new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, ToCriterionModels(x.AcceptanceCriteria), x.ScopeStartLayerKey, x.ScopeEndLayerKey);
+    /// <summary>
+    /// Maps a stored requirement row to an <see cref="FrEntry"/> including acceptance criteria and, per FR-MCP-040 ac-1, the
+    /// creation and update times stored with the row.
+    /// </summary>
+    internal static FrEntry MapFr(RequirementEntity x) =>
+        new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, ToCriterionModels(x.AcceptanceCriteria), x.ScopeStartLayerKey, x.ScopeEndLayerKey,
+            CreatedAtUtc: RequirementStoredTimestamp.Read(x.CreatedAtUtc), UpdatedAtUtc: RequirementStoredTimestamp.Read(x.UpdatedAtUtc));
 
     /// <summary>
     /// FR-MCP-USECASE-003: Loads UC links for the given FR ids using the same join as GetUseCasesForFrQuery
@@ -192,13 +196,33 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             .ToArray();
     }
 
-    /// <summary>Maps a stored requirement row to a <see cref="TrEntry"/> including acceptance criteria.</summary>
-    private static TrEntry MapTr(RequirementEntity x) =>
-        new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, ToCriterionModels(x.AcceptanceCriteria), x.ScopeStartLayerKey, x.ScopeEndLayerKey);
+    /// <summary>Maps a stored requirement row to a <see cref="TrEntry"/> including acceptance criteria and stored times (FR-MCP-040 ac-1).</summary>
+    internal static TrEntry MapTr(RequirementEntity x) =>
+        new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, ToCriterionModels(x.AcceptanceCriteria), x.ScopeStartLayerKey, x.ScopeEndLayerKey,
+            CreatedAtUtc: RequirementStoredTimestamp.Read(x.CreatedAtUtc), UpdatedAtUtc: RequirementStoredTimestamp.Read(x.UpdatedAtUtc));
 
-    /// <summary>Maps a stored requirement row to a <see cref="TestEntry"/> including acceptance criteria.</summary>
-    private static TestEntry MapTest(RequirementEntity x) =>
-        new(x.Id, x.Body, x.WorkspaceId, x.Title, x.Priority, x.Status, x.Notes, ToCriterionModels(x.AcceptanceCriteria), x.ScopeStartLayerKey, x.ScopeEndLayerKey);
+    /// <summary>Maps a stored requirement row to a <see cref="TestEntry"/> including acceptance criteria and stored times (FR-MCP-040 ac-1).</summary>
+    internal static TestEntry MapTest(RequirementEntity x) =>
+        new(x.Id, x.Body, x.WorkspaceId, x.Title, x.Priority, x.Status, x.Notes, ToCriterionModels(x.AcceptanceCriteria), x.ScopeStartLayerKey, x.ScopeEndLayerKey,
+            CreatedAtUtc: RequirementStoredTimestamp.Read(x.CreatedAtUtc), UpdatedAtUtc: RequirementStoredTimestamp.Read(x.UpdatedAtUtc));
+
+    /// <summary>
+    /// Builds the one mapping row of an FR from its traceability links: distinct TR and TEST targets and, per FR-MCP-040
+    /// ac-1, the earliest creation time stored with those links. Shared by every mapping read so they report the same row.
+    /// </summary>
+    /// <param name="frId">The FR identifier.</param>
+    /// <param name="links">The FR's links.</param>
+    /// <param name="workspaceId">The owning workspace.</param>
+    /// <returns>The mapping row.</returns>
+    internal static FrTrMapping BuildMapping(string frId, IReadOnlyCollection<RequirementTraceabilityLinkEntity> links, string workspaceId) =>
+        new(
+            frId,
+            links.Where(link => link.TargetKind == TrKind).Select(link => link.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
+            links.Where(link => link.TargetKind == TestKind).Select(link => link.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
+            workspaceId)
+        {
+            CreatedAtUtc = RequirementStoredTimestamp.Earliest(links.Select(link => link.CreatedAtUtc)),
+        };
 
     /// <summary>Maps a stored requirement scope layer row to the public model.</summary>
     private static RequirementScopeLayerEntry MapLayer(RequirementScopeLayerEntity x) =>
@@ -399,11 +423,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         var effectiveLinks = links
             .Where(link => effectiveKeys.Contains($"{FrKind}\0{link.FrId}") && effectiveKeys.Contains($"{link.TargetKind}\0{link.TargetId}"))
             .GroupBy(link => link.FrId, StringComparer.OrdinalIgnoreCase)
-            .Select(group => new FrTrMapping(
-                group.Key,
-                group.Where(link => link.TargetKind == TrKind).Select(link => link.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
-                group.Where(link => link.TargetKind == TestKind).Select(link => link.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
-                RequireWorkspaceId(ctx)))
+            .Select(group => BuildMapping(group.Key, group.ToArray(), RequireWorkspaceId(ctx)))
             .ToArray();
 
         return new EffectiveRequirementsResult(
@@ -880,11 +900,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
 
         return links
             .GroupBy(x => x.FrId, StringComparer.OrdinalIgnoreCase)
-            .Select(group => new FrTrMapping(
-                group.Key,
-                group.Where(x => x.TargetKind == TrKind).Select(x => x.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
-                group.Where(x => x.TargetKind == TestKind).Select(x => x.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
-                group.First().WorkspaceId))
+            .Select(group => BuildMapping(group.Key, group.ToArray(), group.First().WorkspaceId))
             .ToArray();
     }
 
@@ -909,11 +925,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             return null;
         }
 
-        return new FrTrMapping(
-            links[0].FrId,
-            links.Where(x => x.TargetKind == TrKind).Select(x => x.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
-            links.Where(x => x.TargetKind == TestKind).Select(x => x.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
-            links[0].WorkspaceId);
+        return BuildMapping(links[0].FrId, links, links[0].WorkspaceId);
     }
 
     /// <inheritdoc />
@@ -1784,11 +1796,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         return links
             .Where(link => !IsSoftDeleted(ctx, link))
             .GroupBy(link => link.FrId, StringComparer.OrdinalIgnoreCase)
-            .Select(group => new FrTrMapping(
-                group.Key,
-                group.Where(link => link.TargetKind == TrKind).Select(link => link.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
-                group.Where(link => link.TargetKind == TestKind).Select(link => link.TargetId).Distinct(StringComparer.OrdinalIgnoreCase).ToArray(),
-                group.First().WorkspaceId))
+            .Select(group => BuildMapping(group.Key, group.ToArray(), group.First().WorkspaceId))
             .ToArray();
     }
 

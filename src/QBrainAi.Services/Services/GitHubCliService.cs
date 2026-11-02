@@ -591,7 +591,7 @@ public sealed class GitHubCliService : IGitHubCliService
             _workspaceAccessor?.GetWorkspacePath(),
             TryNormalizeRepositoryArgument(_githubOptions?.CurrentValue.Repository),
             _pathNormalizer,
-            static path => TryResolveGitHubRepositoryFromGitConfig(Path.GetFullPath(path)));
+            TryResolveGitHubRepositoryFromGitConfig);
         if (plan.Refused)
         {
             _logger.LogWarning("{Refusal}", plan.Refusal);

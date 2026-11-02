@@ -50,6 +50,14 @@ public sealed class FrEntry
     /// <summary>FR-MCP-USECASE-003: use cases linked to this FR (including Realizes).</summary>
     [JsonPropertyName("linkedUseCases")]
     public IReadOnlyList<LinkedUseCaseRef>? LinkedUseCases { get; set; }
+
+    /// <summary>FR-MCP-040 ac-1: the creation time stored with the requirement, or null when none is stored.</summary>
+    [JsonPropertyName("createdAtUtc")]
+    public DateTimeOffset? CreatedAtUtc { get; set; }
+
+    /// <summary>FR-MCP-040 ac-1: the update time stored with the requirement, or null when none is stored.</summary>
+    [JsonPropertyName("updatedAtUtc")]
+    public DateTimeOffset? UpdatedAtUtc { get; set; }
 }
 
 /// <summary>FR-MCP-USECASE-003: Use case linked to an FR.</summary>
@@ -114,6 +122,14 @@ public sealed class TrEntry
     /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this TR applies.</summary>
     [JsonPropertyName("scopeEndLayerKey")]
     public string? ScopeEndLayerKey { get; set; }
+
+    /// <summary>FR-MCP-040 ac-1: the creation time stored with the requirement, or null when none is stored.</summary>
+    [JsonPropertyName("createdAtUtc")]
+    public DateTimeOffset? CreatedAtUtc { get; set; }
+
+    /// <summary>FR-MCP-040 ac-1: the update time stored with the requirement, or null when none is stored.</summary>
+    [JsonPropertyName("updatedAtUtc")]
+    public DateTimeOffset? UpdatedAtUtc { get; set; }
 }
 
 /// <summary>A testing requirement entry.</summary>
@@ -158,6 +174,14 @@ public sealed class TestEntry
     /// <summary>FR-MCP-REQSCOPE-002: optional last requirement layer where this TEST applies.</summary>
     [JsonPropertyName("scopeEndLayerKey")]
     public string? ScopeEndLayerKey { get; set; }
+
+    /// <summary>FR-MCP-040 ac-1: the creation time stored with the requirement, or null when none is stored.</summary>
+    [JsonPropertyName("createdAtUtc")]
+    public DateTimeOffset? CreatedAtUtc { get; set; }
+
+    /// <summary>FR-MCP-040 ac-1: the update time stored with the requirement, or null when none is stored.</summary>
+    [JsonPropertyName("updatedAtUtc")]
+    public DateTimeOffset? UpdatedAtUtc { get; set; }
 }
 
 /// <summary>FR-MCP-REQSCOPE-001: requirement scope layer returned by layer catalog endpoints.</summary>
@@ -278,6 +302,10 @@ public sealed class FrTrMapping
     /// <summary>Owning workspace discriminator.</summary>
     [JsonPropertyName("workspaceId")]
     public string WorkspaceId { get; set; } = string.Empty;
+
+    /// <summary>FR-MCP-040 ac-1: the earliest creation time stored with the mapping's links, or null when none is stored.</summary>
+    [JsonPropertyName("createdAtUtc")]
+    public DateTimeOffset? CreatedAtUtc { get; set; }
 }
 
 /// <summary>Request payload for creating a functional requirement entry.</summary>

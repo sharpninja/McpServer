@@ -999,12 +999,6 @@ Scope: layer-1+
 **Status:** pending
 Scope: layer-1+
 
-## TR-MCP-FED-BACKFILL-001
-
-**TR-MCP-FED-BACKFILL-001** — Placeholder requirement backfilled for TODO link TR-MCP-FED-BACKFILL-001.
-**Status:** pending
-Scope: layer-1+
-
 ## TR-MCP-FED-MEMORY-001
 
 **Memory Federation Adapter Contract** — Memory federation SHALL register a memory state adapter that snapshots active memory rows by globally unique memory ID and applies signed REST-originated memory operations. The adapter SHALL preserve memory ID, scope, workspace ownership, category, raw text, timestamps, soft-delete semantics, and version tokens based on MemoryEntity.Version. Workspace-scoped memory rows SHALL only apply when the operation GlobalWorkspaceId matches the row owner. LocalProxy queueing SHALL accept POST /mcpserver/memory only when the JSON body supplies an explicit valid MEMORY-* ID, and SHALL accept PUT, PATCH, and DELETE /mcpserver/memory/{id} as replayable memory operations.
@@ -1021,12 +1015,6 @@ Scope: layer-1+
 **Acceptance Criteria:**
 - [ ] IWorkspacePathNormalizer.Combine treats a segment with one leading backslash as root-relative on Windows: it keeps the current root's volume, the drive (C:/) or the UNC server and share (//srv/share/), and replaces the rest of the path, on a Linux hub and a Windows host (PR 81 finding P12, PR 82 review). (evidence: tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspacePathNormalizerContractTests.cs (CombineResolvesRootRelativeWindowsSegmentAgainstDrive, CombineResolvesRootRelativeWindowsSegmentAgainstUncShare); WorkspacePathNormalizerMockDataTests.cs (RootRelativeNegativeControls_AreRejectedInsidePassingHarness); PR 82 commits f6768359 and dcd0269a)
 
-## TR-MCP-FED-ROUTE-001
-
-**TR-MCP-FED-ROUTE-001** — Placeholder requirement backfilled for TODO link TR-MCP-FED-ROUTE-001.
-**Status:** pending
-Scope: layer-1+
-
 ## TR-MCP-FED-SESSIONLOG-001
 
 **Session-log federation snapshot carries the full session graph** — SessionLogFederationStateAdapter.SnapshotAsync SHALL return, for an existing session of the local store, a payload in the UnifiedSessionLogDto shape that the adapter's ApplyAsync accepts, carrying every session field and every turn with all of its fields and child collections (actions, tags, context items, processing dialog, commits with their files, design decisions, requirements discovered, files modified, blockers), equal to what the local session-log read returns for that session after the outbound session-log sanitizer. Building a snapshot reads only the local store. The snapshot version stays the session's explicit version (ContentHash, else LastUpdated in Unix milliseconds, else TurnCount).
@@ -1039,12 +1027,6 @@ Scope: layer-1+
 - [ ] A value the outbound session-log sanitizer redacts in the session-log read is redacted the same way in the snapshot payload.
 - [ ] Building a snapshot makes no federation data call: a session that exists only on a peer is not snapshotted, and a local session's snapshot carries only local turns.
 - [ ] A missing or soft-deleted session yields PayloadJson "null" and Version null, and an existing session's Version equals its explicit version (ContentHash, else LastUpdated in Unix milliseconds, else TurnCount), as before this requirement.
-
-## TR-MCP-FED-WSSYNC-001
-
-**TR-MCP-FED-WSSYNC-001** — Placeholder requirement backfilled for TODO link TR-MCP-FED-WSSYNC-001.
-**Status:** pending
-Scope: layer-1+
 
 ## TR-MCP-FILETOOLS-001
 
@@ -1815,6 +1797,19 @@ Scope: layer-1+
 - [ ] The run log names the selection filter (filter text only). The host filter, each lane project's filter and each lane project's TRX name are outputs of one lane composition that the target uses and logs as given, proved by Build.Tests cases over that composition (operator 2026-10-29: "Lane ACs (Recommended)"; holistic review finding BLD-3; operator 2026-10-30: "F1: AC-3 wording (Recommended)").
 - [ ] Every integration case MigrationIntegrationTests runs that needs a QBrain.AI instance uses a temporary instance it owns, whether a server process on a free port, an in-process host or a stdio host, with a test-owned workspace, marker and database, never the live server, its marker or its API key. A case that needs a server asserts on that instance's answers and fails when it cannot reach it; it never catches the failure and passes. A database selection outside the owned root is refused before the instance reads or writes that database. The rules for the instance's environment, database selection and consumers are FR-MCP-TESTRESOURCE-001 ac-4 (operator 2026-10-29: "Strengthen ACs, fix both (Recommended)", "Run the 2 classes, AC first (Recommended)" and "Lane ACs (Recommended)"; operator 2026-10-30: "FR-MCP-TESTRESOURCE-001 (Recommended)"; hostile validation findings R8B-F2 and R8B-F3; holistic review findings PLAN-6, PLAN-7, RINT-1, RINT-2 and RINT-3).
 
+## TR-MCP-NUKE-020
+
+**Targeted test-group runs** — The Nuke target TestGroups runs only named groups of test classes, each group in one test project, and writes one TRX per project, so that a mock gate or binding after an edit runs the changed tests through Nuke instead of the full suite. The full gate set (Test, MigrationIntegrationTests, Build.Tests, ValidateTraceability) still runs once at phase exit.
+**Covered by:** FR: FR-MCP-BUILD-001
+**Status:** pending
+Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Nuke target TestGroups runs only the test groups its --test-groups array names. Each group names one test project and one or more test classes, selected by class name whatever their category. The target requires --test-run-id and writes one TRX per selected project under TestResults/<run id>. It fails when a group names an unknown project, when a group selects no case, or when any selected case fails or is skipped.
+- [ ] The group filters and TRX names come from the same composition MigrationIntegrationTests uses (TR-MCP-NUKE-019 AC-3), proved by Build.Tests over that composition. The run log names each filter it ran.
+- [ ] TestGroups never changes which cases Test or MigrationIntegrationTests run.
+- [ ] TestGroups excludes cases tagged for the other platform with the lane's host platform clause: on a Linux host Platform!=Windows, on a Windows host Platform!=Linux, untagged cases on both (TR-MCP-NUKE-019 AC-1). A group whose classes hold only other-platform cases selects no case and fails (operator 2026-11-02: "Add both ACs (Recommended)").
+- [ ] Every class a group names runs at least one case in its project's TRX; a named class that runs no case fails the target and the failure names that class (operator 2026-11-02: "Add both ACs (Recommended)").
+
 ## TR-MCP-OPS-001
 
 Operational scripts for startup, health checks, packaging, config validation, and migration.
@@ -1940,6 +1935,7 @@ Scope: layer-1+
 ## TR-MCP-PLUGINCORE-002
 
 **core-guard.yml no-duplication job** — CI enumerates lib files; any not in manifest nor PLUGIN-RESIDUAL.txt fails the build.
+**Covered by:** FR: FR-MCP-PLUGINCORE-002; TEST: TEST-MCP-PLUGINCORE-002
 **Status:** pending
 Scope: layer-1+
 
@@ -3454,6 +3450,7 @@ Scope: layer-1+
 ## TR-MCP-SERVICEUPDATE-001
 
 **Platform adapters and metadata-preserving Linux service lifecycle** — Preserve Windows behavior. Linux uses bounded shell-free systemctl/tar operations, installed-unit preflight, platform RID/apphost selection, shared preservation paths,0700 backup directories/0600 archives, ownership/mode/ACL/xattr preservation, failure restoration and same health checks. No SQL database export or automatic binary rollback claim.
+**Covered by:** FR: FR-MCP-SERVICEUPDATE-001; TEST: TEST-MCP-SERVICEUPDATE-001
 **Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
@@ -4293,6 +4290,7 @@ Scope: layer-1+
 ## TR-MCP-USECASE-020
 
 **Identity-preserving use-case component update pipeline** — Implement workspace- and parent-scoped CQRS mutations for existing actor, flow, and step components, exposed consistently through REST, typed client, source-generated JSON, and MCP tool surfaces.
+**Covered by:** FR: FR-MCP-USECASE-018; TEST: TEST-MCP-USECASE-021
 **Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**
@@ -4552,6 +4550,7 @@ Scope: layer-1+
 ## TR-TIMER-LIFECYCLE-001
 
 **Serialize timer lifecycle admission separately from callback invocation** — Protect shutdown admission and token replacement with a short-lived state lock. Cancel outside locks before draining the callback invocation gate. Reject queued Restart if shutdown admission changed while it waited. Do not dispose cancellation sources still visible to callbacks. Preserve reentrant Stop/Dispose/Restart behavior.
+**Covered by:** FR: FR-TIMER-001; TEST: TEST-TIMER-001
 **Status:** pending
 Scope: layer-1+
 **Acceptance Criteria:**

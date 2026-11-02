@@ -328,6 +328,8 @@ The server shall support CRUD operations for Functional Requirements (FR), Techn
 
 **Covered by:** `RequirementsController`, `RequirementsDocumentService`, `IRequirementsRepository`
 Scope: layer-1+
+**Acceptance Criteria:**
+- [ ] Reading an FR, TR, TEST or mapping through REST, the typed client or the REPL reports the creation and update times stored with that record. A read never reports the time of the read; when the store holds no time, the value is null (operator 2026-11-02: "This HAS to be fixed."; PR 87 slice P).
 
 ## FR-MCP-041 Requirements Document Generation
 
@@ -1307,11 +1309,6 @@ Scope: layer-1+
 - [ ] Test-ReplFailsafeBackendUnreachable treats HTTP 503 and code backend_unavailable as unreachable
 - [ ] Drain does not latch failed=1 as permanently completed in-process
 
-## FR-MCP-FED-BACKFILL-001 FR-MCP-FED-BACKFILL-001
-
-Placeholder requirement backfilled for TODO link FR-MCP-FED-BACKFILL-001.
-Scope: layer-1+
-
 ## FR-MCP-FED-PATH-001 Request workspace paths are interpreted by their own syntax
 
 A server must interpret any request-supplied workspace path by its own syntax (drive letter, UNC, POSIX root), never by the host OS, so a Linux host accepts and stores Windows paths unchanged in meaning.
@@ -1322,16 +1319,6 @@ Scope: layer-1+
 - [ ] Triage submit/status round-trips: getReport with the submitter's original path finds the report on a Linux hub.
 - [ ] WorkspaceService.Init never creates a directory from a foreign-platform path.
 - [ ] When the workspace path belongs to the other platform and no Mcp:GitHub:Repository is configured, a GitHub CLI operation never starts gh and returns a failure that names the foreign workspace and the missing Mcp:GitHub:Repository setting; with a repository configured, gh runs with --repo and no working directory (operator 2026-10-29: "gh foreign-workspace AC (Recommended)"; holistic review findings SRC-1 and SRC-4).
-
-## FR-MCP-FED-ROUTE-001 FR-MCP-FED-ROUTE-001
-
-Placeholder requirement backfilled for TODO link FR-MCP-FED-ROUTE-001.
-Scope: layer-1+
-
-## FR-MCP-FED-WSSYNC-001 FR-MCP-FED-WSSYNC-001
-
-Placeholder requirement backfilled for TODO link FR-MCP-FED-WSSYNC-001.
-Scope: layer-1+
 
 ## FR-MCP-FILETOOLS-001 Global repository discovery tools
 
@@ -2869,33 +2856,6 @@ Scope: layer-1+
 - [ ] Fourteenth receipts map exact commands to outputs, distinguish completed failures from aborted or inconclusive runs, supersede inaccurate twelfth claims explicitly, and carry an independently verified SHA-256 inventory.
 - [ ] All previously approved controls remain covered and complete current-plus-prior provider, repository, release-build, compile, test, and traceability gates finish with zero failures and zero skips.
 
-## FR-MCP-USECASE-016 BUG-TRIAGE-139 fifteenth-review bounded cross-platform remediation
-
-Use-case persistence and its supporting contained rollback, physical workspace identity, SQLite opening, cancellation classification, and repository evidence paths shall remain safe and finitely completing on every supported platform, including deterministic CI builds, while preserving exact provider failures and truthful supersession evidence.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] Linux rollback directories retain owner search and execute permission, nested restoration reproduces file contents and mode, and all mutations remain contained.
-- [ ] Physical workspace identity resolution completes within a finite bound on Windows and non-Windows without caller-thread blocking, cancellation gaps, abandoned workers, or silent platform returns.
-- [ ] SQLite connection opening is finitely bounded before native-handle publication on every supported platform and leaves no worker, handle, callback, interrupt, pool, or lifecycle leak.
-- [ ] Only outcomes precisely attributable to requested cancellation become OperationCanceledException; independent I/O, disposal, and provider failures retain their original type and details.
-- [ ] Repository and Agent Help fixtures discover their root from true external deterministic builds with mapped CallerFilePath and no MCP_REPOSITORY_ROOT override.
-- [ ] Every supported platform executes an applicable native contract assertion; platform-specific tests neither skip nor silently return.
-- [ ] The rejected fourteenth receipt is preserved with an explicit supersession notice, and the fifteenth evidence records every failed, inconclusive, and passing run with independently verified hashes and command mappings.
-
-## FR-MCP-USECASE-017 BUG-TRIAGE-139 sixteenth-review race-safe bounded remediation
-
-Use-case persistence and its filesystem, provider, process, platform-test, and evidence boundaries shall close physical alias and replacement races, complete publicly within finite contracts, preserve truthful worker and provider causality, execute applicable native contracts, and report only exact immutable evidence while retaining every previously approved control.
-Scope: layer-1+
-**Acceptance Criteria:**
-- [ ] Physical workspace identity rejects safe lexical paths whose physical target is on an unsafe mount, remains safe across symlink or mount replacement timing, completes publicly within its deadline, and reports any unstoppable worker as active until it actually exits.
-- [ ] SQLite data-source validation and pre-handle opening resist safe-link and check-to-open replacement, use no ineffective Thread.Interrupt dependency for native Linux I/O, finish cleanup within a finite deadline, and preserve exact lifecycle, handle, worker, and exception state.
-- [ ] PostgreSQL SQLSTATE 57014 is translated to caller cancellation only with causal evidence produced by the caller-triggered cancellation mechanism; statement timeout and administrative cancellation remain PostgresException even during concurrent token cancellation.
-- [ ] Platform-specific tests are discovered or composed only where applicable, prove real execution and inventory counts, and never pass through source inspection, skip, silent return, abort, inconclusive outcome, or a below-minimum count.
-- [ ] Containment race coverage requires at least one successful contained read and write while proving no escape or corruption, and deterministic total-rejection tests prove that rejecting every attempt cannot satisfy the success gate.
-- [ ] Windows descendant cleanup establishes containment at process creation or proves an equivalent race-free boundary before descendants can escape, and timeout or cancellation terminates immediate descendants finitely without regressing non-Windows process-group cleanup.
-- [ ] Historical rejected receipts remain intact but are explicitly superseded; final evidence identifies the exact immutable tested SHA, contains executable commands or a mechanically complete ledger, independently reconciles hashes, mappings and totals, and limits conclusions to the proven local and retained-evidence boundary.
-- [ ] All current and prior requirements pass focused and cumulative Windows, native Linux/FUSE/non-root, SQLite, LocalDB, fresh PostgreSQL, deterministic external, BDPv4, build, traceability, Release, repository, history, harness, and EOL gates from C:-physical outputs with exact zero failures and zero skips.
-
 ## FR-MCP-USECASE-018 Edit existing use-case actors, flows, and steps in place
 
 Operators and agents shall edit actor, flow, and step records through supported authenticated operations while preserving the existing component identities and parent relationships.
@@ -3307,9 +3267,4 @@ Scope: layer-1+
 - [ ] Saving hourly and daily caps persists on the agent configuration.
 - [ ] When the hourly cap is exceeded, a new dispatch for that agent fails closed and the TODO stays pending or failed, not silently running.
 - [ ] Clearing caps restores unlimited dispatch for that agent.
-
-## FR-WF-005 FR-WF-005
-
-Placeholder requirement backfilled for TODO link FR-WF-005.
-Scope: layer-1+
 

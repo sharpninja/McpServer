@@ -1366,10 +1366,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-ACKRECOVERY-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-AUDITACTION-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-BUILD-001 | Tracked | Functional-Requirements.md |
-| FR-MCP-FED-BACKFILL-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-FED-PATH-001 | Tracked | Functional-Requirements.md |
-| FR-MCP-FED-ROUTE-001 | Tracked | Functional-Requirements.md |
-| FR-MCP-FED-WSSYNC-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-HVPIPE-001 | Tracked | Functional-Requirements.md |
 | FR-MCP-HVPIPE-002 | Tracked | Functional-Requirements.md |
 | FR-MCP-HVPIPE-003 | Tracked | Functional-Requirements.md |
@@ -1396,18 +1393,14 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-VERIFYPOLICY-001 | Tracked | Functional-Requirements.md |
 | FR-SUPPORT-016 | Tracked | Functional-Requirements.md |
 | FR-TIMER-001 | Tracked | Functional-Requirements.md |
-| FR-WF-005 | Tracked | Functional-Requirements.md |
 | TR-API-001 | Tracked | Technical-Requirements.md |
 | TR-API-002 | Tracked | Technical-Requirements.md |
 | TR-MCP-ACKRECOVERY-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
 | TR-MCP-AUDITACTION-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-DB-DTO-001 | Tracked | Technical-Requirements.md |
-| TR-MCP-FED-BACKFILL-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-FED-PATH-001 | Tracked | Technical-Requirements.md |
-| TR-MCP-FED-ROUTE-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-FED-SESSIONLOG-001 | Tracked | Technical-Requirements.md |
-| TR-MCP-FED-WSSYNC-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-HVPIPE-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-HVPIPE-002 | Tracked | Technical-Requirements.md |
 | TR-MCP-HVPIPE-003 | Tracked | Technical-Requirements.md |
@@ -1443,6 +1436,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-NUKE-017 | Tracked | Technical-Requirements.md |
 | TR-MCP-NUKE-018 | Tracked | Technical-Requirements.md |
 | TR-MCP-NUKE-019 | Tracked | Technical-Requirements.md |
+| TR-MCP-NUKE-020 | Tracked | Technical-Requirements.md |
 | TR-MCP-PATHNORM-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-RUNAS-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-VERIFYPOLICY-001 | Tracked | Technical-Requirements.md |

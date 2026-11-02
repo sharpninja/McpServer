@@ -1364,3 +1364,39 @@ All times are local (America/Chicago, UTC-5); the operator's messages and answer
 - Prepared /tmp/Add-UnitgreenProviderContract.ps1 and /tmp/Apply-UnitgreenProviderFix.ps1 have not edited implementation or created the new provider test file. Before use, adapt Codex-specific auditing to Claude's required plugin and replace the add script's stale exit-file prerequisite with validated incomplete-receipt plus fresh process-identity evidence. Do not fabricate an exit. Full mock gate and fixture hash still precede production correction and same-case real bindings. Explicitly compile all4 linked consumers of TemporaryInstanceChecks after its edit. The corrected helper's linked-build path remains analyzed/WhatIf only, not live compile proof.
 - Matching numeric requirement suffixes are not coverage evidence. Preserve the eleven C3 gaps and reconcile semantics through supported live APIs only. FR-MCP-074 is Azure-specific and informational only; no Azure error gates acceptance. Other mapping gaps, placeholder records and provenance questions remain unresolved. Do not weaken validator assertions or manually edit authoritative projections.
 - Old helper names do not establish current behavior: Read-UnitgreenFinalGate reports still running when any exit file is absent and pins oldHEAD; Commit-UnitgreenR9/Log-UnitgreenCommit and old receipt scripts hardcode prior refs or turns. Inspect/adapt before use. Use a fresh matching Claude plugin session/turn, not Codex cache or wrapper identity. Cline Beam High remains the operator preference through Monday afternoon with unspecified cutoff; no HV launched. All pending operator decisions and pre-HV projected-problem confirmation remain pending. No elapsed-time approval is inferred.
+
+### 27.19 Claude merge plan and operator rulings, 2026-11-02 (supersedes 27.17 and 27.18 where they differ)
+
+- The operator approved the merge plan on 2026-11-02. Plan copy: `/home/sharpninja/.claude/plans/crispy-knitting-seal.md`. Audit: ClaudeCode-20261102T151154Z-plugin-session, turn req-20261102T151453Z-prompt-be7e.
+- **HV reviewer:** Codex CLI, gpt-6-astra, max effort, run only on the merged OMARCHY worktree and never on Windows. The Cline line in 27.12 and 27.18 was Codex's and does not apply.
+- **Windows:** Windows-only work goes on child branch fix/unit-suite-green-20261019-windows, edited from its own OMARCHY worktree and only fetched and run on PAYTON-LEGION2 over SSH. Windows failures do not block OMARCHY work unless they block a merge point. The child branch merges into the PR branch before HV.
+- **Triage:** a triage or session-submit failure never stops work; confirm the failsafe file, then continue.
+- **Targeted runs:** mock gates and bindings run only the changed classes, through a dedicated Nuke target (operator: "Use dedicated targets or an integration target that accepts an array of tests groups to run"), never raw dotnet test. New TR-MCP-NUKE-020 (AC-1 to AC-3) under FR-MCP-BUILD-001 is created and mapped; its target is TestGroups (slice Q). The full gate set runs once at the final HEAD. This supersedes the handoff's full Nuke Test mock gate. The ruling becomes a Global memory on both lab machines.
+- **createdAt:** reading a requirement reports the read time as its createdAt. The cause is the REPL adapters at src/QBrainAi.Repl.Core/RequirementsWorkflow.cs:963-964, 1021-1022, 1085-1086 and 1133, which return DateTimeOffset.UtcNow, while the client FrEntry, TrEntry and TestEntry carry no stored times. The operator: "This HAS to be fixed." It is fixed inside PR 87 as slice P under new FR-MCP-040 ac-1 (added and read back).
+- **Traceability:** an audit through the live getters confirms these edges by the records' own cross-references:
+  - FR-MCP-074 to TR-MCP-CI-001.
+  - PLUGINCORE-002 to its TR and TEST.
+  - SERVICEUPDATE-001 to its TR and TEST.
+  - USECASE-018 to TR-MCP-USECASE-020 and TEST-MCP-USECASE-021.
+  - FR-TIMER-001 to TR-TIMER-LIFECYCLE-001 and TEST-TIMER-001.
+
+  These are to be deleted with full-record receipts: FR-MCP-USECASE-016/017 (again; section 17 approved their conversion), the FED-BACKFILL, FED-ROUTE and FED-WSSYNC FR/TR placeholder pairs, and FR-WF-005. A note goes into PAYTON-LEGION2's federation worktree so it can recreate them. PLAN-AZURERETIRE-001 tracks the later retirement of FR-MCP-074 and TR-MCP-CI-001.
+- **Identifier scrub:** the 4 exact assertions stay, as flagged lab-bound exceptions. The 417-candidate audit stays out of scope.
+- **Exports:** the server writes read-only requirement exports into the registered workspace. The main checkout's modified Functional-Requirements.md is that export and is left alone.
+- **Shared helpers:** a lab repository `~/github/lab-agent-helpers` (first commit 749c79d7) holds the PowerShell helper format shared with Codex (FORMAT.md, proposal 1). The agents communicate through its coordination folder.
+- **Prerequisite:** Codex's exit-file prerequisite is replaced by Test-IncompleteLaneReceipt.ps1, verdict STOPPED_VERIFIED at 10:04:44: no exit file, 10 of 10 TRX hashes match, 0 of 9 recorded processes alive, 0 live test processes. Codex's /tmp scripts are not run; their reviewed fixture text and the two exact replacements are reused.
+- **Triage filed:**
+  - triage-report-0d5b6229a3e647fda4d3493111bf9bae: hook session submits land in failsafe with no error text.
+  - triage-report-d88dc14a2c3847b9adbc02e9a3b9725a: FR-MCP-SERVICEUPDATE-001 has empty AC ids.
+  - triage-report-8928fd021e6b47c1945387935f0765d9: deleted USECASE FRs reappear.
+- IMPL-UNITGREEN-001 now has 35 tasks (5 appended for Q, R, P, traceability and Windows), with FR-MCP-040 and TR-MCP-NUKE-020 linked. All tasks remain unchecked.
+- **Order:**
+  1. Q: TestGroups. Its bootstrap mock gate goes through the Build.Tests infrastructure path, because the target doesn't exist yet.
+  2. R: provider key and GitHub ratchet.
+  3. P: createdAt.
+  4. Traceability reconciliation.
+  5. Signed checkpoint, then the full OMARCHY gate set, with Windows on the child branch in parallel.
+  6. Merge point.
+  7. Self-review and projected-problem confirmation.
+  8. HV round 9.
+  9. Merge on the operator's go.

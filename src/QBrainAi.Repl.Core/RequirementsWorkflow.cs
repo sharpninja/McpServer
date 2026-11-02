@@ -449,12 +449,12 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
 
             if (!string.IsNullOrEmpty(trId) && !string.IsNullOrEmpty(testId))
             {
-                items.AddRange(matchingTrIds.SelectMany(tr => matchingTestIds.Select(test => new MappingItemAdapter(mapping.FrId, tr, test, null))));
+                items.AddRange(matchingTrIds.SelectMany(tr => matchingTestIds.Select(test => new MappingItemAdapter(mapping.FrId, tr, test, null, mapping.CreatedAtUtc))));
                 continue;
             }
 
-            items.AddRange(matchingTrIds.Select(tr => new MappingItemAdapter(mapping.FrId, tr, null, null)));
-            items.AddRange(matchingTestIds.Select(test => new MappingItemAdapter(mapping.FrId, null, test, null)));
+            items.AddRange(matchingTrIds.Select(tr => new MappingItemAdapter(mapping.FrId, tr, null, null, mapping.CreatedAtUtc)));
+            items.AddRange(matchingTestIds.Select(test => new MappingItemAdapter(mapping.FrId, null, test, null, mapping.CreatedAtUtc)));
         }
 
         return new MappingQueryResultAdapter(items);
@@ -537,7 +537,8 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             mapping.FrId,
             trIds.FirstOrDefault(),
             testIds.FirstOrDefault(),
-            request.Notes);
+            request.Notes,
+            mapping.CreatedAtUtc);
         return new MappingMutationResultAdapter(true, item);
     }
 
@@ -960,8 +961,10 @@ internal sealed class FrItemAdapter : IFrItem
     public string ScopeStartLayerKey => _entry.ScopeStartLayerKey;
     /// <inheritdoc />
     public string? ScopeEndLayerKey => _entry.ScopeEndLayerKey;
-    public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
-    public string UpdatedAt => DateTimeOffset.UtcNow.ToString("o");
+    /// <inheritdoc />
+    public string? CreatedAt => RequirementTimestampText.Format(_entry.CreatedAtUtc);
+    /// <inheritdoc />
+    public string? UpdatedAt => RequirementTimestampText.Format(_entry.UpdatedAtUtc);
 
     private static string ExtractArea(string id)
     {
@@ -1018,8 +1021,10 @@ internal sealed class TrItemAdapter : ITrItem
     public string ScopeStartLayerKey => _entry.ScopeStartLayerKey;
     /// <inheritdoc />
     public string? ScopeEndLayerKey => _entry.ScopeEndLayerKey;
-    public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
-    public string UpdatedAt => DateTimeOffset.UtcNow.ToString("o");
+    /// <inheritdoc />
+    public string? CreatedAt => RequirementTimestampText.Format(_entry.CreatedAtUtc);
+    /// <inheritdoc />
+    public string? UpdatedAt => RequirementTimestampText.Format(_entry.UpdatedAtUtc);
 
     private static string ExtractArea(string id)
     {
@@ -1082,8 +1087,10 @@ internal sealed class TestItemAdapter : ITestItem
     public string ScopeStartLayerKey => _entry.ScopeStartLayerKey;
     /// <inheritdoc />
     public string? ScopeEndLayerKey => _entry.ScopeEndLayerKey;
-    public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
-    public string UpdatedAt => DateTimeOffset.UtcNow.ToString("o");
+    /// <inheritdoc />
+    public string? CreatedAt => RequirementTimestampText.Format(_entry.CreatedAtUtc);
+    /// <inheritdoc />
+    public string? UpdatedAt => RequirementTimestampText.Format(_entry.UpdatedAtUtc);
 
     private static string ExtractArea(string id)
     {
@@ -1119,18 +1126,20 @@ internal sealed class TestMutationResultAdapter : ITestMutationResult
 
 internal sealed class MappingItemAdapter : IMappingItem
 {
-    public MappingItemAdapter(string? frId, string? trId, string? testId, string? notes)
+    public MappingItemAdapter(string? frId, string? trId, string? testId, string? notes, DateTimeOffset? createdAtUtc)
     {
         FrId = frId;
         TrId = trId;
         TestId = testId;
         Notes = notes;
+        CreatedAt = RequirementTimestampText.Format(createdAtUtc);
     }
 
     public string? FrId { get; }
     public string? TrId { get; }
     public string? TestId { get; }
-    public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
+    /// <inheritdoc />
+    public string? CreatedAt { get; }
     public string? Notes { get; }
 }
 

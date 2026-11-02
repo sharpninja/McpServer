@@ -170,7 +170,11 @@ internal static class TemporaryInstanceChecks
 
         foreach (var (key, value) in settings)
         {
-            if ((key.EndsWith("__Provider", StringComparison.OrdinalIgnoreCase)
+            // FR-MCP-TESTRESOURCE-001 ac-4: only database-engine settings must name SQLite: hierarchical Database__Provider,
+            // flat DatabaseProvider and the DATABASE_PROVIDER environment aliases, with any host or instance prefix. Other
+            // provider settings, such as TodoStorage's 'database' backend, keep the exact ownership check above.
+            if ((key.EndsWith("__Database__Provider", StringComparison.OrdinalIgnoreCase)
+                    || key.EndsWith("__DatabaseProvider", StringComparison.OrdinalIgnoreCase)
                     || key.EndsWith("DATABASE_PROVIDER", StringComparison.OrdinalIgnoreCase)) && !IsSqliteProvider(value))
                 return $"The temporary instance's database provider '{value}' is not SQLite.";
             var database = key.Contains("ConnectionString", StringComparison.OrdinalIgnoreCase)
