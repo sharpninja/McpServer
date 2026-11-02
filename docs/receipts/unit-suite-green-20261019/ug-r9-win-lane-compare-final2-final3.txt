@@ -1,0 +1,4 @@
+Now: 2026-11-02T13:31:18 before=/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r9-final2-win-lane-1 (713) after=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/unitgreen-r9-trx-62c5882d/ug-r9-final3-win-lane-1 (713)
+onlyBefore=0 onlyAfter=0 common=713
+--- only in before ---
+--- only in after ---

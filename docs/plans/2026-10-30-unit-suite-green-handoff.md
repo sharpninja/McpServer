@@ -2,6 +2,17 @@
 
 Operator request: "Update the handoff for claude to resume work on this. Add any insights you gained that claude appeared to be missing." This handoff supersedes the October30 continuation state. New evidence and corrections below were obtained by Codex after Claude's earlier work; Codex owns its mistakes described here. No implementation was changed and no new suite or reviewer was launched for this handoff.
 
+## Claude update, 2026-11-02 afternoon (supersedes the sections below where they differ)
+
+Written by ClaudeCode (claude-opus-5-5, xhigh) during the approved merge plan; plan sections 27.19 and 27.20 of `docs/plans/2026-10-19-unit-suite-green.md` are the as-built record. The scratch master copy is `/home/sharpninja/.claude/scratch/pr82-review-20261019/plan-unit-suite-green-20261019-r9final.md` (the earlier master is kept unchanged). Recheck live refs before acting; this section records state, never availability.
+
+- **Done:** slices Q (TestGroups, TR-MCP-NUKE-020 AC-1 to AC-5), R (provider key, GetFullPath ratchet) and P (stored requirement times, FR-MCP-040 ac-1), the traceability reconciliation and the federation note, the MEMORY-FACT-008 retrofit. Last code head `62c5882d`; every later commit is docs only (D-A).
+- **Gates of record at `62c5882d`, all green:** Linux Test and Windows Test 4694/0/0 each (0 NU190x); Linux lane 738/0/0 and Windows lane 715/0/0 (7 TRX each; by name complete against final2 and against the round 8b lanes); Build.Tests Linux 522/0/0 and Windows 427/0/0 (plus the 84 Integration cases in the Windows lane); ValidateTraceability passed on both hosts. TRX evidence for HV: `docs/receipts/hv/unitgreen-r9-trx-62c5882d/manifest.json` (30 TRX).
+- **Windows child branch** `fix/unit-suite-green-20261019-windows` has no commit of its own (fast-forwarded to each checkpoint); the merge point is a no-op.
+- **Decisions this section's older text lists as open are settled** by the operator-approved 2026-11-02 plan: the SSH route for Windows gates; FR-MCP-USECASE-016/017 deleted again with receipts; the four identifier-scrub exceptions kept and flagged; the 417 candidates out of scope; the HV reviewer is Codex CLI, gpt-6-astra, max effort, on the merged OMARCHY worktree only (the Cline line below does not apply).
+- **Next:** present every projected problem to the operator and wait for confirmation (plan 27.20 "Declared for round 9" and the pre-HV self-review); rewrite the PR body (still round 8b text); bind the round 9 brief (it must carry MEMORY-PROCESS-013 verbatim and policy 7.9, and the reviewer runs no build or test); launch HV round 9 only after confirmation; on AGREE at 98/98 or better, check the TODO tasks and criteria through the plugin and ask the operator for the merge go.
+- **Open, declared:** SQL error 1223's cause is unknown; the running server reports read-time createdAt until a build with slice P is deployed; TR-MCP-FED-PATH-001 has no criterion for the no-direct-GetFullPath rule; the memory-bench integration tests rewrite two tracked result files (restore them before every commit, triage 32e6bc07).
+
 ## Resume here
 
 1. Run add-profile in full, including fresh Global then Workspace memories through the required Claude plugin, excluding MEMORY-PROCESS-007 before rendering. Read the complete current workspace instructions and marker; never infer live state from this handoff. Use Claude's own plugin, agent identity and fresh per-request audit turn. Do not run Codex wrappers under a Claude identity or reuse Codex's current-turn cache.
