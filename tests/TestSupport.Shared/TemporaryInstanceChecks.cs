@@ -8,6 +8,8 @@ namespace QBrainAi.TestSupport.TemporaryInstance;
 /// environment), linked into the unit project that proves their contract (QBrainAi.Repl.Core.Tests) and the
 /// integration projects whose cases call them. Each check returns null when the input passes and a message naming the
 /// violation otherwise, so a caller asserts <c>Assert.Null(check)</c> and the failure message says what was wrong.
+/// Since 2026-11-02 it also holds the FR-MCP-TESTRESOURCE-001 check that a test's generated-artifact folder lies outside
+/// the checkout (<see cref="CheckTestOutputFolder"/>).
 /// </summary>
 internal static class TemporaryInstanceChecks
 {
@@ -228,6 +230,40 @@ internal static class TemporaryInstanceChecks
             ? null
             : $"The temporary instance's database '{database ?? connectionString}' is not inside its owned root '{ownedRoot}'.";
     }
+
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 (second criterion: "Generated test artifacts are written only to test-owned disposable
+    /// output locations, not to repository fixture or documentation paths"): accepts a folder for a test's generated
+    /// artifacts only when it is an absolute path with no '.' or '..' segment that lies outside
+    /// <paramref name="checkoutRoot"/>, compared segment by segment (ordinally, as the other owned-root checks) with
+    /// either separator. The checkout root itself, any folder inside it and a relative path are refused.
+    /// </summary>
+    /// <param name="folder">The candidate artifact folder.</param>
+    /// <param name="checkoutRoot">The repository checkout root.</param>
+    /// <returns>Null when the folder is a test-owned location outside the checkout; otherwise the refusal, naming the folder.</returns>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 (second criterion): added, because two memory-bench stub cases wrote into the checkout's docs/benchmarks/results and rewrote two tracked files on every lane run (operator 2026-11-02: "Fix in scope"; mock gate ug-r9-mockgate-s-1).</description></item>
+    /// </list>
+    /// </remarks>
+    internal static string? CheckTestOutputFolder(string folder, string checkoutRoot)
+    {
+        ArgumentNullException.ThrowIfNull(folder);
+        ArgumentException.ThrowIfNullOrWhiteSpace(checkoutRoot);
+
+        var segments = Segments(folder);
+        var acceptable = IsAbsolute(folder)
+            && !segments.Any(segment => segment is "." or "..")
+            && !IsStrictlyInside(folder, checkoutRoot)
+            && !SameSegments(segments, Segments(checkoutRoot));
+        return acceptable
+            ? null
+            : $"The test artifact folder '{folder}' is not a test-owned location outside the checkout '{checkoutRoot}'.";
+    }
+
+    private static bool SameSegments(string[] left, string[] right) =>
+        left.Length == right.Length && left.Zip(right).All(pair => string.Equals(pair.First, pair.Second, StringComparison.Ordinal));
 
     private static readonly string[] ConnectionStringPrefixes =
         ["SQLCONNSTR_", "SQLAZURECONNSTR_", "MYSQLCONNSTR_", "POSTGRESQLCONNSTR_", "CUSTOMCONNSTR_"];

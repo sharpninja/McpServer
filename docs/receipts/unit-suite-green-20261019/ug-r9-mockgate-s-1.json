@@ -1,0 +1,64 @@
+{
+  "name": "ug-r9-mockgate-s-1",
+  "kind": "mock-gate",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "23955af0b330ec1fe167138edac1ef5ef8ff3bfd",
+  "dirtyPaths": [
+    " M tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampContractTests.cs",
+    "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "QBrainAi.Repl.Core.Tests:TestOutputFolderContractTests",
+    "QBrainAi.Support.Mcp.Tests:RequirementStoredTimestampContractTests",
+    "--test-run-id",
+    "ug-r9-mockgate-s-1"
+  ],
+  "startedLocal": "2026-11-02T14:38:27",
+  "endedLocal": "2026-11-02T14:38:51",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 14,
+  "passed": 14,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "QBrainAi.Repl.Core.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-s-1/groups/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-s-1/QBrainAi.Repl.Core.Tests.trx",
+      "sha256": "B159C8C7B7F5788D90063EE8D9B834336F4AF67D2C90BC16DD99647181A034E0",
+      "total": 8,
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Support.Mcp.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-s-1/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r9-mockgate-s-1/QBrainAi.Support.Mcp.Tests.trx",
+      "sha256": "A4406E27D7C0D18639DDA90EA428EDEF3C02A7D686DC7020C9C10CCE6F04D9D9",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs",
+      "sha256": "D2F393773E3271A3D6E07679AC1993C0FC3A89C562623441BDEF7331938B9108"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampContractTests.cs",
+      "sha256": "ECF28CAD43C89F9DE2A07E0E53922F382272F1B237F394520E79DF52C1636A4F"
+    }
+  ],
+  "writtenLocal": "2026-11-02T14:39:39",
+  "writtenBy": "ClaudeCode"
+}

@@ -1,4 +1,5 @@
 using QBrainAi.Support.Mcp.Services;
+using QBrainAi.TestSupport.TemporaryInstance;
 
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
@@ -64,19 +65,34 @@ public sealed class MemoryBenchPluginTests
         => AssertPluginCompletesFullPack("opencode", MemoryBenchCatalog.StubAll());
 
     /// <summary>AC-FR-MCP-MEMORY-018-09 / H7b: Stub -Plugin all writes per-cell tokens for all eight plugins.</summary>
-    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    /// <remarks>
+    /// Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).
+    /// The stub artifacts go to a new test-owned folder outside the checkout (FR-MCP-TESTRESOURCE-001, second criterion).
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, generated artifacts in test-owned locations): the run writes to a new temporary folder that TemporaryInstanceChecks.CheckTestOutputFolder accepts, instead of the checkout's docs/benchmarks/results, whose two tracked files every lane run rewrote (operator 2026-11-02: "Fix in scope"; triage-report-32e6bc07); assertions unchanged.</description></item>
+    /// </list>
+    /// </remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public void AllEight_WritesStubArtifacts()
     {
-        var directory = Path.Combine(MemoryBenchCatalog.FindRepoRoot(), "docs", "benchmarks", "results");
+        var directory = Path.Combine(Path.GetTempPath(), "memory-bench-stub-" + Guid.NewGuid().ToString("N"));
+        Assert.Null(TemporaryInstanceChecks.CheckTestOutputFolder(directory, MemoryBenchCatalog.FindRepoRoot()));
         Directory.CreateDirectory(directory);
-        var result = MemoryBenchCatalog.RunStub(["all"], directory, utcStamp: "20260919T091800Z");
-        Assert.Equal(MemoryBenchAdapterRegistry.AllPluginIds, result.Plugins);
-        Assert.Equal(128, result.Cells.Count);
-        Assert.Equal(1.0, result.Cells.Average(cell => cell.Pass ? 1 : 0));
-        Assert.True(File.Exists(Path.Combine(directory, "memory-bench-20260919T091800Z.json")));
-        Assert.True(File.Exists(Path.Combine(directory, "memory-bench-20260919T091800Z.md")));
+        try
+        {
+            var result = MemoryBenchCatalog.RunStub(["all"], directory, utcStamp: "20260919T091800Z");
+            Assert.Equal(MemoryBenchAdapterRegistry.AllPluginIds, result.Plugins);
+            Assert.Equal(128, result.Cells.Count);
+            Assert.Equal(1.0, result.Cells.Average(cell => cell.Pass ? 1 : 0));
+            Assert.True(File.Exists(Path.Combine(directory, "memory-bench-20260919T091800Z.json")));
+            Assert.True(File.Exists(Path.Combine(directory, "memory-bench-20260919T091800Z.md")));
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
     }
 
     private static void AssertPluginCompletesFullPack(string plugin, MemoryBenchRunResult result)

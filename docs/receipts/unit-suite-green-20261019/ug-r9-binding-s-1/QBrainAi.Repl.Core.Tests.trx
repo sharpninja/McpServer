@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="899a274f-7827-466b-b8c3-1a7a177ba869" name="@LAB-OMARCHY 2026-11-02 14:45:22" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-02T14:45:22.1802999-06:00" queuing="2026-11-02T14:45:22.1803001-06:00" start="2026-11-02T14:45:20.2388978-06:00" finish="2026-11-02T14:45:22.1901827-06:00" />
+  <TestSettings name="default" id="1fd9f8d4-17bb-4080-afd6-1949ad0063a8">
+    <Deployment runDeploymentRoot="_LAB-OMARCHY_2026-11-02_14_45_22" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="68343b58-f13a-4e90-9226-3d80935b10a1" testId="8e42b8e1-14c9-bd5b-e392-b693aa5e8e02" testName="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: &quot;one separator only&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0010931" startTime="2026-11-02T14:45:21.9893645-06:00" endTime="2026-11-02T14:45:21.9905126-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="68343b58-f13a-4e90-9226-3d80935b10a1" />
+    <UnitTestResult executionId="90e53689-48b7-4000-ab48-b34fa7deabc6" testId="353593e1-083e-6d53-940b-3587f07a48c9" testName="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: &quot;accepts a relative folder&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0001175" startTime="2026-11-02T14:45:21.9912212-06:00" endTime="2026-11-02T14:45:21.9914094-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="90e53689-48b7-4000-ab48-b34fa7deabc6" />
+    <UnitTestResult executionId="7e763bbf-92a4-4418-af23-43514391cad3" testId="1d2b2dc4-2830-8942-5365-203040bc67a4" testName="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.ScriptedCheck_SatisfiesEveryRow" computerName="LAB-OMARCHY" duration="00:00:00.0003363" startTime="2026-11-02T14:45:21.9984527-06:00" endTime="2026-11-02T14:45:21.9988419-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7e763bbf-92a4-4418-af23-43514391cad3" />
+    <UnitTestResult executionId="4ba6df2f-b309-4392-a5e1-f3454393a0da" testId="84d71a10-426d-f4f9-e2a8-ef20f3e26be0" testName="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: &quot;accepts the checkout root&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0002702" startTime="2026-11-02T14:45:21.9926842-06:00" endTime="2026-11-02T14:45:21.9930265-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4ba6df2f-b309-4392-a5e1-f3454393a0da" />
+    <UnitTestResult executionId="141ded82-3443-4d9f-882c-e6258bff3887" testId="c3bf1234-429f-00bf-e203-cfb4cf9a21b1" testName="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: &quot;accepts anything&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0149984" startTime="2026-11-02T14:45:21.9583470-06:00" endTime="2026-11-02T14:45:21.9831136-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="141ded82-3443-4d9f-882c-e6258bff3887" />
+    <UnitTestResult executionId="0de9a786-ffd4-400e-893b-fe8dc12da05d" testId="4588c4da-07a2-7a59-5de9-a96c01ea9e4d" testName="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: &quot;ignores dot segments&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0039369" startTime="2026-11-02T14:45:21.9936258-06:00" endTime="2026-11-02T14:45:21.9976298-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0de9a786-ffd4-400e-893b-fe8dc12da05d" />
+    <UnitTestResult executionId="5b80b3fd-5101-4adf-b47e-5ce5acc42d2d" testId="3ee38b13-b32a-df9c-2ede-302dd569b267" testName="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderBindingTests.SharedCheck_SatisfiesMockGatedRows" computerName="LAB-OMARCHY" duration="00:00:00.0151613" startTime="2026-11-02T14:45:21.9583432-06:00" endTime="2026-11-02T14:45:21.9830967-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5b80b3fd-5101-4adf-b47e-5ce5acc42d2d" />
+    <UnitTestResult executionId="9ffd1d42-95cc-41c1-8efd-5470a718d82d" testId="86a3ef6f-963f-6681-e8df-01c07fdae108" testName="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: &quot;string prefix&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0005516" startTime="2026-11-02T14:45:21.9883739-06:00" endTime="2026-11-02T14:45:21.9890108-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9ffd1d42-95cc-41c1-8efd-5470a718d82d" />
+    <UnitTestResult executionId="06aa8ff2-fcea-4016-bbd4-3fae98cd7817" testId="46264353-5daf-54e1-0915-320374889f39" testName="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: &quot;refuses anything&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0000702" startTime="2026-11-02T14:45:21.9919862-06:00" endTime="2026-11-02T14:45:21.9921193-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="06aa8ff2-fcea-4016-bbd4-3fae98cd7817" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: &quot;string prefix&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.repl.core.tests/bin/debug/net10.0/qbrainai.repl.core.tests.dll" id="86a3ef6f-963f-6681-e8df-01c07fdae108">
+      <Execution id="9ffd1d42-95cc-41c1-8efd-5470a718d82d" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/bin/Debug/net10.0/QBrainAi.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests" name="WrongChecks_AreRejected" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: &quot;accepts the checkout root&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.repl.core.tests/bin/debug/net10.0/qbrainai.repl.core.tests.dll" id="84d71a10-426d-f4f9-e2a8-ef20f3e26be0">
+      <Execution id="4ba6df2f-b309-4392-a5e1-f3454393a0da" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/bin/Debug/net10.0/QBrainAi.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests" name="WrongChecks_AreRejected" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderBindingTests.SharedCheck_SatisfiesMockGatedRows" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.repl.core.tests/bin/debug/net10.0/qbrainai.repl.core.tests.dll" id="3ee38b13-b32a-df9c-2ede-302dd569b267">
+      <Execution id="5b80b3fd-5101-4adf-b47e-5ce5acc42d2d" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/bin/Debug/net10.0/QBrainAi.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderBindingTests" name="SharedCheck_SatisfiesMockGatedRows" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: &quot;ignores dot segments&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.repl.core.tests/bin/debug/net10.0/qbrainai.repl.core.tests.dll" id="4588c4da-07a2-7a59-5de9-a96c01ea9e4d">
+      <Execution id="0de9a786-ffd4-400e-893b-fe8dc12da05d" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/bin/Debug/net10.0/QBrainAi.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests" name="WrongChecks_AreRejected" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: &quot;refuses anything&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.repl.core.tests/bin/debug/net10.0/qbrainai.repl.core.tests.dll" id="46264353-5daf-54e1-0915-320374889f39">
+      <Execution id="06aa8ff2-fcea-4016-bbd4-3fae98cd7817" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/bin/Debug/net10.0/QBrainAi.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests" name="WrongChecks_AreRejected" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.ScriptedCheck_SatisfiesEveryRow" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.repl.core.tests/bin/debug/net10.0/qbrainai.repl.core.tests.dll" id="1d2b2dc4-2830-8942-5365-203040bc67a4">
+      <Execution id="7e763bbf-92a4-4418-af23-43514391cad3" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/bin/Debug/net10.0/QBrainAi.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests" name="ScriptedCheck_SatisfiesEveryRow" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: &quot;accepts a relative folder&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.repl.core.tests/bin/debug/net10.0/qbrainai.repl.core.tests.dll" id="353593e1-083e-6d53-940b-3587f07a48c9">
+      <Execution id="90e53689-48b7-4000-ab48-b34fa7deabc6" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/bin/Debug/net10.0/QBrainAi.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests" name="WrongChecks_AreRejected" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: &quot;one separator only&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.repl.core.tests/bin/debug/net10.0/qbrainai.repl.core.tests.dll" id="8e42b8e1-14c9-bd5b-e392-b693aa5e8e02">
+      <Execution id="68343b58-f13a-4e90-9226-3d80935b10a1" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/bin/Debug/net10.0/QBrainAi.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests" name="WrongChecks_AreRejected" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: &quot;accepts anything&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.repl.core.tests/bin/debug/net10.0/qbrainai.repl.core.tests.dll" id="c3bf1234-429f-00bf-e203-cfb4cf9a21b1">
+      <Execution id="141ded82-3443-4d9f-882c-e6258bff3887" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Repl.Core.Tests/bin/Debug/net10.0/QBrainAi.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests" name="WrongChecks_AreRejected" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="8e42b8e1-14c9-bd5b-e392-b693aa5e8e02" executionId="68343b58-f13a-4e90-9226-3d80935b10a1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="353593e1-083e-6d53-940b-3587f07a48c9" executionId="90e53689-48b7-4000-ab48-b34fa7deabc6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1d2b2dc4-2830-8942-5365-203040bc67a4" executionId="7e763bbf-92a4-4418-af23-43514391cad3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="84d71a10-426d-f4f9-e2a8-ef20f3e26be0" executionId="4ba6df2f-b309-4392-a5e1-f3454393a0da" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c3bf1234-429f-00bf-e203-cfb4cf9a21b1" executionId="141ded82-3443-4d9f-882c-e6258bff3887" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4588c4da-07a2-7a59-5de9-a96c01ea9e4d" executionId="0de9a786-ffd4-400e-893b-fe8dc12da05d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3ee38b13-b32a-df9c-2ede-302dd569b267" executionId="5b80b3fd-5101-4adf-b47e-5ce5acc42d2d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="86a3ef6f-963f-6681-e8df-01c07fdae108" executionId="9ffd1d42-95cc-41c1-8efd-5470a718d82d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="46264353-5daf-54e1-0915-320374889f39" executionId="06aa8ff2-fcea-4016-bbd4-3fae98cd7817" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="9" executed="9" passed="9" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.25]   Discovering: QBrainAi.Repl.Core.Tests
+[xUnit.net 00:00:00.93]   Discovered:  QBrainAi.Repl.Core.Tests
+[xUnit.net 00:00:01.17]   Starting:    QBrainAi.Repl.Core.Tests
+[xUnit.net 00:00:01.30]   Finished:    QBrainAi.Repl.Core.Tests (ID = '9ec79100a80453498340eecd008c974fb7e3f26dc7852d8f593b2110a3aa358a')
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

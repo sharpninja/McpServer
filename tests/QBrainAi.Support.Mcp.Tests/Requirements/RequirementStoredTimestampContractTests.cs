@@ -14,6 +14,7 @@ namespace QBrainAi.Support.Mcp.Tests.Requirements;
 /// <list type="table">
 /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
 /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added the stored-time reader contract (mock gate ug-r9-mockgate-p-1).</description></item>
+/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1 (appended "A stored time written without an offset is read as UTC"): added the offset-less row and a wrong reader that applies a fixed local offset, because no row pinned that case (operator 2026-11-02: "UTC").</description></item>
 /// </list>
 /// </remarks>
 public sealed class RequirementStoredTimestampContractTests
@@ -23,6 +24,7 @@ public sealed class RequirementStoredTimestampContractTests
     [
         ("round-trip UTC", "2026-10-20T15:00:00.0000000+00:00", new DateTimeOffset(2026, 10, 20, 15, 0, 0, TimeSpan.Zero)),
         ("stored offset kept", "2026-10-20T10:00:00.0000000-05:00", new DateTimeOffset(2026, 10, 20, 10, 0, 0, TimeSpan.FromHours(-5))),
+        ("no offset reads as UTC", "2026-10-20T15:00:00.0000000", new DateTimeOffset(2026, 10, 20, 15, 0, 0, TimeSpan.Zero)),
         ("empty", "", null),
         ("whitespace", "   ", null),
         ("unreadable", "not a time", null),
@@ -48,6 +50,7 @@ public sealed class RequirementStoredTimestampContractTests
     [InlineData("always null")]
     [InlineData("offset converted to UTC")]
     [InlineData("latest link")]
+    [InlineData("no offset read with a fixed local offset")]
     public void WrongReaders_AreRejected(string fault) =>
         Assert.ThrowsAny<XunitException>(() => AssertReaders(
             stored => fault switch
@@ -56,6 +59,10 @@ public sealed class RequirementStoredTimestampContractTests
                 "always null" => null,
                 "offset converted to UTC" => ScriptedRead(stored)?.ToUniversalTime(),
                 "latest link" => ScriptedRead(stored),
+                // A fixed -06:00 offset stands in for "the local zone", so the control does not depend on the host's zone.
+                "no offset read with a fixed local offset" => stored == "2026-10-20T15:00:00.0000000"
+                    ? new DateTimeOffset(2026, 10, 20, 15, 0, 0, TimeSpan.FromHours(-6))
+                    : ScriptedRead(stored),
                 _ => throw new ArgumentOutOfRangeException(nameof(fault)),
             },
             links => fault == "latest link"
