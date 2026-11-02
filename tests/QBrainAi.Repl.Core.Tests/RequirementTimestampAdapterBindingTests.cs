@@ -7,6 +7,12 @@ namespace QBrainAi.Repl.Core.Tests;
 /// assertions, mock-gated in ug-r9-mockgate-p-1, to the production FR, TR, TEST and mapping adapters over client entries
 /// that carry fixed stored times. No clock, store or environment is read.
 /// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: binds the mock-gated rows to the production adapters (binding ug-r9-binding-p-1).</description></item>
+/// </list>
+/// </remarks>
 public sealed class RequirementTimestampAdapterBindingTests
 {
     /// <summary>The production adapters report the stored times, keep the stored offset, and report null when nothing is stored.</summary>

@@ -137,6 +137,12 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     /// Maps a stored requirement row to an <see cref="FrEntry"/> including acceptance criteria and, per FR-MCP-040 ac-1, the
     /// creation and update times stored with the row.
     /// </summary>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: maps the stored CreatedAtUtc and UpdatedAtUtc; made internal so the binding test reads the real mapper.</description></item>
+    /// </list>
+    /// </remarks>
     internal static FrEntry MapFr(RequirementEntity x) =>
         new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, ToCriterionModels(x.AcceptanceCriteria), x.ScopeStartLayerKey, x.ScopeEndLayerKey,
             CreatedAtUtc: RequirementStoredTimestamp.Read(x.CreatedAtUtc), UpdatedAtUtc: RequirementStoredTimestamp.Read(x.UpdatedAtUtc));
@@ -197,11 +203,23 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     }
 
     /// <summary>Maps a stored requirement row to a <see cref="TrEntry"/> including acceptance criteria and stored times (FR-MCP-040 ac-1).</summary>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: maps the stored CreatedAtUtc and UpdatedAtUtc; made internal so the binding test reads the real mapper.</description></item>
+    /// </list>
+    /// </remarks>
     internal static TrEntry MapTr(RequirementEntity x) =>
         new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, ToCriterionModels(x.AcceptanceCriteria), x.ScopeStartLayerKey, x.ScopeEndLayerKey,
             CreatedAtUtc: RequirementStoredTimestamp.Read(x.CreatedAtUtc), UpdatedAtUtc: RequirementStoredTimestamp.Read(x.UpdatedAtUtc));
 
     /// <summary>Maps a stored requirement row to a <see cref="TestEntry"/> including acceptance criteria and stored times (FR-MCP-040 ac-1).</summary>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: maps the stored CreatedAtUtc and UpdatedAtUtc; made internal so the binding test reads the real mapper.</description></item>
+    /// </list>
+    /// </remarks>
     internal static TestEntry MapTest(RequirementEntity x) =>
         new(x.Id, x.Body, x.WorkspaceId, x.Title, x.Priority, x.Status, x.Notes, ToCriterionModels(x.AcceptanceCriteria), x.ScopeStartLayerKey, x.ScopeEndLayerKey,
             CreatedAtUtc: RequirementStoredTimestamp.Read(x.CreatedAtUtc), UpdatedAtUtc: RequirementStoredTimestamp.Read(x.UpdatedAtUtc));
@@ -214,6 +232,12 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     /// <param name="links">The FR's links.</param>
     /// <param name="workspaceId">The owning workspace.</param>
     /// <returns>The mapping row.</returns>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added; replaces four copies of the row construction (effective view, GetAllMappingsAsync, GetMappingAsync, BuildVisibleMappings) and adds the earliest stored link time.</description></item>
+    /// </list>
+    /// </remarks>
     internal static FrTrMapping BuildMapping(string frId, IReadOnlyCollection<RequirementTraceabilityLinkEntity> links, string workspaceId) =>
         new(
             frId,
@@ -387,6 +411,12 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     }
 
     /// <inheritdoc />
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: effective FR, TR and TEST rows carry their stored times, and mapping rows are built by BuildMapping.</description></item>
+    /// </list>
+    /// </remarks>
     public async Task<EffectiveRequirementsResult> GetEffectiveRequirementsAsync(string? layerKey = null, CancellationToken ct = default)
     {
         await using var scope = CreateScope();
@@ -886,6 +916,12 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     }
 
     /// <inheritdoc />
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: rows are built by BuildMapping, so they carry the earliest stored link time.</description></item>
+    /// </list>
+    /// </remarks>
     public async Task<IReadOnlyList<FrTrMapping>> GetAllMappingsAsync(CancellationToken ct = default)
     {
         await using var scope = CreateScope();
@@ -905,6 +941,12 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     }
 
     /// <inheritdoc />
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: the row is built by BuildMapping, so it carries the earliest stored link time.</description></item>
+    /// </list>
+    /// </remarks>
     public async Task<FrTrMapping?> GetMappingAsync(string frId, CancellationToken ct = default)
     {
         ValidateId(frId, nameof(frId));
@@ -1789,6 +1831,16 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
 
     private static string Now() => DateTime.UtcNow.ToString("O");
 
+    /// <summary>Builds the mapping rows of the links that are not soft-deleted, one row per FR.</summary>
+    /// <param name="ctx">The database context, for the soft-delete check.</param>
+    /// <param name="links">The traceability links.</param>
+    /// <returns>The mapping rows.</returns>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: rows are built by BuildMapping, so they carry the earliest stored link time.</description></item>
+    /// </list>
+    /// </remarks>
     private static IReadOnlyList<FrTrMapping> BuildVisibleMappings(
         McpDbContext ctx,
         IReadOnlyList<RequirementTraceabilityLinkEntity> links)

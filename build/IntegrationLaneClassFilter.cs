@@ -10,6 +10,12 @@ sealed class IntegrationLaneClassFilter : IIntegrationLaneClassFilter
     static readonly Regex PlainIdentifier = new("^[A-Za-z_][A-Za-z0-9_]*\\z", RegexOptions.CultureInvariant);
 
     /// <inheritdoc />
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2; TR-MCP-NUKE-020 AC-3: now built from the shared class clause; the lane filter text is unchanged.</description></item>
+    /// </list>
+    /// </remarks>
     public string Compose(string hostFilter, IReadOnlyList<string> classNames)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(hostFilter);
@@ -27,6 +33,12 @@ sealed class IntegrationLaneClassFilter : IIntegrationLaneClassFilter
     /// <param name="classNames">One or more plain class names.</param>
     /// <returns>The parenthesized clause.</returns>
     /// <exception cref="ArgumentException">A name is not a plain class name, or no name is given.</exception>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2; TR-MCP-NUKE-020 AC-2: extracted so the lane and TestGroups select classes with one clause.</description></item>
+    /// </list>
+    /// </remarks>
     internal static string ClassClause(IReadOnlyList<string> classNames)
     {
         ArgumentNullException.ThrowIfNull(classNames);

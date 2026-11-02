@@ -9,6 +9,12 @@ partial class Build
     /// <summary>
     /// TR-MCP-NUKE-020 AC-1: the groups the TestGroups target runs, each <c>&lt;test project&gt;:&lt;Class&gt;[,&lt;Class&gt;...]</c>.
     /// </summary>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1: added the --test-groups array parameter (operator 2026-11-02).</description></item>
+    /// </list>
+    /// </remarks>
     [Parameter("TestGroups: the test groups to run, each '<test project>:<Class>[,<Class>...]' (TR-MCP-NUKE-020)", Name = "test-groups")]
     readonly string[] TestGroupSpecs = [];
 
@@ -22,6 +28,13 @@ partial class Build
     /// or a named class that ran no case (AC-5) fails the target. It provisions nothing and leaves Test and
     /// MigrationIntegrationTests unchanged (AC-3); the full gate set still runs once at phase exit.
     /// </summary>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1, AC-2, AC-3: added the TestGroups target so mock gates and bindings run only the changed classes through Nuke.</description></item>
+    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-4, AC-5: composes for the current host and checks each named class against its project's TRX.</description></item>
+    /// </list>
+    /// </remarks>
     public Target TestGroups => _ => _
         .Description("Run only the named test classes (--test-groups '<project>:<Class>[,<Class>...]'), one TRX per project (TR-MCP-NUKE-020)")
         .Executes(() =>

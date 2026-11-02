@@ -3,6 +3,12 @@ using System.Xml.Linq;
 /// <summary>TR-MCP-NUKE-020 AC-1 and AC-5: one TestGroups run: the lane-shaped run record and the classes it names.</summary>
 /// <param name="Run">The project, path, filter, log line and TRX name, as the lane composes them.</param>
 /// <param name="Classes">The classes this run's groups named, in first-seen order.</param>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1, AC-5: added so the target can check every named class of a project's merged groups against that project's TRX.</description></item>
+/// </list>
+/// </remarks>
 internal sealed record TestGroupRun(IntegrationLaneRun Run, IReadOnlyList<string> Classes);
 
 /// <summary>
@@ -13,6 +19,13 @@ internal sealed record TestGroupRun(IntegrationLaneRun Run, IReadOnlyList<string
 /// (<see cref="IntegrationLaneClassFilter.ClassClause"/>), with no category clause; the run record, log line and TRX name
 /// follow the lane's <see cref="IntegrationLaneRun"/>. Every refusal happens before any test runs.
 /// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1, AC-2, AC-3: added the TestGroups composition and run-id policy so targeted runs go through Nuke (operator 2026-11-02) and reuse the lane composition.</description></item>
+/// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-4, AC-5: added the host platform clause and the per-class result check after a Windows-only class was run on Linux.</description></item>
+/// </list>
+/// </remarks>
 internal static class TestGroupExecution
 {
     /// <summary>Composes the runs for the given groups against the solution's projects on one host.</summary>
@@ -22,6 +35,13 @@ internal static class TestGroupExecution
     /// <returns>One run per selected project, in the order the groups first name them.</returns>
     /// <exception cref="InvalidOperationException">No group, a malformed group, an unknown or blank project, or a class
     /// name that is empty or not a plain class name.</exception>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1, AC-2: added; one run per project with the lane's class clause and run record.</description></item>
+    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-4: added the host parameter and the platform clause so other-platform cases never run.</description></item>
+    /// </list>
+    /// </remarks>
     internal static IReadOnlyList<TestGroupRun> Compose(IReadOnlyList<string> groups, IReadOnlyList<(string Name, string Path)> projects, IntegrationLaneHost host)
     {
         ArgumentNullException.ThrowIfNull(groups);
@@ -85,6 +105,12 @@ internal static class TestGroupExecution
     /// <param name="testRunId">The raw <c>--test-run-id</c> value.</param>
     /// <returns>The run id.</returns>
     /// <exception cref="InvalidOperationException">The id is blank or not a single path segment.</exception>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1: added so a targeted run always leaves TRX receipts.</description></item>
+    /// </list>
+    /// </remarks>
     internal static string RequireRunId(string testRunId) =>
         SessionLifeUnitGateReports.NormalizeRunId(testRunId)
             ?? throw new InvalidOperationException("TestGroups requires --test-run-id, so that every selected project writes its TRX receipt.");
@@ -97,6 +123,12 @@ internal static class TestGroupExecution
     /// <param name="classes">The classes the project's groups named.</param>
     /// <param name="xml">The complete TRX content.</param>
     /// <returns>Null when every class ran a case; otherwise the failure, naming each class that ran none.</returns>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-5: added so a misspelled class in a multi-class group fails instead of passing silently.</description></item>
+    /// </list>
+    /// </remarks>
     internal static string? CheckClasses(string project, IReadOnlyList<string> classes, string xml)
     {
         ArgumentNullException.ThrowIfNull(classes);

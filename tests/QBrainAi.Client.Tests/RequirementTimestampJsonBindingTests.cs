@@ -8,6 +8,12 @@ namespace QBrainAi.Client.Tests;
 /// assertions, mock-gated in ug-r9-mockgate-p-1, to the typed client's own deserialization (the options and
 /// source-generated <see cref="McpClientJsonContext"/> that RequirementsClient uses) for FR, TR, TEST and mapping payloads.
 /// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: binds the mock-gated rows to the client models (binding ug-r9-binding-p-1).</description></item>
+/// </list>
+/// </remarks>
 public sealed class RequirementTimestampJsonBindingTests
 {
     private static readonly JsonSerializerOptions s_clientOptions = new() { PropertyNameCaseInsensitive = true, TypeInfoResolver = McpClientJsonContext.Default };

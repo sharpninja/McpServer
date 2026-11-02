@@ -10,6 +10,12 @@ namespace QBrainAi.Repl.Core.Tests;
 /// independent scripted formatter; wrong adapters (read time, swapped, always null, converted to local time) are
 /// rejected by the same assertions inside this passing harness. No clock, store or environment is read.
 /// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added the adapter timestamp contract (mock gate ug-r9-mockgate-p-1).</description></item>
+/// </list>
+/// </remarks>
 public sealed class RequirementTimestampAdapterContractTests
 {
     /// <summary>Stored times and the exact text each adapter must report.</summary>

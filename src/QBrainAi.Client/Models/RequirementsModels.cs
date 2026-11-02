@@ -5,6 +5,12 @@ using System.Text.Json.Serialization;
 namespace QBrainAi.Client.Models;
 
 /// <summary>A functional requirement entry.</summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added CreatedAtUtc and UpdatedAtUtc (createdAtUtc, updatedAtUtc) so the client reads the stored times the server sends.</description></item>
+/// </list>
+/// </remarks>
 public sealed class FrEntry
 {
     /// <summary>Requirement identifier.</summary>
@@ -81,6 +87,12 @@ public sealed class LinkedUseCaseRef
 }
 
 /// <summary>A technical requirement entry.</summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added CreatedAtUtc and UpdatedAtUtc (createdAtUtc, updatedAtUtc) so the client reads the stored times the server sends.</description></item>
+/// </list>
+/// </remarks>
 public sealed class TrEntry
 {
     /// <summary>Requirement identifier.</summary>
@@ -133,6 +145,12 @@ public sealed class TrEntry
 }
 
 /// <summary>A testing requirement entry.</summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added CreatedAtUtc and UpdatedAtUtc (createdAtUtc, updatedAtUtc) so the client reads the stored times the server sends.</description></item>
+/// </list>
+/// </remarks>
 public sealed class TestEntry
 {
     /// <summary>Requirement identifier.</summary>
@@ -285,6 +303,12 @@ public sealed class EffectiveRequirementsResult
 }
 
 /// <summary>A functional-to-technical requirement mapping row.</summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added CreatedAtUtc (createdAtUtc), the earliest stored creation time of the mapping's links.</description></item>
+/// </list>
+/// </remarks>
 public sealed class FrTrMapping
 {
     /// <summary>Functional requirement identifier.</summary>

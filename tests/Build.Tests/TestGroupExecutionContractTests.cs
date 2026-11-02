@@ -11,6 +11,13 @@ namespace NukeBuild.Tests;
 /// references answer from these rows, and wrong compositions and checkers are rejected by the same assertions inside
 /// this passing harness. No checkout, process or environment is read.
 /// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1, AC-2, AC-3: added the composition and run-id contracts (mock gate ug-r9-mockgate-q-1).</description></item>
+/// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-4, AC-5: host-aware rows and the per-class check rows (mock gate ug-r9-mockgate-q-2).</description></item>
+/// </list>
+/// </remarks>
 public sealed class TestGroupExecutionContractTests
 {
     /// <summary>Solution projects whose names differ from their file stems, to expose accidental file-name lookups.</summary>

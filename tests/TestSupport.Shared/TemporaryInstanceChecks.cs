@@ -153,6 +153,12 @@ internal static class TemporaryInstanceChecks
     /// <param name="settings">The instance's own variables.</param>
     /// <param name="ownedRoot">The temporary instance's root folder.</param>
     /// <returns>Null when the environment passes; otherwise the violation.</returns>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 ac-4; TR-MCP-NUKE-019 AC-6: the SQLite-only rule now applies to database-engine settings only (Database__Provider, DatabaseProvider, DATABASE_PROVIDER, any prefix), because it refused TodoStorage's valid 'database' backend and broke the stdio host case.</description></item>
+    /// </list>
+    /// </remarks>
     internal static string? CheckOwnedInstanceEnvironment(
         IReadOnlyDictionary<string, string?> child,
         IReadOnlyDictionary<string, string> settings,

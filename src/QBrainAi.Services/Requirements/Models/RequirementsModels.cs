@@ -16,6 +16,12 @@ namespace QBrainAi.Support.Mcp.Requirements.Models;
 /// <param name="LinkedUseCases">FR-MCP-USECASE-003: use cases linked to this FR (including Realizes), for reverse navigation.</param>
 /// <param name="CreatedAtUtc">FR-MCP-040 ac-1: the creation time stored with the row, or null when none is stored.</param>
 /// <param name="UpdatedAtUtc">FR-MCP-040 ac-1: the update time stored with the row, or null when none is stored.</param>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added CreatedAtUtc and UpdatedAtUtc (optional, last) so reads carry the stored times.</description></item>
+/// </list>
+/// </remarks>
 public sealed record FrEntry(
     string Id,
     string Title,
@@ -57,6 +63,12 @@ public sealed record LinkedUseCaseRef(
 /// <param name="ScopeEndLayerKey">FR-MCP-REQSCOPE-002: optional last requirement layer where this TR applies.</param>
 /// <param name="CreatedAtUtc">FR-MCP-040 ac-1: the creation time stored with the row, or null when none is stored.</param>
 /// <param name="UpdatedAtUtc">FR-MCP-040 ac-1: the update time stored with the row, or null when none is stored.</param>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added CreatedAtUtc and UpdatedAtUtc (optional, last) so reads carry the stored times.</description></item>
+/// </list>
+/// </remarks>
 public sealed record TrEntry(
     string Id,
     string Title,
@@ -84,6 +96,12 @@ public sealed record TrEntry(
 /// <param name="ScopeEndLayerKey">FR-MCP-REQSCOPE-002: optional last requirement layer where this TEST applies.</param>
 /// <param name="CreatedAtUtc">FR-MCP-040 ac-1: the creation time stored with the row, or null when none is stored.</param>
 /// <param name="UpdatedAtUtc">FR-MCP-040 ac-1: the update time stored with the row, or null when none is stored.</param>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added CreatedAtUtc and UpdatedAtUtc (optional, last) so reads carry the stored times.</description></item>
+/// </list>
+/// </remarks>
 public sealed record TestEntry(
     string Id,
     string Condition,
@@ -209,6 +227,12 @@ public sealed record FrTrMapping
     public string WorkspaceId { get; init; }
 
     /// <summary>FR-MCP-040 ac-1: the earliest creation time stored with the mapping's links, or null when none is stored.</summary>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added; a mapping row aggregates links, so it reports their earliest stored creation time.</description></item>
+    /// </list>
+    /// </remarks>
     public DateTimeOffset? CreatedAtUtc { get; init; }
 }
 

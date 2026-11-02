@@ -7,6 +7,12 @@ namespace QBrainAi.Repl.Core.Tests.TestSupport;
 /// FR-MCP-TESTRESOURCE-001 ac-4: fixed owned-setting maps distinguish database engines from TODO and other providers.
 /// The same rows and atomic replacement assertions bind scripted and real adapters; no ambient state or IO is used.
 /// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 ac-4: added 22 fixed provider rows with reference and wrong verdicts (mock gate ug-r9-mockgate-r-1), then the two real bindings (ug-r9-binding-r-2), because the owned-instance check refused TodoStorage's 'database' backend.</description></item>
+/// </list>
+/// </remarks>
 public sealed class OwnedInstanceProviderSettingContractTests
 {
     private const string Root = "/scratch/owned";

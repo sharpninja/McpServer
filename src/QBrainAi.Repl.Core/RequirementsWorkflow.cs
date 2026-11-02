@@ -939,6 +939,13 @@ internal sealed class RequirementsSelectionState : IRequirementsSelectionState
     public DateTimeOffset SelectedAt { get; set; } = DateTimeOffset.UtcNow;
 }
 
+/// <summary>Presents a client <see cref="FrEntry"/> as an <see cref="IFrItem"/>.</summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: CreatedAt and UpdatedAt report the stored times through RequirementTimestampText instead of DateTimeOffset.UtcNow.</description></item>
+/// </list>
+/// </remarks>
 internal sealed class FrItemAdapter : IFrItem
 {
     private readonly FrEntry _entry;
@@ -998,6 +1005,13 @@ internal sealed class FrMutationResultAdapter : IFrMutationResult
     public IFrItem Item { get; }
 }
 
+/// <summary>Presents a client <see cref="TrEntry"/> as an <see cref="ITrItem"/>.</summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: CreatedAt and UpdatedAt report the stored times through RequirementTimestampText instead of DateTimeOffset.UtcNow.</description></item>
+/// </list>
+/// </remarks>
 internal sealed class TrItemAdapter : ITrItem
 {
     private readonly TrEntry _entry;
@@ -1064,6 +1078,13 @@ internal sealed class TrMutationResultAdapter : ITrMutationResult
     public ITrItem Item { get; }
 }
 
+/// <summary>Presents a client <see cref="TestEntry"/> as an <see cref="ITestItem"/>.</summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: CreatedAt and UpdatedAt report the stored times through RequirementTimestampText instead of DateTimeOffset.UtcNow.</description></item>
+/// </list>
+/// </remarks>
 internal sealed class TestItemAdapter : ITestItem
 {
     private readonly TestEntry _entry;
@@ -1124,6 +1145,13 @@ internal sealed class TestMutationResultAdapter : ITestMutationResult
     public ITestItem Item { get; }
 }
 
+/// <summary>Presents one FR-to-TR or FR-to-TEST pair of a client mapping as an <see cref="IMappingItem"/>.</summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: takes the mapping's stored creation time and reports it as CreatedAt instead of DateTimeOffset.UtcNow.</description></item>
+/// </list>
+/// </remarks>
 internal sealed class MappingItemAdapter : IMappingItem
 {
     public MappingItemAdapter(string? frId, string? trId, string? testId, string? notes, DateTimeOffset? createdAtUtc)

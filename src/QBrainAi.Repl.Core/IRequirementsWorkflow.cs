@@ -633,12 +633,24 @@ public interface IFrItem
     /// FR-MCP-040 ac-1: gets the creation time stored with the record (ISO 8601 round-trip), or null when none is stored;
     /// never the time of the read.
     /// </summary>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: now nullable and the stored time; implementations formerly reported DateTimeOffset.UtcNow.</description></item>
+    /// </list>
+    /// </remarks>
     string? CreatedAt { get; }
 
     /// <summary>
     /// FR-MCP-040 ac-1: gets the update time stored with the record (ISO 8601 round-trip), or null when none is stored;
     /// never the time of the read.
     /// </summary>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: now nullable and the stored time; implementations formerly reported DateTimeOffset.UtcNow.</description></item>
+    /// </list>
+    /// </remarks>
     string? UpdatedAt { get; }
 }
 
@@ -828,12 +840,24 @@ public interface ITrItem
     /// FR-MCP-040 ac-1: gets the creation time stored with the record (ISO 8601 round-trip), or null when none is stored;
     /// never the time of the read.
     /// </summary>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: now nullable and the stored time; implementations formerly reported DateTimeOffset.UtcNow.</description></item>
+    /// </list>
+    /// </remarks>
     string? CreatedAt { get; }
 
     /// <summary>
     /// FR-MCP-040 ac-1: gets the update time stored with the record (ISO 8601 round-trip), or null when none is stored;
     /// never the time of the read.
     /// </summary>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: now nullable and the stored time; implementations formerly reported DateTimeOffset.UtcNow.</description></item>
+    /// </list>
+    /// </remarks>
     string? UpdatedAt { get; }
 }
 
@@ -1028,12 +1052,24 @@ public interface ITestItem
     /// FR-MCP-040 ac-1: gets the creation time stored with the record (ISO 8601 round-trip), or null when none is stored;
     /// never the time of the read.
     /// </summary>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: now nullable and the stored time; implementations formerly reported DateTimeOffset.UtcNow.</description></item>
+    /// </list>
+    /// </remarks>
     string? CreatedAt { get; }
 
     /// <summary>
     /// FR-MCP-040 ac-1: gets the update time stored with the record (ISO 8601 round-trip), or null when none is stored;
     /// never the time of the read.
     /// </summary>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: now nullable and the stored time; implementations formerly reported DateTimeOffset.UtcNow.</description></item>
+    /// </list>
+    /// </remarks>
     string? UpdatedAt { get; }
 }
 
@@ -1193,6 +1229,12 @@ public interface IMappingItem
     /// FR-MCP-040 ac-1: gets the creation time stored with the record (ISO 8601 round-trip), or null when none is stored;
     /// never the time of the read.
     /// </summary>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: now nullable and the stored time; implementations formerly reported DateTimeOffset.UtcNow.</description></item>
+    /// </list>
+    /// </remarks>
     string? CreatedAt { get; }
 
     /// <summary>

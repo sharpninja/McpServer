@@ -10,6 +10,12 @@ namespace QBrainAi.Client.Tests;
 /// as null. Fixed JSON rows and an independent scripted reader over JsonDocument; wrong readers (fields ignored,
 /// swapped, read time) are rejected by the same assertions inside this passing harness. No network or clock is used.
 /// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added the client timestamp JSON contract (mock gate ug-r9-mockgate-p-1).</description></item>
+/// </list>
+/// </remarks>
 public sealed class RequirementTimestampJsonContractTests
 {
     /// <summary>The timestamp members of a payload and the values the client must read.</summary>

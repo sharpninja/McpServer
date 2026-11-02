@@ -8,6 +8,12 @@ namespace QBrainAi.Support.Mcp.Tests.Requirements;
 /// assertions, mock-gated in ug-r9-mockgate-p-1, to the production reader and to the service's own FR, TR and TEST row
 /// mappers and mapping builder, over entities that carry the rows' stored texts. No store, clock or environment is read.
 /// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: binds the mock-gated rows to the production reader, row mappers and mapping builder (binding ug-r9-binding-p-1).</description></item>
+/// </list>
+/// </remarks>
 public sealed class RequirementStoredTimestampBindingTests
 {
     /// <summary>The production reader and earliest-link reader satisfy every row.</summary>

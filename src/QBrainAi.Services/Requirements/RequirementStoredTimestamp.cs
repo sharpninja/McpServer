@@ -7,6 +7,12 @@ namespace QBrainAi.Support.Mcp.Requirements;
 /// the stored time and never the time of the read. Stored values are round-trip text written in UTC; a blank or
 /// unreadable value reads as null.
 /// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added Read and Earliest, because requirement reads reported the time of the read instead of the stored times (operator 2026-11-02: "This HAS to be fixed.").</description></item>
+/// </list>
+/// </remarks>
 internal static class RequirementStoredTimestamp
 {
     /// <summary>Reads one stored time, keeping its stored offset.</summary>

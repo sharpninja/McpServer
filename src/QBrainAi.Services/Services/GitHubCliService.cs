@@ -583,6 +583,16 @@ public sealed class GitHubCliService : IGitHubCliService
         return builder.ToString();
     }
 
+    /// <summary>Plans and runs one gh invocation: refuses a foreign workspace with no configured repository, otherwise runs gh with the planned repository or working directory and the stored token or CLI fallback.</summary>
+    /// <param name="arguments">The gh arguments.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>The process result, or a refusal result when gh is not started.</returns>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-FED-PATH-001; TR-MCP-FED-PATH-001 (no AC states its no-direct-GetFullPath rule; gap reported): the git-config callback is passed as a method group, because TryResolveGitConfigPath already normalizes the path and the extra Path.GetFullPath exceeded the reviewed ratchet allowance of 4.</description></item>
+    /// </list>
+    /// </remarks>
     private async Task<ProcessRunResult> RunGhAsync(IReadOnlyList<string> arguments, CancellationToken ct)
     {
         var preferStoredToken = _githubOptions?.CurrentValue.PreferStoredToken ?? true;
