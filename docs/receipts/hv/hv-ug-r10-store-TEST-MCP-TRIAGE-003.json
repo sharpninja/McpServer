@@ -1,0 +1,20 @@
+{
+  "payload": {
+    "requestId": "req-20261103T123152Z-7062",
+    "result": {
+      "createdAt": "2026-11-03T12:31:54.2810762+00:00",
+      "area": "MCP",
+      "title": "Test TEST-MCP-TRIAGE-003",
+      "scopeStartLayerKey": "layer-1",
+      "updatedAt": "2026-11-03T12:31:54.2812007+00:00",
+      "testType": "unit",
+      "status": "pending",
+      "acceptanceCriteria": [],
+      "priority": "medium",
+      "id": "TEST-MCP-TRIAGE-003",
+      "description": "Research worker invokes configured direct agent with group JSON and prompt."
+    },
+    "deprecated": true
+  },
+  "type": "result"
+}

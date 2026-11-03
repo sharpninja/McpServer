@@ -1,0 +1,26 @@
+{
+  "payload": {
+    "requestId": "req-20261103T123123Z-d85f",
+    "result": {
+      "createdAt": "2026-11-03T12:31:24.9011183+00:00",
+      "area": "MCP",
+      "title": "Marker File Service",
+      "updatedAt": "2026-11-03T12:31:24.9012464+00:00",
+      "scopeStartLayerKey": "layer-1",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "id": "AC-TR-MCP-WS-005-002",
+          "isSatisfied": false,
+          "text": "On the host's real file system, the directory walk that FR-MCP-018 ac-1 relies on reaches a real folder below the scan boundary, does not reach a scan root that is a directory link or one reached through a linked ancestor whose target lies outside the boundary, still reaches a root below a boundary that is itself a link, and flags directory and file links without descending a directory link; the integration case creates its links in its own temporary folder and removes them (operator 2026-10-30: \"New TR binding criterion (Recommended)\"; the real file-system binding of FR-MCP-018 ac-1 and of AC-FR-MCP-SESSIONLOGCTX-001-008)."
+        }
+      ],
+      "priority": "medium",
+      "subarea": "WS",
+      "id": "TR-MCP-WS-005",
+      "description": "`MarkerFileService.WriteMarkerAsync` writes `AGENTS-README-FIRST.yaml` to the workspace root. All markers point to the same shared host port. Uses Handlebars.Net templating with full workspace context. The marker template MUST be loaded from `templates/prompt-templates.yaml` via `PromptTemplateService` (id: `default-marker-prompt`). **CRITICAL**: If the template cannot be loaded (missing file, invalid YAML, or missing ID), the service must log a critical error and shut down the server immediately. Fallback to hardcoded templates is PROHIBITED. The YAML file contains port, `baseUrl`, all endpoint paths, process PID, `startedAt` timestamp, workspace name, per-workspace auth token (`apiKey`), and a machine-readable `prompt` block. Agents should send `X-Workspace-Path` header for workspace targeting.\n**Covered by:** FR: FR-MCP-018"
+    },
+    "deprecated": true
+  },
+  "type": "result"
+}

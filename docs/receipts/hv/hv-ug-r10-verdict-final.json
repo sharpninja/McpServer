@@ -1,0 +1,298 @@
+{
+  "overallVerdict": "DISAGREE",
+  "accuracy": 96,
+  "completeness": 95,
+  "confidence": 99,
+  "passCount": 23,
+  "failCount": 12,
+  "unknownCount": 0,
+  "failList": [
+    {
+      "id": "UG3",
+      "findingIds": [
+        "R10-F3"
+      ],
+      "reason": "Explicit environment-baseline seams, corrected writers, CLI fallback ownership, native classification and process-free junction creation remain supported. The six named retained unit facts still assert against the live clock and violate the settled no-wall-clock-bound rule. Fix R10-F3; scanner coverage, hostile runs and the excluded physical-I/O inventory make no deduction."
+    },
+    {
+      "id": "UG4",
+      "findingIds": [
+        "R10-F2"
+      ],
+      "reason": "Seven-project routing, exact two-class selection, filters and passing per-project lane TRX are proven. The universal owned-root refusal clause is false because root-flattening accepts a different path root. Fix the database and REPL containment cases in R10-F2; there is no claim that the retained lane actually escaped its root."
+    },
+    {
+      "id": "UG8",
+      "findingIds": [
+        "R10-F1",
+        "R10-F2",
+        "R10-F3"
+      ],
+      "reason": "The chronology, supersession notes, gate counts, amendments and failed-run disclosures reconcile. The built/completed interpretation and exit readiness remain false for incomplete dates, root identity and retained clock-bound unit cases. Record these open obligations and complete their contract-first remedies before asserting the exit definition is met."
+    },
+    {
+      "id": "UG11",
+      "findingIds": [
+        "R10-F1",
+        "R10-F2",
+        "R10-F3"
+      ],
+      "reason": "The R9-F6 propagation defects are repaired: the handoff points to the canonical D-B and task 32 names the successful binding. Gate and scope disclosures reconcile. The claim that nothing material remains unreported fails on the three current findings; the listed what-if cases omit incomplete year/month dates and UNC/root-kind boundaries, and the unit clock cases remain. Add these open findings and correct completion statements after remediation."
+    },
+    {
+      "id": "UG12",
+      "findingIds": [
+        "R10-F1",
+        "R10-F2",
+        "R10-F3"
+      ],
+      "reason": "The sequencing is now coherent: FR-MCP-040 ac-1 waits for post-merge deployment/live read; TR-MCP-NUKE-016 AC-001 is not set; four follow-up TODOs stay open; done waits for merge/deploy/read. Nevertheless the proposed acceptance set includes ownership/output and no-wall-clock behavior not yet proven, and the future timestamp acceptance would deploy a known defect. Do not check all 37 tasks or set affected criteria until R10-F1/F2/F3 are remedied and accepted."
+    },
+    {
+      "id": "UG13",
+      "findingIds": [
+        "R10-F1",
+        "R10-F2"
+      ],
+      "reason": "Six of eight round 9 findings are resolved. R9-F3 remains incomplete for UNC and root-kind siblings; R9-F4 still accepts incomplete dates. The three specifically identified R8B remedies and earlier closure items remain intact or overridden. Complete R10-F1/F2 to close the two unresolved round 9 findings."
+    },
+    {
+      "id": "UG17",
+      "findingIds": [
+        "R10-F3"
+      ],
+      "reason": "The selected options, corrected counts and later supersessions generally reconcile. The October 29 Environment ACs choice is still incomplete because six unit cases retain wall-clock assertions. Fix R10-F3 and reconcile the completion claim. Scanner work ended at ccc78b7a before the 06:06:46 override; no scanner finding or change is requested."
+    },
+    {
+      "id": "UG28",
+      "findingIds": [
+        "R10-F2"
+      ],
+      "reason": "Inherited canonical/legacy/host-prefixed product settings are removed and checked; Scratch, REPL consumers, stdio and the in-process guard are wired as recorded, and the original refusal cases pass. The stronger assertion that every outside selection is refused fails for the root-identity counterexample. Strengthen the shared containment contract and apply R10-F2 across every consumer."
+    },
+    {
+      "id": "UG30",
+      "findingIds": [
+        "R10-F2",
+        "R10-F3"
+      ],
+      "reason": "Recorded I-to-O slice order, receipts, moved criteria, nonce correction, first-failure capture and source-identifier dispositions reconcile. Their claimed complete outcomes do not: owned containment still drops root identity, and six plain unit cases retain wall-clock assertions. Fix R10-F2/F3. The four approved identifier exceptions and 417 physical-I/O candidates remain excluded."
+    },
+    {
+      "id": "UG33",
+      "findingIds": [
+        "R10-F1"
+      ],
+      "reason": "Stored values, nulls, offset-less UTC, additive client fields and nullable REPL behavior are wired as described. However Read still accepts incomplete dates and can derive a date from the clock; Earliest propagates them. Fix R10-F1 before the deferred post-merge deployment/live acceptance. The current deployed read-time getters are disclosed, not treated as evidence for the new code."
+    },
+    {
+      "id": "UG35",
+      "findingIds": [
+        "R10-F2"
+      ],
+      "reason": "The two memory-bench stubs now use disposable checked folders and preserve assertions; tracked benchmark result files remain unchanged after the retained lanes. The 16-row/9-wrong-check contract still misses UNC case aliases, so the claimed checkout refusal is incomplete. Apply R10-F2; no checkout write was observed in these gates."
+    },
+    {
+      "id": "UG37",
+      "findingIds": [
+        "R10-F1",
+        "R10-F2"
+      ],
+      "reason": "Six criterion writes and readbacks, unchanged six contract hashes, changed three production hashes and mock-before-production/binding order reconcile. The class-ID join, whole JSON nonce and shared Ollama model selection are fixed, and declared behavior/name changes match. The date and containment fixes cover only a subset of their required boundaries. Complete R10-F1/F2 and their sibling controls; their green existing cases do not establish full slice T acceptance."
+    }
+  ],
+  "unknownList": [],
+  "implementerFixes": [
+    {
+      "id": "R10-F1",
+      "title": "Stored timestamp validation still accepts incomplete dates",
+      "changeToPass": "Validate that the stored representation actually supplies all date components before accepting it. Keep complete supported dates, stored offsets, null behavior and offset-less UTC semantics. Reject partial dates independently of the read clock; use that same validation for Earliest. Strengthen and prove the contracts before changing the implementation, then supply the required final-head evidence."
+    },
+    {
+      "id": "R10-F2",
+      "title": "Containment checks discard root identity and miss forward-slash UNC syntax",
+      "changeToPass": "Compare explicit path roots, including root kind and UNC authority/share, before segment containment. Recognize forward-slash and mixed-separator UNC forms under the Windows syntax already supported. Preserve case-sensitive POSIX distinctions, drive-letter case folding, dot-segment refusal and distinct siblings. Apply the shared rule to output, database and all REPL-owned path checks, with mock controls before the binding."
+    },
+    {
+      "id": "R10-F3",
+      "title": "Six retained unit cases still depend on the live wall clock",
+      "changeToPass": "Make these stub/selection cases consume fixed or scripted test-owned timestamps. Assert exact expected transitions and timestamp propagation without sleeping, comparing against UtcNow, or weakening/removing their existing state assertions. Prove wrong-clock, stale and swapped values are rejected before binding the same cases. Supply the complete required final-head TRX after remediation."
+    }
+  ],
+  "operatorDecisionFails": [],
+  "operatorOverriddenObservations": [],
+  "closure": [
+    {
+      "id": "R9-F1",
+      "verdict": "PASS",
+      "evidence": "Executed results are joined to definitions by test ID, and the final or nested class name is compared exactly. Contract controls and both host Build.Tests evidence cover the prior false positives."
+    },
+    {
+      "id": "R9-F2",
+      "verdict": "PASS",
+      "evidence": "CheckHealthAnswer reads the JSON nonce string and compares the complete nonce ordinally. Missing/malformed/non-text/other-field and prefix/suffix rows discriminate the original bug."
+    },
+    {
+      "id": "R9-F3",
+      "verdict": "FAIL",
+      "evidence": "Drive-letter case aliases are fixed, but forward-slash UNC case aliases and root-kind siblings remain. R10-F2 states the required remaining remedy."
+    },
+    {
+      "id": "R9-F4",
+      "verdict": "FAIL",
+      "evidence": "Plain time-only and yearless inputs are rejected, but year/month inputs and year digits outside the date evade the substring check. R10-F1 states the remaining remedy."
+    },
+    {
+      "id": "R9-F5",
+      "verdict": "PASS",
+      "evidence": "InstallOllama and the QuadBrain cases call the same linked QuadBrainOllamaModel rule: nonblank canonical, then legacy, then default. Missing selected model fails explicitly. These variables are now one coherent lane provisioning input, as declared and unit-proved."
+    },
+    {
+      "id": "R9-F6",
+      "verdict": "PASS",
+      "evidence": "The handoff references the canonical D-B, task 32 cites r-2 and records r-1 failure, tasks 31/34 and new 37 reconcile. Scripted document checks and transcript evidence support the repaired propagation claim."
+    },
+    {
+      "id": "R9-F7",
+      "verdict": "PASS",
+      "evidence": "Current D-A wording accurately names untracked receipts and the handoff; each local receipt/meta contains only those docs paths, with no code/test/build change."
+    },
+    {
+      "id": "R9-F8",
+      "verdict": "PASS",
+      "evidence": "The 38 previously undocumented members now have XML documentation and associated dated canonical requirement/criterion change records; the affected slice scope is disclosed."
+    },
+    {
+      "id": "R8B-F1",
+      "verdict": "PASS",
+      "evidence": "Explicit-baseline unit maps and the owned/restored GH_TOKEN integration baseline remain correct; relevant cases pass in both supplied host sets."
+    },
+    {
+      "id": "R8B-F2",
+      "verdict": "PASS",
+      "evidence": "The seven-project selector runs exactly the two Support integration classes, six Passed results per host, with source-bound contracts and supplied TRX."
+    },
+    {
+      "id": "R8B-F3",
+      "verdict": "PASS",
+      "evidence": "The original inherited-configuration escape and both identified process/factory siblings are remedied by owned environments and pre-use guards. The new root-kind guard counterexample is separately failed as R10-F2; this PASS is specific to the original inherited-setting finding."
+    },
+    {
+      "id": "R7-F1",
+      "verdict": "PASS",
+      "evidence": "Shared bounded timeout parser, explicit call-site reads, scripted controls and nineteen retained final unit cases."
+    },
+    {
+      "id": "R6-F1",
+      "verdict": "PASS",
+      "evidence": "Four CLI resolver paths under CliTempVariables with all fallback names owned/restored; moved cases and contracts present."
+    },
+    {
+      "id": "R6-F2",
+      "verdict": "PASS",
+      "evidence": "Historical labels on changed absent-ID citations, current mapped replacements and corrected requirement-scope label retained."
+    },
+    {
+      "id": "R5-F1",
+      "verdict": "PASS",
+      "evidence": "Root/ancestor reachability, positive and rejection controls, preserved real-link lane assertions and moved current criteria."
+    },
+    {
+      "id": "R5-F2",
+      "verdict": "PASS",
+      "evidence": "The originally named ProductAliasCompatibility canonical/legacy probes remain controlled and serialized. The later Ollama selection mismatch is now also corrected under R9-F5."
+    },
+    {
+      "id": "R4-F1",
+      "verdict": "OVERRIDDEN",
+      "evidence": "Scanner alias-resolution scope is explicitly overridden; no deduction or remediation."
+    },
+    {
+      "id": "R4-F2",
+      "verdict": "PASS",
+      "evidence": "Tasks 9/15/18 retain the historical head/count corrections; current counts and docs-only dirty paths now reconcile."
+    },
+    {
+      "id": "R4-F3",
+      "verdict": "PASS",
+      "evidence": "Memory binding cites present and mapped FR/TR/TEST-MCP-MEMORY-002."
+    },
+    {
+      "id": "R3-F1",
+      "verdict": "PASS",
+      "evidence": "Version-resolution explicit source seam and real filesystem integration binding remain intact."
+    },
+    {
+      "id": "R3-F2",
+      "verdict": "OVERRIDDEN",
+      "evidence": "Scanner-mediated part is overridden; its documentation is also outside scoring."
+    },
+    {
+      "id": "R3-F3",
+      "verdict": "PASS",
+      "evidence": "Retired FR-MCP-USECASE-016/017 absent through dedicated/effective getters; replacement mappings, repointed TODO and retirement notices present."
+    },
+    {
+      "id": "R3-F4",
+      "verdict": "PASS",
+      "evidence": "The original self-review/head correction remains, and 6082b116 with docs-only descendants is proven. New semantic completion gaps are explicitly failed in UG8/11/12."
+    },
+    {
+      "id": "R2-F1",
+      "verdict": "PASS",
+      "evidence": "Originally named native/environment dependencies retain classification or explicit seams and applicable passing assertions."
+    },
+    {
+      "id": "R2-F2",
+      "verdict": "OVERRIDDEN",
+      "evidence": "Scanner-mediated closure is excluded by the operator override."
+    },
+    {
+      "id": "R2-F3",
+      "verdict": "PASS",
+      "evidence": "Earlier scripting/audit exceptions remain disclosed and retained; no inference of perfect historical conduct is required."
+    },
+    {
+      "id": "F1",
+      "verdict": "PASS",
+      "evidence": "Original guard mock run remains disclosed as 4692 total, 4675 Passed, 1 Failed and 16 NotExecuted, not green. Scanner correction portions remain overridden."
+    },
+    {
+      "id": "F2",
+      "verdict": "PASS",
+      "evidence": "Original native filesystem/SQLite cases retain their moved integration assertions or deterministic seams; current lane evidence contains their applicable results."
+    },
+    {
+      "id": "F3",
+      "verdict": "OVERRIDDEN",
+      "evidence": "Scanner syntax/skip-guard coverage and its coverage claims are overridden."
+    },
+    {
+      "id": "F4",
+      "verdict": "PASS",
+      "evidence": "The complete interactive Windows lane now has 716 Passed rows, correct filter/head/session proof, and every prior complete-lane name plus the one new model binding."
+    },
+    {
+      "id": "F5",
+      "verdict": "OVERRIDDEN",
+      "evidence": "Scanner project-selection detection and coverage descriptions are overridden."
+    },
+    {
+      "id": "F6",
+      "verdict": "PASS",
+      "evidence": "The historical Bash ls exception is retained as a disclosure, not erased."
+    },
+    {
+      "id": "F7",
+      "verdict": "PASS",
+      "evidence": "The original missing Windows lane and unconditional done wording are corrected. All 37 tasks and affected criteria remain unsatisfied; current D-B inadequacies are separately failed in UG12."
+    }
+  ],
+  "headSha": "03df5a6a1aec4627d0cd6847fdaab6f2462ec014",
+  "receiptPaths": [
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r10-20261103T062131.md",
+    "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/hostile-validator-unitgreen-r10-20261103T062131.json"
+  ],
+  "reviewerSessionId": "Codex-20261103T122431Z-plugin-session",
+  "reviewerRequestId": "req-20261103T122503Z-unitgreen-r10"
+}

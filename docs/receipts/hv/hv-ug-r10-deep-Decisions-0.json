@@ -1,0 +1,26 @@
+[
+  {
+    "Line": 55555,
+    "Local": "2026-10-27T22:54:37-05:00",
+    "Answer": "The user answered: \"Every gate is green at 3e487b6b. The pre-HV list (sent above) has one decision. R8b-P3: AC-8 doesn't say what happens when a provisioning download's connection drops mid-file, and that error doesn't name the URL. How should I proceed?\"=\"NO!  Setting up environment is not something that gets AC.  Stop this madness.\". Read the answers carefully — they may request clarification, changes, or that you not proceed — and follow what they actually say.",
+    "Selected": []
+  },
+  {
+    "Line": 65789,
+    "Local": "2026-10-29T12:20:57-05:00",
+    "Answer": "The user answered: \"With ACs primarily on FRs, where should this round's five TR criteria go: TR-MCP-NUKE-019 AC-2, AC-3, AC-6, TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008? (The QuadBrain and gh criteria are already on FRs.)\"=\"Move criteria that are misplaced.  Unit tests are for FR, Integration tests are for TR.\". Read the answers carefully — they may request clarification, changes, or that you not proceed — and follow what they actually say.",
+    "Selected": []
+  },
+  {
+    "Line": 80034,
+    "Local": "2026-11-03T06:12:56-06:00",
+    "Answer": "Your questions have been answered: \"Round 10 projected problems are ready (file above). Every gate at 6082b116 is green on both hosts, and the holistic read's findings are fixed. The new items you'd most want to see: ac-4 was written before your approval (33); task 37 was added to the TODO (41); product behavior and configuration changes from rounds 9 and 10 are now declared, including the REPL cache variables, the gh refusal and the containment alias (42); some evidence is weaker than files written at the time (43). Confirm and launch round 10?\"=\"Confirmed, launch (Recommended)\". You can now continue with these answers in mind.",
+    "Selected": [
+      {
+        "Question": "Round 10 projected problems are ready (file above). Every gate at 6082b116 is green on both hosts, and the holistic read's findings are fixed. The new items you'd most want to see: ac-4 was written before your approval (33); task 37 was added to the TODO (41); product behavior and configuration changes from rounds 9 and 10 are now declared, including the REPL cache variables, the gh refusal and the containment alias (42); some evidence is weaker than files written at the time (43). Confirm and launch round 10?",
+        "Label": "Confirmed, launch (Recommended)",
+        "Description": "I commit the docs-only round 10 records (receipts, TRX set byte-exact, plan, handoff, projected problems), publish PR body r12, then launch HV round 10 (Codex gpt-6-astra max, merged OMARCHY worktree)."
+      }
+    ]
+  }
+]

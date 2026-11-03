@@ -1,0 +1,20 @@
+{
+  "payload": {
+    "requestId": "req-20261103T123150Z-e322",
+    "result": {
+      "createdAt": "2026-11-03T12:31:51.6897674+00:00",
+      "area": "MCP",
+      "title": "Test TEST-MCP-MEMORY-002",
+      "scopeStartLayerKey": "layer-1",
+      "updatedAt": "2026-11-03T12:31:51.6898795+00:00",
+      "testType": "unit",
+      "status": "pending",
+      "acceptanceCriteria": [],
+      "priority": "medium",
+      "id": "TEST-MCP-MEMORY-002",
+      "description": "CRUD behavior tests SHALL prove add, list, update, remove, soft-delete omission, scope preservation, scope changes, invalid ID, invalid text, invalid category, and invalid scope failures."
+    },
+    "deprecated": true
+  },
+  "type": "result"
+}

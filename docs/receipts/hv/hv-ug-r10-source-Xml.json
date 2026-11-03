@@ -1,0 +1,234 @@
+[
+  {
+    "File": "build/Build.TestDependencies.cs",
+    "DatedComments": [
+      "    /// <remarks>2026-11-02, FR-MCP-BUILD-001; TR-MCP-NUKE-016 AC-001: reads the variables and delegates to the shared rule, because hostile validation finding R9-F5 showed this property and the cases chose the model differently (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\").</remarks>"
+    ],
+    "XmlLines": 55
+  },
+  {
+    "File": "build/Build.TestGroups.cs",
+    "DatedComments": [
+      "/// <remarks>2026-11-02, FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1 to AC-5: documented this partial declaration (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1: added the --test-groups array parameter (operator 2026-11-02).</description></item>",
+      "    /// changed tests through Nuke (operator 2026-11-02: \"Use dedicated targets or an integration target that accepts an",
+      "    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1, AC-2, AC-3: added the TestGroups target so mock gates and bindings run only the changed classes through Nuke.</description></item>",
+      "    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-4, AC-5: composes for the current host and checks each named class against its project's TRX.</description></item>"
+    ],
+    "XmlLines": 28
+  },
+  {
+    "File": "build/QuadBrainOllamaModel.cs",
+    "DatedComments": [
+      "/// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-016 AC-001 (appended: the required model is chosen by one rule that InstallOllama and QuadBrainOllamaEndpointIntegrationTests both use): added, because hostile validation finding R9-F5 showed provisioning preferred the canonical variable, let an empty canonical value hide the legacy one and turned whitespace into an empty model, while the cases read only the legacy variable (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\"; contract QuadBrainOllamaModelContractTests, mock gate ug-r10-mockgate-t-1).</description></item>"
+    ],
+    "XmlLines": 22
+  },
+  {
+    "File": "build/TestGroupExecution.cs",
+    "DatedComments": [
+      "/// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1, AC-5: added so the target can check every named class of a project's merged groups against that project's TRX.</description></item>",
+      "/// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1, AC-2, AC-3: added the TestGroups composition and run-id policy so targeted runs go through Nuke (operator 2026-11-02) and reuse the lane composition.</description></item>",
+      "/// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-4, AC-5: added the host platform clause and the per-class result check after a Windows-only class was run on Linux.</description></item>",
+      "    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1, AC-2: added; one run per project with the lane's class clause and run record.</description></item>",
+      "    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-4: added the host parameter and the platform clause so other-platform cases never run.</description></item>",
+      "    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1: added so a targeted run always leaves TRX receipts.</description></item>",
+      "    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-5: added so a misspelled class in a multi-class group fails instead of passing silently.</description></item>",
+      "    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-5 (appended: a class counts only through an executed result joined to its definition by test id): joins each executed result to its definition and compares the definition's class name, instead of matching text in display names and every definition, because hostile validation finding R9-F1 showed a definition without a result, a display name or a namespace segment satisfied the check (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\").</description></item>",
+      "    /// <remarks>2026-11-02, FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-5: added for hostile validation finding R9-F1.</remarks>"
+    ],
+    "XmlLines": 74
+  },
+  {
+    "File": "src/QBrainAi.Repl.Core/RequirementsWorkflow.cs",
+    "DatedComments": [
+      "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: CreatedAt and UpdatedAt report the stored times through RequirementTimestampText instead of DateTimeOffset.UtcNow.</description></item>",
+      "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: CreatedAt and UpdatedAt report the stored times through RequirementTimestampText instead of DateTimeOffset.UtcNow.</description></item>",
+      "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: CreatedAt and UpdatedAt report the stored times through RequirementTimestampText instead of DateTimeOffset.UtcNow.</description></item>",
+      "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: takes the mapping's stored creation time and reports it as CreatedAt instead of DateTimeOffset.UtcNow.</description></item>",
+      "    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>"
+    ],
+    "XmlLines": 97
+  },
+  {
+    "File": "src/QBrainAi.Services/Requirements/RequirementStoredTimestamp.cs",
+    "DatedComments": [
+      "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added Read and Earliest, because requirement reads reported the time of the read instead of the stored times (operator 2026-11-02: \"This HAS to be fixed.\").</description></item>",
+      "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1 (appended \"A read never fills a missing date from the clock\"): Read refuses a value without a complete date, because hostile validation finding R9-F4 showed the unrestricted parse gave a time alone the read day's date (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\").</description></item>"
+    ],
+    "XmlLines": 23
+  },
+  {
+    "File": "tests/Build.Tests/QuadBrainOllamaModelBindingTests.cs",
+    "DatedComments": [
+      "/// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-016 AC-001 (appended: one rule both use): added after mock gate ug-r10-mockgate-t-1, for hostile validation finding R9-F5 (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\").</description></item>"
+    ],
+    "XmlLines": 20
+  },
+  {
+    "File": "tests/Build.Tests/QuadBrainOllamaModelContractTests.cs",
+    "DatedComments": [
+      "/// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-016 AC-001 (appended: the required model is chosen by one rule that InstallOllama and QuadBrainOllamaEndpointIntegrationTests both use): added the selection contract, because hostile validation finding R9-F5 showed provisioning preferred the canonical variable while the cases read only the legacy one (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\").</description></item>"
+    ],
+    "XmlLines": 24
+  },
+  {
+    "File": "tests/Build.Tests/TestGroupExecutionContractTests.cs",
+    "DatedComments": [
+      "/// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1, AC-2, AC-3: added the composition and run-id contracts (mock gate ug-r9-mockgate-q-1).</description></item>",
+      "/// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-4, AC-5: host-aware rows and the per-class check rows (mock gate ug-r9-mockgate-q-2).</description></item>",
+      "/// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-5 (appended: a class counts only through an executed result joined to its definition by test id): the class rows now carry TRX test definitions, with rows for a definition without an executed result, a display name that mentions the class, a namespace segment that names it, a custom display name and a not-executed result, and wrong checkers for the earlier production check, display names only and definitions only, because hostile validation finding R9-F1 showed the check accepted a class that ran no case; every helper documented (MEMORY-FACT-008; finding R9-F8) (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\").</description></item>",
+      "    /// <remarks>2026-11-02, FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-4: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1, AC-2: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1 to AC-4: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1 to AC-4: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-5: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-5: added for hostile validation finding R9-F1 (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\").</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-5: now writes definitions joined by test id, for hostile validation finding R9-F1; documented (MEMORY-FACT-008).</remarks>"
+    ],
+    "XmlLines": 108
+  },
+  {
+    "File": "tests/QBrainAi.Client.Tests/RequirementTimestampJsonBindingTests.cs",
+    "DatedComments": [
+      "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: binds the mock-gated rows to the client models (binding ug-r9-binding-p-1).</description></item>",
+      "    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>"
+    ],
+    "XmlLines": 24
+  },
+  {
+    "File": "tests/QBrainAi.Client.Tests/RequirementTimestampJsonContractTests.cs",
+    "DatedComments": [
+      "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added the client timestamp JSON contract (mock gate ug-r9-mockgate-p-1).</description></item>",
+      "    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>"
+    ],
+    "XmlLines": 38
+  },
+  {
+    "File": "tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterBindingTests.cs",
+    "DatedComments": [
+      "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: binds the mock-gated rows to the production adapters (binding ug-r9-binding-p-1).</description></item>",
+      "    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>"
+    ],
+    "XmlLines": 24
+  },
+  {
+    "File": "tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterContractTests.cs",
+    "DatedComments": [
+      "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added the adapter timestamp contract (mock gate ug-r9-mockgate-p-1).</description></item>",
+      "    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>"
+    ],
+    "XmlLines": 33
+  },
+  {
+    "File": "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs",
+    "DatedComments": [
+      "    /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 ac-12 (strengthened: the answer's nonce field equals the whole nonce): the answer is now a JSON body with a nonce field instead of plain text, because the shared check now reads that field (hostile validation finding R9-F2; operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\"). The two boundaries are unchanged.</description></item>"
+    ],
+    "XmlLines": 37
+  },
+  {
+    "File": "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceProviderSettingContractTests.cs",
+    "DatedComments": [
+      "/// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 ac-4: added 22 fixed provider rows with reference and wrong verdicts (mock gate ug-r9-mockgate-r-1), then the two real bindings (ug-r9-binding-r-2), because the owned-instance check refused TodoStorage's 'database' backend.</description></item>",
+      "    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>"
+    ],
+    "XmlLines": 49
+  },
+  {
+    "File": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksBindingTests.cs",
+    "DatedComments": [
+      "/// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 ac-4 and ac-12: the two binding facts moved here unchanged from TemporaryInstanceChecksTests, so the contract class can run as a mock gate before the shared checks change (BDPv4; hostile validation findings R9-F2 and the sibling of R9-F3; operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\"). Their test names change class.</description></item>"
+    ],
+    "XmlLines": 23
+  },
+  {
+    "File": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+    "DatedComments": [
+      "/// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 ac-12 (strengthened: the answer's nonce field equals the whole nonce): health bodies are now JSON in the server's shape, with rows for a longer and a shorter nonce, the nonce in another field, a malformed body and a non-string nonce, and wrong checks \"nonce substring\" (the earlier shared check) and \"any field\", because hostile validation finding R9-F2 showed a substring match accepted another nonce. FR-MCP-TESTRESOURCE-001 ac-4 (strengthened: segments compared under the path's own syntax): start rows for a Windows case alias (accepted) and a POSIX case alias (refused), and wrong checks \"ordinal only\" and \"ignores case everywhere\", the sibling of finding R9-F3 (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\").</description></item>",
+      "    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-12: the nonce field is compared exactly instead of the body as a substring (hostile validation finding R9-F2; operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\").</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-12: added for hostile validation finding R9-F2.</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-12: added for hostile validation finding R9-F2.</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4: compares under the path's own syntax instead of ordinally everywhere (the sibling of hostile validation finding R9-F3).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4: added for the sibling of hostile validation finding R9-F3.</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4: added for the sibling of hostile validation finding R9-F3.</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-12: added \"nonce substring\" and \"any field\" for hostile validation finding R9-F2.</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-12: added for hostile validation finding R9-F2.</remarks>"
+    ],
+    "XmlLines": 118
+  },
+  {
+    "File": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs",
+    "DatedComments": [
+      "/// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, generated artifacts in test-owned locations): added the output-folder contract, because two memory-bench stub cases wrote into the checkout's docs/benchmarks/results and rewrote two tracked files on every lane run (operator 2026-11-02: \"Fix in scope\"; triage-report-32e6bc07).</description></item>",
+      "/// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, appended \"compared ... under the path's own syntax\"): added four case rows and the wrong checks \"ordinal only\" (the earlier shared check) and \"ignores case everywhere\", because hostile validation finding R9-F3 showed a Windows case alias of the checkout was accepted; documented every helper (MEMORY-FACT-008; finding R9-F8) (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\").</description></item>",
+      "    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 generated-artifact criterion: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 generated-artifact criterion: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 generated-artifact criterion: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 generated-artifact criterion: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 generated-artifact criterion: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 generated-artifact criterion: added for hostile validation finding R9-F3 (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\").</remarks>"
+    ],
+    "XmlLines": 70
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/QuadBrainOllamaEndpointIntegrationTests.cs",
+    "DatedComments": [
+      "    /// <item><term>2026-11-02</term><description>TR-MCP-NUKE-016 AC-001 (appended: the required model is chosen by one rule that InstallOllama and these cases both use): reads both variables through the shared rule and requires that model, instead of reading only the legacy variable and falling back to the first installed model, because hostile validation finding R9-F5 showed the cases could request a different model than provisioning installed (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\").</description></item>"
+    ],
+    "XmlLines": 40
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampBindingTests.cs",
+    "DatedComments": [
+      "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: binds the mock-gated rows to the production reader, row mappers and mapping builder (binding ug-r9-binding-p-1).</description></item>",
+      "    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>"
+    ],
+    "XmlLines": 25
+  },
+  {
+    "File": "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampContractTests.cs",
+    "DatedComments": [
+      "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1: added the stored-time reader contract (mock gate ug-r9-mockgate-p-1).</description></item>",
+      "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1 (appended \"A stored time written without an offset is read as UTC\"): added the offset-less row and a wrong reader that applies a fixed local offset, because no row pinned that case (operator 2026-11-02: \"UTC\").</description></item>",
+      "/// <item><term>2026-11-02</term><description>FR-MCP-040 ac-1 (appended \"A read never fills a missing date from the clock\"): added rows for a time alone, a date without a year, a date alone and a complete date in another order, a mapping row with an incomplete link time, and the wrong reader \"date filled from the clock\" (the earlier production parse), because hostile validation finding R9-F4 showed a time alone took the read day's date (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\").</description></item>",
+      "    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-040 ac-1: added for hostile validation finding R9-F4 (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\").</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8); the time-alone link is read through the main rows.</remarks>"
+    ],
+    "XmlLines": 47
+  },
+  {
+    "File": "tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+    "DatedComments": [
+      "/// Since 2026-11-02 it also holds the FR-MCP-TESTRESOURCE-001 check that a test's generated-artifact folder lies outside",
+      "    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4 (strengthened: segments compared under the path's own syntax): the containment helper compares Windows-form paths ignoring case, the sibling of hostile validation finding R9-F3 (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\").</remarks>",
+      "    /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 ac-12 (strengthened: the answer's nonce field equals the whole nonce): compares the nonce field exactly instead of finding the nonce anywhere in the body, because hostile validation finding R9-F2 showed a longer nonce or the nonce in another field passed (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\").</description></item>",
+      "    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-12: added for hostile validation finding R9-F2.</remarks>",
+      "    /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 ac-4; TR-MCP-NUKE-019 AC-6: the SQLite-only rule now applies to database-engine settings only (Database__Provider, DatabaseProvider, DATABASE_PROVIDER, any prefix), because it refused TodoStorage's valid 'database' backend and broke the stdio host case.</description></item>",
+      "    /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 (second criterion): added, because two memory-bench stub cases wrote into the checkout's docs/benchmarks/results and rewrote two tracked files on every lane run (operator 2026-11-02: \"Fix in scope\"; mock gate ug-r9-mockgate-s-1).</description></item>",
+      "    /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, appended \"compared ... under the path's own syntax\"): containment and equality compare Windows-form paths ignoring case, because hostile validation finding R9-F3 showed a case alias of the checkout was accepted (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\").</description></item>",
+      "    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 generated-artifact criterion: takes the path syntax's comparison instead of ordinal only (hostile validation finding R9-F3); documented (MEMORY-FACT-008; finding R9-F8).</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: added for hostile validation finding R9-F3 and its ac-4 sibling.</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: added for hostile validation finding R9-F3.</remarks>",
+      "    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: compares under the paths' own syntax instead of ordinally everywhere (hostile validation finding R9-F3 and its ac-4 sibling; operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\").</remarks>"
+    ],
+    "XmlLines": 148
+  }
+]

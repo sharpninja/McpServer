@@ -1,0 +1,25 @@
+{
+  "payload": {
+    "result": {
+      "area": "MCP",
+      "title": "Requirements Document CRUD Management",
+      "createdAt": "2026-11-03T12:29:51.8474053+00:00",
+      "scopeStartLayerKey": "layer-1",
+      "priority": "medium",
+      "updatedAt": "2026-11-03T12:29:51.8475275+00:00",
+      "id": "FR-MCP-040",
+      "description": "The server shall support CRUD operations for Functional Requirements (FR), Technical Requirements (TR), Testing Requirements (TEST), and FR-to-TR mapping rows backed by the canonical project requirements Markdown files.\n\n**Covered by:** `RequirementsController`, `RequirementsDocumentService`, `IRequirementsRepository`",
+      "status": "pending",
+      "acceptanceCriteria": [
+        {
+          "text": "Reading an FR, TR, TEST or mapping through REST, the typed client or the REPL reports the creation and update times stored with that record. A read never reports the time of the read; when the store holds no time, the value is null (operator 2026-11-02: \"This HAS to be fixed.\"; PR 87 slice P). A stored time written without an offset is read as UTC (operator 2026-11-02: \"UTC\"; pre-HV what-if finding: no contract row pinned it). A read never fills a missing date from the clock: a stored value without a complete date (a time alone, or a partial date) reads as null and is ignored when a mapping's creation time is chosen (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\"; hostile validation finding R9-F4).",
+          "id": "ac-1",
+          "isSatisfied": false
+        }
+      ]
+    },
+    "requestId": "req-20261103T122950Z-3af1",
+    "deprecated": true
+  },
+  "type": "result"
+}

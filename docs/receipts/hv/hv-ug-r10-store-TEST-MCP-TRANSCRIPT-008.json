@@ -1,0 +1,20 @@
+{
+  "payload": {
+    "requestId": "req-20261103T123158Z-cad7",
+    "result": {
+      "createdAt": "2026-11-03T12:31:59.4494948+00:00",
+      "area": "MCP",
+      "title": "Test TEST-MCP-TRANSCRIPT-008",
+      "scopeStartLayerKey": "layer-1",
+      "updatedAt": "2026-11-03T12:31:59.4496198+00:00",
+      "testType": "unit",
+      "status": "pending",
+      "acceptanceCriteria": [],
+      "priority": "medium",
+      "id": "TEST-MCP-TRANSCRIPT-008",
+      "description": "Tests verify typed client, REPL commands, HTTP MCP discovery, stdio MCP discovery, and tool invocation for transcript ingestion and normalization."
+    },
+    "deprecated": true
+  },
+  "type": "result"
+}

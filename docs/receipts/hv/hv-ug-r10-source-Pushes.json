@@ -1,0 +1,58 @@
+[
+  {
+    "Line": 7984,
+    "Utc": "2026-10-19T21:43:16.8320000+00:00",
+    "Local": "2026-10-19T16:43:16-05:00",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \".nuke/build.schema.json;build/Build.TestDependencies.cs;build/LinuxProviderTestProvisioner.cs;build/ProviderTestProvisioningContracts.cs;src/QBrainAi.Services/Services/GitHubCliService.cs;tests/Build.Tests/ProviderTestProvisioningContract.cs;tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs;tests/Build.Tests/ProviderTestProvisioningTests.cs;tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceResolutionMiddlewareTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/Decompose4nfBackfillMigrationTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertions.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-takeover.txt\" -Push -WhatIf"
+  },
+  {
+    "Line": 7988,
+    "Utc": "2026-10-19T21:43:24.6640000+00:00",
+    "Local": "2026-10-19T16:43:24-05:00",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \".nuke/build.schema.json;build/Build.TestDependencies.cs;build/LinuxProviderTestProvisioner.cs;build/ProviderTestProvisioningContracts.cs;src/QBrainAi.Services/Services/GitHubCliService.cs;tests/Build.Tests/ProviderTestProvisioningContract.cs;tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs;tests/Build.Tests/ProviderTestProvisioningTests.cs;tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceResolutionMiddlewareTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs;tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/Decompose4nfBackfillMigrationTests.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertions.cs;tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-takeover.txt\" -Push"
+  },
+  {
+    "Line": 8058,
+    "Utc": "2026-10-19T21:45:31.3210000+00:00",
+    "Local": "2026-10-19T16:45:31-05:00",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"build/Build.TestDependencies.cs;build/IntegrationLaneFilter.cs;build/IntegrationLaneFilterContracts.cs;tests/Build.Tests/IntegrationLaneFilterContract.cs;tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs;tests/Build.Tests/IntegrationLaneFilterTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-g.txt\" -Push -WhatIf"
+  },
+  {
+    "Line": 8078,
+    "Utc": "2026-10-19T21:45:57.8270000+00:00",
+    "Local": "2026-10-19T16:45:57-05:00",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"build/Build.TestDependencies.cs;build/IntegrationLaneFilter.cs;build/IntegrationLaneFilterContracts.cs;tests/Build.Tests/IntegrationLaneFilterContract.cs;tests/Build.Tests/IntegrationLaneFilterMockGateTests.cs;tests/Build.Tests/IntegrationLaneFilterTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-g.txt\" -Push"
+  },
+  {
+    "Line": 10348,
+    "Utc": "2026-10-19T23:55:51.3360000+00:00",
+    "Local": "2026-10-19T18:55:51-05:00",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"build/Build.TestDependencies.cs;build/IntegrationLanePreconditionContracts.cs;build/InteractiveSessionPrecondition.cs;tests/Build.Tests/IntegrationLanePreconditionContract.cs;tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs;tests/Build.Tests/IntegrationLanePreconditionTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-h.txt\" -Push -WhatIf"
+  },
+  {
+    "Line": 10354,
+    "Utc": "2026-10-19T23:55:58.6140000+00:00",
+    "Local": "2026-10-19T18:55:58-05:00",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File \"/home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1\" -Worktree \"/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019\" -Files \"build/Build.TestDependencies.cs;build/IntegrationLanePreconditionContracts.cs;build/InteractiveSessionPrecondition.cs;tests/Build.Tests/IntegrationLanePreconditionContract.cs;tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs;tests/Build.Tests/IntegrationLanePreconditionTests.cs\" -MessageFile \"/home/sharpninja/.claude/scratch/pr82-review-20261019/commit-msg-unitgreen-h.txt\" -Push"
+  },
+  {
+    "Line": 15006,
+    "Utc": "2026-10-20T13:46:08.6490000+00:00",
+    "Local": "2026-10-20T08:46:08-05:00",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'Directory.Packages.props;tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj;tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs;tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs;tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs;tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-scanner.txt -Push -WhatIf"
+  },
+  {
+    "Line": 15033,
+    "Utc": "2026-10-20T13:46:38.6280000+00:00",
+    "Local": "2026-10-20T08:46:38-05:00",
+    "Tool": "Bash",
+    "Command": "pwsh -NoProfile -NonInteractive -File /home/sharpninja/.claude/scratch/pr82-review-20261019/Publish-Commit.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Files 'Directory.Packages.props;tests/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.csproj;tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs;tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs;tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs;tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs' -MessageFile /home/sharpninja/.claude/scratch/pr82-review-20261019/commit-ug-r3-scanner.txt -Push"
+  }
+]

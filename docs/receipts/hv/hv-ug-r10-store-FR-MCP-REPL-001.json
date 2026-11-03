@@ -1,0 +1,25 @@
+{
+  "payload": {
+    "requestId": "req-20261103T123055Z-f3ff",
+    "result": {
+      "createdAt": "2026-11-03T12:30:56.9937948+00:00",
+      "area": "MCP",
+      "title": "YAML Protocol STDIO REPL Host",
+      "updatedAt": "2026-11-03T12:30:56.9939057+00:00",
+      "scopeStartLayerKey": "layer-1",
+      "status": "✅ complete",
+      "acceptanceCriteria": [
+        {
+          "id": "ac-1",
+          "isSatisfied": false,
+          "text": "A command timeout configured through MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS (agent stdio requests) or MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS (stream commands) is used only when it is a whole number of seconds from 1 to the largest delay the runtime's cancellation timer accepts (4294967 seconds); any other value (unset, empty, not a number, zero, negative or larger) is ignored and the two-minute default applies, so no request fails and the process does not crash because of the configured value, and the timeout message names the timeout that applied; one parse rule serves both variables (hostile validation round 7: both variables at 2147483647 made 19 REPL unit cases throw ArgumentOutOfRangeException from CancellationTokenSource.CancelAfter; triage-report-c993b9446bb8464ba375f74fabd07dad; operator 2026-10-26: \"if you surface new AC, add them without waiting for approval\"; moved from TR-MCP-REPL-001 AC-002, operator 2026-10-29: \"Move criteria that are misplaced.  Unit tests are for FR, Integration tests are for TR.\")."
+        }
+      ],
+      "priority": "medium",
+      "id": "FR-MCP-REPL-001",
+      "description": "The server shall provide a YAML-envelope STDIO REPL host that accepts structured commands over standard input, executes operations against workspace services, and returns structured YAML responses over standard output. The REPL host shall support the same trust bootstrap, authentication, and workspace resolution semantics as the HTTP and MCP STDIO transports.\n\n\n**Technical Implementation:** [TR-MCP-REPL-001](./Technical-Requirements.md#tr-mcp-repl-001) | [TR-MCP-REPL-002](./Technical-Requirements.md#tr-mcp-repl-002) | [Mapping](./TR-per-FR-Mapping.md)\n\n**Covered by:** `QBrainAi.Repl.Core` (`IReplProtocol`, `IYamlEnvelope`, `IYamlSerializer`, `IMarkerFileReader`, `ITrustBootstrapService`, `IAuthRotationHandler`, `IWorkspaceSelector`), `QBrainAi.Repl.Host` (`Program.cs`, `AgentStdioHandler`, `InteractiveHandler`, `ServiceCollectionExtensions`)"
+    },
+    "deprecated": true
+  },
+  "type": "result"
+}
