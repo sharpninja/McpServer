@@ -1,0 +1,22 @@
+Now: 2026-11-03T08:57:29 before=/mnt/legion2-github/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r10-final-win-unit-1/unit (4711) after=/mnt/legion2-github/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r11-final-win-unit-1/unit (4724)
+onlyBefore=1 onlyAfter=14 common=4710
+onlyBefore QBrainAi.Repl.Core.Tests=1
+onlyAfter QBrainAi.Repl.Core.Tests=13
+onlyAfter QBrainAi.Support.Mcp.Tests=1
+--- only in before ---
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.RequirementsWorkflowTests.CurrentSelection_HasTimestamp_ReturnsRecentTimestamp
+--- only in after ---
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.RequirementsWorkflowTests.CurrentSelection_HasTimestamp_ReturnsScriptedTimestamp
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeBindingTests.ScriptedClock_RefusesAReadPastItsScript
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeBindingTests.ScriptedClock_SatisfiesTheContract
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeBindingTests.SteppingClock_YieldsExactSteps
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.ScriptedReferenceClock_SatisfiesEveryRow
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.WrongClocks_AreRejected(fault: "read time")
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.WrongClocks_AreRejected(fault: "shifted")
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.WrongClocks_AreRejected(fault: "stale")
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.RecordedTimeContractTests.WrongClocks_AreRejected(fault: "swapped")
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongStartChecks_AreRejectedInsidePassingHarness(wrong: "ignores the root", failingRow: "a single-rooted marker under a UNC root is another"···)
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.TemporaryInstanceChecksTests.WrongStartChecks_AreRejectedInsidePassingHarness(wrong: "UNC compared ordinally", failingRow: "owned UNC layout in another case and separators")
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: "ignores the root")
+QBrainAi.Repl.Core.Tests | QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: "UNC compared ordinally")
+QBrainAi.Support.Mcp.Tests | QBrainAi.Support.Mcp.Tests.Requirements.RequirementStoredTimestampContractTests.WrongReaders_AreRejected(fault: "year in the text")

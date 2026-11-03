@@ -1,0 +1,6 @@
+Now: 2026-11-03T11:16:41 key=test name only before=/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r11v-final-win-lane-1 (714) after=/mnt/legion2-github/McpServer/.worktrees/unit-green-interactive-20261019/TestResults/ug-r11w-final-win-lane-1 (716)
+onlyBefore=0 onlyAfter=2 common=714
+--- only in before ---
+--- only in after ---
+QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests.RunAsync_Heartbeat_RotatesGlyphWithoutStillWorkingLines
+QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogFileWatcherTests.WhenFileCreatedThenWatcherTriggersImport

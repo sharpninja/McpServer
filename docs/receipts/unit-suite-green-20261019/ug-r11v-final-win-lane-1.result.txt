@@ -1,0 +1,35 @@
+RECEIPT 2026-11-03T10:28:15 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinInteractiveLane.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-11-03T10:28:12 host=PAYTON-LEGION2 user=kingd
+WORKTREE HEAD cb174ac807c8e60b7a38a30bc216a651ed72c6c7
+PROOF START 2026-11-03T09:48:03 user=kingd session=1 interactive=True head=cb174ac807c8e60b7a38a30bc216a651ed72c6c7
+EXIT 0 2026-11-03T10:26:07
+TASK state=Ready lastRun=11/03/2026 09:48:01 result=0
+LOG lines=190
+  LOG 09:48:13 [INF] Integration lane filter: Category=Integration&Platform!=Linux
+  LOG 09:48:13 [INF] Integration lane filter for QBrainAi.Support.Mcp.Tests: Category=Integration&Platform!=Linux
+  LOG 09:48:13 [INF] Integration lane filter for QBrainAi.McpAgent.Tests: Category=Integration&Platform!=Linux
+  LOG 09:48:13 [INF] Integration lane filter for QBrainAi.Repl.Core.Tests: Category=Integration&Platform!=Linux
+  LOG 09:48:13 [INF] Integration lane filter for QBrainAi.QBAgent.Tests: Category=Integration&Platform!=Linux
+  LOG 09:48:13 [INF] Integration lane filter for Build.Tests: Category=Integration&Platform!=Linux
+  LOG 09:48:13 [INF] Integration lane filter for QBrainAi.Repl.IntegrationTests: Category=Integration&Platform!=Linux
+  LOG 09:48:13 [INF] Integration lane filter for QBrainAi.Support.Mcp.IntegrationTests: Category=Integration&Platform!=Linux&(FullyQualifiedName~.RequirementScopeLayerReplIntegrationTests.|FullyQualifiedName~.QuadBrainOllamaEndpointIntegrationTests.)
+  LOG 09:55:13 [DBG] Passed!  - Failed:     0, Passed:   441, Skipped:     0, Total:   441, Duration: 5 m 57 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+  LOG 09:55:22 [DBG] Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 111 ms - QBrainAi.McpAgent.Tests.dll (net10.0)
+  LOG 09:55:31 [DBG] Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 341 ms - QBrainAi.Repl.Core.Tests.dll (net10.0)
+  LOG 09:55:39 [DBG] Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 49 ms - QBrainAi.QBAgent.Tests.dll (net10.0)
+  LOG 10:00:21 [DBG] Passed!  - Failed:     0, Passed:    85, Skipped:     0, Total:    85, Duration: 4 m 37 s - Build.Tests.dll (net10.0)
+  LOG 10:23:17 [DBG] Passed!  - Failed:     0, Passed:   179, Skipped:     0, Total:   179, Duration: 22 m 41 s - QBrainAi.Repl.IntegrationTests.dll (net10.0)
+  LOG 10:26:04 [DBG] Passed!  - Failed:     0, Passed:     6, Skipped:     0, Total:     6, Duration: 2 m 27 s - QBrainAi.Support.Mcp.IntegrationTests.dll (net10.0)
+  LOG Build succeeded on 11/3/2026 10:26:05 AM. ＼（＾ᴗ＾）／
+TRX \provider\Build.Tests\Build.Tests.trx total=85 executed=85 passed=85 failed=0 notExecuted=0
+TRX \provider\QBrainAi.McpAgent.Tests\QBrainAi.McpAgent.Tests.trx total=1 executed=1 passed=1 failed=0 notExecuted=0
+TRX \provider\QBrainAi.QBAgent.Tests\QBrainAi.QBAgent.Tests.trx total=2 executed=2 passed=2 failed=0 notExecuted=0
+TRX \provider\QBrainAi.Repl.Core.Tests\QBrainAi.Repl.Core.Tests.trx total=2 executed=2 passed=2 failed=0 notExecuted=0
+TRX \provider\QBrainAi.Repl.IntegrationTests\QBrainAi.Repl.IntegrationTests.trx total=179 executed=179 passed=179 failed=0 notExecuted=0
+TRX \provider\QBrainAi.Support.Mcp.IntegrationTests\QBrainAi.Support.Mcp.IntegrationTests.trx total=6 executed=6 passed=6 failed=0 notExecuted=0
+TRX \provider\QBrainAi.Support.Mcp.Tests\QBrainAi.Support.Mcp.Tests.trx total=441 executed=441 passed=441 failed=0 notExecuted=0
+TASK REMOVED McpUnitGreenLane-r11v-final present-after=False
+END 2026-11-03T10:28:15

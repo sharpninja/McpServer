@@ -1,0 +1,111 @@
+{
+  "name": "ug-r11-mockgate-v-1",
+  "kind": "mock-gate",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "2e1210150ae009162b047c604b56b75426c4d428",
+  "dirtyPaths": [
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-binding-u-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-binding-u-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-compile-u-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-compile-u-2.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-compile-u-3.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-criteria-u-readback-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-criteria-v-readback-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-lane-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-lane-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-unit-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-unit-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-final-win-lane-1.start.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-final-win-unit-1.nu190x.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-final-win-unit-1.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-linux-unit-compare-r10-r11.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-mockgate-u-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-mockgate-u-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r11-win-unit-compare-r10-r11.txt",
+    "?? tests/QBrainAi.Support.Mcp.Tests/TestSupport/ScriptedTimeProvider.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/TestSupport/ScriptedTimeProviderTests.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/TestSupport/StampedTimeContractTests.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "QBrainAi.Support.Mcp.Tests:StampedTimeContractTests,ScriptedTimeProviderTests",
+    "--test-run-id",
+    "ug-r11-mockgate-v-1"
+  ],
+  "startedLocal": "2026-11-03T09:31:30",
+  "endedLocal": "2026-11-03T09:32:20",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 11,
+  "passed": 11,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "QBrainAi.Support.Mcp.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r11-mockgate-v-1/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r11-mockgate-v-1/QBrainAi.Support.Mcp.Tests.trx",
+      "sha256": "269318301CDA020C43A8D219A364FCD608457C6B30135F4714BFB57FCBACCBBA",
+      "total": 11,
+      "passed": 11,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/StampedTimeContractTests.cs",
+      "sha256": "B77EDDD4197197251497896E4B3D4C0C31CD984441AB0CD52D54F3D4BF7594DC"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/ScriptedTimeProvider.cs",
+      "sha256": "F2A9D146AEA018AC1D4A893F6FA6A10EC561D2CCD57F8104A79A001CFC785114"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/ScriptedTimeProviderTests.cs",
+      "sha256": "AE2DF1674B9D8513E60F3F677971706DC9FBECD2CF3005B142055D1E2D40CF98"
+    },
+    {
+      "path": "src/QBrainAi.GraphRag/Services/GraphRagService.cs",
+      "sha256": "28B5AED79D88B1D455B69E57AD8C2BF736F75525FA3F35EC6BB7CD6F6C1435AE"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/MemoryService.cs",
+      "sha256": "9F1A9A759261319C84B862B5E65A1DE886D4F4E5C251F1C43B47AB975A1500AF"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagEntityCrudTests.cs",
+      "sha256": "3A5ED52676618778A5438790D837CE85B32B19E556990D137537A18C84012CD6"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagEntityStorageTests.cs",
+      "sha256": "3AD973A65555C384FAE6CE636F72F05B7319E73E8507743CB1A93E4A6D676AD7"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryModelTests.cs",
+      "sha256": "951492FE4C7C38C90DEB7EB797BAE885E5B5A10857790FAED637C9B406C92098"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/AuthRotationTests.cs",
+      "sha256": "22B5DC22E023AA1298BFCF62F7E3E61BC318CD1DDF93227408FDD96C97D0BB7D"
+    },
+    {
+      "path": "tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+      "sha256": "D28255F386E704ADB0E1B08B739CE908DE8D39EBC9435EAE2B055A53E7D5A796"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+      "sha256": "FA70787483AC19BAAF62D40EEF7488F334D34CD769B6846297FBDA631321ACC2"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs",
+      "sha256": "9500C7C40993277541A976D3B44C62ABECEBD4C8C5F1C081291ECB9B0F347F7C"
+    }
+  ],
+  "writtenLocal": "2026-11-03T09:33:13",
+  "writtenBy": "ClaudeCode"
+}
