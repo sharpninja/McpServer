@@ -274,7 +274,10 @@ internal static class TemporaryInstanceChecks
     /// letter, or a UNC server and share written with either separator) is part of the path's identity, then segments
     /// split on either separator are compared, UNC and drive-letter paths ignoring case and POSIX paths ordinally. The
     /// checkout root itself, any folder inside it, a case or separator alias of either on Windows and a relative path
-    /// are refused; a path under another root kind, server, share or drive is another location.
+    /// are refused. Within one path syntax a path under another root, server, share or drive is another location; a
+    /// folder in the other syntax than the checkout (a POSIX path against a Windows drive or UNC path), a Windows device
+    /// path ("\\?\", "\\.\" or "\??\", either separator) and a Windows segment that ends in a dot or a space or holds a
+    /// colon are refused, because each can name a location inside the checkout.
     /// </summary>
     /// <param name="folder">The candidate artifact folder.</param>
     /// <param name="checkoutRoot">The repository checkout root.</param>
@@ -286,6 +289,7 @@ internal static class TemporaryInstanceChecks
     /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, appended "compared ... under the path's own syntax"): containment and equality compare Windows-form paths ignoring case, because hostile validation finding R9-F3 showed a case alias of the checkout was accepted (operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)").</description></item>
     /// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, appended "A path's root is part of its identity"): the folder and the checkout are compared through <see cref="PathIdentity"/>, so a forward-slash, backslash or mixed-separator UNC alias of the checkout or of a folder inside it is refused, and a path under another root kind, server, share or drive is another location, because hostile validation round 10 finding R10-F2 showed a forward-slash UNC alias was accepted (operator 2026-11-03: "don't gate on me between rounds").</description></item>
     /// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 (second criterion): documentation only, the summary now states the root rule of the entry above instead of the 2026-11-02 rule (stale summary found before round 11).</description></item>
+    /// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, appended "That holds only within one path syntax"): refuses a folder in the other path syntax than the checkout, a Windows device path and a Windows segment that ends in a dot or a space or holds a colon, because the hostile validation round 11 that stopped without a verdict found a device path alias of a folder inside the checkout accepted, and the sibling sweep found the cross-syntax and segment aliases (operator 2026-11-03: "don't gate on me between rounds").</description></item>
     /// </list>
     /// </remarks>
     internal static string? CheckTestOutputFolder(string folder, string checkoutRoot)
@@ -294,14 +298,47 @@ internal static class TemporaryInstanceChecks
         ArgumentException.ThrowIfNullOrWhiteSpace(checkoutRoot);
 
         var identity = PathIdentity.Parse(folder);
+        var checkout = PathIdentity.Parse(checkoutRoot);
         var acceptable = identity.Kind != PathRootKind.None
             && !identity.Segments.Any(segment => segment is "." or "..")
+            && !IsDevicePath(folder)
+            && identity.IsWindowsSyntax == checkout.IsWindowsSyntax
+            && !(identity.IsWindowsSyntax && identity.Segments.Any(IsWindowsSegmentAlias))
             && !IsStrictlyInside(folder, checkoutRoot)
-            && !identity.SameLocation(PathIdentity.Parse(checkoutRoot));
+            && !identity.SameLocation(checkout);
         return acceptable
             ? null
             : $"The test artifact folder '{folder}' is not a test-owned location outside the checkout '{checkoutRoot}'.";
     }
+
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 (generated-artifact criterion): whether a path is a Windows device path: two separators of
+    /// either kind, then '?' or '.', then a separator ("\\?\", "\\.\", "//?/"), or a separator, "??" and a separator
+    /// ("\??\"). Windows resolves such a path to a drive, a share or a device, which a lexical check cannot place.
+    /// </summary>
+    /// <param name="path">The path.</param>
+    /// <returns>True for a device path.</returns>
+    /// <remarks>2026-11-03, FR-MCP-TESTRESOURCE-001 generated-artifact criterion (appended "That holds only within one path syntax"): added, because the hostile validation round 11 that stopped without a verdict found "\\?\C:\" read as a UNC share named "?/C:", so a device alias of a folder inside the checkout was accepted.</remarks>
+    private static bool IsDevicePath(string path) =>
+        path.Length >= 4
+        && ((IsPathSeparator(path[0]) && IsPathSeparator(path[1]) && path[2] is '?' or '.' && IsPathSeparator(path[3]))
+            || (IsPathSeparator(path[0]) && path[1] == '?' && path[2] == '?' && IsPathSeparator(path[3])));
+
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 (generated-artifact criterion): whether a Windows path segment is one Windows resolves to
+    /// another name (it ends in a dot or a space) or reads as a stream (it holds a colon).
+    /// </summary>
+    /// <param name="segment">The segment.</param>
+    /// <returns>True for such a segment.</returns>
+    /// <remarks>2026-11-03, FR-MCP-TESTRESOURCE-001 generated-artifact criterion (appended "That holds only within one path syntax"): added by the sibling sweep of the findings of the hostile validation round 11 that stopped without a verdict ("repo." and "repo " name "repo" on Windows).</remarks>
+    private static bool IsWindowsSegmentAlias(string segment) =>
+        segment.EndsWith('.') || segment.EndsWith(' ') || segment.Contains(':', StringComparison.Ordinal);
+
+    /// <summary>FR-MCP-TESTRESOURCE-001 (generated-artifact criterion): whether a character is a path separator of either kind.</summary>
+    /// <param name="value">The character.</param>
+    /// <returns>True for '/' or '\'.</returns>
+    /// <remarks>2026-11-03, FR-MCP-TESTRESOURCE-001 generated-artifact criterion: added for <see cref="IsDevicePath"/>.</remarks>
+    private static bool IsPathSeparator(char value) => value is '/' or '\\';
 
     /// <summary>FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: the kind of a path's root.</summary>
     /// <remarks>2026-11-03, FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: added, because hostile validation round 10 finding R10-F2 showed the checks flattened the root into the segments.</remarks>
@@ -339,6 +376,13 @@ internal static class TemporaryInstanceChecks
     {
         /// <summary>How this path's root and segments compare: ignoring case for Windows syntax, ordinally for POSIX.</summary>
         internal StringComparison Comparison => Kind is PathRootKind.Drive or PathRootKind.Unc ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+
+        /// <summary>
+        /// FR-MCP-TESTRESOURCE-001 (generated-artifact criterion): whether the path is in Windows syntax (a drive letter
+        /// or a UNC share) rather than POSIX syntax.
+        /// </summary>
+        /// <remarks>2026-11-03, FR-MCP-TESTRESOURCE-001 generated-artifact criterion (appended "That holds only within one path syntax"): added, because a folder is compared with the checkout only within one path syntax.</remarks>
+        internal bool IsWindowsSyntax => Kind is PathRootKind.Drive or PathRootKind.Unc;
 
         /// <summary>Parses a path into its root and segments.</summary>
         /// <param name="path">The path.</param>

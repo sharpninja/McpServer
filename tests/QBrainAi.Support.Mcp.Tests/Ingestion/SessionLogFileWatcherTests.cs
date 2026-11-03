@@ -59,7 +59,7 @@ public sealed class SessionLogFileWatcherTests : IDisposable
     /// for its 2 s debounce, so its outcome depends on file-system events and on how much real time passes.
     /// </summary>
     /// <returns>The test task.</returns>
-    /// <remarks>2026-11-03, TR-MCP-USECASE-018 AC-006 (appended "A wall-clock bound is an assertion whose outcome depends on how much real time passes ... for example ... a file-system event or a debounce; such a test is an integration test"): tagged Category=Integration with its assertions unchanged, so it runs in the MigrationIntegrationTests lane and not in the unit suite (holistic read before round 11).</remarks>
+    /// <remarks>2026-11-03, TR-MCP-USECASE-018 AC-006 (appended "A wall-clock bound is an assertion whose outcome depends on how much real time passes ... for example ... a file-system event or a debounce; such a test is an integration test"): tagged Category=Integration with its assertions unchanged, so it runs in the MigrationIntegrationTests lane and not in the unit suite (holistic read before round 11). 2026-11-03, documentation only: TR-PLANNED-CORE-013 in this file (the class summary and this case's summary) is a historical id of the core plan, not a record in the requirement store; the requirement this change answers is TR-MCP-USECASE-018 AC-006 (found by the hostile validation round 11 that stopped without a verdict).</remarks>
     [Fact]
     [Trait("Category", "Integration")]
     public async Task WhenFileCreatedThenWatcherTriggersImport()

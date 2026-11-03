@@ -119,6 +119,12 @@ public class StubMarkerFileReaderTests
         Assert.True(result.Details.ContainsKey("signature"));
     }
 
+    /// <summary>
+    /// The stub watcher reports a rotated marker through the callback, and ends by cancellation only when the test
+    /// cancels it after the callback.
+    /// </summary>
+    /// <returns>The test task.</returns>
+    /// <remarks>2026-11-03, TR-MCP-USECASE-018 AC-006 (appended "A cancellation or timeout that a unit test arms on a real timer is such a wait when a step the test asserts must happen before the timer fires"): the watch token no longer cancels itself after 100 ms; the test cancels it explicitly after the callback, so the callback cannot be lost to a cancellation that fires first, because the hostile validation round 11 that stopped without a verdict found the 100 ms timer racing the stub's 10 ms delay before the callback (operator 2026-11-03: "don't gate on me between rounds").</remarks>
     [Fact]
     public async Task WatchAsync_SimulatesMarkerFileChange_InvokesCallback()
     {
@@ -132,7 +138,7 @@ public class StubMarkerFileReaderTests
             return Task.CompletedTask;
         };
 
-        using var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(100));
+        using var cts = new CancellationTokenSource();
 
         var watchTask = stub.WatchAsync("/home/user/trusted-workspace", onChange, cts.Token);
 

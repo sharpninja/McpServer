@@ -9,11 +9,16 @@ namespace QBrainAi.Repl.Core.Tests.TestSupport;
 /// root, a drive letter or a UNC server and share written with either separator, is part of its identity; then path
 /// segments split on either separator are compared, UNC and drive-letter paths ignoring case and POSIX paths
 /// ordinally); the checkout itself, any folder inside it, a case or separator alias of either on Windows, a relative
-/// path and a dot segment are refused, and a path under another root kind, server, share or drive is another
-/// location. Fixed rows and an independent scripted reference check; wrong checks (accepts anything, refuses anything,
-/// plain string prefix, ignores dot segments, accepts the checkout root, accepts a relative folder, one separator only,
-/// ordinal only, ignores case everywhere, ignores the root, UNC compared ordinally) are rejected by the same assertions
-/// inside this passing harness. Strings only: no folder is created or read.
+/// path and a dot segment are refused, and within one path syntax a path under another root, server, share or drive
+/// is another location. Across path syntaxes (a POSIX path against a Windows drive or UNC path) the folder is refused,
+/// and so are a Windows device path ("\\?\", "\\.\", "\??\", either separator) and a Windows segment that ends in a
+/// dot or a space or holds a colon, because each can name a location inside the checkout. Fixed rows and an
+/// independent scripted reference check, plus the stated rule over the scripted path identity as a second positive
+/// control; wrong checks (accepts anything, refuses anything, plain string prefix, ignores dot segments, accepts the
+/// checkout root, accepts a relative folder, one separator only, ordinal only, ignores case everywhere, ignores the
+/// root, UNC compared ordinally, accepts device paths, compares across path syntaxes, ignores Windows segment aliases,
+/// Windows segment rules on POSIX paths) are rejected by the same assertions inside this passing harness. Strings
+/// only: no folder is created or read.
 /// </summary>
 /// <remarks>
 /// <list type="table">
@@ -22,6 +27,7 @@ namespace QBrainAi.Repl.Core.Tests.TestSupport;
 /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, appended "compared ... under the path's own syntax"): added four case rows and the wrong checks "ordinal only" (the earlier shared check) and "ignores case everywhere", because hostile validation finding R9-F3 showed a Windows case alias of the checkout was accepted; documented every helper (MEMORY-FACT-008; finding R9-F8) (operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)").</description></item>
 /// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, appended "A path's root is part of its identity"): added rows for a forward-slash, mixed-separator and backslash UNC alias of the checkout (refused), a distinct UNC share, a single-rooted path under a UNC checkout and a UNC path under a POSIX checkout (accepted as other locations), and the wrong checks "ignores the root" (the round 10 shared check) and "UNC compared ordinally", because hostile validation round 10 finding R10-F2 showed forward-slash UNC aliases were compared ordinally and the root was flattened (operator 2026-11-03: "don't gate on me between rounds").</description></item>
 /// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 (second criterion): documentation only, the summary now states the root rule and lists all eleven wrong checks (stale summary found before round 11).</description></item>
+/// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, appended "That holds only within one path syntax"): the rows for a single-rooted path under a UNC checkout and for two leading separators under a POSIX checkout now expect a refusal; added rows for a POSIX folder under a drive checkout (refused), a UNC folder under a drive checkout (another location), device path, device namespace, forward-slash device, device UNC and NT object aliases (refused), a device path on another drive (refused), trailing-dot, trailing-space and stream-syntax aliases (refused) and a POSIX name ending in a dot (accepted); the stated rule as a second positive control; and the wrong checks "accepts device paths", "compares across path syntaxes", "ignores Windows segment aliases" (each the round 11 shared check's behavior) and "Windows segment rules on POSIX paths", because the hostile validation round 11 that stopped without a verdict found a device path alias of a folder inside the checkout accepted, and the sibling sweep found the cross-syntax and segment aliases (operator 2026-11-03: "don't gate on me between rounds").</description></item>
 /// </list>
 /// </remarks>
 public sealed class TestOutputFolderContractTests
@@ -56,8 +62,20 @@ public sealed class TestOutputFolderContractTests
         new("Windows UNC mixed-separator alias inside the checkout", "//Server/Share/Repo", @"\\server\share/Repo\docs", false),
         new("Windows UNC checkout root in backslashes", "//Server/Share/Repo", @"\\Server\Share\Repo", false),
         new("a distinct UNC share is another location", "//Server/Share/Repo", "//Server/Other/Repo/out", true),
-        new("a single-rooted path is another root than a UNC checkout", "//server/share/repo", "/server/share/repo/docs/out", true),
-        new("a UNC path is another root than a POSIX checkout", "/server/share/repo", "//server/share/repo/docs/out", true),
+        new("a single-rooted path under a UNC checkout is another path syntax", "//server/share/repo", "/server/share/repo/docs/out", false),
+        new("two leading separators under a POSIX checkout are another path syntax", "/server/share/repo", "//server/share/repo/docs/out", false),
+        new("a POSIX folder under a drive-letter checkout is another path syntax", "C:/GitHub/repo", "/GitHub/repo/docs/out", false),
+        new("a UNC folder under a drive-letter checkout is another location", "C:/GitHub/repo", "//Server/Share/out", true),
+        new("a device path alias inside the checkout", "C:/GitHub/repo", @"\\?\C:\GitHub\repo\docs\out", false),
+        new("a device namespace alias inside the checkout", "C:/GitHub/repo", @"\\.\C:\GitHub\repo\docs\out", false),
+        new("a forward-slash device alias inside the checkout", "C:/GitHub/repo", "//?/C:/GitHub/repo/docs/out", false),
+        new("a device UNC alias inside a UNC checkout", "//Server/Share/Repo", @"\\?\UNC\Server\Share\Repo\docs", false),
+        new("an NT object path inside the checkout", "C:/GitHub/repo", @"\??\C:\GitHub\repo\docs", false),
+        new("a device path on another drive is still refused", "C:/GitHub/repo", @"\\?\D:\Temp\out", false),
+        new("a trailing-dot alias of a checkout segment", "C:/GitHub/repo", @"C:\GitHub\repo.\docs\out", false),
+        new("a trailing-space alias of a checkout segment", "C:/GitHub/repo", @"C:\GitHub\repo \docs\out", false),
+        new("a stream-syntax alias of the checkout", "C:/GitHub/repo", @"C:\GitHub\repo::$INDEX_ALLOCATION\docs", false),
+        new("a POSIX segment ending in a dot is an ordinary name", "/work/repo", "/tmp/out./stub", true),
     ];
 
     /// <summary>The scripted reference check satisfies every row.</summary>
@@ -78,6 +96,10 @@ public sealed class TestOutputFolderContractTests
     [InlineData("ignores case everywhere")]
     [InlineData("ignores the root")]
     [InlineData("UNC compared ordinally")]
+    [InlineData("accepts device paths")]
+    [InlineData("compares across path syntaxes")]
+    [InlineData("ignores Windows segment aliases")]
+    [InlineData("Windows segment rules on POSIX paths")]
     public void WrongChecks_AreRejected(string fault) =>
         Assert.ThrowsAny<XunitException>(() => AssertCheck((folder, checkout) => fault switch
         {
@@ -92,8 +114,98 @@ public sealed class TestOutputFolderContractTests
             "ignores case everywhere" => SegmentCheck(folder, checkout, StringComparer.OrdinalIgnoreCase),
             "ignores the root" => RootRuleCheck(folder, checkout, flattenRoot: true, ordinalUnc: false),
             "UNC compared ordinally" => RootRuleCheck(folder, checkout, flattenRoot: false, ordinalUnc: true),
+            "accepts device paths" => SyntaxRuleCheck(folder, checkout, SyntaxFlaw.AcceptsDevicePaths),
+            "compares across path syntaxes" => SyntaxRuleCheck(folder, checkout, SyntaxFlaw.AcrossSyntaxes),
+            "ignores Windows segment aliases" => SyntaxRuleCheck(folder, checkout, SyntaxFlaw.IgnoresWindowsAliases),
+            "Windows segment rules on POSIX paths" => SyntaxRuleCheck(folder, checkout, SyntaxFlaw.WindowsAliasesEverywhere),
             _ => throw new ArgumentOutOfRangeException(nameof(fault)),
         }));
+
+    /// <summary>
+    /// Positive control for the rule stated in the criterion (2026-11-03 append): the syntax rule with no flaw, built on
+    /// the scripted path identity, gives every row its stated verdict, so the rows and the rule agree.
+    /// </summary>
+    [Fact]
+    public void StatedSyntaxRule_SatisfiesEveryRow() => AssertCheck((folder, checkout) => SyntaxRuleCheck(folder, checkout, SyntaxFlaw.None));
+
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 (generated-artifact criterion, appended "That holds only within one path syntax"): the
+    /// one flaw a <see cref="SyntaxRuleCheck"/> variant carries.
+    /// </summary>
+    /// <remarks>2026-11-03, FR-MCP-TESTRESOURCE-001 generated-artifact criterion: added for the findings of the hostile validation round 11 that stopped without a verdict.</remarks>
+    internal enum SyntaxFlaw
+    {
+        /// <summary>No flaw: the rule as the criterion states it.</summary>
+        None,
+
+        /// <summary>Accepts a Windows device path (the round 11 shared check read "\\?\C:\" as a UNC share named "?/C:").</summary>
+        AcceptsDevicePaths,
+
+        /// <summary>Accepts a folder in the other path syntax as another location (the round 11 shared check).</summary>
+        AcrossSyntaxes,
+
+        /// <summary>Accepts a Windows segment that ends in a dot or a space or holds a colon (the round 11 shared check).</summary>
+        IgnoresWindowsAliases,
+
+        /// <summary>Applies the Windows segment rule to POSIX paths too, which refuses ordinary POSIX names.</summary>
+        WindowsAliasesEverywhere,
+    }
+
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 (generated-artifact criterion, appended "That holds only within one path syntax"): the
+    /// output rule over the scripted path identity, with at most one flaw. A folder is refused when it is not absolute,
+    /// has a '.' or '..' segment, is a Windows device path (two separators then '?' or '.' then a separator, or a
+    /// separator, "??" and a separator), is in the other path syntax than the checkout (POSIX against Windows, where a
+    /// drive letter and a UNC share are both Windows), has a Windows segment that ends in a dot or a space or holds a
+    /// colon, or is the checkout or lies inside it.
+    /// </summary>
+    /// <param name="folder">The candidate artifact folder.</param>
+    /// <param name="checkout">The checkout root.</param>
+    /// <param name="flaw">The one flaw, or <see cref="SyntaxFlaw.None"/>.</param>
+    /// <returns>Null when the folder is acceptable under the rule; otherwise the refusal.</returns>
+    /// <remarks>2026-11-03, FR-MCP-TESTRESOURCE-001 generated-artifact criterion: added for the findings of the hostile validation round 11 that stopped without a verdict (a device path alias, a folder in the other path syntax and a Windows segment alias of a folder inside the checkout were accepted).</remarks>
+    private static string? SyntaxRuleCheck(string folder, string checkout, SyntaxFlaw flaw)
+    {
+        var path = ScriptedPathIdentity.Parse(folder);
+        var root = ScriptedPathIdentity.Parse(checkout);
+        var windowsFolder = path.Kind is ScriptedPathIdentity.RootKind.Drive or ScriptedPathIdentity.RootKind.Unc;
+        var windowsCheckout = root.Kind is ScriptedPathIdentity.RootKind.Drive or ScriptedPathIdentity.RootKind.Unc;
+        var aliasRuleApplies = flaw != SyntaxFlaw.IgnoresWindowsAliases && (windowsFolder || flaw == SyntaxFlaw.WindowsAliasesEverywhere);
+        var refused = path.Kind == ScriptedPathIdentity.RootKind.None
+            || path.Segments.Any(segment => segment is "." or "..")
+            || (flaw != SyntaxFlaw.AcceptsDevicePaths && IsDevicePath(folder))
+            || (flaw != SyntaxFlaw.AcrossSyntaxes && windowsFolder != windowsCheckout)
+            || (aliasRuleApplies && path.Segments.Any(IsWindowsSegmentAlias))
+            || ScriptedPathIdentity.Inside(folder, checkout)
+            || ScriptedPathIdentity.Same(folder, checkout);
+        return refused ? Refusal(folder, checkout) : null;
+    }
+
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 (generated-artifact criterion): whether a path is a Windows device path: two separators of
+    /// either kind, then '?' or '.', then a separator ("\\?\", "\\.\", "//?/"), or a separator, "??" and a separator
+    /// ("\??\").
+    /// </summary>
+    /// <param name="path">The path.</param>
+    /// <returns>True for a device path.</returns>
+    /// <remarks>2026-11-03, FR-MCP-TESTRESOURCE-001 generated-artifact criterion: added for the findings of the hostile validation round 11 that stopped without a verdict.</remarks>
+    private static bool IsDevicePath(string path)
+    {
+        static bool Separator(char value) => value is '/' or '\\';
+        return path.Length >= 4
+            && ((Separator(path[0]) && Separator(path[1]) && path[2] is '?' or '.' && Separator(path[3]))
+                || (Separator(path[0]) && path[1] == '?' && path[2] == '?' && Separator(path[3])));
+    }
+
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 (generated-artifact criterion): whether a Windows path segment is one Windows resolves to
+    /// another name (it ends in a dot or a space) or reads as a stream (it holds a colon).
+    /// </summary>
+    /// <param name="segment">The segment.</param>
+    /// <returns>True for such a segment.</returns>
+    /// <remarks>2026-11-03, FR-MCP-TESTRESOURCE-001 generated-artifact criterion: added for the findings of the hostile validation round 11 that stopped without a verdict.</remarks>
+    private static bool IsWindowsSegmentAlias(string segment) =>
+        segment.EndsWith('.') || segment.EndsWith(' ') || segment.Contains(':', StringComparison.Ordinal);
 
     /// <summary>
     /// FR-MCP-TESTRESOURCE-001 (generated-artifact criterion), for the wrong checks "ignores the root" (the round 10 shared
