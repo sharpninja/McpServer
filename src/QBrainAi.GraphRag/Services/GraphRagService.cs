@@ -42,8 +42,26 @@ internal sealed class GraphRagService : IGraphRagService
     private readonly McpDbContext _dbContext;
     private readonly IEmbeddingService _embeddingService;
     private readonly IVectorIndexService _vectorIndexService;
+    private readonly TimeProvider _timeProvider;
 
     /// <summary>FR-MCP-078/079/080: Initializes the service with all required dependencies.</summary>
+    /// <param name="options">The GraphRAG options.</param>
+    /// <param name="ingestionOptions">The ingestion options.</param>
+    /// <param name="configuration">The application configuration.</param>
+    /// <param name="workspaceContext">The active workspace.</param>
+    /// <param name="contextSearchService">The context search used for queries.</param>
+    /// <param name="backendAdapters">The backend adapters.</param>
+    /// <param name="logger">The logger.</param>
+    /// <param name="dbContext">The database context.</param>
+    /// <param name="embeddingService">The embedding service.</param>
+    /// <param name="vectorIndexService">The vector index service.</param>
+    /// <param name="timeProvider">The clock that stamps entity and relationship creation and update times; null means the system clock.</param>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-03</term><description>FR-MCP-079; TR-MCP-USECASE-018 AC-006 (appended "This covers every recorded time a unit test checks, including the creation and update times a service stamps on a record it stores"): added the optional clock that stamps entity and relationship times, so a unit test can supply scripted times instead of comparing with the live clock or sleeping, because the sibling sweep before round 11 of hostile validation round 10 finding R10-F3 found GraphRagEntityCrudTests doing both (operator 2026-11-03: "don't gate on me between rounds"). Callers that pass no clock keep the system clock, so behavior is unchanged.</description></item>
+    /// </list>
+    /// </remarks>
     public GraphRagService(
         IOptions<GraphRagOptions> options,
         IOptions<IngestionOptions> ingestionOptions,
@@ -54,7 +72,8 @@ internal sealed class GraphRagService : IGraphRagService
         ILogger<GraphRagService> logger,
         McpDbContext dbContext,
         IEmbeddingService embeddingService,
-        IVectorIndexService vectorIndexService)
+        IVectorIndexService vectorIndexService,
+        TimeProvider? timeProvider = null)
     {
         _options = options.Value;
         _ingestionOptions = ingestionOptions.Value;
@@ -66,6 +85,7 @@ internal sealed class GraphRagService : IGraphRagService
         _dbContext = dbContext;
         _embeddingService = embeddingService;
         _vectorIndexService = vectorIndexService;
+        _timeProvider = timeProvider ?? TimeProvider.System;
     }
 
     public async Task<GraphRagStatusResponse> GetStatusAsync(
@@ -519,10 +539,11 @@ internal sealed class GraphRagService : IGraphRagService
     // ── Entity CRUD (FR-MCP-079, TR-GRAPHRAG-ADHOC-002) ──
 
     /// <inheritdoc />
+    /// <remarks>2026-11-03, FR-MCP-079; TR-MCP-USECASE-018 AC-006 (appended): the creation and update times come from one reading of the service's clock instead of DateTime.UtcNow, so a unit test can supply scripted times (sibling sweep before round 11 of hostile validation round 10 finding R10-F3).</remarks>
     public async Task<GraphEntityResponse> CreateEntityAsync(GraphEntityRequest request, CancellationToken ct = default)
     {
         ArgumentNullException.ThrowIfNull(request);
-        var now = DateTime.UtcNow;
+        var now = _timeProvider.GetUtcNow().UtcDateTime;
         var entity = new GraphEntityEntity
         {
             Id = $"ge-{Guid.NewGuid():N}",
@@ -548,6 +569,7 @@ internal sealed class GraphRagService : IGraphRagService
     }
 
     /// <inheritdoc />
+    /// <remarks>2026-11-03, FR-MCP-079; TR-MCP-USECASE-018 AC-006 (appended): the update time comes from the service's clock instead of DateTime.UtcNow, and the creation time is kept, so a unit test can supply scripted times (sibling sweep before round 11 of hostile validation round 10 finding R10-F3).</remarks>
     public async Task<GraphEntityResponse?> UpdateEntityAsync(string entityId, GraphEntityRequest request, CancellationToken ct = default)
     {
         ArgumentNullException.ThrowIfNull(request);
@@ -559,7 +581,7 @@ internal sealed class GraphRagService : IGraphRagService
         entity.EntityType = request.EntityType;
         entity.Description = request.Description;
         entity.Metadata = request.Metadata;
-        entity.UpdatedAtUtc = DateTime.UtcNow;
+        entity.UpdatedAtUtc = _timeProvider.GetUtcNow().UtcDateTime;
 
         await _dbContext.SaveChangesAsync(ct).ConfigureAwait(false);
         return MapEntityToResponse(entity);
@@ -602,6 +624,7 @@ internal sealed class GraphRagService : IGraphRagService
     // ── Relationship CRUD (FR-MCP-079, TR-GRAPHRAG-ADHOC-002) ──
 
     /// <inheritdoc />
+    /// <remarks>2026-11-03, FR-MCP-079; TR-MCP-USECASE-018 AC-006 (appended): the creation and update times come from one reading of the service's clock instead of DateTime.UtcNow, the same rule as entities (sibling sweep before round 11 of hostile validation round 10 finding R10-F3).</remarks>
     public async Task<GraphRelationshipResponse> CreateRelationshipAsync(GraphRelationshipRequest request, CancellationToken ct = default)
     {
         ArgumentNullException.ThrowIfNull(request);
@@ -614,7 +637,7 @@ internal sealed class GraphRagService : IGraphRagService
         if (!targetExists)
             throw new InvalidOperationException($"Target entity '{request.TargetEntityId}' does not exist.");
 
-        var now = DateTime.UtcNow;
+        var now = _timeProvider.GetUtcNow().UtcDateTime;
         var relationship = new GraphRelationshipEntity
         {
             Id = $"gr-{Guid.NewGuid():N}",
@@ -642,6 +665,7 @@ internal sealed class GraphRagService : IGraphRagService
     }
 
     /// <inheritdoc />
+    /// <remarks>2026-11-03, FR-MCP-079; TR-MCP-USECASE-018 AC-006 (appended): the update time comes from the service's clock instead of DateTime.UtcNow, the same rule as entities (sibling sweep before round 11 of hostile validation round 10 finding R10-F3).</remarks>
     public async Task<GraphRelationshipResponse?> UpdateRelationshipAsync(string relationshipId, GraphRelationshipRequest request, CancellationToken ct = default)
     {
         ArgumentNullException.ThrowIfNull(request);
@@ -655,7 +679,7 @@ internal sealed class GraphRagService : IGraphRagService
         rel.Description = request.Description;
         rel.Weight = request.Weight;
         rel.Metadata = request.Metadata;
-        rel.UpdatedAtUtc = DateTime.UtcNow;
+        rel.UpdatedAtUtc = _timeProvider.GetUtcNow().UtcDateTime;
 
         await _dbContext.SaveChangesAsync(ct).ConfigureAwait(false);
         return MapRelationshipToResponse(rel);

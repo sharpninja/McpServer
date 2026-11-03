@@ -5,13 +5,15 @@ namespace QBrainAi.Repl.Core.Tests.TestSupport;
 /// <summary>
 /// FR-MCP-TESTRESOURCE-001 (second criterion: "Generated test artifacts are written only to test-owned disposable output
 /// locations, not to repository fixture or documentation paths"), BDPv4 mock gate: a test's artifact folder is accepted
-/// only when it is an absolute path with no '.' or '..' segment that lies outside the checkout (compared by path segment
-/// with either separator, under the path's own syntax: a Windows-form path ignores case, drive letter included, and a
-/// POSIX path compares ordinally); the checkout itself, any folder inside it, a case alias of either on Windows, a
-/// relative path and a dot segment are refused. Fixed rows and an independent scripted reference check; wrong checks
-/// (accepts anything, refuses anything, plain string prefix, ignores dot segments, accepts the checkout root, accepts a
-/// relative folder, one separator only, ordinal only, ignores case everywhere) are rejected by the same assertions inside
-/// this passing harness. Strings only: no folder is created or read.
+/// only when it is an absolute path with no '.' or '..' segment that lies outside the checkout (its root, the POSIX
+/// root, a drive letter or a UNC server and share written with either separator, is part of its identity; then path
+/// segments split on either separator are compared, UNC and drive-letter paths ignoring case and POSIX paths
+/// ordinally); the checkout itself, any folder inside it, a case or separator alias of either on Windows, a relative
+/// path and a dot segment are refused, and a path under another root kind, server, share or drive is another
+/// location. Fixed rows and an independent scripted reference check; wrong checks (accepts anything, refuses anything,
+/// plain string prefix, ignores dot segments, accepts the checkout root, accepts a relative folder, one separator only,
+/// ordinal only, ignores case everywhere, ignores the root, UNC compared ordinally) are rejected by the same assertions
+/// inside this passing harness. Strings only: no folder is created or read.
 /// </summary>
 /// <remarks>
 /// <list type="table">
@@ -19,6 +21,7 @@ namespace QBrainAi.Repl.Core.Tests.TestSupport;
 /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, generated artifacts in test-owned locations): added the output-folder contract, because two memory-bench stub cases wrote into the checkout's docs/benchmarks/results and rewrote two tracked files on every lane run (operator 2026-11-02: "Fix in scope"; triage-report-32e6bc07).</description></item>
 /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, appended "compared ... under the path's own syntax"): added four case rows and the wrong checks "ordinal only" (the earlier shared check) and "ignores case everywhere", because hostile validation finding R9-F3 showed a Windows case alias of the checkout was accepted; documented every helper (MEMORY-FACT-008; finding R9-F8) (operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)").</description></item>
 /// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, appended "A path's root is part of its identity"): added rows for a forward-slash, mixed-separator and backslash UNC alias of the checkout (refused), a distinct UNC share, a single-rooted path under a UNC checkout and a UNC path under a POSIX checkout (accepted as other locations), and the wrong checks "ignores the root" (the round 10 shared check) and "UNC compared ordinally", because hostile validation round 10 finding R10-F2 showed forward-slash UNC aliases were compared ordinally and the root was flattened (operator 2026-11-03: "don't gate on me between rounds").</description></item>
+/// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 (second criterion): documentation only, the summary now states the root rule and lists all eleven wrong checks (stale summary found before round 11).</description></item>
 /// </list>
 /// </remarks>
 public sealed class TestOutputFolderContractTests

@@ -275,14 +275,14 @@ public sealed class TemporaryInstanceChecksTests
         nonce is null ? JsonSerializer.Serialize(new { status }) : JsonSerializer.Serialize(new { status, nonce });
 
     /// <summary>
-    /// FR-MCP-TESTRESOURCE-001 ac-4 scripted reference: whether a path lies strictly inside a root, by path segment with
-    /// either separator, with no '.' or '..' segment, under the path's own syntax (a Windows-form path ignores case,
-    /// drive letter included; a POSIX path compares ordinally).
+    /// FR-MCP-TESTRESOURCE-001 ac-4 scripted reference: whether a path lies strictly inside a root, through
+    /// <see cref="ScriptedPathIdentity.Inside"/>: the same root kind and root identity first, then by path segment with
+    /// either separator and no '.' or '..' segment, UNC and drive-letter paths ignoring case and POSIX paths ordinally.
     /// </summary>
     /// <param name="path">The path.</param>
     /// <param name="root">The root.</param>
     /// <returns>True when the path is strictly inside the root.</returns>
-    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4: compares under the path's own syntax instead of ordinally everywhere (the sibling of hostile validation finding R9-F3). 2026-11-03, FR-MCP-TESTRESOURCE-001 ac-4 (appended "Strict containment in the owned root also requires the same root"): delegates to ScriptedPathIdentity, which compares root kind and root identity first (hostile validation round 10 finding R10-F2).</remarks>
+    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4: compares under the path's own syntax instead of ordinally everywhere (the sibling of hostile validation finding R9-F3). 2026-11-03, FR-MCP-TESTRESOURCE-001 ac-4 (appended "Strict containment in the owned root also requires the same root"): delegates to ScriptedPathIdentity, which compares root kind and root identity first (hostile validation round 10 finding R10-F2). 2026-11-03, documentation only: the summary states the delegated rule instead of the 2026-11-02 one (stale summary found before round 11).</remarks>
     private static bool ScriptedInside(string path, string root) => ScriptedPathIdentity.Inside(path, root);
 
     private static string[] Segments(string path) =>

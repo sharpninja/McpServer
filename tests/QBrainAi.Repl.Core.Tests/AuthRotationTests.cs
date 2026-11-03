@@ -3,8 +3,22 @@ using NSubstitute;
 
 namespace QBrainAi.Repl.Core.Tests;
 
+/// <summary>
+/// Tests the auth-rotation contracts of the REPL (IAuthRotationHandler and IAuthState) through NSubstitute doubles:
+/// state updates, callbacks, refreshes, validation, clearing and rotation after a server restart. The recorded times
+/// these doubles return are fixed scripted instants.
+/// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-03</term><description>TR-MCP-USECASE-018 AC-006 (appended "A unit test that checks a recorded time (an auth rotation ...) takes the clock values from test-owned scripted inputs" and "This covers every recorded time a unit test checks"): the two cases that check a recorded auth time use the fixed instant RotationTime instead of DateTimeOffset.UtcNow, because the sibling sweep before round 11 of hostile validation round 10 finding R10-F3 found them taking the value from the live clock (operator 2026-11-03: "don't gate on me between rounds"). Documented the class (MEMORY-FACT-008).</description></item>
+/// </list>
+/// </remarks>
 public class AuthRotationTests
 {
+    /// <summary>The fixed instant the recorded-time cases script: a time in the past, so no case depends on the date it runs.</summary>
+    private static readonly DateTimeOffset RotationTime = new(2026, 1, 15, 9, 0, 0, TimeSpan.Zero);
+
     [Fact]
     public async Task UpdateAuthStateAsync_NewMarkerData_UpdatesCurrentAuthState()
     {
@@ -198,24 +212,30 @@ public class AuthRotationTests
         authHandler.Received(1).ClearAuthState();
     }
 
+    /// <summary>An auth state reports its validity and the time it was last validated.</summary>
+    /// <returns>The test task.</returns>
+    /// <remarks>2026-11-03, TR-MCP-USECASE-018 AC-006 (appended): the validation time is the fixed RotationTime and is asserted exactly, instead of DateTimeOffset.UtcNow asserted only as present (sibling sweep before round 11 of hostile validation round 10 finding R10-F3).</remarks>
     [Fact]
     public async Task AuthState_IsValid_IndicatesCurrentValidity()
     {
         var authState = Substitute.For<IAuthState>();
         authState.IsValid.Returns(true);
-        authState.LastValidated.Returns(DateTimeOffset.UtcNow);
+        authState.LastValidated.Returns(RotationTime);
 
         Assert.True(authState.IsValid);
-        Assert.NotNull(authState.LastValidated);
+        Assert.Equal(RotationTime, authState.LastValidated);
 
         await Task.CompletedTask;
     }
 
+    /// <summary>An auth state reports the time of its last rotation exactly.</summary>
+    /// <returns>The test task.</returns>
+    /// <remarks>2026-11-03, TR-MCP-USECASE-018 AC-006 (appended): the rotation time is the fixed RotationTime instead of DateTimeOffset.UtcNow (sibling sweep before round 11 of hostile validation round 10 finding R10-F3).</remarks>
     [Fact]
     public async Task AuthState_LastUpdated_TracksRotationTime()
     {
         var authState = Substitute.For<IAuthState>();
-        var updateTime = DateTimeOffset.UtcNow;
+        var updateTime = RotationTime;
         authState.LastUpdated.Returns(updateTime);
 
         Assert.Equal(updateTime, authState.LastUpdated);

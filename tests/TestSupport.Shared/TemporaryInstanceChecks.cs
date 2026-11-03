@@ -15,11 +15,11 @@ internal static class TemporaryInstanceChecks
 {
     /// <summary>
     /// Checks the REPL host's start arguments: a <c>--workspace-path</c> and a <c>--marker-file</c> are present and
-    /// both lie strictly inside <paramref name="ownedRoot"/>, compared segment by segment ('/' and '\' both separate
-    /// segments) under the path's own syntax (a Windows-form path ignores case, drive letter included; a POSIX path
-    /// compares ordinally), and neither path holds a '.' or '..' segment.
+    /// both lie strictly inside <paramref name="ownedRoot"/> (<see cref="IsStrictlyInside"/>: the same root kind and
+    /// root identity, then segment by segment with '/' and '\' both separating segments, UNC and drive-letter paths
+    /// ignoring case and POSIX paths ordinally), and neither path holds a '.' or '..' segment.
     /// </summary>
-    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4 (strengthened: segments compared under the path's own syntax): the containment helper compares Windows-form paths ignoring case, the sibling of hostile validation finding R9-F3 (operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)").</remarks>
+    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4 (strengthened: segments compared under the path's own syntax): the containment helper compares Windows-form paths ignoring case, the sibling of hostile validation finding R9-F3 (operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)"). 2026-11-03, FR-MCP-TESTRESOURCE-001 ac-4 (appended "Strict containment in the owned root also requires the same root"): documentation only, the summary now states the root rule slice U added to the containment helper (hostile validation round 10 finding R10-F2; stale summary found before round 11).</remarks>
     /// <param name="arguments">The argument list the REPL host was started with.</param>
     /// <param name="ownedRoot">The temporary instance's root folder.</param>
     /// <returns>Null when the arguments pass; otherwise the violation.</returns>
@@ -181,7 +181,8 @@ internal static class TemporaryInstanceChecks
     /// TR-MCP-NUKE-019 AC-6 (hostile validation finding R8B-F3): checks a child environment before the process starts:
     /// every variable in the product's namespaces is one the instance set, with the value it set, and every database
     /// the instance's settings select (a connection string's Data Source, or a data source value) lies strictly inside
-    /// <paramref name="ownedRoot"/>, compared segment by segment with no '.' or '..' segment.
+    /// <paramref name="ownedRoot"/> (<see cref="IsStrictlyInside"/>: the same root kind and root identity, then segment by
+    /// segment with no '.' or '..' segment).
     /// </summary>
     /// <param name="child">The environment the process will start with.</param>
     /// <param name="settings">The instance's own variables.</param>
@@ -191,6 +192,7 @@ internal static class TemporaryInstanceChecks
     /// <list type="table">
     /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
     /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 ac-4; TR-MCP-NUKE-019 AC-6: the SQLite-only rule now applies to database-engine settings only (Database__Provider, DatabaseProvider, DATABASE_PROVIDER, any prefix), because it refused TodoStorage's valid 'database' backend and broke the stdio host case.</description></item>
+    /// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 ac-4 (appended "Strict containment in the owned root also requires the same root"): documentation only, the summary now states the root rule slice U added to the containment helper (hostile validation round 10 finding R10-F2; stale summary found before round 11).</description></item>
     /// </list>
     /// </remarks>
     internal static string? CheckOwnedInstanceEnvironment(
@@ -233,13 +235,14 @@ internal static class TemporaryInstanceChecks
     /// TR-MCP-NUKE-019 AC-6 (hostile validation findings R8B-F2 and R8B-F3): checks the real database selection of an
     /// in-process temporary instance before it starts: <paramref name="connectionString"/>, the one its database
     /// context holds, names a Data Source (keyword matched ignoring case; the last one wins, as in a connection string
-    /// builder) that lies strictly inside <paramref name="ownedRoot"/>, compared segment by segment with no '.' or '..'
-    /// segment. A missing connection string, one with no Data Source (a server connection string), and any other
-    /// selection are refused.
+    /// builder) that lies strictly inside <paramref name="ownedRoot"/> (<see cref="IsStrictlyInside"/>: the same root kind
+    /// and root identity, then segment by segment with no '.' or '..' segment). A missing connection string, one with no
+    /// Data Source (a server connection string), and any other selection are refused.
     /// </summary>
     /// <param name="connectionString">The connection string the instance's database context holds, or null.</param>
     /// <param name="ownedRoot">The temporary instance's owned data folder.</param>
     /// <returns>Null when the selection passes; otherwise the violation.</returns>
+    /// <remarks>2026-11-03, FR-MCP-TESTRESOURCE-001 ac-4 (appended "Strict containment in the owned root also requires the same root"): documentation only, the summary now states the root rule slice U added to the containment helper (hostile validation round 10 finding R10-F2; stale summary found before round 11).</remarks>
     internal static string? CheckDatabaseSelection(string? connectionString, string ownedRoot) =>
         CheckDatabaseSelection(connectionString, ownedRoot, "sqlite");
 
@@ -267,9 +270,11 @@ internal static class TemporaryInstanceChecks
     /// FR-MCP-TESTRESOURCE-001 (second criterion: "Generated test artifacts are written only to test-owned disposable
     /// output locations, not to repository fixture or documentation paths"): accepts a folder for a test's generated
     /// artifacts only when it is an absolute path with no '.' or '..' segment that lies outside
-    /// <paramref name="checkoutRoot"/>, compared segment by segment with either separator under the path's own syntax (a
-    /// Windows-form path ignores case, drive letter included; a POSIX path compares ordinally). The checkout root itself,
-    /// any folder inside it, a case alias of either on Windows and a relative path are refused.
+    /// <paramref name="checkoutRoot"/>, compared through <see cref="PathIdentity"/>: the root (the POSIX root, a drive
+    /// letter, or a UNC server and share written with either separator) is part of the path's identity, then segments
+    /// split on either separator are compared, UNC and drive-letter paths ignoring case and POSIX paths ordinally. The
+    /// checkout root itself, any folder inside it, a case or separator alias of either on Windows and a relative path
+    /// are refused; a path under another root kind, server, share or drive is another location.
     /// </summary>
     /// <param name="folder">The candidate artifact folder.</param>
     /// <param name="checkoutRoot">The repository checkout root.</param>
@@ -280,6 +285,7 @@ internal static class TemporaryInstanceChecks
     /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 (second criterion): added, because two memory-bench stub cases wrote into the checkout's docs/benchmarks/results and rewrote two tracked files on every lane run (operator 2026-11-02: "Fix in scope"; mock gate ug-r9-mockgate-s-1).</description></item>
     /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, appended "compared ... under the path's own syntax"): containment and equality compare Windows-form paths ignoring case, because hostile validation finding R9-F3 showed a case alias of the checkout was accepted (operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)").</description></item>
     /// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, appended "A path's root is part of its identity"): the folder and the checkout are compared through <see cref="PathIdentity"/>, so a forward-slash, backslash or mixed-separator UNC alias of the checkout or of a folder inside it is refused, and a path under another root kind, server, share or drive is another location, because hostile validation round 10 finding R10-F2 showed a forward-slash UNC alias was accepted (operator 2026-11-03: "don't gate on me between rounds").</description></item>
+    /// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 (second criterion): documentation only, the summary now states the root rule of the entry above instead of the 2026-11-02 rule (stale summary found before round 11).</description></item>
     /// </list>
     /// </remarks>
     internal static string? CheckTestOutputFolder(string folder, string checkoutRoot)
@@ -425,13 +431,14 @@ internal static class TemporaryInstanceChecks
 
     /// <summary>
     /// FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: whether an absolute path lies strictly inside an
-    /// absolute root, by segment with either separator, with no '.' or '..' segment, under the paths' own syntax
-    /// (<see cref="SegmentComparison"/>).
+    /// absolute root: both parsed by <see cref="PathIdentity"/>, the same root kind and root identity, no '.' or '..'
+    /// segment in the path, more segments than the root, and the root's segments as its first segments, compared under
+    /// the path's own syntax (UNC and drive-letter paths ignoring case, POSIX paths ordinally).
     /// </summary>
     /// <param name="path">The path.</param>
     /// <param name="root">The root.</param>
     /// <returns>True when the path is strictly inside the root.</returns>
-    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: compares under the paths' own syntax instead of ordinally everywhere (hostile validation finding R9-F3 and its ac-4 sibling; operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)"). 2026-11-03, FR-MCP-TESTRESOURCE-001 ac-4 (appended "Strict containment in the owned root also requires the same root"): requires the same root kind and root identity before comparing segments (<see cref="PathIdentity"/>), because hostile validation round 10 finding R10-F2 showed a single-rooted path was accepted under a UNC root.</remarks>
+    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: compares under the paths' own syntax instead of ordinally everywhere (hostile validation finding R9-F3 and its ac-4 sibling; operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)"). 2026-11-03, FR-MCP-TESTRESOURCE-001 ac-4 (appended "Strict containment in the owned root also requires the same root"): requires the same root kind and root identity before comparing segments (<see cref="PathIdentity"/>), because hostile validation round 10 finding R10-F2 showed a single-rooted path was accepted under a UNC root. 2026-11-03, documentation only: the summary no longer cites the removed member SegmentComparison and states the root rule (stale summary found before round 11; test projects build without documentation output, so no compiler check caught the dangling reference).</remarks>
     private static bool IsStrictlyInside(string path, string root)
     {
         var pathIdentity = PathIdentity.Parse(path);

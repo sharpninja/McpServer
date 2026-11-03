@@ -1,10 +1,18 @@
 using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Tests.TestSupport;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
 /// <summary>
 /// TEST-MCP-MEMORY-010 / FR-MCP-MEMORY-010: S1 Red acceptance for multi-layer model persistence and validation.
 /// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-03</term><description>FR-MCP-MEMORY-001 (criterion "A memory record has ... created/updated timestamps"); FR-MCP-MEMORY-002 (criteria "Add creates a memory and returns ... timestamps" and "Update replaces raw text, increments version"); TR-MCP-USECASE-018 AC-006 (appended "This covers every recorded time a unit test checks, including the creation and update times a service stamps on a record it stores"): Timestamps_CreateAndUpdate gives MemoryService a ScriptedTimeProvider and asserts the exact scripted times through StampedTimeContractTests, instead of sleeping 20 ms between create and update, because the sibling sweep before round 11 of hostile validation round 10 finding R10-F3 found the sleep (operator 2026-11-03: "don't gate on me between rounds"). TEST-MCP-MEMORY-010, FR-MCP-MEMORY-010 and AC-FR-MCP-MEMORY-010-35 in this file are historical ids of the memory plan, not records in the requirement store.</description></item>
+/// </list>
+/// </remarks>
 public sealed class MemoryModelTests : IDisposable
 {
     private readonly MemoryS1Harness _harness = new();
@@ -331,30 +339,37 @@ public sealed class MemoryModelTests : IDisposable
     }
 
     /// <summary>AC-FR-MCP-MEMORY-010-35: CreatedAt/UpdatedAt set on create; UpdatedAt advances; CreatedAt is stable.</summary>
+    /// <returns>The test task.</returns>
+    /// <remarks>2026-11-03, FR-MCP-MEMORY-001 and FR-MCP-MEMORY-002 (timestamp criteria); TR-MCP-USECASE-018 AC-006 (appended): for every row of StampedTimeContractTests the real MemoryService, given a ScriptedTimeProvider, adds a memory and updates it, each operation on its own database context so the stored times round-trip through SQLite; the case asserts the exact scripted creation and update times instead of sleeping 20 ms and checking that the update time grew (sibling sweep before round 11 of hostile validation round 10 finding R10-F3).</remarks>
     [Fact]
-    public async Task Timestamps_CreateAndUpdate()
-    {
-        var created = await _harness.AddCompatAsync(new MemoryAddRequest
+    public Task Timestamps_CreateAndUpdate() =>
+        StampedTimeContractTests.AssertStampsAsync(async (clock, updates) =>
         {
-            Category = "time",
-            Text = "before",
-        }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-        Assert.True(created.Success, created.Error);
-        var createdAt = created.Memory!.CreatedAtUtc;
-        var updatedAt = created.Memory.UpdatedAtUtc;
-        Assert.NotEqual(default, createdAt);
-        Assert.NotEqual(default, updatedAt);
+            MemoryItem memory;
+            await using (var addContext = _harness.CreateContext(_harness.WorkspaceA))
+            {
+                var created = await new MemoryService(addContext, NullLogger<MemoryService>.Instance, clock).AddAsync(new MemoryAddRequest
+                {
+                    Category = "time",
+                    Text = "before",
+                }, TestContext.Current.CancellationToken).ConfigureAwait(true);
+                Assert.True(created.Success, created.Error);
+                memory = created.Memory!;
+            }
 
-        await Task.Delay(20, TestContext.Current.CancellationToken).ConfigureAwait(true);
-        var updated = await _harness.UpdateCompatAsync(
-            created.Memory.Id,
-            new MemoryUpdateRequest { Text = "after", Content = "after" },
-            cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            for (var update = 0; update < updates; update++)
+            {
+                await using var updateContext = _harness.CreateContext(_harness.WorkspaceA);
+                var updated = await new MemoryService(updateContext, NullLogger<MemoryService>.Instance, clock).UpdateAsync(
+                    memory.Id,
+                    new MemoryUpdateRequest { Text = $"after {update}", Content = $"after {update}" },
+                    TestContext.Current.CancellationToken).ConfigureAwait(true);
+                Assert.True(updated.Success, updated.Error);
+                memory = updated.Memory!;
+            }
 
-        Assert.True(updated.Success, updated.Error);
-        Assert.Equal(createdAt, updated.Memory!.CreatedAtUtc);
-        Assert.True(updated.Memory.UpdatedAtUtc > updatedAt);
-    }
+            return (memory.CreatedAtUtc, memory.UpdatedAtUtc);
+        });
 
     /// <summary>AC-FR-MCP-MEMORY-010-36: Author/updatedBy attribution is recorded on create and update.</summary>
     [Fact]
