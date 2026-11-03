@@ -215,6 +215,7 @@ public sealed class TodoWorkflowTests
     /// The test uses an infinite-delay HTTP handler with <see cref="HttpClient.Timeout"/> disabled so
     /// only the caller token can complete the workflow call.
     /// </summary>
+    /// <remarks>2026-11-03, TEST-MCP-089 and TR-MCP-USECASE-018 AC-006 (appended for finding B4: "Far above" means at least 100 times the longest real or scripted delay of the awaited step): the hang guard rises from 1 s to 10 s, because the awaited workflow ends by the caller's 100 ms cancellation, so a hang guard must be at least 10 s; the holistic read before hostile validation round 12 found 1 s, 10 times that delay (operator 2026-11-03: "Strengthen + margin (Recommended)"). The 100 ms cancellation is the input the case checks is honored; no asserted step must happen before it fires.</remarks>
     [Fact]
     public async Task BufferedPromptHelpers_PreserveCallerCancellation()
     {
@@ -228,7 +229,7 @@ public sealed class TodoWorkflowTests
         using var cancellationSource = new CancellationTokenSource(TimeSpan.FromMilliseconds(100));
 
         var workflowTask = workflow.GetPlanAsync("MCP-AGENT-001", cancellationSource.Token);
-        var completedTask = await Task.WhenAny(workflowTask, Task.Delay(TimeSpan.FromSeconds(1), cancellationToken: TestContext.Current.CancellationToken));
+        var completedTask = await Task.WhenAny(workflowTask, Task.Delay(TimeSpan.FromSeconds(10), cancellationToken: TestContext.Current.CancellationToken));
 
         Assert.Same(workflowTask, completedTask);
         await Assert.ThrowsAnyAsync<OperationCanceledException>(async () => await workflowTask);

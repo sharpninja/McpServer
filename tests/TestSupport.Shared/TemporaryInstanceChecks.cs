@@ -277,7 +277,7 @@ internal static class TemporaryInstanceChecks
     /// are refused. Within one path syntax a path under another root, server, share or drive is another location; a
     /// folder in the other syntax than the checkout (a POSIX path against a Windows drive or UNC path), a Windows device
     /// path ("\\?\", "\\.\" or "\??\", either separator) and a Windows segment that ends in a dot or a space or holds a
-    /// colon are refused, because each can name a location inside the checkout.
+    /// colon, a UNC server and share name included, are refused, because each can name a location inside the checkout.
     /// </summary>
     /// <param name="folder">The candidate artifact folder.</param>
     /// <param name="checkoutRoot">The repository checkout root.</param>
@@ -290,6 +290,8 @@ internal static class TemporaryInstanceChecks
     /// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, appended "A path's root is part of its identity"): the folder and the checkout are compared through <see cref="PathIdentity"/>, so a forward-slash, backslash or mixed-separator UNC alias of the checkout or of a folder inside it is refused, and a path under another root kind, server, share or drive is another location, because hostile validation round 10 finding R10-F2 showed a forward-slash UNC alias was accepted (operator 2026-11-03: "don't gate on me between rounds").</description></item>
     /// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 (second criterion): documentation only, the summary now states the root rule of the entry above instead of the 2026-11-02 rule (stale summary found before round 11).</description></item>
     /// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, appended "That holds only within one path syntax"): refuses a folder in the other path syntax than the checkout, a Windows device path and a Windows segment that ends in a dot or a space or holds a colon, because the hostile validation round 11 that stopped without a verdict found a device path alias of a folder inside the checkout accepted, and the sibling sweep found the cross-syntax and segment aliases (operator 2026-11-03: "don't gate on me between rounds").</description></item>
+    /// <item><term>2026-11-03</term><description>Correction of the entry above (holistic read before hostile validation round 12, finding B3): "don't gate on me between rounds" covers fixing findings after a DISAGREE verdict, and round 11 stopped with none; the change was kept by the operator's choice "Mark ready, then HV (Recommended)" (2026-11-03 13:11). That entry stays as written.</description></item>
+    /// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, appended "The UNC server and share names are held to the same segment rule"): the segment alias rule also covers a UNC server and share name (<see cref="PathIdentity.AliasCheckedNames"/>), so a trailing-dot or trailing-space server or share alias and a share name holding a colon are refused, because the holistic read before hostile validation round 12 (finding D3) found a trailing-dot server alias of the checkout accepted (operator 2026-11-03: "Strengthen + fix (Recommended)").</description></item>
     /// </list>
     /// </remarks>
     internal static string? CheckTestOutputFolder(string folder, string checkoutRoot)
@@ -303,7 +305,7 @@ internal static class TemporaryInstanceChecks
             && !identity.Segments.Any(segment => segment is "." or "..")
             && !IsDevicePath(folder)
             && identity.IsWindowsSyntax == checkout.IsWindowsSyntax
-            && !(identity.IsWindowsSyntax && identity.Segments.Any(IsWindowsSegmentAlias))
+            && !(identity.IsWindowsSyntax && identity.AliasCheckedNames.Any(IsWindowsSegmentAlias))
             && !IsStrictlyInside(folder, checkoutRoot)
             && !identity.SameLocation(checkout);
         return acceptable
@@ -334,10 +336,20 @@ internal static class TemporaryInstanceChecks
     private static bool IsWindowsSegmentAlias(string segment) =>
         segment.EndsWith('.') || segment.EndsWith(' ') || segment.Contains(':', StringComparison.Ordinal);
 
-    /// <summary>FR-MCP-TESTRESOURCE-001 (generated-artifact criterion): whether a character is a path separator of either kind.</summary>
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: whether a character is a path separator of
+    /// either kind; the one separator test of this class, used by <see cref="IsDevicePath"/> and
+    /// <see cref="PathIdentity.Parse"/>.
+    /// </summary>
     /// <param name="value">The character.</param>
     /// <returns>True for '/' or '\'.</returns>
-    /// <remarks>2026-11-03, FR-MCP-TESTRESOURCE-001 generated-artifact criterion: added for <see cref="IsDevicePath"/>.</remarks>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 generated-artifact criterion: added for <see cref="IsDevicePath"/>.</description></item>
+    /// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: now also the separator test of <see cref="PathIdentity.Parse"/>, replacing the duplicate PathIdentity.IsSeparator, because the holistic read before hostile validation round 12 found the same test written twice in this file (DRY; operator 2026-11-03: "Strengthen + fix (Recommended)").</description></item>
+    /// </list>
+    /// </remarks>
     private static bool IsPathSeparator(char value) => value is '/' or '\\';
 
     /// <summary>FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: the kind of a path's root.</summary>
@@ -384,18 +396,26 @@ internal static class TemporaryInstanceChecks
         /// <remarks>2026-11-03, FR-MCP-TESTRESOURCE-001 generated-artifact criterion (appended "That holds only within one path syntax"): added, because a folder is compared with the checkout only within one path syntax.</remarks>
         internal bool IsWindowsSyntax => Kind is PathRootKind.Drive or PathRootKind.Unc;
 
+        /// <summary>
+        /// FR-MCP-TESTRESOURCE-001 (generated-artifact criterion): the names the Windows segment alias rule covers: for a
+        /// UNC path its server and share names, then its segments; otherwise its segments.
+        /// </summary>
+        /// <remarks>2026-11-03, FR-MCP-TESTRESOURCE-001 generated-artifact criterion (appended "The UNC server and share names are held to the same segment rule"): added, because the holistic read before hostile validation round 12 (finding D3) found a trailing-dot server alias of the checkout accepted (operator 2026-11-03: "Strengthen + fix (Recommended)").</remarks>
+        internal IEnumerable<string> AliasCheckedNames => Kind == PathRootKind.Unc ? Root.Split('/').Concat(Segments) : Segments;
+
         /// <summary>Parses a path into its root and segments.</summary>
         /// <param name="path">The path.</param>
         /// <returns>The identity; kind None when the path is not absolute.</returns>
+        /// <remarks>2026-11-03, FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: uses the class's one separator test <see cref="IsPathSeparator"/> instead of its own copy (DRY; holistic read before hostile validation round 12).</remarks>
         internal static PathIdentity Parse(string path)
         {
-            if (path.Length > 2 && IsSeparator(path[0]) && IsSeparator(path[1]) && !IsSeparator(path[2]))
+            if (path.Length > 2 && IsPathSeparator(path[0]) && IsPathSeparator(path[1]) && !IsPathSeparator(path[2]))
             {
                 var parts = Split(path[2..]);
                 return parts.Length >= 2 ? new PathIdentity(PathRootKind.Unc, parts[0] + "/" + parts[1], parts[2..]) : new PathIdentity(PathRootKind.None, string.Empty, []);
             }
 
-            if (path.Length >= 3 && char.IsAsciiLetter(path[0]) && path[1] == ':' && IsSeparator(path[2]))
+            if (path.Length >= 3 && char.IsAsciiLetter(path[0]) && path[1] == ':' && IsPathSeparator(path[2]))
                 return new PathIdentity(PathRootKind.Drive, path[..1], Split(path[3..]));
             return path.StartsWith('/')
                 ? new PathIdentity(PathRootKind.Posix, "/", Split(path[1..]))
@@ -417,11 +437,6 @@ internal static class TemporaryInstanceChecks
             return SameRoot(other) && Segments.Length == other.Segments.Length
                 && Segments.Zip(other.Segments).All(pair => string.Equals(pair.First, pair.Second, comparison));
         }
-
-        /// <summary>Whether a character is a path separator of either kind.</summary>
-        /// <param name="value">The character.</param>
-        /// <returns>True for '/' or '\'.</returns>
-        private static bool IsSeparator(char value) => value is '/' or '\\';
 
         /// <summary>The non-empty parts of a text split on either separator.</summary>
         /// <param name="text">The text after the root.</param>

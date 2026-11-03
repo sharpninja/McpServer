@@ -80,6 +80,12 @@ public sealed class QBAgentHeartbeatOverlayTests
         Assert.Contains("done", text, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// The run loop hides the heartbeat glyph and reports the error when the runner fails after a scripted 80 ms of
+    /// work, and writes no "still working" line. The run is bounded by a hang guard only.
+    /// </summary>
+    /// <returns>The test task.</returns>
+    /// <remarks>2026-11-03, TR-MCP-USECASE-018 AC-006 (appended for finding B4: "Far above" means at least 100 times the longest real or scripted delay of the awaited step): the hang guard on the run loop rises from 2 s to 10 s, because the awaited run includes the runner's 80 ms delay, so a hang guard must be at least 8 s; the holistic read before hostile validation round 12 found 2 s, 25 times the delay (operator 2026-11-03: "Strengthen + margin (Recommended)").</remarks>
     [Fact]
     public async Task RunAsync_RunnerThrows_HidesGlyph()
     {
@@ -103,7 +109,7 @@ public sealed class QBAgentHeartbeatOverlayTests
                     TerminalWidth = static () => 24,
                 },
                 cancellationToken: TestContext.Current.CancellationToken)
-            .WaitAsync(TimeSpan.FromSeconds(2), TestContext.Current.CancellationToken)
+            .WaitAsync(TimeSpan.FromSeconds(10), TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
 
         var text = output.ToString();

@@ -124,7 +124,13 @@ public class StubMarkerFileReaderTests
     /// cancels it after the callback.
     /// </summary>
     /// <returns>The test task.</returns>
-    /// <remarks>2026-11-03, TR-MCP-USECASE-018 AC-006 (appended "A cancellation or timeout that a unit test arms on a real timer is such a wait when a step the test asserts must happen before the timer fires"): the watch token no longer cancels itself after 100 ms; the test cancels it explicitly after the callback, so the callback cannot be lost to a cancellation that fires first, because the hostile validation round 11 that stopped without a verdict found the 100 ms timer racing the stub's 10 ms delay before the callback (operator 2026-11-03: "don't gate on me between rounds").</remarks>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-03</term><description>TR-MCP-USECASE-018 AC-006 (appended "A cancellation or timeout that a unit test arms on a real timer is such a wait when a step the test asserts must happen before the timer fires"): the watch token no longer cancels itself after 100 ms; the test cancels it explicitly after the callback, so the callback cannot be lost to a cancellation that fires first, because the hostile validation round 11 that stopped without a verdict found the 100 ms timer racing the stub's 10 ms delay before the callback (operator 2026-11-03: "don't gate on me between rounds").</description></item>
+    /// <item><term>2026-11-03</term><description>Correction of the entry above (holistic read before hostile validation round 12, finding B3): "don't gate on me between rounds" covers fixing findings after a DISAGREE verdict, and round 11 stopped with none; the change was kept by the operator's choice "Mark ready, then HV (Recommended)" (2026-11-03 13:11). TR-MCP-USECASE-018 AC-006 as appended for finding B4 ("Far above" means at least 100 times the longest real or scripted delay of the awaited step): the 1 s hang guard on the callback is 100 times the stub's 10 ms delay, so it is a hang guard, not a wall-clock wait. No code change.</description></item>
+    /// </list>
+    /// </remarks>
     [Fact]
     public async Task WatchAsync_SimulatesMarkerFileChange_InvokesCallback()
     {
