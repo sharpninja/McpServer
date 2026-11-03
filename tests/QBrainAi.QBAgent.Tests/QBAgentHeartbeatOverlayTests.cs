@@ -33,7 +33,15 @@ public sealed class QBAgentHeartbeatOverlayTests
         Assert.Equal(QBAgentHeartbeatOverlay.FrameAt(0), QBAgentHeartbeatOverlay.FrameAt(QBAgentHeartbeatOverlay.Frames.Length));
     }
 
+    /// <summary>
+    /// The run loop paints rotating heartbeat frames in the top-right cell while a turn runs, writes no "still working"
+    /// line, and hides the glyph when the turn ends. An integration case: it expects the real 20 ms heartbeat timer to
+    /// tick at least once during an 80 ms real-time wait, so its outcome depends on how much real time passes.
+    /// </summary>
+    /// <returns>The test task.</returns>
+    /// <remarks>2026-11-03, TR-MCP-USECASE-018 AC-006 (appended "A wall-clock bound is an assertion whose outcome depends on how much real time passes ... such a test is an integration test"): tagged Category=Integration with its assertions unchanged, so it runs in the MigrationIntegrationTests lane and not in the unit suite, because the holistic read before round 11 found the second frame depends on scheduling within an 80 ms wait.</remarks>
     [Fact]
+    [Trait("Category", "Integration")]
     public async Task RunAsync_Heartbeat_RotatesGlyphWithoutStillWorkingLines()
     {
         var started = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);

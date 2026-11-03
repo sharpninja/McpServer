@@ -666,6 +666,7 @@ public sealed class HandoffDurabilityTests : IDisposable
     /// <c>StateVersion</c>, and a lost owner or version cannot persist a terminal update.
     /// Fixtures: in-memory SQLite, blocked extractor, lease/clock fakes. Takeover names stay reuse.
     /// </summary>
+    /// <remarks>2026-11-03, TR-MCP-USECASE-018 AC-006 (appended "A unit test that checks a recorded time ... never sleeps to separate two times, and its result cannot change with elapsed time, scheduling delay"): after the scripted clock advances, the case waits until the heartbeat has written the renewed expiry instead of sleeping 250 ms, and asserts the exact renewed expiry (the original expiry plus the scripted advance) instead of "later than before", because the holistic read before round 11 found the sleep made the comparison depend on scheduling.</remarks>
     [Fact]
     public async Task ProcessingLease_RenewsAndFencesTerminalUpdates()
     {
@@ -715,8 +716,16 @@ public sealed class HandoffDurabilityTests : IDisposable
 
         try
         {
-            _time.Advance(lease.HeartbeatInterval + TimeSpan.FromSeconds(1));
-            await Task.Delay(250, TestContext.Current.CancellationToken);
+            var advance = lease.HeartbeatInterval + TimeSpan.FromSeconds(1);
+            var expectedExpiry = originalExpiry + advance;
+            _time.Advance(advance);
+            await WaitUntilAsync(
+                () =>
+                {
+                    using var db = CreateDb();
+                    return db.HandoffIngestionRuns.Single().ProcessingLeaseExpiresAtUtc == expectedExpiry;
+                },
+                TimeSpan.FromSeconds(5));
 
             DateTimeOffset? renewedExpiry;
             int versionAfterHeartbeat;
@@ -729,9 +738,7 @@ public sealed class HandoffDurabilityTests : IDisposable
                 ownerAfterHeartbeat = run.ProcessingOwner;
             }
 
-            Assert.True(
-                renewedExpiry > originalExpiry,
-                "Heartbeat must renew ProcessingLeaseExpiresAtUtc when the injected clock advances by HeartbeatInterval.");
+            Assert.Equal(expectedExpiry, renewedExpiry);
             Assert.Equal(originalVersion, versionAfterHeartbeat);
             Assert.Equal(owner, ownerAfterHeartbeat);
 
