@@ -1,0 +1,58 @@
+commit 11681680d316bee7c8c184e45b699af7c1bd2188
+Author:     Sharp Ninja <ninja@thesharp.ninja>
+AuthorDate: Mon Oct 19 16:43:25 2026 -0500
+Commit:     Sharp Ninja <ninja@thesharp.ninja>
+CommitDate: Mon Oct 19 16:43:25 2026 -0500
+
+    test: take over the unit-suite fixes and Linux provider provisioning from PLAN-C4MODEL-001 (IMPL-UNITGREEN-001)
+    
+    Operator ownership decision 2026-10-19 ("I don't want you and the C4 agent
+    working on the same thing.  C4 should not be changing code, only docs."; I
+    named IMPL-UNITGREEN-001; at 16:38 "Handover stands (Recommended)"): the
+    unit-suite code of C4 commits ff55292e and d248230e moves to this effort.
+    C4 reverts the same files on PR 84 only on the operator's direct word.
+    
+    The 15 files below are byte-identical to C4's c2125c42 (git blob hashes
+    compared file by file at 2026-10-19T16:42:56, 0 mismatches), so C4 can check
+    each one against this commit:
+    - build/Build.TestDependencies.cs, build/LinuxProviderTestProvisioner.cs,
+      build/ProviderTestProvisioningContracts.cs (TR-MCP-NUKE-018)
+    - tests/Build.Tests/ProviderTestProvisioningContract.cs,
+      ProviderTestProvisioningMockGateTests.cs, ProviderTestProvisioningTests.cs
+    - src/QBrainAi.Services/Services/GitHubCliService.cs
+    - tests/QBrainAi.Support.Mcp.Tests: Middleware/WorkspaceResolutionMiddlewareTests.cs,
+      Services/GitHubCliServiceTests.cs, Services/WorkspaceServiceAccessorTests.cs,
+      Storage/EphemeralPostgresFixtureTests.cs,
+      Storage/SessionLogAgentSessionHeaderMigrationTests.cs,
+      Storage/Decompose4nfBackfillMigrationTests.cs, Storage/MigrationKeyAssertions.cs,
+      Storage/MigrationKeyAssertionsMockGateTests.cs
+    .nuke/build.schema.json gains only C4's TestDbEnvFile parameter entry.
+    
+    Linux gates on this tree before commit: Test 0 failed, 16 not executed (the
+    Windows-only cases the next steps move to the integration lane), run
+    unit-green-takeover-20261019T1611; MigrationIntegrationTests 68 passed,
+    0 failed, 0 not executed, run unit-green-takeover-int-20261019T1616.
+    
+    Requirements: TR-MCP-NUKE-018, TR-MCP-QUALITY-001, FR/TR/TEST-MCP-PATHNORM-001.
+    
+    Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 93%
+    
+    Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+ .nuke/build.schema.json                            |   4 +
+ build/Build.TestDependencies.cs                    |  55 +++-
+ build/LinuxProviderTestProvisioner.cs              | 320 +++++++++++++++++++++
+ build/ProviderTestProvisioningContracts.cs         |  82 ++++++
+ src/QBrainAi.Services/Services/GitHubCliService.cs |  14 +-
+ .../ProviderTestProvisioningContract.cs            | 228 +++++++++++++++
+ .../ProviderTestProvisioningMockGateTests.cs       | 170 +++++++++++
+ tests/Build.Tests/ProviderTestProvisioningTests.cs |  30 ++
+ .../WorkspaceResolutionMiddlewareTests.cs          |   7 +-
+ .../Services/GitHubCliServiceTests.cs              | 151 +++++++---
+ .../Services/WorkspaceServiceAccessorTests.cs      |  18 +-
+ .../Storage/Decompose4nfBackfillMigrationTests.cs  |  14 +-
+ .../Storage/EphemeralPostgresFixtureTests.cs       |   1 +
+ .../Storage/MigrationKeyAssertions.cs              |  46 +++
+ .../Storage/MigrationKeyAssertionsMockGateTests.cs | 110 +++++++
+ .../SessionLogAgentSessionHeaderMigrationTests.cs  |   2 +
+ 16 files changed, 1193 insertions(+), 59 deletions(-)

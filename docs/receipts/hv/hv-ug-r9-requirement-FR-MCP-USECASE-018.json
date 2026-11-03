@@ -1,0 +1,57 @@
+{
+  "TimestampLocal": "2026-11-02T19:31:24",
+  "TimestampUtc": "2026-11-03T01:31:24.5509230Z",
+  "Method": "workflow.requirements.getFr",
+  "Params": {
+    "id": "FR-MCP-USECASE-018"
+  },
+  "Data": [
+    {
+      "payload": {
+        "result": {
+          "description": "Operators and agents shall edit actor, flow, and step records through supported authenticated operations while preserving the existing component identities and parent relationships.",
+          "updatedAt": "2026-11-03T01:31:26.9251662+00:00",
+          "status": "pending",
+          "id": "FR-MCP-USECASE-018",
+          "createdAt": "2026-11-03T01:31:26.9250577+00:00",
+          "title": "Edit existing use-case actors, flows, and steps in place",
+          "priority": "high",
+          "notes": "Required to correct UC-125 without replacement rows or direct storage mutation.",
+          "scopeStartLayerKey": "layer-1",
+          "area": "MCP",
+          "acceptanceCriteria": [
+            {
+              "isSatisfied": false,
+              "text": "A supported authenticated operation updates an actor already associated with a use case, preserves ActorId and UseCaseId, and returns the changed name, description, type, and IsPrimary values.",
+              "id": "AC-FR-USECASE-018-1"
+            },
+            {
+              "isSatisfied": false,
+              "text": "A supported authenticated operation updates an existing flow in its parent use case, preserves FlowId and UseCaseId, and returns the changed FlowType, Name, and SequenceNumber values.",
+              "id": "AC-FR-USECASE-018-2"
+            },
+            {
+              "isSatisfied": false,
+              "text": "A supported authenticated operation updates an existing step in its parent flow and use case, preserves StepId and FlowId, and returns the changed StepNumber, ActorId, Action, SystemResponse, and DataEntities values.",
+              "id": "AC-FR-USECASE-018-3"
+            },
+            {
+              "isSatisfied": false,
+              "text": "Component updates reject missing, soft-deleted, cross-workspace, and parent-mismatched IDs without changing any row or creating duplicates.",
+              "id": "AC-FR-USECASE-018-4"
+            },
+            {
+              "isSatisfied": false,
+              "text": "Updating actors, flows, or steps leaves the use case approval status, version, links, unrelated actors, unrelated flows, and unrelated steps unchanged while advancing only the aggregate update timestamp.",
+              "id": "AC-FR-USECASE-018-5"
+            }
+          ]
+        },
+        "requestId": "req-20261103T013125Z-0b0b",
+        "deprecated": true
+      },
+      "type": "result"
+    }
+  ],
+  "ExitCode": 0
+}

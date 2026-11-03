@@ -1,0 +1,31 @@
+{
+  "TimestampLocal": "2026-11-02T19:31:12",
+  "TimestampUtc": "2026-11-03T01:31:12.0330412Z",
+  "Method": "workflow.requirements.getTr",
+  "Params": {
+    "id": "TR-MCP-PLUGINCORE-002"
+  },
+  "Data": [
+    {
+      "payload": {
+        "result": {
+          "description": "CI enumerates lib files; any not in manifest nor PLUGIN-RESIDUAL.txt fails the build.",
+          "updatedAt": "2026-11-03T01:31:14.4127224+00:00",
+          "status": "pending",
+          "id": "TR-MCP-PLUGINCORE-002",
+          "createdAt": "2026-11-03T01:31:14.4126014+00:00",
+          "title": "core-guard.yml no-duplication job",
+          "priority": "medium",
+          "scopeStartLayerKey": "layer-1",
+          "area": "MCP",
+          "subarea": "PLUGINCORE",
+          "acceptanceCriteria": []
+        },
+        "requestId": "req-20261103T013113Z-577e",
+        "deprecated": true
+      },
+      "type": "result"
+    }
+  ],
+  "ExitCode": 0
+}

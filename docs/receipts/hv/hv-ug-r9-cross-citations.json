@@ -1,0 +1,1105 @@
+{
+  "ChangedFiles": 326,
+  "StoreIdCount": 1569,
+  "ChangedCitationIds": [
+    "FR-MCP-018",
+    "FR-MCP-040",
+    "FR-MCP-077",
+    "FR-MCP-083",
+    "FR-MCP-103",
+    "FR-MCP-BUILD-001",
+    "FR-MCP-FED-PATH-001",
+    "FR-MCP-MEMORY-002",
+    "FR-MCP-MEMORY-010",
+    "FR-MCP-MEMORY-011",
+    "FR-MCP-MEMORY-016",
+    "FR-MCP-MEMORY-017",
+    "FR-MCP-MEMORY-018",
+    "FR-MCP-PATHNORM-001",
+    "FR-MCP-QBOPENAI-001",
+    "FR-MCP-QBSKILLS-003",
+    "FR-MCP-REPL-001",
+    "FR-MCP-REPL-005",
+    "FR-MCP-REPL-007",
+    "FR-MCP-REPL-008",
+    "FR-MCP-SESSIONLOGCTX-001",
+    "FR-MCP-TESTRESOURCE-001",
+    "FR-X-001",
+    "TEST-HANDOFF-002",
+    "TEST-HANDOFF-005",
+    "TEST-HANDOFF-007",
+    "TEST-MCP-177",
+    "TEST-MCP-FED-002",
+    "TEST-MCP-FED-PATH-001",
+    "TEST-MCP-GH-006",
+    "TEST-MCP-MEMORY-002",
+    "TEST-MCP-MEMORY-010",
+    "TEST-MCP-MEMORY-011",
+    "TEST-MCP-MEMORY-012",
+    "TEST-MCP-MEMORY-014",
+    "TEST-MCP-MEMORY-016",
+    "TEST-MCP-MEMORY-017",
+    "TEST-MCP-MEMORY-018",
+    "TEST-MCP-MEMORY-019",
+    "TEST-MCP-PATHNORM-001",
+    "TEST-MCP-PLUGIN-PSONLY-001",
+    "TEST-MCP-QBAGENTTOOL-001",
+    "TEST-MCP-QBCLI-001",
+    "TEST-MCP-QBOLLAMA-001",
+    "TEST-MCP-QBOPENAI-001",
+    "TEST-MCP-QBSURFACE-004",
+    "TEST-MCP-REQSCOPE-005",
+    "TEST-MCP-REQSCOPE-REPL-001",
+    "TEST-MCP-TRANSCRIPT-008",
+    "TEST-MCP-TRIAGE-003",
+    "TEST-MCP-TRIAGE-004",
+    "TEST-MCP-TRIAGE-005",
+    "TEST-MCP-TRIAGE-007",
+    "TEST-MCP-USECASE-020",
+    "TEST-MCP-WARNREMEDIATION-001",
+    "TEST-MCP-WIKIEXPORT-001",
+    "TEST-NUKE-001",
+    "TEST-NUKE-002",
+    "TEST-NUKE-POWERSHELL-001",
+    "TEST-TRIAGE-003",
+    "TEST-X-001",
+    "TR-GH-013",
+    "TR-MCP-CFG-007",
+    "TR-MCP-DB-001",
+    "TR-MCP-FED-PATH-001",
+    "TR-MCP-FEDERATION-001",
+    "TR-MCP-GH-003",
+    "TR-MCP-GH-004",
+    "TR-MCP-HOSTILEREVIEW-003",
+    "TR-MCP-MEMORY-002",
+    "TR-MCP-MEMORY-API-002",
+    "TR-MCP-MEMORY-BENCH-002",
+    "TR-MCP-MEMORY-MODEL-002",
+    "TR-MCP-MEMORY-SEARCH-002",
+    "TR-MCP-MEMORY-UI-002",
+    "TR-MCP-NUKE-018",
+    "TR-MCP-NUKE-019",
+    "TR-MCP-NUKE-020",
+    "TR-MCP-PATHNORM-001",
+    "TR-MCP-QBRAIN-004",
+    "TR-MCP-QBRAIN-005",
+    "TR-MCP-QUALITY-001",
+    "TR-MCP-REPL-008",
+    "TR-MCP-SESSIONLOG-006",
+    "TR-MCP-USECASE-018",
+    "TR-MCP-USECASE-019",
+    "TR-MCP-WS-005",
+    "TR-PLANNED-CORE-013",
+    "TR-X-001"
+  ],
+  "AbsentCitations": [
+    {
+      "Id": "TR-PLANNED-CORE-013",
+      "File": "src/QBrainAi.Services/Services/GitHubCliService.cs",
+      "Line": 13,
+      "HistoricalNearby": true,
+      "Text": "/// TR-PLANNED-CORE-013 (historical), TR-MCP-GH-003, TR-MCP-GH-004: Runs gh CLI for issues, PRs, and workflow runs."
+    },
+    {
+      "Id": "TR-PLANNED-CORE-013",
+      "File": "src/QBrainAi.Services/Services/GitHubCliService.cs",
+      "Line": 37,
+      "HistoricalNearby": true,
+      "Text": "    /// <summary>TR-PLANNED-CORE-013 (historical): Constructor with IProcessRunner for testability.</summary>"
+    },
+    {
+      "Id": "TR-PLANNED-CORE-013",
+      "File": "src/QBrainAi.Services/Services/SessionLogService.cs",
+      "Line": 21,
+      "HistoricalNearby": true,
+      "Text": "/// TR-PLANNED-CORE-013 (historical): Implements session log submit (upsert) and query with pagination (MVP-SUPPORT-011)."
+    },
+    {
+      "Id": "TR-PLANNED-CORE-013",
+      "File": "src/QBrainAi.Services/Services/SessionLogService.cs",
+      "Line": 38,
+      "HistoricalNearby": true,
+      "Text": "    /// <summary>TR-PLANNED-CORE-013 (historical): Constructor.</summary>"
+    },
+    {
+      "Id": "TEST-NUKE-001",
+      "File": "tests/Build.Tests/BuildTargetTests.cs",
+      "Line": 7,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-NUKE-001 (historical): Verifies that the Nuke _build project compiles and the Build class"
+    },
+    {
+      "Id": "TEST-MCP-PLUGIN-PSONLY-001",
+      "File": "tests/Build.Tests/BuildTargetTests.cs",
+      "Line": 139,
+      "HistoricalNearby": true,
+      "Text": "    /// <summary>TEST-MCP-PLUGIN-PSONLY-001 (historical): Plugin sync refreshes Node core vendor packages before installed caches are refreshed.</summary>"
+    },
+    {
+      "Id": "TEST-MCP-REQSCOPE-005",
+      "File": "tests/Build.Tests/BuildTargetTests.cs",
+      "Line": 175,
+      "HistoricalNearby": true,
+      "Text": "    /// <summary>TEST-MCP-REQSCOPE-005 (historical): Plugin validation fails stale Requirements skills that omit layer method shapes.</summary>"
+    },
+    {
+      "Id": "TEST-MCP-QBAGENTTOOL-001",
+      "File": "tests/Build.Tests/BuildTargetTests.cs",
+      "Line": 279,
+      "HistoricalNearby": true,
+      "Text": "    /// <summary>TEST-MCP-QBAGENTTOOL-001 (historical): QBAgent has dedicated pack and deploy targets.</summary>"
+    },
+    {
+      "Id": "TEST-MCP-QBAGENTTOOL-001",
+      "File": "tests/Build.Tests/BuildTargetTests.cs",
+      "Line": 287,
+      "HistoricalNearby": true,
+      "Text": "    /// <summary>TEST-MCP-QBAGENTTOOL-001 (historical): QBAgent is configured as a .NET global tool package.</summary>"
+    },
+    {
+      "Id": "TEST-NUKE-002",
+      "File": "tests/Build.Tests/BuildTargetTests.cs",
+      "Line": 779,
+      "HistoricalNearby": true,
+      "Text": "    /// TEST-NUKE-002 (historical): BackupPreservedState tolerates a first-time install where the"
+    },
+    {
+      "Id": "TEST-MCP-WARNREMEDIATION-001",
+      "File": "tests/Build.Tests/MigrationAssemblyObsoleteWarningTests.cs",
+      "Line": 7,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-WARNREMEDIATION-001 (historical): Verifies provider migration assemblies compile and"
+    },
+    {
+      "Id": "TEST-NUKE-POWERSHELL-001",
+      "File": "tests/Build.Tests/PowerShellInvocationTests.cs",
+      "Line": 4,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-NUKE-POWERSHELL-001 (historical): Guards build and deployment automation so child"
+    },
+    {
+      "Id": "TEST-NUKE-POWERSHELL-001",
+      "File": "tests/Build.Tests/PowerShellInvocationTests.cs",
+      "Line": 10,
+      "HistoricalNearby": true,
+      "Text": "    /// TEST-NUKE-POWERSHELL-001 (historical): Verifies the Nuke PowerShell bootstrap"
+    },
+    {
+      "Id": "TEST-NUKE-POWERSHELL-001",
+      "File": "tests/Build.Tests/PowerShellInvocationTests.cs",
+      "Line": 28,
+      "HistoricalNearby": true,
+      "Text": "    /// TEST-NUKE-POWERSHELL-001 (historical): Verifies Build.Tests helpers that spawn"
+    },
+    {
+      "Id": "TEST-NUKE-POWERSHELL-001",
+      "File": "tests/Build.Tests/PowerShellInvocationTests.cs",
+      "Line": 46,
+      "HistoricalNearby": true,
+      "Text": "    /// TEST-NUKE-POWERSHELL-001 (historical): Verifies live deployment guidance does not"
+    },
+    {
+      "Id": "TEST-MCP-QBSURFACE-004",
+      "File": "tests/Build.Tests/QuadBrainDescriptorAbsenceTests.cs",
+      "Line": 4,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-QBSURFACE-004 (historical): Guards the shared MCP descriptor registry under"
+    },
+    {
+      "Id": "TEST-MCP-QBSURFACE-004",
+      "File": "tests/Build.Tests/QuadBrainDescriptorAbsenceTests.cs",
+      "Line": 13,
+      "HistoricalNearby": true,
+      "Text": "    /// TEST-MCP-QBSURFACE-004 (historical): Verifies that no file matching"
+    },
+    {
+      "Id": "FR-X-001",
+      "File": "tests/QBrainAi.Client.Tests/RequirementTimestampJsonContractTests.cs",
+      "Line": 64,
+      "HistoricalNearby": false,
+      "Text": "        \"fr\" => \"{\" + members + \"\\\"id\\\":\\\"FR-X-001\\\",\\\"title\\\":\\\"t\\\",\\\"body\\\":\\\"b\\\"}\","
+    },
+    {
+      "Id": "TR-X-001",
+      "File": "tests/QBrainAi.Client.Tests/RequirementTimestampJsonContractTests.cs",
+      "Line": 65,
+      "HistoricalNearby": false,
+      "Text": "        \"tr\" => \"{\" + members + \"\\\"id\\\":\\\"TR-X-001\\\",\\\"title\\\":\\\"t\\\",\\\"body\\\":\\\"b\\\"}\","
+    },
+    {
+      "Id": "TEST-X-001",
+      "File": "tests/QBrainAi.Client.Tests/RequirementTimestampJsonContractTests.cs",
+      "Line": 66,
+      "HistoricalNearby": false,
+      "Text": "        \"test\" => \"{\" + members + \"\\\"id\\\":\\\"TEST-X-001\\\",\\\"condition\\\":\\\"c\\\"}\","
+    },
+    {
+      "Id": "FR-X-001",
+      "File": "tests/QBrainAi.Client.Tests/RequirementTimestampJsonContractTests.cs",
+      "Line": 67,
+      "HistoricalNearby": false,
+      "Text": "        \"mapping\" => \"{\" + members.Replace(\",\\\"updatedAtUtc\\\":null\", string.Empty, StringComparison.Ordinal) + \"\\\"frId\\\":\\\"FR-X-001\\\",\\\"trIds\\\":[\\\"TR-X-001\\\"],\\\"testIds\\\":[]}\","
+    },
+    {
+      "Id": "TR-X-001",
+      "File": "tests/QBrainAi.Client.Tests/RequirementTimestampJsonContractTests.cs",
+      "Line": 67,
+      "HistoricalNearby": false,
+      "Text": "        \"mapping\" => \"{\" + members.Replace(\",\\\"updatedAtUtc\\\":null\", string.Empty, StringComparison.Ordinal) + \"\\\"frId\\\":\\\"FR-X-001\\\",\\\"trIds\\\":[\\\"TR-X-001\\\"],\\\"testIds\\\":[]}\","
+    },
+    {
+      "Id": "FR-X-001",
+      "File": "tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterBindingTests.cs",
+      "Line": 23,
+      "HistoricalNearby": false,
+      "Text": "            \"fr\" => Read(new FrItemAdapter(new FrEntry { Id = \"FR-X-001\", CreatedAtUtc = created, UpdatedAtUtc = updated })),"
+    },
+    {
+      "Id": "TR-X-001",
+      "File": "tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterBindingTests.cs",
+      "Line": 24,
+      "HistoricalNearby": false,
+      "Text": "            \"tr\" => Read(new TrItemAdapter(new TrEntry { Id = \"TR-X-001\", CreatedAtUtc = created, UpdatedAtUtc = updated })),"
+    },
+    {
+      "Id": "TEST-X-001",
+      "File": "tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterBindingTests.cs",
+      "Line": 25,
+      "HistoricalNearby": false,
+      "Text": "            \"test\" => Read(new TestItemAdapter(new TestEntry { Id = \"TEST-X-001\", CreatedAtUtc = created, UpdatedAtUtc = updated })),"
+    },
+    {
+      "Id": "FR-X-001",
+      "File": "tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterBindingTests.cs",
+      "Line": 26,
+      "HistoricalNearby": false,
+      "Text": "            \"mapping\" => (new MappingItemAdapter(\"FR-X-001\", \"TR-X-001\", null, null, created).CreatedAt, null),"
+    },
+    {
+      "Id": "TR-X-001",
+      "File": "tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterBindingTests.cs",
+      "Line": 26,
+      "HistoricalNearby": false,
+      "Text": "            \"mapping\" => (new MappingItemAdapter(\"FR-X-001\", \"TR-X-001\", null, null, created).CreatedAt, null),"
+    },
+    {
+      "Id": "TR-PLANNED-CORE-013",
+      "File": "tests/QBrainAi.Support.Mcp.IntegrationTests/CustomWebApplicationFactory.cs",
+      "Line": 25,
+      "HistoricalNearby": true,
+      "Text": "/// <summary>TR-PLANNED-CORE-013 (historical): Web application factory for MCP API integration tests.</summary>"
+    },
+    {
+      "Id": "TEST-MCP-REQSCOPE-REPL-001",
+      "File": "tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs",
+      "Line": 8,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-REQSCOPE-REPL-001 (historical): REPL-driven integration coverage for requirement scope layers, on the"
+    },
+    {
+      "Id": "TEST-MCP-REQSCOPE-REPL-001",
+      "File": "tests/QBrainAi.Support.Mcp.IntegrationTests/RequirementScopeLayerReplIntegrationTests.cs",
+      "Line": 12,
+      "HistoricalNearby": true,
+      "Text": "/// The TEST-MCP-REQSCOPE-REPL-001 citations in this file are historical: that record is not in the requirements store"
+    },
+    {
+      "Id": "TR-MCP-FEDERATION-001",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs",
+      "Line": 165,
+      "HistoricalNearby": true,
+      "Text": "    /// Requirement coverage: FR-MCP-103, TR-MCP-FEDERATION-001 (historical)."
+    },
+    {
+      "Id": "TR-PLANNED-CORE-013",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogIngestorImportTests.cs",
+      "Line": 14,
+      "HistoricalNearby": true,
+      "Text": "/// <summary>TR-PLANNED-CORE-013 (historical): Tests for SessionLogIngestor.ImportToSessionLogTablesAsync (MVP-SUPPORT-011).</summary>"
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-016",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryApiIdempotencyTests.cs",
+      "Line": 6,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-016 (historical) / TR-MCP-MEMORY-API-002 (historical):"
+    },
+    {
+      "Id": "TR-MCP-MEMORY-API-002",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryApiIdempotencyTests.cs",
+      "Line": 6,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-016 (historical) / TR-MCP-MEMORY-API-002 (historical):"
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchCiTests.cs",
+      "Line": 6,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018 (historical): CI gate and non-Grok optionality."
+    },
+    {
+      "Id": "FR-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchCiTests.cs",
+      "Line": 6,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018 (historical): CI gate and non-Grok optionality."
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchConflictTests.cs",
+      "Line": 4,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-13 (historical): Conflict prompts prefer the newer seeded memory."
+    },
+    {
+      "Id": "FR-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchConflictTests.cs",
+      "Line": 4,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-13 (historical): Conflict prompts prefer the newer seeded memory."
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchDocsTests.cs",
+      "Line": 4,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018 (historical): Benchmark docs contracts."
+    },
+    {
+      "Id": "FR-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchDocsTests.cs",
+      "Line": 4,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018 (historical): Benchmark docs contracts."
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+      "Line": 7,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018 (historical): Harness conditions, metrics, isolation, and modes. The class"
+    },
+    {
+      "Id": "FR-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+      "Line": 7,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 / FR-MCP-MEMORY-018 (historical): Harness conditions, metrics, isolation, and modes. The class"
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+      "Line": 12,
+      "HistoricalNearby": true,
+      "Text": "/// The TEST-MCP-MEMORY-018 and FR-MCP-MEMORY-018 citations in this file, its AC-FR-MCP-MEMORY-018 criteria included,"
+    },
+    {
+      "Id": "FR-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+      "Line": 12,
+      "HistoricalNearby": true,
+      "Text": "/// The TEST-MCP-MEMORY-018 and FR-MCP-MEMORY-018 citations in this file, its AC-FR-MCP-MEMORY-018 criteria included,"
+    },
+    {
+      "Id": "FR-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchHarnessTests.cs",
+      "Line": 12,
+      "HistoricalNearby": true,
+      "Text": "/// The TEST-MCP-MEMORY-018 and FR-MCP-MEMORY-018 citations in this file, its AC-FR-MCP-MEMORY-018 criteria included,"
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchInjectionTests.cs",
+      "Line": 4,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-14 (historical): REQUIRED MEMORIES appears only with_memory."
+    },
+    {
+      "Id": "FR-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchInjectionTests.cs",
+      "Line": 4,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-14 (historical): REQUIRED MEMORIES appears only with_memory."
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchIsolationTests.cs",
+      "Line": 6,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-28 (historical): Bench workspace isolation."
+    },
+    {
+      "Id": "FR-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchIsolationTests.cs",
+      "Line": 6,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-28 (historical): Bench workspace isolation."
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-019",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnDocsTests.cs",
+      "Line": 4,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-019 (historical): v2 is the real efficiency bench; v1 remains smoke/regression."
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-019",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnHarnessTests.cs",
+      "Line": 7,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-019 (historical): Multi-turn harness conditions, tokens, and job success gate."
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-019",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnPackTests.cs",
+      "Line": 6,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-019 (historical): Canonical multi-turn pack existence and schema."
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-019",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchMultiTurnScoringTests.cs",
+      "Line": 6,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-019 (historical): Multi-turn scoring uses the same gold for both conditions."
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPackTests.cs",
+      "Line": 6,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018 (historical): Canonical pack existence and schema."
+    },
+    {
+      "Id": "FR-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPackTests.cs",
+      "Line": 6,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018 (historical): Canonical pack existence and schema."
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs",
+      "Line": 7,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-16 (historical)..23: Each plugin completes the full pack after H7a."
+    },
+    {
+      "Id": "FR-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchPluginTests.cs",
+      "Line": 7,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-16 (historical)..23: Each plugin completes the full pack after H7a."
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchReportTests.cs",
+      "Line": 4,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018 (historical): Token-first summary tables."
+    },
+    {
+      "Id": "FR-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchReportTests.cs",
+      "Line": 4,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018 (historical): Token-first summary tables."
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchSafetyTests.cs",
+      "Line": 4,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-12 (historical): Negative prompts must not hallucinate memory."
+    },
+    {
+      "Id": "FR-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchSafetyTests.cs",
+      "Line": 4,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-12 (historical): Negative prompts must not hallucinate memory."
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchScoringTests.cs",
+      "Line": 6,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-10 (historical): Deterministic or locked auto-rubric scoring."
+    },
+    {
+      "Id": "FR-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchScoringTests.cs",
+      "Line": 6,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-10 (historical): Deterministic or locked auto-rubric scoring."
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTechTests.cs",
+      "Line": 6,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / TR-MCP-MEMORY-BENCH-002 (historical): Harness technology contracts."
+    },
+    {
+      "Id": "TR-MCP-MEMORY-BENCH-002",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTechTests.cs",
+      "Line": 6,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / TR-MCP-MEMORY-BENCH-002 (historical): Harness technology contracts."
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTokenTests.cs",
+      "Line": 6,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018 (historical): Token accounting is the primary bench metric."
+    },
+    {
+      "Id": "FR-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchTokenTests.cs",
+      "Line": 6,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018 (historical): Token accounting is the primary bench metric."
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchToolUseTests.cs",
+      "Line": 4,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-15 (historical): Recall tools are the with_memory path when injection hosts differ."
+    },
+    {
+      "Id": "FR-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchToolUseTests.cs",
+      "Line": 4,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-15 (historical): Recall tools are the with_memory path when injection hosts differ."
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchValueGateTests.cs",
+      "Line": 6,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018 (historical): H7a value-gate policy."
+    },
+    {
+      "Id": "FR-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryBenchValueGateTests.cs",
+      "Line": 6,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018 (historical): H7a value-gate policy."
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-011",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+      "Line": 7,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011 (historical):"
+    },
+    {
+      "Id": "TR-MCP-MEMORY-SEARCH-002",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+      "Line": 7,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011 (historical):"
+    },
+    {
+      "Id": "FR-MCP-MEMORY-011",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+      "Line": 7,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-011 / TR-MCP-MEMORY-SEARCH-002 / FR-MCP-MEMORY-011 (historical):"
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-011",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+      "Line": 13,
+      "HistoricalNearby": true,
+      "Text": "/// The TEST-MCP-MEMORY-011, TR-MCP-MEMORY-SEARCH-002 and FR-MCP-MEMORY-011 citations in this file, its"
+    },
+    {
+      "Id": "TR-MCP-MEMORY-SEARCH-002",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+      "Line": 13,
+      "HistoricalNearby": true,
+      "Text": "/// The TEST-MCP-MEMORY-011, TR-MCP-MEMORY-SEARCH-002 and FR-MCP-MEMORY-011 citations in this file, its"
+    },
+    {
+      "Id": "FR-MCP-MEMORY-011",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+      "Line": 13,
+      "HistoricalNearby": true,
+      "Text": "/// The TEST-MCP-MEMORY-011, TR-MCP-MEMORY-SEARCH-002 and FR-MCP-MEMORY-011 citations in this file, its"
+    },
+    {
+      "Id": "TR-MCP-MEMORY-SEARCH-002",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+      "Line": 14,
+      "HistoricalNearby": true,
+      "Text": "/// AC-TR-MCP-MEMORY-SEARCH-002 criteria included, are historical: those records are not in the requirements store"
+    },
+    {
+      "Id": "TR-MCP-MEMORY-SEARCH-002",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIndexerTests.cs",
+      "Line": 156,
+      "HistoricalNearby": true,
+      "Text": "    /// AC-TR-MCP-MEMORY-SEARCH-002-09 (historical): Local ONNX path works without cloud credentials in the test host. The test"
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIntegrationTests.cs",
+      "Line": 6,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-46 (historical) / FR-MCP-MEMORY-018-49 (historical):"
+    },
+    {
+      "Id": "FR-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIntegrationTests.cs",
+      "Line": 6,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-46 (historical) / FR-MCP-MEMORY-018-49 (historical):"
+    },
+    {
+      "Id": "FR-MCP-MEMORY-018",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryIntegrationTests.cs",
+      "Line": 6,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018-46 (historical) / FR-MCP-MEMORY-018-49 (historical):"
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-016",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMcpSchemaTests.cs",
+      "Line": 6,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-016 (historical) / TR-MCP-MEMORY-API-002 (historical):"
+    },
+    {
+      "Id": "TR-MCP-MEMORY-API-002",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMcpSchemaTests.cs",
+      "Line": 6,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-016 (historical) / TR-MCP-MEMORY-API-002 (historical):"
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-010",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMigrationTests.cs",
+      "Line": 9,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-010 (historical) / TR-MCP-MEMORY-MODEL-002 (historical): S1 Red acceptance for model/migrations."
+    },
+    {
+      "Id": "TR-MCP-MEMORY-MODEL-002",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMigrationTests.cs",
+      "Line": 9,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-010 (historical) / TR-MCP-MEMORY-MODEL-002 (historical): S1 Red acceptance for model/migrations."
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-016",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryOnboardingDocsTests.cs",
+      "Line": 4,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-016 (historical) / FR-MCP-MEMORY-017 (historical):"
+    },
+    {
+      "Id": "FR-MCP-MEMORY-017",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryOnboardingDocsTests.cs",
+      "Line": 4,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-016 (historical) / FR-MCP-MEMORY-017 (historical):"
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-016",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryPluginSyncTests.cs",
+      "Line": 7,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-016 (historical) / FR-MCP-MEMORY-017 (historical):"
+    },
+    {
+      "Id": "FR-MCP-MEMORY-017",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryPluginSyncTests.cs",
+      "Line": 7,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-016 (historical) / FR-MCP-MEMORY-017 (historical):"
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-010",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs",
+      "Line": 17,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-010 (historical) / TEST-MCP-MEMORY-011 (historical) / TEST-MCP-MEMORY-012 (historical) / TEST-MCP-MEMORY-014 (historical) / TEST-MCP-MEMORY-016 (historical):"
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-011",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs",
+      "Line": 17,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-010 (historical) / TEST-MCP-MEMORY-011 (historical) / TEST-MCP-MEMORY-012 (historical) / TEST-MCP-MEMORY-014 (historical) / TEST-MCP-MEMORY-016 (historical):"
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-012",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs",
+      "Line": 17,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-010 (historical) / TEST-MCP-MEMORY-011 (historical) / TEST-MCP-MEMORY-012 (historical) / TEST-MCP-MEMORY-014 (historical) / TEST-MCP-MEMORY-016 (historical):"
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-014",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs",
+      "Line": 17,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-010 (historical) / TEST-MCP-MEMORY-011 (historical) / TEST-MCP-MEMORY-012 (historical) / TEST-MCP-MEMORY-014 (historical) / TEST-MCP-MEMORY-016 (historical):"
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-016",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs",
+      "Line": 17,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-010 (historical) / TEST-MCP-MEMORY-011 (historical) / TEST-MCP-MEMORY-012 (historical) / TEST-MCP-MEMORY-014 (historical) / TEST-MCP-MEMORY-016 (historical):"
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-010",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs",
+      "Line": 14,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-010 (historical) that the concurrency tests cite is absent from it (hostile validation round 4 finding R4-F3)."
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-016",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS5Catalog.cs",
+      "Line": 8,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-016 (historical): Shared S5 verb/route/method names and production-surface probes."
+    },
+    {
+      "Id": "FR-MCP-MEMORY-017",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS5Catalog.cs",
+      "Line": 12,
+      "HistoricalNearby": true,
+      "Text": "    /// <summary>Additive MCP verbs introduced by FR-MCP-MEMORY-017 (historical) / TR-MCP-MEMORY-API-002 (historical).</summary>"
+    },
+    {
+      "Id": "TR-MCP-MEMORY-API-002",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS5Catalog.cs",
+      "Line": 12,
+      "HistoricalNearby": true,
+      "Text": "    /// <summary>Additive MCP verbs introduced by FR-MCP-MEMORY-017 (historical) / TR-MCP-MEMORY-API-002 (historical).</summary>"
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-016",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemorySurfaceParityTests.cs",
+      "Line": 8,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-016 (historical) / FR-MCP-MEMORY-010 (historical): MCP tool and REST remember store equivalent fields."
+    },
+    {
+      "Id": "FR-MCP-MEMORY-010",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemorySurfaceParityTests.cs",
+      "Line": 8,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-016 (historical) / FR-MCP-MEMORY-010 (historical): MCP tool and REST remember store equivalent fields."
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-016",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryToolsDiscoveryTests.cs",
+      "Line": 8,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-016 (historical) / FR-MCP-MEMORY-017 (historical):"
+    },
+    {
+      "Id": "FR-MCP-MEMORY-017",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryToolsDiscoveryTests.cs",
+      "Line": 8,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-016 (historical) / FR-MCP-MEMORY-017 (historical):"
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-017",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiDeployDocsTests.cs",
+      "Line": 4,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-017 (historical) / TR-MCP-MEMORY-UI-002-02 (historical):"
+    },
+    {
+      "Id": "TR-MCP-MEMORY-UI-002",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiDeployDocsTests.cs",
+      "Line": 4,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-017 (historical) / TR-MCP-MEMORY-UI-002-02 (historical):"
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-017",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiHostingTests.cs",
+      "Line": 4,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-017 (historical) / TR-MCP-MEMORY-UI-002 (historical):"
+    },
+    {
+      "Id": "TR-MCP-MEMORY-UI-002",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiHostingTests.cs",
+      "Line": 4,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-017 (historical) / TR-MCP-MEMORY-UI-002 (historical):"
+    },
+    {
+      "Id": "TEST-MCP-MEMORY-017",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiTests.cs",
+      "Line": 4,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-017 (historical) / FR-MCP-MEMORY-016 (historical):"
+    },
+    {
+      "Id": "FR-MCP-MEMORY-016",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryUiTests.cs",
+      "Line": 4,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-MEMORY-017 (historical) / FR-MCP-MEMORY-016 (historical):"
+    },
+    {
+      "Id": "FR-X-001",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampBindingTests.cs",
+      "Line": 30,
+      "HistoricalNearby": false,
+      "Text": "            stored => RequirementsDatabaseDocumentService.MapFr(Row(\"fr\", \"FR-X-001\", stored, \"\")).CreatedAtUtc,"
+    },
+    {
+      "Id": "FR-X-001",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampBindingTests.cs",
+      "Line": 33,
+      "HistoricalNearby": false,
+      "Text": "            stored => RequirementsDatabaseDocumentService.MapFr(Row(\"fr\", \"FR-X-001\", \"\", stored)).UpdatedAtUtc,"
+    },
+    {
+      "Id": "TR-X-001",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampBindingTests.cs",
+      "Line": 36,
+      "HistoricalNearby": false,
+      "Text": "            stored => RequirementsDatabaseDocumentService.MapTr(Row(\"tr\", \"TR-X-001\", stored, \"\")).CreatedAtUtc,"
+    },
+    {
+      "Id": "TEST-X-001",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampBindingTests.cs",
+      "Line": 39,
+      "HistoricalNearby": false,
+      "Text": "            stored => RequirementsDatabaseDocumentService.MapTest(Row(\"test\", \"TEST-X-001\", \"\", stored)).UpdatedAtUtc,"
+    },
+    {
+      "Id": "FR-X-001",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampBindingTests.cs",
+      "Line": 45,
+      "HistoricalNearby": false,
+      "Text": "            \"FR-X-001\","
+    },
+    {
+      "Id": "FR-X-001",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampBindingTests.cs",
+      "Line": 49,
+      "HistoricalNearby": false,
+      "Text": "                FrId = \"FR-X-001\","
+    },
+    {
+      "Id": "TEST-MCP-QBCLI-001",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 15,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-QBCLI-001 (historical): QuadBrain CLI provider kind, persistent Grok/Codex session args, and slot session"
+    },
+    {
+      "Id": "TEST-MCP-QBCLI-001",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 22,
+      "HistoricalNearby": true,
+      "Text": "/// The TEST-MCP-QBCLI-001 citations in this file are historical: no such record is in the requirements store"
+    },
+    {
+      "Id": "TEST-MCP-QBCLI-001",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 128,
+      "HistoricalNearby": true,
+      "Text": "    /// TEST-MCP-QBCLI-001 (historical): Grok runs in an isolated working folder with its dashboard, memory and subagents off and"
+    },
+    {
+      "Id": "TEST-MCP-QBCLI-001",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 184,
+      "HistoricalNearby": true,
+      "Text": "    /// TEST-MCP-QBCLI-001 (historical): Grok output that stops at the turn limit is returned instead of thrown. The"
+    },
+    {
+      "Id": "TEST-MCP-QBCLI-001",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 215,
+      "HistoricalNearby": true,
+      "Text": "    /// TEST-MCP-QBCLI-001 (historical): Grok stopping at the turn limit with empty output returns empty text. The"
+    },
+    {
+      "Id": "TEST-MCP-QBCLI-001",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 243,
+      "HistoricalNearby": true,
+      "Text": "    /// TEST-MCP-QBCLI-001 (historical): any other Grok failure still throws with its error text. The client's"
+    },
+    {
+      "Id": "TEST-MCP-QBCLI-001",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 272,
+      "HistoricalNearby": true,
+      "Text": "    /// TEST-MCP-QBCLI-001 (historical): a Grok resume whose session is missing retries once without resume. The"
+    },
+    {
+      "Id": "TEST-MCP-QBCLI-001",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 388,
+      "HistoricalNearby": true,
+      "Text": "    /// TEST-MCP-QBCLI-001 (historical): Codex returns the assistant text from the JSONL stream, not the raw events. The test writes"
+    },
+    {
+      "Id": "TEST-MCP-QBCLI-001",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 427,
+      "HistoricalNearby": true,
+      "Text": "    /// TEST-MCP-QBCLI-001 (historical): Codex prefers the JSONL assistant text over tool-call JSON in the output file. The test"
+    },
+    {
+      "Id": "TEST-MCP-QBCLI-001",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 463,
+      "HistoricalNearby": true,
+      "Text": "    /// TEST-MCP-QBCLI-001 (historical): the temp folder comes from the configured variable without the Windows service ACL. The"
+    },
+    {
+      "Id": "TEST-MCP-QBCLI-001",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 481,
+      "HistoricalNearby": true,
+      "Text": "    /// TEST-MCP-QBCLI-001 (historical): Grok writes its prompt file under the configured temp folder and points TEMP and TMP at it."
+    },
+    {
+      "Id": "TEST-MCP-QBCLI-001",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 520,
+      "HistoricalNearby": true,
+      "Text": "    /// TEST-MCP-QBCLI-001 (historical): Codex writes its output file under the configured temp folder. The test writes the process"
+    },
+    {
+      "Id": "TEST-MCP-QBCLI-001",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 557,
+      "HistoricalNearby": true,
+      "Text": "    /// TEST-MCP-QBCLI-001 (historical): a second Grok call on the same slot resumes the first call's session. The"
+    },
+    {
+      "Id": "TEST-MCP-QBCLI-001",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 599,
+      "HistoricalNearby": true,
+      "Text": "    /// TEST-MCP-QBCLI-001 (historical): a second Codex call on the same slot resumes the thread the first call"
+    },
+    {
+      "Id": "TEST-MCP-QBCLI-001",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 636,
+      "HistoricalNearby": true,
+      "Text": "    /// TEST-MCP-QBCLI-001 (historical): the factory creates the CLI client for a CLI slot, and the client completes."
+    },
+    {
+      "Id": "TEST-MCP-QBCLI-001",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs",
+      "Line": 856,
+      "HistoricalNearby": true,
+      "Text": "/// TEST-MCP-QBCLI-001 (historical; no such record in the requirements store): the default shared CLI temp directory on a Windows host lives under the machine's"
+    },
+    {
+      "Id": "TEST-MCP-FED-002",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/FederatedSessionLogServiceTests.cs",
+      "Line": 16,
+      "HistoricalNearby": true,
+      "Text": "/// FR-MCP-083, TEST-MCP-FED-002 (historical)."
+    },
+    {
+      "Id": "TR-PLANNED-CORE-013",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+      "Line": 14,
+      "HistoricalNearby": true,
+      "Text": "/// <summary>TR-PLANNED-CORE-013 (historical), TR-GH-013-001 (historical): Unit tests for GitHubCliService with mocked IProcessRunner.</summary>"
+    },
+    {
+      "Id": "TR-GH-013",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+      "Line": 14,
+      "HistoricalNearby": true,
+      "Text": "/// <summary>TR-PLANNED-CORE-013 (historical), TR-GH-013-001 (historical): Unit tests for GitHubCliService with mocked IProcessRunner.</summary>"
+    },
+    {
+      "Id": "TEST-MCP-GH-006",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+      "Line": 104,
+      "HistoricalNearby": true,
+      "Text": "    /// TEST-MCP-GH-006 (historical): Verifies that issue comment targets are emitted after an explicit end-of-options"
+    },
+    {
+      "Id": "TEST-MCP-GH-006",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+      "Line": 227,
+      "HistoricalNearby": true,
+      "Text": "    /// TEST-MCP-GH-006 (historical): Verifies that invalid close reasons are rejected before launching the GitHub CLI so"
+    },
+    {
+      "Id": "TEST-MCP-GH-006",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+      "Line": 270,
+      "HistoricalNearby": true,
+      "Text": "    /// TEST-MCP-GH-006 (historical): Verifies that invalid list-state values are rejected before process launch so state"
+    },
+    {
+      "Id": "TEST-MCP-PLUGIN-PSONLY-001",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs",
+      "Line": 735,
+      "HistoricalNearby": true,
+      "Text": "    /// TEST-MCP-PLUGIN-PSONLY-001 (historical; no such record is in the requirements store, hostile validation finding"
+    },
+    {
+      "Id": "TR-PLANNED-CORE-013",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/RepoFileServiceTests.cs",
+      "Line": 10,
+      "HistoricalNearby": true,
+      "Text": "/// <summary>TR-PLANNED-CORE-013 (historical): Physical bindings for RepoFileService path security and audit; every constructor creates an owned repository tree.</summary>"
+    },
+    {
+      "Id": "TEST-MCP-TRIAGE-007",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs",
+      "Line": 176,
+      "HistoricalNearby": true,
+      "Text": "    /// TEST-MCP-TRIAGE-007 (historical): DeleteGroupAsync soft-deletes the group and its reports so they no"
+    },
+    {
+      "Id": "TEST-MCP-TRIAGE-007",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs",
+      "Line": 202,
+      "HistoricalNearby": true,
+      "Text": "    /// <summary>TEST-MCP-TRIAGE-007 (historical): deleting a missing triage group throws KeyNotFoundException.</summary>"
+    },
+    {
+      "Id": "TEST-TRIAGE-003",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs",
+      "Line": 1140,
+      "HistoricalNearby": true,
+      "Text": "    /// <summary>TEST-TRIAGE-003 (historical): selected reports can be moved into a new editable triage group.</summary>"
+    },
+    {
+      "Id": "TEST-TRIAGE-003",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs",
+      "Line": 1179,
+      "HistoricalNearby": true,
+      "Text": "    /// <summary>TEST-TRIAGE-003 (historical): selected groups can be merged into an existing editable target group.</summary>"
+    },
+    {
+      "Id": "TEST-TRIAGE-003",
+      "File": "tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs",
+      "Line": 1212,
+      "HistoricalNearby": true,
+      "Text": "    /// <summary>TEST-TRIAGE-003 (historical): groups with run history cannot be regrouped.</summary>"
+    }
+  ]
+}

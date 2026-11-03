@@ -1,0 +1,37 @@
+{
+  "TimestampLocal": "2026-11-02T19:16:36",
+  "TimestampUtc": "2026-11-03T01:16:36.7762970Z",
+  "Method": "workflow.requirements.getTr",
+  "Params": {
+    "id": "TR-MCP-SESSIONLOG-006"
+  },
+  "Data": [
+    {
+      "payload": {
+        "deprecated": true,
+        "result": {
+          "acceptanceCriteria": [
+            {
+              "isSatisfied": false,
+              "id": "AC-TR-MCP-SESSIONLOG-006-010",
+              "text": "The real file-system binding of AC-FR-MCP-SESSIONLOGCTX-001-008 is AC-TR-MCP-WS-005-002: the agent-history scan uses the same directory walk, so that integration case proves both (operator 2026-10-30: \"New TR binding criterion (Recommended)\")."
+            }
+          ],
+          "createdAt": "2026-11-03T01:16:39.0681686+00:00",
+          "scopeStartLayerKey": "layer-1",
+          "area": "MCP",
+          "subarea": "SESSIONLOG",
+          "status": "pending",
+          "id": "TR-MCP-SESSIONLOG-006",
+          "description": "Session-log turn storage, DTOs, REST, MCP tools, and plugin wrappers SHALL expose required string fields planFile and todoId. New interactive creates/submits/beginTurn/replace-turn reject omitted, null, or empty values. Accepted planFile values are a workspace-relative path, an exact absolute path, a ~/ home-relative path, or the literal sentinel None. Accepted todoId values are a canonical MCP TODO id, ISSUE-N, or None. An EF migration adds both columns, defaults existing rows to None, then a one-time backfill scans turn contents and agent history under ~. Uncertain extractions remain None. Query/get results SHALL return both fields.\n**Covered by:** FR: FR-MCP-SESSIONLOGCTX-001; TEST: TEST-MCP-SESSIONLOG-006",
+          "updatedAt": "2026-11-03T01:16:39.0682948+00:00",
+          "title": "Required planFile and todoId scalars with None sentinel and backfill",
+          "priority": "medium"
+        },
+        "requestId": "req-20261103T011637Z-6550"
+      },
+      "type": "result"
+    }
+  ],
+  "ExitCode": 0
+}

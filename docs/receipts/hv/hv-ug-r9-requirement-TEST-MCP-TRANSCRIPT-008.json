@@ -1,0 +1,31 @@
+{
+  "TimestampLocal": "2026-11-02T19:17:03",
+  "TimestampUtc": "2026-11-03T01:17:03.8246507Z",
+  "Method": "workflow.requirements.getTest",
+  "Params": {
+    "id": "TEST-MCP-TRANSCRIPT-008"
+  },
+  "Data": [
+    {
+      "payload": {
+        "deprecated": true,
+        "result": {
+          "acceptanceCriteria": [],
+          "testType": "unit",
+          "scopeStartLayerKey": "layer-1",
+          "area": "MCP",
+          "createdAt": "2026-11-03T01:17:06.0716531+00:00",
+          "status": "pending",
+          "id": "TEST-MCP-TRANSCRIPT-008",
+          "description": "Tests verify typed client, REPL commands, HTTP MCP discovery, stdio MCP discovery, and tool invocation for transcript ingestion and normalization.",
+          "updatedAt": "2026-11-03T01:17:06.0717620+00:00",
+          "title": "Test TEST-MCP-TRANSCRIPT-008",
+          "priority": "medium"
+        },
+        "requestId": "req-20261103T011704Z-ff3f"
+      },
+      "type": "result"
+    }
+  ],
+  "ExitCode": 0
+}

@@ -1,0 +1,9 @@
+{
+  "TimestampLocal": "2026-11-02T19:17:24",
+  "Method": "workflow.requirements.getTr",
+  "Params": {
+    "id": "TR-MCP-MEMORY-SEARCH-002"
+  },
+  "ExitCode": 1,
+  "Error": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261103T011725Z-4fca\n  code: not_found\n  message: TR 'TR-MCP-MEMORY-SEARCH-002' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getTr\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n"
+}

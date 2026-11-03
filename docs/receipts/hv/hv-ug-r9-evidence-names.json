@@ -1,0 +1,1806 @@
+[
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Repl.Core.Tests.HandoffSkillDelegationTests.PluginSkillWorkflow_InvokesTypedClientHandoffEndpoints",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.HandoffSkillDelegationTests.PluginSkillWorkflow_InvokesTypedClientHandoffEndpoints",
+        "Outcome": "Passed",
+        "TestId": "b77cf320-3255-f1ee-52b0-cc7b4a0dae57",
+        "ExecutionId": "11240e17-8cfa-448c-b7e7-bb01f51b3f84",
+        "Start": "2026-11-02T14:52:03.0791704-06:00",
+        "End": "2026-11-02T14:52:03.3278253-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.HandoffSkillDelegationTests.PluginSkillWorkflow_InvokesTypedClientHandoffEndpoints",
+        "Outcome": "Passed",
+        "TestId": "bbbd219e-82d1-7a9f-98d2-7e163f44fc45",
+        "ExecutionId": "a95ae146-be5b-4eeb-897d-cd0b4031eae4",
+        "Start": "2026-11-02T14:52:57.4792346-06:00",
+        "End": "2026-11-02T14:52:57.7269999-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.BuildPublicUrl_PrefersPublicBaseUrl_ThenCustomDomain_ThenSubdomain",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.BuildPublicUrl_PrefersPublicBaseUrl_ThenCustomDomain_ThenSubdomain",
+        "Outcome": "Passed",
+        "TestId": "daf8914d-30d2-b2a5-f802-9fd829e4cd0c",
+        "ExecutionId": "ecc635f3-d38b-448e-8a3e-cb6476437bfb",
+        "Start": "2026-11-02T14:50:55.5219884-06:00",
+        "End": "2026-11-02T14:50:55.5242483-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.BuildPublicUrl_PrefersPublicBaseUrl_ThenCustomDomain_ThenSubdomain",
+        "Outcome": "Passed",
+        "TestId": "7f776ad9-076c-f4fa-eba1-4cda2b0a9ba7",
+        "ExecutionId": "9ff5040f-e15a-4ab8-9984-073740b148f7",
+        "Start": "2026-11-02T14:51:54.4050831-06:00",
+        "End": "2026-11-02T14:51:54.4072552-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_IncludesExpectedHttpFieldsAndToken",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_IncludesExpectedHttpFieldsAndToken",
+        "Outcome": "Passed",
+        "TestId": "71b95ab4-93be-72f7-0f96-51327a11d915",
+        "ExecutionId": "43428af6-d59e-4137-9fae-ae6ede015873",
+        "Start": "2026-11-02T14:50:55.5472883-06:00",
+        "End": "2026-11-02T14:50:55.5582024-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_IncludesExpectedHttpFieldsAndToken",
+        "Outcome": "Passed",
+        "TestId": "450a484b-54d2-5fb4-9c28-03b32e5c40b9",
+        "ExecutionId": "ab3569a3-a3fc-40ac-9f7c-a9fcedbe71b0",
+        "Start": "2026-11-02T14:51:54.3134262-06:00",
+        "End": "2026-11-02T14:51:54.3174717-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_TcpRange_CreatesOneToOneMappings",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_TcpRange_CreatesOneToOneMappings",
+        "Outcome": "Passed",
+        "TestId": "8c9705dc-fe71-1f90-3a09-99f786ff523b",
+        "ExecutionId": "2a4e8259-8fa2-4237-a7ac-384a9d7a3ce9",
+        "Start": "2026-11-02T14:50:55.5873886-06:00",
+        "End": "2026-11-02T14:50:55.5887332-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_TcpRange_CreatesOneToOneMappings",
+        "Outcome": "Passed",
+        "TestId": "4940619f-d4c0-c4ac-fa59-edf3e47e1ed2",
+        "ExecutionId": "41dcea34-f1af-4aad-9256-f71f71540b67",
+        "Start": "2026-11-02T14:51:54.3398775-06:00",
+        "End": "2026-11-02T14:51:54.3722204-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_TcpSinglePort_UsesLocalTunnelPortAndConfiguredRemotePort",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_TcpSinglePort_UsesLocalTunnelPortAndConfiguredRemotePort",
+        "Outcome": "Passed",
+        "TestId": "81bd3a39-d7bb-5f1e-b720-cd5c514254e0",
+        "ExecutionId": "3416117a-8da5-4d5c-a5d1-8c457d78b205",
+        "Start": "2026-11-02T14:50:55.5592939-06:00",
+        "End": "2026-11-02T14:50:55.571953-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_TcpSinglePort_UsesLocalTunnelPortAndConfiguredRemotePort",
+        "Outcome": "Passed",
+        "TestId": "34a934ef-80e0-be6a-5b2d-74ac78fea470",
+        "ExecutionId": "9fd8af9f-4302-4616-9254-a96783f2f35f",
+        "Start": "2026-11-02T14:51:54.3745768-06:00",
+        "End": "2026-11-02T14:51:54.3876675-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_WhenSubdomainConfigured_UsesSubdomainInsteadOfCustomDomain",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_WhenSubdomainConfigured_UsesSubdomainInsteadOfCustomDomain",
+        "Outcome": "Passed",
+        "TestId": "d974a400-2dd0-5c71-ee69-7ba27806bc8b",
+        "ExecutionId": "9cc7fab5-8b9f-4808-828f-f53924da99ea",
+        "Start": "2026-11-02T14:50:55.5892753-06:00",
+        "End": "2026-11-02T14:50:55.5896804-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_WhenSubdomainConfigured_UsesSubdomainInsteadOfCustomDomain",
+        "Outcome": "Passed",
+        "TestId": "3dcf410a-e917-644e-84d3-fe5dcfe31076",
+        "ExecutionId": "f24f63a7-8d36-4322-9b3b-8380fd971aee",
+        "Start": "2026-11-02T14:51:54.3181858-06:00",
+        "End": "2026-11-02T14:51:54.3380854-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenCliMissing_SetsError",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenCliMissing_SetsError",
+        "Outcome": "Passed",
+        "TestId": "3877b46d-bac1-c80c-ec82-4dc0c93bd46d",
+        "ExecutionId": "8d35ce49-be0f-4d6b-9315-cffae5aaa055",
+        "Start": "2026-11-02T14:50:55.5981284-06:00",
+        "End": "2026-11-02T14:50:55.6003606-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenCliMissing_SetsError",
+        "Outcome": "Passed",
+        "TestId": "90436de4-6f0a-d06f-f281-7464f4511be6",
+        "ExecutionId": "c0d73451-e98d-422c-84ec-80e3ac97d5f4",
+        "Start": "2026-11-02T14:51:54.2836246-06:00",
+        "End": "2026-11-02T14:51:54.2969733-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenProxyTypeUnsupported_SetsValidationErrorAndSkipsCliCheck",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenProxyTypeUnsupported_SetsValidationErrorAndSkipsCliCheck",
+        "Outcome": "Passed",
+        "TestId": "83a51313-bf06-7beb-a2ae-19b110d4afbc",
+        "ExecutionId": "2533ce3d-2ff2-4da8-9e0b-22fc28fb4fa4",
+        "Start": "2026-11-02T14:50:55.5743403-06:00",
+        "End": "2026-11-02T14:50:55.5763648-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenProxyTypeUnsupported_SetsValidationErrorAndSkipsCliCheck",
+        "Outcome": "Passed",
+        "TestId": "7dca7556-bd2b-fb42-7c5b-4e1dbd59d6ac",
+        "ExecutionId": "504689ee-0df0-4d37-9e11-0c716da819d3",
+        "Start": "2026-11-02T14:51:54.2977683-06:00",
+        "End": "2026-11-02T14:51:54.3129232-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenSubdomainAndCustomDomainConfigured_SetsValidationError",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenSubdomainAndCustomDomainConfigured_SetsValidationError",
+        "Outcome": "Passed",
+        "TestId": "b3f1d2df-55d2-e1a5-1aca-0d77b116c405",
+        "ExecutionId": "a017e767-db97-4527-ac18-392f9b94b509",
+        "Start": "2026-11-02T14:50:55.5411898-06:00",
+        "End": "2026-11-02T14:50:55.5466676-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenSubdomainAndCustomDomainConfigured_SetsValidationError",
+        "Outcome": "Passed",
+        "TestId": "64c5131b-de3b-e927-30c2-62de5f0b08ca",
+        "ExecutionId": "add39f17-9218-4b44-a788-87f0a3383336",
+        "Start": "2026-11-02T14:51:54.3909454-06:00",
+        "End": "2026-11-02T14:51:54.4029697-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenTcpRangeAndRemotePortBothConfigured_SetsValidationError",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenTcpRangeAndRemotePortBothConfigured_SetsValidationError",
+        "Outcome": "Passed",
+        "TestId": "2e29330d-02d2-d4e9-6b63-e3a467bb4f0b",
+        "ExecutionId": "05c24f3a-f72f-4b05-b0bd-86790c990eb8",
+        "Start": "2026-11-02T14:50:55.600899-06:00",
+        "End": "2026-11-02T14:50:55.6024533-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenTcpRangeAndRemotePortBothConfigured_SetsValidationError",
+        "Outcome": "Passed",
+        "TestId": "c28d3803-695c-d855-8e9b-c4f7abde84a4",
+        "ExecutionId": "917d835d-0252-4e49-b877-96a2a089d705",
+        "Start": "2026-11-02T14:51:54.4076772-06:00",
+        "End": "2026-11-02T14:51:54.4239736-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenTcpRangeMissingEnd_SetsValidationError",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenTcpRangeMissingEnd_SetsValidationError",
+        "Outcome": "Passed",
+        "TestId": "382657b0-c3dd-f1c5-54ea-f0060863f0ae",
+        "ExecutionId": "2b43a6d2-89d0-48df-bbfc-d3da9bdc2443",
+        "Start": "2026-11-02T14:50:55.585345-06:00",
+        "End": "2026-11-02T14:50:55.586812-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenTcpRangeMissingEnd_SetsValidationError",
+        "Outcome": "Passed",
+        "TestId": "dea93eef-54e0-2707-8b36-2464a78b19c7",
+        "ExecutionId": "11147831-0120-4452-8437-54edcb5c26ee",
+        "Start": "2026-11-02T14:51:54.3889437-06:00",
+        "End": "2026-11-02T14:51:54.390418-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.GitHubCliServiceLinuxTests.ListIssuesAsync_WithForeignWorkspace_RunsWithoutWorkingDirectory",
+    "CurrentMatches": []
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.NormalizeFinalPath_LocalDevicePrefix_IsStripped",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.NormalizeFinalPath_LocalDevicePrefix_IsStripped",
+        "Outcome": "Passed",
+        "TestId": "be5a685c-3342-f605-5a13-e943baef9f7f",
+        "ExecutionId": "caf79ec9-0ebb-4de8-9969-7ea67955faad",
+        "Start": "2026-11-02T14:50:44.0106684-06:00",
+        "End": "2026-11-02T14:50:44.011327-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.NormalizeFinalPath_LocalDevicePrefix_IsStripped",
+        "Outcome": "Passed",
+        "TestId": "713df6bc-a01e-9c8f-3c30-66302599c06f",
+        "ExecutionId": "ff3cb4fb-611f-4335-a9fd-185335b68d15",
+        "Start": "2026-11-02T14:52:01.2055373-06:00",
+        "End": "2026-11-02T14:52:01.2060029-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.NormalizeFinalPath_UncDevicePrefix_BecomesUncPath",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.NormalizeFinalPath_UncDevicePrefix_BecomesUncPath",
+        "Outcome": "Passed",
+        "TestId": "066e311b-612f-0eaa-233a-bc22ce687b84",
+        "ExecutionId": "2b27adb0-a777-4a79-9f13-2dd55241a8d0",
+        "Start": "2026-11-02T14:50:44.2429777-06:00",
+        "End": "2026-11-02T14:50:44.2432996-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.NormalizeFinalPath_UncDevicePrefix_BecomesUncPath",
+        "Outcome": "Passed",
+        "TestId": "15190ab3-1c4d-21e1-061d-4be5f3dbb9c4",
+        "ExecutionId": "d542d3f4-7d27-4403-83c5-33e808949d1f",
+        "Start": "2026-11-02T14:52:01.2064154-06:00",
+        "End": "2026-11-02T14:52:01.2066483-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadAsync_LongContainedPath_SucceedsWhenSupported",
+    "CurrentMatches": []
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadBoundedAsync_Cancelled_Throws",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadBoundedAsync_Cancelled_Throws",
+        "Outcome": "Passed",
+        "TestId": "35d0e552-f2b8-a706-17cb-2f4f32c25d65",
+        "ExecutionId": "84a51958-1482-4faa-bfac-90c879ec1722",
+        "Start": "2026-11-02T14:50:44.2403825-06:00",
+        "End": "2026-11-02T14:50:44.2417085-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadBoundedAsync_Cancelled_Throws",
+        "Outcome": "Passed",
+        "TestId": "a71961c7-fb20-0339-807f-38a0c5e8c554",
+        "ExecutionId": "10dafbfc-d6ae-45ca-b191-19fa902a3e0a",
+        "Start": "2026-11-02T14:52:01.1956717-06:00",
+        "End": "2026-11-02T14:52:01.2044705-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadBoundedAsync_ExactlyAtLimit_ReturnsText",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadBoundedAsync_ExactlyAtLimit_ReturnsText",
+        "Outcome": "Passed",
+        "TestId": "33502600-1379-7205-640d-487e49dbb054",
+        "ExecutionId": "ebea7de6-8293-4f78-8f25-dc2e8f5f0684",
+        "Start": "2026-11-02T14:50:44.0120111-06:00",
+        "End": "2026-11-02T14:50:44.1324294-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadBoundedAsync_ExactlyAtLimit_ReturnsText",
+        "Outcome": "Passed",
+        "TestId": "6600be95-0f4d-7e9f-54e2-709b2c9033a6",
+        "ExecutionId": "a4098018-009a-4438-9eea-6cc3ab2dff52",
+        "Start": "2026-11-02T14:52:01.2765495-06:00",
+        "End": "2026-11-02T14:52:01.4106411-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadBoundedAsync_GrowingStream_StopsAtLimit",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadBoundedAsync_GrowingStream_StopsAtLimit",
+        "Outcome": "Passed",
+        "TestId": "9fd2601e-50bc-4e95-5f83-f12578d1db30",
+        "ExecutionId": "36d67776-bb6f-46e8-9ab2-cd31e95fcc65",
+        "Start": "2026-11-02T14:50:44.1348807-06:00",
+        "End": "2026-11-02T14:50:44.2316783-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadBoundedAsync_GrowingStream_StopsAtLimit",
+        "Outcome": "Passed",
+        "TestId": "5fec96e6-5eac-93a5-47f8-03a583b65e75",
+        "ExecutionId": "d3609b7d-db66-4888-bfd1-8fd27c1cd29f",
+        "Start": "2026-11-02T14:52:01.2243912-06:00",
+        "End": "2026-11-02T14:52:01.2760055-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.QueryAsync_HomeRelativeFilter_ExpandsThenExactMatches",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.QueryAsync_HomeRelativeFilter_ExpandsThenExactMatches",
+        "Outcome": "Passed",
+        "TestId": "a5d98b7f-c87d-cbb3-b499-139088c4f87d",
+        "ExecutionId": "605f2a6a-6d07-467d-8f26-9470a626eb96",
+        "Start": "2026-11-02T14:50:41.3530835-06:00",
+        "End": "2026-11-02T14:50:41.417493-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.QueryAsync_HomeRelativeFilter_ExpandsThenExactMatches",
+        "Outcome": "Passed",
+        "TestId": "d43f58b5-1384-1f86-a609-f97daf5cffff",
+        "ExecutionId": "537139fc-82bc-4668-b158-c09b0d4311df",
+        "Start": "2026-11-02T14:52:09.516523-06:00",
+        "End": "2026-11-02T14:52:09.5711908-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_BuildStartupTimeoutError_IncludesOutputContext",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_BuildStartupTimeoutError_IncludesOutputContext",
+        "Outcome": "Passed",
+        "TestId": "54301650-bf77-98a7-0484-520290b35352",
+        "ExecutionId": "1e5344ef-6bfb-49ba-8a67-38a6a211fb0d",
+        "Start": "2026-11-02T14:51:09.5141772-06:00",
+        "End": "2026-11-02T14:51:09.5153287-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_BuildStartupTimeoutError_IncludesOutputContext",
+        "Outcome": "Passed",
+        "TestId": "db849c4f-c3f2-4361-52d0-c3689e1b2fbc",
+        "ExecutionId": "69fdb509-533e-4ac4-ad9b-78c83bd9d243",
+        "Start": "2026-11-02T14:51:38.2983768-06:00",
+        "End": "2026-11-02T14:51:38.2996046-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning",
+        "Outcome": "Passed",
+        "TestId": "1204d14f-06e9-e93a-30b1-8a112443e589",
+        "ExecutionId": "4e082da3-b671-4d1d-9e1e-c3756e57dd49",
+        "Start": "2026-11-02T14:51:09.4543128-06:00",
+        "End": "2026-11-02T14:51:09.4656099-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning",
+        "Outcome": "Passed",
+        "TestId": "bce67cac-c65a-465a-4dfd-03d8f00b3b15",
+        "ExecutionId": "e464ab30-46f3-4ce9-b8df-586ab8c3226d",
+        "Start": "2026-11-02T14:51:38.2882309-06:00",
+        "End": "2026-11-02T14:51:38.2905702-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_ProviderName_IsCloudflare",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_ProviderName_IsCloudflare",
+        "Outcome": "Passed",
+        "TestId": "a817117b-e9ae-10a7-7445-57e1f12af925",
+        "ExecutionId": "3f528450-6297-41fd-9387-ee9c0611cf7d",
+        "Start": "2026-11-02T14:51:09.4518282-06:00",
+        "End": "2026-11-02T14:51:09.4532836-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_ProviderName_IsCloudflare",
+        "Outcome": "Passed",
+        "TestId": "5e0150c1-b0fa-4c16-66b4-2196a7cdee1b",
+        "ExecutionId": "667c3897-fc55-46f3-a25d-a766fbbbd175",
+        "Start": "2026-11-02T14:51:38.2972914-06:00",
+        "End": "2026-11-02T14:51:38.2978507-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_StartAsync_WhenCliMissing_SetsError",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_StartAsync_WhenCliMissing_SetsError",
+        "Outcome": "Passed",
+        "TestId": "30f4d41b-9798-de77-ef0e-d5d9bfcc6eb9",
+        "ExecutionId": "20781e94-7512-475d-9edf-a249f2638fad",
+        "Start": "2026-11-02T14:51:09.4688032-06:00",
+        "End": "2026-11-02T14:51:09.4788993-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_StartAsync_WhenCliMissing_SetsError",
+        "Outcome": "Passed",
+        "TestId": "58d5dedf-8ee0-d2fb-dbae-65ff6914c216",
+        "ExecutionId": "ca51947b-df1f-4ac2-9703-fb3b02faf6c7",
+        "Start": "2026-11-02T14:51:38.313383-06:00",
+        "End": "2026-11-02T14:51:38.3169215-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.FrpProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.FrpProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning",
+        "Outcome": "Passed",
+        "TestId": "6b8d2013-bf21-54a9-d63d-51b5e44215dc",
+        "ExecutionId": "989cb8b1-9541-4890-9de7-717c4c01da68",
+        "Start": "2026-11-02T14:51:09.4809967-06:00",
+        "End": "2026-11-02T14:51:09.4895975-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.FrpProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning",
+        "Outcome": "Passed",
+        "TestId": "bdc7f035-a927-35d7-f4cb-5725f28aed64",
+        "ExecutionId": "eb4fcb2b-f6f1-4ab1-9cc8-30c37ca60ef4",
+        "Start": "2026-11-02T14:51:38.2849661-06:00",
+        "End": "2026-11-02T14:51:38.287626-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.FrpProvider_ProviderName_IsFrp",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.FrpProvider_ProviderName_IsFrp",
+        "Outcome": "Passed",
+        "TestId": "e8038590-0c81-54a4-c972-5a96cb538345",
+        "ExecutionId": "a987f6b9-e36f-4dfa-9531-e5eb495f67cf",
+        "Start": "2026-11-02T14:51:09.5158643-06:00",
+        "End": "2026-11-02T14:51:09.5162736-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.FrpProvider_ProviderName_IsFrp",
+        "Outcome": "Passed",
+        "TestId": "d9a00847-f06f-e73f-19fa-8a2d21d7ab5d",
+        "ExecutionId": "140c9184-651f-4df1-8a37-80b68ec082b8",
+        "Start": "2026-11-02T14:51:38.3176074-06:00",
+        "End": "2026-11-02T14:51:38.3186656-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.FrpProvider_StartAsync_WhenCliMissing_SetsError",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.FrpProvider_StartAsync_WhenCliMissing_SetsError",
+        "Outcome": "Passed",
+        "TestId": "53a5a38c-3b33-acdb-83fe-9aad139e23c6",
+        "ExecutionId": "735964f6-303c-4ba2-85bc-a4ed53d54574",
+        "Start": "2026-11-02T14:51:09.5021377-06:00",
+        "End": "2026-11-02T14:51:09.5043879-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.FrpProvider_StartAsync_WhenCliMissing_SetsError",
+        "Outcome": "Passed",
+        "TestId": "f1f730c3-ebd0-2a7e-0000-69cc91bdce21",
+        "ExecutionId": "95fd0463-c1e3-4636-adac-334f8b749cea",
+        "Start": "2026-11-02T14:51:38.3275783-06:00",
+        "End": "2026-11-02T14:51:38.3326073-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_BuildStartupTimeoutError_IncludesApiAndOutputContext",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_BuildStartupTimeoutError_IncludesApiAndOutputContext",
+        "Outcome": "Passed",
+        "TestId": "d3541664-1b4f-40b6-0d2c-37787fc13bd2",
+        "ExecutionId": "0627fa43-b932-4804-8327-7df09aea9408",
+        "Start": "2026-11-02T14:51:09.4794893-06:00",
+        "End": "2026-11-02T14:51:09.4806102-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_BuildStartupTimeoutError_IncludesApiAndOutputContext",
+        "Outcome": "Passed",
+        "TestId": "3eb0293a-bb7e-ff73-b6cd-05552ea6ddc9",
+        "ExecutionId": "dd2deca3-d3ed-4e0b-aaf4-ec183eb364c4",
+        "Start": "2026-11-02T14:51:38.3001739-06:00",
+        "End": "2026-11-02T14:51:38.3010714-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning",
+        "Outcome": "Passed",
+        "TestId": "57ce46fc-5069-1441-88cf-04012a90f827",
+        "ExecutionId": "143f7092-c2a4-453e-b4cd-2a37873f6657",
+        "Start": "2026-11-02T14:51:09.4667789-06:00",
+        "End": "2026-11-02T14:51:09.4678082-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning",
+        "Outcome": "Passed",
+        "TestId": "23fb4fc1-c6ab-e712-501b-302399b420c1",
+        "ExecutionId": "d0f10d9a-d90b-4486-8377-3b47a287a23c",
+        "Start": "2026-11-02T14:51:38.3016404-06:00",
+        "End": "2026-11-02T14:51:38.3119493-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_ProviderName_IsNgrok",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_ProviderName_IsNgrok",
+        "Outcome": "Passed",
+        "TestId": "fd270fea-d953-95c6-8c4f-0b78732ddfb8",
+        "ExecutionId": "778c8272-9f69-488c-b54c-fc324a1925b8",
+        "Start": "2026-11-02T14:51:09.4380984-06:00",
+        "End": "2026-11-02T14:51:09.4504757-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_ProviderName_IsNgrok",
+        "Outcome": "Passed",
+        "TestId": "2ca9f538-d81c-c03c-b00e-4f150fba77e6",
+        "ExecutionId": "62c66dfb-0ebf-4a4a-b083-43ac5d766903",
+        "Start": "2026-11-02T14:51:38.2727411-06:00",
+        "End": "2026-11-02T14:51:38.2839233-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_StartAsync_WhenCliMissing_SetsError",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_StartAsync_WhenCliMissing_SetsError",
+        "Outcome": "Passed",
+        "TestId": "4e20d105-ca57-7be5-0f95-9ccc84304aab",
+        "ExecutionId": "5a27628e-4142-4844-8f92-2229060420e9",
+        "Start": "2026-11-02T14:51:09.490777-06:00",
+        "End": "2026-11-02T14:51:09.5002692-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_StartAsync_WhenCliMissing_SetsError",
+        "Outcome": "Passed",
+        "TestId": "aebdfb83-859d-7500-7bc6-2ec61895f7b5",
+        "ExecutionId": "a77662ed-02e2-49d6-9b80-6dde3ea8bc15",
+        "Start": "2026-11-02T14:51:38.341113-06:00",
+        "End": "2026-11-02T14:51:38.3460743-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixtureTests.EphemeralPostgresFixture_InitdbFailure_CapturesSanitizedInvocationStdoutAndStderr",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-win-lane-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixtureTests.EphemeralPostgresFixture_InitdbFailure_CapturesSanitizedInvocationStdoutAndStderr",
+        "Outcome": "Passed",
+        "TestId": "f5d8c762-31c1-7e35-f603-bf38364da673",
+        "ExecutionId": "a0a7eb10-c816-4892-bf89-7e51b638ee1e",
+        "Start": "2026-11-02T14:56:54.0713248-06:00",
+        "End": "2026-11-02T14:56:54.1067724-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentMockDataTests.CurrentDirectory_IsProcessWorkingDirectory",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentMockDataTests.CurrentDirectory_IsProcessWorkingDirectory",
+        "Outcome": "Passed",
+        "TestId": "0a3518ad-31f0-e6f2-3f2e-a2c880a708b9",
+        "ExecutionId": "dc2cdc69-9467-4fd3-b106-66b0d1dfb58c",
+        "Start": "2026-11-02T14:51:27.4786062-06:00",
+        "End": "2026-11-02T14:51:27.4797348-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentMockDataTests.CurrentDirectory_IsProcessWorkingDirectory",
+        "Outcome": "Passed",
+        "TestId": "880ad69d-e324-045c-cc4a-d1e5ecd7b7f0",
+        "ExecutionId": "e2347002-48dd-4b63-a0c7-411afd8d8bb8",
+        "Start": "2026-11-02T14:51:54.0662866-06:00",
+        "End": "2026-11-02T14:51:54.0669727-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentMockDataTests.NormalizeNativePath_CollapsesToCanonicalForm",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentMockDataTests.NormalizeNativePath_CollapsesToCanonicalForm",
+        "Outcome": "Passed",
+        "TestId": "87639796-815b-11b7-e37f-357145d84020",
+        "ExecutionId": "da06f6b3-34ec-4aeb-ada0-cc9002c51b9f",
+        "Start": "2026-11-02T14:51:27.4800691-06:00",
+        "End": "2026-11-02T14:51:27.4891864-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentMockDataTests.NormalizeNativePath_CollapsesToCanonicalForm",
+        "Outcome": "Passed",
+        "TestId": "a4ed6887-0a32-dc56-93ac-387e3897f2c5",
+        "ExecutionId": "293627ff-e55f-4604-a9ea-eb9faac3615f",
+        "Start": "2026-11-02T14:51:54.0642651-06:00",
+        "End": "2026-11-02T14:51:54.0657139-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentMockDataTests.Platform_IsRunningPlatform",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentMockDataTests.Platform_IsRunningPlatform",
+        "Outcome": "Passed",
+        "TestId": "926f6b34-02c2-4e02-546a-b196db599b53",
+        "ExecutionId": "ffb3964b-23bf-41e3-a980-157692900137",
+        "Start": "2026-11-02T14:51:27.490055-06:00",
+        "End": "2026-11-02T14:51:27.4902735-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentMockDataTests.Platform_IsRunningPlatform",
+        "Outcome": "Passed",
+        "TestId": "91851f6f-acbd-68f9-f1c1-c73cdfa24d92",
+        "ExecutionId": "463e671b-0524-425b-b8ba-ac89151435f8",
+        "Start": "2026-11-02T14:51:54.0674267-06:00",
+        "End": "2026-11-02T14:51:54.0676017-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.ResolveAsync_EmptyWorkspaceId_PreservesGlobalIdentityWithoutNativeResolution",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.ResolveAsync_EmptyWorkspaceId_PreservesGlobalIdentityWithoutNativeResolution",
+        "Outcome": "Passed",
+        "TestId": "0922a792-ba52-52df-fe72-170ddc356498",
+        "ExecutionId": "116e3aa4-9490-4477-98f8-15f96a1ad0fd",
+        "Start": "2026-11-02T14:51:41.3661301-06:00",
+        "End": "2026-11-02T14:51:41.3673097-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.ResolveAsync_EmptyWorkspaceId_PreservesGlobalIdentityWithoutNativeResolution",
+        "Outcome": "Passed",
+        "TestId": "1f73859d-9f60-19a4-7b9a-f0672a451185",
+        "ExecutionId": "bbc8e4ba-132c-4b6d-92b2-cbf1b047e38d",
+        "Start": "2026-11-02T14:52:34.829545-06:00",
+        "End": "2026-11-02T14:52:34.8315162-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathGetFullPathRatchetMockDataTests.AllOtherFiles_StayWithinReviewedAllowlist",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathGetFullPathRatchetMockDataTests.AllOtherFiles_StayWithinReviewedAllowlist",
+        "Outcome": "Passed",
+        "TestId": "ce9ef6b1-55a5-3e86-3ed0-6bfb0b8309b1",
+        "ExecutionId": "40ff5edc-cb13-48da-a8fd-b135a2737d41",
+        "Start": "2026-11-02T14:50:45.5347012-06:00",
+        "End": "2026-11-02T14:50:45.5354304-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathGetFullPathRatchetMockDataTests.AllOtherFiles_StayWithinReviewedAllowlist",
+        "Outcome": "Passed",
+        "TestId": "89f905b7-cce0-3f5e-adc3-2548ce6b9991",
+        "ExecutionId": "2c79f13b-4c37-44cb-ae5d-04b10257e8c0",
+        "Start": "2026-11-02T14:52:15.9758113-06:00",
+        "End": "2026-11-02T14:52:15.9766116-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "linux",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathGetFullPathRatchetMockDataTests.IdentityFiles_HaveNoDirectGetFullPath",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathGetFullPathRatchetMockDataTests.IdentityFiles_HaveNoDirectGetFullPath",
+        "Outcome": "Passed",
+        "TestId": "5e1fa353-e6f5-d060-f8db-865a339d7cb6",
+        "ExecutionId": "6173b2bc-0bda-4b35-9a41-0500e64fd228",
+        "Start": "2026-11-02T14:50:45.5522952-06:00",
+        "End": "2026-11-02T14:50:45.5528637-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathGetFullPathRatchetMockDataTests.IdentityFiles_HaveNoDirectGetFullPath",
+        "Outcome": "Passed",
+        "TestId": "4f19d0e6-46eb-ee25-15bd-75696ab7bb1f",
+        "ExecutionId": "1b0c5368-213e-4444-840e-28645497daf5",
+        "Start": "2026-11-02T14:52:15.9770814-06:00",
+        "End": "2026-11-02T14:52:15.9777322-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Repl.Core.Tests.HandoffSkillDelegationTests.PluginSkillWorkflow_InvokesTypedClientHandoffEndpoints",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.HandoffSkillDelegationTests.PluginSkillWorkflow_InvokesTypedClientHandoffEndpoints",
+        "Outcome": "Passed",
+        "TestId": "b77cf320-3255-f1ee-52b0-cc7b4a0dae57",
+        "ExecutionId": "11240e17-8cfa-448c-b7e7-bb01f51b3f84",
+        "Start": "2026-11-02T14:52:03.0791704-06:00",
+        "End": "2026-11-02T14:52:03.3278253-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Repl.Core.Tests",
+        "Name": "QBrainAi.Repl.Core.Tests.HandoffSkillDelegationTests.PluginSkillWorkflow_InvokesTypedClientHandoffEndpoints",
+        "Outcome": "Passed",
+        "TestId": "bbbd219e-82d1-7a9f-98d2-7e163f44fc45",
+        "ExecutionId": "a95ae146-be5b-4eeb-897d-cd0b4031eae4",
+        "Start": "2026-11-02T14:52:57.4792346-06:00",
+        "End": "2026-11-02T14:52:57.7269999-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.BuildPublicUrl_PrefersPublicBaseUrl_ThenCustomDomain_ThenSubdomain",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.BuildPublicUrl_PrefersPublicBaseUrl_ThenCustomDomain_ThenSubdomain",
+        "Outcome": "Passed",
+        "TestId": "daf8914d-30d2-b2a5-f802-9fd829e4cd0c",
+        "ExecutionId": "ecc635f3-d38b-448e-8a3e-cb6476437bfb",
+        "Start": "2026-11-02T14:50:55.5219884-06:00",
+        "End": "2026-11-02T14:50:55.5242483-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.BuildPublicUrl_PrefersPublicBaseUrl_ThenCustomDomain_ThenSubdomain",
+        "Outcome": "Passed",
+        "TestId": "7f776ad9-076c-f4fa-eba1-4cda2b0a9ba7",
+        "ExecutionId": "9ff5040f-e15a-4ab8-9984-073740b148f7",
+        "Start": "2026-11-02T14:51:54.4050831-06:00",
+        "End": "2026-11-02T14:51:54.4072552-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_IncludesExpectedHttpFieldsAndToken",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_IncludesExpectedHttpFieldsAndToken",
+        "Outcome": "Passed",
+        "TestId": "71b95ab4-93be-72f7-0f96-51327a11d915",
+        "ExecutionId": "43428af6-d59e-4137-9fae-ae6ede015873",
+        "Start": "2026-11-02T14:50:55.5472883-06:00",
+        "End": "2026-11-02T14:50:55.5582024-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_IncludesExpectedHttpFieldsAndToken",
+        "Outcome": "Passed",
+        "TestId": "450a484b-54d2-5fb4-9c28-03b32e5c40b9",
+        "ExecutionId": "ab3569a3-a3fc-40ac-9f7c-a9fcedbe71b0",
+        "Start": "2026-11-02T14:51:54.3134262-06:00",
+        "End": "2026-11-02T14:51:54.3174717-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_TcpRange_CreatesOneToOneMappings",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_TcpRange_CreatesOneToOneMappings",
+        "Outcome": "Passed",
+        "TestId": "8c9705dc-fe71-1f90-3a09-99f786ff523b",
+        "ExecutionId": "2a4e8259-8fa2-4237-a7ac-384a9d7a3ce9",
+        "Start": "2026-11-02T14:50:55.5873886-06:00",
+        "End": "2026-11-02T14:50:55.5887332-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_TcpRange_CreatesOneToOneMappings",
+        "Outcome": "Passed",
+        "TestId": "4940619f-d4c0-c4ac-fa59-edf3e47e1ed2",
+        "ExecutionId": "41dcea34-f1af-4aad-9256-f71f71540b67",
+        "Start": "2026-11-02T14:51:54.3398775-06:00",
+        "End": "2026-11-02T14:51:54.3722204-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_TcpSinglePort_UsesLocalTunnelPortAndConfiguredRemotePort",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_TcpSinglePort_UsesLocalTunnelPortAndConfiguredRemotePort",
+        "Outcome": "Passed",
+        "TestId": "81bd3a39-d7bb-5f1e-b720-cd5c514254e0",
+        "ExecutionId": "3416117a-8da5-4d5c-a5d1-8c457d78b205",
+        "Start": "2026-11-02T14:50:55.5592939-06:00",
+        "End": "2026-11-02T14:50:55.571953-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_TcpSinglePort_UsesLocalTunnelPortAndConfiguredRemotePort",
+        "Outcome": "Passed",
+        "TestId": "34a934ef-80e0-be6a-5b2d-74ac78fea470",
+        "ExecutionId": "9fd8af9f-4302-4616-9254-a96783f2f35f",
+        "Start": "2026-11-02T14:51:54.3745768-06:00",
+        "End": "2026-11-02T14:51:54.3876675-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_WhenSubdomainConfigured_UsesSubdomainInsteadOfCustomDomain",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_WhenSubdomainConfigured_UsesSubdomainInsteadOfCustomDomain",
+        "Outcome": "Passed",
+        "TestId": "d974a400-2dd0-5c71-ee69-7ba27806bc8b",
+        "ExecutionId": "9cc7fab5-8b9f-4808-828f-f53924da99ea",
+        "Start": "2026-11-02T14:50:55.5892753-06:00",
+        "End": "2026-11-02T14:50:55.5896804-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.GenerateConfig_WhenSubdomainConfigured_UsesSubdomainInsteadOfCustomDomain",
+        "Outcome": "Passed",
+        "TestId": "3dcf410a-e917-644e-84d3-fe5dcfe31076",
+        "ExecutionId": "f24f63a7-8d36-4322-9b3b-8380fd971aee",
+        "Start": "2026-11-02T14:51:54.3181858-06:00",
+        "End": "2026-11-02T14:51:54.3380854-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenCliMissing_SetsError",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenCliMissing_SetsError",
+        "Outcome": "Passed",
+        "TestId": "3877b46d-bac1-c80c-ec82-4dc0c93bd46d",
+        "ExecutionId": "8d35ce49-be0f-4d6b-9315-cffae5aaa055",
+        "Start": "2026-11-02T14:50:55.5981284-06:00",
+        "End": "2026-11-02T14:50:55.6003606-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenCliMissing_SetsError",
+        "Outcome": "Passed",
+        "TestId": "90436de4-6f0a-d06f-f281-7464f4511be6",
+        "ExecutionId": "c0d73451-e98d-422c-84ec-80e3ac97d5f4",
+        "Start": "2026-11-02T14:51:54.2836246-06:00",
+        "End": "2026-11-02T14:51:54.2969733-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenProxyTypeUnsupported_SetsValidationErrorAndSkipsCliCheck",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenProxyTypeUnsupported_SetsValidationErrorAndSkipsCliCheck",
+        "Outcome": "Passed",
+        "TestId": "83a51313-bf06-7beb-a2ae-19b110d4afbc",
+        "ExecutionId": "2533ce3d-2ff2-4da8-9e0b-22fc28fb4fa4",
+        "Start": "2026-11-02T14:50:55.5743403-06:00",
+        "End": "2026-11-02T14:50:55.5763648-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenProxyTypeUnsupported_SetsValidationErrorAndSkipsCliCheck",
+        "Outcome": "Passed",
+        "TestId": "7dca7556-bd2b-fb42-7c5b-4e1dbd59d6ac",
+        "ExecutionId": "504689ee-0df0-4d37-9e11-0c716da819d3",
+        "Start": "2026-11-02T14:51:54.2977683-06:00",
+        "End": "2026-11-02T14:51:54.3129232-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenSubdomainAndCustomDomainConfigured_SetsValidationError",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenSubdomainAndCustomDomainConfigured_SetsValidationError",
+        "Outcome": "Passed",
+        "TestId": "b3f1d2df-55d2-e1a5-1aca-0d77b116c405",
+        "ExecutionId": "a017e767-db97-4527-ac18-392f9b94b509",
+        "Start": "2026-11-02T14:50:55.5411898-06:00",
+        "End": "2026-11-02T14:50:55.5466676-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenSubdomainAndCustomDomainConfigured_SetsValidationError",
+        "Outcome": "Passed",
+        "TestId": "64c5131b-de3b-e927-30c2-62de5f0b08ca",
+        "ExecutionId": "add39f17-9218-4b44-a788-87f0a3383336",
+        "Start": "2026-11-02T14:51:54.3909454-06:00",
+        "End": "2026-11-02T14:51:54.4029697-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenTcpRangeAndRemotePortBothConfigured_SetsValidationError",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenTcpRangeAndRemotePortBothConfigured_SetsValidationError",
+        "Outcome": "Passed",
+        "TestId": "2e29330d-02d2-d4e9-6b63-e3a467bb4f0b",
+        "ExecutionId": "05c24f3a-f72f-4b05-b0bd-86790c990eb8",
+        "Start": "2026-11-02T14:50:55.600899-06:00",
+        "End": "2026-11-02T14:50:55.6024533-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenTcpRangeAndRemotePortBothConfigured_SetsValidationError",
+        "Outcome": "Passed",
+        "TestId": "c28d3803-695c-d855-8e9b-c4f7abde84a4",
+        "ExecutionId": "917d835d-0252-4e49-b877-96a2a089d705",
+        "Start": "2026-11-02T14:51:54.4076772-06:00",
+        "End": "2026-11-02T14:51:54.4239736-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenTcpRangeMissingEnd_SetsValidationError",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenTcpRangeMissingEnd_SetsValidationError",
+        "Outcome": "Passed",
+        "TestId": "382657b0-c3dd-f1c5-54ea-f0060863f0ae",
+        "ExecutionId": "2b43a6d2-89d0-48df-bbfc-d3da9bdc2443",
+        "Start": "2026-11-02T14:50:55.585345-06:00",
+        "End": "2026-11-02T14:50:55.586812-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.FrpTunnelProviderTests.StartAsync_WhenTcpRangeMissingEnd_SetsValidationError",
+        "Outcome": "Passed",
+        "TestId": "dea93eef-54e0-2707-8b36-2464a78b19c7",
+        "ExecutionId": "11147831-0120-4452-8437-54edcb5c26ee",
+        "Start": "2026-11-02T14:51:54.3889437-06:00",
+        "End": "2026-11-02T14:51:54.390418-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.GitHubCliServiceWindowsTests.ListIssuesAsync_WithForeignWorkspace_RunsWithoutWorkingDirectory",
+    "CurrentMatches": []
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.NormalizeFinalPath_LocalDevicePrefix_IsStripped",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.NormalizeFinalPath_LocalDevicePrefix_IsStripped",
+        "Outcome": "Passed",
+        "TestId": "be5a685c-3342-f605-5a13-e943baef9f7f",
+        "ExecutionId": "caf79ec9-0ebb-4de8-9969-7ea67955faad",
+        "Start": "2026-11-02T14:50:44.0106684-06:00",
+        "End": "2026-11-02T14:50:44.011327-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.NormalizeFinalPath_LocalDevicePrefix_IsStripped",
+        "Outcome": "Passed",
+        "TestId": "713df6bc-a01e-9c8f-3c30-66302599c06f",
+        "ExecutionId": "ff3cb4fb-611f-4335-a9fd-185335b68d15",
+        "Start": "2026-11-02T14:52:01.2055373-06:00",
+        "End": "2026-11-02T14:52:01.2060029-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.NormalizeFinalPath_UncDevicePrefix_BecomesUncPath",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.NormalizeFinalPath_UncDevicePrefix_BecomesUncPath",
+        "Outcome": "Passed",
+        "TestId": "066e311b-612f-0eaa-233a-bc22ce687b84",
+        "ExecutionId": "2b27adb0-a777-4a79-9f13-2dd55241a8d0",
+        "Start": "2026-11-02T14:50:44.2429777-06:00",
+        "End": "2026-11-02T14:50:44.2432996-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.NormalizeFinalPath_UncDevicePrefix_BecomesUncPath",
+        "Outcome": "Passed",
+        "TestId": "15190ab3-1c4d-21e1-061d-4be5f3dbb9c4",
+        "ExecutionId": "d542d3f4-7d27-4403-83c5-33e808949d1f",
+        "Start": "2026-11-02T14:52:01.2064154-06:00",
+        "End": "2026-11-02T14:52:01.2066483-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadAsync_LongContainedPath_SucceedsWhenSupported",
+    "CurrentMatches": []
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadBoundedAsync_Cancelled_Throws",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadBoundedAsync_Cancelled_Throws",
+        "Outcome": "Passed",
+        "TestId": "35d0e552-f2b8-a706-17cb-2f4f32c25d65",
+        "ExecutionId": "84a51958-1482-4faa-bfac-90c879ec1722",
+        "Start": "2026-11-02T14:50:44.2403825-06:00",
+        "End": "2026-11-02T14:50:44.2417085-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadBoundedAsync_Cancelled_Throws",
+        "Outcome": "Passed",
+        "TestId": "a71961c7-fb20-0339-807f-38a0c5e8c554",
+        "ExecutionId": "10dafbfc-d6ae-45ca-b191-19fa902a3e0a",
+        "Start": "2026-11-02T14:52:01.1956717-06:00",
+        "End": "2026-11-02T14:52:01.2044705-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadBoundedAsync_ExactlyAtLimit_ReturnsText",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadBoundedAsync_ExactlyAtLimit_ReturnsText",
+        "Outcome": "Passed",
+        "TestId": "33502600-1379-7205-640d-487e49dbb054",
+        "ExecutionId": "ebea7de6-8293-4f78-8f25-dc2e8f5f0684",
+        "Start": "2026-11-02T14:50:44.0120111-06:00",
+        "End": "2026-11-02T14:50:44.1324294-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadBoundedAsync_ExactlyAtLimit_ReturnsText",
+        "Outcome": "Passed",
+        "TestId": "6600be95-0f4d-7e9f-54e2-709b2c9033a6",
+        "ExecutionId": "a4098018-009a-4438-9eea-6cc3ab2dff52",
+        "Start": "2026-11-02T14:52:01.2765495-06:00",
+        "End": "2026-11-02T14:52:01.4106411-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadBoundedAsync_GrowingStream_StopsAtLimit",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadBoundedAsync_GrowingStream_StopsAtLimit",
+        "Outcome": "Passed",
+        "TestId": "9fd2601e-50bc-4e95-5f83-f12578d1db30",
+        "ExecutionId": "36d67776-bb6f-46e8-9ab2-cd31e95fcc65",
+        "Start": "2026-11-02T14:50:44.1348807-06:00",
+        "End": "2026-11-02T14:50:44.2316783-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.HandoffContainedFileReaderTests.ReadBoundedAsync_GrowingStream_StopsAtLimit",
+        "Outcome": "Passed",
+        "TestId": "5fec96e6-5eac-93a5-47f8-03a583b65e75",
+        "ExecutionId": "d3609b7d-db66-4888-bfd1-8fd27c1cd29f",
+        "Start": "2026-11-02T14:52:01.2243912-06:00",
+        "End": "2026-11-02T14:52:01.2760055-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.QueryAsync_HomeRelativeFilter_ExpandsThenExactMatches",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.QueryAsync_HomeRelativeFilter_ExpandsThenExactMatches",
+        "Outcome": "Passed",
+        "TestId": "a5d98b7f-c87d-cbb3-b499-139088c4f87d",
+        "ExecutionId": "605f2a6a-6d07-467d-8f26-9470a626eb96",
+        "Start": "2026-11-02T14:50:41.3530835-06:00",
+        "End": "2026-11-02T14:50:41.417493-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.SessionLogServiceTurnContextTests.QueryAsync_HomeRelativeFilter_ExpandsThenExactMatches",
+        "Outcome": "Passed",
+        "TestId": "d43f58b5-1384-1f86-a609-f97daf5cffff",
+        "ExecutionId": "537139fc-82bc-4668-b158-c09b0d4311df",
+        "Start": "2026-11-02T14:52:09.516523-06:00",
+        "End": "2026-11-02T14:52:09.5711908-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_BuildStartupTimeoutError_IncludesOutputContext",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_BuildStartupTimeoutError_IncludesOutputContext",
+        "Outcome": "Passed",
+        "TestId": "54301650-bf77-98a7-0484-520290b35352",
+        "ExecutionId": "1e5344ef-6bfb-49ba-8a67-38a6a211fb0d",
+        "Start": "2026-11-02T14:51:09.5141772-06:00",
+        "End": "2026-11-02T14:51:09.5153287-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_BuildStartupTimeoutError_IncludesOutputContext",
+        "Outcome": "Passed",
+        "TestId": "db849c4f-c3f2-4361-52d0-c3689e1b2fbc",
+        "ExecutionId": "69fdb509-533e-4ac4-ad9b-78c83bd9d243",
+        "Start": "2026-11-02T14:51:38.2983768-06:00",
+        "End": "2026-11-02T14:51:38.2996046-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning",
+        "Outcome": "Passed",
+        "TestId": "1204d14f-06e9-e93a-30b1-8a112443e589",
+        "ExecutionId": "4e082da3-b671-4d1d-9e1e-c3756e57dd49",
+        "Start": "2026-11-02T14:51:09.4543128-06:00",
+        "End": "2026-11-02T14:51:09.4656099-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning",
+        "Outcome": "Passed",
+        "TestId": "bce67cac-c65a-465a-4dfd-03d8f00b3b15",
+        "ExecutionId": "e464ab30-46f3-4ce9-b8df-586ab8c3226d",
+        "Start": "2026-11-02T14:51:38.2882309-06:00",
+        "End": "2026-11-02T14:51:38.2905702-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_ProviderName_IsCloudflare",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_ProviderName_IsCloudflare",
+        "Outcome": "Passed",
+        "TestId": "a817117b-e9ae-10a7-7445-57e1f12af925",
+        "ExecutionId": "3f528450-6297-41fd-9387-ee9c0611cf7d",
+        "Start": "2026-11-02T14:51:09.4518282-06:00",
+        "End": "2026-11-02T14:51:09.4532836-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_ProviderName_IsCloudflare",
+        "Outcome": "Passed",
+        "TestId": "5e0150c1-b0fa-4c16-66b4-2196a7cdee1b",
+        "ExecutionId": "667c3897-fc55-46f3-a25d-a766fbbbd175",
+        "Start": "2026-11-02T14:51:38.2972914-06:00",
+        "End": "2026-11-02T14:51:38.2978507-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_StartAsync_WhenCliMissing_SetsError",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_StartAsync_WhenCliMissing_SetsError",
+        "Outcome": "Passed",
+        "TestId": "30f4d41b-9798-de77-ef0e-d5d9bfcc6eb9",
+        "ExecutionId": "20781e94-7512-475d-9edf-a249f2638fad",
+        "Start": "2026-11-02T14:51:09.4688032-06:00",
+        "End": "2026-11-02T14:51:09.4788993-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.CloudflareProvider_StartAsync_WhenCliMissing_SetsError",
+        "Outcome": "Passed",
+        "TestId": "58d5dedf-8ee0-d2fb-dbae-65ff6914c216",
+        "ExecutionId": "ca51947b-df1f-4ac2-9703-fb3b02faf6c7",
+        "Start": "2026-11-02T14:51:38.313383-06:00",
+        "End": "2026-11-02T14:51:38.3169215-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.FrpProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.FrpProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning",
+        "Outcome": "Passed",
+        "TestId": "6b8d2013-bf21-54a9-d63d-51b5e44215dc",
+        "ExecutionId": "989cb8b1-9541-4890-9de7-717c4c01da68",
+        "Start": "2026-11-02T14:51:09.4809967-06:00",
+        "End": "2026-11-02T14:51:09.4895975-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.FrpProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning",
+        "Outcome": "Passed",
+        "TestId": "bdc7f035-a927-35d7-f4cb-5725f28aed64",
+        "ExecutionId": "eb4fcb2b-f6f1-4ab1-9cc8-30c37ca60ef4",
+        "Start": "2026-11-02T14:51:38.2849661-06:00",
+        "End": "2026-11-02T14:51:38.287626-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.FrpProvider_ProviderName_IsFrp",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.FrpProvider_ProviderName_IsFrp",
+        "Outcome": "Passed",
+        "TestId": "e8038590-0c81-54a4-c972-5a96cb538345",
+        "ExecutionId": "a987f6b9-e36f-4dfa-9531-e5eb495f67cf",
+        "Start": "2026-11-02T14:51:09.5158643-06:00",
+        "End": "2026-11-02T14:51:09.5162736-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.FrpProvider_ProviderName_IsFrp",
+        "Outcome": "Passed",
+        "TestId": "d9a00847-f06f-e73f-19fa-8a2d21d7ab5d",
+        "ExecutionId": "140c9184-651f-4df1-8a37-80b68ec082b8",
+        "Start": "2026-11-02T14:51:38.3176074-06:00",
+        "End": "2026-11-02T14:51:38.3186656-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.FrpProvider_StartAsync_WhenCliMissing_SetsError",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.FrpProvider_StartAsync_WhenCliMissing_SetsError",
+        "Outcome": "Passed",
+        "TestId": "53a5a38c-3b33-acdb-83fe-9aad139e23c6",
+        "ExecutionId": "735964f6-303c-4ba2-85bc-a4ed53d54574",
+        "Start": "2026-11-02T14:51:09.5021377-06:00",
+        "End": "2026-11-02T14:51:09.5043879-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.FrpProvider_StartAsync_WhenCliMissing_SetsError",
+        "Outcome": "Passed",
+        "TestId": "f1f730c3-ebd0-2a7e-0000-69cc91bdce21",
+        "ExecutionId": "95fd0463-c1e3-4636-adac-334f8b749cea",
+        "Start": "2026-11-02T14:51:38.3275783-06:00",
+        "End": "2026-11-02T14:51:38.3326073-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_BuildStartupTimeoutError_IncludesApiAndOutputContext",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_BuildStartupTimeoutError_IncludesApiAndOutputContext",
+        "Outcome": "Passed",
+        "TestId": "d3541664-1b4f-40b6-0d2c-37787fc13bd2",
+        "ExecutionId": "0627fa43-b932-4804-8327-7df09aea9408",
+        "Start": "2026-11-02T14:51:09.4794893-06:00",
+        "End": "2026-11-02T14:51:09.4806102-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_BuildStartupTimeoutError_IncludesApiAndOutputContext",
+        "Outcome": "Passed",
+        "TestId": "3eb0293a-bb7e-ff73-b6cd-05552ea6ddc9",
+        "ExecutionId": "dd2deca3-d3ed-4e0b-aaf4-ec183eb364c4",
+        "Start": "2026-11-02T14:51:38.3001739-06:00",
+        "End": "2026-11-02T14:51:38.3010714-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning",
+        "Outcome": "Passed",
+        "TestId": "57ce46fc-5069-1441-88cf-04012a90f827",
+        "ExecutionId": "143f7092-c2a4-453e-b4cd-2a37873f6657",
+        "Start": "2026-11-02T14:51:09.4667789-06:00",
+        "End": "2026-11-02T14:51:09.4678082-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning",
+        "Outcome": "Passed",
+        "TestId": "23fb4fc1-c6ab-e712-501b-302399b420c1",
+        "ExecutionId": "d0f10d9a-d90b-4486-8377-3b47a287a23c",
+        "Start": "2026-11-02T14:51:38.3016404-06:00",
+        "End": "2026-11-02T14:51:38.3119493-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_ProviderName_IsNgrok",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_ProviderName_IsNgrok",
+        "Outcome": "Passed",
+        "TestId": "fd270fea-d953-95c6-8c4f-0b78732ddfb8",
+        "ExecutionId": "778c8272-9f69-488c-b54c-fc324a1925b8",
+        "Start": "2026-11-02T14:51:09.4380984-06:00",
+        "End": "2026-11-02T14:51:09.4504757-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_ProviderName_IsNgrok",
+        "Outcome": "Passed",
+        "TestId": "2ca9f538-d81c-c03c-b00e-4f150fba77e6",
+        "ExecutionId": "62c66dfb-0ebf-4a4a-b083-43ac5d766903",
+        "Start": "2026-11-02T14:51:38.2727411-06:00",
+        "End": "2026-11-02T14:51:38.2839233-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_StartAsync_WhenCliMissing_SetsError",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_StartAsync_WhenCliMissing_SetsError",
+        "Outcome": "Passed",
+        "TestId": "4e20d105-ca57-7be5-0f95-9ccc84304aab",
+        "ExecutionId": "5a27628e-4142-4844-8f92-2229060420e9",
+        "Start": "2026-11-02T14:51:09.490777-06:00",
+        "End": "2026-11-02T14:51:09.5002692-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Services.TunnelProviderTests.NgrokProvider_StartAsync_WhenCliMissing_SetsError",
+        "Outcome": "Passed",
+        "TestId": "aebdfb83-859d-7500-7bc6-2ec61895f7b5",
+        "ExecutionId": "a77662ed-02e2-49d6-9b80-6dde3ea8bc15",
+        "Start": "2026-11-02T14:51:38.341113-06:00",
+        "End": "2026-11-02T14:51:38.3460743-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentMockDataTests.CurrentDirectory_IsProcessWorkingDirectory",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentMockDataTests.CurrentDirectory_IsProcessWorkingDirectory",
+        "Outcome": "Passed",
+        "TestId": "0a3518ad-31f0-e6f2-3f2e-a2c880a708b9",
+        "ExecutionId": "dc2cdc69-9467-4fd3-b106-66b0d1dfb58c",
+        "Start": "2026-11-02T14:51:27.4786062-06:00",
+        "End": "2026-11-02T14:51:27.4797348-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentMockDataTests.CurrentDirectory_IsProcessWorkingDirectory",
+        "Outcome": "Passed",
+        "TestId": "880ad69d-e324-045c-cc4a-d1e5ecd7b7f0",
+        "ExecutionId": "e2347002-48dd-4b63-a0c7-411afd8d8bb8",
+        "Start": "2026-11-02T14:51:54.0662866-06:00",
+        "End": "2026-11-02T14:51:54.0669727-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentMockDataTests.NormalizeNativePath_CollapsesToCanonicalForm",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentMockDataTests.NormalizeNativePath_CollapsesToCanonicalForm",
+        "Outcome": "Passed",
+        "TestId": "87639796-815b-11b7-e37f-357145d84020",
+        "ExecutionId": "da06f6b3-34ec-4aeb-ada0-cc9002c51b9f",
+        "Start": "2026-11-02T14:51:27.4800691-06:00",
+        "End": "2026-11-02T14:51:27.4891864-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentMockDataTests.NormalizeNativePath_CollapsesToCanonicalForm",
+        "Outcome": "Passed",
+        "TestId": "a4ed6887-0a32-dc56-93ac-387e3897f2c5",
+        "ExecutionId": "293627ff-e55f-4604-a9ea-eb9faac3615f",
+        "Start": "2026-11-02T14:51:54.0642651-06:00",
+        "End": "2026-11-02T14:51:54.0657139-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentMockDataTests.Platform_IsRunningPlatform",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentMockDataTests.Platform_IsRunningPlatform",
+        "Outcome": "Passed",
+        "TestId": "926f6b34-02c2-4e02-546a-b196db599b53",
+        "ExecutionId": "ffb3964b-23bf-41e3-a980-157692900137",
+        "Start": "2026-11-02T14:51:27.490055-06:00",
+        "End": "2026-11-02T14:51:27.4902735-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceHostEnvironmentMockDataTests.Platform_IsRunningPlatform",
+        "Outcome": "Passed",
+        "TestId": "91851f6f-acbd-68f9-f1c1-c73cdfa24d92",
+        "ExecutionId": "463e671b-0524-425b-b8ba-ac89151435f8",
+        "Start": "2026-11-02T14:51:54.0674267-06:00",
+        "End": "2026-11-02T14:51:54.0676017-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.ResolveAsync_EmptyWorkspaceId_PreservesGlobalIdentityWithoutNativeResolution",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.ResolveAsync_EmptyWorkspaceId_PreservesGlobalIdentityWithoutNativeResolution",
+        "Outcome": "Passed",
+        "TestId": "0922a792-ba52-52df-fe72-170ddc356498",
+        "ExecutionId": "116e3aa4-9490-4477-98f8-15f96a1ad0fd",
+        "Start": "2026-11-02T14:51:41.3661301-06:00",
+        "End": "2026-11-02T14:51:41.3673097-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspaceIdentityFourteenthNativeTests.ResolveAsync_EmptyWorkspaceId_PreservesGlobalIdentityWithoutNativeResolution",
+        "Outcome": "Passed",
+        "TestId": "1f73859d-9f60-19a4-7b9a-f0672a451185",
+        "ExecutionId": "bbc8e4ba-132c-4b6d-92b2-cbf1b047e38d",
+        "Start": "2026-11-02T14:52:34.829545-06:00",
+        "End": "2026-11-02T14:52:34.8315162-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathGetFullPathRatchetMockDataTests.AllOtherFiles_StayWithinReviewedAllowlist",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathGetFullPathRatchetMockDataTests.AllOtherFiles_StayWithinReviewedAllowlist",
+        "Outcome": "Passed",
+        "TestId": "ce9ef6b1-55a5-3e86-3ed0-6bfb0b8309b1",
+        "ExecutionId": "40ff5edc-cb13-48da-a8fd-b135a2737d41",
+        "Start": "2026-11-02T14:50:45.5347012-06:00",
+        "End": "2026-11-02T14:50:45.5354304-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathGetFullPathRatchetMockDataTests.AllOtherFiles_StayWithinReviewedAllowlist",
+        "Outcome": "Passed",
+        "TestId": "89f905b7-cce0-3f5e-adc3-2548ce6b9991",
+        "ExecutionId": "2c79f13b-4c37-44cb-ae5d-04b10257e8c0",
+        "Start": "2026-11-02T14:52:15.9758113-06:00",
+        "End": "2026-11-02T14:52:15.9766116-06:00"
+      }
+    ]
+  },
+  {
+    "Host": "win",
+    "OldName": "QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathGetFullPathRatchetMockDataTests.IdentityFiles_HaveNoDirectGetFullPath",
+    "CurrentMatches": [
+      {
+        "RunId": "ug-r9-final4-linux-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathGetFullPathRatchetMockDataTests.IdentityFiles_HaveNoDirectGetFullPath",
+        "Outcome": "Passed",
+        "TestId": "5e1fa353-e6f5-d060-f8db-865a339d7cb6",
+        "ExecutionId": "6173b2bc-0bda-4b35-9a41-0500e64fd228",
+        "Start": "2026-11-02T14:50:45.5522952-06:00",
+        "End": "2026-11-02T14:50:45.5528637-06:00"
+      },
+      {
+        "RunId": "ug-r9-final4-win-unit-1",
+        "Project": "QBrainAi.Support.Mcp.Tests",
+        "Name": "QBrainAi.Support.Mcp.Tests.Storage.WorkspacePathGetFullPathRatchetMockDataTests.IdentityFiles_HaveNoDirectGetFullPath",
+        "Outcome": "Passed",
+        "TestId": "4f19d0e6-46eb-ee25-15bd-75696ab7bb1f",
+        "ExecutionId": "1b0c5368-213e-4444-840e-28645497daf5",
+        "Start": "2026-11-02T14:52:15.9770814-06:00",
+        "End": "2026-11-02T14:52:15.9777322-06:00"
+      }
+    ]
+  }
+]

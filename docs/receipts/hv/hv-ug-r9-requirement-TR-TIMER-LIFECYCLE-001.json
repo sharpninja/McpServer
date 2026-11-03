@@ -1,0 +1,47 @@
+{
+  "TimestampLocal": "2026-11-02T19:31:34",
+  "TimestampUtc": "2026-11-03T01:31:34.6570295Z",
+  "Method": "workflow.requirements.getTr",
+  "Params": {
+    "id": "TR-TIMER-LIFECYCLE-001"
+  },
+  "Data": [
+    {
+      "payload": {
+        "result": {
+          "description": "Protect shutdown admission and token replacement with a short-lived state lock. Cancel outside locks before draining the callback invocation gate. Reject queued Restart if shutdown admission changed while it waited. Do not dispose cancellation sources still visible to callbacks. Preserve reentrant Stop/Dispose/Restart behavior.",
+          "updatedAt": "2026-11-03T01:31:37.0340736+00:00",
+          "status": "pending",
+          "id": "TR-TIMER-LIFECYCLE-001",
+          "createdAt": "2026-11-03T01:31:37.0339630+00:00",
+          "title": "Serialize timer lifecycle admission separately from callback invocation",
+          "priority": "high",
+          "scopeStartLayerKey": "layer-1",
+          "area": "TIMER",
+          "subarea": "LIFECYCLE",
+          "acceptanceCriteria": [
+            {
+              "isSatisfied": false,
+              "text": "Both Manager timer implementations enforce the same shutdown admission and fresh-token rules without invoking user callbacks under the state lock.",
+              "id": "tr-timer-lifecycle-001-ac-001"
+            },
+            {
+              "isSatisfied": false,
+              "text": "Restart cannot replace the token after a shutdown captured it; multiple overlapping shutdowns cannot reopen admission early.",
+              "id": "tr-timer-lifecycle-001-ac-002"
+            },
+            {
+              "isSatisfied": false,
+              "text": "Cancellation registration and callback reentrancy cannot deadlock the lifecycle state lock.",
+              "id": "tr-timer-lifecycle-001-ac-003"
+            }
+          ]
+        },
+        "requestId": "req-20261103T013135Z-68b1",
+        "deprecated": true
+      },
+      "type": "result"
+    }
+  ],
+  "ExitCode": 0
+}

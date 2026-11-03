@@ -1,0 +1,405 @@
+diff --git a/src/QBrainAi.Services/Services/GitHubCliService.cs b/src/QBrainAi.Services/Services/GitHubCliService.cs
+index c771cf2e..b01f7576 100644
+--- a/src/QBrainAi.Services/Services/GitHubCliService.cs
++++ b/src/QBrainAi.Services/Services/GitHubCliService.cs
+@@ -7,13 +7,13 @@ using Microsoft.AspNetCore.Http;
+ using Microsoft.Extensions.DependencyInjection;
+ using Microsoft.Extensions.Options;
+ 
+ namespace QBrainAi.Support.Mcp.Services;
+ 
+ /// <summary>
+-/// TR-PLANNED-CORE-013, TR-MCP-GH-003, TR-MCP-GH-004: Runs gh CLI for issues, PRs, and workflow runs.
++/// TR-PLANNED-CORE-013 (historical), TR-MCP-GH-003, TR-MCP-GH-004: Runs gh CLI for issues, PRs, and workflow runs.
+ /// </summary>
+ public sealed class GitHubCliService : IGitHubCliService
+ {
+     private const string GhExe = "gh";
+     private static readonly HashSet<string> AllowedIssueStates = new(StringComparer.OrdinalIgnoreCase)
+     {
+@@ -29,28 +29,85 @@ public sealed class GitHubCliService : IGitHubCliService
+     private readonly IProcessRunner _processRunner;
+     private readonly ILogger<GitHubCliService> _logger;
+     private readonly IGitHubWorkspaceTokenStore? _tokenStore;
+     private readonly IHttpContextAccessor? _httpContextAccessor;
+     private readonly IOptionsMonitor<GitHubIntegrationOptions>? _githubOptions;
+     private readonly WorkspaceServiceAccessor? _workspaceAccessor;
++    private readonly QBrainAi.Client.IWorkspacePathNormalizer _pathNormalizer;
+ 
+-    /// <summary>TR-PLANNED-CORE-013: Constructor with IProcessRunner for testability.</summary>
++    /// <summary>TR-PLANNED-CORE-013 (historical): Constructor with IProcessRunner for testability.</summary>
++    /// <param name="processRunner">Runs gh.</param>
++    /// <param name="logger">Logger.</param>
++    /// <param name="tokenStore">Optional stored workspace tokens.</param>
++    /// <param name="httpContextAccessor">Optional request context for the workspace token.</param>
++    /// <param name="githubOptions">Optional GitHub integration options (Mcp:GitHub).</param>
++    /// <param name="workspaceAccessor">Optional active workspace.</param>
++    /// <param name="pathNormalizer">FR-MCP-FED-PATH-001 AC5 (SRC-5): the path normalizer that decides whether the workspace is host-native; the process normalizer when omitted.</param>
+     public GitHubCliService(
+         IProcessRunner processRunner,
+         ILogger<GitHubCliService> logger,
+         IGitHubWorkspaceTokenStore? tokenStore = null,
+         IHttpContextAccessor? httpContextAccessor = null,
+         IOptionsMonitor<GitHubIntegrationOptions>? githubOptions = null,
+-        WorkspaceServiceAccessor? workspaceAccessor = null)
++        WorkspaceServiceAccessor? workspaceAccessor = null,
++        QBrainAi.Client.IWorkspacePathNormalizer? pathNormalizer = null)
+     {
+         _logger = logger;
+         _processRunner = processRunner;
+         _tokenStore = tokenStore;
+         _httpContextAccessor = httpContextAccessor;
+         _githubOptions = githubOptions;
+         _workspaceAccessor = workspaceAccessor;
++        _pathNormalizer = pathNormalizer ?? QBrainAi.Client.WorkspacePathNormalizer.Process;
++    }
++
++    /// <summary>
++    /// FR-MCP-FED-PATH-001 AC5: a planned GitHub CLI invocation, either a refusal with its message (gh is not started) or a run with
++    /// its working directory (null for none) and its repository selector (null for none).
++    /// </summary>
++    /// <param name="Refused">True when gh must not start.</param>
++    /// <param name="Refusal">The failure message of a refusal.</param>
++    /// <param name="WorkingDirectory">The host-native workspace gh runs in, or null.</param>
++    /// <param name="Repository">The repository passed as --repo, or null.</param>
++    internal sealed record GhInvocationPlan(bool Refused, string? Refusal, string? WorkingDirectory, string? Repository);
++
++    /// <summary>
++    /// FR-MCP-FED-PATH-001 AC5 (operator 2026-10-29: "gh foreign-workspace AC (Recommended)"; holistic review findings SRC-1 and SRC-4):
++    /// plans a gh invocation for the active workspace. A workspace whose path belongs to the other platform than the host is an identity
++    /// only: with a configured repository gh runs with --repo and no working directory; without one gh is not started and the refusal
++    /// names the workspace and the Mcp:GitHub:Repository setting. A host-native workspace keeps its working directory and uses the
++    /// configured repository, else the one its git configuration names. No workspace runs with the configured repository only.
++    /// </summary>
++    /// <param name="workspacePath">The active workspace path, or null.</param>
++    /// <param name="configuredRepository">The normalized Mcp:GitHub:Repository value, or null.</param>
++    /// <param name="normalizer">Decides whether the workspace path is host-native.</param>
++    /// <param name="gitConfigRepository">Reads the repository a host-native workspace's git configuration names.</param>
++    /// <returns>The plan.</returns>
++    internal static GhInvocationPlan PlanInvocation(
++        string? workspacePath,
++        string? configuredRepository,
++        QBrainAi.Client.IWorkspacePathNormalizer normalizer,
++        Func<string, string?> gitConfigRepository)
++    {
++        ArgumentNullException.ThrowIfNull(normalizer);
++        ArgumentNullException.ThrowIfNull(gitConfigRepository);
++        if (string.IsNullOrWhiteSpace(workspacePath))
++            return new GhInvocationPlan(false, null, null, configuredRepository);
++
++        if (!normalizer.IsHostNative(workspacePath))
++        {
++            return string.IsNullOrWhiteSpace(configuredRepository)
++                ? new GhInvocationPlan(
++                    true,
++                    $"GitHub CLI operation refused: workspace '{workspacePath}' belongs to another platform than this host and no Mcp:GitHub:Repository is configured.",
++                    null,
++                    null)
++                : new GhInvocationPlan(false, null, null, configuredRepository);
++        }
++
++        return new GhInvocationPlan(false, null, workspacePath, configuredRepository ?? gitConfigRepository(workspacePath));
+     }
+ 
+     /// <inheritdoc />
+     public async Task<GitHubIssueListResult> ListIssuesAsync(string? state, int limit, CancellationToken cancellationToken = default)
+     {
+         if (!TryNormalizeIssueState(state, out var normalizedState, out var errorMessage))
+@@ -523,18 +580,39 @@ public sealed class GitHubCliService : IGitHubCliService
+             builder.Append('\\', backslashCount * 2);
+ 
+         builder.Append('"');
+         return builder.ToString();
+     }
+ 
++    /// <summary>Plans and runs one gh invocation: refuses a foreign workspace with no configured repository, otherwise runs gh with the planned repository or working directory and the stored token or CLI fallback.</summary>
++    /// <param name="arguments">The gh arguments.</param>
++    /// <param name="ct">Cancellation token.</param>
++    /// <returns>The process result, or a refusal result when gh is not started.</returns>
++    /// <remarks>
++    /// <list type="table">
++    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
++    /// <item><term>2026-11-02</term><description>FR-MCP-FED-PATH-001; TR-MCP-FED-PATH-001 (no AC states its no-direct-GetFullPath rule; gap reported): the git-config callback is passed as a method group, because TryResolveGitConfigPath already normalizes the path and the extra Path.GetFullPath exceeded the reviewed ratchet allowance of 4.</description></item>
++    /// </list>
++    /// </remarks>
+     private async Task<ProcessRunResult> RunGhAsync(IReadOnlyList<string> arguments, CancellationToken ct)
+     {
+         var preferStoredToken = _githubOptions?.CurrentValue.PreferStoredToken ?? true;
+         var allowFallback = _githubOptions?.CurrentValue.AllowCliFallback ?? true;
+-        var workingDirectory = ResolveWorkingDirectory();
+-        var repository = ResolveRepositoryArgument(workingDirectory);
++        var plan = PlanInvocation(
++            _workspaceAccessor?.GetWorkspacePath(),
++            TryNormalizeRepositoryArgument(_githubOptions?.CurrentValue.Repository),
++            _pathNormalizer,
++            TryResolveGitHubRepositoryFromGitConfig);
++        if (plan.Refused)
++        {
++            _logger.LogWarning("{Refusal}", plan.Refusal);
++            return new ProcessRunResult(-1, null, plan.Refusal);
++        }
++
++        var workingDirectory = plan.WorkingDirectory is null ? null : Path.GetFullPath(plan.WorkingDirectory);
++        var repository = plan.Repository;
+         var args = BuildArguments(AddRepositoryOption(arguments, repository));
+         var processWorkingDirectory = string.IsNullOrWhiteSpace(repository) ? workingDirectory : null;
+         var environmentVariables = string.IsNullOrWhiteSpace(repository)
+             ? BuildGitSafeDirectoryEnvironment(workingDirectory)
+             : null;
+ 
+@@ -562,25 +640,12 @@ public sealed class GitHubCliService : IGitHubCliService
+ 
+         return await _processRunner.RunAsync(
+             new ProcessRunRequest(GhExe, args, WorkingDirectory: processWorkingDirectory, EnvironmentVariables: environmentVariables),
+             ct).ConfigureAwait(false);
+     }
+ 
+-    private string? ResolveRepositoryArgument(string? workingDirectory)
+-    {
+-        var configured = _githubOptions?.CurrentValue.Repository;
+-        var configuredRepository = TryNormalizeRepositoryArgument(configured);
+-        if (!string.IsNullOrWhiteSpace(configuredRepository))
+-            return configuredRepository;
+-
+-        if (string.IsNullOrWhiteSpace(workingDirectory))
+-            return null;
+-
+-        return TryResolveGitHubRepositoryFromGitConfig(workingDirectory);
+-    }
+-
+     private static IReadOnlyDictionary<string, string?>? BuildGitSafeDirectoryEnvironment(string? workingDirectory)
+     {
+         if (string.IsNullOrWhiteSpace(workingDirectory))
+             return null;
+ 
+         return new Dictionary<string, string?>(StringComparer.Ordinal)
+@@ -776,20 +841,12 @@ public sealed class GitHubCliService : IGitHubCliService
+             return null;
+         }
+ 
+         return record.AccessToken;
+     }
+ 
+-    private string? ResolveWorkingDirectory()
+-    {
+-        var workingDirectory = _workspaceAccessor?.GetWorkspacePath();
+-        return string.IsNullOrWhiteSpace(workingDirectory)
+-            ? null
+-            : Path.GetFullPath(workingDirectory);
+-    }
+-
+     private GitHubIssueDetail? ParseIssueDetail(string? json)
+     {
+         if (string.IsNullOrWhiteSpace(json)) return null;
+         try
+         {
+             using var doc = JsonDocument.Parse(json);
+diff --git a/src/QBrainAi.Services/Services/SessionLogService.cs b/src/QBrainAi.Services/Services/SessionLogService.cs
+index 26db9985..b518091a 100644
+--- a/src/QBrainAi.Services/Services/SessionLogService.cs
++++ b/src/QBrainAi.Services/Services/SessionLogService.cs
+@@ -15,13 +15,13 @@ using Microsoft.EntityFrameworkCore.Storage;
+ using Microsoft.Extensions.Logging;
+ using Microsoft.Extensions.Options;
+ 
+ namespace QBrainAi.Support.Mcp.Services;
+ 
+ /// <summary>
+-/// TR-PLANNED-CORE-013: Implements session log submit (upsert) and query with pagination (MVP-SUPPORT-011).
++/// TR-PLANNED-CORE-013 (historical): Implements session log submit (upsert) and query with pagination (MVP-SUPPORT-011).
+ /// FR-SUPPORT-010: Persists session logs in 4NF-normalized SQLite tables via <see cref="McpDbContext"/>.
+ /// </summary>
+ public sealed class SessionLogService : ISessionLogService
+ {
+     private const int MaxLimit = 1000;
+     private const string SessionTurnComplianceError =
+@@ -30,14 +30,15 @@ public sealed class SessionLogService : ISessionLogService
+     private readonly McpDbContext _db;
+     private readonly IChangeEventBus? _eventBus;
+     private readonly ILogger<SessionLogService> _logger;
+     private readonly WorkspaceContext? _workspaceContext;
+     private readonly SessionLogTurnContextExtractor _turnContextExtractor;
+     private readonly TimeSpan _submitCommandBudget;
++    private readonly Func<string, string> _normalizePlanFilter = static path => SessionLogTurnContextValidator.NormalizePlanFile(path);
+ 
+-    /// <summary>TR-PLANNED-CORE-013: Constructor.</summary>
++    /// <summary>TR-PLANNED-CORE-013 (historical): Constructor.</summary>
+     /// <remarks>
+     /// TR-MCP-MT-004: <paramref name="workspaceContext"/> is optional so the
+     /// ingestion / batch import paths (which run without an HTTP scope) keep
+     /// working; in those cases <c>WorkspaceId</c> defaults to empty string.
+     /// TR-MCP-TRIAGESTORE-002: <paramref name="submitOptions"/> sets the Submit SaveChanges
+     /// and session-graph materialization budget. Null uses the 30 second default.
+@@ -55,12 +56,29 @@ public sealed class SessionLogService : ISessionLogService
+         _eventBus = eventBus;
+         _workspaceContext = workspaceContext;
+         _turnContextExtractor = new SessionLogTurnContextExtractor();
+         _submitCommandBudget = (submitOptions?.Value ?? new SessionLogSubmitOptions()).GetSubmitCommandBudget();
+     }
+ 
++    /// <summary>
++    /// AC-FR-MCP-SESSIONLOGCTX-001-005, TR-MCP-USECASE-018 AC-006: binds plan filtering to an explicit normalizer,
++    /// allowing owned profile data without changing the public constructor's native normalization behavior.
++    /// </summary>
++    /// <param name="db">Session storage.</param>
++    /// <param name="logger">Service logger.</param>
++    /// <param name="eventBus">Optional change publisher.</param>
++    /// <param name="workspaceContext">Active workspace.</param>
++    /// <param name="submitOptions">Optional submit budget.</param>
++    /// <param name="normalizePlanFilter">Normalizes the query's explicit plan filter.</param>
++    internal SessionLogService(McpDbContext db, ILogger<SessionLogService> logger, IChangeEventBus? eventBus,
++        WorkspaceContext? workspaceContext, IOptions<SessionLogSubmitOptions>? submitOptions, Func<string, string> normalizePlanFilter)
++        : this(db, logger, eventBus, workspaceContext, submitOptions)
++    {
++        _normalizePlanFilter = normalizePlanFilter ?? throw new ArgumentNullException(nameof(normalizePlanFilter));
++    }
++
+     private string ResolveWorkspaceId() => WorkspaceIdentity.CanonicalizeWorkspaceId(_workspaceContext?.WorkspacePath);
+ 
+     private void SyncDbWorkspaceFromContext()
+     {
+         var workspaceId = ResolveWorkspaceId();
+         if (string.IsNullOrWhiteSpace(workspaceId))
+@@ -532,13 +550,13 @@ public sealed class SessionLogService : ISessionLogService
+             var matcher = BooleanSearchParser.Parse(request.Text);
+             filtered = filtered.Where(s => s.Turns.Any(e => matcher(BuildSearchText(e))));
+         }
+ 
+         if (!string.IsNullOrWhiteSpace(request.PlanFile))
+         {
+-            var planFilter = SessionLogTurnContextValidator.NormalizePlanFile(request.PlanFile);
++            var planFilter = _normalizePlanFilter(request.PlanFile);
+             filtered = filtered.Where(s => s.Turns.Any(e => string.Equals(e.PlanFile, planFilter, StringComparison.Ordinal)));
+         }
+ 
+         if (!string.IsNullOrWhiteSpace(request.TodoId))
+         {
+             var todoFilter = request.TodoId;
+diff --git a/src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs b/src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs
+index d022c74c..4a1c6d3e 100644
+--- a/src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs
++++ b/src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs
+@@ -17,12 +17,33 @@ public sealed class SessionLogTurnContextExtractor
+         @"\b(?:[A-Z]+-[A-Z0-9]+-\d{3}|ISSUE-\d+)\b",
+         RegexOptions.Compiled | RegexOptions.CultureInvariant);
+ 
+     private const int MaxHistoryFiles = 20;
+     private const int MaxHistoryBytes = 1_048_576;
+ 
++    private readonly DirectoryTreeWalker _walker;
++
++    /// <summary>
++    /// Creates an extractor whose agent-history scan walks the real file system (AC-FR-MCP-SESSIONLOGCTX-001-008).
++    /// </summary>
++    public SessionLogTurnContextExtractor()
++        : this(DirectoryTreeWalker.FileSystem)
++    {
++    }
++
++    /// <summary>
++    /// AC-FR-MCP-SESSIONLOGCTX-001-008: creates an extractor whose agent-history scan walks through
++    /// <paramref name="walker"/>, which skips directory links and any directory it cannot list.
++    /// </summary>
++    /// <param name="walker">Directory walk used for the history scan.</param>
++    internal SessionLogTurnContextExtractor(DirectoryTreeWalker walker)
++    {
++        ArgumentNullException.ThrowIfNull(walker);
++        _walker = walker;
++    }
++
+     /// <summary>
+     /// Extracts a validated pair. Always returns <see cref="SessionLogTurnContextValidator.NoneSentinel"/>
+     /// or a valid value. Never invents ids or paths.
+     /// </summary>
+     /// <param name="turn">Turn entity with children loaded.</param>
+     /// <param name="workspacePath">Active workspace path for relative matching.</param>
+@@ -36,24 +57,25 @@ public sealed class SessionLogTurnContextExtractor
+         string? userProfilePath = null,
+         string? agentSessionId = null,
+         string? agentSessionTranscriptFile = null)
+     {
+         ArgumentNullException.ThrowIfNull(turn);
+ 
+-        var sources = CollectSources(turn, workspacePath, userProfilePath, agentSessionId, agentSessionTranscriptFile);
++        var sources = CollectSources(turn, workspacePath, userProfilePath, agentSessionId, agentSessionTranscriptFile, _walker);
+         var todoId = ExtractTodoId(turn, sources);
+         var planFile = ExtractPlanFile(turn, sources, workspacePath, userProfilePath);
+         return (planFile, todoId);
+     }
+ 
+     private static List<string> CollectSources(
+         SessionLogTurnEntity turn,
+         string? workspacePath,
+         string? userProfilePath,
+         string? agentSessionId,
+-        string? agentSessionTranscriptFile)
++        string? agentSessionTranscriptFile,
++        DirectoryTreeWalker walker)
+     {
+         var parts = new List<string>();
+         AddIfAny(parts, turn.QueryTitle);
+         AddIfAny(parts, turn.QueryText);
+         AddIfAny(parts, turn.Response);
+         AddIfAny(parts, turn.Interpretation);
+@@ -69,22 +91,23 @@ public sealed class SessionLogTurnContextExtractor
+             AddIfAny(parts, action.Description);
+         }
+ 
+         foreach (var dialog in turn.ProcessingDialog)
+             AddIfAny(parts, dialog.Content);
+ 
+-        AppendHistory(parts, workspacePath, userProfilePath, agentSessionId, agentSessionTranscriptFile);
++        AppendHistory(parts, workspacePath, userProfilePath, agentSessionId, agentSessionTranscriptFile, walker);
+         return parts;
+     }
+ 
+     private static void AppendHistory(
+         List<string> parts,
+         string? workspacePath,
+         string? userProfilePath,
+         string? agentSessionId,
+-        string? agentSessionTranscriptFile)
++        string? agentSessionTranscriptFile,
++        DirectoryTreeWalker walker)
+     {
+         var files = new List<string>();
+         if (!string.IsNullOrWhiteSpace(agentSessionTranscriptFile) && File.Exists(agentSessionTranscriptFile))
+             files.Add(agentSessionTranscriptFile);
+ 
+         var home = userProfilePath
+@@ -96,30 +119,19 @@ public sealed class SessionLogTurnContextExtractor
+             ? null
+             : Path.GetFileName(workspacePath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+ 
+         foreach (var rootName in new[] { ".grok", ".claude", ".codex", ".cursor" })
+         {
+             var root = Path.Combine(home, rootName);
+-            if (!Directory.Exists(root))
++            // AC-FR-MCP-SESSIONLOGCTX-001-008: a history root that is a link contributes no file, the same as a link
++            // inside it (hostile validation round 5 finding R5-F1); a home that is itself a link is still scanned.
++            if (!Directory.Exists(root) || !walker.IsReachable(home, root))
+                 continue;
+ 
+-            IEnumerable<string> candidates;
+-            try
+-            {
+-                candidates = Directory.EnumerateFiles(root, "*", SearchOption.AllDirectories);
+-            }
+-            catch (IOException)
+-            {
+-                continue;
+-            }
+-            catch (UnauthorizedAccessException)
+-            {
+-                continue;
+-            }
+-
+-            foreach (var file in candidates)
++            // AC-FR-MCP-SESSIONLOGCTX-001-008: the walk skips directory links and any directory it cannot list.
++            foreach (var file in walker.EnumerateFiles(root))
+             {
+                 if (files.Count >= MaxHistoryFiles)
+                     break;
+                 if (HistoryFileMatches(file, agentSessionId, workspaceSlug))
+                     files.Add(file);
+             }

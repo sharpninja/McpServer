@@ -1,0 +1,9 @@
+{
+  "TimestampLocal": "2026-11-02T19:17:17",
+  "Method": "workflow.requirements.getFr",
+  "Params": {
+    "id": "FR-MCP-MEMORY-018"
+  },
+  "ExitCode": 1,
+  "Error": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261103T011718Z-f068\n  code: not_found\n  message: FR 'FR-MCP-MEMORY-018' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getFr\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n"
+}

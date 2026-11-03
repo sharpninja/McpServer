@@ -1,0 +1,9 @@
+{
+  "TimestampLocal": "2026-11-02T19:17:22",
+  "Method": "workflow.requirements.getTest",
+  "Params": {
+    "id": "TEST-MCP-PLUGIN-PSONLY-001"
+  },
+  "ExitCode": 1,
+  "Error": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261103T011723Z-727d\n  code: not_found\n  message: TEST 'TEST-MCP-PLUGIN-PSONLY-001' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getTest\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n"
+}

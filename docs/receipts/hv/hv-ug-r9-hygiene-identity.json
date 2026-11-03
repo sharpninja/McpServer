@@ -1,0 +1,59 @@
+[
+  {
+    "Kind": "session_meta",
+    "Timestamp": "2026-11-03T01:08:33.585Z",
+    "Id": "01a19ef3-61d6-7dd2-8605-b39c64ac10eb",
+    "Cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+    "Originator": "codex_exec",
+    "Version": "0.166.0"
+  },
+  {
+    "Kind": "turn_context",
+    "Timestamp": "2026-11-03T01:08:34.654Z",
+    "Model": "gpt-6-astra",
+    "Effort": "max",
+    "Cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019"
+  },
+  {
+    "Kind": "turn_context",
+    "Timestamp": "2026-11-03T01:23:18.128Z",
+    "Model": "gpt-6-astra",
+    "Effort": "max",
+    "Cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019"
+  },
+  {
+    "Kind": "turn_context",
+    "Timestamp": "2026-11-03T01:35:18.045Z",
+    "Model": "gpt-6-astra",
+    "Effort": "max",
+    "Cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019"
+  },
+  {
+    "Kind": "turn_context",
+    "Timestamp": "2026-11-03T01:50:50.973Z",
+    "Model": "gpt-6-astra",
+    "Effort": "max",
+    "Cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019"
+  },
+  {
+    "Kind": "turn_context",
+    "Timestamp": "2026-11-03T02:05:45.216Z",
+    "Model": "gpt-6-astra",
+    "Effort": "max",
+    "Cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019"
+  },
+  {
+    "Kind": "turn_context",
+    "Timestamp": "2026-11-03T02:23:43.673Z",
+    "Model": "gpt-6-astra",
+    "Effort": "max",
+    "Cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019"
+  },
+  {
+    "Kind": "turn_context",
+    "Timestamp": "2026-11-03T02:54:13.495Z",
+    "Model": "gpt-6-astra",
+    "Effort": "max",
+    "Cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019"
+  }
+]

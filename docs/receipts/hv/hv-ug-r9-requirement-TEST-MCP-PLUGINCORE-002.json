@@ -1,0 +1,31 @@
+{
+  "TimestampLocal": "2026-11-02T19:31:14",
+  "TimestampUtc": "2026-11-03T01:31:14.5922446Z",
+  "Method": "workflow.requirements.getTest",
+  "Params": {
+    "id": "TEST-MCP-PLUGINCORE-002"
+  },
+  "Data": [
+    {
+      "payload": {
+        "result": {
+          "description": "core-guard job fails on a seeded undeclared lib file and passes when declared in PLUGIN-RESIDUAL.txt.",
+          "updatedAt": "2026-11-03T01:31:16.8657825+00:00",
+          "status": "pending",
+          "id": "TEST-MCP-PLUGINCORE-002",
+          "createdAt": "2026-11-03T01:31:16.8656724+00:00",
+          "title": "Test TEST-MCP-PLUGINCORE-002",
+          "priority": "medium",
+          "scopeStartLayerKey": "layer-1",
+          "area": "MCP",
+          "testType": "unit",
+          "acceptanceCriteria": []
+        },
+        "requestId": "req-20261103T013115Z-a749",
+        "deprecated": true
+      },
+      "type": "result"
+    }
+  ],
+  "ExitCode": 0
+}

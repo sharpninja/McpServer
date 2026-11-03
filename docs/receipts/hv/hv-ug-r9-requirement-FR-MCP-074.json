@@ -1,0 +1,30 @@
+{
+  "TimestampLocal": "2026-11-02T19:31:04",
+  "TimestampUtc": "2026-11-03T01:31:04.6801436Z",
+  "Method": "workflow.requirements.getFr",
+  "Params": {
+    "id": "FR-MCP-074"
+  },
+  "Data": [
+    {
+      "payload": {
+        "result": {
+          "description": "The repository SHALL define Azure DevOps YAML pipelines as the source of truth for repository CI/CD instead of the retired GitHub Actions workflow files.\n\nThe Azure DevOps pipeline SHALL preserve the current repository automation intent for branch/path-filtered validation, published server artifacts, documentation artifacts, Windows MSIX packaging, and branch-conditional client package publication, while ignoring any separate Copilot coding agent pipeline.\n\n**Technical Implementation:** [TR-MCP-CI-001](./Technical-Requirements.md#tr-mcp-ci-001) | [Mapping](./TR-per-FR-Mapping.md)\n\n**Covered by:** `azure-pipelines.yml`, `docs/AZURE-PIPELINES.md`",
+          "updatedAt": "2026-11-03T01:31:06.9416289+00:00",
+          "status": "pending",
+          "id": "FR-MCP-074",
+          "createdAt": "2026-11-03T01:31:06.9414980+00:00",
+          "title": "Azure DevOps Repository Pipeline Migration",
+          "priority": "medium",
+          "scopeStartLayerKey": "layer-1",
+          "area": "MCP",
+          "acceptanceCriteria": []
+        },
+        "requestId": "req-20261103T013105Z-10b1",
+        "deprecated": true
+      },
+      "type": "result"
+    }
+  ],
+  "ExitCode": 0
+}

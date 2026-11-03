@@ -1,0 +1,193 @@
+[
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-linux-buildtests-1.meta.json",
+    "Sha256": "36CD2D41225A241732E94206E6FA2E6F520FB6BE2C6AEAC6C389B3B54E9DB3B0",
+    "Nu190x": 0,
+    "AuditOrWarningSuppression": 0,
+    "FilterLines": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-linux-buildtests-1.out.log",
+    "Sha256": "6D6E2D7DCC10075E106C429B0832FAE771FAAA5431F7FC1B18A4A18EDF5E3E88",
+    "Nu190x": 0,
+    "AuditOrWarningSuppression": 0,
+    "FilterLines": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-linux-buildtests-1.tempdir.json",
+    "Sha256": "8066CE93806BF39EA9344C867F5591F0EE9A03684DC2FC241459A6FEDE642AAD",
+    "Nu190x": 0,
+    "AuditOrWarningSuppression": 0,
+    "FilterLines": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-linux-lane-1.err.log",
+    "Sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "Nu190x": 0,
+    "AuditOrWarningSuppression": 0,
+    "FilterLines": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-linux-lane-1.exit.txt",
+    "Sha256": "93817204AF2D86E3611342B49BCD09287A6BA938299912EA945EBF85AC540890",
+    "Nu190x": 0,
+    "AuditOrWarningSuppression": 0,
+    "FilterLines": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-linux-lane-1.meta.json",
+    "Sha256": "776E9FA0E1080133EBDBA0E290B7B18FF7110048D60B6F02A19BAD285B8994C2",
+    "Nu190x": 0,
+    "AuditOrWarningSuppression": 0,
+    "FilterLines": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-linux-lane-1.out.log",
+    "Sha256": "C984C991424F3A356DCD00B10464623D1DBB842526E1177962C92ECEA2109557",
+    "Nu190x": 0,
+    "AuditOrWarningSuppression": 0,
+    "FilterLines": [
+      "14:52:45 [INF] Integration lane filter for QBrainAi.Support.Mcp.Tests: Category=Integration&Platform!=Windows",
+      "14:52:45 [INF] Integration lane filter for QBrainAi.McpAgent.Tests: Category=Integration&Platform!=Windows",
+      "14:52:45 [INF] Integration lane filter for QBrainAi.Repl.Core.Tests: Category=Integration&Platform!=Windows",
+      "14:52:45 [INF] Integration lane filter for QBrainAi.QBAgent.Tests: Category=Integration&Platform!=Windows",
+      "14:52:45 [INF] Integration lane filter for Build.Tests: Category=Integration&Platform!=Windows",
+      "14:52:45 [INF] Integration lane filter for QBrainAi.Repl.IntegrationTests: Category=Integration&Platform!=Windows",
+      "14:52:45 [INF] Integration lane filter for QBrainAi.Support.Mcp.IntegrationTests: Category=Integration&Platform!=Windows&(FullyQualifiedName~.RequirementScopeLayerReplIntegrationTests.|FullyQualifiedName~.QuadBrainOllamaEndpointIntegrationTests.)"
+    ]
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-linux-lane-1.stdin.txt",
+    "Sha256": "01BA4719C80B6FE911B091A7C05124B64EEECE964E09C058EF8F9805DACA546B",
+    "Nu190x": 0,
+    "AuditOrWarningSuppression": 0,
+    "FilterLines": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-linux-lane-1.wrapper.ps1",
+    "Sha256": "F3F4EC0343DD51D5602DE10E4DC1BCC23D8E13BF99E0B91BDC82829558821594",
+    "Nu190x": 0,
+    "AuditOrWarningSuppression": 0,
+    "FilterLines": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-linux-traceability-1.err.log",
+    "Sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "Nu190x": 0,
+    "AuditOrWarningSuppression": 0,
+    "FilterLines": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-linux-traceability-1.exit.txt",
+    "Sha256": "0B71C7B50996407D925E23FA9BD2302BDD7809E4B1CE42AD36D67EA0E13C9873",
+    "Nu190x": 0,
+    "AuditOrWarningSuppression": 0,
+    "FilterLines": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-linux-traceability-1.meta.json",
+    "Sha256": "50F74BC9C11AE551AF97EA6DF356E2280AECBBD8EAD946FB35A55D65A4D172C7",
+    "Nu190x": 0,
+    "AuditOrWarningSuppression": 0,
+    "FilterLines": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-linux-traceability-1.out.log",
+    "Sha256": "486F9C96EBDF73ED40E06BD8EB8A6F3B97568F9C02424061E23C1C36D7E669E8",
+    "Nu190x": 0,
+    "AuditOrWarningSuppression": 0,
+    "FilterLines": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-linux-traceability-1.stdin.txt",
+    "Sha256": "01BA4719C80B6FE911B091A7C05124B64EEECE964E09C058EF8F9805DACA546B",
+    "Nu190x": 0,
+    "AuditOrWarningSuppression": 0,
+    "FilterLines": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-linux-traceability-1.wrapper.ps1",
+    "Sha256": "CCCB001B2B9B4078659DAD08D256F82D2AFB60CEC7EE2A52CB75F47635C18DF2",
+    "Nu190x": 0,
+    "AuditOrWarningSuppression": 0,
+    "FilterLines": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-linux-unit-1.err.log",
+    "Sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "Nu190x": 0,
+    "AuditOrWarningSuppression": 0,
+    "FilterLines": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-linux-unit-1.exit.txt",
+    "Sha256": "02FB9162B78BF4D3F77888F21098449BEA6C7F35AAF01C6E03FB3FDA51275A4C",
+    "Nu190x": 0,
+    "AuditOrWarningSuppression": 0,
+    "FilterLines": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-linux-unit-1.meta.json",
+    "Sha256": "37DC82B44A12FB13F8EC3A35C32B38B1468795D514D759D90804DC67AB56D1C4",
+    "Nu190x": 0,
+    "AuditOrWarningSuppression": 0,
+    "FilterLines": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-linux-unit-1.out.log",
+    "Sha256": "913DD59AA398F78B9A706CA3AEB0B984C685410C91EF3B9E8BD0EDB2059F766C",
+    "Nu190x": 0,
+    "AuditOrWarningSuppression": 0,
+    "FilterLines": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-linux-unit-1.stdin.txt",
+    "Sha256": "01BA4719C80B6FE911B091A7C05124B64EEECE964E09C058EF8F9805DACA546B",
+    "Nu190x": 0,
+    "AuditOrWarningSuppression": 0,
+    "FilterLines": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-linux-unit-1.wrapper.ps1",
+    "Sha256": "823078E4CE448A5E8F567169BBEF514DCBFD0EDC2694C09576C2476AF254BB5B",
+    "Nu190x": 0,
+    "AuditOrWarningSuppression": 0,
+    "FilterLines": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-win-buildtests-1.ssh.txt",
+    "Sha256": "A59B549F937A70BDB89B52304AC7C6ACF679B34C12EFBDF3ABB8E3C08B041498",
+    "Nu190x": 0,
+    "AuditOrWarningSuppression": 0,
+    "FilterLines": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-win-lane-1.read.txt",
+    "Sha256": "29004752CE1C8AFC8AD34EF6C9D95E3E74104DAAF40FBDC428B9E447805B9517",
+    "Nu190x": 0,
+    "AuditOrWarningSuppression": 0,
+    "FilterLines": [
+      "  LOG 14:54:23 [INF] Integration lane filter for QBrainAi.Support.Mcp.Tests: Category=Integration&Platform!=Linux",
+      "  LOG 14:54:23 [INF] Integration lane filter for QBrainAi.McpAgent.Tests: Category=Integration&Platform!=Linux",
+      "  LOG 14:54:23 [INF] Integration lane filter for QBrainAi.Repl.Core.Tests: Category=Integration&Platform!=Linux",
+      "  LOG 14:54:23 [INF] Integration lane filter for QBrainAi.QBAgent.Tests: Category=Integration&Platform!=Linux",
+      "  LOG 14:54:23 [INF] Integration lane filter for Build.Tests: Category=Integration&Platform!=Linux",
+      "  LOG 14:54:23 [INF] Integration lane filter for QBrainAi.Repl.IntegrationTests: Category=Integration&Platform!=Linux",
+      "  LOG 14:54:23 [INF] Integration lane filter for QBrainAi.Support.Mcp.IntegrationTests: Category=Integration&Platform!=Linux&(FullyQualifiedName~.RequirementScopeLayerReplIntegrationTests.|FullyQualifiedName~.QuadBrainOllamaEndpointIntegrationTests.)"
+    ]
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-win-lane-1.start.txt",
+    "Sha256": "312B0A66FE234A265E16449779D4E4B9CE6A53081980D93EE1659AF5B4FAAF07",
+    "Nu190x": 0,
+    "AuditOrWarningSuppression": 0,
+    "FilterLines": []
+  },
+  {
+    "File": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-final4-win-unit-1.ssh.txt",
+    "Sha256": "CA1427477A2ABBFD4D43BC0BA0EA59574055226B467CC2964CFC1BEF520D043B",
+    "Nu190x": 0,
+    "AuditOrWarningSuppression": 0,
+    "FilterLines": []
+  }
+]

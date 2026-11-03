@@ -1,0 +1,5 @@
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsDatabaseDocumentServiceTests.cs
+tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampContractTests.cs
+tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampBindingTests.cs
+src/QBrainAi.Services/Requirements/RequirementsDatabaseDocumentService.cs
+src/QBrainAi.Services/Requirements/RequirementStoredTimestamp.cs
