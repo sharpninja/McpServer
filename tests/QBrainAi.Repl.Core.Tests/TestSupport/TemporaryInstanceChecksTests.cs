@@ -21,12 +21,14 @@ namespace QBrainAi.Repl.Core.Tests.TestSupport;
 /// <list type="table">
 /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
 /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 ac-12 (strengthened: the answer's nonce field equals the whole nonce): health bodies are now JSON in the server's shape, with rows for a longer and a shorter nonce, the nonce in another field, a malformed body and a non-string nonce, and wrong checks "nonce substring" (the earlier shared check) and "any field", because hostile validation finding R9-F2 showed a substring match accepted another nonce. FR-MCP-TESTRESOURCE-001 ac-4 (strengthened: segments compared under the path's own syntax): start rows for a Windows case alias (accepted) and a POSIX case alias (refused), and wrong checks "ordinal only" and "ignores case everywhere", the sibling of finding R9-F3 (operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)").</description></item>
+/// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 ac-4 (appended "Strict containment in the owned root also requires the same root"): start rows for a UNC owned root (accepted, and accepted in another case with mixed separators), a single-rooted marker or workspace under a UNC root, a marker on another share, a UNC marker under a POSIX root and a marker on another drive (each refused), the wrong checks "ignores the root" (the round 10 shared check) and "UNC compared ordinally", and the scripted reference moved to ScriptedPathIdentity, because hostile validation round 10 finding R10-F2 showed the check flattened the root (operator 2026-11-03: "don't gate on me between rounds").</description></item>
 /// </list>
 /// </remarks>
 public sealed class TemporaryInstanceChecksTests
 {
     private const string OwnedRoot = "/scratch/owned";
     private const string WindowsOwnedRoot = @"C:\scratch\owned";
+    private const string UncOwnedRoot = "//server/share/owned";
     private const string Nonce = "nonce-r8b-1";
 
     /// <summary>
@@ -48,6 +50,13 @@ public sealed class TemporaryInstanceChecksTests
         ("no workspace argument", ["host.dll", "--agent-stdio", "--marker-file", "/scratch/owned/workspace/AGENTS-README-FIRST.yaml"], OwnedRoot, false),
         ("owned layout in another case on Windows", Start(@"c:\Scratch\owned\workspace", @"C:\scratch\OWNED\workspace\AGENTS-README-FIRST.yaml"), WindowsOwnedRoot, true),
         ("a POSIX marker differing only in case is another root", Start("/scratch/owned/workspace", "/scratch/Owned/workspace/AGENTS-README-FIRST.yaml"), OwnedRoot, false),
+        ("owned UNC layout", Start("//server/share/owned/workspace", "//server/share/owned/workspace/AGENTS-README-FIRST.yaml"), UncOwnedRoot, true),
+        ("owned UNC layout in another case and separators", Start(@"\\SERVER\Share\owned\workspace", @"//server/SHARE\Owned/workspace\AGENTS-README-FIRST.yaml"), UncOwnedRoot, true),
+        ("a single-rooted marker under a UNC root is another root", Start("//server/share/owned/workspace", "/server/share/owned/workspace/AGENTS-README-FIRST.yaml"), UncOwnedRoot, false),
+        ("a single-rooted workspace under a UNC root is another root", Start("/server/share/owned/workspace", "//server/share/owned/workspace/AGENTS-README-FIRST.yaml"), UncOwnedRoot, false),
+        ("a marker on another UNC share", Start("//server/share/owned/workspace", "//server/other/owned/workspace/AGENTS-README-FIRST.yaml"), UncOwnedRoot, false),
+        ("a UNC marker under a POSIX root is another root", Start("/scratch/owned/workspace", "//scratch/owned/workspace/AGENTS-README-FIRST.yaml"), OwnedRoot, false),
+        ("a marker on another drive", Start(@"C:\scratch\owned\workspace", @"D:\scratch\owned\workspace\AGENTS-README-FIRST.yaml"), WindowsOwnedRoot, false),
     ];
 
     /// <summary>
@@ -184,6 +193,8 @@ public sealed class TemporaryInstanceChecksTests
     [InlineData("missing marker allowed", "no marker argument")]
     [InlineData("ordinal only", "owned layout in another case on Windows")]
     [InlineData("ignores case everywhere", "a POSIX marker differing only in case is another root")]
+    [InlineData("ignores the root", "a single-rooted marker under a UNC root is another root")]
+    [InlineData("UNC compared ordinally", "owned UNC layout in another case and separators")]
     public void WrongStartChecks_AreRejectedInsidePassingHarness(string wrong, string failingRow) =>
         Assert.Contains(failingRow, StartContractFailures(WrongStartCheck(wrong)));
 
@@ -271,24 +282,8 @@ public sealed class TemporaryInstanceChecksTests
     /// <param name="path">The path.</param>
     /// <param name="root">The root.</param>
     /// <returns>True when the path is strictly inside the root.</returns>
-    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4: compares under the path's own syntax instead of ordinally everywhere (the sibling of hostile validation finding R9-F3).</remarks>
-    private static bool ScriptedInside(string path, string root)
-    {
-        var pathSegments = Segments(path);
-        var rootSegments = Segments(root);
-        if (pathSegments.Any(segment => segment is "." or ".."))
-            return false;
-        var comparer = IsWindowsForm(path) && IsWindowsForm(root) ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal;
-        return pathSegments.Length > rootSegments.Length
-            && rootSegments.SequenceEqual(pathSegments.Take(rootSegments.Length), comparer);
-    }
-
-    /// <summary>FR-MCP-TESTRESOURCE-001 ac-4 scripted reference: whether a path is in Windows form (a drive letter or a backslash).</summary>
-    /// <param name="path">The path.</param>
-    /// <returns>True for a Windows-form path.</returns>
-    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4: added for the sibling of hostile validation finding R9-F3.</remarks>
-    private static bool IsWindowsForm(string path) =>
-        path.Contains('\\', StringComparison.Ordinal) || (path.Length >= 2 && char.IsAsciiLetter(path[0]) && path[1] == ':');
+    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4: compares under the path's own syntax instead of ordinally everywhere (the sibling of hostile validation finding R9-F3). 2026-11-03, FR-MCP-TESTRESOURCE-001 ac-4 (appended "Strict containment in the owned root also requires the same root"): delegates to ScriptedPathIdentity, which compares root kind and root identity first (hostile validation round 10 finding R10-F2).</remarks>
+    private static bool ScriptedInside(string path, string root) => ScriptedPathIdentity.Inside(path, root);
 
     private static string[] Segments(string path) =>
         path.Split(['/', '\\'], StringSplitOptions.RemoveEmptyEntries);
@@ -329,8 +324,28 @@ public sealed class TemporaryInstanceChecksTests
             ValueAfter(arguments, "--marker-file") is null ? null : ScriptedStart(arguments, root),
         "ordinal only" => (arguments, root) => WrongCaseStart(arguments, root, StringComparer.Ordinal),
         "ignores case everywhere" => (arguments, root) => WrongCaseStart(arguments, root, StringComparer.OrdinalIgnoreCase),
+        "ignores the root" => (arguments, root) => WrongRootStart(arguments, root, flattenRoot: true, ordinalUnc: false),
+        "UNC compared ordinally" => (arguments, root) => WrongRootStart(arguments, root, flattenRoot: false, ordinalUnc: true),
         _ => throw new ArgumentOutOfRangeException(nameof(wrong), wrong, "Unknown wrong start check."),
     };
+
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 ac-4, for the wrong checks "ignores the root" (the round 10 shared check, which flattened the
+    /// root into the segments) and "UNC compared ordinally": a start check over the scripted path identity with one flaw.
+    /// </summary>
+    /// <param name="arguments">The REPL host's arguments.</param>
+    /// <param name="root">The owned root.</param>
+    /// <param name="flattenRoot">Ignore root kind and identity.</param>
+    /// <param name="ordinalUnc">Compare UNC paths ordinally.</param>
+    /// <returns>Null when the workspace and the marker are inside the root under the flawed rule.</returns>
+    /// <remarks>2026-11-03, FR-MCP-TESTRESOURCE-001 ac-4 (appended "Strict containment in the owned root also requires the same root"): added for hostile validation round 10 finding R10-F2.</remarks>
+    private static string? WrongRootStart(IReadOnlyList<string> arguments, string root, bool flattenRoot, bool ordinalUnc) =>
+        ValueAfter(arguments, "--workspace-path") is { } workspace
+        && ValueAfter(arguments, "--marker-file") is { } marker
+        && ScriptedPathIdentity.Inside(workspace, root, flattenRoot, ordinalUnc)
+        && ScriptedPathIdentity.Inside(marker, root, flattenRoot, ordinalUnc)
+            ? null
+            : "outside";
 
     /// <summary>
     /// FR-MCP-TESTRESOURCE-001 ac-4, for the wrong checks "ordinal only" and "ignores case everywhere": a start check

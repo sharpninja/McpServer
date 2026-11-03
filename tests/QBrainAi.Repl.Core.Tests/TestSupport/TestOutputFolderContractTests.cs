@@ -18,6 +18,7 @@ namespace QBrainAi.Repl.Core.Tests.TestSupport;
 /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
 /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, generated artifacts in test-owned locations): added the output-folder contract, because two memory-bench stub cases wrote into the checkout's docs/benchmarks/results and rewrote two tracked files on every lane run (operator 2026-11-02: "Fix in scope"; triage-report-32e6bc07).</description></item>
 /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, appended "compared ... under the path's own syntax"): added four case rows and the wrong checks "ordinal only" (the earlier shared check) and "ignores case everywhere", because hostile validation finding R9-F3 showed a Windows case alias of the checkout was accepted; documented every helper (MEMORY-FACT-008; finding R9-F8) (operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)").</description></item>
+/// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, appended "A path's root is part of its identity"): added rows for a forward-slash, mixed-separator and backslash UNC alias of the checkout (refused), a distinct UNC share, a single-rooted path under a UNC checkout and a UNC path under a POSIX checkout (accepted as other locations), and the wrong checks "ignores the root" (the round 10 shared check) and "UNC compared ordinally", because hostile validation round 10 finding R10-F2 showed forward-slash UNC aliases were compared ordinally and the root was flattened (operator 2026-11-03: "don't gate on me between rounds").</description></item>
 /// </list>
 /// </remarks>
 public sealed class TestOutputFolderContractTests
@@ -48,6 +49,12 @@ public sealed class TestOutputFolderContractTests
         new("Windows folder case alias inside the checkout", "C:/GitHub/repo", @"C:\github\REPO\docs\out", false),
         new("Windows checkout root in another case", "C:/GitHub/repo", "c:/github/repo", false),
         new("POSIX folder differing only in case is a distinct sibling", "/work/repo", "/work/Repo/out", true),
+        new("Windows UNC case alias inside the checkout", "//Server/Share/Repo", "//server/share/repo/docs/out", false),
+        new("Windows UNC mixed-separator alias inside the checkout", "//Server/Share/Repo", @"\\server\share/Repo\docs", false),
+        new("Windows UNC checkout root in backslashes", "//Server/Share/Repo", @"\\Server\Share\Repo", false),
+        new("a distinct UNC share is another location", "//Server/Share/Repo", "//Server/Other/Repo/out", true),
+        new("a single-rooted path is another root than a UNC checkout", "//server/share/repo", "/server/share/repo/docs/out", true),
+        new("a UNC path is another root than a POSIX checkout", "/server/share/repo", "//server/share/repo/docs/out", true),
     ];
 
     /// <summary>The scripted reference check satisfies every row.</summary>
@@ -66,6 +73,8 @@ public sealed class TestOutputFolderContractTests
     [InlineData("one separator only")]
     [InlineData("ordinal only")]
     [InlineData("ignores case everywhere")]
+    [InlineData("ignores the root")]
+    [InlineData("UNC compared ordinally")]
     public void WrongChecks_AreRejected(string fault) =>
         Assert.ThrowsAny<XunitException>(() => AssertCheck((folder, checkout) => fault switch
         {
@@ -78,8 +87,29 @@ public sealed class TestOutputFolderContractTests
             "one separator only" => !folder.Contains('/', StringComparison.Ordinal) && IsAbsolute(folder) ? null : ScriptedCheck(folder, checkout),
             "ordinal only" => SegmentCheck(folder, checkout, StringComparer.Ordinal),
             "ignores case everywhere" => SegmentCheck(folder, checkout, StringComparer.OrdinalIgnoreCase),
+            "ignores the root" => RootRuleCheck(folder, checkout, flattenRoot: true, ordinalUnc: false),
+            "UNC compared ordinally" => RootRuleCheck(folder, checkout, flattenRoot: false, ordinalUnc: true),
             _ => throw new ArgumentOutOfRangeException(nameof(fault)),
         }));
+
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 (generated-artifact criterion), for the wrong checks "ignores the root" (the round 10 shared
+    /// check, which flattened the root into the segments) and "UNC compared ordinally": an output check over the scripted
+    /// path identity with one flaw.
+    /// </summary>
+    /// <param name="folder">The candidate artifact folder.</param>
+    /// <param name="checkout">The checkout root.</param>
+    /// <param name="flattenRoot">Ignore root kind and identity.</param>
+    /// <param name="ordinalUnc">Compare UNC paths ordinally.</param>
+    /// <returns>Null when the folder is acceptable under the flawed rule; otherwise the refusal.</returns>
+    /// <remarks>2026-11-03, FR-MCP-TESTRESOURCE-001 generated-artifact criterion (appended "A path's root is part of its identity"): added for hostile validation round 10 finding R10-F2.</remarks>
+    private static string? RootRuleCheck(string folder, string checkout, bool flattenRoot, bool ordinalUnc) =>
+        ScriptedPathIdentity.IsAbsolute(folder)
+        && !ScriptedPathIdentity.Parse(folder).Segments.Any(segment => segment is "." or "..")
+        && !ScriptedPathIdentity.Inside(folder, checkout, flattenRoot, ordinalUnc)
+        && !ScriptedPathIdentity.Same(folder, checkout, flattenRoot, ordinalUnc)
+            ? null
+            : Refusal(folder, checkout);
 
     /// <summary>Asserts a check against every row: null for an acceptable folder, a message naming the folder otherwise.</summary>
     /// <param name="check">The check under test: folder and checkout root in, null or a refusal out.</param>

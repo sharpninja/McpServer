@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using QBrainAi.Client;
 using QBrainAi.Client.Models;
 using QBrainAi.Repl.Core;
+using QBrainAi.Repl.Core.Tests.TestSupport;
 using Xunit;
 
 namespace QBrainAi.Repl.Core.Tests;
@@ -428,6 +429,11 @@ public class SessionLogWorkflowIntegration2Tests
 
     #region Session State Metadata Tests
 
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 (appended 2026-11-03): opening a session records every metadata field and the scripted
+    /// open time exactly as Started and LastUpdated, from a test-owned clock (hostile validation round 10 finding
+    /// R10-F3: the case formerly compared the times with the live clock).
+    /// </summary>
     [Fact]
     public void SessionMetadata_AfterOpenSession_ContainsAllFields()
     {
@@ -435,39 +441,43 @@ public class SessionLogWorkflowIntegration2Tests
         var sessionId = "Copilot-20260304T113901Z-metadata";
         var title = "Metadata Test Session";
         var model = "claude-sonnet-4-20250514";
+        var opened = new DateTimeOffset(2026, 3, 4, 11, 39, 1, TimeSpan.Zero);
+        var state = new FakeSessionLogState(new ScriptedClock(opened).Next);
 
-        _fakeState.OpenSession(agent, sessionId, title, model);
+        state.OpenSession(agent, sessionId, title, model);
 
-        Assert.Equal(agent, _fakeState.Agent);
-        Assert.Equal(sessionId, _fakeState.SessionId);
-        Assert.Equal(title, _fakeState.Title);
-        Assert.Equal(model, _fakeState.Model);
-        Assert.Equal("in_progress", _fakeState.Status);
-        Assert.True(_fakeState.Started <= DateTimeOffset.UtcNow);
-        Assert.True(_fakeState.LastUpdated <= DateTimeOffset.UtcNow);
-        Assert.Equal(0, _fakeState.TurnCount);
+        Assert.Equal(agent, state.Agent);
+        Assert.Equal(sessionId, state.SessionId);
+        Assert.Equal(title, state.Title);
+        Assert.Equal(model, state.Model);
+        Assert.Equal("in_progress", state.Status);
+        RecordedTimeContractTests.AssertRecordedTimes([opened, opened], [state.Started, state.LastUpdated], "open session");
+        Assert.Equal(0, state.TurnCount);
     }
 
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 (appended 2026-11-03): open, begin, update and complete each record the next scripted
+    /// time exactly as LastUpdated, with no sleep (hostile validation round 10 finding R10-F3: the case formerly slept to
+    /// separate live-clock times).
+    /// </summary>
     [Fact]
     public void SessionMetadata_LastUpdated_UpdatesOnChanges()
     {
-        _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
-        var initialTimestamp = _fakeState.LastUpdated;
+        var first = new DateTimeOffset(2026, 3, 4, 11, 39, 1, TimeSpan.Zero);
+        DateTimeOffset[] times = [first, first.AddSeconds(1), first.AddSeconds(2), first.AddSeconds(3)];
+        var state = new FakeSessionLogState(new ScriptedClock(times).Next);
+        var recorded = new List<DateTimeOffset>();
 
-        Thread.Sleep(50);
-        _fakeState.BeginTurn("req-20260304T113901Z-task-001");
-        var afterBeginTimestamp = _fakeState.LastUpdated;
-        Assert.True(afterBeginTimestamp > initialTimestamp);
+        state.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
+        recorded.Add(state.LastUpdated);
+        state.BeginTurn("req-20260304T113901Z-task-001");
+        recorded.Add(state.LastUpdated);
+        state.UpdateTurn();
+        recorded.Add(state.LastUpdated);
+        state.CompleteTurn();
+        recorded.Add(state.LastUpdated);
 
-        Thread.Sleep(50);
-        _fakeState.UpdateTurn();
-        var afterUpdateTimestamp = _fakeState.LastUpdated;
-        Assert.True(afterUpdateTimestamp > afterBeginTimestamp);
-
-        Thread.Sleep(50);
-        _fakeState.CompleteTurn();
-        var afterCompleteTimestamp = _fakeState.LastUpdated;
-        Assert.True(afterCompleteTimestamp > afterUpdateTimestamp);
+        RecordedTimeContractTests.AssertRecordedTimes(times, recorded, "session transitions");
     }
 
     #endregion

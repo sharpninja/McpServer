@@ -8,6 +8,12 @@ namespace QBrainAi.Repl.Core.Tests.TestSupport;
 /// paths and answers. Scripted positive and negative controls precede the shared implementation binding.
 /// No case reads the process environment, file system, network or host platform.
 /// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 ac-4 (appended "Strict containment in the owned root also requires the same root"): database rows for a single-rooted path under a UNC root, a UNC alias in another case and separators (accepted), another UNC share and a UNC database under a POSIX root, and a start row for a UNC trust cache under a POSIX root; every row keeps its per-row wrong verdict, because hostile validation round 10 finding R10-F2 showed the shared containment flattened the root (operator 2026-11-03: "don't gate on me between rounds"). Earlier entries are in the git history of this file; the 2026-11-02 JSON health answer is recorded on AssertHealth.</description></item>
+/// </list>
+/// </remarks>
 public sealed class OwnedInstanceIsolationContractTests
 {
     internal const string Root = "/scratch/owned";
@@ -52,6 +58,10 @@ public sealed class OwnedInstanceIsolationContractTests
         ("last synonym wins inside", "Data Source=/scratch/other/main.db;Filename=/scratch/owned/data/main.db", Root, "sqlite", true),
         ("broken quoting", "Data Source=\"/scratch/owned/data/main.db", Root, "sqlite", false),
         ("memory database", "Data Source=:memory:", Root, "sqlite", false),
+        ("single-rooted path under a UNC root", "DataSource=/server/share/owned/main.db", "//server/share/owned", "sqlite", false),
+        ("UNC alias in another case and separators", @"DataSource=\\SERVER\Share\Owned\main.db", "//server/share/owned", "sqlite", true),
+        ("database on another UNC share", "DataSource=//server/other/owned/main.db", "//server/share/owned", "sqlite", false),
+        ("UNC database under a POSIX root", "Data Source=//scratch/owned/data/main.db", Root, "sqlite", false),
     ];
 
     /// <summary>Start contexts must supply the owned server and an owned trust-cache folder.</summary>
@@ -66,6 +76,7 @@ public sealed class OwnedInstanceIsolationContractTests
         ("cache prefix sibling", StartEnvironment(Address, "/scratch/owned2/cache"), false),
         ("cache parent escape", StartEnvironment(Address, "/scratch/owned/../other/cache"), false),
         ("canonical cache conflict", StartEnvironment(Address, "/scratch/owned/cache", canonicalCache: "/scratch/other/cache"), false),
+        ("UNC cache under a POSIX root", StartEnvironment(Address, "//scratch/owned/cache"), false),
     ];
 
     /// <summary>Verifies the complete environment contract against an injected builder, preserving exact values.</summary>

@@ -6,16 +6,40 @@ using System.Threading.Tasks;
 using QBrainAi.Client;
 using QBrainAi.Client.Models;
 using QBrainAi.Repl.Core;
+using QBrainAi.Repl.Core.Tests.TestSupport;
 
 namespace QBrainAi.Repl.Core.Tests;
 
 /// <summary>
 /// Fake in-memory implementation of ISessionLogState for testing turn lifecycle.
-/// Tracks session and turn state with validation rules.
+/// Tracks session and turn state with validation rules. Its times come from a test-owned clock, never the real one.
 /// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-03</term><description>TR-MCP-USECASE-018 AC-006 (appended "A unit test that checks a recorded time ... takes the clock values from test-owned scripted inputs and asserts them exactly"): Started and LastUpdated come from an injected test-owned clock (by default <see cref="ScriptedClock.Stepping"/> from <see cref="DefaultFirstTime"/>, one second per read) instead of DateTimeOffset.UtcNow, because hostile validation round 10 finding R10-F3 showed two session cases compared these times with the live clock and slept to separate them (operator 2026-11-03: "don't gate on me between rounds").</description></item>
+/// </list>
+/// </remarks>
 internal sealed class FakeSessionLogState : ISessionLogState
 {
+    /// <summary>The first time the default clock returns: a fixed instant, so no case depends on the date it runs.</summary>
+    internal static readonly DateTimeOffset DefaultFirstTime = new(2026, 1, 15, 9, 0, 0, TimeSpan.Zero);
+
+    private readonly Func<DateTimeOffset> _clock;
     private readonly HashSet<string> _completedRequestIds = new();
+
+    /// <summary>Creates the fake with the default stepping clock.</summary>
+    public FakeSessionLogState()
+        : this(ScriptedClock.Stepping(DefaultFirstTime, TimeSpan.FromSeconds(1)))
+    {
+    }
+
+    /// <summary>Creates the fake with a test-owned clock.</summary>
+    /// <param name="clock">Returns the time each state change records.</param>
+    public FakeSessionLogState(Func<DateTimeOffset> clock)
+    {
+        _clock = clock ?? throw new ArgumentNullException(nameof(clock));
+    }
     private string? _currentTurnRequestId;
     private string? _lastCompletedStatus;
 
@@ -36,7 +60,7 @@ internal sealed class FakeSessionLogState : ISessionLogState
         SessionId = sessionId;
         Title = title;
         Model = model;
-        Started = DateTimeOffset.UtcNow;
+        Started = _clock();
         LastUpdated = Started;
         Status = "in_progress";
     }
@@ -60,7 +84,7 @@ internal sealed class FakeSessionLogState : ISessionLogState
 
         _currentTurnRequestId = requestId;
         CurrentTurnStatus = "in_progress";
-        LastUpdated = DateTimeOffset.UtcNow;
+        LastUpdated = _clock();
     }
 
     public void UpdateTurn()
@@ -75,7 +99,7 @@ internal sealed class FakeSessionLogState : ISessionLogState
             throw new InvalidOperationException($"Turn is immutable (status: {_lastCompletedStatus})");
         }
 
-        LastUpdated = DateTimeOffset.UtcNow;
+        LastUpdated = _clock();
     }
 
     public void CompleteTurn()
@@ -90,7 +114,7 @@ internal sealed class FakeSessionLogState : ISessionLogState
         _currentTurnRequestId = null;
         CurrentTurnStatus = null;
         TurnCount++;
-        LastUpdated = DateTimeOffset.UtcNow;
+        LastUpdated = _clock();
         _lastCompletedStatus = null;
     }
 
@@ -106,7 +130,7 @@ internal sealed class FakeSessionLogState : ISessionLogState
         _currentTurnRequestId = null;
         CurrentTurnStatus = null;
         TurnCount++;
-        LastUpdated = DateTimeOffset.UtcNow;
+        LastUpdated = _clock();
         _lastCompletedStatus = null;
     }
 }

@@ -279,6 +279,7 @@ internal static class TemporaryInstanceChecks
     /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
     /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 (second criterion): added, because two memory-bench stub cases wrote into the checkout's docs/benchmarks/results and rewrote two tracked files on every lane run (operator 2026-11-02: "Fix in scope"; mock gate ug-r9-mockgate-s-1).</description></item>
     /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, appended "compared ... under the path's own syntax"): containment and equality compare Windows-form paths ignoring case, because hostile validation finding R9-F3 showed a case alias of the checkout was accepted (operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)").</description></item>
+    /// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, appended "A path's root is part of its identity"): the folder and the checkout are compared through <see cref="PathIdentity"/>, so a forward-slash, backslash or mixed-separator UNC alias of the checkout or of a folder inside it is refused, and a path under another root kind, server, share or drive is another location, because hostile validation round 10 finding R10-F2 showed a forward-slash UNC alias was accepted (operator 2026-11-03: "don't gate on me between rounds").</description></item>
     /// </list>
     /// </remarks>
     internal static string? CheckTestOutputFolder(string folder, string checkoutRoot)
@@ -286,43 +287,97 @@ internal static class TemporaryInstanceChecks
         ArgumentNullException.ThrowIfNull(folder);
         ArgumentException.ThrowIfNullOrWhiteSpace(checkoutRoot);
 
-        var segments = Segments(folder);
-        var acceptable = IsAbsolute(folder)
-            && !segments.Any(segment => segment is "." or "..")
+        var identity = PathIdentity.Parse(folder);
+        var acceptable = identity.Kind != PathRootKind.None
+            && !identity.Segments.Any(segment => segment is "." or "..")
             && !IsStrictlyInside(folder, checkoutRoot)
-            && !SameSegments(segments, Segments(checkoutRoot), SegmentComparison(folder, checkoutRoot));
+            && !identity.SameLocation(PathIdentity.Parse(checkoutRoot));
         return acceptable
             ? null
             : $"The test artifact folder '{folder}' is not a test-owned location outside the checkout '{checkoutRoot}'.";
     }
 
-    /// <summary>FR-MCP-TESTRESOURCE-001 (generated-artifact criterion): whether two segment lists name the same folder.</summary>
-    /// <param name="left">The first path's segments.</param>
-    /// <param name="right">The second path's segments.</param>
-    /// <param name="comparison">How segments compare (from <see cref="SegmentComparison"/>).</param>
-    /// <returns>True when both lists have the same segments in order.</returns>
-    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 generated-artifact criterion: takes the path syntax's comparison instead of ordinal only (hostile validation finding R9-F3); documented (MEMORY-FACT-008; finding R9-F8).</remarks>
-    private static bool SameSegments(string[] left, string[] right, StringComparison comparison) =>
-        left.Length == right.Length && left.Zip(right).All(pair => string.Equals(pair.First, pair.Second, comparison));
+    /// <summary>FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: the kind of a path's root.</summary>
+    /// <remarks>2026-11-03, FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: added, because hostile validation round 10 finding R10-F2 showed the checks flattened the root into the segments.</remarks>
+    private enum PathRootKind
+    {
+        /// <summary>Not an absolute path.</summary>
+        None,
+
+        /// <summary>The POSIX root, one leading '/'.</summary>
+        Posix,
+
+        /// <summary>A drive letter, a colon and a separator.</summary>
+        Drive,
+
+        /// <summary>Two leading separators of either kind, then a server and a share.</summary>
+        Unc,
+    }
 
     /// <summary>
-    /// FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: how two paths' segments compare under their own
-    /// syntax. Both in Windows form (a drive letter or a backslash): ignoring case, drive letter included; otherwise
-    /// ordinally, as POSIX paths are case-sensitive.
+    /// FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: a path's root (kind and identity: "/", the drive
+    /// letter, or "server/share") and its segments after the root, split on either separator. UNC and drive-letter paths
+    /// are Windows syntax and compare ignoring case; POSIX paths compare ordinally. Two paths share a location only under
+    /// the same root kind and root identity.
     /// </summary>
-    /// <param name="path">The path.</param>
-    /// <param name="root">The root it is compared with.</param>
-    /// <returns>The comparison.</returns>
-    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: added for hostile validation finding R9-F3 and its ac-4 sibling.</remarks>
-    private static StringComparison SegmentComparison(string path, string root) =>
-        IsWindowsForm(path) && IsWindowsForm(root) ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+    /// <param name="Kind">The root kind.</param>
+    /// <param name="Root">The root identity.</param>
+    /// <param name="Segments">The segments after the root.</param>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 ac-4 (appended "Strict containment in the owned root also requires the same root") and the generated-artifact criterion (appended "A path's root is part of its identity"): added, replacing the segment split that dropped the root and the Windows-form test that missed forward-slash UNC paths, because hostile validation round 10 finding R10-F2 showed a single-rooted path was accepted under a UNC owned root and a forward-slash UNC alias of the checkout was compared ordinally (operator 2026-11-03: "don't gate on me between rounds"). Follows the repository's own reading of "//" as UNC (WorkspaceIdentityPath).</description></item>
+    /// </list>
+    /// </remarks>
+    private readonly record struct PathIdentity(PathRootKind Kind, string Root, string[] Segments)
+    {
+        /// <summary>How this path's root and segments compare: ignoring case for Windows syntax, ordinally for POSIX.</summary>
+        internal StringComparison Comparison => Kind is PathRootKind.Drive or PathRootKind.Unc ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
 
-    /// <summary>FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: whether a path is in Windows form (a drive letter or a backslash).</summary>
-    /// <param name="path">The path.</param>
-    /// <returns>True for a Windows-form path.</returns>
-    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: added for hostile validation finding R9-F3.</remarks>
-    private static bool IsWindowsForm(string path) =>
-        path.Contains('\\', StringComparison.Ordinal) || (path.Length >= 2 && char.IsAsciiLetter(path[0]) && path[1] == ':');
+        /// <summary>Parses a path into its root and segments.</summary>
+        /// <param name="path">The path.</param>
+        /// <returns>The identity; kind None when the path is not absolute.</returns>
+        internal static PathIdentity Parse(string path)
+        {
+            if (path.Length > 2 && IsSeparator(path[0]) && IsSeparator(path[1]) && !IsSeparator(path[2]))
+            {
+                var parts = Split(path[2..]);
+                return parts.Length >= 2 ? new PathIdentity(PathRootKind.Unc, parts[0] + "/" + parts[1], parts[2..]) : new PathIdentity(PathRootKind.None, string.Empty, []);
+            }
+
+            if (path.Length >= 3 && char.IsAsciiLetter(path[0]) && path[1] == ':' && IsSeparator(path[2]))
+                return new PathIdentity(PathRootKind.Drive, path[..1], Split(path[3..]));
+            return path.StartsWith('/')
+                ? new PathIdentity(PathRootKind.Posix, "/", Split(path[1..]))
+                : new PathIdentity(PathRootKind.None, string.Empty, []);
+        }
+
+        /// <summary>Whether another identity has the same root kind and root identity.</summary>
+        /// <param name="other">The other identity.</param>
+        /// <returns>True for the same root.</returns>
+        internal bool SameRoot(PathIdentity other) =>
+            Kind != PathRootKind.None && Kind == other.Kind && string.Equals(Root, other.Root, Comparison);
+
+        /// <summary>Whether another identity names the same location: the same root and the same segments.</summary>
+        /// <param name="other">The other identity.</param>
+        /// <returns>True for the same location.</returns>
+        internal bool SameLocation(PathIdentity other)
+        {
+            var comparison = Comparison;
+            return SameRoot(other) && Segments.Length == other.Segments.Length
+                && Segments.Zip(other.Segments).All(pair => string.Equals(pair.First, pair.Second, comparison));
+        }
+
+        /// <summary>Whether a character is a path separator of either kind.</summary>
+        /// <param name="value">The character.</param>
+        /// <returns>True for '/' or '\'.</returns>
+        private static bool IsSeparator(char value) => value is '/' or '\\';
+
+        /// <summary>The non-empty parts of a text split on either separator.</summary>
+        /// <param name="text">The text after the root.</param>
+        /// <returns>The parts.</returns>
+        private static string[] Split(string text) => text.Split(['/', '\\'], StringSplitOptions.RemoveEmptyEntries);
+    }
 
     private static readonly string[] ConnectionStringPrefixes =
         ["SQLCONNSTR_", "SQLAZURECONNSTR_", "MYSQLCONNSTR_", "POSTGRESQLCONNSTR_", "CUSTOMCONNSTR_"];
@@ -376,31 +431,23 @@ internal static class TemporaryInstanceChecks
     /// <param name="path">The path.</param>
     /// <param name="root">The root.</param>
     /// <returns>True when the path is strictly inside the root.</returns>
-    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: compares under the paths' own syntax instead of ordinally everywhere (hostile validation finding R9-F3 and its ac-4 sibling; operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)").</remarks>
+    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: compares under the paths' own syntax instead of ordinally everywhere (hostile validation finding R9-F3 and its ac-4 sibling; operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)"). 2026-11-03, FR-MCP-TESTRESOURCE-001 ac-4 (appended "Strict containment in the owned root also requires the same root"): requires the same root kind and root identity before comparing segments (<see cref="PathIdentity"/>), because hostile validation round 10 finding R10-F2 showed a single-rooted path was accepted under a UNC root.</remarks>
     private static bool IsStrictlyInside(string path, string root)
     {
-        if (!IsAbsolute(path) || !IsAbsolute(root)) return false;
-        var pathSegments = Segments(path);
-        if (pathSegments.Any(segment => segment is "." or ".."))
+        var pathIdentity = PathIdentity.Parse(path);
+        var rootIdentity = PathIdentity.Parse(root);
+        if (!pathIdentity.SameRoot(rootIdentity) || pathIdentity.Segments.Any(segment => segment is "." or ".."))
+            return false;
+        if (pathIdentity.Segments.Length <= rootIdentity.Segments.Length)
             return false;
 
-        var rootSegments = Segments(root);
-        if (pathSegments.Length <= rootSegments.Length)
-            return false;
-
-        var comparison = SegmentComparison(path, root);
-        for (var index = 0; index < rootSegments.Length; index++)
+        var comparison = pathIdentity.Comparison;
+        for (var index = 0; index < rootIdentity.Segments.Length; index++)
         {
-            if (!string.Equals(pathSegments[index], rootSegments[index], comparison))
+            if (!string.Equals(pathIdentity.Segments[index], rootIdentity.Segments[index], comparison))
                 return false;
         }
 
         return true;
     }
-
-    private static string[] Segments(string path) =>
-        path.Split(['/', '\\'], StringSplitOptions.RemoveEmptyEntries);
-
-    private static bool IsAbsolute(string path) => path.StartsWith('/') || path.StartsWith(@"\\", StringComparison.Ordinal)
-        || (path.Length >= 3 && char.IsAsciiLetter(path[0]) && path[1] == ':' && path[2] is '/' or '\\');
 }

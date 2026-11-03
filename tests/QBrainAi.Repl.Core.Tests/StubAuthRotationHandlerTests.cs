@@ -1,17 +1,26 @@
 using QBrainAi.Repl.Core;
+using QBrainAi.Repl.Core.Tests.TestSupport;
 using NSubstitute;
 
 namespace QBrainAi.Repl.Core.Tests;
 
 public class StubAuthRotationHandlerTests
 {
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 (appended 2026-11-03): updating the auth state from new marker data takes the new key,
+    /// stays valid and records the scripted update time exactly, from a test-owned clock (hostile validation round 10
+    /// finding R10-F3: the case formerly compared LastUpdated with the live clock).
+    /// </summary>
     [Fact]
     public async Task UpdateAuthState_NewMarkerData_TransitionsToNewState()
     {
-        var stub = new StubAuthRotationHandler("/home/user/project", "initial-key");
+        var created = new DateTimeOffset(2026, 1, 15, 9, 0, 0, TimeSpan.Zero);
+        var updated = created.AddMinutes(5);
+        var stub = new StubAuthRotationHandler("/home/user/project", "initial-key", new ScriptedClock(created, updated).Next);
 
         Assert.Equal("initial-key", stub.CurrentAuthState.ApiKey);
         Assert.True(stub.CurrentAuthState.IsValid);
+        RecordedTimeContractTests.AssertRecordedTimes([created], [stub.CurrentAuthState.LastUpdated], "initial auth state");
 
         var newMarkerData = CreateMarkerData("/home/user/project", "updated-key");
 
@@ -19,7 +28,7 @@ public class StubAuthRotationHandlerTests
 
         Assert.Equal("updated-key", stub.CurrentAuthState.ApiKey);
         Assert.True(stub.CurrentAuthState.IsValid);
-        Assert.True(stub.CurrentAuthState.LastUpdated > DateTimeOffset.UtcNow.AddSeconds(-2));
+        RecordedTimeContractTests.AssertRecordedTimes([updated], [stub.CurrentAuthState.LastUpdated], "updated auth state");
     }
 
     [Fact]
@@ -208,19 +217,37 @@ public class StubAuthRotationHandlerTests
         data.ServerUrl.Returns("http://localhost:5177");
         data.ApiKey.Returns(apiKey);
         data.WorkspaceId.Returns(workspacePath);
-        data.LastModified.Returns(DateTimeOffset.UtcNow);
+        data.LastModified.Returns(MarkerModified);
         return data;
     }
+
+    /// <summary>The fixed modification time of the scripted marker data (2026-11-03: no live clock in this unit class).</summary>
+    private static readonly DateTimeOffset MarkerModified = new(2026, 1, 15, 8, 0, 0, TimeSpan.Zero);
 }
 
+/// <summary>
+/// Test stub of the auth-rotation handler: keeps the auth state in memory and stamps each change with a test-owned clock.
+/// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-03</term><description>TR-MCP-USECASE-018 AC-006 (appended "A unit test that checks a recorded time ... takes the clock values from test-owned scripted inputs and asserts them exactly"): every recorded time comes from an injected clock (by default <see cref="ScriptedClock.Stepping"/> from a fixed instant) instead of DateTimeOffset.UtcNow, because hostile validation round 10 finding R10-F3 showed the update case compared LastUpdated with the live clock (operator 2026-11-03: "don't gate on me between rounds").</description></item>
+/// </list>
+/// </remarks>
 internal sealed class StubAuthRotationHandler : IAuthRotationHandler
 {
     private readonly List<Func<IAuthState, Task>> _callbacks = new();
+    private readonly Func<DateTimeOffset> _clock;
     private IAuthState _currentAuthState;
 
-    public StubAuthRotationHandler(string workspacePath, string initialApiKey)
+    /// <summary>Creates the stub with an initial key and a test-owned clock.</summary>
+    /// <param name="workspacePath">The workspace path.</param>
+    /// <param name="initialApiKey">The initial key.</param>
+    /// <param name="clock">Returns the time each state change records; by default a stepping clock from a fixed instant.</param>
+    public StubAuthRotationHandler(string workspacePath, string initialApiKey, Func<DateTimeOffset>? clock = null)
     {
-        _currentAuthState = CreateAuthState(workspacePath, initialApiKey, true, DateTimeOffset.UtcNow);
+        _clock = clock ?? ScriptedClock.Stepping(new DateTimeOffset(2026, 1, 15, 9, 0, 0, TimeSpan.Zero), TimeSpan.FromSeconds(1));
+        _currentAuthState = CreateAuthState(workspacePath, initialApiKey, true, _clock());
     }
 
     public IAuthState CurrentAuthState => _currentAuthState;
@@ -233,7 +260,7 @@ internal sealed class StubAuthRotationHandler : IAuthRotationHandler
             newMarkerData.WorkspacePath,
             newMarkerData.ApiKey,
             true,
-            DateTimeOffset.UtcNow);
+            _clock());
 
         foreach (var callback in _callbacks)
         {
@@ -264,8 +291,8 @@ internal sealed class StubAuthRotationHandler : IAuthRotationHandler
             workspacePath,
             $"refreshed-key-{Guid.NewGuid().ToString()[..8]}",
             true,
-            DateTimeOffset.UtcNow,
-            DateTimeOffset.UtcNow);
+            _clock(),
+            _clock());
 
         _currentAuthState = refreshedState;
 
@@ -285,7 +312,7 @@ internal sealed class StubAuthRotationHandler : IAuthRotationHandler
                 _currentAuthState.ApiKey,
                 true,
                 _currentAuthState.LastUpdated,
-                DateTimeOffset.UtcNow);
+                _clock());
             _currentAuthState = validated;
         }
 
@@ -298,7 +325,7 @@ internal sealed class StubAuthRotationHandler : IAuthRotationHandler
             _currentAuthState.WorkspacePath,
             null!,
             false,
-            DateTimeOffset.UtcNow,
+            _clock(),
             null);
     }
 
