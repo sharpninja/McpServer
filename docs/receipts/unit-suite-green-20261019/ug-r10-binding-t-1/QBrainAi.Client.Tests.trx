@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="cb8e656c-39b5-4419-ac86-909d6eacb943" name="@LAB-OMARCHY 2026-11-02 22:17:04" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-02T22:17:04.8031736-06:00" queuing="2026-11-02T22:17:04.8031738-06:00" start="2026-11-02T22:17:02.8074307-06:00" finish="2026-11-02T22:17:04.8149398-06:00" />
+  <TestSettings name="default" id="fedcf4eb-8624-4529-8655-daa18f5b5c44">
+    <Deployment runDeploymentRoot="_LAB-OMARCHY_2026-11-02_22_17_04" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="2bfe6555-c4ea-4433-a4d2-b9749f58e6b2" testId="668e689c-674d-8729-650c-e6e4bea5809a" testName="QBrainAi.Client.Tests.RequirementTimestampJsonContractTests.WrongReaders_AreRejected(fault: &quot;swapped&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0016049" startTime="2026-11-02T22:17:04.5350728-06:00" endTime="2026-11-02T22:17:04.5367880-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2bfe6555-c4ea-4433-a4d2-b9749f58e6b2" />
+    <UnitTestResult executionId="b4ee6d14-28ad-4f74-be7f-9d3ddf9c44a2" testId="7733b4d8-9ee7-67e9-7986-3f3def8f4ea2" testName="QBrainAi.Client.Tests.RequirementTimestampJsonBindingTests.ClientModels_SatisfyMockGatedRows" computerName="LAB-OMARCHY" duration="00:00:00.1740377" startTime="2026-11-02T22:17:04.4619745-06:00" endTime="2026-11-02T22:17:04.6437301-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b4ee6d14-28ad-4f74-be7f-9d3ddf9c44a2" />
+    <UnitTestResult executionId="1420aa31-e347-45dc-8246-1a780c2ba38e" testId="89c61d18-dc8a-651c-0d4f-930d487815be" testName="QBrainAi.Client.Tests.RequirementTimestampJsonContractTests.WrongReaders_AreRejected(fault: &quot;read time&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0000890" startTime="2026-11-02T22:17:04.5371927-06:00" endTime="2026-11-02T22:17:04.5373136-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1420aa31-e347-45dc-8246-1a780c2ba38e" />
+    <UnitTestResult executionId="60b16495-ccbf-41f0-950a-bf8712920b15" testId="a542337f-a4dc-b015-3001-f214ed08e2ed" testName="QBrainAi.Client.Tests.RequirementTimestampJsonContractTests.WrongReaders_AreRejected(fault: &quot;fields ignored&quot;)" computerName="LAB-OMARCHY" duration="00:00:00.0570152" startTime="2026-11-02T22:17:04.4619746-06:00" endTime="2026-11-02T22:17:04.5293921-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="60b16495-ccbf-41f0-950a-bf8712920b15" />
+    <UnitTestResult executionId="c942ca2d-a66c-4c83-878f-813d6d492400" testId="029f29fd-d9bc-83ae-60d2-6f8ae7954da2" testName="QBrainAi.Client.Tests.RequirementTimestampJsonContractTests.ScriptedReader_SatisfiesEveryRow" computerName="LAB-OMARCHY" duration="00:00:00.0012063" startTime="2026-11-02T22:17:04.5398812-06:00" endTime="2026-11-02T22:17:04.5411312-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c942ca2d-a66c-4c83-878f-813d6d492400" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="QBrainAi.Client.Tests.RequirementTimestampJsonContractTests.WrongReaders_AreRejected(fault: &quot;fields ignored&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.client.tests/bin/debug/net10.0/qbrainai.client.tests.dll" id="a542337f-a4dc-b015-3001-f214ed08e2ed">
+      <Execution id="60b16495-ccbf-41f0-950a-bf8712920b15" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Client.Tests/bin/Debug/net10.0/QBrainAi.Client.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Client.Tests.RequirementTimestampJsonContractTests" name="WrongReaders_AreRejected" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Client.Tests.RequirementTimestampJsonContractTests.WrongReaders_AreRejected(fault: &quot;swapped&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.client.tests/bin/debug/net10.0/qbrainai.client.tests.dll" id="668e689c-674d-8729-650c-e6e4bea5809a">
+      <Execution id="2bfe6555-c4ea-4433-a4d2-b9749f58e6b2" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Client.Tests/bin/Debug/net10.0/QBrainAi.Client.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Client.Tests.RequirementTimestampJsonContractTests" name="WrongReaders_AreRejected" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Client.Tests.RequirementTimestampJsonContractTests.ScriptedReader_SatisfiesEveryRow" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.client.tests/bin/debug/net10.0/qbrainai.client.tests.dll" id="029f29fd-d9bc-83ae-60d2-6f8ae7954da2">
+      <Execution id="c942ca2d-a66c-4c83-878f-813d6d492400" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Client.Tests/bin/Debug/net10.0/QBrainAi.Client.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Client.Tests.RequirementTimestampJsonContractTests" name="ScriptedReader_SatisfiesEveryRow" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Client.Tests.RequirementTimestampJsonContractTests.WrongReaders_AreRejected(fault: &quot;read time&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.client.tests/bin/debug/net10.0/qbrainai.client.tests.dll" id="89c61d18-dc8a-651c-0d4f-930d487815be">
+      <Execution id="1420aa31-e347-45dc-8246-1a780c2ba38e" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Client.Tests/bin/Debug/net10.0/QBrainAi.Client.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Client.Tests.RequirementTimestampJsonContractTests" name="WrongReaders_AreRejected" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Client.Tests.RequirementTimestampJsonBindingTests.ClientModels_SatisfyMockGatedRows" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.client.tests/bin/debug/net10.0/qbrainai.client.tests.dll" id="7733b4d8-9ee7-67e9-7986-3f3def8f4ea2">
+      <Execution id="b4ee6d14-28ad-4f74-be7f-9d3ddf9c44a2" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Client.Tests/bin/Debug/net10.0/QBrainAi.Client.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Client.Tests.RequirementTimestampJsonBindingTests" name="ClientModels_SatisfyMockGatedRows" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="668e689c-674d-8729-650c-e6e4bea5809a" executionId="2bfe6555-c4ea-4433-a4d2-b9749f58e6b2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7733b4d8-9ee7-67e9-7986-3f3def8f4ea2" executionId="b4ee6d14-28ad-4f74-be7f-9d3ddf9c44a2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="89c61d18-dc8a-651c-0d4f-930d487815be" executionId="1420aa31-e347-45dc-8246-1a780c2ba38e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a542337f-a4dc-b015-3001-f214ed08e2ed" executionId="60b16495-ccbf-41f0-950a-bf8712920b15" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="029f29fd-d9bc-83ae-60d2-6f8ae7954da2" executionId="c942ca2d-a66c-4c83-878f-813d6d492400" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="5" executed="5" passed="5" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.33]   Discovering: QBrainAi.Client.Tests
+[xUnit.net 00:00:00.71]   Discovered:  QBrainAi.Client.Tests
+[xUnit.net 00:00:00.94]   Starting:    QBrainAi.Client.Tests
+[xUnit.net 00:00:01.21]   Finished:    QBrainAi.Client.Tests (ID = '039838820a15acc15352bc60a3a5789fdfbcf1d1377e6da75599ad83304cc05d')
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

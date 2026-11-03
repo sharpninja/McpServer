@@ -1,0 +1,175 @@
+{
+  "name": "ug-r10-binding-t-1",
+  "kind": "binding",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "a98250179d67af8712ad8eb032e333440ba11fd9",
+  "dirtyPaths": [
+    " M build/Build.TestDependencies.cs",
+    " M build/Build.TestGroups.cs",
+    " M build/TestGroupExecution.cs",
+    " M src/QBrainAi.Repl.Core/RequirementsWorkflow.cs",
+    " M src/QBrainAi.Services/Requirements/RequirementStoredTimestamp.cs",
+    " M tests/Build.Tests/TestGroupExecutionContractTests.cs",
+    " M tests/QBrainAi.Client.Tests/RequirementTimestampJsonBindingTests.cs",
+    " M tests/QBrainAi.Client.Tests/RequirementTimestampJsonContractTests.cs",
+    " M tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterBindingTests.cs",
+    " M tests/QBrainAi.Repl.Core.Tests/RequirementTimestampAdapterContractTests.cs",
+    " M tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs",
+    " M tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceProviderSettingContractTests.cs",
+    " M tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+    " M tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs",
+    " M tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/QuadBrainOllamaEndpointIntegrationTests.cs",
+    " M tests/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.csproj",
+    " M tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampBindingTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampContractTests.cs",
+    " M tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+    "?? build/QuadBrainOllamaModel.cs",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r10-mockgate-t-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r10-mockgate-t-1/",
+    "?? tests/Build.Tests/QuadBrainOllamaModelBindingTests.cs",
+    "?? tests/Build.Tests/QuadBrainOllamaModelContractTests.cs",
+    "?? tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksBindingTests.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "Build.Tests:TestGroupExecutionContractTests,TestGroupExecutionBindingTests,QuadBrainOllamaModelContractTests,QuadBrainOllamaModelBindingTests",
+    "QBrainAi.Repl.Core.Tests:TemporaryInstanceChecksTests,TemporaryInstanceChecksBindingTests,TestOutputFolderContractTests,TestOutputFolderBindingTests,OwnedInstanceIsolationContractTests,OwnedInstanceIsolationBindingTests,OwnedInstanceProviderSettingContractTests,RequirementTimestampAdapterContractTests,RequirementTimestampAdapterBindingTests",
+    "QBrainAi.Support.Mcp.Tests:RequirementStoredTimestampContractTests,RequirementStoredTimestampBindingTests,MemoryBenchPluginTests,MemoryBenchMultiTurnHarnessTests",
+    "QBrainAi.Client.Tests:RequirementTimestampJsonContractTests,RequirementTimestampJsonBindingTests",
+    "QBrainAi.Support.Mcp.IntegrationTests:QuadBrainOllamaEndpointIntegrationTests",
+    "QBrainAi.Repl.IntegrationTests:EndToEndFlowTests,Iteration1IntegrationTests,TrustBootstrapFlowTests",
+    "--test-run-id",
+    "ug-r10-binding-t-1"
+  ],
+  "startedLocal": "2026-11-02T22:16:00",
+  "endedLocal": "2026-11-02T22:22:33",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 142,
+  "passed": 142,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "Build.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-binding-t-1/groups/Build.Tests/Build.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r10-binding-t-1/Build.Tests.trx",
+      "sha256": "3C533D3E25A511480E91DEEBF32A6B520AFFD58FE06A4BC7F646E75AD94B4AEB",
+      "total": 23,
+      "passed": 23,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Client.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-binding-t-1/groups/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r10-binding-t-1/QBrainAi.Client.Tests.trx",
+      "sha256": "961693C2C1F491FC9F48D6A056BEE2BCB5CAA920181BFD8E98D7F6D07D4D65B8",
+      "total": 5,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Repl.Core.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-binding-t-1/groups/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r10-binding-t-1/QBrainAi.Repl.Core.Tests.trx",
+      "sha256": "0096D93BE764CF2EEF8068B3761AF1A8CF7A524490036AC9B8A2CE95D65D7D7E",
+      "total": 57,
+      "passed": 57,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Repl.IntegrationTests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-binding-t-1/groups/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r10-binding-t-1/QBrainAi.Repl.IntegrationTests.trx",
+      "sha256": "8BB750070B14305310251775CC745A9E3E5D8444857DA9FC4B7A746EF8F65D63",
+      "total": 25,
+      "passed": 25,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Support.Mcp.IntegrationTests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-binding-t-1/groups/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r10-binding-t-1/QBrainAi.Support.Mcp.IntegrationTests.trx",
+      "sha256": "33A8BF8BAA2D5A45750B52A3D7A03E37B9F9A7A9DD037B318D92D57666C8A64A",
+      "total": 5,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    },
+    {
+      "project": "QBrainAi.Support.Mcp.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r10-binding-t-1/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r10-binding-t-1/QBrainAi.Support.Mcp.Tests.trx",
+      "sha256": "94AE32F0EC61FCE05E7EBC2982CEB710F9FAD754F80AACFEE4F8D9130716B254",
+      "total": 27,
+      "passed": 27,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/Build.Tests/TestGroupExecutionContractTests.cs",
+      "sha256": "7DB74F4E9BEA8EAE1E7355FB310577BD4D3EB574B29B3EB26CB0797609CA7229"
+    },
+    {
+      "path": "tests/Build.Tests/QuadBrainOllamaModelContractTests.cs",
+      "sha256": "69EDAD4588912A6187580BCE2550B6EEF8BE72F2157DA4BA2273E92CF2638B1D"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+      "sha256": "C8843655CC5599465566709086A1FA74D527A1046A47DF5D72B8E3AA371A1F59"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs",
+      "sha256": "7CB6142A5D1054B59F59E369DDC53DEAB8AC8A2FFB8B4BF5B08C0CDDFC28AE94"
+    },
+    {
+      "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs",
+      "sha256": "79C804776FBDEA4BDCF4043ADF39DDA8F2A3C3610FE682BB05BAF0940809595F"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementStoredTimestampContractTests.cs",
+      "sha256": "6FE381A6EF8EDD2DA1C19D0B1223EF2B79C44CC9336764322EF93FFAB4C0261C"
+    },
+    {
+      "path": "tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+      "sha256": "9EDC453CA39ECF7F49AEDEB0EB7B34028C0BB7BED79C1F387B9DF834BAC74E1B"
+    },
+    {
+      "path": "src/QBrainAi.Services/Requirements/RequirementStoredTimestamp.cs",
+      "sha256": "7F92E651E046DC9FC37BDC5F90711F17A3BE961250AF794A01286733FA9ACAEE"
+    },
+    {
+      "path": "build/TestGroupExecution.cs",
+      "sha256": "FE72D08B93F50475E7AB805E1DA28F655053077FF7EFD08D3FE9247294912327"
+    },
+    {
+      "path": "build/QuadBrainOllamaModel.cs",
+      "sha256": "0E73F6DBFC18A99BDC5E522D3B5A461C93D2537C178534C53AF0834FF0EED121"
+    },
+    {
+      "path": "build/Build.TestDependencies.cs",
+      "sha256": "DF93A624C3BE4A6766558FA89A3D3BA8C827F1E8597F01B8498129DE39D34583"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.IntegrationTests/Controllers/QuadBrainOllamaEndpointIntegrationTests.cs",
+      "sha256": "5C8E11093D3321BE3879D624EB44CF8E796F0C83A4CC122A01A916B05201E862"
+    }
+  ],
+  "writtenLocal": "2026-11-02T22:23:01",
+  "writtenBy": "ClaudeCode"
+}
