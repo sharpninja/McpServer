@@ -3,6 +3,7 @@ using System.Net.Http;
 using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.Tools.DotNet;
+using QBrainAi.Build.Shared;
 using Serilog;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
@@ -23,15 +24,14 @@ partial class Build
     const string OllamaTagsEndpoint = "http://localhost:11434/api/tags";
 
     /// <summary>
-    /// Model pulled for the QuadBrain Ollama tests. The default must be strong enough that the
-    /// ArbiterOfTruth slot reliably accepts simple prompts; 1b-class models reject them as
-    /// ambiguous and fail the content assertions.
+    /// TR-MCP-NUKE-016 AC-001: the model pulled for the QuadBrain Ollama tests, chosen by the one rule the cases also use
+    /// (<see cref="QuadBrainOllamaModel.Select"/>) from the two variables.
     /// </summary>
+    /// <remarks>2026-11-02, FR-MCP-BUILD-001; TR-MCP-NUKE-016 AC-001: reads the variables and delegates to the shared rule, because hostile validation finding R9-F5 showed this property and the cases chose the model differently (operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)").</remarks>
     static string RequiredOllamaModel =>
-        (Environment.GetEnvironmentVariable("QBRAINAI_QUADBRAIN_OLLAMA_MODEL")
-            ?? Environment.GetEnvironmentVariable("MCP_QUADBRAIN_OLLAMA_MODEL")) is { Length: > 0 } configured
-            ? configured.Trim()
-            : "gemma4:e4b";
+        QuadBrainOllamaModel.Select(
+            Environment.GetEnvironmentVariable(QuadBrainOllamaModel.CanonicalVariable),
+            Environment.GetEnvironmentVariable(QuadBrainOllamaModel.LegacyVariable));
 
     static AbsolutePath TestToolsDirectory =>
         (AbsolutePath)Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) / "QBrainAi" / "test-tools";

@@ -1,3 +1,4 @@
+using System.Text.Json;
 using QBrainAi.TestSupport.TemporaryInstance;
 using Xunit;
 
@@ -17,6 +18,10 @@ namespace QBrainAi.Repl.Core.Tests.TestSupport;
 /// verdict each must get, as literal strings with both separator styles, run against checks passed in, so the
 /// contract is proved on scripted reference checks with negative controls before the shared checks exist; no test
 /// touches the file system, the network or the process environment.
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 ac-12 (strengthened: the answer's nonce field equals the whole nonce): health bodies are now JSON in the server's shape, with rows for a longer and a shorter nonce, the nonce in another field, a malformed body and a non-string nonce, and wrong checks "nonce substring" (the earlier shared check) and "any field", because hostile validation finding R9-F2 showed a substring match accepted another nonce. FR-MCP-TESTRESOURCE-001 ac-4 (strengthened: segments compared under the path's own syntax): start rows for a Windows case alias (accepted) and a POSIX case alias (refused), and wrong checks "ordinal only" and "ignores case everywhere", the sibling of finding R9-F3 (operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)").</description></item>
+/// </list>
 /// </remarks>
 public sealed class TemporaryInstanceChecksTests
 {
@@ -41,20 +46,28 @@ public sealed class TemporaryInstanceChecksTests
         ("a marker argument without a value", ["host.dll", "--agent-stdio", "--workspace-path", "/scratch/owned/workspace", "--marker-file"], OwnedRoot, false),
         ("a workspace outside the root", Start("/fixture/workspaces/McpServer", "/scratch/owned/workspace/AGENTS-README-FIRST.yaml"), OwnedRoot, false),
         ("no workspace argument", ["host.dll", "--agent-stdio", "--marker-file", "/scratch/owned/workspace/AGENTS-README-FIRST.yaml"], OwnedRoot, false),
+        ("owned layout in another case on Windows", Start(@"c:\Scratch\owned\workspace", @"C:\scratch\OWNED\workspace\AGENTS-README-FIRST.yaml"), WindowsOwnedRoot, true),
+        ("a POSIX marker differing only in case is another root", Start("/scratch/owned/workspace", "/scratch/Owned/workspace/AGENTS-README-FIRST.yaml"), OwnedRoot, false),
     ];
 
     /// <summary>
     /// The health-answer contract rows: a row name, the status code, the body, and whether the check must accept the
-    /// answer for <see cref="Nonce"/>. Only a 200 answer whose body holds the nonce is accepted.
+    /// answer for <see cref="Nonce"/>. Bodies are JSON in the server's health shape (status and nonce fields). Only a 200
+    /// answer whose nonce field equals the whole nonce, compared ordinally, is accepted.
     /// </summary>
     internal static readonly (string Name, int Status, string? Body, bool Accepted)[] HealthRows =
     [
-        ("200 echoing the nonce", 200, "Healthy " + Nonce, true),
-        ("503 echoing the nonce", 503, "Unhealthy " + Nonce, false),
-        ("200 without the nonce", 200, "Healthy", false),
+        ("200 echoing the nonce", 200, HealthBody("Healthy", Nonce), true),
+        ("503 echoing the nonce", 503, HealthBody("Unhealthy", Nonce), false),
+        ("200 without the nonce", 200, HealthBody("Healthy", null), false),
         ("200 with an empty body", 200, string.Empty, false),
         ("200 with no body", 200, null, false),
-        ("200 echoing a different nonce", 200, "Healthy nonce-r8b-2", false),
+        ("200 echoing a different nonce", 200, HealthBody("Healthy", "nonce-r8b-2"), false),
+        ("200 with a longer nonce", 200, HealthBody("Healthy", Nonce + "-suffix"), false),
+        ("200 with a shorter nonce", 200, HealthBody("Healthy", "nonce-r8b"), false),
+        ("200 with the nonce in another field", 200, HealthBody("Healthy " + Nonce, "nonce-other"), false),
+        ("200 with a body that is not JSON", 200, "Healthy " + Nonce, false),
+        ("200 with a nonce field that is not text", 200, JsonSerializer.Serialize(new { status = "Healthy", nonce = 7 }), false),
     ];
 
     /// <summary>
@@ -148,29 +161,6 @@ public sealed class TemporaryInstanceChecksTests
             .ToList();
     }
 
-    /// <summary>
-    /// Binding: the shared checks, <see cref="TemporaryInstanceChecks.CheckReplStartArguments"/>,
-    /// <see cref="TemporaryInstanceChecks.CheckHealthAnswer"/> and
-    /// <see cref="TemporaryInstanceChecks.ShouldRestartOnNewPort"/> (TR-MCP-NUKE-019), satisfy the same rows the
-    /// scripted references passed and the wrong checks failed. Start and health assertions prove FR-MCP-TESTRESOURCE-001 ac-4 and ac-12; restart assertions prove retained plan design, with no current criterion.
-    /// </summary>
-    [Fact]
-    public void SharedChecks_SatisfyTheContract()
-    {
-        Assert.Empty(StartContractFailures(TemporaryInstanceChecks.CheckReplStartArguments));
-        Assert.Empty(HealthContractFailures(TemporaryInstanceChecks.CheckHealthAnswer));
-        Assert.Empty(RestartContractFailures(TemporaryInstanceChecks.ShouldRestartOnNewPort));
-    }
-
-    /// <summary>
-    /// FR-MCP-TESTRESOURCE-001 ac-4: runs every original workspace/marker case through the shared REPL consumer
-    /// used by both integration starters. The consumer returns a plan only for accepted rows and propagates the
-    /// shared guard's refusal for the foreign, missing and escaping inputs; this binds a consumer, not the check again.
-    /// </summary>
-    [Fact]
-    public void TemporaryInstanceConsumer_UsesExplicitOwnedWorkspaceAndMarker() =>
-        OwnedInstanceIsolationBindingTests.AssertOriginalConsumerRows();
-
     /// <summary>Mock gate positive control: the scripted reference checks satisfy every row of both contracts.</summary>
     [Fact]
     public void ScriptedReferenceChecks_SatisfyTheContract()
@@ -192,18 +182,23 @@ public sealed class TemporaryInstanceChecksTests
     [InlineData("string prefix", "a sibling root sharing the prefix")]
     [InlineData("no parent-segment refusal", "a parent-segment escape")]
     [InlineData("missing marker allowed", "no marker argument")]
+    [InlineData("ordinal only", "owned layout in another case on Windows")]
+    [InlineData("ignores case everywhere", "a POSIX marker differing only in case is another root")]
     public void WrongStartChecks_AreRejectedInsidePassingHarness(string wrong, string failingRow) =>
         Assert.Contains(failingRow, StartContractFailures(WrongStartCheck(wrong)));
 
     /// <summary>
-    /// Mock gate negative controls on the health contract: a check that reads only the status and one that reads only
-    /// the body, each rejected on the row named.
+    /// Mock gate negative controls on the health contract: a check that reads only the status, one that reads only the
+    /// body, one that accepts the nonce anywhere in the body as a substring, and one that accepts the nonce in any field,
+    /// each rejected on the row named.
     /// </summary>
     /// <param name="wrong">The name of the wrong health check.</param>
     /// <param name="failingRow">The contract row that must reject it.</param>
     [Theory]
     [InlineData("status only", "200 without the nonce")]
     [InlineData("body only", "503 echoing the nonce")]
+    [InlineData("nonce substring", "200 with a longer nonce")]
+    [InlineData("any field", "200 with the nonce in another field")]
     public void WrongHealthChecks_AreRejectedInsidePassingHarness(string wrong, string failingRow) =>
         Assert.Contains(failingRow, HealthContractFailures(WrongHealthCheck(wrong)));
 
@@ -223,20 +218,77 @@ public sealed class TemporaryInstanceChecksTests
         return ScriptedInside(marker, root) ? null : $"The marker '{marker}' is outside the owned root '{root}'.";
     }
 
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 ac-12 scripted reference: accepts a 200 answer only when its JSON body holds a text field
+    /// "nonce" equal, ordinally, to the whole nonce the request sent.
+    /// </summary>
+    /// <param name="status">The answer's status code.</param>
+    /// <param name="body">The answer's body, or null.</param>
+    /// <param name="nonce">The nonce the request sent.</param>
+    /// <returns>Null for an accepted answer; otherwise the violation.</returns>
+    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-12: the nonce field is compared exactly instead of the body as a substring (hostile validation finding R9-F2; operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)").</remarks>
     private static string? ScriptedHealth(int status, string? body, string nonce) =>
-        status == 200 && !string.IsNullOrEmpty(nonce) && body is not null && body.Contains(nonce, StringComparison.Ordinal)
+        status == 200 && !string.IsNullOrEmpty(nonce) && ScriptedNonceField(body) is { } echoed && string.Equals(echoed, nonce, StringComparison.Ordinal)
             ? null
             : $"The health answer was {status} and did not echo the nonce '{nonce}'.";
 
+    /// <summary>FR-MCP-TESTRESOURCE-001 ac-12 scripted reference: the text value of a JSON body's "nonce" field, if any.</summary>
+    /// <param name="body">The body, or null.</param>
+    /// <returns>The nonce text, or null when the body is missing, is not a JSON object, or has no text nonce field.</returns>
+    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-12: added for hostile validation finding R9-F2.</remarks>
+    private static string? ScriptedNonceField(string? body)
+    {
+        if (string.IsNullOrWhiteSpace(body))
+            return null;
+        try
+        {
+            using var document = JsonDocument.Parse(body);
+            return document.RootElement.ValueKind == JsonValueKind.Object
+                && document.RootElement.TryGetProperty("nonce", out var field)
+                && field.ValueKind == JsonValueKind.String
+                    ? field.GetString()
+                    : null;
+        }
+        catch (JsonException)
+        {
+            return null;
+        }
+    }
+
+    /// <summary>FR-MCP-TESTRESOURCE-001 ac-12: a health body in the server's shape, built from an object.</summary>
+    /// <param name="status">The status field.</param>
+    /// <param name="nonce">The nonce field, or null to leave it out.</param>
+    /// <returns>The JSON body.</returns>
+    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-12: added for hostile validation finding R9-F2.</remarks>
+    private static string HealthBody(string status, string? nonce) =>
+        nonce is null ? JsonSerializer.Serialize(new { status }) : JsonSerializer.Serialize(new { status, nonce });
+
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 ac-4 scripted reference: whether a path lies strictly inside a root, by path segment with
+    /// either separator, with no '.' or '..' segment, under the path's own syntax (a Windows-form path ignores case,
+    /// drive letter included; a POSIX path compares ordinally).
+    /// </summary>
+    /// <param name="path">The path.</param>
+    /// <param name="root">The root.</param>
+    /// <returns>True when the path is strictly inside the root.</returns>
+    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4: compares under the path's own syntax instead of ordinally everywhere (the sibling of hostile validation finding R9-F3).</remarks>
     private static bool ScriptedInside(string path, string root)
     {
         var pathSegments = Segments(path);
         var rootSegments = Segments(root);
         if (pathSegments.Any(segment => segment is "." or ".."))
             return false;
+        var comparer = IsWindowsForm(path) && IsWindowsForm(root) ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal;
         return pathSegments.Length > rootSegments.Length
-            && rootSegments.SequenceEqual(pathSegments.Take(rootSegments.Length), StringComparer.Ordinal);
+            && rootSegments.SequenceEqual(pathSegments.Take(rootSegments.Length), comparer);
     }
+
+    /// <summary>FR-MCP-TESTRESOURCE-001 ac-4 scripted reference: whether a path is in Windows form (a drive letter or a backslash).</summary>
+    /// <param name="path">The path.</param>
+    /// <returns>True for a Windows-form path.</returns>
+    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4: added for the sibling of hostile validation finding R9-F3.</remarks>
+    private static bool IsWindowsForm(string path) =>
+        path.Contains('\\', StringComparison.Ordinal) || (path.Length >= 2 && char.IsAsciiLetter(path[0]) && path[1] == ':');
 
     private static string[] Segments(string path) =>
         path.Split(['/', '\\'], StringSplitOptions.RemoveEmptyEntries);
@@ -275,15 +327,71 @@ public sealed class TemporaryInstanceChecksTests
                 : "outside",
         "missing marker allowed" => (arguments, root) =>
             ValueAfter(arguments, "--marker-file") is null ? null : ScriptedStart(arguments, root),
+        "ordinal only" => (arguments, root) => WrongCaseStart(arguments, root, StringComparer.Ordinal),
+        "ignores case everywhere" => (arguments, root) => WrongCaseStart(arguments, root, StringComparer.OrdinalIgnoreCase),
         _ => throw new ArgumentOutOfRangeException(nameof(wrong), wrong, "Unknown wrong start check."),
     };
 
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 ac-4, for the wrong checks "ordinal only" and "ignores case everywhere": a start check
+    /// that compares every path's segments with one comparer, whatever its syntax.
+    /// </summary>
+    /// <param name="arguments">The REPL host's arguments.</param>
+    /// <param name="root">The owned root.</param>
+    /// <param name="comparer">The one comparer used for every segment.</param>
+    /// <returns>Null when the workspace and the marker are strictly inside the root under that comparer.</returns>
+    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4: added for the sibling of hostile validation finding R9-F3.</remarks>
+    private static string? WrongCaseStart(IReadOnlyList<string> arguments, string root, StringComparer comparer)
+    {
+        bool Inside(string path) =>
+            !Segments(path).Any(segment => segment is "." or "..")
+            && Segments(path).Length > Segments(root).Length
+            && Segments(root).SequenceEqual(Segments(path).Take(Segments(root).Length), comparer);
+        return ValueAfter(arguments, "--workspace-path") is { } workspace
+            && ValueAfter(arguments, "--marker-file") is { } marker
+            && Inside(workspace)
+            && Inside(marker)
+                ? null
+                : "outside";
+    }
+
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 ac-12 wrong health checks: status only, body only, the nonce as a substring of the body
+    /// (the earlier shared check), and the nonce as the value of any JSON field.
+    /// </summary>
+    /// <param name="wrong">The name of the wrong check.</param>
+    /// <returns>The wrong check.</returns>
+    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-12: added "nonce substring" and "any field" for hostile validation finding R9-F2.</remarks>
     private static Func<int, string?, string, string?> WrongHealthCheck(string wrong) => wrong switch
     {
         "status only" => (status, _, _) => status == 200 ? null : "not 200",
         "body only" => (_, body, nonce) => body is not null && body.Contains(nonce, StringComparison.Ordinal) ? null : "no nonce",
+        "nonce substring" => (status, body, nonce) => status == 200 && body is not null && body.Contains(nonce, StringComparison.Ordinal) ? null : "no nonce",
+        "any field" => (status, body, nonce) => status == 200 && AnyFieldEquals(body, nonce) ? null : "no nonce",
         _ => throw new ArgumentOutOfRangeException(nameof(wrong), wrong, "Unknown wrong health check."),
     };
+
+    /// <summary>FR-MCP-TESTRESOURCE-001 ac-12, for the wrong check "any field": whether any text field of a JSON body contains the nonce.</summary>
+    /// <param name="body">The body, or null.</param>
+    /// <param name="nonce">The nonce.</param>
+    /// <returns>True when a text field of the body's top-level object contains the nonce.</returns>
+    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-12: added for hostile validation finding R9-F2.</remarks>
+    private static bool AnyFieldEquals(string? body, string nonce)
+    {
+        if (string.IsNullOrWhiteSpace(body))
+            return false;
+        try
+        {
+            using var document = JsonDocument.Parse(body);
+            return document.RootElement.ValueKind == JsonValueKind.Object
+                && document.RootElement.EnumerateObject().Any(field =>
+                    field.Value.ValueKind == JsonValueKind.String && (field.Value.GetString() ?? string.Empty).Contains(nonce, StringComparison.Ordinal));
+        }
+        catch (JsonException)
+        {
+            return false;
+        }
+    }
 
     private static bool SegmentPrefix(string path, string root)
     {

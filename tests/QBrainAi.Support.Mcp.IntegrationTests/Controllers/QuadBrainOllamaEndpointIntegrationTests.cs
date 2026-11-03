@@ -42,7 +42,6 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<Olla
     private const string QBAgentVisibleEndpoint = "QBrainAi /v1/chat/completions";
     private const string OllamaOpenAiEndpoint = "http://localhost:11434/v1";
     private const string OllamaTagsEndpoint = "http://localhost:11434/api/tags";
-    private const string PreferredOllamaModel = "gemma4:e4b";
     private static readonly object ArtifactGate = new();
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
     private static readonly JsonSerializerOptions ArtifactJsonOptions = new(JsonSerializerDefaults.Web)
@@ -729,11 +728,24 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<Olla
         return body!;
     }
 
+    /// <summary>
+    /// TEST-MCP-QBOLLAMA-001; TR-MCP-NUKE-016 AC-001: the model the cases request, chosen by the same rule InstallOllama
+    /// uses (<see cref="QBrainAi.Build.Shared.QuadBrainOllamaModel.Select"/>) from the canonical and legacy variables, which
+    /// the provisioning run sets for the lane; the model must be installed in the local Ollama server.
+    /// </summary>
+    /// <returns>The required model.</returns>
+    /// <exception cref="InvalidOperationException">Local Ollama does not answer.</exception>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>TR-MCP-NUKE-016 AC-001 (appended: the required model is chosen by one rule that InstallOllama and these cases both use): reads both variables through the shared rule and requires that model, instead of reading only the legacy variable and falling back to the first installed model, because hostile validation finding R9-F5 showed the cases could request a different model than provisioning installed (operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)").</description></item>
+    /// </list>
+    /// </remarks>
     private static async Task<string> ResolveDefaultOllamaModelAsync()
     {
-        var configured = Environment.GetEnvironmentVariable("MCP_QUADBRAIN_OLLAMA_MODEL");
-        if (!string.IsNullOrWhiteSpace(configured))
-            return configured.Trim();
+        var model = QBrainAi.Build.Shared.QuadBrainOllamaModel.Select(
+            Environment.GetEnvironmentVariable(QBrainAi.Build.Shared.QuadBrainOllamaModel.CanonicalVariable),
+            Environment.GetEnvironmentVariable(QBrainAi.Build.Shared.QuadBrainOllamaModel.LegacyVariable));
 
         using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
         HttpResponseMessage response;
@@ -744,7 +756,7 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<Olla
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
         {
             throw new InvalidOperationException(
-                "Local Ollama is required for TEST-MCP-QBOLLAMA-001. Start Ollama on http://localhost:11434 or set MCP_QUADBRAIN_OLLAMA_MODEL after installing a model.",
+                "Local Ollama is required for TEST-MCP-QBOLLAMA-001. Start Ollama on http://localhost:11434 and run the 'InstallOllama' Nuke target, which installs the required model.",
                 ex);
         }
 
@@ -753,10 +765,12 @@ public sealed class QuadBrainOllamaEndpointIntegrationTests : IClassFixture<Olla
         var tags = JsonSerializer.Deserialize<OllamaTagsResponse>(responseText, JsonOptions);
         // Prefer the model provisioned by the InstallOllama Nuke target (strong enough for the
         // ArbiterOfTruth slot); otherwise fall back to the first installed model.
-        var model = tags?.Models.FirstOrDefault(item => string.Equals(item.Name, PreferredOllamaModel, StringComparison.OrdinalIgnoreCase))?.Name
-            ?? tags?.Models.FirstOrDefault(item => !string.IsNullOrWhiteSpace(item.Name))?.Name;
-        Assert.False(string.IsNullOrWhiteSpace(model), "Local Ollama has no installed models; run the 'InstallOllama' Nuke target before TEST-MCP-QBOLLAMA-001.");
-        return model!;
+        // Ollama lists an untagged pull as "<name>:latest".
+        var installed = tags?.Models.FirstOrDefault(item =>
+            string.Equals(item.Name, model, StringComparison.OrdinalIgnoreCase)
+            || string.Equals(item.Name, model + ":latest", StringComparison.OrdinalIgnoreCase))?.Name;
+        Assert.False(string.IsNullOrWhiteSpace(installed), $"Local Ollama does not have the required model '{model}'; run the 'InstallOllama' Nuke target before TEST-MCP-QBOLLAMA-001.");
+        return installed!;
     }
 
     private static string BuildSessionId(string suffix)

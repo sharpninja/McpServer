@@ -94,12 +94,21 @@ public sealed class OwnedInstanceProviderSettingContractTests
     public void RealProcessAdapter_SatisfiesMockGatedRowsAndAtomicity() =>
         AssertAdapter((row, target) => OwnedInstanceProcess.ReplaceEnvironment(target, Settings(row), Root));
 
+    /// <summary>FR-MCP-TESTRESOURCE-001 ac-4: asserts a provider-setting check accepts exactly the rows marked accepted.</summary>
+    /// <param name="check">The check under test: a row in, null or a refusal out.</param>
+    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
     private static void AssertCheck(Func<ProviderCase, string?> check)
     {
         foreach (var row in Cases)
             Assert.True(row.Accepted == (check(row) is null), row.Key + "=" + row.Value);
     }
 
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 ac-4: asserts an environment adapter refuses a refused row without changing the target,
+    /// and for an accepted row replaces the inherited values atomically with the row's settings, keeping PATH.
+    /// </summary>
+    /// <param name="apply">The adapter under test: a row and a target environment in.</param>
+    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
     private static void AssertAdapter(Action<ProviderCase, IDictionary<string, string?>> apply)
     {
         foreach (var row in Cases)
@@ -129,6 +138,10 @@ public sealed class OwnedInstanceProviderSettingContractTests
         }
     }
 
+    /// <summary>FR-MCP-TESTRESOURCE-001 ac-4: the owned instance's settings with the row's setting added.</summary>
+    /// <param name="row">The row.</param>
+    /// <returns>The settings.</returns>
+    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
     private static Dictionary<string, string> Settings(ProviderCase row)
     {
         var settings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
@@ -140,6 +153,13 @@ public sealed class OwnedInstanceProviderSettingContractTests
         return settings;
     }
 
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 ac-4 independent reference verdict: TODO-storage and embedding providers are not database
+    /// engines; any other provider setting must name SQLite.
+    /// </summary>
+    /// <param name="row">The row.</param>
+    /// <returns>Null when the row is accepted; otherwise the refusal.</returns>
+    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
     private static string? ReferenceReply(ProviderCase row) => row.Key switch
     {
         "Mcp__TodoStorage__Provider" or "QBrainAi__TodoStorage__Provider" => null,
@@ -147,12 +167,21 @@ public sealed class OwnedInstanceProviderSettingContractTests
         _ => row.Value is "sqlite" or "SQLITE" or "Microsoft.EntityFrameworkCore.Sqlite" ? null : "non-SQLite engine",
     };
 
+    /// <summary>FR-MCP-TESTRESOURCE-001 ac-4 scripted adapter: refuses a refused row, otherwise applies its settings.</summary>
+    /// <param name="row">The row.</param>
+    /// <param name="target">The target environment.</param>
+    /// <exception cref="InvalidOperationException">The row is refused.</exception>
+    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
     private static void ReferenceApply(ProviderCase row, IDictionary<string, string?> target)
     {
         if (ReferenceReply(row) is not null) throw new InvalidOperationException("non-SQLite engine");
         ApplyLiteralSettings(row, target);
     }
 
+    /// <summary>FR-MCP-TESTRESOURCE-001 ac-4 scripted adapter: replaces the target's values with the row's settings, keeping PATH.</summary>
+    /// <param name="row">The row.</param>
+    /// <param name="target">The target environment.</param>
+    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
     private static void ApplyLiteralSettings(ProviderCase row, IDictionary<string, string?> target)
     {
         target.TryGetValue("PATH", out var path);

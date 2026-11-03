@@ -16,8 +16,10 @@ internal static class TemporaryInstanceChecks
     /// <summary>
     /// Checks the REPL host's start arguments: a <c>--workspace-path</c> and a <c>--marker-file</c> are present and
     /// both lie strictly inside <paramref name="ownedRoot"/>, compared segment by segment ('/' and '\' both separate
-    /// segments), and neither path holds a '.' or '..' segment.
+    /// segments) under the path's own syntax (a Windows-form path ignores case, drive letter included; a POSIX path
+    /// compares ordinally), and neither path holds a '.' or '..' segment.
     /// </summary>
+    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4 (strengthened: segments compared under the path's own syntax): the containment helper compares Windows-form paths ignoring case, the sibling of hostile validation finding R9-F3 (operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)").</remarks>
     /// <param name="arguments">The argument list the REPL host was started with.</param>
     /// <param name="ownedRoot">The temporary instance's root folder.</param>
     /// <returns>Null when the arguments pass; otherwise the violation.</returns>
@@ -68,13 +70,20 @@ internal static class TemporaryInstanceChecks
             : environment.GetValueOrDefault("MCP_" + suffix);
 
     /// <summary>
-    /// Checks a health answer from the temporary instance: the status is 200 and the body holds the request's nonce
-    /// (ordinal), the byte-for-byte echo the server's liveness contract gives.
+    /// Checks a health answer from the temporary instance: the status is 200 and the JSON body's text field "nonce" (the
+    /// server's health shape) equals the whole nonce the request sent, compared ordinally. A longer or shorter nonce, the
+    /// nonce text in another field, and a missing, malformed or non-text nonce field are refused.
     /// </summary>
     /// <param name="statusCode">The HTTP status code of the answer.</param>
     /// <param name="body">The answer body, or null.</param>
     /// <param name="nonce">The nonce the request sent.</param>
     /// <returns>Null when the answer passes; otherwise the violation.</returns>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 ac-12 (strengthened: the answer's nonce field equals the whole nonce): compares the nonce field exactly instead of finding the nonce anywhere in the body, because hostile validation finding R9-F2 showed a longer nonce or the nonce in another field passed (operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)").</description></item>
+    /// </list>
+    /// </remarks>
     internal static string? CheckHealthAnswer(int statusCode, string? body, string nonce)
     {
         if (string.IsNullOrEmpty(nonce))
@@ -83,9 +92,32 @@ internal static class TemporaryInstanceChecks
         if (statusCode != 200)
             return $"The temporary instance answered health with status {statusCode}, not 200.";
 
-        return body is not null && body.Contains(nonce, StringComparison.Ordinal)
+        return string.Equals(NonceField(body), nonce, StringComparison.Ordinal)
             ? null
             : $"The temporary instance's health answer did not echo the nonce '{nonce}'.";
+    }
+
+    /// <summary>FR-MCP-TESTRESOURCE-001 ac-12: the text value of a JSON health body's "nonce" field.</summary>
+    /// <param name="body">The answer body, or null.</param>
+    /// <returns>The nonce text, or null when the body is missing, is not a JSON object, or has no text nonce field.</returns>
+    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-12: added for hostile validation finding R9-F2.</remarks>
+    private static string? NonceField(string? body)
+    {
+        if (string.IsNullOrWhiteSpace(body))
+            return null;
+        try
+        {
+            using var document = System.Text.Json.JsonDocument.Parse(body);
+            return document.RootElement.ValueKind == System.Text.Json.JsonValueKind.Object
+                && document.RootElement.TryGetProperty("nonce", out var field)
+                && field.ValueKind == System.Text.Json.JsonValueKind.String
+                    ? field.GetString()
+                    : null;
+        }
+        catch (System.Text.Json.JsonException)
+        {
+            return null;
+        }
     }
 
     /// <summary>TR-MCP-NUKE-019: the most starts a case makes of a temporary instance that keeps losing its port.</summary>
@@ -235,8 +267,9 @@ internal static class TemporaryInstanceChecks
     /// FR-MCP-TESTRESOURCE-001 (second criterion: "Generated test artifacts are written only to test-owned disposable
     /// output locations, not to repository fixture or documentation paths"): accepts a folder for a test's generated
     /// artifacts only when it is an absolute path with no '.' or '..' segment that lies outside
-    /// <paramref name="checkoutRoot"/>, compared segment by segment (ordinally, as the other owned-root checks) with
-    /// either separator. The checkout root itself, any folder inside it and a relative path are refused.
+    /// <paramref name="checkoutRoot"/>, compared segment by segment with either separator under the path's own syntax (a
+    /// Windows-form path ignores case, drive letter included; a POSIX path compares ordinally). The checkout root itself,
+    /// any folder inside it, a case alias of either on Windows and a relative path are refused.
     /// </summary>
     /// <param name="folder">The candidate artifact folder.</param>
     /// <param name="checkoutRoot">The repository checkout root.</param>
@@ -245,6 +278,7 @@ internal static class TemporaryInstanceChecks
     /// <list type="table">
     /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
     /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 (second criterion): added, because two memory-bench stub cases wrote into the checkout's docs/benchmarks/results and rewrote two tracked files on every lane run (operator 2026-11-02: "Fix in scope"; mock gate ug-r9-mockgate-s-1).</description></item>
+    /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 (second criterion, appended "compared ... under the path's own syntax"): containment and equality compare Windows-form paths ignoring case, because hostile validation finding R9-F3 showed a case alias of the checkout was accepted (operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)").</description></item>
     /// </list>
     /// </remarks>
     internal static string? CheckTestOutputFolder(string folder, string checkoutRoot)
@@ -256,14 +290,39 @@ internal static class TemporaryInstanceChecks
         var acceptable = IsAbsolute(folder)
             && !segments.Any(segment => segment is "." or "..")
             && !IsStrictlyInside(folder, checkoutRoot)
-            && !SameSegments(segments, Segments(checkoutRoot));
+            && !SameSegments(segments, Segments(checkoutRoot), SegmentComparison(folder, checkoutRoot));
         return acceptable
             ? null
             : $"The test artifact folder '{folder}' is not a test-owned location outside the checkout '{checkoutRoot}'.";
     }
 
-    private static bool SameSegments(string[] left, string[] right) =>
-        left.Length == right.Length && left.Zip(right).All(pair => string.Equals(pair.First, pair.Second, StringComparison.Ordinal));
+    /// <summary>FR-MCP-TESTRESOURCE-001 (generated-artifact criterion): whether two segment lists name the same folder.</summary>
+    /// <param name="left">The first path's segments.</param>
+    /// <param name="right">The second path's segments.</param>
+    /// <param name="comparison">How segments compare (from <see cref="SegmentComparison"/>).</param>
+    /// <returns>True when both lists have the same segments in order.</returns>
+    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 generated-artifact criterion: takes the path syntax's comparison instead of ordinal only (hostile validation finding R9-F3); documented (MEMORY-FACT-008; finding R9-F8).</remarks>
+    private static bool SameSegments(string[] left, string[] right, StringComparison comparison) =>
+        left.Length == right.Length && left.Zip(right).All(pair => string.Equals(pair.First, pair.Second, comparison));
+
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: how two paths' segments compare under their own
+    /// syntax. Both in Windows form (a drive letter or a backslash): ignoring case, drive letter included; otherwise
+    /// ordinally, as POSIX paths are case-sensitive.
+    /// </summary>
+    /// <param name="path">The path.</param>
+    /// <param name="root">The root it is compared with.</param>
+    /// <returns>The comparison.</returns>
+    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: added for hostile validation finding R9-F3 and its ac-4 sibling.</remarks>
+    private static StringComparison SegmentComparison(string path, string root) =>
+        IsWindowsForm(path) && IsWindowsForm(root) ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+
+    /// <summary>FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: whether a path is in Windows form (a drive letter or a backslash).</summary>
+    /// <param name="path">The path.</param>
+    /// <returns>True for a Windows-form path.</returns>
+    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: added for hostile validation finding R9-F3.</remarks>
+    private static bool IsWindowsForm(string path) =>
+        path.Contains('\\', StringComparison.Ordinal) || (path.Length >= 2 && char.IsAsciiLetter(path[0]) && path[1] == ':');
 
     private static readonly string[] ConnectionStringPrefixes =
         ["SQLCONNSTR_", "SQLAZURECONNSTR_", "MYSQLCONNSTR_", "POSTGRESQLCONNSTR_", "CUSTOMCONNSTR_"];
@@ -309,6 +368,15 @@ internal static class TemporaryInstanceChecks
         return null;
     }
 
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: whether an absolute path lies strictly inside an
+    /// absolute root, by segment with either separator, with no '.' or '..' segment, under the paths' own syntax
+    /// (<see cref="SegmentComparison"/>).
+    /// </summary>
+    /// <param name="path">The path.</param>
+    /// <param name="root">The root.</param>
+    /// <returns>True when the path is strictly inside the root.</returns>
+    /// <remarks>2026-11-02, FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: compares under the paths' own syntax instead of ordinally everywhere (hostile validation finding R9-F3 and its ac-4 sibling; operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)").</remarks>
     private static bool IsStrictlyInside(string path, string root)
     {
         if (!IsAbsolute(path) || !IsAbsolute(root)) return false;
@@ -320,9 +388,10 @@ internal static class TemporaryInstanceChecks
         if (pathSegments.Length <= rootSegments.Length)
             return false;
 
+        var comparison = SegmentComparison(path, root);
         for (var index = 0; index < rootSegments.Length; index++)
         {
-            if (!string.Equals(pathSegments[index], rootSegments[index], StringComparison.Ordinal))
+            if (!string.Equals(pathSegments[index], rootSegments[index], comparison))
                 return false;
         }
 

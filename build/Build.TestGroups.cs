@@ -4,6 +4,8 @@ using Nuke.Common.Tools.DotNet;
 using Serilog;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
+/// <summary>TR-MCP-NUKE-020 AC-1 to AC-5: the part of the Nuke build that holds the TestGroups target and its parameters.</summary>
+/// <remarks>2026-11-02, FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1 to AC-5: documented this partial declaration (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
 partial class Build
 {
     /// <summary>

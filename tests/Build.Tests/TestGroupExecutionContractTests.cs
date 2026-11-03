@@ -16,6 +16,7 @@ namespace NukeBuild.Tests;
 /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
 /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1, AC-2, AC-3: added the composition and run-id contracts (mock gate ug-r9-mockgate-q-1).</description></item>
 /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-4, AC-5: host-aware rows and the per-class check rows (mock gate ug-r9-mockgate-q-2).</description></item>
+/// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-5 (appended: a class counts only through an executed result joined to its definition by test id): the class rows now carry TRX test definitions, with rows for a definition without an executed result, a display name that mentions the class, a namespace segment that names it, a custom display name and a not-executed result, and wrong checkers for the earlier production check, display names only and definitions only, because hostile validation finding R9-F1 showed the check accepted a class that ran no case; every helper documented (MEMORY-FACT-008; finding R9-F8) (operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)").</description></item>
 /// </list>
 /// </remarks>
 public sealed class TestGroupExecutionContractTests
@@ -80,15 +81,21 @@ public sealed class TestGroupExecutionContractTests
     ];
 
     /// <summary>TR-MCP-NUKE-020 AC-5: named classes, a project's TRX, and the class whose absence must be reported, or
-    /// null when every named class ran at least one case. A class counts only when a result's test name holds it as a
-    /// whole dot-bounded segment, as the filter selects it.</summary>
+    /// null when every named class ran at least one case. A class counts only when an executed result's test, joined to
+    /// its definition by test id, belongs to that class (the definition's class name is the class, as the whole name or
+    /// its last segment); a definition without an executed result, a display name and a namespace segment never count.</summary>
     internal static readonly (string Name, string[] Classes, string Xml, string? Missing)[] ClassRows =
     [
-        ("every class ran", ["Alpha", "Beta"], Trx("Ns.Alpha.Method", "Ns.Beta.Method(value: 1)"), null),
-        ("one class ran nothing", ["Alpha", "Beta"], Trx("Ns.Alpha.Method"), "Beta"),
-        ("a longer class name is not the class", ["Alpha"], Trx("Ns.AlphaBeta.Method"), "Alpha"),
+        ("every class ran", ["Alpha", "Beta"], Trx(("Ns.Alpha", "Ns.Alpha.Method", "Passed"), ("Ns.Beta", "Ns.Beta.Method(value: 1)", "Passed")), null),
+        ("one class ran nothing", ["Alpha", "Beta"], Trx(("Ns.Alpha", "Ns.Alpha.Method", "Passed")), "Beta"),
+        ("a longer class name is not the class", ["Alpha"], Trx(("Ns.AlphaBeta", "Ns.AlphaBeta.Method", "Passed")), "Alpha"),
         ("no results at all", ["Alpha"], Trx(), "Alpha"),
         ("unreadable TRX", ["Alpha"], "<TestRun>", "Alpha"),
+        ("a definition without an executed result does not count", ["Alpha"], Trx(("Ns.Alpha", "Ns.Alpha.Method", null), ("Ns.Beta", "Ns.Beta.Method", "Passed")), "Alpha"),
+        ("a display name that mentions the class does not count", ["Alpha"], Trx(("Ns.Beta", "Ns.Beta.Method(path: \"x.Alpha.y\")", "Passed")), "Alpha"),
+        ("a namespace segment is not the declaring class", ["Alpha"], Trx(("Ns.Alpha.Tests.Beta", "Ns.Alpha.Tests.Beta.Method", "Passed")), "Alpha"),
+        ("a custom display name counts through its test's class", ["Alpha"], Trx(("Ns.Alpha", "Readable custom name", "Passed")), null),
+        ("a not-executed result does not count", ["Alpha"], Trx(("Ns.Alpha", "Ns.Alpha.Method", "NotExecuted")), "Alpha"),
     ];
 
     /// <summary>The scripted reference satisfies every composition row on both hosts, with the project list in either order.</summary>
@@ -124,8 +131,9 @@ public sealed class TestGroupExecutionContractTests
         Assert.ThrowsAny<XunitException>(() => AssertRunId(raw => raw.Contains('/', StringComparison.Ordinal) ? raw : ScriptedRunId(raw)));
     }
 
-    /// <summary>TR-MCP-NUKE-020 AC-5: the scripted class check satisfies every row; a checker that accepts everything
-    /// or that matches a class by prefix is rejected.</summary>
+    /// <summary>TR-MCP-NUKE-020 AC-5: the scripted class check satisfies every row; checkers that accept everything,
+    /// match a class by prefix, take the union of display names and definitions without a join (the earlier production
+    /// check), read display names only, or read definitions only are rejected.</summary>
     [Fact]
     public void ScriptedClassCheck_SatisfiesContractAndRejectsWrongCheckers()
     {
@@ -136,6 +144,9 @@ public sealed class TestGroupExecutionContractTests
             var missing = classes.Where(name => !xml.Contains("." + name, StringComparison.Ordinal)).ToArray();
             return missing.Length == 0 ? null : "missing " + string.Join(", ", missing);
         }));
+        Assert.ThrowsAny<XunitException>(() => AssertClassCheck((classes, xml) => TextMatchCheck(classes, xml, displayNames: true, definitions: true)));
+        Assert.ThrowsAny<XunitException>(() => AssertClassCheck((classes, xml) => TextMatchCheck(classes, xml, displayNames: true, definitions: false)));
+        Assert.ThrowsAny<XunitException>(() => AssertClassCheck((classes, xml) => TextMatchCheck(classes, xml, displayNames: false, definitions: true)));
     }
 
     /// <summary>Asserts every row against a composer on both hosts, with the solution's project list in both orders:
@@ -207,8 +218,18 @@ public sealed class TestGroupExecutionContractTests
         }
     }
 
+    /// <summary>TR-MCP-NUKE-020 AC-4 scripted reference: the host platform clause the lane uses (TR-MCP-NUKE-019 AC-1).</summary>
+    /// <param name="host">The host.</param>
+    /// <returns>The platform clause.</returns>
+    /// <remarks>2026-11-02, FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-4: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
     private static string PlatformClause(IntegrationLaneHost host) => host == IntegrationLaneHost.Linux ? "Platform!=Windows" : "Platform!=Linux";
 
+    /// <summary>TR-MCP-NUKE-020 AC-1, AC-2 scripted reference: the run a project's merged groups must produce.</summary>
+    /// <param name="project">The project name.</param>
+    /// <param name="host">The host.</param>
+    /// <param name="classes">The project's named classes, in group order.</param>
+    /// <returns>The expected run.</returns>
+    /// <remarks>2026-11-02, FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1, AC-2: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
     private static Step Run(string project, IntegrationLaneHost host, string[] classes)
     {
         var path = Projects.Single(entry => entry.Name == project).Path;
@@ -216,6 +237,13 @@ public sealed class TestGroupExecutionContractTests
         return new Step(project, path, filter, "Test group filter for " + project + ": " + filter, project + ".trx");
     }
 
+    /// <summary>TR-MCP-NUKE-020 AC-1 to AC-4 scripted reference: the runs each composition row states, or its refusal.</summary>
+    /// <param name="groups">The --test-groups values.</param>
+    /// <param name="projects">The solution's projects.</param>
+    /// <param name="host">The host.</param>
+    /// <returns>The expected runs.</returns>
+    /// <exception cref="InvalidOperationException">The row states a refusal.</exception>
+    /// <remarks>2026-11-02, FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1 to AC-4: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
     private static IReadOnlyList<Step> ScriptedComposition(IReadOnlyList<string> groups, IReadOnlyList<(string Name, string Path)> projects, IntegrationLaneHost host)
     {
         var row = Rows.Single(candidate => candidate.Groups.SequenceEqual(groups));
@@ -225,6 +253,13 @@ public sealed class TestGroupExecutionContractTests
             with { Path = projects.Single(project => project.Name == selection.Project).Path }).ToArray();
     }
 
+    /// <summary>TR-MCP-NUKE-020 AC-1 to AC-4 negative controls: the scripted runs with one deliberate fault.</summary>
+    /// <param name="fault">The fault.</param>
+    /// <param name="groups">The --test-groups values.</param>
+    /// <param name="projects">The solution's projects.</param>
+    /// <param name="host">The host.</param>
+    /// <returns>The faulty runs.</returns>
+    /// <remarks>2026-11-02, FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1 to AC-4: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
     private static IReadOnlyList<Step> WrongComposition(string fault, IReadOnlyList<string> groups, IReadOnlyList<(string Name, string Path)> projects, IntegrationLaneHost host)
     {
         var row = Rows.Single(candidate => candidate.Groups.SequenceEqual(groups));
@@ -249,17 +284,72 @@ public sealed class TestGroupExecutionContractTests
         };
     }
 
+    /// <summary>TR-MCP-NUKE-020 AC-1 scripted reference: the run id each row states, or its refusal.</summary>
+    /// <param name="raw">The --test-run-id value.</param>
+    /// <returns>The run id.</returns>
+    /// <exception cref="InvalidOperationException">The row states a refusal.</exception>
+    /// <remarks>2026-11-02, FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
     private static string ScriptedRunId(string raw) =>
         RunIdRows.Single(row => row.Raw == raw).Expected ?? throw new InvalidOperationException("scripted refusal of --test-run-id '" + raw + "'");
 
+    /// <summary>TR-MCP-NUKE-020 AC-5 scripted reference: the missing class each class row states, looked up from the rows.</summary>
+    /// <param name="classes">The named classes.</param>
+    /// <param name="xml">The TRX content.</param>
+    /// <returns>Null when the row states every class ran; otherwise a failure naming the missing class.</returns>
+    /// <remarks>2026-11-02, FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-5: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
     private static string? ScriptedClassCheck(IReadOnlyList<string> classes, string xml)
     {
         var row = ClassRows.Single(candidate => candidate.Xml == xml && candidate.Classes.SequenceEqual(classes));
         return row.Missing is null ? null : "scripted: class " + row.Missing + " ran no case";
     }
 
-    private static string Trx(params string[] testNames) =>
+    /// <summary>
+    /// TR-MCP-NUKE-020 AC-5 negative controls: a class check that matches the class as a dot-bounded segment of text,
+    /// in result display names, in definition class names, or in both without joining a result to its definition. With
+    /// both it is the earlier production check.
+    /// </summary>
+    /// <param name="classes">The named classes.</param>
+    /// <param name="xml">The TRX content.</param>
+    /// <param name="displayNames">Whether result display names count.</param>
+    /// <param name="definitions">Whether definition class names count.</param>
+    /// <returns>Null when every class matched; otherwise a failure naming the classes that did not.</returns>
+    /// <remarks>2026-11-02, FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-5: added for hostile validation finding R9-F1 (operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)").</remarks>
+    private static string? TextMatchCheck(IReadOnlyList<string> classes, string xml, bool displayNames, bool definitions)
+    {
+        string[] texts;
+        try
+        {
+            var document = System.Xml.Linq.XDocument.Parse(xml);
+            texts = document.Descendants().Where(element => displayNames && element.Name.LocalName == "UnitTestResult")
+                .Select(element => (string?)element.Attribute("testName") ?? string.Empty)
+                .Concat(document.Descendants().Where(element => definitions && element.Name.LocalName == "TestMethod")
+                    .Select(element => ((string?)element.Attribute("className") ?? string.Empty) + "."))
+                .ToArray();
+        }
+        catch (System.Xml.XmlException)
+        {
+            return "unreadable";
+        }
+
+        var missing = classes.Where(name => !texts.Any(text => text.Contains("." + name + ".", StringComparison.Ordinal))).ToArray();
+        return missing.Length == 0 ? null : "missing " + string.Join(", ", missing);
+    }
+
+    /// <summary>
+    /// TR-MCP-NUKE-020 AC-5: a TRX with one test definition per entry (id, display name and a TestMethod with the class
+    /// name) and one result per entry whose outcome is given, joined to its definition by test id; an entry with no
+    /// outcome has a definition and no result.
+    /// </summary>
+    /// <param name="tests">Each test's class name, display name and result outcome (null for no result).</param>
+    /// <returns>The TRX content.</returns>
+    /// <remarks>2026-11-02, FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-5: now writes definitions joined by test id, for hostile validation finding R9-F1; documented (MEMORY-FACT-008).</remarks>
+    private static string Trx(params (string ClassName, string DisplayName, string? Outcome)[] tests) =>
         "<TestRun xmlns='http://microsoft.com/schemas/VisualStudio/TeamTest/2010'><Results>"
-        + string.Concat(testNames.Select(name => "<UnitTestResult testName='" + name + "' outcome='Passed' />"))
-        + "</Results></TestRun>";
+        + string.Concat(tests.Select((test, index) => test.Outcome is null
+            ? string.Empty
+            : "<UnitTestResult testId='t" + index + "' testName='" + System.Security.SecurityElement.Escape(test.DisplayName) + "' outcome='" + test.Outcome + "' />"))
+        + "</Results><TestDefinitions>"
+        + string.Concat(tests.Select((test, index) =>
+            "<UnitTest id='t" + index + "' name='" + System.Security.SecurityElement.Escape(test.DisplayName) + "'><TestMethod className='" + test.ClassName + "' name='Method' /></UnitTest>"))
+        + "</TestDefinitions></TestRun>";
 }

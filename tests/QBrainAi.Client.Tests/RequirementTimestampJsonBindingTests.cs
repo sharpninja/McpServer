@@ -30,9 +30,21 @@ public sealed class RequirementTimestampJsonBindingTests
             _ => throw new ArgumentOutOfRangeException(nameof(kind)),
         });
 
+    /// <summary>FR-MCP-040 ac-1: the creation and update times a deserialized FR entry carries.</summary>
+    /// <param name="entry">The FR entry.</param>
+    /// <returns>Its CreatedAtUtc and UpdatedAtUtc.</returns>
+    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
     private static (DateTimeOffset? Created, DateTimeOffset? Updated) Times(FrEntry entry) => (entry.CreatedAtUtc, entry.UpdatedAtUtc);
 
+    /// <summary>FR-MCP-040 ac-1: the creation and update times a deserialized TR entry carries.</summary>
+    /// <param name="entry">The TR entry.</param>
+    /// <returns>Its CreatedAtUtc and UpdatedAtUtc.</returns>
+    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
     private static (DateTimeOffset? Created, DateTimeOffset? Updated) Times(TrEntry entry) => (entry.CreatedAtUtc, entry.UpdatedAtUtc);
 
+    /// <summary>FR-MCP-040 ac-1: the creation and update times a deserialized TEST entry carries.</summary>
+    /// <param name="entry">The TEST entry.</param>
+    /// <returns>Its CreatedAtUtc and UpdatedAtUtc.</returns>
+    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
     private static (DateTimeOffset? Created, DateTimeOffset? Updated) Times(TestEntry entry) => (entry.CreatedAtUtc, entry.UpdatedAtUtc);
 }

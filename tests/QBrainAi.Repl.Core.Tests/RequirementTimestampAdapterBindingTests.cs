@@ -27,9 +27,21 @@ public sealed class RequirementTimestampAdapterBindingTests
             _ => throw new ArgumentOutOfRangeException(nameof(kind)),
         });
 
+    /// <summary>FR-MCP-040 ac-1: the creation and update texts a REPL FR item reports.</summary>
+    /// <param name="item">The FR item.</param>
+    /// <returns>Its CreatedAt and UpdatedAt.</returns>
+    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
     private static (string? Created, string? Updated) Read(IFrItem item) => (item.CreatedAt, item.UpdatedAt);
 
+    /// <summary>FR-MCP-040 ac-1: the creation and update texts a REPL TR item reports.</summary>
+    /// <param name="item">The TR item.</param>
+    /// <returns>Its CreatedAt and UpdatedAt.</returns>
+    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
     private static (string? Created, string? Updated) Read(ITrItem item) => (item.CreatedAt, item.UpdatedAt);
 
+    /// <summary>FR-MCP-040 ac-1: the creation and update texts a REPL TEST item reports.</summary>
+    /// <param name="item">The TEST item.</param>
+    /// <returns>Its CreatedAt and UpdatedAt.</returns>
+    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
     private static (string? Created, string? Updated) Read(ITestItem item) => (item.CreatedAt, item.UpdatedAt);
 }

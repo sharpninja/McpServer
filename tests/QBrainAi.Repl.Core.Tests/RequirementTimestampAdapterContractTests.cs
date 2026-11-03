@@ -69,10 +69,22 @@ public sealed class RequirementTimestampAdapterContractTests
         }
     }
 
+    /// <summary>FR-MCP-040 ac-1 scripted reference: the texts a REPL adapter must report for stored times.</summary>
+    /// <param name="kind">The record kind (fr, tr, test or mapping; a mapping has no update time).</param>
+    /// <param name="created">The stored creation time, or null.</param>
+    /// <param name="updated">The stored update time, or null.</param>
+    /// <returns>The creation and update texts.</returns>
+    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
     private static (string? Created, string? Updated) ScriptedAdapter(string kind, DateTimeOffset? created, DateTimeOffset? updated) =>
         (Text(created), kind == "mapping" ? null : Text(updated));
 
-    // Independent of the production formatter: an explicit custom pattern, not the "o" specifier.
+    /// <summary>
+    /// FR-MCP-040 ac-1 scripted reference: a time as round-trip text, independent of the production formatter (an
+    /// explicit custom pattern, not the "o" specifier).
+    /// </summary>
+    /// <param name="value">The time, or null.</param>
+    /// <returns>The text, or null.</returns>
+    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
     private static string? Text(DateTimeOffset? value) =>
         value?.ToString("yyyy-MM-dd'T'HH:mm:ss.fffffffzzz", CultureInfo.InvariantCulture);
 }

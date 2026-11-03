@@ -236,11 +236,22 @@ public sealed class OwnedInstanceIsolationContractTests
         Assert.Equal(Path.Combine("/profiles/example", ".mcpserver"), resolve("  ", "/profiles/example"));
     }
 
-    /// <summary>Asserts both nonce-presence boundaries using the same answer and explicit request values.</summary>
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 ac-12: asserts both nonce-presence boundaries using the same answer, a JSON body in the
+    /// server's health shape whose nonce field is "nonce-owned", and explicit request values.
+    /// </summary>
+    /// <param name="check">The health check under test: the status, the body and the request nonce to a violation or null.</param>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 ac-12 (strengthened: the answer's nonce field equals the whole nonce): the answer is now a JSON body with a nonce field instead of plain text, because the shared check now reads that field (hostile validation finding R9-F2; operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)"). The two boundaries are unchanged.</description></item>
+    /// </list>
+    /// </remarks>
     internal static void AssertHealth(Func<int, string?, string, string?> check)
     {
-        Assert.Null(check(200, "Healthy nonce-owned", "nonce-owned"));
-        Assert.NotNull(check(200, "Healthy nonce-owned", string.Empty));
+        var answer = System.Text.Json.JsonSerializer.Serialize(new { status = "Healthy", nonce = "nonce-owned" });
+        Assert.Null(check(200, answer, "nonce-owned"));
+        Assert.NotNull(check(200, answer, string.Empty));
     }
 
     /// <summary>RINT-6: each pre-existing database row rejects a wrong verdict through its actual contract assertion.</summary>

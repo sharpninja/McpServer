@@ -40,6 +40,10 @@ public sealed class RequirementStoredTimestampBindingTests
             Mapping);
     }
 
+    /// <summary>FR-MCP-040 ac-1: the creation time the server's mapping builder reports for links with the given stored texts.</summary>
+    /// <param name="links">The links' stored creation texts.</param>
+    /// <returns>The mapping's creation time.</returns>
+    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
     private static DateTimeOffset? Mapping(IReadOnlyList<string> links) =>
         RequirementsDatabaseDocumentService.BuildMapping(
             "FR-X-001",
@@ -53,6 +57,13 @@ public sealed class RequirementStoredTimestampBindingTests
             }).ToArray(),
             "workspace").CreatedAtUtc;
 
+    /// <summary>FR-MCP-040 ac-1: a stored requirement row with the given stored times.</summary>
+    /// <param name="kind">The requirement kind.</param>
+    /// <param name="id">The requirement id.</param>
+    /// <param name="created">The stored creation text.</param>
+    /// <param name="updated">The stored update text.</param>
+    /// <returns>The row.</returns>
+    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
     private static RequirementEntity Row(string kind, string id, string created, string updated) => new()
     {
         WorkspaceId = "workspace",

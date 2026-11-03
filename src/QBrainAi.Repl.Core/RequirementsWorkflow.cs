@@ -1154,6 +1154,13 @@ internal sealed class TestMutationResultAdapter : ITestMutationResult
 /// </remarks>
 internal sealed class MappingItemAdapter : IMappingItem
 {
+    /// <summary>FR-MCP-040 ac-1: presents one mapping pair with its stored creation time.</summary>
+    /// <param name="frId">The FR id.</param>
+    /// <param name="trId">The TR id, or null for an FR-to-TEST pair.</param>
+    /// <param name="testId">The TEST id, or null for an FR-to-TR pair.</param>
+    /// <param name="notes">The mapping notes, or null.</param>
+    /// <param name="createdAtUtc">The mapping's stored creation time, or null when none is stored.</param>
+    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
     public MappingItemAdapter(string? frId, string? trId, string? testId, string? notes, DateTimeOffset? createdAtUtc)
     {
         FrId = frId;

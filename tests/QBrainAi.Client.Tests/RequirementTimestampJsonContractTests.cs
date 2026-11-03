@@ -85,14 +85,28 @@ public sealed class RequirementTimestampJsonContractTests
         }
     }
 
+    /// <summary>FR-MCP-040 ac-1: the round-trip text of a time, so instant and offset are compared together.</summary>
+    /// <param name="value">The time, or null.</param>
+    /// <returns>The round-trip text, or null.</returns>
+    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
     private static string? Exact(DateTimeOffset? value) => value?.ToString("o", CultureInfo.InvariantCulture);
 
+    /// <summary>FR-MCP-040 ac-1 scripted reference: reads the createdAtUtc and updatedAtUtc members of a client JSON body.</summary>
+    /// <param name="kind">The record kind (fr, tr, test or mapping; a mapping has no update time).</param>
+    /// <param name="json">The JSON body.</param>
+    /// <returns>The creation and update times, null where absent.</returns>
+    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
     private static (DateTimeOffset? Created, DateTimeOffset? Updated) ScriptedReader(string kind, string json)
     {
         using var document = JsonDocument.Parse(json);
         return (Member(document.RootElement, "createdAtUtc"), kind == "mapping" ? null : Member(document.RootElement, "updatedAtUtc"));
     }
 
+    /// <summary>FR-MCP-040 ac-1 scripted reference: one time member of a JSON body.</summary>
+    /// <param name="root">The body's root element.</param>
+    /// <param name="name">The member name.</param>
+    /// <returns>The time, or null when the member is absent or not text.</returns>
+    /// <remarks>2026-11-02, FR-MCP-040 ac-1: documented (MEMORY-FACT-008; hostile validation finding R9-F8).</remarks>
     private static DateTimeOffset? Member(JsonElement root, string name) =>
         root.TryGetProperty(name, out var value) && value.ValueKind == JsonValueKind.String
             ? DateTimeOffset.Parse(value.GetString()!, CultureInfo.InvariantCulture, DateTimeStyles.None)

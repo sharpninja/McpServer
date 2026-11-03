@@ -116,8 +116,11 @@ internal static class TestGroupExecution
             ?? throw new InvalidOperationException("TestGroups requires --test-run-id, so that every selected project writes its TRX receipt.");
 
     /// <summary>
-    /// TR-MCP-NUKE-020 AC-5: every named class ran at least one case. A result counts for a class when its test name holds
-    /// the class as a whole dot-bounded segment, as the filter's <c>FullyQualifiedName~.Class.</c> selects it.
+    /// TR-MCP-NUKE-020 AC-5: every named class ran at least one case. A class counts only through an executed result (an
+    /// outcome other than NotExecuted) whose test, joined to its definition by test id, belongs to the class: the
+    /// definition's TestMethod class name is the class, as the whole name or its last segment ('.' or '+' separated). A
+    /// definition with no executed result, a display name and a namespace segment never count; a custom display name
+    /// counts through its test's class.
     /// </summary>
     /// <param name="project">The project whose TRX is checked.</param>
     /// <param name="classes">The classes the project's groups named.</param>
@@ -127,23 +130,28 @@ internal static class TestGroupExecution
     /// <list type="table">
     /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
     /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-5: added so a misspelled class in a multi-class group fails instead of passing silently.</description></item>
+    /// <item><term>2026-11-02</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-5 (appended: a class counts only through an executed result joined to its definition by test id): joins each executed result to its definition and compares the definition's class name, instead of matching text in display names and every definition, because hostile validation finding R9-F1 showed a definition without a result, a display name or a namespace segment satisfied the check (operator 2026-11-02: "Strengthen 5 ACs, fix all 8 (Recommended)").</description></item>
     /// </list>
     /// </remarks>
     internal static string? CheckClasses(string project, IReadOnlyList<string> classes, string xml)
     {
         ArgumentNullException.ThrowIfNull(classes);
-        string[] testNames;
+        string[] executedClasses;
         try
         {
             var document = XDocument.Parse(xml);
-            // A result's display name normally starts with its class; a TestMethod definition names the class itself,
-            // which still holds when a display name is customized.
-            testNames = document.Descendants()
+            var classById = document.Descendants()
+                .Where(element => element.Name.LocalName == "UnitTest")
+                .Select(test => (Id: (string?)test.Attribute("id"), ClassName: (string?)test.Elements().FirstOrDefault(child => child.Name.LocalName == "TestMethod")?.Attribute("className")))
+                .Where(test => !string.IsNullOrEmpty(test.Id) && !string.IsNullOrEmpty(test.ClassName))
+                .GroupBy(test => test.Id!, StringComparer.Ordinal)
+                .ToDictionary(group => group.Key, group => group.First().ClassName!, StringComparer.Ordinal);
+            executedClasses = document.Descendants()
                 .Where(element => element.Name.LocalName == "UnitTestResult")
-                .Select(element => (string?)element.Attribute("testName") ?? string.Empty)
-                .Concat(document.Descendants()
-                    .Where(element => element.Name.LocalName == "TestMethod")
-                    .Select(element => ((string?)element.Attribute("className") ?? string.Empty) + "."))
+                .Where(result => !string.Equals((string?)result.Attribute("outcome"), "NotExecuted", StringComparison.Ordinal))
+                .Select(result => (string?)result.Attribute("testId"))
+                .Where(id => id is not null && classById.ContainsKey(id))
+                .Select(id => classById[id!])
                 .ToArray();
         }
         catch (System.Xml.XmlException error)
@@ -151,9 +159,22 @@ internal static class TestGroupExecution
             return $"Test group project '{project}' wrote unreadable TRX evidence, so classes {string.Join(", ", classes)} are unproven: {error.Message}";
         }
 
-        var missing = classes.Where(name => !testNames.Any(test => test.Contains("." + name + ".", StringComparison.Ordinal))).ToArray();
+        var missing = classes.Where(name => !executedClasses.Any(className => IsClass(className, name))).ToArray();
         return missing.Length == 0
             ? null
             : $"Test group project '{project}' ran no case of class {string.Join(", ", missing)}.";
     }
+
+    /// <summary>
+    /// TR-MCP-NUKE-020 AC-5: whether a definition's class name is the named class, as the whole name or its last segment
+    /// ('.' or '+' separated, '+' marking a nested class).
+    /// </summary>
+    /// <param name="className">The definition's TestMethod class name.</param>
+    /// <param name="name">The class a group names.</param>
+    /// <returns>True when the definition belongs to the named class.</returns>
+    /// <remarks>2026-11-02, FR-MCP-BUILD-001; TR-MCP-NUKE-020 AC-5: added for hostile validation finding R9-F1.</remarks>
+    private static bool IsClass(string className, string name) =>
+        string.Equals(className, name, StringComparison.Ordinal)
+        || className.EndsWith("." + name, StringComparison.Ordinal)
+        || className.EndsWith("+" + name, StringComparison.Ordinal);
 }
