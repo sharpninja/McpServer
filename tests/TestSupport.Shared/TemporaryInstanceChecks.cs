@@ -348,9 +348,17 @@ internal static class TemporaryInstanceChecks
     /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
     /// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 generated-artifact criterion: added for <see cref="IsDevicePath"/>.</description></item>
     /// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: now also the separator test of <see cref="PathIdentity.Parse"/>, replacing the duplicate PathIdentity.IsSeparator, because the holistic read before hostile validation round 12 found the same test written twice in this file (DRY; operator 2026-11-03: "Strengthen + fix (Recommended)").</description></item>
+    /// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: reads the separator set from <see cref="PathSeparators"/>, which PathIdentity.Split also uses, because the second holistic read before hostile validation round 12 (finding C5) found Split still stating the set itself. Behavior unchanged.</description></item>
     /// </list>
     /// </remarks>
-    private static bool IsPathSeparator(char value) => value is '/' or '\\';
+    private static bool IsPathSeparator(char value) => Array.IndexOf(PathSeparators, value) >= 0;
+
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: the two path separators, '/' and '\'; the one
+    /// statement of the separator set of this class, used by <see cref="IsPathSeparator"/> and PathIdentity.Split.
+    /// </summary>
+    /// <remarks>2026-11-03, FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: added, because the second holistic read before hostile validation round 12 (finding C5) found the separator set stated twice in this file (DRY).</remarks>
+    private static readonly char[] PathSeparators = ['/', '\\'];
 
     /// <summary>FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: the kind of a path's root.</summary>
     /// <remarks>2026-11-03, FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: added, because hostile validation round 10 finding R10-F2 showed the checks flattened the root into the segments.</remarks>
@@ -441,7 +449,8 @@ internal static class TemporaryInstanceChecks
         /// <summary>The non-empty parts of a text split on either separator.</summary>
         /// <param name="text">The text after the root.</param>
         /// <returns>The parts.</returns>
-        private static string[] Split(string text) => text.Split(['/', '\\'], StringSplitOptions.RemoveEmptyEntries);
+        /// <remarks>2026-11-03, FR-MCP-TESTRESOURCE-001 ac-4 and the generated-artifact criterion: splits on the class's one separator set <see cref="PathSeparators"/> instead of its own copy, because the second holistic read before hostile validation round 12 (finding C5) found the set stated twice (DRY). Behavior unchanged.</remarks>
+        private static string[] Split(string text) => text.Split(PathSeparators, StringSplitOptions.RemoveEmptyEntries);
     }
 
     private static readonly string[] ConnectionStringPrefixes =

@@ -512,11 +512,12 @@ public sealed class HandoffDurabilityTests : IDisposable
     }
 
     /// <summary>P1-4: GetById timeout during compensation is a stable failure, not a Created memory report.</summary>
+    /// <remarks>2026-11-03, TR-MCP-USECASE-018 AC-006 (as appended 2026-11-03 16:37:35: a hang guard is at least 100 times the longest real or scripted delay of the awaited step): the fake TODO read's delay rises from 3 s to 5 s. It is a hang guard: it ends on its own only when the service's 50 ms compensation timeout (CompensationTimeout, armed as a CancellationTokenSource on the token the read receives) fails to cancel it, and 3 s was 60 times that timeout; the second holistic read before hostile validation round 12 found it (finding C1). On a passing run the compensation timeout cancels the read at 50 ms.</remarks>
     [Fact]
     public async Task SaveRunAfterTodo_CompensationTimeout_DoesNotReportCreatedFromMemory()
     {
         var todo = TrackingTodo();
-        todo.GetDelay = TimeSpan.FromSeconds(3);
+        todo.GetDelay = TimeSpan.FromSeconds(5);
         todo.HideFromGet = true;
         var sut = CreateService(
             SuccessfulExtractor(ValidDraft("MCP-HANDOFFDEMO-207", 0.9)),

@@ -123,6 +123,7 @@ public sealed class BugTriage139SixteenthSqliteConsumerTests
     /// Verifies successful public completion is withheld until the real opener thread exits,
     /// while active-worker accounting remains asserted at the final thread boundary.
     /// </summary>
+    /// <remarks>2026-11-03, TR-MCP-USECASE-018 AC-006 (as appended 2026-11-03 16:37:35: a hang guard is at least 100 times the longest real or scripted delay of the awaited step): the open's timeout argument rises from 5 s to 10 s. It is a hang guard: it fires only when the test stalls before it releases the held worker, and the case's 100 ms scripted wait (the open must still be withheld 100 ms after entry) comes before that release, so 5 s was 50 times that delay; the second holistic read before hostile validation round 12 found its class (finding C1). On a passing run the test releases the worker after 100 ms and the timeout never fires.</remarks>
     [Fact]
     public async Task OpenAsync_ResultWithheldUntilThreadExit_WorkerRemainsObservable()
     {
@@ -149,7 +150,7 @@ public sealed class BugTriage139SixteenthSqliteConsumerTests
 
             operation = SqliteBoundedConnectionOpener.OpenAsync(
                 connection,
-                TimeSpan.FromSeconds(5),
+                TimeSpan.FromSeconds(10),
                 TestContext.Current.CancellationToken);
             Assert.True(entered.Wait(
                 TimeSpan.FromSeconds(2),

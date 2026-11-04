@@ -32,6 +32,7 @@ public sealed class SqliteBoundedOpenFourteenthTests
     /// Cancellation before SQLite has a handle must return without permitting the isolated worker
     /// to mutate the caller, while truthful accounting remains until that worker actually exits.
     /// </summary>
+    /// <remarks>2026-11-03, TR-MCP-USECASE-018 AC-006 (as appended 2026-11-03 16:37:35: a hang guard is at least 100 times the longest real or scripted delay of the awaited step): the bound on the cancelled open rises from 5 s to 25 s. After the caller cancels a worker the hook still holds, the opener spends up to its 250 ms native cleanup deadline (SqliteBoundedConnectionOpener s_nativeCleanupTimeout) before it throws, so the awaited step has a real 250 ms delay and 5 s was 20 times it; the second holistic read before hostile validation round 12 found its class (finding C1). On a passing run the open ends about 250 ms after the cancel.</remarks>
     [Fact]
     public async Task OpenAsync_PreHandleNativeWait_CancelsWithoutMutatingCaller()
     {
@@ -69,7 +70,7 @@ public sealed class SqliteBoundedOpenFourteenthTests
             cancellation.Cancel();
             var exception = await Assert.ThrowsAnyAsync<OperationCanceledException>(
                     async () => await operation.WaitAsync(
-                            TimeSpan.FromSeconds(5),
+                            TimeSpan.FromSeconds(25),
                             TestContext.Current.CancellationToken)
                         .ConfigureAwait(true))
                 .ConfigureAwait(true);
@@ -251,6 +252,7 @@ public sealed class SqliteBoundedOpenFourteenthTests
     /// <summary>
     /// Close and disposal may race cancellation without invalid-handle access or a leaked worker.
     /// </summary>
+    /// <remarks>2026-11-03, TR-MCP-USECASE-018 AC-006 (as appended 2026-11-03 16:37:35: a hang guard is at least 100 times the longest real or scripted delay of the awaited step): the bound on each cancelled open rises from 5 s to 25 s. After the cancel and the disposal, the opener spends up to its 250 ms native cleanup deadline (SqliteBoundedConnectionOpener s_nativeCleanupTimeout) before it throws, so the awaited step has a real 250 ms delay and 5 s was 20 times it; the second holistic read before hostile validation round 12 found its class (finding C1). On a passing run each of the eight opens ends about 250 ms after its cancel.</remarks>
     [Fact]
     public async Task OpenAsync_CloseDisposeCancellationRaces_DoNotLeakWorkersOrHandles()
     {
@@ -298,7 +300,7 @@ public sealed class SqliteBoundedOpenFourteenthTests
 
                 var exception = await Assert.ThrowsAsync<OperationCanceledException>(
                         () => operation.WaitAsync(
-                            TimeSpan.FromSeconds(5),
+                            TimeSpan.FromSeconds(25),
                             TestContext.Current.CancellationToken))
                     .ConfigureAwait(true);
                 Assert.Equal(cancellation.Token, exception.CancellationToken);
