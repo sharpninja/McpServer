@@ -277,13 +277,28 @@ public sealed class TodoWorkflowTests
             static value => value.MediaType == "text/event-stream");
     }
 
+    /// <summary>
+    /// TEST-MCP-089: builds the workflow over the real transport client with the recording handler, a fixed test key,
+    /// a local base URL and a generic workspace path that no test asserts on.
+    /// </summary>
+    /// <param name="httpClient">The HTTP client over the recording handler.</param>
+    /// <returns>The workflow under test.</returns>
+    /// <remarks>
+    /// <list type="table">
+    /// <item><term>2026-11-04</term><description>Plan section 27.7, the lab-name scrub of every file this branch touches
+    /// (fourth holistic read before hostile validation round 12, finding d4; slice Z3): the workspace path was a lab
+    /// drive path (since 6de989f3) and is now the generic <c>C:\workspace\example</c>, still a
+    /// drive-rooted Windows path, so the client's lexical normalization takes the same branch. No assertion
+    /// changed.</description></item>
+    /// </list>
+    /// </remarks>
     private static TodoWorkflow CreateWorkflow(HttpClient httpClient)
     {
         var client = new QBrainAiClient(httpClient, new QBrainAiClientOptions
         {
             ApiKey = "test-key",
             BaseUrl = new Uri("http://localhost:7147"),
-            WorkspacePath = @"E:\github\QBrainAi",
+            WorkspacePath = @"C:\workspace\example",
         });
 
         return new TodoWorkflow(client);

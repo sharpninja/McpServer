@@ -155,9 +155,45 @@ internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, Ser
         throw new InvalidOperationException("Updated service did not become active with the expected executable within the startup retry limit.");
     }
     /// <summary>Gets only required systemd properties; sensitive values remain local.</summary>
-    private Dictionary<string, string> GetUnit(string name) => Command("systemctl", "show", name, "--no-pager", "--property=" + UnitProperties)
-        .Split('\n').Where(line => line.Contains('='))
-        .Select(line => line.Split('=', 2)).ToDictionary(pair => pair[0], pair => pair[1].TrimEnd('\r'), StringComparer.Ordinal);
+    /// <remarks>
+    /// <list type="table">
+    /// <item><term>2026-11-04</term><description>TR-MCP-SERVICEUPDATE-001 criteria repeated-properties, preserve and lifecycle
+    /// (slice Z3): the output is read through <see cref="ParseUnitProperties"/>, because systemd 262 prints one
+    /// EnvironmentFiles line per environment file and keying the lines with ToDictionary threw on the second line, before
+    /// any service change (redeploy of 2026-11-04).</description></item>
+    /// </list>
+    /// </remarks>
+    private Dictionary<string, string> GetUnit(string name) => ParseUnitProperties(Command("systemctl", "show", name, "--no-pager", "--property=" + UnitProperties));
+
+    /// <summary>
+    /// TR-MCP-SERVICEUPDATE-001 repeated-properties: reads systemctl show output into properties by name. Repeated lines
+    /// of one property are one value, their non-empty values in order separated by one space, which ParseEnvironmentFiles
+    /// and ParseWords read as a list; a repeated ExecStart still fails ValidateUnit's single-command check. Lines without a
+    /// property are ignored and carriage returns are removed.
+    /// </summary>
+    /// <param name="output">The systemctl show output.</param>
+    /// <returns>The properties by name.</returns>
+    /// <remarks>
+    /// <list type="table">
+    /// <item><term>2026-11-04</term><description>TR-MCP-SERVICEUPDATE-001 criteria repeated-properties, preserve and lifecycle
+    /// (slice Z3): new. Its contract rows are ServiceUnitPropertiesContractTests.Rows, proven against a reference reader
+    /// and six wrong readers in mock gate ug-r12z3-mockgate-1 before this change.</description></item>
+    /// </list>
+    /// </remarks>
+    internal static Dictionary<string, string> ParseUnitProperties(string output)
+    {
+        var properties = new Dictionary<string, string>(StringComparer.Ordinal);
+        foreach (var line in output.Split('\n'))
+        {
+            var separator = line.IndexOf('=', StringComparison.Ordinal);
+            if (separator < 0) continue;
+            var key = line[..separator];
+            var value = line[(separator + 1)..].TrimEnd('\r');
+            if (!properties.TryGetValue(key, out var existing)) properties[key] = value;
+            else if (value.Length > 0) properties[key] = existing.Length == 0 ? value : existing + " " + value;
+        }
+        return properties;
+    }
 
     /// <summary>Reads an optional property without leaking contents in errors.</summary>
     private static string Value(IReadOnlyDictionary<string, string> unit, string key) => unit.GetValueOrDefault(key, "");

@@ -336,7 +336,12 @@ public sealed class HandoffDurabilityTests : IDisposable
     }
 
     /// <summary>P1-1: lease expiry during a live blocked extraction is taken over; the stale owner cannot create or clobber the Created receipt.</summary>
-    /// <remarks>2026-11-04, TR-MCP-USECASE-018 AC-006 (as appended 2026-11-04 12:20:22: the longest delay of the awaited step is the sum of every real or scripted delay on its path, read from the sources): the bound on the processing-state wait rises from 5 s to 10 s. This wait's condition does not depend on the heartbeat (WaitUntilAsync's own 10 ms poll only), but the five WaitUntilAsync callers take one bound, set by the slowest: the heartbeat-renewal wait of ProcessingLease_RenewsAndFencesTerminalUpdates, 60 ms on its path, which 5 s was 83 times and 10 s is 167 times; the third holistic read before hostile validation round 12 raised the measure (finding d3; operator 2026-11-04: "Fix it"). Assertions unchanged.</remarks>
+    /// <remarks>
+    /// <list type="table">
+    /// <item><term>2026-11-04</term><description>TR-MCP-USECASE-018 AC-006 (as appended 2026-11-04 12:20:22: the longest delay of the awaited step is the sum of every real or scripted delay on its path, read from the sources): the bound on the processing-state wait rises from 5 s to 10 s. This wait's condition does not depend on the heartbeat (WaitUntilAsync's own 10 ms poll only), but the five WaitUntilAsync callers take one bound, set by the slowest: the heartbeat-renewal wait of ProcessingLease_RenewsAndFencesTerminalUpdates, 60 ms on its path, which 5 s was 83 times and 10 s is 167 times; the third holistic read before hostile validation round 12 raised the measure (finding d3; operator 2026-11-04: "Fix it"). Assertions unchanged.</description></item>
+    /// <item><term>2026-11-04</term><description>TR-MCP-USECASE-018 AC-006 (as appended 2026-11-04 15:29:24: a wait that happens only under a condition the step can meet, such as the 150 ms Microsoft.Data.Sqlite busy retry, counts once for each poll on the path), slice Z3: the bound rises from 10 s to 36 s with the one bound of the five WaitUntilAsync callers, which the heartbeat-renewal wait of ProcessingLease_RenewsAndFencesTerminalUpdates sets: 360 ms on its path under the clause, which 10 s was 28 times and 36 s is 100 times. No other connection writes during this wait, so the clause adds nothing to its own 10 ms path (fourth holistic read before hostile validation round 12, finding g1; operator 2026-11-04: "Strengthen: include them"). Assertions unchanged.</description></item>
+    /// </list>
+    /// </remarks>
     [Fact]
     public async Task IngestAsync_LeaseExpiresDuringLiveExtraction_TakeoverWinsAndFirstCannotCreate()
     {
@@ -367,7 +372,7 @@ public sealed class HandoffDurabilityTests : IDisposable
                     && run.ProcessingState == nameof(HandoffProcessingState.Processing)
                     && !string.IsNullOrWhiteSpace(run.ProcessingOwner);
             },
-            TimeSpan.FromSeconds(10));
+            TimeSpan.FromSeconds(36));
         _time.Advance(lease.Duration + TimeSpan.FromSeconds(1));
         var takeover = await second.IngestAsync(request, TestContext.Current.CancellationToken);
         release.TrySetResult();
@@ -387,7 +392,12 @@ public sealed class HandoffDurabilityTests : IDisposable
     }
 
     /// <summary>P1-2: an approval lease that expires during a live create is recovered by the second instance; the stale claimant cannot mark Created.</summary>
-    /// <remarks>2026-11-04, TR-MCP-USECASE-018 AC-006 (as appended 2026-11-04 12:20:22: the longest delay of the awaited step is the sum of every real or scripted delay on its path, read from the sources): the bound on the takeover-owner wait rises from 5 s to 10 s, and WaitForApprovalOwnerAsync's bound with it. These waits' conditions do not depend on the heartbeat (WaitUntilAsync's own 10 ms poll only), but the five WaitUntilAsync callers take one bound, set by the slowest: the heartbeat-renewal wait of ProcessingLease_RenewsAndFencesTerminalUpdates, 60 ms on its path, which 5 s was 83 times and 10 s is 167 times; the third holistic read before hostile validation round 12 raised the measure (finding d3; operator 2026-11-04: "Fix it"). Assertions unchanged.</remarks>
+    /// <remarks>
+    /// <list type="table">
+    /// <item><term>2026-11-04</term><description>TR-MCP-USECASE-018 AC-006 (as appended 2026-11-04 12:20:22: the longest delay of the awaited step is the sum of every real or scripted delay on its path, read from the sources): the bound on the takeover-owner wait rises from 5 s to 10 s, and WaitForApprovalOwnerAsync's bound with it. These waits' conditions do not depend on the heartbeat (WaitUntilAsync's own 10 ms poll only), but the five WaitUntilAsync callers take one bound, set by the slowest: the heartbeat-renewal wait of ProcessingLease_RenewsAndFencesTerminalUpdates, 60 ms on its path, which 5 s was 83 times and 10 s is 167 times; the third holistic read before hostile validation round 12 raised the measure (finding d3; operator 2026-11-04: "Fix it"). Assertions unchanged.</description></item>
+    /// <item><term>2026-11-04</term><description>TR-MCP-USECASE-018 AC-006 (as appended 2026-11-04 15:29:24: a wait that happens only under a condition the step can meet, such as the 150 ms Microsoft.Data.Sqlite busy retry, counts once for each poll on the path), slice Z3: the takeover-owner bound rises from 10 s to 36 s, and WaitForApprovalOwnerAsync's bound with it, with the one bound of the five WaitUntilAsync callers, which the heartbeat-renewal wait of ProcessingLease_RenewsAndFencesTerminalUpdates sets: 360 ms on its path under the clause, which 10 s was 28 times and 36 s is 100 times. Each claim here commits before its task returns, so no other connection writes during these waits and the clause adds nothing to their own 10 ms paths (fourth holistic read before hostile validation round 12, finding g1; operator 2026-11-04: "Strengthen: include them"). Assertions unchanged.</description></item>
+    /// </list>
+    /// </remarks>
     [Fact]
     public async Task ApproveAsync_LeaseExpiresDuringLiveCreate_SecondInstanceWins()
     {
@@ -410,7 +420,7 @@ public sealed class HandoffDurabilityTests : IDisposable
                 return !string.IsNullOrWhiteSpace(run.ApprovalOwner)
                     && !string.Equals(run.ApprovalOwner, firstOwner, StringComparison.Ordinal);
             },
-            TimeSpan.FromSeconds(10));
+            TimeSpan.FromSeconds(36));
         todo.CreateGate.TrySetResult();
         var takeover = await secondTask;
         var firstResult = await firstTask;
@@ -674,6 +684,7 @@ public sealed class HandoffDurabilityTests : IDisposable
     /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
     /// <item><term>2026-11-03</term><description>TR-MCP-USECASE-018 AC-006 (appended "A unit test that checks a recorded time ... never sleeps to separate two times, and its result cannot change with elapsed time, scheduling delay"): after the scripted clock advances, the case waits until the heartbeat has written the renewed expiry instead of sleeping 250 ms, and asserts the exact renewed expiry (the original expiry plus the scripted advance) instead of "later than before", because the holistic read before round 11 found the sleep made the comparison depend on scheduling.</description></item>
     /// <item><term>2026-11-04</term><description>TR-MCP-USECASE-018 AC-006 (as appended 2026-11-04 12:20:22: the longest delay of the awaited step is the sum of every real or scripted delay on its path, read from the sources): the bounds on the processing-state wait and the renewed-expiry wait rise from 5 s to 10 s. After the scripted advance, the renewal waits behind the service's heartbeat poll of the adjustable clock, every 50 ms of real time (HandoffIngestionService.cs:1025-1031), and WaitUntilAsync polls its condition every 10 ms, 60 ms in all, so 5 s was 83 times it and 10 s is 167 times; the processing-state wait takes the same bound, as every WaitUntilAsync caller does. The third holistic read before hostile validation round 12 raised the measure (finding d3; operator 2026-11-04: "Fix it"). Assertions unchanged.</description></item>
+    /// <item><term>2026-11-04</term><description>TR-MCP-USECASE-018 AC-006 (as appended 2026-11-04 15:29:24: a wait that happens only under a condition the step can meet, such as the 150 ms sleep before Microsoft.Data.Sqlite retries a statement that found the database busy, counts once for each poll on the path), slice Z3: both bounds rise from 10 s to 36 s. The renewal write runs on the heartbeat's own context and WaitUntilAsync reads through a new context each poll, separate connections to the same file (Pooling=False), so each of the renewed-expiry wait's two polls can meet a busy retry: 50 ms, 150 ms, 10 ms and 150 ms, 360 ms in all, which 10 s was 28 times and 36 s is 100 times; the processing-state wait takes the same bound, as every WaitUntilAsync caller does. The fourth holistic read before hostile validation round 12 raised the clause (finding g1; operator 2026-11-04: "Strengthen: include them"). Assertions unchanged.</description></item>
     /// </list>
     /// </remarks>
     [Fact]
@@ -721,7 +732,7 @@ public sealed class HandoffDurabilityTests : IDisposable
                 originalExpiry = run.ProcessingLeaseExpiresAtUtc.Value;
                 return true;
             },
-            TimeSpan.FromSeconds(10));
+            TimeSpan.FromSeconds(36));
 
         try
         {
@@ -734,7 +745,7 @@ public sealed class HandoffDurabilityTests : IDisposable
                     using var db = CreateDb();
                     return db.HandoffIngestionRuns.Single().ProcessingLeaseExpiresAtUtc == expectedExpiry;
                 },
-                TimeSpan.FromSeconds(10));
+                TimeSpan.FromSeconds(36));
 
             DateTimeOffset? renewedExpiry;
             int versionAfterHeartbeat;
@@ -849,7 +860,12 @@ public sealed class HandoffDurabilityTests : IDisposable
     /// <summary>Waits until the run with <paramref name="runId"/> has an approval owner in the Approving state and returns it.</summary>
     /// <param name="runId">The handoff run to watch.</param>
     /// <returns>The approval owner the run holds.</returns>
-    /// <remarks>2026-11-04, TR-MCP-USECASE-018 AC-006 (as appended 2026-11-04 12:20:22: the longest delay of the awaited step is the sum of every real or scripted delay on its path, read from the sources): the bound rises from 5 s to 10 s, the one bound of the five WaitUntilAsync callers, set by the 60 ms heartbeat-renewal wait of ProcessingLease_RenewsAndFencesTerminalUpdates (5 s was 83 times, 10 s is 167 times); this condition waits only on WaitUntilAsync's 10 ms poll. The third holistic read before hostile validation round 12 raised the measure (finding d3; operator 2026-11-04: "Fix it").</remarks>
+    /// <remarks>
+    /// <list type="table">
+    /// <item><term>2026-11-04</term><description>TR-MCP-USECASE-018 AC-006 (as appended 2026-11-04 12:20:22: the longest delay of the awaited step is the sum of every real or scripted delay on its path, read from the sources): the bound rises from 5 s to 10 s, the one bound of the five WaitUntilAsync callers, set by the 60 ms heartbeat-renewal wait of ProcessingLease_RenewsAndFencesTerminalUpdates (5 s was 83 times, 10 s is 167 times); this condition waits only on WaitUntilAsync's 10 ms poll. The third holistic read before hostile validation round 12 raised the measure (finding d3; operator 2026-11-04: "Fix it").</description></item>
+    /// <item><term>2026-11-04</term><description>TR-MCP-USECASE-018 AC-006 (as appended 2026-11-04 15:29:24: a wait that happens only under a condition the step can meet, such as the 150 ms Microsoft.Data.Sqlite busy retry, counts once for each poll on the path), slice Z3: the bound rises from 10 s to 36 s, the one bound of the five WaitUntilAsync callers, set by the heartbeat-renewal wait of ProcessingLease_RenewsAndFencesTerminalUpdates, 360 ms on its path under the clause (10 s was 28 times, 36 s is 100 times). The claim commits before the approval task returns, so no other connection writes during this wait (fourth holistic read before hostile validation round 12, finding g1; operator 2026-11-04: "Strengthen: include them").</description></item>
+    /// </list>
+    /// </remarks>
     private async Task<string> WaitForApprovalOwnerAsync(string runId)
     {
         string? owner = null;
@@ -863,7 +879,7 @@ public sealed class HandoffDurabilityTests : IDisposable
                 owner = run.ApprovalOwner;
                 return true;
             },
-            TimeSpan.FromSeconds(10)).ConfigureAwait(true);
+            TimeSpan.FromSeconds(36)).ConfigureAwait(true);
         return owner ?? throw new InvalidOperationException("Approval owner was not assigned.");
     }
 

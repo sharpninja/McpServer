@@ -539,6 +539,71 @@ public sealed class ServiceUpdateTests
         Assert.Equal(true, Property(files[1], "Optional"));
     }
 
+    /// <summary>
+    /// TR-MCP-SERVICEUPDATE-001 repeated-properties binding: the production reader of systemctl show output meets every
+    /// row of <see cref="ServiceUnitPropertiesContractTests.Rows"/>, the rows the mock gate proved against a reference
+    /// reader and six wrong readers.
+    /// </summary>
+    /// <remarks>
+    /// <list type="table">
+    /// <item><term>2026-11-04</term><description>TR-MCP-SERVICEUPDATE-001 criteria repeated-properties, preserve and
+    /// lifecycle (slice Z3): new; binds the contract rows of mock gate ug-r12z3-mockgate-1 to
+    /// LinuxServiceHelper.ParseUnitProperties.</description></item>
+    /// </list>
+    /// </remarks>
+    [Fact]
+    public void LinuxUnitState_ReadsRepeatedShowLinesAsTheContractRows()
+    {
+        ServiceUnitPropertiesContractTests.PropertyReader production =
+            output => (IReadOnlyDictionary<string, string>)Call("LinuxServiceHelper", "ParseUnitProperties", null, output);
+        foreach (var row in ServiceUnitPropertiesContractTests.Rows)
+            Assert.True(ServiceUnitPropertiesContractTests.Meets(production, row), row.Name);
+    }
+
+    /// <summary>
+    /// TR-MCP-SERVICEUPDATE-001 repeated-properties and preserve: a unit whose systemctl show output prints a second
+    /// EnvironmentFiles line, as systemd 262 does for a second environment file, updates, and the archive holds both files.
+    /// </summary>
+    /// <remarks>
+    /// <list type="table">
+    /// <item><term>2026-11-04</term><description>TR-MCP-SERVICEUPDATE-001 criteria repeated-properties, preserve and
+    /// lifecycle (slice Z3): new; the redeploy of 2026-11-04 met this output and stopped before any service
+    /// change.</description></item>
+    /// </list>
+    /// </remarks>
+    [Fact]
+    public void LinuxUpdate_PreservesEveryEnvironmentFileOfRepeatedShowLines()
+    {
+        using var f = new Fixture();
+        f.SecondEnv = Path.Combine(f.Root, "second.env");
+        File.WriteAllText(f.SecondEnv, "Federation__Key=private\n");
+        f.Update();
+        var root = Path.GetPathRoot(f.Root)!;
+        Assert.Contains(Path.GetRelativePath(root, f.Env), f.TarArguments);
+        Assert.Contains(Path.GetRelativePath(root, f.SecondEnv), f.TarArguments);
+        Assert.Equal("Federation__Key=private\n", File.ReadAllText(f.SecondEnv));
+        Assert.Contains("start", f.Events);
+    }
+
+    /// <summary>
+    /// TR-MCP-SERVICEUPDATE-001 repeated-properties and lifecycle: a required environment file named only on the second
+    /// EnvironmentFiles line is validated; when it is missing the update fails before the service is stopped.
+    /// </summary>
+    /// <remarks>
+    /// <list type="table">
+    /// <item><term>2026-11-04</term><description>TR-MCP-SERVICEUPDATE-001 criteria repeated-properties, preserve and
+    /// lifecycle (slice Z3): new.</description></item>
+    /// </list>
+    /// </remarks>
+    [Fact]
+    public void LinuxPreflight_RequiresTheEnvironmentFileOfTheSecondShowLine()
+    {
+        using var f = new Fixture();
+        f.SecondEnv = Path.Combine(f.Root, "missing.env");
+        Assert.ThrowsAny<FileNotFoundException>(() => f.Update());
+        Assert.DoesNotContain("stop", f.Events);
+    }
+
     /// <summary>Missing required environment fails before stop; optional missing files remain absent.</summary>
     [Theory]
     [InlineData(true)]
@@ -706,6 +771,12 @@ public sealed class ServiceUpdateTests
         public bool RealTar { get; set; }
         public bool InspectRealFileKinds { get; set; }
         public bool OptionalEnvironment { get; set; }
+        /// <summary>
+        /// 2026-11-04, TR-MCP-SERVICEUPDATE-001 repeated-properties (slice Z3): a required environment file the fake
+        /// systemctl show names on a second EnvironmentFiles line, as systemd 262 prints one line per file; null prints no
+        /// second line.
+        /// </summary>
+        public string? SecondEnv { get; set; }
         public string DropIns { get; set; } = "";
         public string PrivateOwner { get; set; } = "0";
         public string ServiceName { get; set; } = "example.service";
@@ -775,7 +846,7 @@ public sealed class ServiceUpdateTests
             }
             if (command == "systemctl")
             {
-                if (args[0] == "show") return Result(0, $"LoadState={LoadState}\nType=simple\nFragmentPath={Path.Combine(Root, "example.service")}\nDropInPaths={DropIns}\nEnvironmentFiles={Env} (ignore_errors={(OptionalEnvironment ? "yes" : "no")})\nEnvironment=\nWorkingDirectory={WorkingDirectory}\nExecStart={{ path={UnitExecutable} ; argv[]={UnitExecutable} {Arguments} ; ignore_errors=no ; }}\nMainPID={(started ? Environment.ProcessId : 0)}\nActiveState={(started ? "active" : "inactive")}\n{ExtraProperties}");
+                if (args[0] == "show") return Result(0, $"LoadState={LoadState}\nType=simple\nFragmentPath={Path.Combine(Root, "example.service")}\nDropInPaths={DropIns}\nEnvironmentFiles={Env} (ignore_errors={(OptionalEnvironment ? "yes" : "no")})\n{(SecondEnv is null ? "" : $"EnvironmentFiles={SecondEnv} (ignore_errors=no)\n")}Environment=\nWorkingDirectory={WorkingDirectory}\nExecStart={{ path={UnitExecutable} ; argv[]={UnitExecutable} {Arguments} ; ignore_errors=no ; }}\nMainPID={(started ? Environment.ProcessId : 0)}\nActiveState={(started ? "active" : "inactive")}\n{ExtraProperties}");
                 if (args[0] == "is-active") return Result(started ? 0 : 3, started ? "active" : "inactive");
                 Events.Add(args[0]); if (args[0] == "start") started = true; if (args[0] == "stop") started = false;
                 return Result(0, "");
