@@ -123,7 +123,13 @@ public sealed class BugTriage139SixteenthSqliteConsumerTests
     /// Verifies successful public completion is withheld until the real opener thread exits,
     /// while active-worker accounting remains asserted at the final thread boundary.
     /// </summary>
-    /// <remarks>2026-11-03, TR-MCP-USECASE-018 AC-006 (as appended 2026-11-03 16:37:35: a hang guard is at least 100 times the longest real or scripted delay of the awaited step): the open's timeout argument rises from 5 s to 10 s. It is a hang guard: it fires only when the test stalls before it releases the held worker, and the case's 100 ms scripted wait (the open must still be withheld 100 ms after entry) comes before that release, so 5 s was 50 times that delay; the second holistic read before hostile validation round 12 found its class (finding C1). On a passing run the test releases the worker after 100 ms and the timeout never fires.</remarks>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-03</term><description>TR-MCP-USECASE-018 AC-006 (as appended 2026-11-03 16:37:35: a hang guard is at least 100 times the longest real or scripted delay of the awaited step): the open's timeout argument rises from 5 s to 10 s. It is a hang guard: it fires only when the test stalls before it releases the held worker, and the case's 100 ms scripted wait (the open must still be withheld 100 ms after entry) comes before that release, so 5 s was 50 times that delay; the second holistic read before hostile validation round 12 found its class (finding C1). On a passing run the test releases the worker after 100 ms and the timeout never fires.</description></item>
+    /// <item><term>2026-11-04</term><description>TR-MCP-USECASE-018 AC-006 (as appended 2026-11-04 12:20:22: the longest delay of the awaited step is the sum of every real or scripted delay on its path, read from the sources): the open's timeout argument rises from 10 s to 15 s. Before the open completes, the case waits 100 ms and releases the worker, and the opener's worker tracker then polls the thread's exit every 5 ms (SqliteBoundedConnectionOpener.cs:278-279), 105 ms in all, so 10 s was 95 times it and 15 s is 143 times; the third holistic read before hostile validation round 12 raised the measure (finding d3; operator 2026-11-04: "Fix it"). Assertions unchanged.</description></item>
+    /// </list>
+    /// </remarks>
     [Fact]
     public async Task OpenAsync_ResultWithheldUntilThreadExit_WorkerRemainsObservable()
     {
@@ -150,7 +156,7 @@ public sealed class BugTriage139SixteenthSqliteConsumerTests
 
             operation = SqliteBoundedConnectionOpener.OpenAsync(
                 connection,
-                TimeSpan.FromSeconds(10),
+                TimeSpan.FromSeconds(15),
                 TestContext.Current.CancellationToken);
             Assert.True(entered.Wait(
                 TimeSpan.FromSeconds(2),
