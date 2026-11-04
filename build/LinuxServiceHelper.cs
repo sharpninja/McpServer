@@ -1,7 +1,9 @@
 using System.Diagnostics;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using Serilog;
 
 /// <summary>TR-MCP-SERVICEUPDATE-001: native command result; output is never included in failure messages.</summary>
 internal sealed record ServiceCommandResult(int ExitCode, string StandardOutput);
@@ -15,6 +17,22 @@ internal sealed record LinuxServiceUpdateResult(string ArchivePath, string Archi
 
 /// <summary>Systemd environment-file path and missing-file policy.</summary>
 internal sealed record ServiceEnvironmentFile(string Path, bool Optional);
+
+/// <summary>TR-MCP-SERVICEUPDATE-001 startup-health-wait (slice Z3, 2026-11-04): how a startup health wait ended.</summary>
+internal enum StartupHealthOutcome
+{
+    /// <summary>The server answered health.</summary>
+    Healthy,
+
+    /// <summary>The unit left the active state before it answered.</summary>
+    UnitStopped,
+
+    /// <summary>The allowed probes were spent.</summary>
+    TimedOut,
+}
+
+/// <summary>TR-MCP-SERVICEUPDATE-001 startup-health-wait (slice Z3, 2026-11-04): the outcome and the probes made.</summary>
+internal sealed record StartupHealthResult(StartupHealthOutcome Outcome, int Probes);
 
 /// <summary>TR-MCP-SERVICEUPDATE-001: updates an existing systemd unit with retained live-state recovery.</summary>
 internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, ServiceCommandResult> run)
@@ -132,6 +150,91 @@ internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, Ser
             }
             throw new InvalidOperationException($"Service update failed; recovery evidence retained at {archiveDirectory}. No binary rollback was performed.", failure);
         }
+    }
+
+    /// <summary>TR-MCP-SERVICEUPDATE-001 startup-health-wait: seconds between health probes after the start.</summary>
+    internal static readonly TimeSpan StartupHealthInterval = TimeSpan.FromSeconds(5);
+
+    /// <summary>TR-MCP-SERVICEUPDATE-001 startup-health-wait: probes allowed after the start, 10 minutes at the interval.</summary>
+    internal const int StartupHealthProbes = 120;
+
+    /// <summary>
+    /// TR-MCP-SERVICEUPDATE-001 startup-health-wait: waits for HTTP health after the start while the unit stays active,
+    /// for up to <see cref="StartupHealthProbes"/> probes <see cref="StartupHealthInterval"/> apart, and throws when the
+    /// unit leaves the active state or the probes are spent, so a server that is still starting is never stopped as
+    /// unhealthy.
+    /// </summary>
+    /// <param name="service">The unit.</param>
+    /// <param name="probe">One health probe; true when the server answers healthy.</param>
+    /// <remarks>
+    /// <list type="table">
+    /// <item><term>2026-11-04</term><description>TR-MCP-SERVICEUPDATE-001 criteria startup-health-wait and lifecycle
+    /// (slice Z3): new. The redeploy of 2026-11-04 stopped a server that was starting normally, because the update probed
+    /// health 10 times 2 s apart while the server registers every workspace before it listens (93 s at 14:27).</description></item>
+    /// </list>
+    /// </remarks>
+    internal void WaitForStartupHealth(string service, Func<bool> probe)
+    {
+        var result = EvaluateStartupHealth(() => Value(GetUnit(service), "ActiveState"), probe, Thread.Sleep, StartupHealthProbes, StartupHealthInterval);
+        if (result.Outcome == StartupHealthOutcome.UnitStopped)
+            throw new InvalidOperationException("Updated service left the active state before it answered health.");
+        if (result.Outcome == StartupHealthOutcome.TimedOut)
+            throw new InvalidOperationException("Updated service did not answer health within the startup wait.");
+        Log.Information("  Startup health answered after {Probes} probe(s).", result.Probes);
+    }
+
+    /// <summary>
+    /// TR-MCP-SERVICEUPDATE-001 startup-health-wait: the wait itself, over an injected unit state, probe and sleep. Before
+    /// each probe it reads the unit; a unit that is not active ends the wait at once. It sleeps only between probes and
+    /// stops after <paramref name="maxProbes"/>.
+    /// </summary>
+    /// <param name="activeState">Reads the unit's ActiveState.</param>
+    /// <param name="probe">One health probe.</param>
+    /// <param name="sleep">Waits between probes.</param>
+    /// <param name="maxProbes">The probes allowed.</param>
+    /// <param name="interval">The wait between probes.</param>
+    /// <returns>The outcome and the probes made.</returns>
+    /// <remarks>
+    /// <list type="table">
+    /// <item><term>2026-11-04</term><description>TR-MCP-SERVICEUPDATE-001 criteria startup-health-wait and lifecycle
+    /// (slice Z3): new. Its contract rows are ServiceStartupHealthContractTests.Rows, proven against a reference wait and
+    /// five wrong waits in mock gate ug-r12z3-mockgate-2 before this change.</description></item>
+    /// </list>
+    /// </remarks>
+    internal static StartupHealthResult EvaluateStartupHealth(Func<string> activeState, Func<bool> probe, Action<TimeSpan> sleep, int maxProbes, TimeSpan interval)
+    {
+        var probes = 0;
+        while (probes < maxProbes)
+        {
+            if (!string.Equals(activeState(), "active", StringComparison.Ordinal))
+                return new(StartupHealthOutcome.UnitStopped, probes);
+            probes++;
+            if (probe())
+                return new(StartupHealthOutcome.Healthy, probes);
+            if (probes < maxProbes)
+                sleep(interval);
+        }
+        return new(StartupHealthOutcome.TimedOut, probes);
+    }
+
+    /// <summary>
+    /// TR-MCP-SERVICEUPDATE-001 startup-health-wait: one quiet probe of the loopback health endpoint (3 s timeout); a
+    /// refused or timed-out request is "not yet", not an error.
+    /// </summary>
+    /// <param name="port">The service HTTP port.</param>
+    /// <returns>True when /health answers with a success status.</returns>
+    /// <remarks>
+    /// <list type="table">
+    /// <item><term>2026-11-04</term><description>TR-MCP-SERVICEUPDATE-001 criterion startup-health-wait (slice Z3): new, so
+    /// the startup wait does not log an error for every probe the starting server refuses.</description></item>
+    /// </list>
+    /// </remarks>
+    internal static bool ProbeHealth(int port)
+    {
+        using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(3) };
+        try { return client.GetAsync($"http://localhost:{port}/health").GetAwaiter().GetResult().IsSuccessStatusCode; }
+        catch (HttpRequestException) { return false; }
+        catch (TaskCanceledException) { return false; }
     }
 
     /// <summary>TR-MCP-SERVICEUPDATE-001: systemd simple units report start before exec; bound retries until the active main process resolves to the deployed apphost.</summary>

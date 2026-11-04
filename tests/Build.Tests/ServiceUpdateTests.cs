@@ -604,6 +604,51 @@ public sealed class ServiceUpdateTests
         Assert.DoesNotContain("stop", f.Events);
     }
 
+    /// <summary>
+    /// TR-MCP-SERVICEUPDATE-001 startup-health-wait binding: the production startup wait meets every row of
+    /// <see cref="ServiceStartupHealthContractTests.Rows"/>, the rows the mock gate proved against a reference wait and five
+    /// wrong waits; the unit state, probe and sleep are the contract's scripts, so no row waits on real time.
+    /// </summary>
+    /// <remarks>
+    /// <list type="table">
+    /// <item><term>2026-11-04</term><description>TR-MCP-SERVICEUPDATE-001 criteria startup-health-wait and lifecycle
+    /// (slice Z3): new; binds the contract rows of mock gate ug-r12z3-mockgate-2 to
+    /// LinuxServiceHelper.EvaluateStartupHealth.</description></item>
+    /// </list>
+    /// </remarks>
+    [Fact]
+    public void LinuxStartupHealth_WaitsAsTheContractRows()
+    {
+        ServiceStartupHealthContractTests.StartupWait production = (state, probe, sleep, max, interval) =>
+        {
+            var result = Call("LinuxServiceHelper", "EvaluateStartupHealth", null, state, probe, sleep, max, interval);
+            return (Property(result, "Outcome").ToString()!, (int)Property(result, "Probes"));
+        };
+        foreach (var row in ServiceStartupHealthContractTests.Rows)
+            Assert.True(ServiceStartupHealthContractTests.Meets(production, row), row.Name);
+    }
+
+    /// <summary>
+    /// TR-MCP-SERVICEUPDATE-001 startup-health-wait and lifecycle: the unit's own wait reads the unit through systemctl show;
+    /// a unit that is not active fails the wait at once, before any probe.
+    /// </summary>
+    /// <remarks>
+    /// <list type="table">
+    /// <item><term>2026-11-04</term><description>TR-MCP-SERVICEUPDATE-001 criteria startup-health-wait and lifecycle
+    /// (slice Z3): new.</description></item>
+    /// </list>
+    /// </remarks>
+    [Fact]
+    public void LinuxStartupHealth_StopsAtOnceForAnInactiveUnit()
+    {
+        using var f = new Fixture();
+        var helper = f.CreateHelper();
+        var probes = 0;
+        var failure = Assert.Throws<InvalidOperationException>(() => Call("LinuxServiceHelper", "WaitForStartupHealth", helper, f.ServiceName, (Func<bool>)(() => { probes++; return true; })));
+        Assert.Contains("left the active state", failure.Message, StringComparison.Ordinal);
+        Assert.Equal(0, probes);
+    }
+
     /// <summary>Missing required environment fails before stop; optional missing files remain absent.</summary>
     [Theory]
     [InlineData(true)]
