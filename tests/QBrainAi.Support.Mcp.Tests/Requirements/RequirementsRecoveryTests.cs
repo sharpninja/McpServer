@@ -473,7 +473,13 @@ WHERE Id = 'FR-MCP-REQRECOVERY-001'");
     }
 
     /// <summary>A hung SaveChanges is retryable HTTP 503 and persists nothing.</summary>
-    /// <remarks>Integration: asserts an elapsed wall-clock bound on actual scheduling and timer execution (TR-MCP-USECASE-018 AC-006).</remarks>
+    /// <remarks>
+    /// Integration: asserts an elapsed wall-clock bound on actual scheduling and timer execution (TR-MCP-USECASE-018 AC-006).
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-05</term><description>TR-MCP-USECASE-018 AC-006 (a wall-clock bound makes a case an integration case): which budget elapsed is read from the exception message (the configured 1 second storage command budget; the delayed save would finish after 4 seconds and throw nothing), and the elapsed time keeps a 20 second hang guard instead of the 3 second bound, because the sibling sweep of the Windows integration lane failure at b79fd51f (slice Z5) found this case at up to 7.12 seconds of run time across nine Windows lanes (ug-r13z5-win-lane-elapsed-bound-durations-1.txt): its bound also timed the host.</description></item>
+    /// </list>
+    /// </remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public async Task ApplyAsync_HungSave_IsRetryable503()
@@ -489,7 +495,8 @@ WHERE Id = 'FR-MCP-REQRECOVERY-001'");
                 TestContext.Current.CancellationToken)).ConfigureAwait(true);
             clock.Stop();
 
-            Assert.True(clock.Elapsed < TimeSpan.FromSeconds(3), $"Recovery save budget took {clock.Elapsed}.");
+            Assert.Contains("within the 1 second storage command budget", ex.Message, StringComparison.Ordinal);
+            Assert.True(clock.Elapsed < TimeSpan.FromSeconds(20), $"The recovery save was not cut short by its budget: {clock.Elapsed}.");
             var classified = McpErrorClassifier.Classify(ex);
             Assert.Equal(503, classified.StatusCode);
             Assert.Equal(McpErrorClassifier.BackendUnavailable, classified.Code);

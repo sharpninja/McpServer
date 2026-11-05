@@ -131,14 +131,21 @@ public sealed class SessionLogTriageStoreTests : IDisposable
     /// and surfaces backend_unavailable when that budget elapses. This fixture sets 1 second
     /// so the test does not wait for the 30 second default.
     /// </summary>
-    /// <remarks>Integration: asserts an elapsed wall-clock bound on actual scheduling and timer execution (TR-MCP-USECASE-018 AC-006).</remarks>
+    /// <remarks>
+    /// Integration: asserts an elapsed wall-clock bound on actual scheduling and timer execution (TR-MCP-USECASE-018 AC-006).
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-05</term><description>TEST-MCP-TRIAGESTORE-007; TR-MCP-USECASE-018 AC-006 (a wall-clock bound makes a case an integration case): which budget elapsed is read from the exception message (the configured 1 second storage command budget, so neither the 5 second intake budget nor the 30 second submit default passes), the stalled SaveChanges is proved reached, and the elapsed time keeps a 20 second hang guard (below that default and the interceptor's 60 second stall) instead of the 4 and 5 second bounds, because the Windows integration lane ug-r13z4c-final-win-lane-1 measured 4.42 seconds and the case took about 1 or about 4 seconds across nine Windows lanes (ug-r13z4c-win-lane-hungsave-durations-1.txt): the old bound timed the whole Submit and the host's scheduling, not the budget.</description></item>
+    /// </list>
+    /// </remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public async Task SubmitAsync_HungSaveChanges_FailsFastWithStorageUnavailable()
     {
+        var interceptor = new HungSaveChangesInterceptor();
         var options = new DbContextOptionsBuilder<McpDbContext>()
             .UseInMemoryDatabase($"SessionLogHungSave_{Guid.NewGuid():N}")
-            .AddInterceptors(new HungSaveChangesInterceptor())
+            .AddInterceptors(interceptor)
             .Options;
         await using var db = new McpDbContext(options);
         db.Database.EnsureCreated();
@@ -156,8 +163,9 @@ public sealed class SessionLogTriageStoreTests : IDisposable
             .ConfigureAwait(true);
         clock.Stop();
 
-        Assert.True(clock.Elapsed < TimeSpan.FromSeconds(4), $"SaveChanges budget took {clock.Elapsed}.");
-        Assert.True(clock.Elapsed < TimeSpan.FromSeconds(5), $"Submit still used the 5 second intake budget: {clock.Elapsed}.");
+        Assert.True(interceptor.Entered, "SaveChanges was never reached, so no budget cut a stalled save.");
+        Assert.Contains("within the 1 second storage command budget", ex.Message, StringComparison.Ordinal);
+        Assert.True(clock.Elapsed < TimeSpan.FromSeconds(20), $"The stalled SaveChanges was not cut short by its budget: {clock.Elapsed}.");
         var classified = McpErrorClassifier.Classify(ex);
         Assert.Equal(McpErrorClassifier.BackendUnavailable, classified.Code);
         Assert.True(classified.Retryable);
@@ -261,15 +269,20 @@ public sealed class SessionLogTriageStoreTests : IDisposable
         Assert.Equal(SessionLogTurnContextValidator.NoneSentinel, turn.TodoId);
     }
 
-    /// <summary>Delays SaveChanges until the storage budget cancels the token.</summary>
+    /// <summary>Delays SaveChanges until the storage budget cancels the token, and records that SaveChanges was reached.</summary>
+    /// <remarks>2026-11-05, TEST-MCP-TRIAGESTORE-007: records its entry, so the hung-save case proves the budget cut a stalled SaveChanges (slice Z5, after the Windows integration lane ug-r13z4c-final-win-lane-1).</remarks>
     private sealed class HungSaveChangesInterceptor : SaveChangesInterceptor
     {
+        /// <summary>Whether SaveChanges reached this interceptor.</summary>
+        internal bool Entered { get; private set; }
+
         /// <inheritdoc />
         public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(
             DbContextEventData eventData,
             InterceptionResult<int> result,
             CancellationToken cancellationToken = default)
         {
+            Entered = true;
             await Task.Delay(TimeSpan.FromMinutes(1), cancellationToken).ConfigureAwait(false);
             return result;
         }
