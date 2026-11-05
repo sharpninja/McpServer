@@ -62,7 +62,7 @@ public sealed partial class MemoryConsolidateOperations
     /// <param name="now">The time of the attempt, from the operations' clock.</param>
     /// <param name="lockHeld">True when the attempt failed because the lock is held.</param>
     /// <returns>True when the lock was taken.</returns>
-    /// <remarks>2026-11-05, TR-MCP-MEMORY-JOBS-002; TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): takes the time of the attempt from its caller instead of reading DateTimeOffset.UtcNow, and is internal so a unit test binds the TTL decision to scripted times (hostile validation round 12 finding R12-F2, sibling S37; mock gate ug-r13z4-mockgate-b-1).</remarks>
+    /// <remarks>2026-11-05, TR-MCP-MEMORY-JOBS-002; TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): takes the time of the attempt from its caller instead of reading DateTimeOffset.UtcNow, and is internal so a unit test binds the TTL decision to scripted times (hostile validation round 12 finding R12-F2, sibling S37; mock gate ug-r13z4-mockgate-b-1). TR-MCP-MEMORY-JOBS-002 in this file is a historical id of the memory plan, not a record in the requirement store, so it makes no coverage claim (labeled 2026-11-05 before hostile validation round 13).</remarks>
     internal static bool TryAcquireLock(string workspace, bool forceOverlap, DateTimeOffset now, out bool lockHeld)
     {
         lockHeld = false;

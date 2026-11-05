@@ -17,7 +17,7 @@ public sealed class MemoryConsolidateJobTests : IDisposable
 
     /// <summary>AC-TR-MCP-MEMORY-JOBS-002-01: job respects per-workspace lock.</summary>
     /// <returns>A task that completes when the case finishes.</returns>
-    /// <remarks>2026-11-05, TR-MCP-MEMORY-JOBS-002; TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): the workspace lock is held, as by a job in progress, at the instant of a settable clock the job handler reads; a forced job at that instant finds it held; after the release a job runs on the free lock. The two jobs previously ran concurrently on the live clock and relied on the second arriving within the first's 100 ms hold and before the 30 second TTL (sibling sweep of hostile validation round 12 finding R12-F2, S37). The assertions are unchanged.</remarks>
+    /// <remarks>2026-11-05, TR-MCP-MEMORY-JOBS-002; TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): the workspace lock is held, as by a job in progress, at the instant of a settable clock the job handler reads; a forced job at that instant finds it held; after the release a job runs on the free lock. The two jobs previously ran concurrently on the live clock and relied on the second arriving within the first's 100 ms hold and before the 30 second TTL (sibling sweep of hostile validation round 12 finding R12-F2, S37). The assertions are unchanged. TR-MCP-MEMORY-JOBS-002 in this file is a historical id of the memory plan, not a record in the requirement store, so it makes no coverage claim (labeled 2026-11-05 before hostile validation round 13).</remarks>
     [Fact]
     public async Task PerWorkspaceLock()
     {
