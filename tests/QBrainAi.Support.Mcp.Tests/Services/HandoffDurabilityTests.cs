@@ -121,6 +121,37 @@ public sealed class HandoffDurabilityTests : IDisposable
         Assert.NotEqual("dead-instance", stored.ProcessingOwner);
     }
 
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 binding, decision D6 of
+    /// <see cref="QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests"/>: for each scripted reference time and
+    /// each contract row, another instance's processing run whose lease expires at the row's time is taken over by an
+    /// ingest at the reference exactly when the contract says (still live at its expiry instant, because only a lease that
+    /// expired before now is taken over); a live lease answers in progress. Test data: the contract's times; one
+    /// incomplete run per row with its own content, owned by another instance.
+    /// </summary>
+    /// <returns>A task that completes when every row has been asserted.</returns>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): added for the sibling sweep of hostile validation round 12 finding R12-F2 (S36).</remarks>
+    [Fact]
+    public Task ProcessingLeaseTakeover_UsesScriptedClock() =>
+        QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.AssertDecisionAsync("D6 handoff processing lease takeover", async (reference, recorded) =>
+        {
+            var content = "lease-row-" + Guid.NewGuid().ToString("N");
+            using (var db = CreateDb())
+            {
+                var run = IncompleteRun("handoff-run-" + Guid.NewGuid().ToString("N"), content, processingOwner: "other-instance");
+                run.ProcessingLeaseExpiresAtUtc = recorded;
+                db.HandoffIngestionRuns.Add(run);
+                db.SaveChanges();
+            }
+
+            _time.Advance(reference - _time.GetUtcNow());
+            var sut = CreateService(SuccessfulExtractor(ValidDraft("MCP-HANDOFFDEMO-150")), Substitute.For<ITodoService>());
+            var result = await sut.IngestAsync(ContentRequest(content), TestContext.Current.CancellationToken);
+            if (!result.Success)
+                Assert.Equal(HandoffErrorCodes.InProgress, result.ErrorCode);
+            return result.Success;
+        });
+
     /// <summary>Cancellation persists a terminal failed run and then still throws.</summary>
     [Fact]
     public async Task IngestAsync_CancelledAfterReserve_PersistsFailureThenThrows()

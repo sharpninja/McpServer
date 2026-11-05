@@ -19,6 +19,12 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// DateTimeOffset values cannot appear in ORDER BY clauses. These tests keep the provider-specific
 /// hydration path honest by asserting the same scenarios succeed against SQLite.
 /// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-05</term><description>TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): GetExecutionContextAsync_WithLinkedSessionTurns_OrdersByTimestampOnSqlite seeds its two turns at fixed instants ten minutes apart instead of two live-clock readings, so a change of the system clock between the seeds cannot reverse the order it asserts (the sibling sweep of hostile validation round 12 finding R12-F2, R1); the assertions are unchanged.</description></item>
+/// </list>
+/// </remarks>
 public sealed class TodoExecutionServiceSqliteTests : IDisposable
 {
     private readonly SqliteConnection _connection;
@@ -121,9 +127,13 @@ public sealed class TodoExecutionServiceSqliteTests : IDisposable
             requirementIds: ["FR-BYRD-001"],
             relevantFiles: ["src/QBrainAi.Services/Services/TodoExecutionService.cs"]).ConfigureAwait(true);
 
-        // Seed two turns with distinct DateTimeOffset timestamps so ordering is observable.
-        await SeedSessionTurnAsync("req-sqlite-001", "Older turn evidence.", "docs/older.md", DateTimeOffset.UtcNow.AddMinutes(-10)).ConfigureAwait(true);
-        await SeedSessionTurnAsync("req-sqlite-002", "Newer turn evidence.", "docs/newer.md", DateTimeOffset.UtcNow).ConfigureAwait(true);
+        // Seed two turns with distinct DateTimeOffset timestamps so ordering is observable. TR-MCP-USECASE-018 AC-006
+        // (appended 2026-11-05): the two times are fixed scripted instants ten minutes apart, not two live-clock readings, so
+        // a change of the system clock between the seeds cannot reverse the order the test asserts (sibling sweep of hostile
+        // validation round 12 finding R12-F2, R1).
+        var newer = new DateTimeOffset(2026, 8, 18, 20, 0, 0, TimeSpan.Zero);
+        await SeedSessionTurnAsync("req-sqlite-001", "Older turn evidence.", "docs/older.md", newer.AddMinutes(-10)).ConfigureAwait(true);
+        await SeedSessionTurnAsync("req-sqlite-002", "Newer turn evidence.", "docs/newer.md", newer).ConfigureAwait(true);
 
         await _sut.LinkTodoToSessionTurnsAsync(
             _workspacePath,

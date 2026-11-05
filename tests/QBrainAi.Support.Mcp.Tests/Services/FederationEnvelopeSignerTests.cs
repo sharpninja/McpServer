@@ -6,8 +6,17 @@ using NSubstitute;
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
 /// <summary>Tests for signed federation operation envelopes.</summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-05</term><description>FR-MCP-103; TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): every signer reads the class's settable clock, so signing stamps and the expiry and future-issue checks are decided by the test's instants, and the D4 bindings of AgeBoundaryContractTests were added, because the sibling sweep of hostile validation round 12 finding R12-F2 found these cases on the live clock; the assertions are unchanged.</description></item>
+/// </list>
+/// </remarks>
 public sealed class FederationEnvelopeSignerTests
 {
+    private readonly QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProvider _clock =
+        new(QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.References[0]);
+
     /// <summary>Signed envelopes verify successfully before expiry.</summary>
     [Fact]
     public void Sign_ProducesVerifiableEnvelope()
@@ -99,7 +108,7 @@ public sealed class FederationEnvelopeSignerTests
             ProxyId = "PAYTON-LEGION2",
             Domain = "todo",
         }, "PAYTON-LEGION2");
-        envelope.ExpiresAtUtc = DateTimeOffset.UtcNow.AddSeconds(-1);
+        envelope.ExpiresAtUtc = _clock.GetUtcNow().AddSeconds(-1);
 
         var result = sut.Verify(envelope);
 
@@ -121,12 +130,65 @@ public sealed class FederationEnvelopeSignerTests
                 EnvelopeTtlSeconds = 300,
             },
         });
-        var sut = new FederationEnvelopeSigner(monitor);
+        var sut = new FederationEnvelopeSigner(monitor, _clock);
 
         Assert.False(sut.IsConfigured);
     }
 
-    private static FederationEnvelopeSigner CreateSigner()
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 binding, decision D4 expiry of
+    /// <see cref="QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests"/>: for each scripted reference time and
+    /// each contract row, an envelope signed so that it expires at the row's time is rejected as expired at the reference
+    /// exactly when the contract says (valid at its expiry instant, because only an expiry before now is rejected), and an
+    /// envelope that is not expired verifies. Test data: the contract's times; the 300 second TTL of the class's signer.
+    /// </summary>
+    /// <remarks>2026-11-05, FR-MCP-103; TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): added for the sibling sweep of hostile validation round 12 finding R12-F2.</remarks>
+    [Fact]
+    public void EnvelopeExpiry_UsesScriptedClock() =>
+        QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.AssertDecision("D4 federation envelope expiry", (reference, recorded) =>
+        {
+            var sut = CreateSigner();
+            _clock.Set(recorded.AddSeconds(-300));
+            var envelope = sut.Sign(Operation(), "PAYTON-LEGION2", "PAYTON-DESKTOP");
+            Assert.Equal(recorded, envelope.ExpiresAtUtc);
+            _clock.Set(reference);
+            var result = sut.Verify(envelope, "PAYTON-DESKTOP");
+            var expired = !result.IsValid && (result.Error ?? string.Empty).Contains("expired", StringComparison.OrdinalIgnoreCase);
+            Assert.True(expired || result.IsValid, result.Error);
+            return expired;
+        });
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 binding, decision D4 future issue of
+    /// <see cref="QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests"/>: for each scripted reference time and
+    /// each contract row, an envelope issued at the row's time is rejected as issued in the future exactly when the
+    /// contract says (valid when issued exactly five minutes ahead), and an envelope that is not rejected verifies.
+    /// </summary>
+    /// <remarks>2026-11-05, FR-MCP-103; TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): added for the sibling sweep of hostile validation round 12 finding R12-F2.</remarks>
+    [Fact]
+    public void EnvelopeFutureIssue_UsesScriptedClock() =>
+        QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.AssertDecision("D4 federation envelope future issue", (reference, recorded) =>
+        {
+            var sut = CreateSigner();
+            _clock.Set(recorded);
+            var envelope = sut.Sign(Operation(), "PAYTON-LEGION2", "PAYTON-DESKTOP");
+            Assert.Equal(recorded, envelope.IssuedAtUtc);
+            _clock.Set(reference);
+            var result = sut.Verify(envelope, "PAYTON-DESKTOP");
+            var future = !result.IsValid && (result.Error ?? string.Empty).Contains("future", StringComparison.OrdinalIgnoreCase);
+            Assert.True(future || result.IsValid, result.Error);
+            return future;
+        });
+
+    private static FederationOperationRequest Operation() => new()
+    {
+        OperationId = "op-1",
+        ProxyId = "PAYTON-LEGION2",
+        Domain = "todo",
+        BodyBase64 = Convert.ToBase64String("{}"u8.ToArray()),
+    };
+
+    private FederationEnvelopeSigner CreateSigner()
     {
         var monitor = Substitute.For<IOptionsMonitor<FederationOptions>>();
         monitor.CurrentValue.Returns(new FederationOptions
@@ -138,6 +200,6 @@ public sealed class FederationEnvelopeSignerTests
                 EnvelopeTtlSeconds = 300,
             },
         });
-        return new FederationEnvelopeSigner(monitor);
+        return new FederationEnvelopeSigner(monitor, _clock);
     }
 }

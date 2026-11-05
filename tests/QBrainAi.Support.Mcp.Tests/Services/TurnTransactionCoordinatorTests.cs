@@ -14,6 +14,12 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// Unit tests for <see cref="TurnTransactionCoordinator"/> transaction gating.
 /// TEST-MCP-161, TEST-MCP-168, TEST-MCP-169.
 /// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-05</term><description>TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): the real key server of ExecuteAsync_WhenProtectDiffgramsEnabled_SendsProtectedEnvelopeToSubscriber reads a settable clock fixed at one instant, so the manifest expiry and future-issue checks cannot change its outcome (the sibling sweep of hostile validation round 12 finding R12-F2, S33); the assertions are unchanged.</description></item>
+/// </list>
+/// </remarks>
 public sealed class TurnTransactionCoordinatorTests
 {
     /// <summary>Disabled coordinator bypasses transaction dependencies and preserves existing mutation behavior.</summary>
@@ -143,7 +149,13 @@ public sealed class TurnTransactionCoordinatorTests
     {
         using var encryptionKey = EncryptionKeyPair.Create();
         var canonicalizer = new TransactionManifestCanonicalizer();
-        using var keyServer = new InMemoryKeyServerService(Monitor(new KeyServerOptions()), canonicalizer);
+        // TR-MCP-USECASE-018 AC-006 (appended 2026-11-05): the key server reads a settable clock fixed at one instant, so the
+        // manifest expiry and future-issue checks cannot change this case's outcome (sibling sweep of hostile validation
+        // round 12 finding R12-F2, S33).
+        using var keyServer = new InMemoryKeyServerService(
+            Monitor(new KeyServerOptions()),
+            canonicalizer,
+            new QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProvider(QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.References[0]));
         await keyServer.RegisterPartyAsync(new PartyRegistrationRequest { PartyId = "mcpserver", Role = "publisher" }, cancellationToken: TestContext.Current.CancellationToken)
             .ConfigureAwait(true);
         await keyServer.RegisterPartyAsync(new PartyRegistrationRequest

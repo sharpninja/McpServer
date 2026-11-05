@@ -33,6 +33,9 @@ public sealed class FederationControllerTests
             NullLogger<TunnelRegistry>.Instance);
     }
 
+    /// <summary>A signer over the test secret whose signing stamps and verification checks read a settable test clock fixed at one instant.</summary>
+    /// <returns>The signer.</returns>
+    /// <remarks>2026-11-05, FR-MCP-103; TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): the signer reads a settable clock instead of the system clock, so the envelope expiry and future-issue checks cannot change a case's outcome with the time spent between signing and recording (the sibling sweep of hostile validation round 12 finding R12-F2).</remarks>
     private static FederationEnvelopeSigner CreateSigner()
     {
         var monitor = Substitute.For<IOptionsMonitor<FederationOptions>>();
@@ -45,7 +48,9 @@ public sealed class FederationControllerTests
                 EnvelopeTtlSeconds = 300,
             },
         });
-        return new FederationEnvelopeSigner(monitor);
+        return new FederationEnvelopeSigner(
+            monitor,
+            new QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProvider(QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.References[0]));
     }
 
     private static FederationController CreateController(

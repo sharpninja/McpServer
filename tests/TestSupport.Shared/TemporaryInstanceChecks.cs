@@ -139,24 +139,55 @@ internal static class TemporaryInstanceChecks
         && (output ?? string.Empty).Contains("address already in use", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
-    /// FR-MCP-TESTRESOURCE-001 ac-4 and ac-12: the configuration and variable namespaces of the product, matched ignoring case; an
-    /// inherited variable in one of them never reaches a temporary instance or its REPL child.
+    /// FR-MCP-TESTRESOURCE-001 ac-4 and ac-12: the configuration sections no inherited setting may reach, the product's
+    /// canonical and legacy sections, the connection strings and the host's endpoint section, matched on the setting's
+    /// configuration key (<see cref="ConfigurationKeyIdentity"/>) ignoring case, so every separator spelling of a key in
+    /// them counts; an inherited variable in one of them never reaches a temporary instance or its REPL child.
     /// </summary>
-    internal static readonly IReadOnlyList<string> ProductNamespaces = ["Mcp__", "QBrainAi__", "MCP_", "QBRAINAI_", "MCPSERVER_", "ConnectionStrings__"];
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-05</term><description>FR-MCP-TESTRESOURCE-001 ac-4 (appended "A setting is identified by its configuration key, not by its spelling"): replaces the raw prefixes Mcp__, QBrainAi__ and ConnectionStrings__ with sections matched on the configuration key, and adds the endpoint section Kestrel, because hostile validation round 12 finding R12-F1 showed that an inherited colon or mixed-separator spelling passed the raw prefixes and that inherited endpoint settings could replace the instance's address.</description></item>
+    /// </list>
+    /// </remarks>
+    internal static readonly IReadOnlyList<string> ConfigurationSections = ["Mcp", "QBrainAi", "ConnectionStrings", "Kestrel"];
+
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 ac-4 and ac-12: the flat variable prefixes of the product, matched on the raw name ignoring case
+    /// (the legacy MCP_, the canonical QBRAINAI_ and the plugin's MCPSERVER_ names).
+    /// </summary>
+    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4 (appended "A setting is identified by its configuration key, not by its spelling"): split from the earlier single prefix list, which also held the section prefixes (hostile validation round 12 finding R12-F1).</remarks>
+    internal static readonly IReadOnlyList<string> ProductVariablePrefixes = ["MCP_", "QBRAINAI_", "MCPSERVER_"];
+
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 ac-4: the configuration key a process-environment name sets, as .NET configuration reads it:
+    /// every double underscore stands for the ':' delimiter (keys are compared ignoring case by the callers).
+    /// </summary>
+    /// <param name="name">The environment name.</param>
+    /// <returns>The configuration key.</returns>
+    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4 (appended "A setting is identified by its configuration key, not by its spelling"): added so the scrub and the start check judge a setting by its key, not its spelling (hostile validation round 12 finding R12-F1).</remarks>
+    internal static string ConfigurationKeyIdentity(string name)
+    {
+        ArgumentNullException.ThrowIfNull(name);
+        return name.Replace("__", ":", StringComparison.Ordinal);
+    }
 
     /// <summary>TR-MCP-NUKE-019 AC-6: the provider fallback variables the database resolver also reads.</summary>
     internal static readonly IReadOnlyList<string> ProviderFallbacks = ["DATABASE_URL", "POSTGRES_CONNECTION_STRING"];
 
     /// <summary>
     /// TR-MCP-NUKE-019 AC-6 (hostile validation finding R8B-F3): builds the environment a temporary instance, or the
-    /// REPL child of one, starts with. Every inherited variable in <see cref="ProductNamespaces"/> (ignoring case) and
-    /// every provider fallback in <see cref="ProviderFallbacks"/> is removed, so no inherited connection string, data
-    /// source, provider or instance name can select another database; the instance's own <paramref name="settings"/> are
-    /// then applied; every other inherited variable is kept.
+    /// REPL child of one, starts with. Every inherited variable whose configuration key lies in
+    /// <see cref="ConfigurationSections"/>, alone or host-prefixed, every flat product variable
+    /// (<see cref="ProductVariablePrefixes"/>), every connection-string variable and every provider fallback and host
+    /// setting (<see cref="ProviderFallbacks"/>; all ignoring case) is removed, so no inherited connection string, data
+    /// source, provider, instance name or endpoint, under any separator spelling, can select another database or address;
+    /// the instance's own <paramref name="settings"/> are then applied; every other inherited variable is kept.
     /// </summary>
     /// <param name="inherited">The environment the process would inherit.</param>
     /// <param name="settings">The instance's own variables.</param>
     /// <returns>The child environment, keys compared ignoring case.</returns>
+    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4 (appended "A setting is identified by its configuration key, not by its spelling"): the removal rule now reads each name's configuration key, so colon and mixed-separator spellings and the endpoint section are removed too (hostile validation round 12 finding R12-F1; mock gate ug-r13z4-mockgate-a-1).</remarks>
     internal static Dictionary<string, string?> BuildOwnedInstanceEnvironment(
         IReadOnlyDictionary<string, string?> inherited,
         IReadOnlyDictionary<string, string> settings)
@@ -179,10 +210,12 @@ internal static class TemporaryInstanceChecks
 
     /// <summary>
     /// TR-MCP-NUKE-019 AC-6 (hostile validation finding R8B-F3): checks a child environment before the process starts:
-    /// every variable in the product's namespaces is one the instance set, with the value it set, and every database
-    /// the instance's settings select (a connection string's Data Source, or a data source value) lies strictly inside
-    /// <paramref name="ownedRoot"/> (<see cref="IsStrictlyInside"/>: the same root kind and root identity, then segment by
-    /// segment with no '.' or '..' segment).
+    /// every product variable, under any separator spelling, is one the instance set, with the value it set; no two names
+    /// of one product key differ only in separators or case (<see cref="ConfigurationKeyIdentity"/>, ignoring case), so
+    /// the value .NET reads cannot depend on enumeration order; every database-engine setting, under any separator
+    /// spelling, names SQLite; and every database the instance's settings select (a connection string's Data Source, or a
+    /// data source value) lies strictly inside <paramref name="ownedRoot"/> (<see cref="IsStrictlyInside"/>: the same root
+    /// kind and root identity, then segment by segment with no '.' or '..' segment).
     /// </summary>
     /// <param name="child">The environment the process will start with.</param>
     /// <param name="settings">The instance's own variables.</param>
@@ -193,6 +226,7 @@ internal static class TemporaryInstanceChecks
     /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
     /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 ac-4; TR-MCP-NUKE-019 AC-6: the SQLite-only rule now applies to database-engine settings only (Database__Provider, DatabaseProvider, DATABASE_PROVIDER, any prefix), because it refused TodoStorage's valid 'database' backend and broke the stdio host case.</description></item>
     /// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 ac-4 (appended "Strict containment in the owned root also requires the same root"): documentation only, the summary now states the root rule slice U added to the containment helper (hostile validation round 10 finding R10-F2; stale summary found before round 11).</description></item>
+    /// <item><term>2026-11-05</term><description>FR-MCP-TESTRESOURCE-001 ac-4 (appended "A setting is identified by its configuration key, not by its spelling"): product variables are recognized by configuration key, two names of one product key are refused, and the database-engine rule reads the configuration key, because hostile validation round 12 finding R12-F1 showed that an unowned colon spelling passed the check and a colon-spelled provider escaped the SQLite rule (mock gate ug-r13z4-mockgate-a-1).</description></item>
     /// </list>
     /// </remarks>
     internal static string? CheckOwnedInstanceEnvironment(
@@ -210,13 +244,24 @@ internal static class TemporaryInstanceChecks
                 return $"The temporary instance's environment holds '{key}', which the instance did not set.";
         }
 
+        // FR-MCP-TESTRESOURCE-001 ac-4: two names of one product key (differing only in separators or case) would let the
+        // enumeration order decide which value .NET reads, so the start is refused.
+        var twoNames = child.Keys
+            .Where(IsProductVariable)
+            .GroupBy(ConfigurationKeyIdentity, StringComparer.OrdinalIgnoreCase)
+            .FirstOrDefault(group => group.Count() > 1);
+        if (twoNames is not null)
+            return $"The temporary instance's environment sets '{twoNames.Key}' under more than one name.";
+
         foreach (var (key, value) in settings)
         {
-            // FR-MCP-TESTRESOURCE-001 ac-4: only database-engine settings must name SQLite: hierarchical Database__Provider,
-            // flat DatabaseProvider and the DATABASE_PROVIDER environment aliases, with any host or instance prefix. Other
-            // provider settings, such as TodoStorage's 'database' backend, keep the exact ownership check above.
-            if ((key.EndsWith("__Database__Provider", StringComparison.OrdinalIgnoreCase)
-                    || key.EndsWith("__DatabaseProvider", StringComparison.OrdinalIgnoreCase)
+            // FR-MCP-TESTRESOURCE-001 ac-4: only database-engine settings must name SQLite: hierarchical Database:Provider,
+            // flat DatabaseProvider (each under any separator spelling) and the DATABASE_PROVIDER environment aliases, with
+            // any host or instance prefix. Other provider settings, such as TodoStorage's 'database' backend, keep the exact
+            // ownership check above.
+            var identity = ConfigurationKeyIdentity(key);
+            if ((identity.EndsWith(":Database:Provider", StringComparison.OrdinalIgnoreCase)
+                    || identity.EndsWith(":DatabaseProvider", StringComparison.OrdinalIgnoreCase)
                     || key.EndsWith("DATABASE_PROVIDER", StringComparison.OrdinalIgnoreCase)) && !IsSqliteProvider(value))
                 return $"The temporary instance's database provider '{value}' is not SQLite.";
             var database = key.Contains("ConnectionString", StringComparison.OrdinalIgnoreCase)
@@ -460,14 +505,26 @@ internal static class TemporaryInstanceChecks
         ["CONTENTROOT", "ENVIRONMENT", "URLS", "APPLICATIONNAME", "WEBROOT", "HTTP_PORTS", "HTTPS_PORTS",
             "HOSTINGSTARTUPASSEMBLIES", "HOSTINGSTARTUPEXCLUDEASSEMBLIES", "PREVENTHOSTINGSTARTUP"];
 
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 ac-4: whether an environment name is a product variable: any ASPNETCORE_ name, a DOTNET_
+    /// name whose rest is one, a name whose configuration key lies in <see cref="ConfigurationSections"/> (the section
+    /// itself or below it), a flat product variable, a connection-string variable, or a provider fallback or host setting
+    /// read by its configuration key; all ignoring case.
+    /// </summary>
+    /// <param name="key">The environment name.</param>
+    /// <returns>True for a product variable.</returns>
+    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4 (appended "A setting is identified by its configuration key, not by its spelling"): sections are matched on the configuration key instead of raw double-underscore prefixes (hostile validation round 12 finding R12-F1; mock gate ug-r13z4-mockgate-a-1).</remarks>
     private static bool IsProductVariable(string key)
     {
         if (key.StartsWith("ASPNETCORE_", StringComparison.OrdinalIgnoreCase)) return true;
         if (key.StartsWith("DOTNET_", StringComparison.OrdinalIgnoreCase))
             return IsProductVariable(key["DOTNET_".Length..]);
-        return ProductNamespaces.Any(prefix => key.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+        var identity = ConfigurationKeyIdentity(key);
+        return ConfigurationSections.Any(section => string.Equals(identity, section, StringComparison.OrdinalIgnoreCase)
+                || identity.StartsWith(section + ":", StringComparison.OrdinalIgnoreCase))
+            || ProductVariablePrefixes.Any(prefix => key.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
             || ConnectionStringPrefixes.Any(prefix => key.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
-            || ProviderFallbacks.Concat(HostSettings).Any(name => string.Equals(key, name, StringComparison.OrdinalIgnoreCase));
+            || ProviderFallbacks.Concat(HostSettings).Any(name => string.Equals(identity, name, StringComparison.OrdinalIgnoreCase));
     }
 
     private static bool IsSqliteProvider(string provider) =>

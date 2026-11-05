@@ -163,11 +163,19 @@ public sealed partial class MemoryS1Harness
     private static BindingFlags BindingFlagsPublicInstanceStatic()
         => BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static;
 
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 (appended 2026-11-05): the clock the production handlers read when a test sets it; null
+    /// leaves every handler on its default clock (hostile validation round 12 finding R12-F2, sibling S37).
+    /// </summary>
+    internal TimeProvider? Clock { get; set; }
+
     private IDispatcher CreateProductionDispatcher()
     {
         var services = new ServiceCollection();
         services.AddLogging();
         services.AddSingleton(_options);
+        if (Clock is not null)
+            services.AddSingleton(Clock);
         services.AddCqrs(typeof(RememberMemoryCommand).Assembly, typeof(MemoryController).Assembly);
         var provider = services.BuildServiceProvider();
         return provider.GetRequiredService<IDispatcher>();

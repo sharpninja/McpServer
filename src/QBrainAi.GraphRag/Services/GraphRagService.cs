@@ -964,9 +964,16 @@ internal sealed class GraphRagService : IGraphRagService
         await File.WriteAllTextAsync(readyArtifactPath, json, cancellationToken).ConfigureAwait(false);
     }
 
-    private static void CleanupStaleArtifacts(string graphRoot)
+    /// <summary>
+    /// Deletes the temporary (*.tmp) and partial (*.partial) files under the graph root, its output and its cache folder
+    /// whose last write is more than two hours before the service's clock, read once per cleanup.
+    /// </summary>
+    /// <param name="graphRoot">The graph root.</param>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): the age is measured from the injected clock instead of DateTimeOffset.UtcNow, so a unit test supplies the reference time and the file times (hostile validation round 12 finding R12-F2; mock gate ug-r13z4-mockgate-b-1).</remarks>
+    private void CleanupStaleArtifacts(string graphRoot)
     {
         var maxAge = TimeSpan.FromHours(2);
+        var now = _timeProvider.GetUtcNow();
         foreach (var folder in new[]
                  {
                      graphRoot,
@@ -979,19 +986,24 @@ internal sealed class GraphRagService : IGraphRagService
 
             foreach (var file in Directory.EnumerateFiles(folder, "*.tmp", SearchOption.AllDirectories))
             {
-                TryDeleteIfStale(file, maxAge);
+                TryDeleteIfStale(file, maxAge, now);
             }
 
             foreach (var file in Directory.EnumerateFiles(folder, "*.partial", SearchOption.AllDirectories))
             {
-                TryDeleteIfStale(file, maxAge);
+                TryDeleteIfStale(file, maxAge, now);
             }
         }
     }
 
-    private static void TryDeleteIfStale(string filePath, TimeSpan maxAge)
+    /// <summary>Deletes <paramref name="filePath"/> when its last write is more than <paramref name="maxAge"/> before <paramref name="now"/>.</summary>
+    /// <param name="filePath">The file.</param>
+    /// <param name="maxAge">The age a file must exceed to be deleted.</param>
+    /// <param name="now">The reference time, read once by the cleanup.</param>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): takes the reference time from its caller instead of reading DateTimeOffset.UtcNow (hostile validation round 12 finding R12-F2).</remarks>
+    private static void TryDeleteIfStale(string filePath, TimeSpan maxAge, DateTimeOffset now)
     {
-        var age = DateTimeOffset.UtcNow - File.GetLastWriteTimeUtc(filePath);
+        var age = now - File.GetLastWriteTimeUtc(filePath);
         if (age > maxAge)
             File.Delete(filePath);
     }

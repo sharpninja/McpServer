@@ -52,10 +52,20 @@ public sealed partial class MemoryConsolidateOperations
         }
     }
 
-    private static bool TryAcquireLock(string workspace, bool forceOverlap, out bool lockHeld)
+    /// <summary>
+    /// TR-MCP-MEMORY-JOBS-002: takes the workspace's consolidation lock at <paramref name="now"/>. A free lock is taken; a
+    /// held lock is taken over only by a forced overlap when it was acquired more than the 30 second TTL before
+    /// <paramref name="now"/>; otherwise the caller is told the lock is held.
+    /// </summary>
+    /// <param name="workspace">The canonical workspace key.</param>
+    /// <param name="forceOverlap">Whether a held lock past its TTL may be taken over.</param>
+    /// <param name="now">The time of the attempt, from the operations' clock.</param>
+    /// <param name="lockHeld">True when the attempt failed because the lock is held.</param>
+    /// <returns>True when the lock was taken.</returns>
+    /// <remarks>2026-11-05, TR-MCP-MEMORY-JOBS-002; TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): takes the time of the attempt from its caller instead of reading DateTimeOffset.UtcNow, and is internal so a unit test binds the TTL decision to scripted times (hostile validation round 12 finding R12-F2, sibling S37; mock gate ug-r13z4-mockgate-b-1).</remarks>
+    internal static bool TryAcquireLock(string workspace, bool forceOverlap, DateTimeOffset now, out bool lockHeld)
     {
         lockHeld = false;
-        var now = DateTimeOffset.UtcNow;
         var state = Locks.GetOrAdd(workspace, _ => new WorkspaceLockState());
         lock (state.Gate)
         {
@@ -78,7 +88,10 @@ public sealed partial class MemoryConsolidateOperations
         }
     }
 
-    private static void ReleaseLock(string workspace)
+    /// <summary>TR-MCP-MEMORY-JOBS-002: releases the workspace's consolidation lock.</summary>
+    /// <param name="workspace">The canonical workspace key.</param>
+    /// <remarks>2026-11-05, TR-MCP-MEMORY-JOBS-002; TR-MCP-USECASE-018 AC-006 (appended): internal so a unit test that holds the lock at a scripted time releases it (hostile validation round 12 finding R12-F2, sibling S37).</remarks>
+    internal static void ReleaseLock(string workspace)
     {
         if (!Locks.TryGetValue(workspace, out var state))
             return;

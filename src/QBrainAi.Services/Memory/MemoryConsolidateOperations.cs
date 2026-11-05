@@ -13,13 +13,19 @@ public sealed partial class MemoryConsolidateOperations
     private static readonly TimeSpan LockTtl = TimeSpan.FromSeconds(30);
     private readonly McpDbContext _db;
     private readonly string _workspacePath;
+    private readonly TimeProvider _time;
 
     /// <summary>Creates operations bound to an already-scoped <see cref="McpDbContext"/>.</summary>
-    public MemoryConsolidateOperations(McpDbContext db, string workspacePath)
+    /// <param name="db">The scoped database context.</param>
+    /// <param name="workspacePath">The active workspace.</param>
+    /// <param name="time">The clock the workspace lock and its TTL are read from; null uses <see cref="TimeProvider.System"/>.</param>
+    /// <remarks>2026-11-05, TR-MCP-MEMORY-JOBS-002; TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): added the optional <paramref name="time"/> clock, read for the lock's acquisition time and TTL takeover instead of DateTimeOffset.UtcNow, because the sibling sweep of hostile validation round 12 finding R12-F2 showed the forced-overlap TTL decision ran on the live clock in a unit case (mock gate ug-r13z4-mockgate-b-1).</remarks>
+    public MemoryConsolidateOperations(McpDbContext db, string workspacePath, TimeProvider? time = null)
     {
         _db = db;
         // FR-MCP-PATHNORM-001: stored WorkspaceId values are canonical; filter and lock in the same form.
         _workspacePath = WorkspaceIdentity.CanonicalizeWorkspaceId(workspacePath);
+        _time = time ?? TimeProvider.System;
     }
 
     /// <summary>Plans or applies a consolidate merge for the active workspace.</summary>
@@ -46,7 +52,7 @@ public sealed partial class MemoryConsolidateOperations
             ? "consol-" + Guid.NewGuid().ToString("N")
             : request.RunId!;
 
-        if (!TryAcquireLock(_workspacePath, forceOverlap: false, out _))
+        if (!TryAcquireLock(_workspacePath, forceOverlap: false, _time.GetUtcNow(), out _))
         {
             return new MemoryConsolidateResult(
                 409,
@@ -153,9 +159,9 @@ public sealed partial class MemoryConsolidateOperations
     {
         var appliedDryRun = dryRun ?? MemoryConsolidateLimits.DefaultDryRun;
         var runId = "job-" + Guid.NewGuid().ToString("N");
-        var now = DateTimeOffset.UtcNow;
+        var now = _time.GetUtcNow();
 
-        if (!TryAcquireLock(_workspacePath, forceOverlap, out _))
+        if (!TryAcquireLock(_workspacePath, forceOverlap, now, out _))
         {
             return new MemoryConsolidateJobResult(
                 409,

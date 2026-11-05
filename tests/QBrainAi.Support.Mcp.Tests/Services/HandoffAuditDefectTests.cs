@@ -22,6 +22,10 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// production does (the race class of triage-report-9b96ada18d72483dad2a3113e455c01b; operator 2026-10-20: "Extend
 /// fix, then round 4 (Recommended)"; the harness assertion and its negative controls are in
 /// <see cref="HandoffTestDatabaseTests"/>).
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-05</term><description>TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): CreateService hands every service a settable clock fixed at one instant, so the 30 second processing and approval leases cannot expire between concurrent calls and change a case's outcome (the sibling sweep of hostile validation round 12 finding R12-F2, S36 and U1); the assertions are unchanged.</description></item>
+/// </list>
 /// </remarks>
 public sealed class HandoffAuditDefectTests : IDisposable
 {
@@ -279,7 +283,11 @@ public sealed class HandoffAuditDefectTests : IDisposable
             new HandoffModePolicy(),
             accessor,
             db,
-            new SessionLogSanitizer(MsOptions.Create(new SessionLogSanitizationOptions { RegexTimeoutMilliseconds = 5000 })));
+            new SessionLogSanitizer(MsOptions.Create(new SessionLogSanitizationOptions { RegexTimeoutMilliseconds = 5000 })),
+            // TR-MCP-USECASE-018 AC-006 (appended 2026-11-05): every service of this class reads a settable clock fixed at
+            // one instant, so the 30 second processing and approval leases cannot expire between two concurrent calls and
+            // change a case's outcome (sibling sweep of hostile validation round 12 finding R12-F2, S36 and U1).
+            time: new QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProvider(QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.References[0]));
     }
 
     private McpDbContext CreateDb()

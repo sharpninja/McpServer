@@ -1,4 +1,6 @@
 using QBrainAi.Support.Mcp.Services;
+using QBrainAi.Support.Mcp.Storage;
+using QBrainAi.Support.Mcp.Tests.TestSupport;
 
 namespace QBrainAi.Support.Mcp.Tests.Memory;
 
@@ -14,16 +16,59 @@ public sealed class MemoryConsolidateJobTests : IDisposable
     public void Dispose() => _harness.Dispose();
 
     /// <summary>AC-TR-MCP-MEMORY-JOBS-002-01: job respects per-workspace lock.</summary>
+    /// <returns>A task that completes when the case finishes.</returns>
+    /// <remarks>2026-11-05, TR-MCP-MEMORY-JOBS-002; TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): the workspace lock is held, as by a job in progress, at the instant of a settable clock the job handler reads; a forced job at that instant finds it held; after the release a job runs on the free lock. The two jobs previously ran concurrently on the live clock and relied on the second arriving within the first's 100 ms hold and before the 30 second TTL (sibling sweep of hostile validation round 12 finding R12-F2, S37). The assertions are unchanged.</remarks>
     [Fact]
     public async Task PerWorkspaceLock()
     {
-        var a = _harness.RunConsolidateJobAsync(dryRun: false, cancellationToken: TestContext.Current.CancellationToken);
-        var b = _harness.RunConsolidateJobAsync(dryRun: false, forceOverlap: true, cancellationToken: TestContext.Current.CancellationToken);
-        var results = await Task.WhenAll(a, b).ConfigureAwait(true);
+        var clock = new SettableTimeProvider(AgeBoundaryContractTests.References[0]);
+        _harness.Clock = clock;
+        var key = WorkspaceIdentity.CanonicalizeWorkspaceId(_harness.WorkspaceA);
+        Assert.True(MemoryConsolidateOperations.TryAcquireLock(key, forceOverlap: false, clock.GetUtcNow(), out _));
+        MemoryConsolidateJobResult b;
+        try
+        {
+            b = await _harness.RunConsolidateJobAsync(dryRun: false, forceOverlap: true, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        }
+        finally
+        {
+            MemoryConsolidateOperations.ReleaseLock(key);
+        }
+
+        var a = await _harness.RunConsolidateJobAsync(dryRun: false, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        var results = new[] { a, b };
 
         Assert.Contains(results, r => r.StatusCode is 200 or 201);
         Assert.Contains(results, r => r.StatusCode is 409 or 423 || r.LockHeld == true);
     }
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 binding, decision D7 of <see cref="AgeBoundaryContractTests"/>: for each scripted reference
+    /// time and each contract row, a workspace lock acquired at the row's time is taken over by a forced attempt at the
+    /// reference exactly when the contract says (held at exactly 30 seconds, because only an age above the TTL is taken
+    /// over), an unforced attempt always finds it held, and a failed forced attempt reports the lock as held. Test data:
+    /// the contract's times; one workspace key per row.
+    /// </summary>
+    /// <remarks>2026-11-05, TR-MCP-MEMORY-JOBS-002; TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): added for the sibling sweep of hostile validation round 12 finding R12-F2 (S37).</remarks>
+    [Fact]
+    public void ConsolidationLockTakeover_UsesScriptedClock() =>
+        AgeBoundaryContractTests.AssertDecision("D7 consolidation lock takeover", (reference, recorded) =>
+        {
+            var key = "d7-" + Guid.NewGuid().ToString("N");
+            Assert.True(MemoryConsolidateOperations.TryAcquireLock(key, forceOverlap: false, recorded, out _));
+            try
+            {
+                Assert.False(MemoryConsolidateOperations.TryAcquireLock(key, forceOverlap: false, reference, out var unforcedHeld));
+                Assert.True(unforcedHeld);
+                var taken = MemoryConsolidateOperations.TryAcquireLock(key, forceOverlap: true, reference, out var lockHeld);
+                Assert.Equal(!taken, lockHeld);
+                return taken;
+            }
+            finally
+            {
+                MemoryConsolidateOperations.ReleaseLock(key);
+            }
+        });
 
     /// <summary>AC-TR-MCP-MEMORY-JOBS-002-02: dry-run default is true unless overridden.</summary>
     [Fact]

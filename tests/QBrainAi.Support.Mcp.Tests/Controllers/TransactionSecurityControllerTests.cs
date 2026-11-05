@@ -15,6 +15,12 @@ namespace QBrainAi.Support.Mcp.Tests.Controllers;
 /// Unit tests for keyserver and subscriber transaction-security controllers.
 /// TEST-MCP-158, TEST-MCP-159, TEST-MCP-160, TEST-MCP-165.
 /// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-05</term><description>TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): every key server reads a settable test clock (<see cref="TransactionSecurityTestServices.Clock"/>), so manifest signing stamps and the expiry and future-issue checks are decided by the test's instants; the trace-report case steps the clock between its two signs instead of relying on two live readings; the D5 bindings of AgeBoundaryContractTests were added. The sibling sweep of hostile validation round 12 finding R12-F2 found these cases on the live clock; their assertions are unchanged.</description></item>
+/// </list>
+/// </remarks>
 public sealed class TransactionSecurityControllerTests
 {
     /// <summary>Party registration generates usable signing and encryption key descriptors.</summary>
@@ -107,6 +113,9 @@ public sealed class TransactionSecurityControllerTests
         var controller = new KeyServerController(services.KeyServer, services.KeyServer);
         await SignAsync(services.KeyServer, "txn-controller-report-1", sequence: 26, nonce: "nonce-controller-report-1")
             .ConfigureAwait(true);
+        // TR-MCP-USECASE-018 AC-006 (appended 2026-11-05): the second manifest is signed one scripted second later, so the
+        // report's order comes from the test's instants, not from two live readings (hostile validation round 12 finding R12-F2, R2).
+        services.Clock.Advance(TimeSpan.FromSeconds(1));
         await SignAsync(services.KeyServer, "txn-controller-report-2", sequence: 27, nonce: "nonce-controller-report-2")
             .ConfigureAwait(true);
 
@@ -509,17 +518,74 @@ public sealed class TransactionSecurityControllerTests
         Assert.Equal(TransactionFailureReason.Aborted, response.Reason);
     }
 
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 binding, decision D5 expiry of
+    /// <see cref="QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests"/>: for each scripted reference time and
+    /// each contract row, a manifest signed to expire at the row's time is rejected as expired at the reference exactly
+    /// when the contract says (valid at its expiry instant, because only an expiry before now is rejected), and a manifest
+    /// that is not expired verifies. Test data: the contract's times; explicit issue and expiry times on each sign request.
+    /// </summary>
+    /// <returns>A task that completes when every row has been asserted.</returns>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): added for the sibling sweep of hostile validation round 12 finding R12-F2.</remarks>
+    [Fact]
+    public Task ManifestExpiry_UsesScriptedClock() =>
+        QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.AssertDecisionAsync("D5 transaction manifest expiry", (reference, recorded) =>
+            VerifyAtAsync(reference, issuedAt: recorded.AddSeconds(-60), expiresAt: recorded, TransactionFailureReason.ExpiredManifest));
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 binding, decision D5 future issue of
+    /// <see cref="QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests"/>: for each scripted reference time and
+    /// each contract row, a manifest issued at the row's time is rejected as issued in the future exactly when the
+    /// contract says (valid when issued exactly the 300 second skew ahead), and a manifest that is not rejected verifies.
+    /// </summary>
+    /// <returns>A task that completes when every row has been asserted.</returns>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): added for the sibling sweep of hostile validation round 12 finding R12-F2.</remarks>
+    [Fact]
+    public Task ManifestFutureIssue_UsesScriptedClock() =>
+        QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.AssertDecisionAsync("D5 transaction manifest future issue", (reference, recorded) =>
+            VerifyAtAsync(reference, issuedAt: recorded, expiresAt: recorded.AddHours(1), TransactionFailureReason.FutureManifest));
+
+    /// <summary>
+    /// Signs one manifest with the given issue and expiry times, verifies it with the key server's clock at
+    /// <paramref name="reference"/>, and reports whether it was rejected for <paramref name="reason"/>; any other outcome
+    /// than that rejection or a valid manifest fails the case.
+    /// </summary>
+    /// <param name="reference">The verification time.</param>
+    /// <param name="issuedAt">The manifest's issue time.</param>
+    /// <param name="expiresAt">The manifest's expiry time.</param>
+    /// <param name="reason">The rejection the decision under test gives.</param>
+    /// <returns>True when the manifest was rejected for <paramref name="reason"/>.</returns>
+    private static async Task<bool> VerifyAtAsync(DateTimeOffset reference, DateTimeOffset issuedAt, DateTimeOffset expiresAt, TransactionFailureReason reason)
+    {
+        using var services = CreateServices();
+        await RegisterStandardPartiesAsync(services.KeyServer).ConfigureAwait(true);
+        var request = CreateSignRequest("txn-age-" + Guid.NewGuid().ToString("N"), sequence: 1, nonce: "nonce-age-" + Guid.NewGuid().ToString("N"));
+        request.IssuedAtUtc = issuedAt;
+        request.ExpiresAtUtc = expiresAt;
+        var signed = await services.KeyServer.SignManifestAsync(request, CancellationToken.None).ConfigureAwait(true);
+        Assert.True(signed.Success, signed.Reason.ToString());
+        Assert.NotNull(signed.Manifest);
+        services.Clock.Set(reference);
+        var verified = await services.KeyServer.VerifyManifestAsync(
+            new TransactionManifestVerifyRequest { Manifest = signed.Manifest!, ExpectedSubscriberPartyId = "subscriber-1" },
+            CancellationToken.None).ConfigureAwait(true);
+        Assert.True(verified.IsValid || verified.Reason == reason, verified.Reason.ToString());
+        return !verified.IsValid && verified.Reason == reason;
+    }
+
     private static TransactionSecurityTestServices CreateServices(SubscriberOptions? subscriberOptions = null)
     {
         var canonicalizer = new TransactionManifestCanonicalizer();
+        var clock = new QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProvider(QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.References[0]);
         var keyServer = new InMemoryKeyServerService(
             Monitor(new KeyServerOptions { ManifestTtlSeconds = 300, MaxClockSkewSeconds = 300 }),
-            canonicalizer);
+            canonicalizer,
+            clock);
         var subscriber = new InMemorySubscriberCommitService(
             keyServer,
             canonicalizer,
             Monitor(subscriberOptions ?? new SubscriberOptions { PartyId = "subscriber-1" }));
-        return new TransactionSecurityTestServices(keyServer, subscriber);
+        return new TransactionSecurityTestServices(keyServer, subscriber, clock);
     }
 
     private static async Task RegisterStandardPartiesAsync(IKeyServerPartyRegistry registry)
@@ -578,9 +644,14 @@ public sealed class TransactionSecurityControllerTests
     private static string Sha256Hex(string value)
         => Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(value))).ToLowerInvariant();
 
+    /// <summary>The key server, subscriber and the settable test clock the key server reads.</summary>
+    /// <param name="KeyServer">The key server.</param>
+    /// <param name="Subscriber">The subscriber commit service.</param>
+    /// <param name="Clock">The key server's clock (TR-MCP-USECASE-018 AC-006, appended 2026-11-05).</param>
     private sealed record TransactionSecurityTestServices(
         InMemoryKeyServerService KeyServer,
-        InMemorySubscriberCommitService Subscriber) : IDisposable
+        InMemorySubscriberCommitService Subscriber,
+        QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProvider Clock) : IDisposable
     {
         public void Dispose()
         {

@@ -12,12 +12,16 @@ public sealed class FederationEnvelopeSigner : IFederationEnvelopeSigner
     private const string Canonicalization = "federation-envelope-v1";
 
     private readonly IOptionsMonitor<FederationOptions> _options;
+    private readonly TimeProvider _time;
 
     /// <summary>Initializes a new instance of the <see cref="FederationEnvelopeSigner"/> class.</summary>
     /// <param name="options">Federation options containing the shared signing secret.</param>
-    public FederationEnvelopeSigner(IOptionsMonitor<FederationOptions> options)
+    /// <param name="time">The clock signing stamps and verification checks against; null uses <see cref="TimeProvider.System"/>.</param>
+    /// <remarks>2026-11-05, FR-MCP-103; TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): added the optional <paramref name="time"/> clock, read once by Sign and once by Verify instead of DateTimeOffset.UtcNow, because hostile validation round 12 finding R12-F2 and its sibling sweep showed the envelope expiry and future-issue checks ran on the live clock in unit cases (mock gate ug-r13z4-mockgate-b-1).</remarks>
+    public FederationEnvelopeSigner(IOptionsMonitor<FederationOptions> options, TimeProvider? time = null)
     {
         _options = options;
+        _time = time ?? TimeProvider.System;
     }
 
     /// <inheritdoc />
@@ -44,7 +48,7 @@ public sealed class FederationEnvelopeSigner : IFederationEnvelopeSigner
         if (!_options.CurrentValue.Signing.Enabled)
             throw new InvalidOperationException("Federation envelope signing is disabled.");
 
-        var now = DateTimeOffset.UtcNow;
+        var now = _time.GetUtcNow();
         var ttl = Math.Max(1, _options.CurrentValue.Signing.EnvelopeTtlSeconds);
         var envelope = new FederationExecutionEnvelope
         {
@@ -82,7 +86,7 @@ public sealed class FederationEnvelopeSigner : IFederationEnvelopeSigner
             return Invalid("Envelope signature metadata is unsupported.");
         }
 
-        var now = DateTimeOffset.UtcNow;
+        var now = _time.GetUtcNow();
         if (envelope.ExpiresAtUtc < now)
             return Invalid("Envelope has expired.");
         if (envelope.IssuedAtUtc > now.AddMinutes(5))

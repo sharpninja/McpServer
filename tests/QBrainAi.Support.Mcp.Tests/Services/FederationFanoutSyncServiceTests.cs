@@ -9,14 +9,25 @@ using NSubstitute;
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
 /// <summary>Tests for LocalProxy fanout sync polling and acknowledgement.</summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-05</term><description>FR-MCP-103; TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): every signer reads a settable clock fixed at one instant (<see cref="FixedClock"/>), so the envelope expiry and future-issue checks cannot change a case's outcome with the time between signing and verification (the sibling sweep of hostile validation round 12 finding R12-F2); the assertions are unchanged.</description></item>
+/// </list>
+/// </remarks>
 public sealed class FederationFanoutSyncServiceTests
 {
+    /// <summary>A settable test clock fixed at the age-boundary contract's first reference time.</summary>
+    /// <returns>The clock.</returns>
+    private static QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProvider FixedClock() =>
+        new(QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.References[0]);
+
     /// <summary>Valid hub envelopes are verified, applied, and acknowledged by recipient sequence.</summary>
     [Fact]
     public async Task SyncOnceAsync_VerifiesEnvelopeAppliesAndAcknowledgesRecipientSequence()
     {
         var options = CreateOptions();
-        var signer = new FederationEnvelopeSigner(options);
+        var signer = new FederationEnvelopeSigner(options, FixedClock());
         var operation = new FederationOperationRequest
         {
             OperationId = "op-1",
@@ -55,7 +66,7 @@ public sealed class FederationFanoutSyncServiceTests
     public async Task SyncOnceAsync_InvalidEnvelopeAcksRejectedAndDoesNotApply()
     {
         var options = CreateOptions();
-        var signer = new FederationEnvelopeSigner(options);
+        var signer = new FederationEnvelopeSigner(options, FixedClock());
         var operation = new FederationOperationRequest
         {
             OperationId = "op-1",
@@ -88,7 +99,7 @@ public sealed class FederationFanoutSyncServiceTests
     public async Task SyncOnceAsync_SigningEnabledRejectsUnsignedSyncItem()
     {
         var options = CreateOptions();
-        var signer = new FederationEnvelopeSigner(options);
+        var signer = new FederationEnvelopeSigner(options, FixedClock());
         var item = new FederationSyncItem
         {
             Sequence = 11,
@@ -114,7 +125,7 @@ public sealed class FederationFanoutSyncServiceTests
     public async Task SyncOnceAsync_LocalExecutionEnvelopeExecutesAndAcknowledges()
     {
         var options = CreateOptions(localExecutionEnabled: true);
-        var signer = new FederationEnvelopeSigner(options);
+        var signer = new FederationEnvelopeSigner(options, FixedClock());
         var request = new FederationLocalExecutionRequest
         {
             Method = "desktop_launch",
@@ -160,7 +171,7 @@ public sealed class FederationFanoutSyncServiceTests
     public async Task SyncOnceAsync_LocalExecutionDisabledRejectsEnvelope()
     {
         var options = CreateOptions(localExecutionEnabled: false);
-        var signer = new FederationEnvelopeSigner(options);
+        var signer = new FederationEnvelopeSigner(options, FixedClock());
         var operation = new FederationOperationRequest
         {
             OperationId = "op-local-1",

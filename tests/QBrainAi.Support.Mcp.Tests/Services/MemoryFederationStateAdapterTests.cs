@@ -19,6 +19,12 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// FR-MCP-MEMORY-008 and TR-MCP-FED-MEMORY-001 using isolated EF stores and
 /// signed federation operation envelopes.
 /// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-05</term><description>FR-MCP-103; TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): CreateProvider registers the envelope signer with a settable clock fixed at one instant, so the envelope expiry and future-issue checks cannot change a case's outcome (the sibling sweep of hostile validation round 12 finding R12-F2, S18 to S20); the assertions are unchanged.</description></item>
+/// </list>
+/// </remarks>
 public sealed class MemoryFederationStateAdapterTests
 {
     private const string WorkspaceA = @"Q:\__mcp_unit_test__\QBrainAi";
@@ -428,7 +434,11 @@ public sealed class MemoryFederationStateAdapterTests
         services.AddSingleton<FederationStateAdapterRegistry>();
         services.AddSingleton<IFederationTopologyService, FederationTopologyService>();
         services.AddSingleton<IFederationOperationApplyService, FederationOperationApplyService>();
-        services.AddSingleton<IFederationEnvelopeSigner, FederationEnvelopeSigner>();
+        // TR-MCP-USECASE-018 AC-006 (appended 2026-11-05): the signer reads a settable clock fixed at one instant, so the
+        // envelope expiry and future-issue checks cannot change a case's outcome (hostile validation round 12 finding R12-F2).
+        services.AddSingleton<IFederationEnvelopeSigner>(provider => new FederationEnvelopeSigner(
+            provider.GetRequiredService<IOptionsMonitor<FederationOptions>>(),
+            new QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProvider(QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.References[0])));
         return services.BuildServiceProvider();
     }
 }
