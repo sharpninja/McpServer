@@ -65,6 +65,18 @@ internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, Ser
     }
 
     /// <summary>Validates, stops, archives, replaces, restores and verifies exactly the selected service.</summary>
+    /// <remarks>
+    /// <list type="table">
+    /// <item><term>2026-11-04</term><description>TR-MCP-SERVICEUPDATE-001 criterion failed-update-startable (slice Z3,
+    /// fifth holistic read before hostile validation round 12, finding d3): when the update fails after the replacement
+    /// completed, the recovery restores the preserved state and then retargets a unit file or drop-in that names the
+    /// legacy apphost, as the success path does, and reloads systemd after that change, so the unit names the apphost
+    /// the replacement installed and can be started by hand. Before, the recovery restored a unit file that named the
+    /// removed legacy apphost, and the redeploy of 2026-11-04 left a service that could not start until a manual
+    /// retarget. A failure before the replacement completes keeps the old recovery (no binary rollback either
+    /// way).</description></item>
+    /// </list>
+    /// </remarks>
     public LinuxServiceUpdateResult Update(LinuxServiceUpdateOptions options, Action copyRuntimeConfig, Action verifyHealth)
     {
         if (Command("id", "-u").Trim() != "0")
@@ -118,6 +130,7 @@ internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, Ser
         MakePrivateDirectory(archiveDirectory);
         var archive = Path.Combine(archiveDirectory, "preserved-state.tar");
         string? hash = null;
+        var replaced = false;
         Stop(options.ServiceName);
         try
         {
@@ -128,10 +141,11 @@ internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, Ser
             Command("tar", "--list", "--file", archive);
             hash = Hash(archive);
             ReplaceFiles(stage, install, preserved);
+            replaced = true;
             EnsureNoLinks(Path.Combine(install, "config", "brain-slots", "quad-brain-slot-assignments.yaml"));
             copyRuntimeConfig();
             Restore(archive, hash, preserved, install);
-            RetargetLegacyExecStart(unit, install);
+            _ = RetargetLegacyExecStart(unit, install);
             Command("systemctl", "daemon-reload");
             Command("systemctl", "start", options.ServiceName);
             var pid = WaitForServiceProcess(options.ServiceName, Path.Combine(install, AppHost));
@@ -142,7 +156,13 @@ internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, Ser
         {
             if (hash is not null)
             {
-                try { Stop(options.ServiceName); Restore(archive, hash, preserved, install); }
+                try
+                {
+                    Stop(options.ServiceName);
+                    Restore(archive, hash, preserved, install);
+                    if (replaced && RetargetLegacyExecStart(unit, install))
+                        Command("systemctl", "daemon-reload");
+                }
                 catch (Exception recovery)
                 {
                     throw new AggregateException($"Update and live-state restoration failed. Retained archive: {archive}", failure, recovery);
@@ -327,16 +347,27 @@ internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, Ser
     /// TR-MCP-QBRAIN-006: After files are replaced, a preserved unit or drop-in that still names McpServer.Support.Mcp
     /// is retargeted at QBrainAi.Support.Mcp before daemon-reload. The effective ExecStart may live in a drop-in.
     /// </summary>
-    private void RetargetLegacyExecStart(IReadOnlyDictionary<string, string> unit, string install)
+    /// <param name="unit">The unit properties read before the update.</param>
+    /// <param name="install">The install folder.</param>
+    /// <returns>True when a unit file or drop-in was retargeted; false when the unit does not run the legacy apphost.</returns>
+    /// <exception cref="InvalidOperationException">The unit runs the legacy apphost but no unit file or drop-in names it.</exception>
+    /// <remarks>
+    /// <list type="table">
+    /// <item><term>2026-11-04</term><description>TR-MCP-SERVICEUPDATE-001 criterion failed-update-startable (slice Z3,
+    /// finding d3 of the fifth holistic read): now returns whether it retargeted a file, so the failure path reloads
+    /// systemd only after a change; the retargeting itself is unchanged.</description></item>
+    /// </list>
+    /// </remarks>
+    private bool RetargetLegacyExecStart(IReadOnlyDictionary<string, string> unit, string install)
     {
         var start = Value(unit, "ExecStart");
         var executable = Regex.Match(start, @"^\{ path=(.*?) ; argv\[\]=", RegexOptions.CultureInvariant);
         if (!executable.Success)
-            return;
+            return false;
 
         var legacyPath = Path.Combine(install, LegacyAppHost);
         if (!string.Equals(Decode(executable.Groups[1].Value), legacyPath, StringComparison.Ordinal))
-            return;
+            return false;
 
         var candidates = new List<string> { RequiredUnitFile(Value(unit, "FragmentPath")) };
         candidates.AddRange(ParseWords(Value(unit, "DropInPaths")).Select(RequiredUnitFile));
@@ -354,6 +385,7 @@ internal sealed class LinuxServiceHelper(Func<string, IReadOnlyList<string>, Ser
 
         if (!replaced)
             throw new InvalidOperationException("Legacy ExecStart could not be retargeted to the deployed application host.");
+        return true;
     }
 
     /// <summary>Fails closed when configuration precedence could point preservation at the wrong live data.</summary>

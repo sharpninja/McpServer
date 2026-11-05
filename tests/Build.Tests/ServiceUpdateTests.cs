@@ -649,6 +649,54 @@ public sealed class ServiceUpdateTests
         Assert.Equal(0, probes);
     }
 
+    /// <summary>
+    /// TR-MCP-SERVICEUPDATE-001 failed-update-startable binding: the production update, failing after the replacement at
+    /// the row's failure point, leaves the unit texts and the recovery events of each row of
+    /// <see cref="ServiceRecoveryContractTests.Rows"/>, the rows the mock gate proved against a reference recovery and six
+    /// wrong recoveries. The fixture's install folder takes the place of the contract's install token.
+    /// </summary>
+    /// <param name="index">The row's position in <see cref="ServiceRecoveryContractTests.Rows"/>.</param>
+    /// <remarks>
+    /// <list type="table">
+    /// <item><term>2026-11-04</term><description>TR-MCP-SERVICEUPDATE-001 criterion failed-update-startable (slice Z3,
+    /// finding d3 of the fifth holistic read): new; binds the contract rows of mock gate ug-r12z3c-mockgate-1 to
+    /// LinuxServiceHelper.Update through the command double.</description></item>
+    /// </list>
+    /// </remarks>
+    [Theory]
+    [InlineData(0)]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(3)]
+    [InlineData(4)]
+    [InlineData(5)]
+    public void LinuxRecovery_LeavesAStartableUnitAsTheContractRows(int index)
+    {
+        var row = ServiceRecoveryContractTests.Rows[index];
+        using var f = new Fixture
+        {
+            FailCopy = row.Failure == ServiceRecoveryContractTests.FailurePoint.RuntimeConfiguration,
+            FailHealth = row.Failure == ServiceRecoveryContractTests.FailurePoint.Health,
+        };
+        string Local(string text) => text.Replace(ServiceRecoveryContractTests.InstallToken, f.Install + Path.DirectorySeparatorChar, StringComparison.Ordinal);
+        f.UnitExecutable = Path.Combine(f.Install, row.NamesLegacy ? ServiceRecoveryContractTests.Legacy : ServiceRecoveryContractTests.Current);
+        var fragment = Path.Combine(f.Root, "example.service");
+        File.WriteAllText(fragment, Local(row.ArchivedFragment));
+        var dropIn = Path.Combine(f.Root, "override.conf");
+        if (row.ArchivedDropIn is not null)
+        {
+            File.WriteAllText(dropIn, Local(row.ArchivedDropIn));
+            f.DropIns = dropIn;
+        }
+
+        Assert.ThrowsAny<Exception>(() => f.Update());
+
+        Assert.Equal(Local(row.ExpectedFragment), File.ReadAllText(fragment));
+        if (row.ExpectedDropIn is null) Assert.False(File.Exists(dropIn));
+        else Assert.Equal(Local(row.ExpectedDropIn), File.ReadAllText(dropIn));
+        Assert.Equal(row.ExpectedRecovery, f.Events.Skip(f.Events.Count - row.ExpectedRecovery.Length).ToArray());
+    }
+
     /// <summary>Missing required environment fails before stop; optional missing files remain absent.</summary>
     [Theory]
     [InlineData(true)]
