@@ -407,6 +407,13 @@ public sealed class MemoryFederationStateAdapterTests
         await db.SaveChangesAsync().ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// FR-MCP-103; TR-MCP-USECASE-018 AC-006: a service provider with federation options (signing enabled, a fixed secret,
+    /// a 300 second envelope TTL), an isolated in-memory database for workspace A, the federation state adapters, topology
+    /// and apply services, and an envelope signer reading a settable clock fixed at the first age-boundary reference.
+    /// </summary>
+    /// <returns>The provider.</returns>
+    /// <remarks>2026-11-05, FR-MCP-103; TR-MCP-USECASE-018 AC-006: this entry documents the helper, changed in slice Z4 to register the envelope signer with a settable clock fixed at one instant (the sibling sweep of hostile validation round 12 finding R12-F2, S18 to S20), because the tenth holistic read before hostile validation round 13 (finding d1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private static ServiceProvider CreateProvider()
     {
         var services = new ServiceCollection();

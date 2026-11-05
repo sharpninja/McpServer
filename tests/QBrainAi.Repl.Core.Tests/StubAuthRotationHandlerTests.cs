@@ -210,6 +210,11 @@ public class StubAuthRotationHandlerTests
         Assert.True(stub.CurrentAuthState.IsValid);
     }
 
+    /// <summary>TR-MCP-USECASE-018 AC-006: scripted marker data for one workspace and key, with the fixed modification time <see cref="MarkerModified"/>.</summary>
+    /// <param name="workspacePath">The workspace path, also used as the workspace id.</param>
+    /// <param name="apiKey">The key the marker holds.</param>
+    /// <returns>A substitute marker with a local server address.</returns>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the helper, changed on 2026-11-03 to return the fixed modification time instead of the live clock (hostile validation round 10 finding R10-F3), because the tenth holistic read before hostile validation round 13 (finding d1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private static IMarkerFileData CreateMarkerData(string workspacePath, string apiKey)
     {
         var data = Substitute.For<IMarkerFileData>();
@@ -255,6 +260,8 @@ internal sealed class StubAuthRotationHandler : IAuthRotationHandler
 
     public IAuthState CurrentAuthState => _currentAuthState;
 
+    /// <inheritdoc />
+    /// <remarks>Takes the marker's workspace and key as a valid state stamped from the test-owned clock, then runs every registered callback. 2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the method, changed on 2026-11-03 to read the injected clock instead of DateTimeOffset.UtcNow (hostile validation round 10 finding R10-F3), because the tenth holistic read before hostile validation round 13 (finding d1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     public async Task UpdateAuthStateAsync(IMarkerFileData newMarkerData, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(newMarkerData);
@@ -283,6 +290,8 @@ internal sealed class StubAuthRotationHandler : IAuthRotationHandler
         _callbacks.Remove(onAuthChanged);
     }
 
+    /// <inheritdoc />
+    /// <remarks>Throws for a workspace outside /home/user/; otherwise takes a new random key, stamping its update and validation times from the test-owned clock. 2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the method, changed on 2026-11-03 to read the injected clock instead of DateTimeOffset.UtcNow (hostile validation round 10 finding R10-F3), because the tenth holistic read before hostile validation round 13 (finding d1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     public Task<IAuthState> RefreshAuthStateAsync(string workspacePath, CancellationToken cancellationToken = default)
     {
         if (!workspacePath.StartsWith("/home/user/"))
@@ -302,6 +311,8 @@ internal sealed class StubAuthRotationHandler : IAuthRotationHandler
         return Task.FromResult(refreshedState);
     }
 
+    /// <inheritdoc />
+    /// <remarks>Valid when the state is valid and its key is present and does not contain "expired"; a valid state keeps its update time and takes its validation time from the test-owned clock. 2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the method, changed on 2026-11-03 to read the injected clock instead of DateTimeOffset.UtcNow (hostile validation round 10 finding R10-F3), because the tenth holistic read before hostile validation round 13 (finding d1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     public Task<bool> ValidateAuthStateAsync(CancellationToken cancellationToken = default)
     {
         var isValid = _currentAuthState.IsValid &&
@@ -322,6 +333,8 @@ internal sealed class StubAuthRotationHandler : IAuthRotationHandler
         return Task.FromResult(isValid);
     }
 
+    /// <inheritdoc />
+    /// <remarks>Replaces the state with an invalid one with no key and no validation time, its update time from the test-owned clock. 2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the method, changed on 2026-11-03 to read the injected clock instead of DateTimeOffset.UtcNow (hostile validation round 10 finding R10-F3), because the tenth holistic read before hostile validation round 13 (finding d1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     public void ClearAuthState()
     {
         _currentAuthState = CreateAuthState(

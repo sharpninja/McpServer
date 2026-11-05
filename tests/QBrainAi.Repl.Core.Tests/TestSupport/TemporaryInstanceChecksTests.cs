@@ -301,6 +301,15 @@ public sealed class TemporaryInstanceChecksTests
         return null;
     }
 
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 ac-4 wrong start checks for the mock gate's negative controls: one that accepts anything,
+    /// one that checks only the workspace, a string-prefix check, one without the parent-segment refusal, one that
+    /// accepts a missing marker, one that compares every path ordinally, one that ignores case everywhere, one that
+    /// ignores the root and one that compares UNC paths ordinally.
+    /// </summary>
+    /// <param name="wrong">The name of the wrong check.</param>
+    /// <returns>The wrong check: null for an accepted start, otherwise the violation.</returns>
+    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4: this entry documents the method, changed on 2026-11-02 to add "ordinal only" and "ignores case everywhere" (the sibling of hostile validation finding R9-F3) and on 2026-11-03 to add "ignores the root" and "UNC compared ordinally" (hostile validation round 10 finding R10-F2), because the tenth holistic read before hostile validation round 13 (finding d1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private static Func<IReadOnlyList<string>, string, string?> WrongStartCheck(string wrong) => wrong switch
     {
         "accepts anything" => (_, _) => null,

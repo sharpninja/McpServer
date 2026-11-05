@@ -243,6 +243,15 @@ public sealed class HandoffAuditDefectTests : IDisposable
         Assert.Equal(nameof(HandoffReviewState.Created), stored.ReviewState);
     }
 
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006: a handoff ingestion service over the class's database (seeded once with
+    /// FR-HANDOFF-001 and TR-HANDOFF-CONTRACT-001 records), the extractor and TODO service passed in, and a settable clock
+    /// fixed at the first age-boundary reference.
+    /// </summary>
+    /// <param name="extractor">The one-shot extractor.</param>
+    /// <param name="todo">The TODO service, or null for a substitute.</param>
+    /// <returns>The service under test.</returns>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the helper, changed in slice Z4 to hand the service a settable clock fixed at one instant (the sibling sweep of hostile validation round 12 finding R12-F2, S36 and U1), because the tenth holistic read before hostile validation round 13 (finding d1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private IHandoffIngestionService CreateService(IHandoffOneShotExtractor extractor, ITodoService? todo = null)
     {
         todo ??= Substitute.For<ITodoService>();

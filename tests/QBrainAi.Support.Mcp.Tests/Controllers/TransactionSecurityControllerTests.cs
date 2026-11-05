@@ -573,6 +573,13 @@ public sealed class TransactionSecurityControllerTests
         return !verified.IsValid && verified.Reason == reason;
     }
 
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006: an in-memory key server (300 second manifest TTL and clock skew) and a subscriber commit
+    /// service over it, the key server reading a settable clock set to the first age-boundary reference.
+    /// </summary>
+    /// <param name="subscriberOptions">The subscriber options, or null for party subscriber-1.</param>
+    /// <returns>The services and the key server's clock.</returns>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the helper, changed in slice Z4 to hand the key server a settable clock and return it (the sibling sweep of hostile validation round 12 finding R12-F2), because the tenth holistic read before hostile validation round 13 (finding d1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private static TransactionSecurityTestServices CreateServices(SubscriberOptions? subscriberOptions = null)
     {
         var canonicalizer = new TransactionManifestCanonicalizer();

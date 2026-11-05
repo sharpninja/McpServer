@@ -56,6 +56,8 @@ internal sealed class FakeSessionLogState : ISessionLogState
     public string? CurrentTurnStatus { get; private set; }
     public int TurnCount { get; private set; }
 
+    /// <inheritdoc />
+    /// <remarks>Records Started and LastUpdated from the test-owned clock. 2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the method, changed on 2026-11-03 to read the injected clock instead of DateTimeOffset.UtcNow (hostile validation round 10 finding R10-F3), because the tenth holistic read before hostile validation round 13 (finding d1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     public void OpenSession(string agent, string sessionId, string title, string model)
     {
         Agent = agent;
@@ -67,6 +69,8 @@ internal sealed class FakeSessionLogState : ISessionLogState
         Status = "in_progress";
     }
 
+    /// <inheritdoc />
+    /// <remarks>Refuses a turn without a session, a reused request id and a second open turn, and records LastUpdated from the test-owned clock. 2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the method, changed on 2026-11-03 to read the injected clock instead of DateTimeOffset.UtcNow (hostile validation round 10 finding R10-F3), because the tenth holistic read before hostile validation round 13 (finding d1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     public void BeginTurn(string requestId)
     {
         if (string.IsNullOrEmpty(SessionId))
@@ -89,6 +93,8 @@ internal sealed class FakeSessionLogState : ISessionLogState
         LastUpdated = _clock();
     }
 
+    /// <inheritdoc />
+    /// <remarks>Refuses an update without an open turn or of a closed one, and records LastUpdated from the test-owned clock. 2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the method, changed on 2026-11-03 to read the injected clock instead of DateTimeOffset.UtcNow (hostile validation round 10 finding R10-F3), because the tenth holistic read before hostile validation round 13 (finding d1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     public void UpdateTurn()
     {
         if (_currentTurnRequestId == null)
@@ -104,6 +110,8 @@ internal sealed class FakeSessionLogState : ISessionLogState
         LastUpdated = _clock();
     }
 
+    /// <inheritdoc />
+    /// <remarks>Closes the open turn as completed, counts it and records LastUpdated from the test-owned clock. 2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the method, changed on 2026-11-03 to read the injected clock instead of DateTimeOffset.UtcNow (hostile validation round 10 finding R10-F3), because the tenth holistic read before hostile validation round 13 (finding d1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     public void CompleteTurn()
     {
         if (_currentTurnRequestId == null)
@@ -120,6 +128,8 @@ internal sealed class FakeSessionLogState : ISessionLogState
         _lastCompletedStatus = null;
     }
 
+    /// <inheritdoc />
+    /// <remarks>Closes the open turn as failed, counts it and records LastUpdated from the test-owned clock. 2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the method, changed on 2026-11-03 to read the injected clock instead of DateTimeOffset.UtcNow (hostile validation round 10 finding R10-F3), because the tenth holistic read before hostile validation round 13 (finding d1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     public void FailTurn()
     {
         if (_currentTurnRequestId == null)

@@ -1351,6 +1351,14 @@ public class TodoWorkflowTests
         };
     }
 
+    /// <summary>TR-MCP-USECASE-018 AC-006: a substitute TODO selection holding the given fields and a fixed selection time, 2026-01-15 09:40 UTC.</summary>
+    /// <param name="id">The TODO id.</param>
+    /// <param name="title">The title.</param>
+    /// <param name="section">The section.</param>
+    /// <param name="priority">The priority.</param>
+    /// <param name="done">Whether the item is done.</param>
+    /// <returns>The substitute selection state.</returns>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the helper, changed on 2026-11-03 to return a fixed selection time instead of the live clock (hostile validation round 10 finding R10-F3), because the tenth holistic read before hostile validation round 13 (finding d1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private static ITodoSelectionState CreateMockSelectionState(string id, string title, string section, string priority, bool done)
     {
         var state = Substitute.For<ITodoSelectionState>();

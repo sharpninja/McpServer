@@ -452,6 +452,9 @@ public sealed class WorkspaceHygieneG5OverlayTests : IDisposable
         }
     }
 
+    /// <summary>TR-MCP-USECASE-018 AC-006: a workspace validation service over a new context of the class's database, reading the class's settable clock.</summary>
+    /// <returns>The service under test.</returns>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the helper, changed in slice Z4 to hand the service the class's settable clock instead of TimeProvider.System (hostile validation round 12 finding R12-F2, S3 and S4), because the tenth holistic read before hostile validation round 13 (finding d1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private WorkspaceValidationService CreateService()
         => new(CreateDb(), _clock);
 

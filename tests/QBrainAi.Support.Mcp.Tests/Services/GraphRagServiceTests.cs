@@ -260,6 +260,20 @@ public sealed class GraphRagServiceTests : IDisposable
         }
     }
 
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006: a GraphRagService over the test workspace, an in-memory database, a substitute context
+    /// search and embedding service, the internal fallback and external command back ends, and the clock passed in.
+    /// </summary>
+    /// <param name="enabled">Whether GraphRAG is enabled.</param>
+    /// <param name="backendCommand">The external back-end command, or null.</param>
+    /// <param name="processRunner">The process runner, or null for a substitute that answers "ok".</param>
+    /// <param name="workspacePath">The workspace path, or null for the test workspace.</param>
+    /// <param name="rootPath">The graph root path, or null for mcp-data/graphrag.</param>
+    /// <param name="globalRootPath">The global graph root path, or null for graphrag-global.</param>
+    /// <param name="configuration">The configuration, or null for one whose DataFolder is the test workspace.</param>
+    /// <param name="clock">The clock the service reads, or null for its default clock.</param>
+    /// <returns>The service under test.</returns>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the helper, changed in slice Z4 to take an optional clock handed to the service (hostile validation round 12 finding R12-F2), because the tenth holistic read before hostile validation round 13 (finding d1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private GraphRagService CreateSut(
         bool enabled,
         string? backendCommand = null,

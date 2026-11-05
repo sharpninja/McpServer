@@ -10,6 +10,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// <list type="table">
 /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
 /// <item><term>2026-11-05</term><description>FR-MCP-103; TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): every signer reads the class's settable clock, so signing stamps and the expiry and future-issue checks are decided by the test's instants, and the D4 bindings of AgeBoundaryContractTests were added, because the sibling sweep of hostile validation round 12 finding R12-F2 found these cases on the live clock; the assertions are unchanged.</description></item>
+/// <item><term>2026-11-05</term><description>FR-MCP-103; TR-MCP-USECASE-018 AC-006: the two D4 bindings and Operation() sign and verify with the generic proxy ids proxy-a and proxy-b instead of lab machine names, because the tenth holistic read before hostile validation round 13 (finding c5) found these slice Z4 lines naming the lab, against the plan 27.7 scrub of this pull request; the assertions are unchanged.</description></item>
 /// </list>
 /// </remarks>
 public sealed class FederationEnvelopeSignerTests
@@ -151,10 +152,10 @@ public sealed class FederationEnvelopeSignerTests
         {
             var sut = CreateSigner();
             _clock.Set(recorded.AddSeconds(-300));
-            var envelope = sut.Sign(Operation(), "PAYTON-LEGION2", "PAYTON-DESKTOP");
+            var envelope = sut.Sign(Operation(), "proxy-a", "proxy-b");
             Assert.Equal(recorded, envelope.ExpiresAtUtc);
             _clock.Set(reference);
-            var result = sut.Verify(envelope, "PAYTON-DESKTOP");
+            var result = sut.Verify(envelope, "proxy-b");
             var expired = !result.IsValid && (result.Error ?? string.Empty).Contains("expired", StringComparison.OrdinalIgnoreCase);
             Assert.True(expired || result.IsValid, result.Error);
             return expired;
@@ -173,22 +174,22 @@ public sealed class FederationEnvelopeSignerTests
         {
             var sut = CreateSigner();
             _clock.Set(recorded);
-            var envelope = sut.Sign(Operation(), "PAYTON-LEGION2", "PAYTON-DESKTOP");
+            var envelope = sut.Sign(Operation(), "proxy-a", "proxy-b");
             Assert.Equal(recorded, envelope.IssuedAtUtc);
             _clock.Set(reference);
-            var result = sut.Verify(envelope, "PAYTON-DESKTOP");
+            var result = sut.Verify(envelope, "proxy-b");
             var future = !result.IsValid && (result.Error ?? string.Empty).Contains("future", StringComparison.OrdinalIgnoreCase);
             Assert.True(future || result.IsValid, result.Error);
             return future;
         });
 
-    /// <summary>FR-MCP-103: the fixed operation request every case signs.</summary>
-    /// <returns>A new request with fixed ids and an empty body.</returns>
-    /// <remarks>2026-11-05, FR-MCP-103; TR-MCP-USECASE-018 AC-006: this entry documents the helper, added in slice Z4 when the cases moved to the settable clock (the sibling sweep of hostile validation round 12 finding R12-F2), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
+    /// <summary>FR-MCP-103: the fixed operation request the two D4 age-boundary bindings sign.</summary>
+    /// <returns>A new request with fixed ids and a JSON body of {}.</returns>
+    /// <remarks>2026-11-05, FR-MCP-103; TR-MCP-USECASE-018 AC-006: this entry documents the helper, added in slice Z4 when the cases moved to the settable clock (the sibling sweep of hostile validation round 12 finding R12-F2), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation. 2026-11-05, FR-MCP-103; TR-MCP-USECASE-018 AC-006: the summary names the two D4 bindings, its only callers, and the returns line the JSON body, because the tenth holistic read (finding g1) found that the first text said every case signs it and the body is empty; its proxy id is generic (finding c5).</remarks>
     private static FederationOperationRequest Operation() => new()
     {
         OperationId = "op-1",
-        ProxyId = "PAYTON-LEGION2",
+        ProxyId = "proxy-a",
         Domain = "todo",
         BodyBase64 = Convert.ToBase64String("{}"u8.ToArray()),
     };
