@@ -1,0 +1,1392 @@
+{
+  "timestampLocal": "2026-11-03T12:16:39",
+  "comparisons": [
+    {
+      "label": "ug-r11v-final-linux-unit-1 to ug-r11w-final-linux-unit-1",
+      "beforeRows": 4735,
+      "afterRows": 4733,
+      "beforeNames": 4735,
+      "afterNames": 4733,
+      "lost": [
+        {
+          "name": "QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests.RunAsync_Heartbeat_RotatesGlyphWithoutStillWorkingLines",
+          "count": 1
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogFileWatcherTests.WhenFileCreatedThenWatcherTriggersImport",
+          "count": 1
+        }
+      ],
+      "added": []
+    },
+    {
+      "label": "ug-r11v-final-linux-lane-1 to ug-r11w-final-linux-lane-1",
+      "beforeRows": 739,
+      "afterRows": 741,
+      "beforeNames": 737,
+      "afterNames": 739,
+      "lost": [],
+      "added": [
+        {
+          "name": "QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests.RunAsync_Heartbeat_RotatesGlyphWithoutStillWorkingLines",
+          "count": 1
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogFileWatcherTests.WhenFileCreatedThenWatcherTriggersImport",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "label": "ug-r10-final-linux-buildtests-1 to ug-r11w-final-linux-buildtests-1",
+      "beforeRows": 529,
+      "afterRows": 529,
+      "beforeNames": 529,
+      "afterNames": 529,
+      "lost": [],
+      "added": []
+    },
+    {
+      "label": "ug-r11v-final-win-unit-1 to ug-r11w-final-win-unit-1",
+      "beforeRows": 4735,
+      "afterRows": 4733,
+      "beforeNames": 4735,
+      "afterNames": 4733,
+      "lost": [
+        {
+          "name": "QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests.RunAsync_Heartbeat_RotatesGlyphWithoutStillWorkingLines",
+          "count": 1
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogFileWatcherTests.WhenFileCreatedThenWatcherTriggersImport",
+          "count": 1
+        }
+      ],
+      "added": []
+    },
+    {
+      "label": "ug-r11v-final-win-lane-1 to ug-r11w-final-win-lane-1",
+      "beforeRows": 716,
+      "afterRows": 718,
+      "beforeNames": 714,
+      "afterNames": 716,
+      "lost": [],
+      "added": [
+        {
+          "name": "QBrainAi.QBAgent.Tests.QBAgentHeartbeatOverlayTests.RunAsync_Heartbeat_RotatesGlyphWithoutStillWorkingLines",
+          "count": 1
+        },
+        {
+          "name": "QBrainAi.Support.Mcp.Tests.Ingestion.SessionLogFileWatcherTests.WhenFileCreatedThenWatcherTriggersImport",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "label": "ug-r10-final-win-buildtests-1 to ug-r11w-final-win-buildtests-1",
+      "beforeRows": 433,
+      "afterRows": 433,
+      "beforeNames": 433,
+      "afterNames": 433,
+      "lost": [],
+      "added": []
+    },
+    {
+      "label": "Linux units to Windows units",
+      "beforeRows": 4733,
+      "afterRows": 4733,
+      "beforeNames": 4733,
+      "afterNames": 4733,
+      "lost": [],
+      "added": []
+    }
+  ],
+  "retrospective": [
+    {
+      "name": "ug-r10-compile-t-1",
+      "file": "ug-r10-compile-t-1.json",
+      "started": "2026-11-02T22:00:27",
+      "ended": "2026-11-02T22:02:41",
+      "exit": 0,
+      "sourceExit": "0 2026-11-02T22:02:41",
+      "runHead": "a98250179d67af8712ad8eb032e333440ba11fd9",
+      "metaHead": "a98250179d67af8712ad8eb032e333440ba11fd9",
+      "metaExists": true,
+      "checks": [],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r10-compile-t-2",
+      "file": "ug-r10-compile-t-2.json",
+      "started": "2026-11-02T22:12:56",
+      "ended": "2026-11-02T22:15:08",
+      "exit": 0,
+      "sourceExit": "0 2026-11-02T22:15:08",
+      "runHead": "a98250179d67af8712ad8eb032e333440ba11fd9",
+      "metaHead": "a98250179d67af8712ad8eb032e333440ba11fd9",
+      "metaExists": true,
+      "checks": [],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r11-compile-u-1",
+      "file": "ug-r11-compile-u-1.json",
+      "started": "2026-11-03T08:23:26",
+      "ended": "2026-11-03T08:25:42",
+      "exit": 0,
+      "sourceExit": "0 2026-11-03T08:25:42",
+      "runHead": "4e4a227ad63ab789aad4b4c5eb977bc9319e83f2",
+      "metaHead": "4e4a227ad63ab789aad4b4c5eb977bc9319e83f2",
+      "metaExists": true,
+      "checks": [],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r11-compile-u-2",
+      "file": "ug-r11-compile-u-2.json",
+      "started": "2026-11-03T08:34:36",
+      "ended": "2026-11-03T08:36:24",
+      "exit": 255,
+      "sourceExit": "255 2026-11-03T08:36:24",
+      "runHead": "4e4a227ad63ab789aad4b4c5eb977bc9319e83f2",
+      "metaHead": "4e4a227ad63ab789aad4b4c5eb977bc9319e83f2",
+      "metaExists": true,
+      "checks": [],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r11-compile-u-3",
+      "file": "ug-r11-compile-u-3.json",
+      "started": "2026-11-03T08:36:49",
+      "ended": "2026-11-03T08:38:34",
+      "exit": 0,
+      "sourceExit": "0 2026-11-03T08:38:34",
+      "runHead": "4e4a227ad63ab789aad4b4c5eb977bc9319e83f2",
+      "metaHead": "4e4a227ad63ab789aad4b4c5eb977bc9319e83f2",
+      "metaExists": true,
+      "checks": [],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r11-compile-v-1",
+      "file": "ug-r11-compile-v-1.json",
+      "started": "2026-11-03T09:27:59",
+      "ended": "2026-11-03T09:30:55",
+      "exit": 0,
+      "sourceExit": "0 2026-11-03T09:30:55",
+      "runHead": "2e1210150ae009162b047c604b56b75426c4d428",
+      "metaHead": "2e1210150ae009162b047c604b56b75426c4d428",
+      "metaExists": true,
+      "checks": [],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r11-compile-v-2",
+      "file": "ug-r11-compile-v-2.json",
+      "started": "2026-11-03T09:33:59",
+      "ended": "2026-11-03T09:36:21",
+      "exit": 0,
+      "sourceExit": "0 2026-11-03T09:36:21",
+      "runHead": "2e1210150ae009162b047c604b56b75426c4d428",
+      "metaHead": "2e1210150ae009162b047c604b56b75426c4d428",
+      "metaExists": true,
+      "checks": [],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r11-compile-w-1",
+      "file": "ug-r11-compile-w-1.json",
+      "started": "2026-11-03T10:26:06",
+      "ended": "2026-11-03T10:28:21",
+      "exit": 0,
+      "sourceExit": "0 2026-11-03T10:28:21",
+      "runHead": "cb174ac807c8e60b7a38a30bc216a651ed72c6c7",
+      "metaHead": "cb174ac807c8e60b7a38a30bc216a651ed72c6c7",
+      "metaExists": true,
+      "checks": [],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r9-binding-1",
+      "file": "ug-r9-binding-1.json",
+      "started": "2026-10-29T09:46:01",
+      "ended": "2026-10-29T09:50:31",
+      "exit": 0,
+      "sourceExit": "0 2026-10-29T09:50:31",
+      "runHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "metaHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "metaExists": true,
+      "checks": [
+        {
+          "project": "QBrainAi.Client.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-1/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 306,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Cqrs.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-1/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 33,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Launcher.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-1/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 20,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.McpAgent.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-1/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 64,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.QBAgent.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-1/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 94,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Repl.Core.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-1/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 924,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Support.Mcp.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 3181,
+          "failed": 0,
+          "skipped": 0
+        }
+      ],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r9-binding-f-1",
+      "file": "ug-r9-binding-f-1.json",
+      "started": "2026-10-29T09:40:40",
+      "ended": "2026-10-29T09:40:44",
+      "exit": 0,
+      "sourceExit": "0",
+      "runHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "metaHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "metaExists": true,
+      "checks": [
+        {
+          "project": "ug-r9-binding-f-1",
+          "path": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-binding-f-1/ug-r9-binding-f-1.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 67,
+          "failed": 0,
+          "skipped": 0
+        }
+      ],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r9-binding-h-1",
+      "file": "ug-r9-binding-h-1.json",
+      "started": "2026-10-29T11:18:19",
+      "ended": "2026-10-29T11:24:28",
+      "exit": 0,
+      "sourceExit": "0 2026-10-29T11:24:28",
+      "runHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "metaHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "metaExists": true,
+      "checks": [
+        {
+          "project": "QBrainAi.Client.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-h-1/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 306,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Cqrs.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-h-1/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 33,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Launcher.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-h-1/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 20,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.McpAgent.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-h-1/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 64,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.QBAgent.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-h-1/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 94,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Repl.Core.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-h-1/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 924,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Support.Mcp.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-h-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 3185,
+          "failed": 0,
+          "skipped": 0
+        }
+      ],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r9-binding-j-1",
+      "file": "ug-r9-binding-j-1.json",
+      "started": "2026-10-30T16:11:22",
+      "ended": "2026-10-30T16:11:26",
+      "exit": 0,
+      "sourceExit": "0",
+      "runHead": "fb19eeab6a1533274b2092962bbef5df8c964eab",
+      "metaHead": "fb19eeab6a1533274b2092962bbef5df8c964eab",
+      "metaExists": true,
+      "checks": [
+        {
+          "project": "ug-r9-binding-j-1",
+          "path": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-binding-j-1/ug-r9-binding-j-1.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 109,
+          "failed": 0,
+          "skipped": 0
+        }
+      ],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r9-binding-j-worker-1",
+      "file": "ug-r9-binding-j-worker-1.json",
+      "started": "2026-10-30T16:13:42",
+      "ended": "2026-10-30T16:13:48",
+      "exit": 0,
+      "sourceExit": "0",
+      "runHead": "fb19eeab6a1533274b2092962bbef5df8c964eab",
+      "metaHead": "fb19eeab6a1533274b2092962bbef5df8c964eab",
+      "metaExists": true,
+      "checks": [
+        {
+          "project": "ug-r9-binding-j-worker-1",
+          "path": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-binding-j-worker-1/ug-r9-binding-j-worker-1.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 1,
+          "failed": 0,
+          "skipped": 0
+        }
+      ],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r9-binding-k-mockgate-l-1",
+      "file": "ug-r9-binding-k-mockgate-l-1.json",
+      "started": "2026-10-30T15:00:04",
+      "ended": "2026-10-30T15:02:17",
+      "exit": 255,
+      "sourceExit": "255 2026-10-30T15:02:17",
+      "runHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "metaHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "metaExists": true,
+      "checks": [],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r9-binding-k-mockgate-l-2",
+      "file": "ug-r9-binding-k-mockgate-l-2.json",
+      "started": "2026-10-30T15:04:03",
+      "ended": "2026-10-30T15:08:09",
+      "exit": 0,
+      "sourceExit": "0 2026-10-30T15:08:09",
+      "runHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "metaHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "metaExists": true,
+      "checks": [
+        {
+          "project": "QBrainAi.Client.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-k-mockgate-l-2/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 306,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Cqrs.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-k-mockgate-l-2/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 33,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Launcher.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-k-mockgate-l-2/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 20,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.McpAgent.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-k-mockgate-l-2/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 64,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.QBAgent.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-k-mockgate-l-2/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 94,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Repl.Core.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-k-mockgate-l-2/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 924,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Support.Mcp.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-k-mockgate-l-2/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 3197,
+          "failed": 0,
+          "skipped": 0
+        }
+      ],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r9-binding-l-1",
+      "file": "ug-r9-binding-l-1.json",
+      "started": "2026-10-30T15:14:13",
+      "ended": "2026-10-30T15:18:51",
+      "exit": 255,
+      "sourceExit": "255 2026-10-30T15:18:51",
+      "runHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "metaHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "metaExists": true,
+      "checks": [
+        {
+          "project": "QBrainAi.Client.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-l-1/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 306,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Cqrs.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-l-1/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 33,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Launcher.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-l-1/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 20,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.McpAgent.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-l-1/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 64,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.QBAgent.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-l-1/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 94,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Repl.Core.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-l-1/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 924,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Support.Mcp.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-l-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 3202,
+          "failed": 1,
+          "skipped": 0
+        }
+      ],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r9-binding-l-2",
+      "file": "ug-r9-binding-l-2.json",
+      "started": "2026-10-30T15:25:22",
+      "ended": "2026-10-30T15:29:43",
+      "exit": 0,
+      "sourceExit": "0 2026-10-30T15:29:43",
+      "runHead": "fb19eeab6a1533274b2092962bbef5df8c964eab",
+      "metaHead": "fb19eeab6a1533274b2092962bbef5df8c964eab",
+      "metaExists": true,
+      "checks": [
+        {
+          "project": "QBrainAi.Client.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-l-2/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 306,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Cqrs.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-l-2/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 33,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Launcher.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-l-2/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 20,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.McpAgent.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-l-2/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 64,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.QBAgent.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-l-2/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 94,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Repl.Core.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-l-2/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 924,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Support.Mcp.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-binding-l-2/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 3202,
+          "failed": 0,
+          "skipped": 0
+        }
+      ],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r9-final-linux-unit-1",
+      "file": "ug-r9-final-linux-unit-1.json",
+      "started": "2026-10-30T20:27:30",
+      "ended": "2026-10-30T20:33:43",
+      "exit": 0,
+      "sourceExit": "0 2026-10-30T20:33:43",
+      "runHead": "765490a9035878c7888c911776289880493dacab",
+      "metaHead": "765490a9035878c7888c911776289880493dacab",
+      "metaExists": true,
+      "checks": [
+        {
+          "project": "QBrainAi.Client.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-final-linux-unit-1/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 306,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Cqrs.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-final-linux-unit-1/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 33,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Launcher.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-final-linux-unit-1/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 20,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.McpAgent.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-final-linux-unit-1/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 64,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.QBAgent.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-final-linux-unit-1/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 94,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Repl.Core.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-final-linux-unit-1/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 952,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Support.Mcp.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-final-linux-unit-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 3201,
+          "failed": 0,
+          "skipped": 0
+        }
+      ],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r9-mockgate-de-1",
+      "file": "ug-r9-mockgate-de-1.json",
+      "started": "2026-10-29T09:02:23",
+      "ended": "2026-10-29T09:07:01",
+      "exit": 0,
+      "sourceExit": "0 2026-10-29T09:07:01",
+      "runHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "metaHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "metaExists": true,
+      "checks": [
+        {
+          "project": "QBrainAi.Client.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-de-1/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 306,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Cqrs.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-de-1/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 33,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Launcher.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-de-1/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 20,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.McpAgent.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-de-1/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 64,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.QBAgent.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-de-1/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 94,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Repl.Core.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-de-1/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 912,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Support.Mcp.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-de-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 3177,
+          "failed": 0,
+          "skipped": 0
+        }
+      ],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r9-mockgate-f-1",
+      "file": "ug-r9-mockgate-f-1.json",
+      "started": "2026-10-29T09:38:25",
+      "ended": "2026-10-29T09:38:29",
+      "exit": 0,
+      "sourceExit": "0",
+      "runHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "metaHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "metaExists": true,
+      "checks": [
+        {
+          "project": "ug-r9-mockgate-f-1",
+          "path": "/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r9-mockgate-f-1/ug-r9-mockgate-f-1.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 22,
+          "failed": 0,
+          "skipped": 0
+        }
+      ],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r9-mockgate-g-1",
+      "file": "ug-r9-mockgate-g-1.json",
+      "started": "2026-10-29T09:22:41",
+      "ended": "2026-10-29T09:27:01",
+      "exit": 0,
+      "sourceExit": "0 2026-10-29T09:27:01",
+      "runHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "metaHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "metaExists": true,
+      "checks": [
+        {
+          "project": "QBrainAi.Client.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-g-1/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 306,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Cqrs.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-g-1/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 33,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Launcher.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-g-1/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 20,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.McpAgent.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-g-1/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 64,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.QBAgent.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-g-1/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 94,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Repl.Core.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-g-1/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 923,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Support.Mcp.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-g-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 3181,
+          "failed": 0,
+          "skipped": 0
+        }
+      ],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r9-mockgate-h-1",
+      "file": "ug-r9-mockgate-h-1.json",
+      "started": "2026-10-29T10:56:32",
+      "ended": "2026-10-29T11:01:24",
+      "exit": 0,
+      "sourceExit": "0 2026-10-29T11:01:24",
+      "runHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "metaHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "metaExists": true,
+      "checks": [
+        {
+          "project": "QBrainAi.Client.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-h-1/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 306,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Cqrs.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-h-1/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 33,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Launcher.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-h-1/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 20,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.McpAgent.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-h-1/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 64,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.QBAgent.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-h-1/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 94,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Repl.Core.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-h-1/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 924,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Support.Mcp.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-h-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 3182,
+          "failed": 0,
+          "skipped": 0
+        }
+      ],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r9-mockgate-i-2",
+      "file": "ug-r9-mockgate-i-2.json",
+      "started": "2026-10-30T15:40:12",
+      "ended": "2026-10-30T15:44:13",
+      "exit": 255,
+      "sourceExit": "255 2026-10-30T15:44:13",
+      "runHead": "fb19eeab6a1533274b2092962bbef5df8c964eab",
+      "metaHead": "fb19eeab6a1533274b2092962bbef5df8c964eab",
+      "metaExists": true,
+      "checks": [
+        {
+          "project": "QBrainAi.Client.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-i-2/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 306,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Cqrs.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-i-2/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 33,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Launcher.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-i-2/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 20,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.McpAgent.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-i-2/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 64,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.QBAgent.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-i-2/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 94,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Repl.Core.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-i-2/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 935,
+          "failed": 1,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Support.Mcp.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-i-2/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 3202,
+          "failed": 0,
+          "skipped": 0
+        }
+      ],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r9-mockgate-k-1",
+      "file": "ug-r9-mockgate-k-1.json",
+      "started": "2026-10-30T14:52:13",
+      "ended": "2026-10-30T14:56:21",
+      "exit": 0,
+      "sourceExit": "0 2026-10-30T14:56:21",
+      "runHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "metaHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "metaExists": true,
+      "checks": [
+        {
+          "project": "QBrainAi.Client.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-k-1/unit/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 306,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Cqrs.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-k-1/unit/QBrainAi.Cqrs.Tests/QBrainAi.Cqrs.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 33,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Launcher.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-k-1/unit/QBrainAi.Launcher.Tests/QBrainAi.Launcher.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 20,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.McpAgent.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-k-1/unit/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 64,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.QBAgent.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-k-1/unit/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 94,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Repl.Core.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-k-1/unit/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 924,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Support.Mcp.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-mockgate-k-1/unit/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 3188,
+          "failed": 0,
+          "skipped": 0
+        }
+      ],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r9-precommit-lane-1",
+      "file": "ug-r9-precommit-lane-1.json",
+      "started": "2026-10-29T09:51:12",
+      "ended": "2026-10-29T10:34:40",
+      "exit": 255,
+      "sourceExit": "255 2026-10-29T10:34:40",
+      "runHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "metaHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "metaExists": true,
+      "checks": [
+        {
+          "project": "Build.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-precommit-lane-1/provider/Build.Tests/Build.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 16,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.McpAgent.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-precommit-lane-1/provider/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 1,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.QBAgent.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-precommit-lane-1/provider/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 2,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Repl.Core.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-precommit-lane-1/provider/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 3,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Repl.IntegrationTests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-precommit-lane-1/provider/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 179,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Support.Mcp.IntegrationTests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-precommit-lane-1/provider/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 6,
+          "failed": 2,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Support.Mcp.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-precommit-lane-1/provider/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 411,
+          "failed": 0,
+          "skipped": 0
+        }
+      ],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r9-precommit-lane-2",
+      "file": "ug-r9-precommit-lane-2.json",
+      "started": "2026-10-29T11:26:18",
+      "ended": "2026-10-29T11:58:07",
+      "exit": 255,
+      "sourceExit": "255 2026-10-29T11:58:07",
+      "runHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "metaHead": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "metaExists": true,
+      "checks": [
+        {
+          "project": "Build.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-precommit-lane-2/provider/Build.Tests/Build.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 16,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.McpAgent.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-precommit-lane-2/provider/QBrainAi.McpAgent.Tests/QBrainAi.McpAgent.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 1,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.QBAgent.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-precommit-lane-2/provider/QBrainAi.QBAgent.Tests/QBrainAi.QBAgent.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 2,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Repl.Core.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-precommit-lane-2/provider/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 3,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Repl.IntegrationTests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-precommit-lane-2/provider/QBrainAi.Repl.IntegrationTests/QBrainAi.Repl.IntegrationTests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 179,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Support.Mcp.IntegrationTests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-precommit-lane-2/provider/QBrainAi.Support.Mcp.IntegrationTests/QBrainAi.Support.Mcp.IntegrationTests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 6,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Support.Mcp.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-precommit-lane-2/provider/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 411,
+          "failed": 1,
+          "skipped": 0
+        }
+      ],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r9-retrofit-compile-1",
+      "file": "ug-r9-retrofit-compile-1.json",
+      "started": "2026-11-02T12:31:01",
+      "ended": "2026-11-02T12:33:17",
+      "exit": 0,
+      "sourceExit": "0 2026-11-02T12:33:17",
+      "runHead": "611a5dc556b5d0b6ce22b98c3103a9f873e34ac5",
+      "metaHead": "611a5dc556b5d0b6ce22b98c3103a9f873e34ac5",
+      "metaExists": true,
+      "checks": [],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r9-retrofit-groups-1",
+      "file": "ug-r9-retrofit-groups-1.json",
+      "started": "2026-11-02T12:34:09",
+      "ended": "2026-11-02T12:35:16",
+      "exit": 0,
+      "sourceExit": "0 2026-11-02T12:35:16",
+      "runHead": "611a5dc556b5d0b6ce22b98c3103a9f873e34ac5",
+      "metaHead": "611a5dc556b5d0b6ce22b98c3103a9f873e34ac5",
+      "metaExists": true,
+      "checks": [
+        {
+          "project": "Build.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-retrofit-groups-1/groups/Build.Tests/Build.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 16,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Client.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-retrofit-groups-1/groups/QBrainAi.Client.Tests/QBrainAi.Client.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 5,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Repl.Core.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-retrofit-groups-1/groups/QBrainAi.Repl.Core.Tests/QBrainAi.Repl.Core.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 12,
+          "failed": 0,
+          "skipped": 0
+        },
+        {
+          "project": "QBrainAi.Support.Mcp.Tests",
+          "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r9-retrofit-groups-1/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+          "exists": true,
+          "hashMatches": true,
+          "total": 7,
+          "failed": 0,
+          "skipped": 0
+        }
+      ],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    },
+    {
+      "name": "ug-r9-slice-s-compile-1",
+      "file": "ug-r9-slice-s-compile-1.json",
+      "started": "2026-11-02T14:42:33",
+      "ended": "2026-11-02T14:44:39",
+      "exit": 0,
+      "sourceExit": "0 2026-11-02T14:44:39",
+      "runHead": "23955af0b330ec1fe167138edac1ef5ef8ff3bfd",
+      "metaHead": "23955af0b330ec1fe167138edac1ef5ef8ff3bfd",
+      "metaExists": true,
+      "checks": [],
+      "note": "Written after the run from its own meta, exit and TRX files, because the run had no durable receipt; the TRX originals stay at the paths named here."
+    }
+  ]
+}

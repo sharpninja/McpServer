@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="7202436a-c4ff-47a0-96e0-63017fdd0167" name="@LAB-OMARCHY 2026-11-03 13:37:13" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-03T13:37:13.0515403-06:00" queuing="2026-11-03T13:37:13.0515404-06:00" start="2026-11-03T13:36:57.5227913-06:00" finish="2026-11-03T13:39:08.2028962-06:00" />
+  <TestSettings name="default" id="9f2c0b7b-cc66-440e-ad6a-2e4840a2b8d4">
+    <Deployment runDeploymentRoot="_LAB-OMARCHY_2026-11-03_13_37_13" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="858ec0e6-cb64-4613-912f-519f4a489e2d" testId="344645aa-4b18-6617-627e-74835983f224" testName="QBrainAi.Support.Mcp.IntegrationTests.Controllers.QuadBrainOllamaEndpointIntegrationTests.TemporaryInstance_RefusesDatabaseOutsideOwnedRoot" computerName="LAB-OMARCHY" duration="00:00:00.8075732" startTime="2026-11-03T13:39:07.2324044-06:00" endTime="2026-11-03T13:39:08.0400465-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="858ec0e6-cb64-4613-912f-519f4a489e2d" />
+    <UnitTestResult executionId="9f1d83ba-0bbd-4c19-b69b-d095712d68e9" testId="0f4e6cb9-3b63-f5a9-f252-680e5922b6b4" testName="QBrainAi.Support.Mcp.IntegrationTests.RequirementScopeLayerReplIntegrationTests.RequirementScopeLayer_ReplWorkflow_ExercisesCurrentEffectiveRequirementsBeforeAndAfterLayer" computerName="LAB-OMARCHY" duration="00:00:13.6959257" startTime="2026-11-03T13:36:59.0953766-06:00" endTime="2026-11-03T13:37:12.8042966-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9f1d83ba-0bbd-4c19-b69b-d095712d68e9" />
+    <UnitTestResult executionId="bcf20a6f-07be-4d2f-b2e5-f65c2638d6c3" testId="c4d8fa89-6fff-824c-032f-2c1c6a2f7cb2" testName="QBrainAi.Support.Mcp.IntegrationTests.Controllers.QuadBrainOllamaEndpointIntegrationTests.ChatCompletions_OpenAiCompatibleFieldVariants_AreLoggedToSessionTurn" computerName="LAB-OMARCHY" duration="00:00:00.7467326" startTime="2026-11-03T13:39:06.4850287-06:00" endTime="2026-11-03T13:39:07.2318054-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bcf20a6f-07be-4d2f-b2e5-f65c2638d6c3" />
+    <UnitTestResult executionId="b3ee3361-d4c7-46cd-963d-380e3a9acf82" testId="b8385c25-fa31-3c51-7ed6-789d099d2b1c" testName="QBrainAi.Support.Mcp.IntegrationTests.Controllers.QuadBrainOllamaEndpointIntegrationTests.ChatCompletions_LocalOllamaDefaultModel_TriggersNormalBrainSlots(prompt: &quot;Hello&quot;)" computerName="LAB-OMARCHY" duration="00:00:36.8168655" startTime="2026-11-03T13:37:59.0232568-06:00" endTime="2026-11-03T13:38:35.8401988-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b3ee3361-d4c7-46cd-963d-380e3a9acf82" />
+    <UnitTestResult executionId="15083545-1f42-4135-8b4e-52a705084a1b" testId="5d0ec2d4-5be1-38f9-106e-9c66a6bd45ac" testName="QBrainAi.Support.Mcp.IntegrationTests.Controllers.QuadBrainOllamaEndpointIntegrationTests.ChatCompletions_LocalOllamaDefaultModel_TriggersNormalBrainSlots(prompt: &quot;Create Hello World in C++&quot;)" computerName="LAB-OMARCHY" duration="00:00:30.6426252" startTime="2026-11-03T13:38:35.8414624-06:00" endTime="2026-11-03T13:39:06.4842102-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="15083545-1f42-4135-8b4e-52a705084a1b" />
+    <UnitTestResult executionId="3ddba036-faeb-42b4-9080-2caef8fa67a7" testId="dfdd35bd-fdff-3283-650d-784196752761" testName="QBrainAi.Support.Mcp.IntegrationTests.Controllers.QuadBrainOllamaEndpointIntegrationTests.QBAgentRunLoop_LocalOllamaDefaultModel_DisplaysQuadBrainResponse(prompt: &quot;Hello&quot;)" computerName="LAB-OMARCHY" duration="00:00:59.9002968" startTime="2026-11-03T13:36:59.1215816-06:00" endTime="2026-11-03T13:37:59.0220716-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3ddba036-faeb-42b4-9080-2caef8fa67a7" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="QBrainAi.Support.Mcp.IntegrationTests.Controllers.QuadBrainOllamaEndpointIntegrationTests.ChatCompletions_LocalOllamaDefaultModel_TriggersNormalBrainSlots(prompt: &quot;Create Hello World in C++&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.integrationtests/bin/debug/net10.0/qbrainai.support.mcp.integrationtests.dll" id="5d0ec2d4-5be1-38f9-106e-9c66a6bd45ac">
+      <Execution id="15083545-1f42-4135-8b4e-52a705084a1b" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.IntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.IntegrationTests.Controllers.QuadBrainOllamaEndpointIntegrationTests" name="ChatCompletions_LocalOllamaDefaultModel_TriggersNormalBrainSlots" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.IntegrationTests.RequirementScopeLayerReplIntegrationTests.RequirementScopeLayer_ReplWorkflow_ExercisesCurrentEffectiveRequirementsBeforeAndAfterLayer" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.integrationtests/bin/debug/net10.0/qbrainai.support.mcp.integrationtests.dll" id="0f4e6cb9-3b63-f5a9-f252-680e5922b6b4">
+      <Execution id="9f1d83ba-0bbd-4c19-b69b-d095712d68e9" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.IntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.IntegrationTests.RequirementScopeLayerReplIntegrationTests" name="RequirementScopeLayer_ReplWorkflow_ExercisesCurrentEffectiveRequirementsBeforeAndAfterLayer" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.IntegrationTests.Controllers.QuadBrainOllamaEndpointIntegrationTests.ChatCompletions_OpenAiCompatibleFieldVariants_AreLoggedToSessionTurn" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.integrationtests/bin/debug/net10.0/qbrainai.support.mcp.integrationtests.dll" id="c4d8fa89-6fff-824c-032f-2c1c6a2f7cb2">
+      <Execution id="bcf20a6f-07be-4d2f-b2e5-f65c2638d6c3" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.IntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.IntegrationTests.Controllers.QuadBrainOllamaEndpointIntegrationTests" name="ChatCompletions_OpenAiCompatibleFieldVariants_AreLoggedToSessionTurn" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.IntegrationTests.Controllers.QuadBrainOllamaEndpointIntegrationTests.QBAgentRunLoop_LocalOllamaDefaultModel_DisplaysQuadBrainResponse(prompt: &quot;Hello&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.integrationtests/bin/debug/net10.0/qbrainai.support.mcp.integrationtests.dll" id="dfdd35bd-fdff-3283-650d-784196752761">
+      <Execution id="3ddba036-faeb-42b4-9080-2caef8fa67a7" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.IntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.IntegrationTests.Controllers.QuadBrainOllamaEndpointIntegrationTests" name="QBAgentRunLoop_LocalOllamaDefaultModel_DisplaysQuadBrainResponse" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.IntegrationTests.Controllers.QuadBrainOllamaEndpointIntegrationTests.TemporaryInstance_RefusesDatabaseOutsideOwnedRoot" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.integrationtests/bin/debug/net10.0/qbrainai.support.mcp.integrationtests.dll" id="344645aa-4b18-6617-627e-74835983f224">
+      <Execution id="858ec0e6-cb64-4613-912f-519f4a489e2d" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.IntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.IntegrationTests.Controllers.QuadBrainOllamaEndpointIntegrationTests" name="TemporaryInstance_RefusesDatabaseOutsideOwnedRoot" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.IntegrationTests.Controllers.QuadBrainOllamaEndpointIntegrationTests.ChatCompletions_LocalOllamaDefaultModel_TriggersNormalBrainSlots(prompt: &quot;Hello&quot;)" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.integrationtests/bin/debug/net10.0/qbrainai.support.mcp.integrationtests.dll" id="b8385c25-fa31-3c51-7ed6-789d099d2b1c">
+      <Execution id="b3ee3361-d4c7-46cd-963d-380e3a9acf82" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.IntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.IntegrationTests.Controllers.QuadBrainOllamaEndpointIntegrationTests" name="ChatCompletions_LocalOllamaDefaultModel_TriggersNormalBrainSlots" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="344645aa-4b18-6617-627e-74835983f224" executionId="858ec0e6-cb64-4613-912f-519f4a489e2d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0f4e6cb9-3b63-f5a9-f252-680e5922b6b4" executionId="9f1d83ba-0bbd-4c19-b69b-d095712d68e9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c4d8fa89-6fff-824c-032f-2c1c6a2f7cb2" executionId="bcf20a6f-07be-4d2f-b2e5-f65c2638d6c3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b8385c25-fa31-3c51-7ed6-789d099d2b1c" executionId="b3ee3361-d4c7-46cd-963d-380e3a9acf82" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5d0ec2d4-5be1-38f9-106e-9c66a6bd45ac" executionId="15083545-1f42-4135-8b4e-52a705084a1b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dfdd35bd-fdff-3283-650d-784196752761" executionId="3ddba036-faeb-42b4-9080-2caef8fa67a7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="6" executed="6" passed="6" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.30]   Discovering: QBrainAi.Support.Mcp.IntegrationTests
+[xUnit.net 00:00:00.74]   Discovered:  QBrainAi.Support.Mcp.IntegrationTests
+[xUnit.net 00:00:00.99]   Starting:    QBrainAi.Support.Mcp.IntegrationTests
+Both QBrainAi and Mcp configuration sections are present. Command line overrides environment, which overrides file QBrainAi, which overrides file Mcp. The Mcp section remains a 1.x alias.
+Both QBrainAi and Mcp configuration sections are present. Command line overrides environment, which overrides file QBrainAi, which overrides file Mcp. The Mcp section remains a 1.x alias.
+Both QBrainAi and Mcp configuration sections are present. Command line overrides environment, which overrides file QBrainAi, which overrides file Mcp. The Mcp section remains a 1.x alias.
+Both QBrainAi and Mcp configuration sections are present. Command line overrides environment, which overrides file QBrainAi, which overrides file Mcp. The Mcp section remains a 1.x alias.
+Both QBrainAi and Mcp configuration sections are present. Command line overrides environment, which overrides file QBrainAi, which overrides file Mcp. The Mcp section remains a 1.x alias.
+[xUnit.net 00:02:10.02]   Finished:    QBrainAi.Support.Mcp.IntegrationTests (ID = '97349802194b096ab35262556ee9839820d7c91a0ff55894e0a4d3b5d0f3e167')
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

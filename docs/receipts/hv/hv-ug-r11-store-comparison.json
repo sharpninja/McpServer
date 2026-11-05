@@ -1,0 +1,618 @@
+{
+  "timestampLocal": "2026-11-03T12:06:27",
+  "comparisons": [
+    {
+      "id": "FR-MCP-018",
+      "beforeCount": 1,
+      "currentCount": 1,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "FR-MCP-040",
+      "beforeCount": 1,
+      "currentCount": 1,
+      "changed": [
+        {
+          "position": 1,
+          "id": "ac-1",
+          "before": {
+            "text": "Reading an FR, TR, TEST or mapping through REST, the typed client or the REPL reports the creation and update times stored with that record. A read never reports the time of the read; when the store holds no time, the value is null (operator 2026-11-02: \"This HAS to be fixed.\"; PR 87 slice P). A stored time written without an offset is read as UTC (operator 2026-11-02: \"UTC\"; pre-HV what-if finding: no contract row pinned it). A read never fills a missing date from the clock: a stored value without a complete date (a time alone, or a partial date) reads as null and is ignored when a mapping's creation time is chosen (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\"; hostile validation finding R9-F4).",
+            "id": "ac-1",
+            "isSatisfied": false
+          },
+          "after": {
+            "id": "ac-1",
+            "text": "Reading an FR, TR, TEST or mapping through REST, the typed client or the REPL reports the creation and update times stored with that record. A read never reports the time of the read; when the store holds no time, the value is null (operator 2026-11-02: \"This HAS to be fixed.\"; PR 87 slice P). A stored time written without an offset is read as UTC (operator 2026-11-02: \"UTC\"; pre-HV what-if finding: no contract row pinned it). A read never fills a missing date from the clock: a stored value without a complete date (a time alone, or a partial date) reads as null and is ignored when a mapping's creation time is chosen (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\"; hostile validation finding R9-F4). A readable stored time states its year, its month and its day as date components: a year and month alone, and year digits that appear only in a time, a fraction or another component, read as null and are ignored when a mapping's creation time is chosen, whatever the read clock says (hostile validation round 10 finding R10-F1; strengthened between rounds under the operator's \"Strengthening Acceptance Criteria should always be the recommended option\" and \"don't gate on me between rounds\", 2026-11-03).",
+            "isSatisfied": false
+          },
+          "appendOnly": true
+        }
+      ],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "FR-MCP-047",
+      "beforeCount": 1,
+      "currentCount": 1,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "FR-MCP-BUILD-001",
+      "beforeCount": 1,
+      "currentCount": 1,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "FR-MCP-FED-PATH-001",
+      "beforeCount": 5,
+      "currentCount": 5,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "FR-MCP-MEMORY-002",
+      "beforeCount": 5,
+      "currentCount": 5,
+      "changed": [],
+      "allUnsatisfied": false,
+      "notesUnchanged": true
+    },
+    {
+      "id": "FR-MCP-PATHNORM-001",
+      "beforeCount": 0,
+      "currentCount": 0,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "FR-MCP-QBOPENAI-001",
+      "beforeCount": 7,
+      "currentCount": 7,
+      "changed": [],
+      "allUnsatisfied": false,
+      "notesUnchanged": true
+    },
+    {
+      "id": "FR-MCP-REPL-001",
+      "beforeCount": 1,
+      "currentCount": 1,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "FR-MCP-REPL-007",
+      "beforeCount": 4,
+      "currentCount": 4,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "FR-MCP-REPL-008",
+      "beforeCount": 4,
+      "currentCount": 4,
+      "changed": [],
+      "allUnsatisfied": false,
+      "notesUnchanged": true
+    },
+    {
+      "id": "FR-MCP-SESSIONLOGCTX-001",
+      "beforeCount": 8,
+      "currentCount": 8,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "FR-MCP-TESTRESOURCE-001",
+      "beforeCount": 12,
+      "currentCount": 12,
+      "changed": [
+        {
+          "position": 2,
+          "id": "",
+          "before": {
+            "text": "Generated test artifacts are written only to test-owned disposable output locations, not to repository fixture or documentation paths. The location is compared with the checkout by path segment under the path's own syntax: a Windows-form path (a drive letter or a backslash) ignores case, drive letter included, and a POSIX path compares ordinally; a case alias of the checkout or of a folder inside it is refused, and a distinct sibling is accepted (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\"; hostile validation finding R9-F3).",
+            "id": "",
+            "isSatisfied": false
+          },
+          "after": {
+            "id": "",
+            "text": "Generated test artifacts are written only to test-owned disposable output locations, not to repository fixture or documentation paths. The location is compared with the checkout by path segment under the path's own syntax: a Windows-form path (a drive letter or a backslash) ignores case, drive letter included, and a POSIX path compares ordinally; a case alias of the checkout or of a folder inside it is refused, and a distinct sibling is accepted (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\"; hostile validation finding R9-F3). A path's root is part of its identity: a UNC path (two leading separators of either kind, then a server and a share) is in Windows form and compares its server, its share and its segments ignoring case, so a forward-slash, backslash or mixed-separator UNC alias of the checkout or of a folder inside it is refused, and a path under another root kind, server, share or drive letter is a different location (hostile validation round 10 finding R10-F2; strengthened between rounds under the operator's \"Strengthening Acceptance Criteria should always be the recommended option\" and \"don't gate on me between rounds\", 2026-11-03).",
+            "isSatisfied": false
+          },
+          "appendOnly": true
+        },
+        {
+          "position": 4,
+          "id": "ac-4",
+          "before": {
+            "text": "A test-owned temporary QBrain.AI instance uses the database inside its owned root: no inherited setting, in configuration or the process environment and in the canonical (QBrainAi, QBRAINAI_), legacy (Mcp, MCP_) or host-prefixed (DOTNET_, ASPNETCORE_) form, nor a connection-string or content-root variable, selects another database for it (a connection string, a data source, a database provider or an instance name), and a database selection outside the owned root is refused. Every consumer of a temporary instance takes its workspace, marker and server address from that instance, and no inherited setting overrides them. These are the unit-proved rules TR-MCP-NUKE-019 AC-6 relies on (operator 2026-10-29: \"Strengthen ACs, fix both (Recommended)\", \"Run the 2 classes, AC first (Recommended)\" and \"Lane ACs (Recommended)\"; operator 2026-10-30: \"FR-MCP-TESTRESOURCE-001 (Recommended)\"; hostile validation findings R8B-F2 and R8B-F3; holistic review findings PLAN-6, PLAN-7, RINT-1, RINT-2 and RINT-3). A REPL host started for a temporary instance names both a workspace and a marker, each strictly inside the instance's owned root, compared by path segment with either separator under the path's own syntax (a Windows-form path ignores case, drive letter included; a POSIX path compares ordinally; operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\", the sibling of hostile validation finding R9-F3) and with no '.' or '..' segment; the checkout's marker, another or sibling root, a parent-segment escape, the root itself as the marker, and a missing argument or value are refused (operator 2026-10-26: \"if you surface new AC, add them without waiting for approval\"; the start-argument rows of TemporaryInstanceChecksTests already prove it).",
+            "id": "ac-4",
+            "isSatisfied": false
+          },
+          "after": {
+            "id": "ac-4",
+            "text": "A test-owned temporary QBrain.AI instance uses the database inside its owned root: no inherited setting, in configuration or the process environment and in the canonical (QBrainAi, QBRAINAI_), legacy (Mcp, MCP_) or host-prefixed (DOTNET_, ASPNETCORE_) form, nor a connection-string or content-root variable, selects another database for it (a connection string, a data source, a database provider or an instance name), and a database selection outside the owned root is refused. Every consumer of a temporary instance takes its workspace, marker and server address from that instance, and no inherited setting overrides them. These are the unit-proved rules TR-MCP-NUKE-019 AC-6 relies on (operator 2026-10-29: \"Strengthen ACs, fix both (Recommended)\", \"Run the 2 classes, AC first (Recommended)\" and \"Lane ACs (Recommended)\"; operator 2026-10-30: \"FR-MCP-TESTRESOURCE-001 (Recommended)\"; hostile validation findings R8B-F2 and R8B-F3; holistic review findings PLAN-6, PLAN-7, RINT-1, RINT-2 and RINT-3). A REPL host started for a temporary instance names both a workspace and a marker, each strictly inside the instance's owned root, compared by path segment with either separator under the path's own syntax (a Windows-form path ignores case, drive letter included; a POSIX path compares ordinally; operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\", the sibling of hostile validation finding R9-F3) and with no '.' or '..' segment; the checkout's marker, another or sibling root, a parent-segment escape, the root itself as the marker, and a missing argument or value are refused (operator 2026-10-26: \"if you surface new AC, add them without waiting for approval\"; the start-argument rows of TemporaryInstanceChecksTests already prove it). Strict containment in the owned root also requires the same root: the same root kind (UNC, drive letter or POSIX) and the same root identity (server and share, or drive letter, compared ignoring case); a single-rooted path under a UNC owned root, a path on another server, share or drive, and a UNC path under a POSIX owned root are refused for the database, the workspace, the marker and the trust cache (hostile validation round 10 finding R10-F2; strengthened between rounds under the operator's \"Strengthening Acceptance Criteria should always be the recommended option\" and \"don't gate on me between rounds\", 2026-11-03).",
+            "isSatisfied": false
+          },
+          "appendOnly": true
+        }
+      ],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "FR-MCP-USECASE-001",
+      "beforeCount": 0,
+      "currentCount": 0,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TEST-HANDOFF-004",
+      "beforeCount": 0,
+      "currentCount": 0,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TEST-HANDOFF-005",
+      "beforeCount": 0,
+      "currentCount": 0,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TEST-HANDOFF-006",
+      "beforeCount": 0,
+      "currentCount": 0,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TEST-HANDOFF-007",
+      "beforeCount": 3,
+      "currentCount": 3,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TEST-MCP-MEMORY-002",
+      "beforeCount": 0,
+      "currentCount": 0,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TEST-MCP-PATHNORM-001",
+      "beforeCount": 1,
+      "currentCount": 1,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TEST-MCP-QBOLLAMA-001",
+      "beforeCount": 4,
+      "currentCount": 4,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TEST-MCP-QBOPENAI-001",
+      "beforeCount": 1,
+      "currentCount": 1,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TEST-MCP-TRANSCRIPT-008",
+      "beforeCount": 0,
+      "currentCount": 0,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TEST-MCP-TRIAGE-003",
+      "beforeCount": 0,
+      "currentCount": 0,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TEST-MCP-TRIAGE-005",
+      "beforeCount": 0,
+      "currentCount": 0,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TEST-MCP-USECASE-019",
+      "beforeCount": 0,
+      "currentCount": 0,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TEST-MCP-USECASE-020",
+      "beforeCount": 0,
+      "currentCount": 0,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TR-MCP-FED-PATH-001",
+      "beforeCount": 1,
+      "currentCount": 1,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TR-MCP-MEMORY-002",
+      "beforeCount": 0,
+      "currentCount": 0,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TR-MCP-NUKE-016",
+      "beforeCount": 3,
+      "currentCount": 3,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TR-MCP-NUKE-018",
+      "beforeCount": 1,
+      "currentCount": 1,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TR-MCP-NUKE-019",
+      "beforeCount": 4,
+      "currentCount": 4,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TR-MCP-NUKE-020",
+      "beforeCount": 5,
+      "currentCount": 5,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TR-MCP-PATHNORM-001",
+      "beforeCount": 5,
+      "currentCount": 5,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TR-MCP-QUALITY-001",
+      "beforeCount": 23,
+      "currentCount": 23,
+      "changed": [],
+      "allUnsatisfied": false,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TR-MCP-REPL-001",
+      "beforeCount": 1,
+      "currentCount": 1,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TR-MCP-REPL-008",
+      "beforeCount": 0,
+      "currentCount": 0,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TR-MCP-SESSIONLOG-006",
+      "beforeCount": 1,
+      "currentCount": 1,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TR-MCP-USECASE-018",
+      "beforeCount": 7,
+      "currentCount": 7,
+      "changed": [
+        {
+          "position": 6,
+          "id": "AC-006",
+          "before": {
+            "id": "AC-006",
+            "isSatisfied": false,
+            "text": "Every supported platform executes an applicable native contract assertion: a platform-specific test is a Category=Integration test tagged Platform=Linux or Platform=Windows for the host it applies to, which TR-MCP-NUKE-019 AC-1 and AC-2 route to that host's MigrationIntegrationTests and require to run and pass there, and it passes only as TR-MCP-USECASE-019 AC-008 states (operator 2026-10-30: \"D3: dedupe lane rules (Recommended)\"); no unit test depends on the platform or on the process environment, directly, through a test helper or through the production code it calls: a test whose outcome can change with the value of an environment variable it reads or writes, directly, through a test helper or through the production code it calls (for example a temporary-folder lookup that takes its folder from a variable and creates it), a test that imports the process environment into configuration (AddEnvironmentVariables or a default host builder), and a test that asserts on an environment value a child process inherits are Category=Integration tests that set and restore every variable their assertions or the code they call depend on, every name of a fallback chain the code reads, both forms where a variable has a canonical (QBrainAi, QBRAINAI_) and a legacy (Mcp, MCP_) form, and the tests that write the process environment run one at a time (operator 2026-10-21: \"Fix both, strengthen ACs\", \"Strengthening Acceptance Criteria should always be the recommended option\" and \"Approve, strengthen AC-006/008 (Recommended)\"; operator 2026-10-26: \"Strengthen AC, move 14 (Recommended)\", \"Dependence + proof AC (Recommended)\" and \"Fix source, strengthen AC (Recommended)\"; hostile validation findings R5-F2, R6-F1 and R7-F1). The hostile-environment runs are out of scope: they are not part of this criterion or its evidence (operator 2026-10-27: \"Get ride of the hostile runs enforcing integration test separation.  I have already stated this once.\" and \"Which I sated last night were out of scope.\"). An integration case may read the lane's own inputs without setting them: MCP_REPOSITORY_ROOT, the MCP_TEST_ connection variables the lane provisions, and, for an import that scans agent folders, the user's real profile folder, read only and never asserted on; every other variable its assertions or the code it calls depend on it sets and restores. A unit test asserts no wall-clock bound (operator 2026-10-29: \"Environment ACs (Recommended)\"; holistic review findings MCPT-11, SVC-6 and MCPT-12). These rules are stated here once for TR-MCP-USECASE-019 AC-008 as well; the environment-delta rule moved to FR-MCP-047 ac-1 (operator 2026-10-29: \"Move criteria that are misplaced.  Unit tests are for FR, Integration tests are for TR.\")."
+          },
+          "after": {
+            "id": "AC-006",
+            "text": "Every supported platform executes an applicable native contract assertion: a platform-specific test is a Category=Integration test tagged Platform=Linux or Platform=Windows for the host it applies to, which TR-MCP-NUKE-019 AC-1 and AC-2 route to that host's MigrationIntegrationTests and require to run and pass there, and it passes only as TR-MCP-USECASE-019 AC-008 states (operator 2026-10-30: \"D3: dedupe lane rules (Recommended)\"); no unit test depends on the platform or on the process environment, directly, through a test helper or through the production code it calls: a test whose outcome can change with the value of an environment variable it reads or writes, directly, through a test helper or through the production code it calls (for example a temporary-folder lookup that takes its folder from a variable and creates it), a test that imports the process environment into configuration (AddEnvironmentVariables or a default host builder), and a test that asserts on an environment value a child process inherits are Category=Integration tests that set and restore every variable their assertions or the code they call depend on, every name of a fallback chain the code reads, both forms where a variable has a canonical (QBrainAi, QBRAINAI_) and a legacy (Mcp, MCP_) form, and the tests that write the process environment run one at a time (operator 2026-10-21: \"Fix both, strengthen ACs\", \"Strengthening Acceptance Criteria should always be the recommended option\" and \"Approve, strengthen AC-006/008 (Recommended)\"; operator 2026-10-26: \"Strengthen AC, move 14 (Recommended)\", \"Dependence + proof AC (Recommended)\" and \"Fix source, strengthen AC (Recommended)\"; hostile validation findings R5-F2, R6-F1 and R7-F1). The hostile-environment runs are out of scope: they are not part of this criterion or its evidence (operator 2026-10-27: \"Get ride of the hostile runs enforcing integration test separation.  I have already stated this once.\" and \"Which I sated last night were out of scope.\"). An integration case may read the lane's own inputs without setting them: MCP_REPOSITORY_ROOT, the MCP_TEST_ connection variables the lane provisions, and, for an import that scans agent folders, the user's real profile folder, read only and never asserted on; every other variable its assertions or the code it calls depend on it sets and restores. A unit test asserts no wall-clock bound (operator 2026-10-29: \"Environment ACs (Recommended)\"; holistic review findings MCPT-11, SVC-6 and MCPT-12). These rules are stated here once for TR-MCP-USECASE-019 AC-008 as well; the environment-delta rule moved to FR-MCP-047 ac-1 (operator 2026-10-29: \"Move criteria that are misplaced.  Unit tests are for FR, Integration tests are for TR.\"). A unit test that checks a recorded time (an auth rotation, a selection or a session transition) takes the clock values from test-owned scripted inputs and asserts them exactly; it never compares with the current time, never sleeps to separate two times, and its result cannot change with elapsed time, scheduling delay or a change to the system clock (hostile validation round 10 finding R10-F3; strengthened between rounds under the operator's \"Strengthening Acceptance Criteria should always be the recommended option\" and \"don't gate on me between rounds\", 2026-11-03). This covers every recorded time a unit test checks, including the creation and update times a service stamps on a record it stores: the test supplies the service's clock as scripted times and asserts that each stamp equals the scripted time the service read (sibling sweep before round 11 of hostile validation round 10 finding R10-F3, 2026-11-03, under the same rulings). A wall-clock bound is an assertion whose outcome depends on how much real time passes: an elapsed time compared with a limit, or work the test expects to have happened during a short real-time wait (for example a periodic tick, a file-system event or a debounce); such a test is an integration test. A timeout whose only effect is to fail a test that would otherwise hang, set far above the time the awaited step needs, is not a wall-clock bound (holistic read before round 11, 2026-11-03, under the same rulings).",
+            "isSatisfied": false
+          },
+          "appendOnly": true
+        }
+      ],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TR-MCP-USECASE-019",
+      "beforeCount": 11,
+      "currentCount": 11,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    },
+    {
+      "id": "TR-MCP-WS-005",
+      "beforeCount": 1,
+      "currentCount": 1,
+      "changed": [],
+      "allUnsatisfied": true,
+      "notesUnchanged": true
+    }
+  ],
+  "selectedMappings": [
+    {
+      "frId": "FR-MCP-018",
+      "trId": "TR-MCP-WS-005",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-BUILD-001",
+      "trId": "TR-MCP-NUKE-001",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-BUILD-001",
+      "trId": "TR-MCP-NUKE-002",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-BUILD-001",
+      "trId": "TR-MCP-NUKE-005",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-BUILD-001",
+      "trId": "TR-MCP-NUKE-006",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-BUILD-001",
+      "trId": "TR-MCP-NUKE-007",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-BUILD-001",
+      "trId": "TR-MCP-NUKE-008",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-BUILD-001",
+      "trId": "TR-MCP-NUKE-009",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-BUILD-001",
+      "trId": "TR-MCP-NUKE-010",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-BUILD-001",
+      "trId": "TR-MCP-NUKE-011",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-BUILD-001",
+      "trId": "TR-MCP-NUKE-012",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-BUILD-001",
+      "trId": "TR-MCP-NUKE-015",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-BUILD-001",
+      "trId": "TR-MCP-NUKE-016",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-BUILD-001",
+      "trId": "TR-MCP-NUKE-017",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-BUILD-001",
+      "trId": "TR-MCP-NUKE-018",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-BUILD-001",
+      "trId": "TR-MCP-NUKE-019",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-BUILD-001",
+      "trId": "TR-MCP-NUKE-020",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-MEMORY-002",
+      "trId": "TR-MCP-MEMORY-002",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-MEMORY-002",
+      "trId": null,
+      "testId": "TEST-MCP-MEMORY-002"
+    },
+    {
+      "frId": "FR-MCP-PATHNORM-001",
+      "trId": "TR-MCP-PATHNORM-001",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-PATHNORM-001",
+      "trId": null,
+      "testId": "TEST-MCP-PATHNORM-001"
+    },
+    {
+      "frId": "FR-MCP-REPL-001",
+      "trId": "TR-MCP-REPL-001",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-REPL-001",
+      "trId": "TR-MCP-REPL-002",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-REPL-007",
+      "trId": "TR-MCP-REPL-008",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-REPL-007",
+      "trId": null,
+      "testId": "TEST-MCP-REPL-007-1"
+    },
+    {
+      "frId": "FR-MCP-REPL-007",
+      "trId": null,
+      "testId": "TEST-MCP-REPL-007-2"
+    },
+    {
+      "frId": "FR-MCP-REPL-007",
+      "trId": null,
+      "testId": "TEST-MCP-REPL-007-3"
+    },
+    {
+      "frId": "FR-MCP-SESSIONLOGCTX-001",
+      "trId": "TR-MCP-SESSIONLOG-006",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-SESSIONLOGCTX-001",
+      "trId": null,
+      "testId": "TEST-MCP-SESSIONLOG-006"
+    },
+    {
+      "frId": "FR-MCP-USECASE-001",
+      "trId": "TR-MCP-USECASE-001",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-USECASE-001",
+      "trId": "TR-MCP-USECASE-002",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-USECASE-001",
+      "trId": "TR-MCP-USECASE-003",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-USECASE-001",
+      "trId": "TR-MCP-USECASE-005",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-USECASE-001",
+      "trId": "TR-MCP-USECASE-018",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-USECASE-001",
+      "trId": "TR-MCP-USECASE-019",
+      "testId": null
+    },
+    {
+      "frId": "FR-MCP-USECASE-001",
+      "trId": null,
+      "testId": "TEST-MCP-USECASE-001"
+    },
+    {
+      "frId": "FR-MCP-USECASE-001",
+      "trId": null,
+      "testId": "TEST-MCP-USECASE-002"
+    },
+    {
+      "frId": "FR-MCP-USECASE-001",
+      "trId": null,
+      "testId": "TEST-MCP-USECASE-004"
+    },
+    {
+      "frId": "FR-MCP-USECASE-001",
+      "trId": null,
+      "testId": "TEST-MCP-USECASE-019"
+    },
+    {
+      "frId": "FR-MCP-USECASE-001",
+      "trId": null,
+      "testId": "TEST-MCP-USECASE-020"
+    }
+  ],
+  "todo": {
+    "beforeCount": 37,
+    "currentCount": 40,
+    "changedExisting": [],
+    "addedTasks": [
+      {
+        "task": "Slice U, the round 10 findings (fixed between rounds under the operator's 2026-11-03 \"don't gate on me between rounds\"): criteria strengthened through the plugin first (FR-MCP-040 ac-1 complete date components; FR-MCP-TESTRESOURCE-001 generated-artifact criterion and ac-4 path root identity; TR-MCP-USECASE-018 AC-006 recorded times from scripted clocks); contracts with scripted references and wrong implementations (R10-F1 the wrong reader \"year in the text\"; R10-F2 UNC and root-kind rows with the wrong checks \"ignores the root\" and \"UNC compared ordinally\"; R10-F3 RecordedTimeContractTests with wrong clocks), mock gate ug-r11-mockgate-u-1 before any change, the fixes (exact complete-date formats; explicit path roots; a test-owned ScriptedClock for the session fake and the auth stub, six cases asserting exact scripted times), binding ug-r11-binding-u-1 through TestGroups; commit 2e121015; every gate at the new code head on both hosts; projected problems shown and committed; then round 11.",
+        "done": false
+      },
+      {
+        "task": "Slice V, the R10-F3 siblings the round 10 sweep missed and stale slice U documentation (found in the holistic read before round 11, fixed under \"don't gate on me between rounds\"): TR-MCP-USECASE-018 AC-006 appended through the plugin first (every recorded time a unit test checks, including service-stamped creation and update times); contracts StampedTimeContractTests and the test-owned ScriptedTimeProvider with wrong stampers, mock gate ug-r11-mockgate-v-1 before any change; an optional TimeProvider in GraphRagService and a clock constructor on MemoryService; GraphRagEntityCrudTests (two cases), MemoryModelTests.Timestamps_CreateAndUpdate, AuthRotationTests (two cases) and GraphRagEntityStorageTests.PersistsEntityWithAllFields on scripted times with no live clock and no sleep; the TemporaryInstanceChecks, ScriptedInside and TestOutputFolderContractTests summaries corrected (documentation only); binding ug-r11-binding-v-1 through TestGroups; sweep receipt ug-r11-clock-sweep.txt; commit cb174ac8; every gate at the new code head on both hosts; projected problems shown and committed; then round 11.",
+        "done": false
+      },
+      {
+        "task": "Slice W, the timing-dependent unit cases and the holistic read before round 11 (fixed under \"don't gate on me between rounds\"): TR-MCP-USECASE-018 AC-006 appended through the plugin first (a wall-clock bound is an assertion whose outcome depends on how much real time passes, and such a test is an integration test; a timeout that only turns a hang into a failure is not one); HandoffDurabilityTests.ProcessingLease_RenewsAndFencesTerminalUpdates waits for the renewed expiry and asserts it exactly instead of sleeping 250 ms; QBAgentHeartbeatOverlayTests.RunAsync_Heartbeat_RotatesGlyphWithoutStillWorkingLines and SessionLogFileWatcherTests.WhenFileCreatedThenWatcherTriggersImport move to Category=Integration with their assertions unchanged; binding ug-r11-binding-w-1 through TestGroups; commit 1f51d4b2; the sweep receipt regenerated with timer-bounded waits, multiline assertions and the unit or integration status of each hit from the unit TRX; every holistic-read finding applied to the plan, brief, PR body, handoff and records; every gate at the new code head on both hosts; then round 11.",
+        "done": false
+      }
+    ],
+    "allUnchecked": true
+  }
+}

@@ -1,0 +1,1252 @@
+{
+  "timestampLocal": "2026-11-03T12:09:08",
+  "head": "142a93f0d5246f3224f601499073c96eeac072f3",
+  "commitCount": 100,
+  "commits": [
+    {
+      "sha": "142a93f0d5246f3224f601499073c96eeac072f3",
+      "subject": "docs: gates and HV TRX evidence at 1f51d4b2, plan 27.23, round 11 prelaunch records (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 95%, completeness 93%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "1f51d4b28862d505dea846899ab20ae23a8b13dc",
+      "subject": "fix(tests): timing-dependent unit cases (slice W)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 95%, completeness 92%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "cb174ac807c8e60b7a38a30bc216a651ed72c6c7",
+      "subject": "fix(tests): scripted clocks for service-stamped times; stale slice U docs (slice V)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 95%, completeness 92%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "2e1210150ae009162b047c604b56b75426c4d428",
+      "subject": "fix: round 10 findings: complete stored dates, path root identity, scripted test clocks (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 95%, completeness 93%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "4e4a227ad63ab789aad4b4c5eb977bc9319e83f2",
+      "subject": "docs: hostile validation round 10 receipts as received, DISAGREE 96/95 (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "03df5a6a1aec4627d0cd6847fdaab6f2462ec014",
+      "subject": "docs: gates and HV TRX evidence at 6082b116, plan 27.22, round 10 prelaunch records (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 94%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "6082b11691e8f2e0ab44119ff1f53485d77b9861",
+      "subject": "fix: round 9 findings: executed class identity, exact health nonce, checkout case aliases, dated reads, one Ollama model rule",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 95%, completeness 92%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "a98250179d67af8712ad8eb032e333440ba11fd9",
+      "subject": "docs: hostile validation round 9 receipts as received, DISAGREE 95/94 (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "e3eb8369481cbe2f49cb95798d9138193a18c1be",
+      "subject": "docs: round 9 prelaunch records and the ac-6 ruling in plan 27.21 (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 94%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "462709315de8609ce9b8b2b1f14dc4df2e092e82",
+      "subject": "docs: gates and HV TRX evidence at 878c366f, plan 27.21, retrospective receipts (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 95%, completeness 93%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "878c366faadc955d79d7e8e3f6b39f063107bb5b",
+      "subject": "test: memory-bench stub runs write outside the checkout; pin offset-less stored times as UTC",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 93%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "23955af0b330ec1fe167138edac1ef5ef8ff3bfd",
+      "subject": "docs(plan): round 9 as-built record, final gates at 62c5882d and the HV TRX evidence",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 92%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "62c5882d87f3d0b5019827b1f803140cbf79ca0d",
+      "subject": "docs(xml): dated change logs per MEMORY-FACT-008 on PR 87 slices P, Q and R",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 95%, completeness 92%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "611a5dc556b5d0b6ce22b98c3103a9f873e34ac5",
+      "subject": "fix: targeted test groups, owned provider keys, stored requirement times",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 92%, accuracy 95%, completeness 85%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "679eb7881d0342a58ef446be5084b703c0cee7c4",
+      "subject": "chore: sync Claude handoff and run evidence",
+      "signature": [
+        "Signed: gpt-6.1-sol-ultra@Codex | Confidence: correctness 99%, accuracy 99%, completeness 99%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "765490a9035878c7888c911776289880493dacab",
+      "subject": "fix: isolate unit suite and lane resources",
+      "signature": [
+        "Signed: gpt-6.1-sol-high@Codex | Confidence: correctness 95%, accuracy 99%, completeness 80%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "fb19eeab6a1533274b2092962bbef5df8c964eab",
+      "subject": "docs(plan): record the slice L binding result in the PR 87 handoff",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "0dd224daec46eb3e7c2d0766c6cd2c2ee9ac6a07",
+      "subject": "docs(plan): PR 87 handoff at the 2026-10-30 pause",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 95%, completeness 90%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "0039917455cb0b8c70376129ca46a4a67d8c7f06",
+      "subject": "docs: hostile validation round 8b receipts as received, DISAGREE 96/95 (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "332e0d31dbcb823418c3db30c409bc44df655de8",
+      "subject": "docs: round 8b second attempt as received, ended by the service; HV unbounded rule (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "a9d6a8d7e259803e438b7125701a186bae8db26d",
+      "subject": "docs: record the killed round 8b first attempt in plan 25.7 and the brief (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 96%, completeness 96%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "366238a2dfdbbc65991605db19b9b8b2192c3aa9",
+      "subject": "docs: round 8b first attempt receipts as received, killed with no verdict (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 96%, completeness 96%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "2b0f65d87f1948afcdcab6b0aa7c7afd3edd42cd",
+      "subject": "docs: gates and TRX evidence at a78640ba, plan 25.7, round 8b prelaunch records (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "a78640baacb867cdea182f316ef06ee019d489d9",
+      "subject": "test: label the TEST-MCP-REQSCOPE-REPL-001 citations historical (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "a69edb612a8f9994b2a1108f5096160332afca9e",
+      "subject": "docs: round 8b lanes complete by name and plan 25.4 (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "fbc2da860e83c095433c51f8c7bec3c6038bdba6",
+      "subject": "docs: round 8b TRX evidence at 433ce191 and plan section 25 (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "d43c1d125cc6129940f21f439b5b3982dc1e61c3",
+      "subject": "merge: develop 9b099716 into PR 87, docs only (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "4634c73c4b97f759177df0057c6142f5339e5027",
+      "subject": "docs: gates at 433ce191 and plan sections 22.8 to 24 (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 94%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "433ce1919d04bb6c5bb3c95a60c6b5df656d59fb",
+      "subject": "docs: cite TR-MCP-NUKE-018 and -019 without their removed environment criteria",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 93%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "751e34e42151dedddca2ce31b5a12c768f3d2876",
+      "subject": "docs: round 8b run receipts through 3e487b6b (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 95%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "3e487b6b9e520bd8bd7cba836cdb0bea8716fd48",
+      "subject": "test: run the marker walk cases as unit tests over an in-memory file system (TR-MCP-REPL-008 AC-1 to AC-4)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "4fab4424c0ebcd961e5135e393eace47771dd62c",
+      "subject": "fix: stream provisioning downloads with no total time limit (TR-MCP-NUKE-019 AC-8)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 96%, completeness 92%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "2f67921357bff28a636fc5824d70422dbb1f168d",
+      "subject": "test: fix the four REPL integration defects (TR-MCP-NUKE-019 AC-6, AC-7)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 96%, completeness 92%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "6667c405fe4e38a651773782809f355f087ac935",
+      "subject": "build: select the integration lane's six projects (TR-MCP-NUKE-019 AC-2, slice A)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 93%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "d5a23364daa20da6e23a89e020ddc65ec810773c",
+      "subject": "build: the integration lane provisions Ollama and its model on Windows and Linux (TR-MCP-NUKE-019 AC-4)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 92%, accuracy 97%, completeness 95%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "8c651f13036db0aa2b90413770377cc66cb419d6",
+      "subject": "test: run the REPL integration tests on a temporary instance they own, never the live marker (TR-MCP-NUKE-019 AC-6)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 97%, completeness 95%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "2175d827fa6bf4bcbca05e23fae75aaf6b889737",
+      "subject": "docs: hostile validation round 8 receipts as received, stopped by operator decision before a verdict (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "868bbb575052a39e763280a42c4fbca01c9c9fdd",
+      "subject": "docs: hostile validation round 8 prelaunch records (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "43cb62a78951ee71d27c8fd49f0fc0c153d42f50",
+      "subject": "docs: round 8 run receipts and plan section 21 as built at ccd9e91f (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "ccd9e91f00dae4419b39ae8d37c2ae522e6fc62d",
+      "subject": "fix: bind the REPL timeout call sites to TR-MCP-REPL-001 AC-002 through one read seam",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 96%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "845f323b6b6ae13bc01b6165d6f987238c631dea",
+      "subject": "test: create the eighteenth-review traversal junction in process instead of a cmd.exe mklink helper (TR-MCP-USECASE-019 AC-008)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 96%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "7ab3c1c40bc226056f7c20f1db6963e12311a313",
+      "subject": "test: create the Twelfth-review junction in process instead of a pwsh.exe helper on a 5-second budget (TR-MCP-USECASE-019 AC-008)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 96%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "f5cda3c15455b8f42f97bb35768c142757323378",
+      "subject": "fix: REPL command timeouts ignore values the cancellation timer rejects (R7-F1, TR-MCP-REPL-001 AC-002)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "96b81bef6588a19d772de28fa5429c333300e1c0",
+      "subject": "docs: hostile validation round 7 receipts as received (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "8b97aa4bee778273688e53a64a737c3170a41823",
+      "subject": "docs: hostile validation round 7 prelaunch records (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "55c1400c58df1e03cb9a0cc2c3926b02534ab75a",
+      "subject": "docs: round 7 gates of record at c31f36d8, the script-checking ledger and plan section 20 as built (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "c31f36d81dc87509b605175c5ced0d3b0f08180c",
+      "subject": "docs: round 7 run receipts through 04841148 and plan section 20 as of the first round 7 head (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 95%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "0484114872c09cf5afab5e019748dfabbda294bc",
+      "subject": "test: the CLI temp helper points the primary name at the test folder and the fallbacks elsewhere (IMPL-UNITGREEN-001, R6-F1)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 96%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "6a87791d9363bb972feb6a4539339fac0c1a1915",
+      "subject": "test: CLI temp-folder tests become integration tests with every temp variable controlled (IMPL-UNITGREEN-001, R6-F1, R6-F2)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 95%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "3a607fb17dba72c6c7f920a6067b1ca191ec86fb",
+      "subject": "docs: hostile validation round 6 receipts as received, DISAGREE (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "3ce97b3e3dd31dbe009a3716d2b15d43ce60bb5b",
+      "subject": "docs: hostile validation round 6 prelaunch records and hostile gate v4 (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "44e9d810d88c0e34239ae31eef2683a614d392f7",
+      "subject": "docs: round 6 run receipts and plan section 19 (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "c84183016a032bd522f5ae085a90d7c912bef810",
+      "subject": "test: environment-touching unit tests become integration tests; env writers run one at a time (R5-F2, IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 95%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "9933796c53433a55d11cf14a96be97438a087b0f",
+      "subject": "fix: profile scans skip a linked scan root and linked folders above it (R5-F1, IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 95%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "c3625a64222c558b16c564e62ec2b5d600801e77",
+      "subject": "docs: hostile validation round 5 receipts as received (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "780b6513b4004da0b17c2359d9cb65f6a69de67e",
+      "subject": "docs: hostile validation round 5 prelaunch records (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "8b7a49eaa3e8d4872b33d66af517acc8ad7e21ea",
+      "subject": "docs: the widened hostile gate, the gates at 810ee8aa and plan section 18 to date (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "810ee8aa0fbdcc6cf64a3d9575693068d261a97c",
+      "subject": "test(maintenance): the environment-instance parse test is an integration test that controls both instance variables (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 98%, completeness 96%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "5b818847b4e598b4e85ac6567041b847b0385950",
+      "subject": "docs: round 5 console logs and the Windows Test dry run as text receipts (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "3a9f8ff46690c4e35781bab444deac0d4345bbbd",
+      "subject": "docs: round 5 run receipts at ccc78b7a, plan section 18 and the R4-F2 corrections (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "ccc78b7a7624e0367725af585a5fd7c4f38b3661",
+      "subject": "test(scanner): the scanner documentation states the declared alias limit (R4-F1, IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "8c254695d886d6ff87d5caaa42b0fa6b421c9c6b",
+      "subject": "test(memory): the harness binding cites the memory CRUD chain present in the store (R4-F3, IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "094e47f4e0e8074c027e68f25d26482ce68b331e",
+      "subject": "docs: hostile validation round 4 receipts as received (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "b0db5b09b5824b2e49b028ac37b3ee8a3b48ec8a",
+      "subject": "docs: round 4 plan record, final-head receipts and pre-launch records (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "97b7811491ccb3e338804a01d0bf28e4ecfe273a",
+      "subject": "test(handoff,memory): own connection per context in HandoffAuditDefectTests and MemoryS1Harness (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 95%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "50b58ce515cba89dab9b479b5e3eceb9fbb7c0a8",
+      "subject": "docs: round 4 run receipts through code head 26fc8348 (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "26fc83486be252e63579cca9d53f3132672555c7",
+      "subject": "test(handoff),fix(marker): own connection per context in the handoff tests; sibling rule back in MarkerFileService (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 94%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "c31c2918c15d4085e463e00f6a4977fd67913b76",
+      "subject": "docs: correct the round 3 self-review run sentence (R3-F4, IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "801e6862d49d669808c9315a7ad43d0272b1d1f1",
+      "subject": "fix(marker,tests): one source seam for plugin-version inputs; scanner aliases in lexical scope (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 95%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "0996a1164fa84dd6288403e5161f337581fc21cb",
+      "subject": "docs: hostile validation round 3 receipts as received (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 98%, accuracy 98%, completeness 97%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "64fc4b1400ac5bc7526c472f8efeacb91980f2a6",
+      "subject": "docs: hostile validation round 3 pre-launch records (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 96%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "6b89998f4f0257b967bba12e2434135964cf135b",
+      "subject": "docs: the R3-P3 record, its gate receipts and the round 3 traceability receipts (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 95%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "e0b078c802d6456d106e6ec681d1aa93d6c4d055",
+      "subject": "fix(marker): a plugin version file that cannot be read never fails the marker (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 95%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "395b4cd89726e921af481d4c8c056bf8fa535ae6",
+      "subject": "docs: hostile validation round 2 receipts, the round 3 record and its gate receipts (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 94%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "68fa7b393d007c0d0c466c29ae4da5738bf54af2",
+      "subject": "test(storage): the SQL Server LocalDB collection runs with parallelization disabled, as the chosen option states (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 94%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "6ea425ab943ebdd8aad1de1c84896de92d0270d8",
+      "subject": "test(storage): the ephemeral PostgreSQL fixture runs pg_ctl silent so it cannot garble xUnit messages (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "0210244d27bf2b5e731e4ee40350504934e812a4",
+      "subject": "test(storage): the SQL Server test classes on LocalDB run one after another (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 96%, completeness 92%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "6042dbb3551c38a740e13de28f44fe9a814e6f0a",
+      "subject": "test(storage): SQL Server integration tests wait 120 s for LocalDB to accept a connection (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 96%, completeness 92%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "56d14d7cd7e72975b1cbf0ddcd2cc17c16763249",
+      "subject": "test(services): the hermetic-profile check reads the injected fixture, not a parallel test's folder (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 93%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "538d0ccf957c041f1e3886864bdf5e4ca693e9ec",
+      "subject": "fix(services): user-profile scans skip directory links and unlistable folders (IMPL-UNITGREEN-001, triage b0e41c36)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 95%, completeness 90%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "27c43bccd19a591e4ca30560b52d4c5a9e8b81c9",
+      "subject": "test(guards): one repository-root locator, refused outside Integration; classify by dependency (IMPL-UNITGREEN-001, R2-F1)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 94%, accuracy 95%, completeness 90%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "45a3197c9afda2f7c7d87e7d986908f885c20b02",
+      "subject": "test(guards): Roslyn syntax-tree platform scanner, Roslyn pins to 5.9.0 (IMPL-UNITGREEN-001, R2-F2)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 90%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "a94579db927f25a0cbddd07d639f3054f2ee72e8",
+      "subject": "docs: hostile validation round 1 receipts, its remediation record and the round 2 gate receipts (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 94%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "b4ad42aaa601ed0df7e03b34203dee4f93d316a9",
+      "subject": "test: unit tests that reach native file-system boundaries or write tracked files move to Integration (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "49cfec920349f17ace1b287b18d1b0fe2d956b03",
+      "subject": "test: one skip definition for both guards; multiline, qualified and listed skip attributes; interpolation holes kept as code (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 94%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "6b4295b790e0e2cde7113f3be4bb83bc66343016",
+      "subject": "docs: record the 19:41 decisions and the handoff-correction commit in the unit-suite-green plan (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 96%, completeness 94%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "83417029fa3e0ee8ef2ffc6bdfa29a7c1e9fdb38",
+      "subject": "docs: unit-suite-green plan as built and the code-head gate receipts (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 96%, completeness 93%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "127468345afcc7a24e6a254f712d6b75a54713e8",
+      "subject": "test: the invalid-handle final-path case runs only on Windows, without a silent return (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 94%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "69d8f3f5b19b070f9059a096f344c44bbd359d47",
+      "subject": "build: the Windows integration lane runs only from an interactive desktop session (TR-MCP-NUKE-019 AC-5, amendment H1)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "5924926051f84720c110ab1421430499fadf918a",
+      "subject": "test: the interactive desktop-spawner case fails loudly instead of returning silently (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 92%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "4f668b76d26b26e7162d8654fb946c484fd42539",
+      "subject": "docs: unit-suite-green plan and the PR 82 handoff correction (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 96%, completeness 93%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "b2bd50b3711c28bdb256e1f4fa56f3d8114fb6c6",
+      "subject": "test: classify platform-dependent tests as integration tests and guard the unit suite (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 93%, accuracy 95%, completeness 90%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "8a6173342dcd7683b9d9549005a5af819b8abc90",
+      "subject": "Merge origin/develop (PR 86, 3da2db93) into fix/unit-suite-green-20261019",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 95%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "8c2b83ab5a442ce7dbc4a5a78f70dfaafbd034a2",
+      "subject": "build: host-scoped integration lane filter for MigrationIntegrationTests (TR-MCP-NUKE-019, IMPL-UNITGREEN-001 G)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 90%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "11681680d316bee7c8c184e45b699af7c1bd2188",
+      "subject": "test: take over the unit-suite fixes and Linux provider provisioning from PLAN-C4MODEL-001 (IMPL-UNITGREEN-001)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 96%, completeness 93%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "b2319488039bbcd1e2014d8f3a1b7a26627b3ba8",
+      "subject": "test: HostileReviewWorker startup test no longer depends on Event Log write access (IMPL-UNITGREEN-001 F)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 95%, accuracy 97%, completeness 93%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "a4c358efd91131e7fb714370726997b5c2d076cb",
+      "subject": "test: leave the PLAN-C4MODEL-001 unit fixes to that effort (IMPL-UNITGREEN-001 scope)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 92%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "de5813532adb51b964b222644ae0519bd814f8ef",
+      "subject": "feat(client): host-aware WorkspaceIdentityPath.ToNativePath overload (IMPL-UNITGREEN-001 step 4)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 93%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "28bf0b222464c5bdbfb8b6ec0a357e15284e486f",
+      "subject": "test: canonical workspace keys, provider traits and a host-aware native-path contract (IMPL-UNITGREEN-001 step 2)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 96%, accuracy 97%, completeness 92%"
+      ],
+      "signed": true
+    },
+    {
+      "sha": "cbc74e823e7af96f8df1a1320498998e5de2b328",
+      "subject": "fix(deps): pin System.Security.Cryptography.Xml and Pkcs to the advisory-patched 10.0.13 (IMPL-UNITGREEN-001 step A)",
+      "signature": [
+        "Signed: claude-opus-5-5-xhigh@ClaudeCode | Confidence: correctness 97%, accuracy 97%, completeness 90%"
+      ],
+      "signed": true
+    }
+  ],
+  "unsigned": [],
+  "takeover": [
+    {
+      "path": ".nuke/build.schema.json",
+      "sourceBlob": "d9fad69e8622f9365b3d334338fb6ba439188e9d",
+      "takeoverBlob": "342d0757244c252cd7b79ecf18cfac092575f240",
+      "equal": false
+    },
+    {
+      "path": "build/Build.TestDependencies.cs",
+      "sourceBlob": "7206fba621ac3b4e5f636e92c5c7e00c3d04216d",
+      "takeoverBlob": "7206fba621ac3b4e5f636e92c5c7e00c3d04216d",
+      "equal": true
+    },
+    {
+      "path": "build/LinuxProviderTestProvisioner.cs",
+      "sourceBlob": "2649ae8c503a46d799c037629b2dd05e5a5c4d1c",
+      "takeoverBlob": "2649ae8c503a46d799c037629b2dd05e5a5c4d1c",
+      "equal": true
+    },
+    {
+      "path": "build/ProviderTestProvisioningContracts.cs",
+      "sourceBlob": "c9fe9f5c8683a9d10cdade22919faedbff1e751b",
+      "takeoverBlob": "c9fe9f5c8683a9d10cdade22919faedbff1e751b",
+      "equal": true
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/GitHubCliService.cs",
+      "sourceBlob": "0c9ca325e4dd982818392d7b04005af0f07810ba",
+      "takeoverBlob": "0c9ca325e4dd982818392d7b04005af0f07810ba",
+      "equal": true
+    },
+    {
+      "path": "tests/Build.Tests/ProviderTestProvisioningContract.cs",
+      "sourceBlob": "fef74b60b6ccccdc2064d961de4d9054b9acf21b",
+      "takeoverBlob": "fef74b60b6ccccdc2064d961de4d9054b9acf21b",
+      "equal": true
+    },
+    {
+      "path": "tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs",
+      "sourceBlob": "281a8b2c77ddbcf2058c3e3a7e97dae3caa51c12",
+      "takeoverBlob": "281a8b2c77ddbcf2058c3e3a7e97dae3caa51c12",
+      "equal": true
+    },
+    {
+      "path": "tests/Build.Tests/ProviderTestProvisioningTests.cs",
+      "sourceBlob": "a523887077a2747de826facb16add62e0d2a89a8",
+      "takeoverBlob": "a523887077a2747de826facb16add62e0d2a89a8",
+      "equal": true
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Middleware/WorkspaceResolutionMiddlewareTests.cs",
+      "sourceBlob": "98a15c728af7c1db2ef6bc74395e5484a4009775",
+      "takeoverBlob": "98a15c728af7c1db2ef6bc74395e5484a4009775",
+      "equal": true
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs",
+      "sourceBlob": "e7350e77a85a05a23d273a8e49d2d33d3711146d",
+      "takeoverBlob": "e7350e77a85a05a23d273a8e49d2d33d3711146d",
+      "equal": true
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceServiceAccessorTests.cs",
+      "sourceBlob": "a594df1af7170c9bdabb9cad0289c60f68183ce1",
+      "takeoverBlob": "a594df1af7170c9bdabb9cad0289c60f68183ce1",
+      "equal": true
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/Decompose4nfBackfillMigrationTests.cs",
+      "sourceBlob": "f354ddc970f8243c1b0f36ceb63f4460734bbfe2",
+      "takeoverBlob": "f354ddc970f8243c1b0f36ceb63f4460734bbfe2",
+      "equal": true
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs",
+      "sourceBlob": "3ad458c9988c2f22ecc8f3694c40c5a339ea401d",
+      "takeoverBlob": "3ad458c9988c2f22ecc8f3694c40c5a339ea401d",
+      "equal": true
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertions.cs",
+      "sourceBlob": "14d553ebff1e9b244b802ec665f77957f644e27a",
+      "takeoverBlob": "14d553ebff1e9b244b802ec665f77957f644e27a",
+      "equal": true
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs",
+      "sourceBlob": "364880bdecc87546a46ddb8a99f706c9729e545c",
+      "takeoverBlob": "364880bdecc87546a46ddb8a99f706c9729e545c",
+      "equal": true
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Storage/SessionLogAgentSessionHeaderMigrationTests.cs",
+      "sourceBlob": "04b803279c573cb5bb57d402b49215de85d487a6",
+      "takeoverBlob": "04b803279c573cb5bb57d402b49215de85d487a6",
+      "equal": true
+    }
+  ],
+  "documentFormat": [
+    {
+      "path": "docs/plans/2026-10-19-unit-suite-green.md",
+      "enDashCount": 0,
+      "emDashCount": 0,
+      "tableLines": 0
+    },
+    {
+      "path": "docs/receipts/hv/hv-ug-r11-pr-body.md",
+      "enDashCount": 0,
+      "emDashCount": 0,
+      "tableLines": 0
+    }
+  ],
+  "knownMarkerKeyPatternCount": 1,
+  "knownKeyHits": [],
+  "credentialPatternHits": [],
+  "postCodePaths": [
+    "docs/plans/2026-10-19-unit-suite-green.md",
+    "docs/plans/2026-10-30-unit-suite-green-handoff.md",
+    "docs/receipts/hv/unitgreen-r11-prelaunch.brief.md",
+    "docs/receipts/hv/unitgreen-r11-prelaunch.projected-problems.md",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/manifest.json",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-buildtests-1/ug-r11w-final-linux-buildtests-1.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-lane-1/Build.Tests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-lane-1/QBrainAi.McpAgent.Tests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-lane-1/QBrainAi.QBAgent.Tests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-lane-1/QBrainAi.Repl.Core.Tests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-lane-1/QBrainAi.Repl.IntegrationTests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-lane-1/QBrainAi.Support.Mcp.IntegrationTests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-lane-1/QBrainAi.Support.Mcp.Tests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-lane-1/selected-projects.json",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-unit-1/QBrainAi.Client.Tests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-unit-1/QBrainAi.Cqrs.Tests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-unit-1/QBrainAi.Launcher.Tests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-unit-1/QBrainAi.McpAgent.Tests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-unit-1/QBrainAi.QBAgent.Tests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-unit-1/QBrainAi.Repl.Core.Tests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-unit-1/QBrainAi.Support.Mcp.Tests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-linux-unit-1/selected-projects.json",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-buildtests-1/Build.Tests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-lane-1/Build.Tests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-lane-1/QBrainAi.McpAgent.Tests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-lane-1/QBrainAi.QBAgent.Tests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-lane-1/QBrainAi.Repl.Core.Tests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-lane-1/QBrainAi.Repl.IntegrationTests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-lane-1/QBrainAi.Support.Mcp.IntegrationTests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-lane-1/QBrainAi.Support.Mcp.Tests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-lane-1/selected-projects.json",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-unit-1/QBrainAi.Client.Tests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-unit-1/QBrainAi.Cqrs.Tests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-unit-1/QBrainAi.Launcher.Tests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-unit-1/QBrainAi.McpAgent.Tests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-unit-1/QBrainAi.QBAgent.Tests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-unit-1/QBrainAi.Repl.Core.Tests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-unit-1/QBrainAi.Support.Mcp.Tests.trx",
+    "docs/receipts/hv/unitgreen-r11-trx-1f51d4b2/ug-r11w-final-win-unit-1/selected-projects.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-binding-u-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-binding-u-1/QBrainAi.Repl.Core.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-binding-u-1/QBrainAi.Repl.IntegrationTests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-binding-u-1/QBrainAi.Support.Mcp.IntegrationTests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-binding-u-1/QBrainAi.Support.Mcp.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-binding-v-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-binding-v-1/QBrainAi.Repl.Core.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-binding-v-1/QBrainAi.Support.Mcp.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-binding-w-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-binding-w-1/QBrainAi.QBAgent.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-binding-w-1/QBrainAi.Support.Mcp.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-clock-sweep.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-compile-u-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-compile-u-2.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-compile-u-3.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-compile-v-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-compile-v-2.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-compile-w-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-criteria-u-readback-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-criteria-v-readback-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-criteria-w-readback-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-doc-claim-checks-1.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-lane-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-lane-1/Build.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-lane-1/QBrainAi.McpAgent.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-lane-1/QBrainAi.QBAgent.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-lane-1/QBrainAi.Repl.Core.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-lane-1/QBrainAi.Repl.IntegrationTests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-lane-1/QBrainAi.Support.Mcp.IntegrationTests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-lane-1/QBrainAi.Support.Mcp.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-unit-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-unit-1/QBrainAi.Client.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-unit-1/QBrainAi.Cqrs.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-unit-1/QBrainAi.Launcher.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-unit-1/QBrainAi.McpAgent.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-unit-1/QBrainAi.QBAgent.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-unit-1/QBrainAi.Repl.Core.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-final-linux-unit-1/QBrainAi.Support.Mcp.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-final-win-lane-1.result.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-final-win-lane-1.start.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-final-win-unit-1.nu190x.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-final-win-unit-1.result.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-linux-unit-compare-r10-r11.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-mockgate-u-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-mockgate-u-1/QBrainAi.Repl.Core.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-mockgate-u-1/QBrainAi.Support.Mcp.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-mockgate-v-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-mockgate-v-1/QBrainAi.Support.Mcp.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-store-readback-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-timing-sweep.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11-win-unit-compare-r10-r11.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11v-final-linux-lane-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r11v-final-linux-unit-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r11v-final-linux-unit-1/QBrainAi.Client.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11v-final-linux-unit-1/QBrainAi.Cqrs.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11v-final-linux-unit-1/QBrainAi.Launcher.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11v-final-linux-unit-1/QBrainAi.McpAgent.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11v-final-linux-unit-1/QBrainAi.QBAgent.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11v-final-linux-unit-1/QBrainAi.Repl.Core.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11v-final-linux-unit-1/QBrainAi.Support.Mcp.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11v-final-win-lane-1.result.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11v-final-win-lane-1.start.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11v-final-win-unit-1.nu190x.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11v-final-win-unit-1.result.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11v-linux-unit-compare-u-v.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11v-win-unit-compare-u-v.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-final-linux-buildtests-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-final-linux-buildtests-1/ug-r11w-final-linux-buildtests-1.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-final-linux-lane-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-final-linux-lane-1/Build.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-final-linux-lane-1/QBrainAi.McpAgent.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-final-linux-lane-1/QBrainAi.QBAgent.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-final-linux-lane-1/QBrainAi.Repl.Core.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-final-linux-lane-1/QBrainAi.Repl.IntegrationTests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-final-linux-lane-1/QBrainAi.Support.Mcp.IntegrationTests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-final-linux-lane-1/QBrainAi.Support.Mcp.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-final-linux-nu190x.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-final-linux-traceability-1.meta.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-final-linux-unit-1.json",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-final-linux-unit-1/QBrainAi.Client.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-final-linux-unit-1/QBrainAi.Cqrs.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-final-linux-unit-1/QBrainAi.Launcher.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-final-linux-unit-1/QBrainAi.McpAgent.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-final-linux-unit-1/QBrainAi.QBAgent.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-final-linux-unit-1/QBrainAi.Repl.Core.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-final-linux-unit-1/QBrainAi.Support.Mcp.Tests.trx",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-final-win-buildtests-1.result.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-final-win-lane-1.result.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-final-win-lane-1.start.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-final-win-unit-1.nu190x.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-final-win-unit-1.result.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-linux-buildtests-compare-r10-r11.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-linux-lane-compare-v-w.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-linux-unit-compare-v-w.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-unit-compare-linux-win.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-win-buildtests-compare-r10-r11.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-win-lane-compare-v-w.txt",
+    "docs/receipts/unit-suite-green-20261019/ug-r11w-win-unit-compare-v-w.txt"
+  ],
+  "scannerHistory": [
+    "ccc78b7a7624e0367725af585a5fd7c4f38b3661 2026-10-21T05:55:57-05:00 test(scanner): the scanner documentation states the declared alias limit (R4-F1, IMPL-UNITGREEN-001)",
+    "801e6862d49d669808c9315a7ad43d0272b1d1f1 2026-10-20T18:50:56-05:00 fix(marker,tests): one source seam for plugin-version inputs; scanner aliases in lexical scope (IMPL-UNITGREEN-001)",
+    "27c43bccd19a591e4ca30560b52d4c5a9e8b81c9 2026-10-20T09:33:13-05:00 test(guards): one repository-root locator, refused outside Integration; classify by dependency (IMPL-UNITGREEN-001, R2-F1)",
+    "45a3197c9afda2f7c7d87e7d986908f885c20b02 2026-10-20T08:46:39-05:00 test(guards): Roslyn syntax-tree platform scanner, Roslyn pins to 5.9.0 (IMPL-UNITGREEN-001, R2-F2)",
+    "49cfec920349f17ace1b287b18d1b0fe2d956b03 2026-10-19T21:08:53-05:00 test: one skip definition for both guards; multiline, qualified and listed skip attributes; interpolation holes kept as code (IMPL-UNITGREEN-001)"
+  ],
+  "branchReflog": [
+    "142a93f0d5246f3224f601499073c96eeac072f3 commit: docs: gates and HV TRX evidence at 1f51d4b2, plan 27.23, round 11 prelaunch records (IMPL-UNITGREEN-001)",
+    "1f51d4b28862d505dea846899ab20ae23a8b13dc commit: fix(tests): timing-dependent unit cases (slice W)",
+    "cb174ac807c8e60b7a38a30bc216a651ed72c6c7 commit: fix(tests): scripted clocks for service-stamped times; stale slice U docs (slice V)",
+    "2e1210150ae009162b047c604b56b75426c4d428 commit: fix: round 10 findings: complete stored dates, path root identity, scripted test clocks (IMPL-UNITGREEN-001)",
+    "4e4a227ad63ab789aad4b4c5eb977bc9319e83f2 commit: docs: hostile validation round 10 receipts as received, DISAGREE 96/95 (IMPL-UNITGREEN-001)",
+    "03df5a6a1aec4627d0cd6847fdaab6f2462ec014 commit: docs: gates and HV TRX evidence at 6082b116, plan 27.22, round 10 prelaunch records (IMPL-UNITGREEN-001)",
+    "6082b11691e8f2e0ab44119ff1f53485d77b9861 commit: fix: round 9 findings: executed class identity, exact health nonce, checkout case aliases, dated reads, one Ollama model rule",
+    "a98250179d67af8712ad8eb032e333440ba11fd9 commit: docs: hostile validation round 9 receipts as received, DISAGREE 95/94 (IMPL-UNITGREEN-001)",
+    "e3eb8369481cbe2f49cb95798d9138193a18c1be commit: docs: round 9 prelaunch records and the ac-6 ruling in plan 27.21 (IMPL-UNITGREEN-001)",
+    "462709315de8609ce9b8b2b1f14dc4df2e092e82 commit: docs: gates and HV TRX evidence at 878c366f, plan 27.21, retrospective receipts (IMPL-UNITGREEN-001)",
+    "878c366faadc955d79d7e8e3f6b39f063107bb5b commit: test: memory-bench stub runs write outside the checkout; pin offset-less stored times as UTC",
+    "23955af0b330ec1fe167138edac1ef5ef8ff3bfd commit: docs(plan): round 9 as-built record, final gates at 62c5882d and the HV TRX evidence",
+    "62c5882d87f3d0b5019827b1f803140cbf79ca0d commit: docs(xml): dated change logs per MEMORY-FACT-008 on PR 87 slices P, Q and R",
+    "611a5dc556b5d0b6ce22b98c3103a9f873e34ac5 commit: fix: targeted test groups, owned provider keys, stored requirement times",
+    "679eb7881d0342a58ef446be5084b703c0cee7c4 commit: chore: sync Claude handoff and run evidence",
+    "765490a9035878c7888c911776289880493dacab commit: fix: isolate unit suite and lane resources",
+    "fb19eeab6a1533274b2092962bbef5df8c964eab commit: docs(plan): record the slice L binding result in the PR 87 handoff",
+    "0dd224daec46eb3e7c2d0766c6cd2c2ee9ac6a07 commit: docs(plan): PR 87 handoff at the 2026-10-30 pause",
+    "0039917455cb0b8c70376129ca46a4a67d8c7f06 commit: docs: hostile validation round 8b receipts as received, DISAGREE 96/95 (IMPL-UNITGREEN-001)",
+    "332e0d31dbcb823418c3db30c409bc44df655de8 commit: docs: round 8b second attempt as received, ended by the service; HV unbounded rule (IMPL-UNITGREEN-001)",
+    "a9d6a8d7e259803e438b7125701a186bae8db26d commit: docs: record the killed round 8b first attempt in plan 25.7 and the brief (IMPL-UNITGREEN-001)",
+    "366238a2dfdbbc65991605db19b9b8b2192c3aa9 commit: docs: round 8b first attempt receipts as received, killed with no verdict (IMPL-UNITGREEN-001)",
+    "2b0f65d87f1948afcdcab6b0aa7c7afd3edd42cd commit: docs: gates and TRX evidence at a78640ba, plan 25.7, round 8b prelaunch records (IMPL-UNITGREEN-001)",
+    "a78640baacb867cdea182f316ef06ee019d489d9 commit: test: label the TEST-MCP-REQSCOPE-REPL-001 citations historical (IMPL-UNITGREEN-001)",
+    "a69edb612a8f9994b2a1108f5096160332afca9e commit: docs: round 8b lanes complete by name and plan 25.4 (IMPL-UNITGREEN-001)",
+    "fbc2da860e83c095433c51f8c7bec3c6038bdba6 commit: docs: round 8b TRX evidence at 433ce191 and plan section 25 (IMPL-UNITGREEN-001)",
+    "d43c1d125cc6129940f21f439b5b3982dc1e61c3 merge 9b099716e3f4b773787a1caef44353e112bda556: Merge made by the 'ort' strategy.",
+    "4634c73c4b97f759177df0057c6142f5339e5027 commit: docs: gates at 433ce191 and plan sections 22.8 to 24 (IMPL-UNITGREEN-001)",
+    "433ce1919d04bb6c5bb3c95a60c6b5df656d59fb commit: docs: cite TR-MCP-NUKE-018 and -019 without their removed environment criteria",
+    "751e34e42151dedddca2ce31b5a12c768f3d2876 commit: docs: round 8b run receipts through 3e487b6b (IMPL-UNITGREEN-001)",
+    "3e487b6b9e520bd8bd7cba836cdb0bea8716fd48 commit: test: run the marker walk cases as unit tests over an in-memory file system (TR-MCP-REPL-008 AC-1 to AC-4)",
+    "4fab4424c0ebcd961e5135e393eace47771dd62c commit: fix: stream provisioning downloads with no total time limit (TR-MCP-NUKE-019 AC-8)",
+    "2f67921357bff28a636fc5824d70422dbb1f168d commit: test: fix the four REPL integration defects (TR-MCP-NUKE-019 AC-6, AC-7)",
+    "6667c405fe4e38a651773782809f355f087ac935 commit: build: select the integration lane's six projects (TR-MCP-NUKE-019 AC-2, slice A)",
+    "d5a23364daa20da6e23a89e020ddc65ec810773c commit: build: the integration lane provisions Ollama and its model on Windows and Linux (TR-MCP-NUKE-019 AC-4)",
+    "8c651f13036db0aa2b90413770377cc66cb419d6 commit: test: run the REPL integration tests on a temporary instance they own, never the live marker (TR-MCP-NUKE-019 AC-6)",
+    "2175d827fa6bf4bcbca05e23fae75aaf6b889737 commit: docs: hostile validation round 8 receipts as received, stopped by operator decision before a verdict (IMPL-UNITGREEN-001)",
+    "868bbb575052a39e763280a42c4fbca01c9c9fdd commit: docs: hostile validation round 8 prelaunch records (IMPL-UNITGREEN-001)",
+    "43cb62a78951ee71d27c8fd49f0fc0c153d42f50 commit: docs: round 8 run receipts and plan section 21 as built at ccd9e91f (IMPL-UNITGREEN-001)",
+    "ccd9e91f00dae4419b39ae8d37c2ae522e6fc62d commit: fix: bind the REPL timeout call sites to TR-MCP-REPL-001 AC-002 through one read seam",
+    "845f323b6b6ae13bc01b6165d6f987238c631dea commit: test: create the eighteenth-review traversal junction in process instead of a cmd.exe mklink helper (TR-MCP-USECASE-019 AC-008)",
+    "7ab3c1c40bc226056f7c20f1db6963e12311a313 commit: test: create the Twelfth-review junction in process instead of a pwsh.exe helper on a 5-second budget (TR-MCP-USECASE-019 AC-008)",
+    "f5cda3c15455b8f42f97bb35768c142757323378 commit: fix: REPL command timeouts ignore values the cancellation timer rejects (R7-F1, TR-MCP-REPL-001 AC-002)",
+    "96b81bef6588a19d772de28fa5429c333300e1c0 commit: docs: hostile validation round 7 receipts as received (IMPL-UNITGREEN-001)",
+    "8b97aa4bee778273688e53a64a737c3170a41823 commit: docs: hostile validation round 7 prelaunch records (IMPL-UNITGREEN-001)",
+    "55c1400c58df1e03cb9a0cc2c3926b02534ab75a commit: docs: round 7 gates of record at c31f36d8, the script-checking ledger and plan section 20 as built (IMPL-UNITGREEN-001)",
+    "c31f36d81dc87509b605175c5ced0d3b0f08180c commit: docs: round 7 run receipts through 04841148 and plan section 20 as of the first round 7 head (IMPL-UNITGREEN-001)",
+    "0484114872c09cf5afab5e019748dfabbda294bc commit: test: the CLI temp helper points the primary name at the test folder and the fallbacks elsewhere (IMPL-UNITGREEN-001, R6-F1)",
+    "6a87791d9363bb972feb6a4539339fac0c1a1915 commit: test: CLI temp-folder tests become integration tests with every temp variable controlled (IMPL-UNITGREEN-001, R6-F1, R6-F2)",
+    "3a607fb17dba72c6c7f920a6067b1ca191ec86fb commit: docs: hostile validation round 6 receipts as received, DISAGREE (IMPL-UNITGREEN-001)",
+    "3ce97b3e3dd31dbe009a3716d2b15d43ce60bb5b commit: docs: hostile validation round 6 prelaunch records and hostile gate v4 (IMPL-UNITGREEN-001)",
+    "44e9d810d88c0e34239ae31eef2683a614d392f7 commit: docs: round 6 run receipts and plan section 19 (IMPL-UNITGREEN-001)",
+    "c84183016a032bd522f5ae085a90d7c912bef810 commit: test: environment-touching unit tests become integration tests; env writers run one at a time (R5-F2, IMPL-UNITGREEN-001)",
+    "9933796c53433a55d11cf14a96be97438a087b0f commit: fix: profile scans skip a linked scan root and linked folders above it (R5-F1, IMPL-UNITGREEN-001)",
+    "c3625a64222c558b16c564e62ec2b5d600801e77 commit: docs: hostile validation round 5 receipts as received (IMPL-UNITGREEN-001)",
+    "780b6513b4004da0b17c2359d9cb65f6a69de67e commit: docs: hostile validation round 5 prelaunch records (IMPL-UNITGREEN-001)",
+    "8b7a49eaa3e8d4872b33d66af517acc8ad7e21ea commit: docs: the widened hostile gate, the gates at 810ee8aa and plan section 18 to date (IMPL-UNITGREEN-001)",
+    "810ee8aa0fbdcc6cf64a3d9575693068d261a97c commit: test(maintenance): the environment-instance parse test is an integration test that controls both instance variables (IMPL-UNITGREEN-001)",
+    "5b818847b4e598b4e85ac6567041b847b0385950 commit: docs: round 5 console logs and the Windows Test dry run as text receipts (IMPL-UNITGREEN-001)",
+    "3a9f8ff46690c4e35781bab444deac0d4345bbbd commit: docs: round 5 run receipts at ccc78b7a, plan section 18 and the R4-F2 corrections (IMPL-UNITGREEN-001)",
+    "ccc78b7a7624e0367725af585a5fd7c4f38b3661 commit: test(scanner): the scanner documentation states the declared alias limit (R4-F1, IMPL-UNITGREEN-001)",
+    "8c254695d886d6ff87d5caaa42b0fa6b421c9c6b commit: test(memory): the harness binding cites the memory CRUD chain present in the store (R4-F3, IMPL-UNITGREEN-001)",
+    "094e47f4e0e8074c027e68f25d26482ce68b331e commit: docs: hostile validation round 4 receipts as received (IMPL-UNITGREEN-001)",
+    "b0db5b09b5824b2e49b028ac37b3ee8a3b48ec8a commit: docs: round 4 plan record, final-head receipts and pre-launch records (IMPL-UNITGREEN-001)",
+    "97b7811491ccb3e338804a01d0bf28e4ecfe273a commit: test(handoff,memory): own connection per context in HandoffAuditDefectTests and MemoryS1Harness (IMPL-UNITGREEN-001)",
+    "50b58ce515cba89dab9b479b5e3eceb9fbb7c0a8 commit: docs: round 4 run receipts through code head 26fc8348 (IMPL-UNITGREEN-001)",
+    "26fc83486be252e63579cca9d53f3132672555c7 commit: test(handoff),fix(marker): own connection per context in the handoff tests; sibling rule back in MarkerFileService (IMPL-UNITGREEN-001)",
+    "c31c2918c15d4085e463e00f6a4977fd67913b76 commit: docs: correct the round 3 self-review run sentence (R3-F4, IMPL-UNITGREEN-001)",
+    "801e6862d49d669808c9315a7ad43d0272b1d1f1 commit: fix(marker,tests): one source seam for plugin-version inputs; scanner aliases in lexical scope (IMPL-UNITGREEN-001)",
+    "0996a1164fa84dd6288403e5161f337581fc21cb commit: docs: hostile validation round 3 receipts as received (IMPL-UNITGREEN-001)",
+    "64fc4b1400ac5bc7526c472f8efeacb91980f2a6 commit: docs: hostile validation round 3 pre-launch records (IMPL-UNITGREEN-001)",
+    "6b89998f4f0257b967bba12e2434135964cf135b commit: docs: the R3-P3 record, its gate receipts and the round 3 traceability receipts (IMPL-UNITGREEN-001)",
+    "e0b078c802d6456d106e6ec681d1aa93d6c4d055 commit: fix(marker): a plugin version file that cannot be read never fails the marker (IMPL-UNITGREEN-001)",
+    "395b4cd89726e921af481d4c8c056bf8fa535ae6 commit: docs: hostile validation round 2 receipts, the round 3 record and its gate receipts (IMPL-UNITGREEN-001)",
+    "68fa7b393d007c0d0c466c29ae4da5738bf54af2 commit: test(storage): the SQL Server LocalDB collection runs with parallelization disabled, as the chosen option states (IMPL-UNITGREEN-001)",
+    "6ea425ab943ebdd8aad1de1c84896de92d0270d8 commit: test(storage): the ephemeral PostgreSQL fixture runs pg_ctl silent so it cannot garble xUnit messages (IMPL-UNITGREEN-001)",
+    "0210244d27bf2b5e731e4ee40350504934e812a4 commit: test(storage): the SQL Server test classes on LocalDB run one after another (IMPL-UNITGREEN-001)",
+    "6042dbb3551c38a740e13de28f44fe9a814e6f0a commit: test(storage): SQL Server integration tests wait 120 s for LocalDB to accept a connection (IMPL-UNITGREEN-001)",
+    "56d14d7cd7e72975b1cbf0ddcd2cc17c16763249 commit: test(services): the hermetic-profile check reads the injected fixture, not a parallel test's folder (IMPL-UNITGREEN-001)",
+    "538d0ccf957c041f1e3886864bdf5e4ca693e9ec commit: fix(services): user-profile scans skip directory links and unlistable folders (IMPL-UNITGREEN-001, triage b0e41c36)",
+    "27c43bccd19a591e4ca30560b52d4c5a9e8b81c9 commit: test(guards): one repository-root locator, refused outside Integration; classify by dependency (IMPL-UNITGREEN-001, R2-F1)",
+    "45a3197c9afda2f7c7d87e7d986908f885c20b02 commit: test(guards): Roslyn syntax-tree platform scanner, Roslyn pins to 5.9.0 (IMPL-UNITGREEN-001, R2-F2)",
+    "a94579db927f25a0cbddd07d639f3054f2ee72e8 commit: docs: hostile validation round 1 receipts, its remediation record and the round 2 gate receipts (IMPL-UNITGREEN-001)",
+    "b4ad42aaa601ed0df7e03b34203dee4f93d316a9 commit: test: unit tests that reach native file-system boundaries or write tracked files move to Integration (IMPL-UNITGREEN-001)",
+    "49cfec920349f17ace1b287b18d1b0fe2d956b03 commit: test: one skip definition for both guards; multiline, qualified and listed skip attributes; interpolation holes kept as code (IMPL-UNITGREEN-001)",
+    "6b4295b790e0e2cde7113f3be4bb83bc66343016 commit: docs: record the 19:41 decisions and the handoff-correction commit in the unit-suite-green plan (IMPL-UNITGREEN-001)",
+    "83417029fa3e0ee8ef2ffc6bdfa29a7c1e9fdb38 commit: docs: unit-suite-green plan as built and the code-head gate receipts (IMPL-UNITGREEN-001)",
+    "127468345afcc7a24e6a254f712d6b75a54713e8 commit: test: the invalid-handle final-path case runs only on Windows, without a silent return (IMPL-UNITGREEN-001)",
+    "69d8f3f5b19b070f9059a096f344c44bbd359d47 commit: build: the Windows integration lane runs only from an interactive desktop session (TR-MCP-NUKE-019 AC-5, amendment H1)",
+    "5924926051f84720c110ab1421430499fadf918a commit: test: the interactive desktop-spawner case fails loudly instead of returning silently (IMPL-UNITGREEN-001)",
+    "4f668b76d26b26e7162d8654fb946c484fd42539 commit: docs: unit-suite-green plan and the PR 82 handoff correction (IMPL-UNITGREEN-001)",
+    "b2bd50b3711c28bdb256e1f4fa56f3d8114fb6c6 commit: test: classify platform-dependent tests as integration tests and guard the unit suite (IMPL-UNITGREEN-001)",
+    "8a6173342dcd7683b9d9549005a5af819b8abc90 merge origin/develop: Merge made by the 'ort' strategy.",
+    "8c2b83ab5a442ce7dbc4a5a78f70dfaafbd034a2 commit: build: host-scoped integration lane filter for MigrationIntegrationTests (TR-MCP-NUKE-019, IMPL-UNITGREEN-001 G)",
+    "11681680d316bee7c8c184e45b699af7c1bd2188 commit: test: take over the unit-suite fixes and Linux provider provisioning from PLAN-C4MODEL-001 (IMPL-UNITGREEN-001)",
+    "b2319488039bbcd1e2014d8f3a1b7a26627b3ba8 commit: test: HostileReviewWorker startup test no longer depends on Event Log write access (IMPL-UNITGREEN-001 F)",
+    "a4c358efd91131e7fb714370726997b5c2d076cb commit: test: leave the PLAN-C4MODEL-001 unit fixes to that effort (IMPL-UNITGREEN-001 scope)",
+    "de5813532adb51b964b222644ae0519bd814f8ef commit: feat(client): host-aware WorkspaceIdentityPath.ToNativePath overload (IMPL-UNITGREEN-001 step 4)",
+    "28bf0b222464c5bdbfb8b6ec0a357e15284e486f commit: test: canonical workspace keys, provider traits and a host-aware native-path contract (IMPL-UNITGREEN-001 step 2)",
+    "cbc74e823e7af96f8df1a1320498998e5de2b328 commit: fix(deps): pin System.Security.Cryptography.Xml and Pkcs to the advisory-patched 10.0.13 (IMPL-UNITGREEN-001 step A)",
+    "ace70daa963287ff43273c1d19754549a13abe2d branch: Created from ace70daa963287ff43273c1d19754549a13abe2d"
+  ],
+  "status": [
+    "?? docs/receipts/hv/20261103T113108-unitgreen-r11.request.jsonl",
+    "?? docs/receipts/hv/20261103T113108-unitgreen-r11.response.jsonl",
+    "?? docs/receipts/hv/20261103T113108-unitgreen-r11.selfreview.md",
+    "?? docs/receipts/hv/hv-ug-r11-bootstrap.json",
+    "?? docs/receipts/hv/hv-ug-r11-continuity.json",
+    "?? docs/receipts/hv/hv-ug-r11-gate-details.json",
+    "?? docs/receipts/hv/hv-ug-r11-history-initial.json",
+    "?? docs/receipts/hv/hv-ug-r11-inventory.json",
+    "?? docs/receipts/hv/hv-ug-r11-memories-global.json",
+    "?? docs/receipts/hv/hv-ug-r11-memories-workspace.json",
+    "?? docs/receipts/hv/hv-ug-r11-operator-evidence.json",
+    "?? docs/receipts/hv/hv-ug-r11-own-log-10.json",
+    "?? docs/receipts/hv/hv-ug-r11-own-log-11.json",
+    "?? docs/receipts/hv/hv-ug-r11-pr-body.md",
+    "?? docs/receipts/hv/hv-ug-r11-pr.json",
+    "?? docs/receipts/hv/hv-ug-r11-progress-1.json",
+    "?? docs/receipts/hv/hv-ug-r11-record-audit.json",
+    "?? docs/receipts/hv/hv-ug-r11-reload1-memories-global.json",
+    "?? docs/receipts/hv/hv-ug-r11-reload1-memories-workspace.json",
+    "?? docs/receipts/hv/hv-ug-r11-reload2-memories-global.json",
+    "?? docs/receipts/hv/hv-ug-r11-reload2-memories-workspace.json",
+    "?? docs/receipts/hv/hv-ug-r11-reload2b-memories-workspace.json",
+    "?? docs/receipts/hv/hv-ug-r11-source-snapshot.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-BUG-TRIAGE-139.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-FR-MCP-018.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-FR-MCP-040.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-FR-MCP-047.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-FR-MCP-079.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-FR-MCP-BUILD-001.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-FR-MCP-FED-PATH-001.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-FR-MCP-MEMORY-001.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-FR-MCP-MEMORY-002.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-FR-MCP-PATHNORM-001.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-FR-MCP-QBOPENAI-001.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-FR-MCP-REPL-001.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-FR-MCP-REPL-007.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-FR-MCP-REPL-008.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-FR-MCP-SESSIONLOGCTX-001.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-FR-MCP-TESTRESOURCE-001.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-FR-MCP-USECASE-001.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-IMPL-SCANNERALIAS-001.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-IMPL-TXNINTEGRATION-001.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-IMPL-UNITGREEN-001.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-PLAN-AZURERETIRE-001.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-PLAN-LINKVALIDATOR-001.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TEST-HANDOFF-004.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TEST-HANDOFF-005.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TEST-HANDOFF-006.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TEST-HANDOFF-007.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TEST-MCP-MEMORY-002.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TEST-MCP-PATHNORM-001.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TEST-MCP-QBOLLAMA-001.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TEST-MCP-QBOPENAI-001.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TEST-MCP-TRANSCRIPT-008.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TEST-MCP-TRIAGE-003.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TEST-MCP-TRIAGE-005.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TEST-MCP-USECASE-019.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TEST-MCP-USECASE-020.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TR-MCP-FED-PATH-001.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TR-MCP-MEMORY-002.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TR-MCP-NUKE-016.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TR-MCP-NUKE-018.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TR-MCP-NUKE-019.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TR-MCP-NUKE-020.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TR-MCP-PATHNORM-001.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TR-MCP-QUALITY-001.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TR-MCP-REPL-001.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TR-MCP-REPL-008.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TR-MCP-SESSIONLOG-006.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TR-MCP-USECASE-018.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TR-MCP-USECASE-019.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-TR-MCP-WS-005.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-comparison.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-effective.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-index.json",
+    "?? docs/receipts/hv/hv-ug-r11-store-mappings.json",
+    "?? docs/receipts/hv/hv-ug-r11-trx-audit.json",
+    "?? docs/receipts/hv/hv-ug-r11-trx-index.json"
+  ]
+}

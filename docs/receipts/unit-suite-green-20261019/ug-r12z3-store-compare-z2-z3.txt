@@ -1,0 +1,13 @@
+Store readback comparison, written 2026-11-04T16:12:03 local by ClaudeCode (Compare-StoreReadbacks.ps1; read only over the two receipts).
+before /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r12z2-store-readback-1.json sha256=C14694C427746CA4084F4C67A6DBE0955DF289199F30E7BF81BF083C273003B8
+after /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r12z3-store-readback-1.json sha256=2506FC0F7F850BFBDD31AB1ECCB33E00F1134589790E94272025B269F3A4DECD
+before read 2026-11-04T12:49:26; after read 2026-11-04T16:11:48
+FR-MCP-TESTRESOURCE-001: criteria before=12 after=12
+TR-MCP-USECASE-018: criteria before=7 after=7
+  position 5 id=AC-006: CHANGED append=True satisfied False->False tail= A wait that happens only under a condition the step can meet, such as the 150 ms sleep before Microsoft.Data.Sqlite retries a statement that found the database busy, counts in that sum once for each poll on the path (fourth holistic read before hostile validation round 12, finding g1; operator 2026-11-04: "Strengthen: include them").
+IMPL-UNITGREEN-001: tasks before=44 after=45
+  task 43: CHANGED done False->False
+  task 44: CHANGED done False->False
+  task 45: NEW done=False
+  field functionalRequirements: CHANGED
+  field technicalRequirements: CHANGED

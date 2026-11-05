@@ -1,0 +1,9 @@
+Now: 2026-11-03T15:05:53 key=test name only before=/mnt/legion2-github/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r11w-final-win-unit-1/unit (4733) after=/mnt/legion2-github/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r11x-final-win-unit-1/unit (4738)
+onlyBefore=0 onlyAfter=5 common=4733
+--- only in before ---
+--- only in after ---
+QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.StatedSyntaxRule_SatisfiesEveryRow
+QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: "accepts device paths")
+QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: "compares across path syntaxes")
+QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: "ignores Windows segment aliases")
+QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: "Windows segment rules on POSIX paths")

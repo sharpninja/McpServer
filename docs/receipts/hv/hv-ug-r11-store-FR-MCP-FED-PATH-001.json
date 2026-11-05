@@ -1,0 +1,51 @@
+{
+  "timestampLocal": "2026-11-03T11:42:34",
+  "method": "workflow.requirements.getFr",
+  "id": "FR-MCP-FED-PATH-001",
+  "result": {
+    "type": "result",
+    "payload": {
+      "requestId": "req-20261103T174235Z-4991",
+      "result": {
+        "id": "FR-MCP-FED-PATH-001",
+        "title": "Request workspace paths are interpreted by their own syntax",
+        "description": "A server must interpret any request-supplied workspace path by its own syntax (drive letter, UNC, POSIX root), never by the host OS, so a Linux host accepts and stores Windows paths unchanged in meaning.",
+        "status": "pending",
+        "priority": "medium",
+        "area": "MCP",
+        "notes": "Registered in this workspace store 2026-10-19 by operator decision (\"Create the records here now\"). Statement and FR criteria verbatim from docs/plans/2026-10-07-federation-fixes.md:53-59 (approved 2026-10-07; first registered in the original Windows workspace store). Architecture Amendment 1 H0 import must merge with these records.",
+        "acceptanceCriteria": [
+          {
+            "id": "AC1",
+            "text": "On a Linux host, C:\\Users\\fixture-user, C:/Users/fixture-user resolve to the same Windows identity; nothing is prefixed with the process cwd.",
+            "isSatisfied": false
+          },
+          {
+            "id": "AC2",
+            "text": "On a Windows host, /home/x stays a POSIX path.",
+            "isSatisfied": false
+          },
+          {
+            "id": "AC3",
+            "text": "Triage submit/status round-trips: getReport with the submitter's original path finds the report on a Linux hub.",
+            "isSatisfied": false
+          },
+          {
+            "id": "AC4",
+            "text": "WorkspaceService.Init never creates a directory from a foreign-platform path.",
+            "isSatisfied": false
+          },
+          {
+            "id": "AC5",
+            "text": "When the workspace path belongs to the other platform and no Mcp:GitHub:Repository is configured, a GitHub CLI operation never starts gh and returns a failure that names the foreign workspace and the missing Mcp:GitHub:Repository setting; with a repository configured, gh runs with --repo and no working directory (operator 2026-10-29: \"gh foreign-workspace AC (Recommended)\"; holistic review findings SRC-1 and SRC-4).",
+            "isSatisfied": false
+          }
+        ],
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-11-03T17:42:36.5944139+00:00",
+        "updatedAt": "2026-11-03T17:42:36.5945911+00:00"
+      },
+      "deprecated": true
+    }
+  }
+}

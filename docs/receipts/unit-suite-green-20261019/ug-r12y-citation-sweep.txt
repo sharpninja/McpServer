@@ -1,0 +1,12 @@
+RECEIPT started=2026-11-03T17:09:50 ended=2026-11-03T17:10:20 host=LAB-OMARCHY exit=0
+SCRIPT /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-AddedLineCitations.ps1 sha256=970964F8F788FF2C7A7B18739E9CEF7CA746C745E6C47AEFF6B6FA952E50CCAE
+ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Base | 6082b116
+HEAD ec58cf4af3e3b5482dab8dd1388cdc7db096bbc8
+Now: 2026-11-03T17:09:51 base=6082b116
+store ids=1453
+added-line citations: ids=10 absent=3 [FR-MCP-MEMORY-010, TEST-MCP-MEMORY-010, TR-PLANNED-CORE-013]
+  w/tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogFileWatcherTests.cs:57: TR-PLANNED-CORE-013
+  w/tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogFileWatcherTests.cs:62: TR-PLANNED-CORE-013
+  w/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryModelTests.cs:13: TEST-MCP-MEMORY-010
+  w/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryModelTests.cs:13: FR-MCP-MEMORY-010
+  w/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryModelTests.cs:13: FR-MCP-MEMORY-010

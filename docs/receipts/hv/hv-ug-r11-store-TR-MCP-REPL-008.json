@@ -1,0 +1,25 @@
+{
+  "timestampLocal": "2026-11-03T11:40:55",
+  "method": "workflow.requirements.getTr",
+  "id": "TR-MCP-REPL-008",
+  "result": {
+    "type": "result",
+    "payload": {
+      "requestId": "req-20261103T174055Z-2e47",
+      "result": {
+        "id": "TR-MCP-REPL-008",
+        "title": "",
+        "description": "`MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(workspacePathOverride, markerPathOverride, out options, out error)` returns success/failure plus a human-readable diagnostic. The diagnostic enumerates every directory walked, names the marker file when found, and distinguishes \"not found\" from \"malformed\" and \"signature mismatch\". `FindMarkerFile(startPath, out searchedPaths)` exposes the same path list for callers that want raw enumeration. The legacy parameterless `Resolve()` remains for back-compat.\n**Covered by:** FR: FR-MCP-REPL-007; TEST: TEST-MCP-REPL-007-1, TEST-MCP-REPL-007-2, TEST-MCP-REPL-007-3",
+        "status": "pending",
+        "priority": "medium",
+        "area": "MCP",
+        "subarea": "REPL",
+        "acceptanceCriteria": [],
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-11-03T17:40:57.3185350+00:00",
+        "updatedAt": "2026-11-03T17:40:57.3186542+00:00"
+      },
+      "deprecated": true
+    }
+  }
+}

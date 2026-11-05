@@ -1,0 +1,21 @@
+[2026-11-04T16:50:20] Phase 1/4: checks service=mcpserver.service install=/opt/mcpserver/app port=7147 whatIf=False
+[2026-11-04T16:50:20]   uid=0
+[2026-11-04T16:50:20]   apphost=/opt/mcpserver/app/QBrainAi.Support.Mcp bytes=209203061 mode=OtherExecute, OtherRead, GroupExecute, GroupRead, UserExecute, UserWrite, UserRead legacyPresent=False
+[2026-11-04T16:50:20]   ActiveState=failed NeedDaemonReload=no
+[2026-11-04T16:50:20] Phase 2/4: retarget McpServer.Support.Mcp to QBrainAi.Support.Mcp in the unit files
+[2026-11-04T16:50:20]   FILE /etc/systemd/system/mcpserver.service occurrences=1
+[2026-11-04T16:50:20]     COPY /var/backups/mcpserver/manual-retarget-20261104T165020/mcpserver.service verified=True
+[2026-11-04T16:50:20]     WROTE /etc/systemd/system/mcpserver.service legacyLeft=0
+[2026-11-04T16:50:20]   FILE /etc/systemd/system/mcpserver.service.d/binding.conf occurrences=1
+[2026-11-04T16:50:20]     COPY /var/backups/mcpserver/manual-retarget-20261104T165020/binding.conf verified=True
+[2026-11-04T16:50:20]     WROTE /etc/systemd/system/mcpserver.service.d/binding.conf legacyLeft=0
+[2026-11-04T16:50:20]   FILE /etc/systemd/system/mcpserver.service.d/federation.conf occurrences=0
+[2026-11-04T16:50:20]   changedFiles=2
+[2026-11-04T16:50:20] Phase 3/4: daemon-reload, reset-failed, start
+[2026-11-04T16:50:21]   daemon-reload exit=0
+[2026-11-04T16:50:21]   reset-failed exit=0
+[2026-11-04T16:50:21]   start exit=0
+[2026-11-04T16:50:21]   ExecStart path=/opt/mcpserver/app/QBrainAi.Support.Mcp
+[2026-11-04T16:50:21] Phase 4/4: wait up to 300 s for /health and the deployed apphost
+[2026-11-04T16:51:06]   healthy=True ActiveState=active MainPID=456615 exe=/opt/mcpserver/app/QBrainAi.Support.Mcp
+[2026-11-04T16:51:06] END exit=0

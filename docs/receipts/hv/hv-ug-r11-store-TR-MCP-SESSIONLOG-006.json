@@ -1,0 +1,31 @@
+{
+  "timestampLocal": "2026-11-03T11:41:32",
+  "method": "workflow.requirements.getTr",
+  "id": "TR-MCP-SESSIONLOG-006",
+  "result": {
+    "type": "result",
+    "payload": {
+      "requestId": "req-20261103T174133Z-0965",
+      "result": {
+        "id": "TR-MCP-SESSIONLOG-006",
+        "title": "Required planFile and todoId scalars with None sentinel and backfill",
+        "description": "Session-log turn storage, DTOs, REST, MCP tools, and plugin wrappers SHALL expose required string fields planFile and todoId. New interactive creates/submits/beginTurn/replace-turn reject omitted, null, or empty values. Accepted planFile values are a workspace-relative path, an exact absolute path, a ~/ home-relative path, or the literal sentinel None. Accepted todoId values are a canonical MCP TODO id, ISSUE-N, or None. An EF migration adds both columns, defaults existing rows to None, then a one-time backfill scans turn contents and agent history under ~. Uncertain extractions remain None. Query/get results SHALL return both fields.\n**Covered by:** FR: FR-MCP-SESSIONLOGCTX-001; TEST: TEST-MCP-SESSIONLOG-006",
+        "status": "pending",
+        "priority": "medium",
+        "area": "MCP",
+        "subarea": "SESSIONLOG",
+        "acceptanceCriteria": [
+          {
+            "id": "AC-TR-MCP-SESSIONLOG-006-010",
+            "text": "The real file-system binding of AC-FR-MCP-SESSIONLOGCTX-001-008 is AC-TR-MCP-WS-005-002: the agent-history scan uses the same directory walk, so that integration case proves both (operator 2026-10-30: \"New TR binding criterion (Recommended)\").",
+            "isSatisfied": false
+          }
+        ],
+        "scopeStartLayerKey": "layer-1",
+        "createdAt": "2026-11-03T17:41:35.2151922+00:00",
+        "updatedAt": "2026-11-03T17:41:35.2153194+00:00"
+      },
+      "deprecated": true
+    }
+  }
+}

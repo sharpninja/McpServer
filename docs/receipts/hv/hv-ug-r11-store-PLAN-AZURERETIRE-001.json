@@ -1,0 +1,43 @@
+{
+  "timestampLocal": "2026-11-03T11:43:12",
+  "method": "workflow.todo.get",
+  "id": "PLAN-AZURERETIRE-001",
+  "result": {
+    "type": "result",
+    "payload": {
+      "requestId": "req-20261103T174313Z-12cf",
+      "result": {
+        "id": "PLAN-AZURERETIRE-001",
+        "title": "Retire the Azure DevOps CI requirements FR-MCP-074 and TR-MCP-CI-001",
+        "section": "Requirements",
+        "priority": "low",
+        "done": false,
+        "note": "Opened by ClaudeCode 2026-11-02 from the PR 87 traceability audit (session ClaudeCode-20261102T151154Z-plugin-session, turn req-20261102T151453Z-prompt-be7e).",
+        "description": [
+          "FR-MCP-074 (Azure DevOps Repository Pipeline Migration) and TR-MCP-CI-001 (Azure DevOps Repository Pipeline Definition) describe a CI that is out of the picture (MEMORY-PROCESS-009, operator 2026-10-21: \"Azure is no longer in the picture.\").",
+          "PR 87 restores their mapping edge (the FR body names the TR) so that ValidateTraceability passes; the operator ruled on 2026-11-02 to restore the edge now and retire both records later.",
+          "Plan the retirement under BDPv4 with the operator: how the store marks a retired requirement, what replaces the CI description, and the projections and mappings that change."
+        ],
+        "technicalDetails": [],
+        "implementationTasks": [
+          {
+            "task": "Decide with the operator how a retired requirement is recorded (status, deletion with receipts, or replacement record).",
+            "done": false
+          },
+          {
+            "task": "Apply the decision to FR-MCP-074 and TR-MCP-CI-001 through the plugin, with full-record receipts and regenerated projections.",
+            "done": false
+          }
+        ],
+        "dependsOn": [],
+        "functionalRequirements": [
+          "FR-MCP-074"
+        ],
+        "technicalRequirements": [
+          "TR-MCP-CI-001"
+        ]
+      },
+      "deprecated": true
+    }
+  }
+}

@@ -1,0 +1,835 @@
+{
+  "timestampLocal": "2026-11-03T12:23:19",
+  "effectiveProperties": [
+    "currentLayer",
+    "functional",
+    "technical",
+    "testing",
+    "mappings"
+  ],
+  "deletions": [
+    {
+      "id": "FR-MCP-USECASE-016",
+      "kind": "fr",
+      "recordKeys": [
+        "description",
+        "area",
+        "scopeStartLayerKey",
+        "priority",
+        "title",
+        "updatedAt",
+        "createdAt",
+        "status",
+        "acceptanceCriteria",
+        "id"
+      ],
+      "presentNow": false,
+      "fullGetterRecord": {
+        "description": "Use-case persistence and its supporting contained rollback, physical workspace identity, SQLite opening, cancellation classification, and repository evidence paths shall remain safe and finitely completing on every supported platform, including deterministic CI builds, while preserving exact provider failures and truthful supersession evidence.",
+        "area": "MCP",
+        "scopeStartLayerKey": "layer-1",
+        "priority": "high",
+        "title": "BUG-TRIAGE-139 fifteenth-review bounded cross-platform remediation",
+        "updatedAt": "2026-11-02T17:19:11.0310048+00:00",
+        "createdAt": "2026-11-02T17:19:11.0308867+00:00",
+        "status": "pending",
+        "acceptanceCriteria": [
+          {
+            "isSatisfied": false,
+            "id": "FR-MCP-USECASE-016-AC001",
+            "text": "Linux rollback directories retain owner search and execute permission, nested restoration reproduces file contents and mode, and all mutations remain contained."
+          },
+          {
+            "isSatisfied": false,
+            "id": "FR-MCP-USECASE-016-AC002",
+            "text": "Physical workspace identity resolution completes within a finite bound on Windows and non-Windows without caller-thread blocking, cancellation gaps, abandoned workers, or silent platform returns."
+          },
+          {
+            "isSatisfied": false,
+            "id": "FR-MCP-USECASE-016-AC003",
+            "text": "SQLite connection opening is finitely bounded before native-handle publication on every supported platform and leaves no worker, handle, callback, interrupt, pool, or lifecycle leak."
+          },
+          {
+            "isSatisfied": false,
+            "id": "FR-MCP-USECASE-016-AC004",
+            "text": "Only outcomes precisely attributable to requested cancellation become OperationCanceledException; independent I/O, disposal, and provider failures retain their original type and details."
+          },
+          {
+            "isSatisfied": false,
+            "id": "FR-MCP-USECASE-016-AC005",
+            "text": "Repository and Agent Help fixtures discover their root from true external deterministic builds with mapped CallerFilePath and no MCP_REPOSITORY_ROOT override."
+          },
+          {
+            "isSatisfied": false,
+            "id": "FR-MCP-USECASE-016-AC006",
+            "text": "Every supported platform executes an applicable native contract assertion; platform-specific tests neither skip nor silently return."
+          },
+          {
+            "isSatisfied": false,
+            "id": "FR-MCP-USECASE-016-AC007",
+            "text": "The rejected fourteenth receipt is preserved with an explicit supersession notice, and the fifteenth evidence records every failed, inconclusive, and passing run with independently verified hashes and command mappings."
+          }
+        ],
+        "id": "FR-MCP-USECASE-016"
+      }
+    },
+    {
+      "id": "FR-MCP-USECASE-017",
+      "kind": "fr",
+      "recordKeys": [
+        "description",
+        "area",
+        "scopeStartLayerKey",
+        "priority",
+        "title",
+        "updatedAt",
+        "createdAt",
+        "status",
+        "acceptanceCriteria",
+        "id"
+      ],
+      "presentNow": false,
+      "fullGetterRecord": {
+        "description": "Use-case persistence and its filesystem, provider, process, platform-test, and evidence boundaries shall close physical alias and replacement races, complete publicly within finite contracts, preserve truthful worker and provider causality, execute applicable native contracts, and report only exact immutable evidence while retaining every previously approved control.",
+        "area": "MCP",
+        "scopeStartLayerKey": "layer-1",
+        "priority": "high",
+        "title": "BUG-TRIAGE-139 sixteenth-review race-safe bounded remediation",
+        "updatedAt": "2026-11-02T17:19:14.3949629+00:00",
+        "createdAt": "2026-11-02T17:19:14.3948452+00:00",
+        "status": "pending",
+        "acceptanceCriteria": [
+          {
+            "isSatisfied": false,
+            "id": "FR-MCP-USECASE-017-AC001",
+            "text": "Physical workspace identity rejects safe lexical paths whose physical target is on an unsafe mount, remains safe across symlink or mount replacement timing, completes publicly within its deadline, and reports any unstoppable worker as active until it actually exits."
+          },
+          {
+            "isSatisfied": false,
+            "id": "FR-MCP-USECASE-017-AC002",
+            "text": "SQLite data-source validation and pre-handle opening resist safe-link and check-to-open replacement, use no ineffective Thread.Interrupt dependency for native Linux I/O, finish cleanup within a finite deadline, and preserve exact lifecycle, handle, worker, and exception state."
+          },
+          {
+            "isSatisfied": false,
+            "id": "FR-MCP-USECASE-017-AC003",
+            "text": "PostgreSQL SQLSTATE 57014 is translated to caller cancellation only with causal evidence produced by the caller-triggered cancellation mechanism; statement timeout and administrative cancellation remain PostgresException even during concurrent token cancellation."
+          },
+          {
+            "isSatisfied": false,
+            "id": "FR-MCP-USECASE-017-AC004",
+            "text": "Platform-specific tests are discovered or composed only where applicable, prove real execution and inventory counts, and never pass through source inspection, skip, silent return, abort, inconclusive outcome, or a below-minimum count."
+          },
+          {
+            "isSatisfied": false,
+            "id": "FR-MCP-USECASE-017-AC005",
+            "text": "Containment race coverage requires at least one successful contained read and write while proving no escape or corruption, and deterministic total-rejection tests prove that rejecting every attempt cannot satisfy the success gate."
+          },
+          {
+            "isSatisfied": false,
+            "id": "FR-MCP-USECASE-017-AC006",
+            "text": "Windows descendant cleanup establishes containment at process creation or proves an equivalent race-free boundary before descendants can escape, and timeout or cancellation terminates immediate descendants finitely without regressing non-Windows process-group cleanup."
+          },
+          {
+            "isSatisfied": false,
+            "id": "FR-MCP-USECASE-017-AC007",
+            "text": "Historical rejected receipts remain intact but are explicitly superseded; final evidence identifies the exact immutable tested SHA, contains executable commands or a mechanically complete ledger, independently reconciles hashes, mappings and totals, and limits conclusions to the proven local and retained-evidence boundary."
+          },
+          {
+            "isSatisfied": false,
+            "id": "FR-MCP-USECASE-017-AC008",
+            "text": "All current and prior requirements pass focused and cumulative Windows, native Linux/FUSE/non-root, SQLite, LocalDB, fresh PostgreSQL, deterministic external, BDPv4, build, traceability, Release, repository, history, harness, and EOL gates from C:-physical outputs with exact zero failures and zero skips."
+          }
+        ],
+        "id": "FR-MCP-USECASE-017"
+      }
+    },
+    {
+      "id": "FR-MCP-FED-BACKFILL-001",
+      "kind": "fr",
+      "recordKeys": [
+        "description",
+        "area",
+        "scopeStartLayerKey",
+        "priority",
+        "title",
+        "updatedAt",
+        "createdAt",
+        "status",
+        "acceptanceCriteria",
+        "id"
+      ],
+      "presentNow": false,
+      "fullGetterRecord": {
+        "description": "Placeholder requirement backfilled for TODO link FR-MCP-FED-BACKFILL-001.",
+        "area": "MCP",
+        "scopeStartLayerKey": "layer-1",
+        "priority": "medium",
+        "title": "FR-MCP-FED-BACKFILL-001",
+        "updatedAt": "2026-11-02T17:19:17.7923983+00:00",
+        "createdAt": "2026-11-02T17:19:17.7922798+00:00",
+        "status": "pending",
+        "acceptanceCriteria": [],
+        "id": "FR-MCP-FED-BACKFILL-001"
+      }
+    },
+    {
+      "id": "TR-MCP-FED-BACKFILL-001",
+      "kind": "tr",
+      "recordKeys": [
+        "description",
+        "area",
+        "scopeStartLayerKey",
+        "priority",
+        "title",
+        "updatedAt",
+        "createdAt",
+        "status",
+        "acceptanceCriteria",
+        "subarea",
+        "id"
+      ],
+      "presentNow": false,
+      "fullGetterRecord": {
+        "description": "Placeholder requirement backfilled for TODO link TR-MCP-FED-BACKFILL-001.",
+        "area": "MCP",
+        "scopeStartLayerKey": "layer-1",
+        "priority": "medium",
+        "title": "TR-MCP-FED-BACKFILL-001",
+        "updatedAt": "2026-11-02T17:19:21.0582190+00:00",
+        "createdAt": "2026-11-02T17:19:21.0581017+00:00",
+        "status": "pending",
+        "acceptanceCriteria": [],
+        "subarea": "FED",
+        "id": "TR-MCP-FED-BACKFILL-001"
+      }
+    },
+    {
+      "id": "FR-MCP-FED-ROUTE-001",
+      "kind": "fr",
+      "recordKeys": [
+        "description",
+        "area",
+        "scopeStartLayerKey",
+        "priority",
+        "title",
+        "updatedAt",
+        "createdAt",
+        "status",
+        "acceptanceCriteria",
+        "id"
+      ],
+      "presentNow": false,
+      "fullGetterRecord": {
+        "description": "Placeholder requirement backfilled for TODO link FR-MCP-FED-ROUTE-001.",
+        "area": "MCP",
+        "scopeStartLayerKey": "layer-1",
+        "priority": "medium",
+        "title": "FR-MCP-FED-ROUTE-001",
+        "updatedAt": "2026-11-02T17:19:24.3729568+00:00",
+        "createdAt": "2026-11-02T17:19:24.3728510+00:00",
+        "status": "pending",
+        "acceptanceCriteria": [],
+        "id": "FR-MCP-FED-ROUTE-001"
+      }
+    },
+    {
+      "id": "TR-MCP-FED-ROUTE-001",
+      "kind": "tr",
+      "recordKeys": [
+        "description",
+        "area",
+        "scopeStartLayerKey",
+        "priority",
+        "title",
+        "updatedAt",
+        "createdAt",
+        "status",
+        "acceptanceCriteria",
+        "subarea",
+        "id"
+      ],
+      "presentNow": false,
+      "fullGetterRecord": {
+        "description": "Placeholder requirement backfilled for TODO link TR-MCP-FED-ROUTE-001.",
+        "area": "MCP",
+        "scopeStartLayerKey": "layer-1",
+        "priority": "medium",
+        "title": "TR-MCP-FED-ROUTE-001",
+        "updatedAt": "2026-11-02T17:19:27.6416414+00:00",
+        "createdAt": "2026-11-02T17:19:27.6415142+00:00",
+        "status": "pending",
+        "acceptanceCriteria": [],
+        "subarea": "FED",
+        "id": "TR-MCP-FED-ROUTE-001"
+      }
+    },
+    {
+      "id": "FR-MCP-FED-WSSYNC-001",
+      "kind": "fr",
+      "recordKeys": [
+        "description",
+        "area",
+        "scopeStartLayerKey",
+        "priority",
+        "title",
+        "updatedAt",
+        "createdAt",
+        "status",
+        "acceptanceCriteria",
+        "id"
+      ],
+      "presentNow": false,
+      "fullGetterRecord": {
+        "description": "Placeholder requirement backfilled for TODO link FR-MCP-FED-WSSYNC-001.",
+        "area": "MCP",
+        "scopeStartLayerKey": "layer-1",
+        "priority": "medium",
+        "title": "FR-MCP-FED-WSSYNC-001",
+        "updatedAt": "2026-11-02T17:19:30.9624499+00:00",
+        "createdAt": "2026-11-02T17:19:30.9623311+00:00",
+        "status": "pending",
+        "acceptanceCriteria": [],
+        "id": "FR-MCP-FED-WSSYNC-001"
+      }
+    },
+    {
+      "id": "TR-MCP-FED-WSSYNC-001",
+      "kind": "tr",
+      "recordKeys": [
+        "description",
+        "area",
+        "scopeStartLayerKey",
+        "priority",
+        "title",
+        "updatedAt",
+        "createdAt",
+        "status",
+        "acceptanceCriteria",
+        "subarea",
+        "id"
+      ],
+      "presentNow": false,
+      "fullGetterRecord": {
+        "description": "Placeholder requirement backfilled for TODO link TR-MCP-FED-WSSYNC-001.",
+        "area": "MCP",
+        "scopeStartLayerKey": "layer-1",
+        "priority": "medium",
+        "title": "TR-MCP-FED-WSSYNC-001",
+        "updatedAt": "2026-11-02T17:19:34.1649995+00:00",
+        "createdAt": "2026-11-02T17:19:34.1648899+00:00",
+        "status": "pending",
+        "acceptanceCriteria": [],
+        "subarea": "FED",
+        "id": "TR-MCP-FED-WSSYNC-001"
+      }
+    },
+    {
+      "id": "FR-WF-005",
+      "kind": "fr",
+      "recordKeys": [
+        "description",
+        "area",
+        "scopeStartLayerKey",
+        "priority",
+        "title",
+        "updatedAt",
+        "createdAt",
+        "status",
+        "acceptanceCriteria",
+        "id"
+      ],
+      "presentNow": false,
+      "fullGetterRecord": {
+        "description": "Placeholder requirement backfilled for TODO link FR-WF-005.",
+        "area": "WF",
+        "scopeStartLayerKey": "layer-1",
+        "priority": "medium",
+        "title": "FR-WF-005",
+        "updatedAt": "2026-11-02T17:19:37.4484318+00:00",
+        "createdAt": "2026-11-02T17:19:37.4483250+00:00",
+        "status": "pending",
+        "acceptanceCriteria": [],
+        "id": "FR-WF-005"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "frId": "FR-MCP-074",
+      "expectedTr": [
+        "TR-MCP-CI-001"
+      ],
+      "expectedTest": [],
+      "actual": [
+        {
+          "frId": "FR-MCP-074",
+          "trId": "TR-MCP-CI-001",
+          "createdAt": "2026-11-03T17:43:28.9063559+00:00"
+        }
+      ],
+      "records": [
+        {
+          "id": "FR-MCP-074",
+          "title": "Azure DevOps Repository Pipeline Migration",
+          "body": "The repository SHALL define Azure DevOps YAML pipelines as the source of truth for repository CI/CD instead of the retired GitHub Actions workflow files.\n\nThe Azure DevOps pipeline SHALL preserve the current repository automation intent for branch/path-filtered validation, published server artifacts, documentation artifacts, Windows MSIX packaging, and branch-conditional client package publication, while ignoring any separate Copilot coding agent pipeline.\n\n**Technical Implementation:** [TR-MCP-CI-001](./Technical-Requirements.md#tr-mcp-ci-001) | [Mapping](./TR-per-FR-Mapping.md)\n\n**Covered by:** `azure-pipelines.yml`, `docs/AZURE-PIPELINES.md`",
+          "workspaceId": "/home/sharpninja/github/McpServer",
+          "priority": "medium",
+          "status": "pending",
+          "acceptanceCriteria": [],
+          "scopeStartLayerKey": "layer-1"
+        },
+        {
+          "id": "TR-MCP-CI-001",
+          "title": "Azure DevOps Repository Pipeline Definition",
+          "body": "The repository SHALL use `azure-pipelines.yml` as the CI/CD definition for the core repo workflow. The pipeline SHALL trigger on `main` and `develop` pushes and pull requests with path filters matching the tracked source, test, docs, script, template, and pipeline-definition files. The pipeline SHALL run repository config validation, restore/build/test the support MCP test project, compute package versioning from GitVersion, publish the server build artifact, lint and link-check documentation, build the DocFX site artifact, run Windows MSIX packaging as a non-blocking job, and pack the client NuGet package.\nPackage publication SHALL be branch-conditional: `main` publishes to `nuget.org` only when `NuGetApiKey` is configured, while non-`main` branches publish to Azure Artifacts only when `AzureArtifactsFeedUrl` is configured. Optional docs deployment to Azure static website storage SHALL be gated behind explicit pipeline variables so the repo pipeline remains portable when deployment infrastructure is absent. The retired GitHub Actions workflow YAML files SHALL be removed from the repository as part of the migration, and retention of stale runs/artifacts SHALL move to Azure DevOps retention policy configuration rather than a repository-hosted cleanup workflow.\n\n**Status:** ✅ Complete\n\n**Covered by:** `azure-pipelines.yml`, `docs/AZURE-PIPELINES.md`, `README.md`, `docs/MCP-SERVER.md`, `docs/RELEASE-CHECKLIST.md`",
+          "workspaceId": "/home/sharpninja/github/McpServer",
+          "priority": "medium",
+          "status": "pending",
+          "acceptanceCriteria": [],
+          "scopeStartLayerKey": "layer-1"
+        }
+      ],
+      "evidence": "Restored from develop 9b099716 TR-per-FR-Mapping.md line 85; the FR body names TR-MCP-CI-001 as its technical implementation. Both describe the retired Azure DevOps CI; retirement tracked by PLAN-AZURERETIRE-001 (operator 2026-11-02)."
+    },
+    {
+      "frId": "FR-MCP-PLUGINCORE-002",
+      "expectedTr": [
+        "TR-MCP-PLUGINCORE-002"
+      ],
+      "expectedTest": [
+        "TEST-MCP-PLUGINCORE-002"
+      ],
+      "actual": [
+        {
+          "frId": "FR-MCP-PLUGINCORE-002",
+          "trId": "TR-MCP-PLUGINCORE-002",
+          "createdAt": "2026-11-03T17:43:28.9414089+00:00"
+        },
+        {
+          "frId": "FR-MCP-PLUGINCORE-002",
+          "testId": "TEST-MCP-PLUGINCORE-002",
+          "createdAt": "2026-11-03T17:43:28.9414724+00:00"
+        }
+      ],
+      "records": [
+        {
+          "id": "FR-MCP-PLUGINCORE-002",
+          "title": "No-duplication CI guard for plugin lib files",
+          "body": "Plugin CI SHALL fail when a lib file is neither covered by the core manifest nor declared as plugin residual.",
+          "workspaceId": "/home/sharpninja/github/McpServer",
+          "priority": "medium",
+          "status": "pending",
+          "acceptanceCriteria": [],
+          "scopeStartLayerKey": "layer-1"
+        },
+        {
+          "id": "TR-MCP-PLUGINCORE-002",
+          "title": "core-guard.yml no-duplication job",
+          "body": "CI enumerates lib files; any not in manifest nor PLUGIN-RESIDUAL.txt fails the build.",
+          "workspaceId": "/home/sharpninja/github/McpServer",
+          "priority": "medium",
+          "status": "pending",
+          "acceptanceCriteria": [],
+          "scopeStartLayerKey": "layer-1"
+        },
+        {
+          "id": "TEST-MCP-PLUGINCORE-002",
+          "condition": "core-guard job fails on a seeded undeclared lib file and passes when declared in PLUGIN-RESIDUAL.txt.",
+          "title": "",
+          "workspaceId": "/home/sharpninja/github/McpServer",
+          "priority": "medium",
+          "status": "pending",
+          "acceptanceCriteria": [],
+          "scopeStartLayerKey": "layer-1"
+        }
+      ],
+      "evidence": "Restored from develop 9b099716 TR-per-FR-Mapping.md line 203; FR, TR and TEST all describe the core-guard no-duplication check for plugin lib files."
+    },
+    {
+      "frId": "FR-MCP-SERVICEUPDATE-001",
+      "expectedTr": [
+        "TR-MCP-SERVICEUPDATE-001"
+      ],
+      "expectedTest": [
+        "TEST-MCP-SERVICEUPDATE-001"
+      ],
+      "actual": [
+        {
+          "frId": "FR-MCP-SERVICEUPDATE-001",
+          "trId": "TR-MCP-SERVICEUPDATE-001",
+          "createdAt": "2026-11-03T17:43:28.9542124+00:00"
+        },
+        {
+          "frId": "FR-MCP-SERVICEUPDATE-001",
+          "testId": "TEST-MCP-SERVICEUPDATE-001",
+          "createdAt": "2026-11-03T17:43:28.9542788+00:00"
+        }
+      ],
+      "records": [
+        {
+          "id": "FR-MCP-SERVICEUPDATE-001",
+          "title": "Cross-platform service update preserving live state",
+          "body": "The existing Nuke UpdateService target detects Windows or Linux and updates the selected service while preserving the live configuration and file data strategy. Linux updates an existing systemd service without rewriting its operator configuration.",
+          "workspaceId": "/home/sharpninja/github/McpServer",
+          "priority": "medium",
+          "status": "pending",
+          "acceptanceCriteria": [
+            {
+              "id": "",
+              "text": "UpdateService selects Windows or Linux at runtime; Windows defaults/launcher remain compatible; Linux x64/arm64 use extensionless apphost; unsupported hosts fail before changes.",
+              "isSatisfied": false
+            },
+            {
+              "id": "",
+              "text": "Both platforms preserve live appsettings.yaml and configured DataFolder with legacy fallback. Linux also preserves unit/drop-ins/environment files and Unix ownership/modes/ACLs/xattrs through a private retained archive.",
+              "isSatisfied": false
+            },
+            {
+              "id": "",
+              "text": "Linux validates installed service identity and stage before stop; backup precedes replacement; restore precedes start; service executable and server/workspace health must pass. Failures preserve recovery artifacts and never report success.",
+              "isSatisfied": false
+            },
+            {
+              "id": "",
+              "text": "Mocks-first tests and full applicable unit suites pass with zero failures/skips; independent gates pass; existing local Linux service update preserves configuration/data and trusted workspace behavior.",
+              "isSatisfied": false
+            }
+          ],
+          "scopeStartLayerKey": "layer-1"
+        },
+        {
+          "id": "TR-MCP-SERVICEUPDATE-001",
+          "title": "Platform adapters and metadata-preserving Linux service lifecycle",
+          "body": "Preserve Windows behavior. Linux uses bounded shell-free systemctl/tar operations, installed-unit preflight, platform RID/apphost selection, shared preservation paths,0700 backup directories/0600 archives, ownership/mode/ACL/xattr preservation, failure restoration and same health checks. No SQL database export or automatic binary rollback claim.",
+          "workspaceId": "/home/sharpninja/github/McpServer",
+          "priority": "high",
+          "status": "pending",
+          "acceptanceCriteria": [
+            {
+              "id": "platform",
+              "text": "UpdateService selects Windows or Linux at runtime; Windows defaults/launcher remain compatible; Linux x64/arm64 use extensionless apphost; unsupported hosts fail before changes.",
+              "isSatisfied": false
+            },
+            {
+              "id": "preserve",
+              "text": "Both platforms preserve live appsettings.yaml and configured DataFolder with legacy fallback. Linux also preserves unit/drop-ins/environment files and Unix ownership/modes/ACLs/xattrs through a private retained archive.",
+              "isSatisfied": false
+            },
+            {
+              "id": "lifecycle",
+              "text": "Linux validates installed service identity and stage before stop; backup precedes replacement; restore precedes start; service executable and server/workspace health must pass. Failures preserve recovery artifacts and never report success.",
+              "isSatisfied": false
+            },
+            {
+              "id": "validation",
+              "text": "Mocks-first tests and full applicable unit suites pass with zero failures/skips; independent gates pass; existing local Linux service update preserves configuration/data and trusted workspace behavior.",
+              "isSatisfied": false
+            },
+            {
+              "id": "per-os-tests",
+              "text": "Every Build.Tests ServiceUpdateTests case runs and passes on Linux and on Windows with no skip. A case whose Linux check needs a Linux-only facility (a FIFO, Unix file modes, GNU tar ACL and xattr preservation, unlinking a directory symbolic link with File.Delete) asserts on Windows the outcome the helper produces there for the same input (PLAN-SESSIONTRIAGEFIX-001 C2, triage-report-cdf116ad, as BUG-BASELINE-004 did for Windows-only tests; StatDouble_ReportsRegisteredSpecialFileAsFifo, and the Windows cases of LinuxPreflight_RejectsSpecialStageFiles, LinuxPreflight_RejectsSpecialApphostAndTextInputs, LinuxArchive_UsesPrivateMetadataPreservingCommands, LinuxReplacement_DoesNotFollowSymlinks and LinuxPreflight_RejectsSymlinkRootAndNonexecutableStage).",
+              "isSatisfied": false
+            }
+          ],
+          "scopeStartLayerKey": "layer-1"
+        },
+        {
+          "id": "TEST-MCP-SERVICEUPDATE-001",
+          "condition": "Mocks-first ordering/failure/path tests, Windows defaults regression, preservation policy tests, real temporary tar metadata smoke, full unit gates, independent review and local Nuke service update verification per docs/plans/2026-09-28-cross-platform-update-service.md.",
+          "title": "Cross-platform service update regression and Linux smoke",
+          "workspaceId": "/home/sharpninja/github/McpServer",
+          "priority": "medium",
+          "status": "pending",
+          "acceptanceCriteria": [
+            {
+              "id": "platform",
+              "text": "UpdateService selects Windows or Linux at runtime; Windows defaults/launcher remain compatible; Linux x64/arm64 use extensionless apphost; unsupported hosts fail before changes.",
+              "isSatisfied": false
+            },
+            {
+              "id": "preserve",
+              "text": "Both platforms preserve live appsettings.yaml and configured DataFolder with legacy fallback. Linux also preserves unit/drop-ins/environment files and Unix ownership/modes/ACLs/xattrs through a private retained archive.",
+              "isSatisfied": false
+            },
+            {
+              "id": "lifecycle",
+              "text": "Linux validates installed service identity and stage before stop; backup precedes replacement; restore precedes start; service executable and server/workspace health must pass. Failures preserve recovery artifacts and never report success.",
+              "isSatisfied": false
+            },
+            {
+              "id": "validation",
+              "text": "Mocks-first tests and full applicable unit suites pass with zero failures/skips; independent gates pass; existing local Linux service update preserves configuration/data and trusted workspace behavior.",
+              "isSatisfied": false
+            }
+          ],
+          "scopeStartLayerKey": "layer-1"
+        }
+      ],
+      "evidence": "Restored from develop 9b099716 TR-per-FR-Mapping.md line 254; the TR carries the FR acceptance criteria verbatim plus its per-OS criterion."
+    },
+    {
+      "frId": "FR-MCP-USECASE-018",
+      "expectedTr": [
+        "TR-MCP-USECASE-020"
+      ],
+      "expectedTest": [
+        "TEST-MCP-USECASE-021"
+      ],
+      "actual": [
+        {
+          "frId": "FR-MCP-USECASE-018",
+          "trId": "TR-MCP-USECASE-020",
+          "createdAt": "2026-11-03T17:43:28.9654088+00:00"
+        },
+        {
+          "frId": "FR-MCP-USECASE-018",
+          "testId": "TEST-MCP-USECASE-021",
+          "createdAt": "2026-11-03T17:43:28.9654701+00:00"
+        }
+      ],
+      "records": [
+        {
+          "id": "FR-MCP-USECASE-018",
+          "title": "Edit existing use-case actors, flows, and steps in place",
+          "body": "Operators and agents shall edit actor, flow, and step records through supported authenticated operations while preserving the existing component identities and parent relationships.",
+          "workspaceId": "/home/sharpninja/github/McpServer",
+          "priority": "high",
+          "status": "pending",
+          "notes": "Required to correct UC-125 without replacement rows or direct storage mutation.",
+          "acceptanceCriteria": [
+            {
+              "id": "AC-FR-USECASE-018-1",
+              "text": "A supported authenticated operation updates an actor already associated with a use case, preserves ActorId and UseCaseId, and returns the changed name, description, type, and IsPrimary values.",
+              "isSatisfied": false
+            },
+            {
+              "id": "AC-FR-USECASE-018-2",
+              "text": "A supported authenticated operation updates an existing flow in its parent use case, preserves FlowId and UseCaseId, and returns the changed FlowType, Name, and SequenceNumber values.",
+              "isSatisfied": false
+            },
+            {
+              "id": "AC-FR-USECASE-018-3",
+              "text": "A supported authenticated operation updates an existing step in its parent flow and use case, preserves StepId and FlowId, and returns the changed StepNumber, ActorId, Action, SystemResponse, and DataEntities values.",
+              "isSatisfied": false
+            },
+            {
+              "id": "AC-FR-USECASE-018-4",
+              "text": "Component updates reject missing, soft-deleted, cross-workspace, and parent-mismatched IDs without changing any row or creating duplicates.",
+              "isSatisfied": false
+            },
+            {
+              "id": "AC-FR-USECASE-018-5",
+              "text": "Updating actors, flows, or steps leaves the use case approval status, version, links, unrelated actors, unrelated flows, and unrelated steps unchanged while advancing only the aggregate update timestamp.",
+              "isSatisfied": false
+            }
+          ],
+          "scopeStartLayerKey": "layer-1"
+        },
+        {
+          "id": "TR-MCP-USECASE-020",
+          "title": "Identity-preserving use-case component update pipeline",
+          "body": "Implement workspace- and parent-scoped CQRS mutations for existing actor, flow, and step components, exposed consistently through REST, typed client, source-generated JSON, and MCP tool surfaces.",
+          "workspaceId": "/home/sharpninja/github/McpServer",
+          "priority": "high",
+          "status": "pending",
+          "notes": "Implements FR-MCP-USECASE-018 and provides the supported path needed for UC-125 correction.",
+          "acceptanceCriteria": [
+            {
+              "id": "AC-TR-USECASE-020-1",
+              "text": "CQRS update commands scope every actor, flow, and step lookup by workspace and complete parent identity, use tracked in-place mutations, and return not-found for mismatches.",
+              "isSatisfied": false
+            },
+            {
+              "id": "AC-TR-USECASE-020-2",
+              "text": "Actor updates validate name and actor type, flow updates validate flow type, name, and positive sequence, and step updates validate positive order, nonempty action, and an actor associated with the same use case when ActorId is supplied.",
+              "isSatisfied": false
+            },
+            {
+              "id": "AC-TR-USECASE-020-3",
+              "text": "REST routes, the typed client, generated JSON metadata, and MCP tools expose update-actor, update-flow, and update-step with cancellation and classified failures.",
+              "isSatisfied": false
+            },
+            {
+              "id": "AC-TR-USECASE-020-4",
+              "text": "Each successful component update advances UseCaseEntity.UpdatedAtUtc, emits the established use-case mutation audit signal, and leaves approval/version and unrelated aggregate data unchanged.",
+              "isSatisfied": false
+            }
+          ],
+          "scopeStartLayerKey": "layer-1"
+        },
+        {
+          "id": "TEST-MCP-USECASE-021",
+          "condition": "Prove identity-preserving actor, flow, and step editing through discriminating independent fakes before production, then bind the same assertions to CQRS, REST, client, MCP, persistence, and authenticated readback.",
+          "title": "Use-case component update mocks-first and production contract",
+          "workspaceId": "/home/sharpninja/github/McpServer",
+          "priority": "high",
+          "status": "pending",
+          "notes": "BDPv4 chronological receipts must distinguish mock, negative-control, production, full-suite, deployment, and live readback evidence.",
+          "acceptanceCriteria": [
+            {
+              "id": "AC-TEST-USECASE-021-1",
+              "text": "Before production edits, contract tests pass against correct independent fake editor responses and prove inside the passing harness that wrong IDs, parent IDs, fields, and mutation counts are rejected.",
+              "isSatisfied": false
+            },
+            {
+              "id": "AC-TEST-USECASE-021-2",
+              "text": "The same contract cases and assertions pass against the real CQRS handlers for actor, flow, and step updates, including validation, missing, cross-workspace, and parent-mismatch cases.",
+              "isSatisfied": false
+            },
+            {
+              "id": "AC-TEST-USECASE-021-3",
+              "text": "Controller tests prove the three update routes and classified 400/404 responses; typed-client tests prove HTTP methods, paths, payloads, cancellation, and response deserialization; MCP-tool tests prove dispatcher inputs and serialized results.",
+              "isSatisfied": false
+            },
+            {
+              "id": "AC-TEST-USECASE-021-4",
+              "text": "A persistence test proves IDs and row counts are unchanged, aggregate approval/version and unrelated data are unchanged, UpdatedAtUtc advances, and authenticated readback returns the edited values.",
+              "isSatisfied": false
+            },
+            {
+              "id": "AC-TEST-USECASE-021-5",
+              "text": "Focused tests, the full applicable unit suite, Compile, and ValidateTraceability complete with zero failures and zero skips before deployment.",
+              "isSatisfied": false
+            }
+          ],
+          "scopeStartLayerKey": "layer-1"
+        }
+      ],
+      "evidence": "Restored from develop 9b099716 TR-per-FR-Mapping.md line 308; TR-MCP-USECASE-020 notes \"Implements FR-MCP-USECASE-018\" and TEST-MCP-USECASE-021 proves the same component editing."
+    },
+    {
+      "frId": "FR-TIMER-001",
+      "expectedTr": [
+        "TR-TIMER-LIFECYCLE-001"
+      ],
+      "expectedTest": [
+        "TEST-TIMER-001"
+      ],
+      "actual": [
+        {
+          "frId": "FR-TIMER-001",
+          "trId": "TR-TIMER-LIFECYCLE-001",
+          "createdAt": "2026-11-03T17:43:28.9693259+00:00"
+        },
+        {
+          "frId": "FR-TIMER-001",
+          "testId": "TEST-TIMER-001",
+          "createdAt": "2026-11-03T17:43:28.9693842+00:00"
+        }
+      ],
+      "records": [
+        {
+          "id": "FR-TIMER-001",
+          "title": "Stop and Dispose take precedence over overlapping Restart",
+          "body": "Manager Core and UI.Core timer handles ignore Restart overlapping Stop or Dispose, cancel in-flight callbacks without deadlock, allow a new fresh-token Restart after Stop returns, and never restart after Dispose. Operator approved 2026-10-08 in the Phase 2 rebrand repair.",
+          "workspaceId": "/home/sharpninja/github/McpServer",
+          "priority": "high",
+          "status": "pending",
+          "acceptanceCriteria": [
+            {
+              "id": "fr-timer-001-ac-001",
+              "text": "Restart while Stop or Dispose is in progress cannot create a new callback run or change the stored interval.",
+              "isSatisfied": false
+            },
+            {
+              "id": "fr-timer-001-ac-002",
+              "text": "Stop/Dispose cancel the active token before waiting for a synchronous callback and return without external rescue when that callback cooperates with cancellation.",
+              "isSatisfied": false
+            },
+            {
+              "id": "fr-timer-001-ac-003",
+              "text": "Restart after Stop returns uses a fresh uncanceled token; Dispose is final and repeated stop/dispose calls remain safe.",
+              "isSatisfied": false
+            }
+          ],
+          "scopeStartLayerKey": "layer-1"
+        },
+        {
+          "id": "TR-TIMER-LIFECYCLE-001",
+          "title": "Serialize timer lifecycle admission separately from callback invocation",
+          "body": "Protect shutdown admission and token replacement with a short-lived state lock. Cancel outside locks before draining the callback invocation gate. Reject queued Restart if shutdown admission changed while it waited. Do not dispose cancellation sources still visible to callbacks. Preserve reentrant Stop/Dispose/Restart behavior.",
+          "workspaceId": "/home/sharpninja/github/McpServer",
+          "priority": "high",
+          "status": "pending",
+          "acceptanceCriteria": [
+            {
+              "id": "tr-timer-lifecycle-001-ac-001",
+              "text": "Both Manager timer implementations enforce the same shutdown admission and fresh-token rules without invoking user callbacks under the state lock.",
+              "isSatisfied": false
+            },
+            {
+              "id": "tr-timer-lifecycle-001-ac-002",
+              "text": "Restart cannot replace the token after a shutdown captured it; multiple overlapping shutdowns cannot reopen admission early.",
+              "isSatisfied": false
+            },
+            {
+              "id": "tr-timer-lifecycle-001-ac-003",
+              "text": "Cancellation registration and callback reentrancy cannot deadlock the lifecycle state lock.",
+              "isSatisfied": false
+            }
+          ],
+          "scopeStartLayerKey": "layer-1"
+        },
+        {
+          "id": "TEST-TIMER-001",
+          "condition": "Run the same scenario and assertions against independently scripted ITimerService/ITimerHandle mocks and both real services. Correct mock and deliberate negative responses must yield a green outer mock gate before product edits. Cover blocked cancellation registration, overlapping Restart against Stop and Dispose, new run after Stop, final Dispose, repeated shutdown, and reentrant calls.",
+          "title": "Discriminating shared timer shutdown contract",
+          "workspaceId": "/home/sharpninja/github/McpServer",
+          "priority": "high",
+          "status": "pending",
+          "acceptanceCriteria": [
+            {
+              "id": "test-timer-001-ac-001",
+              "text": "Mock contract gate passes with zero failures/skips and rejects forbidden restart, stale token, and restart-after-dispose behaviors as expected negative controls.",
+              "isSatisfied": false
+            },
+            {
+              "id": "test-timer-001-ac-002",
+              "text": "The same contract tests pass against Core and UI.Core, and all four reproduced race cases no longer require external rescue.",
+              "isSatisfied": false
+            },
+            {
+              "id": "test-timer-001-ac-003",
+              "text": "Full five-project Manager suites, extension tests, and deployment-script tests have zero failures/skips before acceptance; deferred Claude HV must review all changed code/tests/docs before Phase 2 closure.",
+              "isSatisfied": false
+            }
+          ],
+          "scopeStartLayerKey": "layer-1"
+        }
+      ],
+      "evidence": "Operator 2026-11-02 \"Retire placeholders, map TIMER\": FR, TR and TEST all describe the Manager timer Stop/Dispose/Restart lifecycle."
+    }
+  ],
+  "projections": [
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/Project/Functional-Requirements.md",
+      "expected": "DA7F8CAB66915CE4A36F1A7F6067A533950681F02DE915FA0F607A3B7A1D4885",
+      "actual": "DA7F8CAB66915CE4A36F1A7F6067A533950681F02DE915FA0F607A3B7A1D4885",
+      "unchanged": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/Project/Technical-Requirements.md",
+      "expected": "5D3140981D9A22D54CEBD45F7C6368C187DA76862A7B15282CBFF870738BEC6D",
+      "actual": "5D3140981D9A22D54CEBD45F7C6368C187DA76862A7B15282CBFF870738BEC6D",
+      "unchanged": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/Project/Testing-Requirements.md",
+      "expected": "62B125645F152453DA2A3E9ADB24A7AA3F5930A4B61E7D4370E6FB3682DF8C05",
+      "actual": "62B125645F152453DA2A3E9ADB24A7AA3F5930A4B61E7D4370E6FB3682DF8C05",
+      "unchanged": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/Project/TR-per-FR-Mapping.md",
+      "expected": "F43D751587C91F1633788A500E6218EFF16243DB177A828EE26761B19FF3E1D2",
+      "actual": "F43D751587C91F1633788A500E6218EFF16243DB177A828EE26761B19FF3E1D2",
+      "unchanged": true
+    },
+    {
+      "path": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/Project/Requirements-Matrix.md",
+      "expected": "BE09AE9D1488B45DDECF35007301FA85B1DF4585468A3933C7E5464D3CE1898E",
+      "actual": "BE09AE9D1488B45DDECF35007301FA85B1DF4585468A3933C7E5464D3CE1898E",
+      "unchanged": true
+    }
+  ]
+}

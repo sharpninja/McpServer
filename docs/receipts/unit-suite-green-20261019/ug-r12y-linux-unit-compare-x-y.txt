@@ -1,0 +1,5 @@
+Now: 2026-11-03T17:06:30 key=test name only before=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r11x-final-linux-unit-1 (4738) after=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r12y-final-linux-unit-1 (4739)
+onlyBefore=0 onlyAfter=1 common=4738
+--- only in before ---
+--- only in after ---
+QBrainAi.Repl.Core.Tests.TestSupport.TestOutputFolderContractTests.WrongChecks_AreRejected(fault: "ignores UNC server and share aliases")

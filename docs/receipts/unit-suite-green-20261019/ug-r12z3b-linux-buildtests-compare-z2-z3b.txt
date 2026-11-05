@@ -1,0 +1,24 @@
+Now: 2026-11-04T18:25:28 key=test name only before=/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r12z2-final-linux-buildtests-1 (529) after=/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r12z3b-final-linux-buildtests-1 (549)
+onlyBefore=0 onlyAfter=20 common=529
+--- only in before ---
+--- only in after ---
+NukeBuild.Tests.ServiceStartupHealthContractTests.OldWindow_FailsOnlyTheSlowStartRow
+NukeBuild.Tests.ServiceStartupHealthContractTests.ReferenceWait_MeetsEveryRow
+NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 0)
+NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 1)
+NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 2)
+NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 3)
+NukeBuild.Tests.ServiceStartupHealthContractTests.WrongWait_FailsAtLeastOneRow(index: 4)
+NukeBuild.Tests.ServiceUnitPropertiesContractTests.DefectReader_FailsOnlyTheRepeatedRows
+NukeBuild.Tests.ServiceUnitPropertiesContractTests.ReferenceReader_MeetsEveryRow
+NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 0)
+NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 1)
+NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 2)
+NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 3)
+NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 4)
+NukeBuild.Tests.ServiceUnitPropertiesContractTests.WrongReader_FailsAtLeastOneRow(index: 5)
+NukeBuild.Tests.ServiceUpdateTests.LinuxPreflight_RequiresTheEnvironmentFileOfTheSecondShowLine
+NukeBuild.Tests.ServiceUpdateTests.LinuxStartupHealth_StopsAtOnceForAnInactiveUnit
+NukeBuild.Tests.ServiceUpdateTests.LinuxStartupHealth_WaitsAsTheContractRows
+NukeBuild.Tests.ServiceUpdateTests.LinuxUnitState_ReadsRepeatedShowLinesAsTheContractRows
+NukeBuild.Tests.ServiceUpdateTests.LinuxUpdate_PreservesEveryEnvironmentFileOfRepeatedShowLines

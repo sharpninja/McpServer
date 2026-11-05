@@ -1,0 +1,18 @@
+Now: 2026-11-04T20:22:41 key=test name only before=/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r12z3b-final-linux-buildtests-1 (549) after=/home/sharpninja/.claude/scratch/pr82-review-20261019/runs-r9/ug-r12z3c-final-linux-buildtests-1 (563)
+onlyBefore=0 onlyAfter=14 common=549
+--- only in before ---
+--- only in after ---
+NukeBuild.Tests.ServiceRecoveryContractTests.OldRecovery_FailsOnlyTheLegacyRows
+NukeBuild.Tests.ServiceRecoveryContractTests.ReferenceRecovery_MeetsEveryRow
+NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 0)
+NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 1)
+NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 2)
+NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 3)
+NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 4)
+NukeBuild.Tests.ServiceRecoveryContractTests.WrongRecovery_FailsAtLeastOneRow(index: 5)
+NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 0)
+NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 1)
+NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 2)
+NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 3)
+NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 4)
+NukeBuild.Tests.ServiceUpdateTests.LinuxRecovery_LeavesAStartableUnitAsTheContractRows(index: 5)

@@ -1,0 +1,13 @@
+Store readback comparison, written 2026-11-03T19:17:17 local by ClaudeCode (Compare-StoreReadbacks.ps1; read only over the two receipts).
+before /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r12-store-readback-1.json sha256=77F27C316BFEC6A13E97B6B13C1FFD8313507B4E3E2F5B6D0A8D76B75A3B9185
+after /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r12z-store-readback-1.json sha256=838A42536C8934B35C6F4478A800451C883718378203AB127D5952694445B855
+before read 2026-11-03T15:13:57; after read 2026-11-03T19:16:50
+FR-MCP-TESTRESOURCE-001: criteria before=12 after=12
+  position 1 id=: CHANGED append=True satisfied False->False tail= The UNC server and share names are held to the same segment rule: a UNC folder whose server or share name ends in a dot or a space or holds a colon is refused, because Windows may resolve it to the checkout's server or share (holistic read before hostile validation round 12, finding D3; operator 2026-11-03: "Strengthen + fix (Recommended)").
+TR-MCP-USECASE-018: criteria before=7 after=7
+  position 5 id=AC-006: CHANGED append=True satisfied False->False tail= Of the two sentences above, the hang-guard sentence governs: a timer a unit test arms whose only effect when it fires is to fail a test that would otherwise hang is a hang guard, not a wall-clock wait, even when an asserted step must finish before it fires. A test-armed cancellation or timeout is a wall-clock wait when its firing changes what the code under test does (for example it cancels or times out the operation whose outcome the test asserts) and an asserted step must happen before it fires. "Far above" means at least 100 times the longest real or scripted delay of the awaited step; a step with no real or scripted delay meets it for any positive timeout (holistic read before hostile validation round 12, finding B4; operator 2026-11-03: "Strengthen + margin (Recommended)").
+IMPL-UNITGREEN-001: tasks before=41 after=43
+  task 41: CHANGED done False->False
+  task 42: NEW done=False
+  task 43: NEW done=False
+  field description: CHANGED
