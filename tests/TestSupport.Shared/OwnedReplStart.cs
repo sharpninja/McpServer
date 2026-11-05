@@ -50,6 +50,7 @@ internal static class OwnedReplStart
     /// <param name="serverAddress">The owned server address.</param>
     /// <param name="agent">The invoking agent.</param>
     /// <returns>The validated start information; this method starts no process.</returns>
+    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4 (appended "A name is matched exactly, as the process environment holds it"): the environment is replaced and checked through <see cref="ApplyOwnedStartEnvironment"/> (seventh holistic read before hostile validation round 13, finding g1).</remarks>
     internal static ProcessStartInfo CreateStartInfo(string assemblyPath, string workspacePath, string markerPath,
         string ownedRoot, string serverAddress, string agent = "default")
     {
@@ -62,11 +63,32 @@ internal static class OwnedReplStart
             StandardOutputEncoding = Encoding.UTF8, StandardErrorEncoding = Encoding.UTF8,
         };
         foreach (var argument in plan.Arguments) startInfo.ArgumentList.Add(argument);
-        OwnedInstanceProcess.ApplyOwnedEnvironment(startInfo, plan.Settings, ownedRoot);
-        var environment = startInfo.Environment.ToDictionary(pair => pair.Key, pair => pair.Value, StringComparer.OrdinalIgnoreCase);
-        var violation = TemporaryInstanceChecks.CheckReplStartContext(plan.Arguments, environment, ownedRoot, serverAddress);
-        if (violation is not null) throw new InvalidOperationException(violation);
+        ApplyOwnedStartEnvironment(startInfo.Environment, plan, ownedRoot, serverAddress);
         return startInfo;
+    }
+
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 ac-4: replaces <paramref name="environment"/>, the environment a REPL child would inherit,
+    /// with the one <see cref="OwnedInstanceProcess.ReplaceEnvironment"/> builds from it and the plan's settings, then
+    /// checks the replaced environment's server address and trust cache (<see cref="TemporaryInstanceChecks.CheckReplStartContext"/>)
+    /// through a read-only view of it, never a copy, so every name is read as the environment holds it and two
+    /// names that differ only in case stay two names. Throws when either check refuses. The same boundary the process
+    /// start uses, so unit tests need no ambient process environment.
+    /// </summary>
+    /// <param name="environment">The inherited environment, replaced in place.</param>
+    /// <param name="plan">The validated start plan.</param>
+    /// <param name="ownedRoot">The owned absolute root.</param>
+    /// <param name="serverAddress">The owned server address.</param>
+    /// <exception cref="InvalidOperationException">The owned environment or the start context is refused.</exception>
+    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4 (appended "A name is matched exactly, as the process environment holds it"): added in place of the ignore-case copy CreateStartInfo checked, which would throw on, or merge, two inherited names that differ only in case once the builder keeps them, because the seventh holistic read before hostile validation round 13 (finding g1) showed the builder merged such names (mock gate ug-r13z4c-mockgate-1).</remarks>
+    internal static void ApplyOwnedStartEnvironment(IDictionary<string, string?> environment, Plan plan, string ownedRoot, string serverAddress)
+    {
+        ArgumentNullException.ThrowIfNull(environment);
+        ArgumentNullException.ThrowIfNull(plan);
+        OwnedInstanceProcess.ReplaceEnvironment(environment, plan.Settings, ownedRoot);
+        var violation = TemporaryInstanceChecks.CheckReplStartContext(plan.Arguments,
+            new System.Collections.ObjectModel.ReadOnlyDictionary<string, string?>(environment), ownedRoot, serverAddress);
+        if (violation is not null) throw new InvalidOperationException(violation);
     }
 
     /// <summary>The explicit data a validated owned REPL start consumes.</summary>

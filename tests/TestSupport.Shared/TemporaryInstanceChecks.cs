@@ -182,12 +182,20 @@ internal static class TemporaryInstanceChecks
     /// (<see cref="ProductVariablePrefixes"/>), every connection-string variable and every provider fallback and host
     /// setting (<see cref="ProviderFallbacks"/>; all ignoring case) is removed, so no inherited connection string, data
     /// source, provider, instance name or endpoint, under any separator spelling, can select another database or address;
-    /// the instance's own <paramref name="settings"/> are then applied; every other inherited variable is kept.
+    /// so is every inherited spelling of a key one of the instance's own <paramref name="settings"/> sets
+    /// (<see cref="SetsOwnedKey"/>); the settings are then applied; every other inherited variable is kept under its
+    /// exact name, so two unrelated names that differ only in case stay two variables.
     /// </summary>
     /// <param name="inherited">The environment the process would inherit.</param>
     /// <param name="settings">The instance's own variables.</param>
-    /// <returns>The child environment, keys compared ignoring case.</returns>
-    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4 (appended "A setting is identified by its configuration key, not by its spelling"): the removal rule now reads each name's configuration key, so colon and mixed-separator spellings and the endpoint section are removed too (hostile validation round 12 finding R12-F1; mock gate ug-r13z4-mockgate-a-1).</remarks>
+    /// <returns>The child environment, names compared ordinally, as a POSIX process environment compares them.</returns>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-05</term><description>FR-MCP-TESTRESOURCE-001 ac-4 (appended "A setting is identified by its configuration key, not by its spelling"): the removal rule now reads each name's configuration key, so colon and mixed-separator spellings and the endpoint section are removed too (hostile validation round 12 finding R12-F1; mock gate ug-r13z4-mockgate-a-1).</description></item>
+    /// <item><term>2026-11-05</term><description>FR-MCP-TESTRESOURCE-001 ac-4 (appended "A name is matched exactly, as the process environment holds it"): the child compares names ordinally instead of ignoring case, and an inherited spelling of a key the instance sets is removed before the settings are applied, because the seventh holistic read before hostile validation round 13 (finding g1) showed that the ignore-case map merged unrelated inherited names that differ only in case, and the ordinal map alone would have kept an inherited "port" beside the owned "PORT" (mock gate ug-r13z4c-mockgate-1).</description></item>
+    /// </list>
+    /// </remarks>
     internal static Dictionary<string, string?> BuildOwnedInstanceEnvironment(
         IReadOnlyDictionary<string, string?> inherited,
         IReadOnlyDictionary<string, string> settings)
@@ -195,10 +203,10 @@ internal static class TemporaryInstanceChecks
         ArgumentNullException.ThrowIfNull(inherited);
         ArgumentNullException.ThrowIfNull(settings);
 
-        var child = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase);
+        var child = new Dictionary<string, string?>(StringComparer.Ordinal);
         foreach (var (key, value) in inherited)
         {
-            if (!IsProductVariable(key))
+            if (!IsProductVariable(key) && !SetsOwnedKey(key, settings))
                 child[key] = value;
         }
 
@@ -211,8 +219,9 @@ internal static class TemporaryInstanceChecks
     /// <summary>
     /// TR-MCP-NUKE-019 AC-6 (hostile validation finding R8B-F3): checks a child environment before the process starts:
     /// every product variable, under any separator spelling, is one the instance set, with the value it set; no two names
-    /// of one product key differ only in separators or case (<see cref="ConfigurationKeyIdentity"/>, ignoring case), so
-    /// the value .NET reads cannot depend on enumeration order; every database-engine setting, under any separator
+    /// of one product key, or of one key the instance sets (<see cref="SetsOwnedKey"/>), differ only in separators or
+    /// case (<see cref="ConfigurationKeyIdentity"/>, ignoring case), so the value .NET reads cannot depend on enumeration
+    /// order; every database-engine setting, under any separator
     /// spelling, names SQLite; and every database the instance's settings select (a connection string's Data Source, or a
     /// data source value) lies strictly inside <paramref name="ownedRoot"/> (<see cref="IsStrictlyInside"/>: the same root
     /// kind and root identity, then segment by segment with no '.' or '..' segment).
@@ -227,6 +236,7 @@ internal static class TemporaryInstanceChecks
     /// <item><term>2026-11-02</term><description>FR-MCP-TESTRESOURCE-001 ac-4; TR-MCP-NUKE-019 AC-6: the SQLite-only rule now applies to database-engine settings only (Database__Provider, DatabaseProvider, DATABASE_PROVIDER, any prefix), because it refused TodoStorage's valid 'database' backend and broke the stdio host case.</description></item>
     /// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 ac-4 (appended "Strict containment in the owned root also requires the same root"): documentation only, the summary now states the root rule slice U added to the containment helper (hostile validation round 10 finding R10-F2; stale summary found before round 11).</description></item>
     /// <item><term>2026-11-05</term><description>FR-MCP-TESTRESOURCE-001 ac-4 (appended "A setting is identified by its configuration key, not by its spelling"): product variables are recognized by configuration key, two names of one product key are refused, and the database-engine rule reads the configuration key, because hostile validation round 12 finding R12-F1 showed that an unowned colon spelling passed the check and a colon-spelled provider escaped the SQLite rule (mock gate ug-r13z4-mockgate-a-1).</description></item>
+    /// <item><term>2026-11-05</term><description>FR-MCP-TESTRESOURCE-001 ac-4 (appended "A name is matched exactly, as the process environment holds it"): the rule for two names also covers the keys the instance sets outside the product's namespaces (PORT, a logging level), because the seventh holistic read before hostile validation round 13 (finding g1) showed that once the child keeps names exactly, two spellings of such a key could reach the instance (mock gate ug-r13z4c-mockgate-1).</description></item>
     /// </list>
     /// </remarks>
     internal static string? CheckOwnedInstanceEnvironment(
@@ -244,10 +254,10 @@ internal static class TemporaryInstanceChecks
                 return $"The temporary instance's environment holds '{key}', which the instance did not set.";
         }
 
-        // FR-MCP-TESTRESOURCE-001 ac-4: two names of one product key (differing only in separators or case) would let the
-        // enumeration order decide which value .NET reads, so the start is refused.
+        // FR-MCP-TESTRESOURCE-001 ac-4: two names of one product key or of one key the instance sets (differing only in
+        // separators or case) would let the enumeration order decide which value .NET reads, so the start is refused.
         var twoNames = child.Keys
-            .Where(IsProductVariable)
+            .Where(key => IsProductVariable(key) || SetsOwnedKey(key, settings))
             .GroupBy(ConfigurationKeyIdentity, StringComparer.OrdinalIgnoreCase)
             .FirstOrDefault(group => group.Count() > 1);
         if (twoNames is not null)
@@ -525,6 +535,21 @@ internal static class TemporaryInstanceChecks
             || ProductVariablePrefixes.Any(prefix => key.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
             || ConnectionStringPrefixes.Any(prefix => key.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
             || ProviderFallbacks.Concat(HostSettings).Any(name => string.Equals(identity, name, StringComparison.OrdinalIgnoreCase));
+    }
+
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 ac-4: whether an environment name sets the same configuration key as one of the instance's
+    /// own settings: its <see cref="ConfigurationKeyIdentity"/> equals that of a setting's name, ignoring case, so another
+    /// case or separator spelling of an owned key counts and the owned setting governs it.
+    /// </summary>
+    /// <param name="key">The environment name.</param>
+    /// <param name="settings">The instance's own variables.</param>
+    /// <returns>True when the name sets a key the instance sets.</returns>
+    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4 (appended "A name is matched exactly, as the process environment holds it"): added for the builder and the rule for two names, because the seventh holistic read before hostile validation round 13 (finding g1) showed that the keys the instance sets outside the product's namespaces had no spelling rule (mock gate ug-r13z4c-mockgate-1).</remarks>
+    private static bool SetsOwnedKey(string key, IReadOnlyDictionary<string, string> settings)
+    {
+        var identity = ConfigurationKeyIdentity(key);
+        return settings.Keys.Any(own => string.Equals(ConfigurationKeyIdentity(own), identity, StringComparison.OrdinalIgnoreCase));
     }
 
     private static bool IsSqliteProvider(string provider) =>
