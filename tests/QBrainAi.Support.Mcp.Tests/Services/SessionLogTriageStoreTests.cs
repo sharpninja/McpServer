@@ -132,10 +132,10 @@ public sealed class SessionLogTriageStoreTests : IDisposable
     /// so the test does not wait for the 30 second default.
     /// </summary>
     /// <remarks>
-    /// Integration: asserts an elapsed wall-clock bound on actual scheduling and timer execution (TR-MCP-USECASE-018 AC-006).
+    /// Integration: its outcome depends on a real storage-command budget timer firing while the stalled step runs, a wall-clock wait under TR-MCP-USECASE-018 AC-006; its elapsed check is a hang guard only.
     /// <list type="table">
     /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
-    /// <item><term>2026-11-05</term><description>TEST-MCP-TRIAGESTORE-007; TR-MCP-USECASE-018 AC-006 (a wall-clock bound makes a case an integration case): which budget elapsed is read from the exception message (the configured 1 second storage command budget, so neither the 5 second intake budget nor the 30 second submit default passes), the stalled SaveChanges is proved reached, and the elapsed time keeps a 20 second hang guard (below that default and the interceptor's 60 second stall) instead of the 4 and 5 second bounds, because the Windows integration lane ug-r13z4c-final-win-lane-1 measured 4.42 seconds and the case took about 1 or about 4 seconds across nine Windows lanes (ug-r13z4c-win-lane-hungsave-durations-1.txt): the old bound timed the whole Submit and the host's scheduling, not the budget.</description></item>
+    /// <item><term>2026-11-05</term><description>TEST-MCP-TRIAGESTORE-007; TR-MCP-USECASE-018 AC-006 (a wall-clock bound makes a case an integration case): which budget elapsed is read from the exception message (the configured 1 second storage command budget, so neither the 5 second intake budget nor the 30 second submit default passes), the stalled SaveChanges is proved reached, and the elapsed time keeps a 20 second hang guard (below that default and the interceptor's 60 second stall) instead of the 4 and 5 second bounds, because the Windows integration lane ug-r13z4c-final-win-lane-1 measured 4.42 seconds and the case took about 1 or about 4 seconds across nine Windows lanes (ug-r13z4c-win-lane-hungsave-durations-1.txt): the old bound timed the whole Submit and the host's scheduling, not the budget. The classification line above was restated after the eighth holistic read before hostile validation round 13 (finding b2), because it still named the elapsed bound this entry removed.</description></item>
     /// </list>
     /// </remarks>
     [Trait("Category", "Integration")]

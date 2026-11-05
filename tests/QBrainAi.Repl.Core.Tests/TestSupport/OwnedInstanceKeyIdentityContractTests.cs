@@ -7,8 +7,8 @@ namespace QBrainAi.Repl.Core.Tests.TestSupport;
 /// appended 2026-11-05, "A setting is identified by its configuration key, not by its spelling" and "A name is matched
 /// exactly, as the process environment holds it"): an inherited colon, double-underscore or mixed-separator spelling of
 /// a product key or of the host's endpoint section (Kestrel), alone or host-prefixed, in either enumeration order,
-/// changes nothing in the instance's effective configuration; an inherited spelling of a key the instance sets is
-/// replaced by the instance's setting; every other inherited variable is kept with its exact name and value, two names
+/// changes nothing in the instance's effective configuration; an inherited spelling of a key the instance sets, alone
+/// or host-prefixed, is replaced by the instance's setting; every other inherited variable is kept with its exact name and value, two names
 /// that differ only in case included, by the builder and by the REPL start; and the start check refuses a product key
 /// the instance did not set, under any spelling, and two names of one product key or of one key the instance sets that
 /// differ only in separators or case.
@@ -33,6 +33,7 @@ namespace QBrainAi.Repl.Core.Tests.TestSupport;
 /// <item><term>2026-11-05</term><description>FR-MCP-TESTRESOURCE-001 ac-4 (same appended sentence): appended the two bindings to the shared builder and start check, unchanged rows and assertions, after the mock gate passed and TemporaryInstanceChecks read configuration keys (hostile validation round 12 finding R12-F1).</description></item>
 /// <item><term>2026-11-05</term><description>FR-MCP-TESTRESOURCE-001 ac-4 (appended "A name is matched exactly, as the process environment holds it"): the maps that hold environment names (the row orders, the scripted builder and the start environments) compare names ordinally instead of ignoring case; builder rows for unrelated names that differ only in case and for another case or separator spelling of a key the instance sets; builder rows are judged on the product keys and the instance's own keys by the oracle and on every other name exactly; start-check rows for two names of an owned key that differ only in case or separators and an accepted unrelated pair; REPL start rows for the environment a REPL child of an instance starts with; wrong builders, checks and REPL starts for each, the earlier ignore-case builder among them; mock gate, the bindings held out until the production change. Because the seventh holistic read before hostile validation round 13 (finding g1) showed that the ignore-case child map merged unrelated inherited names that differ only in case, against ac-4's "unrelated variables are kept unchanged", and the rows could not hold such a pair.</description></item>
 /// <item><term>2026-11-05</term><description>FR-MCP-TESTRESOURCE-001 ac-4 (same appended sentence): re-appended the two bindings unchanged and appended the binding of the shared REPL start boundary, after mock gate ug-r13z4c-mockgate-1 passed and TemporaryInstanceChecks and OwnedReplStart kept names exactly (seventh holistic read before hostile validation round 13, finding g1).</description></item>
+/// <item><term>2026-11-05</term><description>FR-MCP-TESTRESOURCE-001 ac-4 ("a DOTNET_ or ASPNETCORE_ prefix places the rest of the name in the host's configuration, so every ... spelling of a key, alone or host-prefixed, sets that key", with the append "A name is matched exactly, as the process environment holds it"): the reference rule for a key the instance sets reads the keys a name sets with and without a host prefix; builder rows for an unprefixed spelling of an owned host-prefixed setting, for a host-prefixed spelling of owned settings and for unrelated host-prefixed names kept; start-check rows for the instance's own DOTNET_ and ASPNETCORE_ pair (accepted) and for two cases of an unprefixed spelling of an owned host-prefixed setting (refused); a REPL start row; wrong builders, checks and a REPL start for each, the earlier rule among them; mock gate, the bindings held out until the production change. Because the eighth holistic read before hostile validation round 13 (finding g1) showed that an inherited NOLOGO beside the owned DOTNET_NOLOGO, or DOTNET_PORT beside the owned PORT, reached the instance, and no row held such a name.</description></item>
 /// </list>
 /// </remarks>
 public sealed class OwnedInstanceKeyIdentityContractTests
@@ -111,6 +112,9 @@ public sealed class OwnedInstanceKeyIdentityContractTests
         ("unrelated names that differ only in case are kept",
             new() { ["http_proxy"] = "http://proxy.example:3128", ["HTTP_PROXY"] = "http://proxy.example:8080", ["PATH"] = "/usr/bin" },
             new() { ["http_proxy"] = "http://proxy.example:3128", ["HTTP_PROXY"] = "http://proxy.example:8080", ["PATH"] = "/usr/bin" }),
+        ("unrelated host-prefixed names are kept",
+            new() { ["DOTNET_ROOT"] = "/usr/share/dotnet", ["DOTNET_gcServer"] = "1", ["PATH"] = "/usr/bin" },
+            new() { ["DOTNET_ROOT"] = "/usr/share/dotnet", ["DOTNET_gcServer"] = "1", ["PATH"] = "/usr/bin" }),
     ];
 
     /// <summary>
@@ -126,6 +130,14 @@ public sealed class OwnedInstanceKeyIdentityContractTests
         ("another separator spelling of an owned setting is replaced",
             OwnedWith(null, ("Logging__LogLevel__Default", "Error")),
             new() { ["Logging:LogLevel:Default"] = "Debug", ["logging__loglevel__default"] = "Trace", ["PATH"] = "/usr/bin" },
+            new() { ["PATH"] = "/usr/bin" }),
+        ("an unprefixed spelling of an owned host-prefixed setting is replaced",
+            OwnedWith(null, ("DOTNET_NOLOGO", "1")),
+            new() { ["NOLOGO"] = "0", ["PATH"] = "/usr/bin" },
+            new() { ["PATH"] = "/usr/bin" }),
+        ("a host-prefixed spelling of an owned setting is replaced",
+            OwnedWith(null, ("Logging__LogLevel__Default", "Error")),
+            new() { ["DOTNET_Logging__LogLevel__Default"] = "Trace", ["DOTNET_port"] = "7147", ["PATH"] = "/usr/bin" },
             new() { ["PATH"] = "/usr/bin" }),
     ];
 
@@ -166,6 +178,12 @@ public sealed class OwnedInstanceKeyIdentityContractTests
         ("two separator spellings of an owned setting",
             Child(OwnedWith(null, ("Logging__LogLevel__Default", "Error")), ("Logging:LogLevel:Default", "Debug")),
             OwnedWith(null, ("Logging__LogLevel__Default", "Error")), false),
+        ("owned settings under both host prefixes",
+            Child(OwnedWith(null, ("DOTNET_ENVIRONMENT", "Production"), ("ASPNETCORE_ENVIRONMENT", "Production"))),
+            OwnedWith(null, ("DOTNET_ENVIRONMENT", "Production"), ("ASPNETCORE_ENVIRONMENT", "Production")), true),
+        ("two cases of an unprefixed spelling of an owned host-prefixed setting",
+            Child(OwnedWith(null, ("DOTNET_NOLOGO", "1")), ("NOLOGO", "0"), ("nologo", "0")),
+            OwnedWith(null, ("DOTNET_NOLOGO", "1")), false),
     ];
 
     /// <summary>
@@ -180,6 +198,9 @@ public sealed class OwnedInstanceKeyIdentityContractTests
             new() { ["http_proxy"] = "http://proxy.example:3128", ["HTTP_PROXY"] = "http://proxy.example:8080", ["PATH"] = "/usr/bin" }),
         ("an inherited server address in another case is replaced",
             new() { ["Mcp_Server_Url"] = LiveAddress, ["QBRAINAI_SERVER_URL"] = LiveAddress, ["PATH"] = "/usr/bin" },
+            new() { ["PATH"] = "/usr/bin" }),
+        ("an unprefixed spelling of the REPL's host setting is replaced",
+            new() { ["NOLOGO"] = "0", ["PATH"] = "/usr/bin" },
             new() { ["PATH"] = "/usr/bin" }),
     ];
 
@@ -358,7 +379,9 @@ public sealed class OwnedInstanceKeyIdentityContractTests
     /// raw-prefix builder, one that knows both separators but not the host prefixes, one that keeps the endpoint
     /// section, one that removes every key holding a separator, one that drops the instance's own settings, one that
     /// merges names that differ only in case (the builder before the seventh holistic read), one that keeps other
-    /// spellings of the instance's own keys, and one that matches those keys by name instead of by key.
+    /// spellings of the instance's own keys, one that matches those keys by name instead of by key, one that matches
+    /// them without the host prefixes (the builder before the eighth holistic read), and one that removes every
+    /// host-prefixed name.
     /// </summary>
     /// <param name="wrong">The name of the wrong builder.</param>
     /// <param name="failingRow">The builder row that must reject it.</param>
@@ -374,6 +397,9 @@ public sealed class OwnedInstanceKeyIdentityContractTests
     [InlineData("keeps other spellings of owned settings", "another case of an owned setting is replaced")]
     [InlineData("keeps other spellings of owned settings", "another separator spelling of an owned setting is replaced")]
     [InlineData("owned settings matched by name, not key", "another separator spelling of an owned setting is replaced")]
+    [InlineData("owned settings matched without host prefixes", "an unprefixed spelling of an owned host-prefixed setting is replaced")]
+    [InlineData("owned settings matched without host prefixes", "a host-prefixed spelling of an owned setting is replaced")]
+    [InlineData("removes every host-prefixed name", "unrelated host-prefixed names are kept")]
     public void WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(string wrong, string failingRow) =>
         Assert.Contains(failingRow, BuildContractFailures(WrongBuild(wrong)));
 
@@ -381,7 +407,9 @@ public sealed class OwnedInstanceKeyIdentityContractTests
     /// Mock gate negative controls on the start check, each rejected on the row named: the round 12 raw-prefix check, one
     /// without the rule for two names of one key, one whose provider rule reads only double-underscore names, one that
     /// refuses every name holding a colon, one whose rule for two names matches case, one whose rule for two names
-    /// covers product keys only, and one whose rule for two names covers every name.
+    /// covers product keys only, one whose rule for two names covers every name, one whose rule for two names misses
+    /// the unprefixed spellings of the instance's host-prefixed keys (the check before the eighth holistic read), and one
+    /// whose rule for two names also groups names that differ only in their host prefix.
     /// </summary>
     /// <param name="wrong">The name of the wrong check.</param>
     /// <param name="failingRow">The check row that must reject it.</param>
@@ -397,19 +425,23 @@ public sealed class OwnedInstanceKeyIdentityContractTests
     [InlineData("two-name rule on product keys only", "two names of an owned setting that differ only in case")]
     [InlineData("two-name rule on product keys only", "two separator spellings of an owned setting")]
     [InlineData("two-name rule on every name", "unrelated names that differ only in case")]
+    [InlineData("two-name rule on owned keys without host prefixes", "two cases of an unprefixed spelling of an owned host-prefixed setting")]
+    [InlineData("two-name rule strips host prefixes", "owned settings under both host prefixes")]
     public void WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(string wrong, string failingRow) =>
         Assert.Contains(failingRow, CheckContractFailures(WrongCheck(wrong)));
 
     /// <summary>
     /// Mock gate negative controls on the REPL start, each rejected on the row named: one that reads the replaced
-    /// environment into a map that ignores case (the REPL start before the seventh holistic read), and one that builds
-    /// the REPL child in such a map.
+    /// environment into a map that ignores case (the REPL start before the seventh holistic read), one that builds the
+    /// REPL child in such a map, and one that matches the REPL's own keys without the host prefixes (the REPL start before
+    /// the eighth holistic read).
     /// </summary>
     /// <param name="wrong">The name of the wrong REPL start.</param>
     /// <param name="failingRow">The REPL start row that must reject it.</param>
     [Theory]
     [InlineData("reads the start environment ignoring case", "unrelated names that differ only in case reach the REPL child")]
     [InlineData("builds the REPL child ignoring case", "unrelated names that differ only in case reach the REPL child")]
+    [InlineData("matches the REPL's own keys without host prefixes", "an unprefixed spelling of the REPL's host setting is replaced")]
     public void WrongReplStarts_AreRejectedInsidePassingHarness(string wrong, string failingRow) =>
         Assert.Contains(failingRow, ReplStartFailures(WrongReplStart(wrong)));
 
@@ -549,12 +581,27 @@ public sealed class OwnedInstanceKeyIdentityContractTests
             || ReferenceNames.Any(name => identity.Equals(name, IgnoreCase));
     }
 
-    /// <summary>Reference rule for a key the instance sets: the name's identity equals, ignoring case, that of one of the settings.</summary>
+    /// <summary>
+    /// Reference rule for a key the instance sets: one of the keys the name sets (<see cref="KeysSetBy"/>) equals, ignoring
+    /// case, one of the keys a setting's name sets, so an unprefixed or host-prefixed spelling of an owned key counts.
+    /// </summary>
     /// <param name="key">The name.</param>
     /// <param name="settings">The instance's settings.</param>
     /// <returns>True when the name sets a key the instance sets.</returns>
-    private static bool SetsOwnedKey(string key, IReadOnlyDictionary<string, string> settings) =>
-        settings.Keys.Any(own => string.Equals(Identity(own), Identity(key), IgnoreCase));
+    private static bool SetsOwnedKey(string key, IReadOnlyDictionary<string, string> settings)
+    {
+        var keys = KeysSetBy(key).ToList();
+        return settings.Keys.Any(own => KeysSetBy(own).Any(ownKey => keys.Contains(ownKey, StringComparer.OrdinalIgnoreCase)));
+    }
+
+    /// <summary>
+    /// The configuration keys an environment name sets, as the oracle reads it: its identity, and, when it starts with a
+    /// host prefix (DOTNET_ or ASPNETCORE_), the identity of the rest, which the host reads.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <returns>The keys.</returns>
+    private static IEnumerable<string> KeysSetBy(string name) =>
+        HostPrefixes.Where(prefix => name.StartsWith(prefix, IgnoreCase)).Select(prefix => Identity(name[prefix.Length..])).Prepend(Identity(name));
 
     /// <summary>
     /// The part of an effective configuration the oracle judges: the product keys and the keys the instance's settings
@@ -639,6 +686,10 @@ public sealed class OwnedInstanceKeyIdentityContractTests
         "keeps other spellings of owned settings" => (inherited, settings) => BuildWith(inherited, settings, IsProductKey, applySettings: true, StringComparer.Ordinal),
         "owned settings matched by name, not key" => (inherited, settings) => BuildWith(inherited, settings,
             key => IsProductKey(key) || settings.Keys.Any(own => string.Equals(own, key, IgnoreCase)), applySettings: true, StringComparer.Ordinal),
+        "owned settings matched without host prefixes" => (inherited, settings) => BuildWith(inherited, settings,
+            key => IsProductKey(key) || settings.Keys.Any(own => string.Equals(Identity(own), Identity(key), IgnoreCase)), applySettings: true, StringComparer.Ordinal),
+        "removes every host-prefixed name" => (inherited, settings) => BuildWith(inherited, settings,
+            key => IsProductKey(key) || SetsOwnedKey(key, settings) || HostPrefixes.Any(prefix => key.StartsWith(prefix, IgnoreCase)), applySettings: true, StringComparer.Ordinal),
         _ => throw new ArgumentOutOfRangeException(nameof(wrong), wrong, "Unknown wrong builder."),
     };
 
@@ -741,6 +792,13 @@ public sealed class OwnedInstanceKeyIdentityContractTests
             (names, _) => TwoNamesAmong(names.Keys.Where(IsProductKey), StringComparer.OrdinalIgnoreCase), ProviderSetting),
         "two-name rule on every name" => (child, settings, root) => CheckWith(child, settings, root, IsProductKey,
             (names, _) => TwoNamesAmong(names.Keys, StringComparer.OrdinalIgnoreCase), ProviderSetting),
+        "two-name rule on owned keys without host prefixes" => (child, settings, root) => CheckWith(child, settings, root, IsProductKey,
+            (names, own) => TwoNamesAmong(names.Keys.Where(key => IsProductKey(key) || own.Keys.Any(name => string.Equals(Identity(name), Identity(key), IgnoreCase))), StringComparer.OrdinalIgnoreCase),
+            ProviderSetting),
+        "two-name rule strips host prefixes" => (child, settings, root) => CheckWith(child, settings, root, IsProductKey,
+            (names, own) => names.Keys.Where(key => IsProductKey(key) || SetsOwnedKey(key, own))
+                .GroupBy(key => KeysSetBy(key).Last(), StringComparer.OrdinalIgnoreCase).Any(group => group.Count() > 1),
+            ProviderSetting),
         _ => throw new ArgumentOutOfRangeException(nameof(wrong), wrong, "Unknown wrong check."),
     };
 
@@ -770,6 +828,9 @@ public sealed class OwnedInstanceKeyIdentityContractTests
         "builds the REPL child ignoring case" => environment => ReplaceWith(environment,
             BuildWith(new Dictionary<string, string?>(environment, StringComparer.Ordinal), ReplSettings,
                 key => IsProductKey(key) || SetsOwnedKey(key, ReplSettings), applySettings: true, StringComparer.OrdinalIgnoreCase)),
+        "matches the REPL's own keys without host prefixes" => environment => ReplaceWith(environment,
+            BuildWith(new Dictionary<string, string?>(environment, StringComparer.Ordinal), ReplSettings,
+                key => IsProductKey(key) || ReplSettings.Keys.Any(own => string.Equals(Identity(own), Identity(key), IgnoreCase)), applySettings: true, StringComparer.Ordinal)),
         _ => throw new ArgumentOutOfRangeException(nameof(wrong), wrong, "Unknown wrong REPL start."),
     };
 

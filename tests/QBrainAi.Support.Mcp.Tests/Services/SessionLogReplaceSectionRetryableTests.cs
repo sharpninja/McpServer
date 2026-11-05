@@ -120,10 +120,10 @@ public sealed class SessionLogReplaceSectionRetryableTests
     /// and classifies as backend_unavailable retryable true.
     /// </summary>
     /// <remarks>
-    /// Integration: asserts an elapsed wall-clock bound on actual scheduling and timer execution (TR-MCP-USECASE-018 AC-006).
+    /// Integration: its outcome depends on a real storage-command budget timer firing while the stalled step runs, a wall-clock wait under TR-MCP-USECASE-018 AC-006; its elapsed check is a hang guard only.
     /// <list type="table">
     /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
-    /// <item><term>2026-11-05</term><description>TR-MCP-USECASE-018 AC-006 (a wall-clock bound makes a case an integration case): which budget elapsed is read from the exception message (the 5 second intake budget), and the elapsed time keeps a 30 second hang guard (below the interceptor's 60 second stall) instead of the 8 second bound, because the sibling sweep of the Windows integration lane failure at b79fd51f (slice Z5) found this case at 5.07 to 8.64 seconds of run time across nine Windows lanes (ug-r13z5-win-lane-elapsed-bound-durations-1.txt): its bound also timed the host.</description></item>
+    /// <item><term>2026-11-05</term><description>TR-MCP-USECASE-018 AC-006 (a wall-clock bound makes a case an integration case): which budget elapsed is read from the exception message (the 5 second intake budget), and the elapsed time keeps a 30 second hang guard (below the interceptor's 60 second stall) instead of the 8 second bound, because the sibling sweep of the Windows integration lane failure at b79fd51f (slice Z5) found this case at 5.07 to 8.64 seconds of run time across nine Windows lanes (ug-r13z5-win-lane-elapsed-bound-durations-1.txt): its bound also timed the host. The classification line above was restated after the eighth holistic read before hostile validation round 13 (finding b2), because it still named the elapsed bound this entry removed.</description></item>
     /// </list>
     /// </remarks>
     [Trait("Category", "Integration")]

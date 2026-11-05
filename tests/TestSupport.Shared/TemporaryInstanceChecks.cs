@@ -182,8 +182,8 @@ internal static class TemporaryInstanceChecks
     /// (<see cref="ProductVariablePrefixes"/>), every connection-string variable and every provider fallback and host
     /// setting (<see cref="ProviderFallbacks"/>; all ignoring case) is removed, so no inherited connection string, data
     /// source, provider, instance name or endpoint, under any separator spelling, can select another database or address;
-    /// so is every inherited spelling of a key one of the instance's own <paramref name="settings"/> sets
-    /// (<see cref="SetsOwnedKey"/>); the settings are then applied; every other inherited variable is kept under its
+    /// so is every inherited spelling of a key one of the instance's own <paramref name="settings"/> sets, alone or
+    /// host-prefixed (<see cref="SetsOwnedKey"/>); the settings are then applied; every other inherited variable is kept under its
     /// exact name, so two unrelated names that differ only in case stay two variables.
     /// </summary>
     /// <param name="inherited">The environment the process would inherit.</param>
@@ -194,6 +194,7 @@ internal static class TemporaryInstanceChecks
     /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
     /// <item><term>2026-11-05</term><description>FR-MCP-TESTRESOURCE-001 ac-4 (appended "A setting is identified by its configuration key, not by its spelling"): the removal rule now reads each name's configuration key, so colon and mixed-separator spellings and the endpoint section are removed too (hostile validation round 12 finding R12-F1; mock gate ug-r13z4-mockgate-a-1).</description></item>
     /// <item><term>2026-11-05</term><description>FR-MCP-TESTRESOURCE-001 ac-4 (appended "A name is matched exactly, as the process environment holds it"): the child compares names ordinally instead of ignoring case, and an inherited spelling of a key the instance sets is removed before the settings are applied, because the seventh holistic read before hostile validation round 13 (finding g1) showed that the ignore-case map merged unrelated inherited names that differ only in case, and the ordinal map alone would have kept an inherited "port" beside the owned "PORT" (mock gate ug-r13z4c-mockgate-1).</description></item>
+    /// <item><term>2026-11-05</term><description>FR-MCP-TESTRESOURCE-001 ac-4 ("so every ... spelling of a key, alone or host-prefixed, sets that key"): an inherited host-prefix spelling of a key the instance sets, or an unprefixed spelling of a key the instance sets under a host prefix, is removed too, through <see cref="SetsOwnedKey"/>, because the eighth holistic read before hostile validation round 13 (finding g1) showed that an inherited NOLOGO beside the owned DOTNET_NOLOGO, or DOTNET_PORT beside the owned PORT, reached the instance (mock gate ug-r13z6-mockgate-1).</description></item>
     /// </list>
     /// </remarks>
     internal static Dictionary<string, string?> BuildOwnedInstanceEnvironment(
@@ -237,6 +238,7 @@ internal static class TemporaryInstanceChecks
     /// <item><term>2026-11-03</term><description>FR-MCP-TESTRESOURCE-001 ac-4 (appended "Strict containment in the owned root also requires the same root"): documentation only, the summary now states the root rule slice U added to the containment helper (hostile validation round 10 finding R10-F2; stale summary found before round 11).</description></item>
     /// <item><term>2026-11-05</term><description>FR-MCP-TESTRESOURCE-001 ac-4 (appended "A setting is identified by its configuration key, not by its spelling"): product variables are recognized by configuration key, two names of one product key are refused, and the database-engine rule reads the configuration key, because hostile validation round 12 finding R12-F1 showed that an unowned colon spelling passed the check and a colon-spelled provider escaped the SQLite rule (mock gate ug-r13z4-mockgate-a-1).</description></item>
     /// <item><term>2026-11-05</term><description>FR-MCP-TESTRESOURCE-001 ac-4 (appended "A name is matched exactly, as the process environment holds it"): the rule for two names also covers the keys the instance sets outside the product's namespaces (PORT, a logging level), because the seventh holistic read before hostile validation round 13 (finding g1) showed that once the child keeps names exactly, two spellings of such a key could reach the instance (mock gate ug-r13z4c-mockgate-1).</description></item>
+    /// <item><term>2026-11-05</term><description>FR-MCP-TESTRESOURCE-001 ac-4 (appended "A name is matched exactly, as the process environment holds it"): the names the rule for two names covers now include the unprefixed spellings of a key the instance sets under a host prefix (<see cref="SetsOwnedKey"/>), while names are still grouped by <see cref="ConfigurationKeyIdentity"/>, so two names that differ only in their host prefix, such as the instance's own DOTNET_ENVIRONMENT and ASPNETCORE_ENVIRONMENT, are not refused; because the eighth holistic read before hostile validation round 13 (finding g1) showed the rule missed such spellings (mock gate ug-r13z6-mockgate-1).</description></item>
     /// </list>
     /// </remarks>
     internal static string? CheckOwnedInstanceEnvironment(
@@ -539,18 +541,48 @@ internal static class TemporaryInstanceChecks
 
     /// <summary>
     /// FR-MCP-TESTRESOURCE-001 ac-4: whether an environment name sets the same configuration key as one of the instance's
-    /// own settings: its <see cref="ConfigurationKeyIdentity"/> equals that of a setting's name, ignoring case, so another
-    /// case or separator spelling of an owned key counts and the owned setting governs it.
+    /// own settings: one of the keys it sets (<see cref="ConfigurationKeysSetBy"/>) equals, ignoring case, one of the keys a
+    /// setting's name sets, so another case, separator or host-prefix spelling of an owned key counts and the owned
+    /// setting governs it.
     /// </summary>
     /// <param name="key">The environment name.</param>
     /// <param name="settings">The instance's own variables.</param>
     /// <returns>True when the name sets a key the instance sets.</returns>
-    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4 (appended "A name is matched exactly, as the process environment holds it"): added for the builder and the rule for two names, because the seventh holistic read before hostile validation round 13 (finding g1) showed that the keys the instance sets outside the product's namespaces had no spelling rule (mock gate ug-r13z4c-mockgate-1).</remarks>
+    /// <remarks>
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-05</term><description>FR-MCP-TESTRESOURCE-001 ac-4 (appended "A name is matched exactly, as the process environment holds it"): added for the builder and the rule for two names, because the seventh holistic read before hostile validation round 13 (finding g1) showed that the keys the instance sets outside the product's namespaces had no spelling rule (mock gate ug-r13z4c-mockgate-1).</description></item>
+    /// <item><term>2026-11-05</term><description>FR-MCP-TESTRESOURCE-001 ac-4 ("a DOTNET_ or ASPNETCORE_ prefix places the rest of the name in the host's configuration, so every ... spelling of a key, alone or host-prefixed, sets that key"): compares the keys a name sets with and without a host prefix instead of its double-underscore spelling alone, because the eighth holistic read before hostile validation round 13 (finding g1) showed that an inherited NOLOGO beside the owned DOTNET_NOLOGO, or DOTNET_PORT beside the owned PORT, was kept (mock gate ug-r13z6-mockgate-1).</description></item>
+    /// </list>
+    /// </remarks>
     private static bool SetsOwnedKey(string key, IReadOnlyDictionary<string, string> settings)
     {
-        var identity = ConfigurationKeyIdentity(key);
-        return settings.Keys.Any(own => string.Equals(ConfigurationKeyIdentity(own), identity, StringComparison.OrdinalIgnoreCase));
+        var keys = ConfigurationKeysSetBy(key);
+        return settings.Keys.Any(own => ConfigurationKeysSetBy(own).Any(ownKey => keys.Contains(ownKey, StringComparer.OrdinalIgnoreCase)));
     }
+
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 ac-4: the configuration keys an environment name sets: its
+    /// <see cref="ConfigurationKeyIdentity"/>, and, when the name starts with a host prefix (DOTNET_ or ASPNETCORE_, ignoring
+    /// case), the identity of the rest of the name, which the host's configuration reads.
+    /// </summary>
+    /// <param name="name">The environment name.</param>
+    /// <returns>The keys, the unprefixed reading first.</returns>
+    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4 ("a DOTNET_ or ASPNETCORE_ prefix places the rest of the name in the host's configuration"): added so <see cref="SetsOwnedKey"/> reads a host-prefix spelling of an owned key, because the eighth holistic read before hostile validation round 13 (finding g1) showed it read only the double-underscore spelling (mock gate ug-r13z6-mockgate-1).</remarks>
+    internal static IReadOnlyList<string> ConfigurationKeysSetBy(string name)
+    {
+        ArgumentNullException.ThrowIfNull(name);
+        var keys = new List<string> { ConfigurationKeyIdentity(name) };
+        foreach (var prefix in HostPrefixes)
+        {
+            if (name.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                keys.Add(ConfigurationKeyIdentity(name[prefix.Length..]));
+        }
+
+        return keys;
+    }
+
+    private static readonly string[] HostPrefixes = ["DOTNET_", "ASPNETCORE_"];
 
     private static bool IsSqliteProvider(string provider) =>
         string.Equals(provider, "sqlite", StringComparison.OrdinalIgnoreCase)
