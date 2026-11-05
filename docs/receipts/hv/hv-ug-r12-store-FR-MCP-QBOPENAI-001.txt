@@ -1,0 +1,39 @@
+type: result
+payload:
+  requestId: req-20261105T065006Z-c12e
+  result:
+    id: FR-MCP-QBOPENAI-001
+    title: QuadBrain OpenAI-compatible chat-completions endpoint
+    description: QuadBrain SHALL expose an inbound OpenAI-compatible chat-completions endpoint (chat/completions shape) backed by QuadBrain orchestration, accepting standard OpenAI chat messages and tool/function definitions and returning OpenAI-shaped completions - including assistant tool_calls when the model elects to invoke a tool - so any OpenAI-compatible client, including QBAgent, can use QuadBrain as a drop-in model. QBAgent (FR-MCP-QBAGENT-001) consumes this endpoint as its IChatClient and executes the emitted tool calls via the Microsoft Agent Framework loop; the ACID tightly-coupled profile is NOT required for QBAgent.
+    status: pending
+    priority: medium
+    area: MCP
+    acceptanceCriteria:
+    - id: ''
+      text: An inbound OpenAI chat request maps the role-tagged transcript onto QuadBrain orchestration and returns the Arbiter output as the assistant message.
+      isSatisfied: true
+    - id: ''
+      text: Tool definitions in the request flow through and the response emits assistant tool_calls when QuadBrain elects to call a tool.
+      isSatisfied: true
+    - id: ''
+      text: Bearer-auth (Authorization Bearer with X-Api-Key fallback) is validated via WorkspaceTokenService; invalid or missing yields 401.
+      isSatisfied: true
+    - id: ''
+      text: QBAgent wires a standard OpenAI IChatClient to the v1 endpoint and runs the Agent Framework tool loop with action tools under the non-ACID profile.
+      isSatisfied: true
+    - id: ac-5
+      text: 'With no tools in the request and no tool_choice, an Arbiter reply that is not an arbiter envelope is the final answer after one orchestration round and is returned as the assistant message with finish reason stop; an explicit continue envelope still asks for another round (PLAN-SESSIONTRIAGEFIX-001 B13; operator decision 2026-10-15 "Both rules (Recommended)"). A tool_choice of auto with no tools counts as no tool_choice, and a committed Arbiter output that is empty is answered with the no-decision message after one round (operator 2026-10-29: "QuadBrain ACs (Recommended)"; holistic review finding SRC-3).'
+      isSatisfied: false
+    - id: ac-6
+      text: 'When the round budget (8 orchestration rounds) ends without a final envelope, the response carries the last Arbiter output formatted for display as the assistant message with finish reason stop, never empty content; a last output whose display formatting leaves nothing (an Arbiter envelope without displayable content, or any other output that formats to nothing), and a budget that ends after an internal-tool round, are answered as ac-7 states (PLAN-SESSIONTRIAGEFIX-001 B13; operator decision 2026-10-15 "Both rules (Recommended)"; operator 2026-10-30: "F2: ac-6 vs ac-7 (Recommended)"; operator 2026-11-02: "Strengthen ac-6 (Recommended)").'
+      isSatisfied: false
+    - id: ac-7
+      text: "The assistant content is never an Arbiter envelope without displayable content: when display formatting of the answer leaves nothing, the content is a plain message naming the round budget and the last intent, and when the round budget ends after an internal-tool round, the content is that round's internal tool results (operator 2026-10-29: \"QuadBrain ACs (Recommended)\"; holistic review finding SRC-2)."
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-11-05T06:50:07.6797072+00:00
+    updatedAt: 2026-11-05T06:50:07.6798138+00:00
+  deprecated: true
+
+---
+

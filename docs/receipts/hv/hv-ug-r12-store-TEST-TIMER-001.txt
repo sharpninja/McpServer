@@ -1,0 +1,28 @@
+type: result
+payload:
+  requestId: req-20261105T075313Z-ddc1
+  result:
+    id: TEST-TIMER-001
+    title: Discriminating shared timer shutdown contract
+    description: Run the same scenario and assertions against independently scripted ITimerService/ITimerHandle mocks and both real services. Correct mock and deliberate negative responses must yield a green outer mock gate before product edits. Cover blocked cancellation registration, overlapping Restart against Stop and Dispose, new run after Stop, final Dispose, repeated shutdown, and reentrant calls.
+    status: pending
+    priority: high
+    area: TIMER
+    testType: unit
+    acceptanceCriteria:
+    - id: test-timer-001-ac-001
+      text: Mock contract gate passes with zero failures/skips and rejects forbidden restart, stale token, and restart-after-dispose behaviors as expected negative controls.
+      isSatisfied: false
+    - id: test-timer-001-ac-002
+      text: The same contract tests pass against Core and UI.Core, and all four reproduced race cases no longer require external rescue.
+      isSatisfied: false
+    - id: test-timer-001-ac-003
+      text: Full five-project Manager suites, extension tests, and deployment-script tests have zero failures/skips before acceptance; deferred Claude HV must review all changed code/tests/docs before Phase 2 closure.
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-11-05T07:53:14.8029531+00:00
+    updatedAt: 2026-11-05T07:53:14.8030619+00:00
+  deprecated: true
+
+---
+

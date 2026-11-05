@@ -1,0 +1,35 @@
+type: result
+payload:
+  requestId: req-20261105T065056Z-ce55
+  result:
+    id: TR-MCP-NUKE-020
+    title: Targeted test-group runs
+    description: The Nuke target TestGroups runs only named groups of test classes, each group in one test project, and writes one TRX per project, so that a mock gate or binding after an edit runs the changed tests through Nuke instead of the full suite. The full gate set (Test, MigrationIntegrationTests, Build.Tests, ValidateTraceability) still runs once at phase exit.
+    status: pending
+    priority: high
+    area: MCP
+    subarea: NUKE
+    notes: 'IMPL-UNITGREEN-001 slice Q. Operator 2026-11-02: "Use dedicated targets or an integration target that accepts an array of tests groups to run." Operator 2026-10-27: "Stop running full test suites after one edit.  Test what you changed and save full suite execution for validatin that its time to exit the phase and run HV." AC text approved with the PR 87 merge plan, 2026-11-02. Implementation detail of FR-MCP-BUILD-001; no TEST record; proved by Build.Tests.'
+    acceptanceCriteria:
+    - id: AC-1
+      text: Nuke target TestGroups runs only the test groups its --test-groups array names. Each group names one test project and one or more test classes, selected by class name whatever their category. The target requires --test-run-id and writes one TRX per selected project under TestResults/<run id>. It fails when a group names an unknown project, when a group selects no case, or when any selected case fails or is skipped.
+      isSatisfied: false
+    - id: AC-2
+      text: The group filters and TRX names come from the same composition MigrationIntegrationTests uses (TR-MCP-NUKE-019 AC-3), proved by Build.Tests over that composition. The run log names each filter it ran.
+      isSatisfied: false
+    - id: AC-3
+      text: TestGroups never changes which cases Test or MigrationIntegrationTests run.
+      isSatisfied: false
+    - id: AC-4
+      text: "TestGroups excludes cases tagged for the other platform with the lane's host platform clause: on a Linux host Platform!=Windows, on a Windows host Platform!=Linux, untagged cases on both (TR-MCP-NUKE-019 AC-1). A group whose classes hold only other-platform cases selects no case and fails (operator 2026-11-02: \"Add both ACs (Recommended)\")."
+      isSatisfied: false
+    - id: AC-5
+      text: "Every class a group names runs at least one case in its project's TRX; a named class that runs no case fails the target and the failure names that class (operator 2026-11-02: \"Add both ACs (Recommended)\"). A class counts as run only when an executed result's test, joined to its definition by test id, belongs to that class (its definition's class name is the class, as the whole name or its last segment). A definition with no executed result, a namespace segment, and a display name or argument that mentions the class do not count; a custom display name counts through its test's class (operator 2026-11-02: \"Strengthen 5 ACs, fix all 8 (Recommended)\"; hostile validation finding R9-F1)."
+      isSatisfied: false
+    scopeStartLayerKey: layer-1
+    createdAt: 2026-11-05T06:50:58.2083606+00:00
+    updatedAt: 2026-11-05T06:50:58.2084712+00:00
+  deprecated: true
+
+---
+

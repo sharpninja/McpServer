@@ -1,0 +1,61 @@
+type: result
+payload:
+  requestId: req-20261105T070056Z-b4c2
+  result:
+  - agent: Codex
+    sessionId: Codex-20261105T064457Z-plugin-session
+    title: Independent hostile validation unitgreen-r12
+    model: codex
+    started:
+      dateTime: 2026-11-05T06:45:00.0000000
+      utcDateTime: 2026-11-05T06:45:00.0000000Z
+      localDateTime: 2026-11-05T00:45:00.0000000-06:00
+      date: 2026-11-05T00:00:00.0000000
+      day: 5
+      dayOfWeek: Thursday
+      dayOfYear: 309
+      hour: 6
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 45
+      month: 11
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 0
+      ticks: 639294579000000000
+      utcTicks: 639294579000000000
+      timeOfDay: 06:45:00
+      year: 2026
+    lastUpdated:
+      dateTime: 2026-11-05T07:00:17.0000000
+      utcDateTime: 2026-11-05T07:00:17.0000000Z
+      localDateTime: 2026-11-05T01:00:17.0000000-06:00
+      date: 2026-11-05T00:00:00.0000000
+      day: 5
+      dayOfWeek: Thursday
+      dayOfYear: 309
+      hour: 7
+      millisecond: 0
+      microsecond: 0
+      nanosecond: 0
+      minute: 0
+      month: 11
+      offset: 00:00:00
+      totalOffsetMinutes: 0
+      second: 17
+      ticks: 639294588170000000
+      utcTicks: 639294588170000000
+      timeOfDay: 07:00:17
+      year: 2026
+    status: in_progress
+    turnCount: 1
+    tags:
+    - unitgreen-r12
+    - IMPL-UNITGREEN-001
+    - hostile-validation
+    filesModifiedCount: 2
+  deprecated: true
+
+---
+

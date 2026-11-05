@@ -1,0 +1,119 @@
+{
+  "threadId": "01a1aa70-3c52-7311-8e8c-276da9268500",
+  "rollout": "/home/sharpninja/.codex/sessions/2026/11/05/rollout-2026-11-05T00-40-44-01a1aa70-3c52-7311-8e8c-276da9268500.jsonl",
+  "readUtc": "2026-11-05T08:07:09.2720129Z",
+  "turns": [
+    {
+      "line": 10,
+      "timestamp": "2026-11-05T06:40:46.251Z",
+      "model": "gpt-6-astra",
+      "effort": "max",
+      "turnId": "01a1aa70-3e04-7b42-8b96-8e923539c4cd",
+      "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "collaborationMode": {
+        "mode": "default",
+        "settings": {
+          "model": "gpt-6-astra",
+          "reasoning_effort": "max",
+          "developer_instructions": null
+        }
+      }
+    },
+    {
+      "line": 307,
+      "timestamp": "2026-11-05T06:56:11.035Z",
+      "model": "gpt-6-astra",
+      "effort": "max",
+      "turnId": "01a1aa70-3e04-7b42-8b96-8e923539c4cd",
+      "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "collaborationMode": {
+        "mode": "default",
+        "settings": {
+          "model": "gpt-6-astra",
+          "reasoning_effort": "max",
+          "developer_instructions": null
+        }
+      }
+    },
+    {
+      "line": 545,
+      "timestamp": "2026-11-05T07:07:18.681Z",
+      "model": "gpt-6-astra",
+      "effort": "max",
+      "turnId": "01a1aa70-3e04-7b42-8b96-8e923539c4cd",
+      "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "collaborationMode": {
+        "mode": "default",
+        "settings": {
+          "model": "gpt-6-astra",
+          "reasoning_effort": "max",
+          "developer_instructions": null
+        }
+      }
+    },
+    {
+      "line": 837,
+      "timestamp": "2026-11-05T07:21:41.629Z",
+      "model": "gpt-6-astra",
+      "effort": "max",
+      "turnId": "01a1aa70-3e04-7b42-8b96-8e923539c4cd",
+      "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "collaborationMode": {
+        "mode": "default",
+        "settings": {
+          "model": "gpt-6-astra",
+          "reasoning_effort": "max",
+          "developer_instructions": null
+        }
+      }
+    },
+    {
+      "line": 1152,
+      "timestamp": "2026-11-05T07:35:39.108Z",
+      "model": "gpt-6-astra",
+      "effort": "max",
+      "turnId": "01a1aa70-3e04-7b42-8b96-8e923539c4cd",
+      "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "collaborationMode": {
+        "mode": "default",
+        "settings": {
+          "model": "gpt-6-astra",
+          "reasoning_effort": "max",
+          "developer_instructions": null
+        }
+      }
+    },
+    {
+      "line": 1365,
+      "timestamp": "2026-11-05T07:46:19.4Z",
+      "model": "gpt-6-astra",
+      "effort": "max",
+      "turnId": "01a1aa70-3e04-7b42-8b96-8e923539c4cd",
+      "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "collaborationMode": {
+        "mode": "default",
+        "settings": {
+          "model": "gpt-6-astra",
+          "reasoning_effort": "max",
+          "developer_instructions": null
+        }
+      }
+    },
+    {
+      "line": 1705,
+      "timestamp": "2026-11-05T08:03:35.625Z",
+      "model": "gpt-6-astra",
+      "effort": "max",
+      "turnId": "01a1aa70-3e04-7b42-8b96-8e923539c4cd",
+      "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "collaborationMode": {
+        "mode": "default",
+        "settings": {
+          "model": "gpt-6-astra",
+          "reasoning_effort": "max",
+          "developer_instructions": null
+        }
+      }
+    }
+  ]
+}
