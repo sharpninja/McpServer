@@ -29,6 +29,7 @@ public sealed partial class MemoryConsolidateOperations
     }
 
     /// <summary>Plans or applies a consolidate merge for the active workspace.</summary>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): passes the time of the lock attempt, read from the injected clock, to TryAcquireLock, which no longer reads DateTimeOffset.UtcNow itself (the sibling sweep of hostile validation round 12 finding R12-F2; mock gate ug-r13z4-mockgate-b-1). This member's own entry was added after the seventh holistic read before hostile validation round 13 (finding c5); until then the change was logged only on the constructor.</remarks>
     public async Task<MemoryConsolidateResult> ConsolidateAsync(
         MemoryConsolidateRequest? request,
         bool readOnlyCaller,
@@ -152,6 +153,7 @@ public sealed partial class MemoryConsolidateOperations
     }
 
     /// <summary>Runs a scheduled consolidate tick / stats probe.</summary>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): reads the job's time once from the injected clock, for the lock attempt and the reported run time, instead of DateTimeOffset.UtcNow (the sibling sweep of hostile validation round 12 finding R12-F2, sibling S37; mock gate ug-r13z4-mockgate-b-1). This member's own entry was added after the seventh holistic read before hostile validation round 13 (finding c5); until then the change was logged only on the constructor.</remarks>
     public async Task<MemoryConsolidateJobResult> RunJobAsync(
         bool? dryRun,
         bool forceOverlap,

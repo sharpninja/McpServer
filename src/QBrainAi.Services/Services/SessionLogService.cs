@@ -498,6 +498,7 @@ public sealed class SessionLogService : ISessionLogService
     }
 
     /// <inheritdoc />
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): takes the stale-turn cutoff from the injected clock instead of DateTimeOffset.UtcNow (hostile validation round 12 finding R12-F2; mock gate ug-r13z4-mockgate-b-1). This member's own entry was added after the seventh holistic read before hostile validation round 13 (finding c5); until then the change was logged on the constructor and in an inline comment.</remarks>
     public async Task<SessionLogQueryResult> QueryAsync(SessionLogQueryRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);

@@ -286,6 +286,7 @@ public sealed class InMemoryKeyServerService : IKeyServerPartyRegistry, IKeyServ
         => _stateStore.GetPartyKeyAsync(partyId.Trim(), keyId.Trim(), cancellationToken);
 
     /// <inheritdoc />
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): stamps the manifest's issue and expiry times from the injected clock, read once, instead of DateTimeOffset.UtcNow (hostile validation round 12 finding R12-F2 and its sibling sweep; mock gate ug-r13z4-mockgate-b-1). This member's own entry was added after the seventh holistic read before hostile validation round 13 (finding c5); until then the change was logged only on the constructor.</remarks>
     public async Task<TransactionManifestSignResponse> SignManifestAsync(
         TransactionManifestSignRequest request,
         CancellationToken cancellationToken = default)
@@ -438,6 +439,7 @@ public sealed class InMemoryKeyServerService : IKeyServerPartyRegistry, IKeyServ
     }
 
     /// <inheritdoc />
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): checks the manifest's expiry and future issue against the injected clock, read once, instead of DateTimeOffset.UtcNow (hostile validation round 12 finding R12-F2 and its sibling sweep; mock gate ug-r13z4-mockgate-b-1). This member's own entry was added after the seventh holistic read before hostile validation round 13 (finding c5); until then the change was logged only on the constructor.</remarks>
     public async Task<TransactionManifestVerifyResponse> VerifyManifestAsync(
         TransactionManifestVerifyRequest request,
         CancellationToken cancellationToken = default)
