@@ -28,6 +28,8 @@ public sealed class TemporaryInstanceChecksTests
 {
     private const string OwnedRoot = "/scratch/owned";
     private const string WindowsOwnedRoot = @"C:\scratch\owned";
+    /// <summary>FR-MCP-TESTRESOURCE-001 ac-4: the UNC owned root of the start rows that require the same root kind and identity.</summary>
+    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4: this entry documents the constant, added on 2026-11-03 with the UNC start rows (hostile validation round 10 finding R10-F2), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private const string UncOwnedRoot = "//server/share/owned";
     private const string Nonce = "nonce-r8b-1";
 

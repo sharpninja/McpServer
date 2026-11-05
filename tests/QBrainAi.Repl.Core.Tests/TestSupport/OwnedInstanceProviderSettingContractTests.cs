@@ -15,6 +15,8 @@ namespace QBrainAi.Repl.Core.Tests.TestSupport;
 /// </remarks>
 public sealed class OwnedInstanceProviderSettingContractTests
 {
+    /// <summary>FR-MCP-TESTRESOURCE-001 ac-4: the owned root the provider rows are judged under.</summary>
+    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4: this entry documents the constant, added on 2026-11-02 with the class (mock gate ug-r9-mockgate-r-1), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private const string Root = "/scratch/owned";
 
     /// <summary>A literal setting and its independently specified acceptance outcome.</summary>
@@ -23,6 +25,8 @@ public sealed class OwnedInstanceProviderSettingContractTests
     /// <param name="Accepted">Whether the owned-instance boundary accepts this map.</param>
     internal sealed record ProviderCase(string Key, string Value, bool Accepted);
 
+    /// <summary>FR-MCP-TESTRESOURCE-001 ac-4: the 22 fixed provider rows, each with its independently specified outcome.</summary>
+    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4: this entry documents the field, added on 2026-11-02 with the class (mock gate ug-r9-mockgate-r-1), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private static readonly ProviderCase[] Cases =
     [
         new("Mcp__TodoStorage__Provider", "database", true),

@@ -14,6 +14,8 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// </remarks>
 public sealed class FederationEnvelopeSignerTests
 {
+    /// <summary>FR-MCP-103; TR-MCP-USECASE-018 AC-006: the settable clock every signer of this class reads, set to the first age-boundary reference.</summary>
+    /// <remarks>2026-11-05, FR-MCP-103; TR-MCP-USECASE-018 AC-006: this entry documents the field, added in slice Z4 (the sibling sweep of hostile validation round 12 finding R12-F2), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private readonly QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProvider _clock =
         new(QBrainAi.Support.Mcp.Tests.TestSupport.AgeBoundaryContractTests.References[0]);
 
@@ -180,6 +182,9 @@ public sealed class FederationEnvelopeSignerTests
             return future;
         });
 
+    /// <summary>FR-MCP-103: the fixed operation request every case signs.</summary>
+    /// <returns>A new request with fixed ids and an empty body.</returns>
+    /// <remarks>2026-11-05, FR-MCP-103; TR-MCP-USECASE-018 AC-006: this entry documents the helper, added in slice Z4 when the cases moved to the settable clock (the sibling sweep of hostile validation round 12 finding R12-F2), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private static FederationOperationRequest Operation() => new()
     {
         OperationId = "op-1",
@@ -188,6 +193,9 @@ public sealed class FederationEnvelopeSignerTests
         BodyBase64 = Convert.ToBase64String("{}"u8.ToArray()),
     };
 
+    /// <summary>FR-MCP-103: a signer with signing enabled, a fixed secret and a 300 second envelope TTL, reading the class's settable clock.</summary>
+    /// <returns>The signer under test.</returns>
+    /// <remarks>2026-11-05, FR-MCP-103; TR-MCP-USECASE-018 AC-006: this entry documents the helper, changed in slice Z4 to pass the settable clock (the sibling sweep of hostile validation round 12 finding R12-F2), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private FederationEnvelopeSigner CreateSigner()
     {
         var monitor = Substitute.For<IOptionsMonitor<FederationOptions>>();

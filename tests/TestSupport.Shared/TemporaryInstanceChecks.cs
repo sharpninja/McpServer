@@ -582,6 +582,13 @@ internal static class TemporaryInstanceChecks
         return keys;
     }
 
+    /// <summary>
+    /// FR-MCP-TESTRESOURCE-001 ac-4: the host prefixes whose rest of name the host's configuration reads, which
+    /// <see cref="ConfigurationKeysSetBy"/> strips to find the second key a name sets. <see cref="IsProductVariable"/>
+    /// names the same two prefixes as literals, because it treats them differently: every ASPNETCORE_ name is a product
+    /// variable, and a DOTNET_ name is one when the rest of the name is.
+    /// </summary>
+    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4 ("a DOTNET_ or ASPNETCORE_ prefix places the rest of the name in the host's configuration"): this entry documents the field, added in slice Z6 for the eighth holistic read before hostile validation round 13 (finding g1; mock gate ug-r13z6-mockgate-1), because the ninth holistic read (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private static readonly string[] HostPrefixes = ["DOTNET_", "ASPNETCORE_"];
 
     private static bool IsSqliteProvider(string provider) =>

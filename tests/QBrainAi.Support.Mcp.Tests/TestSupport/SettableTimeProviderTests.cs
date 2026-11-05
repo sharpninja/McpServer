@@ -14,6 +14,8 @@ namespace QBrainAi.Support.Mcp.Tests.TestSupport;
 /// </remarks>
 public sealed class SettableTimeProviderTests
 {
+    /// <summary>TR-MCP-USECASE-018 AC-006: a fixed UTC instant in 2001 that the cases set the clock to.</summary>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the field, added in slice Z4 with the class (hostile validation round 12 finding R12-F2), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private static readonly DateTimeOffset Early = new(2001, 2, 3, 4, 5, 6, TimeSpan.Zero);
 
     /// <summary>Every read returns the set instant until the test sets or advances it.</summary>

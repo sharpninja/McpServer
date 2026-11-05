@@ -16,6 +16,8 @@ namespace QBrainAi.Client.Tests;
 /// </remarks>
 public sealed class RequirementTimestampJsonBindingTests
 {
+    /// <summary>FR-MCP-040 ac-1: the deserialization options RequirementsClient reads with (case-insensitive names and the source-generated <see cref="McpClientJsonContext"/>).</summary>
+    /// <remarks>2026-11-05, FR-MCP-040 ac-1: this entry documents the field, added on 2026-11-02 with the class (binding ug-r9-binding-p-1), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private static readonly JsonSerializerOptions s_clientOptions = new() { PropertyNameCaseInsensitive = true, TypeInfoResolver = McpClientJsonContext.Default };
 
     /// <summary>The client models read the sent times, keep the sent offset, and read absent or null values as null.</summary>

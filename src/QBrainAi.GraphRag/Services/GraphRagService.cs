@@ -42,6 +42,9 @@ internal sealed class GraphRagService : IGraphRagService
     private readonly McpDbContext _dbContext;
     private readonly IEmbeddingService _embeddingService;
     private readonly IVectorIndexService _vectorIndexService;
+
+    /// <summary>FR-MCP-079: the clock that stamps entity and relationship creation and update times and that the temporary cleanup reads once per run.</summary>
+    /// <remarks>2026-11-05, FR-MCP-079; TR-MCP-USECASE-018 AC-006: this entry documents the field, added on 2026-11-03 with the optional constructor clock (the sibling sweep of hostile validation round 10 finding R10-F3) and read by the temporary cleanup since slice Z4 (hostile validation round 12 finding R12-F2), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private readonly TimeProvider _timeProvider;
 
     /// <summary>FR-MCP-078/079/080: Initializes the service with all required dependencies.</summary>

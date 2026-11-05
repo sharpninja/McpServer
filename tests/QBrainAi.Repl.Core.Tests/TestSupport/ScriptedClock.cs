@@ -14,7 +14,12 @@ namespace QBrainAi.Repl.Core.Tests.TestSupport;
 /// </remarks>
 internal sealed class ScriptedClock
 {
+    /// <summary>TR-MCP-USECASE-018 AC-006: the scripted times, returned in order.</summary>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the field, added on 2026-11-03 with the class (hostile validation round 10 finding R10-F3), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private readonly DateTimeOffset[] _times;
+
+    /// <summary>TR-MCP-USECASE-018 AC-006: the index of the next scripted time, and so the number of reads so far.</summary>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the field, added on 2026-11-03 with the class (hostile validation round 10 finding R10-F3), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private int _next;
 
     /// <summary>Creates a clock that returns <paramref name="times"/> in order.</summary>

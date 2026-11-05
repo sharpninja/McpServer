@@ -180,6 +180,9 @@ public sealed class InMemoryKeyServerService : IKeyServerPartyRegistry, IKeyServ
     private readonly IOptionsMonitor<KeyServerOptions> _options;
     private readonly ITransactionManifestCanonicalizer _canonicalizer;
     private readonly IKeyServerStateStore _stateStore;
+
+    /// <summary>TR-MCP-USECASE-018 AC-006: the clock manifest signing stamps a manifest with and verification checks its expiry and future issue against.</summary>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the field, added in slice Z4 with the optional constructor clock (hostile validation round 12 finding R12-F2), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private readonly TimeProvider _time;
     private readonly Dictionary<string, Dictionary<string, ECDsa>> _signingKeys = new(StringComparer.OrdinalIgnoreCase);
 

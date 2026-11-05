@@ -38,20 +38,54 @@ namespace QBrainAi.Repl.Core.Tests.TestSupport;
 /// </remarks>
 public sealed class OwnedInstanceKeyIdentityContractTests
 {
+    /// <summary>FR-MCP-TESTRESOURCE-001 ac-4: the owned root of every row.</summary>
+    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4: this entry documents the constant, added with the class in slice Z4 (hostile validation round 12 finding R12-F1), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private const string OwnedRoot = "/scratch/owned";
+
+    /// <summary>FR-MCP-TESTRESOURCE-001 ac-4: the database inside the owned root that the instance's own settings select.</summary>
+    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4: this entry documents the constant, added with the class in slice Z4 (hostile validation round 12 finding R12-F1), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private const string OwnedDatabase = "/scratch/owned/data/qbrainai.db";
+
+    /// <summary>FR-MCP-TESTRESOURCE-001 ac-4: a database outside the owned root, the value an inherited spelling tries to select.</summary>
+    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4: this entry documents the constant, added with the class in slice Z4 (hostile validation round 12 finding R12-F1), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private const string LiveDatabase = "/home/example/live/qbrainai.db";
+
+    /// <summary>FR-MCP-TESTRESOURCE-001 ac-4: the server address the instance's own settings set.</summary>
+    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4: this entry documents the constant, added with the class in slice Z4 (hostile validation round 12 finding R12-F1), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private const string OwnedAddress = "http://127.0.0.1:49123";
+
+    /// <summary>FR-MCP-TESTRESOURCE-001 ac-4: another server address, the value an inherited spelling of the instance's server address tries to set.</summary>
+    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4: this entry documents the constant, added with the class in slice Z4 (hostile validation round 12 finding R12-F1), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private const string LiveAddress = "http://127.0.0.1:7147";
+
+    /// <summary>FR-MCP-TESTRESOURCE-001 ac-4: the case-insensitive comparison the reference rules and the row helpers use.</summary>
+    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4: this entry documents the constant, added with the class in slice Z4 (hostile validation round 12 finding R12-F1), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private const StringComparison IgnoreCase = StringComparison.OrdinalIgnoreCase;
 
+    /// <summary>FR-MCP-TESTRESOURCE-001 ac-4: the host prefixes whose rest of name the host's configuration reads, as the oracle states them independently of the code under test.</summary>
+    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4: this entry documents the field, added with the class in slice Z4 (hostile validation round 12 finding R12-F1) and also read by the reference rule for the instance's own keys since slice Z6 (eighth holistic read before hostile validation round 13, finding g1), because the ninth holistic read (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private static readonly string[] HostPrefixes = ["DOTNET_", "ASPNETCORE_"];
+
+    /// <summary>FR-MCP-TESTRESOURCE-001 ac-4: the five connection-string prefixes the environment-variable provider maps into ConnectionStrings.</summary>
+    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4: this entry documents the field, added with the class in slice Z4 (hostile validation round 12 finding R12-F1), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private static readonly string[] ConnectionStringPrefixes = ["SQLCONNSTR_", "SQLAZURECONNSTR_", "MYSQLCONNSTR_", "POSTGRESQLCONNSTR_", "CUSTOMCONNSTR_"];
+
+    /// <summary>FR-MCP-TESTRESOURCE-001 ac-4: the configuration sections the oracle treats as product keys or the host's endpoint section.</summary>
+    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4: this entry documents the field, added with the class in slice Z4 (hostile validation round 12 finding R12-F1), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private static readonly string[] ReferenceSections = ["Mcp", "QBrainAi", "ConnectionStrings", "Kestrel"];
+
+    /// <summary>FR-MCP-TESTRESOURCE-001 ac-4: the flat name prefixes the oracle treats as product variables.</summary>
+    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4: this entry documents the field, added with the class in slice Z4 (hostile validation round 12 finding R12-F1), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private static readonly string[] ReferenceFlatPrefixes = ["MCP_", "QBRAINAI_", "MCPSERVER_"];
+
+    /// <summary>FR-MCP-TESTRESOURCE-001 ac-4: the provider fallback and host setting names the oracle treats as product variables.</summary>
+    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4: this entry documents the field, added with the class in slice Z4 (hostile validation round 12 finding R12-F1), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private static readonly string[] ReferenceNames =
         ["DATABASE_URL", "POSTGRES_CONNECTION_STRING", "CONTENTROOT", "ENVIRONMENT", "URLS", "APPLICATIONNAME", "WEBROOT",
             "HTTP_PORTS", "HTTPS_PORTS", "HOSTINGSTARTUPASSEMBLIES", "HOSTINGSTARTUPEXCLUDEASSEMBLIES", "PREVENTHOSTINGSTARTUP"];
+
+    /// <summary>FR-MCP-TESTRESOURCE-001 ac-4: the raw name prefixes of the round 12 rule, which the wrong implementations of that rule match.</summary>
+    /// <remarks>2026-11-05, FR-MCP-TESTRESOURCE-001 ac-4: this entry documents the field, added with the class in slice Z4 (hostile validation round 12 finding R12-F1), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private static readonly string[] RawPrefixes = ["Mcp__", "QBrainAi__", "MCP_", "QBRAINAI_", "MCPSERVER_", "ConnectionStrings__"];
 
     /// <summary>The settings of the REPL start rows: the owned workspace, server address and trust cache, and one host control.</summary>

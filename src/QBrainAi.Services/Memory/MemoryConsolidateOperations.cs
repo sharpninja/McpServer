@@ -13,6 +13,9 @@ public sealed partial class MemoryConsolidateOperations
     private static readonly TimeSpan LockTtl = TimeSpan.FromSeconds(30);
     private readonly McpDbContext _db;
     private readonly string _workspacePath;
+
+    /// <summary>TR-MCP-USECASE-018 AC-006: the clock the workspace lock's acquisition time and TTL takeover are read from.</summary>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the field, added in slice Z4 with the optional constructor clock (hostile validation round 12 finding R12-F2), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation. TR-MCP-MEMORY-JOBS-002 in this file is a historical id, not a record in the requirement store.</remarks>
     private readonly TimeProvider _time;
 
     /// <summary>Creates operations bound to an already-scoped <see cref="McpDbContext"/>.</summary>

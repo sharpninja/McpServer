@@ -12,6 +12,9 @@ public sealed class FederationEnvelopeSigner : IFederationEnvelopeSigner
     private const string Canonicalization = "federation-envelope-v1";
 
     private readonly IOptionsMonitor<FederationOptions> _options;
+
+    /// <summary>FR-MCP-103: the clock Sign stamps an envelope with and Verify checks its expiry and future issue against.</summary>
+    /// <remarks>2026-11-05, FR-MCP-103; TR-MCP-USECASE-018 AC-006: this entry documents the field, added in slice Z4 with the optional constructor clock (hostile validation round 12 finding R12-F2), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private readonly TimeProvider _time;
 
     /// <summary>Initializes a new instance of the <see cref="FederationEnvelopeSigner"/> class.</summary>

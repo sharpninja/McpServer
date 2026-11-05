@@ -237,6 +237,9 @@ public class StubAuthRotationHandlerTests
 internal sealed class StubAuthRotationHandler : IAuthRotationHandler
 {
     private readonly List<Func<IAuthState, Task>> _callbacks = new();
+
+    /// <summary>TR-MCP-USECASE-018 AC-006: the test-owned clock each auth state change records its time from.</summary>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the field, added on 2026-11-03 with the injected clock (hostile validation round 10 finding R10-F3), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private readonly Func<DateTimeOffset> _clock;
     private IAuthState _currentAuthState;
 

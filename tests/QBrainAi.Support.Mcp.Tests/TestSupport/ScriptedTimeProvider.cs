@@ -15,7 +15,12 @@ namespace QBrainAi.Support.Mcp.Tests.TestSupport;
 /// </remarks>
 internal sealed class ScriptedTimeProvider : TimeProvider
 {
+    /// <summary>TR-MCP-USECASE-018 AC-006: the scripted UTC instants, returned in order.</summary>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the field, added on 2026-11-03 with the class (the sibling sweep of hostile validation round 10 finding R10-F3), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private readonly DateTimeOffset[] _times;
+
+    /// <summary>TR-MCP-USECASE-018 AC-006: the index of the next scripted instant, and so the number of reads so far.</summary>
+    /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the field, added on 2026-11-03 with the class (the sibling sweep of hostile validation round 10 finding R10-F3), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private int _next;
 
     /// <summary>Creates a provider that returns <paramref name="times"/> in order.</summary>

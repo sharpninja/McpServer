@@ -15,6 +15,9 @@ public sealed partial class MemoryService : IMemoryService
 
     private readonly McpDbContext _db;
     private readonly ILogger<MemoryService> _logger;
+
+    /// <summary>FR-MCP-MEMORY-001: the clock that stamps a memory's creation, update and removal times.</summary>
+    /// <remarks>2026-11-05, FR-MCP-MEMORY-001; TR-MCP-USECASE-018 AC-006: this entry documents the field, added on 2026-11-03 with the constructor that takes a clock (the sibling sweep of hostile validation round 10 finding R10-F3), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>
     private readonly TimeProvider _timeProvider;
 
     /// <summary>Initializes a new instance of the <see cref="MemoryService"/> class that stamps times from the system clock.</summary>
