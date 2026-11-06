@@ -11,9 +11,10 @@ namespace QBrainAi.Support.Mcp.Tests.TestSupport;
 /// <list type="table">
 /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
 /// <item><term>2026-11-05</term><description>TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): added as the one settable test clock of this project, because hostile validation round 12 finding R12-F2 and its sibling sweep found unit cases whose age, expiry, lease and lock decisions ran on the live clock, and the private fixed clocks of HandoffIngestionServiceTests, HandoffDurabilityTests and TriageServiceTests each repeat the same type.</description></item>
+/// <item><term>2026-11-06</term><description>TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "This includes an age, expiry or staleness decision that a background callback in the code under test makes"): no longer sealed, so <see cref="TriggeredTimerTimeProvider"/> reuses its settable instant and replaces only the timer refusal with timers the test fires, because hostile validation round 13 finding R13-F1 found a production cleanup timer that a unit test could not control. This provider's own behavior is unchanged: it still refuses timers.</description></item>
 /// </list>
 /// </remarks>
-internal sealed class SettableTimeProvider : TimeProvider
+internal class SettableTimeProvider : TimeProvider
 {
     /// <summary>TR-MCP-USECASE-018 AC-006: the instant every read returns until the test sets or advances it.</summary>
     /// <remarks>2026-11-05, TR-MCP-USECASE-018 AC-006: this entry documents the field, added in slice Z4 with the class (hostile validation round 12 finding R12-F2), because the ninth holistic read before hostile validation round 13 (finding e1; MEMORY-FACT-008) found it without XML documentation.</remarks>

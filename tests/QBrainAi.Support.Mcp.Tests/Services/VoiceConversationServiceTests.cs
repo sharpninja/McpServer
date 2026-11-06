@@ -9,12 +9,32 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using NSubstitute;
+using QBrainAi.Support.Mcp.Tests.TestSupport;
 using Xunit;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
+/// <summary>
+/// Tests <see cref="VoiceConversationService"/>: session reuse, execution strategy selection, turn options, the streaming
+/// error path, and (TR-MCP-USECASE-018 AC-006, appended 2026-11-06) the idle-session lifecycle and its idle decisions on
+/// scripted time. Every service here is built on a <see cref="TriggeredTimerTimeProvider"/>, so its idle-cleanup timer
+/// fires only where a test fires it and no case depends on the system clock or on elapsed time.
+/// </summary>
+/// <remarks>
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "This includes an age, expiry or staleness decision that a background callback in the code under test makes"): every fixture service now runs on a scripted clock whose timers fire only when the test fires them, and four bindings were added (the lifecycle trace of <see cref="IdleSessionLifecycleContractTests"/>, decisions D8 and D9 of <see cref="AgeBoundaryContractTests"/>, and the cleanup schedule), because hostile validation round 13 finding R13-F1 found that the session-reuse case depended on the service's real 60-second cleanup timer and the live clock. The earlier cases and their assertions are unchanged; documented in the same change (MEMORY-FACT-008).</description></item>
+/// </list>
+/// </remarks>
 public sealed class VoiceConversationServiceTests
 {
+    /// <summary>TR-MCP-USECASE-018 AC-006: the fixed UTC instant the fixture clock starts at when a test supplies none.</summary>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added with the scripted fixture clock (hostile validation round 13 finding R13-F1).</remarks>
+    private static readonly DateTimeOffset FixtureStart = new(2001, 2, 3, 4, 5, 6, TimeSpan.Zero);
+
+    /// <summary>Two creates for the same agent and workspace reuse the idle session.</summary>
+    /// <returns>A task that completes when the check finishes.</returns>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: documented, and now on the scripted fixture clock, so no cleanup can run between the two creates (hostile validation round 13 finding R13-F1); the assertion is unchanged.</remarks>
     [Fact]
     public async Task CreateSessionAsync_SameAgentAndWorkspace_ReusesExistingIdleSession()
     {
@@ -223,12 +243,115 @@ public sealed class VoiceConversationServiceTests
         Assert.Contains("Node.js v24", exception.Message, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 binding of <see cref="IdleSessionLifecycleContractTests.AssertLifecycleAsync"/>: on the
+    /// production service, two creates reuse one session while its scripted idle age is eligible, across a cleanup the
+    /// test triggers between them; no cleanup runs unless the test fires the service's timer, even past the threshold; a
+    /// fired cleanup keeps a session exactly at the strict 15-minute threshold and removes it one second past it; and a
+    /// create after the removal gives a new session. Run at a reference in 2001 and one in 2041.
+    /// </summary>
+    /// <returns>A task that completes when the trace finishes.</returns>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added as the reviewer's proposed test of hostile validation round 13 finding R13-F1.</remarks>
+    [Fact]
+    public Task VoiceSessionReuse_DoesNotDependOnWallClockOrCleanupScheduling() =>
+        IdleSessionLifecycleContractTests.AssertLifecycleAsync(reference => new ServiceSessionPool(reference));
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 binding of decision D8 of <see cref="AgeBoundaryContractTests"/>: the cleanup the
+    /// service's timer runs removes a session whose recorded idle time is more than the 15-minute timeout before the
+    /// scripted reference, and keeps one exactly at it or one second short of it, at a reference in 2001 and one in 2041.
+    /// </summary>
+    /// <returns>A task that completes when every row has been asserted.</returns>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added as the reviewer's proposed test of hostile validation round 13 finding R13-F1.</remarks>
+    [Fact]
+    public Task IdleCleanup_UsesScriptedAgeBoundary() =>
+        AgeBoundaryContractTests.AssertDecisionAsync("D8 voice idle-session cleanup", async (reference, recorded) =>
+        {
+            var clock = new TriggeredTimerTimeProvider(recorded);
+            using var service = CreateService(time: clock);
+            var created = await service.CreateSessionAsync(ReuseRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            clock.Set(reference);
+            Assert.Single(clock.Timers).Fire();
+            var transcript = await service.GetTranscriptAsync(created.SessionId, TestContext.Current.CancellationToken).ConfigureAwait(true);
+            return transcript is null;
+        });
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006 binding of decision D9 of <see cref="AgeBoundaryContractTests"/>: a device lookup skips a
+    /// session whose recorded idle time is more than the 15-minute timeout before the scripted reference, and finds one
+    /// exactly at it or one second short of it, with no cleanup fired.
+    /// </summary>
+    /// <returns>A task that completes when every row has been asserted.</returns>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added for the second idle decision of the service (hostile validation round 13 finding R13-F1).</remarks>
+    [Fact]
+    public Task FindSessionByDevice_UsesScriptedAgeBoundary() =>
+        AgeBoundaryContractTests.AssertDecisionAsync("D9 voice device-session idle skip", async (reference, recorded) =>
+        {
+            var clock = new TriggeredTimerTimeProvider(recorded);
+            using var service = CreateService(time: clock);
+            await service.CreateSessionAsync(new VoiceSessionCreateRequest
+            {
+                AgentName = "planner",
+                DeviceId = "device-1",
+            }, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+            clock.Set(reference);
+            var found = service.FindSessionByDevice("device-1");
+            Assert.Equal(0, Assert.Single(clock.Timers).FireCount);
+            return found is null;
+        });
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006: the service arms exactly one idle-cleanup timer through its clock, with the production
+    /// schedule (first run after 60 seconds, then every 60 seconds), never fires it on its own, and disposes it.
+    /// </summary>
+    /// <returns>A task that completes when the check finishes.</returns>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added so the binding of hostile validation round 13 finding R13-F1 pins the schedule the production code keeps.</remarks>
+    [Fact]
+    public async Task IdleCleanupTimer_IsArmedThroughTheClockWithTheProductionSchedule()
+    {
+        var clock = new TriggeredTimerTimeProvider(FixtureStart);
+        using var service = CreateService(time: clock);
+        await service.CreateSessionAsync(ReuseRequest(), cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
+        clock.Advance(TimeSpan.FromDays(1));
+
+        var timer = Assert.Single(clock.Timers);
+        Assert.Equal(TimeSpan.FromSeconds(60), VoiceConversationService.IdleCleanupInterval);
+        Assert.Equal(TimeSpan.FromSeconds(60), timer.DueTime);
+        Assert.Equal(TimeSpan.FromSeconds(60), timer.Period);
+        Assert.Equal(0, timer.FireCount);
+        Assert.False(timer.IsDisposed);
+
+        service.Dispose();
+        Assert.True(timer.IsDisposed);
+    }
+
+    /// <summary>TR-MCP-USECASE-018 AC-006: the create request the reuse cases send (one fixed agent and workspace).</summary>
+    /// <returns>The request.</returns>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added for the bindings of hostile validation round 13 finding R13-F1; the same values as the reuse case.</remarks>
+    private static VoiceSessionCreateRequest ReuseRequest() => new()
+    {
+        AgentName = "planner",
+        AgentModel = "gpt-5.3-codex",
+        WorkspacePath = @"E:\ws-a",
+        OneShotSession = false,
+    };
+
+    /// <summary>Builds the service under test with fake strategies and the scripted clock.</summary>
+    /// <param name="defaultExecutionStrategy">The configured default execution strategy.</param>
+    /// <param name="modelApiKey">The configured model API key.</param>
+    /// <param name="modelApiKeyEnvironmentVariableName">The variable name the key is passed under.</param>
+    /// <param name="hostedStrategy">The hosted strategy, or null for a fake.</param>
+    /// <param name="oneShotStrategy">The one-shot strategy, or null for a fake.</param>
+    /// <param name="time">The service's clock, or null for a <see cref="TriggeredTimerTimeProvider"/> at <see cref="FixtureStart"/>.</param>
+    /// <returns>The service.</returns>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added the <paramref name="time"/> parameter, defaulting to a scripted clock whose timers fire only when a test fires them, and the idle timeout now comes from <see cref="IdleSessionLifecycleContractTests.IdleTimeout"/> (15 minutes, unchanged), because hostile validation round 13 finding R13-F1 found that every service here armed a real cleanup timer; documented in the same change (MEMORY-FACT-008).</remarks>
     private static VoiceConversationService CreateService(
         string defaultExecutionStrategy = AgentExecutionStrategyNames.OneShotCli,
         string? modelApiKey = null,
         string modelApiKeyEnvironmentVariableName = "OPENAI_API_KEY",
         IAgentExecutionStrategy? hostedStrategy = null,
-        IAgentExecutionStrategy? oneShotStrategy = null)
+        IAgentExecutionStrategy? oneShotStrategy = null,
+        TimeProvider? time = null)
     {
         var copilotClient = Substitute.For<IAgentCliClient>();
         var workspaceAccessor = CreateWorkspaceAccessor();
@@ -265,12 +388,54 @@ public sealed class VoiceConversationServiceTests
                 DefaultExecutionStrategy = defaultExecutionStrategy,
                 ModelApiKey = modelApiKey,
                 ModelApiKeyEnvironmentVariableName = modelApiKeyEnvironmentVariableName,
-                SessionIdleTimeoutMinutes = TimeSpan.FromMinutes(15),
+                SessionIdleTimeoutMinutes = IdleSessionLifecycleContractTests.IdleTimeout,
             }),
             CreateOptionsMonitor(new TodoPromptOptions { BaseUrl = "http://localhost:7147" }),
             hostEnvironment,
             NullLogger<VoiceConversationService>.Instance,
-            NullLoggerFactory.Instance);
+            NullLoggerFactory.Instance,
+            time ?? new TriggeredTimerTimeProvider(FixtureStart));
+    }
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006: the production service as a pool of <see cref="IdleSessionLifecycleContractTests"/>:
+    /// the scripted clock is a <see cref="TriggeredTimerTimeProvider"/>, a create sends <see cref="ReuseRequest"/>, a
+    /// session exists while its transcript can be read (a read that does not refresh its idle time), and a triggered
+    /// cleanup fires the service's one cleanup timer.
+    /// </summary>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added for the lifecycle binding of hostile validation round 13 finding R13-F1.</remarks>
+    private sealed class ServiceSessionPool : IdleSessionLifecycleContractTests.IIdleSessionPool
+    {
+        /// <summary>The service's scripted clock.</summary>
+        private readonly TriggeredTimerTimeProvider _clock;
+
+        /// <summary>The service under test.</summary>
+        private readonly VoiceConversationService _service;
+
+        /// <summary>Creates the service with its clock at <paramref name="start"/>.</summary>
+        /// <param name="start">The scripted start instant.</param>
+        internal ServiceSessionPool(DateTimeOffset start)
+        {
+            _clock = new TriggeredTimerTimeProvider(start);
+            _service = CreateService(time: _clock);
+        }
+
+        /// <inheritdoc />
+        public void SetClock(DateTimeOffset utcNow) => _clock.Set(utcNow);
+
+        /// <inheritdoc />
+        public async Task<string> CreateAsync() =>
+            (await _service.CreateSessionAsync(ReuseRequest(), TestContext.Current.CancellationToken).ConfigureAwait(true)).SessionId;
+
+        /// <inheritdoc />
+        public async Task<bool> ExistsAsync(string sessionId) =>
+            await _service.GetTranscriptAsync(sessionId, TestContext.Current.CancellationToken).ConfigureAwait(true) is not null;
+
+        /// <inheritdoc />
+        public void TriggerCleanup() => Assert.Single(_clock.Timers).Fire();
+
+        /// <inheritdoc />
+        public void Dispose() => _service.Dispose();
     }
 
     private static WorkspaceServiceAccessor CreateWorkspaceAccessor()

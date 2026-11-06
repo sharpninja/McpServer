@@ -20,6 +20,7 @@ namespace QBrainAi.Support.Mcp.Tests.TestSupport;
 /// <list type="table">
 /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
 /// <item><term>2026-11-05</term><description>TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): added the shared age-boundary contract and its mock gate, because hostile validation round 12 finding R12-F2 and its sibling sweep found 37 unit cases whose stale-turn, temporary-file, hygiene, envelope, manifest, lease and lock decisions ran on the live clock.</description></item>
+/// <item><term>2026-11-06</term><description>TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "This includes an age, expiry or staleness decision that a background callback in the code under test makes"): added decisions D8 (the voice idle-session cleanup that the service's cleanup timer runs) and D9 (the voice device-session idle skip), because hostile validation round 13 finding R13-F1 found that the cleanup decision ran on the live clock from a real timer, and the R12-F2 sweep had excluded it on elapsed time alone (entry N35). The earlier decisions and rows are unchanged.</description></item>
 /// </list>
 /// </remarks>
 public sealed class AgeBoundaryContractTests
@@ -61,6 +62,11 @@ public sealed class AgeBoundaryContractTests
         new("D6 handoff processing lease takeover", TimeSpan.Zero, AgeDirection.Older, AtThreshold: false),
         // MemoryConsolidateOperations.TryAcquireLock: a forced job takes a held lock over when now - acquired > 30 seconds.
         new("D7 consolidation lock takeover", TimeSpan.FromSeconds(30), AgeDirection.Older, AtThreshold: false),
+        // VoiceConversationService.CleanupIdleSessionsAsync (the idle-cleanup timer callback): an idle session is deleted
+        // when now - LastUpdatedUtc > SessionIdleTimeoutMinutes; the binding fixture configures 15 minutes.
+        new("D8 voice idle-session cleanup", TimeSpan.FromMinutes(15), AgeDirection.Older, AtThreshold: false),
+        // VoiceConversationService.FindSessionByDevice: a device's session is skipped when now - LastUpdatedUtc > the same timeout.
+        new("D9 voice device-session idle skip", TimeSpan.FromMinutes(15), AgeDirection.Older, AtThreshold: false),
     ];
 
     /// <summary>Which side of the reference a selected recorded time lies on.</summary>
