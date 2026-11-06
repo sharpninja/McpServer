@@ -22,6 +22,7 @@ namespace QBrainAi.Support.Mcp.Services;
 /// <list type="table">
 /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
 /// <item><term>2026-11-06</term><description>TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "This includes an age, expiry or staleness decision that a background callback in the code under test makes"): every time the service reads (the recorded idle times, the transcript stamps and the reference time of the idle-cleanup and device-lookup decisions) and the idle-cleanup timer now come from one clock, an optional <see cref="TimeProvider"/> that defaults to <see cref="TimeProvider.System"/>, because hostile validation round 13 finding R13-F1 found that a unit test's session-reuse assertion depended on a real cleanup timer and the live clock. With the system clock the behavior, the 60-second cleanup schedule and the strict idle comparison are unchanged.</description></item>
+/// <item><term>2026-11-06</term><description>TR-MCP-USECASE-018 AC-006: the entry above says every time the service reads comes from the clock; more exactly, every UTC instant the service records or compares does (17 reads: the recorded idle time, written in twelve places, the five transcript stamps, and the reference time of the device-lookup and idle-cleanup decisions), while the turn latency stays a <see cref="Stopwatch"/> duration that no idle decision and no unit assertion reads, because the fifteenth holistic read before hostile validation round 14 (findings c3 and g1) found the wider statement false. Documentation only; no behavior change.</description></item>
 /// </list>
 /// </remarks>
 public sealed partial class VoiceConversationService : IVoiceConversationService, IDisposable
@@ -46,8 +47,11 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
     private readonly IHostEnvironment _hostEnvironment;
     private readonly ILogger<VoiceConversationService> _logger;
 
-    /// <summary>TR-MCP-USECASE-018 AC-006: the clock every time the service reads comes from.</summary>
-    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added so the recorded idle times and the reference time of the idle decisions come from one clock that a unit test scripts (hostile validation round 13 finding R13-F1).</remarks>
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006: the clock every UTC instant the service records or compares comes from (the turn latency
+    /// is a <see cref="Stopwatch"/> duration instead).
+    /// </summary>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added so the recorded idle times and the reference time of the idle decisions come from one clock that a unit test scripts (hostile validation round 13 finding R13-F1). 2026-11-06, TR-MCP-USECASE-018 AC-006: summary narrowed from "every time the service reads" to the UTC instants it records or compares, because the turn latency is a Stopwatch duration (fifteenth holistic read before hostile validation round 14, finding g1); no behavior change.</remarks>
     private readonly TimeProvider _time;
 
     /// <summary>TR-MCP-USECASE-018 AC-006: the recurring idle-cleanup timer, created through <see cref="_time"/>.</summary>
@@ -66,8 +70,10 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
     /// <param name="hostEnvironment">The host environment.</param>
     /// <param name="logger">The logger.</param>
     /// <param name="loggerFactory">The logger factory.</param>
-    /// <param name="time">The clock every time the service reads and its idle-cleanup timer come from; null uses <see cref="TimeProvider.System"/>.</param>
-    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "This includes an age, expiry or staleness decision that a background callback in the code under test makes"): added the optional <paramref name="time"/> parameter and arms the idle-cleanup timer through it with the unchanged 60-second schedule (<see cref="IdleCleanupInterval"/>), because hostile validation round 13 finding R13-F1 found that a unit test could not control the real timer or the live clock its idle decision read. Dependency injection keeps the system clock: the parameter is optional and a registered <see cref="TimeProvider"/> is <see cref="TimeProvider.System"/>.</remarks>
+    /// <param name="time">The clock every UTC instant the service records or compares, and its idle-cleanup timer, come from; null uses <see cref="TimeProvider.System"/>.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="copilotClient"/>, <paramref name="serviceProvider"/>, <paramref name="workspaceAccessor"/>, <paramref name="configuration"/>, <paramref name="options"/>, <paramref name="todoPromptOptions"/>, <paramref name="hostEnvironment"/> or <paramref name="logger"/> is null.</exception>
+    /// <exception cref="InvalidOperationException"><paramref name="serviceProvider"/> does not provide the strategy resolver, the TODO creation or update service, or the scope factory.</exception>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "This includes an age, expiry or staleness decision that a background callback in the code under test makes"): added the optional <paramref name="time"/> parameter and arms the idle-cleanup timer through it with the unchanged 60-second schedule (<see cref="IdleCleanupInterval"/>), because hostile validation round 13 finding R13-F1 found that a unit test could not control the real timer or the live clock its idle decision read. Dependency injection keeps the system clock: the parameter is optional and a registered <see cref="TimeProvider"/> is <see cref="TimeProvider.System"/>. 2026-11-06, TR-MCP-USECASE-018 AC-006: the <paramref name="time"/> description narrowed to the UTC instants the service records or compares, and the exceptions the constructor throws documented, because the fifteenth holistic read before hostile validation round 14 (findings g1 and g2) found the wider description false and the exceptions missing; no behavior change.</remarks>
     public VoiceConversationService(
         IAgentCliClient copilotClient,
         IServiceProvider serviceProvider,
