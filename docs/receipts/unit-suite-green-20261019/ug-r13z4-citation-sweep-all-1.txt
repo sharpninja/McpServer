@@ -1,0 +1,7 @@
+RECEIPT started=2026-11-05T04:30:25 ended=2026-11-05T04:30:44 host=LAB-OMARCHY exit=0
+SCRIPT /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-AddedLineCitations-v2.ps1 sha256=D279A16F6F99B89A26FEB3F517399718593062EB1102E256FA83D295591DE610
+ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Base | 9b099716 | -Pathspecs | src/*.cs,build/*.cs,tests/*.cs
+HEAD 4398cffc06878dfb1d3defad3cfb67465863fe67
+Now: 2026-11-05T04:30:25 base=9b099716 pathspecs=src/*.cs,build/*.cs,tests/*.cs
+store ids=1453
+added-line citations: ids=0 absent=0 []

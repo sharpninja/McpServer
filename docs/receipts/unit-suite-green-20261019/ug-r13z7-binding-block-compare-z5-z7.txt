@@ -1,0 +1,8 @@
+RECEIPT started=2026-11-05T14:31:33 ended=2026-11-05T14:31:34 host=LAB-OMARCHY exit=0
+SCRIPT /home/sharpninja/.claude/scratch/pr82-review-20261019/Compare-TextBlock.ps1 sha256=E820E01AEE2E040EAFFC68C396ABE9D06653698213E48A77C2720C5ED3DF18F6
+ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Revision | a3caa21d | -Path | tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs | -StartText | /// Binding, the reviewer's named case: the shared builder, | -EndText | OwnedAddress)))
+HEAD 1d77a79c4e1e78a4c8e164a49779393721a95061
+Now: 2026-11-05T14:31:34 path=tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs revision=a3caa21d
+BASE lines=38 sha256=86DD9BF83A00898C9AF9394BD9E1F9C1100629CE6E12B3BDE0C397FDFB836392
+WORK lines=38 sha256=86DD9BF83A00898C9AF9394BD9E1F9C1100629CE6E12B3BDE0C397FDFB836392
+SAME True

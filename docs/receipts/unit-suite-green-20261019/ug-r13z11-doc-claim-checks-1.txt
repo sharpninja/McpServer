@@ -1,0 +1,216 @@
+[2026-11-05T23:30:01] Phase 1/6: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/plans/2026-10-19-unit-suite-green.md
+  Now: 2026-11-05T23:30:01 document=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/plans/2026-10-19-unit-suite-green.md head=53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-linux-unit-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-linux-unit-1 dirty=346: untracked under docs/receipts, plus 0 tracked docs change(s)
+  INFO ug-r13z11-final-linux-unit-1 line 2292 states no N/N/N
+  OK ug-r13z11-final-linux-unit-1 line 2296 claims 4838/0/0 = receipt
+  OK ug-r13z11-final-linux-lane-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-linux-lane-1 dirty=364: untracked under docs/receipts, plus 0 tracked docs change(s)
+  OK ug-r13z11-final-linux-lane-1 line 2297 claims 741/0/0 = receipt
+  OK ug-r13z11-final-linux-buildtests-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-linux-buildtests-1 dirty=371: untracked under docs/receipts, plus 0 tracked docs change(s)
+  OK ug-r13z11-final-linux-buildtests-1 line 2298 claims 563/0/0 = receipt
+  OK ug-r13z11-final-win-unit-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-win-unit-1 dirty=0: untracked under docs/receipts, plus 0 tracked docs change(s)
+  OK ug-r13z11-final-win-unit-1 line 2296 claims 4838/0/0 = receipt
+  OK ug-r13z11-final-win-lane-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-win-lane-1 dirty=0: untracked under docs/receipts, plus 0 tracked docs change(s)
+  OK ug-r13z11-final-win-lane-1 line 2297 claims 718/0/0 = receipt
+  OK ug-r13z11-final-win-buildtests-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-win-buildtests-1 dirty=0: untracked under docs/receipts, plus 0 tracked docs change(s)
+  OK ug-r13z11-final-win-buildtests-1 line 2298 claims 467/0/0 = receipt
+  END failed=0
+  Now: 2026-11-05T23:30:39 plan=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/plans/2026-10-19-unit-suite-green.md fromLine=1 cited=924 missing=45
+    MISSING line 17: project.assets.json
+    MISSING line 97: build.schema.json
+    MISSING line 161: legion2-requirements-20261019T1459.txt
+    MISSING line 180: platform-test-inventory-20261019T1612.txt
+    MISSING line 261: ug-r1-test
+    MISSING line 324: .scanfix-tests.txt
+    MISSING line 426: out.txt
+    MISSING line 471: .tempdir.json
+    MISSING line 479: .whatif.txt
+    MISSING line 882: ug-r8b-gate-v6
+    MISSING line 894: ug-r8b-gate-v6b
+    MISSING line 902: .result.txt
+    MISSING line 967: ug-r8b-gate-v6c
+    MISSING line 1002: environment-bound-criteria-20261027T2322.json
+    MISSING line 1094: .trx-summary.txt
+    MISSING line 1094: tempfree.txt
+    MISSING line 1382: .failed.json
+    MISSING line 1400: .incomplete.json
+    MISSING line 1518: lane-compare-final3-final4.txt
+    MISSING line 1560: compare-final4-final.txt
+    MISSING line 1569: .nu190x.txt
+    MISSING line 1586: 2.json
+    MISSING line 1691: .start.txt
+    MISSING line 1694: .meta.json
+    MISSING line 1694: .out.txt
+    MISSING line 1694: .exit.txt
+    MISSING line 1803: exit.txt
+    MISSING line 1919: 1616.out.txt
+    MISSING line 1919: 1731.out.txt
+    MISSING line 1935: .retrospective.json
+    MISSING line 1978: r12f-sut-lines.txt
+    MISSING line 2034: ug-r13z4-binding-b-1
+    MISSING line 2092: 1.txt
+    MISSING line 2092: 2.txt
+    MISSING line 2126: pattern-z6-host-prefixed-sets.txt
+    MISSING line 2126: pattern-z7-host-prefix-literals.txt
+    MISSING line 2194: pattern-r13z7-open-fixes.txt
+    MISSING line 2194: pattern-r13z8-open-fixes.txt
+    MISSING line 2197: pattern-z8-lab-names.txt
+    MISSING line 2229: lab-names-touched.txt
+    MISSING line 2257: pattern-r13z10-lab-names-wide.txt
+    MISSING line 2259: pattern-r13z10-glob-pathspec.txt
+    MISSING line 2293: pattern-r13z11-forward-tails.txt
+    MISSING line 2294: pattern-r13n-stale.txt
+    MISSING line 2294: pattern-r13n-current.txt
+[2026-11-05T23:30:39] Phase 2/6: /home/sharpninja/.claude/scratch/pr82-review-20261019/brief-unitgreen-r13.md
+  Now: 2026-11-05T23:30:39 document=/home/sharpninja/.claude/scratch/pr82-review-20261019/brief-unitgreen-r13.md head=53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-linux-unit-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-linux-unit-1 dirty=346: untracked under docs/receipts, plus 0 tracked docs change(s)
+  INFO ug-r13z11-final-linux-unit-1 line 6 states no N/N/N
+  OK ug-r13z11-final-linux-unit-1 line 68 claims 4838/0/0 = receipt
+  INFO ug-r13z11-final-linux-unit-1 line 243 states no N/N/N
+  OK ug-r13z11-final-linux-lane-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-linux-lane-1 dirty=364: untracked under docs/receipts, plus 0 tracked docs change(s)
+  INFO ug-r13z11-final-linux-lane-1 line 6 states no N/N/N
+  OK ug-r13z11-final-linux-lane-1 line 70 claims 741/0/0 = receipt
+  OK ug-r13z11-final-linux-buildtests-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-linux-buildtests-1 dirty=371: untracked under docs/receipts, plus 0 tracked docs change(s)
+  INFO ug-r13z11-final-linux-buildtests-1 line 6 states no N/N/N
+  OK ug-r13z11-final-linux-buildtests-1 line 72 claims 563/0/0 = receipt
+  OK ug-r13z11-final-win-unit-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-win-unit-1 dirty=0: untracked under docs/receipts, plus 0 tracked docs change(s)
+  INFO ug-r13z11-final-win-unit-1 line 6 states no N/N/N
+  OK ug-r13z11-final-win-unit-1 line 69 claims 4838/0/0 = receipt
+  OK ug-r13z11-final-win-lane-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-win-lane-1 dirty=0: untracked under docs/receipts, plus 0 tracked docs change(s)
+  INFO ug-r13z11-final-win-lane-1 line 6 states no N/N/N
+  OK ug-r13z11-final-win-lane-1 line 71 claims 718/0/0 = receipt
+  OK ug-r13z11-final-win-buildtests-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-win-buildtests-1 dirty=0: untracked under docs/receipts, plus 0 tracked docs change(s)
+  INFO ug-r13z11-final-win-buildtests-1 line 6 states no N/N/N
+  OK ug-r13z11-final-win-buildtests-1 line 73 claims 467/0/0 = receipt
+  END failed=0
+  Now: 2026-11-05T23:31:04 plan=/home/sharpninja/.claude/scratch/pr82-review-20261019/brief-unitgreen-r13.md fromLine=1 cited=529 missing=20
+    MISSING line 21: 1.txt
+    MISSING line 21: 3.txt
+    MISSING line 21: all-1.txt
+    MISSING line 21: pattern-r13z10-lab-names-wide.txt
+    MISSING line 21: 1616.out.txt
+    MISSING line 21: 1731.out.txt
+    MISSING line 39: cea7a82d-3843-4f79-8b4a-4f40d4a21532.jsonl
+    MISSING line 69: .result.txt
+    MISSING line 69: .nu190x.txt
+    MISSING line 71: .start.txt
+    MISSING line 74: .meta.json
+    MISSING line 74: out.txt
+    MISSING line 74: exit.txt
+    MISSING line 135: .out.txt
+    MISSING line 135: .exit.txt
+    MISSING line 173: .retrospective.json
+    MISSING line 226: nu190x.txt
+    MISSING line 233: ug-r13z4-binding-b-1
+    MISSING line 241: ug-r13z11-doc-claim-checks-1
+    MISSING line 266: 2.txt
+[2026-11-05T23:31:04] Phase 3/6: /home/sharpninja/.claude/scratch/pr82-review-20261019/projected-problems-r13.md
+  Now: 2026-11-05T23:31:04 document=/home/sharpninja/.claude/scratch/pr82-review-20261019/projected-problems-r13.md head=53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-linux-unit-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-linux-unit-1 dirty=346: untracked under docs/receipts, plus 0 tracked docs change(s)
+  OK ug-r13z11-final-linux-unit-1 line 42 claims 4838/0/0 = receipt
+  OK ug-r13z11-final-linux-lane-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-linux-lane-1 dirty=364: untracked under docs/receipts, plus 0 tracked docs change(s)
+  INFO ug-r13z11-final-linux-lane-1 not named in the document
+  OK ug-r13z11-final-linux-buildtests-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-linux-buildtests-1 dirty=371: untracked under docs/receipts, plus 0 tracked docs change(s)
+  INFO ug-r13z11-final-linux-buildtests-1 not named in the document
+  OK ug-r13z11-final-win-unit-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-win-unit-1 dirty=0: untracked under docs/receipts, plus 0 tracked docs change(s)
+  OK ug-r13z11-final-win-unit-1 line 42 claims 4838/0/0 = receipt
+  OK ug-r13z11-final-win-lane-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-win-lane-1 dirty=0: untracked under docs/receipts, plus 0 tracked docs change(s)
+  INFO ug-r13z11-final-win-lane-1 not named in the document
+  OK ug-r13z11-final-win-buildtests-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-win-buildtests-1 dirty=0: untracked under docs/receipts, plus 0 tracked docs change(s)
+  INFO ug-r13z11-final-win-buildtests-1 not named in the document
+  END failed=0
+  Now: 2026-11-05T23:31:10 plan=/home/sharpninja/.claude/scratch/pr82-review-20261019/projected-problems-r13.md fromLine=1 cited=119 missing=3
+    MISSING line 35: pattern-r13z7-open-fixes.txt
+    MISSING line 35: pattern-r13z8-open-fixes.txt
+    MISSING line 47: ug-r13z11-doc-claim-checks-1
+[2026-11-05T23:31:10] Phase 4/6: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/unitgreen-r13-prelaunch.pr-description.md
+  Now: 2026-11-05T23:31:10 document=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/unitgreen-r13-prelaunch.pr-description.md head=53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-linux-unit-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-linux-unit-1 dirty=346: untracked under docs/receipts, plus 0 tracked docs change(s)
+  OK ug-r13z11-final-linux-unit-1 line 182 claims 4838/0/0 = receipt
+  OK ug-r13z11-final-linux-lane-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-linux-lane-1 dirty=364: untracked under docs/receipts, plus 0 tracked docs change(s)
+  OK ug-r13z11-final-linux-lane-1 line 184 claims 741/0/0 = receipt
+  OK ug-r13z11-final-linux-buildtests-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-linux-buildtests-1 dirty=371: untracked under docs/receipts, plus 0 tracked docs change(s)
+  OK ug-r13z11-final-linux-buildtests-1 line 186 claims 563/0/0 = receipt
+  OK ug-r13z11-final-win-unit-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-win-unit-1 dirty=0: untracked under docs/receipts, plus 0 tracked docs change(s)
+  OK ug-r13z11-final-win-unit-1 line 183 claims 4838/0/0 = receipt
+  OK ug-r13z11-final-win-lane-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-win-lane-1 dirty=0: untracked under docs/receipts, plus 0 tracked docs change(s)
+  OK ug-r13z11-final-win-lane-1 line 185 claims 718/0/0 = receipt
+  OK ug-r13z11-final-win-buildtests-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-win-buildtests-1 dirty=0: untracked under docs/receipts, plus 0 tracked docs change(s)
+  OK ug-r13z11-final-win-buildtests-1 line 186 claims 467/0/0 = receipt
+  END failed=0
+  Now: 2026-11-05T23:31:21 plan=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/hv/unitgreen-r13-prelaunch.pr-description.md fromLine=1 cited=255 missing=1
+    MISSING line 294: .retrospective.json
+[2026-11-05T23:31:21] Phase 5/6: /home/sharpninja/.claude/scratch/pr82-review-20261019/pr-unitgreen-body-r16.md
+  Now: 2026-11-05T23:31:21 document=/home/sharpninja/.claude/scratch/pr82-review-20261019/pr-unitgreen-body-r16.md head=53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-linux-unit-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-linux-unit-1 dirty=346: untracked under docs/receipts, plus 0 tracked docs change(s)
+  OK ug-r13z11-final-linux-unit-1 line 24 claims 4838/0/0 = receipt
+  OK ug-r13z11-final-linux-lane-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-linux-lane-1 dirty=364: untracked under docs/receipts, plus 0 tracked docs change(s)
+  OK ug-r13z11-final-linux-lane-1 line 25 claims 741/0/0 = receipt
+  OK ug-r13z11-final-linux-buildtests-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-linux-buildtests-1 dirty=371: untracked under docs/receipts, plus 0 tracked docs change(s)
+  OK ug-r13z11-final-linux-buildtests-1 line 26 claims 563/0/0 = receipt
+  OK ug-r13z11-final-win-unit-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-win-unit-1 dirty=0: untracked under docs/receipts, plus 0 tracked docs change(s)
+  OK ug-r13z11-final-win-unit-1 line 24 claims 4838/0/0 = receipt
+  OK ug-r13z11-final-win-lane-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-win-lane-1 dirty=0: untracked under docs/receipts, plus 0 tracked docs change(s)
+  OK ug-r13z11-final-win-lane-1 line 25 claims 718/0/0 = receipt
+  OK ug-r13z11-final-win-buildtests-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-win-buildtests-1 dirty=0: untracked under docs/receipts, plus 0 tracked docs change(s)
+  OK ug-r13z11-final-win-buildtests-1 line 26 claims 467/0/0 = receipt
+  END failed=0
+  Now: 2026-11-05T23:31:22 plan=/home/sharpninja/.claude/scratch/pr82-review-20261019/pr-unitgreen-body-r16.md fromLine=1 cited=10 missing=0
+[2026-11-05T23:31:22] Phase 6/6: /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/plans/2026-10-30-unit-suite-green-handoff.md
+  Now: 2026-11-05T23:31:22 document=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/plans/2026-10-30-unit-suite-green-handoff.md head=53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-linux-unit-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-linux-unit-1 dirty=346: untracked under docs/receipts, plus 0 tracked docs change(s)
+  INFO ug-r13z11-final-linux-unit-1 not named in the document
+  OK ug-r13z11-final-linux-lane-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-linux-lane-1 dirty=364: untracked under docs/receipts, plus 0 tracked docs change(s)
+  INFO ug-r13z11-final-linux-lane-1 not named in the document
+  OK ug-r13z11-final-linux-buildtests-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-linux-buildtests-1 dirty=371: untracked under docs/receipts, plus 0 tracked docs change(s)
+  INFO ug-r13z11-final-linux-buildtests-1 not named in the document
+  OK ug-r13z11-final-win-unit-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-win-unit-1 dirty=0: untracked under docs/receipts, plus 0 tracked docs change(s)
+  INFO ug-r13z11-final-win-unit-1 not named in the document
+  OK ug-r13z11-final-win-lane-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-win-lane-1 dirty=0: untracked under docs/receipts, plus 0 tracked docs change(s)
+  INFO ug-r13z11-final-win-lane-1 not named in the document
+  OK ug-r13z11-final-win-buildtests-1 head 53a210ca4e521474685f2e3e1558b5cf88a5d535
+  OK ug-r13z11-final-win-buildtests-1 dirty=0: untracked under docs/receipts, plus 0 tracked docs change(s)
+  INFO ug-r13z11-final-win-buildtests-1 not named in the document
+  END failed=0
+  Now: 2026-11-05T23:31:22 plan=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/plans/2026-10-30-unit-suite-green-handoff.md fromLine=1 cited=15 missing=6
+    MISSING line 27: .incomplete.json
+    MISSING line 45: .verified.json
+    MISSING line 48: exit.txt
+    MISSING line 79: unitgreen-traceability-gap-records.json
+    MISSING line 92: .failed.json
+    MISSING line 100: ug-r9-mockgate-provider-1
+[2026-11-05T23:31:22] END documents=6 gateCheckFailures=0

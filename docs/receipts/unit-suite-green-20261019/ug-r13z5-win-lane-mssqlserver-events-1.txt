@@ -1,0 +1,23 @@
+RECEIPT 2026-11-05T10:24:07 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinProviderEvents.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-11-05T10:24:06 host=PAYTON-LEGION2 providers=MSSQLSERVER,Microsoft-Windows-Security-SPP window=2026-11-05T08:20:00..2026-11-05T09:06:00
+NOTE System unavailable: The specified providers do not write events to any of the specified logs.
+EVENTS count=15
+  2026-11-05T08:21:36 Application Microsoft-Windows-Security-SPP id=16394 level=Information Offline downlevel migration succeeded.
+  2026-11-05T08:22:09 Application Microsoft-Windows-Security-SPP id=16384 level=Information Successfully scheduled Software Protection service for re-start at 2126-10-12T14:22:09Z. Reason: RulesEngine.
+  2026-11-05T08:23:49 Application MSSQLSERVER id=17890 level=Information A significant part of SQL Server process memory has been paged out. This may result in a performance degradation. Duration: 657 seconds. Working set (KB): 132592, committed (KB): 369452, memory utilization: 35%%.
+  2026-11-05T08:28:09 Application MSSQLSERVER id=17890 level=Information A significant part of SQL Server process memory has been paged out. This may result in a performance degradation. Duration: 917 seconds. Working set (KB): 146088, committed (KB): 368612, memory utilization: 39%%.
+  2026-11-05T08:33:36 Application MSSQLSERVER id=17890 level=Information A significant part of SQL Server process memory has been paged out. This may result in a performance degradation. Duration: 1244 seconds. Working set (KB): 150220, committed (KB): 368972, memory utilization: 40%%.
+  2026-11-05T08:38:01 Application MSSQLSERVER id=17890 level=Information A significant part of SQL Server process memory has been paged out. This may result in a performance degradation. Duration: 1509 seconds. Working set (KB): 163088, committed (KB): 377340, memory utilization: 43%%.
+  2026-11-05T08:43:29 Application MSSQLSERVER id=17890 level=Information A significant part of SQL Server process memory has been paged out. This may result in a performance degradation. Duration: 1837 seconds. Working set (KB): 157772, committed (KB): 377468, memory utilization: 41%%.
+  2026-11-05T08:56:33 Application Microsoft-Windows-Security-SPP id=16394 level=Information Offline downlevel migration succeeded.
+  2026-11-05T08:57:04 Application Microsoft-Windows-Security-SPP id=16384 level=Information Successfully scheduled Software Protection service for re-start at 2126-10-12T14:57:04Z. Reason: RulesEngine.
+  2026-11-05T09:01:02 Application MSSQLSERVER id=18264 level=Information Database backed up. Database: McpServer, creation date(time): 2026/07/01(07:13:00), pages dumped: 4235, first LSN: 131:3512:1, last LSN: 131:3536:1, number of dump devices: 1, device information: (FILE=1, TYPE=DISK: {'C:\Program Files\Microsoft SQL Server\MSSQL16.MSSQLSERVER\MSSQL\Backup\McpServer_2
+  2026-11-05T09:01:04 Application MSSQLSERVER id=3014 level=Information BACKUP DATABASE successfully processed 4090 pages in 0.082 seconds (389.624 MB/sec).
+  2026-11-05T09:01:04 Application MSSQLSERVER id=18264 level=Information Database backed up. Database: McpIdentity, creation date(time): 2026/07/01(07:13:00), pages dumped: 651, first LSN: 123:2464:1, last LSN: 123:2488:1, number of dump devices: 1, device information: (FILE=1, TYPE=DISK: {'C:\Program Files\Microsoft SQL Server\MSSQL16.MSSQLSERVER\MSSQL\Backup\McpIdentit
+  2026-11-05T09:01:04 Application MSSQLSERVER id=3014 level=Information BACKUP DATABASE successfully processed 642 pages in 0.031 seconds (161.668 MB/sec).
+  2026-11-05T09:01:46 Application Microsoft-Windows-Security-SPP id=16394 level=Information Offline downlevel migration succeeded.
+  2026-11-05T09:02:16 Application Microsoft-Windows-Security-SPP id=16384 level=Information Successfully scheduled Software Protection service for re-start at 2126-10-12T15:02:16Z. Reason: RulesEngine.
+END 2026-11-05T10:24:07

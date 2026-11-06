@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="eb5679aa-3ff6-473e-b749-96d2a354276d" name="kingd@PAYTON-LEGION2 2026-11-05 18:14:38" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-05T18:14:38.8558772-06:00" queuing="2026-11-05T18:14:38.8558774-06:00" start="2026-11-05T18:14:37.3384479-06:00" finish="2026-11-05T18:14:38.8601629-06:00" />
+  <TestSettings name="default" id="b42a91e8-54d8-42a3-9a95-193ee5a9d3ec">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-11-05_18_14_38" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="47996396-fc6d-4b3e-93e6-13ab5ca3c25c" testId="b1ad9d1e-8cfb-50f4-148d-c933e5e71b5e" testName="QBrainAi.McpAgent.Tests.McpAgentOptionsLegacySectionHostTests.AddQBrainAiMcpAgent_BindsLegacyMcpServerSection" computerName="PAYTON-LEGION2" duration="00:00:00.0802035" startTime="2026-11-05T18:14:38.6230704-06:00" endTime="2026-11-05T18:14:38.7121566-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="47996396-fc6d-4b3e-93e6-13ab5ca3c25c" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="QBrainAi.McpAgent.Tests.McpAgentOptionsLegacySectionHostTests.AddQBrainAiMcpAgent_BindsLegacyMcpServerSection" storage="f:\github\mcpserver\.worktrees\unit-green-interactive-20261019\tests\qbrainai.mcpagent.tests\bin\debug\net10.0\qbrainai.mcpagent.tests.dll" id="b1ad9d1e-8cfb-50f4-148d-c933e5e71b5e">
+      <Execution id="47996396-fc6d-4b3e-93e6-13ab5ca3c25c" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-interactive-20261019\tests\QBrainAi.McpAgent.Tests\bin\Debug\net10.0\QBrainAi.McpAgent.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.McpAgent.Tests.McpAgentOptionsLegacySectionHostTests" name="AddQBrainAiMcpAgent_BindsLegacyMcpServerSection" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="b1ad9d1e-8cfb-50f4-148d-c933e5e71b5e" executionId="47996396-fc6d-4b3e-93e6-13ab5ca3c25c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="1" executed="1" passed="1" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)&#xD;
+[xUnit.net 00:00:00.25]   Discovering: QBrainAi.McpAgent.Tests&#xD;
+[xUnit.net 00:00:00.53]   Discovered:  QBrainAi.McpAgent.Tests&#xD;
+[xUnit.net 00:00:00.75]   Starting:    QBrainAi.McpAgent.Tests&#xD;
+[xUnit.net 00:00:00.92]   Finished:    QBrainAi.McpAgent.Tests (ID = '37ef4060967bb5ea6f0a55267b1a5052e7e3fc2f71cda14b44b276f3ffeb4161')&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

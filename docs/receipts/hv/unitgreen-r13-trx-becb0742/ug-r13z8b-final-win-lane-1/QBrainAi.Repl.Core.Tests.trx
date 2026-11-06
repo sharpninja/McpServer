@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="c4889695-a8fe-4f5d-8e3f-68cd89e1da4e" name="kingd@PAYTON-LEGION2 2026-11-05 16:35:01" runUser="PAYTON-LEGION2\kingd" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-05T16:35:01.4421654-06:00" queuing="2026-11-05T16:35:01.4421660-06:00" start="2026-11-05T16:34:59.4066751-06:00" finish="2026-11-05T16:35:01.4822053-06:00" />
+  <TestSettings name="default" id="352f0834-9360-40d7-98db-c6b3f4ce7f11">
+    <Deployment runDeploymentRoot="kingd_PAYTON-LEGION2_2026-11-05_16_35_01" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="786f7f11-266d-48fe-b60b-6a77c4ec08e9" testId="549af53a-4c70-702a-843d-d3fcd5239e30" testName="QBrainAi.Repl.Core.Tests.MemorySchemaContractTests.CanonicalYamlSchema_ContainsMemoryWorkflowRules" computerName="PAYTON-LEGION2" duration="00:00:00.0307340" startTime="2026-11-05T16:35:01.1173763-06:00" endTime="2026-11-05T16:35:01.1578954-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="786f7f11-266d-48fe-b60b-6a77c4ec08e9" />
+    <UnitTestResult executionId="7c9c49c6-eef8-4c92-8f1c-aa24f62079dd" testId="5e5f8817-6f2b-e040-90ac-aedf51a46ecc" testName="QBrainAi.Repl.Core.Tests.HandoffSkillDelegationTests.SkillDocumentedMethods_DispatchThroughWorkflowToHandoffClient" computerName="PAYTON-LEGION2" duration="00:00:00.2719482" startTime="2026-11-05T16:35:01.1173762-06:00" endTime="2026-11-05T16:35:01.3978371-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7c9c49c6-eef8-4c92-8f1c-aa24f62079dd" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="QBrainAi.Repl.Core.Tests.MemorySchemaContractTests.CanonicalYamlSchema_ContainsMemoryWorkflowRules" storage="f:\github\mcpserver\.worktrees\unit-green-interactive-20261019\tests\qbrainai.repl.core.tests\bin\debug\net10.0\qbrainai.repl.core.tests.dll" id="549af53a-4c70-702a-843d-d3fcd5239e30">
+      <Execution id="786f7f11-266d-48fe-b60b-6a77c4ec08e9" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-interactive-20261019\tests\QBrainAi.Repl.Core.Tests\bin\Debug\net10.0\QBrainAi.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Repl.Core.Tests.MemorySchemaContractTests" name="CanonicalYamlSchema_ContainsMemoryWorkflowRules" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Repl.Core.Tests.HandoffSkillDelegationTests.SkillDocumentedMethods_DispatchThroughWorkflowToHandoffClient" storage="f:\github\mcpserver\.worktrees\unit-green-interactive-20261019\tests\qbrainai.repl.core.tests\bin\debug\net10.0\qbrainai.repl.core.tests.dll" id="5e5f8817-6f2b-e040-90ac-aedf51a46ecc">
+      <Execution id="7c9c49c6-eef8-4c92-8f1c-aa24f62079dd" />
+      <TestMethod codeBase="F:\GitHub\McpServer\.worktrees\unit-green-interactive-20261019\tests\QBrainAi.Repl.Core.Tests\bin\Debug\net10.0\QBrainAi.Repl.Core.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Repl.Core.Tests.HandoffSkillDelegationTests" name="SkillDocumentedMethods_DispatchThroughWorkflowToHandoffClient" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="549af53a-4c70-702a-843d-d3fcd5239e30" executionId="786f7f11-266d-48fe-b60b-6a77c4ec08e9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5e5f8817-6f2b-e040-90ac-aedf51a46ecc" executionId="7c9c49c6-eef8-4c92-8f1c-aa24f62079dd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="2" executed="2" passed="2" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)&#xD;
+[xUnit.net 00:00:00.32]   Discovering: QBrainAi.Repl.Core.Tests&#xD;
+[xUnit.net 00:00:00.91]   Discovered:  QBrainAi.Repl.Core.Tests&#xD;
+[xUnit.net 00:00:01.13]   Starting:    QBrainAi.Repl.Core.Tests&#xD;
+[xUnit.net 00:00:01.49]   Finished:    QBrainAi.Repl.Core.Tests (ID = '01aa148794d3696c847e9e857250fd5ec76b1b27fc62ca7e1d2aa0ee898b86ae')&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

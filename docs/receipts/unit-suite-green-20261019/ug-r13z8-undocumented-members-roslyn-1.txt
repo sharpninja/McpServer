@@ -1,0 +1,412 @@
+RECEIPT started=2026-11-05T16:14:13 ended=2026-11-05T16:14:35 host=LAB-OMARCHY exit=0
+SCRIPT /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-UndocumentedMembersRoslyn.ps1 sha256=1F66A9E809E8C632DA4BE635C802A5AA1E2F55D4FB3E0D58BB35B138C052A93F
+ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019
+HEAD b21c21ecdee4b2658830f998b45efcd0491f1d36
+Now: 2026-11-05T16:14:13 head=b21c21ecdee4b2658830f998b45efcd0491f1d36 prBase=9b099716 ruleBase=679eb788 files=370
+UNDOC-PRE-RULE Method build/Build.TestDependencies.cs:253 [] EnsureOllamaServerRunning
+UNDOC-PRE-RULE Field build/IntegrationLaneClassFilter.cs:10 [static readonly] PlainIdentifier
+UNDOC-PRE-RULE Method build/IntegrationLaneExecution.cs:77 [private static] Counter
+UNDOC-PRE-RULE Field build/IntegrationLaneProjects.cs:11 [const] SupportIntegrationProject
+UNDOC-PRE-RULE Field build/IntegrationLaneProjects.cs:13 [static readonly] LaneProjects
+UNDOC-PRE-RULE Field build/IntegrationLaneProjects.cs:24 [static readonly] SupportIntegrationClasses
+UNDOC-PRE-RULE Field build/LinuxProviderTestProvisioner.cs:14 [private static readonly] ProbeTimeout
+UNDOC-PRE-RULE Field build/LinuxProviderTestProvisioner.cs:15 [private const] ProbeAttempts
+UNDOC-PRE-RULE Field build/LinuxProviderTestProvisioner.cs:17 [private static readonly] Endpoints
+UNDOC-PRE-RULE Method build/LinuxProviderTestProvisioner.cs:163 [private static] TryReadEndpoint
+UNDOC-PRE-RULE Method build/LinuxProviderTestProvisioner.cs:239 [private static] FirstValue
+UNDOC-PRE-RULE Method build/LinuxProviderTestProvisioner.cs:300 [private static] Docker
+NODATE-SRC-CHANGED EnumMember build/LinuxServiceHelper.cs:25 [] Healthy type=StartupHealthOutcome typeDated=True
+NODATE-SRC-CHANGED EnumMember build/LinuxServiceHelper.cs:28 [] UnitStopped type=StartupHealthOutcome typeDated=True
+NODATE-SRC-CHANGED EnumMember build/LinuxServiceHelper.cs:31 [] TimedOut type=StartupHealthOutcome typeDated=True
+NODATE-SRC-CHANGED Field build/LinuxServiceHelper.cs:176 [internal static readonly] StartupHealthInterval type=LinuxServiceHelper typeDated=False
+NODATE-SRC-CHANGED Field build/LinuxServiceHelper.cs:179 [internal const] StartupHealthProbes type=LinuxServiceHelper typeDated=False
+NODATE-SRC-CHANGED Field build/QuadBrainOllamaModel.cs:18 [internal const] CanonicalVariable type=QuadBrainOllamaModel typeDated=True
+NODATE-SRC-CHANGED Field build/QuadBrainOllamaModel.cs:21 [internal const] LegacyVariable type=QuadBrainOllamaModel typeDated=True
+NODATE-SRC-CHANGED Field build/QuadBrainOllamaModel.cs:27 [internal const] DefaultModel type=QuadBrainOllamaModel typeDated=True
+NODATE-SRC-CHANGED Method build/QuadBrainOllamaModel.cs:33 [internal static] Select type=QuadBrainOllamaModel typeDated=True
+NODATE-SRC-CHANGED Property src/QBrainAi.Client/Models/RequirementsModels.cs:62 [public] CreatedAtUtc type=FrEntry typeDated=True
+NODATE-SRC-CHANGED Property src/QBrainAi.Client/Models/RequirementsModels.cs:66 [public] UpdatedAtUtc type=FrEntry typeDated=True
+NODATE-SRC-CHANGED Property src/QBrainAi.Client/Models/RequirementsModels.cs:140 [public] CreatedAtUtc type=TrEntry typeDated=True
+NODATE-SRC-CHANGED Property src/QBrainAi.Client/Models/RequirementsModels.cs:144 [public] UpdatedAtUtc type=TrEntry typeDated=True
+NODATE-SRC-CHANGED Property src/QBrainAi.Client/Models/RequirementsModels.cs:198 [public] CreatedAtUtc type=TestEntry typeDated=True
+NODATE-SRC-CHANGED Property src/QBrainAi.Client/Models/RequirementsModels.cs:202 [public] UpdatedAtUtc type=TestEntry typeDated=True
+NODATE-SRC-CHANGED Property src/QBrainAi.Client/Models/RequirementsModels.cs:332 [public] CreatedAtUtc type=FrTrMapping typeDated=True
+UNDOC-PRE-RULE Method src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs:3005 [private async] CollectTodoEventsAsync
+NODATE-SRC-CHANGED Method src/QBrainAi.Repl.Core/RequirementTimestampText.cs:20 [internal static] Format type=RequirementTimestampText typeDated=True
+NODATE-SRC-CHANGED Method src/QBrainAi.Repl.Core/RequirementsWorkflow.cs:420 [public async] ListMappingsAsync type=RequirementsWorkflow typeDated=False
+NODATE-SRC-CHANGED Method src/QBrainAi.Repl.Core/RequirementsWorkflow.cs:464 [public async] CreateMappingAsync type=RequirementsWorkflow typeDated=False
+NODATE-SRC-CHANGED Property src/QBrainAi.Repl.Core/RequirementsWorkflow.cs:972 [public] CreatedAt type=FrItemAdapter typeDated=True
+NODATE-SRC-CHANGED Property src/QBrainAi.Repl.Core/RequirementsWorkflow.cs:974 [public] UpdatedAt type=FrItemAdapter typeDated=True
+NODATE-SRC-CHANGED Property src/QBrainAi.Repl.Core/RequirementsWorkflow.cs:1039 [public] CreatedAt type=TrItemAdapter typeDated=True
+NODATE-SRC-CHANGED Property src/QBrainAi.Repl.Core/RequirementsWorkflow.cs:1041 [public] UpdatedAt type=TrItemAdapter typeDated=True
+NODATE-SRC-CHANGED Property src/QBrainAi.Repl.Core/RequirementsWorkflow.cs:1112 [public] CreatedAt type=TestItemAdapter typeDated=True
+NODATE-SRC-CHANGED Property src/QBrainAi.Repl.Core/RequirementsWorkflow.cs:1114 [public] UpdatedAt type=TestItemAdapter typeDated=True
+NODATE-SRC-CHANGED Property src/QBrainAi.Repl.Core/RequirementsWorkflow.cs:1177 [public] CreatedAt type=MappingItemAdapter typeDated=True
+NODATE-SRC-CHANGED Field src/QBrainAi.Services/Requirements/RequirementStoredTimestamp.cs:26 [private static readonly] CompleteDateFormats type=RequirementStoredTimestamp typeDated=True
+NODATE-SRC-CHANGED Method src/QBrainAi.Services/Requirements/RequirementStoredTimestamp.cs:46 [internal static] Read type=RequirementStoredTimestamp typeDated=True
+NODATE-SRC-CHANGED Method src/QBrainAi.Services/Requirements/RequirementStoredTimestamp.cs:55 [internal static] Earliest type=RequirementStoredTimestamp typeDated=True
+UNDOC-PRE-RULE Field src/QBrainAi.Services/Services/DirectoryTreeWalker.cs:21 [private static readonly] s_singleLevel
+UNDOC-PRE-RULE Field src/QBrainAi.Services/Services/DirectoryTreeWalker.cs:29 [private readonly] _list
+UNDOC-PRE-RULE Field src/QBrainAi.Services/Services/DirectoryTreeWalker.cs:30 [private readonly] _platform
+UNDOC-PRE-RULE LOCAL src/QBrainAi.Services/Services/DirectoryTreeWalker.cs:77 [] Canonical
+UNDOC-PRE-RULE Method src/QBrainAi.Services/Services/DirectoryTreeWalker.cs:128 [private] Walk
+UNDOC-PRE-RULE Method src/QBrainAi.Services/Services/DirectoryTreeWalker.cs:152 [private] TryList
+UNDOC-PRE-RULE Field src/QBrainAi.Services/Services/GitHubCliService.cs:35 [private readonly] _pathNormalizer
+UNDOC-PRE-RULE Method src/QBrainAi.Services/Services/MarkerFileService.cs:555 [internal static] BuildDefaultAgentPlugins
+UNDOC-PRE-RULE Method src/QBrainAi.Services/Services/MarkerFileService.cs:729 [private static] EnumerateUserPluginCacheRoots
+UNDOC-PRE-RULE Method src/QBrainAi.Services/Services/MarkerFileService.cs:765 [private static] OrderPluginVersionRoots
+UNDOC-PRE-RULE Method src/QBrainAi.Services/Services/MarkerFileService.cs:774 [private static] GetPluginVersionSortKey
+UNDOC-PRE-RULE Method src/QBrainAi.Services/Services/MarkerFileService.cs:825 [private static] TryReadFileText
+UNDOC-PRE-RULE Method src/QBrainAi.Services/Services/MarkerFileService.cs:837 [private static] TryReadVersionFromJson
+UNDOC-PRE-RULE Field src/QBrainAi.Services/Services/SessionLogService.cs:40 [private readonly] _normalizePlanFilter
+UNDOC-PRE-RULE Field src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs:23 [private readonly] _walker
+UNDOC-PRE-RULE Field tests/Build.Tests/IntegrationLaneClassFilterMockGateTests.cs:71 [private static readonly] PlainIdentifier
+UNDOC-PRE-RULE Method tests/Build.Tests/IntegrationLaneDetachedWorkerTests.cs:87 [private static] PowerShell
+UNDOC-PRE-RULE Method tests/Build.Tests/IntegrationLaneDetachedWorkerTests.cs:95 [private static async] UntilAsync
+UNDOC-PRE-RULE Method tests/Build.Tests/IntegrationLaneDetachedWorkerTests.cs:102 [private static] Quote
+UNDOC-PRE-RULE Method tests/Build.Tests/IntegrationLaneDetachedWorkerTests.cs:104 [private static] FindRepositoryRoot
+UNDOC-PRE-RULE Method tests/Build.Tests/IntegrationLaneExecutionContractTests.cs:183 [private static] ScriptedComposition
+UNDOC-PRE-RULE Method tests/Build.Tests/IntegrationLaneExecutionContractTests.cs:193 [private static] ScriptedTrx
+UNDOC-PRE-RULE Method tests/Build.Tests/IntegrationLaneExecutionContractTests.cs:195 [private static] ScriptedLaunch
+UNDOC-PRE-RULE Method tests/Build.Tests/IntegrationLaneExecutionContractTests.cs:198 [private static] Trx
+UNDOC-PRE-RULE Interface tests/Build.Tests/IntegrationLaneExecutionContractTests.cs:201 [private] ExplicitSelectorContract
+UNDOC-PRE-RULE Method tests/Build.Tests/IntegrationLaneExecutionContractTests.cs:203 [] ClassesOf
+UNDOC-PRE-RULE Interface tests/Build.Tests/IntegrationLaneExecutionContractTests.cs:206 [private] WrongDefaultSelectorContract
+UNDOC-PRE-RULE Method tests/Build.Tests/IntegrationLaneExecutionContractTests.cs:208 [] ClassesOf
+UNDOC-PRE-RULE Field tests/Build.Tests/IntegrationLaneFilterTests.cs:10 [private readonly] filter
+UNDOC-PRE-RULE Field tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs:62 [private const] Message
+UNDOC-PRE-RULE Field tests/Build.Tests/IntegrationLanePreconditionTests.cs:10 [private readonly] precondition
+UNDOC-PRE-RULE Field tests/Build.Tests/IntegrationLaneProjectsTests.cs:13 [private static readonly] ProjectLine
+UNDOC-PRE-RULE Field tests/Build.Tests/IntegrationLaneProjectsTests.cs:17 [private readonly] selector
+UNDOC-PRE-RULE Method tests/Build.Tests/IntegrationLaneProjectsTests.cs:67 [private static] ReadSolutionProjectNames
+UNDOC-PRE-RULE Method tests/Build.Tests/IntegrationLaneProjectsTests.cs:73 [private static] FindRepositoryRoot
+UNDOC-PRE-RULE Method tests/Build.Tests/OllamaInstallLayoutMockGateTests.cs:106 [private] Name
+UNDOC-PRE-RULE Field tests/Build.Tests/OllamaInstallLayoutTests.cs:10 [private readonly] layout
+UNDOC-PRE-RULE Method tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs:87 [public] Provision
+UNDOC-PRE-RULE Field tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs:185 [public const] Postgres
+UNDOC-PRE-RULE Field tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs:186 [public const] SqlServer
+UNDOC-PRE-RULE Field tests/Build.Tests/ProviderTestProvisioningTests.cs:10 [private readonly] provisioner
+UNDOC-PRE-RULE Field tests/Build.Tests/ProvisioningDownloadContract.cs:131 [private] _chunk
+UNDOC-PRE-RULE Field tests/Build.Tests/ProvisioningDownloadContract.cs:132 [private] _offset
+UNDOC-PRE-RULE Constructor tests/Build.Tests/ProvisioningDownloadContract.cs:217 [public] TemporaryFolder
+UNDOC-PRE-RULE Property tests/Build.Tests/ProvisioningDownloadContract.cs:223 [public] Path
+UNDOC-PRE-RULE Method tests/Build.Tests/ProvisioningDownloadContract.cs:225 [public] Dispose
+UNDOC-SINCE-RULE LOCAL tests/Build.Tests/ServiceStartupHealthContractTests.cs:98 [] State
+UNDOC-SINCE-RULE LOCAL tests/Build.Tests/ServiceStartupHealthContractTests.cs:99 [] Probe
+UNDOC-SINCE-RULE LOCAL tests/Build.Tests/ServiceUpdateTests.cs:681 [] Local
+UNDOC-PRE-RULE Method tests/QBrainAi.QBAgent.Tests/Skills/AuthoredSkillsTests.cs:26 [private static] FindSkillsRoot
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs:134 [private static] FindRepoRoot
+UNDOC-PRE-RULE Field tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs:97 [internal const] Root
+UNDOC-PRE-RULE Field tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs:98 [internal const] Start
+UNDOC-PRE-RULE Field tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs:99 [internal static readonly] Folders
+UNDOC-PRE-RULE Property tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs:100 [internal] Markers
+UNDOC-PRE-RULE Property tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs:101 [internal] CacheEvents
+UNDOC-PRE-RULE Property tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs:102 [internal] ExpectedMarker
+UNDOC-PRE-RULE Property tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs:103 [internal] SignatureValid
+UNDOC-PRE-RULE Property tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs:104 [internal] CacheHit
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs:142 [private] AssertMarkerIdentity
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs:150 [internal static] Signed
+UNDOC-PRE-RULE Field tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs:181 [private readonly] _fault
+UNDOC-PRE-RULE Constructor tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs:185 [private] MarkerIsolationMockTests
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkMockGateTests.cs:90 [private static] ScriptedWalk
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkMockGateTests.cs:122 [private static] ScriptedDiagnosis
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkTests.cs:33 [private static] ProductionWalk
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkTests.cs:36 [private static] ProductionDiagnosis
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/MemorySchemaContractTests.cs:56 [private static] FindRepoRoot
+UNDOC-PRE-RULE LOCAL tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutCallSiteTests.cs:102 [] Read
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutCallSiteTests.cs:219 [private static async] RunProtocolAsync
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutCallSiteTests.cs:244 [private static async] RunStreamCommandAsync
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutCallSiteTests.cs:305 [public async] DispatchAsync
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutCallSiteTests.cs:340 [private static] WithMessage
+UNDOC-PRE-RULE Field tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutTests.cs:22 [private static readonly] DefaultTimeout
+UNDOC-PRE-RULE Field tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutTests.cs:24 [private const] LargestSeconds
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutTests.cs:119 [private static] Bounded
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutTests.cs:128 [private static] Capping
+UNDOC-PRE-RULE Field tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedDatabaseSelectionTests.cs:23 [private const] OwnedRoot
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedDatabaseSelectionTests.cs:84 [private static] ScriptedCheck
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedDatabaseSelectionTests.cs:87 [private static] WrongCheck
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedDatabaseSelectionTests.cs:101 [private static] CheckWith
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedDatabaseSelectionTests.cs:121 [private static] SegmentInside
+UNDOC-PRE-RULE Field tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:26 [private const] OwnedRoot
+UNDOC-PRE-RULE Field tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:27 [private const] OwnedDatabase
+UNDOC-PRE-RULE Field tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:28 [private const] LiveDatabase
+UNDOC-PRE-RULE Field tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:230 [private static readonly] ProductPrefixes
+UNDOC-PRE-RULE Field tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:231 [private static readonly] ProviderFallbacks
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:233 [private static] OwnedSettings
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:244 [private static] With
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:254 [private static] IsProductKey
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:258 [private static] ScriptedBuild
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:261 [private static] BuildWith
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:279 [private static] WrongBuild
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:291 [private static] ScriptedCheck
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:309 [private static] WrongCheck
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:321 [private static] ScriptedLeftoverCheck
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:327 [private static] DatabasePaths
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:338 [private static] DataSourceOf
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:350 [private static] SegmentInside
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationBindingTests.cs:60 [private static] ValueAfter
+UNDOC-PRE-RULE Field tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:19 [internal const] Root
+UNDOC-PRE-RULE Field tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:20 [internal const] Address
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:338 [private static] ScriptedBuilder
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:345 [private static] ScriptedDatabase
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:348 [private static] ScriptedStart
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:351 [private static] StartEnvironment
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:361 [private static] ExpectedStart
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:369 [private static] ScriptedConsumer
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:378 [private static] ScriptedAdapter
+UNDOC-SINCE-RULE LOCAL tests/QBrainAi.Repl.Core.Tests/TestSupport/ScriptedPathIdentity.cs:121 [static] Windows
+UNDOC-PRE-RULE Field tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:29 [private const] OwnedRoot
+UNDOC-PRE-RULE Field tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:30 [private const] WindowsOwnedRoot
+UNDOC-PRE-RULE Field tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:34 [private const] Nonce
+UNDOC-PRE-RULE Field tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:103 [private const] BindFailure
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:137 [private static] ScriptedRestart
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:140 [private static] WrongRestartCheck
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:218 [private static] Start
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:221 [private static] ScriptedStart
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:290 [private static] Segments
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:293 [private static] ValueAfter
+UNDOC-SINCE-RULE LOCAL tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:372 [] Inside
+UNDOC-PRE-RULE Method tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:422 [private static] SegmentPrefix
+UNDOC-SINCE-RULE LOCAL tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs:228 [static] Separator
+UNDOC-PRE-RULE Field tests/QBrainAi.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs:15 [private readonly] _previousCache
+UNDOC-PRE-RULE Field tests/QBrainAi.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs:16 [private readonly] _ownedCache
+UNDOC-PRE-RULE Field tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs:19 [private] _instance
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.IntegrationTests/CustomWebApplicationFactory.cs:372 [private] Check
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:326 [private static] FindDirectoryFromRepoRoot
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs:15 [private static readonly] Cases
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs:110 [private static] Traits
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Configuration/TriageConfigurationContractTests.cs:46 [private static] FindFileFromRepoRoot
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:41 [private const] AssemblyOwner
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:43 [private const] AttributeSuffix
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:45 [private static readonly] ParseOptions
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:47 [private static readonly] KindOrder
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:159 [private static] Parse
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:162 [private static] SymbolsOf
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:227 [private static] IsImportContainer
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:229 [private static] RepositoryLocatorNodes
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:254 [private static] IsBaseDirectory
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:258 [private static] HasCallerFilePath
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:262 [private static] IsParentStep
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:270 [private static] IsRelativeWalkUp
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:278 [private static] AttributeKinds
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:289 [private static] MemberKinds
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:292 [private static] StaticImportKinds
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:295 [private static] SetsSkipProperty
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:320 [private static] IsTestClass
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:324 [private static] IsTestMethod
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:329 [private static] HasIntegrationTrait
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:336 [private static] IsStringLiteral
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:352 [private static] InNameOf
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:362 [private static] RightmostName
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:371 [private static] WithoutAttributeSuffix
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:376 [private static] LineOf
+UNDOC-PRE-RULE Record tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:378 [private sealed] MemberRule
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:383 [internal static readonly] Empty
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs:24 [private static readonly] Cases
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:17 [private static readonly] Cases
+UNDOC-PRE-RULE LOCAL tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:414 [static] SourceWith
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs:18 [private static readonly] ExpectedUnitProjects
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs:89 [private static] UnitProjects
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs:102 [private static] IsBuildOutput
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs:109 [private static] FindTestsRoot
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:189 [private static] SourceRepositoryRoot
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs:350 [private static] SourceRepositoryRoot
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Documentation/QuadBrainSlotConfigurationTests.cs:179 [private static] FindRepoRoot
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Documentation/TurnTransactionPlanArtifactTests.cs:236 [private static] FindRepoRoot
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs:21 [private readonly] _fixture
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Infrastructure/PickupIsolationContractTests.cs:66 [private] InvokeLocate
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Infrastructure/PickupIsolationContractTests.cs:118 [private readonly] _fault
+UNDOC-PRE-RULE Constructor tests/QBrainAi.Support.Mcp.Tests/Infrastructure/PickupIsolationContractTests.cs:123 [private] PickupIsolationMockTests
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs:79 [private static] FindRepositoryRoot
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/McpStdio/BrainSlotToolAbsenceTests.cs:93 [private static] FindRepoRoot
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs:214 [private static] FindRepoRoot
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/McpStdio/MemoryContractArtifactTests.cs:96 [private static] FindRepoRoot
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMigrationTests.cs:178 [private static] FindRepoRoot
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs:29 [private readonly] _databaseFolder
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs:22 [private readonly] _harness
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Memory/MemorySurfaceParityTests.cs:48 [private static] FindRepoRoot
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementsRecoveryMigrationTests.cs:47 [private static] RepositoryRoot
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:26 [private const] Variable
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:28 [private static readonly] PluginRootVariables
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:31 [private readonly] _root
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:33 [private readonly] _plugin
+UNDOC-PRE-RULE Property tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:58 [private] Workspace
+UNDOC-PRE-RULE Property tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:60 [private] EnvironmentRoot
+UNDOC-PRE-RULE Property tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:62 [private] GivenSibling
+UNDOC-PRE-RULE Property tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:64 [private] GivenProfile
+UNDOC-PRE-RULE Property tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:66 [private] EmptyProfile
+UNDOC-PRE-RULE Property tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:68 [private] MachineEnvironmentRoot
+UNDOC-PRE-RULE Property tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:70 [private] MachineProfile
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:78 [private static] WriteVersion
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:102 [private] RunAndAssert
+UNDOC-PRE-RULE LOCAL tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:123 [] Roots
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotLlmStrategyTests.cs:131 [private static] RepoRoot
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:155 [private static async] AssertGrokRunsIsolatedAsync
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:712 [private static] WithIsolatedQuadbrainTemp
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:237 [internal static] CreateRequest
+UNDOC-PRE-RULE Class tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:254 [internal sealed] CapturingProcessEnvironmentService
+UNDOC-PRE-RULE Class tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:271 [internal sealed] CapturingProcessSpawner
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:32 [private const] UntrustedMountPointMessage
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:40 [private static] DirEntry
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:42 [private static] DirLinkEntry
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:44 [private static] FileEntry
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:46 [private static] FileLinkEntry
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:377 [private static] LegacyRecursiveWalk
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:402 [private static] FollowsLinksWalk
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:406 [private static] StopsAtFirstErrorWalk
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:410 [private static] DropsUnlistableDirectoryWalk
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:414 [private static] SwallowsEverythingWalk
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:418 [private static] ConfigurableWalk
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:677 [private static readonly] UncheckedReach
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:679 [private static] FollowsLinksReach
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:682 [private static] RootOnlyReach
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:685 [private static] ChecksBoundaryReach
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:688 [private static] PrefixMatchReach
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:691 [private static] PropagatesListingErrorsReach
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:694 [private static] ListsRootReach
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:697 [private static] SwallowsEverythingReach
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:700 [private static] ConfigurableReach
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:757 [private readonly] _listings
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:759 [private readonly] _directoryLinks
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/EnvironmentDeltaContractTests.cs:133 [private static] Production
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/EnvironmentDeltaContractTests.cs:139 [private static] ScriptedDelta
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/EnvironmentDeltaContractTests.cs:151 [private static] WrongDelta
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/EnvironmentDeltaContractTests.cs:160 [private static] Collect
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/EnvironmentDeltaContractTests.cs:172 [private static] SameDelta
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs:333 [internal static] CreateProvider
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliInvocationPlanContractTests.cs:208 [private static] IsForeign
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliInvocationPlanContractTests.cs:211 [private static] ScriptedPlanner
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:519 [private static] UsesHostWorkspace
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:524 [private static] OpensWorkspaceOnHost
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:529 [private static] CreateHostWorkspace
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs:166 [private static] FindRepoRoot
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDeadContractInventoryTests.cs:68 [private static] FindRepoRoot
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs:29 [private readonly] _root
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs:31 [private readonly] _owned
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs:61 [private static] Scalar
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs:79 [private] Context
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs:554 [private static] FindRepoRoot
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:24 [private const] PrimaryTempName
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs:25 [private const] Root
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs:27 [private const] LockedMessage
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs:44 [private static] FileAt
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs:202 [private static] PreviousRead
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs:205 [private static] StopsAtFirstUnreadableRead
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs:208 [private static] HidesEveryErrorRead
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs:211 [private static] ConfigurableRead
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs:242 [private static] VersionFromJson
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs:264 [private readonly] _files
+UNDOC-PRE-RULE Class tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:812 [private sealed] EchoingMcpExecutor
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:814 [public] TryExecuteAsync
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:1257 [private const] NoDecision
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:1260 [private static readonly] DisplayContentRows
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:1273 [private static] AssertDisplayContent
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:1289 [private static] ScriptedDisplayContent
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:1301 [private static] AssertInternalRoundOutcome
+UNDOC-PRE-RULE Record tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:1310 [private sealed] DisplayContentRow
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:1314 [private static] AssertChatRoundOutcome
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:1322 [private static] Choice
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogOwnedHomeFilterContractTests.cs:25 [private static] Query
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSanitizerRegistrationTests.cs:56 [private static] ReadRepoFile
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextBackfillTests.cs:160 [private static] IsolatedHome
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextBackfillTests.cs:162 [private static] PureExtractor
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextExtractorTests.cs:13 [private readonly] _sut
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextExtractorTests.cs:129 [private static] IsolatedHome
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedSessionLogServiceTests.cs:541 [private static] FindRepositoryRoot
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:29 [private const] UntrustedMountPointMessage
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:32 [private const] PluginName
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:34 [private readonly] _root
+UNDOC-PRE-RULE Property tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:46 [private] Profile
+UNDOC-PRE-RULE Property tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:48 [private] Workspace
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:50 [private static] SamePath
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:67 [private] CreatePluginCacheProfile
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:88 [private] Resolve
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:132 [private] ResolveWithReader
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:170 [private] CreateHistoryProfile
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:224 [private] CreateSingleCacheProfile
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs:673 [private static] FindRepoRoot
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Storage/AuditPayloadProviderMigrationTests.cs:18 [private readonly] _serverConnectionString
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Storage/AuditPayloadProviderMigrationTests.cs:20 [private readonly] _failures
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureArgumentsTests.cs:20 [private static readonly] Silent
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureArgumentsTests.cs:22 [private static readonly] Wait
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertions.cs:33 [private static] ReadStrings
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs:13 [private const] LegacyKey
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs:14 [private const] CanonicalKey
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs:15 [private readonly] _connection
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs:88 [private] SeedParent
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs:90 [private] SeedChild
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs:99 [private] Execute
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Storage/RemoveTodoRecordsMigrationTests.cs:21 [private static readonly] WorkspacePath
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Storage/RemoveTodoRecordsMigrationTests.cs:22 [private static readonly] StaleAnchorWorkspacePath
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerDecompose4nfBackfillMigrationTests.cs:29 [private readonly] _failures
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs:28 [private const] RequiredCollection
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs:30 [private const] ScriptedSerializedName
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs:32 [private const] ScriptedParallelName
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs:34 [private const] ScriptedExplicitParallelName
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureBindingTests.cs:16 [private static] Create
+UNDOC-PRE-RULE LOCAL tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureContractTests.cs:89 [] Record
+UNDOC-PRE-RULE LOCAL tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureContractTests.cs:94 [] Report
+UNDOC-PRE-RULE LOCAL tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureContractTests.cs:110 [] Begin
+UNDOC-PRE-RULE LOCAL tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureContractTests.cs:114 [] Run
+UNDOC-PRE-RULE LOCAL tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureContractTests.cs:120 [async] RunAsync
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureReporter.cs:13 [private readonly] _failures
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureReporter.cs:14 [private] _active
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureReporter.cs:72 [private] Begin
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerRenameQuadBrainRolesMigrationTests.cs:29 [private readonly] _failures
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnectionTests.cs:21 [private const] RequiredDefault
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathContractTests.cs:31 [private static readonly] AnyHost
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs:51 [private static readonly] WindowsHost
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs:24 [private const] Folder
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs:26 [private const] Fallback
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs:220 [private static] SetAll
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs:226 [private static] Prior
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs:229 [private static] Scripted
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs:29 [private const] RequiredCollection
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunction.cs:22 [private const] SetReparsePointControl
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunction.cs:23 [private const] GenericWrite
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunction.cs:24 [private const] OpenExisting
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunction.cs:25 [private const] FlagOpenReparsePoint
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunction.cs:26 [private const] FlagBackupSemantics
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunction.cs:85 [private static extern] CreateFile
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunction.cs:96 [private static extern] DeviceIoControl
+UNDOC-PRE-RULE Field tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs:24 [private const] MountPointTag
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs:99 [private static] Scripted
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Web/UseCaseCanvasUiAssetTests.cs:98 [private static] FindWwwrootFile
+UNDOC-PRE-RULE Method tests/QBrainAi.Support.Mcp.Tests/Web/UseCaseUiAssetTests.cs:97 [private static] FindWwwrootFile
+UNDOC-PRE-RULE Field tests/Shared/TestRepositoryRoot.cs:18 [private const] RuleMessage
+UNDOC-PRE-RULE LOCAL tests/Shared/TestRepositoryRoot.cs:91 [] ValidateExplicit
+UNDOC-PRE-RULE Method tests/Shared/TestRepositoryRoot.cs:106 [private static] ReadBuildMetadata
+UNDOC-PRE-RULE Method tests/Shared/TestRepositoryRoot.cs:112 [private static] IsRepositoryRoot
+UNDOC-PRE-RULE Field tests/TestSupport.Shared/ScratchQBrainAi.cs:25 [private static readonly] MarkerTimeout
+UNDOC-PRE-RULE Field tests/TestSupport.Shared/ScratchQBrainAi.cs:26 [private static readonly] ServerHealthTimeout
+UNDOC-PRE-RULE Field tests/TestSupport.Shared/ScratchQBrainAi.cs:28 [private readonly] _stdout
+UNDOC-PRE-RULE Field tests/TestSupport.Shared/ScratchQBrainAi.cs:29 [private readonly] _stderr
+UNDOC-PRE-RULE Field tests/TestSupport.Shared/ScratchQBrainAi.cs:30 [private readonly] _lock
+UNDOC-PRE-RULE Field tests/TestSupport.Shared/ScratchQBrainAi.cs:31 [private] _process
+UNDOC-PRE-RULE Constructor tests/TestSupport.Shared/ScratchQBrainAi.cs:33 [private] ScratchQBrainAi
+UNDOC-PRE-RULE Method tests/TestSupport.Shared/ScratchQBrainAi.cs:169 [private async] InitializeAsync
+UNDOC-PRE-RULE Method tests/TestSupport.Shared/ScratchQBrainAi.cs:217 [private async] StageWorkspaceDatabaseAsync
+UNDOC-PRE-RULE Method tests/TestSupport.Shared/ScratchQBrainAi.cs:243 [private] StartProcess
+UNDOC-PRE-RULE Method tests/TestSupport.Shared/ScratchQBrainAi.cs:311 [private async] WaitForMarkerAsync
+UNDOC-PRE-RULE Method tests/TestSupport.Shared/ScratchQBrainAi.cs:356 [private] TryReadMarker
+UNDOC-PRE-RULE Method tests/TestSupport.Shared/ScratchQBrainAi.cs:413 [private async] WaitForHealthAsync
+UNDOC-PRE-RULE Method tests/TestSupport.Shared/ScratchQBrainAi.cs:449 [private] BuildAppSettingsYaml
+UNDOC-PRE-RULE Method tests/TestSupport.Shared/ScratchQBrainAi.cs:506 [private static] YamlQuote
+UNDOC-PRE-RULE Method tests/TestSupport.Shared/ScratchQBrainAi.cs:508 [private static] Unquote
+UNDOC-PRE-RULE Method tests/TestSupport.Shared/ScratchQBrainAi.cs:546 [private static] CreatePortProbe
+UNDOC-PRE-RULE Method tests/TestSupport.Shared/ScratchQBrainAi.cs:566 [private static] ResolveAssemblyPath
+UNDOC-PRE-RULE Method tests/TestSupport.Shared/ScratchQBrainAi.cs:592 [private static] NormalizePath
+UNDOC-PRE-RULE Record tests/TestSupport.Shared/ScratchQBrainAi.cs:595 [private sealed] MarkerSettings
+UNDOC-PRE-RULE Method tests/TestSupport.Shared/TemporaryInstanceChecks.cs:67 [private static] AliasedValue
+UNDOC-PRE-RULE Field tests/TestSupport.Shared/TemporaryInstanceChecks.cs:513 [private static readonly] ConnectionStringPrefixes
+UNDOC-PRE-RULE Field tests/TestSupport.Shared/TemporaryInstanceChecks.cs:516 [private static readonly] HostSettings
+UNDOC-PRE-RULE Method tests/TestSupport.Shared/TemporaryInstanceChecks.cs:594 [private static] IsSqliteProvider
+UNDOC-PRE-RULE Method tests/TestSupport.Shared/TemporaryInstanceChecks.cs:598 [private static] LastDataSource
+UNDOC-PRE-RULE Method tests/TestSupport.Shared/TemporaryInstanceChecks.cs:610 [private static] ValueAfter
+COUNT NODATE-SRC-CHANGED 29
+COUNT UNDOC-PRE-RULE 365
+COUNT UNDOC-PRE-RULE-CHANGED 0
+COUNT UNDOC-PREPR-CHANGED 0
+COUNT UNDOC-SINCE-RULE 6
+FILES-WITH-UNDOC-SINCE-RULE 5
+END

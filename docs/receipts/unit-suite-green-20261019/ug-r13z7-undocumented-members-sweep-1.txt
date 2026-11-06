@@ -1,0 +1,517 @@
+RECEIPT started=2026-11-05T14:04:05 ended=2026-11-05T14:04:12 host=LAB-OMARCHY exit=0
+SCRIPT /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-UndocumentedAddedMembers-v2.ps1 sha256=8C484DCDC135579512854D92289F618266A0D29E06591AAFC67D5CD1839A850E
+ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Range | 9b099716..88c5abcc
+HEAD 88c5abccee5f92b785f1368fdaace50dc0d4e2c2
+Now: 2026-11-05T14:04:05 range=9b099716..88c5abcc files=370
+  FIELD build/IntegrationLaneClassFilter.cs:10: static readonly Regex PlainIdentifier = new("^[A-Za-z_][A-Za-z0-9_]*\\z", RegexOptions.CultureInvariant);
+  METHOD-OR-TYPE build/IntegrationLaneExecution.cs:77: private static bool Counter(XElement element, string name, out int value) =>
+  FIELD build/IntegrationLaneProjects.cs:11: const string SupportIntegrationProject = "QBrainAi.Support.Mcp.IntegrationTests";
+  FIELD build/IntegrationLaneProjects.cs:13: static readonly string[] LaneProjects =
+  FIELD build/IntegrationLaneProjects.cs:24: static readonly string[] SupportIntegrationClasses =
+  FIELD build/LinuxProviderTestProvisioner.cs:14: private static readonly TimeSpan ProbeTimeout = TimeSpan.FromSeconds(2);
+  FIELD build/LinuxProviderTestProvisioner.cs:15: private const int ProbeAttempts = 30;
+  METHOD-OR-TYPE build/LinuxProviderTestProvisioner.cs:17: private static readonly (string Variable, string Container, int DefaultPort, bool IsSqlServer)[] Endpoints =
+  METHOD-OR-TYPE build/LinuxProviderTestProvisioner.cs:163: private static bool TryReadEndpoint(string connectionString, bool isSqlServer, int defaultPort, out string host, out int port, out string problem)
+  METHOD-OR-TYPE build/LinuxProviderTestProvisioner.cs:239: private static string? FirstValue(DbConnectionStringBuilder builder, params string[] keys)
+  METHOD-OR-TYPE build/LinuxProviderTestProvisioner.cs:300: private static (int ExitCode, string Output) Docker(params string[] arguments)
+  FIELD src/QBrainAi.GraphRag/Services/GraphRagService.cs:45: private readonly TimeProvider _timeProvider;
+  METHOD-OR-TYPE src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs:3005: private async Task<IReadOnlyList<IStreamingEvent>> CollectTodoEventsAsync(
+  FIELD src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs:16: private readonly TimeProvider _time;
+  FIELD src/QBrainAi.Services/Services/DirectoryTreeWalker.cs:21: private static readonly EnumerationOptions s_singleLevel = new()
+  FIELD src/QBrainAi.Services/Services/DirectoryTreeWalker.cs:29: private readonly Func<string, IReadOnlyList<DirectoryListingEntry>> _list;
+  FIELD src/QBrainAi.Services/Services/DirectoryTreeWalker.cs:30: private readonly WorkspacePathPlatform? _platform;
+  METHOD-OR-TYPE src/QBrainAi.Services/Services/DirectoryTreeWalker.cs:128: private IEnumerable<string> Walk(string root, bool yieldDirectories)
+  METHOD-OR-TYPE src/QBrainAi.Services/Services/DirectoryTreeWalker.cs:152: private IReadOnlyList<DirectoryListingEntry> TryList(string directory)
+  FIELD src/QBrainAi.Services/Services/FederationEnvelopeSigner.cs:15: private readonly TimeProvider _time;
+  FIELD src/QBrainAi.Services/Services/GitHubCliService.cs:35: private readonly QBrainAi.Client.IWorkspacePathNormalizer _pathNormalizer;
+  METHOD-OR-TYPE src/QBrainAi.Services/Services/MarkerFileService.cs:555: internal static MarkerAgentPlugins BuildDefaultAgentPlugins(string workspacePath) =>
+  METHOD-OR-TYPE src/QBrainAi.Services/Services/MarkerFileService.cs:729: private static IEnumerable<string> EnumerateUserPluginCacheRoots(
+  METHOD-OR-TYPE src/QBrainAi.Services/Services/MarkerFileService.cs:765: private static IEnumerable<string> OrderPluginVersionRoots(IEnumerable<string> candidates, Func<string, string?> readText)
+  METHOD-OR-TYPE src/QBrainAi.Services/Services/MarkerFileService.cs:774: private static System.Version GetPluginVersionSortKey(string root, Func<string, string?> readText)
+  METHOD-OR-TYPE src/QBrainAi.Services/Services/MarkerFileService.cs:825: private static string? TryReadFileText(string path, Func<string, string?> readText)
+  METHOD-OR-TYPE src/QBrainAi.Services/Services/MarkerFileService.cs:837: private static string? TryReadVersionFromJson(string text)
+  FIELD src/QBrainAi.Services/Services/MemoryService.cs:18: private readonly TimeProvider _timeProvider;
+  FIELD src/QBrainAi.Services/Services/SessionLogService.cs:36: private readonly TimeProvider _time;
+  FIELD src/QBrainAi.Services/Services/SessionLogService.cs:37: private readonly Func<string, string> _normalizePlanFilter = static path => SessionLogTurnContextValidator.NormalizePlanFile(path);
+  FIELD src/QBrainAi.Services/Services/SessionLogTurnContextExtractor.cs:23: private readonly DirectoryTreeWalker _walker;
+  FIELD src/QBrainAi.TransactionSecurity/Services/TransactionSecurityServices.cs:183: private readonly TimeProvider _time;
+  FIELD tests/Build.Tests/IntegrationLaneClassFilterMockGateTests.cs:71: private static readonly Regex PlainIdentifier = new("^[A-Za-z_][A-Za-z0-9_]*\\z", RegexOptions.CultureInvariant);
+  METHOD-OR-TYPE tests/Build.Tests/IntegrationLaneDetachedWorkerTests.cs:87: private static ProcessStartInfo PowerShell(string script, params string[] arguments)
+  METHOD-OR-TYPE tests/Build.Tests/IntegrationLaneDetachedWorkerTests.cs:95: private static async Task UntilAsync(Func<bool> ready)
+  METHOD-OR-TYPE tests/Build.Tests/IntegrationLaneDetachedWorkerTests.cs:102: private static string Quote(string value) => "'" + value.Replace("'", "''", StringComparison.Ordinal) + "'";
+  METHOD-OR-TYPE tests/Build.Tests/IntegrationLaneDetachedWorkerTests.cs:104: private static string FindRepositoryRoot()
+  METHOD-OR-TYPE tests/Build.Tests/IntegrationLaneExecutionContractTests.cs:183: private static IReadOnlyList<Step> ScriptedComposition(IReadOnlyList<(string Name, string Path)> projects, IntegrationLaneHost host) =>
+  METHOD-OR-TYPE tests/Build.Tests/IntegrationLaneExecutionContractTests.cs:193: private static bool ScriptedTrx(string xml) => TrxRows.Single(row => row.Xml == xml).Accepted;
+  METHOD-OR-TYPE tests/Build.Tests/IntegrationLaneExecutionContractTests.cs:195: private static Launch ScriptedLaunch() => new("setsid",
+  METHOD-OR-TYPE tests/Build.Tests/IntegrationLaneExecutionContractTests.cs:198: private static string Trx(int total, int passed, int failed, int skipped) =>
+  METHOD-OR-TYPE tests/Build.Tests/IntegrationLaneExecutionContractTests.cs:201: private interface ExplicitSelectorContract
+  METHOD-OR-TYPE tests/Build.Tests/IntegrationLaneExecutionContractTests.cs:206: private interface WrongDefaultSelectorContract
+  FIELD tests/Build.Tests/IntegrationLaneFilterTests.cs:10: private readonly IntegrationLaneFilter filter = new();
+  FIELD tests/Build.Tests/IntegrationLanePreconditionMockGateTests.cs:62: private const string Message = "MigrationIntegrationTests needs an interactive desktop session on Windows.";
+  FIELD tests/Build.Tests/IntegrationLanePreconditionTests.cs:10: private readonly InteractiveSessionPrecondition precondition = new();
+  FIELD tests/Build.Tests/IntegrationLaneProjectsTests.cs:13: private static readonly Regex ProjectLine = new(
+  FIELD tests/Build.Tests/IntegrationLaneProjectsTests.cs:17: private readonly IntegrationLaneProjects selector = new();
+  METHOD-OR-TYPE tests/Build.Tests/IntegrationLaneProjectsTests.cs:67: private static string[] ReadSolutionProjectNames()
+  METHOD-OR-TYPE tests/Build.Tests/IntegrationLaneProjectsTests.cs:73: private static string FindRepositoryRoot()
+  METHOD-OR-TYPE tests/Build.Tests/OllamaInstallLayoutMockGateTests.cs:106: private string Name(IntegrationLaneHost host)
+  FIELD tests/Build.Tests/OllamaInstallLayoutTests.cs:10: private readonly OllamaInstallLayout layout = new();
+  METHOD-OR-TYPE tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs:87: public ProviderTestProvisioningResult Provision(string envFilePath, IProviderTestHost host)
+  FIELD tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs:92: const string pg = ProviderTestNames.PostgresVariable;
+  FIELD tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs:93: const string sql = ProviderTestNames.SqlServerVariable;
+  FIELD tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs:185: public const string Postgres = ProviderTestProvisioningContract.PostgresValue;
+  FIELD tests/Build.Tests/ProviderTestProvisioningMockGateTests.cs:186: public const string SqlServer = ProviderTestProvisioningContract.SqlServerValue;
+  FIELD tests/Build.Tests/ProviderTestProvisioningTests.cs:10: private readonly LinuxProviderTestProvisioner provisioner = new();
+  FIELD tests/Build.Tests/ProvisioningDownloadContract.cs:131: private int _chunk;
+  FIELD tests/Build.Tests/ProvisioningDownloadContract.cs:132: private int _offset;
+  METHOD-OR-TYPE tests/Build.Tests/ProvisioningDownloadContract.cs:217: public TemporaryFolder()
+  METHOD-OR-TYPE tests/Build.Tests/ProvisioningDownloadContract.cs:223: public string Path { get; }
+  METHOD-OR-TYPE tests/Build.Tests/ProvisioningDownloadContract.cs:225: public void Dispose()
+  FIELD tests/QBrainAi.Client.Tests/RequirementTimestampJsonBindingTests.cs:19: private static readonly JsonSerializerOptions s_clientOptions = new() { PropertyNameCaseInsensitive = true, TypeInfoResolver = McpClientJsonContext.Default };
+  METHOD-OR-TYPE tests/QBrainAi.QBAgent.Tests/Skills/AuthoredSkillsTests.cs:26: private static string FindSkillsRoot() => TestRepositoryRoot.Combine("skills");
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/HandoffSkillDelegationTests.cs:134: private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
+  FIELD tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs:97: internal const string Root = "/test-owned-temporary-marker-root";
+  FIELD tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs:98: internal const string Start = Root + "/workspace/src";
+  FIELD tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs:99: internal static readonly string[] Folders = [Start, Root + "/workspace", Root];
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs:100: internal Dictionary<string, string[]> Markers { get; } = new(StringComparer.Ordinal);
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs:101: internal List<string> CacheEvents { get; } = [];
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs:102: internal MarkerFileClientOptionsResolver.MarkerSettings? ExpectedMarker { get; private set; }
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs:103: internal bool SignatureValid { get; private set; }
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs:104: internal bool CacheHit { get; set; }
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs:142: private void AssertMarkerIdentity(MarkerFileClientOptionsResolver.MarkerSettings marker)
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs:150: internal static RecordingMarkerFileSystem Signed(bool valid)
+  FIELD tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs:181: private readonly string? _fault;
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/Host/MarkerIsolationContractTests.cs:185: private MarkerIsolationMockTests(string fault) => _fault = fault;
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkMockGateTests.cs:90: private static MarkerWalkContract.Walk ScriptedWalk(WalkFault fault)
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkMockGateTests.cs:122: private static MarkerWalkContract.Diagnose ScriptedDiagnosis(DiagnosisFault fault)
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkTests.cs:33: private static string? ProductionWalk(string startPath, IMarkerFileSystem fileSystem, out IReadOnlyList<string> searched)
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/Host/MarkerWalkTests.cs:36: private static bool ProductionDiagnosis(string startPath, IMarkerFileSystem fileSystem, out string error)
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/MemorySchemaContractTests.cs:56: private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutCallSiteTests.cs:219: private static async Task<CallSiteResult> RunProtocolAsync(Func<string, string?> read, bool runsUntilCancelled)
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutCallSiteTests.cs:244: private static async Task<CallSiteResult> RunStreamCommandAsync(Func<string, string?> read, bool runsUntilCancelled)
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutCallSiteTests.cs:305: public async Task<IYamlEnvelope> DispatchAsync(IYamlEnvelope envelope, CancellationToken cancellationToken)
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutCallSiteTests.cs:340: private static CallSiteResult WithMessage(CallSiteResult result, string messageFormat, long seconds) =>
+  FIELD tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutTests.cs:22: private static readonly TimeSpan DefaultTimeout = TimeSpan.FromMinutes(2);
+  FIELD tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutTests.cs:24: private const long LargestSeconds = 4294967;
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutTests.cs:119: private static TimeSpan Bounded(string? configured, long smallest, long largest) =>
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/ReplCommandTimeoutTests.cs:128: private static TimeSpan Capping(string? configured) =>
+  FIELD tests/QBrainAi.Repl.Core.Tests/SessionLogTestHelpers.cs:28: private readonly Func<DateTimeOffset> _clock;
+  FIELD tests/QBrainAi.Repl.Core.Tests/StubAuthRotationHandlerTests.cs:240: private readonly Func<DateTimeOffset> _clock;
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedDatabaseSelectionTests.cs:23: private const string OwnedRoot = "/scratch/owned";
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedDatabaseSelectionTests.cs:84: private static string? ScriptedCheck(string? connectionString, string root) =>
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedDatabaseSelectionTests.cs:87: private static Func<string?, string, string?> WrongCheck(string wrong) => wrong switch
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedDatabaseSelectionTests.cs:101: private static string? CheckWith(string? connectionString, string root, bool lastWins, StringComparison keyword, bool segments, bool acceptMissing)
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedDatabaseSelectionTests.cs:121: private static bool SegmentInside(string path, string root)
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:26: private const string OwnedRoot = "/scratch/owned";
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:27: private const string OwnedDatabase = "/scratch/owned/data/qbrainai.db";
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:28: private const string LiveDatabase = "/home/example/live/qbrainai.db";
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:230: private static readonly string[] ProductPrefixes = ["Mcp__", "QBrainAi__", "MCP_", "QBRAINAI_", "MCPSERVER_", "ConnectionStrings__"];
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:231: private static readonly string[] ProviderFallbacks = ["DATABASE_URL", "POSTGRES_CONNECTION_STRING"];
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:233: private static Dictionary<string, string> OwnedSettings(string database, string workspace) => new(StringComparer.OrdinalIgnoreCase)
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:244: private static Dictionary<string, string?> With(Dictionary<string, string> settings, params (string Key, string Value)[] extra)
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:254: private static bool IsProductKey(string key, StringComparison comparison) =>
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:258: private static Dictionary<string, string?> ScriptedBuild(IReadOnlyDictionary<string, string?> inherited, IReadOnlyDictionary<string, string> settings) =>
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:261: private static Dictionary<string, string?> BuildWith(IReadOnlyDictionary<string, string?> inherited, IReadOnlyDictionary<string, string> settings, Func<string, 
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:279: private static Func<IReadOnlyDictionary<string, string?>, IReadOnlyDictionary<string, string>, Dictionary<string, string?>> WrongBuild(string wrong) => wrong sw
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:291: private static string? ScriptedCheck(IReadOnlyDictionary<string, string?> child, IReadOnlyDictionary<string, string> settings, string root)
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:309: private static Func<IReadOnlyDictionary<string, string?>, IReadOnlyDictionary<string, string>, string, string?> WrongCheck(string wrong) => wrong switch
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:321: private static string? ScriptedLeftoverCheck(IReadOnlyDictionary<string, string?> child, IReadOnlyDictionary<string, string> settings) =>
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:327: private static IEnumerable<string> DatabasePaths(IReadOnlyDictionary<string, string> settings)
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:338: private static string DataSourceOf(string connectionString)
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceEnvironmentTests.cs:350: private static bool SegmentInside(string path, string root, bool refuseParentSegments)
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationBindingTests.cs:60: private static string ValueAfter(string[] arguments, string name)
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:19: internal const string Root = "/scratch/owned";
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:20: internal const string Address = "http://127.0.0.1:49123";
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:338: private static Dictionary<string, string?> ScriptedBuilder(IReadOnlyDictionary<string, string?> inherited, IReadOnlyDictionary<string, string> settings)
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:345: private static string? ScriptedDatabase(string? connection, string root, string provider) =>
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:348: private static string? ScriptedStart(IReadOnlyDictionary<string, string?> environment) =>
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:351: private static Dictionary<string, string?> StartEnvironment(string? address, string? cache, string? canonicalAddress = null, string? canonicalCache = null)
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:361: private static (IReadOnlyList<string> Arguments, IReadOnlyDictionary<string, string?> Environment) ExpectedStart() =>
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:369: private static (IReadOnlyList<string> Arguments, IReadOnlyDictionary<string, string?> Environment) ScriptedConsumer(
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceIsolationContractTests.cs:378: private static void ScriptedAdapter(IDictionary<string, string?> target, IReadOnlyDictionary<string, string> settings, bool accepted)
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:41: private const string OwnedRoot = "/scratch/owned";
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:42: private const string OwnedDatabase = "/scratch/owned/data/qbrainai.db";
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:43: private const string LiveDatabase = "/home/example/live/qbrainai.db";
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:44: private const string OwnedAddress = "http://127.0.0.1:49123";
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:45: private const string LiveAddress = "http://127.0.0.1:7147";
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:46: private const StringComparison IgnoreCase = StringComparison.OrdinalIgnoreCase;
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:48: private static readonly string[] HostPrefixes = ["DOTNET_", "ASPNETCORE_"];
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:49: private static readonly string[] ConnectionStringPrefixes = ["SQLCONNSTR_", "SQLAZURECONNSTR_", "MYSQLCONNSTR_", "POSTGRESQLCONNSTR_", "CUSTOMCONNSTR_"];
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:50: private static readonly string[] ReferenceSections = ["Mcp", "QBrainAi", "ConnectionStrings", "Kestrel"];
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:51: private static readonly string[] ReferenceFlatPrefixes = ["MCP_", "QBRAINAI_", "MCPSERVER_"];
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:52: private static readonly string[] ReferenceNames =
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:55: private static readonly string[] RawPrefixes = ["Mcp__", "QBrainAi__", "MCP_", "QBRAINAI_", "MCPSERVER_", "ConnectionStrings__"];
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceProviderSettingContractTests.cs:18: private const string Root = "/scratch/owned";
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceProviderSettingContractTests.cs:26: private static readonly ProviderCase[] Cases =
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/ScriptedClock.cs:17: private readonly DateTimeOffset[] _times;
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/ScriptedClock.cs:18: private int _next;
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/ScriptedPathIdentity.cs:121: static bool Windows(RootKind kind) => kind is RootKind.Drive or RootKind.Unc;
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:29: private const string OwnedRoot = "/scratch/owned";
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:30: private const string WindowsOwnedRoot = @"C:\scratch\owned";
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:31: private const string UncOwnedRoot = "//server/share/owned";
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:32: private const string Nonce = "nonce-r8b-1";
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:101: private const string BindFailure = "Unhandled exception. System.IO.IOException: Failed to bind to address http://[::]:49974: address already in use.";
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:135: private static bool ScriptedRestart(int starts, bool exited, string output) =>
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:138: private static Func<int, bool, string, bool> WrongRestartCheck(string wrong) => wrong switch
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:216: private static string[] Start(string workspace, string marker) =>
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:219: private static string? ScriptedStart(IReadOnlyList<string> arguments, string root)
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:288: private static string[] Segments(string path) =>
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:291: private static string? ValueAfter(IReadOnlyList<string> arguments, string name)
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:302: private static Func<IReadOnlyList<string>, string, string?> WrongStartCheck(string wrong) => wrong switch
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:411: private static bool SegmentPrefix(string path, string root)
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs:228: static bool Separator(char value) => value is '/' or '\\';
+  FIELD tests/QBrainAi.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs:15: private readonly string? _previousCache = MarkerFileClientOptionsResolver.CacheDirectoryOverride;
+  FIELD tests/QBrainAi.Repl.IntegrationTests/MarkerFileClientOptionsResolverTests.cs:16: private readonly string _ownedCache = Path.Combine(Path.GetTempPath(), "repl-marker-owned-cache-" + Guid.NewGuid().ToString("N"));
+  FIELD tests/QBrainAi.Repl.IntegrationTests/ReplChildProcessHelper.cs:19: private ScratchQBrainAi? _instance;
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.IntegrationTests/CustomWebApplicationFactory.cs:372: private void Check(DbConnection connection, ConnectionEventData eventData)
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/IngestionAllowlistContractTests.cs:326: private static string FindDirectoryFromRepoRoot(params string[] segments) => TestRepositoryRoot.Combine(segments);
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs:15: private static readonly Dictionary<string, (IReadOnlyDictionary<string, IReadOnlyCollection<string>>? Traits, bool Allowed)> Cases =
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/TestRepositoryRootPolicyTests.cs:110: private static IReadOnlyDictionary<string, IReadOnlyCollection<string>> Traits(params (string Name, string[] Values)[] traits) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/TriageConfigurationContractTests.cs:46: private static string FindFileFromRepoRoot(params string[] segments) => TestRepositoryRoot.Combine(segments);
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:41: private const string AssemblyOwner = "<assembly>";
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:43: private const string AttributeSuffix = "Attribute";
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:45: private static readonly CSharpParseOptions ParseOptions = new(LanguageVersion.Preview, DocumentationMode.None);
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:47: private static readonly string[] KindOrder = ["os-check", "os-attribute", "skip", "process-host"];
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:159: private static CompilationUnitSyntax Parse(string source, IEnumerable<string> symbols) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:162: private static IEnumerable<string> SymbolsOf(CompilationUnitSyntax root) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:227: private static bool IsImportContainer(SyntaxNode node) => node is CompilationUnitSyntax or BaseNamespaceDeclarationSyntax;
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:229: private static IEnumerable<SyntaxNode> RepositoryLocatorNodes(CompilationUnitSyntax root)
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:254: private static bool IsBaseDirectory(SyntaxNode node) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:258: private static bool HasCallerFilePath(ParameterSyntax parameter) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:262: private static bool IsParentStep(SyntaxNode node) => node switch
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:270: private static bool IsRelativeWalkUp(InvocationExpressionSyntax invocation) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:278: private static IReadOnlyList<string> AttributeKinds(AttributeSyntax attribute, IReadOnlyDictionary<string, string> aliases)
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:289: private static IReadOnlyList<string> MemberKinds(string? typeName, string member) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:292: private static IReadOnlyList<string> StaticImportKinds(string member, IReadOnlySet<string> staticTypes) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:295: private static bool SetsSkipProperty(AttributeSyntax attribute) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:320: private static bool IsTestClass(TypeDeclarationSyntax type) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:324: private static bool IsTestMethod(MethodDeclarationSyntax method) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:329: private static bool HasIntegrationTrait(SyntaxList<AttributeListSyntax> lists) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:336: private static bool IsStringLiteral(ExpressionSyntax expression, string value) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:352: private static bool InNameOf(SyntaxNode node) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:362: private static string? RightmostName(SyntaxNode? node) => node switch
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:371: private static string? WithoutAttributeSuffix(string? name) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:376: private static int LineOf(SyntaxNode node) => node.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:378: private sealed record MemberRule(string Kind, string Type, Func<string, bool> Matches);
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScanner.cs:383: internal static readonly ImportScope Empty =
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs:24: private static readonly Dictionary<string, (string Source, string[] Expected)> Cases = new(StringComparer.Ordinal)
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs:30: public class AliasTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs:33: public void A() { _ = OS.IsWindows(); }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs:39: public class Helper
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs:41: public OS Name { get; set; }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs:49: public class StringTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs:52: public void B() { _ = OS.IsNullOrEmpty("x"); }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs:58: public class AliasTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs:61: public void A() { _ = OS.IsWindows(); }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs:72: public class InnerTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs:75: public void A() { _ = OS.IsNullOrEmpty("x"); }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs:78: public class OuterTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs:81: public void B() { _ = OS.IsWindows(); }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs:89: public class StaticTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs:92: public void A() { _ = IsWindows(); }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs:97: public class OtherTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs:100: public void B() { _ = IsWindows(); }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs:101: private static bool IsWindows() => true;
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs:108: public sealed class FileScopedTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs:111: public void A() { _ = OS.IsLinux(); }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs:118: public class StringTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerAliasScopeTests.cs:121: public void A() { _ = OperatingSystem.IsNullOrEmpty("x"); }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:17: private static readonly Dictionary<string, (string Source, string[] Expected)> Cases = new(StringComparer.Ordinal)
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:21: public sealed class FooTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:24: public void A()
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:33: public sealed class FooTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:36: public void A()
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:44: public sealed class FooTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:47: public void A()
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:58: public sealed class LinuxTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:61: public void A() { }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:66: public sealed class FooTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:69: public void A() { }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:71: public void B()
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:81: internal static class UnitTestPaths
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:83: public static string Root { get; } = OperatingSystem.IsWindows() ? "a" : "b";
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:89: public sealed class OuterTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:92: public void A() { }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:93: private sealed class Helper
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:95: public bool On => OperatingSystem.IsLinux();
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:102: public sealed class FirstTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:105: public void A() { _ = OperatingSystem.IsLinux(); }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:107: public sealed class SecondTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:110: public void B() { _ = OperatingSystem.IsLinux(); }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:115: public sealed class HostTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:118: public void A()
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:127: public sealed class RuntimeTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:130: public void A() => Assert.True(RuntimeInformation.IsOSPlatform(OSPlatform.Linux));
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:135: public sealed class MethodTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:139: public void A() { }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:144: public sealed class LiteralTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:147: public void A()
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:158: public abstract class ContractTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:161: public void A()
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:172: public sealed class LinuxTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:175: public void A() => Assert.True(OperatingSystem.IsLinux());
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:180: public sealed class FooTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:184: public void A() { }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:188: public void B(int x) { }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:193: public sealed class FooTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:196: public void A() { }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:198: public void B(int x) { }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:200: public void C() { }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:202: public void D() { }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:204: public void E() { }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:209: public sealed class FooTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:212: public void A()
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:224: public sealed class FooTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:227: public void A()
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:243: public sealed class FooTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:247: public void A() { }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:249: public void B() { }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:252: public void C() { }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:254: public void D() { }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:262: public sealed class FooTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:265: public void A()
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:279: public sealed class FooTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:282: public void A() { }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:287: public sealed class FooTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:292: public void A() { _ = OperatingSystem.IsWindows(); }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:294: public void B() { _ = OperatingSystem.IsWindows(); }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:299: public sealed class FooTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:304: public void A(int x) { }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:306: public void B() { Skip.If(true); Skip.IfNot(false); }
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:308: public void C() => throw new Xunit.Sdk.SkipException("x");
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:313: public sealed class FooTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:316: public void A()
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:414: static string SourceWith(int symbolCount) =>
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:505: const string source = """"
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:507: public sealed class FooTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:539: internal static class Paths
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:541: internal static string Root()
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:552: public sealed class FooTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:554: private static string Root()
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:566: public sealed class FooTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:569: public void A()
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:579: internal static class Paths
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:581: internal static string Root([CallerFilePath] string path = "") =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:587: internal static class Paths
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:589: internal static string? Root() => typeof(Paths).Assembly
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:596: public sealed class FooTests
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:598: private static string Fixture(string name) => Path.Combine(AppContext.BaseDirectory, "Fixtures", name);
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:599: private static string Up(string temp) => new DirectoryInfo(temp).Parent!.FullName;
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:600: private static string Shared() => TestRepositoryRoot.Resolve();
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:602: private const string Text = "McpRepositoryRoot AppContext.BaseDirectory .Parent";
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerMockGateTests.cs:603: private static bool IsAnchorKey(string key) => key == "McpRepositoryRoot";
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs:18: private static readonly string[] ExpectedUnitProjects =
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs:89: private static IEnumerable<string> UnitProjects(string testsRoot) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs:102: private static bool IsBuildOutput(string path)
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Configuration/UnitSuitePlatformScannerTests.cs:109: private static string FindTestsRoot() => TestRepositoryRoot.Combine("tests");
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:189: private static string SourceRepositoryRoot() =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs:350: private static string SourceRepositoryRoot() =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Documentation/QuadBrainSlotConfigurationTests.cs:179: private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Documentation/TurnTransactionPlanArtifactTests.cs:236: private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
+  FIELD tests/QBrainAi.Support.Mcp.Tests/HermeticUserProfileFixtureTests.cs:21: private readonly HermeticUserProfileFixture _fixture;
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Infrastructure/PickupIsolationContractTests.cs:37: const string value = " Server=database.example;Database=master;Encrypt=False ";
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Infrastructure/PickupIsolationContractTests.cs:66: private string InvokeLocate(string? configured, string? buildRoot, string?[] starts) =>
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Infrastructure/PickupIsolationContractTests.cs:118: private readonly string? _fault;
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Infrastructure/PickupIsolationContractTests.cs:123: private PickupIsolationMockTests(string fault) => _fault = fault;
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Ingestion/ImportRecoveryEnvelopeTests.cs:79: private static string FindRepositoryRoot() => TestRepositoryRoot.Resolve();
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/McpStdio/BrainSlotToolAbsenceTests.cs:93: private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/McpStdio/HandoffMcpToolTests.cs:214: private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/McpStdio/MemoryContractArtifactTests.cs:96: private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryMigrationTests.cs:178: private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreA1.cs:29: private readonly string _databaseFolder = Path.Combine(Path.GetTempPath(), "mcp-s1-db-" + Guid.NewGuid().ToString("N"));
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1HarnessDatabaseTests.cs:22: private readonly MemoryS1Harness _harness = new();
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Memory/MemorySurfaceParityTests.cs:48: private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementsRecoveryMigrationTests.cs:47: private static string RepositoryRoot() => TestRepositoryRoot.Resolve();
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:26: private const string Variable = "CLAUDE_PLUGIN_ROOT";
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:28: private static readonly string[] PluginRootVariables =
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:31: private readonly string _root = Path.Combine(Path.GetTempPath(), $"mcp-plugin-sources-{Guid.NewGuid():N}");
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:33: private readonly string _plugin = $"mcpserver-sources-test-{Guid.NewGuid():N}";
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:58: private string Workspace => Path.Combine(_root, "workspace");
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:60: private string EnvironmentRoot => Path.Combine(_root, "given-environment-root");
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:62: private string GivenSibling => Path.Combine(_root, "elsewhere", _plugin);
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:64: private string GivenProfile => Path.Combine(_root, "given-profile");
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:66: private string EmptyProfile => Path.Combine(_root, "empty-profile");
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:68: private string MachineEnvironmentRoot => Path.Combine(_root, "machine-environment-root");
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:70: private string MachineProfile => Path.Combine(_root, "machine-profile");
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:78: private static void WriteVersion(string directory, string version)
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/AgentPluginVersionSourcesTests.cs:102: private void RunAndAssert(string name, ResolveFunction resolve)
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/BrainSlotLlmStrategyTests.cs:131: private static string RepoRoot() => QBrainAi.Tests.Shared.TestRepositoryRoot.Resolve();
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:155: private static async Task AssertGrokRunsIsolatedAsync()
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/CliBrainSlotStrategyTests.cs:712: private static Task WithIsolatedQuadbrainTemp(Func<string, Task> body) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:237: internal static AgentExecutionSessionRequest CreateRequest(
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:254: internal sealed class CapturingProcessEnvironmentService : IProcessEnvironmentService
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/CodexCliAgentExecutionStrategyTests.cs:271: internal sealed class CapturingProcessSpawner(
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:32: private const string UntrustedMountPointMessage =
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:40: private static DirectoryListingEntry DirEntry(string path) => new(path, IsDirectory: true, IsLink: false);
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:42: private static DirectoryListingEntry DirLinkEntry(string path) => new(path, IsDirectory: true, IsLink: true);
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:44: private static DirectoryListingEntry FileEntry(string path) => new(path, IsDirectory: false, IsLink: false);
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:46: private static DirectoryListingEntry FileLinkEntry(string path) => new(path, IsDirectory: false, IsLink: true);
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:377: private static (List<string> Directories, List<string> Files) LegacyRecursiveWalk(
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:402: private static (List<string> Directories, List<string> Files) FollowsLinksWalk(
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:406: private static (List<string> Directories, List<string> Files) StopsAtFirstErrorWalk(
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:410: private static (List<string> Directories, List<string> Files) DropsUnlistableDirectoryWalk(
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:414: private static (List<string> Directories, List<string> Files) SwallowsEverythingWalk(
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:418: private static (List<string> Directories, List<string> Files) ConfigurableWalk(
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:677: private static readonly ReachFunction UncheckedReach = (_, _, _) => true;
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:679: private static bool FollowsLinksReach(Func<string, IReadOnlyList<DirectoryListingEntry>> list, string boundary, string root) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:682: private static bool RootOnlyReach(Func<string, IReadOnlyList<DirectoryListingEntry>> list, string boundary, string root) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:685: private static bool ChecksBoundaryReach(Func<string, IReadOnlyList<DirectoryListingEntry>> list, string boundary, string root) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:688: private static bool PrefixMatchReach(Func<string, IReadOnlyList<DirectoryListingEntry>> list, string boundary, string root) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:691: private static bool PropagatesListingErrorsReach(Func<string, IReadOnlyList<DirectoryListingEntry>> list, string boundary, string root) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:694: private static bool ListsRootReach(Func<string, IReadOnlyList<DirectoryListingEntry>> list, string boundary, string root) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:697: private static bool SwallowsEverythingReach(Func<string, IReadOnlyList<DirectoryListingEntry>> list, string boundary, string root) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:700: private static bool ConfigurableReach(
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:757: private readonly Dictionary<string, Func<IReadOnlyList<DirectoryListingEntry>>> _listings = new(StringComparer.Ordinal);
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/DirectoryTreeWalkerTests.cs:759: private readonly HashSet<string> _directoryLinks = new(StringComparer.Ordinal);
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/EnvironmentDeltaContractTests.cs:133: private static Dictionary<string, string>? Production(string rowName)
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/EnvironmentDeltaContractTests.cs:139: private static Dictionary<string, string>? ScriptedDelta(IEnumerable<KeyValuePair<string, string?>> requested, Func<string, string?> baseline)
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/EnvironmentDeltaContractTests.cs:151: private static Func<IEnumerable<KeyValuePair<string, string?>>, Func<string, string?>, Dictionary<string, string>?> WrongDelta(string wrong) => wrong switch
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/EnvironmentDeltaContractTests.cs:160: private static Dictionary<string, string>? Collect(IEnumerable<KeyValuePair<string, string?>> requested, Func<string, string, bool> keep)
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/EnvironmentDeltaContractTests.cs:172: private static bool SameDelta(Dictionary<string, string>? expected, Dictionary<string, string>? actual)
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/FederationEnvelopeSignerTests.cs:17: private readonly QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProvider _clock =
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/FederationEnvelopeSignerTests.cs:183: private static FederationOperationRequest Operation() => new()
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/FederationEnvelopeSignerTests.cs:191: private FederationEnvelopeSigner CreateSigner()
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/FederationTopologyServiceTests.cs:333: internal static ServiceProvider CreateProvider(params IFederationStateAdapter[] adapters)
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliInvocationPlanContractTests.cs:208: private static bool IsForeign(string? workspace, IWorkspacePathNormalizer normalizer) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliInvocationPlanContractTests.cs:211: private static GhPlan ScriptedPlanner(string? workspace, string? configured, IWorkspacePathNormalizer normalizer, Func<string, string?> gitConfig)
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:519: private static bool UsesHostWorkspace(ProcessRunRequest? request, string workspacePath)
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:524: private static bool OpensWorkspaceOnHost(ProcessRunRequest? request)
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/GitHubCliServiceTests.cs:529: private static string CreateHostWorkspace()
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/HandoffD3D5OverlayTests.cs:166: private static string FindRepoRoot() => QBrainAi.Tests.Shared.TestRepositoryRoot.Resolve();
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/HandoffDeadContractInventoryTests.cs:68: private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs:29: private readonly string _root = Path.Combine(Path.GetTempPath(), $"mcp-handoff-harness-{Guid.NewGuid():N}");
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs:31: private readonly List<IDisposable> _owned = [];
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs:61: private static long Scalar(DbConnection connection, string sql)
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/HandoffTestDatabaseTests.cs:79: private McpDbContext Context(DbContextOptions<McpDbContext> options) =>
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/HandoffWorkspacePathsTests.cs:42: const string leftRoot = "Q:/fixture/handoff-left";
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/HandoffWorkspacePathsTests.cs:43: const string rightRoot = "Q:/fixture/handoff-right";
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs:554: private static string FindRepoRoot() => QBrainAi.Tests.Shared.TestRepositoryRoot.Resolve();
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/OneShotCliAgentExecutionStrategyTests.cs:24: private const string PrimaryTempName = "MCPSERVER_ONESHOT_TEMP";
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs:25: private const string Root = "plugin-root";
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs:27: private const string LockedMessage =
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs:44: private static string FileAt(string relative) => Path.Combine(Root, relative);
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs:202: private static string? PreviousRead(string root, Func<string, string?> readText) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs:205: private static string? StopsAtFirstUnreadableRead(string root, Func<string, string?> readText) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs:208: private static string? HidesEveryErrorRead(string root, Func<string, string?> readText) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs:211: private static string? ConfigurableRead(
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs:242: private static string? VersionFromJson(string text)
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/PluginVersionFileReadTests.cs:264: private readonly Dictionary<string, Func<string>> _files = new(StringComparer.Ordinal);
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:812: private sealed class EchoingMcpExecutor : IQuadBrainInternalToolExecutor
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:814: public Task<InternalToolExecutionOutcome> TryExecuteAsync(
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:1089: const string results = """{"tool":"mcp_round_8"}""";
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:1157: const string continueEnvelope = """{"intent":"continue"}""";
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:1185: const string finalEnvelope = """{"intent":"final"}""";
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:1257: private const string NoDecision = "QuadBrain returned no decision (committed).";
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:1260: private static readonly DisplayContentRow[] DisplayContentRows =
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:1273: private static void AssertDisplayContent(DisplayContentRow row, string? content)
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:1289: private static string ScriptedDisplayContent(string? output, int roundsUsed, string noDecision)
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:1301: private static void AssertInternalRoundOutcome(int expectedRounds, string expectedToolResults, int rounds, OpenAiChatChoice choice)
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:1310: private sealed record DisplayContentRow(string? Output, int RoundsUsed, string? ExpectedExact, string? ExpectedIntent);
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:1314: private static void AssertChatRoundOutcome(int expectedRounds, string expectedContent, int rounds, OpenAiChatChoice choice)
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/QuadBrainOpenAiChatServiceTests.cs:1322: private static OpenAiChatChoice Choice(string? content, string finishReason)
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogOwnedHomeFilterContractTests.cs:25: private static Task<int> Query(string path) => Task.FromResult(path switch
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSanitizerRegistrationTests.cs:56: private static string ReadRepoFile(string relativePath) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextBackfillTests.cs:160: private static string IsolatedHome() => "/fixture/no-history";
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextBackfillTests.cs:162: private static SessionLogTurnContextExtractor PureExtractor() => new(new DirectoryTreeWalker(_ => []));
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextExtractorTests.cs:13: private readonly SessionLogTurnContextExtractor _sut = new(new DirectoryTreeWalker(_ => []));
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextExtractorTests.cs:82: const string home = "/fixture/home";
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTurnContextExtractorTests.cs:129: private static string IsolatedHome() => "/fixture/no-history";
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/TransactionGatedSessionLogServiceTests.cs:541: private static string FindRepositoryRoot() => QBrainAi.Tests.Shared.TestRepositoryRoot.Resolve();
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceCrossPlatformContractTests.cs:52: const string windowsWorkspace = @"C:\Users\fixture-user";
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceCrossPlatformContractTests.cs:71: const string posixWorkspace = "/fixture/workspaces/ExampleWorkspace";
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceCrossPlatformContractTests.cs:123: const string hubProduct = "/fixture/workspaces/QBrainAi";
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:29: private const string UntrustedMountPointMessage =
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:32: private const string PluginName = "mcpserver-scan-binding-plugin";
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:34: private readonly string _root = Path.Combine(Path.GetTempPath(), $"mcp-scan-binding-{Guid.NewGuid():N}");
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:46: private string Profile => Path.Combine(_root, "profile");
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:48: private string Workspace => Path.Combine(_root, "workspace");
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:50: private static bool SamePath(string left, string right) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:67: private (string Unlistable, string Linked) CreatePluginCacheProfile()
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:88: private string Resolve(DirectoryTreeWalker walker) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:132: private string ResolveWithReader(Func<string, string?> readText) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:170: private (string Unlistable, string Linked) CreateHistoryProfile()
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/UserProfileScanBindingTests.cs:224: private void CreateSingleCacheProfile(string kind)
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs:670: private static string FindRepoRoot() => QBrainAi.Tests.Shared.TestRepositoryRoot.Resolve();
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/WorkspacePathConsumersContractTests.cs:137: const string foreign = "/fixture/workspaces/ExampleWorkspace";
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Storage/AuditPayloadProviderMigrationTests.cs:18: private readonly string _serverConnectionString = SqlServerTestConnection.Server;
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Storage/AuditPayloadProviderMigrationTests.cs:20: private readonly SqlServerMigrationFailureReporter _failures = new();
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureArgumentsTests.cs:20: private static readonly Regex Silent = new(@"(^|\s)-s(\s|$)", RegexOptions.CultureInvariant);
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureArgumentsTests.cs:22: private static readonly Regex Wait = new(@"(^|\s)-w(\s|$)", RegexOptions.CultureInvariant);
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixtureTests.cs:22: const string external = "Host=database.example;Port=55432;Username=fixture;Password=fixture-data;Database=postgres";
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertions.cs:33: private static List<string> ReadStrings(SqliteConnection connection, string sql)
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs:13: private const string LegacyKey = "Q:\\__mcp_unit_test__\\QBrainAi";
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs:14: private const string CanonicalKey = "Q:/__mcp_unit_test__/QBrainAi";
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs:15: private readonly SqliteConnection _connection;
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs:88: private void SeedParent(string key) => Execute("INSERT INTO \"Workspaces\" VALUES ($key);", key);
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs:90: private void SeedChild(string key, string value)
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Storage/MigrationKeyAssertionsMockGateTests.cs:99: private void Execute(string sql, string? key = null)
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Storage/RemoveTodoRecordsMigrationTests.cs:21: private static readonly string WorkspacePath = ExpectedWorkspaceKey.Of(@"Q:\__mcp_unit_test__\QBrainAi");
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Storage/RemoveTodoRecordsMigrationTests.cs:22: private static readonly string StaleAnchorWorkspacePath = ExpectedWorkspaceKey.Of(@"C:\ProgramData\QBrainAi");
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerDecompose4nfBackfillMigrationTests.cs:29: private readonly SqlServerMigrationFailureReporter _failures = new();
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs:28: private const string RequiredCollection = "SQL Server LocalDB";
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs:30: private const string ScriptedSerializedName = "Scripted serialized collection";
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs:32: private const string ScriptedParallelName = "Scripted parallel collection";
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerLocalDbCollectionTests.cs:34: private const string ScriptedExplicitParallelName = "Scripted explicit parallel collection";
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureBindingTests.cs:16: private static SqlServerMigrationFailureContractTests.Probe Create()
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureContractTests.cs:120: async Task RunAsync(Func<Task> operation)
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureReporter.cs:13: private readonly List<Exception> _failures = [];
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureReporter.cs:14: private bool _active;
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerMigrationFailureReporter.cs:72: private void Begin()
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerRenameQuadBrainRolesMigrationTests.cs:29: private readonly SqlServerMigrationFailureReporter _failures = new();
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnectionTests.cs:21: private const string RequiredDefault =
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Storage/SqlServerTestConnectionTests.cs:77: const string external = "Server=sql.example.invalid;Database=master;User Id=tester;Encrypt=False";
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathContractTests.cs:31: private static readonly Dictionary<(string, WorkspacePathPlatform), string> AnyHost = new()
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathHostContractTests.cs:51: private static readonly Dictionary<(string, WorkspacePathPlatform), string> WindowsHost = new()
+  FIELD tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs:24: private const string Folder = "/scripted/cli-temp-folder";
+  FIELD tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs:26: private const string Fallback = "/scripted/cli-temp-fallback";
+  FIELD tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs:67: const string primary = "MCPSERVER_QUADBRAIN_CLI_TEMP";
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs:220: private static void SetAll(Func<string, string?> value)
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs:226: private static string? Prior(string name) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/TestSupport/CliTempVariablesTests.cs:229: private static Dictionary<string, string?> Scripted(Func<string, string?> value) =>
+  FIELD tests/QBrainAi.Support.Mcp.Tests/TestSupport/ProcessEnvironmentCollectionTests.cs:29: private const string RequiredCollection = "Process environment";
+  FIELD tests/QBrainAi.Support.Mcp.Tests/TestSupport/ScriptedTimeProvider.cs:18: private readonly DateTimeOffset[] _times;
+  FIELD tests/QBrainAi.Support.Mcp.Tests/TestSupport/ScriptedTimeProvider.cs:19: private int _next;
+  FIELD tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProvider.cs:18: private DateTimeOffset _utcNow;
+  FIELD tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProviderTests.cs:17: private static readonly DateTimeOffset Early = new(2001, 2, 3, 4, 5, 6, TimeSpan.Zero);
+  FIELD tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunction.cs:22: private const uint SetReparsePointControl = 0x000900A4;
+  FIELD tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunction.cs:23: private const uint GenericWrite = 0x40000000;
+  FIELD tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunction.cs:24: private const uint OpenExisting = 3;
+  FIELD tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunction.cs:25: private const uint FlagOpenReparsePoint = 0x00200000;
+  FIELD tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunction.cs:26: private const uint FlagBackupSemantics = 0x02000000;
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunction.cs:85: private static extern SafeFileHandle CreateFile(
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunction.cs:96: private static extern bool DeviceIoControl(
+  FIELD tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs:24: private const uint MountPointTag = 0xA0000003;
+  FIELD tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs:52: const string target = @"D:\Temp\mcp twelfth external";
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/TestSupport/WindowsJunctionTests.cs:99: private static byte[] Scripted(string target, uint tag, string prefix, bool nullGap, bool headerInLength)
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Web/UseCaseCanvasUiAssetTests.cs:98: private static string FindWwwrootFile(string folder, string file) =>
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Web/UseCaseUiAssetTests.cs:97: private static string FindWwwrootFile(string folder, string file) =>
+  FIELD tests/Shared/TestRepositoryRoot.cs:18: private const string RuleMessage =
+  METHOD-OR-TYPE tests/Shared/TestRepositoryRoot.cs:106: private static string? ReadBuildMetadata() =>
+  METHOD-OR-TYPE tests/Shared/TestRepositoryRoot.cs:112: private static bool IsRepositoryRoot(string root)
+  FIELD tests/TestSupport.Shared/ScratchQBrainAi.cs:25: private static readonly TimeSpan MarkerTimeout = TimeSpan.FromMinutes(1);
+  FIELD tests/TestSupport.Shared/ScratchQBrainAi.cs:26: private static readonly TimeSpan ServerHealthTimeout = TimeSpan.FromSeconds(30);
+  FIELD tests/TestSupport.Shared/ScratchQBrainAi.cs:28: private readonly List<string> _stdout = new();
+  FIELD tests/TestSupport.Shared/ScratchQBrainAi.cs:29: private readonly List<string> _stderr = new();
+  FIELD tests/TestSupport.Shared/ScratchQBrainAi.cs:30: private readonly object _lock = new();
+  FIELD tests/TestSupport.Shared/ScratchQBrainAi.cs:31: private Process? _process;
+  METHOD-OR-TYPE tests/TestSupport.Shared/ScratchQBrainAi.cs:33: private ScratchQBrainAi(string rootPath, int port, string supportAssemblyPath, string replHostAssemblyPath)
+  METHOD-OR-TYPE tests/TestSupport.Shared/ScratchQBrainAi.cs:169: private async Task InitializeAsync(string repoRoot)
+  METHOD-OR-TYPE tests/TestSupport.Shared/ScratchQBrainAi.cs:217: private async Task StageWorkspaceDatabaseAsync()
+  METHOD-OR-TYPE tests/TestSupport.Shared/ScratchQBrainAi.cs:243: private void StartProcess()
+  METHOD-OR-TYPE tests/TestSupport.Shared/ScratchQBrainAi.cs:311: private async Task<MarkerSettings> WaitForMarkerAsync()
+  METHOD-OR-TYPE tests/TestSupport.Shared/ScratchQBrainAi.cs:356: private bool TryReadMarker(out MarkerSettings? marker)
+  METHOD-OR-TYPE tests/TestSupport.Shared/ScratchQBrainAi.cs:413: private async Task WaitForHealthAsync(string baseUrl)
+  METHOD-OR-TYPE tests/TestSupport.Shared/ScratchQBrainAi.cs:449: private string BuildAppSettingsYaml()
+  METHOD-OR-TYPE tests/TestSupport.Shared/ScratchQBrainAi.cs:506: private static string YamlQuote(string value) => $"'{value.Replace("'", "''", StringComparison.Ordinal)}'";
+  METHOD-OR-TYPE tests/TestSupport.Shared/ScratchQBrainAi.cs:508: private static string Unquote(string value)
+  METHOD-OR-TYPE tests/TestSupport.Shared/ScratchQBrainAi.cs:546: private static TcpListener CreatePortProbe(int port)
+  METHOD-OR-TYPE tests/TestSupport.Shared/ScratchQBrainAi.cs:566: private static string ResolveAssemblyPath(string repoRoot, string configuration, string targetFramework, string projectName)
+  METHOD-OR-TYPE tests/TestSupport.Shared/ScratchQBrainAi.cs:592: private static string NormalizePath(string path)
+  METHOD-OR-TYPE tests/TestSupport.Shared/ScratchQBrainAi.cs:595: private sealed record MarkerSettings(int Port, string BaseUrl, string ApiKey);
+  METHOD-OR-TYPE tests/TestSupport.Shared/TemporaryInstanceChecks.cs:67: private static string? AliasedValue(IReadOnlyDictionary<string, string?> environment, string suffix) =>
+  FIELD tests/TestSupport.Shared/TemporaryInstanceChecks.cs:513: private static readonly string[] ConnectionStringPrefixes =
+  FIELD tests/TestSupport.Shared/TemporaryInstanceChecks.cs:516: private static readonly string[] HostSettings =
+  FIELD tests/TestSupport.Shared/TemporaryInstanceChecks.cs:585: private static readonly string[] HostPrefixes = ["DOTNET_", "ASPNETCORE_"];
+  METHOD-OR-TYPE tests/TestSupport.Shared/TemporaryInstanceChecks.cs:587: private static bool IsSqliteProvider(string provider) =>
+  METHOD-OR-TYPE tests/TestSupport.Shared/TemporaryInstanceChecks.cs:591: private static string? LastDataSource(string connectionString)
+  METHOD-OR-TYPE tests/TestSupport.Shared/TemporaryInstanceChecks.cs:603: private static string? ValueAfter(IReadOnlyList<string> arguments, string name)
+END undocumented=511 fields=162

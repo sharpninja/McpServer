@@ -1,0 +1,16 @@
+Now: 2026-11-05T08:32:06 key=test name only before=/mnt/legion2-github/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r13z4b-final-win-unit-1/unit (4820) after=/mnt/legion2-github/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r13z5-final-win-unit-1/unit (4832)
+onlyBefore=0 onlyAfter=12 common=4820
+--- only in before ---
+--- only in after ---
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.OwnedSpellingBuilder_LeavesNamesTheCheckRefuses
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.ReplStart_KeepsUnrelatedNamesExactly
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: "collapses case variants", failingRow: "unrelated names that differ only in case are kept")
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: "keeps other spellings of owned settings", failingRow: "another case of an owned setting is replaced")
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: "keeps other spellings of owned settings", failingRow: "another separator spelling of an owned setting is "···)
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityBuilders_AreRejectedInsidePassingHarness(wrong: "owned settings matched by name, not key", failingRow: "another separator spelling of an owned setting is "···)
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: "two-name rule matches case", failingRow: "two names of an owned product key that differ only"···)
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: "two-name rule on every name", failingRow: "unrelated names that differ only in case")
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: "two-name rule on product keys only", failingRow: "two names of an owned setting that differ only in "···)
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongKeyIdentityChecks_AreRejectedInsidePassingHarness(wrong: "two-name rule on product keys only", failingRow: "two separator spellings of an owned setting")
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongReplStarts_AreRejectedInsidePassingHarness(wrong: "builds the REPL child ignoring case", failingRow: "unrelated names that differ only in case reach the"···)
+QBrainAi.Repl.Core.Tests.TestSupport.OwnedInstanceKeyIdentityContractTests.WrongReplStarts_AreRejectedInsidePassingHarness(wrong: "reads the start environment ignoring case", failingRow: "unrelated names that differ only in case reach the"···)

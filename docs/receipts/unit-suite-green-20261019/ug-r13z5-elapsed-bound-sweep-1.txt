@@ -1,0 +1,40 @@
+RECEIPT started=2026-11-05T08:03:12 ended=2026-11-05T08:03:15 host=LAB-OMARCHY exit=0
+SCRIPT /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-CodeLines.ps1 sha256=6CB582531536BFCDFC583B99ACED75DD62505EED8C6D053A3FE448FC4EA64E72
+ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Roots | tests | -PatternFile | /home/sharpninja/.claude/scratch/pr82-review-20261019/pattern-elapsed-bounds-2.txt | -MaxLength | 200
+HEAD ff7dcf517bb788654442cc546012172f07b60b84
+Now: 2026-11-05T08:03:13 roots=tests pattern=Assert\.InRange\([^;]*Elapsed|Assert\.[A-Za-z]+\([^;]*Elapsed[^;]*(<|>)|Elapsed\s*(<|<=|>|>=)\s*TimeSpan|ElapsedMilliseconds\s*(<|<=|>|>=)
+tests/Build.Tests/BoundedProcessTests.cs:32: Assert.True(stopwatch.Elapsed < TimeSpan.FromSeconds(20), $"RunAsync waited {stopwatch.Elapsed} for the descendant.");
+tests/Build.Tests/BoundedProcessTests.cs:58: Assert.True(stopwatch.Elapsed < TimeSpan.FromSeconds(40), $"RunAsync returned after {stopwatch.Elapsed}.");
+tests/Build.Tests/BoundedProcessTests.cs:85: Assert.True(stopwatch.Elapsed < TimeSpan.FromSeconds(40), $"RunAsync returned after {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139FourteenthHarnessTests.cs:149: stopwatch.Elapsed < TimeSpan.FromSeconds(8),
+tests/QBrainAi.Support.Mcp.Tests/Documentation/BugTriage139SixteenthWindowsProcessTests.cs:183: stopwatch.Elapsed < TimeSpan.FromSeconds(7),
+tests/QBrainAi.Support.Mcp.Tests/Requirements/RequirementsRecoveryTests.cs:499: Assert.True(clock.Elapsed < TimeSpan.FromSeconds(20), $"The recovery save was not cut short by its budget: {clock.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Services/BugTriage139EighteenthTraversalTests.cs:61: Assert.True(stopwatch.Elapsed < TimeSpan.FromSeconds(1), $"Timeout took {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Services/RequirementsFourteenthLinuxNativeTests.cs:39: Assert.True(stopwatch.Elapsed < TimeSpan.FromSeconds(2), $"Opening the FIFO took {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogDenseGraphTests.cs:93: Assert.True(clock.Elapsed < TimeSpan.FromSeconds(20), $"The graph load was not cut short by its budget: {clock.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogReplaceSectionRetryableTests.cs:176: Assert.True(clock.Elapsed < TimeSpan.FromSeconds(30), $"The stalled SaveChanges was not cut short by its budget: {clock.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSubmitBudgetTests.cs:124: Assert.True(clock.Elapsed >= TimeSpan.FromSeconds(5), $"Save finished before the old 5 second cancel: {clock.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogSubmitBudgetTests.cs:125: Assert.True(clock.Elapsed < TimeSpan.FromSeconds(20), $"Save exceeded the 30 second Submit budget: {clock.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Services/SessionLogTriageStoreTests.cs:168: Assert.True(clock.Elapsed < TimeSpan.FromSeconds(20), $"The stalled SaveChanges was not cut short by its budget: {clock.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Services/StorageCommandBudgetTests.cs:26: Assert.True(clock.Elapsed < TimeSpan.FromSeconds(8), $"Budget took {clock.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Services/StorageCommandBudgetTests.cs:27: Assert.True(clock.Elapsed >= TimeSpan.FromSeconds(4), $"Budget expired too early: {clock.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Services/StorageCommandBudgetTests.cs:63: Assert.True(clock.Elapsed < TimeSpan.FromSeconds(2), $"Explicit budget took {clock.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Services/TriageServiceTests.cs:90: Assert.True(clock.Elapsed < TimeSpan.FromSeconds(8), $"Intake hung for {clock.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:371: Assert.True(stopwatch.Elapsed < TimeSpan.FromSeconds(1), $"FIFO traversal took {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:397: Assert.True(stopwatch.Elapsed < TimeSpan.FromSeconds(1), $"FUSE rejection took {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:450: Assert.True(stopwatch.Elapsed < TimeSpan.FromSeconds(1), $"Pinned-root traversal took {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:518: Assert.True(stopwatch.Elapsed < TimeSpan.FromSeconds(1), $"Caller {index} took {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:645: result.Elapsed < TimeSpan.FromSeconds(1),
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthLinuxTests.cs:707: Assert.True(stopwatch.Elapsed < TimeSpan.FromSeconds(1), $"Pinned-root export took {stopwatch.Elapsed}.");
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:286: invocation.Elapsed < TimeSpan.FromMilliseconds(250),
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139FifteenthNativeTests.cs:625: while (deadline.Elapsed < TimeSpan.FromSeconds(5))
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:51: stopwatch.Elapsed < TimeSpan.FromSeconds(1),
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:181: stopwatch.Elapsed < TimeSpan.FromSeconds(1),
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:235: stopwatch.Elapsed < TimeSpan.FromSeconds(1),
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:384: stopwatch.Elapsed < TimeSpan.FromSeconds(1),
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:490: stopwatch.Elapsed < TimeSpan.FromSeconds(1),
+tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139SixteenthLinuxTests.cs:908: while (stopwatch.Elapsed < TimeSpan.FromSeconds(5))
+tests/QBrainAi.Support.Mcp.Tests/Storage/SqliteBoundedOpenFourteenthTests.cs:178: stopwatch.Elapsed < TimeSpan.FromSeconds(1),
+tests/QBrainAi.Support.Mcp.Tests/Storage/SqliteBoundedOpenFourteenthTests.cs:245: Assert.InRange(stopwatch.Elapsed, TimeSpan.Zero, TimeSpan.FromSeconds(5));
+tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceIdentityFourteenthNativeTests.cs:191: stopwatch.Elapsed < TimeSpan.FromSeconds(5),
+END matches=34

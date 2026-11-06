@@ -1,0 +1,14 @@
+Record comparison for TR-MCP-SERVICEUPDATE-001, written 2026-11-05T03:09:41 local by ClaudeCode (Compare-RecordAcrossReceipts.ps1; read only over the receipts, earliest first).
+receipt /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/traceability-reconcile-20261102T111536.json time=2026-11-02T11:20:26 sha256=6E29485286DC6DF613D3C489699C5C15080A2C3F3C2696DAA0712B623BA0F41D criteria=5
+receipt /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r12z3-criteria-readback-1.json time=2026-11-04T15:30:16 sha256=A54DD93571F8F06FBE3B8BF7F03DAA3D5089AE4CF63C8C2D9633F7373A5FDBC1 criteria=6
+receipt /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r12z3-store-readback-2.json time=2026-11-04T17:43:48 sha256=5EA2A2767FDE67E5DFA31B8AFAF85E2AB3F58051778D0BCB2AAC903BB09FA304 criteria=7
+receipt /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r12z3c-store-readback-1.json time=2026-11-04T19:40:53 sha256=6C56A29DA0ED70A7081FECAB8C68AB6410D54C1D60A0E01229E6EE1479F528F1 criteria=8
+pair traceability-reconcile-20261102T111536.json -> ug-r12z3-criteria-readback-1.json
+  ADDED repeated-properties
+  changes=1
+pair ug-r12z3-criteria-readback-1.json -> ug-r12z3-store-readback-2.json
+  ADDED startup-health-wait
+  changes=1
+pair ug-r12z3-store-readback-2.json -> ug-r12z3c-store-readback-1.json
+  ADDED failed-update-startable
+  changes=1

@@ -1,0 +1,14 @@
+RECEIPT started=2026-11-05T04:25:51 ended=2026-11-05T04:26:11 host=LAB-OMARCHY exit=0
+SCRIPT /home/sharpninja/.claude/scratch/pr82-review-20261019/Get-AddedLineCitations.ps1 sha256=970964F8F788FF2C7A7B18739E9CEF7CA746C745E6C47AEFF6B6FA952E50CCAE
+ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Base | 6082b116
+HEAD 4398cffc06878dfb1d3defad3cfb67465863fe67
+Now: 2026-11-05T04:25:51 base=6082b116
+store ids=1453
+added-line citations: ids=16 absent=4 [FR-MCP-MEMORY-010, TEST-MCP-MEMORY-010, TR-MCP-MEMORY-JOBS-002, TR-PLANNED-CORE-013]
+  w/tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogFileWatcherTests.cs:57: TR-PLANNED-CORE-013
+  w/tests/QBrainAi.Support.Mcp.Tests/Ingestion/SessionLogFileWatcherTests.cs:62: TR-PLANNED-CORE-013
+  w/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryConsolidateJobTests.cs:20: TR-MCP-MEMORY-JOBS-002
+  w/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryConsolidateJobTests.cs:52: TR-MCP-MEMORY-JOBS-002
+  w/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryModelTests.cs:13: TEST-MCP-MEMORY-010
+  w/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryModelTests.cs:13: FR-MCP-MEMORY-010
+  w/tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryModelTests.cs:13: FR-MCP-MEMORY-010

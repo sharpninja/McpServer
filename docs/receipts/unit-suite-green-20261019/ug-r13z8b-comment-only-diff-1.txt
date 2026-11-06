@@ -1,0 +1,7 @@
+RECEIPT started=2026-11-05T16:18:48 ended=2026-11-05T16:18:48 host=LAB-OMARCHY exit=0
+SCRIPT /home/sharpninja/.claude/scratch/pr82-review-20261019/Test-CommentOnlyDiff-v2.ps1 sha256=57E4515CAD25ACC926B2B121D13D96F94DE52BBB9A819250A561E4C4D752A860
+ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Paths:src/QBrainAi.Repl.Core/RequirementsWorkflow.cs
+HEAD b21c21ecdee4b2658830f998b45efcd0491f1d36
+Now: 2026-11-05T16:18:48 head=b21c21ec
+PATH src/QBrainAi.Repl.Core/RequirementsWorkflow.cs added=2 doc=2 blank=0 removed=0 other=0
+END doc=2 blank=0 breaking=0

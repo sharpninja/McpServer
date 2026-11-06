@@ -1,0 +1,42 @@
+RECEIPT started=2026-11-05T14:04:56 ended=2026-11-05T14:04:58 host=LAB-OMARCHY exit=0
+SCRIPT /home/sharpninja/.claude/scratch/pr82-review-20261019/Find-UndocumentedAddedMembers-v2.ps1 sha256=8C484DCDC135579512854D92289F618266A0D29E06591AAFC67D5CD1839A850E
+ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Range | 679eb788..88c5abcc
+HEAD 88c5abccee5f92b785f1368fdaace50dc0d4e2c2
+Now: 2026-11-05T14:04:56 range=679eb788..88c5abcc files=94
+  FIELD src/QBrainAi.GraphRag/Services/GraphRagService.cs:45: private readonly TimeProvider _timeProvider;
+  FIELD src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs:16: private readonly TimeProvider _time;
+  FIELD src/QBrainAi.Services/Services/FederationEnvelopeSigner.cs:15: private readonly TimeProvider _time;
+  FIELD src/QBrainAi.Services/Services/MemoryService.cs:18: private readonly TimeProvider _timeProvider;
+  FIELD src/QBrainAi.Services/Services/SessionLogService.cs:36: private readonly TimeProvider _time;
+  FIELD src/QBrainAi.TransactionSecurity/Services/TransactionSecurityServices.cs:183: private readonly TimeProvider _time;
+  FIELD tests/QBrainAi.Client.Tests/RequirementTimestampJsonBindingTests.cs:19: private static readonly JsonSerializerOptions s_clientOptions = new() { PropertyNameCaseInsensitive = true, TypeInfoResolver = McpClientJsonContext.Default };
+  FIELD tests/QBrainAi.Repl.Core.Tests/SessionLogTestHelpers.cs:28: private readonly Func<DateTimeOffset> _clock;
+  FIELD tests/QBrainAi.Repl.Core.Tests/StubAuthRotationHandlerTests.cs:240: private readonly Func<DateTimeOffset> _clock;
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:41: private const string OwnedRoot = "/scratch/owned";
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:42: private const string OwnedDatabase = "/scratch/owned/data/qbrainai.db";
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:43: private const string LiveDatabase = "/home/example/live/qbrainai.db";
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:44: private const string OwnedAddress = "http://127.0.0.1:49123";
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:45: private const string LiveAddress = "http://127.0.0.1:7147";
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:46: private const StringComparison IgnoreCase = StringComparison.OrdinalIgnoreCase;
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:48: private static readonly string[] HostPrefixes = ["DOTNET_", "ASPNETCORE_"];
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:49: private static readonly string[] ConnectionStringPrefixes = ["SQLCONNSTR_", "SQLAZURECONNSTR_", "MYSQLCONNSTR_", "POSTGRESQLCONNSTR_", "CUSTOMCONNSTR_"];
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:50: private static readonly string[] ReferenceSections = ["Mcp", "QBrainAi", "ConnectionStrings", "Kestrel"];
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:51: private static readonly string[] ReferenceFlatPrefixes = ["MCP_", "QBRAINAI_", "MCPSERVER_"];
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:52: private static readonly string[] ReferenceNames =
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs:55: private static readonly string[] RawPrefixes = ["Mcp__", "QBrainAi__", "MCP_", "QBRAINAI_", "MCPSERVER_", "ConnectionStrings__"];
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceProviderSettingContractTests.cs:18: private const string Root = "/scratch/owned";
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceProviderSettingContractTests.cs:26: private static readonly ProviderCase[] Cases =
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/ScriptedClock.cs:17: private readonly DateTimeOffset[] _times;
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/ScriptedClock.cs:18: private int _next;
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/ScriptedPathIdentity.cs:121: static bool Windows(RootKind kind) => kind is RootKind.Drive or RootKind.Unc;
+  FIELD tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs:31: private const string UncOwnedRoot = "//server/share/owned";
+  METHOD-OR-TYPE tests/QBrainAi.Repl.Core.Tests/TestSupport/TestOutputFolderContractTests.cs:228: static bool Separator(char value) => value is '/' or '\\';
+  FIELD tests/QBrainAi.Support.Mcp.Tests/Services/FederationEnvelopeSignerTests.cs:17: private readonly QBrainAi.Support.Mcp.Tests.TestSupport.SettableTimeProvider _clock =
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/FederationEnvelopeSignerTests.cs:183: private static FederationOperationRequest Operation() => new()
+  METHOD-OR-TYPE tests/QBrainAi.Support.Mcp.Tests/Services/FederationEnvelopeSignerTests.cs:191: private FederationEnvelopeSigner CreateSigner()
+  FIELD tests/QBrainAi.Support.Mcp.Tests/TestSupport/ScriptedTimeProvider.cs:18: private readonly DateTimeOffset[] _times;
+  FIELD tests/QBrainAi.Support.Mcp.Tests/TestSupport/ScriptedTimeProvider.cs:19: private int _next;
+  FIELD tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProvider.cs:18: private DateTimeOffset _utcNow;
+  FIELD tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProviderTests.cs:17: private static readonly DateTimeOffset Early = new(2001, 2, 3, 4, 5, 6, TimeSpan.Zero);
+  FIELD tests/TestSupport.Shared/TemporaryInstanceChecks.cs:585: private static readonly string[] HostPrefixes = ["DOTNET_", "ASPNETCORE_"];
+END undocumented=36 fields=32

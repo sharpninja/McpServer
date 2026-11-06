@@ -1,0 +1,38 @@
+RECEIPT 2026-11-05T07:23:31 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinInteractiveLane.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-11-05T07:23:26 host=PAYTON-LEGION2 user=kingd
+WORKTREE HEAD b79fd51f1638cea821e912abcea8838b7e20bf3c
+PROOF START 2026-11-05T06:41:24 user=kingd session=1 interactive=True head=b79fd51f1638cea821e912abcea8838b7e20bf3c
+EXIT -1 2026-11-05T07:21:30
+TASK state=Ready lastRun=11/05/2026 06:41:22 result=0
+LOG lines=225
+  LOG 06:41:36 [INF] Integration lane filter: Category=Integration&Platform!=Linux
+  LOG 06:41:36 [INF] Integration lane filter for QBrainAi.Support.Mcp.Tests: Category=Integration&Platform!=Linux
+  LOG 06:41:36 [INF] Integration lane filter for QBrainAi.McpAgent.Tests: Category=Integration&Platform!=Linux
+  LOG 06:41:36 [INF] Integration lane filter for QBrainAi.Repl.Core.Tests: Category=Integration&Platform!=Linux
+  LOG 06:41:36 [INF] Integration lane filter for QBrainAi.QBAgent.Tests: Category=Integration&Platform!=Linux
+  LOG 06:41:36 [INF] Integration lane filter for Build.Tests: Category=Integration&Platform!=Linux
+  LOG 06:41:36 [INF] Integration lane filter for QBrainAi.Repl.IntegrationTests: Category=Integration&Platform!=Linux
+  LOG 06:41:36 [INF] Integration lane filter for QBrainAi.Support.Mcp.IntegrationTests: Category=Integration&Platform!=Linux&(FullyQualifiedName~.RequirementScopeLayerReplIntegrationTests.|FullyQualifiedName~.QuadBrainOllamaEndpointIntegrationTests.)
+  LOG 06:45:31 [DBG] Failed!  - Failed:     1, Passed:   441, Skipped:     0, Total:   442, Duration: 2 m 50 s - QBrainAi.Support.Mcp.Tests.dll (net10.0)
+  LOG 06:45:39 [DBG] Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: 108 ms - QBrainAi.McpAgent.Tests.dll (net10.0)
+  LOG 06:45:48 [DBG] Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 325 ms - QBrainAi.Repl.Core.Tests.dll (net10.0)
+  LOG 06:45:57 [DBG] Passed!  - Failed:     0, Passed:     3, Skipped:     0, Total:     3, Duration: 135 ms - QBrainAi.QBAgent.Tests.dll (net10.0)
+  LOG 06:51:41 [DBG] Passed!  - Failed:     0, Passed:    85, Skipped:     0, Total:    85, Duration: 5 m 37 s - Build.Tests.dll (net10.0)
+  LOG 07:18:09 [DBG] Passed!  - Failed:     0, Passed:   179, Skipped:     0, Total:   179, Duration: 26 m - QBrainAi.Repl.IntegrationTests.dll (net10.0)
+  LOG 07:21:29 [DBG] Passed!  - Failed:     0, Passed:     6, Skipped:     0, Total:     6, Duration: 2 m 53 s - QBrainAi.Support.Mcp.IntegrationTests.dll (net10.0)
+  LOG 07:21:29 [ERR] Target MigrationIntegrationTests has thrown an exception
+  LOG [ERR] MigrationIntegration: Target MigrationIntegrationTests has thrown an exception
+  LOG Build failed on 11/5/2026 7:21:29 AM. (╯°□°）╯︵ ┻━┻
+TRX \provider\Build.Tests\Build.Tests.trx total=85 executed=85 passed=85 failed=0 notExecuted=0
+TRX \provider\QBrainAi.McpAgent.Tests\QBrainAi.McpAgent.Tests.trx total=1 executed=1 passed=1 failed=0 notExecuted=0
+TRX \provider\QBrainAi.QBAgent.Tests\QBrainAi.QBAgent.Tests.trx total=3 executed=3 passed=3 failed=0 notExecuted=0
+TRX \provider\QBrainAi.Repl.Core.Tests\QBrainAi.Repl.Core.Tests.trx total=2 executed=2 passed=2 failed=0 notExecuted=0
+TRX \provider\QBrainAi.Repl.IntegrationTests\QBrainAi.Repl.IntegrationTests.trx total=179 executed=179 passed=179 failed=0 notExecuted=0
+TRX \provider\QBrainAi.Support.Mcp.IntegrationTests\QBrainAi.Support.Mcp.IntegrationTests.trx total=6 executed=6 passed=6 failed=0 notExecuted=0
+TRX \provider\QBrainAi.Support.Mcp.Tests\QBrainAi.Support.Mcp.Tests.trx total=442 executed=442 passed=441 failed=1 notExecuted=0
+  Failed QBrainAi.Support.Mcp.Tests.Services.SessionLogTriageStoreTests.SubmitAsync_HungSaveChanges_FailsFastWithStorageUnavailable :: SaveChanges budget took 00:00:04.4203680.
+TASK REMOVED McpUnitGreenLane-r13z4c-final present-after=False
+END 2026-11-05T07:23:31

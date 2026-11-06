@@ -1,0 +1,13 @@
+Store readback comparison, written 2026-11-05T08:40:57 local by ClaudeCode (Compare-StoreReadbacks.ps1; read only over the two receipts).
+before /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z4b-store-readback-1.json sha256=88773CAA4D687861F2F4D07B707DA37A14E9029091D975A7F240DF10FD69DA02
+after /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z5-store-readback-1.json sha256=D23090B7EBF594DA6EB1A83FA7EC3D3B37F1CF750C676F664EBB79FBC5A04DE8
+before read 2026-11-05T05:01:30; after read 2026-11-05T08:40:43
+TR-MCP-SERVICEUPDATE-001: criteria before=8 after=8
+TR-MCP-USECASE-018: criteria before=7 after=7
+FR-MCP-TESTRESOURCE-001: criteria before=12 after=12
+  position 3 id=ac-4: CHANGED append=True satisfied False->False tail= A name is matched exactly, as the process environment holds it: two inherited names that differ only in case are two variables, and each unrelated one is kept with its own value. An inherited name that sets the same configuration key as one of the instance's own settings, under any spelling, is a competing value for that setting, not an unrelated variable: the instance's setting replaces it, and a start environment that holds two names of a key the instance sets that differ only in separators or case is refused, as two names of one product key are (seventh holistic read before hostile validation round 13, finding g1; strengthened between rounds under the operator's "Strengthening Acceptance Criteria should always be the recommended option" and "don't gate on me between rounds", 2026-11-05).
+IMPL-UNITGREEN-001: tasks before=48 after=50
+  task 48: CHANGED done False->False
+  task 49: NEW done=False
+  task 50: NEW done=False
+IMPL-SERVICEOVERRIDES-001: tasks before=3 after=3

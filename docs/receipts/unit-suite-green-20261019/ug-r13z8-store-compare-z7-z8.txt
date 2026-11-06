@@ -1,0 +1,11 @@
+Store readback comparison, written 2026-11-05T16:37:00 local by ClaudeCode (Compare-StoreReadbacks.ps1; read only over the two receipts).
+before /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z7-store-readback-1.json sha256=713EA861AA31ADCEA5EE180CDB0F4A267BC387311543DF4F86241850D97564DC
+after /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z8-store-readback-1.json sha256=2DE679E90C7F85067F1D84D01573AFA9F2F3045F21A14612B9F328F9B0481664
+before read 2026-11-05T14:54:24; after read 2026-11-05T16:36:37
+TR-MCP-SERVICEUPDATE-001: criteria before=8 after=8
+TR-MCP-USECASE-018: criteria before=7 after=7
+FR-MCP-TESTRESOURCE-001: criteria before=12 after=12
+IMPL-UNITGREEN-001: tasks before=52 after=53
+  task 52: CHANGED done False->False
+  task 53: NEW done=False
+IMPL-SERVICEOVERRIDES-001: tasks before=3 after=3

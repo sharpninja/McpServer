@@ -1,0 +1,20 @@
+RECEIPT 2026-11-05T11:04:35 host=PAYTON-LEGION2 route=ssh-kingd script=/home/sharpninja/.claude/scratch/pr82-review-20261019/remote/Get-WinTrxCaseMaxDurations.ps1 exit=0
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+READ 2026-11-05T11:04:34 host=PAYTON-LEGION2 worktree=unit-green-interactive-20261019 fragments=SqlServer,SessionLogTriageStoreTests.SubmitAsync_HungSaveChanges,RequirementsRecoveryTests.ApplyAsync_HungSave,SessionLogDenseGraphTests.UpsertTurnAsync_SlowGraphLoad,SessionLogReplaceSectionRetryableTests.ReplaceTurnSectionAsync_HungSaveChanges,StorageCommandBudgetTests
+RUNS read=1 cases=13
+CASE runs=1 Passed=1 min=1.87s max=1.87s maxRun=ug-r13z5-final-win-lane-2 QBrainAi.Support.Mcp.Tests.Requirements.RequirementsRecoveryTests.ApplyAsync_HungSave_IsRetryable503
+CASE runs=1 Passed=1 min=1.96s max=1.96s maxRun=ug-r13z5-final-win-lane-2 QBrainAi.Support.Mcp.Tests.Services.SessionLogDenseGraphTests.UpsertTurnAsync_SlowGraphLoad_FailsRetryableWithoutPersisting
+CASE runs=1 Passed=1 min=5.12s max=5.12s maxRun=ug-r13z5-final-win-lane-2 QBrainAi.Support.Mcp.Tests.Services.SessionLogReplaceSectionRetryableTests.ReplaceTurnSectionAsync_HungSaveChanges_FailsFastWithRetryableUnavailable
+CASE runs=1 Passed=1 min=1.01s max=1.01s maxRun=ug-r13z5-final-win-lane-2 QBrainAi.Support.Mcp.Tests.Services.SessionLogTriageStoreTests.SubmitAsync_HungSaveChanges_FailsFastWithStorageUnavailable
+CASE runs=1 Passed=1 min=0.21s max=0.21s maxRun=ug-r13z5-final-win-lane-2 QBrainAi.Support.Mcp.Tests.Services.StorageCommandBudgetTests.ExecuteAsync_ExplicitBudget_ExpiresAtThatBudget
+CASE runs=1 Passed=1 min=4.99s max=4.99s maxRun=ug-r13z5-final-win-lane-2 QBrainAi.Support.Mcp.Tests.Services.StorageCommandBudgetTests.ExecuteAsync_HungWork_FailsWithinEightSeconds
+CASE runs=1 Passed=1 min=0s max=0s maxRun=ug-r13z5-final-win-lane-2 QBrainAi.Support.Mcp.Tests.Storage.AddSessionLogTurnPlanFileAndTodoIdMigrationTests.SqlServerMigration_UpAddsColumns_DownDropsThem
+CASE runs=1 Passed=1 min=5.24s max=5.24s maxRun=ug-r13z5-final-win-lane-2 QBrainAi.Support.Mcp.Tests.Storage.SessionLogAgentSessionHeaderMigrationTests.SqlServerUpSql_LegacySessionLogs_AddsHeaderColumnsAndTagsIdempotently
+CASE runs=1 Passed=1 min=6.48s max=6.48s maxRun=ug-r13z5-final-win-lane-2 QBrainAi.Support.Mcp.Tests.Storage.SqlServerAuditPayloadMigrationTests.Migration_PersistsCompressedPayloads_AndDeniesAuditMutation
+CASE runs=1 Passed=1 min=8.06s max=8.06s maxRun=ug-r13z5-final-win-lane-2 QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables
+CASE runs=1 Passed=1 min=7.44s max=7.44s maxRun=ug-r13z5-final-win-lane-2 QBrainAi.Support.Mcp.Tests.Storage.SqlServerDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows
+CASE runs=1 Passed=1 min=6.07s max=6.07s maxRun=ug-r13z5-final-win-lane-2 QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows
+CASE runs=1 Passed=1 min=5.8s max=5.8s maxRun=ug-r13z5-final-win-lane-2 QBrainAi.Support.Mcp.Tests.Storage.SqlServerRenameQuadBrainRolesMigrationTests.MigrateDown_RenameQuadBrainRoles_RestoresLegacyHemisphereRows
+END 2026-11-05T11:04:34
