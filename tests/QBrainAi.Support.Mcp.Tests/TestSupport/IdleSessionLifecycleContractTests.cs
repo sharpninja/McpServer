@@ -9,9 +9,12 @@ namespace QBrainAi.Support.Mcp.Tests.TestSupport;
 /// including across a cleanup the test triggers between them; no cleanup runs unless the test triggers it, even when
 /// the scripted clock has passed the threshold; a triggered cleanup keeps a session exactly at the strict threshold and
 /// removes it one step past it; and a create after the removal gives a new session. Each keep assertion after a trigger
-/// is read only once the same triggered pass is seen to have run to its end: a sentinel session for a second agent and
-/// workspace, one step older, is already removed. The trace is run at a reference far before and one far after the real
-/// clock, so it gives the same result whatever the real time or elapsed time is.
+/// is read only once the same triggered pass is seen to have run to its end: a sentinel session under a second key, one
+/// step older, is already removed. That observation shows a finished pass because no removal in the trace can await:
+/// the scripted pool's pass has no await, and in the service binding no session holds an interactive session, so no
+/// removal waits on a release. A removal decision is read directly after its trigger, because an unfinished pass can only
+/// make it fail. The trace is run at a reference far before and one far after the real clock, so it gives the same result
+/// whatever the real time or elapsed time is.
 /// </summary>
 /// <remarks>
 /// Requirement coverage: TR-MCP-USECASE-018 AC-006 (and TR-MCP-USECASE-019 AC-008, which states these rules once with
@@ -26,6 +29,7 @@ namespace QBrainAi.Support.Mcp.Tests.TestSupport;
 /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
 /// <item><term>2026-11-06</term><description>TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "This includes an age, expiry or staleness decision that a background callback in the code under test makes"): added because hostile validation round 13 finding R13-F1 found that the voice-session reuse unit test depended on a real cleanup timer and the live clock; the reviewer proposed the tests VoiceSessionReuse_DoesNotDependOnWallClockOrCleanupScheduling and IdleCleanup_UsesScriptedAgeBoundary, with negative controls for a live clock, uncontrolled cleanup scheduling and an inclusive comparison.</description></item>
 /// <item><term>2026-11-06</term><description>TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "A test that triggers such a callback asserts its decisions only after it has observed that the pass it triggered has run to its end"): the trace now creates a sentinel session one step older than the session under test and reads each keep decision after a trigger only once the sentinel is seen removed by the same pass, the pool gains <see cref="IIdleSessionPool.CreateSentinelAsync"/>, and a negative control rejects a pool whose triggered pass runs only at the next trigger, because the fifteenth holistic read before hostile validation round 14 (finding d7) found that the trace read a keep decision right after a trigger without observing that the pass had finished, and the earlier trace accepted that pool (red mock gate ug-r14z13-mockgate-red-1).</description></item>
+/// <item><term>2026-11-06</term><description>TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "Such an observation shows a finished pass only when no removal of that pass can suspend before the decision is read"): the documentation and the sentinel assertion's message now state the condition the sentinel observation rests on (no removal in the trace can await) and why the removal decision is read directly, the sentinel is described as a second key, and the scripted pool's summary names the deferred control's two changed properties, because the sixteenth holistic read before hostile validation round 14 (findings e1, g2, g3 and c3) found that a removed sentinel shows only that a pass reached it when removals can await, and that those statements were wider than the code. No assertion and no pool changed.</description></item>
 /// </list>
 /// </remarks>
 public sealed class IdleSessionLifecycleContractTests
@@ -37,11 +41,11 @@ public sealed class IdleSessionLifecycleContractTests
     private static readonly DateTimeOffset AnotherClock = new(2026, 6, 15, 12, 0, 0, TimeSpan.Zero);
 
     /// <summary>
-    /// A pool under the contract, driven by the trace: the test sets the scripted clock, creates sessions for one fixed
-    /// agent and workspace and a sentinel for a second one, checks whether a session still exists, and triggers the
-    /// background cleanup.
+    /// A pool under the contract, driven by the trace: the test sets the scripted clock, creates sessions under one fixed
+    /// key (one agent and workspace) and a sentinel under a second key, checks whether a session still exists, and
+    /// triggers the background cleanup. A pool bound to the trace must not let a removal of its triggered pass await.
     /// </summary>
-    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "A test that triggers such a callback asserts its decisions only after it has observed that the pass it triggered has run to its end"): <see cref="CreateSentinelAsync"/> added for the fifteenth holistic read before hostile validation round 14, finding d7.</remarks>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "A test that triggers such a callback asserts its decisions only after it has observed that the pass it triggered has run to its end"): <see cref="CreateSentinelAsync"/> added for the fifteenth holistic read before hostile validation round 14, finding d7. 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "Such an observation shows a finished pass only when no removal of that pass can suspend before the decision is read"): the summary names the sentinel's second key and the no-await condition, for the sixteenth holistic read before hostile validation round 14, findings c3 and e1.</remarks>
     internal interface IIdleSessionPool : IDisposable
     {
         /// <summary>Sets the scripted clock every later step reads.</summary>
@@ -53,11 +57,12 @@ public sealed class IdleSessionLifecycleContractTests
         Task<string> CreateAsync();
 
         /// <summary>
-        /// Creates (or reuses) the sentinel session for a second fixed agent and workspace, which no
-        /// <see cref="CreateAsync"/> reuses; the trace reads it to see that a triggered pass has run to its end.
+        /// Creates (or reuses) the sentinel session under a second fixed key (in the service binding, the same agent in a
+        /// second workspace), which no <see cref="CreateAsync"/> reuses; the trace reads it to see that a triggered pass
+        /// whose removals cannot await has run to its end.
         /// </summary>
         /// <returns>The sentinel session id.</returns>
-        /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added for the fifteenth holistic read before hostile validation round 14, finding d7.</remarks>
+        /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added for the fifteenth holistic read before hostile validation round 14, finding d7. 2026-11-06, TR-MCP-USECASE-018 AC-006: the summary names the second key and the no-await condition, for the sixteenth holistic read before hostile validation round 14, findings c3 and e1.</remarks>
         Task<string> CreateSentinelAsync();
 
         /// <summary>Whether the session still exists, read without refreshing its idle age.</summary>
@@ -76,7 +81,7 @@ public sealed class IdleSessionLifecycleContractTests
     /// </summary>
     /// <param name="createPool">Creates a pool whose scripted clock starts at the given reference.</param>
     /// <returns>A task that completes when every step has been asserted.</returns>
-    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "A test that triggers such a callback asserts its decisions only after it has observed that the pass it triggered has run to its end"): the trace creates the sentinel first and, after the trigger at the threshold, asserts it removed before it reads the keep decision, because the fifteenth holistic read before hostile validation round 14 (finding d7) found that a pass still running or running later could make that keep assertion pass.</remarks>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "A test that triggers such a callback asserts its decisions only after it has observed that the pass it triggered has run to its end"): the trace creates the sentinel first and, after the trigger at the threshold, asserts it removed before it reads the keep decision, because the fifteenth holistic read before hostile validation round 14 (finding d7) found that a pass still running or running later could make that keep assertion pass. 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "Such an observation shows a finished pass only when no removal of that pass can suspend before the decision is read"): the sentinel assertion's message names the condition it rests on, that no removal in the trace can await, for the sixteenth holistic read before hostile validation round 14, finding e1; the removal decision after the second trigger is read directly, as the criterion allows (finding g2). No assertion changed.</remarks>
     internal static async Task AssertLifecycleAsync(Func<DateTimeOffset, IIdleSessionPool> createPool)
     {
         ArgumentNullException.ThrowIfNull(createPool);
@@ -92,7 +97,7 @@ public sealed class IdleSessionLifecycleContractTests
 
             pool.SetClock(start + IdleTimeout);
             pool.TriggerCleanup();
-            Assert.False(await pool.ExistsAsync(sentinel).ConfigureAwait(true), $"At {reference:O}: the triggered pass has run to its end before its decisions are read: the sentinel, one step past the idle threshold, is already removed.");
+            Assert.False(await pool.ExistsAsync(sentinel).ConfigureAwait(true), $"At {reference:O}: the triggered pass, whose removals cannot await in this trace, has run to its end before its decisions are read: the sentinel, one step past the idle threshold, is already removed.");
             Assert.True(await pool.ExistsAsync(first).ConfigureAwait(true), $"At {reference:O}: the same triggered pass keeps a session exactly at the idle threshold (the comparison is strict).");
             var second = await pool.CreateAsync().ConfigureAwait(true);
             Assert.True(first == second, $"At {reference:O}: the second create reuses the idle session across an interleaved cleanup.");
@@ -159,11 +164,13 @@ public sealed class IdleSessionLifecycleContractTests
     /// <summary>
     /// The independent scripted pool: one session per create unless an existing one for the same key (the fixed session
     /// or the sentinel) is reused; a create or reuse records the scripted instant; a cleanup pass removes every session
-    /// whose idle age is more than the timeout. The controls change one property each: the clock the cleanup reads,
-    /// whether the cleanup runs on its own whenever the clock moves, the comparison, whether creates reuse, and whether a
-    /// triggered pass runs before the trigger returns or only at the next trigger.
+    /// whose idle age is more than the timeout. A pass has no await, so a pass that runs before the trigger returns has
+    /// run to its end when the trigger returns. The controls change one property each (the clock the cleanup reads,
+    /// whether the cleanup runs on its own whenever the clock moves, the comparison, and whether creates reuse), except the
+    /// deferred control, which changes two: its triggered pass runs only at the next trigger, and it compares inclusively,
+    /// the pairing the slice Z12 trace accepted.
     /// </summary>
-    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "A test that triggers such a callback asserts its decisions only after it has observed that the pass it triggered has run to its end"): sessions are now kept per key so the sentinel is never reused for the fixed session, and the deferred-pass control was added, for the fifteenth holistic read before hostile validation round 14, finding d7.</remarks>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "A test that triggers such a callback asserts its decisions only after it has observed that the pass it triggered has run to its end"): sessions are now kept per key so the sentinel is never reused for the fixed session, and the deferred-pass control was added, for the fifteenth holistic read before hostile validation round 14, finding d7. 2026-11-06, TR-MCP-USECASE-018 AC-006: the summary names the deferred control's two changed properties and that a pass has no await, because the sixteenth holistic read before hostile validation round 14 (findings g3 and e1) found "one property each" false for that control; no behavior change.</remarks>
     private sealed class ScriptedPool : IIdleSessionPool
     {
         /// <summary>The key of the fixed session.</summary>

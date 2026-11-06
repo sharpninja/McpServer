@@ -25,6 +25,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
 /// <item><term>2026-11-06</term><description>TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "This includes an age, expiry or staleness decision that a background callback in the code under test makes"): every fixture service now runs on a scripted clock whose timers fire only when the test fires them, and four bindings were added (the lifecycle trace of <see cref="IdleSessionLifecycleContractTests"/>, decisions D8 and D9 of <see cref="AgeBoundaryContractTests"/>, and the cleanup schedule), because hostile validation round 13 finding R13-F1 found that the session-reuse case depended on the service's real 60-second cleanup timer and the live clock. The earlier cases and their assertions are unchanged; documented in the same change (MEMORY-FACT-008).</description></item>
 /// <item><term>2026-11-06</term><description>TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "A test that triggers such a callback asserts its decisions only after it has observed that the pass it triggered has run to its end"): the lifecycle pool creates the trace's sentinel in a second workspace, decision D8's binding asserts a sentinel removed by the same fired pass before each row is read, and the three sibling cases of the round 13 sweep (the two SubmitTurnAsync cases and the streaming error case) gained XML docs, because the fifteenth holistic read before hostile validation round 14 (findings d7 and g2) found that a keep decision was read without observing that the pass had finished and that those docs were missing. The earlier assertions are unchanged.</description></item>
+/// <item><term>2026-11-06</term><description>TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "Such an observation shows a finished pass only when no removal of that pass can suspend before the decision is read"): the lifecycle pool, the lifecycle binding and decision D8's binding now state the condition their sentinel observation rests on (no create carries an agent prompt and no turn is submitted, so no session holds an interactive session and no removal of a fired cleanup awaits), and D8's sentinel message names it, because the sixteenth holistic read before hostile validation round 14 (finding e1) found that a removed sentinel alone shows only that the pass reached it. No assertion changed.</description></item>
 /// </list>
 /// </remarks>
 public sealed class VoiceConversationServiceTests
@@ -266,10 +267,11 @@ public sealed class VoiceConversationServiceTests
     /// fired cleanup keeps a session exactly at the strict 15-minute threshold and removes it one second past it; and a
     /// create after the removal gives a new session. The keep decision after the fire at the threshold is read only once
     /// the same fired pass is seen to have removed the trace's sentinel, a session in a second workspace one second
-    /// older. Run at a reference in 2001 and one in 2041.
+    /// older; that shows a finished pass because no session in the trace holds an interactive session, so no removal
+    /// awaits. Run at a reference in 2001 and one in 2041.
     /// </summary>
     /// <returns>A task that completes when the trace finishes.</returns>
-    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added as the reviewer's proposed test of hostile validation round 13 finding R13-F1. 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "A test that triggers such a callback asserts its decisions only after it has observed that the pass it triggered has run to its end"): the bound trace now includes the sentinel step (fifteenth holistic read before hostile validation round 14, finding d7).</remarks>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added as the reviewer's proposed test of hostile validation round 13 finding R13-F1. 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "A test that triggers such a callback asserts its decisions only after it has observed that the pass it triggered has run to its end"): the bound trace now includes the sentinel step (fifteenth holistic read before hostile validation round 14, finding d7). 2026-11-06, TR-MCP-USECASE-018 AC-006: the summary states the no-await condition the sentinel observation rests on (sixteenth holistic read before hostile validation round 14, finding e1).</remarks>
     [Fact]
     public Task VoiceSessionReuse_DoesNotDependOnWallClockOrCleanupScheduling() =>
         IdleSessionLifecycleContractTests.AssertLifecycleAsync(reference => new ServiceSessionPool(reference));
@@ -279,10 +281,12 @@ public sealed class VoiceConversationServiceTests
     /// service's timer runs removes a session whose recorded idle time is more than the 15-minute timeout before the
     /// scripted reference, and keeps one exactly at it or one second short of it, at a reference in 2001 and one in 2041.
     /// Each row's decision is read only after the same fired pass is seen to have run to its end: a sentinel session in a
-    /// second workspace, two seconds past the timeout, is already removed.
+    /// second workspace, two seconds past the timeout, is already removed. That shows a finished pass because no removal
+    /// in a row can await: no create carries an agent prompt and no turn is submitted, so no session holds an interactive
+    /// session, and the fired pass runs to its end inside the fire.
     /// </summary>
     /// <returns>A task that completes when every row has been asserted.</returns>
-    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added as the reviewer's proposed test of hostile validation round 13 finding R13-F1. 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "A test that triggers such a callback asserts its decisions only after it has observed that the pass it triggered has run to its end"): each row now creates the sentinel first and asserts it removed after the fire, before the row's decision is read, because the fifteenth holistic read before hostile validation round 14 (finding d7) found that a pass still running when the row was read could make a keep row pass.</remarks>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added as the reviewer's proposed test of hostile validation round 13 finding R13-F1. 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "A test that triggers such a callback asserts its decisions only after it has observed that the pass it triggered has run to its end"): each row now creates the sentinel first and asserts it removed after the fire, before the row's decision is read, because the fifteenth holistic read before hostile validation round 14 (finding d7) found that a pass still running when the row was read could make a keep row pass. 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "Such an observation shows a finished pass only when no removal of that pass can suspend before the decision is read"): the summary and the sentinel assertion's message state the condition the observation rests on (no session in a row holds an interactive session, so no removal awaits), because the sixteenth holistic read before hostile validation round 14 (finding e1) found that a removed sentinel alone shows only that the pass reached it. No assertion changed.</remarks>
     [Fact]
     public Task IdleCleanup_UsesScriptedAgeBoundary() =>
         AgeBoundaryContractTests.AssertDecisionAsync("D8 voice idle-session cleanup", async (reference, recorded) =>
@@ -296,7 +300,7 @@ public sealed class VoiceConversationServiceTests
             clock.Set(reference);
             Assert.Single(clock.Timers).Fire();
             var sentinelTranscript = await service.GetTranscriptAsync(sentinel.SessionId, TestContext.Current.CancellationToken).ConfigureAwait(true);
-            Assert.True(sentinelTranscript is null, $"At {reference:O}: the fired pass has run to its end before the row is read: the sentinel, two seconds past the timeout, is already removed.");
+            Assert.True(sentinelTranscript is null, $"At {reference:O}: the fired pass, whose removals cannot await here, has run to its end before the row is read: the sentinel, two seconds past the timeout, is already removed.");
             var transcript = await service.GetTranscriptAsync(created.SessionId, TestContext.Current.CancellationToken).ConfigureAwait(true);
             return transcript is null;
         });
@@ -440,9 +444,11 @@ public sealed class VoiceConversationServiceTests
     /// TR-MCP-USECASE-018 AC-006: the production service as a pool of <see cref="IdleSessionLifecycleContractTests"/>:
     /// the scripted clock is a <see cref="TriggeredTimerTimeProvider"/>, a create sends <see cref="ReuseRequest"/>, a
     /// session exists while its transcript can be read (a read that does not refresh its idle time), and a triggered
-    /// cleanup fires the service's one cleanup timer.
+    /// cleanup fires the service's one cleanup timer. No create carries an agent prompt and the trace submits no turn, so
+    /// no session holds an interactive session, no removal of a fired cleanup awaits, and the fired pass runs to its end
+    /// inside the fire.
     /// </summary>
-    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added for the lifecycle binding of hostile validation round 13 finding R13-F1. 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "A test that triggers such a callback asserts its decisions only after it has observed that the pass it triggered has run to its end"): the sentinel create was added, sending <see cref="SentinelRequest"/>, for the fifteenth holistic read before hostile validation round 14, finding d7.</remarks>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: added for the lifecycle binding of hostile validation round 13 finding R13-F1. 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "A test that triggers such a callback asserts its decisions only after it has observed that the pass it triggered has run to its end"): the sentinel create was added, sending <see cref="SentinelRequest"/>, for the fifteenth holistic read before hostile validation round 14, finding d7. 2026-11-06, TR-MCP-USECASE-018 AC-006: the summary states the no-await condition the sentinel observation rests on (sixteenth holistic read before hostile validation round 14, finding e1).</remarks>
     private sealed class ServiceSessionPool : IdleSessionLifecycleContractTests.IIdleSessionPool
     {
         /// <summary>The service's scripted clock.</summary>
