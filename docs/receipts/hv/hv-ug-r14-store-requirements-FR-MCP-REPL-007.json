@@ -1,0 +1,46 @@
+{
+  "timestampUtc": "2026-11-06T22:20:58.6908335+00:00",
+  "timestampLocal": "2026-11-06T16:21:01",
+  "method": "workflow.requirements.getFr",
+  "recordId": "FR-MCP-REPL-007",
+  "response": {
+    "payload": {
+      "result": {
+        "area": "MCP",
+        "status": "pending",
+        "updatedAt": "2026-11-06T22:21:01.1961475+00:00",
+        "createdAt": "2026-11-06T22:21:01.1960131+00:00",
+        "description": "`qbrain-ai-repl --agent-stdio` shall expose `--workspace-path` and `--marker-file` CLI overrides for credential resolution. When marker discovery fails, the diagnostic message shall enumerate every directory searched and distinguish \"marker not found\" from \"marker signature mismatch\". The diagnostic is forwarded into the `QBrainAiClient` and appended to the \"Authentication required\" exception so callers see the root cause rather than the generic message.\n\n**Covered by:** `MarkerFileClientOptionsResolver.TryResolveWithDiagnostics`, `Program.cs` (`--workspace-path` / `--marker-file`), `McpClientBase.EnsureAuthenticated`",
+        "id": "FR-MCP-REPL-007",
+        "priority": "medium",
+        "acceptanceCriteria": [
+          {
+            "text": "FindMarkerFile_NoMarkerOnTheWayUp_ListsEveryFolderToTheRoot (unit test, in-memory file system): with no marker in the start folder or any folder above it, FindMarkerFile returns no marker and its searched paths are every folder from the start to the file system root, in walk order (start, its parent, and so on to the root) (moved from TR-MCP-REPL-008 AC-1, operator 2026-10-29: \"Move criteria that are misplaced.  Unit tests are for FR, Integration tests are for TR.\").",
+            "isSatisfied": false,
+            "id": "ac-1"
+          },
+          {
+            "text": "FindMarkerFile_MarkerInParent_IsFound (unit test, in-memory file system): with a marker only in a parent folder, FindMarkerFile returns that parent's marker, as intended (walking up to a parent workspace is the designed behavior), and its searched paths end at that parent (moved from TR-MCP-REPL-008 AC-2, operator 2026-10-29: \"Move criteria that are misplaced.  Unit tests are for FR, Integration tests are for TR.\").",
+            "isSatisfied": false,
+            "id": "ac-2"
+          },
+          {
+            "text": "FindMarkerFile_MarkersInStartAndParent_NearestWins (unit test, in-memory file system): with markers in the start folder and in a parent folder, FindMarkerFile returns the start folder's marker and searches only the start folder (moved from TR-MCP-REPL-008 AC-3, operator 2026-10-29: \"Move criteria that are misplaced.  Unit tests are for FR, Integration tests are for TR.\").",
+            "isSatisfied": false,
+            "id": "ac-3"
+          },
+          {
+            "text": "TryResolveWithDiagnostics_NoMarkerOnTheWayUp_NamesEveryFolderSearched (unit test, in-memory file system): with no marker in the start folder or any folder above it, TryResolveWithDiagnostics returns false and its error names the marker file and every folder searched, from the start to the file system root (moved from TR-MCP-REPL-008 AC-4, operator 2026-10-29: \"Move criteria that are misplaced.  Unit tests are for FR, Integration tests are for TR.\").",
+            "isSatisfied": false,
+            "id": "ac-4"
+          }
+        ],
+        "scopeStartLayerKey": "layer-1",
+        "title": "REPL Credential Discovery Diagnostics"
+      },
+      "requestId": "req-20261106T222059Z-db4e",
+      "deprecated": true
+    },
+    "type": "result"
+  }
+}

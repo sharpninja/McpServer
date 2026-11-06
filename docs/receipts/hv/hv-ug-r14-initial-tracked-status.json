@@ -1,0 +1,11 @@
+{
+  "timestampLocal": "2026-11-06T16:04:08.0958438-06:00",
+  "command": "git",
+  "arguments": [
+    "status",
+    "--short",
+    "--untracked-files=no"
+  ],
+  "exitCode": 0,
+  "output": ""
+}

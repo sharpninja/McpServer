@@ -1,0 +1,31 @@
+{
+  "timestampUtc": "2026-11-06T22:21:30.2597961+00:00",
+  "timestampLocal": "2026-11-06T16:21:32",
+  "method": "workflow.requirements.getFr",
+  "recordId": "FR-MCP-018",
+  "response": {
+    "payload": {
+      "result": {
+        "area": "MCP",
+        "status": "pending",
+        "updatedAt": "2026-11-06T22:21:32.7684530+00:00",
+        "createdAt": "2026-11-06T22:21:32.7683407+00:00",
+        "description": "When a workspace is started, the server shall write an `AGENTS-README-FIRST.yaml` marker file to the workspace root containing the shared host port, all endpoint paths, a machine-readable prompt, and PID. All markers point to the same port; workspace identity is resolved via the `X-Workspace-Path` header. The marker shall be removed when the workspace is stopped.\n\n**Covered by:** `MarkerFileService`, `WorkspaceProcessManager`",
+        "id": "FR-MCP-018",
+        "priority": "medium",
+        "acceptanceCriteria": [
+          {
+            "text": "Agent-plugin version resolution never fails the marker: the scan of the plugin caches under the user profile (.codex/plugins/cache, .claude/plugins/cache, .grok/installed-plugins) skips any directory it cannot traverse (a link or other reparse point, an untrusted mount point, an inaccessible folder), and that covers each cache root itself and every folder between the user profile and it: a cache root that is a link, or that is reached through a link below the user profile (for example a linked .codex, .codex/plugins, .claude/plugins/cache or .grok), contributes no candidate, the same as a link inside the cache, while a user profile that is itself a link is still scanned; a version file (.version or a plugin manifest) that exists but cannot be read (an IO or access error) yields no version, so resolution goes on to the next file and the next candidate; and resolution falls back to the synced plugin version when nothing yields one. Any other error still propagates. Unit tests take every plugin-version input (the agent plugin-root environment variables, the workspace sibling plugin folder and the user profile caches) from test-owned data, never from the process environment, the machine or the real profile (operator 2026-10-20: \"Fix scans in PR 87 (Recommended)\", \"Fold R3-P3 in first\" and \"Structural fix, round 4 (Recommended)\"; operator 2026-10-21: \"Fix both, strengthen ACs\", hostile validation round 5 finding R5-F1; IMPL-UNITGREEN-001, triage-report-b0e41c36f93c4c91b1bf2524eb579ef8). The hostile-environment runs are out of scope: they are not part of this criterion or its evidence (operator 2026-10-27: \"Get ride of the hostile runs enforcing integration test separation.  I have already stated this once.\" and \"Which I sated last night were out of scope.\"). Moved from AC-TR-MCP-WS-005-001 (operator 2026-10-29: \"Move criteria that are misplaced.  Unit tests are for FR, Integration tests are for TR.\"); its real file-system binding is AC-TR-MCP-WS-005-002.",
+            "isSatisfied": false,
+            "id": "ac-1"
+          }
+        ],
+        "scopeStartLayerKey": "layer-1",
+        "title": "Marker File Agent Discovery"
+      },
+      "requestId": "req-20261106T222131Z-0fa9",
+      "deprecated": true
+    },
+    "type": "result"
+  }
+}

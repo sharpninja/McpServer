@@ -1,0 +1,33 @@
+{
+  "timestampUtc": "2026-11-06T22:36:24.1356528+00:00",
+  "timestampLocal": "2026-11-06T16:36:24",
+  "validator": "Codex",
+  "rolloutPath": "/home/sharpninja/.codex/sessions/2026/11/06/rollout-2026-11-06T15-52-42-01a1b2d9-8532-7722-b8b0-1483afa0d3b4.jsonl",
+  "proof": [
+    {
+      "line": 1,
+      "type": "session_meta",
+      "timestamp": "2026-11-06T21:52:42.693Z",
+      "id": "01a1b2d9-8532-7722-b8b0-1483afa0d3b4",
+      "cwd": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+      "cliVersion": "0.167.0",
+      "modelProvider": "openai"
+    },
+    {
+      "line": 10,
+      "type": "turn_context",
+      "timestamp": "2026-11-06T21:52:43.791Z",
+      "model": "gpt-6-astra",
+      "effort": "max"
+    }
+  ],
+  "profileFileCount": 1,
+  "markerReadInFull": true,
+  "markerPath": "/home/sharpninja/github/McpServer/AGENTS-README-FIRST.yaml",
+  "reviewerSessionId": "Codex-20261106T215955Z-plugin-session",
+  "reviewerRequestId": "req-20261106T220114Z-unitgreen-r14",
+  "pluginPath": "/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0",
+  "pluginCache": "/tmp/hv-ug-r14-codex-01a1b2d9",
+  "globalMemoryCount": 8,
+  "workspaceMemoryCount": 3
+}

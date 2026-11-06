@@ -1,0 +1,9 @@
+{
+  "startedLocal": "2026-11-06T15:59:54.4551998-06:00",
+  "endedLocal": "2026-11-06T15:59:59.3271447-06:00",
+  "action": "Bootstrap",
+  "method": "workflow.sessionlog.bootstrap",
+  "cachePath": "/tmp/hv-ug-r14-codex-01a1b2d9",
+  "pluginRoot": "/home/sharpninja/.codex/plugins/cache/mcpserver-codex-plugin/mcpserver/1.121.0",
+  "output": "{}\n"
+}

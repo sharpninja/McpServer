@@ -1,0 +1,66 @@
+{
+  "timestampUtc": "2026-11-06T22:21:32.8989397+00:00",
+  "timestampLocal": "2026-11-06T16:21:35",
+  "method": "workflow.requirements.getFr",
+  "recordId": "FR-MCP-SESSIONLOGCTX-001",
+  "response": {
+    "payload": {
+      "result": {
+        "area": "MCP",
+        "status": "pending",
+        "updatedAt": "2026-11-06T22:21:35.4147097+00:00",
+        "createdAt": "2026-11-06T22:21:35.4145895+00:00",
+        "description": "Every session-log turn SHALL store planFile and todoId. After persist, query/get SHALL return both fields. They are never null in API output. When no plan or TODO is active, the stored value SHALL be the exact sentinel None (case-sensitive). The first persist of a turn SHALL reject omitted, null, empty, or whitespace planFile or todoId. planFile SHALL accept a workspace-relative path, an exact absolute path, or a ~/ home-relative path. .. is rejected. Query SHALL support exact filters on planFile and todoId, and text search SHALL match those fields. Existing rows SHALL be backfilled from turn contents and agent history under ~. Import, transcript ingest, and federation apply SHALL persist a validated pair (None if extraction finds nothing). Children: AC-FR-MCP-SESSIONLOGCTX-001-001, AC-FR-MCP-SESSIONLOGCTX-001-002, AC-FR-MCP-SESSIONLOGCTX-001-003, AC-FR-MCP-SESSIONLOGCTX-001-004, AC-FR-MCP-SESSIONLOGCTX-001-005, AC-FR-MCP-SESSIONLOGCTX-001-006, AC-FR-MCP-SESSIONLOGCTX-001-007.",
+        "id": "FR-MCP-SESSIONLOGCTX-001",
+        "priority": "medium",
+        "acceptanceCriteria": [
+          {
+            "text": "Every session-log turn SHALL store planFile and todoId. After persist, query/get SHALL return both fields. They are never null in API output.",
+            "isSatisfied": false,
+            "id": ""
+          },
+          {
+            "text": "When no plan or TODO is active, the stored value SHALL be the exact sentinel None (case-sensitive).",
+            "isSatisfied": false,
+            "id": ""
+          },
+          {
+            "text": "The first ordinary persist of a turn SHALL reject omitted, null, empty, or whitespace planFile or todoId and insert no turn row. A canceled or cancelled supersession may omit the pair, stores the exact sentinel None for each missing value, and a durable reopen preserves that bounded exception.",
+            "isSatisfied": false,
+            "id": ""
+          },
+          {
+            "text": "planFile SHALL accept a workspace-relative path, an exact absolute path, or a ~/ home-relative path. .. is rejected.",
+            "isSatisfied": false,
+            "id": ""
+          },
+          {
+            "text": "Query SHALL support exact filters on planFile and todoId, and text search SHALL match those fields.",
+            "isSatisfied": false,
+            "id": ""
+          },
+          {
+            "text": "Existing rows SHALL be backfilled from turn contents and agent history under ~. Uncertain results stay None. Invented ids/paths are forbidden.",
+            "isSatisfied": false,
+            "id": ""
+          },
+          {
+            "text": "Import, transcript ingest, and federation apply SHALL persist a validated planFile and todoId (None if extraction finds nothing). Null is never stored.",
+            "isSatisfied": false,
+            "id": ""
+          },
+          {
+            "text": "The agent-history scan under ~ (.grok, .claude, .codex, .cursor) skips any directory it cannot traverse (a link or other reparse point, an untrusted mount point, an inaccessible folder), and that covers each history root itself: a history root that is a link contributes no file, the same as a link inside it, while a home folder that is itself a link is still scanned; the scan never fails a submit or an import; when nothing usable is found the turn keeps None (operator 2026-10-20: \"Fix scans in PR 87 (Recommended)\"; operator 2026-10-21: \"Fix both, strengthen ACs\", hostile validation round 5 finding R5-F1; IMPL-UNITGREEN-001, triage-report-b0e41c36f93c4c91b1bf2524eb579ef8). Moved from AC-TR-MCP-SESSIONLOG-006-009 (operator 2026-10-29: \"Move criteria that are misplaced.  Unit tests are for FR, Integration tests are for TR.\"); its real file-system binding is AC-TR-MCP-SESSIONLOG-006-010.",
+            "isSatisfied": false,
+            "id": "AC-FR-MCP-SESSIONLOGCTX-001-008"
+          }
+        ],
+        "scopeStartLayerKey": "layer-1",
+        "title": "Session turns record current plan file and MCP TODO id"
+      },
+      "requestId": "req-20261106T222134Z-0427",
+      "deprecated": true
+    },
+    "type": "result"
+  }
+}

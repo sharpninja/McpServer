@@ -1,0 +1,12 @@
+{
+  "timestampLocal": "2026-11-06T16:08:40.9812216-06:00",
+  "command": "git",
+  "arguments": [
+    "log",
+    "--first-parent",
+    "--format=%h %aI %s",
+    "53a210ca..9a261993"
+  ],
+  "exitCode": 0,
+  "output": "9a261993 2026-11-06T15:49:51-06:00 docs(unitgreen): round 14 records at da11faa2 (IMPL-UNITGREEN-001)\nda11faa2 2026-11-06T15:01:13-06:00 test(voice): observe directly that a triggered cleanup pass finished, slice Z16 (IMPL-UNITGREEN-001)\n548b1a28 2026-11-06T10:30:42-06:00 test(voice): check at run time that no cleanup removal can await, slice Z15 (IMPL-UNITGREEN-001)\n288b03c3 2026-11-06T08:07:46-06:00 docs(voice): state the no-await condition of the sentinel observation, slice Z14 (IMPL-UNITGREEN-001)\nf9b6bde8 2026-11-06T05:52:22-06:00 test(voice): observe the finished cleanup pass before keep decisions, slice Z13 (IMPL-UNITGREEN-001)\n8c944541 2026-11-06T02:43:41-06:00 fix(voice): idle cleanup on a scripted clock and timer, slice Z12 (IMPL-UNITGREEN-001)\n4e992d30 2026-11-06T02:08:03-06:00 docs: HV round 13 receipts as received, DISAGREE 96/96 (IMPL-UNITGREEN-001)\n11326d42 2026-11-05T23:40:34-06:00 docs: gates and HV TRX evidence at 53a210ca, plan 27.30 to 27.37, round 13 prelaunch records (IMPL-UNITGREEN-001)\n"
+}

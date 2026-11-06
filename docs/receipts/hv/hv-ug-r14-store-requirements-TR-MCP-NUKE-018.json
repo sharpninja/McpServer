@@ -1,0 +1,33 @@
+{
+  "timestampUtc": "2026-11-06T22:20:53.3291941+00:00",
+  "timestampLocal": "2026-11-06T16:20:55",
+  "method": "workflow.requirements.getTr",
+  "recordId": "TR-MCP-NUKE-018",
+  "response": {
+    "payload": {
+      "result": {
+        "area": "MCP",
+        "status": "pending",
+        "acceptanceCriteria": [
+          {
+            "text": "Connection-string values never appear in logs, exception messages, or committed files; only variable names, file paths, container names and host:port endpoints are reported.",
+            "isSatisfied": false,
+            "id": "AC-4"
+          }
+        ],
+        "updatedAt": "2026-11-06T22:20:55.8544199+00:00",
+        "subarea": "NUKE",
+        "createdAt": "2026-11-06T22:20:55.8542801+00:00",
+        "description": "On Linux, InstallTestDependencies supplies the PostgreSQL and SQL Server endpoints of the Category=Integration provider tests from the host test-database env file and the dedicated qbrain-test containers (operator decision 2026-10-11, BUG-BASELINE-005), and exports them to the test processes the build starts; Windows provisioning is unchanged.",
+        "id": "TR-MCP-NUKE-018",
+        "priority": "high",
+        "notes": "PLAN-C4MODEL-001. Operator answers 2026-10-19: \"Fix all 14 in this plan\", \"Fix 10 here; 4 via PR 82/83\", \"Trait + Linux provisioning (Recommended)\". Operational configuration: the Linux provider lane reads a private test-database env file under the user configuration directory. It supplies MCP_TEST_POSTGRES_CONNECTION and MCP_TEST_SQLSERVER_CONNECTION for the dedicated test containers. Concrete host paths, addresses and container observations belong to execution receipts.",
+        "scopeStartLayerKey": "layer-1",
+        "title": "InstallTestDependencies provisions provider test servers on Linux"
+      },
+      "requestId": "req-20261106T222054Z-ace6",
+      "deprecated": true
+    },
+    "type": "result"
+  }
+}

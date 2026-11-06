@@ -1,0 +1,80 @@
+{
+  "timestampUtc": "2026-11-06T22:47:42.4026218+00:00",
+  "timestampLocal": "2026-11-06T16:47:45",
+  "method": "client.SessionLog.QueryAsync",
+  "recordId": "",
+  "response": {
+    "payload": {
+      "result": {
+        "offset": 0,
+        "totalCount": 1,
+        "items": [
+          {
+            "title": "Independent hostile validation of IMPL-UNITGREEN-001 round 14",
+            "sessionId": "Codex-20261106T215955Z-plugin-session",
+            "model": "codex",
+            "turns": [
+              {
+                "planFile": "docs/plans/2026-10-19-unit-suite-green.md",
+                "todoId": "IMPL-UNITGREEN-001",
+                "actions": [
+                  {
+                    "description": "Use the Z16 gate set and the 61-task snapshot. The supplied task snapshot SHA-256 and every task-text SHA match; all 61 live task texts and open states match exactly. The manifest classifies all 23 tracked csproj files under tests with no omissions or extra project. Alternatives: do not use the superseded 60-task snapshot or infer completed tasks from historical prose. The matrix will adjudicate only tasks sharing requirements implemented or changed by the full PR diff.",
+                    "type": "design_decision",
+                    "order": 2,
+                    "filePath": "docs/receipts/hv/hv-ug-r14-task-snapshot-audit.json",
+                    "status": "completed"
+                  }
+                ],
+                "queryTitle": "Independent hostile validation of IMPL-UNITGREEN-001 round 14",
+                "processingDialog": [
+                  {
+                    "role": "model",
+                    "category": "decision",
+                    "content": "Live rollout line 10 confirms model gpt-6-astra and effort max, thread 01a1b2d9-8532-7722-b8b0-1483afa0d3b4, CLI 0.167.0. Executed add-profile: one non-skill profile file read fully; eight Global and three Workspace memories loaded through the Codex wrapper, excluding MEMORY-PROCESS-007. Root marker read fully with API value redacted. Reviewer will apply the Z16 addendum: records head 9a261993, code head da11faa2, 61-task snapshot. The old-head clauses are historical where expressly superseded. No builds/tests, no tracked edits, no external mutations except own session log. Infrastructure failures are separate, not score penalties. Rejected alternative: treating prior reviewer PASSes or implementer disclosures as verified current evidence. Initial profile reads used inline PowerShell before the file-script rule was fully loaded; subsequent inspection logic is in analyzed PS1 files.",
+                    "timestamp": "2026-11-06T22:08:29.3848407+00:00"
+                  },
+                  {
+                    "role": "model",
+                    "category": "decision",
+                    "content": "Evidence decision: the current manifest is the da11faa2 set named by the Z16 addendum, not an older gate set. Independent read-only parsing verified all 34 entries, their bytes and SHA-256 values against the committed blobs, 30 TRX files, zero failed or skipped results, and identical 4866 unit names on Linux and Windows. Retained in hv-ug-r14-trx-audit.json and hv-ug-r14-trx-cases.json. This proves supplied execution results and integrity, not adequacy or environment independence; source, criteria, chronology and individual task review continue. Alternatives rejected: rerunning tests is forbidden by policy 7.9; accepting green counters as proof of adequacy is unsound.",
+                    "timestamp": "2026-11-06T22:30:28.8787568+00:00"
+                  }
+                ],
+                "tags": [
+                  "unitgreen-r14",
+                  "hostile-validation",
+                  "effort-max",
+                  "review-only"
+                ],
+                "queryText": "Review PR 87 at 9a2619936f013d490264d39c3fb92846583b8362 against the complete operator request in docs/receipts/hv/20261106T155240-unitgreen-r14.request.jsonl. Review only; no builds or tests. Read supplied TRX, source, git, receipts and live stores. Return every claim, 61-task requirements matrix, individual task verdicts, regressions, complete findings and full verdict receipts.",
+                "tokenCount": 0,
+                "status": "in_progress",
+                "model": "codex",
+                "contextList": [
+                  "docs/receipts/hv/20261106T155240-unitgreen-r14.request.jsonl",
+                  "docs/receipts/hv/unitgreen-r14-trx-da11faa2/manifest.json",
+                  "docs/receipts/hv/unitgreen-r14-tasks-da11faa2.json"
+                ],
+                "response": "Actions appended.",
+                "timestamp": "2026-11-06T22:01:16.0000000+00:00",
+                "requestId": "req-20261106T220114Z-unitgreen-r14"
+              }
+            ],
+            "agentSessionId": "01a1b2d9-8532-7722-b8b0-1483afa0d3b4",
+            "lastUpdated": "2026-11-06T22:38:37.0000000+00:00",
+            "sourceType": "Codex",
+            "started": "2026-11-06T21:59:59.0000000+00:00",
+            "agentExecutableVersion": "codex-cli 0.167.0",
+            "turnCount": 1,
+            "status": "in_progress",
+            "agentExecutablePath": "/home/sharpninja/.local/bin/codex"
+          }
+        ],
+        "limit": 1
+      },
+      "requestId": "req-20261106T224743Z-e661"
+    },
+    "type": "result"
+  }
+}
