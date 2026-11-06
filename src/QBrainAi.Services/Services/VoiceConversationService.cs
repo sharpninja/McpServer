@@ -23,6 +23,7 @@ namespace QBrainAi.Support.Mcp.Services;
 /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
 /// <item><term>2026-11-06</term><description>TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "This includes an age, expiry or staleness decision that a background callback in the code under test makes"): every time the service reads (the recorded idle times, the transcript stamps and the reference time of the idle-cleanup and device-lookup decisions) and the idle-cleanup timer now come from one clock, an optional <see cref="TimeProvider"/> that defaults to <see cref="TimeProvider.System"/>, because hostile validation round 13 finding R13-F1 found that a unit test's session-reuse assertion depended on a real cleanup timer and the live clock. With the system clock the behavior, the 60-second cleanup schedule and the strict idle comparison are unchanged.</description></item>
 /// <item><term>2026-11-06</term><description>TR-MCP-USECASE-018 AC-006: the entry above says every time the service reads comes from the clock; more exactly, every UTC instant the service records or compares does (17 reads: the recorded idle time, written in twelve places, the five transcript stamps, and the reference time of the device-lookup and idle-cleanup decisions), while the turn latency stays a <see cref="Stopwatch"/> duration that no idle decision and no unit assertion reads, because the fifteenth holistic read before hostile validation round 14 (findings c3 and g1) found the wider statement false. Documentation only; no behavior change.</description></item>
+/// <item><term>2026-11-06</term><description>TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "The run-time check covers every way a removal can await"): the idle-cleanup timer callback keeps the task of the pass it starts, read by unit tests through the internal <see cref="IdleCleanupPass"/>, because the eighteenth holistic read before hostile validation round 14 (finding G1) found that the tests could not observe directly that a triggered pass had finished. The pass still runs without being awaited; what it does is unchanged.</description></item>
 /// </list>
 /// </remarks>
 public sealed partial class VoiceConversationService : IVoiceConversationService, IDisposable
@@ -32,6 +33,14 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
     /// </summary>
     /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: named for the schedule the constructor arms (60 seconds, unchanged), so the unit binding of hostile validation round 13 finding R13-F1 can pin the schedule the production code asks its clock for.</remarks>
     internal static readonly TimeSpan IdleCleanupInterval = TimeSpan.FromSeconds(60);
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006: the task of the latest idle-cleanup pass the timer started (a completed task before the
+    /// first pass), so a unit test that triggers the cleanup can observe directly that the pass has finished before it
+    /// reads the pass's decisions.
+    /// </summary>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "The run-time check covers every way a removal can await"): added for the eighteenth holistic read before hostile validation round 14, finding G1; read only by the unit tests, through the assembly's existing InternalsVisibleTo grant.</remarks>
+    internal Task IdleCleanupPass => Volatile.Read(ref _idleCleanupPass);
 
     private readonly ConcurrentDictionary<string, VoiceSessionState> _sessions = new(StringComparer.OrdinalIgnoreCase);
     private readonly IAgentCliClient _copilotClient;
@@ -57,6 +66,13 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
     /// <summary>TR-MCP-USECASE-018 AC-006: the recurring idle-cleanup timer, created through <see cref="_time"/>.</summary>
     /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: now an <see cref="ITimer"/> created by the service's clock instead of a <see cref="System.Threading.Timer"/>, so a unit test controls when the cleanup runs (hostile validation round 13 finding R13-F1); the schedule is unchanged.</remarks>
     private readonly ITimer _idleCleanupTimer;
+
+    /// <summary>
+    /// TR-MCP-USECASE-018 AC-006: the task of the latest idle-cleanup pass the timer started; a completed task before the
+    /// first pass.
+    /// </summary>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "The run-time check covers every way a removal can await"): added so a unit test can observe directly that a pass it triggered has finished, because the eighteenth holistic read before hostile validation round 14 (finding G1) found that the tests could see only the kinds of awaiting resource they counted; the timer callback discarded the task before. What a pass does is unchanged.</remarks>
+    private Task _idleCleanupPass = Task.CompletedTask;
 
     /// <summary>
     /// Creates a new <see cref="VoiceConversationService"/>.
@@ -1907,10 +1923,10 @@ public sealed partial class VoiceConversationService
     /// Periodically scans for idle sessions and performs graceful shutdown.
     /// </summary>
     /// <param name="state">The timer state (unused).</param>
-    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: now the callback of the timer the service's clock creates, so a unit test runs it only where its scripted trace triggers it (hostile validation round 13 finding R13-F1); what it does is unchanged.</remarks>
+    /// <remarks>2026-11-06, TR-MCP-USECASE-018 AC-006: now the callback of the timer the service's clock creates, so a unit test runs it only where its scripted trace triggers it (hostile validation round 13 finding R13-F1); what it does is unchanged. 2026-11-06, TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "The run-time check covers every way a removal can await"): the pass's task is now kept in <see cref="_idleCleanupPass"/> instead of discarded, so a unit test can observe that the pass finished (eighteenth holistic read before hostile validation round 14, finding G1); the pass still runs without being awaited, as before.</remarks>
     private void OnIdleCleanupTick(object? state)
     {
-        _ = CleanupIdleSessionsAsync();
+        Volatile.Write(ref _idleCleanupPass, CleanupIdleSessionsAsync());
     }
 
     /// <summary>
