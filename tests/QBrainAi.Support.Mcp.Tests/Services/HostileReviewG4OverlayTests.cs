@@ -463,7 +463,7 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
     /// TR-MCP-HOSTILEREVIEW-003: invalid worker options fail host startup validation. The failure
     /// message carries the whole exception text so a different startup failure is diagnosable.
     /// The default logging providers are cleared: on Windows the host adds the Event Log provider,
-    /// and an account without Event Log write access (TEST-NODE-A lab-wsman) failed startup with
+    /// and an account without Event Log write access (TEST-NODE-A, the service account of a test node) failed startup with
     /// "Cannot open log for source '.NET Runtime'" before options validation could report.
     /// </summary>
     /// <remarks>
@@ -472,6 +472,9 @@ public sealed class HostileReviewG4OverlayTests : IDisposable
     /// no environment variable: the in-memory source, added after the environment, sets the five worker keys, and the
     /// renewal interval equal to the lease duration fails validation whatever else the environment holds. It writes no
     /// variable, so it stays outside <c>ProcessEnvironmentCollection</c>.
+    /// 2026-11-05, TR-MCP-HOSTILEREVIEW-003: the summary describes the account as a test node's service account instead
+    /// of naming a lab account, because the twelfth holistic read before hostile validation round 13 (finding g1) found
+    /// the lab name in this comment, against the plan 27.7 scrub of this pull request; the case is unchanged.
     /// </remarks>
     [Fact]
     [Trait("Category", "Integration")]
