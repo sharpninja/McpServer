@@ -1,0 +1,11 @@
+2026-11-06T01:17:02 - R13-F2, implementer edit, confirmed receipt-description defect.
+
+The plan at docs/plans/2026-10-19-unit-suite-green.md:2209 says the slice Z7 compile and binding "pinned no hashes". The same claim appears in the full PR description at docs/receipts/hv/unitgreen-r13-prelaunch.pr-description.md:378, projected problems item 145 at docs/receipts/hv/unitgreen-r13-prelaunch.projected-problems.md:35, and this round's UG50 and UG51 claims.
+
+That statement is false for the compile receipt. docs/receipts/unit-suite-green-20261019/ug-r13z7-compile-1.json:228 has a sources array containing all 18 changed paths and their SHA-256 values. The receipt identifies runHead 88c5abcc, the modified tree, a successful compile, and writtenLocal 2026-11-05T14:18:48. Independent byte-stream hashes of git blobs at commit 1d77a79c match all 18 entries. The companion binding receipt has no sourceHashes. The observed distinction is a compile receipt with 18 matching source hashes and a binding receipt without source hashes, not two receipts without hashes.
+
+Evidence: hv-ug-r13-final-audit-LatePins.json, produced by hv-ug-r13-final-audit.ps1 after PowerShell parser and PSScriptAnalyzer passed. Its first version inspected sourceHashes only; that reviewer-side schema omission was corrected to inspect compile.sources and compile.runHead before reaching this finding. No product code or tests were executed.
+
+This is material under the review's explicit rule that a misstatement of a cited receipt is a finding. It does not establish a failing compile, a failing binding, or a defect in the final committed-tree gates. It understates the available compile evidence.
+
+To pass: correct the current plan, full PR description, projected-problem disclosure and next review claims to distinguish the compile's 18 source pins from the binding's absent pins. Preserve the historical review statements as history and do not rewrite original receipts. State any limits of when those compile hashes were captured only to the extent the original receipt-generation evidence proves them. No new product acceptance criterion or test is needed for this documentation correction, and no operator decision is required.

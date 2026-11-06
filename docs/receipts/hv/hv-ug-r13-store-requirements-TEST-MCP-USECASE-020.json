@@ -1,0 +1,26 @@
+{
+  "timestampUtc": "2026-11-06T06:04:39.1881461+00:00",
+  "timestampLocal": "2026-11-06T00:04:41",
+  "method": "workflow.requirements.getTest",
+  "recordId": "TEST-MCP-USECASE-020",
+  "response": {
+    "payload": {
+      "deprecated": true,
+      "requestId": "req-20261106T060440Z-914d",
+      "result": {
+        "createdAt": "2026-11-06T06:04:41.7263361+00:00",
+        "updatedAt": "2026-11-06T06:04:41.7264576+00:00",
+        "title": "Test TEST-MCP-USECASE-020",
+        "description": "For each sixteenth-review finding (TR-MCP-USECASE-019), write the consumer-facing test and the real operating-system, mount, provider, process, or evidence-boundary test with scripted data first and prove them against that data in a green mock gate with negative controls before production changes (BDPv4: no red tests); then bind the same cases to production and prove focused and cumulative GREEN from C:-physical artifacts with exact zero-failure, zero-skip, zero-abort, zero-inconclusive, and expected-minimum accounting. Platform-specific cases are integration tests that run in their host's lane (TR-MCP-NUKE-019).",
+        "acceptanceCriteria": [],
+        "scopeStartLayerKey": "layer-1",
+        "area": "MCP",
+        "priority": "medium",
+        "id": "TEST-MCP-USECASE-020",
+        "status": "pending",
+        "testType": "unit"
+      }
+    },
+    "type": "result"
+  }
+}

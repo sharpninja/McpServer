@@ -1,0 +1,362 @@
+[
+  {
+    "line": 65640,
+    "timestamp": "2026-10-29T17:07:55.461Z",
+    "role": "question",
+    "input": {
+      "questions": [
+        {
+          "question": "Which acceptance-criteria changes should go in before round 9? (Each goes through the plugin first, then contract tests and a mock gate, then code.)",
+          "header": "AC changes",
+          "multiSelect": true,
+          "options": [
+            {
+              "label": "Lane ACs (Recommended)",
+              "description": "TR-MCP-NUKE-019: AC-2 restores 'every Platform-tagged case runs and passes in its host's lane' (dropped 2026-10-27 without a decision). AC-2 also adds 'a lane project whose filter selects no case fails the lane' (BLD-1, TreatNoTestsAsError). AC-3 binds the logged filters and TRX names to one tested composition (BLD-3). AC-6 is scoped to cases that need a QBrain.AI instance, in-process and stdio forms included (PLAN-6), with the workspace, marker and address rules applied like the database rule (PLAN-7)."
+            },
+            {
+              "label": "Environment ACs (Recommended)",
+              "description": "TR-MCP-USECASE-018 AC-006 and TR-MCP-USECASE-019 AC-008 name the lane-owned variables, MCP_REPOSITORY_ROOT and MCP_TEST_* (MCPT-11). They settle the real-home import rule against AC-TR-MCP-SESSIONLOG-006-009 (SVC-6). They also state whether unit tests may assert wall-clock bounds (MCPT-12)."
+            },
+            {
+              "label": "QuadBrain ACs (Recommended)",
+              "description": "FR-MCP-QBOPENAI-001: the assistant content is never an envelope without content. After an internal-tool round, a spent budget returns that round's results (SRC-2). ac-5 also states that tool_choice 'auto' with no tools counts as no tools, and how an empty committed output is treated (SRC-3). Each gets named unit tests."
+            },
+            {
+              "label": "gh foreign-workspace AC (Recommended)",
+              "description": "A new AC under FR-MCP-FED-PATH-001: when the workspace belongs to the other platform and no Mcp:GitHub:Repository is set, gh is never started. The result names the missing setting. With a repository set, gh runs with --repo and no working directory (SRC-1, SRC-4). Its citation moves off TR-MCP-GH-004."
+            }
+          ]
+        },
+        {
+          "question": "How should pre-existing lab names and stale citations be handled, meaning text this branch did not write (test data, store notes and descriptions, memory-test ids)?",
+          "header": "Lab names",
+          "multiSelect": false,
+          "options": [
+            {
+              "label": "New TODO; fix only branch-added text (Recommended)",
+              "description": "PR 87 scrubs only the lab names and citations it added or rewrote (BLD-5, SVC-8, the new C:/Users/kingd data, the E:\\ path it moved, SVC-10). A new TODO tracks the pre-existing ones in tests and store records (SVC-9, MCPT-8, MCPT-9, PLAN-10, BLD-12, PLAN-18)."
+            },
+            {
+              "label": "Scrub everything in PR 87",
+              "description": "Generic data everywhere in the touched files, plus the store-text edits through the plugin. Wider blast radius, and HV re-reads all of it."
+            }
+          ]
+        },
+        {
+          "question": "The lane-2 failure (SqlServerDecompose4nfBackfillMigrationTests, 'Cannot release the application lock __EFMigrationsLock', unchanged test, passed in lane-1): how should it be handled?",
+          "header": "Lane flake",
+          "multiSelect": false,
+          "options": [
+            {
+              "label": "Diagnose and fix in PR 87 (Recommended)",
+              "description": "Find the root cause, which looks like a retried migration step after a transient error. Fix it under BDPv4 the way the LocalDB flake was fixed in PR 87, then rerun the lane. A red lane cannot exit the phase."
+            },
+            {
+              "label": "Triage it, rerun when quiet",
+              "description": "File it through triage as a pre-existing flake. Rerun the lane and require a green run with the same names, without changing code."
+            }
+          ]
+        },
+        {
+          "question": "Which smaller rulings should PR 87 carry out? Unselected items go to a new TODO.",
+          "header": "Rulings",
+          "multiSelect": true,
+          "options": [
+            {
+              "label": "Isolate the REPL trust cache",
+              "description": "RINT-10: lane REPL children and four marker tests stop using the live ~/.mcpserver/verified-markers.json. This needs a cache override in the REPL host (product code)."
+            },
+            {
+              "label": "Tag checkout-reading Build.Tests",
+              "description": "BLD-6: Build.Tests cases that read QBrainAi.sln or sources become Category=Integration. Build.Tests is a lane project, so they still run."
+            },
+            {
+              "label": "Restore the physical marker walk case",
+              "description": "RINT-8: restore the deterministic integration case that walks to a parent marker through PhysicalMarkerFileSystem. Its unit replacement runs in memory, and round 8b passed UG25 without it."
+            },
+            {
+              "label": "Fixture for the sibling-checkout test",
+              "description": "MCPT-10: HandoffMcpToolTests.PluginSync_HandoffSkill_MatchesCoreArtifact stops needing ../mcpserver-grok-plugin next to the checkout and compares against a fixture copy instead."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "line": 68943,
+    "timestamp": "2026-11-02T15:24:31.231Z",
+    "role": "question",
+    "input": {
+      "questions": [
+        {
+          "question": "Which agent and model should run HV round 9? Codex wrote slices I to O, so a Codex reviewer would be checking a lot of its own code.",
+          "header": "HV reviewer",
+          "multiSelect": false,
+          "options": [
+            {
+              "label": "Cline CLI, Beam, High",
+              "description": "The reviewer you set for Codex until Monday afternoon. It wrote none of PR 87. I would confirm the model and effort from its own stream."
+            },
+            {
+              "label": "Codex CLI, gpt-6-astra, max",
+              "description": "The reviewer for rounds 1 to 8, launched with the existing Start-CodexHvRun.ps1. It would be reviewing slices I to O, which it wrote."
+            }
+          ]
+        },
+        {
+          "question": "FR-MCP-USECASE-016 and -017 are back in the store (7 and 8 criteria, no mappings). In round 3, PR 87 converted them into TR-MCP-USECASE-018/019 under FR-MCP-USECASE-001 and deleted them. Their createdAt can't show who recreated them. What should I do?",
+          "header": "USECASE-016/7",
+          "multiSelect": false,
+          "options": [
+            {
+              "label": "Delete again, with receipts (Recommended)",
+              "description": "Copy both full records into a receipt, delete them through the plugin as section 17 approved, and file triage about the reappearance. They may come back if whatever recreated them runs again."
+            },
+            {
+              "label": "Keep, restore develop's edges",
+              "description": "Map FR-016 to TR-018/TEST-019 and FR-017 to TR-019/TEST-020, as develop's mapping did. Their criteria would then exist twice: in the FRs and in the converted TRs."
+            }
+          ]
+        },
+        {
+          "question": "Five FRs exist only in the live store: three empty federation placeholders, the empty FR-WF-005, and FR-TIMER-001 (Manager timers; no such code in this repo). Each one fails the traceability check. How should PR 87 handle them?",
+          "header": "Store-only FRs",
+          "multiSelect": false,
+          "options": [
+            {
+              "label": "Investigate, then propose (Recommended)",
+              "description": "First, read-only: find the TODOs that created each placeholder, and TIMER's owner. Map FR-TIMER-001 to TR-TIMER-LIFECYCLE-001 and TEST-TIMER-001, whose text matches. Bring you a per-record proposal for the four placeholders before writing anything."
+            },
+            {
+              "label": "Retire placeholders, map TIMER",
+              "description": "Copy them into a receipt, then delete the three federation FR/TR placeholder pairs and FR-WF-005. Map FR-TIMER-001 to its TR and TEST."
+            },
+            {
+              "label": "Map placeholders by name",
+              "description": "Map each federation FR to its same-named placeholder TR and TEST, and map TIMER. The match is by name only, and FR-WF-005 would still have no partner."
+            }
+          ]
+        },
+        {
+          "question": "Four of the 18 identifier-scrub hits are exact assertions: one on a historical receipt path and three on shipped configuration values. How should they be handled?",
+          "header": "Scrub hits",
+          "multiSelect": false,
+          "options": [
+            {
+              "label": "Keep as flagged exceptions (Recommended)",
+              "description": "Leave the four assertions exact and record each as a flagged lab-bound exception with its reason. Historical evidence and shipped configuration stay unchanged in PR 87."
+            },
+            {
+              "label": "Change the artifacts",
+              "description": "Change the shipped configuration and the historical receipt path so they hold no lab identifiers, and update the assertions to match. This is a product configuration change inside PR 87."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "line": 78512,
+    "timestamp": "2026-11-03T04:52:55.674Z",
+    "role": "user",
+    "text": "Approvef"
+  },
+  {
+    "line": 89092,
+    "timestamp": "2026-11-03T21:32:10.105Z",
+    "role": "question",
+    "input": {
+      "questions": [
+        {
+          "question": "Holistic read finding B4: TR-MCP-USECASE-018 AC-006 as I appended it at 12:44:03 (\"a cancellation or timeout that a unit test arms on a real timer is such a wait when a step the test asserts must happen before the timer fires\") also covers every hang guard (25 sweep hits), contradicting its own hang-guard sentence, and \"far above\" has no number. How should AC-006 be fixed?",
+          "header": "AC-006 (B4)",
+          "multiSelect": false,
+          "options": [
+            {
+              "label": "Strengthen + margin (Recommended)",
+              "description": "Append: a timer whose only effect is to fail a test that would otherwise hang is a hang guard even when the asserted step must finish first; a test-armed timer is a wall-clock wait when its firing changes what the code under test does and an asserted step must beat it; a hang guard is at least 100 times any real or scripted delay of the awaited step. Reclassify the sweep by script; any hit below the margin gets a test fix in slice Y, and the gates rerun before HV."
+            },
+            {
+              "label": "Strengthen, no margin",
+              "description": "Append only the precedence (the hang-guard sentence governs; the timer sentence covers timers whose firing changes the code under test). No numeric margin, so no code change is expected; \"far above\" stays unquantified and is declared as a risk for the reviewer."
+            }
+          ]
+        },
+        {
+          "question": "Holistic read finding D3: the output-folder check treats a UNC server and share as the root, not as segments, so `//Server./Share/Repo/docs` under the checkout `//Server/Share/Repo` is accepted. Should the FR-MCP-TESTRESOURCE-001 generated-artifact criterion cover server and share names?",
+          "header": "UNC alias (D3)",
+          "multiSelect": false,
+          "options": [
+            {
+              "label": "Strengthen + fix (Recommended)",
+              "description": "Append: the UNC server and share names are held to the same dot, space and colon rule as segments. Slice Y under BDPv4: contract rows and a wrong check, then the fix. In the same file it also removes the IsPathSeparator duplicate of PathIdentity.IsSeparator (DRY) and corrects the slice X change logs that cite \"don't gate on me\" instead of your 13:11 choice. New code head, full gate set again, then HV."
+            },
+            {
+              "label": "Declare as a limit",
+              "description": "No criterion change and no code: declare server and share aliases, other server names (IP, fully qualified), and mapped or substituted drives as limits of the lexical check, beside the admin-share, short-name and link limits already declared."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "line": 103497,
+    "timestamp": "2026-11-05T00:59:51.049Z",
+    "role": "question",
+    "input": {
+      "questions": [
+        {
+          "question": "The fifth holistic read found that PR 87 slice Z3's new Linux startup health wait does not meet its own new criterion TR-MCP-SERVICEUPDATE-001 startup-health-wait as stored. It counts 120 probes instead of a 10-minute deadline, so a server that accepts but stalls makes it about 16 minutes. Any unit state other than active (activating, reloading), or a failing state read, ends the wait, and the failure path then stops the unit. No test binds the 10 minutes or the call in UpdateLinuxService. This is a code gap, so HV round 12 cannot launch yet. How should it be handled?",
+          "header": "Health wait",
+          "multiSelect": false,
+          "options": [
+            {
+              "label": "Strengthen + fix (Recommended)",
+              "description": "Append to startup-health-wait: the 10 minutes are elapsed time from the start and a probe in progress counts against them; reloading keeps waiting, any other non-active state ends the wait as a failed start; a failing state read or probe counts as not yet healthy until the deadline. Then contract rows on a scripted clock, state and throw rows, a binding of the deadline and the UpdateLinuxService call, the fix, and the full gate set again."
+            },
+            {
+              "label": "Narrow to the code",
+              "description": "Reword the criterion to what the code does (120 probes 5 s apart, only active continues, exceptions fail the update). No code change; the gaps become stated behavior."
+            },
+            {
+              "label": "Keep, out of D-B",
+              "description": "Leave criterion and code as they are, declare the gaps, and do not set startup-health-wait satisfied after AGREE."
+            }
+          ]
+        },
+        {
+          "question": "The same read found, and today's 16:46 start log confirms, that when a Linux update fails after replacing the binaries, its failure path restores the old unit file, which still names the removed legacy apphost. The unit then cannot start until someone retargets it by hand, which is why the server stayed down from 16:18 to 16:51 today. That failure-path code predates PR 87. How should it be handled?",
+          "header": "Failed update",
+          "multiSelect": false,
+          "options": [
+            {
+              "label": "Strengthen + fix in Z3 (Recommended)",
+              "description": "Add a TR-MCP-SERVICEUPDATE-001 criterion that a failed update leaves the unit naming an executable that exists in the install; contract first, then the fix on the failure path, in slice Z3 with the health-wait work."
+            },
+            {
+              "label": "Triage, fix later",
+              "description": "File triage, declare it in the PR as a known defect, and change no code for it in PR 87."
+            }
+          ]
+        },
+        {
+          "question": "The Windows service update in the Nuke UpdateService target keeps the old health window (10 probes 2 s apart) after it starts the service, and the server registers every workspace before it listens on Windows too, so a Windows redeploy may stop a server that is starting normally. Nothing has failed there yet. How should this sibling of the Linux health-wait gap be handled?",
+          "header": "Windows wait",
+          "multiSelect": false,
+          "options": [
+            {
+              "label": "Strengthen + fix both (Recommended)",
+              "description": "Extend startup-health-wait to the Windows update (same deadline and state rules over the Windows service state); contract first, then the fix, with the Linux work, gated on both hosts."
+            },
+            {
+              "label": "Declare, out of scope",
+              "description": "State it as an unswept sibling in the PR and the projected problems, file triage, and change no Windows code in PR 87."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "line": 107423,
+    "timestamp": "2026-11-05T02:55:52.836Z",
+    "role": "question",
+    "input": {
+      "questions": [
+        {
+          "question": "Sixth holistic read, finding g1 (verified in build/LinuxServiceHelper.cs:361-389 at 52e6d627). For a legacy unit, the recovery from slice Z3 part 3 calls RetargetLegacyExecStart, which replaces the name McpServer.Support.Mcp everywhere in the unit file and every drop-in, not only in ExecStart. With an install folder whose path holds that name, WorkingDirectory is rewritten to a folder that does not exist, and the unit cannot start. The success path has done the same since before PR 87. No contract row covers a non-ExecStart line, two legacy drop-ins, a legacy fragment overridden by a current drop-in, or a unit left at systemd's start limit. What should happen with criterion failed-update-startable?",
+          "header": "g1 retarget",
+          "multiSelect": false,
+          "options": [
+            {
+              "label": "Strengthen + fix in Z3 (Recommended)",
+              "description": "Append to failed-update-startable: only the ExecStart executable path <install>/McpServer.Support.Mcp is retargeted, in every unit file and drop-in that names it; other lines stay unchanged; a fragment overridden by a current drop-in is left as restored; a failed unit state is cleared so the unit can start. Contract rows first, then the fix in RetargetLegacyExecStart (success and recovery), slice Z3 part 4, full gates again."
+            },
+            {
+              "label": "Declare, keep in D-B",
+              "description": "No code change. Declare the four what-ifs in plan 27.29, the brief and the projected problems; failed-update-startable is still set satisfied after AGREE, on the six rows it covers."
+            },
+            {
+              "label": "Declare, out of D-B",
+              "description": "No code change. Declare the four what-ifs, and failed-update-startable is not set satisfied after AGREE, as with startup-health-wait."
+            }
+          ]
+        },
+        {
+          "question": "Sixth holistic read, finding g2 (verified in build/LinuxServiceHelper.cs:155-171). If the restore completes but the retarget or the daemon-reload after it fails, the update throws \"Update and live-state restoration failed\", although the restore completed. At the runtime-configuration failure point systemd may then still hold the legacy unit until someone reloads by hand, and the message does not say so. The binding asserts only Assert.ThrowsAny<Exception>, and the test double's daemon-reload never fails. What should happen?",
+          "header": "g2 report",
+          "multiSelect": false,
+          "options": [
+            {
+              "label": "Strengthen + fix in Z3 (Recommended)",
+              "description": "Append to failed-update-startable: when the restore completes and a later recovery step fails, the update reports the original failure and the failed step, and says the restore completed and a manual daemon-reload may be needed. Rows and a binding with a failing reload and a failing retarget assert the exception's type and message; done in the same slice as g1 if both are chosen."
+            },
+            {
+              "label": "Declare",
+              "description": "No code change. Declare the misleading message and the untested failing reload and retarget in plan 27.29, the brief and the projected problems."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "line": 125937,
+    "timestamp": "2026-11-05T15:11:14.336Z",
+    "role": "question",
+    "input": {
+      "questions": [
+        {
+          "question": "PR 87's Windows lane failed again at the last code head a3caa21d. SqlServerDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables hit SQL Server's 120 s command timeout (136.59 s), the same case that failed at 4398cffc. In this run every SQL Server class was about 8 times slower than in the eight passing lanes (6 to 17 s there), and no SQL Server test file has changed. Every other gate at a3caa21d is green; Windows Build.Tests has not run. Plan 27.30 says work stops for your decision. How should it be handled?",
+          "header": "SQL flake",
+          "multiSelect": false,
+          "options": [
+            {
+              "label": "Strengthen + fix (Recommended)",
+              "description": "Requirements first: append to TR-MCP-USECASE-019 AC-008 (it already says no outcome depends on how long a helper process takes to start) that no integration case's outcome depends on how long a working host takes to run a step; its own command and step timeouts bound only a hang. Then BDPv4 test-only: a contract over the SQL Server migration cases' command timeout with scripted controls first, then raise the 120 s timeout (assertions unchanged), plus a sweep for sibling fixed timeouts in integration cases. New code head, so every gate reruns on both hosts."
+            },
+            {
+              "label": "Rerun lane, declare",
+              "description": "Rerun only the Windows lane at a3caa21d. If it passes, declare this run as failed and not evidence, with the triage, as at 4398cffc, then continue to round 13. No code or criterion change."
+            },
+            {
+              "label": "Diagnose first",
+              "description": "Read LEGION2's event log and LocalDB error log for 08:20 to 09:05 (read only) and report what they show before you choose a fix."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "line": 126268,
+    "timestamp": "2026-11-05T16:28:24.119Z",
+    "role": "question",
+    "input": {
+      "questions": [
+        {
+          "question": "The LEGION2 logs show memory pressure during the failed Windows lane at a3caa21d. SQL Server logged its memory being paged out from about 08:12 to 08:43, and the host now runs at 83% of 24 GB with the Android emulator, Visual Studio and VS Code resident. Nothing else showed up: no I/O-stall, Defender or Update events. The cause is likely, not proven. How should PR 87 handle the SQL Server Decompose4nf timeout?",
+          "header": "SQL flake",
+          "multiSelect": false,
+          "options": [
+            {
+              "label": "Strengthen + fix (Recommended)",
+              "description": "Requirements first: append to TR-MCP-USECASE-019 AC-008 that no integration case's outcome depends on how long a working host takes to run a step; its own command and step timeouts bound only a hang. Then BDPv4 test-only: a contract over the SQL Server migration cases' command timeout, scripted controls first, then raise the 120 s timeout with assertions unchanged, plus a sweep for sibling fixed timeouts. New code head, so every gate reruns on both hosts."
+            },
+            {
+              "label": "Free host, rerun lane",
+              "description": "You close the heavy desktop apps on LEGION2 (or tell me which ones). I rerun only the Windows lane at a3caa21d, then Windows Build.Tests. If the lane passes, this run is declared failed and not evidence, with the diagnosis receipts and triage. No code or criterion change."
+            },
+            {
+              "label": "Rerun lane, declare",
+              "description": "Rerun only the Windows lane at a3caa21d with the host as it is. If it passes, declare this run failed and not evidence, with the diagnosis receipts and triage, then continue to round 13. No code or criterion change."
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

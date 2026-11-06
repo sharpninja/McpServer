@@ -1,0 +1,130 @@
+[
+  {
+    "id": "BUG-TRIAGE-139",
+    "done": true,
+    "title": "usecase_create fails with an unclassified EF save error and persists no rows",
+    "functionalRequirements": [
+      "FR-MCP-TRIAGE-002",
+      "FR-MCP-USECASE-015",
+      "FR-MCP-USECASE-001"
+    ],
+    "technicalRequirements": [
+      "TR-MCP-TRIAGE-004",
+      "TR-MCP-USECASE-017",
+      "TR-MCP-USECASE-019"
+    ],
+    "dependsOn": [],
+    "taskCount": 189,
+    "checked": 131
+  },
+  {
+    "id": "IMPL-SCANNERALIAS-001",
+    "done": false,
+    "title": "Unit-suite platform scanner: resolve alias chains and static imports of an alias",
+    "functionalRequirements": [
+      "FR-MCP-USECASE-001"
+    ],
+    "technicalRequirements": [
+      "TR-MCP-USECASE-018",
+      "TR-MCP-USECASE-019"
+    ],
+    "dependsOn": [
+      "IMPL-UNITGREEN-001"
+    ],
+    "taskCount": 3,
+    "checked": 0
+  },
+  {
+    "id": "IMPL-SERVICEOVERRIDES-001",
+    "done": false,
+    "title": "Linux update preflight: refuse canonical QBrainAi data and instance overrides as well as the legacy Mcp ones",
+    "functionalRequirements": [],
+    "technicalRequirements": [],
+    "dependsOn": [],
+    "taskCount": 3,
+    "checked": 0
+  },
+  {
+    "id": "IMPL-TXNINTEGRATION-001",
+    "done": false,
+    "title": "Bring the Support.Mcp, Acid and TransactionSecurity integration projects into the integration lane after PLAN-SESSIONTRIAGEFIX-001 merges",
+    "functionalRequirements": [
+      "FR-MCP-BUILD-001",
+      "FR-MCP-173",
+      "FR-MCP-QBOPENAI-001"
+    ],
+    "technicalRequirements": [
+      "TR-MCP-NUKE-019"
+    ],
+    "dependsOn": [
+      "IMPL-UNITGREEN-001",
+      "PLAN-SESSIONTRIAGEFIX-001"
+    ],
+    "taskCount": 4,
+    "checked": 0
+  },
+  {
+    "id": "IMPL-UNITGREEN-001",
+    "done": false,
+    "title": "Make the unit suite green on both lab hosts (BDPv4: 0 failed, 0 skipped)",
+    "functionalRequirements": [
+      "FR-MCP-PATHNORM-001",
+      "FR-MCP-139",
+      "FR-MCP-BUILD-001",
+      "FR-MCP-USECASE-001",
+      "FR-MCP-018",
+      "FR-MCP-SESSIONLOGCTX-001",
+      "FR-MCP-QBOPENAI-001",
+      "FR-MCP-FED-PATH-001",
+      "FR-MCP-TESTRESOURCE-001",
+      "FR-MCP-047",
+      "FR-MCP-REPL-001",
+      "FR-MCP-REPL-007",
+      "FR-MCP-REPL-008",
+      "FR-MCP-040",
+      "FR-MCP-SERVICEUPDATE-001"
+    ],
+    "technicalRequirements": [
+      "TR-MCP-QUALITY-001",
+      "TR-MCP-PATHNORM-001",
+      "TR-MCP-NUKE-018",
+      "TR-MCP-NUKE-019",
+      "TR-MCP-USECASE-018",
+      "TR-MCP-USECASE-019",
+      "TR-MCP-WS-005",
+      "TR-MCP-SESSIONLOG-006",
+      "TR-MCP-REPL-001",
+      "TR-MCP-REPL-008",
+      "TR-MCP-NUKE-020",
+      "TR-MCP-NUKE-016",
+      "TR-MCP-SERVICEUPDATE-001"
+    ],
+    "dependsOn": [],
+    "taskCount": 56,
+    "checked": 0
+  },
+  {
+    "id": "PLAN-AZURERETIRE-001",
+    "done": false,
+    "title": "Retire the Azure DevOps CI requirements FR-MCP-074 and TR-MCP-CI-001",
+    "functionalRequirements": [
+      "FR-MCP-074"
+    ],
+    "technicalRequirements": [
+      "TR-MCP-CI-001"
+    ],
+    "dependsOn": [],
+    "taskCount": 2,
+    "checked": 0
+  },
+  {
+    "id": "PLAN-LINKVALIDATOR-001",
+    "done": false,
+    "title": "Validator for FR, TR, AC, UC and TODO links to deleted or missing items",
+    "functionalRequirements": [],
+    "technicalRequirements": [],
+    "dependsOn": [],
+    "taskCount": 3,
+    "checked": 0
+  }
+]

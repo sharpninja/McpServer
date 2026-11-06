@@ -1,0 +1,51 @@
+{
+  "timestampUtc": "2026-11-06T06:17:11.2782355+00:00",
+  "timestampLocal": "2026-11-06T00:17:13",
+  "method": "workflow.requirements.getFr",
+  "recordId": "FR-MCP-MEMORY-001",
+  "response": {
+    "payload": {
+      "requestId": "req-20261106T061712Z-913a",
+      "result": {
+        "createdAt": "2026-11-06T06:17:13.7054550+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "area": "MCP",
+        "acceptanceCriteria": [
+          {
+            "text": "A memory record has a stable ID, scope, category, raw text, version, author metadata, and created/updated timestamps.",
+            "id": "",
+            "isSatisfied": true
+          },
+          {
+            "text": "Global memories are returned for every workspace and are not stamped with a workspace owner.",
+            "id": "",
+            "isSatisfied": true
+          },
+          {
+            "text": "Workspace memories require an owning workspace and are not returned for any other workspace.",
+            "id": "",
+            "isSatisfied": true
+          },
+          {
+            "text": "Removed memories are hidden from normal reads and lists without physically deleting the row.",
+            "id": "",
+            "isSatisfied": true
+          },
+          {
+            "text": "Memory text round-trips exactly, including internal newlines and punctuation.",
+            "id": "",
+            "isSatisfied": true
+          }
+        ],
+        "status": "pending",
+        "title": "Global and workspace memory storage",
+        "updatedAt": "2026-11-06T06:17:13.7055853+00:00",
+        "id": "FR-MCP-MEMORY-001",
+        "description": "The QBrain.AI SHALL store raw-text memories with a stable memory ID, explicit scope, and exact text round-trip semantics. Supported scopes are Global and Workspace. Global memories are visible to every workspace, while Workspace memories are visible only to their owning workspace.",
+        "priority": "medium"
+      },
+      "deprecated": true
+    },
+    "type": "result"
+  }
+}

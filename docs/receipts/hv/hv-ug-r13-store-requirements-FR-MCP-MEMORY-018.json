@@ -1,0 +1,8 @@
+{
+  "timestampUtc": "2026-11-06T06:16:48.1487371+00:00",
+  "timestampLocal": "2026-11-06T00:16:50",
+  "method": "workflow.requirements.getFr",
+  "recordId": "FR-MCP-MEMORY-018",
+  "wrapperError": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261106T061649Z-d9a6\n  code: not_found\n  message: FR 'FR-MCP-MEMORY-018' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getFr\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n",
+  "explicitNotFound": true
+}

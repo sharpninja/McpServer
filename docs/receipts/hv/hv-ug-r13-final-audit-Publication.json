@@ -1,0 +1,12 @@
+{
+  "timestampUtc": "2026-11-06T07:15:44.1857842+00:00",
+  "timestampLocal": "2026-11-06T01:15:44",
+  "mode": "Publication",
+  "data": [
+    {
+      "fileCount": 5263,
+      "hits": [],
+      "note": "Read-only secret-pattern inspection. Matching text and marker values are never emitted."
+    }
+  ]
+}

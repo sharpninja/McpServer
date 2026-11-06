@@ -1,0 +1,25 @@
+{
+  "keys": [
+    "currentLayer",
+    "testing",
+    "technical",
+    "mappings",
+    "functional"
+  ],
+  "layer": "layer-1",
+  "matching": [],
+  "counts": [
+    {
+      "kind": "functional",
+      "count": 399
+    },
+    {
+      "kind": "technical",
+      "count": 548
+    },
+    {
+      "kind": "testing",
+      "count": 622
+    }
+  ]
+}

@@ -1,0 +1,434 @@
+{
+  "timestampUtc": "2026-11-06T07:33:29.5519167+00:00",
+  "timestampLocal": "2026-11-06T01:33:29",
+  "mode": "PushAudit",
+  "data": [
+    {
+      "line": 975,
+      "timestamp": "2026-10-19T14:20:47.46Z",
+      "tool": "Write",
+      "snippets": [
+        "mmit failed' }\\n    Write-Output ('Commit: ' + (& git -C $Worktree log -1 --format='%H %s'))\\n}\\n\\nif ($Push) {\\n    $remoteRef = \\\"refs/heads/$branch\\\"\\n    $existing = @(& git -C $Worktree ls-remote origin $remoteRef)\\n    Write-Output \\\"Remote $remoteRef before pus",
+        " ($PSCmdlet.ShouldProcess(\\\"origin $remoteRef\\\", 'git push (no force)')) {\\n        & git -C $Worktree push -u origin \\\"HEAD:$remoteRef\\\"\\n        if ($LASTEXITCODE -ne 0) { throw 'git push failed' }\\n        $after = @(& git -C $Worktree ls-remote origin $remoteRef)"
+      ]
+    },
+    {
+      "line": 2964,
+      "timestamp": "2026-10-19T15:35:52.15Z",
+      "tool": "Write",
+      "snippets": [
+        "let.ShouldProcess($Worktree, 'git worktree remove --force')) {\\n    & git -C $Repo worktree remove --force $Worktree\\n    if ($LASTEXITCODE -ne 0) { throw 'git worktree remove failed' }\\n    & git -C $Repo worktree pr"
+      ]
+    },
+    {
+      "line": 2990,
+      "timestamp": "2026-10-19T15:36:49.273Z",
+      "tool": "Write",
+      "snippets": [
+        "e worktree at 10:36:35 local: git worktree remove --force, then git worktree prune; readback exists False, still registered False'; type = 'edit'; status = 'completed'; filePath = '/home/sharpninja/github/McpServer/.w",
+        " durable scratch folder.'\\n            'Decision: --force is used because the only tracked changes are the two benchmark files the gate rewrote in that worktree, which are my run''s side effects, not work. Consequence"
+      ]
+    },
+    {
+      "line": 2999,
+      "timestamp": "2026-10-19T15:37:00.424Z",
+      "tool": "Bash",
+      "snippets": [
+        "mark files were changed) with git worktree remove --force and prune; readback: gone and unregistered. Its 8 receipt files for run pr82-baseline-20261019T1407Z were first copied to ~/.claude/scratch/pr82-review-2026101"
+      ]
+    },
+    {
+      "line": 4922,
+      "timestamp": "2026-10-19T19:47:22.481Z",
+      "tool": "Write",
+      "snippets": [
+        "/unit-suite-green-20261019`; Windows worktree `F:/GitHub/McpServer/.worktrees/unit-suite-green-20261019` from the pushed branch, `safe.directory` per process only.\\n- Step 0: fresh Linux baseline `./build.ps1 Test --test-run-id unit-green-linux-base-<stamp>` at `ace70daa` (expe"
+      ]
+    },
+    {
+      "line": 8927,
+      "timestamp": "2026-10-19T22:26:12.395Z",
+      "tool": "Write",
+      "snippets": [
+        "e continuing' }\\n    Write-Output ('Merge: ' + (& git -C $Worktree log -1 --format='%H %P %s'))\\n    if ($Push) {\\n        $remoteRef = \\\"refs/heads/$branch\\\"\\n        & git -C $Worktree push -u origin \\\"HEAD:$remoteRef\\\"\\n        if ($LASTEXITCODE -ne 0) { throw 'git p"
+      ]
+    },
+    {
+      "line": 17021,
+      "timestamp": "2026-10-20T15:02:30.352Z",
+      "tool": "Write",
+      "snippets": [
+        "nly. Standing rules from now on: the /mnt/legion2-github tree is read-only from LAB-OMARCHY (no commit, push or build there), never touch the samba credential file, use IP addresses for the link, and recall details through the plugin memory tools.'\\n            Respon"
+      ]
+    },
+    {
+      "line": 17789,
+      "timestamp": "2026-10-20T15:38:53.517Z",
+      "tool": "Edit",
+      "snippets": [
+        " is checked under its stored name). LEGION2's F:\\\\github is mounted read-only-by-rule at /mnt/legion2-github: never commit, push or build there from here, never touch /etc/samba/cred-legion2.\""
+      ]
+    },
+    {
+      "line": 18156,
+      "timestamp": "2026-10-20T15:54:29.754Z",
+      "tool": "Write",
+      "snippets": [
+        ". Supports -WhatIf.\\n.PARAMETER Worktree\\n    The git worktree.\\n.PARAMETER ExpectedSha\\n    The commit HEAD must be before the push.\\n#>\\n[CmdletBinding(SupportsShouldProcess)]\\nparam(\\n    [Parameter(Mandatory)] [string] $Worktree,\\n    [Parameter(Mandatory)] [ValidatePattern('^[0-9a-f]{40",
+        "remoteRef = \\\"refs/heads/$branch\\\"\\n$before = @(& git -C $Worktree ls-remote origin $remoteRef)\\nWrite-Output \\\"Remote $remoteRef before push: $(if ($before.Count -gt 0) { $before -join ' ' } else { '(absent)' })\\\"\\nif ($PSCmdlet.ShouldProcess(\\\"origin $remoteRef\\\", \\\"git push $ExpectedSha (no force)",
+        "\\\")) {\\n    & git -C $Worktree push origin \\\"HEAD:$remoteRef\\\"\\n    if ($LASTEXITCODE -ne 0) { throw 'git push failed' }\\n    $after = @(& git -C $Worktree ls-remote origin $remoteRef)\\n    Write-Output \\\"Remote $remoteRef after push: $($after -join ' ')\\\"\\n    if (-not"
+      ]
+    },
+    {
+      "line": 18328,
+      "timestamp": "2026-10-20T16:05:54.703Z",
+      "tool": "Write",
+      "snippets": [
+        "sses, not hostnames\\\"), that PAYTON-LEGION2's F:\\\\github is mounted at /mnt/legion2-github and is read-only from LAB-OMARCHY (never commit, push or run builds in it), and never to read, print or copy /etc/samba/cred-legion2 or any password.\\n\\nIMPLEMENTER DECISIONS (plan section 13 as revised, and secti",
+        " run nothing on Windows that writes. /mnt/legion2-github is read-only for you as well: no build, commit or push there.\\n\\nMANDATORY ATTACK SURFACES (every one, scored separately): (1) every claim below and every implementer claim in the plan, the PR body, the commits, th"
+      ]
+    },
+    {
+      "line": 22759,
+      "timestamp": "2026-10-20T22:04:59.654Z",
+      "tool": "Write",
+      "snippets": [
+        "5b4cd8 says it carries the traceability logs, but git ignores *.log, so it did not; the pushed message stays (no history rewrite) and 6b89998f carries .out.txt copies, which is the pattern rounds 1 and 2 already used.'\\n            'Decision: present t"
+      ]
+    },
+    {
+      "line": 24669,
+      "timestamp": "2026-10-20T23:54:53.464Z",
+      "tool": "Write",
+      "snippets": [
+        "sses, not hostnames\\\"), that PAYTON-LEGION2's F:\\\\github is mounted at /mnt/legion2-github and is read-only from LAB-OMARCHY (never commit, push or run builds in it), and never to read, print or copy /etc/samba/cred-legion2 or any password.\\n- 2026-10-20, after round 3: \\\"Structural fix, round 4 (Recomm",
+        " run nothing on Windows that writes. /mnt/legion2-github is read-only for you as well: no build, commit or push there.\\n\\nMANDATORY ATTACK SURFACES (every one, scored separately): (1) every claim below and every implementer claim in the plan, the PR body, the commits, th"
+      ]
+    },
+    {
+      "line": 27442,
+      "timestamp": "2026-10-21T10:31:24.236Z",
+      "tool": "Write",
+      "snippets": [
+        "sses, not hostnames\\\"), that PAYTON-LEGION2's F:\\\\github is mounted at /mnt/legion2-github and is read-only from LAB-OMARCHY (never commit, push or run builds in it), and never to read, print or copy /etc/samba/cred-legion2 or any password.\\n- 2026-10-21, after round 4 (asked 2026-10-20T23:08:10, with t",
+        " run nothing on Windows that writes. /mnt/legion2-github is read-only for you as well: no build, commit or push there.\\n\\nMANDATORY ATTACK SURFACES (every one, scored separately): (1) every claim below and every implementer claim in the plan, the PR body, the commits, th"
+      ]
+    },
+    {
+      "line": 33850,
+      "timestamp": "2026-10-21T19:16:14.591Z",
+      "tool": "Write",
+      "snippets": [
+        "addresses, not hostnames\\\"); PAYTON-LEGION2's F:\\\\github mounted at /mnt/legion2-github is read-only from LAB-OMARCHY (never commit, push or run builds in it); never read, print or copy /etc/samba/cred-legion2 or any password.\\n- 2026-10-21, answered by 12:26:11 (asked 12:19:02, after round 5, as",
+        " run nothing on Windows that writes. /mnt/legion2-github is read-only for you as well: no build, commit or push there.\\n\\nMANDATORY ATTACK SURFACES (every one, scored separately): (1) every claim below and every implementer claim in the plan, the PR body, the commits, th"
+      ]
+    },
+    {
+      "line": 34055,
+      "timestamp": "2026-10-21T19:25:56.037Z",
+      "tool": "Write",
+      "snippets": [
+        " receipts (c3625a64) without checking file sizes; GitHub warned that hv-ug-r5-test-results.json is 98.19 MB; it stays in history (no force push). Sizes are checked before every later commit.\\n- The copy of the traceability and failed-compile logs as .out.txt receipts (Copy-FileTo.ps1, 14:08:11) ran wit"
+      ]
+    },
+    {
+      "line": 35943,
+      "timestamp": "2026-10-26T14:52:02.717Z",
+      "tool": "Write",
+      "snippets": [
+        "addresses, not hostnames\\\"); PAYTON-LEGION2's F:\\\\github mounted at /mnt/legion2-github is read-only from LAB-OMARCHY (never commit, push or run builds in it); never read, print or copy /etc/samba/cred-legion2 or any password.\\n- 2026-10-26, asked at 09:02:18 after round 6 as a goal stop conditio",
+        " run nothing on Windows that writes. /mnt/legion2-github is read-only for you as well: no build, commit or push there.\\n\\nMANDATORY ATTACK SURFACES (every one, scored separately): (1) every claim below and every implementer claim in the plan, the PR body, the commits, th"
+      ]
+    },
+    {
+      "line": 38878,
+      "timestamp": "2026-10-26T16:55:41.328Z",
+      "tool": "AskUserQuestion",
+      "snippets": [
+        "d the 20 receipts, a signed docs-only commit, and git push origin HEAD:fix/unit-suite-green-20261019 (no force).\""
+      ]
+    },
+    {
+      "line": 43020,
+      "timestamp": "2026-10-26T20:45:58.067Z",
+      "tool": "Bash",
+      "snippets": [
+        "home/sharpninja/.claude/projects/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532.jsonl -Pattern \\\"(Push-Branch|Publish-Push|Invoke-GitPush|-Push\\\\b)\\\" -Last 6\","
+      ]
+    },
+    {
+      "line": 43114,
+      "timestamp": "2026-10-26T20:50:43.753Z",
+      "tool": "Write",
+      "snippets": [
+        "as kingd with the kingd key; PAYTON-LEGION2's F:\\\\github mounted at /mnt/legion2-github is read-only from LAB-OMARCHY (never commit, push or run builds in it); never read, print or copy /etc/samba/cred-legion2 or any password.\\n- 2026-10-26, during round 7: \\\"I want you to perform a repo-wide sel",
+        " run nothing on Windows that writes. /mnt/legion2-github is read-only for you as well: no build, commit or push there.\\n\\nMANDATORY ATTACK SURFACES (every one, scored separately): (1) every claim below and every implementer claim in the plan, the PR body, the commits, th"
+      ]
+    },
+    {
+      "line": 49735,
+      "timestamp": "2026-10-27T19:27:35.25Z",
+      "tool": "Agent",
+      "snippets": [
+        "ite files only with the Write tool.\\n- Do not run git commands that change anything (add, commit, push, rm, checkout, reset, stash). Do not build, restore, or run tests or Nuke targets. Do not change TODO, requirements, or triage records.\\n- If anything blocks y"
+      ]
+    },
+    {
+      "line": 49737,
+      "timestamp": "2026-10-27T19:27:51.618Z",
+      "tool": "Agent",
+      "snippets": [
+        "ite files only with the Write tool.\\n- Do not run git commands that change anything (add, commit, push, rm, checkout, reset, stash). Do not build, restore, or run tests or Nuke targets. Do not change TODO, requirements, or triage records.\\n- If anything blocks y"
+      ]
+    },
+    {
+      "line": 49739,
+      "timestamp": "2026-10-27T19:28:08.072Z",
+      "tool": "Agent",
+      "snippets": [
+        "ite files only with the Write tool.\\n- Do not run git commands that change anything (add, commit, push, rm, checkout, reset, stash). Do not build, restore, or run tests or Nuke targets. Do not change TODO, requirements, or triage records.\\n- If anything blocks y"
+      ]
+    },
+    {
+      "line": 49741,
+      "timestamp": "2026-10-27T19:28:24.455Z",
+      "tool": "Agent",
+      "snippets": [
+        "ite files only with the Write tool.\\n- Do not run git commands that change anything (add, commit, push, rm, checkout, reset, stash). Do not build, restore, or run tests or Nuke targets. Do not change TODO, requirements, or triage records.\\n- If anything blocks y"
+      ]
+    },
+    {
+      "line": 51402,
+      "timestamp": "2026-10-27T21:18:01.972Z",
+      "tool": "Edit",
+      "snippets": [
+        "  \"old_string\": \"GitHub Actions (`.github/workflows/build.yml`) on Windows-latest with .NET 9.0. Triggers on push/PR to main/develop. Jobs: build-test, validate, package, msix, publish. The Nuke `Test` target excludes `*.IntegrationTests` projects.\","
+      ]
+    },
+    {
+      "line": 57991,
+      "timestamp": "2026-10-28T23:36:05.563Z",
+      "tool": "Write",
+      "snippets": [
+        "e first commit\\n    after the base, and develop's GitHub branch-protection force-push and deletion settings (gh api, read-only).\\n.PARAMETER Worktree\\n    A worktree of the repository.\\n.PARAMETER Head\\n    The branch whose base on develop is me"
+      ]
+    },
+    {
+      "line": 58048,
+      "timestamp": "2026-10-28T23:38:39.408Z",
+      "tool": "Write",
+      "snippets": [
+        "develop's tip, push the base to develop\\n    with --force-with-lease pinned to the expected tip, and read it back; (4) fetch without pruning. Local\\n    branches are not changed. Supports -WhatIf: the dry run performs the read-o",
+        "et\\\", \\\"Fast-forward to $ExpectedTip\\\")) {\\n    & git -C $Worktree push origin \\\"${ExpectedTip}:refs/heads/$Target\\\" 2>&1 | ForEach-Object { \\\"  PUSH $_\\\" }\\n    if ($LASTEXITCODE -ne 0) { throw \\\"push to $Target failed; develop un",
+        "e-push (lease $ExpectedTip) to $Base\\\")) {\\n    & git -C $Worktree push \\\"--force-with-lease=refs/heads/develop:$ExpectedTip\\\" origin \\\"${Base}:refs/heads/develop\\\" 2>&1 | ForEach-Object { \\\"  PUSH $_\\\" }\\n    if ($LASTEXITCODE -ne"
+      ]
+    },
+    {
+      "line": 58107,
+      "timestamp": "2026-10-28T23:41:16.274Z",
+      "tool": "Write",
+      "snippets": [
+        "t branch from an expected tip back to a base with git reset --keep, after origin was\\n    reset the same way, so a later plain push from that checkout cannot fast-forward the removed commits back.\\n    Refuses unless the checkout's branch is the named one, its HEAD is the expected tip, orig"
+      ]
+    },
+    {
+      "line": 58131,
+      "timestamp": "2026-10-28T23:42:18.595Z",
+      "tool": "Write",
+      "snippets": [
+        "r each named branch (git ls-remote, straight from GitHub) beside the\\n    local branch tip and the local remote-tracking tip, so a push claim is checked against the remote itself.\\n    Changes nothing.\\n.PARAMETER Repo\\n    A checkout of the repository.\\n.PARAMETER Branches\\n    Branch names; a"
+      ]
+    },
+    {
+      "line": 58157,
+      "timestamp": "2026-10-28T23:43:05.482Z",
+      "tool": "Bash",
+      "snippets": [
+        "e-qb is d3df535316813a81fa372c4da17c8f6cf0f46539 (git ls-remote at 2026-10-28T18:42:51), pushed as a fast-forward from ec84f4c9 at 18:39:40 by Move-DevelopToBranch.ps1, so it holds all 25 commits removed from develop. Local cline-qb is still ec84f4c9 (c",
+        "d out in the stopped QB worktree /home/sharpninja/github/cline/.worktrees/mcpserver-qbrain, left untouched); pushing it would be rejected as non-fast-forward.\\\"\","
+      ]
+    },
+    {
+      "line": 58181,
+      "timestamp": "2026-10-28T23:44:05.203Z",
+      "tool": "Write",
+      "snippets": [
+        "9..d3df5353 to cline-qb, read back d3df5353; then git push --force-with-lease=refs/heads/develop:d3df5353 origin 3da2db93:refs/heads/develop, \\\"+ d3df5353...3da2db93 (forced update)\\\", read back 3da2db93; fetch without",
+        "191.'\\n            'Finding: PAYTON-LEGION2''s F:/GitHub/McpServer develop still holds d3df5353; a plain push from there would restore all 25 commits on develop; left for the operator because that tree is read-only for me.'\\n        )\\n        tags            = @('IMPL"
+      ]
+    },
+    {
+      "line": 58203,
+      "timestamp": "2026-10-28T23:45:02.76Z",
+      "tool": "Bash",
+      "snippets": [
+        "stays at 4634c73c, clean. Open: PAYTON-LEGION2 F:/GitHub/McpServer develop still at d3df5353, so a plain push from there would restore the commits; asked the operator.\\\"\","
+      ]
+    },
+    {
+      "line": 58278,
+      "timestamp": "2026-10-28T23:49:02.3Z",
+      "tool": "AskUserQuestion",
+      "snippets": [
+        "      \"question\": \"PAYTON-LEGION2's F:/GitHub/McpServer is on develop at d3df5353, so a plain push from there would put all 25 commits back on develop. That tree is read-only to me unless you say so. Reset it?\","
+      ]
+    },
+    {
+      "line": 58304,
+      "timestamp": "2026-10-28T23:50:41.037Z",
+      "tool": "Write",
+      "snippets": [
+        "efuses unless origin holds the\\n    expected SHA (git ls-remote) and that SHA is an ancestor of the new tip, then pushes and reads the branch back\\n    from origin. Supports -WhatIf: the dry run performs the read-only checks only.\\n.PARAMETER Worktree\\n    A checkout of the rep",
+        "igin $Branch\\\", \\\"Plain push $NewTip\\\")) {\\n    & git -C $Worktree push origin \\\"${NewTip}:refs/heads/$Branch\\\" 2>&1 | ForEach-Object { \\\"  PUSH $_\\\" }\\n    if ($LASTEXITCODE -ne 0) { throw 'push failed' }\\n    $after = Get-RemoteTip\\n    Write-Output \\\"READBACK origin $Branch=$after\\\"\\n    if ($after -"
+      ]
+    },
+    {
+      "line": 58392,
+      "timestamp": "2026-10-28T23:53:17.764Z",
+      "tool": "Write",
+      "snippets": [
+        " the removed tip to origin develop's new tip with git reset --keep, so a later plain\\n    push from it cannot restore the removed commits. Refuses unless the checkout is on develop at the expected tip\\n    and origin develop (ls-remote) holds the new tip"
+      ]
+    },
+    {
+      "line": 58811,
+      "timestamp": "2026-10-29T00:13:03.088Z",
+      "tool": "Bash",
+      "snippets": [
+        "home/sharpninja/.claude/projects/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532.jsonl -Needles \\\"i approve the force-push|Merge develop first, then HV (Recommended)\\\\\\\\\\\\\\\". You can|Get it done.\\\" -Since 2026-10-28T00:00:00 -MaxHits 1\","
+      ]
+    },
+    {
+      "line": 58882,
+      "timestamp": "2026-10-29T00:15:23.429Z",
+      "tool": "Edit",
+      "snippets": [
+        " develop force-pushed `d3df5353...3da2db93` with `--force-with-lease` pinned to `d3df5353`;\\n  - the LAB-OMARCHY main checkout's develop reset with `reset --keep`, keeping its one local edit;\\n  - this branch's open develop merg",
+        ");\\n  - and later, approved, PAYTON-LEGION2's `F:/GitHub/McpServer` develop reset the same way (read-only otherwise).\\n- Operator, 18:41:12: \\\"push the cline-qb branch to origin as well.\\\" It already was: origin `cline-qb` is `d3df5353`.\\n- Operator, 18:45:02: \\\"Were all 25 commits you moved related to cod"
+      ]
+    },
+    {
+      "line": 59039,
+      "timestamp": "2026-10-29T00:19:06.413Z",
+      "tool": "Write",
+      "snippets": [
+        "mit read-back failed; not pushed' }\\n$branch = (& git -C $Worktree rev-parse --abbrev-ref HEAD).Trim()\\n& git -C $Worktree push origin \\\"HEAD:refs/heads/$branch\\\" 2>&1 | ForEach-Object { \\\"  PUSH $_\\\" }\\nif ($LASTEXITCODE -ne 0) { throw 'push failed' }\\n$remote = ((@(& git -C $Worktree "
+      ]
+    },
+    {
+      "line": 59118,
+      "timestamp": "2026-10-29T00:24:43.13Z",
+      "tool": "Write",
+      "snippets": [
+        "indows that writes, builds or tests. /mnt/legion2-github is read-only for you as well: no build, commit or push there.\\n\\nMANDATORY ATTACK SURFACES (every one, scored separately): (1) every claim below and every implementer claim in the plan, the PR body, the commits, th"
+      ]
+    },
+    {
+      "line": 59368,
+      "timestamp": "2026-10-29T00:38:59.783Z",
+      "tool": "Write",
+      "snippets": [
+        "ed; not pushed' }\\nif ($Push) {\\n    $branch = (& git -C $Worktree rev-parse --abbrev-ref HEAD).Trim()\\n    & git -C $Worktree push origin \\\"HEAD:refs/heads/$branch\\\" 2>&1 | ForEach-Object { \\\"  PUSH $_\\\" }\\n    if ($LASTEXITCODE -ne 0) { throw 'push failed' }\\n    $remote = ((@(& git -C $W"
+      ]
+    },
+    {
+      "line": 64457,
+      "timestamp": "2026-10-29T15:08:26.981Z",
+      "tool": "Write",
+      "snippets": [
+        "indows that writes, builds or tests. /mnt/legion2-github is read-only for you as well: no build, commit or push there.\\n\\nMANDATORY ATTACK SURFACES (every one, scored separately): (1) every claim below and every implementer claim in the plan, the PR body, the commits, th"
+      ]
+    },
+    {
+      "line": 70905,
+      "timestamp": "2026-11-02T17:24:18.467Z",
+      "tool": "AskUserQuestion",
+      "snippets": [
+        "DERATION-PLACEHOLDERS-REMOVED-20261102.md into F:/GitHub/McpServer/.worktrees/federation-fixes-20261007 on LEGION2 over SSH. No commit or push.\""
+      ]
+    },
+    {
+      "line": 71108,
+      "timestamp": "2026-11-02T17:38:20.249Z",
+      "tool": "Write",
+      "snippets": [
+        "d file of a worktree, listed one by one\\n    from git status, except paths matching an exclusion regex, with a signed message file; optionally pushes with a\\n    plain push. Prints the full list first. Supports -WhatIf (Commit-PathsSigned runs its checks and commits nothing).\\n.PARAMETER Worktree\\n    The "
+      ]
+    },
+    {
+      "line": 72114,
+      "timestamp": "2026-11-02T18:38:49.472Z",
+      "tool": "Write",
+      "snippets": [
+        "put \\\"[$((Get-Date).ToString('s'))] 3/4 push\\\"\\n& git -C $Worktree push origin \\\"HEAD:$branch\\\"\\nif ($LASTEXITCODE -ne 0) { Write-Output 'FAILED push'; exit 1 }\\n\\nWrite-Output \\\"[$((Get-Date).ToString('s'))] 4/4 readback\\\"\\n$remot"
+      ]
+    },
+    {
+      "line": 90934,
+      "timestamp": "2026-11-04T00:07:42.445Z",
+      "tool": "Bash",
+      "snippets": [
+        "dles:Start-NukeRun.ps1 -Worktree /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 -Target MigrationIntegrationTests|Push-Branch|Set-BranchRef|fix/unit-suite-green-20261019-windows\\\" \\\"-Since:2026-11-03T16:50:00\\\" -MaxHits:6\","
+      ]
+    },
+    {
+      "line": 142315,
+      "timestamp": "2026-11-06T00:19:34.712Z",
+      "tool": "Edit",
+      "snippets": [
+        " signed with the marker's commit-signing line, by git 18:03:22 or after, pushed, origin equal), the last code head:\\n  - g1, b1 and d1: in FederationControllerTests (14 lines), FederationEnvelopeSignerTests (12), FederationFanoutSyncServ"
+      ]
+    },
+    {
+      "line": 142349,
+      "timestamp": "2026-11-06T00:19:51.24Z",
+      "tool": "Edit",
+      "snippets": [
+        " signed with the marker's commit-signing line, by git 18:03:22 or after, pushed, origin equal), the last code head:\",",
+        " signed with the marker's commit-signing line, by git 18:03:23, pushed, origin equal), the last code head:\""
+      ]
+    },
+    {
+      "line": 145883,
+      "timestamp": "2026-11-06T01:52:57.794Z",
+      "tool": "Edit",
+      "snippets": [
+        " signed with the marker's commit-signing line, by git 18:03:23, pushed, origin equal), the last code head:\",",
+        " signed with the marker's commit-signing line, by git 18:03:23, pushed, origin equal), the last code head until slice Z10 (27.36):\""
+      ]
+    },
+    {
+      "line": 146024,
+      "timestamp": "2026-11-06T01:55:46.357Z",
+      "tool": "Edit",
+      "snippets": [
+        " signed with the marker's commit-signing line, by git 19:26:00, pushed, origin equal), the last code head:\\n  - g1: the summary of `HostileReviewG4OverlayTests.HostileReviewWorker_InvalidOptions_FailStartup` now reads \\\"(TEST-NO"
+      ]
+    },
+    {
+      "line": 151402,
+      "timestamp": "2026-11-06T04:13:25.533Z",
+      "tool": "Edit",
+      "snippets": [
+        " signed with the marker's commit-signing line, by git 21:18:51, pushed, origin equal), the last code head (g1): the 2026-11-02 sentences of `RequirementsWorkflow.ListMappingsAsync` and `CreateMappingAsync` are back in their firs"
+      ]
+    },
+    {
+      "line": 151448,
+      "timestamp": "2026-11-06T04:14:05.714Z",
+      "tool": "Bash",
+      "snippets": [
+        "home/sharpninja/.claude/projects/-home-sharpninja-github-McpServer/cea7a82d-3843-4f79-8b4a-4f40d4a21532.jsonl \\\"-Pattern:(Push-FastForward\\\\.ps1|-Name ug-r13z11-compile-1)[^\\\\x22]{0,400}-WhatIf\\\" -Width 120\","
+      ]
+    },
+    {
+      "line": 153213,
+      "timestamp": "2026-11-06T05:11:39.736Z",
+      "tool": "Edit",
+      "snippets": [
+        " signed with the marker's commit-signing line, by git 19:26:00, pushed, origin equal), the last code head:\",",
+        " signed with the marker's commit-signing line, by git 19:26:00, pushed, origin equal), the last code head until slice Z11 (27.37; fourteenth holistic read finding a3):\""
+      ]
+    }
+  ]
+}

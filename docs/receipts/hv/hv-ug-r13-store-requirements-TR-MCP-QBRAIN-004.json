@@ -1,0 +1,37 @@
+{
+  "timestampUtc": "2026-11-06T06:17:21.7779557+00:00",
+  "timestampLocal": "2026-11-06T00:17:24",
+  "method": "workflow.requirements.getTr",
+  "recordId": "TR-MCP-QBRAIN-004",
+  "response": {
+    "payload": {
+      "requestId": "req-20261106T061722Z-3f30",
+      "result": {
+        "createdAt": "2026-11-06T06:17:24.1449137+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "area": "MCP",
+        "acceptanceCriteria": [
+          {
+            "text": "No cloud phase renames a GitHub repository.",
+            "id": "",
+            "isSatisfied": false
+          },
+          {
+            "text": "Package RepositoryUrl values still point at sharpninja/QBrainAi.",
+            "id": "",
+            "isSatisfied": false
+          }
+        ],
+        "status": "in_progress",
+        "title": "",
+        "updatedAt": "2026-11-06T06:17:24.1450528+00:00",
+        "id": "TR-MCP-QBRAIN-004",
+        "description": "Cloud pull requests land on the current GitHub names. Payton renames repositories only in Phase 3. Phase 1 does not rename a GitHub repository. RepositoryUrl keeps the live repo name until that rename.\n**Covered by:** FR: FR-MCP-QBRAIN-005; TEST: TEST-MCP-QBRAIN-004",
+        "subarea": "QBRAIN",
+        "priority": "medium"
+      },
+      "deprecated": true
+    },
+    "type": "result"
+  }
+}

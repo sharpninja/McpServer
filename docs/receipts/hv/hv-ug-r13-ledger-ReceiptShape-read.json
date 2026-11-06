@@ -1,0 +1,82 @@
+{
+  "keys": [
+    "timestampUtc",
+    "timestampLocal",
+    "method",
+    "recordId",
+    "response"
+  ],
+  "items": [
+    {
+      "name": "timestampUtc",
+      "type": "DateTime",
+      "count": 1,
+      "keys": [
+        "DateTime",
+        "Date",
+        "Day",
+        "DayOfWeek",
+        "DayOfYear",
+        "Hour",
+        "Kind",
+        "Millisecond",
+        "Microsecond",
+        "Nanosecond",
+        "Minute",
+        "Month",
+        "Second",
+        "Ticks",
+        "TimeOfDay",
+        "Year"
+      ]
+    },
+    {
+      "name": "timestampLocal",
+      "type": "DateTime",
+      "count": 1,
+      "keys": [
+        "DateTime",
+        "Date",
+        "Day",
+        "DayOfWeek",
+        "DayOfYear",
+        "Hour",
+        "Kind",
+        "Millisecond",
+        "Microsecond",
+        "Nanosecond",
+        "Minute",
+        "Month",
+        "Second",
+        "Ticks",
+        "TimeOfDay",
+        "Year"
+      ]
+    },
+    {
+      "name": "method",
+      "type": "String",
+      "count": 1,
+      "keys": [
+        "Length"
+      ]
+    },
+    {
+      "name": "recordId",
+      "type": "String",
+      "count": 1,
+      "keys": [
+        "Length"
+      ]
+    },
+    {
+      "name": "response",
+      "type": "PSCustomObject",
+      "count": 1,
+      "keys": [
+        "type",
+        "payload"
+      ]
+    }
+  ]
+}

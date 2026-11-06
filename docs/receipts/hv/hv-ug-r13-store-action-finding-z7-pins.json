@@ -1,0 +1,25 @@
+{
+  "timestampUtc": "2026-11-06T07:17:46.5991503+00:00",
+  "timestampLocal": "2026-11-06T01:17:50",
+  "method": "workflow.sessionlog.appendActions",
+  "recordId": "",
+  "response": {
+    "type": "result",
+    "payload": {
+      "result": {
+        "degraded": false,
+        "requestId": "req-20261106T055026Z-unitgreen-r13",
+        "failsafePath": "",
+        "retryable": false,
+        "persisted": true,
+        "childStderr": "",
+        "queued": false,
+        "code": "persisted",
+        "method": "workflow.sessionlog.appendActions",
+        "message": "Session log persist confirmed a durable write for request 'req-20261106T055026Z-unitgreen-r13'.",
+        "sessionId": "Codex-20261106T055000Z-plugin-session",
+        "agent": "Codex"
+      }
+    }
+  }
+}

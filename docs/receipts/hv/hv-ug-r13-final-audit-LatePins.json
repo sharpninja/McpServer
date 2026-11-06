@@ -1,0 +1,378 @@
+{
+  "timestampUtc": "2026-11-06T07:16:12.3294231+00:00",
+  "timestampLocal": "2026-11-06T01:16:12",
+  "mode": "LatePins",
+  "data": [
+    {
+      "receipt": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z7-compile-1.json",
+      "commit": "1d77a79c",
+      "head": "88c5abccee5f92b785f1368fdaace50dc0d4e2c2",
+      "exitCode": 0,
+      "total": null,
+      "failed": null,
+      "skipped": null,
+      "pins": [
+        {
+          "path": "src/QBrainAi.GraphRag/Services/GraphRagService.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "src/QBrainAi.Services/Memory/MemoryConsolidateOperations.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "src/QBrainAi.Services/Services/FederationEnvelopeSigner.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "src/QBrainAi.Services/Services/MemoryService.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "src/QBrainAi.Services/Services/SessionLogService.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "src/QBrainAi.TransactionSecurity/Services/TransactionSecurityServices.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Client.Tests/RequirementTimestampJsonBindingTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Repl.Core.Tests/SessionLogTestHelpers.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Repl.Core.Tests/StubAuthRotationHandlerTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceKeyIdentityContractTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/OwnedInstanceProviderSettingContractTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/ScriptedClock.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationEnvelopeSignerTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/ScriptedTimeProvider.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProvider.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProviderTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/TestSupport.Shared/TemporaryInstanceChecks.cs",
+          "matchesCommit": true
+        }
+      ]
+    },
+    {
+      "receipt": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z7-binding-1.json",
+      "commit": "1d77a79c",
+      "head": "88c5abccee5f92b785f1368fdaace50dc0d4e2c2",
+      "exitCode": 0,
+      "total": 160,
+      "failed": 0,
+      "skipped": 0,
+      "pins": []
+    },
+    {
+      "receipt": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z8-compile-1.json",
+      "commit": "b21c21ec",
+      "head": "1d77a79c4e1e78a4c8e164a49779393721a95061",
+      "exitCode": 0,
+      "total": null,
+      "failed": null,
+      "skipped": null,
+      "pins": [
+        {
+          "path": "tests/QBrainAi.Repl.Core.Tests/SessionLogTestHelpers.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Repl.Core.Tests/StubAuthRotationHandlerTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Repl.Core.Tests/RequirementsWorkflowTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Repl.Core.Tests/TodoWorkflowTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/Controllers/TransactionSecurityControllerTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreB.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagServiceTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/Services/MemoryFederationStateAdapterTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationEnvelopeSignerTests.cs",
+          "matchesCommit": true
+        }
+      ]
+    },
+    {
+      "receipt": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z8-binding-1.json",
+      "commit": "b21c21ec",
+      "head": "1d77a79c4e1e78a4c8e164a49779393721a95061",
+      "exitCode": 0,
+      "total": 432,
+      "failed": 0,
+      "skipped": 0,
+      "pins": [
+        {
+          "path": "tests/QBrainAi.Repl.Core.Tests/SessionLogTestHelpers.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Repl.Core.Tests/StubAuthRotationHandlerTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Repl.Core.Tests/RequirementsWorkflowTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Repl.Core.Tests/TodoWorkflowTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Repl.Core.Tests/TestSupport/TemporaryInstanceChecksTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/Controllers/TransactionSecurityControllerTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/Memory/MemoryS1Harness.CoreB.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/Services/GraphRagServiceTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HandoffAuditDefectTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/Services/MemoryFederationStateAdapterTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/Services/WorkspaceHygieneG5OverlayTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationEnvelopeSignerTests.cs",
+          "matchesCommit": true
+        }
+      ]
+    },
+    {
+      "receipt": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z8b-compile-1.json",
+      "commit": "becb0742",
+      "head": "b21c21ecdee4b2658830f998b45efcd0491f1d36",
+      "exitCode": 0,
+      "total": null,
+      "failed": null,
+      "skipped": null,
+      "pins": [
+        {
+          "path": "src/QBrainAi.Repl.Core/RequirementsWorkflow.cs",
+          "matchesCommit": true
+        }
+      ]
+    },
+    {
+      "receipt": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z8b-binding-1.json",
+      "commit": "becb0742",
+      "head": "b21c21ecdee4b2658830f998b45efcd0491f1d36",
+      "exitCode": 0,
+      "total": 77,
+      "failed": 0,
+      "skipped": 0,
+      "pins": [
+        {
+          "path": "src/QBrainAi.Repl.Core/RequirementsWorkflow.cs",
+          "matchesCommit": true
+        }
+      ]
+    },
+    {
+      "receipt": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z9-compile-1.json",
+      "commit": "94dc5b69",
+      "head": "becb0742693de240dce596a8eec4eb41c99a7c1d",
+      "exitCode": 0,
+      "total": null,
+      "failed": null,
+      "skipped": null,
+      "pins": [
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/Controllers/FederationControllerTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationEnvelopeSignerTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationFanoutSyncServiceTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/Services/MemoryFederationStateAdapterTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "src/QBrainAi.Repl.Core/RequirementsWorkflow.cs",
+          "matchesCommit": true
+        }
+      ]
+    },
+    {
+      "receipt": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z9-binding-1.json",
+      "commit": "94dc5b69",
+      "head": "becb0742693de240dce596a8eec4eb41c99a7c1d",
+      "exitCode": 0,
+      "total": 127,
+      "failed": 0,
+      "skipped": 0,
+      "pins": [
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/Controllers/FederationControllerTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationEnvelopeSignerTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/Services/FederationFanoutSyncServiceTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/Services/MemoryFederationStateAdapterTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "src/QBrainAi.Repl.Core/RequirementsWorkflow.cs",
+          "matchesCommit": true
+        }
+      ]
+    },
+    {
+      "receipt": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z10-compile-1.json",
+      "commit": "baff082f",
+      "head": "94dc5b69078f746ea6cffc3bb11c73ecb74811be",
+      "exitCode": 0,
+      "total": null,
+      "failed": null,
+      "skipped": null,
+      "pins": [
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "src/QBrainAi.Repl.Core/RequirementsWorkflow.cs",
+          "matchesCommit": true
+        }
+      ]
+    },
+    {
+      "receipt": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z10-binding-1.json",
+      "commit": "baff082f",
+      "head": "94dc5b69078f746ea6cffc3bb11c73ecb74811be",
+      "exitCode": 0,
+      "total": 95,
+      "failed": 0,
+      "skipped": 0,
+      "pins": [
+        {
+          "path": "tests/QBrainAi.Support.Mcp.Tests/Services/HostileReviewG4OverlayTests.cs",
+          "matchesCommit": true
+        },
+        {
+          "path": "src/QBrainAi.Repl.Core/RequirementsWorkflow.cs",
+          "matchesCommit": true
+        }
+      ]
+    },
+    {
+      "receipt": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z11-compile-1.json",
+      "commit": "53a210ca",
+      "head": "baff082f23c87fdbbec0cd20dbc41569f7b1cf3a",
+      "exitCode": 0,
+      "total": null,
+      "failed": null,
+      "skipped": null,
+      "pins": [
+        {
+          "path": "src/QBrainAi.Repl.Core/RequirementsWorkflow.cs",
+          "matchesCommit": true
+        }
+      ]
+    },
+    {
+      "receipt": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z11-binding-1.json",
+      "commit": "53a210ca",
+      "head": "baff082f23c87fdbbec0cd20dbc41569f7b1cf3a",
+      "exitCode": 0,
+      "total": 77,
+      "failed": 0,
+      "skipped": 0,
+      "pins": [
+        {
+          "path": "src/QBrainAi.Repl.Core/RequirementsWorkflow.cs",
+          "matchesCommit": true
+        }
+      ]
+    }
+  ]
+}

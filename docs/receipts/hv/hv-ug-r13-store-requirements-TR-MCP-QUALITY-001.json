@@ -1,0 +1,164 @@
+{
+  "timestampUtc": "2026-11-06T06:04:41.9189528+00:00",
+  "timestampLocal": "2026-11-06T00:04:44",
+  "method": "workflow.requirements.getTr",
+  "recordId": "TR-MCP-QUALITY-001",
+  "response": {
+    "payload": {
+      "deprecated": true,
+      "requestId": "req-20261106T060442Z-aa11",
+      "result": {
+        "createdAt": "2026-11-06T06:04:44.3441963+00:00",
+        "updatedAt": "2026-11-06T06:04:44.3443091+00:00",
+        "title": "Warning suppression decision register and aiUnit audit",
+        "description": "Warning remediation must distinguish approved suppressions from required fixes through structured acceptance criteria, durable TODO state, suppression inventory validation, and a dedicated aiUnit governance review.\n**Covered by:** FR: FR-MCP-139; TEST: TEST-MCP-AIUNIT-002",
+        "acceptanceCriteria": [
+          {
+            "id": "ac-1",
+            "evidence": "config/warning-suppression-approvals.json contains scoped CA1416 approvals for Windows-only service/event-log and platform-gated code paths.",
+            "isSatisfied": true,
+            "text": "CA1416 is approved only for Windows only code paths with explicit platform justification and a review condition that removes the suppression if the code becomes cross platform."
+          },
+          {
+            "id": "ac-2",
+            "evidence": "config/warning-suppression-approvals.json and ContextChunkEntity.Embedding justify byte[] as EF Core BLOB storage contract.",
+            "isSatisfied": true,
+            "text": "CA1819 is approved where returning arrays is intentional for DTO or API shape and the suppression includes justification."
+          },
+          {
+            "id": "ac-3",
+            "evidence": "config/warning-suppression-approvals.json and WarningSuppressionValidationTargetTests CA2227 allowed-scope check.",
+            "isSatisfied": true,
+            "text": "Current CA2227 suppressions are approved only for non observable JSON, YAML, options binding DTOs, and EF navigation collections. Observable collections must be repopulated in place and not suppressed."
+          },
+          {
+            "id": "ac-4",
+            "evidence": "src/McpServer.Support.Mcp/Logging/ParseableEventFormatter.cs, src/McpServer.Services/Ingestion/MarkdownSessionLogParser.cs, src/McpServer.Storage/Indexing/EmbeddingService.cs, tests/McpServer.Support.Mcp.Tests/Indexing/EmbeddingServiceTests.cs",
+            "isSatisfied": true,
+            "text": "CA1308 is not approved. Code must use explicit mapping or invariant case insensitive comparison rather than lower case normalization."
+          },
+          {
+            "id": "ac-5",
+            "evidence": "Directory.Build.props, build/_build.csproj, lib/NSubstitute/NSubstitute.csproj, tests/Build.Tests/Build.Tests.csproj, solution build on 2026-07-07",
+            "isSatisfied": true,
+            "text": "CS8632 is not approved. Every project must enable nullable annotations and CS8632 NoWarn entries must be removed."
+          },
+          {
+            "id": "ac-6",
+            "evidence": "Directory.Build.props and dotnet build McpServer.sln -c Debug -v minimal passed with zero warnings and zero errors on 2026-07-07",
+            "isSatisfied": true,
+            "text": "TreatWarningsAsErrors false is not approved. The build project warning bypass must remain removed after warning clean validation."
+          },
+          {
+            "id": "ac-7",
+            "evidence": "tests/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.csproj, tests/McpServer.Support.Mcp.IntegrationTests/McpServer.Support.Mcp.IntegrationTests.csproj, solution build on 2026-07-07",
+            "isSatisfied": true,
+            "text": "Stale ASP0019 suppressions are not approved. ASP0019 NoWarn entries must remain removed when no IHeaderDictionary Add usage remains."
+          },
+          {
+            "id": "ac-8",
+            "evidence": "ValidateWarningSuppressions passes after CA1848, CS8602, and Storage migration obsolete pragma removals; approval register contains only scoped approved suppressions.",
+            "isSatisfied": true,
+            "text": "Every warning suppression or warning bypass not explicitly approved by this TR must remain open remediation work until fixed and validated."
+          },
+          {
+            "id": "ac-9",
+            "evidence": "tests/McpServer.Review.Tests/AiReviewTests.cs and build/Build.AiWarningSuppressionReview.cs",
+            "isSatisfied": true,
+            "text": "The aiUnit warning suppression governance prompt audits the suppression decisions, TODO state, requirements traceability, generated exports, and source suppression inventory."
+          },
+          {
+            "id": "ac-10",
+            "evidence": "test project NoWarn entries, cancellable async call updates, dotnet build McpServer.sln -c Debug -v minimal, WorkspacePolicyDirectiveParserTests focused run",
+            "isSatisfied": true,
+            "text": "xUnit1051 is not approved. Test projects must pass TestContext cancellation tokens to cancellable async APIs instead of suppressing the analyzer."
+          },
+          {
+            "id": "ac-11",
+            "evidence": "tests/McpServer.PlanReview.Tests/McpServer.PlanReview.Tests.csproj and tests/McpServer.PlanReview.Tests/PlanTransactionReviewTests.cs",
+            "isSatisfied": true,
+            "text": "xUnit1041 is not approved. xUnit v3 tests must use supported fixture and output helper patterns instead of suppressing constructor injection diagnostics."
+          },
+          {
+            "id": "ac-12",
+            "evidence": "src/McpServer.ServiceDefaults/Extensions.cs and src/McpServer.ServiceDefaults/GlobalExceptionHandlerMiddleware.cs",
+            "isSatisfied": true,
+            "text": "CA1812 is not approved. Middleware and DI activated types must be made visible to analyzers through real construction or removed."
+          },
+          {
+            "id": "ac-13",
+            "evidence": ".editorconfig CA1848 severity override removed; config/warning-suppression-approvals.json CA1848 approval removed; repository suppression scan for CA1848 returns zero matches.",
+            "isSatisfied": true,
+            "text": "CA1848 is not approved. No editorconfig, project, pragma, or attribute suppression may remain for LoggerMessage guidance."
+          },
+          {
+            "id": "ac-14",
+            "evidence": "tests/McpServer.Support.Mcp.Tests/Middleware/FederationMiddlewareTests.cs and Support.Mcp.Tests project build",
+            "isSatisfied": true,
+            "text": "CA2000 is not approved. Disposal warnings must be fixed or proven stale by removing the suppression and building clean."
+          },
+          {
+            "id": "ac-15",
+            "evidence": "src/McpServer.Storage/Migrations/20260212160034_AddSessionLogTables.cs and Storage project build",
+            "isSatisfied": true,
+            "text": "CA1861 is not approved. Constant array arguments must be hoisted rather than suppressed."
+          },
+          {
+            "id": "ac-16",
+            "evidence": "session log migration files 20260212160034, 20260212165804, 20260212170806, and 20260212172109 plus Storage project build",
+            "isSatisfied": true,
+            "text": "CA1062 is not approved. Public migration methods must validate migrationBuilder arguments rather than suppressing the rule."
+          },
+          {
+            "id": "ac-17",
+            "evidence": "src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj and Support.Mcp project build",
+            "isSatisfied": true,
+            "text": "CS0436 is not approved. Type conflict NoWarn entries must be removed once the conflict is no longer present."
+          },
+          {
+            "id": "ac-18",
+            "evidence": "REOPENED 2026-09-09T17:07:12Z: generated migration 612/618 pragmas recurred on candidate 808ec049 and current develop. Historical evidence retained. Storage migration designer and snapshot 612/618 pragmas removed; W18 warning-suppression test now scans src/McpServer.Storage/Migrations plus provider migration roots.",
+            "isSatisfied": false,
+            "text": "CS0618 is not approved. Obsolete APIs must be replaced with current APIs and covered by focused regression tests."
+          },
+          {
+            "id": "ac-19",
+            "evidence": "src/McpServer.ServiceDefaults/RailwayConnectionStringBuilder.cs, src/McpServer.ServiceDefaults/PostgresConnectionStringResolver.cs, ServiceDefaults build, and resolver tests",
+            "isSatisfied": true,
+            "text": "CA1055 is not approved. String return APIs must not advertise URI semantics."
+          },
+          {
+            "id": "ac-20",
+            "evidence": "Directory.Packages.props stable Microsoft Agents versions, lib/NSubstitute.6.0.0/nsubstitute.nuspec, src/McpServer.McpAgent/McpServer.McpAgent.csproj, and dotnet pack McpServer.McpAgent",
+            "isSatisfied": true,
+            "text": "NU5104 is not approved. Stable packages must not depend on prerelease packages or deprecated package metadata."
+          },
+          {
+            "id": "ac-21",
+            "evidence": "REOPENED 2026-10-19 (operator: \"Gotta use the recommended packages.\"): develop ace70daa pins System.Security.Cryptography.Xml 10.0.10 (Directory.Packages.props:91), which brings System.Security.Cryptography.Pkcs 10.0.10; on the Windows host the restore of build/_build.csproj fails NU1902 (GHSA-2fmv-rv2c-59x7) and NU1903 (GHSA-846f-f764-76mx, GHSA-7hqp-7c5m-4vq6, GHSA-c399-9853-6jmj, GHSA-r955-8q5j-3h83), run unit-green-win-baseline-20261019T1433. All five advisories name 10.0.13. Text strengthened from \"NU1901 and NU1903 are not approved. Vulnerable package advisories must be resolved by dependency updates and a clean vulnerability scan.\" Historical evidence retained: Directory.Packages.props transitive pins, Directory.Build.props suppression removal, and dotnet list McpServer.sln package --vulnerable --include-transitive.",
+            "isSatisfied": false,
+            "text": "NU1901, NU1902, NU1903, and NU1904 are not approved. Vulnerable package advisories must be resolved by updating to the patched versions the advisories name, with a clean NuGet vulnerability audit, never by suppression, audit settings, or a build override."
+          },
+          {
+            "id": "ac-22",
+            "evidence": "Directory.Build.props suppression removed; config/warning-suppression-approvals.json stale approval removed; default publish probes passed for McpServer.Support.Mcp, McpServer.Repl.Host, McpServer.QBAgent, McpServer.McpAgent.SampleHost, and McpServer.Launcher on 2026-07-13; ValidateWarningSuppressions passed; WarningSuppression Build.Tests passed 18/0/0; inventory contains zero ErrorOnDuplicatePublishOutputFiles occurrences.",
+            "isSatisfied": true,
+            "text": "ErrorOnDuplicatePublishOutputFiles=false is not approved. Duplicate publish output enforcement must remain enabled unless a scoped approval names the exact affected projects and review condition."
+          },
+          {
+            "id": "ac-23",
+            "isSatisfied": false,
+            "text": "Correction of generated migration CS0612/CS0618 pragma pairs uses an explicit opt-in Nuke NormalizeGeneratedMigrationObsoletePragmas target. Compile, Test, and ValidateWarningSuppressions never invoke normalization or mutate source. Validation remains read-only and fails when exact generated-migration pragma pairs are present."
+          }
+        ],
+        "scopeStartLayerKey": "layer-1",
+        "area": "MCP",
+        "priority": "medium",
+        "id": "TR-MCP-QUALITY-001",
+        "status": "pending",
+        "subarea": "QUALITY"
+      }
+    },
+    "type": "result"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "timestampUtc": "2026-11-06T06:17:16.5305044+00:00",
+  "timestampLocal": "2026-11-06T00:17:19",
+  "method": "workflow.requirements.getTr",
+  "recordId": "TR-MCP-QBRAIN-006",
+  "response": {
+    "payload": {
+      "requestId": "req-20261106T061717Z-234a",
+      "result": {
+        "createdAt": "2026-11-06T06:17:18.9797099+00:00",
+        "scopeStartLayerKey": "layer-1",
+        "area": "MCP",
+        "acceptanceCriteria": [
+          {
+            "text": "Compose and Dockerfile names in git match the qbrain-ai forms.",
+            "id": "",
+            "isSatisfied": false
+          },
+          {
+            "text": "Service script defaults in git match QBrainAi and C:\\ProgramData\\QBrainAi, and the old names remain available as parameters.",
+            "id": "",
+            "isSatisfied": false
+          },
+          {
+            "text": "McpServer_Omarchy and PAYTON-LEGION2 remain where they identify that database and that host.",
+            "id": "",
+            "isSatisfied": false
+          }
+        ],
+        "status": "in_progress",
+        "title": "",
+        "updatedAt": "2026-11-06T06:17:18.9798204+00:00",
+        "id": "TR-MCP-QBRAIN-006",
+        "description": "Docker image, container, network, and volume use qbrain-ai. Windows service name becomes QBrainAi, DisplayName becomes QBrain.AI, and the default install path becomes C:\\ProgramData\\QBrainAi, with parameters that can still target the old service and path. Linux paths, the qbrainai account, and qbrainai.service stay Phase 4-L text. Do not rename database McpServer_Omarchy or host PAYTON-LEGION2.\n**Covered by:** FR: FR-MCP-QBRAIN-001, FR-MCP-QBRAIN-005; TEST: TEST-MCP-QBRAIN-006",
+        "subarea": "QBRAIN",
+        "priority": "medium"
+      },
+      "deprecated": true
+    },
+    "type": "result"
+  }
+}

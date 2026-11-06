@@ -1,0 +1,16 @@
+{
+  "count": 122,
+  "unsigned": [],
+  "gpg": 0,
+  "formatting": [],
+  "mergeTreeExit": 0,
+  "mergeTreeOutput": [],
+  "scannerHistory": [
+    "ccc78b7a7624e0367725af585a5fd7c4f38b3661 2026-10-21T05:55:57-05:00 test(scanner): the scanner documentation states the declared alias limit (R4-F1, IMPL-UNITGREEN-001)",
+    "801e6862d49d669808c9315a7ad43d0272b1d1f1 2026-10-20T18:50:56-05:00 fix(marker,tests): one source seam for plugin-version inputs; scanner aliases in lexical scope (IMPL-UNITGREEN-001)",
+    "27c43bccd19a591e4ca30560b52d4c5a9e8b81c9 2026-10-20T09:33:13-05:00 test(guards): one repository-root locator, refused outside Integration; classify by dependency (IMPL-UNITGREEN-001, R2-F1)",
+    "45a3197c9afda2f7c7d87e7d986908f885c20b02 2026-10-20T08:46:39-05:00 test(guards): Roslyn syntax-tree platform scanner, Roslyn pins to 5.9.0 (IMPL-UNITGREEN-001, R2-F2)",
+    "49cfec920349f17ace1b287b18d1b0fe2d956b03 2026-10-19T21:08:53-05:00 test: one skip definition for both guards; multiline, qualified and listed skip attributes; interpolation holes kept as code (IMPL-UNITGREEN-001)",
+    "b2bd50b3711c28bdb256e1f4fa56f3d8114fb6c6 2026-10-19T17:50:34-05:00 test: classify platform-dependent tests as integration tests and guard the unit suite (IMPL-UNITGREEN-001)"
+  ]
+}

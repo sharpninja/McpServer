@@ -1,0 +1,52 @@
+{
+  "timestampUtc": "2026-11-06T06:17:00.8487171+00:00",
+  "timestampLocal": "2026-11-06T00:17:03",
+  "method": "workflow.requirements.getFr",
+  "recordId": "FR-MCP-FED-PATH-001",
+  "response": {
+    "payload": {
+      "requestId": "req-20261106T061701Z-02c0",
+      "result": {
+        "notes": "Registered in this workspace store 2026-10-19 by operator decision (\"Create the records here now\"). Statement and FR criteria verbatim from docs/plans/2026-10-07-federation-fixes.md:53-59 (approved 2026-10-07; first registered in the original Windows workspace store). Architecture Amendment 1 H0 import must merge with these records.",
+        "scopeStartLayerKey": "layer-1",
+        "area": "MCP",
+        "acceptanceCriteria": [
+          {
+            "text": "On a Linux host, C:\\Users\\fixture-user, C:/Users/fixture-user resolve to the same Windows identity; nothing is prefixed with the process cwd.",
+            "id": "AC1",
+            "isSatisfied": false
+          },
+          {
+            "text": "On a Windows host, /home/x stays a POSIX path.",
+            "id": "AC2",
+            "isSatisfied": false
+          },
+          {
+            "text": "Triage submit/status round-trips: getReport with the submitter's original path finds the report on a Linux hub.",
+            "id": "AC3",
+            "isSatisfied": false
+          },
+          {
+            "text": "WorkspaceService.Init never creates a directory from a foreign-platform path.",
+            "id": "AC4",
+            "isSatisfied": false
+          },
+          {
+            "text": "When the workspace path belongs to the other platform and no Mcp:GitHub:Repository is configured, a GitHub CLI operation never starts gh and returns a failure that names the foreign workspace and the missing Mcp:GitHub:Repository setting; with a repository configured, gh runs with --repo and no working directory (operator 2026-10-29: \"gh foreign-workspace AC (Recommended)\"; holistic review findings SRC-1 and SRC-4).",
+            "id": "AC5",
+            "isSatisfied": false
+          }
+        ],
+        "status": "pending",
+        "title": "Request workspace paths are interpreted by their own syntax",
+        "updatedAt": "2026-11-06T06:17:03.2411354+00:00",
+        "id": "FR-MCP-FED-PATH-001",
+        "description": "A server must interpret any request-supplied workspace path by its own syntax (drive letter, UNC, POSIX root), never by the host OS, so a Linux host accepts and stores Windows paths unchanged in meaning.",
+        "priority": "medium",
+        "createdAt": "2026-11-06T06:17:03.2410139+00:00"
+      },
+      "deprecated": true
+    },
+    "type": "result"
+  }
+}

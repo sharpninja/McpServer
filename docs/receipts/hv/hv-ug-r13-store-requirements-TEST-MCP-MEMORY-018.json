@@ -1,0 +1,8 @@
+{
+  "timestampUtc": "2026-11-06T06:16:50.6117431+00:00",
+  "timestampLocal": "2026-11-06T00:16:53",
+  "method": "workflow.requirements.getTest",
+  "recordId": "TEST-MCP-MEMORY-018",
+  "wrapperError": "Plugin command failed with exit code 1.\ntype: error\npayload:\n  requestId: req-20261106T061651Z-02cd\n  code: not_found\n  message: TEST 'TEST-MCP-MEMORY-018' not found.\n  retryable: false\n  details:\n    methodName: workflow.requirements.getTest\n    exceptionType: McpServer.Client.McpNotFoundException\n    reason: not_found\n\n---\n\n",
+  "explicitNotFound": true
+}
