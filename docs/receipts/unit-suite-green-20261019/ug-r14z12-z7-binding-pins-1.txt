@@ -1,0 +1,12 @@
+RECEIPT started=2026-11-06T02:33:27 ended=2026-11-06T02:33:27 host=LAB-OMARCHY exit=0
+SCRIPT /home/sharpninja/.claude/scratch/pr82-review-20261019/Test-ReceiptPinsAgainstCommit.ps1 sha256=3A7147D68EDF08C6581BF3BD869A5EAC5E9B3846EB1AA2DF5DE3761C6E403529
+ARGUMENTS -Worktree | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019 | -Receipt | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z7-binding-1.json | -Commit | 1d77a79c
+HEAD 4e992d30ff705c0b02e060cb3aad65013c5e956f
+Now: 2026-11-06T02:33:27 receipt=/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z7-binding-1.json commit=1d77a79c
+name: ug-r13z7-binding-1
+startedLocal: 11/5/2026 2:19:04 PM
+endedLocal: 11/5/2026 2:19:59 PM
+writtenLocal: 11/5/2026 2:20:56 PM
+FIELD sourceHashes entries=0
+COMMIT 1d77a79c4e1e78a4c8e164a49779393721a95061
+END pins=0 match=0 differ=0

@@ -1,0 +1,102 @@
+{
+  "name": "ug-r14z13-mockgate-1",
+  "kind": "mock-gate",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "8c944541f00027e507559c81c781c1a6ba76fce0",
+  "dirtyPaths": [
+    " M docs/plans/2026-10-19-unit-suite-green.md",
+    " M docs/plans/2026-10-30-unit-suite-green-handoff.md",
+    " M tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/TestSupport/IdleSessionLifecycleContractTests.cs",
+    "?? docs/receipts/hv/unitgreen-r14-prelaunch.background-sweep.md",
+    "?? docs/receipts/hv/unitgreen-r14-prelaunch.holistic-findings-15.md",
+    "?? docs/receipts/hv/unitgreen-r14-prelaunch.pr-description.md",
+    "?? docs/receipts/hv/unitgreen-r14-trx-8c944541/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-binding-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-binding-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-citation-compare-z11-z12.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-citation-sweep-all-1.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-compile-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-configured-durations-all.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-configured-durations-compare-z11-z12.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-configured-durations.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-final-linux-buildtests-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-final-linux-buildtests-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-final-linux-lane-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-final-linux-lane-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-final-linux-nu190x.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-final-linux-traceability-1.exit.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-final-linux-traceability-1.meta.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-final-linux-traceability-1.out.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-final-linux-unit-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-final-linux-unit-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-final-win-buildtests-1.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-final-win-lane-1.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-final-win-lane-1.start.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-final-win-unit-1.nu190x.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-final-win-unit-1.result.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-lab-names-classified-1.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-linux-buildtests-compare-z11-z12.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-linux-lane-compare-z11-z12.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-linux-unit-compare-z11-z12.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-mockgate-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-mockgate-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-store-compare-z11-z12.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-store-readback-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-timing-sweep.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-unit-compare-linux-win.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-win-buildtests-compare-z11-z12.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-win-lane-compare-z11-z12.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-win-unit-compare-z11-z12.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-z7-binding-pins-1.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z12-z7-compile-pins-1.txt",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z13-mockgate-red-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14z13-mockgate-red-1/"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "QBrainAi.Support.Mcp.Tests:AgeBoundaryContractTests,IdleSessionLifecycleContractTests,TriggeredTimerTimeProviderTests,SettableTimeProviderTests",
+    "--test-run-id",
+    "ug-r14z13-mockgate-1"
+  ],
+  "startedLocal": "2026-11-06T05:43:25",
+  "endedLocal": "2026-11-06T05:43:44",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 72,
+  "passed": 72,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "QBrainAi.Support.Mcp.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14z13-mockgate-1/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14z13-mockgate-1/QBrainAi.Support.Mcp.Tests.trx",
+      "sha256": "94453B8F5FAA4A8C0807BA39D41BE5FB6400FAFE13CD2966FD523D586D8B1083",
+      "total": 72,
+      "passed": 72,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/IdleSessionLifecycleContractTests.cs",
+      "sha256": "DB1833504E49293F8273F648FCC5B51F43B62541EECCF08EE54AB4172983FF57"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs",
+      "sha256": "4BB492CC695078A91A5F3A5C41E61E81B323AF6FC93A4D9060447729E76AFDD5"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/VoiceConversationService.cs",
+      "sha256": "E94029898DF5615BA35D8C6DFAAEA1B438D8820FB8B21318A370ED024005C4D7"
+    }
+  ],
+  "writtenLocal": "2026-11-06T05:44:20",
+  "writtenBy": "ClaudeCode"
+}

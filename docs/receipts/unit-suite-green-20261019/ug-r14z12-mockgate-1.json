@@ -1,0 +1,71 @@
+{
+  "name": "ug-r14z12-mockgate-1",
+  "kind": "mock-gate",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "4e992d30ff705c0b02e060cb3aad65013c5e956f",
+  "dirtyPaths": [
+    " M tests/QBrainAi.Support.Mcp.Tests/TestSupport/AgeBoundaryContractTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProvider.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/TestSupport/IdleSessionLifecycleContractTests.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/TestSupport/TriggeredTimerTimeProvider.cs",
+    "?? tests/QBrainAi.Support.Mcp.Tests/TestSupport/TriggeredTimerTimeProviderTests.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "QBrainAi.Support.Mcp.Tests:AgeBoundaryContractTests,IdleSessionLifecycleContractTests,TriggeredTimerTimeProviderTests,SettableTimeProviderTests",
+    "--test-run-id",
+    "ug-r14z12-mockgate-1"
+  ],
+  "startedLocal": "2026-11-06T02:21:34",
+  "endedLocal": "2026-11-06T02:21:54",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 71,
+  "passed": 71,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "QBrainAi.Support.Mcp.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14z12-mockgate-1/groups/QBrainAi.Support.Mcp.Tests/QBrainAi.Support.Mcp.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14z12-mockgate-1/QBrainAi.Support.Mcp.Tests.trx",
+      "sha256": "0EB4A51B6E77579277A2F2CE876EC19C5E2D93349794E6DE99ACDB6950F6B934",
+      "total": 71,
+      "passed": 71,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/AgeBoundaryContractTests.cs",
+      "sha256": "7D1393BF234B610CB5B8A5AF4880D8F12501DED8FFEABFBD667FCE8F6AC6154C"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/IdleSessionLifecycleContractTests.cs",
+      "sha256": "55A5A68C97B1B1AE24B6923CDFBEFF716CA54DCCA9A349CB8D9D06FAF78ACBC3"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/TriggeredTimerTimeProvider.cs",
+      "sha256": "0511AF2DFDE48B04303DA0130A836D5AA399E9A5489BF2DED1D88F1AAA2523CC"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/TriggeredTimerTimeProviderTests.cs",
+      "sha256": "3AFE24CE73331B41FFB66389CABAA568D70F5AA011DC0AEF43D193261B06C960"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Tests/TestSupport/SettableTimeProvider.cs",
+      "sha256": "2CCC37C37B87186BFCC414007FDE997BA44FAAC8AF831E052DE8842BAA7C9176"
+    },
+    {
+      "path": "src/QBrainAi.Services/Services/VoiceConversationService.cs",
+      "sha256": "D6A5B5FA9F40128DDB3AB14FAF11D7837B0C0815F38C8B11B722858C855ED4C0"
+    }
+  ],
+  "writtenLocal": "2026-11-06T02:22:34",
+  "writtenBy": "ClaudeCode"
+}

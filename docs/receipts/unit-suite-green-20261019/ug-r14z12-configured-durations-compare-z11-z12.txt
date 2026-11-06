@@ -1,0 +1,19 @@
+RECEIPT started=2026-11-06T02:54:00 ended=2026-11-06T02:54:01 host=LAB-OMARCHY exit=0
+SCRIPT /home/sharpninja/.claude/scratch/pr82-review-20261019/Compare-DurationReceipts.ps1 sha256=E090BDECE11511F4C41348F303EC50D72E0DBDAB8FEE0C89BF690D8F489EB22A
+ARGUMENTS -OldReceipt | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z11-configured-durations.txt | -NewReceipt | /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14z12-configured-durations.txt
+HEAD 8c944541f00027e507559c81c781c1a6ba76fce0
+Now: 2026-11-06T02:54:01
+OLD /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z11-configured-durations.txt END hits=314 (UNIT=138, HELPER=73, NOT-UNIT=103) listed=255 longerThanMax=59
+NEW /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14z12-configured-durations.txt END hits=330 (UNIT=151, HELPER=76, NOT-UNIT=103) listed=265 longerThanMax=65
+OLD hits=255 NEW hits=265 onlyOld=0 onlyNew=10
+ONLY-NEW UNIT tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs:318 VoiceConversationServiceTests.IdleCleanupTimer_IsArmedThroughTheClockWithTheProductionSchedule [60000ms] | Assert.Equal(TimeSpan.FromSeconds(60), VoiceConversationService.IdleCleanupInterval);
+ONLY-NEW UNIT tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs:319 VoiceConversationServiceTests.IdleCleanupTimer_IsArmedThroughTheClockWithTheProductionSchedule [60000ms] | Assert.Equal(TimeSpan.FromSeconds(60), timer.DueTime);
+ONLY-NEW UNIT tests/QBrainAi.Support.Mcp.Tests/Services/VoiceConversationServiceTests.cs:320 VoiceConversationServiceTests.IdleCleanupTimer_IsArmedThroughTheClockWithTheProductionSchedule [60000ms] | Assert.Equal(TimeSpan.FromSeconds(60), timer.Period);
+ONLY-NEW UNIT tests/QBrainAi.Support.Mcp.Tests/TestSupport/TriggeredTimerTimeProviderTests.cs:39 TriggeredTimerTimeProviderTests.CreatedTimer_KeepsTheScheduleAndNeverFiresOnItsOwn [60000ms, 60000ms] | using var timer = clock.CreateTimer(calls.Add, state, TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(60));
+ONLY-NEW UNIT tests/QBrainAi.Support.Mcp.Tests/TestSupport/TriggeredTimerTimeProviderTests.cs:44 TriggeredTimerTimeProviderTests.CreatedTimer_KeepsTheScheduleAndNeverFiresOnItsOwn [60000ms] | Assert.Equal(TimeSpan.FromSeconds(60), recorded.DueTime);
+ONLY-NEW UNIT tests/QBrainAi.Support.Mcp.Tests/TestSupport/TriggeredTimerTimeProviderTests.cs:45 TriggeredTimerTimeProviderTests.CreatedTimer_KeepsTheScheduleAndNeverFiresOnItsOwn [60000ms] | Assert.Equal(TimeSpan.FromSeconds(60), recorded.Period);
+ONLY-NEW UNIT tests/QBrainAi.Support.Mcp.Tests/TestSupport/TriggeredTimerTimeProviderTests.cs:63 TriggeredTimerTimeProviderTests.ChangeAndDispose_AreRecordedAndADisposedTimerCannotFire [1000ms] | var timer = clock.CreateTimer(_ => calls++, null, TimeSpan.FromSeconds(1), Timeout.InfiniteTimeSpan);
+ONLY-NEW UNIT tests/QBrainAi.Support.Mcp.Tests/TestSupport/TriggeredTimerTimeProviderTests.cs:86 TriggeredTimerTimeProviderTests.FireAll_FiresLiveTimersInCreationOrder [1000ms, 1000ms] | var first = clock.CreateTimer(_ => order.Add("first"), null, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));
+ONLY-NEW UNIT tests/QBrainAi.Support.Mcp.Tests/TestSupport/TriggeredTimerTimeProviderTests.cs:87 TriggeredTimerTimeProviderTests.FireAll_FiresLiveTimersInCreationOrder [2000ms, 2000ms] | var second = clock.CreateTimer(_ => order.Add("second"), null, TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(2));
+ONLY-NEW UNIT tests/QBrainAi.Support.Mcp.Tests/TestSupport/TriggeredTimerTimeProviderTests.cs:88 TriggeredTimerTimeProviderTests.FireAll_FiresLiveTimersInCreationOrder [3000ms, 3000ms] | var third = clock.CreateTimer(_ => order.Add("third"), null, TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(3));
+END

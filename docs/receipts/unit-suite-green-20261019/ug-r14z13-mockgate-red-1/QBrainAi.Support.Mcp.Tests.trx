@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="11d464b1-dd7a-4fa5-8c7b-a0f44e368d7d" name="@LAB-OMARCHY 2026-11-06 05:38:11" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-06T05:38:11.2497118-06:00" queuing="2026-11-06T05:38:11.2497119-06:00" start="2026-11-06T05:38:07.2884812-06:00" finish="2026-11-06T05:38:11.2622432-06:00" />
+  <TestSettings name="default" id="18ed6528-3634-4fe4-8dcf-03357a8c3198">
+    <Deployment runDeploymentRoot="_LAB-OMARCHY_2026-11-06_05_38_11" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="ed8be081-4ea3-408f-96bb-345dae16a771" testId="7eab1762-67f2-54f3-5ec7-9b207a0f5a25" testName="QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests.PoolWithUncontrolledCleanupScheduling_IsRejected" computerName="LAB-OMARCHY" duration="00:00:00.0005565" startTime="2026-11-06T05:38:11.0790131-06:00" endTime="2026-11-06T05:38:11.0795979-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ed8be081-4ea3-408f-96bb-345dae16a771" />
+    <UnitTestResult executionId="231d0339-b657-4bca-bfde-6af6ebf62e44" testId="712a5d08-efeb-2c27-7f14-8adc9f9cdbb0" testName="QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests.PoolOnAnotherClock_IsRejected" computerName="LAB-OMARCHY" duration="00:00:00.0003847" startTime="2026-11-06T05:38:11.1019927-06:00" endTime="2026-11-06T05:38:11.1024047-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="231d0339-b657-4bca-bfde-6af6ebf62e44" />
+    <UnitTestResult executionId="0ddb2a67-0881-4c49-a0ad-afc4d4ef7941" testId="b60d34d6-67a6-fd27-9b5f-0b66854d4a1f" testName="QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests.PoolWithAnInclusiveComparison_IsRejected" computerName="LAB-OMARCHY" duration="00:00:00.0003583" startTime="2026-11-06T05:38:11.1028365-06:00" endTime="2026-11-06T05:38:11.1032300-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0ddb2a67-0881-4c49-a0ad-afc4d4ef7941" />
+    <UnitTestResult executionId="34a230e4-e8be-4975-9a28-d09df3bf8ef4" testId="0f1a31b9-88c3-40c4-c526-95303f6a7fc0" testName="QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests.PoolWhoseTriggeredCleanupFinishesLater_IsRejected" computerName="LAB-OMARCHY" duration="00:00:00.0029449" startTime="2026-11-06T05:38:11.0800650-06:00" endTime="2026-11-06T05:38:11.1009246-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="34a230e4-e8be-4975-9a28-d09df3bf8ef4">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.ThrowsAny() Failure: No exception was thrown
+Expected: typeof(Xunit.Sdk.XunitException)</Message>
+          <StackTrace>--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="85d42583-e6fc-4ae6-b44d-0074ab6a4c43" testId="16c7d7f5-9c3e-d447-dcd1-bffe4e1d8f85" testName="QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests.ScriptedPool_SatisfiesTheContract" computerName="LAB-OMARCHY" duration="00:00:00.0023424" startTime="2026-11-06T05:38:11.0759593-06:00" endTime="2026-11-06T05:38:11.0784012-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="85d42583-e6fc-4ae6-b44d-0074ab6a4c43" />
+    <UnitTestResult executionId="b1406235-1d40-4113-9719-f7c637e33a54" testId="709e8a43-5507-347c-12b5-08a8f38ef7f9" testName="QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests.PoolThatNeverReuses_IsRejected" computerName="LAB-OMARCHY" duration="00:00:00.0217277" startTime="2026-11-06T05:38:11.0369973-06:00" endTime="2026-11-06T05:38:11.0686874-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b1406235-1d40-4113-9719-f7c637e33a54" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests.PoolOnAnotherClock_IsRejected" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.tests/bin/debug/net10.0/qbrainai.support.mcp.tests.dll" id="712a5d08-efeb-2c27-7f14-8adc9f9cdbb0">
+      <Execution id="231d0339-b657-4bca-bfde-6af6ebf62e44" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests" name="PoolOnAnotherClock_IsRejected" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests.PoolWithAnInclusiveComparison_IsRejected" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.tests/bin/debug/net10.0/qbrainai.support.mcp.tests.dll" id="b60d34d6-67a6-fd27-9b5f-0b66854d4a1f">
+      <Execution id="0ddb2a67-0881-4c49-a0ad-afc4d4ef7941" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests" name="PoolWithAnInclusiveComparison_IsRejected" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests.ScriptedPool_SatisfiesTheContract" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.tests/bin/debug/net10.0/qbrainai.support.mcp.tests.dll" id="16c7d7f5-9c3e-d447-dcd1-bffe4e1d8f85">
+      <Execution id="85d42583-e6fc-4ae6-b44d-0074ab6a4c43" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests" name="ScriptedPool_SatisfiesTheContract" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests.PoolThatNeverReuses_IsRejected" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.tests/bin/debug/net10.0/qbrainai.support.mcp.tests.dll" id="709e8a43-5507-347c-12b5-08a8f38ef7f9">
+      <Execution id="b1406235-1d40-4113-9719-f7c637e33a54" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests" name="PoolThatNeverReuses_IsRejected" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests.PoolWhoseTriggeredCleanupFinishesLater_IsRejected" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.tests/bin/debug/net10.0/qbrainai.support.mcp.tests.dll" id="0f1a31b9-88c3-40c4-c526-95303f6a7fc0">
+      <Execution id="34a230e4-e8be-4975-9a28-d09df3bf8ef4" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests" name="PoolWhoseTriggeredCleanupFinishesLater_IsRejected" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests.PoolWithUncontrolledCleanupScheduling_IsRejected" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.tests/bin/debug/net10.0/qbrainai.support.mcp.tests.dll" id="7eab1762-67f2-54f3-5ec7-9b207a0f5a25">
+      <Execution id="ed8be081-4ea3-408f-96bb-345dae16a771" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/bin/Debug/net10.0/QBrainAi.Support.Mcp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests" name="PoolWithUncontrolledCleanupScheduling_IsRejected" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="7eab1762-67f2-54f3-5ec7-9b207a0f5a25" executionId="ed8be081-4ea3-408f-96bb-345dae16a771" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="712a5d08-efeb-2c27-7f14-8adc9f9cdbb0" executionId="231d0339-b657-4bca-bfde-6af6ebf62e44" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b60d34d6-67a6-fd27-9b5f-0b66854d4a1f" executionId="0ddb2a67-0881-4c49-a0ad-afc4d4ef7941" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0f1a31b9-88c3-40c4-c526-95303f6a7fc0" executionId="34a230e4-e8be-4975-9a28-d09df3bf8ef4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="16c7d7f5-9c3e-d447-dcd1-bffe4e1d8f85" executionId="85d42583-e6fc-4ae6-b44d-0074ab6a4c43" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="709e8a43-5507-347c-12b5-08a8f38ef7f9" executionId="b1406235-1d40-4113-9719-f7c637e33a54" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="6" executed="6" passed="5" failed="1" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.52]   Discovering: QBrainAi.Support.Mcp.Tests
+[xUnit.net 00:00:02.81]   Discovered:  QBrainAi.Support.Mcp.Tests
+[xUnit.net 00:00:03.07]   Starting:    QBrainAi.Support.Mcp.Tests
+[xUnit.net 00:00:03.26]       Assert.ThrowsAny() Failure: No exception was thrown
+[xUnit.net 00:00:03.26]       Expected: typeof(Xunit.Sdk.XunitException)
+[xUnit.net 00:00:03.26]       Stack Trace:
+[xUnit.net 00:00:03.26]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:03.27]   Finished:    QBrainAi.Support.Mcp.Tests (ID = 'f45c1d8f5d642ec0bd26aa00b01c37d1747694d68f097927561d9b6cf1eb96aa')
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="LAB-OMARCHY" outcome="Error" timestamp="2026-11-06T05:38:11.1071160-06:00">
+        <Text>[xUnit.net 00:00:03.26]     QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests.PoolWhoseTriggeredCleanupFinishesLater_IsRejected [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

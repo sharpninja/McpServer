@@ -1,0 +1,12 @@
+Store readback comparison, written 2026-11-06T12:39:15 local by ClaudeCode (Compare-StoreReadbacks.ps1; read only over the two receipts).
+before /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14z14-store-readback-1.json sha256=848834CFECBEC243E2DEE693DA75B5A9E43BC501EF97676B44B467AE15EC3A4E
+after /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14z15-store-readback-1.json sha256=4ED516310CC6A304DDC365B9F2898C1A381B0AAACE3D44F68774513CABFD0BB0
+before read 2026-11-06T08:17:10; after read 2026-11-06T12:39:01
+TR-MCP-SERVICEUPDATE-001: criteria before=8 after=8
+TR-MCP-USECASE-018: criteria before=7 after=7
+  position 5 id=AC-006: CHANGED append=True satisfied False->False tail= To show that no removal in its trace can await, the test checks it at run time, in the same trace and before each trigger whose decisions it reads, from what the code under test was given or did (for example that no dependency handed it a resource whose release awaits), so that a later change that lets a removal await fails the test instead of leaving it green; a statement in the test's documentation or assertion messages alone does not show it (seventeenth holistic read before hostile validation round 14, finding g2; added under the operator's "if you surface new AC, add them without waiting for approval" and "Strengthening Acceptance Criteria should always be the recommended option", 2026-11-06).
+FR-MCP-TESTRESOURCE-001: criteria before=12 after=12
+IMPL-UNITGREEN-001: tasks before=59 after=60
+  task 59: CHANGED done False->False
+  task 60: NEW done=False
+IMPL-SERVICEOVERRIDES-001: tasks before=3 after=3

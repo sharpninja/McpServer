@@ -1,0 +1,12 @@
+Store readback comparison, written 2026-11-06T03:02:25 local by ClaudeCode (Compare-StoreReadbacks.ps1; read only over the two receipts).
+before /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r13z11-store-readback-2.json sha256=5AD2BCA82D62423F36A50EDEA5D1320550A8DA6BD731F7830C8EA7DE9F0802EE
+after /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14z12-store-readback-1.json sha256=051B8BBE12D4A32A9EA9E85D05E4FF15ACCCFA86E6D35C8F3F31E6B28AA0026F
+before read 2026-11-05T23:08:22; after read 2026-11-06T03:02:24
+TR-MCP-SERVICEUPDATE-001: criteria before=8 after=8
+TR-MCP-USECASE-018: criteria before=7 after=7
+  position 5 id=AC-006: CHANGED append=True satisfied False->False tail= This includes an age, expiry or staleness decision that a background callback in the code under test makes (for example an idle-session cleanup timer, a periodic loop or a deadline the production code arms) whenever its firing can alter a unit lifecycle assertion: the callback runs only when the test triggers it, the reference and recorded times are scripted inputs, and the same scripted trace gives the same result regardless of real elapsed time or wall-clock adjustment. An exclusion argued from how long a step takes (for example "the first tick comes after 60 s") does not meet this criterion; only an exclusion the code or the test enforces does (hostile validation round 13 finding R13-F1, proposed criterion scripted-background-expiry; strengthened between rounds under the operator's "Strengthening Acceptance Criteria should always be the recommended option" and "don't gate on me between rounds", 2026-11-06).
+FR-MCP-TESTRESOURCE-001: criteria before=12 after=12
+IMPL-UNITGREEN-001: tasks before=56 after=57
+  task 56: CHANGED done False->False
+  task 57: NEW done=False
+IMPL-SERVICEOVERRIDES-001: tasks before=3 after=3

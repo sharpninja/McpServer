@@ -1,0 +1,6 @@
+Now: 2026-11-06T15:16:05 key=test name only before=/mnt/legion2-github/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r14z15-final-win-unit-1/unit (4864) after=/mnt/legion2-github/McpServer/.worktrees/unit-suite-green-windows-20261102/TestResults/ug-r14z16-final-win-unit-1/unit (4866)
+onlyBefore=0 onlyAfter=2 common=4864
+--- only in before ---
+--- only in after ---
+QBrainAi.Support.Mcp.Tests.Services.VoiceConversationServiceTests.VoiceSessionReuse_TraceWithAnUnreportedAwaitingRemoval_IsRejected
+QBrainAi.Support.Mcp.Tests.TestSupport.IdleSessionLifecycleContractTests.PoolWhoseUnreportedRemovalsAwait_IsRejected
