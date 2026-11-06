@@ -462,7 +462,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     }
 
     /// <inheritdoc />
-    /// <remarks>2026-11-02, FR-MCP-040 ac-1: the returned mapping item carries the created mapping's stored creation time instead of the time of the call. 2026-11-05, FR-MCP-040 ac-1: this dated entry was added because the syntax-parse documentation sweep run after the tenth holistic read before hostile validation round 13 (MEMORY-FACT-008) found the 2026-11-02 change with no dated entry on the method or its type.</remarks>
+    /// <remarks>2026-11-02, FR-MCP-040 ac-1: the returned mapping item carries the stored creation time the upsert returns for the FR's mapping, new or extended, instead of the time its CreatedAt was read. 2026-11-05, FR-MCP-040 ac-1: this dated entry was added because the syntax-parse documentation sweep run after the tenth holistic read before hostile validation round 13 (MEMORY-FACT-008) found the 2026-11-02 change with no dated entry on the method or its type.</remarks>
     public async Task<IMappingMutationResult> CreateMappingAsync(IMappingCreateRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);

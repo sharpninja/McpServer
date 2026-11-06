@@ -13,6 +13,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// <list type="table">
 /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
 /// <item><term>2026-11-05</term><description>FR-MCP-103; TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): every signer reads a settable clock fixed at one instant (<see cref="FixedClock"/>), so the envelope expiry and future-issue checks cannot change a case's outcome with the time between signing and verification (the sibling sweep of hostile validation round 12 finding R12-F2); the assertions are unchanged.</description></item>
+/// <item><term>2026-11-05</term><description>FR-MCP-103: the cases use generic proxy ids (proxy-a for the former first lab machine name, proxy-b for the second) instead of lab machine names, because the eleventh holistic read before hostile validation round 13 (findings g1 and d1) found them in this file, which the plan 27.7 scrub of this pull request covers in every file it touches; each value meets the same values as before, so every assertion checks the same relation.</description></item>
 /// </list>
 /// </remarks>
 public sealed class FederationFanoutSyncServiceTests
@@ -31,7 +32,7 @@ public sealed class FederationFanoutSyncServiceTests
         var operation = new FederationOperationRequest
         {
             OperationId = "op-1",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "proxy-b",
             Domain = "todo",
             ResourceId = "PLAN-FEDERATION-001",
             BodyBase64 = Convert.ToBase64String("{\"done\":true}"u8.ToArray()),
@@ -40,10 +41,10 @@ public sealed class FederationFanoutSyncServiceTests
         {
             Sequence = 7,
             OperationId = "op-1",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "proxy-b",
             Domain = "todo",
             ResourceId = "PLAN-FEDERATION-001",
-            Envelope = signer.Sign(operation, "hub", "PAYTON-LEGION2"),
+            Envelope = signer.Sign(operation, "hub", "proxy-a"),
         };
         var apply = Substitute.For<IFederationOperationApplyService>();
         apply.ApplyAsync(Arg.Any<FederationOperationRequest>(), Arg.Any<CancellationToken>())
@@ -70,16 +71,16 @@ public sealed class FederationFanoutSyncServiceTests
         var operation = new FederationOperationRequest
         {
             OperationId = "op-1",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "proxy-b",
             Domain = "todo",
             BodyBase64 = Convert.ToBase64String("{}"u8.ToArray()),
         };
-        var envelope = signer.Sign(operation, "hub", "PAYTON-DESKTOP");
+        var envelope = signer.Sign(operation, "hub", "proxy-b");
         var item = new FederationSyncItem
         {
             Sequence = 8,
             OperationId = "op-1",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "proxy-b",
             Domain = "todo",
             Envelope = envelope,
         };
@@ -104,7 +105,7 @@ public sealed class FederationFanoutSyncServiceTests
         {
             Sequence = 11,
             OperationId = "op-unsigned-1",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "proxy-b",
             Domain = "todo",
             ResourceId = "PLAN-FEDERATION-001",
         };
@@ -135,7 +136,7 @@ public sealed class FederationFanoutSyncServiceTests
         var operation = new FederationOperationRequest
         {
             OperationId = "op-local-1",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "proxy-b",
             Domain = "local_execution",
             BodyBase64 = Convert.ToBase64String(JsonSerializer.SerializeToUtf8Bytes(request, new JsonSerializerOptions(JsonSerializerDefaults.Web))),
         };
@@ -143,9 +144,9 @@ public sealed class FederationFanoutSyncServiceTests
         {
             Sequence = 9,
             OperationId = "op-local-1",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "proxy-b",
             Domain = "local_execution",
-            Envelope = signer.Sign(operation, "hub", "PAYTON-LEGION2", "local_execution"),
+            Envelope = signer.Sign(operation, "hub", "proxy-a", "local_execution"),
         };
         var apply = Substitute.For<IFederationOperationApplyService>();
         var localExecution = Substitute.For<IFederationLocalExecutionService>();
@@ -175,7 +176,7 @@ public sealed class FederationFanoutSyncServiceTests
         var operation = new FederationOperationRequest
         {
             OperationId = "op-local-1",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "proxy-b",
             Domain = "local_execution",
             Method = "desktop_launch",
             BodyBase64 = Convert.ToBase64String("{}"u8.ToArray()),
@@ -184,10 +185,10 @@ public sealed class FederationFanoutSyncServiceTests
         {
             Sequence = 10,
             OperationId = "op-local-1",
-            ProxyId = "PAYTON-DESKTOP",
+            ProxyId = "proxy-b",
             Domain = "local_execution",
             Method = "desktop_launch",
-            Envelope = signer.Sign(operation, "hub", "PAYTON-LEGION2", "local_execution"),
+            Envelope = signer.Sign(operation, "hub", "proxy-a", "local_execution"),
         };
         var apply = Substitute.For<IFederationOperationApplyService>();
         var localExecution = Substitute.For<IFederationLocalExecutionService>();
@@ -230,7 +231,7 @@ public sealed class FederationFanoutSyncServiceTests
             Role = FederationRole.LocalProxy,
             HubBaseUrl = "http://hub.example:7147",
             HubAccessToken = "hub-secret",
-            ProxyId = "PAYTON-LEGION2",
+            ProxyId = "proxy-a",
             EnrollmentToken = "test-secret",
             Sync = new FederationSyncOptions { FanoutIntervalSeconds = 1 },
             LocalExecution = new FederationLocalExecutionOptions
