@@ -19,35 +19,9 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// extraction, validation, modes, TODO persistence, replay, and audit storage.
 /// Uses an in-memory SQLite workspace and a mocked one-shot extractor.
 /// </summary>
-public sealed class HandoffIngestionServiceTests : IDisposable
+/// <remarks>2026-11-07, TEST-HANDOFF-002; TEST-HANDOFF-007; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 1 Category=Integration case (IngestAsync_ReparseEscape_IsRejected) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the state and helpers both halves use (_workspace, _connection, _dbOptions, _time, .ctor, Dispose, CreateService, DurabilityDbFactory, SeedCanonicalRequirements, CreateDb, SuccessfulExtractor, ValidDraftJson and ManualTimeProvider) moved once into the abstract base class HandoffIngestionServiceTestsBase in Services/HandoffIngestionServiceTestsBase.cs beside this file, which both halves derive from and the integration project links (DRY); the unit cases and the class attributes are unchanged.</remarks>
+public sealed class HandoffIngestionServiceTests : HandoffIngestionServiceTestsBase, IDisposable
 {
-    private readonly string _workspace;
-    private readonly SqliteConnection _connection;
-    private readonly DbContextOptions<McpDbContext> _dbOptions;
-    private readonly ManualTimeProvider _time = new(new DateTimeOffset(2026, 8, 16, 18, 0, 0, TimeSpan.Zero));
-
-    /// <summary>Creates an isolated workspace and SQLite database for handoff tests.</summary>
-    public HandoffIngestionServiceTests()
-    {
-        _workspace = Path.Combine(Path.GetTempPath(), "handoff-tests", Guid.NewGuid().ToString("N"));
-        Directory.CreateDirectory(_workspace);
-        _connection = new SqliteConnection("Data Source=:memory:");
-        _connection.Open();
-        _dbOptions = new DbContextOptionsBuilder<McpDbContext>()
-            .UseSqlite(_connection)
-            .Options;
-        using var db = CreateDb(_workspace);
-        db.Database.EnsureCreated();
-    }
-
-    /// <inheritdoc />
-    public void Dispose()
-    {
-        _connection.Dispose();
-        if (Directory.Exists(_workspace))
-            Directory.Delete(_workspace, recursive: true);
-    }
-
     /// <summary>TEST-HANDOFF-002: Markdown, text, JSON, and YAML files are accepted when contained.</summary>
     [Theory]
     [InlineData("notes.md", "# Handoff")]
@@ -463,41 +437,6 @@ public sealed class HandoffIngestionServiceTests : IDisposable
         Assert.StartsWith("artifact:", result.Provenance.SourceLocator, StringComparison.Ordinal);
     }
 
-    /// <summary>TEST-HANDOFF-002: reparse-point escapes fail closed.</summary>
-    /// <remarks>Integration: creates a real directory link and checks physical containment (TR-MCP-USECASE-018 AC-006).</remarks>
-    [Trait("Category", "Integration")]
-    [Fact]
-    public async Task IngestAsync_ReparseEscape_IsRejected()
-    {
-        var outsideRoot = Path.Combine(Path.GetTempPath(), "handoff-outside-" + Guid.NewGuid().ToString("N"));
-        Directory.CreateDirectory(outsideRoot);
-        var outsideFile = Path.Combine(outsideRoot, "secret.md");
-        File.WriteAllText(outsideFile, "secret-outside");
-        var linkPath = Path.Combine(_workspace, "escape.md");
-        try
-        {
-            File.CreateSymbolicLink(linkPath, outsideFile);
-            var todo = Substitute.For<ITodoService>();
-            var sut = CreateService(SuccessfulExtractor(ValidDraftJson("MCP-HANDOFFDEMO-016")), todo);
-
-            var result = await sut.IngestAsync(new HandoffIngestionRequest
-            {
-                SourceKind = HandoffSourceKind.Path,
-                Path = "escape.md",
-            }, TestContext.Current.CancellationToken);
-
-            Assert.Contains(result.Diagnostics, item => item.Code == "source_reparse" || item.Code == "source_external");
-            await todo.DidNotReceiveWithAnyArgs().CreateAsync(default!, cancellationToken: TestContext.Current.CancellationToken);
-        }
-        finally
-        {
-            if (File.Exists(linkPath))
-                File.Delete(linkPath);
-            if (Directory.Exists(outsideRoot))
-                Directory.Delete(outsideRoot, recursive: true);
-        }
-    }
-
     /// <summary>TEST-HANDOFF-007: runs from another workspace are not replayed.</summary>
     [Fact]
     public async Task IngestAsync_DifferentWorkspace_DoesNotReplay()
@@ -599,99 +538,5 @@ public sealed class HandoffIngestionServiceTests : IDisposable
         Assert.Contains(result.Diagnostics, item => item.Field == "description" && item.Code == "draft_invalid_description");
         Assert.Contains(result.Diagnostics, item => item.Field == "technicalDetails" && item.Code == "draft_invalid_technicalDetails");
         await todo.DidNotReceiveWithAnyArgs().CreateAsync(default!, cancellationToken: TestContext.Current.CancellationToken);
-    }
-
-    private IHandoffIngestionService CreateService(IHandoffOneShotExtractor extractor, ITodoService todo, string? workspacePath = null)
-    {
-        var workspace = workspacePath ?? _workspace;
-        var db = CreateDb(workspace);
-        var ingestionOptions = MsOptions.Create(new IngestionOptions { RepoRoot = workspace });
-        var resolver = new TodoServiceResolver(todo, ingestionOptions, Substitute.For<ITodoServiceFactory>());
-        var accessor = new WorkspaceServiceAccessor(resolver, Substitute.For<IHttpContextAccessor>(), ingestionOptions);
-        SeedCanonicalRequirements(db, workspace);
-        return new HandoffIngestionService(
-            new HandoffSourceResolver(db),
-            extractor,
-            new HandoffTodoDraftParser(),
-            new HandoffTodoDraftValidator(),
-            new HandoffModePolicy(),
-            accessor,
-            db,
-            new SessionLogSanitizer(MsOptions.Create(new SessionLogSanitizationOptions { RegexTimeoutMilliseconds = 5000 })),
-            _time,
-            new DurabilityDbFactory(_dbOptions, workspace));
-    }
-
-    private sealed class DurabilityDbFactory : IDbContextFactory<McpDbContext>
-    {
-        private readonly DbContextOptions<McpDbContext> _options;
-        private readonly string _workspace;
-        public DurabilityDbFactory(DbContextOptions<McpDbContext> options, string workspace)
-        {
-            _options = options;
-            _workspace = workspace;
-        }
-
-        public McpDbContext CreateDbContext()
-            => new(_options, new WorkspaceContext { WorkspacePath = _workspace });
-    }
-
-    private static void SeedCanonicalRequirements(McpDbContext db, string workspace)
-    {
-        if (db.Requirements.Any())
-            return;
-
-        db.Requirements.AddRange(
-            new RequirementEntity
-            {
-                WorkspaceId = workspace,
-                Kind = "fr",
-                Id = "FR-HANDOFF-001",
-                Title = "Handoff FR",
-                Body = "Seeded",
-                Priority = "high",
-                Status = "pending",
-            },
-            new RequirementEntity
-            {
-                WorkspaceId = workspace,
-                Kind = "tr",
-                Id = "TR-HANDOFF-CONTRACT-001",
-                Title = "Handoff TR",
-                Body = "Seeded",
-                Priority = "high",
-                Status = "pending",
-            });
-        db.SaveChanges();
-    }
-
-    private McpDbContext CreateDb(string workspacePath)
-        => new(_dbOptions, new WorkspaceContext { WorkspacePath = workspacePath });
-
-    private static IHandoffOneShotExtractor SuccessfulExtractor(string json)
-    {
-        var extractor = Substitute.For<IHandoffOneShotExtractor>();
-        extractor.ExtractAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string?>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
-            .Returns(new HandoffExtractionResult
-            {
-                Success = true,
-                ResponseText = json,
-                AgentName = "plan-agent",
-                PromptVersion = HandoffPromptDefaults.PromptVersion,
-                TemplateVersion = HandoffPromptDefaults.TemplateId,
-            });
-        return extractor;
-    }
-
-    private static string ValidDraftJson(string id, double confidence = 0.8, string? unknownNotes = null)
-        => $$"""
-            {"id":"{{id}}","title":"Demo","section":"QBrain.AI","priority":"high","estimate":"2h","description":["Do the work"],"technicalDetails":["Use the service"],"implementationTasks":[{"task":"Write tests","done":false}],"dependsOn":[],"functionalRequirements":["FR-HANDOFF-001"],"technicalRequirements":["TR-HANDOFF-CONTRACT-001"],"confidence":{{confidence.ToString(System.Globalization.CultureInfo.InvariantCulture)}},"unknownSourceNotes":[{{(unknownNotes is null ? "" : $"\"{unknownNotes}\"")}}]}
-            """;
-
-    private sealed class ManualTimeProvider : TimeProvider
-    {
-        private readonly DateTimeOffset _utcNow;
-        public ManualTimeProvider(DateTimeOffset utcNow) => _utcNow = utcNow;
-        public override DateTimeOffset GetUtcNow() => _utcNow;
     }
 }

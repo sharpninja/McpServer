@@ -12,26 +12,11 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// Proves empty-DB apply and upgrade from the migration before AddUseCaseSupport.
 /// Does not use EnsureCreated as the storage gate.
 /// </summary>
-public sealed class UseCaseMigrationApplyTests : IDisposable
+/// <remarks>2026-11-07, TEST-MCP-USECASE-006; TR-MCP-USECASE-001; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 1 Category=Integration case (AddUseCaseSupportMigration_Source_HasNoSessionLogsTableOps) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the state and helpers both halves use (_connection, _options, .ctor and Dispose) moved once into the abstract base class UseCaseMigrationApplyTestsBase in Storage/UseCaseMigrationApplyTestsBase.cs beside this file, which both halves derive from and the integration project links (DRY); the unit cases and the class attributes are unchanged.</remarks>
+public sealed class UseCaseMigrationApplyTests : UseCaseMigrationApplyTestsBase, IDisposable
 {
     /// <summary>Migration immediately before AddUseCaseSupport on Sqlite.</summary>
     private const string PrecedingMigration = "20260720170000_RenameQuadBrainRolesToCreativityLogic";
-
-    private readonly SqliteConnection _connection;
-    private readonly DbContextOptions<McpDbContext> _options;
-
-    /// <summary>Opens an isolated in-memory Sqlite database for real Migrate().</summary>
-    public UseCaseMigrationApplyTests()
-    {
-        _connection = new SqliteConnection("Data Source=:memory:");
-        _connection.Open();
-        _options = new DbContextOptionsBuilder<McpDbContext>()
-            .UseSqlite(_connection, sqlite => sqlite.MigrationsAssembly("QBrainAi.Storage.SqliteMigrations"))
-            .Options;
-    }
-
-    /// <inheritdoc />
-    public void Dispose() => _connection.Dispose();
 
     /// <summary>Full migration chain from empty DB creates UseCases and related tables.</summary>
     [Fact]
@@ -73,35 +58,6 @@ public sealed class UseCaseMigrationApplyTests : IDisposable
             Assert.True(TableExists(db, "UseCaseFrLinks"));
             Assert.True(ColumnExists(db, "SessionLogs", "AgentExecutablePath"));
             Assert.True(ColumnExists(db, "UseCases", "VersionNumber"));
-        }
-    }
-
-    /// <summary>AddUseCaseSupport migration sources must not alter SessionLogs.</summary>
-    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
-    [Trait("Category", "Integration")]
-    [Fact]
-    public void AddUseCaseSupportMigration_Source_HasNoSessionLogsTableOps()
-    {
-        var repoSrc = QBrainAi.Tests.Shared.TestRepositoryRoot.Combine("src");
-        var roots = new[]
-        {
-            Path.Combine(repoSrc, "QBrainAi.Storage.SqliteMigrations", "Migrations"),
-            Path.Combine(repoSrc, "QBrainAi.Storage.SqlServerMigrations", "Migrations"),
-            Path.Combine(repoSrc, "QBrainAi.Storage.PostgreSqlMigrations", "Migrations"),
-        };
-
-        foreach (var root in roots)
-        {
-            Assert.True(Directory.Exists(root), $"Missing migrations root {root}");
-            var files = Directory.GetFiles(root, "*AddUseCaseSupport.cs")
-                .Where(f => !f.Contains("Designer", StringComparison.OrdinalIgnoreCase))
-                .ToArray();
-            Assert.NotEmpty(files);
-            foreach (var file in files)
-            {
-                var text = File.ReadAllText(file);
-                Assert.DoesNotContain("table: \"SessionLogs\"", text, StringComparison.Ordinal);
-            }
         }
     }
 

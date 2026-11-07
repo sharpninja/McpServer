@@ -11,26 +11,11 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// AC-TR-MCP-SESSIONLOG-006-004 / TEST-MCP-SESSIONLOG-006:
 /// Provider migrations add and drop SessionLogTurns.PlanFile and TodoId.
 /// </summary>
-public sealed class AddSessionLogTurnPlanFileAndTodoIdMigrationTests : IDisposable
+/// <remarks>2026-11-07, TR-MCP-SESSIONLOG-006-004; TEST-MCP-SESSIONLOG-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 2 Category=Integration cases (SqlServerMigration_UpAddsColumns_DownDropsThem and PostgreSqlMigration_UpAddsColumns_DownDropsThem) and the helpers only they use (AssertProviderMigrationContainsUpAndDown) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the state and helpers both halves use (_connection, _options, .ctor and Dispose) moved once into the abstract base class AddSessionLogTurnPlanFileAndTodoIdMigrationTestsBase in Storage/AddSessionLogTurnPlanFileAndTodoIdMigrationTestsBase.cs beside this file, which both halves derive from and the integration project links (DRY); the unit cases and the class attributes are unchanged.</remarks>
+public sealed class AddSessionLogTurnPlanFileAndTodoIdMigrationTests : AddSessionLogTurnPlanFileAndTodoIdMigrationTestsBase, IDisposable
 {
     private const string Predecessor = "20260808102524_AddUseCaseDiagramGraph";
     private const string Target = "20260812173052_AddSessionLogTurnPlanFileAndTodoId";
-
-    private readonly SqliteConnection _connection;
-    private readonly DbContextOptions<McpDbContext> _options;
-
-    /// <summary>Opens an isolated in-memory Sqlite database for real Migrate().</summary>
-    public AddSessionLogTurnPlanFileAndTodoIdMigrationTests()
-    {
-        _connection = new SqliteConnection("Data Source=:memory:");
-        _connection.Open();
-        _options = new DbContextOptionsBuilder<McpDbContext>()
-            .UseSqlite(_connection, sqlite => sqlite.MigrationsAssembly("QBrainAi.Storage.SqliteMigrations"))
-            .Options;
-    }
-
-    /// <inheritdoc />
-    public void Dispose() => _connection.Dispose();
 
     /// <summary>AC-TR-MCP-SESSIONLOG-006-004: SQLite Up adds both columns; Down drops them.</summary>
     [Fact]
@@ -56,40 +41,6 @@ public sealed class AddSessionLogTurnPlanFileAndTodoIdMigrationTests : IDisposab
             Assert.False(ColumnExists(db, "SessionLogTurns", "PlanFile"));
             Assert.False(ColumnExists(db, "SessionLogTurns", "TodoId"));
         }
-    }
-
-    /// <summary>AC-TR-MCP-SESSIONLOG-006-004: SQL Server migration source adds both columns with None default.</summary>
-    /// <remarks>Integration: reads the selected provider migration source from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
-    [Trait("Category", "Integration")]
-    [Fact]
-    public void SqlServerMigration_UpAddsColumns_DownDropsThem()
-    {
-        AssertProviderMigrationContainsUpAndDown("QBrainAi.Storage.SqlServerMigrations");
-    }
-
-    /// <summary>AC-TR-MCP-SESSIONLOG-006-004: PostgreSQL migration source adds both columns with None default.</summary>
-    /// <remarks>Integration: reads the selected provider migration source from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
-    [Trait("Category", "Integration")]
-    [Fact]
-    public void PostgreSqlMigration_UpAddsColumns_DownDropsThem()
-    {
-        AssertProviderMigrationContainsUpAndDown("QBrainAi.Storage.PostgreSqlMigrations");
-    }
-
-    private static void AssertProviderMigrationContainsUpAndDown(string project)
-    {
-        var repoSrc = QBrainAi.Tests.Shared.TestRepositoryRoot.Combine("src");
-        var root = Path.Combine(repoSrc, project, "Migrations");
-        var files = Directory.GetFiles(root, "*AddSessionLogTurnPlanFileAndTodoId.cs")
-            .Where(f => !f.Contains("Designer", StringComparison.OrdinalIgnoreCase))
-            .ToArray();
-        Assert.NotEmpty(files);
-        var text = File.ReadAllText(files[0]);
-        Assert.Contains("name: \"PlanFile\"", text, StringComparison.Ordinal);
-        Assert.Contains("name: \"TodoId\"", text, StringComparison.Ordinal);
-        Assert.Contains("defaultValue: \"None\"", text, StringComparison.Ordinal);
-        Assert.Contains("DropColumn", text, StringComparison.Ordinal);
-        Assert.Contains("DropIndex", text, StringComparison.Ordinal);
     }
 
     private static bool ColumnExists(McpDbContext db, string table, string column)

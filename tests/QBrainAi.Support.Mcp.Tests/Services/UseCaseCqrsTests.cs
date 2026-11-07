@@ -16,31 +16,9 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// TEST-MCP-USECASE-002 / FR-MCP-USECASE-001..004 / TR-MCP-USECASE-002:
 /// Unit tests for use case CQRS handlers: create, link FR string id, soft delete, and coverage.
 /// </summary>
-public sealed class UseCaseCqrsTests : IDisposable
+/// <remarks>2026-11-07, TEST-MCP-USECASE-002; FR-MCP-USECASE-001; TR-MCP-USECASE-002; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 2 Category=Integration cases (DeleteUseCase_SoftDeletes_HidesFromGetAndList and GetUseCaseDiagram_ReturnsScopedMermaidUml) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the state and helpers both halves use (_connection, _options, _workspace, _ctx, .ctor, Dispose, CreateContext, CreateWorkspaceContext and SeedWorkspace) moved once into the abstract base class UseCaseCqrsTestsBase in Services/UseCaseCqrsTestsBase.cs beside this file, which both halves derive from and the integration project links (DRY); the unit cases and the class attributes are unchanged.</remarks>
+public sealed class UseCaseCqrsTests : UseCaseCqrsTestsBase, IDisposable
 {
-    private readonly SqliteConnection _connection;
-    private readonly DbContextOptions<McpDbContext> _options;
-    private readonly string _workspace = Path.Combine(Path.GetTempPath(), "mcp-uc-cqrs-" + Guid.NewGuid().ToString("N"));
-    private readonly CallContext _ctx = new();
-
-    /// <summary>Creates an isolated SQLite schema shared across handler tests.</summary>
-    public UseCaseCqrsTests()
-    {
-        _connection = new SqliteConnection("Data Source=:memory:");
-        _connection.Open();
-        _options = new DbContextOptionsBuilder<McpDbContext>()
-            .UseSqlite(_connection)
-            .Options;
-
-        using var ctx = CreateContext();
-        ctx.Database.EnsureCreated();
-        SeedWorkspace(ctx, _workspace, "UseCase CQRS");
-        ctx.SaveChanges();
-    }
-
-    /// <summary>Releases the shared SQLite connection.</summary>
-    public void Dispose() => _connection.Dispose();
-
     /// <summary>
     /// BUG-TRIAGE-139 AC1/AC4: create without a pre-seeded Workspaces row auto-creates the parent
     /// and returns a positive useCaseId that list can see.
@@ -198,43 +176,6 @@ public sealed class UseCaseCqrsTests : IDisposable
         Assert.Contains("Conflict", second.Error, StringComparison.OrdinalIgnoreCase);
     }
 
-    /// <summary>FR-MCP-USECASE-001: Soft-delete hides use case from get/list queries.</summary>
-    /// <remarks>Integration: binds real CQRS handlers that resolve physical workspace identity (TR-MCP-USECASE-018 AC-006).</remarks>
-    [Trait("Category", "Integration")]
-    [Fact]
-    public async Task DeleteUseCase_SoftDeletes_HidesFromGetAndList()
-    {
-        await using var db = CreateContext();
-        var create = await new CreateUseCaseCommandHandler(db, CreateWorkspaceContext())
-            .HandleAsync(new CreateUseCaseCommand(_workspace, new CreateUseCaseRequest { Title = "Doomed" }), _ctx)
-            .ConfigureAwait(true);
-        Assert.True(create.IsSuccess, create.Error);
-        var id = create.Value!.UseCaseId;
-
-        var deleted = await new DeleteUseCaseCommandHandler(db, CreateWorkspaceContext())
-            .HandleAsync(new DeleteUseCaseCommand(_workspace, id), _ctx)
-            .ConfigureAwait(true);
-        Assert.True(deleted.IsSuccess, deleted.Error);
-        Assert.True(deleted.Value);
-
-        var get = await new GetUseCaseQueryHandler(db, CreateWorkspaceContext())
-            .HandleAsync(new GetUseCaseQuery(_workspace, id), _ctx)
-            .ConfigureAwait(true);
-        Assert.True(get.IsFailure);
-        Assert.Contains("not found", get.Error, StringComparison.OrdinalIgnoreCase);
-
-        var list = await new ListUseCasesQueryHandler(db, CreateWorkspaceContext())
-            .HandleAsync(new ListUseCasesQuery(_workspace), _ctx)
-            .ConfigureAwait(true);
-        Assert.True(list.IsSuccess, list.Error);
-        Assert.Empty(list.Value!);
-
-        var stillThere = await db.UseCases.IgnoreQueryFilters()
-            .AnyAsync(u => u.UseCaseId == id, TestContext.Current.CancellationToken)
-            .ConfigureAwait(true);
-        Assert.True(stillThere);
-    }
-
     /// <summary>FR-MCP-USECASE-003 / TR-MCP-USECASE-006: Coverage reports Realizes gaps for UC and FR.</summary>
     [Fact]
     public async Task Coverage_ReportsUseCasesAndFrsWithoutRealizes()
@@ -291,65 +232,6 @@ public sealed class UseCaseCqrsTests : IDisposable
         Assert.Single(result.Value.FrLinks);
         Assert.Equal("FR-MCP-USECASE-004", result.Value.FrLinks[0].FrId);
         Assert.Equal(UseCaseConstants.DefaultLinkType, result.Value.FrLinks[0].LinkType);
-    }
-
-    /// <summary>TR-MCP-USECASE-004: Diagram query returns scoped Mermaid UML use-case content.</summary>
-    /// <remarks>Integration: binds real CQRS handlers that resolve physical workspace identity (TR-MCP-USECASE-018 AC-006).</remarks>
-    [Trait("Category", "Integration")]
-    [Fact]
-    public async Task GetUseCaseDiagram_ReturnsScopedMermaidUml()
-    {
-        await using var db = CreateContext();
-        var create = await new CreateUseCaseCommandHandler(db, CreateWorkspaceContext())
-            .HandleAsync(new CreateUseCaseCommand(_workspace, new CreateUseCaseRequest
-            {
-                Title = "Diagram UC",
-                CreateBasicFlow = true,
-                InitialSteps = [new CreateUseCaseStepRequest { Action = "Do work" }],
-            }), _ctx)
-            .ConfigureAwait(true);
-        Assert.True(create.IsSuccess, create.Error);
-
-        var diagram = await new GetUseCaseDiagramQueryHandler(
-                db,
-                CreateWorkspaceContext(),
-                new UseCaseUmlSerializationService())
-            .HandleAsync(new GetUseCaseDiagramQuery(_workspace, create.Value!.UseCaseId, "mermaid"), _ctx)
-            .ConfigureAwait(true);
-
-        Assert.True(diagram.IsSuccess, diagram.Error);
-        Assert.Equal("mermaid", diagram.Value!.Format);
-        Assert.Contains("flowchart", diagram.Value.Content, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("Diagram UC", diagram.Value.Content, StringComparison.Ordinal);
-    }
-
-    private McpDbContext CreateContext()
-    {
-        return new McpDbContext(_options, CreateWorkspaceContext());
-    }
-
-    private WorkspaceContext CreateWorkspaceContext()
-        => new()
-        {
-            WorkspacePath = _workspace,
-            WorkspaceName = "uc-cqrs",
-            DataDirectory = _workspace,
-            TodoFilePath = Path.Combine(_workspace, "docs", "todo.yaml"),
-            SessionsPath = Path.Combine(_workspace, "docs", "sessions"),
-            ExternalDocsPath = Path.Combine(_workspace, "docs", "external"),
-        };
-
-    private static void SeedWorkspace(McpDbContext ctx, string workspaceId, string name)
-    {
-        if (ctx.Workspaces.IgnoreQueryFilters().Any(w => w.WorkspaceId == workspaceId))
-            return;
-
-        ctx.Workspaces.Add(new WorkspaceEntity
-        {
-            WorkspaceId = workspaceId,
-            WorkspacePath = workspaceId,
-            Name = name,
-        });
     }
 
     private async Task SeedFrAsync(McpDbContext db, string id, string title)

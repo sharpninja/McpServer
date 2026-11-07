@@ -69,6 +69,13 @@
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>QBrainAi.Support.Mcp.IntegrationTests</_Parameter1>
     </AssemblyAttribute>
+    <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests,
+         which takes QBrainAi.Support.Mcp.Tests' integration cases (hostile validation finding R14-F4); slice S7 moved the
+         integration half of McpDatabaseEncryptionTransitionCommandTests there, which parses with the internal
+         McpDatabaseEncryptionTransitionCommand and McpDatabaseEncryptionTransitionOptions. -->
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>QBrainAi.Support.Mcp.EnvironmentIntegrationTests</_Parameter1>
+    </AssemblyAttribute>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>QBrainAi.SpecFlow.Tests</_Parameter1>
     </AssemblyAttribute>

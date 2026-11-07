@@ -8,6 +8,7 @@ using QBrainAi.Support.Mcp.UseCases.Models;
 using QBrainAi.Support.Mcp.UseCases.Queries;
 using Xunit;
 using Xunit.Sdk;
+using static QBrainAi.Support.Mcp.Tests.Services.UseCaseGetWorkspaceResolutionContractTestsSupport;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
@@ -15,14 +16,9 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// TEST-MCP-USECASE-002 / FR-MCP-USECASE-001 / TR-MCP-USECASE-002:
 /// proves the get-by-id workspace contract rejects raw-path lookup behavior before production binding.
 /// </summary>
+/// <remarks>2026-11-07, TEST-MCP-USECASE-002; FR-MCP-USECASE-001; TR-MCP-USECASE-002; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 1 Category=Integration case (ProductionGate_EquivalentRawPath_UsesCanonicalWorkspace) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the helpers both halves use (RawWorkspacePath, CanonicalWorkspaceId and AssertCanonicalWorkspaceContractAsync) moved once into Services/UseCaseGetWorkspaceResolutionContractTestsSupport.cs beside this file, which the integration project links (DRY); the unit cases and the class attributes are unchanged.</remarks>
 public sealed class UseCaseGetWorkspaceResolutionContractTests
 {
-    /// <summary>The workspace path as a Windows caller spells it.</summary>
-    private const string RawWorkspacePath = @"Q:\fixture\workspace";
-
-    /// <summary>FR-MCP-PATHNORM-001: the stored and returned workspace key uses '/' (test-side oracle).</summary>
-    private static readonly string CanonicalWorkspaceId = ExpectedWorkspaceKey.Of(RawWorkspacePath);
-
     /// <summary>Correct canonical workspace output satisfies every contract assertion.</summary>
     [Fact]
     public async Task MockGate_CanonicalWorkspaceResult_PassesContract()
@@ -63,73 +59,5 @@ public sealed class UseCaseGetWorkspaceResolutionContractTests
                     WorkspaceId = RawWorkspacePath,
                     Title = "Certify fixture services",
                 })))).ConfigureAwait(true);
-    }
-
-    /// <summary>Production binding resolves an equivalent dot-segment spelling of its own temporary workspace.</summary>
-    /// <remarks>Integration: the real handler resolves physical workspace paths (TR-MCP-USECASE-018 AC-006).</remarks>
-    [Trait("Category", "Integration")]
-    [Fact]
-    public async Task ProductionGate_EquivalentRawPath_UsesCanonicalWorkspace()
-    {
-        var workspaceRoot = Path.Combine(Path.GetTempPath(), "usecase-owned-" + Guid.NewGuid().ToString("N"));
-        Directory.CreateDirectory(workspaceRoot);
-        try
-        {
-            await using var connection = new SqliteConnection("Data Source=:memory:");
-            await connection.OpenAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
-            var options = new DbContextOptionsBuilder<McpDbContext>()
-                .UseSqlite(connection)
-                .Options;
-            // Seeded with the caller's spelling on purpose: the store canonicalizes workspace keys on save.
-            var workspaceContext = new WorkspaceContext
-            {
-                WorkspacePath = workspaceRoot,
-                WorkspaceName = "Fixture",
-                DataDirectory = workspaceRoot,
-            };
-
-            await using var db = new McpDbContext(options, workspaceContext);
-            await db.Database.EnsureCreatedAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
-            db.OverrideWorkspaceId(workspaceRoot);
-            db.Workspaces.Add(new WorkspaceEntity
-            {
-                WorkspaceId = workspaceRoot,
-                WorkspacePath = workspaceRoot,
-                Name = "Fixture",
-            });
-            db.UseCases.Add(new UseCaseEntity
-            {
-                UseCaseId = 125,
-                WorkspaceId = workspaceRoot,
-                Title = "Certify fixture services",
-                CreatedAtUtc = DateTimeOffset.UtcNow,
-                UpdatedAtUtc = DateTimeOffset.UtcNow,
-            });
-            await db.SaveChangesAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
-
-            var equivalentRawPath = workspaceRoot + "/.";
-            var handler = new GetUseCaseQueryHandler(db, workspaceContext);
-
-            await AssertCanonicalWorkspaceContractAsync(
-                () => handler.HandleAsync(
-                    new GetUseCaseQuery(equivalentRawPath, 125),
-                    new CallContext { CancellationToken = TestContext.Current.CancellationToken }), ExpectedWorkspaceKey.Of(workspaceRoot)).ConfigureAwait(true);
-        }
-        finally
-        {
-            Directory.Delete(workspaceRoot, recursive: true);
-        }
-    }
-
-    private static async Task AssertCanonicalWorkspaceContractAsync(
-        Func<Task<Result<UseCaseDetailDto>>> invoke, string? expectedWorkspace = null)
-    {
-        var result = await invoke().ConfigureAwait(true);
-
-        Assert.True(result.IsSuccess, result.Error);
-        Assert.NotNull(result.Value);
-        Assert.Equal(125, result.Value!.UseCaseId);
-        Assert.Equal(expectedWorkspace ?? CanonicalWorkspaceId, result.Value.WorkspaceId);
-        Assert.Equal("Certify fixture services", result.Value.Title);
     }
 }

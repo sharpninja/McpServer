@@ -13,20 +13,9 @@ using Xunit;
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
 /// <summary>TEST-HANDOFF-006: one canonical workspace path is pushed into every handoff scope.</summary>
+/// <remarks>2026-11-07, TEST-HANDOFF-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 1 Category=Integration case (Canonicalize_RelativeAndNested_MatchGetFullPath) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the unit cases and the class attributes are unchanged.</remarks>
 public sealed class HandoffWorkspacePathsTests
 {
-    /// <summary>P1-8: relative and nested paths canonicalize to the same absolute value.</summary>
-    /// <remarks>Integration: binds physical current-directory resolution (TR-MCP-USECASE-018 AC-006).</remarks>
-    [Trait("Category", "Integration")]
-    [Fact]
-    public void Canonicalize_RelativeAndNested_MatchGetFullPath()
-    {
-        var relative = Path.Combine(".", "nested", "..", "workspace");
-        var canonical = HandoffWorkspacePaths.Canonicalize(relative);
-        Assert.Equal(ExpectedWorkspaceKey.Of(Path.GetFullPath(relative)), canonical);
-        Assert.True(Path.IsPathRooted(canonical));
-    }
-
     /// <summary>P1-8: blank paths are rejected.</summary>
     [Fact]
     public void TryCanonicalize_Blank_Fails()

@@ -22,6 +22,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// persist without calling the coordinator (and therefore without keyserver signing)
 /// even when turn transactions are required.
 /// </summary>
+/// <remarks>2026-11-07, TEST-MCP-161; TEST-MCP-221; FR-MCP-173; TR-MCP-TXNKEY-001; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 1 Category=Integration case (TransactionGatedSessionLogServiceSource_DoesNotUseBulkPhysicalDeletes) and the helpers only it uses (FindRepositoryRoot) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the unit cases and the class attributes are unchanged.</remarks>
 public sealed class TransactionGatedSessionLogServiceTests
 {
     private const string WorkspacePath = @"E:\tests\transaction-gated-sessionlog";
@@ -166,27 +167,6 @@ public sealed class TransactionGatedSessionLogServiceTests
 
         Assert.Null(coordinator.Request);
         Assert.Null(await GetSessionAsync(connection, sessionId).ConfigureAwait(true));
-    }
-
-    /// <summary>
-    /// TR-MCP-DB-003: rollback code must not bypass tracked soft-delete protection with
-    /// bulk physical delete operations.
-    /// </summary>
-    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
-    [Trait("Category", "Integration")]
-    [Fact]
-    public void TransactionGatedSessionLogServiceSource_DoesNotUseBulkPhysicalDeletes()
-    {
-        var sourcePath = Path.Combine(
-            FindRepositoryRoot(),
-            "src",
-            "QBrainAi.Support.Mcp",
-            "Services",
-            "TransactionGatedSessionLogService.cs");
-        var source = File.ReadAllText(sourcePath);
-
-        Assert.DoesNotContain("ExecuteDelete", source, StringComparison.Ordinal);
-        Assert.DoesNotContain("DELETE FROM", source, StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>
@@ -537,8 +517,6 @@ public sealed class TransactionGatedSessionLogServiceTests
 
         return total;
     }
-
-    private static string FindRepositoryRoot() => QBrainAi.Tests.Shared.TestRepositoryRoot.Resolve();
 
     private static int ScalarCount(SqliteConnection connection, string sql, params (string Name, object Value)[] args)
     {

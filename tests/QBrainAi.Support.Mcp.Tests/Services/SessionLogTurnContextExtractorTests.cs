@@ -8,6 +8,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// AC-FR-MCP-SESSIONLOGCTX-001-006 / AC-TR-MCP-SESSIONLOG-006-003 / TEST-MCP-SESSIONLOG-006:
 /// extractor ranking from turn contents and fake ~ history.
 /// </summary>
+/// <remarks>2026-11-07, FR-MCP-SESSIONLOGCTX-001-006; TR-MCP-SESSIONLOG-006-003; TEST-MCP-SESSIONLOG-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 1 Category=Integration case (Extract_ExactPathUnderUserProfileHistory_UsedWhenTurnHasNoPlan) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the unit cases and the class attributes are unchanged.</remarks>
 public sealed class SessionLogTurnContextExtractorTests
 {
     private readonly SessionLogTurnContextExtractor _sut = new(new DirectoryTreeWalker(_ => []));
@@ -50,29 +51,6 @@ public sealed class SessionLogTurnContextExtractorTests
         turn.ContextItems.Add(new SessionLogTurnContextEntity { ContextItem = @"F:\ws\docs\plans\x.md", Ordinal = 0 });
         var result = _sut.Extract(turn, @"F:\ws", IsolatedHome());
         Assert.Equal("F:/ws/docs/plans/x.md", result.PlanFile);
-    }
-
-    /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-006: ~ history supplies a TODO when the turn text has none.</summary>
-    /// <remarks>Integration: writes and reads an owned physical agent-history tree (TR-MCP-USECASE-018 AC-006).</remarks>
-    [Trait("Category", "Integration")]
-    [Fact]
-    public void Extract_ExactPathUnderUserProfileHistory_UsedWhenTurnHasNoPlan()
-    {
-        var home = Path.Combine(Path.GetTempPath(), "sesslog-extract-" + Guid.NewGuid().ToString("N"));
-        var histDir = Path.Combine(home, ".grok", "sessions", "agent-abc");
-        Directory.CreateDirectory(histDir);
-        try
-        {
-            File.WriteAllText(Path.Combine(histDir, "chat.jsonl"), "working MCP-HISTORY-001 on docs/plans/from-home.md");
-            var turn = new SessionLogTurnEntity();
-            var result = new SessionLogTurnContextExtractor().Extract(turn, @"F:\ws", home, agentSessionId: "agent-abc");
-            Assert.Equal("MCP-HISTORY-001", result.TodoId);
-            Assert.Equal("docs/plans/from-home.md", result.PlanFile);
-        }
-        finally
-        {
-            Directory.Delete(home, recursive: true);
-        }
     }
 
     /// <summary>AC-FR-MCP-SESSIONLOGCTX-001-004: ~/ in history expands.</summary>

@@ -3,54 +3,8 @@ using QBrainAi.Client;
 
 namespace QBrainAi.Support.Mcp.Tests.Storage;
 
-/// <summary>
-/// TEST-MCP-FED-PATH-001 / TR-MCP-FED-PATH-001: contract for the process
-/// <see cref="IWorkspaceHostEnvironment"/>: it reports the running OS, the process working
-/// directory, and canonical host-native normalization. BDP v4 (plan section 2a):
-/// <see cref="WorkspaceHostEnvironmentMockDataTests"/> then <see cref="WorkspaceHostEnvironmentRealTests"/>.
-/// Scripted Windows and Linux hosts run as unit cases using explicit expectations. Only the real host binding
-/// reads the running platform and directory, so only that binding is Integration (TR-MCP-USECASE-018 AC-006).
-/// </summary>
-public abstract class WorkspaceHostEnvironmentContractTests
-{
-    /// <summary>Explicit expected platform for this adapter.</summary>
-    protected abstract WorkspacePathPlatform RunningPlatform { get; }
-
-    /// <summary>Explicit expected working directory; only the native binding reads the process.</summary>
-    protected abstract string ExpectedCurrentDirectory { get; }
-
-    /// <summary>A host-native path with a dot segment for this runner.</summary>
-    protected abstract string NativeSample { get; }
-
-    /// <summary>Expected canonical form of <see cref="NativeSample"/>.</summary>
-    protected abstract string NativeSampleExpected { get; }
-
-    /// <summary>Creates the host environment under test.</summary>
-    protected abstract IWorkspaceHostEnvironment CreateHost();
-
-    /// <summary>The host reports the platform of the running process.</summary>
-    [Fact]
-    public void Platform_IsRunningPlatform()
-    {
-        Assert.Equal(RunningPlatform, CreateHost().Platform);
-    }
-
-    /// <summary>The host reports the process working directory.</summary>
-    [Fact]
-    public void CurrentDirectory_IsProcessWorkingDirectory()
-    {
-        Assert.Equal(ExpectedCurrentDirectory, CreateHost().CurrentDirectory);
-    }
-
-    /// <summary>Host-native normalization collapses dot segments into the canonical form.</summary>
-    [Fact]
-    public void NormalizeNativePath_CollapsesToCanonicalForm()
-    {
-        Assert.Equal(NativeSampleExpected, CreateHost().NormalizeNativePath(NativeSample));
-    }
-}
-
 /// <summary>BDP v4 step 2: the host contract proven against scripted data.</summary>
+/// <remarks>2026-11-07, TEST-MCP-FED-PATH-001; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: unchanged; the contract it derives from moved into Storage/WorkspaceHostEnvironmentContract.cs beside this file, which the integration project links, and the real-host fixture moved to the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4).</remarks>
 public sealed class WorkspaceHostEnvironmentMockDataTests : WorkspaceHostEnvironmentContractTests
 {
     /// <inheritdoc />
@@ -74,6 +28,7 @@ public sealed class WorkspaceHostEnvironmentMockDataTests : WorkspaceHostEnviron
 }
 
 /// <summary>Pure Linux-host scripted data preserves Linux cases without reading the machine's platform or directory.</summary>
+/// <remarks>2026-11-07, TEST-MCP-FED-PATH-001; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: unchanged; the contract it derives from moved into Storage/WorkspaceHostEnvironmentContract.cs beside this file, which the integration project links, and the real-host fixture moved to the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4); this Linux scripted fixture stays a unit case.</remarks>
 public sealed class WorkspaceHostEnvironmentLinuxMockDataTests : WorkspaceHostEnvironmentContractTests
 {
     /// <inheritdoc />
@@ -93,21 +48,4 @@ public sealed class WorkspaceHostEnvironmentLinuxMockDataTests : WorkspaceHostEn
         host.NormalizeNativePath(NativeSample).Returns(NativeSampleExpected);
         return host;
     }
-}
-
-/// <summary>BDP v4 step 3: the host contract against <see cref="SystemWorkspaceHostEnvironment"/>.</summary>
-[Trait("Category", "Integration")]
-public sealed class WorkspaceHostEnvironmentRealTests : WorkspaceHostEnvironmentContractTests
-{
-    /// <inheritdoc />
-    protected override WorkspacePathPlatform RunningPlatform => OperatingSystem.IsWindows() ? WorkspacePathPlatform.Windows : WorkspacePathPlatform.CaseSensitive;
-    /// <inheritdoc />
-    protected override string ExpectedCurrentDirectory => Environment.CurrentDirectory;
-    /// <inheritdoc />
-    protected override string NativeSample => OperatingSystem.IsWindows() ? @"C:\svc\.\repo" : "/srv/./repo";
-    /// <inheritdoc />
-    protected override string NativeSampleExpected => OperatingSystem.IsWindows() ? "C:/svc/repo" : "/srv/repo";
-
-    /// <inheritdoc />
-    protected override IWorkspaceHostEnvironment CreateHost() => SystemWorkspaceHostEnvironment.Instance;
 }

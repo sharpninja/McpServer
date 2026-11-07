@@ -9,6 +9,7 @@ namespace QBrainAi.Support.Mcp.Tests.Memory;
 /// New memory verbs appear in tools search, descriptions are agent-oriented,
 /// compat verbs remain, and STDIO equals HTTP.
 /// </summary>
+/// <remarks>2026-11-07, TEST-MCP-MEMORY-016; FR-MCP-MEMORY-017; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 1 Category=Integration case (StdioAndHttp_SameVerbSet) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the unit cases and the class attributes are unchanged.</remarks>
 public sealed class MemoryToolsDiscoveryTests
 {
     /// <summary>AC-FR-MCP-MEMORY-017-01: New memory verbs appear in /qbrainai/tools search.</summary>
@@ -74,33 +75,6 @@ public sealed class MemoryToolsDiscoveryTests
             Assert.Contains(verb, names);
         foreach (var verb in MemoryS5Catalog.NewVerbs)
             Assert.Contains(verb, names);
-    }
-
-    /// <summary>AC-FR-MCP-MEMORY-017-09: STDIO and Streamable HTTP advertise the same memory verb set.</summary>
-    /// <remarks>Integration: loads the committed tool JSON and stdio contracts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
-    [Trait("Category", "Integration")]
-    [Fact]
-    public void StdioAndHttp_SameVerbSet()
-    {
-        var httpNames = MemoryS5Catalog.DiscoverMcpToolNames()
-            .Where(name => name.StartsWith("memory_", StringComparison.Ordinal))
-            .OrderBy(name => name, StringComparer.Ordinal)
-            .ToArray();
-        var stdioNames = MemoryS5Catalog.DiscoverStdioContractMemoryNames()
-            .OrderBy(name => name, StringComparer.Ordinal)
-            .ToArray();
-        var jsonNames = MemoryS5Catalog.DiscoverCommittedToolJsonNames()
-            .OrderBy(name => name, StringComparer.Ordinal)
-            .ToArray();
-
-        foreach (var verb in MemoryS5Catalog.NewVerbs.Concat(MemoryS5Catalog.CompatVerbs))
-        {
-            Assert.Contains(verb, httpNames);
-            Assert.Contains(verb, stdioNames);
-            Assert.Contains(verb, jsonNames);
-        }
-
-        Assert.Equal(httpNames, stdioNames);
     }
 
     private static QBrainAi.Support.Mcp.Storage.McpDbContext CreateToolDb()

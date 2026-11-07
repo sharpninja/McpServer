@@ -10,75 +10,13 @@ using Microsoft.Extensions.DependencyInjection;
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
 /// <summary>Unit tests for hub-and-spoke federation topology persistence.</summary>
-public sealed class FederationTopologyServiceTests : IDisposable
+/// <remarks>2026-11-07, TR-MCP-USECASE-018 AC-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its unit cases and class attributes are unchanged; the helper AssertEnrollmentPersistsInventoryAsync, which only the Windows and Linux platform classes of this file call, moved with them to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4); the state and helpers both halves need (_workspacePath, Dispose and CreateProvider) moved once into the abstract base class FederationTopologyServiceTestsBase in Services/FederationTopologyServiceTestsBase.cs beside this file, which both halves derive from and the integration project links (DRY).</remarks>
+public sealed class FederationTopologyServiceTests : FederationTopologyServiceTestsBase, IDisposable
 {
-    private readonly string _workspacePath = Path.Combine(
-        Path.GetTempPath(), "QBrainAi.Tests", nameof(FederationTopologyServiceTests),
-        Guid.NewGuid().ToString("N"));
-
     /// <summary>Creates an isolated workspace for identity resolution.</summary>
     public FederationTopologyServiceTests()
     {
         Directory.CreateDirectory(_workspacePath);
-    }
-
-    /// <summary>Removes the isolated workspace after each test.</summary>
-    public void Dispose()
-    {
-        if (Directory.Exists(_workspacePath))
-            Directory.Delete(_workspacePath, recursive: true);
-    }
-    /// <summary>
-    /// Enrollment persists the proxy and hosted workspaces for hub inventory. The stored workspace key of a
-    /// real host directory is compared with the host's path comparison, so the cases live in the Windows
-    /// and Linux integration classes below (operator 2026-10-19: "Integration + Platform (Recommended)";
-    /// TR-MCP-USECASE-018 AC-006).
-    /// </summary>
-    /// <param name="workspaceComparison">The running host's path comparison.</param>
-    internal static async Task AssertEnrollmentPersistsInventoryAsync(StringComparison workspaceComparison)
-    {
-        var workspacePath = Path.Combine(
-            Path.GetTempPath(), "QBrainAi.Tests", nameof(FederationTopologyServiceTests), Guid.NewGuid().ToString("N"));
-        Directory.CreateDirectory(workspacePath);
-        try
-        {
-            using var provider = CreateProvider();
-            var sut = provider.GetRequiredService<IFederationTopologyService>();
-
-            var response = await sut.EnrollAsync(new FederationEnrollmentRequest
-            {
-                ProxyId = "TEST-NODE-A",
-                DisplayName = "TEST-NODE-A",
-                BaseUrl = "http://test-node-a:7147/",
-                Workspaces =
-                [
-                    new FederationWorkspaceRegistrationRequest
-                    {
-                        WorkspaceName = "QBrainAi",
-                        WorkspacePath = workspacePath,
-                    },
-                ],
-            }, CancellationToken.None).ConfigureAwait(true);
-
-            Assert.True(response.Accepted);
-            Assert.Equal("TEST-NODE-A", response.ProxyId);
-            Assert.Equal(5, response.HeartbeatSeconds);
-
-            var proxies = await sut.ListProxiesAsync(CancellationToken.None).ConfigureAwait(true);
-            var proxy = Assert.Single(proxies);
-            Assert.Equal("TEST-NODE-A", proxy.ProxyId);
-            Assert.Equal(1, proxy.WorkspaceCount);
-
-            var workspaces = await sut.ListWorkspacesAsync("TEST-NODE-A", CancellationToken.None).ConfigureAwait(true);
-            var workspace = Assert.Single(workspaces);
-            Assert.True(string.Equals(ExpectedWorkspaceKey.Of(workspacePath), workspace.WorkspacePath, workspaceComparison));
-            Assert.NotEmpty(workspace.GlobalWorkspaceId);
-        }
-        finally
-        {
-            if (Directory.Exists(workspacePath))
-                Directory.Delete(workspacePath, recursive: true);
-        }
     }
 
     /// <summary>Cached topology status is refreshed from durable storage when status is requested.</summary>
@@ -330,21 +268,6 @@ public sealed class FederationTopologyServiceTests : IDisposable
         Assert.Equal(1, queued.ConflictCount);
     }
 
-    internal static ServiceProvider CreateProvider(params IFederationStateAdapter[] adapters)
-    {
-        var services = new ServiceCollection();
-        services.AddOptions();
-        services.Configure<FederationOptions>(options => options.Sync.HeartbeatSeconds = 5);
-        var databaseRoot = new InMemoryDatabaseRoot();
-        var databaseName = $"fed-topology-{Guid.NewGuid():N}";
-        services.AddDbContext<McpDbContext>(options => options.UseInMemoryDatabase(databaseName, databaseRoot));
-        foreach (var adapter in adapters)
-            services.AddSingleton(adapter);
-
-        services.AddSingleton<IFederationTopologyService, FederationTopologyService>();
-        return services.BuildServiceProvider();
-    }
-
     private static ServiceProvider CreateSqliteProvider(SqliteConnection connection, params IFederationStateAdapter[] adapters)
     {
         var services = new ServiceCollection();
@@ -392,32 +315,4 @@ public sealed class FederationTopologyServiceTests : IDisposable
         public bool IsEcho(FederationStateOperation operation)
             => false;
     }
-}
-
-/// <summary>
-/// Hub-and-spoke enrollment on a Windows host: the stored key of a real host directory matches with the
-/// Windows path comparison (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019).
-/// </summary>
-[Trait("Category", "Integration")]
-[Trait("Platform", "Windows")]
-public sealed class FederationTopologyServiceWindowsTests
-{
-    /// <summary>Enrollment persists the proxy and hosted workspaces for hub inventory.</summary>
-    [Fact]
-    public Task EnrollAsync_PersistsProxyAndWorkspaceInventory() =>
-        FederationTopologyServiceTests.AssertEnrollmentPersistsInventoryAsync(StringComparison.OrdinalIgnoreCase);
-}
-
-/// <summary>
-/// Hub-and-spoke enrollment on a Linux host: the stored key of a real host directory matches with the
-/// case-sensitive path comparison (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019).
-/// </summary>
-[Trait("Category", "Integration")]
-[Trait("Platform", "Linux")]
-public sealed class FederationTopologyServiceLinuxTests
-{
-    /// <summary>Enrollment persists the proxy and hosted workspaces for hub inventory.</summary>
-    [Fact]
-    public Task EnrollAsync_PersistsProxyAndWorkspaceInventory() =>
-        FederationTopologyServiceTests.AssertEnrollmentPersistsInventoryAsync(StringComparison.Ordinal);
 }

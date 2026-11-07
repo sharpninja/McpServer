@@ -1,5 +1,6 @@
 using Xunit;
 using static QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariables;
+using static QBrainAi.Support.Mcp.Tests.TestSupport.CliTempVariablesTestsSupport;
 
 namespace QBrainAi.Support.Mcp.Tests.TestSupport;
 
@@ -17,12 +18,11 @@ namespace QBrainAi.Support.Mcp.Tests.TestSupport;
 /// read and write no process environment, so they are unit tests. The class runs in
 /// <see cref="ProcessEnvironmentCollection"/> because its binding tests write the process environment; those are
 /// integration tests.
+/// <para>2026-11-07, FR-MCP-TESTRESOURCE-001 ac-10; TR-MCP-USECASE-018 AC-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 3 Category=Integration cases (RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem, RunWithTestFolderAsync_BodyThrows_StillRestoresAndDeletes and RunWithTestFolderAsync_UnknownPrimary_IsRefusedWithoutChanges) and the helpers only they use (SetAll) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the helpers both halves use (Folder and Prior) moved once into TestSupport/CliTempVariablesTestsSupport.cs beside this file, which the integration project links (DRY); the unit cases and the class attributes are unchanged.</para>
 /// </remarks>
 [Collection(ProcessEnvironmentCollection.Name)]
 public sealed class CliTempVariablesTests
 {
-    private const string Folder = "/scripted/cli-temp-folder";
-
     private const string Fallback = "/scripted/cli-temp-fallback";
 
     /// <summary>
@@ -103,128 +103,6 @@ public sealed class CliTempVariablesTests
         Assert.NotNull(Record.Exception(() => AssertRestored(before, newlySet)));
         Assert.NotNull(Record.Exception(() => AssertRestored(before, missing)));
     }
-
-    /// <summary>
-    /// Binding: for each name as the primary, the helper points that name at a new test folder and every other name at
-    /// a separate new fallback folder, both under the official temporary folder, while the body runs, then restores
-    /// every scripted earlier value (an unset name included) and deletes both folders. The test writes the process
-    /// environment and restores the ambient values, so it is an integration test.
-    /// </summary>
-    /// <param name="primaryName">The name read first.</param>
-    /// <returns>A task that completes when the assertions have run.</returns>
-    [Theory]
-    [Trait("Category", "Integration")]
-    [InlineData("MCPSERVER_QUADBRAIN_CLI_TEMP")]
-    [InlineData("MCPSERVER_ONESHOT_TEMP")]
-    [InlineData("MCPSERVER_CODEX_ONESHOT_TEMP")]
-    [InlineData("MCPSERVER_CODEX_TRIAGE_TEMP")]
-    [InlineData("MCPSERVER_GROK_ONESHOT_TEMP")]
-    public async Task RunWithTestFoldersAsync_PointsPrimaryAndFallbackThenRestoresThem(string primaryName)
-    {
-        var ambient = Snapshot();
-        try
-        {
-            SetAll(Prior);
-            var before = Snapshot();
-            string? seenFolder = null;
-            string? seenFallback = null;
-            Dictionary<string, string?>? inside = null;
-            var existed = false;
-
-            await RunWithTestFoldersAsync(primaryName, (folder, fallbackFolder) =>
-            {
-                seenFolder = folder;
-                seenFallback = fallbackFolder;
-                inside = Snapshot();
-                existed = Directory.Exists(folder) && Directory.Exists(fallbackFolder);
-                return Task.CompletedTask;
-            }).ConfigureAwait(true);
-
-            Assert.NotNull(seenFolder);
-            Assert.NotNull(seenFallback);
-            Assert.NotNull(inside);
-            AssertChainAt(inside, primaryName, seenFolder, seenFallback);
-            Assert.True(existed);
-            var temp = Path.GetFullPath(Path.GetTempPath());
-            Assert.StartsWith(temp, Path.GetFullPath(seenFolder), StringComparison.OrdinalIgnoreCase);
-            Assert.StartsWith(temp, Path.GetFullPath(seenFallback), StringComparison.OrdinalIgnoreCase);
-            Assert.False(Directory.Exists(seenFolder));
-            Assert.False(Directory.Exists(seenFallback));
-            AssertRestored(before, Snapshot());
-        }
-        finally
-        {
-            SetAll(name => ambient[name]);
-        }
-    }
-
-    /// <summary>
-    /// Binding: when the body throws, the exception reaches the caller and the helper still restores every scripted
-    /// earlier value and deletes both folders. The test writes the process environment and restores the ambient
-    /// values, so it is an integration test.
-    /// </summary>
-    /// <returns>A task that completes when the assertions have run.</returns>
-    [Fact]
-    [Trait("Category", "Integration")]
-    public async Task RunWithTestFolderAsync_BodyThrows_StillRestoresAndDeletes()
-    {
-        var ambient = Snapshot();
-        try
-        {
-            SetAll(Prior);
-            var before = Snapshot();
-            string? seenFolder = null;
-            string? seenFallback = null;
-
-            await Assert.ThrowsAsync<InvalidOperationException>(() => RunWithTestFoldersAsync("MCPSERVER_CODEX_ONESHOT_TEMP", (folder, fallbackFolder) =>
-            {
-                seenFolder = folder;
-                seenFallback = fallbackFolder;
-                throw new InvalidOperationException("scripted body failure");
-            })).ConfigureAwait(true);
-
-            Assert.NotNull(seenFolder);
-            Assert.NotNull(seenFallback);
-            Assert.False(Directory.Exists(seenFolder));
-            Assert.False(Directory.Exists(seenFallback));
-            AssertRestored(before, Snapshot());
-        }
-        finally
-        {
-            SetAll(name => ambient[name]);
-        }
-    }
-
-    /// <summary>
-    /// Binding: a primary name outside the chain is refused before any variable is written or any folder is made.
-    /// The test reads the process environment to prove nothing changed, so it is an integration test.
-    /// </summary>
-    /// <returns>A task that completes when the assertions have run.</returns>
-    [Fact]
-    [Trait("Category", "Integration")]
-    public async Task RunWithTestFolderAsync_UnknownPrimary_IsRefusedWithoutChanges()
-    {
-        var before = Snapshot();
-        var ran = false;
-
-        await Assert.ThrowsAsync<ArgumentException>(() => RunWithTestFolderAsync("MCPSERVER_NOT_A_CHAIN_NAME", _ =>
-        {
-            ran = true;
-            return Task.CompletedTask;
-        })).ConfigureAwait(true);
-
-        Assert.False(ran);
-        AssertRestored(before, Snapshot());
-    }
-
-    private static void SetAll(Func<string, string?> value)
-    {
-        foreach (var name in Names)
-            Environment.SetEnvironmentVariable(name, value(name));
-    }
-
-    private static string? Prior(string name) =>
-        name == "MCPSERVER_GROK_ONESHOT_TEMP" ? null : "/scripted/prior/" + name;
 
     private static Dictionary<string, string?> Scripted(Func<string, string?> value) =>
         Names.ToDictionary(name => name, value, StringComparer.Ordinal);

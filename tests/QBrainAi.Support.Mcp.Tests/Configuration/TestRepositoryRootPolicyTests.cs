@@ -10,6 +10,7 @@ namespace QBrainAi.Support.Mcp.Tests.Configuration;
 /// The ambient case shows a unit test is refused before the checkout is touched; the integration case is the
 /// production binding and reads the checkout.
 /// </summary>
+/// <remarks>2026-11-07, TR-MCP-USECASE-018; TR-MCP-USECASE-019; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 1 Category=Integration case (Resolve_InAnIntegrationTest_ReturnsTheCheckoutRoot) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the unit cases and the class attributes are unchanged.</remarks>
 public sealed class TestRepositoryRootPolicyTests
 {
     private static readonly Dictionary<string, (IReadOnlyDictionary<string, IReadOnlyCollection<string>>? Traits, bool Allowed)> Cases =
@@ -74,18 +75,6 @@ public sealed class TestRepositoryRootPolicyTests
         Assert.Contains("may not read the repository checkout", combine.Message, StringComparison.Ordinal);
         var metadata = Assert.Throws<InvalidOperationException>(() => TestRepositoryRoot.BuildMetadataRoot);
         Assert.Contains("may not read the repository checkout", metadata.Message, StringComparison.Ordinal);
-    }
-
-    /// <summary>Production binding: in an integration test the locator returns the checkout root.</summary>
-    [Fact]
-    [Trait("Category", "Integration")]
-    public void Resolve_InAnIntegrationTest_ReturnsTheCheckoutRoot()
-    {
-        var root = TestRepositoryRoot.Resolve();
-        Assert.True(File.Exists(Path.Combine(root, "QBrainAi.sln")), root);
-        Assert.Equal(Path.Combine(root, "tests"), TestRepositoryRoot.Combine("tests"));
-        Assert.True(File.Exists(TestRepositoryRoot.Combine("tests", "Shared", "TestRepositoryRoot.cs")));
-        Assert.False(string.IsNullOrWhiteSpace(TestRepositoryRoot.BuildMetadataRoot));
     }
 
     /// <summary>Assertion shared by the scripted cases and the negative controls.</summary>

@@ -17,31 +17,9 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// TEST-MCP-TRIAGESTORE-001: session-log persist is idempotent on identical actions,
 /// session tags persist, replace missing turn is not-found, canceled statuses round-trip.
 /// </summary>
-public sealed class SessionLogTriageStoreTests : IDisposable
+/// <remarks>2026-11-07, TEST-MCP-TRIAGESTORE-001; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 1 Category=Integration case (SubmitAsync_HungSaveChanges_FailsFastWithStorageUnavailable) and the helpers only it uses (HungSaveChangesInterceptor) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the state and helpers both halves use (WorkspacePath, _db, _sut, .ctor, Dispose and CreateSession) moved once into the abstract base class SessionLogTriageStoreTestsBase in Services/SessionLogTriageStoreTestsBase.cs beside this file, which both halves derive from and the integration project links (DRY); the unit cases and the class attributes are unchanged.</remarks>
+public sealed class SessionLogTriageStoreTests : SessionLogTriageStoreTestsBase, IDisposable
 {
-    private const string WorkspacePath = @"E:\tests\sessionlog-triage-store";
-    private readonly McpDbContext _db;
-    private readonly SessionLogService _sut;
-
-    /// <summary>Builds an in-memory session-log service.</summary>
-    public SessionLogTriageStoreTests()
-    {
-        var options = new DbContextOptionsBuilder<McpDbContext>()
-            .UseInMemoryDatabase($"SessionLogTriageStore_{Guid.NewGuid():N}")
-            .Options;
-        _db = new McpDbContext(options);
-        _db.Database.EnsureCreated();
-        _db.OverrideWorkspaceId(WorkspacePath);
-        _sut = new SessionLogService(
-            _db,
-            NullLogger<SessionLogService>.Instance,
-            Substitute.For<IChangeEventBus>(),
-            new WorkspaceContext { WorkspacePath = WorkspacePath });
-    }
-
-    /// <inheritdoc />
-    public void Dispose() => _db.Dispose();
-
     /// <summary>TEST-MCP-TRIAGESTORE-001: identical actions[] resubmit does not duplicate rows.</summary>
     [Fact]
     public async Task SubmitAsync_IdenticalActions_DoesNotDuplicate()
@@ -124,51 +102,6 @@ public sealed class SessionLogTriageStoreTests : IDisposable
 
         Assert.NotNull(fetched);
         Assert.Equal(status, fetched!.Turns!.First().Status);
-    }
-
-    /// <summary>
-    /// TEST-MCP-TRIAGESTORE-007: Submit SaveChanges uses the configured command budget
-    /// and surfaces backend_unavailable when that budget elapses. This fixture sets 1 second
-    /// so the test does not wait for the 30 second default.
-    /// </summary>
-    /// <remarks>
-    /// Integration: its outcome depends on a real storage-command budget timer firing while the stalled step runs, a wall-clock wait under TR-MCP-USECASE-018 AC-006; its elapsed check is a hang guard only.
-    /// <list type="table">
-    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
-    /// <item><term>2026-11-05</term><description>TEST-MCP-TRIAGESTORE-007; TR-MCP-USECASE-018 AC-006 (a wall-clock bound makes a case an integration case): which budget elapsed is read from the exception message (the configured 1 second storage command budget, so neither the 5 second intake budget nor the 30 second submit default passes), the stalled SaveChanges is proved reached, and the elapsed time keeps a 20 second hang guard (below that default and the interceptor's 60 second stall) instead of the 4 and 5 second bounds, because the Windows integration lane ug-r13z4c-final-win-lane-1 measured 4.42 seconds and the case took about 1 or about 4 seconds across nine Windows lanes (ug-r13z4c-win-lane-hungsave-durations-1.txt): the old bound timed the whole Submit and the host's scheduling, not the budget. The classification line above was restated after the eighth holistic read before hostile validation round 13 (finding b2), because it still named the elapsed bound this entry removed.</description></item>
-    /// </list>
-    /// </remarks>
-    [Trait("Category", "Integration")]
-    [Fact]
-    public async Task SubmitAsync_HungSaveChanges_FailsFastWithStorageUnavailable()
-    {
-        var interceptor = new HungSaveChangesInterceptor();
-        var options = new DbContextOptionsBuilder<McpDbContext>()
-            .UseInMemoryDatabase($"SessionLogHungSave_{Guid.NewGuid():N}")
-            .AddInterceptors(interceptor)
-            .Options;
-        await using var db = new McpDbContext(options);
-        db.Database.EnsureCreated();
-        db.OverrideWorkspaceId(WorkspacePath);
-        var sut = new SessionLogService(
-            db,
-            NullLogger<SessionLogService>.Instance,
-            Substitute.For<IChangeEventBus>(),
-            new WorkspaceContext { WorkspacePath = WorkspacePath },
-            Microsoft.Extensions.Options.Options.Create(new SessionLogSubmitOptions { SubmitCommandBudgetSeconds = 1 }));
-
-        var clock = Stopwatch.StartNew();
-        var ex = await Assert.ThrowsAsync<StorageCommandBudgetExceededException>(() =>
-            sut.SubmitAsync(CreateSession("Cursor-20260818T220000Z-hung-save"), cancellationToken: TestContext.Current.CancellationToken))
-            .ConfigureAwait(true);
-        clock.Stop();
-
-        Assert.True(interceptor.Entered, "SaveChanges was never reached, so no budget cut a stalled save.");
-        Assert.Contains("within the 1 second storage command budget", ex.Message, StringComparison.Ordinal);
-        Assert.True(clock.Elapsed < TimeSpan.FromSeconds(20), $"The stalled SaveChanges was not cut short by its budget: {clock.Elapsed}.");
-        var classified = McpErrorClassifier.Classify(ex);
-        Assert.Equal(McpErrorClassifier.BackendUnavailable, classified.Code);
-        Assert.True(classified.Retryable);
     }
 
     /// <summary>
@@ -269,25 +202,6 @@ public sealed class SessionLogTriageStoreTests : IDisposable
         Assert.Equal(SessionLogTurnContextValidator.NoneSentinel, turn.TodoId);
     }
 
-    /// <summary>Delays SaveChanges until the storage budget cancels the token, and records that SaveChanges was reached.</summary>
-    /// <remarks>2026-11-05, TEST-MCP-TRIAGESTORE-007: records its entry, so the hung-save case proves the budget cut a stalled SaveChanges (slice Z5, after the Windows integration lane ug-r13z4c-final-win-lane-1).</remarks>
-    private sealed class HungSaveChangesInterceptor : SaveChangesInterceptor
-    {
-        /// <summary>Whether SaveChanges reached this interceptor.</summary>
-        internal bool Entered { get; private set; }
-
-        /// <inheritdoc />
-        public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(
-            DbContextEventData eventData,
-            InterceptionResult<int> result,
-            CancellationToken cancellationToken = default)
-        {
-            Entered = true;
-            await Task.Delay(TimeSpan.FromMinutes(1), cancellationToken).ConfigureAwait(false);
-            return result;
-        }
-    }
-
     /// <summary>A session-log service over this class's in-memory store that reads <paramref name="clock"/>.</summary>
     /// <param name="clock">The service's clock.</param>
     /// <returns>The service.</returns>
@@ -305,31 +219,4 @@ public sealed class SessionLogTriageStoreTests : IDisposable
     /// <returns>The text.</returns>
     private static string Stamp(DateTimeOffset value) =>
         value.UtcDateTime.ToString("yyyy-MM-ddTHH:mm:ssZ", System.Globalization.CultureInfo.InvariantCulture);
-
-    private static UnifiedSessionLogDto CreateSession(
-        string sessionId,
-        string turnStatus = "in_progress",
-        string timestamp = "2026-08-18T20:00:00Z")
-    {
-        return new UnifiedSessionLogDto
-        {
-            SourceType = "Cursor",
-            SessionId = sessionId,
-            Title = "Triage store",
-            Status = "in_progress",
-            TurnCount = 1,
-            Turns =
-            [
-                new UnifiedRequestEntryDto
-                {
-                    RequestId = "req-20260818T200000Z-entry-001",
-                    Timestamp = timestamp,
-                    QueryText = "triage store",
-                    Status = turnStatus,
-                    PlanFile = SessionLogTurnContextValidator.NoneSentinel,
-                    TodoId = SessionLogTurnContextValidator.NoneSentinel,
-                },
-            ],
-        };
-    }
 }

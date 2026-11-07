@@ -2,10 +2,12 @@ using QBrainAi.Support.Mcp.Requirements;
 using QBrainAi.Support.Mcp.Services;
 using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
+using static QBrainAi.Support.Mcp.Tests.Services.RequirementsDocFxWorkflowRunnerTestsSupport;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
 /// <summary>TEST-MCP-DOCFXWIKI-001: DocFX workflow runner execution, artifact, and path-safety coverage.</summary>
+/// <remarks>2026-11-07, TEST-MCP-DOCFXWIKI-001; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 1 Category=Integration case (RunAsync_WhenOutputContainsReparsePointEscape_Throws) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the helpers both halves use (CreateConfig, CreateWorkflow, RecordingProcessRunner and TestWorkspace) moved once into Services/RequirementsDocFxWorkflowRunnerTestsSupport.cs beside this file, which the integration project links (DRY); the unit cases and the class attributes are unchanged.</remarks>
 public sealed class RequirementsDocFxWorkflowRunnerTests
 {
     /// <summary>Runner uses structured process arguments, working directory, timeout cancellation, and cleans staged output.</summary>
@@ -93,31 +95,6 @@ public sealed class RequirementsDocFxWorkflowRunnerTests
         Assert.False(Directory.Exists(workflow.OutputRootPath));
     }
 
-    /// <summary>Runner rejects reparse points in staged output before they can escape the workspace.</summary>
-    /// <remarks>Integration: creates a real reparse point in staged filesystem output (TR-MCP-USECASE-018 AC-006).</remarks>
-    [Trait("Category", "Integration")]
-    [Fact]
-    public async Task RunAsync_WhenOutputContainsReparsePointEscape_Throws()
-    {
-        using var workspace = new TestWorkspace();
-        using var external = new TestWorkspace();
-        var workflow = CreateWorkflow(workspace.Path);
-        var processRunner = new RecordingProcessRunner();
-        processRunner.Enqueue((_, _) =>
-        {
-            Directory.CreateDirectory(workflow.OutputRootPath);
-            Directory.CreateSymbolicLink(Path.Combine(workflow.OutputRootPath, "external"), external.Path);
-            return new ProcessRunResult(0, "ok", null);
-        });
-        var runner = new RequirementsDocFxWorkflowRunner(processRunner, NullLogger<RequirementsDocFxWorkflowRunner>.Instance);
-
-        var ex = await Assert.ThrowsAsync<InvalidOperationException>(() =>
-            runner.RunAsync(CreateConfig(workspace.Path, workflow), TestContext.Current.CancellationToken)).ConfigureAwait(true);
-
-        Assert.Contains("reparse", ex.Message, StringComparison.OrdinalIgnoreCase);
-        Assert.False(Directory.Exists(workflow.OutputRootPath));
-    }
-
     /// <summary>Runner emits deterministic, platform-prefixed wiki artifacts with normalized separators and content types.</summary>
     [Fact]
     public async Task RunAsync_ProjectsFilesInDeterministicOrder()
@@ -176,83 +153,5 @@ public sealed class RequirementsDocFxWorkflowRunnerTests
             runner.RunAsync(CreateConfig(workspace.Path, first, second), TestContext.Current.CancellationToken)).ConfigureAwait(true);
 
         Assert.Contains("duplicate", ex.Message, StringComparison.OrdinalIgnoreCase);
-    }
-
-    private static RequirementsWikiExportConfig CreateConfig(string workspaceRoot, params RequirementsDocFxWorkflow[] workflows) =>
-        new()
-        {
-            ConfigPath = Path.Combine(workspaceRoot, "docs", "wiki.yaml"),
-            WorkspaceRoot = workspaceRoot,
-            Documents = [],
-            Navigation = [],
-            DocFxWorkflows = workflows,
-            DocumentsById = new Dictionary<string, RequirementsWikiExportDocument>(StringComparer.OrdinalIgnoreCase)
-        };
-
-    private static RequirementsDocFxWorkflow CreateWorkflow(
-        string workspaceRoot,
-        string id = "docs",
-        IReadOnlyList<string>? arguments = null,
-        string workingDirectory = "docs/docfx",
-        string outputRoot = "docs/docfx/_site",
-        string targetRoot = "api",
-        IReadOnlyList<string>? platforms = null,
-        int timeoutSeconds = 120)
-    {
-        return new RequirementsDocFxWorkflow
-        {
-            Id = id,
-            Executable = "dotnet",
-            Arguments = arguments ?? ["docfx", "docfx.json"],
-            WorkingDirectory = workingDirectory,
-            WorkingDirectoryPath = Path.GetFullPath(Path.Combine(workspaceRoot, workingDirectory)),
-            OutputRoot = outputRoot,
-            OutputRootPath = Path.GetFullPath(Path.Combine(workspaceRoot, outputRoot)),
-            TargetRoot = targetRoot,
-            Platforms = new HashSet<string>(platforms ?? ["github", "azure"], StringComparer.OrdinalIgnoreCase),
-            TimeoutSeconds = timeoutSeconds
-        };
-    }
-
-    private sealed class RecordingProcessRunner : IProcessRunner
-    {
-        private readonly Queue<Func<ProcessRunRequest, CancellationToken, ProcessRunResult>> _handlers = new();
-
-        public List<ProcessRunRequest> Requests { get; } = [];
-
-        public List<CancellationToken> CancellationTokens { get; } = [];
-
-        public void Enqueue(Func<ProcessRunRequest, CancellationToken, ProcessRunResult> handler) => _handlers.Enqueue(handler);
-
-        public Task<ProcessRunResult> RunAsync(string fileName, string arguments, CancellationToken ct = default)
-            => RunAsync(new ProcessRunRequest(fileName, arguments), ct);
-
-        public Task<ProcessRunResult> RunAsync(ProcessRunRequest request, CancellationToken ct = default)
-        {
-            Requests.Add(request);
-            CancellationTokens.Add(ct);
-            var handler = _handlers.Count == 0
-                ? static (_, _) => new ProcessRunResult(0, "ok", null)
-                : _handlers.Dequeue();
-            return Task.FromResult(handler(request, ct));
-        }
-    }
-
-    private sealed class TestWorkspace : IDisposable
-    {
-        public TestWorkspace()
-        {
-            Path = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "mcp-docfx-runner-tests-" + Guid.NewGuid().ToString("N"));
-            Directory.CreateDirectory(Path);
-            Directory.CreateDirectory(System.IO.Path.Combine(Path, "docs", "docfx"));
-        }
-
-        public string Path { get; }
-
-        public void Dispose()
-        {
-            if (Directory.Exists(Path))
-                Directory.Delete(Path, recursive: true);
-        }
     }
 }

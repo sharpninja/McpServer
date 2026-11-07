@@ -24,15 +24,9 @@ namespace QBrainAi.Support.Mcp.Tests.McpStdio;
 /// <summary>
 /// TEST-HANDOFF-006: native handoff MCP tools and public-surface inventory.
 /// </summary>
-public sealed class HandoffMcpToolTests : IDisposable
+/// <remarks>2026-11-07, TEST-HANDOFF-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 2 Category=Integration cases (PublicSurfaces_ExposeIngestGetAndApprove and PluginSync_HandoffSkill_MatchesCoreArtifact) and the helpers only they use (FindRepoRoot and FindPrimaryRepoRoot) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the state and helpers both halves use (_db and Dispose) moved once into the abstract base class HandoffMcpToolTestsBase in McpStdio/HandoffMcpToolTestsBase.cs beside this file, which both halves derive from and the integration project links (DRY); the unit cases and the class attributes are unchanged.</remarks>
+public sealed class HandoffMcpToolTests : HandoffMcpToolTestsBase, IDisposable
 {
-    private readonly McpDbContext _db = new(
-        new DbContextOptionsBuilder<McpDbContext>().UseInMemoryDatabase("handoff-tools-" + Guid.NewGuid().ToString("N")).Options,
-        new WorkspaceContext { WorkspacePath = @"Q:\__mcp_unit_test__\QBrainAi" });
-
-    /// <inheritdoc />
-    public void Dispose() => _db.Dispose();
-
     /// <summary>TEST-HANDOFF-006: handoff_ingest maps sourceKind/mode and calls IHandoffIngestionService.</summary>
     [Fact]
     public async Task HandoffIngest_DelegatesToSharedService()
@@ -73,59 +67,6 @@ public sealed class HandoffMcpToolTests : IDisposable
         Assert.False(result!.Success);
         Assert.Equal(HandoffErrorCodes.InvalidMode, result.ErrorCode);
         await service.DidNotReceiveWithAnyArgs().IngestAsync(default!, cancellationToken: TestContext.Current.CancellationToken);
-    }
-
-    /// <summary>TEST-HANDOFF-006: native tools, Director aliases, and plugin skill exist.</summary>
-    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
-    [Trait("Category", "Integration")]
-    [Fact]
-    public void PublicSurfaces_ExposeIngestGetAndApprove()
-    {
-        var toolNames = typeof(FwhMcpTools)
-            .GetMethods()
-            .Select(method => method.GetCustomAttribute<McpServerToolAttribute>()?.Name)
-            .Where(name => name is not null)
-            .ToHashSet(StringComparer.Ordinal);
-
-        Assert.Contains("handoff_ingest", toolNames);
-        Assert.Contains("handoff_get", toolNames);
-        Assert.Contains("handoff_approve", toolNames);
-
-        var aliases = typeof(HandoffIngestDirectorCommand).Assembly
-            .GetTypes()
-            .Select(type => type.GetCustomAttribute<ViewModelCommandAttribute>()?.Alias)
-            .Where(alias => alias is not null)
-            .ToHashSet(StringComparer.Ordinal);
-        Assert.Contains("handoff-ingest", aliases);
-        Assert.Contains("handoff-get", aliases);
-        Assert.Contains("handoff-approve", aliases);
-
-        var executor = Substitute.For<IHandoffDirectorExecutor>();
-        Assert.NotNull(new HandoffIngestDirectorCommand(executor).PrimaryCommand);
-        Assert.NotNull(new HandoffGetDirectorCommand(executor).PrimaryCommand);
-        Assert.NotNull(new HandoffApproveDirectorCommand(executor).PrimaryCommand);
-
-        var skill = Path.Combine(FindRepoRoot(), "plugins", "core", "skills", "handoff", "SKILL.md");
-        Assert.True(File.Exists(skill), skill);
-        var skillText = File.ReadAllText(skill);
-        Assert.Contains("workflow.handoff.ingest", skillText, StringComparison.Ordinal);
-    }
-
-    /// <summary>P2-6: plugin-sync artifact matches the canonical core handoff skill bytes.</summary>
-    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
-    [Trait("Category", "Integration")]
-    [Fact]
-    public void PluginSync_HandoffSkill_MatchesCoreArtifact()
-    {
-        var root = FindRepoRoot();
-        var primary = FindPrimaryRepoRoot(root);
-        var core = Path.Combine(root, "plugins", "core", "skills", "handoff", "SKILL.md");
-        var grok = Path.Combine(Directory.GetParent(primary)!.FullName, "mcpserver-grok-plugin", "skills", "handoff", "SKILL.md");
-        Assert.True(File.Exists(core), core);
-        Assert.True(File.Exists(grok), grok);
-        Assert.Equal(
-            Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(core))),
-            Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(grok))));
     }
 
     /// <summary>TEST-HANDOFF-006: invalid mode is rejected instead of coerced to DraftOnly.</summary>
@@ -209,28 +150,5 @@ public sealed class HandoffMcpToolTests : IDisposable
             NullLogger<FwhMcpTools>.Instance,
             agentHelpService: Substitute.For<IAgentHelpConversationService>(),
             handoffIngestionService: handoffService);
-    }
-
-    private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
-
-    private static string FindPrimaryRepoRoot(string repoRoot)
-    {
-        var gitFile = Path.Combine(repoRoot, ".git");
-        if (!File.Exists(gitFile))
-            return repoRoot;
-
-        var gitDirLine = File.ReadLines(gitFile).FirstOrDefault(line => line.StartsWith("gitdir:", StringComparison.OrdinalIgnoreCase));
-        if (gitDirLine is null)
-            return repoRoot;
-
-        var gitDir = gitDirLine["gitdir:".Length..].Trim();
-        if (!Path.IsPathRooted(gitDir))
-            gitDir = Path.GetFullPath(Path.Combine(repoRoot, gitDir));
-
-        var main = Directory.GetParent(gitDir)?.Parent?.Parent;
-        if (main is not null && File.Exists(Path.Combine(main.FullName, "QBrainAi.sln")))
-            return main.FullName;
-
-        return repoRoot;
     }
 }

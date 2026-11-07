@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Storage;
 using Xunit;
+using static QBrainAi.Support.Mcp.Tests.Requirements.RequirementsRecoveryTestsSupport;
 
 namespace QBrainAi.Support.Mcp.Tests.Requirements;
 
@@ -19,10 +20,9 @@ namespace QBrainAi.Support.Mcp.Tests.Requirements;
 /// Dry-run writes nothing. Apply is one serializable commit. A second item failure or a
 /// failed SaveChanges leaves zero requirement rows and zero run rows.
 /// </summary>
+/// <remarks>2026-11-07, TEST-MCP-REQRECOVERY-001; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 1 Category=Integration case (ApplyAsync_HungSave_IsRetryable503) and the helpers only it uses (DelayedSaveInterceptor) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the helpers both halves use (WorkspacePath, Request, Item, Build, OpenConnection and Count) moved once into Requirements/RequirementsRecoveryTestsSupport.cs beside this file, which the integration project links (DRY); the unit cases and the class attributes are unchanged.</remarks>
 public sealed class RequirementsRecoveryTests
 {
-    private const string WorkspacePath = "/tmp/mcp-req-recovery";
-
     /// <summary>Dry-run reports create and update and does not store a run. GET is 404.</summary>
     [Fact]
     public async Task PlanAsync_DoesNotWrite_AndGetIsNotFound()
@@ -472,40 +472,6 @@ WHERE Id = 'FR-MCP-REQRECOVERY-001'");
         }
     }
 
-    /// <summary>A hung SaveChanges is retryable HTTP 503 and persists nothing.</summary>
-    /// <remarks>
-    /// Integration: its outcome depends on a real storage-command budget timer firing while the delayed step runs, a wall-clock wait under TR-MCP-USECASE-018 AC-006; its elapsed check is a hang guard only.
-    /// <list type="table">
-    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
-    /// <item><term>2026-11-05</term><description>TR-MCP-USECASE-018 AC-006 (a wall-clock bound makes a case an integration case): which budget elapsed is read from the exception message (the configured 1 second storage command budget; the delayed save would finish after 4 seconds and throw nothing), and the elapsed time keeps a 20 second hang guard instead of the 3 second bound, because the sibling sweep of the Windows integration lane failure at b79fd51f (slice Z5) found this case at up to 7.12 seconds of run time across nine Windows lanes (ug-r13z5-win-lane-elapsed-bound-durations-1.txt): its bound also timed the host. The classification line above was restated after the eighth holistic read before hostile validation round 13 (finding b2), because it still named the elapsed bound this entry removed.</description></item>
-    /// </list>
-    /// </remarks>
-    [Trait("Category", "Integration")]
-    [Fact]
-    public async Task ApplyAsync_HungSave_IsRetryable503()
-    {
-        await using var connection = OpenConnection();
-        var (sut, db) = Build(connection, new DelayedSaveInterceptor(TimeSpan.FromSeconds(4)), budget: TimeSpan.FromSeconds(1));
-        using (db)
-        {
-            db.Database.EnsureCreated();
-            var clock = Stopwatch.StartNew();
-            var ex = await Assert.ThrowsAsync<StorageCommandBudgetExceededException>(() => sut.ApplyAsync(
-                Request("slow-001", Item("fr", "FR-MCP-REQRECOVERY-001", "slow")),
-                TestContext.Current.CancellationToken)).ConfigureAwait(true);
-            clock.Stop();
-
-            Assert.Contains("within the 1 second storage command budget", ex.Message, StringComparison.Ordinal);
-            Assert.True(clock.Elapsed < TimeSpan.FromSeconds(20), $"The recovery save was not cut short by its budget: {clock.Elapsed}.");
-            var classified = McpErrorClassifier.Classify(ex);
-            Assert.Equal(503, classified.StatusCode);
-            Assert.Equal(McpErrorClassifier.BackendUnavailable, classified.Code);
-            Assert.True(classified.Retryable);
-            Assert.Equal(0, Count(connection, "SELECT COUNT(*) FROM Requirements"));
-            Assert.Equal(0, Count(connection, "SELECT COUNT(*) FROM RequirementsRecoveryRuns"));
-        }
-    }
-
     /// <summary>The model key is the workspace plus idempotency key.</summary>
     [Fact]
     public void Model_PrimaryKey_IsWorkspaceAndIdempotencyKey()
@@ -543,40 +509,6 @@ WHERE Id = 'FR-MCP-REQRECOVERY-001'");
     {
         var row = await db.Requirements.SingleAsync(requirement => requirement.Kind == kind && requirement.Id == id, TestContext.Current.CancellationToken).ConfigureAwait(false);
         return row.Title;
-    }
-
-    private static RequirementsRecoveryRequest Request(string key, params RequirementsRecoveryItemRequest[] items)
-        => new() { IdempotencyKey = key, Items = items.ToList() };
-
-    private static RequirementsRecoveryItemRequest Item(string kind, string id, string title)
-        => new() { Kind = kind, Id = id, Title = title, Body = title + " body" };
-
-    private static (RequirementsRecoveryService Sut, McpDbContext Db) Build(
-        SqliteConnection connection,
-        IInterceptor? interceptor = null,
-        TimeSpan? budget = null)
-    {
-        var builder = new DbContextOptionsBuilder<McpDbContext>().UseSqlite(connection);
-        if (interceptor is not null)
-            builder.AddInterceptors(interceptor);
-        var workspace = new WorkspaceContext { WorkspacePath = WorkspacePath };
-        var db = new McpDbContext(builder.Options, workspace);
-        db.OverrideWorkspaceId(WorkspacePath);
-        return (new RequirementsRecoveryService(db, workspace, budget), db);
-    }
-
-    private static SqliteConnection OpenConnection()
-    {
-        var connection = new SqliteConnection("Data Source=:memory:");
-        connection.Open();
-        return connection;
-    }
-
-    private static long Count(SqliteConnection connection, string sql)
-    {
-        using var command = connection.CreateCommand();
-        command.CommandText = sql;
-        return (long)(command.ExecuteScalar() ?? 0L);
     }
 
     private static void Execute(SqliteConnection connection, string sql)
@@ -656,24 +588,6 @@ WHERE Id = 'FR-MCP-REQRECOVERY-001'");
             InterceptionResult<int> result,
             CancellationToken cancellationToken = default)
             => throw new InvalidOperationException("simulated recovery save failure");
-    }
-
-    /// <summary>Delays SaveChanges until the caller cancels or the delay elapses.</summary>
-    private sealed class DelayedSaveInterceptor : SaveChangesInterceptor
-    {
-        private readonly TimeSpan _delay;
-
-        public DelayedSaveInterceptor(TimeSpan delay) => _delay = delay;
-
-        /// <inheritdoc />
-        public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(
-            DbContextEventData eventData,
-            InterceptionResult<int> result,
-            CancellationToken cancellationToken = default)
-        {
-            await Task.Delay(_delay, cancellationToken).ConfigureAwait(false);
-            return await base.SavingChangesAsync(eventData, result, cancellationToken).ConfigureAwait(false);
-        }
     }
 }
 

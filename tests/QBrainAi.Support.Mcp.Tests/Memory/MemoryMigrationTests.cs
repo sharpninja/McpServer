@@ -8,31 +8,9 @@ namespace QBrainAi.Support.Mcp.Tests.Memory;
 /// <summary>
 /// TEST-MCP-MEMORY-010 (historical) / TR-MCP-MEMORY-MODEL-002 (historical): S1 Red acceptance for model/migrations.
 /// </summary>
-public sealed class MemoryMigrationTests : IDisposable
+/// <remarks>2026-11-07, TEST-MCP-MEMORY-010; TR-MCP-MEMORY-MODEL-002; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 2 Category=Integration cases (Applies_OnAllProviders and SchemaRecreate_Works) and the helpers only they use (FindRepoRoot) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the state and helpers both halves use (_harness and Dispose) moved once into the abstract base class MemoryMigrationTestsBase in Memory/MemoryMigrationTestsBase.cs beside this file, which both halves derive from and the integration project links (DRY); the unit cases and the class attributes are unchanged.</remarks>
+public sealed class MemoryMigrationTests : MemoryMigrationTestsBase, IDisposable
 {
-    private readonly MemoryS1Harness _harness = new();
-
-    /// <inheritdoc />
-    public void Dispose() => _harness.Dispose();
-
-    /// <summary>AC-TR-MCP-MEMORY-MODEL-002-01: Migrations apply cleanly on SQLite, PostgreSQL, and SQL Server test hosts.</summary>
-    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
-    [Trait("Category", "Integration")]
-    [Fact]
-    public void Applies_OnAllProviders()
-    {
-        var root = FindRepoRoot();
-        var sqlite = Directory.GetFiles(Path.Combine(root, "src", "QBrainAi.Storage.SqliteMigrations"), "*MemoryVersion*", SearchOption.AllDirectories);
-        var postgres = Directory.GetFiles(Path.Combine(root, "src", "QBrainAi.Storage.PostgreSqlMigrations"), "*MemoryVersion*", SearchOption.AllDirectories);
-        var sqlserver = Directory.GetFiles(Path.Combine(root, "src", "QBrainAi.Storage.SqlServerMigrations"), "*MemoryVersion*", SearchOption.AllDirectories);
-
-        Assert.NotEmpty(sqlite);
-        Assert.NotEmpty(postgres);
-        Assert.NotEmpty(sqlserver);
-        Assert.NotNull(_harness.FindMappedEntity(typeof(MemoryVersionEntity)));
-        Assert.NotNull(_harness.FindMappedEntity(typeof(MemoryEdgeEntity)));
-    }
-
     /// <summary>AC-TR-MCP-MEMORY-MODEL-002-02: Backfill sets Content from legacy text/guidance for all pre-existing rows.</summary>
     [Fact]
     public async Task Backfill_ContentFromLegacyText()
@@ -77,20 +55,6 @@ public sealed class MemoryMigrationTests : IDisposable
         var filters = memory!.GetDeclaredQueryFilters().Select(filter => filter.Key).ToArray();
         Assert.Contains("SoftDelete", filters);
         Assert.NotNull(memory.FindProperty("IsDeleted"));
-    }
-
-    /// <summary>AC-TR-MCP-MEMORY-MODEL-002-06: Down migration or forward-only policy is documented; test host can recreate schema.</summary>
-    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
-    [Trait("Category", "Integration")]
-    [Fact]
-    public void SchemaRecreate_Works()
-    {
-        using var extra = new MemoryS1Harness();
-        using var ctx = extra.CreateContext(extra.WorkspaceA);
-        Assert.True(ctx.Database.CanConnect());
-        var docs = File.ReadAllText(Path.Combine(FindRepoRoot(), "docs", "plans", "mcp-memory-002.md"));
-        Assert.Contains("forward-only", docs, StringComparison.OrdinalIgnoreCase);
-        Assert.NotNull(extra.FindMappedEntity(typeof(MemoryVersionEntity)));
     }
 
     /// <summary>AC-TR-MCP-MEMORY-MODEL-002-07: Indexes exist for (WorkspaceId, Scope), EmbeddingStatus, and side tables.</summary>
@@ -174,6 +138,4 @@ public sealed class MemoryMigrationTests : IDisposable
         var numbers = versions.Items!.Select(item => item.VersionNumber).ToArray();
         Assert.Equal(numbers.Distinct().Count(), numbers.Length);
     }
-
-    private static string FindRepoRoot() => TestRepositoryRoot.Resolve();
 }

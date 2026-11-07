@@ -2,40 +2,8 @@ using QBrainAi.Client;
 
 namespace QBrainAi.Support.Mcp.Tests.Storage;
 
-/// <summary>
-/// TEST-MCP-PATHNORM-001 / TR-MCP-PATHNORM-001 (plan P1.4b): separator-agnostic Windows path
-/// predicates. A remote UNC path is rejected before any native open whichever separator spells it
-/// (the canonical form is <c>//server/share</c>), and the local administrative share alias resolves to
-/// the drive form from either spelling. BDP v4 (plan section 2a): MockData fixture then Real fixture.
-/// The scripted MockData fixture is a unit test on every host; the Real fixture resolves through the
-/// Windows filesystem, so it is an integration test that runs on Windows hosts only (TR-MCP-USECASE-018
-/// AC-006, TR-MCP-NUKE-019), without a skip.
-/// </summary>
-public abstract class WorkspaceRemotePathContractTests
-{
-    /// <summary>Resolves a Windows-platform workspace path to its canonical normalized form.</summary>
-    protected abstract Task<string> ResolveWindowsAsync(string path);
-
-    /// <summary>Remote UNC paths are not supported for workspace identity, in either spelling.</summary>
-    [Theory]
-    [InlineData(@"\\192.0.2.1\pathnorm-share\child")]
-    [InlineData("//192.0.2.1/pathnorm-share/child")]
-    public async Task RemoteUnc_EitherSpelling_IsRejected(string path)
-    {
-        await Assert.ThrowsAsync<NotSupportedException>(() => ResolveWindowsAsync(path));
-    }
-
-    /// <summary>The local administrative share alias resolves to the drive form from either spelling.</summary>
-    [Theory]
-    [InlineData(@"\\localhost\C$\Windows")]
-    [InlineData("//localhost/C$/Windows")]
-    public async Task LocalAdministrativeShare_EitherSpelling_ResolvesToDrive(string path)
-    {
-        Assert.Equal("C:/Windows", await ResolveWindowsAsync(path), ignoreCase: true);
-    }
-}
-
 /// <summary>BDP v4 step 2: the remote-path contract against scripted outcomes.</summary>
+/// <remarks>2026-11-07, TEST-MCP-PATHNORM-001; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: unchanged; the contract it derives from moved into Storage/WorkspaceRemotePathContract.cs beside this file, which the integration project links, and the Windows filesystem fixture moved to the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4).</remarks>
 public sealed class WorkspaceRemotePathMockDataTests : WorkspaceRemotePathContractTests
 {
     private static readonly Dictionary<string, string?> Outcomes = new(StringComparer.Ordinal)
@@ -55,26 +23,5 @@ public sealed class WorkspaceRemotePathMockDataTests : WorkspaceRemotePathContra
         return resolved is null
             ? Task.FromException<string>(new NotSupportedException($"Remote path '{path}' is not supported."))
             : Task.FromResult(resolved);
-    }
-}
-
-/// <summary>
-/// BDP v4 step 3: the remote-path contract against <see cref="WorkspaceIdentityPath"/>, which resolves
-/// through the Windows filesystem: an integration test on Windows hosts (TR-MCP-USECASE-018 AC-006).
-/// </summary>
-[Trait("Category", "Integration")]
-[Trait("Platform", "Windows")]
-public sealed class WorkspaceRemotePathRealTests : WorkspaceRemotePathContractTests
-{
-    /// <inheritdoc />
-    protected override async Task<string> ResolveWindowsAsync(string path)
-    {
-        var result = await WorkspaceIdentityPath.ResolveAsync(
-                path,
-                WorkspacePathPlatform.Windows,
-                TimeSpan.FromSeconds(5),
-                TestContext.Current.CancellationToken)
-            .ConfigureAwait(true);
-        return result.NormalizedPath;
     }
 }
