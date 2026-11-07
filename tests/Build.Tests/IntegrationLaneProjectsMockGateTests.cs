@@ -24,19 +24,22 @@ public sealed class IntegrationLaneProjectsMockGateTests
     /// - QBrainAi.Acid.IntegrationTests added;
     /// - QBrainAi.PluginIntegration.Tests added;
     /// - the .Validation projects added;
-    /// - Build.IntegrationTests dropped;
+    /// - NukeBuild.IntegrationTests dropped;
     /// - QBrainAi.Repl.IntegrationTests run first;
     /// - the lane projects returned in solution order;
     /// - a missing lane project ignored;
     /// - the lane of da11faa2, which still ran the three unit projects whose integration cases slice S3 moved;
     /// - the lane of slice S3, which still ran the infrastructure-owned Build.Tests;
-    /// - the lane of slice S4, which did not yet run QBrainAi.Support.Mcp.Environment.IntegrationTests.
+    /// - the lane of slice S4, which did not yet run QBrainAi.Support.Mcp.EnvironmentIntegrationTests;
+    /// - the lane before the project renames, which named QBrainAi.Support.Mcp.Environment.IntegrationTests and
+    ///   Build.IntegrationTests.
     /// </summary>
     /// <param name="fault">Injected fault.</param>
     /// <remarks>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: added the negative control KeepsUnitProjects for slice S3 of hostile validation finding R14-F4, so the contract rejects the lane that still selects QBrainAi.McpAgent.Tests, QBrainAi.Repl.Core.Tests and QBrainAi.QBAgent.Tests; the earlier controls are unchanged.</para>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S4: DropsBuildTests became DropsBuildIntegrationTests, because Build.Tests left the lane and dropping it would no longer be a fault, and KeepsBuildTests was added, so the contract rejects the lane that still selects the infrastructure-owned Build.Tests; the other controls are unchanged.</para>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S5: added the negative control OmitsSupportMcpEnvironmentIntegration, so the contract rejects the lane of slice S4, which does not run the integration-owned QBrainAi.Support.Mcp.Environment.IntegrationTests (operator 2026-11-06: "...Environment.IntegrationTests (Recommended)"); the other controls are unchanged.</para>
+    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: the project renames that follow slice S6 (operator 2026-11-07: "Project names and root namespaces for the project should match, so fix the project name."): DropsBuildIntegrationTests became DropsNukeBuildIntegrationTests, KeepsBuildTests and OmitsSupportMcpEnvironmentIntegration name the renamed projects, and the negative control KeepsPreRenameNames was added, so the contract rejects the lane that still names QBrainAi.Support.Mcp.Environment.IntegrationTests and Build.IntegrationTests; the other controls are unchanged.</para>
     /// </remarks>
     [Theory]
     [InlineData(Fault.FixedFiveOnly)]
@@ -48,13 +51,14 @@ public sealed class IntegrationLaneProjectsMockGateTests
     [InlineData(Fault.TakesAcidIntegration)]
     [InlineData(Fault.TakesPluginIntegration)]
     [InlineData(Fault.TakesValidation)]
-    [InlineData(Fault.DropsBuildIntegrationTests)]
+    [InlineData(Fault.DropsNukeBuildIntegrationTests)]
     [InlineData(Fault.ReplIntegrationFirst)]
     [InlineData(Fault.KeepsSolutionOrder)]
     [InlineData(Fault.IgnoresMissingProject)]
     [InlineData(Fault.KeepsUnitProjects)]
     [InlineData(Fault.KeepsBuildTests)]
     [InlineData(Fault.OmitsSupportMcpEnvironmentIntegration)]
+    [InlineData(Fault.KeepsPreRenameNames)]
     public void WrongSelector_IsRejected(Fault fault)
         => Assert.ThrowsAny<Xunit.Sdk.XunitException>(
             () => IntegrationLaneProjectsContract.AssertContract(new ScriptedSelector(fault)));
@@ -92,9 +96,12 @@ public sealed class IntegrationLaneProjectsMockGateTests
         /// <summary>Also selects the .Validation projects.</summary>
         TakesValidation,
 
-        /// <summary>Leaves out Build.IntegrationTests.</summary>
-        /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: was DropsBuildTests (leaves out Build.Tests) until slice S4 took Build.Tests out of the lane.</remarks>
-        DropsBuildIntegrationTests,
+        /// <summary>Leaves out NukeBuild.IntegrationTests.</summary>
+        /// <remarks>
+        /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: was DropsBuildTests (leaves out Build.Tests) until slice S4 took Build.Tests out of the lane.</para>
+        /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: was DropsBuildIntegrationTests (leaves out Build.IntegrationTests) until the project renames named that project NukeBuild.IntegrationTests (operator 2026-11-07: "Project names and root namespaces for the project should match, so fix the project name.").</para>
+        /// </remarks>
+        DropsNukeBuildIntegrationTests,
 
         /// <summary>Runs QBrainAi.Repl.IntegrationTests before the other lane projects.</summary>
         ReplIntegrationFirst,
@@ -112,29 +119,43 @@ public sealed class IntegrationLaneProjectsMockGateTests
         /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: added (slice S3).</remarks>
         KeepsUnitProjects,
 
-        /// <summary>Selects the lane of slice S3: the infrastructure-owned Build.Tests instead of Build.IntegrationTests.</summary>
-        /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: added (slice S4).</remarks>
+        /// <summary>Selects the lane of slice S3: the infrastructure-owned Build.Tests instead of NukeBuild.IntegrationTests.</summary>
+        /// <remarks>
+        /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: added (slice S4).</para>
+        /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: replaces the renamed NukeBuild.IntegrationTests, which was Build.IntegrationTests before the project renames (operator 2026-11-07: "Project names and root namespaces for the project should match, so fix the project name.").</para>
+        /// </remarks>
         KeepsBuildTests,
 
         /// <summary>
         /// Selects the lane of slice S4: the six projects without the integration-owned
-        /// QBrainAi.Support.Mcp.Environment.IntegrationTests.
+        /// QBrainAi.Support.Mcp.EnvironmentIntegrationTests.
         /// </summary>
-        /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: added (slice S5).</remarks>
+        /// <remarks>
+        /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: added (slice S5).</para>
+        /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: leaves out the renamed QBrainAi.Support.Mcp.EnvironmentIntegrationTests, which was QBrainAi.Support.Mcp.Environment.IntegrationTests before the project renames (operator 2026-11-07: "Project names and root namespaces for the project should match, so fix the project name.").</para>
+        /// </remarks>
         OmitsSupportMcpEnvironmentIntegration,
+
+        /// <summary>
+        /// Selects the lane before the project renames: QBrainAi.Support.Mcp.Environment.IntegrationTests instead of
+        /// QBrainAi.Support.Mcp.EnvironmentIntegrationTests and Build.IntegrationTests instead of NukeBuild.IntegrationTests.
+        /// </summary>
+        /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: added for the project renames that follow slice S6 (operator 2026-11-07: "Project names and root namespaces for the project should match, so fix the project name.").</remarks>
+        KeepsPreRenameNames,
     }
 
     /// <summary>Scripted selector: the contract-derived selection and class names, with an optional injected fault.</summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: DropsNukeBuildIntegrationTests, KeepsBuildTests and OmitsSupportMcpEnvironmentIntegration name the renamed projects, and KeepsPreRenameNames maps them back to their names before the project renames (operator 2026-11-07: "Project names and root namespaces for the project should match, so fix the project name.").</remarks>
     private sealed class ScriptedSelector(Fault fault) : IIntegrationLaneProjects
     {
         /// <inheritdoc />
         public IReadOnlyList<string> Select(IReadOnlyList<string> solutionProjectNames)
         {
             var lane = IntegrationLaneProjectsContract.LaneProjects
-                .Where(project => fault != Fault.DropsBuildIntegrationTests || project != "Build.IntegrationTests")
+                .Where(project => fault != Fault.DropsNukeBuildIntegrationTests || project != "NukeBuild.IntegrationTests")
                 .Where(project => fault is not (Fault.FixedFiveOnly or Fault.EveryIntegrationProject) || !project.EndsWith(".IntegrationTests", StringComparison.Ordinal))
                 .Where(project => fault != Fault.OmitsSupportMcpIntegration || project != IntegrationLaneProjectsContract.SupportIntegrationProject)
-                .Where(project => fault != Fault.OmitsSupportMcpEnvironmentIntegration || project != "QBrainAi.Support.Mcp.Environment.IntegrationTests")
+                .Where(project => fault != Fault.OmitsSupportMcpEnvironmentIntegration || project != "QBrainAi.Support.Mcp.EnvironmentIntegrationTests")
                 .ToList();
             var missing = lane.Where(project => !solutionProjectNames.Contains(project)).ToList();
             if (missing.Count > 0)
@@ -158,7 +179,13 @@ public sealed class IntegrationLaneProjectsMockGateTests
                     "QBrainAi.QBAgent.IntegrationTests" => new[] { "QBrainAi.QBAgent.Tests" },
                     _ => new[] { project },
                 })],
-                Fault.KeepsBuildTests => [.. lane.Select(project => project == "Build.IntegrationTests" ? "Build.Tests" : project)],
+                Fault.KeepsBuildTests => [.. lane.Select(project => project == "NukeBuild.IntegrationTests" ? "Build.Tests" : project)],
+                Fault.KeepsPreRenameNames => [.. lane.Select(project => project switch
+                {
+                    "QBrainAi.Support.Mcp.EnvironmentIntegrationTests" => "QBrainAi.Support.Mcp.Environment.IntegrationTests",
+                    "NukeBuild.IntegrationTests" => "Build.IntegrationTests",
+                    _ => project,
+                })],
                 _ => lane,
             };
         }

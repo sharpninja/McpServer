@@ -20,7 +20,11 @@
   <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-6, AC-7: slice S6 moved that stdio host case and the two memory
        bench cases that check their output folder with it into QBrainAi.Support.Mcp.EnvironmentIntegrationTests, which
        takes the place of QBrainAi.Support.Mcp.Tests here: no file left there uses the checks. -->
-  <ItemGroup Condition="'$(MSBuildProjectName)' == 'QBrainAi.Repl.Core.Tests' Or '$(MSBuildProjectName)' == 'QBrainAi.Repl.IntegrationTests' Or '$(MSBuildProjectName)' == 'QBrainAi.Support.Mcp.IntegrationTests' Or '$(MSBuildProjectName)' == 'QBrainAi.Support.Mcp.Environment.IntegrationTests'">
+  <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-6, AC-7: the condition names the project by its new name,
+       QBrainAi.Support.Mcp.EnvironmentIntegrationTests, the same as its root namespace (operator 2026-11-07: "Project
+       names and root namespaces for the project should match, so fix the project name."); it was
+       QBrainAi.Support.Mcp.Environment.IntegrationTests. -->
+  <ItemGroup Condition="'$(MSBuildProjectName)' == 'QBrainAi.Repl.Core.Tests' Or '$(MSBuildProjectName)' == 'QBrainAi.Repl.IntegrationTests' Or '$(MSBuildProjectName)' == 'QBrainAi.Support.Mcp.IntegrationTests' Or '$(MSBuildProjectName)' == 'QBrainAi.Support.Mcp.EnvironmentIntegrationTests'">
     <Compile Include="$(MSBuildThisFileDirectory)TestSupport.Shared\TemporaryInstanceChecks.cs"
              Link="TestSupport.Shared\TemporaryInstanceChecks.cs" />
   </ItemGroup>
@@ -30,7 +34,11 @@
   <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-6, AC-7: slice S6 moved the stdio host case that starts one into
        QBrainAi.Support.Mcp.EnvironmentIntegrationTests, which takes the place of QBrainAi.Support.Mcp.Tests here: no
        file left there starts one. -->
-  <ItemGroup Condition="'$(MSBuildProjectName)' == 'QBrainAi.Repl.Core.Tests' Or '$(MSBuildProjectName)' == 'QBrainAi.Repl.IntegrationTests' Or '$(MSBuildProjectName)' == 'QBrainAi.Support.Mcp.IntegrationTests' Or '$(MSBuildProjectName)' == 'QBrainAi.Support.Mcp.Environment.IntegrationTests'">
+  <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-6, AC-7: the condition names the project by its new name,
+       QBrainAi.Support.Mcp.EnvironmentIntegrationTests, the same as its root namespace (operator 2026-11-07: "Project
+       names and root namespaces for the project should match, so fix the project name."); it was
+       QBrainAi.Support.Mcp.Environment.IntegrationTests. -->
+  <ItemGroup Condition="'$(MSBuildProjectName)' == 'QBrainAi.Repl.Core.Tests' Or '$(MSBuildProjectName)' == 'QBrainAi.Repl.IntegrationTests' Or '$(MSBuildProjectName)' == 'QBrainAi.Support.Mcp.IntegrationTests' Or '$(MSBuildProjectName)' == 'QBrainAi.Support.Mcp.EnvironmentIntegrationTests'">
     <Compile Include="$(MSBuildThisFileDirectory)TestSupport.Shared\OwnedInstanceProcess.cs"
              Link="TestSupport.Shared\OwnedInstanceProcess.cs" />
   </ItemGroup>

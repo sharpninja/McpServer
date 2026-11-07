@@ -18,6 +18,7 @@ partial class Build
     /// TR-MCP-MEMORY-BENCH-002-07 / AC-TR-MCP-MEMORY-BENCH-002-13:
     /// Stub-mode Grok bench by default. Token means print first.
     /// </summary>
+    /// <remarks>2026-11-07, TR-MCP-MEMORY-BENCH-002-07; AC-TR-MCP-MEMORY-BENCH-002-13; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: slice S6 of hostile validation finding R14-F4 moved most MemoryBench classes and MemoryIntegrationTests from QBrainAi.Support.Mcp.Tests into the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (named for its root namespace; operator 2026-11-07: "Project names and root namespaces for the project should match, so fix the project name."), so the target runs its unchanged filter over QBrainAi.Support.Mcp.Tests and then over QBrainAi.Support.Mcp.EnvironmentIntegrationTests, both still after the token means and both built by Compile; the Grok default, the H7a block and the gate parameter are unchanged.</remarks>
     public Target BenchMemory => _ => _
         .DependsOn(Compile)
         .Executes(() =>
@@ -35,13 +36,20 @@ partial class Build
             // TOKEN MEANS (primary metric) must stay the first metrics block before DotNetTest.
             PrintTokenMeansFirst(plugin);
 
-            var project = TestsDirectory / "QBrainAi.Support.Mcp.Tests" / "QBrainAi.Support.Mcp.Tests.csproj";
-            DotNetTest(_ => _
-                .SetProjectFile(project)
-                .SetConfiguration(Configuration)
-                .EnableNoBuild()
-                .SetFilter("FullyQualifiedName~MemoryBench|FullyQualifiedName~MemoryIntegrationTests")
-                .SetResultsDirectory(RootDirectory / "TestResults"));
+            // TR-MCP-NUKE-019 AC-7: since slice S6 the MemoryBench and MemoryIntegrationTests classes live in the unit-owned
+            // QBrainAi.Support.Mcp.Tests and the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests; the same
+            // filter runs over both, in that order.
+            string[] projectNames = ["QBrainAi.Support.Mcp.Tests", "QBrainAi.Support.Mcp.EnvironmentIntegrationTests"];
+            foreach (var projectName in projectNames)
+            {
+                var project = TestsDirectory / projectName / (projectName + ".csproj");
+                DotNetTest(_ => _
+                    .SetProjectFile(project)
+                    .SetConfiguration(Configuration)
+                    .EnableNoBuild()
+                    .SetFilter("FullyQualifiedName~MemoryBench|FullyQualifiedName~MemoryIntegrationTests")
+                    .SetResultsDirectory(RootDirectory / "TestResults"));
+            }
         });
 
     private bool H7aAgreed()

@@ -12,6 +12,7 @@
 /// <item><term>2026-11-07</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S3 of hostile validation finding R14-F4 (operator 2026-11-06: "Per-owner projects (Recommended)"): the integration cases of QBrainAi.McpAgent.Tests, QBrainAi.Repl.Core.Tests and QBrainAi.QBAgent.Tests moved to QBrainAi.McpAgent.IntegrationTests, QBrainAi.Repl.IntegrationTests and QBrainAi.QBAgent.IntegrationTests, so the three unit projects, which would now select no case, leave the lane and the two new integration-owned projects take their run positions, run whole with the lane's Category=Integration and host platform filter; the mock gate ug-r14f4-s3-mockgate-1 ran the changed contract first.</description></item>
 /// <item><term>2026-11-07</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S4 of hostile validation finding R14-F4 (operator 2026-11-06: "Move them (Recommended)"): the build's integration cases moved from the infrastructure-owned Build.Tests to the integration-owned Build.IntegrationTests, so Build.Tests, which would now select no case, leaves the lane and Build.IntegrationTests takes its run position, run whole with the lane's Category=Integration and host platform filter and built by the lane (Compile leaves it out); the mock gate ug-r14f4-s4-mockgate-1 ran the changed contract first.</description></item>
 /// <item><term>2026-11-07</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S5 of hostile validation finding R14-F4 (operator 2026-11-06: "...Environment.IntegrationTests (Recommended)"): the integration-owned QBrainAi.Support.Mcp.Environment.IntegrationTests, which takes the Category=Integration cases of QBrainAi.Support.Mcp.Tests folder by folder, runs immediately after QBrainAi.Support.Mcp.Tests, whole, with the lane's Category=Integration and host platform filter; QBrainAi.Support.Mcp.Tests keeps its run position until slice S8 empties its integration cases; the mock gate ug-r14f4-s5-mockgate-1 ran the changed contract first.</description></item>
+/// <item><term>2026-11-07</term><description>FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: the project renames that follow slice S6 of hostile validation finding R14-F4 (operator 2026-11-07: "Project names and root namespaces for the project should match, so fix the project name."): QBrainAi.Support.Mcp.Environment.IntegrationTests is now QBrainAi.Support.Mcp.EnvironmentIntegrationTests and Build.IntegrationTests is now NukeBuild.IntegrationTests, each named for its root namespace, in the same run positions; the mock gate ug-r14f4-rn-mockgate-1 ran the changed contract first.</description></item>
 /// </list>
 /// </remarks>
 sealed class IntegrationLaneProjects : IIntegrationLaneProjects
@@ -21,10 +22,10 @@ sealed class IntegrationLaneProjects : IIntegrationLaneProjects
     static readonly string[] LaneProjects =
     [
         "QBrainAi.Support.Mcp.Tests",
-        "QBrainAi.Support.Mcp.Environment.IntegrationTests",
+        "QBrainAi.Support.Mcp.EnvironmentIntegrationTests",
         "QBrainAi.McpAgent.IntegrationTests",
         "QBrainAi.QBAgent.IntegrationTests",
-        "Build.IntegrationTests",
+        "NukeBuild.IntegrationTests",
         "QBrainAi.Repl.IntegrationTests",
         SupportIntegrationProject,
     ];
@@ -56,8 +57,8 @@ sealed class IntegrationLaneProjects : IIntegrationLaneProjects
 /// project (declared by the build, never in requirement text), next to the lane composition above. Unit-owned: the seven
 /// projects Test runs. Integration-owned: QBrainAi.Support.Mcp.IntegrationTests, QBrainAi.Repl.IntegrationTests, the
 /// two projects the lane holds out (QBrainAi.TransactionSecurity.IntegrationTests, QBrainAi.Acid.IntegrationTests),
-/// QBrainAi.McpAgent.IntegrationTests, QBrainAi.QBAgent.IntegrationTests, Build.IntegrationTests and
-/// QBrainAi.Support.Mcp.Environment.IntegrationTests. Infrastructure-owned: Build.Tests. Not declared, so offered to neither selection: the .Validation projects, the AI
+/// QBrainAi.McpAgent.IntegrationTests, QBrainAi.QBAgent.IntegrationTests, NukeBuild.IntegrationTests and
+/// QBrainAi.Support.Mcp.EnvironmentIntegrationTests. Infrastructure-owned: Build.Tests. Not declared, so offered to neither selection: the .Validation projects, the AI
 /// review projects and QBrainAi.PluginIntegration.Tests, which has its own target. The Test and MigrationIntegrationTests
 /// targets consult these declarations (<see cref="RequireRole"/>, <see cref="RoleOf"/>); <see cref="TestProjectOwnership"/>
 /// judges a selection from them and a supplied case inventory.
@@ -67,6 +68,7 @@ sealed class IntegrationLaneProjects : IIntegrationLaneProjects
 /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: slice S3 declares QBrainAi.McpAgent.IntegrationTests and QBrainAi.QBAgent.IntegrationTests integration-owned (appended in solution order), the projects that took the integration cases of the MCP agent and QBAgent test projects.</para>
 /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: slice S4 declares Build.IntegrationTests integration-owned (appended in solution order), the project that took the build's integration cases; Build.Tests stays infrastructure-owned.</para>
 /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: slice S5 declares QBrainAi.Support.Mcp.Environment.IntegrationTests integration-owned (appended in solution order), the project that takes the integration cases of QBrainAi.Support.Mcp.Tests; QBrainAi.Support.Mcp.Tests stays unit-owned.</para>
+/// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the project renames that follow slice S6 (operator 2026-11-07: "Project names and root namespaces for the project should match, so fix the project name."): the integration-owned Build.IntegrationTests and QBrainAi.Support.Mcp.Environment.IntegrationTests are declared under their new names, NukeBuild.IntegrationTests and QBrainAi.Support.Mcp.EnvironmentIntegrationTests, with the same role and position.</para>
 /// </remarks>
 static class TestProjectRoles
 {
@@ -75,6 +77,7 @@ static class TestProjectRoles
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: two integration-owned projects added (slice S3).</para>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: Build.IntegrationTests added (slice S4).</para>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: QBrainAi.Support.Mcp.Environment.IntegrationTests added (slice S5).</para>
+    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: Build.IntegrationTests and QBrainAi.Support.Mcp.Environment.IntegrationTests renamed in place to NukeBuild.IntegrationTests and QBrainAi.Support.Mcp.EnvironmentIntegrationTests (operator 2026-11-07: "Project names and root namespaces for the project should match, so fix the project name.").</para>
     /// </remarks>
     static readonly (string Project, TestProjectRole Role)[] Declarations =
     [
@@ -91,8 +94,8 @@ static class TestProjectRoles
         ("QBrainAi.Acid.IntegrationTests", TestProjectRole.Integration),
         ("QBrainAi.McpAgent.IntegrationTests", TestProjectRole.Integration),
         ("QBrainAi.QBAgent.IntegrationTests", TestProjectRole.Integration),
-        ("Build.IntegrationTests", TestProjectRole.Integration),
-        ("QBrainAi.Support.Mcp.Environment.IntegrationTests", TestProjectRole.Integration),
+        ("NukeBuild.IntegrationTests", TestProjectRole.Integration),
+        ("QBrainAi.Support.Mcp.EnvironmentIntegrationTests", TestProjectRole.Integration),
         ("Build.Tests", TestProjectRole.Infrastructure),
     ];
 

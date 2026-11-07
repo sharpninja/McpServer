@@ -109,9 +109,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QBrainAi.McpAgent.Integrati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QBrainAi.QBAgent.IntegrationTests", "tests\QBrainAi.QBAgent.IntegrationTests\QBrainAi.QBAgent.IntegrationTests.csproj", "{9C7D4A21-3E58-4B9A-8F16-2A5C7E0B9D32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Build.IntegrationTests", "tests\Build.IntegrationTests\Build.IntegrationTests.csproj", "{4E8B2D17-6C3A-4F95-B1D0-7A2E9C5F3B64}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NukeBuild.IntegrationTests", "tests\NukeBuild.IntegrationTests\NukeBuild.IntegrationTests.csproj", "{4E8B2D17-6C3A-4F95-B1D0-7A2E9C5F3B64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QBrainAi.Support.Mcp.Environment.IntegrationTests", "tests\QBrainAi.Support.Mcp.Environment.IntegrationTests\QBrainAi.Support.Mcp.Environment.IntegrationTests.csproj", "{A6C2E8F4-3B71-4D95-8E0A-9F5D1C7B2E46}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QBrainAi.Support.Mcp.EnvironmentIntegrationTests", "tests\QBrainAi.Support.Mcp.EnvironmentIntegrationTests\QBrainAi.Support.Mcp.EnvironmentIntegrationTests.csproj", "{A6C2E8F4-3B71-4D95-8E0A-9F5D1C7B2E46}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -8,7 +8,11 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
-  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests')) OR $(MSBuildProjectName.EndsWith('.IntegrationTests')) OR '$(MSBuildProjectName)' == '_build'">
+  <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: test projects build without a documentation file. The suffix is
+       IntegrationTests without the dot, so the rule also covers QBrainAi.Support.Mcp.EnvironmentIntegrationTests, the
+       integration-owned project renamed to its root namespace (operator 2026-11-07: "Project names and root namespaces for
+       the project should match, so fix the project name."); every earlier match is unchanged. -->
+  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests')) OR $(MSBuildProjectName.EndsWith('IntegrationTests')) OR '$(MSBuildProjectName)' == '_build'">
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
   </PropertyGroup>
 

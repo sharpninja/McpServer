@@ -8,9 +8,12 @@ namespace NukeBuild.Tests;
 
 /// <summary>
 /// TEST-MCP-SERVICEUPDATE-001: the reflection and native-command helpers the service-update tests share, linked into
-/// both the build's infrastructure tests (Build.Tests) and the build's integration tests (Build.IntegrationTests).
+/// both the build's infrastructure tests (Build.Tests) and the build's integration tests (NukeBuild.IntegrationTests).
 /// </summary>
-/// <remarks>2026-11-07, TEST-MCP-SERVICEUPDATE-001; TR-MCP-NUKE-015 AC-004, AC-005; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: extracted unchanged from the private helpers of ServiceUpdateTests when that class split into its infrastructure half (Build.Tests) and its Linux integration half (Build.IntegrationTests) in slice S4 (hostile validation finding R14-F4), so both halves use one definition instead of a copy (DRY); each half reaches them through a using-static directive, so the test bodies are unchanged.</remarks>
+/// <remarks>
+/// <para>2026-11-07, TEST-MCP-SERVICEUPDATE-001; TR-MCP-NUKE-015 AC-004, AC-005; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: extracted unchanged from the private helpers of ServiceUpdateTests when that class split into its infrastructure half (Build.Tests) and its Linux integration half (Build.IntegrationTests) in slice S4 (hostile validation finding R14-F4), so both halves use one definition instead of a copy (DRY); each half reaches them through a using-static directive, so the test bodies are unchanged.</para>
+/// <para>2026-11-07, TEST-MCP-SERVICEUPDATE-001; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the summary names NukeBuild.IntegrationTests, Build.IntegrationTests renamed to its root namespace (operator 2026-11-07: "Project names and root namespaces for the project should match, so fix the project name."); the helpers are unchanged.</para>
+/// </remarks>
 internal static class ServiceUpdateTestSupport
 {
     /// <summary>Runs installed metadata utilities against an isolated fixture, failing on timeout or nonzero exit.</summary>
