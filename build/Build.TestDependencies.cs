@@ -114,6 +114,7 @@ partial class Build
     /// TR-MCP-NUKE-019: the lane also provisions Ollama and the QuadBrain test model on both hosts
     /// (<see cref="InstallOllama"/>) before any test runs.
     /// </summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: logs each lane project's role from the build's declarations (<see cref="TestProjectRoles.RoleOf"/>) and fails before any test runs on an undeclared lane project; the lane's projects, filters and cases are unchanged (slice S2).</remarks>
     public Target MigrationIntegrationTests => _ => _
         .Description("Run Category=Integration tests (provider migrations, process spawns) with provisioned dependencies")
         .DependsOn(InstallTestDependencies, InstallOllama)
@@ -136,6 +137,12 @@ partial class Build
             // names every project's filter.
             foreach (var project in projectsWithIntegrationTests)
                 Log.Information("{LaneProjectFilter}", project.LogLine);
+
+            // TR-MCP-NUKE-019 AC-7: the lane consults the build's role declarations: it logs each lane project's declared
+            // role, and an undeclared lane project fails the lane before any test runs. The selection stays the AC-2
+            // composition until the cases move (slices S3 to S8), so no case changes.
+            foreach (var project in projectsWithIntegrationTests)
+                Log.Information("Integration lane project {Project}: declared role {Role}", project.Name, TestProjectRoles.RoleOf(project.Name));
 
             var runId = SessionLifeUnitGateReports.NormalizeRunId(TestRunId)
                 ?? $"integration-{DateTime.Now:yyyyMMddTHHmmss}-{Guid.NewGuid():N}";

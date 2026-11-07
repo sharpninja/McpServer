@@ -6,7 +6,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 partial class Build
 {
-    /// <summary>Run all unit tests, excluding integration test projects and Category=Integration tests.</summary>
+    /// <summary>Run all unit tests, excluding integration test projects and Category=Integration tests.</summary><remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: after its unchanged name rules select the projects, Test consults the build's role declarations (TestProjectRoles.RequireRole) and refuses, before any test runs, a selected project not declared unit-owned; at the da11faa2 layout the seven selected projects are declared unit-owned, so no case changes (slice S2; this remark shares the summary line so the name-rule lines keep their numbers).</remarks>
     public Target Test => _ => _
         .DependsOn(Compile)
         .Executes(() =>
@@ -23,6 +23,9 @@ partial class Build
                 // so it has no built assembly to run with --no-build here. Keep Test consistent with Compile.
                 .Where(p => !p.Name.EndsWith("Build.Tests"))
                 .ToArray();
+
+            // TR-MCP-NUKE-019 AC-7: every project the name rules select must be declared unit-owned by the build.
+            TestProjectRoles.RequireRole(TestProjectRole.Unit, testProjects.Select(project => project.Name).ToArray(), nameof(Test));
 
             var runId = SessionLifeUnitGateReports.NormalizeRunId(TestRunId);
             if (runId is not null)
