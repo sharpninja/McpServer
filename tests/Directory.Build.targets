@@ -17,14 +17,20 @@
        contract, the integration project whose cases call them, every project that links ScratchQBrainAi, whose
        start uses the restart check, and QBrainAi.Support.Mcp.Tests, whose stdio host integration case starts a
        temporary instance. -->
-  <ItemGroup Condition="'$(MSBuildProjectName)' == 'QBrainAi.Repl.Core.Tests' Or '$(MSBuildProjectName)' == 'QBrainAi.Repl.IntegrationTests' Or '$(MSBuildProjectName)' == 'QBrainAi.Support.Mcp.IntegrationTests' Or '$(MSBuildProjectName)' == 'QBrainAi.Support.Mcp.Tests'">
+  <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-6, AC-7: slice S6 moved that stdio host case and the two memory
+       bench cases that check their output folder with it into QBrainAi.Support.Mcp.EnvironmentIntegrationTests, which
+       takes the place of QBrainAi.Support.Mcp.Tests here: no file left there uses the checks. -->
+  <ItemGroup Condition="'$(MSBuildProjectName)' == 'QBrainAi.Repl.Core.Tests' Or '$(MSBuildProjectName)' == 'QBrainAi.Repl.IntegrationTests' Or '$(MSBuildProjectName)' == 'QBrainAi.Support.Mcp.IntegrationTests' Or '$(MSBuildProjectName)' == 'QBrainAi.Support.Mcp.Environment.IntegrationTests'">
     <Compile Include="$(MSBuildThisFileDirectory)TestSupport.Shared\TemporaryInstanceChecks.cs"
              Link="TestSupport.Shared\TemporaryInstanceChecks.cs" />
   </ItemGroup>
 
   <!-- TR-MCP-NUKE-019 AC-6 (hostile validation finding R8B-F3): the owned-environment start of a temporary instance's
        process, linked into every project whose integration cases start one or a REPL child against one. -->
-  <ItemGroup Condition="'$(MSBuildProjectName)' == 'QBrainAi.Repl.Core.Tests' Or '$(MSBuildProjectName)' == 'QBrainAi.Repl.IntegrationTests' Or '$(MSBuildProjectName)' == 'QBrainAi.Support.Mcp.IntegrationTests' Or '$(MSBuildProjectName)' == 'QBrainAi.Support.Mcp.Tests'">
+  <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-6, AC-7: slice S6 moved the stdio host case that starts one into
+       QBrainAi.Support.Mcp.EnvironmentIntegrationTests, which takes the place of QBrainAi.Support.Mcp.Tests here: no
+       file left there starts one. -->
+  <ItemGroup Condition="'$(MSBuildProjectName)' == 'QBrainAi.Repl.Core.Tests' Or '$(MSBuildProjectName)' == 'QBrainAi.Repl.IntegrationTests' Or '$(MSBuildProjectName)' == 'QBrainAi.Support.Mcp.IntegrationTests' Or '$(MSBuildProjectName)' == 'QBrainAi.Support.Mcp.Environment.IntegrationTests'">
     <Compile Include="$(MSBuildThisFileDirectory)TestSupport.Shared\OwnedInstanceProcess.cs"
              Link="TestSupport.Shared\OwnedInstanceProcess.cs" />
   </ItemGroup>

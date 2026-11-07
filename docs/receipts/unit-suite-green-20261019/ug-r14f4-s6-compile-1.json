@@ -1,0 +1,57 @@
+{
+  "name": "ug-r14f4-s6-compile-1",
+  "kind": "compile",
+  "retrospective": false,
+  "note": "Written when the run ended, from its own meta, exit and log files (Save-CompileReceipt.ps1).",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "runHead": "033c3c8d359d405e15ab05002b53a91f3b150f27",
+  "runDirtyPaths": [
+    " M tests/Build.Tests/TestProjectOwnershipTests.cs",
+    " M tests/Directory.Build.targets",
+    " M tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/QBrainAi.Support.Mcp.Environment.IntegrationTests.csproj",
+    "?? tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/Configuration/",
+    "?? tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/Documentation/",
+    "?? tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/Ingestion/",
+    "?? tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/McpStdio/",
+    "?? tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/Memory/",
+    "?? tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/Requirements/",
+    "?? tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/Services/",
+    "?? tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/Storage/EphemeralPostgresFixtureTests.cs",
+    "?? tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/Storage/PostgresDecompose4nfBackfillMigrationTests.cs",
+    "?? tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/Storage/PostgresRenameQuadBrainRolesMigrationTests.cs",
+    "?? tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/Web/"
+  ],
+  "command": [
+    "./build.ps1",
+    "Compile"
+  ],
+  "startedLocal": "2026-11-07T11:36:01",
+  "endedLocal": "2026-11-07T11:38:47",
+  "exitCode": 0,
+  "status": "passed",
+  "buildSucceededLine": "Build succeeded on 11/7/2026 11:38:46 AM. ＼（＾ᴗ＾）／",
+  "errorDiagnostics": 0,
+  "warningDiagnostics": 0,
+  "log": "/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/s6/runs/ug-r14f4-s6-compile-1.out.log",
+  "logSha256": "6533122AB49CE597DA634FB83ED5CC62225DCB8DDBDB9C6D2046521BFFBBA735",
+  "sources": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/QBrainAi.Support.Mcp.Environment.IntegrationTests.csproj",
+      "sha256": "DFD1F97C5B9AA40B76EE7D48E636C46BEF03128AEE842C5A6CD42859B6A915CA"
+    },
+    {
+      "path": "tests/Directory.Build.targets",
+      "sha256": "F56D609AE6C0D7B88E3BDCEF87B9A7355B30912D52CFB6E990838DDF96AD4446"
+    },
+    {
+      "path": "tests/Build.Tests/TestProjectOwnershipTests.cs",
+      "sha256": "712AB178665DC807711DB6B0DE17A8B447864F55A4FFB26DE197914C260C0E36"
+    }
+  ],
+  "metaFile": "/home/sharpninja/.claude/scratch/pr82-review-20261019/records-r14/s6/runs/ug-r14f4-s6-compile-1.meta.json",
+  "metaSha256": "6F441D49791EB2BEABC2F007FF534FB700D9EFE45E11B9B08A89119691E2DA67",
+  "writtenLocal": "2026-11-07T11:39:44",
+  "minutesAfterRunEnd": 0.97,
+  "writtenBy": "ClaudeCode"
+}

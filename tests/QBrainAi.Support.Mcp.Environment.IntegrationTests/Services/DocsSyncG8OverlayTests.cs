@@ -1,0 +1,83 @@
+using QBrainAi.Support.Mcp.Models;
+using QBrainAi.Support.Mcp.Options;
+using QBrainAi.Support.Mcp.Requirements;
+using Microsoft.Extensions.Logging.Abstractions;
+using Xunit;
+using MsOptions = Microsoft.Extensions.Options;
+
+namespace QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Services;
+
+/// <summary>
+/// Overlay G8: wiki export through shipped <see cref="RequirementsDocumentService.GenerateWikiAsync"/>
+/// without --include-dump. TEST-MCP-WIKIEXPORT default no-flag behavior. The export captures a real
+/// temporary export root, so the class is an integration test on every host (TR-MCP-USECASE-018 AC-006,
+/// TR-MCP-NUKE-019).
+/// </summary>
+/// <remarks>
+/// Requirement coverage named by requirement evidence: FR-MCP-WIKIEXPORT-003, FR-MCP-WIKIEXPORT-004 and
+/// FR-MCP-WIKIEXPORT-005 (every criterion of each; they carry no criterion ids).
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>FR-MCP-WIKIEXPORT-003 through FR-MCP-WIKIEXPORT-005 (criteria without ids): cites the criteria whose evidence names this class, so the evidence no longer names the test (operator: "Must be fixed.").</description></item>
+/// <item><term>2026-11-07</term><description>FR-MCP-WIKIEXPORT-003 through FR-MCP-WIKIEXPORT-005; TR-MCP-USECASE-018 AC-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: moved whole from QBrainAi.Support.Mcp.Tests (Services/DocsSyncG8OverlayTests.cs) into the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests, so the unit-owned project holds only unit cases (slice S6, hostile validation finding R14-F4; operator 2026-11-06: "...Environment.IntegrationTests (Recommended)"); only the namespace changed.</description></item>
+/// </list>
+/// </remarks>
+[Trait("Category", "Integration")]
+public sealed class DocsSyncG8OverlayTests : IDisposable
+{
+    private readonly string _tempRoot = Path.Combine(Path.GetTempPath(), "g8-wiki-" + Guid.NewGuid().ToString("N"));
+
+    /// <summary>Creates an isolated docs tree for wiki export.</summary>
+    public DocsSyncG8OverlayTests()
+    {
+        Directory.CreateDirectory(Path.Combine(_tempRoot, "docs", "Project"));
+        var project = Path.Combine(_tempRoot, "docs", "Project");
+        File.WriteAllText(Path.Combine(project, "Functional-Requirements.md"), "# Functional Requirements (QBrain.AI)\n\n## FR-MCP-G8-001 Overlay wiki\n\nBody.\n");
+        File.WriteAllText(Path.Combine(project, "Technical-Requirements.md"), "# Technical Requirements (QBrain.AI)\n\n## TR-MCP-G8-001\n\nBody.\n");
+        File.WriteAllText(Path.Combine(project, "Testing-Requirements.md"), "# Testing Requirements (QBrain.AI)\n\n- TEST-MCP-G8-001: wiki export.\n");
+        File.WriteAllText(Path.Combine(project, "TR-per-FR-Mapping.md"), "# TR per FR Mapping (QBrain.AI)\n\n| FR | Primary TRs | Tests |\n| --- | --- | --- |\n| FR-MCP-G8-001 | TR-MCP-G8-001 | TEST-MCP-G8-001 |\n");
+        File.WriteAllText(Path.Combine(project, "Requirements-Matrix.md"), "# Requirements Matrix (QBrain.AI)\n");
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        try
+        {
+            if (Directory.Exists(_tempRoot))
+                Directory.Delete(_tempRoot, recursive: true);
+        }
+        catch (UnauthorizedAccessException)
+        {
+        }
+        catch (IOException)
+        {
+        }
+    }
+
+    /// <summary>G8: default GenerateWikiAsync writes Azure and GitHub wiki folders and does not write mcp-wiki-dump.json.</summary>
+    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Fact]
+    public async Task G8_GenerateWikiAsync_Default_WritesWikiFoldersWithoutDump()
+    {
+        var service = new RequirementsDocumentService(
+            MsOptions.Options.Create(new RequirementsOptions
+            {
+                FunctionalRequirementsPath = Path.Combine(_tempRoot, "docs", "Project", "Functional-Requirements.md"),
+                TechnicalRequirementsPath = Path.Combine(_tempRoot, "docs", "Project", "Technical-Requirements.md"),
+                TestingRequirementsPath = Path.Combine(_tempRoot, "docs", "Project", "Testing-Requirements.md"),
+                MappingPath = Path.Combine(_tempRoot, "docs", "Project", "TR-per-FR-Mapping.md"),
+                MatrixPath = Path.Combine(_tempRoot, "docs", "Project", "Requirements-Matrix.md"),
+            }),
+            NullLogger<RequirementsDocumentService>.Instance);
+
+        var outputRoot = Path.Combine(_tempRoot, "docs", "Project", "wiki");
+        var result = await service.GenerateWikiAsync(outputRoot, ct: TestContext.Current.CancellationToken);
+        Assert.True(result.Success);
+        Assert.Contains(result.Files, file => file.RelativePath.Replace('\\', '/') == "azure/Functional-Requirements.md");
+        Assert.Contains(result.Files, file => file.RelativePath.Replace('\\', '/') == "github/Home.md");
+        Assert.False(File.Exists(Path.Combine(outputRoot, WikiDumpDefaults.FileName)));
+        Assert.False(File.Exists(Path.Combine(outputRoot, "azure", WikiDumpDefaults.FileName)));
+        Assert.False(File.Exists(Path.Combine(outputRoot, "github", WikiDumpDefaults.FileName)));
+    }
+}

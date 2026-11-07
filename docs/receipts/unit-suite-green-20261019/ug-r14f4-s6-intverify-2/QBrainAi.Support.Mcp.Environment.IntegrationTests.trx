@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="d5dba78c-912e-4baf-b514-e13d8d0a9358" name="@LAB-OMARCHY 2026-11-07 11:48:03" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-07T11:48:03.9311830-06:00" queuing="2026-11-07T11:48:03.9311831-06:00" start="2026-11-07T11:48:01.6336663-06:00" finish="2026-11-07T11:48:03.9384560-06:00" />
+  <TestSettings name="default" id="69ab6c34-2190-4754-8fa6-31426a23b90e">
+    <Deployment runDeploymentRoot="_LAB-OMARCHY_2026-11-07_11_48_03" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="f1837bf5-ec4e-4d4f-8d91-a2851e89d22b" testId="b6e60b3c-47c7-5e25-7499-83bba00a7d44" testName="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.EphemeralPostgresFixtureTests.EphemeralPostgresFixture_ExplicitOverride_IsAdoptedWithoutLocalProvisioning" computerName="LAB-OMARCHY" duration="00:00:00.0156997" startTime="2026-11-07T11:48:03.6836380-06:00" endTime="2026-11-07T11:48:03.7099230-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f1837bf5-ec4e-4d4f-8d91-a2851e89d22b" />
+    <UnitTestResult executionId="4b78e527-9e97-4759-a485-a3357f32001e" testId="a66bc5fc-00c8-fd86-aa4c-b46e96cd0552" testName="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.PostgresDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables" computerName="LAB-OMARCHY" duration="00:00:00.0010000" startTime="2026-11-07T11:48:03.6374119-06:00" endTime="2026-11-07T11:48:03.6374119-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4b78e527-9e97-4759-a485-a3357f32001e">
+      <Output>
+        <ErrorInfo>
+          <Message>Class fixture type 'QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixture' threw in its constructor
+---- System.InvalidOperationException : PostgreSQL binaries not found (Program Files\PostgreSQL\*\bin or the test-tools directory). Run the 'InstallTestDependencies' Nuke target, or set MCP_TEST_POSTGRES_CONNECTION.</Message>
+          <StackTrace>
+----- Inner Stack Trace -----
+   at QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixture..ctor() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs:line 34
+   at InvokeStub_EphemeralPostgresFixture..ctor(Object, Object, IntPtr*)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="291265fa-7ab1-48ef-82aa-69f1ab892b23" testId="8f8be0d7-9a5c-31b3-1117-fc406cbc2523" testName="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.PostgresRenameQuadBrainRolesMigrationTests.Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows" computerName="LAB-OMARCHY" duration="00:00:00.0010000" startTime="2026-11-07T11:48:03.6374617-06:00" endTime="2026-11-07T11:48:03.6374617-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="291265fa-7ab1-48ef-82aa-69f1ab892b23">
+      <Output>
+        <ErrorInfo>
+          <Message>Class fixture type 'QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixture' threw in its constructor
+---- System.InvalidOperationException : PostgreSQL binaries not found (Program Files\PostgreSQL\*\bin or the test-tools directory). Run the 'InstallTestDependencies' Nuke target, or set MCP_TEST_POSTGRES_CONNECTION.</Message>
+          <StackTrace>
+----- Inner Stack Trace -----
+   at QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixture..ctor() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs:line 34
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Constructor(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="e3de0433-950a-44ac-a65a-0480404dd1db" testId="f3d49eca-993a-2eef-3dd3-50c05b7dc2ec" testName="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.PostgresDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows" computerName="LAB-OMARCHY" duration="00:00:00.0010000" startTime="2026-11-07T11:48:03.6286535-06:00" endTime="2026-11-07T11:48:03.6286535-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e3de0433-950a-44ac-a65a-0480404dd1db">
+      <Output>
+        <ErrorInfo>
+          <Message>Class fixture type 'QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixture' threw in its constructor
+---- System.InvalidOperationException : PostgreSQL binaries not found (Program Files\PostgreSQL\*\bin or the test-tools directory). Run the 'InstallTestDependencies' Nuke target, or set MCP_TEST_POSTGRES_CONNECTION.</Message>
+          <StackTrace>
+----- Inner Stack Trace -----
+   at QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixture..ctor() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs:line 34
+   at InvokeStub_EphemeralPostgresFixture..ctor(Object, Object, IntPtr*)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="a8b321e6-2cd8-4d2a-8c60-b3058577067b" testId="446814a9-41b0-c892-39f6-b707105bdbb9" testName="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.PostgresRenameQuadBrainRolesMigrationTests.MigrateDown_RenameQuadBrainRoles_RestoresLegacyHemisphereRows" computerName="LAB-OMARCHY" duration="00:00:00.0010000" startTime="2026-11-07T11:48:03.6286450-06:00" endTime="2026-11-07T11:48:03.6286450-06:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a8b321e6-2cd8-4d2a-8c60-b3058577067b">
+      <Output>
+        <ErrorInfo>
+          <Message>Class fixture type 'QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixture' threw in its constructor
+---- System.InvalidOperationException : PostgreSQL binaries not found (Program Files\PostgreSQL\*\bin or the test-tools directory). Run the 'InstallTestDependencies' Nuke target, or set MCP_TEST_POSTGRES_CONNECTION.</Message>
+          <StackTrace>
+----- Inner Stack Trace -----
+   at QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixture..ctor() in /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs:line 34
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Constructor(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.PostgresRenameQuadBrainRolesMigrationTests.Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.environment.integrationtests/bin/debug/net10.0/qbrainai.support.mcp.environment.integrationtests.dll" id="8f8be0d7-9a5c-31b3-1117-fc406cbc2523">
+      <Execution id="291265fa-7ab1-48ef-82aa-69f1ab892b23" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.Environment.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.PostgresRenameQuadBrainRolesMigrationTests" name="Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.PostgresRenameQuadBrainRolesMigrationTests.MigrateDown_RenameQuadBrainRoles_RestoresLegacyHemisphereRows" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.environment.integrationtests/bin/debug/net10.0/qbrainai.support.mcp.environment.integrationtests.dll" id="446814a9-41b0-c892-39f6-b707105bdbb9">
+      <Execution id="a8b321e6-2cd8-4d2a-8c60-b3058577067b" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.Environment.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.PostgresRenameQuadBrainRolesMigrationTests" name="MigrateDown_RenameQuadBrainRoles_RestoresLegacyHemisphereRows" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.EphemeralPostgresFixtureTests.EphemeralPostgresFixture_ExplicitOverride_IsAdoptedWithoutLocalProvisioning" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.environment.integrationtests/bin/debug/net10.0/qbrainai.support.mcp.environment.integrationtests.dll" id="b6e60b3c-47c7-5e25-7499-83bba00a7d44">
+      <Execution id="f1837bf5-ec4e-4d4f-8d91-a2851e89d22b" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.Environment.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.EphemeralPostgresFixtureTests" name="EphemeralPostgresFixture_ExplicitOverride_IsAdoptedWithoutLocalProvisioning" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.PostgresDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.environment.integrationtests/bin/debug/net10.0/qbrainai.support.mcp.environment.integrationtests.dll" id="f3d49eca-993a-2eef-3dd3-50c05b7dc2ec">
+      <Execution id="e3de0433-950a-44ac-a65a-0480404dd1db" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.Environment.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.PostgresDecompose4nfBackfillMigrationTests" name="Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows" />
+    </UnitTest>
+    <UnitTest name="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.PostgresDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables" storage="/home/sharpninja/github/mcpserver/.worktrees/unit-suite-green-20261019/tests/qbrainai.support.mcp.environment.integrationtests/bin/debug/net10.0/qbrainai.support.mcp.environment.integrationtests.dll" id="a66bc5fc-00c8-fd86-aa4c-b46e96cd0552">
+      <Execution id="4b78e527-9e97-4759-a485-a3357f32001e" />
+      <TestMethod codeBase="/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/bin/Debug/net10.0/QBrainAi.Support.Mcp.Environment.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.PostgresDecompose4nfBackfillMigrationTests" name="Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="b6e60b3c-47c7-5e25-7499-83bba00a7d44" executionId="f1837bf5-ec4e-4d4f-8d91-a2851e89d22b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a66bc5fc-00c8-fd86-aa4c-b46e96cd0552" executionId="4b78e527-9e97-4759-a485-a3357f32001e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8f8be0d7-9a5c-31b3-1117-fc406cbc2523" executionId="291265fa-7ab1-48ef-82aa-69f1ab892b23" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f3d49eca-993a-2eef-3dd3-50c05b7dc2ec" executionId="e3de0433-950a-44ac-a65a-0480404dd1db" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="446814a9-41b0-c892-39f6-b707105bdbb9" executionId="a8b321e6-2cd8-4d2a-8c60-b3058577067b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="5" executed="5" passed="1" failed="4" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.36]   Discovering: QBrainAi.Support.Mcp.Environment.IntegrationTests
+[xUnit.net 00:00:00.90]   Discovered:  QBrainAi.Support.Mcp.Environment.IntegrationTests
+[xUnit.net 00:00:01.16]   Starting:    QBrainAi.Support.Mcp.Environment.IntegrationTests
+[xUnit.net 00:00:01.28]       Class fixture type 'QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixture' threw in its constructor
+[xUnit.net 00:00:01.28]       ---- System.InvalidOperationException : PostgreSQL binaries not found (Program Files\PostgreSQL\*\bin or the test-tools directory). Run the 'InstallTestDependencies' Nuke target, or set MCP_TEST_POSTGRES_CONNECTION.
+[xUnit.net 00:00:01.28]       Stack Trace:
+[xUnit.net 00:00:01.28]         
+[xUnit.net 00:00:01.28]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:01.28]         /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs(34,0): at QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixture..ctor()
+[xUnit.net 00:00:01.28]            at InvokeStub_EphemeralPostgresFixture..ctor(Object, Object, IntPtr*)
+[xUnit.net 00:00:01.28]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:01.29]       Class fixture type 'QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixture' threw in its constructor
+[xUnit.net 00:00:01.29]       ---- System.InvalidOperationException : PostgreSQL binaries not found (Program Files\PostgreSQL\*\bin or the test-tools directory). Run the 'InstallTestDependencies' Nuke target, or set MCP_TEST_POSTGRES_CONNECTION.
+[xUnit.net 00:00:01.29]       Stack Trace:
+[xUnit.net 00:00:01.29]         
+[xUnit.net 00:00:01.29]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:01.29]         /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs(34,0): at QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixture..ctor()
+[xUnit.net 00:00:01.29]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Constructor(Object obj, IntPtr* args)
+[xUnit.net 00:00:01.29]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:01.30]       Class fixture type 'QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixture' threw in its constructor
+[xUnit.net 00:00:01.30]       ---- System.InvalidOperationException : PostgreSQL binaries not found (Program Files\PostgreSQL\*\bin or the test-tools directory). Run the 'InstallTestDependencies' Nuke target, or set MCP_TEST_POSTGRES_CONNECTION.
+[xUnit.net 00:00:01.30]       Stack Trace:
+[xUnit.net 00:00:01.30]         
+[xUnit.net 00:00:01.30]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:01.30]         /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs(34,0): at QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixture..ctor()
+[xUnit.net 00:00:01.30]            at InvokeStub_EphemeralPostgresFixture..ctor(Object, Object, IntPtr*)
+[xUnit.net 00:00:01.30]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:01.30]       Class fixture type 'QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixture' threw in its constructor
+[xUnit.net 00:00:01.30]       ---- System.InvalidOperationException : PostgreSQL binaries not found (Program Files\PostgreSQL\*\bin or the test-tools directory). Run the 'InstallTestDependencies' Nuke target, or set MCP_TEST_POSTGRES_CONNECTION.
+[xUnit.net 00:00:01.30]       Stack Trace:
+[xUnit.net 00:00:01.30]         
+[xUnit.net 00:00:01.30]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:01.30]         /home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/tests/QBrainAi.Support.Mcp.Tests/Storage/EphemeralPostgresFixture.cs(34,0): at QBrainAi.Support.Mcp.Tests.Storage.EphemeralPostgresFixture..ctor()
+[xUnit.net 00:00:01.30]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Constructor(Object obj, IntPtr* args)
+[xUnit.net 00:00:01.30]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:01.36]   Finished:    QBrainAi.Support.Mcp.Environment.IntegrationTests (ID = '34678d75249e35119aa013816dd384313460803925663bf946a2ce76df105e36')
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="LAB-OMARCHY" outcome="Error" timestamp="2026-11-07T11:48:03.6493303-06:00">
+        <Text>[xUnit.net 00:00:01.28]     QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.PostgresDecompose4nfBackfillMigrationTests.Migrate_DownToPreSlice_ReconstructsJsonColumnsFromChildRows [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="LAB-OMARCHY" outcome="Error" timestamp="2026-11-07T11:48:03.6568500-06:00">
+        <Text>[xUnit.net 00:00:01.29]     QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.PostgresRenameQuadBrainRolesMigrationTests.MigrateDown_RenameQuadBrainRoles_RestoresLegacyHemisphereRows [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="LAB-OMARCHY" outcome="Error" timestamp="2026-11-07T11:48:03.6664392-06:00">
+        <Text>[xUnit.net 00:00:01.30]     QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.PostgresDecompose4nfBackfillMigrationTests.Migrate_Decompose4nf_BackfillsJsonListColumnsIntoChildTables [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="LAB-OMARCHY" outcome="Error" timestamp="2026-11-07T11:48:03.6681598-06:00">
+        <Text>[xUnit.net 00:00:01.30]     QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Storage.PostgresRenameQuadBrainRolesMigrationTests.Migrate_RenameQuadBrainRoles_RenamesLegacyHemisphereRows [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

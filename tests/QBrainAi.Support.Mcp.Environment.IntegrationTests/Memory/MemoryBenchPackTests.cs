@@ -1,0 +1,78 @@
+using QBrainAi.Support.Mcp.Services;
+
+namespace QBrainAi.Support.Mcp.EnvironmentIntegrationTests.Memory;
+
+/// <summary>
+/// TEST-MCP-MEMORY-018 (historical) / FR-MCP-MEMORY-018 (historical): Canonical pack existence and schema.
+/// </summary>
+/// <remarks>2026-11-07, FR-MCP-MEMORY-018; TEST-MCP-MEMORY-018; TR-MCP-USECASE-018 AC-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: moved whole from QBrainAi.Support.Mcp.Tests (Memory/MemoryBenchPackTests.cs) into the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests, so the unit-owned project holds only unit cases (slice S6, hostile validation finding R14-F4; operator 2026-11-06: "...Environment.IntegrationTests (Recommended)"); MemoryBenchCatalog is linked into this assembly; only the namespace changed.</remarks>
+public sealed class MemoryBenchPackTests
+{
+    /// <summary>AC-FR-MCP-MEMORY-018-01: Pack file lives at the canonical path and is versioned.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
+    [Fact]
+    public void PackFile_ExistsAndVersioned()
+    {
+        var path = MemoryBenchCatalog.PackPath();
+        Assert.True(File.Exists(path), "docs/benchmarks/memory-prompt-pack-v1.yaml must exist.");
+        var pack = MemoryBenchCatalog.LoadPack();
+        Assert.Equal("memory-prompt-pack-v1", pack.Id);
+        Assert.False(string.IsNullOrWhiteSpace(pack.Version));
+        Assert.Contains("version", File.ReadAllText(path), StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>AC-FR-MCP-MEMORY-018-02: Pack covers the eight required prompt classes.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
+    [Fact]
+    public void CoversEightPromptClasses()
+    {
+        var pack = MemoryBenchCatalog.LoadPack();
+        Assert.True(pack.Prompts.Count >= 8);
+        foreach (var required in MemoryBenchCatalog.RequiredClasses)
+            Assert.Contains(pack.Prompts, prompt => prompt.Class == required);
+    }
+
+    /// <summary>AC-FR-MCP-MEMORY-018-03: Each prompt has the required entry fields.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
+    [Fact]
+    public void EntrySchema_Complete()
+    {
+        foreach (var prompt in MemoryBenchCatalog.LoadPack().Prompts)
+        {
+            Assert.False(string.IsNullOrWhiteSpace(prompt.Id));
+            Assert.False(string.IsNullOrWhiteSpace(prompt.Class));
+            Assert.False(string.IsNullOrWhiteSpace(prompt.UserText));
+            Assert.False(string.IsNullOrWhiteSpace(prompt.GoldAnswerRubric));
+            Assert.NotNull(prompt.SeededMemories);
+            Assert.NotNull(prompt.ForbiddenClaims);
+            Assert.Contains(prompt.Scoring, new[] { "exact", "contains", "rubric" });
+        }
+    }
+
+    /// <summary>AC-FR-MCP-MEMORY-018-04: Pack declares paired without_memory / with_memory conditions.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
+    [Fact]
+    public void PairedConditions()
+    {
+        var pack = MemoryBenchCatalog.LoadPack();
+        Assert.Contains("without_memory", pack.Conditions);
+        Assert.Contains("with_memory", pack.Conditions);
+        Assert.All(pack.Prompts, prompt => Assert.False(string.IsNullOrWhiteSpace(prompt.UserText)));
+    }
+
+    /// <summary>AC-FR-MCP-MEMORY-018-30: Fixtures use synthetic BENCH-* tokens, not real secrets.</summary>
+    /// <remarks>Integration: loads the benchmark catalog, recorded pack or benchmark artifacts from the physical checkout (TR-MCP-USECASE-018 AC-006).</remarks>
+    [Trait("Category", "Integration")]
+    [Fact]
+    public void NoRealSecretsInFixtures()
+    {
+        var raw = File.ReadAllText(MemoryBenchCatalog.PackPath());
+        Assert.Contains("BENCH-PREF-EDITOR=neovim", raw, StringComparison.Ordinal);
+        Assert.DoesNotContain("sk-live-", raw, StringComparison.OrdinalIgnoreCase);
+        MemoryBenchPackLoader.Validate(MemoryBenchCatalog.LoadPack(), raw);
+    }
+}
