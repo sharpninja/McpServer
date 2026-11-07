@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the integration-owned project of QBrainAi.Support.Mcp.Tests'
+       Category=Integration cases, split out folder by folder so the unit-owned project holds only unit cases (slice S5,
+       hostile validation finding R14-F4; operator 2026-11-06: "...Environment.IntegrationTests (Recommended)"). It
+       mirrors QBrainAi.Support.Mcp.Tests with only the references the moved cases use: the repository-root assembly
+       metadata (TR-MCP-USECASE-018 AC-005), and no copied fixtures, embedded resources or OS-conditional compile block
+       until moved cases need them. The lane runs it whole with its Category=Integration and host platform filter. -->
+  <PropertyGroup>
+    <Configurations>Debug;Release;Staging</Configurations>
+    <Platforms>AnyCPU;x64;x86</Platforms>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the root namespace joins "Environment" and "IntegrationTests"
+         into one segment. A namespace QBrainAi.Support.Mcp.Environment would shadow System.Environment for every bare
+         Environment. inside a QBrainAi.Support.Mcp.* namespace of this assembly (C# looks up enclosing namespaces before
+         global usings), which 31 Support.Mcp.Tests files that move here use; the assembly keeps the project name. -->
+    <RootNamespace>QBrainAi.Support.Mcp.EnvironmentIntegrationTests</RootNamespace>
+    <McpRepositoryRoot>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..\..'))</McpRepositoryRoot>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.runner.visualstudio" PrivateAssets="all" />
+    <PackageReference Include="coverlet.collector" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\QBrainAi.Support.Mcp\QBrainAi.Support.Mcp.csproj" />
+    <ProjectReference Include="..\..\src\QBrainAi.Client\QBrainAi.Client.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="Xunit" />
+    <!-- The linked support below keeps its QBrainAi.Support.Mcp.Tests namespaces, so a moved file changes only its own
+         namespace line. -->
+    <Using Include="QBrainAi.Support.Mcp.Tests.Storage" />
+    <AssemblyMetadata Include="McpRepositoryRoot" Value="$(McpRepositoryRoot)" />
+  </ItemGroup>
+  <!-- Shared by link with QBrainAi.Support.Mcp.Tests (one definition each, never copied): xUnit collection definitions and
+       assembly fixtures apply per assembly, so the four serialized collections (FR-MCP-TESTRESOURCE-001 ac-7 and ac-9)
+       and the hermetic user-profile assembly fixture (TR-MCP-WS-005) are compiled into both. -->
+  <ItemGroup>
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\HermeticUserProfileFixture.cs" Link="Shared\HermeticUserProfileFixture.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\TestSupport\ProcessEnvironmentCollection.cs" Link="Shared\TestSupport\ProcessEnvironmentCollection.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Storage\WorkspaceIdentityNativeProcessStateCollection.cs" Link="Shared\Storage\WorkspaceIdentityNativeProcessStateCollection.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Storage\SqlServerLocalDbCollection.cs" Link="Shared\Storage\SqlServerLocalDbCollection.cs" />
+    <Compile Include="..\QBrainAi.Support.Mcp.Tests\Documentation\RepositoryRootProcessStateCollection.cs" Link="Shared\Documentation\RepositoryRootProcessStateCollection.cs" />
+  </ItemGroup>
+</Project>

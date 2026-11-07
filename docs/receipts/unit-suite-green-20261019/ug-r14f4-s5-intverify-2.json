@@ -1,0 +1,74 @@
+{
+  "name": "ug-r14f4-s5-intverify-2",
+  "kind": "binding",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "b05918554448c8e7996450ffedca39cb3010aafa",
+  "dirtyPaths": [
+    " M QBrainAi.sln",
+    " M build/Build.TestDependencies.cs",
+    " M build/IntegrationLaneProjects.cs",
+    " M build/IntegrationLaneProjectsContracts.cs",
+    " M src/QBrainAi.Services/QBrainAi.Services.csproj",
+    " M src/QBrainAi.Storage/QBrainAi.Storage.csproj",
+    " M tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+    " M tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+    " M tests/Build.Tests/TestProjectOwnershipTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthSqliteTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathFacadeTests.cs",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-binding-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-binding-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-compile-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-compile-2.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-intverify-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-intverify-1/",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-mockgate-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-mockgate-1/",
+    "?? tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "QBrainAi.Support.Mcp.Environment.IntegrationTests:BugTriage139EighteenthSqliteTests,WorkspaceNativePathLinuxFacadeTests",
+    "--test-run-id",
+    "ug-r14f4-s5-intverify-2"
+  ],
+  "startedLocal": "2026-11-07T11:06:24",
+  "endedLocal": "2026-11-07T11:07:06",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 7,
+  "passed": 7,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "QBrainAi.Support.Mcp.Environment.IntegrationTests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-s5-intverify-2/groups/QBrainAi.Support.Mcp.Environment.IntegrationTests/QBrainAi.Support.Mcp.Environment.IntegrationTests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-intverify-2/QBrainAi.Support.Mcp.Environment.IntegrationTests.trx",
+      "sha256": "16809FBD5644BC58F6BC7D1AB77831FBB1332534F389BE65DC1ED6337305B720",
+      "total": 7,
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/QBrainAi.Support.Mcp.Environment.IntegrationTests.csproj",
+      "sha256": "CE45AAB1981F4303A0678B5137EAFB66DB0CE01CFB2AC335D76E54197240462F"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/Storage/BugTriage139EighteenthSqliteTests.cs",
+      "sha256": "038E810C0B4774F1A9BD695AC5AF871BE69281E275DBD4462C4FD1525DB53429"
+    },
+    {
+      "path": "tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/Storage/WorkspaceNativePathFacadeTests.cs",
+      "sha256": "0A55452B4E781820DD603C5728298BD128535EB955AE4EC4E2736D2A428F9CF1"
+    }
+  ],
+  "writtenLocal": "2026-11-07T11:07:37",
+  "writtenBy": "ClaudeCode"
+}

@@ -18,6 +18,12 @@
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>QBrainAi.Support.Mcp.IntegrationTests</_Parameter1>
     </AssemblyAttribute>
+    <!-- 2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the integration-owned project that takes QBrainAi.Support.Mcp.Tests'
+         integration cases (slice S5, hostile validation finding R14-F4); its SQLite bounded-open case asserts on
+         SqliteBoundedConnectionOpener. -->
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>QBrainAi.Support.Mcp.Environment.IntegrationTests</_Parameter1>
+    </AssemblyAttribute>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" />

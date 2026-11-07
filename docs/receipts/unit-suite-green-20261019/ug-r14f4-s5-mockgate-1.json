@@ -1,0 +1,56 @@
+{
+  "name": "ug-r14f4-s5-mockgate-1",
+  "kind": "mock-gate",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "6e8371e0a8c7300e7f7ad39e1b820d868863643c",
+  "dirtyPaths": [
+    " M tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+    " M tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "Build.Tests:IntegrationLaneProjectsMockGateTests",
+    "--test-run-id",
+    "ug-r14f4-s5-mockgate-1"
+  ],
+  "startedLocal": "2026-11-07T10:38:19",
+  "endedLocal": "2026-11-07T10:38:28",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 17,
+  "passed": 17,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "Build.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-s5-mockgate-1/groups/Build.Tests/Build.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-mockgate-1/Build.Tests.trx",
+      "sha256": "9128350DF4551088D98B19029F178FB074EAC560480F50AA55C7334CD347FE29",
+      "total": 17,
+      "passed": 17,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+      "sha256": "1B202C40D25CB98684D62E4FA32524C0AE114C645439D1588576320549C94828"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+      "sha256": "8EF4DA490168F40A5D174307B8CC81E06426D91F28FD46EABA5F527EA1D7FD40"
+    },
+    {
+      "path": "build/IntegrationLaneProjects.cs",
+      "sha256": "8BD626703F6D9012E4FA93ABE118246087DF5FDD9507B4B53CDB8700C314E9B0"
+    }
+  ],
+  "writtenLocal": "2026-11-07T10:38:48",
+  "writtenBy": "ClaudeCode"
+}

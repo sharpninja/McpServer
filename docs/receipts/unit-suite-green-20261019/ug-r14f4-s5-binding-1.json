@@ -1,0 +1,73 @@
+{
+  "name": "ug-r14f4-s5-binding-1",
+  "kind": "binding",
+  "host": "LAB-OMARCHY",
+  "worktree": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019",
+  "head": "6e8371e0a8c7300e7f7ad39e1b820d868863643c",
+  "dirtyPaths": [
+    " M QBrainAi.sln",
+    " M build/Build.TestDependencies.cs",
+    " M build/IntegrationLaneProjects.cs",
+    " M build/IntegrationLaneProjectsContracts.cs",
+    " M src/QBrainAi.Services/QBrainAi.Services.csproj",
+    " M src/QBrainAi.Storage/QBrainAi.Storage.csproj",
+    " M tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+    " M tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+    " M tests/Build.Tests/TestProjectOwnershipTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Storage/BugTriage139EighteenthSqliteTests.cs",
+    " M tests/QBrainAi.Support.Mcp.Tests/Storage/WorkspaceNativePathFacadeTests.cs",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-compile-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-mockgate-1.json",
+    "?? docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-mockgate-1/",
+    "?? tests/QBrainAi.Support.Mcp.Environment.IntegrationTests/"
+  ],
+  "command": [
+    "./build.ps1",
+    "TestGroups",
+    "--test-groups",
+    "Build.Tests:IntegrationLaneProjectsMockGateTests,TestProjectOwnershipTests,IntegrationLaneProjectsTests,IntegrationLaneClassFilterTests,IntegrationLaneExecutionContractTests,IntegrationLaneExecutionBindingTests",
+    "--test-run-id",
+    "ug-r14f4-s5-binding-1"
+  ],
+  "startedLocal": "2026-11-07T10:54:31",
+  "endedLocal": "2026-11-07T10:54:40",
+  "exitCode": 0,
+  "status": "passed",
+  "total": 46,
+  "passed": 46,
+  "failed": 0,
+  "skipped": 0,
+  "trx": [
+    {
+      "project": "Build.Tests",
+      "original": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/TestResults/ug-r14f4-s5-binding-1/groups/Build.Tests/Build.Tests.trx",
+      "copy": "/home/sharpninja/github/McpServer/.worktrees/unit-suite-green-20261019/docs/receipts/unit-suite-green-20261019/ug-r14f4-s5-binding-1/Build.Tests.trx",
+      "sha256": "7D95CCC1A4DF1844827F1AC5EA0657CE0FAE8D11A32FAA43E5AE78F4F82F5045",
+      "total": 46,
+      "passed": 46,
+      "failed": 0,
+      "skipped": 0,
+      "nonPassed": []
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "build/IntegrationLaneProjects.cs",
+      "sha256": "E44AE89DA50266394D8C85BFF6294B838B728EF41DBEFB46F27ED70CC760C7C4"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneProjectsContract.cs",
+      "sha256": "1B202C40D25CB98684D62E4FA32524C0AE114C645439D1588576320549C94828"
+    },
+    {
+      "path": "tests/Build.Tests/IntegrationLaneProjectsMockGateTests.cs",
+      "sha256": "8EF4DA490168F40A5D174307B8CC81E06426D91F28FD46EABA5F527EA1D7FD40"
+    },
+    {
+      "path": "tests/Build.Tests/TestProjectOwnershipTests.cs",
+      "sha256": "ECA018723D56310042DBC3E12AD4F013822D6487E4B76729611A3923693317CC"
+    }
+  ],
+  "writtenLocal": "2026-11-07T10:55:17",
+  "writtenBy": "ClaudeCode"
+}

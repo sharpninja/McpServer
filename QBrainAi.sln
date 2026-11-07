@@ -111,6 +111,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QBrainAi.QBAgent.Integratio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Build.IntegrationTests", "tests\Build.IntegrationTests\Build.IntegrationTests.csproj", "{4E8B2D17-6C3A-4F95-B1D0-7A2E9C5F3B64}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QBrainAi.Support.Mcp.Environment.IntegrationTests", "tests\QBrainAi.Support.Mcp.Environment.IntegrationTests\QBrainAi.Support.Mcp.Environment.IntegrationTests.csproj", "{A6C2E8F4-3B71-4D95-8E0A-9F5D1C7B2E46}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -733,6 +735,18 @@ Global
 		{4E8B2D17-6C3A-4F95-B1D0-7A2E9C5F3B64}.Release|x64.Build.0 = Release|Any CPU
 		{4E8B2D17-6C3A-4F95-B1D0-7A2E9C5F3B64}.Release|x86.ActiveCfg = Release|Any CPU
 		{4E8B2D17-6C3A-4F95-B1D0-7A2E9C5F3B64}.Release|x86.Build.0 = Release|Any CPU
+		{A6C2E8F4-3B71-4D95-8E0A-9F5D1C7B2E46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6C2E8F4-3B71-4D95-8E0A-9F5D1C7B2E46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6C2E8F4-3B71-4D95-8E0A-9F5D1C7B2E46}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A6C2E8F4-3B71-4D95-8E0A-9F5D1C7B2E46}.Debug|x64.Build.0 = Debug|Any CPU
+		{A6C2E8F4-3B71-4D95-8E0A-9F5D1C7B2E46}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A6C2E8F4-3B71-4D95-8E0A-9F5D1C7B2E46}.Debug|x86.Build.0 = Debug|Any CPU
+		{A6C2E8F4-3B71-4D95-8E0A-9F5D1C7B2E46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6C2E8F4-3B71-4D95-8E0A-9F5D1C7B2E46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6C2E8F4-3B71-4D95-8E0A-9F5D1C7B2E46}.Release|x64.ActiveCfg = Release|Any CPU
+		{A6C2E8F4-3B71-4D95-8E0A-9F5D1C7B2E46}.Release|x64.Build.0 = Release|Any CPU
+		{A6C2E8F4-3B71-4D95-8E0A-9F5D1C7B2E46}.Release|x86.ActiveCfg = Release|Any CPU
+		{A6C2E8F4-3B71-4D95-8E0A-9F5D1C7B2E46}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -789,5 +803,6 @@ Global
 		{5B1E2C3D-7A44-4E61-9C2F-0D8A3B6E4F11} = {75E852DF-4CB3-4318-9A92-82F84CD3DFA7}
 		{9C7D4A21-3E58-4B9A-8F16-2A5C7E0B9D32} = {75E852DF-4CB3-4318-9A92-82F84CD3DFA7}
 		{4E8B2D17-6C3A-4F95-B1D0-7A2E9C5F3B64} = {75E852DF-4CB3-4318-9A92-82F84CD3DFA7}
+		{A6C2E8F4-3B71-4D95-8E0A-9F5D1C7B2E46} = {75E852DF-4CB3-4318-9A92-82F84CD3DFA7}
 	EndGlobalSection
 EndGlobal
