@@ -49,6 +49,8 @@ public abstract class TriageServiceTestsBase : IDisposable
         AffectedPaths = ["src/QBrainAi.Repl.Core/ReplCommandDispatcher.cs"],
     };
 
+    /// <summary>A triage TODO creator that forwards each create request to the given TODO service.</summary>
+    /// <remarks>2026-11-07, TEST-MCP-TRIAGE-001; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: summary added (slice S8, hostile validation finding R14-F4): this helper type became internal when slice S7 moved it into this shared base class, so it is documented like the other shared members; its code is unchanged.</remarks>
     internal sealed class ForwardingTriageTodoCreator : ITriageTodoCreator
     {
         private readonly ITodoService _todoService;
@@ -75,6 +77,8 @@ public abstract class TriageServiceTestsBase : IDisposable
         PlanPrompt = string.Empty,
     };
 
+    /// <summary>A time provider whose instant starts at the value it was created with and moves only when Advance is called.</summary>
+    /// <remarks>2026-11-07, TEST-MCP-TRIAGE-001; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: summary added (slice S8, hostile validation finding R14-F4): this helper type became internal when slice S7 moved it into this shared base class, so it is documented like the other shared members; its code is unchanged.</remarks>
     internal sealed class ManualTimeProvider : TimeProvider
     {
         private DateTimeOffset _utcNow;

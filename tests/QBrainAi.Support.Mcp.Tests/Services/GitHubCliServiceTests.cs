@@ -12,6 +12,7 @@ using Xunit;
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
 /// <summary>TR-PLANNED-CORE-013 (historical), TR-GH-013-001 (historical): Unit tests for GitHubCliService with mocked IProcessRunner.</summary>
+/// <remarks>2026-11-07, FR-MCP-FED-PATH-001 AC5; TR-MCP-USECASE-018 AC-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class. The real-host binding helper AssertForeignWorkspaceWithoutRepositoryIsRefusedAsync, which only the Windows and Linux Category=Integration classes of this file call, moved with those two classes to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S8, hostile validation finding R14-F4; operator 2026-11-06: "...Environment.IntegrationTests (Recommended)"), so this unit-owned project holds only unit cases; the unit cases and the other helpers are unchanged.</remarks>
 public sealed class GitHubCliServiceTests
 {
     private readonly IProcessRunner _processRunner = Substitute.For<IProcessRunner>();
@@ -472,28 +473,6 @@ public sealed class GitHubCliServiceTests
     }
 
     /// <summary>
-    /// FR-MCP-FED-PATH-001 AC5 real-host binding (operator 2026-10-29: "gh foreign-workspace AC (Recommended)"; holistic review
-    /// findings SRC-1 and SRC-4): on the running host, through the process path normalizer, a foreign-platform workspace (a Windows
-    /// path on a POSIX host, a POSIX path on Windows) with no configured repository never starts gh, and the failure names the
-    /// workspace and Mcp:GitHub:Repository. Which path is foreign depends on the running host, so the cases live in the Windows and
-    /// Linux integration classes below; the unit contract is GitHubCliInvocationPlanContractTests over simulated hosts.
-    /// </summary>
-    /// <param name="foreignWorkspacePath">A workspace path of the other platform than the running host.</param>
-    internal static async Task AssertForeignWorkspaceWithoutRepositoryIsRefusedAsync(string foreignWorkspacePath)
-    {
-        var processRunner = Substitute.For<IProcessRunner>();
-        var workspaceAccessor = TestWorkspaceAccessorHelper.Create(Substitute.For<ITodoService>(), repoRoot: foreignWorkspacePath);
-        var sut = new GitHubCliService(processRunner, NullLogger<GitHubCliService>.Instance, workspaceAccessor: workspaceAccessor);
-
-        var result = await sut.ListIssuesAsync("open", 5, cancellationToken: TestContext.Current.CancellationToken).ConfigureAwait(true);
-
-        Assert.False(result.Success);
-        Assert.Contains(workspaceAccessor.GetWorkspacePath()!, result.Error, StringComparison.Ordinal);
-        Assert.Contains(GitHubCliInvocationPlanContractTests.RepositorySetting, result.Error, StringComparison.Ordinal);
-        Assert.Empty(processRunner.ReceivedCalls());
-    }
-
-    /// <summary>
     /// TR-MCP-FED-PATH-001, BDPv4 mock gate for the working-directory predicates used above: they accept the
     /// specified requests and reject a missing directory, a different executable, a re-rooted foreign path (the
     /// defect: the foreign path joined under the process directory) and a foreign safe.directory, using synthetic
@@ -604,32 +583,4 @@ public sealed class GitHubCliServiceTests
            && key == "safe.directory"
            && request.EnvironmentVariables.TryGetValue("GIT_CONFIG_VALUE_0", out var value)
            && value == Path.GetFullPath(workspacePath);
-}
-
-/// <summary>
-/// FR-MCP-FED-PATH-001 AC5 real-host binding on a Windows host: a POSIX workspace path is foreign there (TR-MCP-USECASE-018
-/// AC-006, TR-MCP-NUKE-019).
-/// </summary>
-[Trait("Category", "Integration")]
-[Trait("Platform", "Windows")]
-public sealed class GitHubCliServiceWindowsTests
-{
-    /// <summary>gh is not started for a POSIX workspace with no configured repository, and the failure names the setting.</summary>
-    [Fact]
-    public Task ListIssuesAsync_WithForeignWorkspaceAndNoRepository_IsRefused() =>
-        GitHubCliServiceTests.AssertForeignWorkspaceWithoutRepositoryIsRefusedAsync("/srv/foreign/workspace");
-}
-
-/// <summary>
-/// FR-MCP-FED-PATH-001 AC5 real-host binding on a Linux host: a Windows drive workspace path is foreign there
-/// (TR-MCP-USECASE-018 AC-006, TR-MCP-NUKE-019).
-/// </summary>
-[Trait("Category", "Integration")]
-[Trait("Platform", "Linux")]
-public sealed class GitHubCliServiceLinuxTests
-{
-    /// <summary>gh is not started for a Windows drive workspace with no configured repository, and the failure names the setting.</summary>
-    [Fact]
-    public Task ListIssuesAsync_WithForeignWorkspaceAndNoRepository_IsRefused() =>
-        GitHubCliServiceTests.AssertForeignWorkspaceWithoutRepositoryIsRefusedAsync(@"C:\foreign\workspace");
 }

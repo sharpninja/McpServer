@@ -3,6 +3,7 @@ using QBrainAi.Client;
 using QBrainAi.Support.Mcp.Services;
 using QBrainAi.Support.Mcp.Tests.Storage;
 using Xunit;
+using static QBrainAi.Support.Mcp.Tests.Services.GitHubCliInvocationPlanContractTestsSupport;
 
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
@@ -15,6 +16,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// tests over simulated Linux and Windows hosts (the production normalizer over NSubstitute host doubles), so no row depends on the
 /// running host.
 /// </summary>
+/// <remarks>2026-11-07, FR-MCP-FED-PATH-001 AC5; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the setting name the refusal rows assert (RepositorySetting), which the real-host binding helper of GitHubCliServiceTests also asserts on, moved unchanged into Services/GitHubCliInvocationPlanContractTestsSupport.cs beside this file, which the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests links, so that helper, which moved there with the Windows and Linux classes that call it, reads the same one definition (slice S8, hostile validation finding R14-F4; DRY); this class reaches it through a using static directive, and its cases are unchanged.</remarks>
 public sealed class GitHubCliInvocationPlanContractTests
 {
     /// <summary>The configured repository the rows use.</summary>
@@ -22,9 +24,6 @@ public sealed class GitHubCliInvocationPlanContractTests
 
     /// <summary>The repository the scripted git configuration names for a native workspace.</summary>
     internal const string GitConfigRepository = "git/config";
-
-    /// <summary>The setting a refusal names.</summary>
-    internal const string RepositorySetting = "Mcp:GitHub:Repository";
 
     /// <summary>
     /// FR-MCP-FED-PATH-001 AC5 mock gate: every row holds for the scripted reference planner. Data: hand-written workspace paths and

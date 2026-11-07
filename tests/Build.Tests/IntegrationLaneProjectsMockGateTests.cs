@@ -32,7 +32,8 @@ public sealed class IntegrationLaneProjectsMockGateTests
     /// - the lane of slice S3, which still ran the infrastructure-owned Build.Tests;
     /// - the lane of slice S4, which did not yet run QBrainAi.Support.Mcp.EnvironmentIntegrationTests;
     /// - the lane before the project renames, which named QBrainAi.Support.Mcp.Environment.IntegrationTests and
-    ///   Build.IntegrationTests.
+    ///   Build.IntegrationTests;
+    /// - the lane of slices S5 to S7, which still ran the unit-owned QBrainAi.Support.Mcp.Tests first.
     /// </summary>
     /// <param name="fault">Injected fault.</param>
     /// <remarks>
@@ -40,6 +41,7 @@ public sealed class IntegrationLaneProjectsMockGateTests
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S4: DropsBuildTests became DropsBuildIntegrationTests, because Build.Tests left the lane and dropping it would no longer be a fault, and KeepsBuildTests was added, so the contract rejects the lane that still selects the infrastructure-owned Build.Tests; the other controls are unchanged.</para>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S5: added the negative control OmitsSupportMcpEnvironmentIntegration, so the contract rejects the lane of slice S4, which does not run the integration-owned QBrainAi.Support.Mcp.Environment.IntegrationTests (operator 2026-11-06: "...Environment.IntegrationTests (Recommended)"); the other controls are unchanged.</para>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: the project renames that follow slice S6 (operator 2026-11-07: "Project names and root namespaces for the project should match, so fix the project name."): DropsBuildIntegrationTests became DropsNukeBuildIntegrationTests, KeepsBuildTests and OmitsSupportMcpEnvironmentIntegration name the renamed projects, and the negative control KeepsPreRenameNames was added, so the contract rejects the lane that still names QBrainAi.Support.Mcp.Environment.IntegrationTests and Build.IntegrationTests; the other controls are unchanged.</para>
+    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S8 of hostile validation finding R14-F4: added the negative control KeepsSupportMcpTests, so the contract rejects the lane that still runs the unit-owned QBrainAi.Support.Mcp.Tests, whose last integration cases moved to QBrainAi.Support.Mcp.EnvironmentIntegrationTests; the other controls are unchanged, and those that name an earlier slice's lane now inject the same fault into the six-project lane of slice S8.</para>
     /// </remarks>
     [Theory]
     [InlineData(Fault.FixedFiveOnly)]
@@ -59,6 +61,7 @@ public sealed class IntegrationLaneProjectsMockGateTests
     [InlineData(Fault.KeepsBuildTests)]
     [InlineData(Fault.OmitsSupportMcpEnvironmentIntegration)]
     [InlineData(Fault.KeepsPreRenameNames)]
+    [InlineData(Fault.KeepsSupportMcpTests)]
     public void WrongSelector_IsRejected(Fault fault)
         => Assert.ThrowsAny<Xunit.Sdk.XunitException>(
             () => IntegrationLaneProjectsContract.AssertContract(new ScriptedSelector(fault)));
@@ -142,10 +145,20 @@ public sealed class IntegrationLaneProjectsMockGateTests
         /// </summary>
         /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: added for the project renames that follow slice S6 (operator 2026-11-07: "Project names and root namespaces for the project should match, so fix the project name.").</remarks>
         KeepsPreRenameNames,
+
+        /// <summary>
+        /// Selects the lane of slices S5 to S7: the unit-owned QBrainAi.Support.Mcp.Tests first, then the six integration-owned
+        /// lane projects.
+        /// </summary>
+        /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: added (slice S8 of hostile validation finding R14-F4).</remarks>
+        KeepsSupportMcpTests,
     }
 
     /// <summary>Scripted selector: the contract-derived selection and class names, with an optional injected fault.</summary>
-    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: DropsNukeBuildIntegrationTests, KeepsBuildTests and OmitsSupportMcpEnvironmentIntegration name the renamed projects, and KeepsPreRenameNames maps them back to their names before the project renames (operator 2026-11-07: "Project names and root namespaces for the project should match, so fix the project name.").</remarks>
+    /// <remarks>
+    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: DropsNukeBuildIntegrationTests, KeepsBuildTests and OmitsSupportMcpEnvironmentIntegration name the renamed projects, and KeepsPreRenameNames maps them back to their names before the project renames (operator 2026-11-07: "Project names and root namespaces for the project should match, so fix the project name.").</para>
+    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: KeepsSupportMcpTests puts QBrainAi.Support.Mcp.Tests back in front of the lane (slice S8); the other faults are unchanged.</para>
+    /// </remarks>
     private sealed class ScriptedSelector(Fault fault) : IIntegrationLaneProjects
     {
         /// <inheritdoc />
@@ -186,6 +199,7 @@ public sealed class IntegrationLaneProjectsMockGateTests
                     "NukeBuild.IntegrationTests" => "Build.IntegrationTests",
                     _ => project,
                 })],
+                Fault.KeepsSupportMcpTests => ["QBrainAi.Support.Mcp.Tests", .. lane],
                 _ => lane,
             };
         }

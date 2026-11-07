@@ -12,7 +12,8 @@ internal sealed record IntegrationLaneRun(string Name, string Path, string Filte
 /// <summary>TR-MCP-NUKE-019: pure lane composition, evidence validation and pre-provisioning policy.</summary>
 internal static class IntegrationLaneExecution
 {
-    /// <summary>Composes the seven projects in contract order, using their solution identity throughout.</summary>
+    /// <summary>Composes the lane projects in contract order, using their solution identity throughout.</summary>
+    /// <remarks>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: the summary no longer states a project count; slices S3 to S8 of hostile validation finding R14-F4 changed the lane's projects, which <see cref="IntegrationLaneProjects"/> names; the composition is unchanged.</remarks>
     /// <param name="projects">Explicit solution names and paths.</param>
     /// <param name="host">The supported lane host.</param>
     /// <returns>The runner inputs and their matching diagnostic/evidence outputs.</returns>

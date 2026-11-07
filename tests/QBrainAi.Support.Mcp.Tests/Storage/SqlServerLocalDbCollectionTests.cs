@@ -1,6 +1,7 @@
 using System.Reflection;
 using Xunit;
 using static QBrainAi.Support.Mcp.Tests.TestSupport.CollectionAssertions;
+using static QBrainAi.Support.Mcp.Tests.Storage.SqlServerLocalDbCollectionTestsSupport;
 
 namespace QBrainAi.Support.Mcp.Tests.Storage;
 
@@ -22,11 +23,10 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// name and a missing definition. The binding then checks the real definition and the four classes that open LocalDB
 /// connections; a new class that opens LocalDB must be added to the list (stated limit: the list is not discovered
 /// from source).
+/// <para>2026-11-07, FR-MCP-TESTRESOURCE-001 ac-7; TR-MCP-NUKE-019 AC-2; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the mock gate half of this class. Its binding case (LocalDbClasses_AreInTheSqlServerLocalDbCollection) names the SQL Server test classes, which moved to the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S8, hostile validation finding R14-F4; operator 2026-11-06: "...Environment.IntegrationTests (Recommended)"), which this unit project cannot reference, so it moved to the class of the same name there and carries Category=Integration; the collection name both halves use (RequiredCollection) moved once into Storage/SqlServerLocalDbCollectionTestsSupport.cs beside this file, which the integration project links (DRY); the four mock gate cases and the scripted types are unchanged.</para>
 /// </remarks>
 public sealed class SqlServerLocalDbCollectionTests
 {
-    private const string RequiredCollection = "SQL Server LocalDB";
-
     private const string ScriptedSerializedName = "Scripted serialized collection";
 
     private const string ScriptedParallelName = "Scripted parallel collection";
@@ -69,29 +69,6 @@ public sealed class SqlServerLocalDbCollectionTests
     {
         Assert.NotNull(Record.Exception(() => AssertInCollection(typeof(ScriptedOutsider), RequiredCollection)));
         Assert.NotNull(Record.Exception(() => AssertInCollection(typeof(ScriptedOtherMember), RequiredCollection)));
-    }
-
-    /// <summary>
-    /// Binding: the collection is defined with the required name and parallelization disabled (the same definition
-    /// assertion the scripted definitions passed and failed), and each of the four classes that open LocalDB
-    /// connections passes the same membership assertion.
-    /// </summary>
-    [Fact]
-    public void LocalDbClasses_AreInTheSqlServerLocalDbCollection()
-    {
-        Assert.Equal(RequiredCollection, SqlServerLocalDbCollection.Name);
-        AssertSerializedDefinition(typeof(SqlServerLocalDbCollection), RequiredCollection);
-
-        foreach (var type in new[]
-                 {
-                     typeof(SqlServerAuditPayloadMigrationTests),
-                     typeof(SqlServerDecompose4nfBackfillMigrationTests),
-                     typeof(SqlServerRenameQuadBrainRolesMigrationTests),
-                     typeof(SessionLogAgentSessionHeaderMigrationTests),
-                 })
-        {
-            AssertInCollection(type, RequiredCollection);
-        }
     }
 
     /// <summary>Scripted type in the required collection; it holds no tests.</summary>

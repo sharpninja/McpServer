@@ -21,17 +21,11 @@ namespace QBrainAi.Support.Mcp.Tests.TestSupport;
 /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
 /// <item><term>2026-11-05</term><description>TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): added the shared age-boundary contract and its mock gate, because hostile validation round 12 finding R12-F2 and its sibling sweep found 37 unit cases whose stale-turn, temporary-file, hygiene, envelope, manifest, lease and lock decisions ran on the live clock.</description></item>
 /// <item><term>2026-11-06</term><description>TR-MCP-USECASE-018 AC-006 (appended 2026-11-06, "This includes an age, expiry or staleness decision that a background callback in the code under test makes"): added decisions D8 (the voice idle-session cleanup that the service's cleanup timer runs) and D9 (the voice device-session idle skip), because hostile validation round 13 finding R13-F1 found that the cleanup decision ran on the live clock from a real timer, and the R12-F2 sweep had excluded it on elapsed time alone (entry N35). The earlier decisions and rows are unchanged.</description></item>
+/// <item><term>2026-11-07</term><description>TR-MCP-USECASE-018 AC-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the reference times (References) moved unchanged into the abstract base class AgeBoundaryContractTestsBase in TestSupport/AgeBoundaryContractTestsBase.cs beside this file, which this class now derives from, so every unit class that names AgeBoundaryContractTests.References still does, and the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests links the base for the clock that both halves of WorkspaceHygieneG5OverlayTests share (slice S8, hostile validation finding R14-F4; DRY); the rows, decisions and cases are unchanged.</description></item>
 /// </list>
 /// </remarks>
-public sealed class AgeBoundaryContractTests
+public sealed class AgeBoundaryContractTests : AgeBoundaryContractTestsBase
 {
-    /// <summary>The reference times every decision is asserted at: one far before and one far after the real clock.</summary>
-    internal static readonly DateTimeOffset[] References =
-    [
-        new(2001, 2, 3, 4, 5, 6, TimeSpan.Zero),
-        new(2041, 2, 3, 4, 5, 6, TimeSpan.Zero),
-    ];
-
     /// <summary>The distance of the rows before and after each threshold.</summary>
     internal static readonly TimeSpan Step = TimeSpan.FromSeconds(1);
 

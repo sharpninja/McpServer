@@ -19,13 +19,10 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// simulated Linux hub or Windows host, so results do not depend on the test runner's OS.
 /// BDP v4 (plan section 2a): MockData fixture then Real fixture.
 /// </summary>
-public abstract class WorkspacePathConsumersContractTests
+/// <remarks>2026-11-07, TEST-MCP-FED-PATH-001; FR-MCP-FED-PATH-001-AC4; TR-MCP-USECASE-018 AC-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit contract of this pair (ClaudeCode decision on the S7 leftover). Its Category=Integration case (RepoFiles_ForeignWorkspace_WriteFailsAndCreatesNothing), which checks the real filesystem under both fixtures, moved unchanged with the RepoFileService section to the abstract contract of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests, whose MockData and Real fixtures of the same names run it there (slice S8, hostile validation finding R14-F4; operator 2026-11-06: "...Environment.IntegrationTests (Recommended)"), so this unit-owned project holds only unit cases; the host constant and the normalizer hook both contracts use (WindowsHost and Normalizer) moved once into the abstract base class WorkspacePathConsumersContractTestsBase in Services/WorkspacePathConsumersContractTestsBase.cs beside this file, which both contracts derive from and the integration project links (DRY); the unit cases are unchanged.</remarks>
+public abstract class WorkspacePathConsumersContractTests : WorkspacePathConsumersContractTestsBase
 {
     private const WorkspacePathPlatform LinuxHub = WorkspacePathPlatform.CaseSensitive;
-    private const WorkspacePathPlatform WindowsHost = WorkspacePathPlatform.Windows;
-
-    /// <summary>Normalizer for a simulated host of the given platform.</summary>
-    protected abstract IWorkspacePathNormalizer Normalizer(WorkspacePathPlatform hostPlatform);
 
     // ---- HandoffWorkspacePaths (every MCP tool workspace override flows through it) ----
 
@@ -156,41 +153,10 @@ public abstract class WorkspacePathConsumersContractTests
         Assert.Equal("/fixture/workspaces/ExampleWorkspace/docs/sessions", wsContext.SessionsPath);
         Assert.Equal("/fixture/workspaces/ExampleWorkspace/docs/external", wsContext.ExternalDocsPath);
     }
-
-    // ---- RepoFileService ----
-
-    /// <summary>
-    /// FR-MCP-FED-PATH-001-AC4: repo writes for a foreign-platform workspace fail and create
-    /// nothing at a host re-rooting of the path.
-    /// Integration: observes a physical host-root spelling. A unique name and precondition ensure cleanup can
-    /// remove only a folder this invocation could have caused, never a pre-existing one (slice M SVC-13).
-    /// </summary>
-    [Trait("Category", "Integration")]
-    [Fact]
-    public async Task RepoFiles_ForeignWorkspace_WriteFailsAndCreatesNothing()
-    {
-        const string leaf = "__mcp_unit_test__repo";
-        var hostRewrite = Path.Combine(Path.GetPathRoot(Environment.CurrentDirectory)!, leaf);
-        Assert.False(Directory.Exists(hostRewrite) || File.Exists(hostRewrite),
-            "Refusal-test target already exists; preserving it and refusing to enter the SUT.");
-        var sut = new RepoFileService(
-            Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = Path.GetTempPath() }),
-            new WorkspaceContext { WorkspacePath = "/" + leaf },
-            Substitute.For<IWriteAuditLog>(),
-            NullLogger<RepoFileService>.Instance,
-            Substitute.For<IChangeEventBus>(),
-            Normalizer(WindowsHost));
-
-        var write = await sut.WriteAsync("notes.md", "x", TestContext.Current.CancellationToken);
-        var read = await sut.ReadAsync("notes.md", TestContext.Current.CancellationToken);
-
-        Assert.False(write.Written);
-        Assert.Null(read);
-        Assert.False(Directory.Exists(hostRewrite), $"Repo write created {hostRewrite}; retained as failure evidence.");
-    }
 }
 
 /// <summary>BDP v4 step 2: consumer path contracts against scripted normalizer data.</summary>
+/// <remarks>2026-11-07, TEST-MCP-FED-PATH-001; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the integration case this fixture inherited (RepoFiles_ForeignWorkspace_WriteFailsAndCreatesNothing) now runs from the fixture of the same name in QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S8, hostile validation finding R14-F4); this fixture runs the unit cases of its contract, unchanged.</remarks>
 public sealed class WorkspacePathConsumersMockDataTests : WorkspacePathConsumersContractTests
 {
     /// <inheritdoc />
@@ -199,6 +165,7 @@ public sealed class WorkspacePathConsumersMockDataTests : WorkspacePathConsumers
 }
 
 /// <summary>BDP v4 step 3: consumer path contracts against the production normalizer.</summary>
+/// <remarks>2026-11-07, TEST-MCP-FED-PATH-001; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the integration case this fixture inherited (RepoFiles_ForeignWorkspace_WriteFailsAndCreatesNothing) now runs from the fixture of the same name in QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S8, hostile validation finding R14-F4); this fixture runs the unit cases of its contract, unchanged.</remarks>
 public sealed class WorkspacePathConsumersRealTests : WorkspacePathConsumersContractTests
 {
     /// <inheritdoc />

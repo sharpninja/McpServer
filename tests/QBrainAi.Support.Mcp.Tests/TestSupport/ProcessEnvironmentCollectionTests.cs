@@ -1,6 +1,7 @@
 using QBrainAi.Support.Mcp.Tests.Documentation;
 using Xunit;
 using static QBrainAi.Support.Mcp.Tests.TestSupport.CollectionAssertions;
+using static QBrainAi.Support.Mcp.Tests.TestSupport.ProcessEnvironmentCollectionTestsSupport;
 
 namespace QBrainAi.Support.Mcp.Tests.TestSupport;
 
@@ -23,11 +24,10 @@ namespace QBrainAi.Support.Mcp.Tests.TestSupport;
 /// desktop spawner's environment-delta case, which owns its GH_TOKEN baseline (hostile validation round 8b finding
 /// R8B-F1). Stated
 /// limit: the list is not discovered from source; a new class that writes the process environment must be added to it.
+/// <para>2026-11-07, FR-MCP-TESTRESOURCE-001 ac-9; TR-MCP-USECASE-018 AC-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the mock gate half of this class. Its binding case (ProcessEnvironmentWriters_AreInASerializedCollection) names test classes that moved to the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S8, hostile validation finding R14-F4; operator 2026-11-06: "...Environment.IntegrationTests (Recommended)"), which this unit project cannot reference, so it moved to the class of the same name there and carries Category=Integration; the collection name both halves use (RequiredCollection) moved once into TestSupport/ProcessEnvironmentCollectionTestsSupport.cs beside this file, which the integration project links (DRY); the three mock gate cases and the scripted types are unchanged.</para>
 /// </remarks>
 public sealed class ProcessEnvironmentCollectionTests
 {
-    private const string RequiredCollection = "Process environment";
-
     /// <summary>Mock gate positive control: a scripted type in the required collection passes the assertion.</summary>
     [Fact]
     public void ScriptedMember_PassesTheMembershipAssertion() =>
@@ -53,42 +53,6 @@ public sealed class ProcessEnvironmentCollectionTests
     [Fact]
     public void RepositoryRootCollection_IsSerialized() =>
         AssertSerializedDefinition(typeof(RepositoryRootProcessStateCollection), RepositoryRootProcessStateCollection.Name);
-
-    /// <summary>
-    /// Binding: the collection is defined with the required name and parallelization disabled (the same definition
-    /// assertion the scripted definitions of <c>SqlServerLocalDbCollectionTests</c> passed and failed); each class the
-    /// sweep found writing the process environment passes the same membership assertion; and the repository-root
-    /// writer stays in its own serialized collection.
-    /// </summary>
-    [Fact]
-    public void ProcessEnvironmentWriters_AreInASerializedCollection()
-    {
-        Assert.Equal(RequiredCollection, ProcessEnvironmentCollection.Name);
-        AssertSerializedDefinition(typeof(ProcessEnvironmentCollection), RequiredCollection);
-
-        foreach (var type in new[]
-                 {
-                     typeof(QBrainAi.Support.Mcp.Tests.Options.ProductAliasCompatibilityTests),
-                     typeof(QBrainAi.Support.Mcp.Tests.Options.McpInstanceResolverTests),
-                     typeof(QBrainAi.Support.Mcp.Tests.Services.BrainSlotCredentialResolverTests),
-                     typeof(QBrainAi.Support.Mcp.Tests.Memory.MemoryIndexerTests),
-                     typeof(QBrainAi.Support.Mcp.Tests.Services.CliBrainSlotStrategyTests),
-                     typeof(QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyTests),
-                     typeof(QBrainAi.Support.Mcp.Tests.DatabaseMaintenance.McpDatabaseEncryptionTransitionCommandTests),
-                     typeof(QBrainAi.Support.Mcp.Tests.Services.ProcessEnvironmentServiceTests),
-                     typeof(QBrainAi.Support.Mcp.Tests.Memory.MemoryBenchHarnessTests),
-                     typeof(QBrainAi.Support.Mcp.Tests.Services.OneShotCliAgentExecutionStrategyTests),
-                     typeof(QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyWindowsTests),
-                     typeof(QBrainAi.Support.Mcp.Tests.Services.CodexCliAgentExecutionStrategyLinuxTests),
-                     typeof(CliTempVariablesTests),
-                     typeof(QBrainAi.Support.Mcp.Tests.Services.DesktopProcessSpawnerTests),
-                 })
-        {
-            AssertInCollection(type, RequiredCollection);
-        }
-
-        AssertInCollection(typeof(BugTriage139FourteenthHarnessTests), RepositoryRootProcessStateCollection.Name);
-    }
 
     /// <summary>Scripted type in the required collection; it holds no tests.</summary>
     [Collection(RequiredCollection)]

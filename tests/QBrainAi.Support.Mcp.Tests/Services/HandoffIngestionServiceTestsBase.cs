@@ -68,6 +68,8 @@ public abstract class HandoffIngestionServiceTestsBase : IDisposable
             new DurabilityDbFactory(_dbOptions, workspace));
     }
 
+    /// <summary>A database context factory that creates each McpDbContext over the given options for the given workspace.</summary>
+    /// <remarks>2026-11-07, TEST-HANDOFF-002; TEST-HANDOFF-007; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: summary added (slice S8, hostile validation finding R14-F4): this helper type became internal when slice S7 moved it into this shared base class, so it is documented like the other shared members; its code is unchanged.</remarks>
     internal sealed class DurabilityDbFactory : IDbContextFactory<McpDbContext>
     {
         private readonly DbContextOptions<McpDbContext> _options;
@@ -134,6 +136,8 @@ public abstract class HandoffIngestionServiceTestsBase : IDisposable
             {"id":"{{id}}","title":"Demo","section":"QBrain.AI","priority":"high","estimate":"2h","description":["Do the work"],"technicalDetails":["Use the service"],"implementationTasks":[{"task":"Write tests","done":false}],"dependsOn":[],"functionalRequirements":["FR-HANDOFF-001"],"technicalRequirements":["TR-HANDOFF-CONTRACT-001"],"confidence":{{confidence.ToString(System.Globalization.CultureInfo.InvariantCulture)}},"unknownSourceNotes":[{{(unknownNotes is null ? "" : $"\"{unknownNotes}\"")}}]}
             """;
 
+    /// <summary>A time provider fixed at the instant it was created with.</summary>
+    /// <remarks>2026-11-07, TEST-HANDOFF-002; TEST-HANDOFF-007; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: summary added (slice S8, hostile validation finding R14-F4): this helper type became internal when slice S7 moved it into this shared base class, so it is documented like the other shared members; its code is unchanged.</remarks>
     internal sealed class ManualTimeProvider : TimeProvider
     {
         private readonly DateTimeOffset _utcNow;

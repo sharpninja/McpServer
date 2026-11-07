@@ -38,6 +38,8 @@ public abstract class CodexCliAgentExecutionStrategyTestsBase
                 AgentOutputReceivedAsync = outputReceivedAsync,
             });
 
+    /// <summary>A process environment service that leaves every start info unchanged and resolves an executable to the name it is given, so a launch is captured as the strategy built it.</summary>
+    /// <remarks>2026-11-07, TEST-MCP-TRIAGE-003; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: summary added (slice S8, hostile validation finding R14-F4): this helper type became internal when slice S7 moved it into this shared base class, so it is documented like the other shared members; its code is unchanged.</remarks>
     internal sealed class CapturingProcessEnvironmentService : IProcessEnvironmentService
     {
         public void ApplyGitHubToken(ProcessStartInfo psi, string? token)
@@ -55,6 +57,8 @@ public abstract class CodexCliAgentExecutionStrategyTestsBase
         public string ResolveExecutable(ProcessStartInfo psi, string fileName) => fileName;
     }
 
+    /// <summary>A process spawner that records the start info and the output paths of the launch and returns a scripted FakeSpawnedProcess with the given exit code and streams; no process starts.</summary>
+    /// <remarks>2026-11-07, TEST-MCP-TRIAGE-003; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: summary added (slice S8, hostile validation finding R14-F4): this helper type became internal when slice S7 moved it into this shared base class, so it is documented like the other shared members; its code is unchanged.</remarks>
     internal sealed class CapturingProcessSpawner(
         int exitCode,
         string outputBody = "",
@@ -126,6 +130,8 @@ public abstract class CodexCliAgentExecutionStrategyTestsBase
         }
     }
 
+    /// <summary>A spawned process double with a scripted exit code, standard output and standard error, which keeps what is written to its standard input and can wait for cancellation instead of exiting.</summary>
+    /// <remarks>2026-11-07, TEST-MCP-TRIAGE-003; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: summary added (slice S8, hostile validation finding R14-F4): this helper type became internal when slice S7 moved it into this shared base class, so it is documented like the other shared members; its code is unchanged.</remarks>
     internal sealed class FakeSpawnedProcess : ISpawnedProcess
     {
         private readonly MemoryStream _standardInput = new();

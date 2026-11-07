@@ -10,8 +10,10 @@ using Xunit;
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
 /// <summary>Unit tests for FRP tunnel provider helper logic and failure paths.</summary>
-/// <remarks>2026-11-07, TR-MCP-USECASE-018 AC-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 2 Category=Integration cases (GetStatusAsync_WhenTrackedProcessExited_ReturnsExitError and Dispose_WhenTempConfigExists_DeletesFileAndClearsConfigPath) and the helpers only they use (SetPrivateField, GetPrivateField and StartExitedDotnetProcess) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the state and helpers both halves use (_processRunner, CreateSut and CreateOptions) moved once into the abstract base class FrpTunnelProviderTestsBase in Services/FrpTunnelProviderTestsBase.cs beside this file, which both halves derive from and the integration project links (DRY); the unit cases and the class attributes are unchanged.</remarks>
-
+/// <remarks>
+/// <para>2026-11-07, TR-MCP-USECASE-018 AC-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the unit half of this class: its 2 Category=Integration cases (GetStatusAsync_WhenTrackedProcessExited_ReturnsExitError and Dispose_WhenTempConfigExists_DeletesFileAndClearsConfigPath) and the helpers only they use (SetPrivateField, GetPrivateField and StartExitedDotnetProcess) moved unchanged to the class of the same name in the integration-owned QBrainAi.Support.Mcp.EnvironmentIntegrationTests (slice S7, hostile validation finding R14-F4), so this unit-owned project holds only unit cases; the state and helpers both halves use (_processRunner, CreateSut and CreateOptions) moved once into the abstract base class FrpTunnelProviderTestsBase in Services/FrpTunnelProviderTestsBase.cs beside this file, which both halves derive from and the integration project links (DRY); the unit cases and the class attributes are unchanged.</para>
+/// <para>2026-11-07, TR-MCP-USECASE-018 AC-006; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: the blank line that separated this documentation from the class declaration was removed (slice S8, hostile validation finding R14-F4), so the documentation sits directly on the declaration and the documentation scan finds it; the text is unchanged.</para>
+/// </remarks>
 public sealed class FrpTunnelProviderTests : FrpTunnelProviderTestsBase
 {
     [Fact]

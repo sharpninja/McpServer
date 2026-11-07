@@ -17,6 +17,8 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// <remarks>2026-11-07, TEST-MCP-QBCLI-001; TR-MCP-USECASE-018 AC-006; TR-MCP-USECASE-019 AC-008; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: extracted unchanged from CliBrainSlotStrategyTests (StaticOptionsMonitor) when that class split into its unit half and its integration half (slice S7, hostile validation finding R14-F4), so both halves use one definition instead of a copy (DRY); only the accessibility changed, from private to internal.</remarks>
 internal static class CliBrainSlotStrategyTestsSupport
 {
+    /// <summary>An options monitor that returns the value it was created with for every name and never reports a change.</summary>
+    /// <remarks>2026-11-07, TEST-MCP-QBCLI-001; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: summary added (slice S8, hostile validation finding R14-F4): this helper type became internal when slice S7 moved it into this shared support file, so it is documented like the other shared members; its code is unchanged.</remarks>
     internal sealed class StaticOptionsMonitor<T>(T value) : IOptionsMonitor<T>
         where T : class
     {

@@ -22,6 +22,8 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// <remarks>2026-11-07, TEST-MCP-DOCFXWIKI-001; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: extracted unchanged from RequirementsWikiExportOrchestratorTests (RecordingDocFxWorkflowRunner and RequirementsWikiWorkspace) when that class split into its unit half and its integration half (slice S7, hostile validation finding R14-F4), so both halves use one definition instead of a copy (DRY); only the accessibility changed, from private to internal.</remarks>
 internal static class RequirementsWikiExportOrchestratorTestsSupport
 {
+    /// <summary>A DocFX workflow runner double that counts its calls and returns the scripted documents, or throws the scripted failure.</summary>
+    /// <remarks>2026-11-07, TEST-MCP-DOCFXWIKI-001; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: summary added (slice S8, hostile validation finding R14-F4): this helper type became internal when slice S7 moved it into this shared support file, so it is documented like the other shared members; its code is unchanged.</remarks>
     internal sealed class RecordingDocFxWorkflowRunner : IRequirementsDocFxWorkflowRunner
     {
         public int CallCount { get; private set; }
@@ -40,6 +42,8 @@ internal static class RequirementsWikiExportOrchestratorTestsSupport
         }
     }
 
+    /// <summary>A temporary workspace folder with a docs/Project folder, whose CreateOptions points the requirements documents into it.</summary>
+    /// <remarks>2026-11-07, TEST-MCP-DOCFXWIKI-001; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: summary added (slice S8, hostile validation finding R14-F4): this helper type became internal when slice S7 moved it into this shared support file, so it is documented like the other shared members; its code is unchanged.</remarks>
     internal sealed class RequirementsWikiWorkspace : IDisposable
     {
         public RequirementsWikiWorkspace()

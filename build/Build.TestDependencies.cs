@@ -120,6 +120,7 @@ partial class Build
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S4 changes the lane's projects the same way (Build.IntegrationTests replaces Build.Tests); the lane builds Build.IntegrationTests itself, because DotNetTest here runs without --no-build and Compile leaves that project out; this target's code is unchanged.</para>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S5 adds QBrainAi.Support.Mcp.Environment.IntegrationTests to the lane through <see cref="IntegrationLaneProjects"/>, immediately after QBrainAi.Support.Mcp.Tests; this target's code is unchanged and its comments name the new composition.</para>
     /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: the project renames that follow slice S6 (operator 2026-11-07: "Project names and root namespaces for the project should match, so fix the project name.") reach the lane through <see cref="IntegrationLaneProjects"/>: QBrainAi.Support.Mcp.EnvironmentIntegrationTests and NukeBuild.IntegrationTests run in the positions of QBrainAi.Support.Mcp.Environment.IntegrationTests and Build.IntegrationTests; the lane still builds NukeBuild.IntegrationTests itself, which Compile leaves out; this target's code and comments are unchanged.</para>
+    /// <para>2026-11-07, FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-2, AC-7: slice S8 takes QBrainAi.Support.Mcp.Tests out of the lane through <see cref="IntegrationLaneProjects"/> once it holds no integration case, so the lane runs only integration-owned projects; the comment on the composition no longer states a project count, which changed with every slice; this target's code is unchanged.</para>
     /// </remarks>
     public Target MigrationIntegrationTests => _ => _
         .Description("Run Category=Integration tests (provider migrations, process spawns) with provisioned dependencies")
@@ -128,7 +129,7 @@ partial class Build
         {
             // TR-MCP-NUKE-019 AC-2/AC-3: a tested composition owns identity, path, filter, log and TRX naming;
             // every project's TRX must prove a nonempty all-passing result, independently of runner exit semantics.
-            // TR-MCP-NUKE-019 AC-2: the seven lane projects IntegrationLaneProjects names, in run order (Repl.IntegrationTests and
+            // TR-MCP-NUKE-019 AC-2: the lane projects IntegrationLaneProjects names, in run order (Repl.IntegrationTests and
             // QBAgent.IntegrationTests hold the tests that read the repository checkout through the shared TestRepositoryRoot,
             // TR-MCP-USECASE-018 AC-006; from QBrainAi.Support.Mcp.IntegrationTests only the classes it names run).
             var solutionProjects = Solution.GetAllProjects("*").ToArray();

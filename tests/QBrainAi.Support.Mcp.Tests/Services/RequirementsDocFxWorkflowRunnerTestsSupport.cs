@@ -47,6 +47,8 @@ internal static class RequirementsDocFxWorkflowRunnerTestsSupport
         };
     }
 
+    /// <summary>A process runner that records each request and cancellation token and answers with the queued handlers in order, or with exit code 0 and "ok" once none is queued; no process starts.</summary>
+    /// <remarks>2026-11-07, TEST-MCP-DOCFXWIKI-001; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: summary added (slice S8, hostile validation finding R14-F4): this helper type became internal when slice S7 moved it into this shared support file, so it is documented like the other shared members; its code is unchanged.</remarks>
     internal sealed class RecordingProcessRunner : IProcessRunner
     {
         private readonly Queue<Func<ProcessRunRequest, CancellationToken, ProcessRunResult>> _handlers = new();
@@ -71,6 +73,8 @@ internal static class RequirementsDocFxWorkflowRunnerTestsSupport
         }
     }
 
+    /// <summary>A temporary workspace folder with a docs/docfx folder, deleted on dispose.</summary>
+    /// <remarks>2026-11-07, TEST-MCP-DOCFXWIKI-001; FR-MCP-BUILD-001; TR-MCP-NUKE-019 AC-7: summary added (slice S8, hostile validation finding R14-F4): this helper type became internal when slice S7 moved it into this shared support file, so it is documented like the other shared members; its code is unchanged.</remarks>
     internal sealed class TestWorkspace : IDisposable
     {
         public TestWorkspace()
