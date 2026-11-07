@@ -12,6 +12,15 @@ namespace QBrainAi.Support.Mcp.Tests.Storage;
 /// green against scripted data; <see cref="WorkspacePathNormalizerRealTests"/> runs the same tests
 /// against the production implementation.
 /// </summary>
+/// <remarks>
+/// Requirement coverage named by requirement evidence: TR-MCP-FED-PATH-001 AC1 and TEST-MCP-FED-PATH-001 AC1, through
+/// the root-relative Combine cases CombineResolvesRootRelativeWindowsSegmentAgainstDrive and
+/// CombineResolvesRootRelativeWindowsSegmentAgainstUncShare.
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>TR-MCP-FED-PATH-001 AC1 and TEST-MCP-FED-PATH-001 AC1: cites the criteria it proves, so the evidence no longer names the test (operator: "Must be fixed.").</description></item>
+/// </list>
+/// </remarks>
 public abstract class WorkspacePathNormalizerContractTests
 {
     /// <summary>Working directory of the simulated Linux hub.</summary>

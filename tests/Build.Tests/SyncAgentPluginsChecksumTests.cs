@@ -4,6 +4,13 @@ namespace NukeBuild.Tests;
 /// FR-MCP-PLUGINCORE-004 AC3: the committed sync path must produce official plugin copies
 /// that match canonical plugin-core lib-ps files without relying on sibling working trees.
 /// </summary>
+/// <remarks>
+/// Requirement coverage named by requirement evidence: TR-MCP-NUKE-006 AC-002.
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>TR-MCP-NUKE-006 AC-002: cites the criterion whose evidence names this class, so the evidence no longer names the test (operator: "Must be fixed.").</description></item>
+/// </list>
+/// </remarks>
 public sealed class SyncAgentPluginsChecksumTests
 {
     /// <summary>

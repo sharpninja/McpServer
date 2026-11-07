@@ -18,7 +18,14 @@ public sealed class BugTriage139EighteenthTraversalTests
     /// Proves a metadata stall cannot hold the public caller indefinitely and that the root remains
     /// physically pinned until the isolated traversal worker actually exits.
     /// </summary>
-    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
+    /// <remarks>
+    /// Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).
+    /// Proves TR-MCP-USECASE-019 AC-004 (a bounded traversal or file worker holds a reference on the export root descriptor until it actually exits).
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-06</term><description>TR-MCP-USECASE-019 AC-004: cites the criterion it proves, so the criterion text no longer names the test (operator: "Must be fixed.").</description></item>
+    /// </list>
+    /// </remarks>
     [Fact]
     public async Task EnumerateFilesBoundedAsync_BlockingMetadata_TimesOutWithTruthfulWorkerAccounting()
     {

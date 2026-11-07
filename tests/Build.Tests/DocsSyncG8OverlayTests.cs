@@ -7,6 +7,14 @@ namespace NukeBuild.Tests;
 /// Overlay G8: docs, SyncAgentPlugins, ValidateTraceability, ValidateConfig, and wiki-export
 /// gates against shipped Nuke targets and validators. Skipped tests are failures.
 /// </summary>
+/// <remarks>
+/// Requirement coverage named by requirement evidence: TR-MCP-NUKE-006 AC-002 and TR-MCP-NUKE-008 AC-002 (through
+/// G8_ValidateConfig_ShippedValidator_PassesOnLiveAppsettings).
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>TR-MCP-NUKE-006 AC-002 and TR-MCP-NUKE-008 AC-002: cites the criteria whose evidence names this class, so the evidence no longer names the test (operator: "Must be fixed.").</description></item>
+/// </list>
+/// </remarks>
 public sealed class DocsSyncG8OverlayTests
 {
     private static readonly Regex FrHeadingPattern = new(

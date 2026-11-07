@@ -16,6 +16,13 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// named scope (omitted/empty cleared); DELETE removes a session, turn, section,
 /// or single item. Backs the PATCH-vs-PUT verb split agreed 2026-06-13.
 /// </summary>
+/// <remarks>
+/// Requirement coverage named by a TEST record: TEST-MCP-DB-006 AC2 (DeleteTurnAsync stays correct under the keyed lock).
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>TEST-MCP-DB-006 (AC2 of its description): cites the record whose description names this class, so the description no longer names the test (operator: "Must be fixed.").</description></item>
+/// </list>
+/// </remarks>
 public sealed class SessionLogServiceReplaceDeleteTests
 {
     private const string WorkspacePath = @"E:\tests\sessionlog-replace-delete";

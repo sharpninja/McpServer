@@ -8,6 +8,13 @@ namespace NukeBuild.Tests;
 /// produces, derived from the plugin core manifest's name and version, so renaming the package does not stop the sync. Build-infrastructure
 /// test, accountable through TR only. Fixtures: temporary directories holding a package.json written for each case; no mocks, no npm.
 /// </summary>
+/// <remarks>
+/// Requirement coverage: TR-MCP-SYNC-001 AC-001 (the vendor step expects the file name npm pack derives from the manifest).
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>TR-MCP-SYNC-001 AC-001: cites the criterion it proves, so the criterion text no longer names the test (operator: "Must be fixed.").</description></item>
+/// </list>
+/// </remarks>
 public sealed class SyncAgentPluginsPackNameTests
 {
     /// <summary>

@@ -78,6 +78,14 @@ public sealed class PluginSessionLogWorkflowAdapterTests
     /// Maps TEST-MCP-PLUGININT-001 AC2 workflow half.
     /// </summary>
     /// <param name="hostKind">One of the eight catalog host kinds.</param>
+    /// <remarks>
+    /// Its five PowerShell host rows also prove TEST-MCP-PLUGININT-001 AC-001 (each PowerShell host's scenario session id,
+    /// set through MCP_SESSION_ID, persists from its first plugin call and is captured here).
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-06</term><description>TEST-MCP-PLUGININT-001 AC-001: cites the criterion it proves, so the criterion text no longer names the test (operator: "Must be fixed.").</description></item>
+    /// </list>
+    /// </remarks>
     [Theory(Timeout = 120000)]
     [InlineData(PluginHostKind.Codex)]
     [InlineData(PluginHostKind.ClaudeCode)]

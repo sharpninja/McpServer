@@ -9,6 +9,14 @@ namespace QBrainAi.Repl.IntegrationTests;
 /// in-memory file system in QBrainAi.Repl.Core.Tests (MarkerWalkTests, FR-MCP-REPL-007 ac-1 to AC-4), because on a
 /// real host the walk from a temporary folder can reach a parent workspace's marker, which is intended.
 /// </summary>
+/// <remarks>
+/// Requirement coverage named by requirement evidence: FR-MCP-REPL-008 (its second and third criteria, which carry no
+/// criterion ids).
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>FR-MCP-REPL-008 (criteria without ids): cites the criteria whose evidence names this class, so the evidence no longer names the test (operator: "Must be fixed.").</description></item>
+/// </list>
+/// </remarks>
 [Trait("Category", "Integration")]
 public sealed class MarkerFileClientOptionsResolverTests : IDisposable
 {

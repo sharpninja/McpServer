@@ -12,6 +12,16 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// through in-process application/CQRS or transaction-gated services. Unknown catalog-absent mcp_ names return
 /// Unhandled. Tests mock those services and do not depend on the Windows service.
 /// </summary>
+/// <remarks>
+/// Requirement coverage named by requirement evidence: FR-MCP-QBEXEC-001 (its fourth and eighth criteria, which carry no
+/// criterion ids; the eighth through Executor_DoesNotDependOnHttpClient) and FR-MCP-QBEXEC-002 (all eight criteria, which
+/// carry no criterion ids, through Execute_CatalogName_IsHandled, Execute_UnknownCatalogAbsentMcpName_ReturnsUnhandled and
+/// Executor_DoesNotDependOnHttpClient).
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>FR-MCP-QBEXEC-001 and FR-MCP-QBEXEC-002 (criteria without ids): cites the criteria whose evidence names this class, so the evidence no longer names the test (operator: "Must be fixed.").</description></item>
+/// </list>
+/// </remarks>
 public sealed class QuadBrainInternalToolExecutorTests
 {
     private readonly ITransactionGatedTodoMutationService _todo = Substitute.For<ITransactionGatedTodoMutationService>();

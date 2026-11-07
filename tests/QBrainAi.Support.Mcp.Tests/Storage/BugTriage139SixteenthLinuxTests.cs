@@ -191,7 +191,14 @@ public sealed class BugTriage139SixteenthLinuxTests
     /// link with stat would send the helper a lookup it never answers; only its root is answered, which is why the
     /// root-target cases above cannot catch this.
     /// </summary>
-    /// <remarks>Integration: starts a real Unix resolver helper and measures its lifecycle after the public timeout (TR-MCP-USECASE-018 AC-006).</remarks>
+    /// <remarks>
+    /// Integration: starts a real Unix resolver helper and measures its lifecycle after the public timeout (TR-MCP-USECASE-018 AC-006).
+    /// Proves TR-MCP-USECASE-019 AC-001 (a symbolic link to any path inside a userspace or network mount is rejected from the mount table).
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-06</term><description>TR-MCP-USECASE-019 AC-001: cites the criterion it proves, so the criterion text no longer names the test (operator: "Must be fixed.").</description></item>
+    /// </list>
+    /// </remarks>
     [Fact(Timeout = 60_000)]
     public async Task SqliteOpen_SafeSymlinkBelowFuseRoot_IsRejectedWithoutEnteringTheMount()
     {

@@ -5,6 +5,13 @@ using Xunit;
 namespace QBrainAi.Support.Mcp.Tests.Indexing;
 
 /// <summary>TR-PLANNED-CORE-013: Unit tests for EmbeddingService (stub mode and ONNX integration).</summary>
+/// <remarks>
+/// Requirement coverage named by requirement evidence: TR-MCP-QUALITY-001 ac-4.
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>TR-MCP-QUALITY-001 ac-4: cites the criterion whose evidence names this class, so the evidence no longer names the test (operator: "Must be fixed.").</description></item>
+/// </list>
+/// </remarks>
 public sealed class EmbeddingServiceTests : IDisposable
 {
     private readonly EmbeddingService _sut = new(new EmbeddingOptions(), NullLogger<EmbeddingService>.Instance);

@@ -30,6 +30,15 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// <see cref="HostileReviewWorkflow"/>, and public submit/status/get/query surfaces.
 /// TEST-MCP-HOSTILEREVIEW-001 through 006.
 /// </summary>
+/// <remarks>
+/// Requirement coverage named by requirement evidence: FR-MCP-HOSTILEREVIEW-001, FR-MCP-HOSTILEREVIEW-002,
+/// FR-MCP-HOSTILEREVIEW-003, FR-MCP-HOSTILEREVIEW-004, FR-MCP-HOSTILEREVIEW-005 and FR-MCP-HOSTILEREVIEW-006 (every
+/// criterion of each; they carry no criterion ids).
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>FR-MCP-HOSTILEREVIEW-001 through FR-MCP-HOSTILEREVIEW-006 (criteria without ids): cites the criteria whose evidence names this class, so the evidence no longer names the test (operator: "Must be fixed.").</description></item>
+/// </list>
+/// </remarks>
 public sealed class HostileReviewG4OverlayTests : IDisposable
 {
     private readonly string _workspace;

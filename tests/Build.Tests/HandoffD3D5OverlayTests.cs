@@ -8,6 +8,16 @@ namespace NukeBuild.Tests;
 /// <see cref="TraceabilityValidator"/> and the Nuke <c>ValidateTraceability</c> target.
 /// TEST-HANDOFF-007 / FR-HANDOFF-001 through FR-HANDOFF-007. Skipped tests are failures.
 /// </summary>
+/// <remarks>
+/// Requirement coverage named by requirement evidence: FR-HANDOFF-001, FR-HANDOFF-002, FR-HANDOFF-003, FR-HANDOFF-004,
+/// FR-HANDOFF-005, FR-HANDOFF-006, FR-HANDOFF-007, TR-HANDOFF-AGENT-001,
+/// TR-HANDOFF-AUDIT-001, TR-HANDOFF-CONTRACT-001, TR-HANDOFF-MODES-001, TR-HANDOFF-SECURITY-001, TR-HANDOFF-SURFACE-001,
+/// TR-HANDOFF-TODO-001 and TR-HANDOFF-VALIDATE-001 (every criterion of each; they carry no criterion ids).
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>FR-HANDOFF-001 through FR-HANDOFF-007 and the eight TR-HANDOFF records above (criteria without ids): cites the criteria whose evidence names this class, so the evidence no longer names the test (operator: "Must be fixed.").</description></item>
+/// </list>
+/// </remarks>
 public sealed class HandoffD3D5OverlayTests
 {
     private static readonly Regex FrHeadingPattern = new(

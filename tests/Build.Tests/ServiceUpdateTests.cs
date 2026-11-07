@@ -10,6 +10,15 @@ using System.Text.Json;
 namespace NukeBuild.Tests;
 
 /// <summary>TEST-MCP-SERVICEUPDATE-001: temporary fixtures exercise deployment without a real service.</summary>
+/// <remarks>
+/// Requirement coverage: TR-MCP-NUKE-015 AC-004 (the service-update evidence, run directly as infrastructure) and AC-005
+/// (every case runs and passes on Linux and on Windows with no skip), and TR-MCP-SERVICEUPDATE-001 per-os-tests, the
+/// same criterion before its move to TR-MCP-NUKE-015.
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>TR-MCP-NUKE-015 AC-004 and AC-005, TR-MCP-SERVICEUPDATE-001 per-os-tests: cites the criteria it proves, so the criterion text no longer names the test (operator: "Must be fixed.").</description></item>
+/// </list>
+/// </remarks>
 public sealed class ServiceUpdateTests
 {
     /// <summary>Reference doubles establish the required preservation order before production exists.</summary>

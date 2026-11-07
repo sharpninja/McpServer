@@ -27,6 +27,14 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// <see cref="WikiDumpService"/>, <see cref="RequirementsWikiExportOrchestrator"/>,
 /// and <see cref="WorkspaceService"/>. TEST-MCP-WIKIEXPORT-003 through 005.
 /// </summary>
+/// <remarks>
+/// Requirement coverage named by requirement evidence: FR-MCP-WIKIEXPORT-003, FR-MCP-WIKIEXPORT-004 and
+/// FR-MCP-WIKIEXPORT-005 (every criterion of each; they carry no criterion ids).
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>FR-MCP-WIKIEXPORT-003 through FR-MCP-WIKIEXPORT-005 (criteria without ids): cites the criteria whose evidence names this class, so the evidence no longer names the test (operator: "Must be fixed.").</description></item>
+/// </list>
+/// </remarks>
 public sealed class WikiDumpG6OverlayTests : IDisposable
 {
     private readonly string _workspace;

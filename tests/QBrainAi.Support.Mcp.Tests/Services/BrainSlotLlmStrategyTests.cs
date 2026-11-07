@@ -9,6 +9,14 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// <summary>
 /// TEST-MCP-LLMSTRATEGY-001: Per-role completion strategies, shared turn-context identity, and HTTP flattening.
 /// </summary>
+/// <remarks>
+/// Requirement coverage named by requirement evidence: FR-MCP-LLMSTRATEGY-001 (its first criterion, which carries no
+/// criterion id, through CreateStrategy_TwoRoles_ResolvesTwoDifferentStrategyTypes).
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>FR-MCP-LLMSTRATEGY-001 (criterion without an id): cites the criterion whose evidence names this class, so the evidence no longer names the test (operator: "Must be fixed.").</description></item>
+/// </list>
+/// </remarks>
 public sealed class BrainSlotLlmStrategyTests
 {
     [Fact]

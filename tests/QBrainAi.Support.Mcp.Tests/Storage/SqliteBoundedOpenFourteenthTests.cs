@@ -109,7 +109,14 @@ public sealed class SqliteBoundedOpenFourteenthTests
     /// its task at once and fails with TimeoutException at the bound, no open worker starts, and the held preflight
     /// stays counted until it actually returns. Fixture: a file data source in a temporary directory.
     /// </summary>
-    /// <remarks>Integration: asserts an elapsed wall-clock bound on actual scheduling and timer execution (TR-MCP-USECASE-018 AC-006).</remarks>
+    /// <remarks>
+    /// Integration: asserts an elapsed wall-clock bound on actual scheduling and timer execution (TR-MCP-USECASE-018 AC-006).
+    /// Proves TR-MCP-USECASE-019 AC-002 (the caller-side data-source preflight runs off the caller's thread under the open's single finite deadline).
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-06</term><description>TR-MCP-USECASE-019 AC-002: cites the criterion it proves, so the criterion text no longer names the test (operator: "Must be fixed.").</description></item>
+    /// </list>
+    /// </remarks>
     [Trait("Category", "Integration")]
     [Fact(Timeout = 60_000)]
     public async Task OpenAsync_PreflightHeldAtBoundary_TimesOutWithoutBlockingTheCaller()

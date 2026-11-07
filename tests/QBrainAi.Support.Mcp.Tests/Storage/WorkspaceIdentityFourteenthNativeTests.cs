@@ -92,7 +92,14 @@ public sealed class WorkspaceIdentityFourteenthNativeTests
     /// TEST-MCP-USECASE-018-AC003: The real platform resolver must execute for local aliases and
     /// unavailable Windows UNC syntax, bound repeated calls, and leave no native worker behind.
     /// </summary>
-    /// <remarks>Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).</remarks>
+    /// <remarks>
+    /// Integration: exercises native filesystem reads or writes for this case instead of only scripted in-memory data (TR-MCP-USECASE-018 AC-006).
+    /// Proves TR-MCP-USECASE-019 AC-003 (Linux workspace identity resolution resolves symbolic-link prefixes through the mount table).
+    /// <list type="table">
+    /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+    /// <item><term>2026-11-06</term><description>TR-MCP-USECASE-019 AC-003: cites the criterion it proves, so the criterion text no longer names the test (operator: "Must be fixed.").</description></item>
+    /// </list>
+    /// </remarks>
     [Trait("Category", "Integration")]
     [Fact]
     public async Task NativeResolver_RepeatedPlatformCallsLeaveNoActiveWorkers()

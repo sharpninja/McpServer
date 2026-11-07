@@ -29,6 +29,7 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// <list type="table">
 /// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
 /// <item><term>2026-11-05</term><description>TR-MCP-USECASE-018 AC-006 (appended "The same holds for every age, expiry or staleness decision a unit test checks"): CreateService hands every service the class's settable clock instead of TimeProvider.System, the two stale-turn cases seed from it, and the D3 binding was added (hostile validation round 12 finding R12-F2, S3 and S4); the assertions are unchanged.</description></item>
+/// <item><term>2026-11-06</term><description>FR-MCP-HYGIENE-001, FR-MCP-HYGIENE-002, FR-MCP-HYGIENE-003, FR-MCP-HYGIENE-004 and FR-MCP-HYGIENE-005 (every criterion of each; they carry no criterion ids): cites the criteria whose evidence names this class, so the evidence no longer names the test (operator: "Must be fixed.").</description></item>
 /// </list>
 /// </remarks>
 public sealed class WorkspaceHygieneG5OverlayTests : IDisposable

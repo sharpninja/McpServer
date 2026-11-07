@@ -10,6 +10,14 @@ namespace QBrainAi.Support.Mcp.Tests.Services;
 /// OpenAI chat request onto QuadBrain orchestration and returns an OpenAI-shaped response carrying the Arbiter
 /// output, and rejects an empty message list.
 /// </summary>
+/// <remarks>
+/// Requirement coverage named by requirement evidence: FR-MCP-QBEXEC-001 (its third, fifth, sixth and seventh criteria,
+/// which carry no criterion ids; the sixth and seventh through CompleteAsync_CatalogName_StopsWithoutEmittingToolCall).
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>FR-MCP-QBEXEC-001 (criteria without ids): cites the criteria whose evidence names this class, so the evidence no longer names the test (operator: "Must be fixed.").</description></item>
+/// </list>
+/// </remarks>
 public sealed class QuadBrainOpenAiChatServiceTests
 {
     /// <summary>The full role-tagged transcript is sent to orchestration and the Arbiter output is returned as the assistant message.</summary>

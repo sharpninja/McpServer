@@ -9,6 +9,15 @@ namespace NukeBuild.Tests;
 /// initialization (assembly name = "_build"), we verify via reflection rather than
 /// direct instantiation.
 /// </summary>
+/// <remarks>
+/// Requirement coverage named by requirement evidence or text: TR-MCP-NUKE-002 AC-002 (BuildTargets_UseGitVersionForCompileAndReplTool),
+/// TR-MCP-NUKE-007 AC-001 (InstallReplTool_ParsesInstalledGlobalToolVersion) and TR-MCP-SYNC-001 AC-003
+/// (PlanPluginVersionUpdates_BumpsMinorAndSkipsNodeModules).
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>TR-MCP-NUKE-002 AC-002, TR-MCP-NUKE-007 AC-001 and TR-MCP-SYNC-001 AC-003: cites the criteria these cases prove, so the criterion text and evidence no longer name the test (operator: "Must be fixed.").</description></item>
+/// </list>
+/// </remarks>
 public sealed class BuildTargetTests
 {
     private static readonly Type BuildType = typeof(Build);

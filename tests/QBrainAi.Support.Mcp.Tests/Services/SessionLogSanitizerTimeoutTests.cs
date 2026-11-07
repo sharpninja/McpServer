@@ -7,6 +7,14 @@ using Xunit;
 namespace QBrainAi.Support.Mcp.Tests.Services;
 
 /// <summary>TEST-MCP-SESSIONLOGSAN-001: timeout fail-closed coverage for pathological configured redaction rules.</summary>
+/// <remarks>
+/// Requirement coverage named by a TEST record: TEST-MCP-SESSIONLOGSAN-002 (the injected replace invoker raises the
+/// regex timeout deterministically, so the timeout cases no longer depend on the wall clock).
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>TEST-MCP-SESSIONLOGSAN-002: cites the record whose description names this class, so the description no longer names the test (operator: "Must be fixed.").</description></item>
+/// </list>
+/// </remarks>
 public sealed class SessionLogSanitizerTimeoutTests
 {
     /// <summary>Regex timeouts replace the complete affected string and log only rule ID plus field path.</summary>

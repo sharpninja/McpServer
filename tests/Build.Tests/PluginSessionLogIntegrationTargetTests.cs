@@ -7,6 +7,15 @@ namespace NukeBuild.Tests;
 /// the PluginSessionLogIntegration Nuke target, solution project, and eight-row
 /// catalog must exist before adapter work starts. Skipped tests are failures.
 /// </summary>
+/// <remarks>
+/// Requirement coverage named by requirement evidence or text: FR-MCP-PLUGININT-001 (every criterion; they carry no
+/// criterion ids), and TR-MCP-NUKE-011 AC-004 through TestTarget_ExcludesPluginIntegrationFromUnitInventory, the
+/// default-selection pin that criterion keeps green.
+/// <list type="table">
+/// <listheader><term>Date</term><description>Requirements; AC; change and reason</description></listheader>
+/// <item><term>2026-11-06</term><description>FR-MCP-PLUGININT-001 and TR-MCP-NUKE-011 AC-004: cites the criteria whose evidence or text names this class, so they no longer name the test (operator: "Must be fixed.").</description></item>
+/// </list>
+/// </remarks>
 public sealed class PluginSessionLogIntegrationTargetTests
 {
     /// <summary>
